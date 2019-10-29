@@ -1,6 +1,6 @@
-========
-NeuroKit
-========
+==========
+NeuroKit 2
+==========
 
 
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
@@ -22,6 +22,7 @@ NeuroKit
 
 The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).
 
+This is a work in progress project meant as a continuation of https://github.com/neuropsychology/NeuroKit.py
 
 * Free software: MIT license
 * Documentation: https://neurokit2.readthedocs.io.
