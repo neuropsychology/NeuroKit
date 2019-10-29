@@ -1,8 +1,10 @@
-===========================================================================
-NeuroKit2 <img src='docs/img/neurokit.png' align="right" height="139" />
-===========================================================================
+.. raw:: html
 
-
+    <embed>
+    <h1>Neurokit2</><img src='docs/img/neurokit.png' align="right" height="200" />
+    </embed>
+    
+    
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
 
