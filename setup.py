@@ -11,7 +11,7 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', ]
+requirements = []
 
 setup_requirements = ['pytest-runner', ]
 
@@ -34,11 +34,6 @@ setup(
         'Programming Language :: Python :: 3.7',
     ],
     description="The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).",
-    entry_points={
-        'console_scripts': [
-            'neurokit2=neurokit2.cli:main',
-        ],
-    },
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
@@ -49,7 +44,7 @@ setup(
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
-    url='https://github.com/DominiqueMakowski/neurokit2',
+    url='https://github.com/neuropsychology/NeuroKit',
     version='0.0.1',
     zip_safe=False,
 )
