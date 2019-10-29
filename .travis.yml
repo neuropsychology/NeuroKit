@@ -19,8 +19,9 @@ install: pip install -U tox-travis
 script:
     - python setup.py install
     - tox
+    - coverage run tests/tests.py
 #    - tox -e codecov
-#   - coverage run tests/tests.py
+#   
 
     
 # Command to run tests, e.g. python setup.py test
