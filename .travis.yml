@@ -30,5 +30,14 @@ deploy:
     secure: PLEASE_REPLACE_ME
   on:
     tags: true
-    repo: DominiqueMakowski/neurokit2
+    repo: neuropsychology/NeuroKit
     python: 3.6
+
+
+
+script:
+  - python setup.py install
+  - coverage run tests/tests.py
+
+after_success:
+  - codecov
