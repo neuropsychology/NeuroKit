@@ -18,9 +18,8 @@
 .. image:: https://img.shields.io/pypi/dm/neurokit2
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
-   :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
-   :alt: Maintainability
+.. image:: https://scrutinizer-ci.com/g/neuropsychology/NeuroKit/badges/quality-score.png?b=master
+        :target: https://scrutinizer-ci.com/g/neuropsychology/NeuroKit/
    
 **The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).**
 
