@@ -2,7 +2,7 @@
 Credits
 =======
 
-Development Lead
+Core team
 ----------------
 
 * Dominique Makowski <dom.makowski@gmail.com>
