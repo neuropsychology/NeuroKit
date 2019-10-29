@@ -9,7 +9,7 @@ python:
 
 os:
   - linux
-  - osx
+  #- osx
   
   
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
