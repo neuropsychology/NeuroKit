@@ -14,7 +14,13 @@ To install NeuroKit, run this command in your terminal:
 
     $ pip install neurokit2
 
-This is the preferred method to install NeuroKit, as it will always install the most recent stable release.
+This is the preferred method to install NeuroKit, as it will always install the most recent stable release. It is also possible to install it directly from github:
+
+.. code-block:: console
+
+    $ pip install https://github.com/neuropsychology/neurokit/zipball/master
+
+
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -32,13 +38,13 @@ You can either clone the public repository:
 
 .. code-block:: console
 
-    $ git clone git://github.com/DominiqueMakowski/neurokit2
+    $ git clone git://github.com/neuropsychology/neurokit
 
 Or download the `tarball`_:
 
 .. code-block:: console
 
-    $ curl  -OL https://github.com/DominiqueMakowski/neurokit2/tarball/master
+    $ curl  -OL https://github.com/neuropsychology/neurokit/tarball/master
 
 Once you have a copy of the source, you can install it with:
 
@@ -47,5 +53,5 @@ Once you have a copy of the source, you can install it with:
     $ python setup.py install
 
 
-.. _Github repo: https://github.com/DominiqueMakowski/neurokit2
-.. _tarball: https://github.com/DominiqueMakowski/neurokit2/tarball/master
+.. _Github repo: https://github.com/neuropsychology/neurokit
+.. _tarball: https://github.com/neuropsychology/neurokit/tarball/master

@@ -23,4 +23,14 @@ This is a work in progress project meant as a continuation of https://github.com
 Installation
 ------------
 
-``pip install neurokit2``
+To install NeuroKit, run this command in your terminal:
+
+.. code-block:: console
+
+    $ pip install neurokit2
+
+This is the preferred method to install NeuroKit, as it will always install the most recent stable release. It is also possible to install it directly from github:
+
+.. code-block:: console
+
+    $ pip install https://github.com/neuropsychology/neurokit/zipball/master
