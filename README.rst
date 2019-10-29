@@ -14,29 +14,13 @@ NeuroKit 2
         :alt: Documentation Status
 
 
-.. image:: https://pyup.io/repos/github/DominiqueMakowski/neurokit2/shield.svg
-     :target: https://pyup.io/repos/github/DominiqueMakowski/neurokit2/
-     :alt: Updates
 
-
-
-The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).
+***The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).***
 
 This is a work in progress project meant as a continuation of https://github.com/neuropsychology/NeuroKit.py
 
-* Free software: MIT license
-* Documentation: https://neurokit2.readthedocs.io.
 
+Installation
+------------
 
-Features
---------
-
-* TODO
-
-Credits
--------
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+``pip install neurokit2``
