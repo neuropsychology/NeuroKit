@@ -15,8 +15,12 @@ os:
 # Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -U tox-travis
 
+
+script:
+    - tox -e codecov
+    
 # Command to run tests, e.g. python setup.py test
-script: tox
+# script: tox
 
 # Assuming you have installed the travis-ci CLI tool, after you
 # create the Github repo and add it to Travis, run the
@@ -32,12 +36,3 @@ deploy:
     tags: true
     repo: neuropsychology/NeuroKit
     python: 3.6
-
-
-
-script:
-  - python setup.py install
-  - coverage run tests/tests.py
-
-after_success:
-  - codecov
