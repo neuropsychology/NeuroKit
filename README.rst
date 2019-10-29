@@ -1,7 +1,7 @@
 .. raw:: html
 
     <embed>
-    <h1>Neurokit2</h1><img src='docs/img/neurokit.png' align="right" height="180" />
+    <h1>Neurokit2<img src='docs/img/neurokit.png' align="right" height="180"/></h1>
     </embed>
     
     
