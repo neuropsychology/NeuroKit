@@ -6,4 +6,5 @@ __author__ = """Dominique Makowski"""
 __email__ = 'dom.makowski@gmail.com'
 __version__ = '0.0.1'
 
-from neurokit2 import *
+
+from .neurokit2 import *
