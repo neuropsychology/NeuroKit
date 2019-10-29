@@ -18,14 +18,14 @@ install: pip install -U tox-travis
 
 script:
     - python setup.py install
-    - coverage run tests/tests.py
     - tox
-#     - tox -e codecov
+#   - coverage run tests/tests.py
+#    - tox -e codecov
     
 # Command to run tests, e.g. python setup.py test
 # script: tox
-after_success:
-  - codecov
+#after_success:
+#  - codecov
   
   
 # Assuming you have installed the travis-ci CLI tool, after you
