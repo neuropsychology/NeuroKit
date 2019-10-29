@@ -16,14 +16,14 @@ os:
 install: pip install -U tox-travis
 
 
-script:
-    - python setup.py install
-    - tox
+#script:
+#    - python setup.py install
+#    - tox
 #   - coverage run tests/tests.py
 #    - tox -e codecov
     
 # Command to run tests, e.g. python setup.py test
-# script: tox
+script: tox
 #after_success:
 #  - codecov
   
