@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+invoke = "*"
+bumpversion = "*"
+coverage = "*"
+wheel = "*"
+sphinx = "*"
+twine = "*"
+tox = "*"
+"flake8" = "*"
+pylint = "*"
+pytest = "*"
+isort = "*"
+yapf = "*"
+
+[packages]
+neurokit2 = {path = ".", editable = true}
