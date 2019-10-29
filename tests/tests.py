@@ -4,7 +4,7 @@
 """Tests for `neurokit2` package."""
 
 import pytest
-import neurokit2 as nk
+import neurokit2
 
 
 @pytest.fixture
