@@ -2,6 +2,7 @@
 
 language: python
 python:
+  - "nightly"
   - 3.7
   - 3.6
   - 3.5
@@ -24,7 +25,7 @@ script:
     - coverage run tests/tests.py
 
 after_success:
-  - codecov
+    - codecov
   
   
 # Assuming you have installed the travis-ci CLI tool, after you
