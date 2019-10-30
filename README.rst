@@ -40,6 +40,6 @@ To install NeuroKit, run this command in your terminal:
 Documentation
 --------------
 
-The documentation is available **`here <https://neurokit2.readthedocs.io/en/latest>`_**. Check out these tutorials:
+The documentation is available `here <https://neurokit2.readthedocs.io/en/latest>`_. Check out these tutorials:
 
 - **No tutorial yet**
