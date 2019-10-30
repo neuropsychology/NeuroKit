@@ -52,7 +52,7 @@ setup(
     name='neurokit2',
     packages=find_packages(include=['neurokit2']),
     setup_requires=setup_requirements,
-    test_suite='tests',
+    test_suite='pytest',
     tests_require=test_requirements,
     url='https://github.com/neuropsychology/NeuroKit',
     version=find_version(),
