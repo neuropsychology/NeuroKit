@@ -8,6 +8,5 @@ if __name__ == '__main__':
     pytest.main()
 
 
-
 def test_foo():
     assert nk.foo() == 4
