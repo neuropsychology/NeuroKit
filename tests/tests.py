@@ -3,8 +3,7 @@ import neurokit2 as nk
 
 
 if __name__ == '__main__':
-    unittest.main()
-    doctest.testmod()
+    assert 1+1 == 2
 
 
 
