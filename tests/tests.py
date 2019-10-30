@@ -8,4 +8,4 @@ if __name__ == '__main__':
 
 
 def test_foo():
-   assert foo() == 4
+   assert nk.foo() == 4
