@@ -11,6 +11,9 @@
 .. image:: https://img.shields.io/travis/neuropsychology/NeuroKit.svg
         :target: https://travis-ci.org/neuropsychology/NeuroKit
 
+.. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
+        :target: https://codecov.io/gh/neuropsychology/NeuroKit
+  
 .. image:: https://img.shields.io/pypi/dm/neurokit2
         :target: https://pypi.python.org/pypi/neurokit2
 
