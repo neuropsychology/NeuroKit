@@ -11,12 +11,13 @@
 .. image:: https://img.shields.io/travis/ neuropsychology/NeuroKit.svg
         :target: https://travis-ci.org/neuropsychology/NeuroKit
 
+.. image:: https://img.shields.io/pypi/dm/neurokit2
+        :target: https://pypi.python.org/pypi/neurokit2
+
 .. image:: https://readthedocs.org/projects/neurokit2/badge/?version=latest
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://img.shields.io/pypi/dm/neurokit2
-        :target: https://pypi.python.org/pypi/neurokit2
 
 **The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).**
 
@@ -36,6 +37,6 @@ To install NeuroKit, run this command in your terminal:
 Documentation
 --------------
 
-The documentation is available `**here** <https://neurokit2.readthedocs.io/en/latest>`_. Check out these tutorials:
+The documentation is available **`here <https://neurokit2.readthedocs.io/en/latest>`_**. Check out these tutorials:
 
 - **No tutorial yet**
