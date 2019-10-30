@@ -11,8 +11,6 @@ os:
   - linux
   #- osx
   
-  
-# Command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: 
   - pip install -U tox-travis
   - pip install codecov
@@ -22,10 +20,6 @@ script:
     - python setup.py install
     - tox
     - coverage run tests/tests.py
-#    - coverage run tests/test_neurokit2.py
-#    - tox -e codecov
-
-    
 
 after_success:
   - codecov
