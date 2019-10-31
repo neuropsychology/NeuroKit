@@ -15,6 +15,7 @@ os:
   
 install: 
   - pip install -U tox-travis
+  - pip install coverage
   - pip install codecov
   - pip install flake8
 
