@@ -1,7 +1,7 @@
 Neurokit2 |logo|
     
 .. |logo| image:: docs/img/neurokit.png
-   :width: 40%
+   :height: 180
    
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
