@@ -8,8 +8,9 @@ python:
   - 3.5
 
 os:
+  - windows
   - linux
-  #- osx
+  - osx
   
 install: 
   - pip install -U tox-travis
@@ -21,7 +22,7 @@ install:
 script:
     - python setup.py install
     - tox
-    - coverage run tests/test_layout.py
+    - coverage run tests/test_all.py
 
 after_success:
     - codecov
@@ -39,5 +40,5 @@ deploy:
     secure: PLEASE_REPLACE_ME
   on:
     tags: true
-    repo: neuropsychology/TruScanEEGpy
+    repo: neuropsychology/NeuroKit
     python: 3.7
