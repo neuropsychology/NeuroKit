@@ -6,8 +6,6 @@ python:
   - 3.7
   - 3.6
   - 3.5
-  - 3.4
-  - 2.7
 
 os:
   - linux
@@ -23,7 +21,7 @@ install:
 script:
     - python setup.py install
     - tox
-    - coverage run tests/test_foo.py
+    - coverage run tests/test_layout.py
 
 after_success:
     - codecov
@@ -41,5 +39,5 @@ deploy:
     secure: PLEASE_REPLACE_ME
   on:
     tags: true
-    repo: neuropsychology/NeuroKit
+    repo: neuropsychology/TruScanEEGpy
     python: 3.7
