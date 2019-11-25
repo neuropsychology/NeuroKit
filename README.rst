@@ -1,10 +1,5 @@
-.. raw:: html
+.. image:: docs/img/banner.png
 
-    <embed>
-    <h1>Neurokit2<img src='docs/img/neurokit.png' align="right" height="180"/></h1>
-    </embed>
-    
-    
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
 

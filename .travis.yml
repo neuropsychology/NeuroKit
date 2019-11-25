@@ -6,10 +6,9 @@ python:
   - 3.7
   - 3.6
   - 3.5
-  - 3.4
-  - 2.7
 
 os:
+  # - windows
   - linux
   #- osx
   
@@ -23,7 +22,7 @@ install:
 script:
     - python setup.py install
     - tox
-    - coverage run tests/test_foo.py
+    #- coverage run tests/test_all.py
 
 after_success:
     - codecov
