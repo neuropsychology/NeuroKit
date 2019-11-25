@@ -22,7 +22,7 @@ install:
 script:
     - python setup.py install
     - tox
-    - coverage run tests/test_all.py
+    #- coverage run tests/test_all.py
 
 after_success:
     - codecov
