@@ -5,7 +5,7 @@ import numpy as np
 
 
 
-def signal_binarize(signal, threshold="auto", cut="higher"):
+def foo2(signal, threshold="auto", cut="higher"):
     """Binarize a continuous signal.
 
     Parameters
