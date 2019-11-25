@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Top-level package for NeuroKit."""
 
 __author__ = """NeuroKit developpment team"""
