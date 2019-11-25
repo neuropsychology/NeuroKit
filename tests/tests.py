@@ -10,7 +10,7 @@ if __name__ == '__main__':
     doctest.testmod()
     pytest.main()
 
-from .tests_events import *
+# from .tests_events import *
 
 # =============================================================================
 # Signal
