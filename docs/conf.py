@@ -83,7 +83,7 @@ author = u"Dominique Makowski"
 #
 # The short X.Y version.
 def find_version():
-    result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"), open('../TruScanEEGpy/__init__.py').read())
+    result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"), open('../neurokit2/__init__.py').read())
     return result.group(1)
     
 version = find_version()

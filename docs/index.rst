@@ -5,10 +5,9 @@ Welcome to NeuroKit's documentation!
    :maxdepth: 2
 
    readme
+   news
    installation
-   contributing
-   authors
-   history
+   credits
 
 Indices and tables
 ==================
