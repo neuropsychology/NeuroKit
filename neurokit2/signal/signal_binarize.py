@@ -3,9 +3,7 @@ import pandas as pd
 import numpy as np
 
 
-
-
-def signal_binarize(signal, threshold="auto", cut="higher"):
+def signal_binarize(signal, threshold="auto"):
     """Binarize a continuous signal.
 
     Parameters
@@ -14,8 +12,6 @@ def signal_binarize(signal, threshold="auto", cut="higher"):
         The signal channel.
     threshold : float
         The threshold value by which to select the events. If "auto", takes the value between the max and the min.
-    cut : str
-        "higher" or "lower", define the events as above or under the threshold. For photosensors, a white screen corresponds usually to higher values. Therefore, if your events were signalled by a black colour, events values would be the lower ones, and you should set the cut to "lower".
 
     Returns
     -------
@@ -43,12 +39,8 @@ def signal_binarize(signal, threshold="auto", cut="higher"):
     if threshold == "auto":
         threshold = np.mean([np.max(signal), np.min(signal)])
 
-    if cut == "higher":
-        signal[signal > threshold] = 1
-        signal[signal <= threshold] = 0
-    else:
-        signal[signal > threshold] = 0
-        signal[signal <= threshold] = 1
+    signal[signal > threshold] = 1
+    signal[signal <= threshold] = 0
 
     if return_list:
         return(list(signal))
