@@ -1,9 +1,9 @@
 import pytest
 import doctest
 
-# import numpy as np
-# import pandas as pd
-import neurokit2 as nk
+import numpy as np
+import pandas as pd
+# import neurokit2 as nk
 
 
 if __name__ == '__main__':
@@ -19,8 +19,9 @@ def test_foo():
 
 
     
-# def test_signal_binarize():
+def test_signal_binarize():
 
-#     signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+    signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+    assert len(signal) == 1000
 #     binary = nk.signal_binarize(signal)
 #     assert len(binary) == 1000
