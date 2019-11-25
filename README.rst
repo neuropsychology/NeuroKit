@@ -29,7 +29,7 @@ To install NeuroKit, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install neurokit2
+    $ pip install neurokit2 as nk
 
 
 Documentation
