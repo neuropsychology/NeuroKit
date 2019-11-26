@@ -21,7 +21,7 @@ def find_version():
 
 
 # Dependencies
-requirements = ['numpy', 'pandas', 'matplotlib']
+requirements = ['numpy', 'pandas']
 setup_requirements = ['pytest-runner']
 test_requirements = requirements + ['pytest', 'coverage']
 
