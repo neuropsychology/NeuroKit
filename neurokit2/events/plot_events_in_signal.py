@@ -17,7 +17,7 @@ def plot_events_in_signal(signal, events, show=True, color="red", linestyle="--"
     ----------
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
-    events_onsets : list or ndarray
+    events : list, ndarray or dict
         Events onset location. If a dict is passed (e.g., from 'events_find()'), will select only the 'Onset' list.
     show : bool
         If True, will return a plot. If False, will return a DataFrame that can be plotted externally.

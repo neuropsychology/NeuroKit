@@ -22,6 +22,15 @@ def test_events_find():
 
 
 
+def test_events_to_mne():
+
+    signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+    events = nk.events_find(signal)
+    events, event_id = nk.events_to_mne(events)
+    assert event_id == {'Event': 0}
+
+
+
 def test_plot_events_in_signal():
 
     signal = np.cos(np.linspace(start=0, stop=20, num=1000))

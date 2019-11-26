@@ -4,9 +4,9 @@ Welcome to NeuroKit's documentation!
 .. toctree::
    :maxdepth: 2
 
-   readme
-   news
    installation
+   news
+   functions
    credits
 
 Indices and tables

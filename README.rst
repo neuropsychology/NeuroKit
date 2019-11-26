@@ -1,4 +1,4 @@
-.. image:: docs/img/banner.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
 
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
@@ -29,7 +29,7 @@ To install NeuroKit, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install neurokit2 as nk
+    $ pip install https://github.com/neuropsychology/neurokit/zipball/master
 
 
 Documentation
