@@ -14,6 +14,12 @@ def test_events_find():
     events = nk.events_find(signal)
     assert list(events["Onset"]) == [0, 236, 550, 864]
 
+    events = nk.events_find(signal, duration_min = 150)
+    assert list(events["Onset"]) == [236, 550]
+
+    events = nk.events_find(signal, inter_min = 300)
+    assert list(events["Onset"]) == [0, 550, 864]
+
 
 
 def test_plot_events_in_signal():
