@@ -58,7 +58,7 @@ def _events_find(event_channel, threshold="auto", keep="above"):
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
-def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None):
+def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0):
     """
     Find and select events based on a continuous signal.
 
@@ -73,7 +73,9 @@ def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_a
     start_at, end_at : int
         Keep events which onset is after, or before a particular time point.
     duration_min, duration_max : int
-        The minimum or maximum duration of an event to be considered as such (in time points). Useful when spurious events are created due to very high sampling rate.
+        The minimum or maximum duration of an event to be considered as such (in time points).
+    inter_min : int
+         The minimum duration after an event for the subsequent event to be considered as such (in time points). Useful when spurious consecutive events are created due to very high sampling rate.
 
     Returns
     ----------
@@ -87,7 +89,8 @@ def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_a
     >>> import neurokit2 as nk
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
-    >>> nk.events_find(signal)
+    >>> events = nk.events_find(signal)
+    >>> events
     {'Onset': array([  0, 236, 550, 864]), 'Duration': array([ 79, 157, 157, 136])}
 
     >>> nk.plot_events_in_signal(signal, events)
@@ -108,12 +111,17 @@ def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_a
     events["Duration"] = events["Duration"][to_keep]
 
     # Remove based on index
-    events["Onset"] = events["Onset"][events["Onset"] >= start_at]
-    events["Duration"] = events["Duration"][events["Onset"] >= start_at]
-
+    if start_at > 0:
+        events["Onset"] = events["Onset"][events["Onset"] >= start_at]
+        events["Duration"] = events["Duration"][events["Onset"] >= start_at]
     if end_at is not None:
         events["Onset"] = events["Onset"][events["Onset"] <= end_at]
         events["Duration"] = events["Duration"][events["Onset"] <= end_at]
 
+    # Remove based on interval min
+    if inter_min > 0:
+        inter = np.diff(events["Onset"])
+        events["Onset"] = np.concatenate([events["Onset"][0:1], events["Onset"][1::][inter >= inter_min]])
+        events["Duration"] = np.concatenate([events["Duration"][0:1], events["Duration"][1::][inter >= inter_min]])
 
     return(events)
