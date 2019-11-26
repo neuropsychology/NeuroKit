@@ -8,14 +8,10 @@ python:
   - 3.5
 
 
-dist: xenial   # required for Python >= 3.7
-services:
-  - xvfb
-  
   
 os:
-  - windows
-  - linux
+  # - windows
+  # - linux
   - osx
   
 install: 
