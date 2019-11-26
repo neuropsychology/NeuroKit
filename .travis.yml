@@ -11,8 +11,8 @@ python:
   
 os:
   # - windows
-  # - linux
-  - osx
+  - linux
+  # - osx
   
 install: 
   - pip install -U tox-travis
