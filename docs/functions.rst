@@ -8,11 +8,9 @@ This part of the documentation details the complete ``NeuroKit2`` for python API
 Signal
 -------
 
-.. automodule:: neurokit2.signal
-    :members:
     
-.. automodule:: neurokit2.signal_binarize
-    :members:
+.. autofunction:: neurokit2.signal_binarize
+
 
 Events
 -------
