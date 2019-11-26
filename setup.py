@@ -46,7 +46,7 @@ setup(
     include_package_data=True,
     keywords='neurokit2',
     name='neurokit2',
-    packages=find_packages(include=['neurokit2']),
+    packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite='pytest',
     tests_require=test_requirements,
