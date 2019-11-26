@@ -3,6 +3,24 @@ import pandas as pd
 import numpy as np
 
 
+
+
+
+def _signal_binarize(signal, threshold="auto"):
+    signal = np.array(signal)
+    if threshold == "auto":
+        threshold = np.mean([np.max(signal), np.min(signal)])
+
+    signal[signal > threshold] = 1
+    signal[signal <= threshold] = 0
+    return(signal)
+
+
+
+
+
+
+
 def signal_binarize(signal, threshold="auto"):
     """Binarize a continuous signal.
 
@@ -28,22 +46,16 @@ def signal_binarize(signal, threshold="auto"):
     >>> binary = nk.signal_binarize(signal)
     >>> pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
     """
-    # Sanity check
+    binary = _signal_binarize(signal, threshold=threshold)
+
+    # Return appropriate type
     if isinstance(signal, list):
-        signal = np.array(signal)
-        return_list = True
+        signal = list(binary)
+    elif isinstance(signal, pd.Series):
+        signal[:] = binary
     else:
-        signal = signal.copy()
-        return_list = False
+        signal = binary
 
-    if threshold == "auto":
-        threshold = np.mean([np.max(signal), np.min(signal)])
+    return(signal)
 
-    signal[signal > threshold] = 1
-    signal[signal <= threshold] = 0
-
-    if return_list:
-        return(list(signal))
-    else:
-        return(signal)
 
