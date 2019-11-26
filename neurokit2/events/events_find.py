@@ -82,6 +82,10 @@ def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_a
     dict
         Dict containing two arrays, 'onset' for events onsets and 'duration' for events durations.
 
+    See Also
+    --------
+    plot_events_in_signal, events_to_mne
+
     Example
     ----------
     >>> import numpy as np

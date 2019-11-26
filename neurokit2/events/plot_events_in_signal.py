@@ -24,6 +24,10 @@ def plot_events_in_signal(signal, events, show=True, color="red", linestyle="--"
     color, linestyle : str
         Other arguments to pass to matplotlib plotting.
 
+    See Also
+    --------
+    events_find
+
     Examples
     ----------
     >>> import numpy as np

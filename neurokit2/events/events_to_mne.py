@@ -22,6 +22,10 @@ def events_to_mne(events, conditions=None):
     (events, event_id) : tuple
         MNE-formatted events, that can be added via 'raw.add_events(events), and a dictionary with event's names.
 
+    See Also
+    --------
+    events_find
+
     Examples
     ----------
     >>> import numpy as np
