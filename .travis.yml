@@ -7,10 +7,16 @@ python:
   - 3.6
   - 3.5
 
+
+dist: xenial   # required for Python >= 3.7
+services:
+  - xvfb
+  
+  
 os:
-  # - windows
+  - windows
   - linux
-  #- osx
+  - osx
   
 install: 
   - pip install -U tox-travis
