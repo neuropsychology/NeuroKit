@@ -14,12 +14,12 @@ from ..signal import signal_binarize
 
 
 
-def _events_find(event_channel, threshold="auto", keep="above"):
+def _events_find(event_channel, threshold="auto", threshold_keep="above"):
     """Internal function
     """
     binary = signal_binarize(event_channel, threshold=threshold)
 
-    if keep != 'above':
+    if threshold_keep != 'above':
         binary = np.abs(binary - 1)  # Reverse if events are below
 
     # Initialize data
@@ -58,7 +58,7 @@ def _events_find(event_channel, threshold="auto", keep="above"):
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
-def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0):
+def events_find(event_channel, threshold="auto", threshold_keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0, discard_first=0, discard_last=None):
     """
     Find and select events based on a continuous signal.
 
@@ -68,14 +68,16 @@ def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_a
         The channel containing the events.
     threshold : str or float
         The threshold value by which to select the events. If "auto", takes the value between the max and the min.
-    keep : str
+    threshold_keep : str
         "above" or "below", define the events as above or under the treshold. For photosensors, a white screen corresponds usually to higher values. Therefore, if your events are signaled by a black colour, events values are the lower ones, and you should set the cut to "below".
     start_at, end_at : int
         Keep events which onset is after, or before a particular time point.
     duration_min, duration_max : int
         The minimum or maximum duration of an event to be considered as such (in time points).
     inter_min : int
-         The minimum duration after an event for the subsequent event to be considered as such (in time points). Useful when spurious consecutive events are created due to very high sampling rate.
+        The minimum duration after an event for the subsequent event to be considered as such (in time points). Useful when spurious consecutive events are created due to very high sampling rate.
+    discard_first, discard_last : int
+        Discard first or last n events. Useful if the experiment stats or ends with some spurious events.
 
     Returns
     ----------
@@ -99,7 +101,7 @@ def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_a
 
     >>> nk.plot_events_in_signal(signal, events)
     """
-    events = _events_find(event_channel, threshold="auto", keep="above")
+    events = _events_find(event_channel, threshold="auto", threshold_keep="above")
 
     # Warning when no events detected
     if len(events["Onset"]) == 0:
@@ -127,5 +129,13 @@ def events_find(event_channel, threshold="auto", keep="above", start_at=0, end_a
         inter = np.diff(events["Onset"])
         events["Onset"] = np.concatenate([events["Onset"][0:1], events["Onset"][1::][inter >= inter_min]])
         events["Duration"] = np.concatenate([events["Duration"][0:1], events["Duration"][1::][inter >= inter_min]])
+
+    # Remove first and last n
+    if discard_first > 0:
+        events["Onset"] = events["Onset"][discard_first:]
+        events["Duration"] = events["Duration"][discard_first:]
+    if discard_last is not None:
+        events["Onset"] = events["Onset"][0:-1*discard_last]
+        events["Duration"] = events["Duration"][0:-1*discard_last]
 
     return(events)
