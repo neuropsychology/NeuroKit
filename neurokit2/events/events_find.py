@@ -17,7 +17,7 @@ from ..signal import signal_binarize
 def _events_find(event_channel, threshold="auto", keep="above"):
     """Internal function
     """
-    binary = signal_binarize(np.array(event_channel), threshold=threshold)
+    binary = signal_binarize(event_channel, threshold=threshold)
 
     if keep != 'above':
         binary = np.abs(binary - 1)  # Reverse if events are below
