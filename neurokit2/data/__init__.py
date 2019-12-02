@@ -1,3 +1,4 @@
 """Submodule for NeuroKit."""
 
-from .eeg_add_channel import eeg_add_channel
+from .find_creation_date import find_creation_date
+from .read_acqknowledge import read_acqknowledge
