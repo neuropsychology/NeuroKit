@@ -5,7 +5,7 @@ import os
 import datetime
 import bioread
 
-from find_creation_date import find_creation_date
+from .find_creation_date import find_creation_date
 
 
 def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", resampling_method="pad", fill_interruptions=True):
