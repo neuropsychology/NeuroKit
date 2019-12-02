@@ -28,8 +28,8 @@ def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", 
         Automatically fill the eventual signal interruptions using a backfill method.
     Returns
     ----------
-    df, sampling_rate : pandas.DataFrame(), int
-        The AcqKnowledge file converted to a dataframe and its sampling_rate.
+    df: pandas.DataFrame()
+        The AcqKnowledge file converted to a dataframe.
 
 
     Example
