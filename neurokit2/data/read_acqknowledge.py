@@ -5,7 +5,7 @@ import os
 import datetime
 import bioread
 
-from .find_creation_date import find_creation_date
+from find_creation_date import find_creation_date
 
 
 def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", resampling_method="pad", fill_interruptions=True):
@@ -36,7 +36,7 @@ def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", 
     ----------
     >>> import neurokit as nk
     >>>
-    >>> df, sampling_rate = nk.read_acqknowledge('file.acq')
+    >>> df = nk.read_acqknowledge('file.acq')
     """
 
 
@@ -145,4 +145,4 @@ def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", 
         df = df.fillna(method="backfill")
 
     # Final dataframe
-    return(df, sampling_rate)
+    return(df)
