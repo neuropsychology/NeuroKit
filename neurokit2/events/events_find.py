@@ -58,7 +58,7 @@ def _events_find(event_channel, threshold="auto", threshold_keep="above"):
 # ==============================================================================
 # ==============================================================================
 # ==============================================================================
-def events_find(event_channel, threshold="auto", threshold_keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0, discard_first=0, discard_last=None):
+def events_find(event_channel, threshold="auto", threshold_keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0, discard_first=0, discard_last=0):
     """
     Find and select events based on a continuous signal.
 
@@ -77,7 +77,7 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     inter_min : int
         The minimum duration after an event for the subsequent event to be considered as such (in time points). Useful when spurious consecutive events are created due to very high sampling rate.
     discard_first, discard_last : int
-        Discard first or last n events. Useful if the experiment stats or ends with some spurious events.
+        Discard first or last n events. Useful if the experiment stats or ends with some spurious events. If discard_first=0 and discard_last=0, no first event or last event is removed. 
 
     Returns
     ----------
@@ -134,7 +134,7 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     if discard_first > 0:
         events["Onset"] = events["Onset"][discard_first:]
         events["Duration"] = events["Duration"][discard_first:]
-    if discard_last is not None:
+    if discard_last > 0:
         events["Onset"] = events["Onset"][0:-1*discard_last]
         events["Duration"] = events["Duration"][0:-1*discard_last]
 
