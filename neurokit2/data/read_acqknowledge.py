@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
 import os
 import datetime
 import bioread
+
+import pandas as pd
+import numpy as np
 
 from .find_creation_date import find_creation_date
 
