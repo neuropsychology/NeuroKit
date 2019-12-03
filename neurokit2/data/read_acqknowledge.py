@@ -146,4 +146,4 @@ def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", 
         df = df.fillna(method="backfill")
 
     # Final dataframe
-    return(df, sampling rate)
+    return(df, sampling_rate)
