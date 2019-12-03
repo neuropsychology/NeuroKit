@@ -6,8 +6,10 @@ Core team
 ----------------
 
 * Dominique Makowski <dom.makowski@gmail.com>
+* Tam Pham <phamttam17@gmail.com>
 
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Hung Pham <hungpham2511@gmail.com>
+
