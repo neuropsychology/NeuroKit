@@ -5,11 +5,11 @@ Credits
 Core team
 ----------------
 
-* Dominique Makowski <dom.makowski@gmail.com>
-* Tam Pham <phamttam17@gmail.com>
+* `Dominique Makowski <https://github.com/DominiqueMakowski>`_
+* `Tam Pham <https://github.com/Tam-Pham>`_
 
 Contributors
 ------------
 
-* Hung Pham <hungpham2511@gmail.com>
+* `Hung Pham <https://github.com/hungpham2511>`_
 
