@@ -7,3 +7,4 @@ __version__ = '0.0.1'
 from .signal import *
 from .events import *
 from .eeg import *
+from .data import *
