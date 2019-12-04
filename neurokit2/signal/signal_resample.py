@@ -54,7 +54,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
         return(signal)
 
     # Resample
-    if method is "FFT":
+    if method == "FFT":
         resampled = _resample_interpolation(signal, desired_length)
     else:
        resampled =  _resample_fft(signal, desired_length)
