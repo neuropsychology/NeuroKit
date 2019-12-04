@@ -6,57 +6,52 @@ import bioread
 import pandas as pd
 import numpy as np
 
-from .find_creation_date import find_creation_date
 
+def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolation", impute_missing=True):
+    """Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
 
-def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", resampling_method="pad", fill_interruptions=True):
-    """
-    Read and Format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
+    The function outputs both the dataframe and the sampling rate (encoded within the AcqKnowledge) file.
 
     Parameters
     ----------
     filename :  str
         Filename (with or without the extension) of a BIOPAC's AcqKnowledge file.
-    path : str
-        Data directory.
-    index : str
-        How to index the dataframe. "datetime" for aproximate datetime (based on the file creation/change) and "range" for a simple range index.
     sampling_rate : int
-        Final sampling rate (samples/second).
-    resampling_method : str
-        The resampling method: "mean", "pad" or "bfill",
-    fill_interruptions : bool
-        Automatically fill the eventual signal interruptions using a backfill method.
+        Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain signals recorded at different rates, harmonization is necessary in order to convert it to a DataFrame. Thus, if `sampling_rate` is set to 'max' (default), will keep the maximum recorded sampling rate and upsample the channels with lower rate if necessary (using the `signal_resample()` function). If the sampling rate is set to a given value, will resample the signals to the desired value. Note that the value of the sampling rate is outputted along with the data.
+    resample_method : str
+        Method of resampling (see `signal_resample()`). Can be 'interpolation' (default) or 'FFT' for the Fourier method. FFT is accurate (if the signal is periodic), but slower compared to interpolation.
+    impute_missing : bool
+        Sometimes, due to connections issues, the signal has some holes (short periods without signal). If 'impute_missing' is True, will automatically fill the signal interruptions using a backfill method (using the value to come).
+
     Returns
     ----------
-    df, sampling rate: pandas.DataFrame(), int
+    df, sampling rate: DataFrame, int
         The AcqKnowledge file converted to a dataframe and its sampling rate.
 
+    See Also
+    --------
+    signal_resample
 
     Example
     ----------
-    >>> import neurokit as nk
+    >>> import neurokit2 as nk
     >>>
-    >>> df = nk.read_acqknowledge('file.acq')
+    >>> data, sampling_rate = nk.read_acqknowledge('file.acq')
     """
 
 
 
-    # Check path
-    file = path + filename
-    if ".acq" not in file:
-        file += ".acq"
-    if os.path.exists(file) is False:
-        print("NeuroKit Error: read_acqknowledge(): couldn't find the following file: " + filename)
-        return()
+    # Check filename
+    if ".acq" not in filename:
+        filename += ".acq"
 
-    # Convert creation date
-    creation_date = find_creation_date(file)
-    creation_date = datetime.datetime.fromtimestamp(creation_date)
+    if os.path.exists(filename) is False:
+        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't find the following file: " + filename)
 
 
     # Read file
-    file = bioread.read(file)
+    file = bioread.read(filename)
+    bioread.read_file(filename)
 
 
     # Get the channel frequencies
@@ -142,7 +137,7 @@ def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", 
         df = df.reset_index()
 
     # Fill signal interruptions
-    if fill_interruptions is True:
+    if impute_missing is True:
         df = df.fillna(method="backfill")
 
     # Final dataframe
