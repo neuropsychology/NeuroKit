@@ -79,7 +79,7 @@ def resample_by_FFT(signal, input_fs, output_fs):
 
 
 ## TESTING interpolation function
-lenght_difference = []
+length_difference = []
 samples = list(np.linspace(100, 10000, 100, endpoint=False))
 for n in samples:
 #    print(n)
