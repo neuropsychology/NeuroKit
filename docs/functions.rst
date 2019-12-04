@@ -11,6 +11,7 @@ Signal
     
 .. autofunction:: neurokit2.signal_binarize
 
+.. autofunction:: neurokit2.signal_resample
 
 Events
 -------
