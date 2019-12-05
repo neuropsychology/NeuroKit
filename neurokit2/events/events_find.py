@@ -19,7 +19,7 @@ def _events_find(event_channel, threshold="auto", threshold_keep="above"):
     """
     binary = signal_binarize(event_channel, threshold=threshold)
 
-    if threshold_keep != 'above':
+    if threshold_keep.lower() != 'above':
         binary = np.abs(binary - 1)  # Reverse if events are below
 
     # Initialize data
@@ -77,7 +77,7 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     inter_min : int
         The minimum duration after an event for the subsequent event to be considered as such (in time points). Useful when spurious consecutive events are created due to very high sampling rate.
     discard_first, discard_last : int
-        Discard first or last n events. Useful if the experiment stats or ends with some spurious events. If discard_first=0 and discard_last=0, no first event or last event is removed. 
+        Discard first or last n events. Useful if the experiment stats or ends with some spurious events. If discard_first=0 and discard_last=0, no first event or last event is removed.
 
     Returns
     ----------
@@ -101,7 +101,7 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
 
     >>> nk.plot_events_in_signal(signal, events)
     """
-    events = _events_find(event_channel, threshold="auto", threshold_keep="above")
+    events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
 
     # Warning when no events detected
     if len(events["Onset"]) == 0:
