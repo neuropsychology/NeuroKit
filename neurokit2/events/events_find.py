@@ -69,7 +69,7 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     threshold : str or float
         The threshold value by which to select the events. If "auto", takes the value between the max and the min.
     threshold_keep : str
-        "above" or "below", define the events as above or under the treshold. For photosensors, a white screen corresponds usually to higher values. Therefore, if your events are signaled by a black colour, events values are the lower ones, and you should set the cut to "below".
+        "above" or "below", define the events as above or under the threshold. For photosensors, a white screen corresponds usually to higher values. Therefore, if your events are signaled by a black colour, events values are the lower ones, and you should set the cut to "below".
     start_at, end_at : int
         Keep events which onset is after, or before a particular time point.
     duration_min, duration_max : int
