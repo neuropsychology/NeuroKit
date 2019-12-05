@@ -1,148 +1,94 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
 import os
-import datetime
 import bioread
 
-from .find_creation_date import find_creation_date
+import pandas as pd
+import numpy as np
 
+from ..signal import signal_resample
 
-def read_acqknowledge(filename, path="", index="datetime", sampling_rate="max", resampling_method="pad", fill_interruptions=True):
-    """
-    Read and Format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
+def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", impute_missing=True):
+    """Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
+
+    The function outputs both the dataframe and the sampling rate (encoded within the AcqKnowledge) file.
 
     Parameters
     ----------
     filename :  str
         Filename (with or without the extension) of a BIOPAC's AcqKnowledge file.
-    path : str
-        Data directory.
-    index : str
-        How to index the dataframe. "datetime" for aproximate datetime (based on the file creation/change) and "range" for a simple range index.
     sampling_rate : int
-        Final sampling rate (samples/second).
-    resampling_method : str
-        The resampling method: "mean", "pad" or "bfill",
-    fill_interruptions : bool
-        Automatically fill the eventual signal interruptions using a backfill method.
+        Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain signals recorded at different rates, harmonization is necessary in order to convert it to a DataFrame. Thus, if `sampling_rate` is set to 'max' (default), will keep the maximum recorded sampling rate and upsample the channels with lower rate if necessary (using the `signal_resample()` function). If the sampling rate is set to a given value, will resample the signals to the desired value. Note that the value of the sampling rate is outputted along with the data.
+    resample_method : str
+        Method of resampling (see `signal_resample()`).
+    impute_missing : bool
+        Sometimes, due to connections issues, the signal has some holes (short periods without signal). If 'impute_missing' is True, will automatically fill the signal interruptions using padding.
+
     Returns
     ----------
-    df: pandas.DataFrame()
-        The AcqKnowledge file converted to a dataframe.
+    df, sampling rate: DataFrame, int
+        The AcqKnowledge file converted to a dataframe and its sampling rate.
 
+    See Also
+    --------
+    signal_resample
 
     Example
     ----------
-    >>> import neurokit as nk
+    >>> import neurokit2 as nk
     >>>
-    >>> df = nk.read_acqknowledge('file.acq')
+    >>> data, sampling_rate = nk.read_acqknowledge('file.acq')
     """
 
 
 
-    # Check path
-    file = path + filename
-    if ".acq" not in file:
-        file += ".acq"
-    if os.path.exists(file) is False:
-        print("NeuroKit Error: read_acqknowledge(): couldn't find the following file: " + filename)
-        return()
+    # Check filename
+    if ".acq" not in filename:
+        filename += ".acq"
 
-    # Convert creation date
-    creation_date = find_creation_date(file)
-    creation_date = datetime.datetime.fromtimestamp(creation_date)
+    if os.path.exists(filename) is False:
+        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't find the following file: " + filename)
 
 
     # Read file
-    file = bioread.read(file)
+    file = bioread.read(filename)
 
-
-    # Get the channel frequencies
-    freq_list = []
-    for channel in file.named_channels:
-        freq_list.append(file.named_channels[channel].samples_per_second)
-
-    # Get data with max frequency and the others
-    data = {}
-    data_else = {}
-    for channel in file.named_channels:
-        if file.named_channels[channel].samples_per_second == max(freq_list):
-            data[channel] = file.named_channels[channel].data
-        else:
-            data_else[channel] = file.named_channels[channel].data
-
-    # Create index
-    time = []
-    beginning_date = creation_date - datetime.timedelta(0, max(file.time_index))
-    for timestamps in file.time_index:
-        time.append(beginning_date + datetime.timedelta(0, timestamps))
-    df = pd.DataFrame(data, index=time)
-
-
-
-
-
-    # max frequency must be 1000
-    if len(data_else.keys()) > 0:  # if not empty
-        for channel in data_else:
-            channel_frequency = file.named_channels[channel].samples_per_second
-            serie = data_else[channel]
-            index = list(np.arange(0, max(file.time_index), 1/channel_frequency))
-            index = index[:len(serie)]
-
-            # Create index
-            time = []
-            for timestamps in index:
-                time.append(beginning_date + datetime.timedelta(0, timestamps))
-            data_else[channel] = pd.Series(serie, index=time)
-        df2 = pd.DataFrame(data_else)
-
-    # Create resampling factor
+    # Get desired frequency
     if sampling_rate == "max":
-        sampling_rate = max(freq_list)
+        freq_list = []
+        for channel in file.named_channels:
+            freq_list.append(file.named_channels[channel].samples_per_second)
+        sampling_rate = np.max(freq_list)
 
-    try:
-        resampling_factor = str(int(1000/sampling_rate)) + "L"
-    except TypeError:
-        print("NeuroKit Warning: read_acqknowledge(): sampling_rate must be either num or 'max'. Setting to 'max'.")
-        sampling_rate = max(freq_list)
-        resampling_factor = str(int(1000/sampling_rate)) + "L"
+    # Loop through channels
+    data = {}
+    for channel in file.named_channels:
+        signal = np.array(file.named_channels[channel].data)
 
+        # Fill signal interruptions
+        if impute_missing is True:
+            if np.isnan(np.sum(signal)):
+                signal = pd.Series(signal).fillna(method="pad").values
 
-    # Resample
-    if resampling_method not in ["mean", "bfill", "pad"]:
-        print("NeuroKit Warning: read_acqknowledge(): resampling_factor must be 'mean', 'bfill' or 'pad'. Setting to 'pad'.")
-        resampling_method = 'pad'
+        # Resample if necessary
+        if file.named_channels[channel].samples_per_second != sampling_rate:
+            signal = signal_resample(signal,
+                                     sampling_rate=file.named_channels[channel].samples_per_second,
+                                     desired_sampling_rate=sampling_rate,
+                                     method=resample_method)
+        data[channel] = signal
 
-    if resampling_method == "mean":
-        if len(data_else.keys()) > 0:
-            df2 = df2.resample(resampling_factor).mean()
-        if int(sampling_rate) != int(max(freq_list)):
-            df = df.resample(resampling_factor).mean()
-    if resampling_method == "bfill":
-        if len(data_else.keys()) > 0:
-            df2 = df2.resample(resampling_factor).bfill()
-        if int(sampling_rate) != int(max(freq_list)):
-            df = df.resample(resampling_factor).bfill()
-    if resampling_method == "pad":
-        if len(data_else.keys()) > 0:
-            df2 = df2.resample(resampling_factor).pad()
-        if int(sampling_rate) != int(max(freq_list)):
-            df = df.resample(resampling_factor).pad()
-
-
-
-    # Join dataframes
-    if len(data_else.keys()) > 0:
-        df = pd.concat([df, df2], 1)
-
-    if index == "range":
-        df = df.reset_index()
-
-    # Fill signal interruptions
-    if fill_interruptions is True:
-        df = df.fillna(method="backfill")
+    # Sanitize lengths
+    lengths = []
+    for channel in data:
+       lengths += [len(data[channel])]
+    if len(set(lengths)) > 1:  # If different lengths
+        length = pd.Series(lengths).mode()[0]  # Find most common (target length)
+        for channel in data:
+            if len(data[channel]) > length:
+                data[channel] = data[channel][0:length]
+            if len(data[channel]) < length:
+                  data[channel] = np.concatenate([data[channel], np.full((length-len(data[channel])), data[channel][-1])])
 
     # Final dataframe
-    return(df)
+    df = pd.DataFrame(data)
+    return(df, sampling_rate)
