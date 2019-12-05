@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import datetime
 import bioread
 
 import pandas as pd
@@ -8,7 +7,7 @@ import numpy as np
 
 from ..signal import signal_resample
 
-def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolation", impute_missing=True):
+def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", impute_missing=True):
     """Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
 
     The function outputs both the dataframe and the sampling rate (encoded within the AcqKnowledge) file.
@@ -20,7 +19,7 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
     sampling_rate : int
         Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain signals recorded at different rates, harmonization is necessary in order to convert it to a DataFrame. Thus, if `sampling_rate` is set to 'max' (default), will keep the maximum recorded sampling rate and upsample the channels with lower rate if necessary (using the `signal_resample()` function). If the sampling rate is set to a given value, will resample the signals to the desired value. Note that the value of the sampling rate is outputted along with the data.
     resample_method : str
-        Method of resampling (see `signal_resample()`). Can be 'interpolation' (default) or 'FFT' for the Fourier method. FFT is accurate (if the signal is periodic), but slower compared to interpolation.
+        Method of resampling (see `signal_resample()`).
     impute_missing : bool
         Sometimes, due to connections issues, the signal has some holes (short periods without signal). If 'impute_missing' is True, will automatically fill the signal interruptions using padding.
 
