@@ -38,3 +38,26 @@ Documentation
 The documentation is available `here <https://neurokit2.readthedocs.io/en/latest>`_. Check out these tutorials:
 
 - **No tutorial yet**
+
+
+Alternatives
+-------------
+
+Here's a list of great alternative packages that you should check-out:
+
+- **ECG**
+
+  - `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
+  - `hrv <https://github.com/rhenanbartels/hrv>`_
+  - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
+  - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
+  - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
+  - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
+
+- **EDA**
+
+  - `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
+  - `cvxEDA <https://github.com/lciti/cvxEDA>`_
+
+- **EEG**
+  - `MNE <https://github.com/mne-tools/mne-python>`_

@@ -61,11 +61,11 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
         return(signal)
 
     # Resample
-    if method == "FFT":
+    if method.lower() == "fft":
         resampled = _resample_interpolation(signal, desired_length)
-    elif method == "poly":
+    elif method.lower() == "poly":
         resampled =  _resample_poly(signal, desired_length)
-    elif method == "interpolation2":
+    elif method.lower() == "interpolation2":
         resampled =  _resample_interpolation2(signal, desired_length)
     else:
         resampled =  _resample_fft(signal, desired_length)
