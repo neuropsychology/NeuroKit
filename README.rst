@@ -60,4 +60,5 @@ Here's a list of great alternative packages that you should check-out:
   - `cvxEDA <https://github.com/lciti/cvxEDA>`_
 
 - **EEG**
+
   - `MNE <https://github.com/mne-tools/mne-python>`_

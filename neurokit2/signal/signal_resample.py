@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
+
+import datetime
 import scipy.signal
 import scipy.ndimage
+
+
 
 
 def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"):
@@ -34,7 +38,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     >>>
     >>> # Downsample and resample back to compare with original (and do time benchmarking)
     >>> # Downsampling
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=50))
+    >>> signal = np.cos(np.linspace(start=0, stop=20, num=100))
     >>> %timeit downsampled_interpolation = nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500)
     >>> %timeit downsampled_interpolation2 = nk.signal_resample(signal, method="interpolation2", sampling_rate=1000, desired_sampling_rate=500)
     >>> %timeit downsampled_fft = nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
@@ -62,13 +66,15 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
 
     # Resample
     if method.lower() == "fft":
-        resampled = _resample_interpolation(signal, desired_length)
+        resampled = _resample_fft(signal, desired_length)
     elif method.lower() == "poly":
         resampled =  _resample_poly(signal, desired_length)
-    elif method.lower() == "interpolation2":
-        resampled =  _resample_interpolation2(signal, desired_length)
+    elif method.lower() == "numpy":
+        resampled =  _resample_numpy(signal, desired_length)
+    elif method.lower() == "pandas":
+        resampled =  _resample_pandas(signal, desired_length)
     else:
-        resampled =  _resample_fft(signal, desired_length)
+        resampled =  _resample_interpolation(signal, desired_length)
 
     return(resampled)
 
@@ -79,7 +85,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
 # Internals
 # =============================================================================
 
-def _resample_interpolation(signal, desired_length):
+def _resample_numpy(signal, desired_length):
     resampled_signal = np.interp(
         np.linspace(0.0, 1.0, desired_length, endpoint=False),  # where to interpolate
         np.linspace(0.0, 1.0, len(signal), endpoint=False),  # known positions
@@ -88,7 +94,7 @@ def _resample_interpolation(signal, desired_length):
     return(resampled_signal)
 
 
-def _resample_interpolation2(signal, desired_length):
+def _resample_interpolation(signal, desired_length):
     resampled_signal = scipy.ndimage.zoom(signal, desired_length/len(signal))
     return(resampled_signal)
 
@@ -102,3 +108,14 @@ def _resample_poly(signal, desired_length):
     resampled_signal = scipy.signal.resample_poly(signal, desired_length, len(signal))
     return(resampled_signal)
 
+
+def _resample_pandas(signal, desired_length):
+    # Convert to Time Series
+    index = pd.date_range('20131212', freq='L', periods=len(signal))
+    resampled_signal = pd.Series(signal, index=index)
+
+    # Create resampling factor
+    resampling_factor = str(round(1/(desired_length / len(signal)))) + "L"
+
+    resampled_signal = resampled_signal.resample(resampling_factor).mean()
+    return(resampled_signal.values)
