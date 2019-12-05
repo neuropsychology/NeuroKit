@@ -6,5 +6,7 @@ __version__ = '0.0.2'
 
 from .signal import *
 from .events import *
-from .eeg import *
 from .data import *
+
+from .ecg import *
+from .eeg import *
