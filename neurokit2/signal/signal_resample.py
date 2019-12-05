@@ -2,13 +2,13 @@
 import pandas as pd
 import numpy as np
 import scipy.signal
-
+import scipy.ndimage
 
 
 def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"):
     """Resample a continuous signal.
 
-    This function can be used to up- or down-sample a signal. The user can specify either a desired length for the vector, or input the original sampling rate and the desired sampling rate.
+    This function can be used to up- or down-sample a signal. The user can specify either a desired length for the vector, or input the original sampling rate and the desired sampling rate. See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of the methods.
 
     Parameters
     ----------
@@ -32,19 +32,26 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> # Downsample
+    >>> # Downsample and resample back to compare with original (and do time benchmarking)
+    >>> # Downsampling
     >>> signal = np.cos(np.linspace(start=0, stop=20, num=50))
-    >>> downsampled_fft = nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_interpolation = nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500)
+    >>> %timeit downsampled_interpolation = nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500)
+    >>> %timeit downsampled_interpolation2 = nk.signal_resample(signal, method="interpolation2", sampling_rate=1000, desired_sampling_rate=500)
+    >>> %timeit downsampled_fft = nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
+    >>> %timeit downsampled_poly = nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500)
     >>>
-    >>> # Upsample
-    >>> upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT", sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_interpolation = nk.signal_resample(downsampled_interpolation, method="interpolation", sampling_rate=500, desired_sampling_rate=1000)
+    >>> # Upsampling
+    >>> %timeit upsampled_interpolation = nk.signal_resample(downsampled_interpolation, method="interpolation", sampling_rate=500, desired_sampling_rate=1000)
+    >>> %timeit upsampled_interpolation2 = nk.signal_resample(downsampled_interpolation2, method="interpolation2", sampling_rate=500, desired_sampling_rate=1000)
+    >>> %timeit upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT", sampling_rate=500, desired_sampling_rate=1000)
+    >>> %timeit upsampled_poly = nk.signal_resample(downsampled_poly, method="poly", sampling_rate=500, desired_sampling_rate=1000)
     >>>
     >>> # Check
     >>> pd.DataFrame({"Original": signal,
+                      "Interpolation": upsampled_interpolation,
+                      "Interpolation2": upsampled_interpolation2,
                       "FFT": upsampled_fft,
-                      "Interpolation": upsampled_interpolation}).plot(style='.-')
+                      "Poly": upsampled_poly}).plot(style='.-')
     """
     if desired_length is None:
         desired_length = round(len(signal) * desired_sampling_rate / sampling_rate)
@@ -56,8 +63,12 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     # Resample
     if method == "FFT":
         resampled = _resample_interpolation(signal, desired_length)
+    elif method == "poly":
+        resampled =  _resample_poly(signal, desired_length)
+    elif method == "interpolation2":
+        resampled =  _resample_interpolation2(signal, desired_length)
     else:
-       resampled =  _resample_fft(signal, desired_length)
+        resampled =  _resample_fft(signal, desired_length)
 
     return(resampled)
 
@@ -77,8 +88,17 @@ def _resample_interpolation(signal, desired_length):
     return(resampled_signal)
 
 
+def _resample_interpolation2(signal, desired_length):
+    resampled_signal = scipy.ndimage.zoom(signal, desired_length/len(signal))
+    return(resampled_signal)
 
 
 def _resample_fft(signal, desired_length):
     resampled_signal = scipy.signal.resample(signal, desired_length)
     return(resampled_signal)
+
+
+def _resample_poly(signal, desired_length):
+    resampled_signal = scipy.signal.resample_poly(signal, desired_length, len(signal))
+    return(resampled_signal)
+
