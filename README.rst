@@ -53,11 +53,13 @@ Here's a list of great alternative packages that you should check-out:
   - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
   - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
   - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
+  - `pyphysio <https://github.com/MPBA/pyphysio>`_
 
 - **EDA**
 
   - `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
   - `cvxEDA <https://github.com/lciti/cvxEDA>`_
+  - `BreatheEasyEDA <https://github.com/johnksander/BreatheEasyEDA>`_ *(matlab)*
 
 - **EEG**
 

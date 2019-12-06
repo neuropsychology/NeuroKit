@@ -9,7 +9,7 @@ from ..signal import signal_resample
 def ecg_simulate(duration=10, length=None, sampling_rate=1000, bpm=60, noise=0.01):
     """Simulate an ECG/EKG signal
 
-    Generate an artificial ECG signal of a given duration and sampling rate (based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_).
+    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate (based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_). It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
 
     Parameters
     ----------
