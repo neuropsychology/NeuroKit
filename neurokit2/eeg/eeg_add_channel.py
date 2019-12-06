@@ -15,15 +15,15 @@ def eeg_add_channel(raw, channel, channel_type=None, channel_name=None, sync_ind
     Parameters
     ----------
     raw : mne.io.Raw
-        Raw EEG data.
+        Raw EEG data from MNE.
     channel : list or array
-        The channel to be added.
+        The signal to be added.
     channel_type : str
         Channel type. Currently supported fields are 'ecg', 'bio', 'stim', 'eog', 'misc', 'seeg', 'ecog', 'mag', 'eeg', 'ref_meg', 'grad', 'emg', 'hbr' or 'hbo'.
     channel_type : str
-        Channel name.
+        Desired channel name.
     sync_index_raw, sync_index_channel : int or list
-        An index, in the raw data and in the channel to add, by which to align the two inputs.
+        An index (e.g., the onset of the same event marked in the same signal), in the raw data and in the channel to add, by which to align the two inputs. This can be used in case the EEG data and the channel to add do not have the same onsets and must be aligned through some common event.
 
     Returns
     ----------
@@ -32,9 +32,12 @@ def eeg_add_channel(raw, channel, channel_type=None, channel_name=None, sync_ind
 
     Example
     ----------
-    >>> import neurokit as nk
+    >>> import neurokit2 as nk
+    >>>
+    >>> # Let's say that the 42nd sample point in the EEG correspond to the 333rd point in the ECG
     >>> event_index_in_eeg = 42
     >>> event_index_in_ecg = 333
+    >>>
     >>> raw = nk.eeg_add_channel(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg")
     """
     if channel_name is None:
