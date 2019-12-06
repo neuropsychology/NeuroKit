@@ -12,4 +12,4 @@ Contributors
 ------------
 
 * `Hung Pham <https://github.com/hungpham2511>`_
-
+* `You? <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
