@@ -7,6 +7,7 @@ Welcome to NeuroKit's documentation!
    installation
    news
    functions
+   contributing
    credits
 
 Indices and tables
