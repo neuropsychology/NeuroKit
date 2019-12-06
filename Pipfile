@@ -17,6 +17,7 @@ pytest = "*"
 isort = "*"
 yapf = "*"
 bioread = "*"
+scipy = "*"
 matplotlib = "*"
 
 [packages]
