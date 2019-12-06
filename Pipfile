@@ -16,14 +16,7 @@ pylint = "*"
 pytest = "*"
 isort = "*"
 yapf = "*"
-numpy = "*"
-pandas = "*"
-mne = "*"
-scipy = "*"
-matplotlib = "*"
-bioread = "*"
 
-    
 
 [packages]
 neurokit2 = {path = ".", editable = true}
