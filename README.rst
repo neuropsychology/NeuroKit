@@ -15,7 +15,10 @@
 .. image:: https://readthedocs.org/projects/neurokit2/badge/?version=latest
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
-
+        
+.. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
+   :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
+   :alt: Maintainability
 
 **The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).**
 
