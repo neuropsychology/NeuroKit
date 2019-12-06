@@ -7,6 +7,7 @@ Core team
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_
 * `Tam Pham <https://github.com/Tam-Pham>`_
+* `Gansheng TAN <https://github.com/GanshengT>`_
 
 Contributors
 ------------
