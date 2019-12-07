@@ -55,7 +55,6 @@ Here's a list of great alternative packages that you should check-out:
   - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
   - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
   - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
-  - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
   - `pyphysio <https://github.com/MPBA/pyphysio>`_
 
 - **EDA**
@@ -68,3 +67,9 @@ Here's a list of great alternative packages that you should check-out:
 
   - `MNE <https://github.com/mne-tools/mne-python>`_
   - `unfold <https://github.com/unfoldtoolbox/unfold>`_ *(matlab)*
+  
+  
+- **Eye-Tracking**
+
+  - `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
+  - `PyTrack <https://github.com/titoghose/PyTrack>`_

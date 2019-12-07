@@ -7,68 +7,6 @@ import math
 from ..signal import signal_resample
 
 
-def ecg_simulate(duration=10, length=None, sampling_rate=1000, bpm=60, noise=0.01):
-    """Simulate an ECG/EKG signal
-
-    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate. It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
-
-    Parameters
-    ----------
-    duration : int
-        Desired recording length in seconds.
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal (in samples).
-    bpm : int
-        Desired simulated heart rate.
-    noise : float
-       Noise level.
-
-
-    Returns
-    ----------
-   array
-        Array containing the ECG signal.
-
-    Example
-    ----------
-    >>> import neurokit as nk
-    >>> import pandas as pd
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=10, bpm=60, sampling_rate=1000, noise=0.01)
-    >>> pd.Series(ecg).plot()
-
-    See Also
-    --------
-    signal_resample
-
-
-    Credits
-    -------
-    This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
-    """
-    # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
-    cardiac = scipy.signal.wavelets.daub(10)
-    # Add the gap after the pqrst when the heart is resting.
-    cardiac = np.concatenate([cardiac, np.zeros(10)])
-
-    # Caculate the number of beats in capture time period
-    num_heart_beats = int(duration * bpm / 60)
-
-    # Concatenate together the number of heart beats needed
-    ecg = np.tile(cardiac , num_heart_beats)
-
-    # Add random (gaussian distributed) noise
-    noise = np.random.normal(0, noise, len(ecg))
-    ecg = noise + ecg
-
-    # Resample
-    ecg = signal_resample(ecg, sampling_rate=1000, desired_length=length, desired_sampling_rate=sampling_rate)
-
-    return(ecg)
-
-
-
-
 def _ecg_simulate_ecgsynth(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfratio=0.5, sfint=256, ti=[-70, -15, 0, 15, 100], ai=[1.2, -5, 30, -7.5, 0.75], bi=[0.25, 0.1, 0.1, 0.1, 0.4]):
     """
     Credits
