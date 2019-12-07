@@ -2,13 +2,13 @@
 import pandas as pd
 import numpy as np
 
-#import matplotlib.pyplot as plt
-#
-#
-#
-#
-#
-#
+import matplotlib.pyplot as plt
+
+
+
+
+
+
 def plot_events_in_signal(signal, events, show=True, color="red", linestyle="--"):
     """
     Plot events in signal.
@@ -49,8 +49,8 @@ def plot_events_in_signal(signal, events, show=True, color="red", linestyle="--"
     # Plot if necessary
     if show:
         df.plot()
-#        for event in events:
-#            plt.axvline(event, color=color, linestyle=linestyle)
+        for event in events:
+            plt.axvline(event, color=color, linestyle=linestyle)
 
     else:
         df["Event_Onset"] = 0
