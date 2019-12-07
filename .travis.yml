@@ -2,7 +2,7 @@
 
 language: python
 python:
-  - "nightly"
+  # - "nightly"
   - 3.7
   - 3.6
   - 3.5

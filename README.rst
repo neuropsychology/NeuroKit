@@ -38,7 +38,7 @@ To install NeuroKit, run this command in your terminal:
 Documentation
 --------------
 
-The documentation is available `here <https://neurokit2.readthedocs.io/en/latest>`_. Check out these tutorials:
+**Check out the documentation** `**here** <https://neurokit2.readthedocs.io/en/latest>`_ and these tutorials:
 
 - **No tutorial yet**
 
@@ -67,3 +67,4 @@ Here's a list of great alternative packages that you should check-out:
 - **EEG**
 
   - `MNE <https://github.com/mne-tools/mne-python>`_
+  - `unfold <https://github.com/unfoldtoolbox/unfold>`_ *(matlab)*

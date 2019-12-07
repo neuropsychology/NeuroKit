@@ -17,6 +17,8 @@ pytest = "*"
 isort = "*"
 yapf = "*"
 bioread = "*"
+scipy = "*"
+matplotlib = "*"
 
 [packages]
 neurokit2 = {path = ".", editable = true}
