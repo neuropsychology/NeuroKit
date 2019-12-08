@@ -47,6 +47,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
     """
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
     cardiac = scipy.signal.wavelets.daub(10)
+
     # Add the gap after the pqrst when the heart is resting.
     cardiac = np.concatenate([cardiac, np.zeros(10)])
 
@@ -61,7 +62,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
 
     # Resample
     ecg = signal_resample(ecg,
-                          sampling_rate=1000,
+                          sampling_rate=int(len(ecg)/10),
                           desired_length=length,
                           desired_sampling_rate=sampling_rate)
 
