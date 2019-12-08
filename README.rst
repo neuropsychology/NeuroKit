@@ -47,7 +47,7 @@ Documentation
         :alt: API
         
 
-**Click on the links above or check out our tutorials:**
+Click on the links above and check out our tutorials:
 
 -  `Intall Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 
