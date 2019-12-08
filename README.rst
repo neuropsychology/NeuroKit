@@ -68,7 +68,7 @@ Simulate Biosignals
     emg = nk.emg_simulate(duration=10, n_bursts=3)
 
     # Visualise biosignals
-    pd.DataFrame({"ECG": ecg, "EMG": emg}).plot(subplots=True, layout=(2,1))
+    pd.DataFrame({"ECG": ecg, "EMG": emg}).plot(subplots=True, layout=(2, 1))
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
