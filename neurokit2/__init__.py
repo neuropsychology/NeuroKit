@@ -9,4 +9,5 @@ from .events import *
 from .data import *
 
 from .ecg import *
+from .emg import *
 from .eeg import *

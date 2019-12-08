@@ -2,12 +2,11 @@
 import pandas as pd
 import numpy as np
 import scipy
-import math
 
 from ..signal import signal_resample
 
 
-def ecg_simulate(duration=10, length=None, sampling_rate=1000, bpm=60, noise=0.01):
+def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=60):
     """Simulate an ECG/EKG signal
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate. It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
@@ -18,10 +17,10 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, bpm=60, noise=0.0
         Desired recording length in seconds.
     sampling_rate, length : int
         The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal (in samples).
-    bpm : int
-        Desired simulated heart rate.
     noise : float
-       Noise level.
+       Noise level (gaussian noise).
+    heart_rate : int
+        Desired simulated heart rate (in beat per minute).
 
 
     Returns
@@ -34,12 +33,12 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, bpm=60, noise=0.0
     >>> import neurokit as nk
     >>> import pandas as pd
     >>>
-    >>> ecg = nk.ecg_simulate(duration=10, bpm=60, sampling_rate=1000, noise=0.01)
+    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=100)
     >>> pd.Series(ecg).plot()
 
     See Also
     --------
-    signal_resample
+    signal_resample, emg_simulate
 
 
     Credits
@@ -52,14 +51,13 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, bpm=60, noise=0.0
     cardiac = np.concatenate([cardiac, np.zeros(10)])
 
     # Caculate the number of beats in capture time period
-    num_heart_beats = int(duration * bpm / 60)
+    num_heart_beats = int(duration * heart_rate / 60)
 
     # Concatenate together the number of heart beats needed
     ecg = np.tile(cardiac , num_heart_beats)
 
     # Add random (gaussian distributed) noise
-    noise = np.random.normal(0, noise, len(ecg))
-    ecg = noise + ecg
+    ecg += np.random.normal(0, noise, len(ecg))
 
     # Resample
     ecg = signal_resample(ecg, sampling_rate=1000, desired_length=length, desired_sampling_rate=sampling_rate)
