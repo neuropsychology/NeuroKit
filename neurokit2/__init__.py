@@ -4,6 +4,7 @@ __author__ = """NeuroKit development team"""
 __email__ = 'dom.makowski@gmail.com'
 __version__ = '0.0.2'
 
+from .stats import *
 from .signal import *
 from .events import *
 from .data import *

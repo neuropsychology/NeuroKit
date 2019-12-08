@@ -54,7 +54,7 @@ Click on the links above and check out our tutorials:
 Examples
 -------------
 
-Simulate Biosignals
+Simulate biosignals
 ^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
