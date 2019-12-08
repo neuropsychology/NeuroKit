@@ -4,6 +4,18 @@ Functions
 This part of the documentation details the complete ``NeuroKit2`` for python API.
 
 
+ECG
+-------
+
+.. autofunction:: neurokit2.ecg_simulate
+
+
+EMG
+-------
+
+.. autofunction:: neurokit2.emg_simulate
+
+
 
 Signal
 -------

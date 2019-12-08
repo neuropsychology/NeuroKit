@@ -60,7 +60,10 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
     ecg += np.random.normal(0, noise, len(ecg))
 
     # Resample
-    ecg = signal_resample(ecg, sampling_rate=1000, desired_length=length, desired_sampling_rate=sampling_rate)
+    ecg = signal_resample(ecg,
+                          sampling_rate=1000,
+                          desired_length=length,
+                          desired_sampling_rate=sampling_rate)
 
     return(ecg)
 
