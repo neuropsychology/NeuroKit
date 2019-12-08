@@ -20,7 +20,7 @@
 
   
   
-**The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...).**
+**The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
 This is a work in progress project meant as a continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community of people** around this collaborative project. If you're interested by getting involved, do `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_.
 
@@ -51,7 +51,29 @@ Click on the links above and check out our tutorials:
 
 -  `Intall Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 
+Examples
+-------------
 
+Simulate Biosignals
+^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    import numpy as np
+    import pandas as pd
+    import neurokit2 as nk
+
+    # Generate synthetic signals
+    ecg = nk.ecg_simulate(duration=10, heart_rate=70)
+    emg = nk.emg_simulate(duration=10, n_bursts=3)
+
+    # Visualise biosignals
+    pd.DataFrame({"ECG": ecg, "EMG": emg}).plot(subplots=True, layout=(2, 1))
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
+
+        
 Alternatives
 -------------
 
