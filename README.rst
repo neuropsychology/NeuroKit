@@ -1,5 +1,6 @@
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
-
+        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
+       
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
 
@@ -11,16 +12,15 @@
   
 .. image:: https://img.shields.io/pypi/dm/neurokit2
         :target: https://pypi.python.org/pypi/neurokit2
-
-.. image:: https://readthedocs.org/projects/neurokit2/badge/?version=latest
-        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
         
 .. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
    :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
    :alt: Maintainability
+   
 
-**The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).**
+  
+  
+**The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...).**
 
 This is a work in progress project meant as a continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community of people** around this collaborative project. If you're interested by getting involved, do `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_.
 
@@ -32,15 +32,24 @@ To install NeuroKit, run this command in your terminal:
 
 .. code-block:: console
 
-    $ pip install https://github.com/neuropsychology/neurokit/zipball/master
+    pip install https://github.com/neuropsychology/neurokit/zipball/master
 
 
 Documentation
 --------------
 
-**Check out the documentation** `**here** <https://neurokit2.readthedocs.io/en/latest>`_ and these tutorials:
+.. image:: https://readthedocs.org/projects/neurokit2/badge/?version=latest
+        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
 
-- **No tutorial yet**
+.. image:: https://img.shields.io/badge/functions-NeuroKit-orange.svg?colorB=2196F3
+        :target: https://neurokit2.readthedocs.io/en/latest/functions.html
+        :alt: API
+        
+
+**Click on the links above or check out our tutorials:**
+
+-  `Intall Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 
 
 Alternatives
