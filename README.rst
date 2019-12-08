@@ -50,6 +50,7 @@ Documentation
 Click on the links above and check out our tutorials:
 
 -  `Intall Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
+-  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
 
 Examples
 -------------

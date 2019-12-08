@@ -10,7 +10,6 @@ import scipy.stats
 
 
 
-
 def _standardize(data, robust=False):
 
     if robust is False:
@@ -19,9 +18,6 @@ def _standardize(data, robust=False):
         z = (data - np.median(data, axis=0))/scipy.stats.median_absolute_deviation(data, axis=0, nan_policy="omit")
 
     return(z)
-
-
-
 
 
 
@@ -57,7 +53,7 @@ def standardize(data, robust=False):
     >>>
     >>> nk.standardize([3, 1, 2, 4, 6])
     """
-     # Return appropriate type
+    # Return appropriate type
     if isinstance(data, list):
         data = list(_standardize(np.array(data), robust=robust))
     elif isinstance(data, pd.Series) or isinstance(data, pd.DataFrame):
@@ -67,6 +63,3 @@ def standardize(data, robust=False):
         data = _standardize(data, robust=robust)
 
     return(data)
-
-
-
