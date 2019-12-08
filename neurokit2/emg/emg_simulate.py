@@ -18,7 +18,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
         The desired sampling rate (in Hz, i.e., samples/second) or the desired
         length of the signal (in samples).
     noise : float
-       Noise level (gaussian noise).
+        Noise level (gaussian noise).
     n_bursts : int
         Desired number of bursts of activity (active muscle periods).
     duration_bursts : float or list
@@ -27,10 +27,10 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
 
     Returns
     ----------
-   array
+    array
         Array containing the EMG signal.
 
-    Example
+    Examples
     ----------
     >>> import neurokit as nk
     >>> import pandas as pd

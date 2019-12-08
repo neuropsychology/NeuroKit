@@ -18,17 +18,17 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
     sampling_rate, length : int
         The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal (in samples).
     noise : float
-       Noise level (gaussian noise).
+        Noise level (gaussian noise).
     heart_rate : int
         Desired simulated heart rate (in beats per minute).
 
 
     Returns
     ----------
-   array
+    array
         Array containing the ECG signal.
 
-    Example
+    Examples
     ----------
     >>> import neurokit as nk
     >>> import pandas as pd
