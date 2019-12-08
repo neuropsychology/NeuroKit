@@ -46,7 +46,8 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", im
         filename += ".acq"
 
     if os.path.exists(filename) is False:
-        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't find the following file: " + filename)
+        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't find" \
+                         " the following file: " + filename)
 
 
     # Read file
@@ -87,7 +88,8 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", im
             if len(data[channel]) > length:
                 data[channel] = data[channel][0:length]
             if len(data[channel]) < length:
-                  data[channel] = np.concatenate([data[channel], np.full((length-len(data[channel])), data[channel][-1])])
+                  data[channel] = np.concatenate([data[channel],
+                                                 np.full((length-len(data[channel])), data[channel][-1])])
 
     # Final dataframe
     df = pd.DataFrame(data)
