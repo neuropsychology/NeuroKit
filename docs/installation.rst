@@ -37,13 +37,13 @@ Install NeuroKit
 
 If you already have python, you can install NeuroKit by running this command in your terminal:
 
-.. code-block::
+.. code-block:: console
 
     pip install neurokit2
 
 This is the preferred method to install NeuroKit, as it will always install the most stable release. It is also possible to install it directly from github:
 
-.. code-block::
+.. code-block:: console
 
     pip install https://github.com/neuropsychology/neurokit/zipball/master
 
