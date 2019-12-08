@@ -10,5 +10,5 @@ import neurokit2 as nk
 #
 def test_read_acqknowledge():
 
-    df, sampling_rate = nk.read_acqknowledge("example1")
+    df, sampling_rate = nk.read_acqknowledge("../data/example1")
     assert sampling_rate == 4000
