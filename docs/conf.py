@@ -22,6 +22,7 @@ import os
 import mock
 import re
 import sys
+import sphinx_bootstrap_theme
 
 sys.path.insert(0, os.path.abspath('../'))
 
@@ -30,7 +31,7 @@ MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'scipy.signal', 'scipy.ndimage', 'sc
 
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
-    
+
 
 # -- General configuration ---------------------------------------------
 
@@ -82,7 +83,7 @@ author = u"Dominique Makowski"
 def find_version():
     result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"), open('../neurokit2/__init__.py').read())
     return result.group(1)
-    
+
 version = find_version()
 # The full version, including alpha/beta/rc tags.
 release = version
@@ -133,6 +134,28 @@ html_static_path = ['_static']
 
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'neurokit2doc'
+
+
+
+# Bootstrap theme
+#html_theme = 'bootstrap'
+#html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+#html_theme_options = {
+#    'source_link_position': "footer",
+#    'bootswatch_theme': "readable",
+#    'navbar_sidebarrel': False,
+#    'nosidebar': True,
+#    'navbar_pagenav': False,
+#    'bootstrap_version': "3",
+#    'navbar_links': [
+#                     ("Installation", "installation"),
+#                     ("What's new", "news"),
+#                     ("Functions", "functions"),
+#                     ("Contributing", "contributing"),
+#                     ("Authors", "credits")
+#                     ],
+#
+#    }
 
 
 # -- Options for LaTeX output ------------------------------------------
@@ -191,7 +214,7 @@ texinfo_documents = [
 ]
 
 
-#Other 
+#Other
 add_module_names = False # so functions aren’t prepended with the name of the package/module
 add_function_parentheses = True # to ensure that parentheses are added to the end of all function names
 
