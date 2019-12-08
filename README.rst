@@ -20,7 +20,7 @@
 
   
   
-**The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...).**
+**The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
 This is a work in progress project meant as a continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community of people** around this collaborative project. If you're interested by getting involved, do `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_.
 
