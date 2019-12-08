@@ -30,7 +30,7 @@ Installation
 
 To install NeuroKit, run this command in your terminal:
 
-.. code-block:: console
+.. code-block::
 
     pip install https://github.com/neuropsychology/neurokit/zipball/master
 
@@ -57,28 +57,32 @@ Alternatives
 
 Here's a list of great alternative packages that you should check-out:
 
-- **ECG**
+ECG
+^^^^
 
-  - `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
-  - `hrv <https://github.com/rhenanbartels/hrv>`_
-  - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
-  - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
-  - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
-  - `pyphysio <https://github.com/MPBA/pyphysio>`_
+- `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
+- `hrv <https://github.com/rhenanbartels/hrv>`_
+- `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
+- `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
+- `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
+- `pyphysio <https://github.com/MPBA/pyphysio>`_
 
-- **EDA**
+EDA
+^^^^
 
-  - `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
-  - `cvxEDA <https://github.com/lciti/cvxEDA>`_
-  - `BreatheEasyEDA <https://github.com/johnksander/BreatheEasyEDA>`_ *(matlab)*
+- `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
+- `cvxEDA <https://github.com/lciti/cvxEDA>`_
+- `BreatheEasyEDA <https://github.com/johnksander/BreatheEasyEDA>`_ *(matlab)*
 
-- **EEG**
+EEG
+^^^^
 
-  - `MNE <https://github.com/mne-tools/mne-python>`_
-  - `unfold <https://github.com/unfoldtoolbox/unfold>`_ *(matlab)*
+- `MNE <https://github.com/mne-tools/mne-python>`_
+- `unfold <https://github.com/unfoldtoolbox/unfold>`_ *(matlab)*
   
   
-- **Eye-Tracking**
+Eye-Tracking
+^^^^^^^^^^^^
 
-  - `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
-  - `PyTrack <https://github.com/titoghose/PyTrack>`_
+- `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
+- `PyTrack <https://github.com/titoghose/PyTrack>`_
