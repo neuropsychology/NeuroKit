@@ -9,8 +9,8 @@ from ..signal import signal_resample
 
 def _ecg_simulate_ecgsynth(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfratio=0.5, sfint=256, ti=[-70, -15, 0, 15, 100], ai=[1.2, -5, 30, -7.5, 0.75], bi=[0.25, 0.1, 0.1, 0.1, 0.4]):
     """
-    Credits
-    -------
+    References
+    -----------
     This function is a python translation of the matlab script by Patrick McSharry & Gari Clifford (2013). All credits go to them.
     """
 # Set parameter default values

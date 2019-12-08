@@ -20,7 +20,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
     noise : float
        Noise level (gaussian noise).
     heart_rate : int
-        Desired simulated heart rate (in beat per minute).
+        Desired simulated heart rate (in beats per minute).
 
 
     Returns
@@ -38,11 +38,11 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
 
     See Also
     --------
-    signal_resample, emg_simulate
+    signal_resample, ppg_simulate, emg_simulate
 
 
-    Credits
-    -------
+    References
+    -----------
     This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
     """
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
