@@ -3,10 +3,44 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import detrend
-from neurokit2.signal import signal_filter, statistics
+from neurokit2.signal import signal_filter
+from neurokit2.stats import interpolate
 
 
-class Rsp():
+class Rsp(object):
+    """
+    Object for calculation and display of signal-specific statistics.
+
+    Parameters
+    ----------
+    signal : 1d array
+        The respiration signal.
+    sfreq : int, optional
+        Sampling frequency (Hz). The default is 1000.
+
+    Attributes
+    ----------
+    signal, sfreq : see Parameters
+    peaks : 1d array
+        The inhalation peaks.
+    troughs : 1d array
+        The exhalation troughs
+    period : 1d array
+        Instantaneous peak to peak difference in milliseconds.
+    rate : 1d array
+        Instantaneous peak to peak difference in breath per minute.
+    amplitude : 1d array
+        Instantaneous breathing amplitude based on vertical distance of peaks
+        to the preceding troughs.
+    period_mean : float
+        Mean of period.
+    rate_mean : float
+        Mean of rate.
+    amplitude_mean : float
+        Mean of amplitude.
+
+    """
+
     def __init__(self, signal, sfreq=1000):
 
         super(Rsp, self).__init__()
@@ -25,13 +59,13 @@ class Rsp():
         self.rate_mean = None
         self.amplitude_mean = None
 
-        # Initialize peaks and troughs.
+        # Compute peaks and troughs.
         self._find_extrema()
 
-        # Initialize instantaneous statistics.
+        # Compute instantaneous statistics.
         self._calculate_instant_stats()
 
-        # Initialize summary statistics.
+        # Compute summary statistics.
         self._calculate_summary_stats()
 
     #######################################################################
@@ -40,27 +74,56 @@ class Rsp():
     # adding arguments.
     #######################################################################
     def summary_stats(self):
+        """Convenience-function to retrieve summary statistics.
 
+        Returns
+        -------
+        summary_stats : dict
+            Contains all summary statistics accessible with the keys
+            "mean_period", "mean_rate", and "mean_amplitude".
+
+        """
         summary_stats = {"mean_period": self.period_mean,
                          "mean_rate": self.rate_mean,
                          "mean_amplitude": self.amplitude_mean}
         return summary_stats
 
     def instantaneous_stats(self):
+        """Convenience-function to retrieve instantaneous statistics.
 
+        Returns
+        -------
+        inst_stats : dict
+            Contains all instantaneous statistics accessible with the keys
+            "period", "rate", and "amplitude".
+
+        """
         inst_stats = {"period": self.period,
                       "rate": self.rate,
                       "amplitude": self.amplitude}
         return inst_stats
 
     def extrema(self):
+        """Convenience-function to retrieve the signals extrema.
 
+        Returns
+        -------
+        extrema : dict
+            Contains the signal's extrema accessible with the keys "peaks", and
+            "troughs".
+
+        """
         extrema = {"peaks": self.peaks,
                    "troughs": self.troughs}
         return extrema
 
     def plot_summary(self):
+        """Plot object overview.
 
+        Displays the signal, its extrema, as well as the instantaneous
+        statistics.
+
+        """
         fig, (ax0, ax1, ax2, ax3) = plt.subplots(nrows=4, ncols=1, sharex=True)
         ax0.set_title("Signal and Breathing Extrema")
         ax0.plot(self.signal)
@@ -75,7 +138,7 @@ class Rsp():
         plt.show()
 
     ###############################################
-    # Internal methods (not publically documented)-
+    # Internal methods (not publically documented).
     ###############################################
     def _find_extrema(self):
 
@@ -88,7 +151,7 @@ class Rsp():
                                                highcut=2)
 
         # Detect zero crossings (note that these are zero crossings in the raw
-        # signal, not in it's gradient).
+        # signal, not in its gradient).
         greater = sig_filt > 0
         smaller = sig_filt < 0
         risex = np.where(np.bitwise_and(smaller[:-1], greater[1:]))[0]
@@ -102,11 +165,13 @@ class Rsp():
         allx = np.concatenate((risex, fallx))
         allx.sort(kind="mergesort")
 
-        # Find extrema.
+        # Find extrema by searching minima between falling zero crossing and
+        # rising zero crossing, and searching maxima between rising zero
+        # crossing and falling zero crossing.
         extrema = []
         for i in range(len(allx) - 1):
 
-            # Determine whether to search for min or max.
+            # Determine whether to search for minimum or maximum.
             if startx == "rise":
                 if (i + 1) % 2 != 0:
                     argextreme = np.argmax
@@ -118,6 +183,8 @@ class Rsp():
                 else:
                     argextreme = np.argmax
 
+            # Get the two zero crossings between which the extreme will be
+            # searched.
             beg = allx[i]
             end = allx[i + 1]
 
@@ -126,7 +193,7 @@ class Rsp():
 
         extrema = np.asarray(extrema)
 
-        # Only consider those extrema that have a minimum vertical difference
+        # Only consider those extrema that have a minimum vertical distance
         # to their direct neighbor, i.e., define outliers in absolute amplitude
         # difference between neighboring extrema.
         vertdiff = np.abs(np.diff(sig_filt[extrema]))
@@ -134,7 +201,7 @@ class Rsp():
         minvert = np.where(vertdiff > avgvertdiff * 0.3)[0]
         extrema = extrema[minvert]
 
-        # Make sure that the alternation of peaks and troughs is unbroken: if
+        # Make sure that the alternation of peaks and troughs is unbroken. If
         # alternation of sign in extdiffs is broken, remove the extrema that
         # cause the breaks.
         amps = sig_filt[extrema]
@@ -161,23 +228,22 @@ class Rsp():
 
     def _calculate_instant_stats(self):
 
-        # Calculate period, based on horizontal peak to peak difference.
-        # Make sure that period has the same number of elements as peaks
-        # (important for interpolation later) by prepending the mean of all
-        # periods.
+        # Calculate period in msec, based on horizontal peak to peak
+        # difference. Make sure that period has the same number of elements as
+        # peaks (important for interpolation later) by prepending the mean of
+        # all periods.
         period = np.ediff1d(self.peaks, to_begin=0) / self.sfreq
         period[0] = np.mean(period)
-
         rate = 60 / period
-
         # TODO: normalize amplitude?
         amplitude = self.peaks - self.troughs
 
         # Interpolate all statistics to length of the breathing signal.
         nsamps = len(self.signal)
-        self.period = statistics.interp_stats(self.peaks, period, nsamps)
-        self.rate = statistics.interp_stats(self.peaks, rate, nsamps)
-        self.amplitude = statistics.interp_stats(self.peaks, amplitude, nsamps)
+        self.period = interpolate.interp_stats(self.peaks, period, nsamps)
+        self.rate = interpolate.interp_stats(self.peaks, rate, nsamps)
+        self.amplitude = interpolate.interp_stats(self.peaks, amplitude,
+                                                  nsamps)
 
     def _calculate_summary_stats(self):
 
