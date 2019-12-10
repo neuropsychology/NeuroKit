@@ -13,3 +13,4 @@ from .ecg import *
 from .emg import *
 from .ppg import *
 from .eeg import *
+from .rsp import *
