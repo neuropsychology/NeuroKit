@@ -80,15 +80,23 @@ Alternatives
 
 Here's a list of great alternative packages that you should check-out:
 
+
+Multi
+^^^^^^
+
+- `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
+- `PySiology <https://github.com/Gabrock94/Pysiology>`_
+
 ECG
 ^^^^
 
-- `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
+
 - `hrv <https://github.com/rhenanbartels/hrv>`_
 - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
 - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
 - `pyphysio <https://github.com/MPBA/pyphysio>`_
+
 
 EDA
 ^^^^
