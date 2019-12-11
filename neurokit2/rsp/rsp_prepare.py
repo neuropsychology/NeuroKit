@@ -18,7 +18,7 @@ from ..signal import signal_interpolate
 
 
 def rsp_preprocessing(rsp, sampling_rate=1000, outlier_threshold=1/3):
-    """
+    """Preprocessing of RSP (respiration) signal
 
     Examples
     --------
