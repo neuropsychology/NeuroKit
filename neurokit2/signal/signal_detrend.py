@@ -14,6 +14,11 @@ def signal_detrend(signal, order=1):
     order : int
         The order of the polynomial. 0, 1 or > 1 for a baseline ('constant detrend', i.e., remove only the mean), linear (remove the linear trend) or polynomial detrending.
 
+    Returns
+    -------
+    array
+        Vector containing the detrended signal.
+
     Examples
     --------
     >>> import numpy as np
