@@ -5,7 +5,7 @@ import scipy.signal
 
 def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", butterworth_order=5):
     """Filter a signal.
-    
+
     Will apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided) or bandpass (if both are provided) filter to the signal.
 
     Parameters
@@ -46,7 +46,7 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
                          "'highcut' frequencies must be provided for filtering.")
         return(signal)
 
-    if method.tolower() in ["butterworth", "butter"]:
+    if method.lower() in ["butterworth", "butter"]:
         filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, butterworth_order)
 
     return(filtered)

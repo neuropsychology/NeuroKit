@@ -47,3 +47,9 @@ def test_signal_resample():
 
 
 
+def test_signal_filter():
+
+    signal = np.cos(np.linspace(start=0, stop=10, num=1000)) # Low freq
+    signal += np.cos(np.linspace(start=0, stop=100, num=1000)) # High freq
+    filtered = nk.signal_filter(signal, highcut=10)
+    assert np.std(signal) > np.std(filtered)
