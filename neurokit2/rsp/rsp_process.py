@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.signal import detrend
 
 from ..signal import signal_filter
-from ..stats import interpolate
+from ..signal import signal_interpolate
 
 
 class Rsp(object):
@@ -239,10 +239,9 @@ class Rsp(object):
 
         # Interpolate all statistics to length of the breathing signal.
         nsamps = len(self.signal)
-        self.period = interpolate.interp_stats(self.peaks, period, nsamps)
-        self.rate = interpolate.interp_stats(self.peaks, rate, nsamps)
-        self.amplitude = interpolate.interp_stats(self.peaks, amplitude,
-                                                  nsamps)
+        self.period = signal_interpolate(self.peaks, x_axis=period, length=nsamps)
+        self.rate = signal_interpolate(self.peaks, x_axis=rate, length=nsamps)
+        self.amplitude = signal_interpolate(self.peaks, x_axis=amplitude, length=nsamps)
 
     def _calculate_summary_stats(self):
 

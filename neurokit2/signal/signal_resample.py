@@ -26,7 +26,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     Returns
     -------
     array
-        Array containing resampled signal values.
+        Vector containing resampled signal values.
 
     Examples
     --------

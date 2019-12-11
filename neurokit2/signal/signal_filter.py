@@ -42,9 +42,8 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
     """
     # Sanity checks
     if lowcut is None and highcut is None:
-        raise ValueError("NeuroKit warning: signal_filter(): 'lowcut' or " \
+        raise ValueError("NeuroKit error: signal_filter(): 'lowcut' or " \
                          "'highcut' frequencies must be provided for filtering.")
-        return(signal)
 
     if method.lower() in ["butterworth", "butter"]:
         filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, butterworth_order)

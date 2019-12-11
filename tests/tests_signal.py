@@ -53,3 +53,21 @@ def test_signal_filter():
     signal += np.cos(np.linspace(start=0, stop=100, num=1000)) # High freq
     filtered = nk.signal_filter(signal, highcut=10)
     assert np.std(signal) > np.std(filtered)
+
+
+
+def test_signal_interpolate():
+
+    x_axis = np.linspace(start=10, stop=30, num=10)
+    signal = np.cos(x_axis)
+
+    interpolated = nk.signal_interpolate(signal, desired_length=1000)
+    assert len(interpolated) == 1000
+
+    new_x = np.linspace(start=0, stop=40, num=1000)
+    interpolated = nk.signal_interpolate(signal,
+                                      desired_length=1000,
+                                      x_axis=x_axis,
+                                      new_x=new_x)
+    assert len(interpolated) == 1000
+    assert interpolated[0] == signal[0]
