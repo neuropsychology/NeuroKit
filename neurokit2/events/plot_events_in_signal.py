@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 
+import matplotlib.cm
 import matplotlib.pyplot as plt
 
 
@@ -37,6 +38,15 @@ def plot_events_in_signal(signal, events, show=True, color="red", linestyle="--"
     >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
     >>> events = nk.events_find(signal)
     >>> nk.plot_events_in_signal(signal, events)
+    >>>
+    >>> events1 = events["Onset"]
+    >>> events2 = np.arange(0, 1000, 100)
+    >>> nk.plot_events_in_signal(signal, events=[events1, events2])
+    >>>
+    >>> signal = np.cos(np.linspace(start=0, stop=70, num=1000))
+    >>> events = nk.events_find(signal)
+    >>> events = [[i] for i in events['Onset']]
+    >>> nk.plot_events_in_signal(signal, events)
     """
 
     if isinstance(events, dict):
@@ -49,8 +59,30 @@ def plot_events_in_signal(signal, events, show=True, color="red", linestyle="--"
     # Plot if necessary
     if show:
         signal.plot()
-        for event in events:
-            plt.axvline(event, color=color, linestyle=linestyle)
+
+        # Check if events is list of lists
+        try:
+            len(events[0])
+            is_listoflists = True
+        except TypeError:
+            is_listoflists = False
+
+        if is_listoflists is False:
+            # Loop through sublists
+            for event in events:
+                plt.axvline(event, color=color, linestyle=linestyle)
+        else:
+            # Convert color and style to list
+            if isinstance(color, str):
+                color_map = matplotlib.cm.get_cmap('rainbow')
+                color = color_map(np.linspace(0, 1, num=len(events)))
+            if isinstance(linestyle, str):
+                linestyle = np.full(len(events), linestyle)
+
+            # Loop through sublists
+            for i, event in enumerate(events):
+                for j in events[i]:
+                    plt.axvline(j, color=color[i], linestyle=linestyle[i])
 
     else:
         signal["Event_Onset"] = 0
