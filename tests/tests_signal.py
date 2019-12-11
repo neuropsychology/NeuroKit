@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 
+import scipy.signal
+
 # =============================================================================
 # Signal
 # =============================================================================
@@ -43,6 +45,22 @@ def test_signal_resample():
                         "FFT": upsampled_fft - signal,
                         "Poly": upsampled_poly - signal})
     assert np.allclose(np.mean(rez.mean()), 0.0001, atol=0.0001)
+
+
+
+def test_signal_detrend():
+    signal = np.cos(np.linspace(start=0, stop=10, num=1000))  # Low freq
+    signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq
+    signal += 3  # Add baseline
+
+    rez_nk = nk.signal_detrend(signal, order=1)
+    rez_scipy = scipy.signal.detrend(signal, type="linear")
+    assert np.allclose(np.mean(rez_nk - rez_scipy), 0, atol=0.000001)
+
+    rez_nk = nk.signal_detrend(signal, order=0)
+    rez_scipy = scipy.signal.detrend(signal, type="constant")
+    assert np.allclose(np.mean(rez_nk - rez_scipy), 0, atol=0.000001)
+
 
 
 

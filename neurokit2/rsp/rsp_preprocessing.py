@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 import scipy.signal
 
+from ..signal import signal_detrend
 from ..signal import signal_filter
 from ..signal import signal_interpolate
 
@@ -31,7 +32,7 @@ def rsp_preprocessing(rsp, sampling_rate=1000, outlier_threshold=1/3):
     """
     # Detrend and lowpass-filter the signal to be able to reliably detect
     # zero crossings in raw signal.
-    rsp = scipy.signal.detrend(rsp, type="linear")
+    rsp = signal_detrend(rsp, order=1)
     filtered = signal_filter(rsp, sampling_rate=sampling_rate, highcut=2, method="butterworth")
 
     # Detect zero crossings (note that these are zero crossings in the raw
