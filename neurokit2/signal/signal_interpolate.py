@@ -30,7 +30,7 @@ def signal_interpolate(signal, desired_length=None, method="quadratic", x_axis=N
         Vector of interpolated samples.
 
     Examples
-        --------
+    --------
     >>> import numpy as np
     >>> import pandas as pd
     >>> import neurokit2 as nk

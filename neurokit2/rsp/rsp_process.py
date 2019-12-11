@@ -1,11 +1,20 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
 import matplotlib.pyplot as plt
+
 from scipy.signal import detrend
 
 from ..signal import signal_filter
 from ..signal import signal_interpolate
+
+
+
+
+
+
+
+
+
 
 
 class Rsp(object):

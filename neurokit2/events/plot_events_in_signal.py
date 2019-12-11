@@ -43,19 +43,19 @@ def plot_events_in_signal(signal, events, show=True, color="red", linestyle="--"
         events = events["Onset"]
 
     if isinstance(signal, pd.DataFrame) is False:
-        df = pd.DataFrame({"Signal": signal})
+        signal = pd.DataFrame({"Signal": signal})
 
 
     # Plot if necessary
     if show:
-        df.plot()
+        signal.plot()
         for event in events:
             plt.axvline(event, color=color, linestyle=linestyle)
 
     else:
-        df["Event_Onset"] = 0
-        df.iloc[events] = 1
-        return(df)
+        signal["Event_Onset"] = 0
+        signal.iloc[events] = 1
+        return(signal)
 
 
 
