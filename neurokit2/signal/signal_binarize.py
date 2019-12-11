@@ -27,7 +27,7 @@ def signal_binarize(signal, threshold="auto"):
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel.
+        The signal channel in the form of a vector of values.
     threshold : float
         The threshold value by which to select the events. If "auto", takes the value between the max and the min.
 

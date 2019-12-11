@@ -2,4 +2,4 @@
 
 from .signal_binarize import signal_binarize
 from .signal_resample import signal_resample
-from .signal_filter import butter_filter
+from .signal_filter import signal_filter

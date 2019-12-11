@@ -15,7 +15,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     Parameters
     ----------
     signal :  list, array or Series
-        The signal channel.
+        The signal channel in the form of a vector of values.
     desired_length : int
         The desired length of the signal.
     sampling_rate, desired_sampling_rate : int

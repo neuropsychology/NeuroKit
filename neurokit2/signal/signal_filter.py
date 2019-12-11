@@ -1,78 +1,92 @@
 # -*- coding: utf-8 -*-
+import scipy.signal
 
-from scipy.signal import butter, filtfilt
 
 
-def butter_filter(x, filttype, sfreq, lowcut=None, highcut=None, order=5):
-    """Filter a signal using IIR Butterworth coefficients.
+def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", butterworth_order=5):
+    """Filter a signal.
+    
+    Will apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided) or bandpass (if both are provided) filter to the signal.
 
     Parameters
     ----------
-    x : 1d array
-        Input signal.
-    filttype : string
-        Type of the filter. Can be either "lowpass", "highpass", "bandpass",
+    signal : list, array or Series
+        The signal channel in the form of a vector of values.
         or "bandstop".
-    sfreq : int
+    sampling_rate : int
         Sampling frequency (Hz).
-    lowcut : float, optional
+    lowcut : float
         Lower cutoff frequency in Hz. The default is None.
-    highcut : float, optional
+    highcut : float
         Upper cutoff frequency in Hz. The default is None.
-    order : int, optional
-        Order of the filter. The default is 5.
+    method : str
+        Can be one of 'butterworth'.
+    butterworth_order : int
+        Order of the filter when method is 'butterworth'. The default is 5.
 
     Returns
     -------
-    y : 1d array
-        Filtered signal.
+    array
+        Vector containing the filtered signal.
 
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> import neurokit2 as nk
+    >>>
+    >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000)) # Low freq
+    >>> signal += np.cos(np.linspace(start=0, stop=100, num=1000)) # High freq
+    >>> filtered = nk.signal_filter(signal, highcut=10)
+    >>> pd.DataFrame({"Raw": signal, "Filtered": filtered}).plot()
+    """
+    # Sanity checks
+    if lowcut is None and highcut is None:
+        raise ValueError("NeuroKit warning: signal_filter(): 'lowcut' or " \
+                         "'highcut' frequencies must be provided for filtering.")
+        return(signal)
+
+    if method.tolower() in ["butterworth", "butter"]:
+        filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, butterworth_order)
+
+    return(filtered)
+
+
+
+# =============================================================================
+# Butterworth
+# =============================================================================
+
+def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, butterworth_order=5):
+    """Filter a signal using IIR Butterworth coefficients.
     """
     # Use filtfilt to obtain a zero-phase filter in order for the filtered
     # signal to not be phase shifted with respect to the original signal.
-    b, a = _butter_coefficients(filttype, sfreq, lowcut, highcut, order)
-    y = filtfilt(b, a, x, method="pad")
-    return y
+    b, a = _signal_filter_butterworth_coefficients(sampling_rate, lowcut, highcut, butterworth_order)
+    filtered = scipy.signal.filtfilt(b, a, signal, method="gust")
+    return(filtered)
 
 
-def _butter_coefficients(filttype, sfreq, lowcut, highcut, order):
+def _signal_filter_butterworth_coefficients(sampling_rate=1000, lowcut=None, highcut=None, butterworth_order=5):
     """Calculate IIR Butterworth coefficient.
-
-    Parameters
-    ----------
-    filttype : string
-        Type of the filter. Can be either "lowpass", "highpass", "bandpass",
-        or "bandstop".
-    sfreq : int
-        Sampling frequency (Hz).
-    lowcut : float
-        Lower cutoff frequency in Hz.
-    highcut : float
-        Upper cutoff frequency in Hz.
-    order : int
-        Order of the filter.
 
     Returns
     -------
-    b : ndarray
-        Numerator polynomials of the filter.
-    a : ndarray
-        Denominator polynomials of the filter.
-
+    b, a : ndarray
+        Numerator and Denominator polynomials of the filter.
     """
-    nyq = 0.5 * sfreq
+    nyquist_freq = 0.5 * sampling_rate
 
-    if lowcut:
-        lowcut_norm = lowcut / nyq
-    if highcut:
-        highcut_norm = highcut / nyq
+    if lowcut is not None:
+        lowcut = lowcut / nyquist_freq
+    if highcut is not None:
+        highcut = highcut / nyquist_freq
 
-    if filttype == "bandpass" or filttype == "bandstop":
-        Wn = [lowcut_norm, highcut_norm]
-    elif filttype == "lowpass":
-        Wn = [highcut_norm]
-    elif filttype == "highpass":
-        Wn = [lowcut_norm]
+    if lowcut is not None and highcut is not None:
+        b, a = scipy.signal.butter(butterworth_order, [lowcut, highcut], btype="bandpass")
+    elif lowcut is not None:
+        b, a = scipy.signal.butter(butterworth_order, [lowcut], btype="highpass")
+    elif highcut is not None:
+        b, a = scipy.signal.butter(butterworth_order, [highcut], btype="lowpass")
 
-    b, a = butter(order, Wn, btype=filttype)
-    return b, a
+    return(b, a)

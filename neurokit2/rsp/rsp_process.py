@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
+
 import matplotlib.pyplot as plt
 from scipy.signal import detrend
-from neurokit2.signal import signal_filter
-from neurokit2.stats import interpolate
+
+from ..signal import signal_filter
+from ..stats import interpolate
 
 
 class Rsp(object):
@@ -146,9 +147,7 @@ class Rsp(object):
         # Detrend and lowpass-filter the signal to be able to reliably detect
         # zero crossings in raw signal.
         sig = detrend(sig, type="linear")
-        sig_filt = signal_filter.butter_filter(sig, "lowpass",
-                                               sfreq=self.sfreq,
-                                               highcut=2)
+        sig_filt = signal_filter(sig, sampling_rate=self.sfreq, highcut=2, method="butterworth")
 
         # Detect zero crossings (note that these are zero crossings in the raw
         # signal, not in its gradient).

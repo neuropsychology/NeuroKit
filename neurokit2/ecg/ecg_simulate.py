@@ -26,7 +26,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
     Returns
     ----------
     array
-        Array containing the ECG signal.
+        Vector containing the ECG signal.
 
     Examples
     ----------
