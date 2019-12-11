@@ -17,7 +17,7 @@ from ..signal import signal_interpolate
 
 
 
-def rsp_preprocessing(rsp, sampling_rate=1000, outlier_threshold=1/3):
+def rsp_prepare(rsp, sampling_rate=1000, outlier_threshold=1/3):
     """Preprocessing of RSP (respiration) signal
 
     Examples
@@ -27,7 +27,7 @@ def rsp_preprocessing(rsp, sampling_rate=1000, outlier_threshold=1/3):
     >>> import neurokit2 as nk
     >>>
     >>> rsp = np.cos(np.linspace(start=0, stop=40, num=20000))
-    >>> preprocessed = nk.rsp_preprocessing(rsp, sampling_rate=1000, outlier_threshold=1/5)
+    >>> preprocessed = nk.rsp_prepare(rsp, sampling_rate=1000, outlier_threshold=1/5)
     >>> nk.plot_events_in_signal(preprocessed['RSP_data'], preprocessed['RSP_info']["RSP_Peaks"])
     """
     # Detrend and lowpass-filter the signal to be able to reliably detect
