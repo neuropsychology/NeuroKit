@@ -6,16 +6,12 @@ from ..signal import signal_detrend
 from ..signal import signal_filter
 from ..signal import signal_interpolate
 
-from .rsp_findpeaks import rsp_findpeaks
 
 
 
 
 
-
-
-
-def rsp_prepare(rsp, sampling_rate=1000):
+def rsp_prepare(rsp_signal, sampling_rate=1000):
     """Preprocessing of RSP (respiration) signal
 
     Examples
@@ -30,10 +26,10 @@ def rsp_prepare(rsp, sampling_rate=1000):
     """
     # Detrend and lowpass-filter the signal to be able to reliably detect
     # zero crossings in raw signal.
-    rsp = signal_detrend(rsp, order=1)
-    filtered_rsp = signal_filter(rsp, sampling_rate=sampling_rate, highcut=2, method="butterworth")
+    filtered_rsp = signal_detrend(rsp_signal, order=1)
+    filtered_rsp = signal_filter(filtered_rsp, sampling_rate=sampling_rate, highcut=2, method="butterworth")
 
     # Prepare output
-    data = pd.DataFrame({"RSP_Raw": rsp,
+    data = pd.DataFrame({"RSP_Raw": rsp_signal,
                          "RSP_Filtered": filtered_rsp})
     return(data)

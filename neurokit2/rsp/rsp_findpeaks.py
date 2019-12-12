@@ -5,7 +5,7 @@ import pandas as pd
 
 
 
-def rsp_findpeaks(filtered_rsp, sampling_rate=1000, outlier_threshold=0.3):
+def rsp_findpeaks(rsp_filtered, sampling_rate=1000, outlier_threshold=0.3):
     """
     https://www.biorxiv.org/content/10.1101/270348v1.full
 
@@ -17,24 +17,25 @@ def rsp_findpeaks(filtered_rsp, sampling_rate=1000, outlier_threshold=0.3):
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=40, num=20000))
     >>> data = nk.rsp_prepare(signal, sampling_rate=1000)
-    >>> info = nk.rsp_findpeaks(filtered_rsp=data["RSP_Filtered"], sampling_rate=1000)
-    >>> nk.plot_events_in_signal(signal, [info["RSP_Peaks"], info["RSP_Troughs"]])
+    >>> peaks_data, peaks_info = nk.rsp_findpeaks(rsp_filtered=data["RSP_Filtered"], sampling_rate=1000)
+    >>> nk.plot_events_in_signal(data, [peaks_info["RSP_Peaks"], peaks_info["RSP_Troughs"]])
     """
     # Try retrieving right column
-    if isinstance(filtered_rsp, pd.DataFrame):
+    if isinstance(rsp_filtered, pd.DataFrame):
         try:
-            filtered_rsp = filtered_rsp["RSP_Filtered"]
+            rsp_filtered = rsp_filtered["RSP_Filtered"]
         except NameError:
             try:
-                filtered_rsp = filtered_rsp["RSP_Raw"]
+                rsp_filtered = rsp_filtered["RSP_Raw"]
             except NameError:
-                filtered_rsp = filtered_rsp["RSP"]
+                rsp_filtered = rsp_filtered["RSP"]
 
+    rsp_filtered = np.array(rsp_filtered)
 
     # Detect zero crossings (note that these are zero crossings in the raw
     # signal, not in its gradient).
-    greater = filtered_rsp > 0
-    smaller = filtered_rsp < 0
+    greater = rsp_filtered > 0
+    smaller = rsp_filtered < 0
     risex = np.where(np.bitwise_and(smaller[:-1], greater[1:]))[0]
     fallx = np.where(np.bitwise_and(greater[:-1], smaller[1:]))[0]
 
@@ -69,7 +70,7 @@ def rsp_findpeaks(filtered_rsp, sampling_rate=1000, outlier_threshold=0.3):
         beg = allx[i]
         end = allx[i + 1]
 
-        extreme = argextreme(filtered_rsp[beg:end])
+        extreme = argextreme(rsp_filtered[beg:end])
         extrema.append(beg + extreme)
 
     extrema = np.asarray(extrema)
@@ -78,7 +79,7 @@ def rsp_findpeaks(filtered_rsp, sampling_rate=1000, outlier_threshold=0.3):
     # Only consider those extrema that have a minimum vertical distance
     # to their direct neighbor, i.e., define outliers in absolute amplitude
     # difference between neighboring extrema.
-    vertdiff = np.abs(np.diff(filtered_rsp[extrema]))
+    vertdiff = np.abs(np.diff(rsp_filtered[extrema]))
     avgvertdiff = np.mean(vertdiff)
     minvert = np.where(vertdiff > (avgvertdiff * outlier_threshold))[0]
     extrema = extrema[minvert]
@@ -86,7 +87,7 @@ def rsp_findpeaks(filtered_rsp, sampling_rate=1000, outlier_threshold=0.3):
     # Make sure that the alternation of peaks and troughs is unbroken. If
     # alternation of sign in extdiffs is broken, remove the extrema that
     # cause the breaks.
-    amps = filtered_rsp[extrema]
+    amps = rsp_filtered[extrema]
     extdiffs = np.sign(np.diff(amps))
     extdiffs = np.add(extdiffs[0:-1], extdiffs[1:])
     removeext = np.where(extdiffs != 0)[0] + 1
@@ -106,9 +107,17 @@ def rsp_findpeaks(filtered_rsp, sampling_rate=1000, outlier_threshold=0.3):
     troughs = extrema[0:-1:2]
 
     # Prepare output
+    peaks_signal = np.full(len(rsp_filtered), 0)
+    peaks_signal[peaks] = 1
+    troughs_signal = np.full(len(rsp_filtered), 0)
+    troughs_signal[troughs] = 1
+
+    data = pd.DataFrame({"RSP_Peaks": peaks_signal,
+                         "RSP_Troughs": troughs_signal})
+
     info = {"RSP_Peaks": peaks,
             "RSP_Troughs": troughs}
-    return(info)
+    return(data, info)
 
 
 

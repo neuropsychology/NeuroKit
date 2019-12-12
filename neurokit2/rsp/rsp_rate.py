@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 
+from ..signal import signal_interpolate
 
 
 
@@ -17,11 +18,11 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
     >>> import neurokit2 as nk
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=50, num=10000))
-    >>> peaks_info = nk.rsp_findpeaks(signal)
+    >>> peaks_data, peaks_info = nk.rsp_findpeaks(signal)
     >>>
-    >>> results = nk.rsp_rate(peaks_info, desired_length=len(signal))
-    >>> results["RSP_Signal"] = signal
-    >>> nk.standardize(results).plot()
+    >>> data = nk.rsp_rate(peaks_info, desired_length=len(signal))
+    >>> data["RSP_Signal"] = signal  # Add the signal back
+    >>> nk.standardize(data).plot()
     """
     if isinstance(peaks, dict):
         troughs = peaks["RSP_Troughs"]
