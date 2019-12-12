@@ -11,7 +11,7 @@ from ..signal import signal_interpolate
 
 
 
-def rsp_prepare(rsp_signal, sampling_rate=1000):
+def rsp_clean(rsp_signal, sampling_rate=1000):
     """Preprocessing of RSP (respiration) signal
 
     Examples
@@ -21,7 +21,7 @@ def rsp_prepare(rsp_signal, sampling_rate=1000):
     >>> import neurokit2 as nk
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=40, num=20000))
-    >>> data = nk.rsp_prepare(signal, sampling_rate=1000)
+    >>> data = nk.rsp_clean(signal, sampling_rate=1000)
     >>> data.plot()
     """
     # Detrend and lowpass-filter the signal to be able to reliably detect

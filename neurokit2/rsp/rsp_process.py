@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-from .rsp_prepare import rsp_prepare
+from .rsp_clean import rsp_clean
 from .rsp_findpeaks import rsp_findpeaks
 from .rsp_rate import rsp_rate
 
@@ -18,9 +18,9 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=50, num=10000))
     >>> data, info = nk.rsp_process(signal, sampling_rate=1000)
-    >>> nk.standardize(data).plot()
+    >>> nk.signal_plot(nk.standardize(data))
     """
-    preprocessed = rsp_prepare(rsp_signal, sampling_rate=sampling_rate)
+    preprocessed = rsp_clean(rsp_signal, sampling_rate=sampling_rate)
 
     # Extremas (peaks and troughs)
     peaks, info = rsp_findpeaks(preprocessed["RSP_Filtered"], sampling_rate=sampling_rate, outlier_threshold=0.3)

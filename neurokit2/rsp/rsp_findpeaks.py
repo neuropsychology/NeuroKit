@@ -16,9 +16,9 @@ def rsp_findpeaks(rsp_filtered, sampling_rate=1000, outlier_threshold=0.3):
     >>> import neurokit2 as nk
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=40, num=20000))
-    >>> data = nk.rsp_prepare(signal, sampling_rate=1000)
+    >>> data = nk.rsp_clean(signal, sampling_rate=1000)
     >>> peaks_data, peaks_info = nk.rsp_findpeaks(rsp_filtered=data["RSP_Filtered"], sampling_rate=1000)
-    >>> nk.plot_events_in_signal(data, [peaks_info["RSP_Peaks"], peaks_info["RSP_Troughs"]])
+    >>> nk.events_plot([peaks_info["RSP_Peaks"], peaks_info["RSP_Troughs"]], data)
     """
     # Try retrieving right column
     if isinstance(rsp_filtered, pd.DataFrame):

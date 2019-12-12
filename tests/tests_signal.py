@@ -94,11 +94,3 @@ def test_signal_interpolate():
 
 
 
-
-
-def test_signal_inversions():
-
-    signal = np.cos(np.linspace(start=0, stop=20, num=1000))
-    inversions = nk.signal_inversions(signal)
-    nk.plot_events_in_signal(signal, inversions)
-    assert len(inversions) == 6
