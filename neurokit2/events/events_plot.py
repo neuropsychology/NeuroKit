@@ -43,14 +43,14 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
 
     Parameters
     ----------
-    signal : array or DataFrame
-        Signal array (can be a dataframe with many signals).
     events : list, ndarray or dict
         Events onset location. Can also be a list of lists, in which case it will mark them with different colors. If a dict is passed (e.g., from 'events_find()'), will select only the 'Onset' list.
+    signal : array or DataFrame
+        Signal array (can be a dataframe with many signals).
     show : bool
         If True, will return a plot. If False, will return a DataFrame that can be plotted externally.
     color, linestyle : str
-        Other arguments to pass to matplotlib plotting.
+        Arguments passed to matplotlib plotting.
 
     See Also
     --------

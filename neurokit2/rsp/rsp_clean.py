@@ -12,7 +12,26 @@ from ..signal import signal_interpolate
 
 
 def rsp_clean(rsp_signal, sampling_rate=1000):
-    """Preprocessing of RSP (respiration) signal
+    """Preprocessing of respiration (RSP) signal.
+
+    This function applies a linear detrending, followed by a 'butterworth' filter.
+
+    Parameters
+    ----------
+    rsp_signal : list, array or Series
+        The raw respiration channel (as measured, for instance, by a respiration belt).
+    sampling_rate : int
+        The original and desired (output) sampling frequency (in Hz, i.e., samples/second).
+
+    Returns
+    -------
+    DataFrame
+        A DataFrame containing the raw signal and the cleaned signal.
+
+
+    See Also
+    --------
+    rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
 
     Examples
     --------

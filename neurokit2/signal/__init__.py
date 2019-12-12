@@ -6,5 +6,4 @@ from .signal_filter import signal_filter
 from .signal_interpolate import signal_interpolate
 from .signal_detrend import signal_detrend
 from .signal_findpeaks import signal_findpeaks
-from .signal_rate import signal_rate
 from .signal_plot import signal_plot

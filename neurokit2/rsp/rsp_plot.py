@@ -8,6 +8,11 @@ import matplotlib.pyplot as plt
 def rsp_plot(rsp_data):
     """Visualize respiration data.
 
+    Parameters
+    ----------
+    rsp_data : DataFrame
+        DataFrame containing respiration data, as obtained from `rsp_process()`.
+
     Examples
     ---------
     >>> import numpy as np
@@ -17,6 +22,10 @@ def rsp_plot(rsp_data):
     >>> signal = np.cos(np.linspace(start=0, stop=50, num=10000))
     >>> rsp_data, info = nk.rsp_process(signal, sampling_rate=1000)
     >>> nk.rsp_plot(rsp_data)
+
+    See Also
+    --------
+    rsp_process
     """
     peaks = np.where(rsp_data["RSP_Peaks"] == 1)[0]
     troughs = np.where(rsp_data["RSP_Troughs"] == 1)[0]
