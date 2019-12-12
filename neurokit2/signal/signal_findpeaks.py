@@ -13,9 +13,12 @@ from ..stats import standardize
 
 def _signal_findpeaks_distances(peaks):
 
-    distances_next = np.concatenate([[np.nan], np.abs(np.diff(peaks))])
-    distances_prev = np.concatenate([np.abs(np.diff(peaks[::-1])), [np.nan]])
-    distances = np.array([np.nanmin(i) for i in list(zip(distances_next, distances_prev))])
+    if len(peaks) <= 2:
+        distances = np.full(len(peaks), np.nan)
+    else:
+        distances_next = np.concatenate([[np.nan], np.abs(np.diff(peaks))])
+        distances_prev = np.concatenate([np.abs(np.diff(peaks[::-1])), [np.nan]])
+        distances = np.array([np.nanmin(i) for i in list(zip(distances_next, distances_prev))])
 
     return(distances)
 
@@ -73,7 +76,7 @@ def signal_findpeaks(signal, distance_min=None, height_min=None, width_min=None,
     >>> import neurokit2 as nk
     >>> import scipy.misc
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000))
+    >>> signal = np.cos(np.linspace(start=0, stop=30, num=1000))
     >>> pd.Series(signal).plot()
     >>> peaks, info = nk.signal_findpeaks(signal)
     >>> nk.plot_events_in_signal(signal, peaks)
