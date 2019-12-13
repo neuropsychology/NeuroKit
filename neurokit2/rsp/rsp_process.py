@@ -21,28 +21,27 @@ def rsp_process(rsp_signal, sampling_rate=1000):
 
     Returns
     -------
-    summary : DataFrame
-        A DataFrame containing:
-        1. raw signal (key : "RSP_Raw").
-        2. cleaned signal (key: "RSP_Filtered").
-        3. inhalation peaks (key: "RSP_Peaks_Signal") marked as "1" in a list
-            of zeros with the same length as rsp_signal.
-        4. exhalation troughs (key: "RSP_Troughs_Signal") marked as "1" in a
-            list of zeros with the same length as rsp_signal.
-        5. rate (key : "RSP_Rate") interpolated between inhalation peaks over
-            the length of rsp_signal.
-        6. period (key : "RSP_Period") interpolated between inhalation peaks
-            over the length of rsp_signal.
-        7. amplitude (key : "RSP_Amplitude") interpolated between inhalation
-            peaks over the length of rsp_signal.
-    extrema: dict
-        A dictionary containing the samples at which inhalation peaks and
-        exhalation troughs occur, accessible with the keys "RSP_Peaks", and
-        "RSP_Troughs" respectively.
+    signals : DataFrame
+        A DataFrame f same length as the input signal containing the following
+        columns:
+        - "RSP_Raw": the raw signal.
+        - "RSP_Filtered": the cleaned signal.
+        - "RSP_Peaks": the inhalation peaks marked as "1" in a list
+            of zeros.
+        - "RSP_Troughs": the exhalation troughs marked as "1" in a
+            list of zeros.
+        - "RSP_Rate": breathing rate interpolated between inhalation peaks.
+        - "RSP_Period": the breathing period interpolated between inhalation peaks.
+        - "RSP_Amplitude": the breathing amplitude interpolated between inhalation
+            peaks.
+    info : dict
+        A dictionary containing additional information, in this case the samples
+        at which inhalation peaks and exhalation troughs occur, accessible with
+        the keys 'RSP_Peaks', and 'RSP_Troughs', respectively.
 
     See Also
     --------
-    rsp_plot
+    rsp_clean, rsp_findpeaks, rsp_rate, rsp_plot
 
     Examples
     --------
@@ -50,21 +49,17 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=50, num=10000))
-    >>> data, info = nk.rsp_process(signal, sampling_rate=1000)
-    >>> nk.signal_plot(nk.standardize(data))
+    >>> rsp = np.cos(np.linspace(start=0, stop=50, num=10000))
+    >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+    >>> nk.signal_plot(nk.standardize(signals))
     """
     preprocessed = rsp_clean(rsp_signal, sampling_rate=sampling_rate)
 
-    extrema_signal, extrema = rsp_findpeaks(preprocessed["RSP_Filtered"],
+    extrema_signal, info = rsp_findpeaks(preprocessed["RSP_Filtered"],
                                             sampling_rate=sampling_rate,
                                             outlier_threshold=0.3)
 
-    rate = rsp_rate(peaks=extrema["RSP_Peaks"],
-                    troughs=extrema["RSP_Troughs"],
-                    return_amplitude=True,
-                    desired_length=len(rsp_signal),
-                    sampling_rate=sampling_rate)
+    rate = rsp_rate(extrema_signal, sampling_rate=sampling_rate)
 
-    summary = pd.concat([preprocessed, extrema_signal, rate], axis=1)
-    return(summary, extrema)
+    signals = pd.concat([preprocessed, extrema_signal, rate], axis=1)
+    return(signals, info)

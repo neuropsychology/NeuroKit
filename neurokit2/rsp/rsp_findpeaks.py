@@ -9,9 +9,8 @@ def rsp_findpeaks(rsp_filtered, sampling_rate=1000, outlier_threshold=0.3):
     Identifies inhalation peaks and exhalation troughs in a zero-centered
     respiration signal. The algorithm is based on (but not an exact
     implementation of) the "Zero-crossing algorithm with amplitude threshold"
-    in the following paper:
+    by `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_.
 
-    https://www.biorxiv.org/content/10.1101/270348v1.full.
 
     Parameters
     ----------
@@ -19,27 +18,28 @@ def rsp_findpeaks(rsp_filtered, sampling_rate=1000, outlier_threshold=0.3):
         The cleaned respiration channel as returned by `rsp_clean`
     sampling_rate : int, default 1000
         The sampling frequency of rsp_filtered (in Hz, i.e., samples/second).
-    outlier_threshold : float, default 0.3
+    outlier_threshold : float
         Extrema that have a vertical distance smaller than (outlier_threshold *
         average vertical distance) to any direct neighbour are removed as
         false positive outliers. I.e., outlier_threshold should be a float with
-        positive sign. Larger values of outlier_threshold correspond to more
+        positive sign (the default is 0.3). Larger values of outlier_threshold correspond to more
         conservative thresholds (i.e., more extrema removed as outliers).
 
     Returns
     -------
-    extrema_signal: dict
-        Occurences of inhalation peaks and exhalation troughs marked as "1" in
+    signals : DataFrame
+        A DataFrame of same length as the input signal in which occurences of
+        inhalation peaks and exhalation troughs marked as "1" in
         lists of zeros with the same length as rsp_filtered. Accessible with
-        the keys "RSP_Peaks_Signal" and "RSP_Troughs_Signal" respectively.
-    extrema: dict
-        A dictionary containing the samples at which inhalation peaks and
-        exhalation troughs occur, accessible with the keys "RSP_Peaks", and
-        "RSP_Troughs" respectively.
+        the keys "RSP_Peaks" and "RSP_Troughs" respectively.
+    info : dict
+        A dictionary containing additional information, in this case the samples
+        at which inhalation peaks and exhalation troughs occur, accessible with
+        the keys 'RSP_Peaks', and 'RSP_Troughs', respectively.
 
     See Also
     --------
-    rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
+    rsp_clean, rsp_rate, rsp_process, rsp_plot
 
     Examples
     --------
@@ -47,10 +47,10 @@ def rsp_findpeaks(rsp_filtered, sampling_rate=1000, outlier_threshold=0.3):
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=40, num=20000))
-    >>> data = nk.rsp_clean(signal, sampling_rate=1000)
-    >>> peaks_data, peaks = nk.rsp_findpeaks(rsp_filtered=data["RSP_Filtered"], sampling_rate=1000)
-    >>> nk.events_plot([peaks["RSP_Peaks"], peaks["RSP_Troughs"]], data)
+    >>> rsp = np.cos(np.linspace(start=0, stop=40, num=20000))
+    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+    >>> signals, info = nk.rsp_findpeaks(cleaned["RSP_Filtered"], sampling_rate=1000)
+    >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
     """
     # Try retrieving right column
     if isinstance(rsp_filtered, pd.DataFrame):
@@ -143,9 +143,9 @@ def rsp_findpeaks(rsp_filtered, sampling_rate=1000, outlier_threshold=0.3):
     troughs_signal = np.full(len(rsp_filtered), 0)
     troughs_signal[troughs] = 1
 
-    extrema_signal = pd.DataFrame({"RSP_Peaks_Signal": peaks_signal,
-                                   "RSP_Troughs_Signal": troughs_signal})
+    signals = pd.DataFrame({"RSP_Peaks": peaks_signal,
+                            "RSP_Troughs": troughs_signal})
 
-    extrema = {"RSP_Peaks": peaks,
-               "RSP_Troughs": troughs}
-    return(extrema_signal, extrema)
+    info = {"RSP_Peaks": peaks,
+            "RSP_Troughs": troughs}
+    return(signals, info)

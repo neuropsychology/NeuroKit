@@ -21,9 +21,10 @@ def rsp_clean(rsp_signal, sampling_rate=1000):
 
     Returns
     -------
-    DataFrame
-        A DataFrame containing the raw signal and the cleaned signal,
-        accessible with the keys "RSP_Raw", and "RSP_Filtered" respectively.
+    signals : DataFrame
+        A DataFrame of same length as the input signal containing the raw signal
+        and the cleaned signal, accessible with the keys "RSP_Raw", and
+        "RSP_Filtered" respectively.
 
     See Also
     --------
@@ -35,9 +36,9 @@ def rsp_clean(rsp_signal, sampling_rate=1000):
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=40, num=20000))
-    >>> data = nk.rsp_clean(signal, sampling_rate=1000)
-    >>> data.plot()
+    >>> rsp = np.cos(np.linspace(start=0, stop=40, num=20000))
+    >>> signals = nk.rsp_clean(rsp, sampling_rate=1000)
+    >>> signals.plot()
     """
     # Detrend and lowpass-filter the signal to be able to reliably detect
     # zero crossings in raw signal.
@@ -46,6 +47,6 @@ def rsp_clean(rsp_signal, sampling_rate=1000):
                                  highcut=2, method="butterworth")
 
     # Prepare output
-    data = pd.DataFrame({"RSP_Raw": rsp_signal,
-                         "RSP_Filtered": filtered_rsp})
-    return(data)
+    signals = pd.DataFrame({"RSP_Raw": rsp_signal,
+                            "RSP_Filtered": filtered_rsp})
+    return(signals)

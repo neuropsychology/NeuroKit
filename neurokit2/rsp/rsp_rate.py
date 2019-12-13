@@ -5,22 +5,20 @@ import pandas as pd
 from ..signal import signal_interpolate
 
 
-def rsp_rate(peaks, troughs=None, return_amplitude=True, sampling_rate=1000,
-             desired_length=None):
+def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
     """Calculate respiration (RSP) rate.
 
-    Calculate respiration rate, as well as the -period and -amplitude.
+    Calculate respiration rate, as well as the period and amplitude.
 
     Parameters
     ----------
     peaks : list, array, Series or dict
-        The samples at which the inhalation peaks occur. If a dict is passed
-        it is assumed that the dict is obtained with `rsp_findpeaks`.
+        The samples at which the inhalation peaks occur. If a dict or a
+        DataFrame is passed, it will attempt to retrieve the information by
+        assuming that it was obtained with `rsp_findpeaks()`.
     troughs : list, array, or Series, default None
         The samples at which the exhalation troughs occur. Only relevant if
         return_amplitude is True.
-    return_amplitude : bool, default True
-        Calculate and return breathing amplitude if True.
     sampling_rate : int, default 1000
         The sampling frequency of the signal that contains the peaks and
         troughs (in Hz, i.e., samples/second).
@@ -32,14 +30,14 @@ def rsp_rate(peaks, troughs=None, return_amplitude=True, sampling_rate=1000,
 
     Returns
     -------
-    DataFrame
+    signals : DataFrame
         A DataFrame containing respiration rate, period, and amplitude,
-        accessible with the keys "RSP_Rate", "RSP_Period" and "RSP_Amplitude"
+        accessible with the keys 'RSP_Rate', 'RSP_Period' and 'RSP_Amplitude'
         respectively.
 
     See Also
     --------
-    rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
+    rsp_clean, rsp_findpeaks, rsp_process, rsp_plot
 
     Examples
     --------
@@ -47,16 +45,20 @@ def rsp_rate(peaks, troughs=None, return_amplitude=True, sampling_rate=1000,
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=50, num=10000))
-    >>> peaks_data, peaks_info = nk.rsp_findpeaks(signal)
+    >>> rsp = np.cos(np.linspace(start=0, stop=50, num=10000))
+    >>> signals, info = nk.rsp_findpeaks(rsp)
     >>>
-    >>> data = nk.rsp_rate(peaks_info, desired_length=len(signal))
-    >>> data["RSP_Signal"] = signal  # Add the signal back
+    >>> data = nk.rsp_rate(signals)
+    >>> data["RSP_Signal"] = rsp  # Add the signal back
     >>> nk.standardize(data).plot()
     """
     if isinstance(peaks, dict):
         troughs = peaks["RSP_Troughs"]
         peaks = peaks["RSP_Peaks"]
+    elif isinstance(peaks, pd.DataFrame):
+        desired_length = len(peaks["RSP_Peaks"])
+        troughs = np.where(peaks["RSP_Troughs"] == 1)[0]
+        peaks = np.where(peaks["RSP_Peaks"] == 1)[0]
 
     # Calculate period in msec, based on horizontal peak to peak
     # difference. Make sure that period has the same number of elements as
@@ -80,11 +82,11 @@ def rsp_rate(peaks, troughs=None, return_amplitude=True, sampling_rate=1000,
            "RSP_Period": period}
 
     # Add amplitude if troughs are available.
-    if (troughs is not None) and return_amplitude:
+    if troughs is not None:
         # TODO: normalize amplitude?
         amplitude = peaks - troughs
         out["RSP_Amplitude"] = signal_interpolate(amplitude, x_axis=peaks,
                                                   desired_length=desired_length)
 
-    out = pd.DataFrame.from_dict(out)
-    return(out)
+    signals = pd.DataFrame.from_dict(out)
+    return(signals)

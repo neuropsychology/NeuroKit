@@ -18,16 +18,16 @@ def rsp_plot(rsp_summary):
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=50, num=10000))
-    >>> rsp_summary, _ = nk.rsp_process(signal, sampling_rate=1000)
-    >>> nk.rsp_plot(rsp_summary)
+    >>> rsp = np.cos(np.linspace(start=0, stop=50, num=10000))
+    >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+    >>> nk.rsp_plot(signals)
 
     See Also
     --------
     rsp_process
     """
-    peaks = np.where(rsp_summary["RSP_Peaks_Signal"] == 1)[0]
-    troughs = np.where(rsp_summary["RSP_Troughs_Signal"] == 1)[0]
+    peaks = np.where(rsp_summary["RSP_Peaks"] == 1)[0]
+    troughs = np.where(rsp_summary["RSP_Troughs"] == 1)[0]
 
     fig, (ax0, ax1, ax2, ax3) = plt.subplots(nrows=4, ncols=1, sharex=True)
     ax0.set_title("Signal and Breathing Extrema")
