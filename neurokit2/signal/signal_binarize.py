@@ -24,6 +24,8 @@ def _signal_binarize(signal, threshold="auto"):
 def signal_binarize(signal, threshold="auto"):
     """Binarize a continuous signal.
 
+    Converts a continuous signal into zeros and ones depending on a given threshold.
+
     Parameters
     ----------
     signal : list, array or Series
