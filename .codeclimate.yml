@@ -6,3 +6,25 @@ engines:
         enabled: false
       E303:
         enabled: false
+
+checks:
+  argument-count:
+    enabled: false
+  complex-logic:
+    enabled: false
+  file-lines:
+    enabled: true
+  method-complexity:
+    enabled: false
+  method-count:
+    enabled: true
+  method-lines:
+    enabled: true
+  nested-control-flow:
+    enabled: true
+  return-statements:
+    enabled: true
+  similar-code:
+    enabled: true
+  identical-code:
+    enabled: true
