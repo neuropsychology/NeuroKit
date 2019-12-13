@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 
+import scipy.signal
+
 # =============================================================================
 # Signal
 # =============================================================================
@@ -43,6 +45,51 @@ def test_signal_resample():
                         "FFT": upsampled_fft - signal,
                         "Poly": upsampled_poly - signal})
     assert np.allclose(np.mean(rez.mean()), 0.0001, atol=0.0001)
+
+
+
+def test_signal_detrend():
+    signal = np.cos(np.linspace(start=0, stop=10, num=1000))  # Low freq
+    signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq
+    signal += 3  # Add baseline
+
+    rez_nk = nk.signal_detrend(signal, order=1)
+    rez_scipy = scipy.signal.detrend(signal, type="linear")
+    assert np.allclose(np.mean(rez_nk - rez_scipy), 0, atol=0.000001)
+
+    rez_nk = nk.signal_detrend(signal, order=0)
+    rez_scipy = scipy.signal.detrend(signal, type="constant")
+    assert np.allclose(np.mean(rez_nk - rez_scipy), 0, atol=0.000001)
+
+
+
+
+
+def test_signal_filter():
+
+    signal = np.cos(np.linspace(start=0, stop=10, num=1000)) # Low freq
+    signal += np.cos(np.linspace(start=0, stop=100, num=1000)) # High freq
+    filtered = nk.signal_filter(signal, highcut=10)
+    assert np.std(signal) > np.std(filtered)
+
+
+
+def test_signal_interpolate():
+
+    x_axis = np.linspace(start=10, stop=30, num=10)
+    signal = np.cos(x_axis)
+
+    interpolated = nk.signal_interpolate(signal, desired_length=1000)
+    assert len(interpolated) == 1000
+
+    new_x = np.linspace(start=0, stop=40, num=1000)
+    interpolated = nk.signal_interpolate(signal,
+                                      desired_length=1000,
+                                      x_axis=x_axis,
+                                      new_x=new_x)
+    assert len(interpolated) == 1000
+    assert interpolated[0] == signal[0]
+
 
 
 

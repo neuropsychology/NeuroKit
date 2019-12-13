@@ -28,7 +28,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
     Returns
     ----------
     array
-        Array containing the EMG signal.
+        Vector containing the EMG signal.
 
     Examples
     ----------

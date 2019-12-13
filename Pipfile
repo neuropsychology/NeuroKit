@@ -18,6 +18,7 @@ isort = "*"
 yapf = "*"
 bioread = "*"
 scipy = "*"
+sklearn = "*"
 matplotlib = "*"
 
 [packages]
