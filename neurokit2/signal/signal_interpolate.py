@@ -65,12 +65,9 @@ def signal_interpolate(signal, desired_length=None, method="quadratic",
         if new_x is not None:
             desired_length = new_x
         else:
-            raise ValueError("NeuroKit error: signal_interpolate(): either " \
-                             "'desired_length' or 'new_x' must be provided.")
+            raise ValueError("NeuroKit error: signal_interpolate(): either 'desired_length' or 'new_x' must be provided.")
     if desired_length < len(signal):
-        raise ValueError("NeuroKit error: signal_interpolate(): 'desired_length'" \
-                         " cannot be lower than the length of the signal. " \
-                         "You might be looking for 'signal_resample()'")
+        raise ValueError("NeuroKit error: signal_interpolate(): 'desired_length' cannot be lower than the length of the signal. You might be looking for 'signal_resample()'")
 
     # Create x axis
     if x_axis is None:
@@ -90,36 +87,3 @@ def signal_interpolate(signal, desired_length=None, method="quadratic",
     interpolated = interpolation_function(new_x)
 
     return(interpolated)
-
-
-
-
-
-#def interp_stats(peaks, stats, nsamp):
-#    """Interpolate statistics over the entire duration of the signal.
-#    Parameters
-#    ----------
-#    peaks : 1d array
-#        R-peaks in ECG, breathing peaks in breathing signal.
-#    stats : 1d array
-#        Any statistic that is calculated on on the difference of peak t to
-#        peak t-1 and is assigned to peak t. Must have the same number of
-#        elements as peaks.
-#    nsamp : int
-#        Desired number of samples in the returned time series.
-#    Returns
-#    -------
-#    statsintp : 1d array
-#        Values in stats interpolated over nsamp samples.
-#    """
-#    # Samples up until the first peak as well as from last peak to end of
-#    # signal are set to the value of the first and last element of stats
-#    # respectively. Linear (2nd order) interpolation is chosen since higher
-#    # order interpolation can lead to biologically implausible values and
-#    # erratic fluctuations.
-#    f = scipy.interpolate.interp1d(np.ravel(peaks), stats, kind='slinear',
-#                 bounds_error=False, fill_value=([stats[0]], [stats[-1]]))
-#    samples = np.arange(0, nsamp)
-#    statsintp = f(samples)
-#
-#    return(statsintp)

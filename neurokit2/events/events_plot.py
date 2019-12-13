@@ -86,7 +86,6 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     if isinstance(signal, pd.DataFrame) is False:
         signal = pd.DataFrame({"Signal": signal})
 
-
     # Plot if necessary
     if show:
         signal.plot()
@@ -96,6 +95,3 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
         signal["Event_Onset"] = 0
         signal.iloc[events] = 1
         return(signal)
-
-
-

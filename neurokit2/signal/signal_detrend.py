@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 
+
 def signal_detrend(signal, order=1):
     """Polynomial detrending of signal.
 
@@ -37,9 +38,11 @@ def signal_detrend(signal, order=1):
                       "Crazy_Detrend": nk.signal_detrend(signal, order=150)}).plot()
     """
     x_axis = np.linspace(0, 100, num=len(signal))
+
     # Generating weights and model for polynomial function with a given degree
     model = np.poly1d(np.polyfit(x_axis, signal, order))
     trend = model(x_axis)
+
     # detrend
     detrended = np.array(signal) - trend
     return(detrended)

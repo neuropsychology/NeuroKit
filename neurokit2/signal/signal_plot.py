@@ -36,7 +36,7 @@ def signal_plot(signal):
         vector = signal[col]
         if vector.nunique() == 2:
             indices = np.where(vector == np.max(vector.unique()))
-            if bool(np.any(np.diff(indices)==1)) is False:
+            if bool(np.any(np.diff(indices) == 1)) is False:
                 events.append(indices[0])
             else:
                 vector.plot()
