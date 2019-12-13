@@ -56,8 +56,8 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     preprocessed = rsp_clean(rsp_signal, sampling_rate=sampling_rate)
 
     extrema_signal, info = rsp_findpeaks(preprocessed["RSP_Filtered"],
-                                            sampling_rate=sampling_rate,
-                                            outlier_threshold=0.3)
+                                         sampling_rate=sampling_rate,
+                                         outlier_threshold=0.3)
 
     rate = rsp_rate(extrema_signal, sampling_rate=sampling_rate)
 

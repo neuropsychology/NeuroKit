@@ -4,6 +4,7 @@ import pandas as pd
 
 from ..events.events_plot import _events_plot
 
+
 def signal_plot(signal):
     """
     Plot signal with events as vertical lines.

@@ -4,3 +4,5 @@ engines:
     checks:
       E501:
         enabled: false
+      E303:
+        enabled: false
