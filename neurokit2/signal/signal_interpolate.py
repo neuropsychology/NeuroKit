@@ -3,7 +3,8 @@ import numpy as np
 import scipy.interpolate
 
 
-def signal_interpolate(signal, desired_length=None, method="quadratic", x_axis=None, new_x=None):
+def signal_interpolate(signal, desired_length=None, method="quadratic",
+                       x_axis=None, new_x=None):
     """Interpolate a signal.
 
     Samples up until the first peak as well as from last peak to end of signal
@@ -21,8 +22,6 @@ def signal_interpolate(signal, desired_length=None, method="quadratic", x_axis=N
         Method of interpolation. Can be 'linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic', 'previous' or 'next'.  'zero', 'slinear', 'quadratic' and 'cubic' refer to a spline interpolation of zeroth, first, second or third order; 'previous' and 'next' simply return the previous or next value of the point) or as an integer specifying the order of the spline interpolator to use.
     x_axis : list, array or Series
         An optional vector of same length as 'signal' corresponding to the x-axis.
-    sampling_rate, desired_sampling_rate : int
-        The original and desired (output) sampling frequency (in Hz, i.e., samples/second).
 
     Returns
     -------
