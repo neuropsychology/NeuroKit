@@ -84,7 +84,7 @@ def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, respi
 # =============================================================================
 # BreathMetrics Model
 # =============================================================================
-def _rsp_simulate_breathmetrics(n_cycles=100,
+def _rsp_simulate_breathmetrics(nCycles=100,
                                sampling_rate=1000,
                                breathing_rate=0.25,
                                average_amplitude=0.5,
