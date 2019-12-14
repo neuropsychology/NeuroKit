@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 
-def rsp_simulate(duration=10, length=None, sampling_rate=1000, breathing_rate = 1, amplitude = 1):
+def rsp_simulate(duration=10, length=None, sampling_rate=1000, breathing_rate=1, amplitude=1):
     """Simulate a respiratory signal
 
     Generate an artificial (synthetic) respiratory signal of a given frequency, amplitude, and number of cycles. It uses a trigonometric sine wave that roughly approximates a single respiratory cycle.
@@ -50,5 +50,3 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, breathing_rate = 
 #    rsp = amplitude*np.sin(frequency*t)
 #
 #    return(rsp)
-
-
