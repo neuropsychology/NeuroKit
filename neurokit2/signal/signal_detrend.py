@@ -6,7 +6,7 @@ import pandas as pd
 def signal_detrend(signal, order=1):
     """Polynomial detrending of signal.
 
-    Function to do baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending of the signal (i.e., removing a general trend).
+    Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
 
     Parameters
     ----------

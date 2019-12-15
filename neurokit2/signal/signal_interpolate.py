@@ -7,10 +7,7 @@ def signal_interpolate(signal, desired_length=None, method="quadratic",
                        x_axis=None, new_x=None):
     """Interpolate a signal.
 
-    Samples up until the first peak as well as from last peak to end of signal
-    are set to the value of the first and last element of 'stats' respectively.
-    Linear (2nd order) interpolation is chosen since higher order interpolation
-    can lead to biologically implausible values and erratic fluctuations.
+    Interpolate (fills the values between data points) a signal using different methods.
 
     Parameters
     ----------
