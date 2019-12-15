@@ -42,11 +42,14 @@ Documentation
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://img.shields.io/badge/functions-NeuroKit-orange.svg?colorB=2196F3
+.. image:: https://img.shields.io/badge/functions-list-orange.svg?colorB=2196F3
         :target: https://neurokit2.readthedocs.io/en/latest/functions.html
         :alt: API
         
-
+.. image:: https://img.shields.io/badge/tutorials-help-orange.svg?colorB=E91E63
+        :target: https://neurokit2.readthedocs.io/en/latest/tutorials.html
+        :alt: Tutorials
+        
 Click on the links above and check out our tutorials:
 
 -  `Intall Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
@@ -97,6 +100,7 @@ Multi
 
 - `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
 - `PySiology <https://github.com/Gabrock94/Pysiology>`_
+- `PsPM <https://github.com/bachlab/PsPM>`_
 
 ECG
 ^^^^
@@ -114,7 +118,9 @@ EDA
 
 - `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
 - `cvxEDA <https://github.com/lciti/cvxEDA>`_
+- `Pypsy <https://github.com/brennon/Pypsy>`_
 - `BreatheEasyEDA <https://github.com/johnksander/BreatheEasyEDA>`_ *(matlab)*
+- `EDA <https://github.com/mateusjoffily/EDA>`_ *(matlab)*
 
 EEG
 ^^^^
