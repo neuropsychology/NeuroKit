@@ -10,7 +10,7 @@ import scipy.ndimage
 def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"):
     """Resample a continuous signal to a different length or sampling rate.
 
-    This function can be used to up- or down-sample a signal. The user can specify either a desired length for the vector, or input the original sampling rate and the desired sampling rate. See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of the methods.
+    Up- or down-sample a signal. The user can specify either a desired length for the vector, or input the original sampling rate and the desired sampling rate. See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of the methods.
 
     Parameters
     ----------

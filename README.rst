@@ -69,10 +69,14 @@ Simulate biosignals
 
     # Generate synthetic signals
     ecg = nk.ecg_simulate(duration=10, heart_rate=70)
+    rsp = nk.rsp_simulate(duration=10, respiratory_rate=15)
     emg = nk.emg_simulate(duration=10, n_bursts=3)
 
     # Visualise biosignals
-    pd.DataFrame({"ECG": ecg, "EMG": emg}).plot(subplots=True, layout=(2, 1))
+    data = pd.DataFrame({"ECG": ecg,
+                         "RSP": rsp,
+                         "EMG": emg})
+    data.plot(subplots=True, layout=(3, 1))
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
@@ -82,21 +86,23 @@ Signal processing
 
 NeuroKit includes functions to facilitate signal processing:
 
-- `signal_binarize() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_binarize>`_
-- `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_
-- `signal_resample() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_resample>`_
-- `signal_interpolate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_interpolate>`_
-- `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_
-- `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_
-        
+- `signal_binarize() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_binarize>`_: Convert a continuous signal into zeros and ones depending on a given threshold.
+- `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_: Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
+- `signal_resample() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_resample>`_: Up- or down-sample a signal.
+- `signal_interpolate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_interpolate>`_: Interpolate (fills the values between data points) a signal using different methods.
+- `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
+- `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Apply a lowpass, highpass or bandpass filter to the signal.
+
+
+
 Alternatives
 -------------
 
 Here's a list of great alternative packages that you should check-out:
 
 
-Multi
-^^^^^^
+General
+^^^^^^^
 
 - `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
 - `PySiology <https://github.com/Gabrock94/Pysiology>`_
