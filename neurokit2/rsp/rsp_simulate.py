@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 
+
 def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, respiratory_rate=15, method="breathmetrics"):
     """Simulate a respiratory signal
 
@@ -182,7 +183,7 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
     exhale_pauseLength_variance_normed = exhale_pause_phase * exhale_pauseLength_variance
     exhale_pauseLengths_with_noise = np.round(
         np.random.randn(nCycles) * exhale_pauseLength_variance_normed +
-        inhale_pause_phase).astype(int)  ##why inhale pause phase??????????????
+        inhale_pause_phase).astype(int)  #why inhale pause phase?
 
     # Normalize pause amplitudes
     pause_amplitude_variance_normed = pause_amplitude * pause_amplitude_variance
@@ -336,8 +337,8 @@ def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000, no
     # Loop until it doesn't fail
     rsp = False
     while rsp is False:
-         # Generate a long than necessary signal so it won't be shorter
-        rsp, raw_features, feature_stats = _rsp_simulate_breathmetrics_original(nCycles=int(n_cycles* 1.5),
+        # Generate a long than necessary signal so it won't be shorter
+        rsp, raw_features, feature_stats = _rsp_simulate_breathmetrics_original(nCycles=int(n_cycles * 1.5),
                                                                                 sampling_rate=sampling_rate,
                                                                                 breathing_rate=respiratory_rate/60,
                                                                                 signal_noise=noise*10)
