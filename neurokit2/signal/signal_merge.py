@@ -6,7 +6,7 @@ from .signal_resample import signal_resample
 
 
 def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
-    """Arbitrary addition of two signals with different time ranges
+    """Arbitrary addition of two signals with different time ranges.
 
     Parameters
     ----------
@@ -53,4 +53,3 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
 
     merged = signal1 + signal2
     return(merged)
-

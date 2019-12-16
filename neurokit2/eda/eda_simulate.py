@@ -4,6 +4,7 @@ import numpy as np
 
 from ..signal import signal_merge
 
+
 def _eda_simulate_canonical(sampling_rate=1000,
                             length=None,
                             time_peak=3.0745,
