@@ -34,11 +34,11 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
     >>> import pandas as pd
     >>>
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=100)
-    >>> pd.Series(ecg).plot()
+    >>> nk.signal_plot(ecg)
 
     See Also
     --------
-    signal_resample, ppg_simulate, emg_simulate
+    rsp_simulate, eda_simulate, ppg_simulate, emg_simulate
 
 
     References

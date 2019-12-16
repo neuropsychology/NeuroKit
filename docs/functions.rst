@@ -1,7 +1,6 @@
 Functions
 #################
 
-This part of the documentation details the complete ``NeuroKit2`` for python API.
 
 
 ECG
@@ -10,14 +9,11 @@ ECG
 .. autofunction:: neurokit2.ecg_simulate
 
 
-EMG
--------
-
-.. autofunction:: neurokit2.emg_simulate
-
 
 RSP
 -------
+
+.. autofunction:: neurokit2.rsp_simulate
 
 .. autofunction:: neurokit2.rsp_clean
 
@@ -30,10 +26,23 @@ RSP
 .. autofunction:: neurokit2.rsp_plot
 
 
-Signal
+EDA
 -------
 
-    
+.. autofunction:: neurokit2.eda_simulate
+
+
+
+EMG
+-------
+
+.. autofunction:: neurokit2.emg_simulate
+
+
+Signal Processing
+-----------------
+
+
 .. autofunction:: neurokit2.signal_binarize
 
 .. autofunction:: neurokit2.signal_resample
@@ -46,6 +55,8 @@ Signal
 
 .. autofunction:: neurokit2.signal_findpeaks
 
+.. autofunction:: neurokit2.signal_merge
+
 .. autofunction:: neurokit2.signal_plot
 
 
@@ -54,7 +65,7 @@ Events
 -------
 
 .. autofunction:: neurokit2.events_find
-    
+
 .. autofunction:: neurokit2.events_plot
 
 .. autofunction:: neurokit2.events_to_mne

@@ -71,7 +71,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     scipy.signal.resample_poly, scipy.signal.resample, scipy.ndimage.zoom
     """
     if desired_length is None:
-        desired_length = round(len(signal) * desired_sampling_rate / sampling_rate)
+        desired_length = np.round(len(signal) * desired_sampling_rate / sampling_rate)
 
     # Sanity checks
     if len(signal) == desired_length:
@@ -136,7 +136,7 @@ def _resample_pandas(signal, desired_length):
     # Adjust extremities
     diff = len(resampled_signal) - desired_length
     if diff < 0:
-        resampled_signal = np.concatenate([resampled_signal, np.full(abs(diff), resampled_signal[-1])])
+        resampled_signal = np.concatenate([resampled_signal, np.full(np.abs(diff), resampled_signal[-1])])
     elif diff > 0:
         resampled_signal = resampled_signal[0:desired_length]
 

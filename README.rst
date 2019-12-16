@@ -42,7 +42,7 @@ Documentation
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
 
-.. image:: https://img.shields.io/badge/functions-list-orange.svg?colorB=2196F3
+.. image:: https://img.shields.io/badge/functions-API-orange.svg?colorB=2196F3
         :target: https://neurokit2.readthedocs.io/en/latest/functions.html
         :alt: API
         
@@ -70,13 +70,15 @@ Simulate biosignals
     # Generate synthetic signals
     ecg = nk.ecg_simulate(duration=10, heart_rate=70)
     rsp = nk.rsp_simulate(duration=10, respiratory_rate=15)
-    emg = nk.emg_simulate(duration=10, n_bursts=3)
+    eda = nk.eda_simulate(duration=10, n_peaks=3)
+    emg = nk.emg_simulate(duration=10, n_bursts=2)
 
     # Visualise biosignals
     data = pd.DataFrame({"ECG": ecg,
                          "RSP": rsp,
+                         "EDA": eda,
                          "EMG": emg})
-    data.plot(subplots=True, layout=(3, 1))
+    data.plot(subplots=True, layout=(4, 1))
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
@@ -92,6 +94,7 @@ NeuroKit includes functions to facilitate signal processing:
 - `signal_interpolate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_interpolate>`_: Interpolate (fills the values between data points) a signal using different methods.
 - `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
 - `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Apply a lowpass, highpass or bandpass filter to the signal.
+- `signal_merge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_merge>`_: Arbitrary addition of two signals with different time ranges.
 
 
 

@@ -1,5 +1,3 @@
-.. highlight:: shell
-
 ======================================
 How to record neurophysiological data
 ======================================
