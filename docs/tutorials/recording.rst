@@ -1,5 +1,5 @@
 ======================================
-How to record neurophysiological data
+Recording neurophysiological activity
 ======================================
 
 

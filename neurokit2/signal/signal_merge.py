@@ -22,11 +22,15 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
 
     Examples
     --------
-    signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
-    signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
-
-    signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
-    nk.signal_plot(signal)
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> import neurokit2 as nk
+    >>>
+    >>> signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
+    >>> signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
+    >>>
+    >>> signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
+    >>> nk.signal_plot(signal)
     """
 
     # Resample signals if different
