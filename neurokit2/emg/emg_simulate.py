@@ -36,11 +36,11 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
     >>> import pandas as pd
     >>>
     >>> emg = nk.emg_simulate(duration=10, n_bursts=3)
-    >>> pd.Series(emg).plot()
+    >>> nk.signal_plot(emg)
 
     See Also
     --------
-    signal_resample, ecg_simulate, ppg_simulate
+    ecg_simulate, rsp_simulate, eda_simulate, ppg_simulate
 
 
     References
@@ -87,7 +87,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
     # Resample
     emg = signal_resample(emg,
                           sampling_rate=1000,
-                          desired_length=length,
+                          desired_length=duration*sampling_rate,
                           desired_sampling_rate=sampling_rate)
 
     return(emg)

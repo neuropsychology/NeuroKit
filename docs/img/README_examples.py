@@ -10,15 +10,17 @@ import neurokit2 as nk
 # Generate synthetic signals
 ecg = nk.ecg_simulate(duration=10, heart_rate=70)
 rsp = nk.rsp_simulate(duration=10, respiratory_rate=15)
-emg = nk.emg_simulate(duration=10, n_bursts=3)
+eda = nk.eda_simulate(duration=10, n_peaks=3)
+emg = nk.emg_simulate(duration=10, n_bursts=2)
 
 # Visualise biosignals
 data = pd.DataFrame({"ECG": ecg,
                      "RSP": rsp,
+                     "EDA": eda,
                      "EMG": emg})
-data.plot(subplots=True, layout=(3, 1))
+data.plot(subplots=True, layout=(4, 1))
 
 
 # Save it
-plot = data.plot(subplots=True, layout=(3, 1))
+plot = data.plot(subplots=True, layout=(4, 1))
 plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)

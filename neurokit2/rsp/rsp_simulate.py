@@ -45,7 +45,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, respi
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
+    ecg_simulate, eda_simulate, ppg_simulate, emg_simulate
 """
     # Generate number of samples automatically if length is unspecified
     if length is None:
