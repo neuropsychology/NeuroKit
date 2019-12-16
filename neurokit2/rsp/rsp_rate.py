@@ -16,13 +16,13 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
         The samples at which the inhalation peaks occur. If a dict or a
         DataFrame is passed, it will attempt to retrieve the information by
         assuming that it was obtained with `rsp_findpeaks()`.
-    troughs : list, array, or Series, default None
+    troughs : list, array, or Series
         The samples at which the exhalation troughs occur. Only relevant if
         return_amplitude is True.
-    sampling_rate : int, default 1000
+    sampling_rate : int
         The sampling frequency of the signal that contains the peaks and
         troughs (in Hz, i.e., samples/second).
-    desired_length : int, default None
+    desired_length : int
         By default, the returned respiration rate, period, and amplitude each
         have the same number of elements as peaks. If set to an integer, each
         of the returned elements will be interpolated between peaks over

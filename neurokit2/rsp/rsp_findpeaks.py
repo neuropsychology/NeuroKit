@@ -16,7 +16,7 @@ def rsp_findpeaks(rsp_filtered, sampling_rate=1000, outlier_threshold=0.3):
     ----------
     rsp_filtered : list, array or Series
         The cleaned respiration channel as returned by `rsp_clean`
-    sampling_rate : int, default 1000
+    sampling_rate : int
         The sampling frequency of rsp_filtered (in Hz, i.e., samples/second).
     outlier_threshold : float
         Extrema that have a vertical distance smaller than (outlier_threshold *
