@@ -10,6 +10,15 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
 
     Parameters
     ----------
+    signal1, signal2 : list, array or Series
+        The signal channels in the form of a vector of values.
+    time1, time2 : list
+        Lists containing two numeric values corresponding to the beginning and end of 'signal1' and 'signal2', respectively.
+
+    Returns
+    -------
+    array
+        Vector containing the sum of the two signals.
 
     Examples
     --------

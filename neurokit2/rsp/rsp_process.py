@@ -14,9 +14,8 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     Parameters
     ----------
     rsp_signal : list, array or Series
-        The raw respiration channel (as measured, for instance, by a
-        respiration belt).
-    sampling_rate : int, default 1000
+        The raw respiration channel (as measured, for instance, by a respiration belt).
+    sampling_rate : int
         The sampling frequency of rsp_signal (in Hz, i.e., samples/second).
 
     Returns
@@ -24,16 +23,14 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     signals : DataFrame
         A DataFrame f same length as the input signal containing the following
         columns:
-        - "RSP_Raw": the raw signal.
-        - "RSP_Filtered": the cleaned signal.
-        - "RSP_Peaks": the inhalation peaks marked as "1" in a list
-            of zeros.
-        - "RSP_Troughs": the exhalation troughs marked as "1" in a
-            list of zeros.
-        - "RSP_Rate": breathing rate interpolated between inhalation peaks.
-        - "RSP_Period": the breathing period interpolated between inhalation peaks.
-        - "RSP_Amplitude": the breathing amplitude interpolated between inhalation
-            peaks.
+
+        - *"RSP_Raw"*: the raw signal.
+        - *"RSP_Filtered"*: the cleaned signal.
+        - *"RSP_Peaks"*: the inhalation peaks marked as "1" in a list of zeros.
+        - *"RSP_Troughs"*: the exhalation troughs marked as "1" in a list of zeros.
+        - *"RSP_Rate"*: breathing rate interpolated between inhalation peaks.
+        - *"RSP_Period"*: the breathing period interpolated between inhalation peaks.
+        - *"RSP_Amplitude"*: the breathing amplitude interpolated between inhalation peaks.
     info : dict
         A dictionary containing additional information, in this case the samples
         at which inhalation peaks and exhalation troughs occur, accessible with
