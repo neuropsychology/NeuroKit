@@ -43,4 +43,3 @@ def _phi(signal, order, r="default", metric='chebyshev', approximate=True):
         phi[0] = np.mean((count1 - 1) / (embedded1.shape[0] - 1))
         phi[1] = np.mean((count2 - 1) / (embedded2.shape[0] - 1))
     return(phi)
-

@@ -4,6 +4,8 @@ import numpy as np
 
 from .utils_phi import _phi
 
+
+
 def entropy_approximate(signal, order=2, r="default"):
     """Compute the approximate entropy (ApEn).
 
