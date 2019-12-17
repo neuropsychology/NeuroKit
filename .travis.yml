@@ -17,6 +17,8 @@ os:
   # - osx
   
 install: 
+  - pip install -U pip
+  - pip install -U pytest
   - pip install -U tox-travis
   - pip install coverage
   - pip install codecov
