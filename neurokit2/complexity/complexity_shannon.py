@@ -40,7 +40,7 @@ def complexity_shannon(signal):
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
     - `nolds` <https://github.com/CSchoel/nolds>`_
     """
-     # Check if string
+    # Check if string
     if not isinstance(signal, str):
         signal = list(signal)
 

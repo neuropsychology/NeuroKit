@@ -184,11 +184,10 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
         inhale_pause_phase).astype(int)
     inhale_pauseLengths_with_noise[inhale_pauseLengths_with_noise < 0] = 0
     exhale_pauseLength_variance_normed = exhale_pause_phase * exhale_pauseLength_variance
-    exhale_pauseLengths_with_noise = np.round(
-        np.random.randn(nCycles) * exhale_pauseLength_variance_normed +
-        inhale_pause_phase).astype(int)  
+    exhale_pauseLengths_with_noise = np.round(np.random.randn(nCycles) * exhale_pauseLength_variance_normed + inhale_pause_phase).astype(int)
+
     # why inhale pause phase?
-    exhale_pauseLengths_with_noise[exhale_pauseLengths_with_noise <0] = 0
+    exhale_pauseLengths_with_noise[exhale_pauseLengths_with_noise < 0] = 0
 
     # Normalize pause amplitudes
     pause_amplitude_variance_normed = pause_amplitude * pause_amplitude_variance
