@@ -5,11 +5,8 @@ import numpy as np
 
 
 
-
-
-
-def complexity_shannon(signal):
-    """Compute the shannon entropy.
+def entropy_shannon(signal):
+    """Compute the Shannon entrop (SE).
 
     Entropy is a measure of unpredictability of the state, or equivalently, of its average information content. Shannon entropy (SE) is one of the first and most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy quantifies the amount of information in a variable.
 
@@ -23,7 +20,7 @@ def complexity_shannon(signal):
     Returns
     ----------
     float
-        The Shannon Entropy as float value.
+        The Shannon entropy as float value.
 
 
     Example
@@ -32,7 +29,7 @@ def complexity_shannon(signal):
     >>>
     >>> # Download example EEG signal
     >>> signal = pd.read_csv('https://raw.github.com/neuropsychology/NeuroKit/master/data/example_eeg.txt', header=None)[0].values
-    >>> nk.complexity_shannon(signal)
+    >>> nk.entropy_shannon(signal)
     7.566810239706894
 
 
