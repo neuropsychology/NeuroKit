@@ -32,7 +32,7 @@ install:
 script:
     - python setup.py install
     - tox
-    #- pytest
+    - pytest
     #- coverage run tests/test_all.py
 
 after_success:
