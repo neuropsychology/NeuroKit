@@ -22,7 +22,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         Noise level (gaussian noise).
     heart_rate : int
         Desired simulated heart rate (in beats per minute).
-    random state: int
+    random_state: int
         Seed for the random number generator.
 
 

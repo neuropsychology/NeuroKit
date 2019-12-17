@@ -63,7 +63,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         Desired number of skin conductance responses (SCRs), i.e., peaks.
     drift : float or list
         The slope of a linear drift of the signal.
-    random state: int
+    random_state: int
         Seed for the random number generator.
 
     Returns
