@@ -5,7 +5,8 @@ import numpy as np
 from ..signal import signal_resample
 
 
-def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bursts=1, duration_bursts=1.0):
+def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
+                 n_bursts=1, duration_bursts=1.0, random_state=42):
     """Simulate an EMG signal
 
     Generate an artificial (synthetic) EMG signal of a given duration and sampling rate.
@@ -47,6 +48,9 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
     -----------
     This function is based on `this script <https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/>`_.
     """
+    # seed the random generator for reproducible results
+    np.random.seed(random_state)
+
     # Sanity checks
     if isinstance(duration_bursts, int) or isinstance(duration_bursts, float):
         duration_bursts = np.repeat(duration_bursts, n_bursts)
@@ -80,7 +84,6 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
             emg += bursts[i]
     emg = np.array(emg)
 
-
     # Add random (gaussian distributed) noise
     emg += np.random.normal(0, noise, len(emg))
 
@@ -91,7 +94,3 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
                           desired_sampling_rate=sampling_rate)
 
     return(emg)
-
-
-
-
