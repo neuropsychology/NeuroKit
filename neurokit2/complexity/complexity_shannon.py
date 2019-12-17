@@ -30,8 +30,10 @@ def complexity_shannon(signal):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.sin(np.log(np.random.sample(666)))
+    >>> # Download example EEG signal
+    >>> signal = pd.read_csv('https://raw.github.com/neuropsychology/NeuroKit/master/data/example_eeg.txt', header=None)[0].values
     >>> nk.complexity_shannon(signal)
+    7.566810239706894
 
 
     References
