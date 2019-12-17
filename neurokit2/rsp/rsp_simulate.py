@@ -26,6 +26,8 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         a single respiratory cycle. If 'breathmetrics' (default), will use an
         advanced model desbribed `Noto, et al. (2018)
         <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_.
+    random state: int
+        Seed for the random number generator.
 
     Returns
     -------

@@ -25,6 +25,8 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     duration_bursts : float or list
         Duration of the bursts. Can be a float (each burst will have the same
         duration) or a list of durations for each bursts.
+    random state: int
+        Seed for the random number generator.
 
     Returns
     ----------
