@@ -1,9 +1,9 @@
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
+        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
+
 .. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
-        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
-       
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
 

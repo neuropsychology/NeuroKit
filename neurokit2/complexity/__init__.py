@@ -1,3 +1,4 @@
 """Submodule for NeuroKit."""
 
-from .complexity_shannon import complexity_shannon
+from .entropy_shannon import entropy_shannon
+from .entropy_approximate import entropy_approximate
