@@ -12,4 +12,4 @@ Contributors
 ------------
 
 * `Hung Pham <https://github.com/hungpham2511>`_
-* `François Lespinasse <https://github.com/sangfrois>`_
+
