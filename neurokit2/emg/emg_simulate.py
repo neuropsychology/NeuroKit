@@ -52,6 +52,10 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     """
     # seed the random generator for reproducible results
     np.random.seed(random_state)
+    
+    # Generate number of samples automatically if length is unspecified
+    if length is None:
+        length = duration * sampling_rate
 
     # Sanity checks
     if isinstance(duration_bursts, int) or isinstance(duration_bursts, float):
@@ -92,7 +96,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     # Resample
     emg = signal_resample(emg,
                           sampling_rate=1000,
-                          desired_length=duration*sampling_rate,
+                          desired_length=length,
                           desired_sampling_rate=sampling_rate)
 
     return(emg)
