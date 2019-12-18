@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 
-#from pyentrp import entropy as pyentrp
+from pyentrp import entropy as pyentrp
 
 
 # =============================================================================
