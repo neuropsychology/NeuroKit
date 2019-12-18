@@ -71,7 +71,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     scipy.signal.resample_poly, scipy.signal.resample, scipy.ndimage.zoom
     """
     if desired_length is None:
-        desired_length = np.round(len(signal) * desired_sampling_rate / sampling_rate)
+        desired_length = int(np.round(len(signal) * desired_sampling_rate / sampling_rate))
 
     # Sanity checks
     if len(signal) == desired_length:

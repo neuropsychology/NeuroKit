@@ -25,7 +25,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     duration_bursts : float or list
         Duration of the bursts. Can be a float (each burst will have the same
         duration) or a list of durations for each bursts.
-    random_state: int
+    random_state : int
         Seed for the random number generator.
 
     Returns
@@ -50,9 +50,9 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     -----------
     This function is based on `this script <https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/>`_.
     """
-    # seed the random generator for reproducible results
+    # Seed the random generator for reproducible results
     np.random.seed(random_state)
-    
+
     # Generate number of samples automatically if length is unspecified
     if length is None:
         length = duration * sampling_rate

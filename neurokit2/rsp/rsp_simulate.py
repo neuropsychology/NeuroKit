@@ -26,7 +26,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         a single respiratory cycle. If 'breathmetrics' (default), will use an
         advanced model desbribed `Noto, et al. (2018)
         <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_.
-    random_state: int
+    random_state : int
         Seed for the random number generator.
 
     Returns
@@ -57,7 +57,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     rsp_clean, rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
 """
 
-    # seed the random generator for reproducible results
+    # Seed the random generator for reproducible results
     np.random.seed(random_state)
 
     # Generate number of samples automatically if length is unspecified
@@ -365,7 +365,7 @@ def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000,
     # Loop until it doesn't fail
     rsp = False
     while rsp is False:
-        # Generate a long than necessary signal so it won't be shorter
+        # Generate a longer than necessary signal so it won't be shorter
         (rsp, raw_features,
         feature_stats) = _rsp_simulate_breathmetrics_original(nCycles=int(n_cycles * 1.5),
                                                               sampling_rate=sampling_rate,

@@ -22,7 +22,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         Noise level (gaussian noise).
     heart_rate : int
         Desired simulated heart rate (in beats per minute).
-    random_state: int
+    random_state : int
         Seed for the random number generator.
 
 
@@ -50,7 +50,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
     """
 
-    # seed the random generator for reproducible results
+    # Seed the random generator for reproducible results
     np.random.seed(random_state)
 
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle

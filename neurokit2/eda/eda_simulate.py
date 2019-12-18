@@ -63,7 +63,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         Desired number of skin conductance responses (SCRs), i.e., peaks.
     drift : float or list
         The slope of a linear drift of the signal.
-    random_state: int
+    random_state : int
         Seed for the random number generator.
 
     Returns
@@ -88,7 +88,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     -----------
     - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
     """
-    # seed the random generator for reproducible results
+    # Seed the random generator for reproducible results
     np.random.seed(random_state)
 
     # Generate number of samples automatically if length is unspecified
