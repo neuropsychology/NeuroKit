@@ -19,7 +19,7 @@ def test_rsp_simulate():
 
     rsp3 = nk.rsp_simulate(duration=20, length=3000, method="sinusoidal")
     rsp4 = nk.rsp_simulate(duration=20, length=3000, method="breathmetrics")
-    pd.DataFrame({"RSP3":rsp3, "RSP4":rsp4}).plot()
+#    pd.DataFrame({"RSP3":rsp3, "RSP4":rsp4}).plot()
     assert len(nk.signal_findpeaks(rsp3, height_min = 0.2)[0]) > len(nk.signal_findpeaks(rsp4, height_min = 0.2)[0])
 
 
