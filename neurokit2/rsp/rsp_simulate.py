@@ -1,35 +1,41 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
 
 
-def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, respiratory_rate=15, method="breathmetrics"):
-    """Simulate a respiratory signal
+def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
+                 respiratory_rate=15, method="breathmetrics", random_state=42):
+    """Simulate a respiratory signal.
 
-    Generate an artificial (synthetic) respiratory signal of a given duration and rate.
+    Generate an artificial (synthetic) respiratory signal of a given duration
+    and rate.
 
     Parameters
     ----------
     duration : int
         Desired length of duration (s).
     sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal (in samples).
+        The desired sampling rate (in Hz, i.e., samples/second) or the desired
+        length of the signal (in samples).
     noise : float
         Noise level (gaussian noise).
     respiratory_rate : float
         Desired number of breath cycles in one minute.
     method : str
-        The model used to generate the signal. Can be 'sinusoidal' for a simulation
-        based on a trigonometric sine wave that roughly approximates a single respiratory cycle.
-        If 'breathmetrics' (default), will use an advanced model desbribed `Noto, et al. (2018) <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_.
+        The model used to generate the signal. Can be 'sinusoidal' for a
+        simulation based on a trigonometric sine wave that roughly approximates
+        a single respiratory cycle. If 'breathmetrics' (default), will use an
+        advanced model desbribed `Noto, et al. (2018)
+        <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_.
+    random_state: int
+        Seed for the random number generator.
 
     Returns
-    ----------
+    -------
     array
         Vector containing the respiratory signal.
 
     Examples
-    ----------
+    --------
     >>> import pandas as pd
     >>> import numpy as np
     >>> import neurokit2 as nk
@@ -41,12 +47,19 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, respi
 
     References
     ----------
-    Noto, T., Zhou, G., Schuele, S., Templer, J., & Zelano, C. (2018). Automated analysis of breathing waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical Senses, 43(8), 583–597. https://doi.org/10.1093/chemse/bjy045
+    Noto, T., Zhou, G., Schuele, S., Templer, J., & Zelano, C. (2018).
+    Automated analysis of breathing waveforms using BreathMetrics: A
+    respiratory signal processing toolbox. Chemical Senses, 43(8), 583–597.
+    https://doi.org/10.1093/chemse/bjy045
 
     See Also
     --------
     rsp_clean, rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
 """
+
+    # seed the random generator for reproducible results
+    np.random.seed(random_state)
+
     # Generate number of samples automatically if length is unspecified
     if length is None:
         length = duration * sampling_rate
@@ -78,16 +91,19 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, respi
 # =============================================================================
 # Simple Sinusoidal Model
 # =============================================================================
-def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, noise=0.01, respiratory_rate=15, amplitude=0.5):
+def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000,
+                             noise=0.01, respiratory_rate=15, amplitude=0.5):
     """
-    Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly approximates a single respiratory cycle.
+    Generate an artificial (synthetic) respiratory signal by trigonometric sine
+    wave that roughly approximates a single respiratory cycle.
     """
     # Generate values along the length of the duration
     x = np.linspace(0, duration, int(length))
 
     frequency = respiratory_rate / 60
 
-    # Compute the value of sine computed by the following trigonometric function
+    # Compute the value of sine computed by the following trigonometric
+    # function
     rsp = amplitude*np.sin(2*np.pi*x*frequency)
 
     # Add random (gaussian distributed) noise
@@ -118,8 +134,9 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
                                          pause_amplitude_variance=0.2,
                                          signal_noise=0.1):
     """
-    Simulates a recording of human airflow data by appending individually constructed sin waves and pauses in sequence.
-    This is translated from the matlab code available `here <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_
+    Simulates a recording of human airflow data by appending individually
+    constructed sin waves and pauses in sequence. This is translated from the
+    matlab code available `here <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_
     by Noto, et al. (2018).
 
     Parameters
@@ -232,11 +249,15 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
             this_exhale_pauseLength = 0
             this_exhale_pause = []
 
-        # Determine length of inhale and exhale for this cycle to main breathing rate
+        # Determine length of inhale and exhale for this cycle to main
+        # breathing rate
         cycle_length = phases_with_noise[c] - (this_inhale_pauseLength +
                                                this_exhale_pauseLength)
 
-        # If pauses are longer than the time alloted for this breath, set them to 0 so a real breath can be simulated. This will deviate the statistics from those initialized but is unavaoidable at the current state
+        # If pauses are longer than the time alloted for this breath, set them
+        # to 0 so a real breath can be simulated. This will deviate the
+        # statistics from those initialized but is unavaoidable at the current
+        # state
         if (cycle_length <= 0) or (cycle_length < min(phases_with_noise) / 4):
             this_inhale_pauseLength = 0
             this_inhale_pause = []
@@ -335,7 +356,8 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
 
 
 
-def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000, noise=0.01, respiratory_rate=15):
+def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000,
+                                noise=0.01, respiratory_rate=15):
     """
     """
     n_cycles = int(respiratory_rate / 60 * duration)
@@ -344,8 +366,9 @@ def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000, no
     rsp = False
     while rsp is False:
         # Generate a long than necessary signal so it won't be shorter
-        rsp, raw_features, feature_stats = _rsp_simulate_breathmetrics_original(nCycles=int(n_cycles * 1.5),
-                                                                                sampling_rate=sampling_rate,
-                                                                                breathing_rate=respiratory_rate/60,
-                                                                                signal_noise=noise*10)
+        (rsp, raw_features,
+        feature_stats) = _rsp_simulate_breathmetrics_original(nCycles=int(n_cycles * 1.5),
+                                                              sampling_rate=sampling_rate,
+                                                              breathing_rate=respiratory_rate/60,
+                                                              signal_noise=noise*10)
     return(rsp)

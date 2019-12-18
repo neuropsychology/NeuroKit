@@ -44,8 +44,9 @@ def _eda_simulate_canonical(sampling_rate=1000,
 
 
 
-def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_peaks=1, drift=-0.01):
-    """Simulate Electrodermal Activity (EDA) signal
+def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
+                 n_peaks=1, drift=-0.01, random_state=42):
+    """Simulate Electrodermal Activity (EDA) signal.
 
     Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.
 
@@ -62,6 +63,8 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_pea
         Desired number of skin conductance responses (SCRs), i.e., peaks.
     drift : float or list
         The slope of a linear drift of the signal.
+    random_state: int
+        Seed for the random number generator.
 
     Returns
     ----------
@@ -85,10 +88,12 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_pea
     -----------
     - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
     """
+    # seed the random generator for reproducible results
+    np.random.seed(random_state)
+
     # Generate number of samples automatically if length is unspecified
     if length is None:
         length = duration * sampling_rate
-
 
     eda = np.full(length, 1.0)
     eda += (drift * np.linspace(0, duration, length))
