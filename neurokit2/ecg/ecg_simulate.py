@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import scipy
 
-#from ..signal import signal_resample
+from ..signal import signal_resample
 
 
 def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=60, random_state=42):
@@ -68,7 +68,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
     ecg += np.random.normal(0, noise, len(ecg))
 
     # Resample
-    ecg = nk.signal_resample(ecg,
+    ecg = signal_resample(ecg,
                           sampling_rate=int(len(ecg)/10),
                           desired_length=length,
                           desired_sampling_rate=sampling_rate)
