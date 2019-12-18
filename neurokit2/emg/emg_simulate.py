@@ -47,6 +47,10 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
     -----------
     This function is based on `this script <https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/>`_.
     """
+    # Generate number of samples automatically if length is unspecified
+    if length is None:
+        length = duration * sampling_rate
+
     # Sanity checks
     if isinstance(duration_bursts, int) or isinstance(duration_bursts, float):
         duration_bursts = np.repeat(duration_bursts, n_bursts)
@@ -87,7 +91,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, n_bur
     # Resample
     emg = signal_resample(emg,
                           sampling_rate=1000,
-                          desired_length=duration*sampling_rate,
+                          desired_length=length,
                           desired_sampling_rate=sampling_rate)
 
     return(emg)
