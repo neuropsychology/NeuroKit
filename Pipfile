@@ -20,6 +20,7 @@ bioread = "*"
 scipy = "*"
 sklearn = "*"
 matplotlib = "*"
+pyentrp = "*"
 
 [packages]
 neurokit2 = {path = ".", editable = true}
