@@ -91,6 +91,22 @@ def test_signal_interpolate():
     assert interpolated[0] == signal[0]
 
 
+def test_signal_findpeaks():
+
+    signal1 = np.cos(np.linspace(start=0, stop=30, num=1000))
+    peaks1, info1 = nk.signal_findpeaks(signal1)
+
+    signal2 = np.concatenate([np.arange(0, 20, 0.1), np.arange(17, 30, 0.1), np.arange(30, 10, -0.1)])
+    peaks2, info2 = nk.signal_findpeaks(signal2)
+    assert len(peaks1) > len(peaks2)
 
 
+def test_signal_merge():
+
+    signal1 = np.cos(np.linspace(start=0, stop=10, num=100))
+    signal2 = np.cos(np.linspace(start=0, stop=20, num=100))
+
+    signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
+    assert len(signal) == 150
+    assert signal[0] == signal2[0] + signal2[0]
 

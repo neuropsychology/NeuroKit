@@ -6,7 +6,8 @@ import scipy
 from ..signal import signal_resample
 
 
-def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=60):
+def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
+                 heart_rate=60, random_state=42):
     """Simulate an ECG/EKG signal
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate. It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
@@ -21,6 +22,9 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
         Noise level (gaussian noise).
     heart_rate : int
         Desired simulated heart rate (in beats per minute).
+    random_state : int
+        Seed for the random number generator.
+
 
 
     Returns
@@ -45,6 +49,10 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
     -----------
     This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
     """
+
+    # Seed the random generator for reproducible results
+    np.random.seed(random_state)
+
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
     cardiac = scipy.signal.wavelets.daub(10)
 
@@ -67,7 +75,3 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01, heart
                           desired_sampling_rate=sampling_rate)
 
     return(ecg)
-
-
-
-

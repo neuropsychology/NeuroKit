@@ -24,6 +24,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="JupyterTrust" id="3c64befa-dfb7-4b06-bc00-3016b7c13d23" />
   <component name="ProjectId" id="1V0QjaAQyYwYx9F0zjeGHi2P6qI" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -85,6 +86,7 @@
       <updated>1576387668659</updated>
       <workItem from="1576387677929" duration="1147000" />
       <workItem from="1576465425012" duration="255000" />
+      <workItem from="1576573439935" duration="81000" />
     </task>
     <servers />
   </component>
@@ -100,9 +102,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="184" y="6" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1576388119071" />
-    <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1576465439677">
+    <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1576573441528">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="384" y="187" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1576465439677" />
+    <state x="384" y="187" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1576573441528" />
   </component>
 </project>
