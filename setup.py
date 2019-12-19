@@ -21,9 +21,9 @@ def find_version():
 
 
 # Dependencies
-requirements = ['numpy', 'pandas', 'scipy', 'mne', 'bioread', 'matplotlib==3.0.0']
+requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'mne', 'bioread', 'matplotlib==3.0.0']
 setup_requirements = ['pytest-runner', 'numpy']
-test_requirements = requirements + ['pytest', 'coverage']
+test_requirements = requirements + ['pytest', 'coverage', 'pyentrp']
 
 
 # Setup
@@ -39,7 +39,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).",
+    description="The Python Toolbox for Neurophysiological Signal Processing.",
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,

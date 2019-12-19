@@ -2,10 +2,12 @@
 
 language: python
 python:
-  - "nightly"
-  - 3.7
-  - 3.6
-  - 3.5
+  #- "nightly"
+  #- "3.8-dev"
+  #- "3.8"
+  - "3.7"
+  - "3.6"
+  - "3.5"
 
 
   
@@ -14,16 +16,23 @@ os:
   - linux
   # - osx
   
+  
+before_install:
+  - python --version
+  - pip install -U pip
+  - pip install -U pytest
+  - pip install codecov
+  
 install: 
   - pip install -U tox-travis
   - pip install coverage
-  - pip install codecov
   - pip install flake8
-
+  - pip install ".[test]"
 
 script:
     - python setup.py install
     - tox
+    - pytest
     #- coverage run tests/test_all.py
 
 after_success:

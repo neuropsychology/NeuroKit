@@ -86,7 +86,7 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
 
     See Also
     --------
-    plot_events_in_signal, events_to_mne
+    events_plot, events_to_mne
 
     Example
     ----------
@@ -98,8 +98,8 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     >>> events = nk.events_find(signal)
     >>> events
     {'Onset': array([  0, 236, 550, 864]), 'Duration': array([ 79, 157, 157, 136])}
-
-    >>> nk.plot_events_in_signal(signal, events)
+    >>>
+    >>> nk.events_plot(signal, events)
     """
     events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
 
