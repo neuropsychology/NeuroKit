@@ -28,6 +28,8 @@ install:
   - pip install coverage
   - pip install flake8
   - pip install ".[test]"
+    # Testing
+  - pip install pyentrp
 
 script:
     - python setup.py install
