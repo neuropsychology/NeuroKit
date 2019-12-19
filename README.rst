@@ -113,17 +113,16 @@ General
 - `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
 - `PySiology <https://github.com/Gabrock94/Pysiology>`_
 - `PsPM <https://github.com/bachlab/PsPM>`_
+- `pyphysio <https://github.com/MPBA/pyphysio>`_
+
 
 ECG
 ^^^^
-
 
 - `hrv <https://github.com/rhenanbartels/hrv>`_
 - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
 - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
-- `pyphysio <https://github.com/MPBA/pyphysio>`_
-
 
 EDA
 ^^^^
