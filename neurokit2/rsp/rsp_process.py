@@ -14,7 +14,8 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     Parameters
     ----------
     rsp_signal : list, array or Series
-        The raw respiration channel (as measured, for instance, by a respiration belt).
+        The raw respiration channel (as measured, for instance, by a
+        respiration belt).
     sampling_rate : int
         The sampling frequency of rsp_signal (in Hz, i.e., samples/second).
 
@@ -32,9 +33,9 @@ def rsp_process(rsp_signal, sampling_rate=1000):
         - *"RSP_Period"*: the breathing period interpolated between inhalation peaks.
         - *"RSP_Amplitude"*: the breathing amplitude interpolated between inhalation peaks.
     info : dict
-        A dictionary containing additional information, in this case the samples
-        at which inhalation peaks and exhalation troughs occur, accessible with
-        the keys 'RSP_Peaks', and 'RSP_Troughs', respectively.
+        A dictionary containing the samples at which inhalation peaks and
+        exhalation troughs occur, accessible with the keys 'RSP_Peaks', and
+        'RSP_Troughs', respectively.
 
     See Also
     --------

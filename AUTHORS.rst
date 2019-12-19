@@ -16,6 +16,7 @@ Contributors
 * `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Gansheng Tan <https://github.com/GanshengT>`_ *(CentraleSupélec, France)*
 * `Chuan-Peng Hu <https://github.com/hcp4715>`_ *(Universitatsmedizin Mainz, Germany)*
+* `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 * `You? <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
 
 More details `here <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.
