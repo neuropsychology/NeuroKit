@@ -50,7 +50,7 @@ Documentation
         :alt: API
         
 .. image:: https://img.shields.io/badge/tutorials-help-orange.svg?colorB=E91E63
-        :target: https://neurokit2.readthedocs.io/en/latest/tutorials.html
+        :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
         :alt: Tutorials
         
 Click on the links above and check out our tutorials:
