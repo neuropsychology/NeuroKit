@@ -126,7 +126,7 @@ def _ecg_simulate_derivsecgsyn(Tspan, x0, rrn, ti, sfint=512, ai=[1.2, -5, 30, -
 
     fresp = 0.25
 #    zbase = 0.005*np.sin(2*np.pi*fresp*Tspan)
-    zbase = 0.005*np.sin(2*np.pi*fresp*t_eval)
+    #zbase = 0.005*np.sin(2*np.pi*fresp*t_eval)
 
     dx1dt = a0*x0[0] - w0*x0[1]
     dx2dt = a0*x0[1] + w0*x0[0]
