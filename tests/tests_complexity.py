@@ -4,8 +4,8 @@ import neurokit2 as nk
 
 import nolds
 
-#from packages import pyrem
-#from packages import pyeeg
+from packages import pyrem
+from packages import pyeeg
 from pyentrp import entropy as pyentrp
 
 
@@ -31,6 +31,7 @@ def test_complexity():
     assert np.allclose(nk.entropy_sample(signal, order=2, r=0.2*np.std(signal)),
                        nolds.sampen(signal, emb_dim=2, tolerance=0.2*np.std(signal)), atol=0.000001)
 #    assert nk.entropy_sample(signal, 2, 0.2) == pyeeg.samp_entropy(signal, 2, 0.2)
+#    assert nk.entropy_sample(signal, 2, 0.2) == pyrem.samp_entropy(signal, 2, 0.2, relative_r=False)
 #    pyentrp.sample_entropy(signal, 2, 0.2)  # Gives something different
 
     # Fuzzy

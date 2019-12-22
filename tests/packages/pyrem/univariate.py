@@ -302,13 +302,13 @@ def samp_entropy(a, m, r, tau=1, relative_r=True):
     # Buffers are preallocated chunks of memory storing temporary results.
     # see the `out` argument in numpy *ufun* documentation
 
-    dist_buffer = np.zeros(embsp.shape[0] - 1, dtype=np.float32)
-    subtract_buffer = np.zeros((dist_buffer.size ,m), dtype=np.float32)
-    in_range_buffer = np.zeros_like(dist_buffer, dtype=np.bool)
+    dist_buffer = np.zeros(embsp.shape[0] - 1, dtype=float)
+    subtract_buffer = np.zeros((dist_buffer.size, m), dtype=float)
+    in_range_buffer = np.zeros_like(dist_buffer, dtype=bool)
     sum_cm, sum_cmp = 0.0, 0.0
 
     # we iterate through all templates (rows), except last one.
-    for i,template in enumerate(embs_mini[:-1]):
+    for i, template in enumerate(embs_mini[:-1]):
 
         # these are just views to the buffer arrays. to store intermediary matrices
         dist_b_view = dist_buffer[i:]
