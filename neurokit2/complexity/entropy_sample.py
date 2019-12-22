@@ -4,7 +4,7 @@ import numpy as np
 
 
 from .utils_embed import _embed
-
+from .utils_phi import _phi
 
 
 
@@ -15,9 +15,6 @@ def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
     # Sanity checks
     signal = np.array(signal).astype(float)
     N = len(signal)
-
-    if r == "default":
-        r = 0.2 * np.std(signal, axis=-1, ddof=1)
 
     phi = [0, 0]  # phi(m), phi(m+1)
     for j in [0, 1]:
@@ -44,14 +41,14 @@ def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
 
         phi[j] = np.mean(count) / (N-m-1)
 
-    return np.log(phi[0] / phi[1])
+    return -np.log(phi[1] / phi[0])
 
 
 
 
 def entropy_sample(signal, order=2, r="default"):
     """
-    Calculate the sample entropy (SampEn) of a signal. Adapted from `entro-py <https://github.com/ixjlyons/entro-py/blob/master/entropy.py>`_.
+    Calculate the sample entropy (SampEn) of a signal.
 
     Parameters
     ----------
@@ -75,4 +72,14 @@ def entropy_sample(signal, order=2, r="default"):
     >>> nk.entropy_sample(signal[0:100])
     0.27503095489822205
     """
-    return _entropy_sample(signal, order=order, r=r, n=1, fuzzy=False)
+    # Sanity checks
+    if r == "default":
+        r = 0.2 * np.std(signal, axis=-1, ddof=1)
+
+    # entro-py implementation (https://github.com/ixjlyons/entro-py/blob/master/entropy.py):
+#    return _entropy_sample(signal, order=order, r=r, n=1, fuzzy=False)
+
+    # nolds and Entropy implementation:
+    phi = _phi(signal, order=order, r=r, metric='chebyshev', approximate=False)
+    return -np.log(np.divide(phi[1], phi[0]))
+

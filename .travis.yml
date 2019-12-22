@@ -30,6 +30,7 @@ install:
   - pip install ".[test]"
     # Testing
   - pip install pyentrp
+  - pip install nolds
 
 script:
     - python setup.py install

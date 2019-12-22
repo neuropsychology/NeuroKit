@@ -36,4 +36,7 @@ def entropy_fuzzy(signal, order=2, r="default", n=1):
     >>> nk.entropy_fuzzy(signal[0:100])
     0.27492692805526253
     """
+    if r == "default":
+        r = 0.2 * np.std(signal, axis=-1, ddof=1)
+
     return _entropy_sample(signal, order=order, r=r, n=1, fuzzy=True)
