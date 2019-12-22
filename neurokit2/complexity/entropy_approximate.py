@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 
 from .utils_phi import _phi
+from .utils_get_r import _get_r
 
 
 
@@ -42,9 +43,7 @@ def entropy_approximate(signal, order=2, r="default"):
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
     - Sabeti, M., Katebi, S., & Boostani, R. (2009). Entropy and complexity measures for EEG signal classification of schizophrenic and control participants. Artificial intelligence in medicine, 47(3), 263-274.
     """
-    # Sanity checks
-    if r == "default":
-        r = 0.2 * np.std(signal, axis=-1, ddof=1)
+    r = _get_r(signal, r=r)
 
     # Get phi
     phi = _phi(signal, order=order, r=r, metric='chebyshev', approximate=True)

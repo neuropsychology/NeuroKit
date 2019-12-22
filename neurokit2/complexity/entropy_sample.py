@@ -5,7 +5,7 @@ import numpy as np
 
 from .utils_embed import _embed
 from .utils_phi import _phi
-
+from .utils_get_r import _get_r
 
 
 def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
@@ -72,9 +72,7 @@ def entropy_sample(signal, order=2, r="default"):
     >>> nk.entropy_sample(signal[0:100])
     0.27503095489822205
     """
-    # Sanity checks
-    if r == "default":
-        r = 0.2 * np.std(signal, axis=-1, ddof=1)
+    r = _get_r(signal, r=r)
 
     # entro-py implementation (https://github.com/ixjlyons/entro-py/blob/master/entropy.py):
 #    return _entropy_sample(signal, order=order, r=r, n=1, fuzzy=False)
@@ -82,4 +80,3 @@ def entropy_sample(signal, order=2, r="default"):
     # nolds and Entropy implementation:
     phi = _phi(signal, order=order, r=r, metric='chebyshev', approximate=False)
     return -np.log(np.divide(phi[1], phi[0]))
-
