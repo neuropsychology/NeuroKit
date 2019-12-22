@@ -4,8 +4,8 @@ import neurokit2 as nk
 
 import nolds
 
-from packages import pyrem
-from packages import pyeeg
+#from packages import pyrem
+#from packages import pyeeg
 from pyentrp import entropy as pyentrp
 
 
