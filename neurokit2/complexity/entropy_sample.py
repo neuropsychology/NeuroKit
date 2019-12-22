@@ -41,7 +41,7 @@ def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
 
         phi[j] = np.mean(count) / (N-m-1)
 
-    return -np.log(phi[1] / phi[0])
+    return -np.log(np.divide(phi[1], phi[0]))
 
 
 
