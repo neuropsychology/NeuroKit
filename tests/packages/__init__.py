@@ -2,3 +2,4 @@
 
 from .pyrem import *
 from .pyeeg import *
+from .entropy import *

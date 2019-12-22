@@ -8,8 +8,8 @@ from pyentrp import entropy as pyentrp
 
 # Local packages (copied in the test folder)
 #from packages import pyrem
-#from packages import pyeeg
-#import entropy
+from packages import pyeeg
+#from packages import entropy
 
 # =============================================================================
 # Complexity
