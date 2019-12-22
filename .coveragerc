@@ -4,6 +4,4 @@ show_missing = True
 
 [run]
 parallel=true
-
-[run]
 omit = *tests*
