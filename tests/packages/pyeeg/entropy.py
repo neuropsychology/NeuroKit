@@ -1,6 +1,6 @@
 import numpy
 from .embedded_sequence import embed_seq
-
+from .spectrum import bin_power
 
 def ap_entropy(X, M, R):
     """Computer approximate entropy (ApEN) of series X, specified by M and R.

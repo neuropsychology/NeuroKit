@@ -427,9 +427,9 @@ def hfd(a, k_max):
     # km_idxs[:,1] -= 1
     #
 
-    for k in xrange(1,k_max):
+    for k in range(1,k_max):
         Lk = 0
-        for m in xrange(0,k):
+        for m in range(0,k):
             #we pregenerate all idxs
             idxs = np.arange(1,int(np.floor((N-m)/k)),dtype=np.int32)
 
@@ -465,7 +465,7 @@ def dfa(X, Ave = None, L = None, sampling= 1):
 
     for i,n in enumerate(L):
         sampled = 0
-        for j in xrange(0,len(X) -n ,n):
+        for j in range(0,len(X) -n ,n):
 
             if np.random.rand() < sampling:
                 F[i] += np.polyfit(np.arange(j,j+n), Y[j:j+n],1, full=True)[1]

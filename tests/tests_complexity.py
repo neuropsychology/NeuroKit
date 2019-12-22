@@ -28,8 +28,9 @@ def test_complexity():
 #    assert nk.entropy_approximate(signal, 2, 0.2) == pyeeg.ap_entropy(signal, 2, 0.2)
 
     # Sample
-    assert np.allclose(nk.entropy_sample(signal, order=2, r=0.2*np.std(signal)), nolds.sampen(signal, emb_dim=2, tolerance=0.2*np.std(signal)), atol=0.000001)
-#    assert nk.entropy_shannon(signal, 2, 0.2) == pyrem.samp_entropy(signal, 2, 0.2, relative_r=False)
+    assert np.allclose(nk.entropy_sample(signal, order=2, r=0.2*np.std(signal)),
+                       nolds.sampen(signal, emb_dim=2, tolerance=0.2*np.std(signal)), atol=0.000001)
+#    assert nk.entropy_sample(signal, 2, 0.2) == pyeeg.samp_entropy(signal, 2, 0.2)
 #    pyentrp.sample_entropy(signal, 2, 0.2)  # Gives something different
 
     # Fuzzy
