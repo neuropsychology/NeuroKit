@@ -23,14 +23,13 @@ def entropy_shannon(signal):
         The Shannon entropy as float value.
 
 
-    Example
+    Examples
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> # Download example EEG signal
-    >>> signal = pd.read_csv('https://raw.github.com/neuropsychology/NeuroKit/master/data/example_eeg.txt', header=None)[0].values
+    >>> signal = np.cos(np.linspace(start=0, stop=30, num=100))
     >>> nk.entropy_shannon(signal)
-    7.566810239706894
+    6.6438561897747395
 
 
     References
@@ -61,4 +60,4 @@ def entropy_shannon(signal):
         shannon_entropy += freq * np.log2(freq)
     shannon_entropy = -shannon_entropy
 
-    return(shannon_entropy)
+    return shannon_entropy

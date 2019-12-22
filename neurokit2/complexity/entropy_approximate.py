@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 
 from .utils_phi import _phi
+from .utils_get_r import _get_r
 
 
 
@@ -17,9 +18,9 @@ def entropy_approximate(signal, order=2, r="default"):
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     order : int
-        The Embedding dimension, i.e., the length of compared run of data. Typically 1, 2 or 3.
-    r : int
-        Filtering level. If 'default', will be set to 0.2 times the standard deviation of the signal.
+        The Embedding dimension (often denoted as 'm'), i.e., the length of compared run of data. Typically 1, 2 or 3.
+    r : float
+        Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
 
 
     Returns
@@ -28,14 +29,13 @@ def entropy_approximate(signal, order=2, r="default"):
         The approximate entropy as float value.
 
 
-    Example
+    Examples
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> # Download example EEG signal
-    >>> signal = pd.read_csv('https://raw.github.com/neuropsychology/NeuroKit/master/data/example_eeg.txt', header=None)[0].values
+    >>> signal = np.cos(np.linspace(start=0, stop=30, num=100))
     >>> nk.entropy_approximate(signal[0:100])
-    0.38717434097485004
+    0.17364897858477146
 
 
     References
@@ -43,9 +43,7 @@ def entropy_approximate(signal, order=2, r="default"):
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
     - Sabeti, M., Katebi, S., & Boostani, R. (2009). Entropy and complexity measures for EEG signal classification of schizophrenic and control participants. Artificial intelligence in medicine, 47(3), 263-274.
     """
-    # Sanity checks
-    if r == "default":
-        r = 0.2 * np.std(signal, axis=-1, ddof=1)
+    r = _get_r(signal, r=r)
 
     # Get phi
     phi = _phi(signal, order=order, r=r, metric='chebyshev', approximate=True)
