@@ -36,7 +36,6 @@ script:
     - python setup.py install
     - tox
     - pytest
-    #- coverage run tests/test_all.py
 
 after_success:
     - codecov

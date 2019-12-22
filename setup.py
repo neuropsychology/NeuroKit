@@ -24,7 +24,7 @@ def find_version():
 requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'mne', 'bioread', 'matplotlib==3.0.0']
 setup_requirements = ['pytest-runner', 'numpy']
 test_requirements = requirements + ['pytest', 'coverage', 'pyentrp', 'nolds']
-
+additional_folders = 
 
 # Setup
 setup(
@@ -47,6 +47,8 @@ setup(
     keywords='neurokit2',
     name='neurokit2',
     packages=find_packages(),
+    package_data = {
+        "neuropsydia.files.font":["*.ttf", "*.otf"]}
     setup_requires=setup_requirements,
     test_suite='pytest',
     tests_require=test_requirements,
