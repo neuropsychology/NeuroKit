@@ -2,13 +2,15 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 
+import os
 import nolds
 
 from pyentrp import entropy as pyentrp
 
 # Local packages (copied in the test folder)
+path_packages = os.path.join(os.path.dirname(os.path.abspath(__file__)), "packages")
 #from packages import pyrem
-from packages import pyeeg
+#from .packages import pyeeg
 #from packages import entropy
 
 # =============================================================================
