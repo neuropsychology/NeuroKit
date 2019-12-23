@@ -11,9 +11,6 @@ import nolds
 from pyentrp import entropy as pyentrp
 
 # Local packages (copied in the test folder)
-path_packages = os.path.join(os.path.dirname(os.path.abspath(__file__)), "packages")
-sys.path.append(path_packages + "/pyrem")
-import pyrem
 #from packages import pyrem
 #from .packages import pyeeg
 #from packages import entropy
