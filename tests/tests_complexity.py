@@ -29,6 +29,7 @@ def test_complexity():
 
 
     # Approximate
+    assert np.allclose(nk.entropy_approximate(signal), 0.17364897858477146)
     assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) == entropy_app_entropy(signal, 2)
 
     assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) != pyeeg_ap_entropy(signal, 2, 0.2*np.std(signal, ddof=1))
