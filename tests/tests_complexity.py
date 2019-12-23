@@ -7,7 +7,7 @@ import nolds
 from pyentrp import entropy as pyentrp
 
 # Local packages (copied in the test folder)
-from tests_utils_pyeeg import ap_entropy as pyeeg_ap_entropy
+from .tests_utils_pyeeg import ap_entropy as pyeeg_ap_entropy
 #from packages import pyrem
 #from .packages import pyeeg
 #from packages import entropy
