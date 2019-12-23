@@ -31,7 +31,7 @@ def test_complexity():
     assert np.allclose(nk.entropy_approximate(signal), 0.17364897858477146, atol=0.000001)
     assert np.allclose(nk.entropy_approximate(np.array([85, 80, 89] * 17)), 1.0996541105257052e-05, atol=0.000001)
 #    assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) == entropy.app_entropy(signal, 2)
-    assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) == pyeeg_ap_entropy(signal, 0.2*np.std(signal, ddof=1))
+    assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) != pyeeg_ap_entropy(signal, 2, 0.2*np.std(signal, ddof=1))
 
 
     # Sample
@@ -70,10 +70,6 @@ def pyeeg_embed_seq(time_series, tau, embedding_dimension):
         shape=shape,
         strides=strides
     )
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod(verbose=True)
 
 
 
