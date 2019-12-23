@@ -4,7 +4,7 @@ import neurokit2 as nk
 
 import os
 
-path_data = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+path_data = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 
 # =============================================================================
 # Data
