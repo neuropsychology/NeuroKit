@@ -21,7 +21,6 @@ scipy = "*"
 sklearn = "*"
 matplotlib = "*"
 pyentrp = "*"
-numba = "*"
 
 [packages]
 neurokit2 = {path = ".", editable = true}

@@ -31,7 +31,6 @@ install:
     # Testing
   - pip install pyentrp
   - pip install nolds
-  - pip install numba
 
 script:
     - python setup.py install

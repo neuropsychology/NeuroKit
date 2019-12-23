@@ -6,12 +6,12 @@ import nolds
 
 from pyentrp import entropy as pyentrp
 
-# Local packages (copied in the test folder)
-#from .tests_utils_pyeeg import ap_entropy as pyeeg_ap_entropy
-#from packages import pyrem
-#from .packages import pyeeg
-#from packages import entropy
-
+"""
+For this testing we test our implementations against existing and established ones.
+However, as some of these other implementations are not really packaged in a way
+so we can easily import it. Thus, we directly copied their content in this file
+(below the tests).
+"""
 
 
 # =============================================================================
@@ -30,13 +30,14 @@ def test_complexity():
     # Approximate
     assert np.allclose(nk.entropy_approximate(signal), 0.17364897858477146, atol=0.000001)
     assert np.allclose(nk.entropy_approximate(np.array([85, 80, 89] * 17)), 1.0996541105257052e-05, atol=0.000001)
-#    assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) == entropy.app_entropy(signal, 2)
+    assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) == entropy_app_entropy(signal, 2)
     assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) != pyeeg_ap_entropy(signal, 2, 0.2*np.std(signal, ddof=1))
 
 
     # Sample
     assert np.allclose(nk.entropy_sample(signal, order=2, r=0.2*np.std(signal)),
                        nolds.sampen(signal, emb_dim=2, tolerance=0.2*np.std(signal)), atol=0.000001)
+    assert nk.entropy_sample(signal, 2, 0.2*np.std(signal, ddof=1)) == entropy_sample_entropy(signal, 2)
 #    assert nk.entropy_sample(signal, 2, 0.2) == pyeeg.samp_entropy(signal, 2, 0.2)
 #    assert nk.entropy_sample(signal, 2, 0.2) == pyrem.samp_entropy(signal, 2, 0.2, relative_r=False)
 #    pyentrp.sample_entropy(signal, 2, 0.2)  # Gives something different
@@ -116,3 +117,72 @@ def pyeeg_ap_entropy(X, M, R):
     Ap_En = (Phi_m - Phi_mp) / (N - M)
 
     return Ap_En
+
+
+# =============================================================================
+# Entropy
+# =============================================================================
+
+
+from math import log, floor
+from sklearn.neighbors import KDTree
+
+def entropy_embed(x, order=3, delay=1):
+    N = len(x)
+    if order * delay > N:
+        raise ValueError("Error: order * delay should be lower than x.size")
+    if delay < 1:
+        raise ValueError("Delay has to be at least 1.")
+    if order < 2:
+        raise ValueError("Order has to be at least 2.")
+    Y = np.zeros((order, N - (order - 1) * delay))
+    for i in range(order):
+        Y[i] = x[i * delay:i * delay + Y.shape[1]]
+    return Y.T
+
+
+
+def entropy_app_samp_entropy(x, order, metric='chebyshev', approximate=True):
+    _all_metrics = KDTree.valid_metrics
+    if metric not in _all_metrics:
+        raise ValueError('The given metric (%s) is not valid. The valid '
+                         'metric names are: %s' % (metric, _all_metrics))
+    phi = np.zeros(2)
+    r = 0.2 * np.std(x, axis=-1, ddof=1)
+
+    # compute phi(order, r)
+    _emb_data1 = entropy_embed(x, order, 1)
+    if approximate:
+        emb_data1 = _emb_data1
+    else:
+        emb_data1 = _emb_data1[:-1]
+    count1 = KDTree(emb_data1, metric=metric).query_radius(emb_data1, r,
+                                                           count_only=True
+                                                           ).astype(np.float64)
+    # compute phi(order + 1, r)
+    emb_data2 = entropy_embed(x, order + 1, 1)
+    count2 = KDTree(emb_data2, metric=metric).query_radius(emb_data2, r,
+                                                           count_only=True
+                                                           ).astype(np.float64)
+    if approximate:
+        phi[0] = np.mean(np.log(count1 / emb_data1.shape[0]))
+        phi[1] = np.mean(np.log(count2 / emb_data2.shape[0]))
+    else:
+        phi[0] = np.mean((count1 - 1) / (emb_data1.shape[0] - 1))
+        phi[1] = np.mean((count2 - 1) / (emb_data2.shape[0] - 1))
+    return phi
+
+
+
+
+def entropy_app_entropy(x, order=2, metric='chebyshev'):
+    phi = entropy_app_samp_entropy(x, order=order, metric=metric, approximate=True)
+    return np.subtract(phi[0], phi[1])
+
+
+
+def entropy_sample_entropy(x, order=2, metric='chebyshev'):
+    x = np.asarray(x, dtype=np.float64)
+    phi = entropy_app_samp_entropy(x, order=order, metric=metric,
+                            approximate=False)
+    return -np.log(np.divide(phi[1], phi[0]))
