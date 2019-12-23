@@ -2,15 +2,12 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 
-import os
-import sys
 import nolds
-
-# the mock-0.3.1 dir contains testcase.py, testutils.py & mock.py
 
 from pyentrp import entropy as pyentrp
 
 # Local packages (copied in the test folder)
+from utils_pyeeg import ap_entropy as pyeeg_ap_entropy
 #from packages import pyrem
 #from .packages import pyeeg
 #from packages import entropy

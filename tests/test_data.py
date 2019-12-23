@@ -2,6 +2,9 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 
+#import os
+#
+#path_data = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
 # =============================================================================
 # Data
