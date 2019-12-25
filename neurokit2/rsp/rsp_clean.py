@@ -44,7 +44,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, defaults="khodadad2018"):
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.5)
+    >>> rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.01)
     >>> signals = pd.DataFrame({
             "RSP_Raw": rsp,
             "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, defaults="khodadad2018")})
