@@ -19,7 +19,7 @@ def listify(**kwargs):
             try:
                 if len(value) > maxi:
                     maxi = len(value)
-            except:
+            except TypeError:
                 pass
 
     # Transform to lists

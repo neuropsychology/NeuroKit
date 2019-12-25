@@ -54,8 +54,8 @@ def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
     params = listify(noise_amplitude=noise_amplitude, noise_frequency=noise_frequency, noise_shape=noise_shape)
     for i in range(len(params["noise_amplitude"])):
         # Parameters
-        duration = int(duration * params["noise_frequency"][i])
-        amplitude =  params["noise_amplitude"][i] * signal_sd
+        duration = int(duration*params["noise_frequency"][i])
+        amplitude =  params["noise_amplitude"][i]*signal_sd
         shape = params["noise_shape"][i]
 
         # Generate noise
@@ -80,8 +80,8 @@ def _signal_distord(signal, noise_duration, noise_amplitude=0.1, noise_shape="la
     elif noise_shape == "laplace":
         noise = np.random.laplace(0, noise_amplitude, noise_duration)
     else:
-        raise ValueError("NeuroKit error: signal_distord(): 'noise_shape' should be " \
-                         "one of 'gaussian' or 'laplace'.")
+        raise ValueError("NeuroKit error: signal_distord(): 'noise_shape' "
+                         "should be one of 'gaussian' or 'laplace'.")
 
     noise = signal_resample(noise, desired_length=len(signal), method="interpolation")
     return noise

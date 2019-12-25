@@ -55,11 +55,10 @@ def rsp_clean(rsp_signal, sampling_rate=1000, defaults="khodadad2018"):
     elif defaults.lower() == "biosppy":
         filtered_rsp = _rsp_clean_biosppy(rsp_signal, sampling_rate)
     else:
-        raise ValueError("NeuroKit error: rsp_clean(): 'defaults' should be " \
+        raise ValueError("NeuroKit error: rsp_clean(): 'defaults' should be "
                          "one of 'khodadad2018' or 'biosppy'.")
 
     return filtered_rsp
-
 
 
 # =============================================================================
