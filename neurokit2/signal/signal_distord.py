@@ -54,8 +54,8 @@ def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
     params = listify(noise_amplitude=noise_amplitude, noise_frequency=noise_frequency, noise_shape=noise_shape)
     for i in range(len(params["noise_amplitude"])):
         # Parameters
-        duration = int(duration*params["noise_frequency"][i])
-        amplitude =  params["noise_amplitude"][i]*signal_sd
+        duration = int(duration * params["noise_frequency"][i])
+        amplitude = params["noise_amplitude"][i] * signal_sd
         shape = params["noise_shape"][i]
 
         # Generate noise
