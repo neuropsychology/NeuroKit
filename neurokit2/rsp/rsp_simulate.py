@@ -40,8 +40,8 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>> import numpy as np
     >>> import neurokit2 as nk
     >>>
-    >>> rsp1 = nk.rsp_simulate(duration = 30, method="sinusoidal")
-    >>> rsp2 = nk.rsp_simulate(duration = 30, method="breathmetrics")
+    >>> rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
+    >>> rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
     >>> pd.DataFrame({"RSP_Simple": rsp1,
                       "RSP_Complex": rsp2}).plot()
 
@@ -78,7 +78,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                                           respiratory_rate=respiratory_rate)
         rsp = rsp[0:length]
 
-    return(rsp)
+    return rsp
 
 
 
@@ -109,7 +109,7 @@ def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000,
     # Add random (gaussian distributed) noise
     rsp += np.random.normal(0, noise, len(rsp))
 
-    return(rsp)
+    return rsp
 
 
 
@@ -349,7 +349,7 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
         'Average Exhale Pause Length': avg_exhale_pauseLength / sampling_rate
     }
 
-    return(simulated_respiration, raw_features, feature_stats)
+    return simulated_respiration, raw_features, feature_stats
 
 
 
@@ -371,4 +371,4 @@ def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000,
                 sampling_rate=sampling_rate,
                 breathing_rate=respiratory_rate/60,
                 signal_noise=noise*10)
-    return(rsp)
+    return rsp
