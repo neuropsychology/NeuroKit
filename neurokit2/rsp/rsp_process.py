@@ -51,15 +51,15 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
     >>> nk.signal_plot(nk.standardize(signals))
     """
-    filtered_rsp = rsp_clean(rsp_signal, sampling_rate=sampling_rate)
+    rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate)
 
-    extrema_signal, info = rsp_findpeaks(filtered_rsp,
+    extrema_signal, info = rsp_findpeaks(rsp_cleaned,
                                          sampling_rate=sampling_rate,
                                          outlier_threshold=0.3)
 
     rate = rsp_rate(extrema_signal, sampling_rate=sampling_rate)
 
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,
-                            "RSP_Filtered": filtered_rsp})
+                            "RSP_Filtered": rsp_cleaned})
     signals = pd.concat([signals, extrema_signal, rate], axis=1)
     return(signals, info)

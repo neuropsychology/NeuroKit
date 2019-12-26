@@ -26,10 +26,8 @@ def rsp_clean(rsp_signal, sampling_rate=1000, defaults="khodadad2018"):
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame of same length as the input signal containing the raw signal
-        and the cleaned signal, accessible with the keys "RSP_Raw", and
-        "RSP_Filtered" respectively.
+    array
+        Vector containing the cleaned respiratory signal.
 
     See Also
     --------
@@ -48,14 +46,14 @@ def rsp_clean(rsp_signal, sampling_rate=1000, defaults="khodadad2018"):
     >>> signals.plot()
     """
     if defaults.lower() == "khodadad2018":
-        filtered_rsp = _rsp_clean_khodadad2018(rsp_signal, sampling_rate)
+        clean = _rsp_clean_khodadad2018(rsp_signal, sampling_rate)
     elif defaults.lower() == "biosppy":
-        filtered_rsp = _rsp_clean_biosppy(rsp_signal, sampling_rate)
+        clean = _rsp_clean_biosppy(rsp_signal, sampling_rate)
     else:
         raise ValueError("NeuroKit error: rsp_clean(): 'defaults' should be "
                          "one of 'khodadad2018' or 'biosppy'.")
 
-    return filtered_rsp
+    return clean
 
 
 # =============================================================================
@@ -68,11 +66,11 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
     """
     # Detrend and lowpass-filter the signal to be able to reliably detect
     # zero crossings in raw signal.
-    filtered_rsp = signal_detrend(rsp_signal, order=1)
-    filtered_rsp = signal_filter(filtered_rsp, sampling_rate=sampling_rate,
-                                 lowcut=None, highcut=2,
-                                 method="butterworth", butterworth_order=5)
-    return filtered_rsp
+    clean = signal_detrend(rsp_signal, order=1)
+    clean = signal_filter(clean, sampling_rate=sampling_rate,
+                          lowcut=None, highcut=2,
+                          method="butterworth", butterworth_order=5)
+    return clean
 
 
 # =============================================================================
@@ -81,7 +79,8 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
 def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
     """Uses the same defaults as `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
     """
-    filtered_rsp = signal_filter(rsp_signal, sampling_rate=sampling_rate,
+    clean = signal_filter(rsp_signal, sampling_rate=sampling_rate,
                                  lowcut=0.1, highcut=0.35,
                                  method="butterworth", butterworth_order=2)
-    return filtered_rsp
+    clean = signal_detrend(clean, order=0)
+    return clean
