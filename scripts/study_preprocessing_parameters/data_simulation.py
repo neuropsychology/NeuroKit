@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-#import neurokit2 as nk
+import neurokit2 as nk
 
 import matplotlib.pyplot as plt
 
@@ -89,16 +89,16 @@ def rsp_quality(rate, info):
 # RSP - Run
 # =============================================================================
 all_data = []
-for noise_amplitude in np.linspace(0.01, 1, 10):
+for noise_amplitude in np.linspace(0.01, 1, 5):
     print(noise_amplitude*100)
     print("---")
-    for noise_frequency in np.linspace(1, 150, 10):
+    for noise_frequency in np.linspace(1, 150, 5):
         print("%.2f" %(noise_frequency/150*100))
         for simulation in ["Simple", "Complex"]:
             for detrend_position in ["First", "Second"]:
                 for detrend_order in [0, 1, 2, 3, 4, 5, 6]:
                     for filter_order in [1, 2, 3, 4, 5, 6]:
-                        for filter_lowcut in [0, 0.1]:
+                        for filter_lowcut in [0, 0.05, 0.1, 0.15, 0.2]:
                             rsp, info = rsp_generate(duration=120, sampling_rate=1000, respiratory_rate=15, method=simulation)
                             distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
                             rate, info = rsp_custom_process(distorted, info,
