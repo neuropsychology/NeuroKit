@@ -6,7 +6,7 @@ from .rsp_findpeaks import rsp_findpeaks
 from .rsp_rate import rsp_rate
 
 
-def rsp_process(rsp_signal, sampling_rate=1000):
+def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """Process a respiration (RSP) signal.
 
     Convenience function that automatically processes a respiration signal.
@@ -18,6 +18,8 @@ def rsp_process(rsp_signal, sampling_rate=1000):
         respiration belt).
     sampling_rate : int
         The sampling frequency of rsp_signal (in Hz, i.e., samples/second).
+    method : str
+        The processing pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
 
     Returns
     -------
@@ -50,12 +52,11 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
     >>> nk.signal_plot(nk.standardize(signals))
     """
-    rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate)
+    rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate, method=method)
 
-    extrema_signal, info = rsp_findpeaks(rsp_cleaned,
-                                         outlier_threshold=0.3)
+    extrema_signal, info = rsp_findpeaks(rsp_cleaned, method=method, outlier_threshold=0.3)
 
-    rate = rsp_rate(extrema_signal, sampling_rate=sampling_rate)
+    rate = rsp_rate(extrema_signal, sampling_rate=sampling_rate, method=method)
 
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,
                             "RSP_Clean": rsp_cleaned})

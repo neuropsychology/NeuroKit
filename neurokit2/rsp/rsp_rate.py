@@ -3,9 +3,9 @@ import numpy as np
 import pandas as pd
 
 from ..signal import signal_interpolate
+from ..signal import signal_smooth
 
-
-def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
+def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, method="khodadad2018"):
     """Calculate respiration (RSP) rate.
 
     Calculate respiration rate and amplitude.
@@ -29,6 +29,8 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
         of the returned elements will be interpolated between peaks over
         desired_length samples. Has not effect if a DataFrame is passed in as
         the peaks argument.
+    method : str
+        The processing pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
 
     Returns
     -------
@@ -72,8 +74,13 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
     # Get rate
     rate = 60 / period
 
+    if method.lower() == "biosppy":
+        rate, peaks, troughs = _rsp_rate_outliers(rate, peaks,
+                                                  troughs=troughs,
+                                                  threshold_absolute=35)
 
-
+        # Smooth with moving average
+        rate = signal_smooth(signal=rate, kernel='boxcar', size=3)
 
 
     # Interpolate all statistics to length of the breathing signal
@@ -105,5 +112,15 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
 # =============================================================================
 # Internals
 # =============================================================================
-def _rsp_rate_outliers(rate):
-    return rate
+def _rsp_rate_outliers(rate, peaks, troughs=None, threshold_absolute=35):
+
+    if threshold_absolute is None:
+        return rate, peaks, troughs
+
+    # physiological limits
+    keep = np.nonzero(rate <= threshold_absolute)
+
+    if troughs is not None:
+        return rate[keep], peaks[keep], troughs[keep]
+    else:
+        return rate[keep], peaks[keep], None

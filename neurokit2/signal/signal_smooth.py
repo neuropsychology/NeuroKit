@@ -3,7 +3,7 @@ import numpy as np
 import scipy.signal
 
 
-def signal_smoothing(signal, kernel='boxzen', size=10):
+def signal_smooth(signal, kernel='boxzen', size=10):
     """Signal smoothing.
 
     This implementation uses the convolution of a filter kernel with the input signal to compute the smoothed signal (Smith, 1997).
@@ -36,10 +36,10 @@ def signal_smoothing(signal, kernel='boxzen', size=10):
     >>> size = len(signal)/100
     >>> signals = pd.DataFrame({
             "Raw": distorted,
-            "Median": nk.signal_smoothing(distorted, kernel='median', size=size-1),
-            "BoxZen": nk.signal_smoothing(distorted, kernel='boxzen', size=size),
-            "Triang": nk.signal_smoothing(distorted, kernel='triang', size=size),
-            "Blackman": nk.signal_smoothing(distorted, kernel='blackman', size=size)})
+            "Median": nk.signal_smooth(distorted, kernel='median', size=size-1),
+            "BoxZen": nk.signal_smooth(distorted, kernel='boxzen', size=size),
+            "Triang": nk.signal_smooth(distorted, kernel='triang', size=size),
+            "Blackman": nk.signal_smooth(distorted, kernel='blackman', size=size)})
     >>> signals.plot()
 
     References
@@ -49,13 +49,13 @@ def signal_smoothing(signal, kernel='boxzen', size=10):
     length = len(signal)
 
     if isinstance(kernel, str) is False:
-        raise TypeError("NeuroKit error: signal_smoothing(): 'kernel' "
+        raise TypeError("NeuroKit error: signal_smooth(): 'kernel' "
                         "should be a string.")
 
 
     # check length
     if size > length or size < 1:
-        raise TypeError("NeuroKit error: signal_smoothing(): 'size' "
+        raise TypeError("NeuroKit error: signal_smooth(): 'size' "
                         "should be between 1 and length of the signal.")
 
     if kernel == 'boxzen':
@@ -84,7 +84,7 @@ def signal_smoothing(signal, kernel='boxzen', size=10):
 def _signal_smoothing_median(signal, size=5):
     # median filter
     if size % 2 == 0:
-        raise ValueError("NeuroKit error: signal_smoothing(): When the "
+        raise ValueError("NeuroKit error: signal_smooth(): When the "
                          "kernel is 'median', 'size' must be odd.")
 
     smoothed = scipy.signal.medfilt(signal, kernel_size=int(size))

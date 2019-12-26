@@ -17,7 +17,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     rsp_cleaned : list, array or Series
         The cleaned respiration channel as returned by `rsp_clean`
     method : str
-        The cleaning pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
+        The processing pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
     outlier_threshold : float
         Extrema that have a vertical distance smaller than (outlier_threshold *
         average vertical distance) to any direct neighbour are removed as
