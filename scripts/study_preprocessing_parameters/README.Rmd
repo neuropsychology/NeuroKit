@@ -1,0 +1,49 @@
+---
+output: 
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(easystats)
+
+options(digits=2)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi=450,
+  fig.path = "figures/"
+)
+
+df <- read.csv("data.csv")
+```
+
+# How to Preprocess ECG, RSP and EDA Signals: A Simulation Study
+
+
+
+## Effect of Noise
+<details><summary>See code</summary>
+<p>
+```{r, echo = TRUE, warning=FALSE, message=FALSE}
+fig7 <- df %>%
+    ggplot(aes(x = Difference_Mean, y = Noise_Amplitude, color=Noise_Frequency)) +
+    # geom_vline(xintercept = 120, linetype = "dotted") +
+    geom_line(aes(color = Participant), size = 0.7) +
+    theme_modern() +
+    scale_color_viridis_d(guide = FALSE) +
+    scale_fill_viridis_d(guide = FALSE) +
+    facet_grid(~Conflict, labeller = "label_both") +
+    xlab("Number of trials")
+```
+</p>
+</details>
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+fig7
+```

@@ -95,7 +95,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
 
 
 # =============================================================================
-# Internals
+# Methods
 # =============================================================================
 
 def _resample_numpy(signal, desired_length):
@@ -108,10 +108,8 @@ def _resample_numpy(signal, desired_length):
 
 
 def _resample_interpolation(signal, desired_length):
-    resampled_signal = scipy.ndimage.zoom(signal, np.round(desired_length/len(signal)))
-
-    # Sanitize
-    resampled_signal = _resample_sanitize(resampled_signal, desired_length)
+    resampled_signal = scipy.ndimage.zoom(signal, int(np.round(desired_length/len(signal))))
+    resampled_signal = _resample_sanitize(resampled_signal, desired_length)  # Sanitize
     return(resampled_signal)
 
 
@@ -141,6 +139,10 @@ def _resample_pandas(signal, desired_length):
 
     return(resampled_signal)
 
+
+# =============================================================================
+# Internals
+# =============================================================================
 
 def _resample_sanitize(resampled_signal, desired_length):
     # Adjust extremities

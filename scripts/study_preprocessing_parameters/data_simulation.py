@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 # =============================================================================
 def rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=15, method="simple"):
 
-    if method == "simple":
+    if method == "Simple":
         actual_method = "sinusoidal"
     else:
         actual_method = "breathmetrics"
@@ -76,15 +76,16 @@ def rsp_quality(rate, info, noise_amplitude=0.1, noise_frequency=100):
 # RSP - Run
 # =============================================================================
 all_data = []
-for noise_amplitude in np.linspace(0.01, 1, 20):
-    for noise_frequency in np.linspace(1, 1000, 20):
-        for detrend_first in [True, False]:
-            for detrend_order in [0, 1, 2, 3, 4]:
-                rsp, info = rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=15, method="simple")
-                distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
-                rate, info = rsp_custom_process(distorted, info, detrend_first=detrend_first, detrend_order=detrend_order)
-                data = rsp_quality(rate, info, noise_amplitude=0.1, noise_frequency=100)
-                all_data += [data]
+for simulation in ["Simple", "Complex"]:
+    for noise_amplitude in np.linspace(0.01, 1, 40):
+        for noise_frequency in [1, 5, 10, 50, 100, 500, 1000]:
+            for detrend_first in [True, False]:
+                for detrend_order in [0, 1, 2, 3, 4]:
+                    rsp, info = rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=15, method=simulation)
+                    distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
+                    rate, info = rsp_custom_process(distorted, info, detrend_first=detrend_first, detrend_order=detrend_order)
+                    data = rsp_quality(rate, info, noise_amplitude=0.1, noise_frequency=100)
+                    all_data += [data]
 data = pd.concat(all_data)
 data.to_csv("data.csv")
 
