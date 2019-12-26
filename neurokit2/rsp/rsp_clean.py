@@ -11,11 +11,8 @@ def rsp_clean(rsp_signal, sampling_rate=1000, defaults="khodadad2018"):
     Respiration (RSP) signal cleaning using different sets of parameters,
     such as:
 
-    - `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_:
-    linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth
-    filter).
-    - `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_:
-    second order 0.1 - 0.35 Hz bandpass Butterworth filter.
+    - `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_: linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter).
+    - `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_: second order 0.1 - 0.35 Hz bandpass Butterworth filter.
 
     Parameters
     ----------
