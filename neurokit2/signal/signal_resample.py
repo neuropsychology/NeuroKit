@@ -108,7 +108,10 @@ def _resample_numpy(signal, desired_length):
 
 
 def _resample_interpolation(signal, desired_length):
-    resampled_signal = scipy.ndimage.zoom(signal, desired_length/len(signal))
+    resampled_signal = scipy.ndimage.zoom(signal, np.round(desired_length/len(signal)))
+
+    # Sanitize
+    resampled_signal = _resample_sanitize(resampled_signal, desired_length)
     return(resampled_signal)
 
 
@@ -133,11 +136,17 @@ def _resample_pandas(signal, desired_length):
     # Resample
     resampled_signal = resampled_signal.resample(resampling_factor).bfill().values
 
+    # Sanitize
+    resampled_signal = _resample_sanitize(resampled_signal, desired_length)
+
+    return(resampled_signal)
+
+
+def _resample_sanitize(resampled_signal, desired_length):
     # Adjust extremities
     diff = len(resampled_signal) - desired_length
     if diff < 0:
         resampled_signal = np.concatenate([resampled_signal, np.full(np.abs(diff), resampled_signal[-1])])
     elif diff > 0:
         resampled_signal = resampled_signal[0:desired_length]
-
-    return(resampled_signal)
+    return resampled_signal
