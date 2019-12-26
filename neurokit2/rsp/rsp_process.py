@@ -26,11 +26,10 @@ def rsp_process(rsp_signal, sampling_rate=1000):
         columns:
 
         - *"RSP_Raw"*: the raw signal.
-        - *"RSP_Filtered"*: the cleaned signal.
+        - *"RSP_Clean"*: the cleaned signal.
         - *"RSP_Peaks"*: the inhalation peaks marked as "1" in a list of zeros.
         - *"RSP_Troughs"*: the exhalation troughs marked as "1" in a list of zeros.
         - *"RSP_Rate"*: breathing rate interpolated between inhalation peaks.
-        - *"RSP_Period"*: the breathing period interpolated between inhalation peaks.
         - *"RSP_Amplitude"*: the breathing amplitude interpolated between inhalation peaks.
     info : dict
         A dictionary containing the samples at which inhalation peaks and
@@ -59,6 +58,6 @@ def rsp_process(rsp_signal, sampling_rate=1000):
     rate = rsp_rate(extrema_signal, sampling_rate=sampling_rate)
 
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,
-                            "RSP_Filtered": rsp_cleaned})
+                            "RSP_Clean": rsp_cleaned})
     signals = pd.concat([signals, extrema_signal, rate], axis=1)
     return(signals, info)

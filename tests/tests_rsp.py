@@ -77,7 +77,7 @@ def test_rsp_rate():
 
     # test with peaks only
     test_length = 30
-    data = nk.rsp_rate(info["RSP_Peaks"], sampling_rate=1000,
+    data = nk.rsp_rate(peaks=info["RSP_Peaks"], sampling_rate=1000,
                        desired_length=test_length)
     assert data.shape == (test_length, 1)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
@@ -120,11 +120,11 @@ def test_rsp_plot():
 
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15)
-    signals, _ = nk.rsp_process(rsp, sampling_rate=1000)
-    nk.rsp_plot(signals)
+    rsp_summary, _ = nk.rsp_process(rsp, sampling_rate=1000)
+    nk.rsp_plot(rsp_summary)
     # this will identify the latest figure
     fig = plt.gcf()
-    assert len(fig.axes) == 4
+    assert len(fig.axes) == 3
     titles = ["Signal and Breathing Extrema",
               "Breathing Rate",
               "Breathing Amplitude"]

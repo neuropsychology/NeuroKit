@@ -63,18 +63,20 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
         peaks = np.where(peaks["RSP_Peaks"] == 1)[0]
 
     # Calculate period in msec, based on horizontal peak to peak
-    # difference, and the rate.
+    # difference and make sure that rate has the same number of elements as
+    # peaks (important for interpolation later) by prepending the mean of
+    # all periods
     period = np.ediff1d(peaks, to_begin=0) / sampling_rate
+    period[0] = np.mean(period)
+
+    # Get rate
     rate = 60 / period
 
 
 
-    # Make sure that rate has the same number of elements as
-    # peaks (important for interpolation later) by prepending the mean of
-    # all periods.
-    rate[0] = np.mean(rate)
 
-    # Interpolate all statistics to length of the breathing signal.
+
+    # Interpolate all statistics to length of the breathing signal
     if desired_length is None:
         desired_length = len(peaks)
 
@@ -82,10 +84,10 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
                               x_axis=peaks,
                               desired_length=desired_length)
 
-    # Prepare output.
+    # Prepare output
     out = {"RSP_Rate": rate}
 
-    # Add amplitude if troughs are available.
+    # Add amplitude if troughs are available
     if troughs is not None:
         # TODO: normalize amplitude?
         amplitude = peaks - troughs
@@ -95,3 +97,13 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
 
     signals = pd.DataFrame.from_dict(out)
     return(signals)
+
+
+
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _rsp_rate_outliers(rate):
+    return rate
