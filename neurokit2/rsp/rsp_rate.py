@@ -63,19 +63,23 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
         peaks = np.where(peaks["RSP_Peaks"] == 1)[0]
 
     # Calculate period in msec, based on horizontal peak to peak
-    # difference. Make sure that period has the same number of elements as
+    # difference, and the rate.
+    period = np.ediff1d(peaks, to_begin=0) / sampling_rate
+    rate = 60 / period
+
+
+
+    # Make sure that rate has the same number of elements as
     # peaks (important for interpolation later) by prepending the mean of
     # all periods.
-    period = np.ediff1d(peaks, to_begin=0) / sampling_rate
-    period[0] = np.mean(period)
-    rate = 60 / period
+    rate[0] = np.mean(rate)
 
     # Interpolate all statistics to length of the breathing signal.
     if desired_length is None:
         desired_length = len(peaks)
 
-
-    rate = signal_interpolate(rate, x_axis=peaks,
+    rate = signal_interpolate(rate,
+                              x_axis=peaks,
                               desired_length=desired_length)
 
     # Prepare output.
@@ -85,7 +89,8 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
     if troughs is not None:
         # TODO: normalize amplitude?
         amplitude = peaks - troughs
-        out["RSP_Amplitude"] = signal_interpolate(amplitude, x_axis=peaks,
+        out["RSP_Amplitude"] = signal_interpolate(amplitude,
+                                                  x_axis=peaks,
                                                   desired_length=desired_length)
 
     signals = pd.DataFrame.from_dict(out)

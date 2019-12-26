@@ -81,7 +81,7 @@ def test_rsp_rate():
                        desired_length=test_length)
     assert data.shape == (test_length, 1)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
-    assert np.abs(data["RSP_Period"].mean() - 4) < 0.1
+    assert int(data["RSP_Amplitude"].mean()) == 2003
 
     # test with peaks and troughs passed in separately
     test_length = 300
