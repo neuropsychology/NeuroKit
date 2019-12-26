@@ -29,15 +29,13 @@ def rsp_plot(rsp_summary):
     peaks = np.where(rsp_summary["RSP_Peaks"] == 1)[0]
     troughs = np.where(rsp_summary["RSP_Troughs"] == 1)[0]
 
-    fig, (ax0, ax1, ax2, ax3) = plt.subplots(nrows=4, ncols=1, sharex=True)
+    fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
     ax0.set_title("Signal and Breathing Extrema")
-    ax0.plot(rsp_summary["RSP_Filtered"])
-    ax0.scatter(peaks, rsp_summary["RSP_Filtered"][peaks])
-    ax0.scatter(troughs, rsp_summary["RSP_Filtered"][troughs])
-    ax1.set_title("Breathing Period")
-    ax1.plot(rsp_summary["RSP_Period"])
-    ax2.set_title("Breathing Rate")
-    ax2.plot(rsp_summary["RSP_Rate"])
-    ax3.set_title("Breathing Amplitude")
-    ax3.plot(rsp_summary["RSP_Amplitude"])
+    ax0.plot(rsp_summary["RSP_Clean"])
+    ax0.scatter(peaks, rsp_summary["RSP_Clean"][peaks])
+    ax0.scatter(troughs, rsp_summary["RSP_Clean"][troughs])
+    ax1.set_title("Breathing Rate")
+    ax1.plot(rsp_summary["RSP_Rate"])
+    ax2.set_title("Breathing Amplitude")
+    ax2.plot(rsp_summary["RSP_Amplitude"])
     plt.show()
