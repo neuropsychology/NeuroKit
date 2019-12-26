@@ -5,7 +5,7 @@ from ..signal import signal_detrend
 from ..signal import signal_filter
 
 
-def rsp_clean(rsp_signal, sampling_rate=1000, defaults="khodadad2018"):
+def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """Preprocess a respiration (RSP) signal.
 
     Respiration (RSP) signal cleaning using different sets of parameters,
@@ -21,7 +21,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, defaults="khodadad2018"):
         respiration belt).
     sampling_rate : int
         The sampling frequency of rsp_signal (in Hz, i.e., samples/second).
-    defaults : str
+    method : str
         The cleaning pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
 
     Returns
@@ -42,12 +42,13 @@ def rsp_clean(rsp_signal, sampling_rate=1000, defaults="khodadad2018"):
     >>> rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.01)
     >>> signals = pd.DataFrame({
             "RSP_Raw": rsp,
-            "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, defaults="khodadad2018")})
+            "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
+            "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
     >>> signals.plot()
     """
-    if defaults.lower() == "khodadad2018":
+    if method.lower() in ["khodadad", "khodadad2018"]:
         clean = _rsp_clean_khodadad2018(rsp_signal, sampling_rate)
-    elif defaults.lower() == "biosppy":
+    elif method.lower() == "biosppy":
         clean = _rsp_clean_biosppy(rsp_signal, sampling_rate)
     else:
         raise ValueError("NeuroKit error: rsp_clean(): 'defaults' should be "

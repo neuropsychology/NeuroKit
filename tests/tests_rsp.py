@@ -30,10 +30,10 @@ def test_rsp_clean():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=sampling_rate,
                           respiratory_rate=15)
 
-    khodadad2018 = nk.rsp_clean(rsp, sampling_rate=1000, defaults="khodadad2018")
+    khodadad2018 = nk.rsp_clean(rsp, sampling_rate=1000, method="khodadad2018")
     assert len(rsp) == len(khodadad2018)
 
-    biosppy = nk.rsp_clean(rsp, sampling_rate=1000, defaults="biosppy")
+    biosppy = nk.rsp_clean(rsp, sampling_rate=1000, method="biosppy")
     assert len(rsp) == len(biosppy)
 
 
@@ -55,7 +55,7 @@ def test_rsp_findpeaks():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned, sampling_rate=1000)
+    signals, info = nk.rsp_findpeaks(rsp_cleaned)
     assert signals.shape == (120000, 2)
     assert signals["RSP_Peaks"].sum() == 28
     assert signals["RSP_Troughs"].sum() == 28
@@ -71,7 +71,7 @@ def test_rsp_rate():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, method="sinusoidal")
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned, sampling_rate=1000)
+    signals, info = nk.rsp_findpeaks(rsp_cleaned)
 
     # vary desired_lenght over tests
 
@@ -79,7 +79,7 @@ def test_rsp_rate():
     test_length = 30
     data = nk.rsp_rate(info["RSP_Peaks"], sampling_rate=1000,
                        desired_length=test_length)
-    assert data.shape == (test_length, 2)
+    assert data.shape == (test_length, 1)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
     assert np.abs(data["RSP_Period"].mean() - 4) < 0.1
 
@@ -87,24 +87,21 @@ def test_rsp_rate():
     test_length = 300
     data = nk.rsp_rate(peaks=info["RSP_Peaks"], troughs=info["RSP_Troughs"],
                        sampling_rate=1000, desired_length=test_length)
-    assert data.shape == (test_length, 3)
+    assert data.shape == (test_length, 2)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
-    assert np.abs(data["RSP_Period"].mean() - 4) < 0.1
     assert int(data["RSP_Amplitude"].mean()) == 2003
 
     # test with DataFrame containing peaks and troughs
     data = nk.rsp_rate(signals, sampling_rate=1000)
-    assert data.shape == (signals.shape[0], 3)
+    assert data.shape == (signals.shape[0], 2)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
-    assert np.abs(data["RSP_Period"].mean() - 4) < 0.1
     assert int(data["RSP_Amplitude"].mean()) == 2003
 
     # test with dict containing peaks and troughs
     test_length = 30000
     data = nk.rsp_rate(info, sampling_rate=1000, desired_length=test_length)
-    assert data.shape == (test_length, 3)
+    assert data.shape == (test_length, 2)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
-    assert np.abs(data["RSP_Period"].mean() - 4) < 0.1
     assert int(data["RSP_Amplitude"].mean()) == 2003
 
 
@@ -116,7 +113,7 @@ def test_rsp_process():
 
     # only check array dimensions since functions called by rsp_process have
     # already been unit tested
-    assert signals.shape == (120000, 7)
+    assert signals.shape == (120000, 6)
 
 
 def test_rsp_plot():
@@ -129,7 +126,6 @@ def test_rsp_plot():
     fig = plt.gcf()
     assert len(fig.axes) == 4
     titles = ["Signal and Breathing Extrema",
-              "Breathing Period",
               "Breathing Rate",
               "Breathing Amplitude"]
     for (ax, title) in zip(fig.get_axes(), titles):

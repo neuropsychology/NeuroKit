@@ -36,7 +36,7 @@ def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.rsp_simulate(duration=8, sampling_rate=1000, method="sinusoidal", noise=0)
+    >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000))
     >>> signals = pd.DataFrame({
             "Freq100": nk.signal_distord(signal, noise_frequency=100),
             "Freq50": nk.signal_distord(signal, noise_frequency=50),

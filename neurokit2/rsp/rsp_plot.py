@@ -34,8 +34,6 @@ def rsp_plot(rsp_summary):
     ax0.plot(rsp_summary["RSP_Filtered"])
     ax0.scatter(peaks, rsp_summary["RSP_Filtered"][peaks])
     ax0.scatter(troughs, rsp_summary["RSP_Filtered"][troughs])
-    ax1.set_title("Breathing Period")
-    ax1.plot(rsp_summary["RSP_Period"])
     ax2.set_title("Breathing Rate")
     ax2.plot(rsp_summary["RSP_Rate"])
     ax3.set_title("Breathing Amplitude")

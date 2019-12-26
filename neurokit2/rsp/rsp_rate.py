@@ -8,7 +8,7 @@ from ..signal import signal_interpolate
 def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
     """Calculate respiration (RSP) rate.
 
-    Calculate respiration rate, as well as the period and amplitude.
+    Calculate respiration rate and amplitude.
 
     Parameters
     ----------
@@ -33,8 +33,8 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
     Returns
     -------
     signals : DataFrame
-        A DataFrame containing respiration rate, period, and amplitude,
-        accessible with the keys 'RSP_Rate', 'RSP_Period' and 'RSP_Amplitude'
+        A DataFrame containing respiration rate, and amplitude,
+        accessible with the keys 'RSP_Rate' and 'RSP_Amplitude'
         respectively.
 
     See Also
@@ -74,14 +74,12 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None):
     if desired_length is None:
         desired_length = len(peaks)
 
-    period = signal_interpolate(period, x_axis=peaks,
-                                desired_length=desired_length)
+
     rate = signal_interpolate(rate, x_axis=peaks,
                               desired_length=desired_length)
 
     # Prepare output.
-    out = {"RSP_Rate": rate,
-           "RSP_Period": period}
+    out = {"RSP_Rate": rate}
 
     # Add amplitude if troughs are available.
     if troughs is not None:

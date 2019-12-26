@@ -2,6 +2,8 @@
 
 from .signal_binarize import signal_binarize
 from .signal_resample import signal_resample
+from .signal_zerocrossings import signal_zerocrossings
+from .signal_smoothing import signal_smoothing
 from .signal_filter import signal_filter
 from .signal_distord import signal_distord
 from .signal_interpolate import signal_interpolate
