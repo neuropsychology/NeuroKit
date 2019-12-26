@@ -81,7 +81,7 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
     """Uses the same defaults as `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
     """
     clean = signal_filter(rsp_signal, sampling_rate=sampling_rate,
-                                 lowcut=0.1, highcut=0.35,
-                                 method="butterworth", butterworth_order=2)
+                          lowcut=0.1, highcut=0.35,
+                          method="butterworth", butterworth_order=2)
     clean = signal_detrend(clean, order=0)
     return clean

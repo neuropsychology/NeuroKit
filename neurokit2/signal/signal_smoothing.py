@@ -50,13 +50,13 @@ def signal_smoothing(signal, kernel='boxzen', size=10):
 
     if isinstance(kernel, str) is False:
         raise TypeError("NeuroKit error: signal_smoothing(): 'kernel' "
-                         "should be a string.")
+                        "should be a string.")
 
 
     # check length
     if size > length or size < 1:
         raise TypeError("NeuroKit error: signal_smoothing(): 'size' "
-                         "should be between 1 and length of the signal.")
+                        "should be between 1 and length of the signal.")
 
     if kernel == 'boxzen':
         # hybrid method
@@ -108,8 +108,3 @@ def _signal_smoothing(signal, kernel="boxcar", size=5):
     smoothed = np.convolve(w, x, mode='same')
     smoothed = smoothed[size:-size]
     return smoothed
-
-
-
-
-
