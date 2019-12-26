@@ -108,8 +108,7 @@ def _resample_numpy(signal, desired_length):
 
 
 def _resample_interpolation(signal, desired_length):
-    resampled_signal = scipy.ndimage.zoom(signal, int(np.round(desired_length/len(signal))))
-    resampled_signal = _resample_sanitize(resampled_signal, desired_length)  # Sanitize
+    resampled_signal = scipy.ndimage.zoom(signal, desired_length/len(signal))
     return(resampled_signal)
 
 

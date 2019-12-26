@@ -26,7 +26,10 @@ def rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=15, method="s
 
 
 def rsp_distord(rsp, info, noise_amplitude=0.1, noise_frequency=100):
-    distorted = nk.signal_distord(rsp, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
+    distorted = nk.signal_distord(rsp,
+                                  noise_amplitude=noise_amplitude,
+                                  noise_frequency=noise_frequency,
+                                  noise_shape="laplace")
     info["Noise_Amplitude"] = [noise_amplitude]
     info["Noise_Frequency"] = [noise_frequency]
     return distorted, info
@@ -78,7 +81,7 @@ def rsp_quality(rate, info, noise_amplitude=0.1, noise_frequency=100):
 all_data = []
 for simulation in ["Simple", "Complex"]:
     for noise_amplitude in np.linspace(0.01, 1, 40):
-        for noise_frequency in [1, 5, 10, 50, 100, 500, 1000]:
+        for noise_frequency in np.linspace(1, 100, 40):
             for detrend_first in [True, False]:
                 for detrend_order in [0, 1, 2, 3, 4]:
                     rsp, info = rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=15, method=simulation)
