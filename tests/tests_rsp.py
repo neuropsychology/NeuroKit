@@ -77,9 +77,9 @@ def test_rsp_rate():
 
     # test with peaks only
     test_length = 30
-    data = nk.rsp_rate(peaks=info["RSP_Peaks"], sampling_rate=1000,
+    data = nk.rsp_rate(peaks=info, sampling_rate=1000,
                        desired_length=test_length)
-    assert data.shape == (test_length, 1)
+    assert data.shape == (test_length, 2)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
     assert int(data["RSP_Amplitude"].mean()) == 2003
 
