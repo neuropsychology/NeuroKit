@@ -82,7 +82,7 @@ def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=
 
 # Old method, doesn't work great for bandpass filters
 
-#def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highcut=None, butterworth_order=2):
+# def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highcut=None, butterworth_order=2):
 #    """Filter a signal using IIR Butterworth B/A method.
 #    """
 #    # Get coefficients

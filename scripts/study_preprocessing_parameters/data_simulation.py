@@ -36,7 +36,7 @@ def rsp_distord(rsp, info, noise_amplitude=0.1, noise_frequency=100):
 
 
 
-def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=0, filter_order=5, filter_lowcut=None):
+def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=0, filter_order=5, filter_lowcut=None, filter_highcut=2):
     sampling_rate = info["Sampling_Rate"][0]
 
     if detrend_position == "First":
@@ -50,7 +50,7 @@ def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=
     distorted = nk.signal_filter(signal=distorted,
                            sampling_rate=sampling_rate,
                            lowcut=actual_filter_lowcut,
-                           highcut=None,
+                           highcut=filter_highcut,
                            method="butterworth",
                            butterworth_order=filter_order)
 
@@ -68,9 +68,8 @@ def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=
     info["Detrend_Position"] = [detrend_position]
     info["Filter_Order"] = [filter_order]
     info["Filter_Low"] = [filter_lowcut]
+    info["Filter_High"] = [filter_highcut]
     return rate, info
-
-
 
 
 
@@ -90,6 +89,7 @@ def rsp_quality(rate, info):
 # =============================================================================
 all_data = []
 for noise_amplitude in np.linspace(0.01, 1, 5):
+    print("---")
     print(noise_amplitude*100)
     print("---")
     for noise_frequency in np.linspace(1, 150, 5):
@@ -99,15 +99,17 @@ for noise_amplitude in np.linspace(0.01, 1, 5):
                 for detrend_order in [0, 1, 2, 3, 4, 5, 6]:
                     for filter_order in [1, 2, 3, 4, 5, 6]:
                         for filter_lowcut in [0, 0.05, 0.1, 0.15, 0.2]:
-                            rsp, info = rsp_generate(duration=120, sampling_rate=1000, respiratory_rate=15, method=simulation)
-                            distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
-                            rate, info = rsp_custom_process(distorted, info,
-                                                            detrend_position=detrend_position,
-                                                            detrend_order=detrend_order,
-                                                            filter_order=filter_order,
-                                                            filter_lowcut=filter_lowcut)
-                            data = rsp_quality(rate, info)
-                            all_data += [data]
+                            for filter_highcut in [3, 2, 1, 0.35, 0.25]:
+                                rsp, info = rsp_generate(duration=120, sampling_rate=1000, respiratory_rate=15, method=simulation)
+                                distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
+                                rate, info = rsp_custom_process(distorted, info,
+                                                                detrend_position=detrend_position,
+                                                                detrend_order=detrend_order,
+                                                                filter_order=filter_order,
+                                                                filter_lowcut=filter_lowcut,
+                                                                filter_highcut=filter_highcut)
+                                data = rsp_quality(rate, info)
+                                all_data += [data]
     data = pd.concat(all_data)
     data.to_csv("data.csv")
 
