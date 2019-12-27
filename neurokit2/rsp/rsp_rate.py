@@ -64,6 +64,21 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
         troughs = np.where(peaks["RSP_Troughs"] == 1)[0]
         peaks = np.where(peaks["RSP_Peaks"] == 1)[0]
 
+    # Find length of final signal to return
+    if desired_length is None:
+        desired_length = len(peaks)
+
+
+    # Sanity checks
+    if len(peaks) <= 3:
+        print("NeuroKit warning: rsp_rate(): too little peaks detected to "
+              "compute the rate. Returning empty variable(s).")
+        if troughs is not None:
+            return pd.DataFrame({"RSP_Rate": np.full(desired_length, np.nan),
+                                 "RSP_Amplitude": np.full(desired_length, np.nan)})
+        else:
+            return pd.DataFrame({"RSP_Rate": np.full(desired_length, np.nan)})
+
     # Calculate period in msec, based on horizontal peak to peak
     # difference and make sure that rate has the same number of elements as
     # peaks (important for interpolation later) by prepending the mean of
@@ -82,11 +97,7 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
         # Smooth with moving average
         rate = signal_smooth(signal=rate, kernel='boxcar', size=3)
 
-
     # Interpolate all statistics to length of the breathing signal
-    if desired_length is None:
-        desired_length = len(peaks)
-
     rate = signal_interpolate(rate,
                               x_axis=peaks,
                               desired_length=desired_length)

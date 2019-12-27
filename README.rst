@@ -61,8 +61,8 @@ Click on the links above and check out our tutorials:
 Examples
 -------------
 
-Simulate biosignals
-^^^^^^^^^^^^^^^^^^^^
+Simulate physiological signals
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -85,6 +85,23 @@ Simulate biosignals
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
+
+Respiration (RSP) processing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    # Generate one minute of respiratory signal
+    rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
+
+    # Process it
+    signals, info = nk.rsp_process(rsp)
+
+    # Visualise the processing
+    nk.rsp_plot(signals)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_respiration.png
 
 Signal processing
 ^^^^^^^^^^^^^^^^^^

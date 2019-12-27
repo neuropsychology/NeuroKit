@@ -95,7 +95,7 @@ for noise_amplitude in np.linspace(0.01, 1, 5):
     for noise_frequency in np.linspace(1, 150, 5):
         print("%.2f" %(noise_frequency/150*100))
         for simulation in ["Simple", "Complex"]:
-            for detrend_position in ["First", "Second"]:
+            for detrend_position in ["First", "Second", "None"]:
                 for detrend_order in [0, 1, 2, 3, 4, 5, 6]:
                     for filter_order in [1, 2, 3, 4, 5, 6]:
                         for filter_lowcut in [0, 0.05, 0.1, 0.15, 0.2]:
