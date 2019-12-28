@@ -20,7 +20,7 @@ def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
         m = order + j
         npat = N - order  # https://github.com/ixjlyons/entro-py/pull/2
 #        patterns = np.transpose(_embed(signal, m))
-        patterns =  np.transpose(_embed(signal, m))[:,:npat]
+        patterns = np.transpose(_embed(signal, m))[:, :npat]
 
         if fuzzy:
             patterns -= np.mean(patterns, axis=0, keepdims=True)
