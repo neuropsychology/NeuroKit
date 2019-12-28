@@ -61,8 +61,8 @@ Click on the links above and check out our tutorials:
 Examples
 -------------
 
-Simulate biosignals
-^^^^^^^^^^^^^^^^^^^^
+Simulate physiological signals
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -86,6 +86,23 @@ Simulate biosignals
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
+Respiration (RSP) processing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    # Generate one minute of respiratory signal
+    rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
+
+    # Process it
+    signals, info = nk.rsp_process(rsp)
+
+    # Visualise the processing
+    nk.rsp_plot(signals)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_respiration.png
+
 Signal processing
 ^^^^^^^^^^^^^^^^^^
 
@@ -95,8 +112,10 @@ NeuroKit includes functions to facilitate signal processing:
 - `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_: Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
 - `signal_resample() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_resample>`_: Up- or down-sample a signal.
 - `signal_interpolate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_interpolate>`_: Interpolate (fills the values between data points) a signal using different methods.
-- `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
 - `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Apply a lowpass, highpass or bandpass filter to the signal.
+- `signal_smooth() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_smooth>`_: Signal smoothing using the convolution of a filter kernel.
+- `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
+- `signal_zerocrossings() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_zerocrossings>`_: Locate the indices where the signal crosses zero.
 - `signal_distord() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_distord>`_: Add noise of a given frequency, amplitude and shape to a signal.
 - `signal_merge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_merge>`_: Arbitrary addition of two signals with different time ranges.
 

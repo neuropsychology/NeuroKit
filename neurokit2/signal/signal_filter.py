@@ -37,17 +37,28 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000)) # Low freq
     >>> signal += np.cos(np.linspace(start=0, stop=100, num=1000)) # High freq
-    >>> filtered = nk.signal_filter(signal, highcut=10)
-    >>> pd.DataFrame({"Raw": signal, "Filtered": filtered}).plot()
+    >>> pd.DataFrame({"Raw": signal,
+                      "Lowpass": nk.signal_filter(signal, highcut=10),
+                      "Highpass": nk.signal_filter(signal, lowcut=2),
+                      "Bandpass": nk.signal_filter(signal, lowcut=2, highcut=10)}).plot()
+
+    >>> original = nk.rsp_simulate(duration=30, method="sinusoidal")
+    >>> signal = original + np.cos(np.linspace(start=0, stop=15, num=len(original)))/2 # Low freq
+    >>> signal += np.cos(np.linspace(start=0, stop=1000, num=len(signal)))/2 # High freq
+    >>> pd.DataFrame({"Raw": signal,
+                      "Lowpass": nk.signal_filter(signal, highcut=2),
+                      "Highpass": nk.signal_filter(signal, lowcut=0.1),
+                      "Bandpass": nk.signal_filter(signal, lowcut=0.1, highcut=2),
+                      "Original": original}).plot()
     """
     # Sanity checks
     if lowcut is None and highcut is None:
-        raise ValueError("NeuroKit error: signal_filter(): 'lowcut' or 'highcut' frequencies must be provided for filtering.")
+        return signal
 
     if method.lower() in ["butterworth", "butter"]:
         filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, butterworth_order)
 
-    return(filtered)
+    return filtered
 
 
 
@@ -55,36 +66,43 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
 # Butterworth
 # =============================================================================
 
-def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, butterworth_order=5):
-    """Filter a signal using IIR Butterworth coefficients.
+def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, butterworth_order=2):
+    """Filter a signal using IIR Butterworth SOS method.
     """
-    # Use filtfilt to obtain a zero-phase filter in order for the filtered
-    # signal to not be phase shifted with respect to the original signal.
-    b, a = _signal_filter_butterworth_coefficients(sampling_rate, lowcut, highcut, butterworth_order)
-    filtered = scipy.signal.filtfilt(b, a, signal, method="gust")
-    return(filtered)
-
-
-def _signal_filter_butterworth_coefficients(sampling_rate=1000, lowcut=None, highcut=None, butterworth_order=5):
-    """Calculate IIR Butterworth coefficient.
-
-    Returns
-    -------
-    b, a : ndarray
-        Numerator and Denominator polynomials of the filter.
-    """
-    nyquist_freq = 0.5 * sampling_rate
-
-    if lowcut is not None:
-        lowcut = lowcut / nyquist_freq
-    if highcut is not None:
-        highcut = highcut / nyquist_freq
-
     if lowcut is not None and highcut is not None:
-        b, a = scipy.signal.butter(butterworth_order, [lowcut, highcut], btype="bandpass")
+        sos = scipy.signal.butter(butterworth_order, [lowcut, highcut], btype="bandpass", output='sos', fs=sampling_rate)
     elif lowcut is not None:
-        b, a = scipy.signal.butter(butterworth_order, [lowcut], btype="highpass")
+        sos = scipy.signal.butter(butterworth_order, [lowcut], btype="highpass", output='sos', fs=sampling_rate)
     elif highcut is not None:
-        b, a = scipy.signal.butter(butterworth_order, [highcut], btype="lowpass")
+        sos = scipy.signal.butter(butterworth_order, [highcut], btype="lowpass", output='sos', fs=sampling_rate)
 
-    return(b, a)
+    filtered = scipy.signal.sosfiltfilt(sos, signal)
+    return filtered
+
+
+# Old method, doesn't work great for bandpass filters
+
+# def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highcut=None, butterworth_order=2):
+#    """Filter a signal using IIR Butterworth B/A method.
+#    """
+#    # Get coefficients
+#    nyquist_freq = 0.5 * sampling_rate
+#
+#    if lowcut is not None:
+#        lowcut = lowcut / nyquist_freq
+#    if highcut is not None:
+#        highcut = highcut / nyquist_freq
+#
+#    if lowcut is not None and highcut is not None:
+#        b, a = scipy.signal.butter(butterworth_order, [lowcut, highcut], btype="bandpass", output='ba')
+#    elif lowcut is not None:
+#        b, a = scipy.signal.butter(butterworth_order, [lowcut], btype="highpass", output='ba')
+#    elif highcut is not None:
+#        b, a = scipy.signal.butter(butterworth_order, [highcut], btype="lowpass", output='ba')
+#
+#    try:
+#        filtered = scipy.signal.filtfilt(b, a, signal, method="gust")
+#    except ValueError:
+#        filtered = scipy.signal.filtfilt(b, a, signal, method="pad")
+#
+#    return filtered

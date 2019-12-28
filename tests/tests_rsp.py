@@ -43,7 +43,8 @@ def test_rsp_clean():
     fft_biosppy = np.fft.rfft(biosppy)
 
     freqs = np.fft.rfftfreq(len(rsp), 1/sampling_rate)
-    assert np.sum(fft_raw[freqs > 2]) > np.sum(fft_khodadad2018[freqs > 2])
+#    assert np.sum(fft_raw[freqs > 2]) > np.sum(fft_khodadad2018[freqs > 2])
+    assert np.sum(fft_raw[freqs > 2]) > np.sum(fft_biosppy[freqs > 2])
     assert np.sum(fft_khodadad2018[freqs > 2]) > np.sum(fft_biosppy[freqs > 2])
 
     # check if detrending was applied

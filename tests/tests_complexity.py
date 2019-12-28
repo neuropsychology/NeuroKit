@@ -25,27 +25,28 @@ def test_complexity():
 
 
     # Shannon
-    assert nk.entropy_shannon(signal) == pyentrp.shannon_entropy(signal)
+    assert np.allclose(nk.entropy_shannon(signal) - pyentrp.shannon_entropy(signal), 0)
 
 
     # Approximate
     assert np.allclose(nk.entropy_approximate(signal), 0.17364897858477146)
-    assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) == entropy_app_entropy(signal, 2)
+    assert np.allclose(nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) - entropy_app_entropy(signal, 2), 0)
 
     assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) != pyeeg_ap_entropy(signal, 2, 0.2*np.std(signal, ddof=1))
 
 
     # Sample
-    assert nk.entropy_sample(signal, 2, 0.2*np.std(signal, ddof=1)) == entropy_sample_entropy(signal, 2)
-    assert nk.entropy_sample(signal, 2, 0.2) == nolds.sampen(signal, 2, 0.2)
+    assert np.allclose(nk.entropy_sample(signal, 2, 0.2*np.std(signal, ddof=1)) - entropy_sample_entropy(signal, 2), 0)
+    assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - nolds.sampen(signal, 2, 0.2), 0)
+    assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - entro_py_sampen(signal, 2, 0.2, scale=False), 0)
 
     assert nk.entropy_sample(signal, 2, 0.2) != pyentrp.sample_entropy(signal, 2, 0.2)[1]
     assert nk.entropy_sample(signal, 2, 0.2) != pyeeg_samp_entropy(signal, 2, 0.2)
-    assert nk.entropy_sample(signal, 2, 0.2) != entro_py_sampen(signal, 2, 0.2, scale=False)
+
 
 
     # Fuzzy
-    assert nk.entropy_fuzzy(signal, 2, 0.2) == entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False)
+    assert np.allclose(nk.entropy_fuzzy(signal, 2, 0.2, 1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0)
 
 
 
@@ -259,10 +260,13 @@ def entro_py_entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
     phi = [0, 0]  # phi(m), phi(m+1)
     for j in [0, 1]:
         m = dim + j
+        npat = N-dim  # https://github.com/ixjlyons/entro-py/pull/2/files
         if cross:
-            patterns = [entro_py_pattern_mat(x[0], m), entro_py_pattern_mat(x[1], m)]
+#            patterns = [entro_py_pattern_mat(x[0], m), entro_py_pattern_mat(x[1], m)]
+            patterns = [entro_py_pattern_mat(x[0], m)[:, :npat], entro_py_pattern_mat(x[1], m)[:, :npat]]  # https://github.com/ixjlyons/entro-py/pull/2/files
         else:
-            patterns = entro_py_pattern_mat(x, m)
+#            patterns = entro_py_pattern_mat(x, m)
+            patterns = entro_py_pattern_mat(x, m)[:, :npat]
 
         if remove_baseline:
             if cross:
@@ -271,8 +275,10 @@ def entro_py_entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
             else:
                 patterns = entro_py_remove_baseline(patterns, axis=0)
 
-        count = np.zeros(N-m)
-        for i in range(N-m):
+#        count = np.zeros(N-m)  # https://github.com/ixjlyons/entro-py/pull/2/files
+#        for i in range(N-m):  # https://github.com/ixjlyons/entro-py/pull/2/files
+        count = np.zeros(npat)
+        for i in range(npat):
             if cross:
                 if m == 1:
                     sub = patterns[1][i]
@@ -289,11 +295,12 @@ def entro_py_entropy(x, dim, r, n=1, scale=True, remove_baseline=False):
             if fuzzy:
                 sim = np.exp(-np.power(dist, n) / r)
             else:
-                sim = dist <= r
+                sim = dist < r
 
             count[i] = np.sum(sim) - 1
 
-        phi[j] = np.mean(count) / (N-m-1)
+#        phi[j] = np.mean(count) / (N-m-1)
+        phi[j] = np.mean(count) / (N-dim-1)  # https://github.com/ixjlyons/entro-py/pull/2/files
 
     return np.log(phi[0] / phi[1])
 

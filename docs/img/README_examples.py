@@ -4,7 +4,7 @@ import neurokit2 as nk
 
 
 # =============================================================================
-# Example 1
+# Simulate physiological signals
 # =============================================================================
 
 # Generate synthetic signals
@@ -24,3 +24,22 @@ data.plot(subplots=True, layout=(4, 1))
 # Save it
 plot = data.plot(subplots=True, layout=(4, 1))
 plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
+
+
+
+# =============================================================================
+# Respiration (RSP) processing
+# =============================================================================
+
+# Generate one minute of respiratory signal
+rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
+
+# Process it
+signals, info = nk.rsp_process(rsp)
+
+# Visualise the processing
+nk.rsp_plot(signals)
+
+# Save it
+plot = nk.rsp_plot(signals)
+plot.savefig("README_respiration.png", dpi=300)

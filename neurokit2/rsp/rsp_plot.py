@@ -4,12 +4,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def rsp_plot(rsp_summary):
+def rsp_plot(rsp_signals):
     """Visualize respiration (RSP) data.
 
     Parameters
     ----------
-    rsp_summary : DataFrame
+    rsp_signals : DataFrame
         DataFrame obtained from `rsp_process`.
 
     Examples
@@ -26,16 +26,17 @@ def rsp_plot(rsp_summary):
     --------
     rsp_process
     """
-    peaks = np.where(rsp_summary["RSP_Peaks"] == 1)[0]
-    troughs = np.where(rsp_summary["RSP_Troughs"] == 1)[0]
+    peaks = np.where(rsp_signals["RSP_Peaks"] == 1)[0]
+    troughs = np.where(rsp_signals["RSP_Troughs"] == 1)[0]
 
     fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
     ax0.set_title("Signal and Breathing Extrema")
-    ax0.plot(rsp_summary["RSP_Clean"])
-    ax0.scatter(peaks, rsp_summary["RSP_Clean"][peaks])
-    ax0.scatter(troughs, rsp_summary["RSP_Clean"][troughs])
+    ax0.plot(rsp_signals["RSP_Clean"])
+    ax0.scatter(peaks, rsp_signals["RSP_Clean"][peaks])
+    ax0.scatter(troughs, rsp_signals["RSP_Clean"][troughs])
     ax1.set_title("Breathing Rate")
-    ax1.plot(rsp_summary["RSP_Rate"])
+    ax1.plot(rsp_signals["RSP_Rate"])
     ax2.set_title("Breathing Amplitude")
-    ax2.plot(rsp_summary["RSP_Amplitude"])
+    ax2.plot(rsp_signals["RSP_Amplitude"])
     plt.show()
+    return fig

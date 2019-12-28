@@ -36,37 +36,46 @@ def rsp_distord(rsp, info, noise_amplitude=0.1, noise_frequency=100):
 
 
 
-def rsp_custom_process(rsp, info, detrend_first=True, detrend_order=0):
+def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=0, filter_order=5, filter_lowcut=None, filter_highcut=2):
     sampling_rate = info["Sampling_Rate"][0]
 
-    if detrend_first is True:
-        rsp = nk.signal_detrend(rsp, order=detrend_order)
+    if detrend_position == "First":
+        distorted = nk.signal_detrend(distorted, order=detrend_order)
 
-    rsp = nk.signal_filter(rsp,
-                             sampling_rate=sampling_rate,
-                             lowcut=None,
-                             highcut=2,
-                             method="butterworth",
-                             butterworth_order=5)
+    if filter_lowcut == 0:
+        actual_filter_lowcut = None
+    else:
+        actual_filter_lowcut = filter_lowcut
 
-    if detrend_first is False:
-        rsp = nk.signal_detrend(rsp, order=detrend_order)
+    distorted = nk.signal_filter(signal=distorted,
+                           sampling_rate=sampling_rate,
+                           lowcut=actual_filter_lowcut,
+                           highcut=filter_highcut,
+                           method="butterworth",
+                           butterworth_order=filter_order)
 
-    extrema_signal, _ = nk.rsp_findpeaks(rsp, outlier_threshold=0.3)
+    if detrend_position == "Second":
+        distorted = nk.signal_detrend(distorted, order=detrend_order)
 
-    rate = nk.rsp_rate(extrema_signal, sampling_rate=sampling_rate)["RSP_Rate"]
+    extrema_signal, _ = nk.rsp_findpeaks(distorted, outlier_threshold=0.3)
+
+    try:
+        rate = nk.rsp_rate(peaks=extrema_signal, sampling_rate=sampling_rate)["RSP_Rate"]
+    except ValueError:
+        rate = np.full(len(distorted), np.nan)
 
     info["Detrend_Order"] = [detrend_order]
-    info["Detrend_First"] = [detrend_first]
+    info["Detrend_Position"] = [detrend_position]
+    info["Filter_Order"] = [filter_order]
+    info["Filter_Low"] = [filter_lowcut]
+    info["Filter_High"] = [filter_highcut]
     return rate, info
 
 
 
 
 
-
-
-def rsp_quality(rate, info, noise_amplitude=0.1, noise_frequency=100):
+def rsp_quality(rate, info):
     diff = info["Respiratory_Rate"][0] - rate
     info["Difference_Mean"] = np.mean(diff)
     info["Difference_SD"] = np.std(diff, ddof=1)
@@ -79,18 +88,30 @@ def rsp_quality(rate, info, noise_amplitude=0.1, noise_frequency=100):
 # RSP - Run
 # =============================================================================
 all_data = []
-for simulation in ["Simple", "Complex"]:
-    for noise_amplitude in np.linspace(0.01, 1, 40):
-        for noise_frequency in np.linspace(1, 100, 40):
-            for detrend_first in [True, False]:
-                for detrend_order in [0, 1, 2, 3, 4]:
-                    rsp, info = rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=15, method=simulation)
-                    distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
-                    rate, info = rsp_custom_process(distorted, info, detrend_first=detrend_first, detrend_order=detrend_order)
-                    data = rsp_quality(rate, info, noise_amplitude=0.1, noise_frequency=100)
-                    all_data += [data]
-data = pd.concat(all_data)
-data.to_csv("data.csv")
+for noise_amplitude in np.linspace(0.01, 1, 5):
+    print("---")
+    print(noise_amplitude*100)
+    print("---")
+    for noise_frequency in np.linspace(1, 150, 5):
+        print("%.2f" %(noise_frequency/150*100))
+        for simulation in ["Simple", "Complex"]:
+            for detrend_position in ["First", "Second", "None"]:
+                for detrend_order in [0, 1, 2, 3, 4, 5, 6]:
+                    for filter_order in [1, 2, 3, 4, 5, 6]:
+                        for filter_lowcut in [0, 0.05, 0.1, 0.15, 0.2]:
+                            for filter_highcut in [3, 2, 1, 0.35, 0.25]:
+                                rsp, info = rsp_generate(duration=120, sampling_rate=1000, respiratory_rate=15, method=simulation)
+                                distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
+                                rate, info = rsp_custom_process(distorted, info,
+                                                                detrend_position=detrend_position,
+                                                                detrend_order=detrend_order,
+                                                                filter_order=filter_order,
+                                                                filter_lowcut=filter_lowcut,
+                                                                filter_highcut=filter_highcut)
+                                data = rsp_quality(rate, info)
+                                all_data += [data]
+    data = pd.concat(all_data)
+    data.to_csv("data.csv")
 
 # Check
 fig, axes = plt.subplots(nrows=2, ncols=2)
