@@ -54,7 +54,7 @@ def signal_detrend(signal, order=1, method="polyonmial", regularization=500):
     - `Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175. <https://ieeexplore.ieee.org/document/979357>`_
     """
     if method.lower() in ["tarvainen", "tarvainen2002"]:
-         detrended = _signal_detrend_tarvainen2002(signal, regularization)
+        detrended = _signal_detrend_tarvainen2002(signal, regularization)
     else:
         detrended = _signal_detrend_polynomial(signal, order)
 
@@ -84,7 +84,7 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     N = len(signal)
     identity = np.eye(N)
     B = np.dot(np.ones((N-2, 1)), np.array([[1, -2, 1]]))
-    D_2 =  scipy.sparse.dia_matrix((B.T, [0, 1, 2]), shape=(N-2, N))
+    D_2 = scipy.sparse.dia_matrix((B.T, [0, 1, 2]), shape=(N-2, N))
     inv = np.linalg.inv(identity + regularization**2 * D_2.T @ D_2)
     z_stat = ((identity - inv)) @ signal
 
