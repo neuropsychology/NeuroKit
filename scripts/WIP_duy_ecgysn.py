@@ -5,11 +5,12 @@ import scipy
 import math
 import matplotlib.pyplot as plt
 
-from ..signal import signal_resample
+# from ..signal import signal_resample
+from neurokit2.signal import signal_resample
 
-# set seed for reproduciblity.
-# SEED = 333
-# np.random.seed(SEED)
+
+SEED = 333
+np.random.seed(SEED)
 
 
 def _ecg_simulate_ecgsynth(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfratio=0.5, sfint=512,
@@ -127,7 +128,6 @@ def _ecg_simulate_derivsecgsyn(t, x, rr, ti, sfint, ai, bi):
     dx1dt = a0 * x[0] - w0 * x[1]
     dx2dt = a0 * x[1] + w0 * x[0]
 
-    # matlab rem and numpy rem are different
     # dti = np.remainder(ta - ti, 2*np.pi)
     dti = (ta - ti) - np.round((ta - ti) / 2 / np.pi) * 2 * np.pi
     dx3dt = -np.sum(ai * dti * np.exp(-0.5 * (dti / bi) ** 2)) - 1 * (x[2] - zbase)
@@ -171,8 +171,30 @@ def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfrat
 if __name__ == '__main__':
     s = _ecg_simulate_ecgsynth()
     x = np.linspace(0, len(s)-1, len(s))
+
+    start_point = 0
     num_points = 4000
+    end_point = start_point + num_points
 
     num_points = min(num_points, len(s))
-    plt.plot(x[:num_points], s[:num_points])
+    plt.plot(x[start_point:end_point], s[start_point:end_point])
+    # plt.plot(x, s)
     plt.show()
+
+    # import numpy as np
+    # import scipy
+    # import scipy.signal
+    # import scipy.interpolate
+    # import matplotlib.pyplot as plt
+    #
+    # t = np.linspace(0, 2, 41)
+    # x = np.sin(2 * np.pi * 30 * t)
+    #
+    # # y = scipy.signal.resample(x, len(t)*4)
+    # f = scipy.interpolate.interp1d(t, x, kind='cubic')
+    #
+    # y = f(np.linspace(0, 2, 41*4))
+    #
+    # plt.plot(np.linspace(0, 2, 41*4), y)
+    # plt.show()
+
