@@ -42,22 +42,42 @@ EMG
 Signal Processing
 -----------------
 
+Signal cleaning
+""""""""""""""""
+
+.. autofunction:: neurokit2.signal_distord
 
 .. autofunction:: neurokit2.signal_binarize
 
-.. autofunction:: neurokit2.signal_resample
-
 .. autofunction:: neurokit2.signal_filter
-
-.. autofunction:: neurokit2.signal_interpolate
 
 .. autofunction:: neurokit2.signal_detrend
 
-.. autofunction:: neurokit2.signal_findpeaks
+.. autofunction:: neurokit2.signal_smooth
+
+
+Signal preprocessing
+""""""""""""""""""""
+
+.. autofunction:: neurokit2.signal_resample
+
+.. autofunction:: neurokit2.signal_interpolate
 
 .. autofunction:: neurokit2.signal_merge
 
+
+Signal processing
+""""""""""""""""""
+
+.. autofunction:: neurokit2.signal_zerocrossings
+
+.. autofunction:: neurokit2.signal_findpeaks
+
 .. autofunction:: neurokit2.signal_plot
+
+
+
+
 
 
 

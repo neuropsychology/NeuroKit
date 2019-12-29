@@ -4,8 +4,11 @@ engines:
     checks:
       E501:
         enabled: false
+      E302:
+        enabled: false
       E303:
         enabled: false
+
 
 checks:
   argument-count:
@@ -28,3 +31,7 @@ checks:
     enabled: true
   identical-code:
     enabled: true
+    
+exclude_patterns:
+- "tests/"
+- "scripts/"
