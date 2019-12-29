@@ -25,6 +25,10 @@ def entropy_sample(signal, order=2, r="default"):
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
 
+    See Also
+    --------
+    entropy_shannon, entropy_approximate, entropy_fuzzy
+
     Returns
     ----------
     float

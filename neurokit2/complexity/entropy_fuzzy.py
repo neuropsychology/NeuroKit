@@ -70,6 +70,10 @@ def entropy_fuzzy(signal, order=2, r="default", n=1):
     float
         The fuzzy entropy as float value.
 
+    See Also
+    --------
+    entropy_shannon, entropy_approximate, entropy_sample
+
     Examples
     ----------
     >>> import neurokit2 as nk
