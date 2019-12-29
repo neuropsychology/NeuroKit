@@ -65,7 +65,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     for start_peak in start_peaks:
         relative_time_peak = np.abs(np.random.normal(0, 5, size=1)) + 3.0745
         scr = _eda_simulate_scr(sampling_rate=sampling_rate,
-                                      time_peak=relative_time_peak)
+                                time_peak=relative_time_peak)
         time_scr = [start_peak, start_peak+9]
         if time_scr[0] < 0:
             scr = scr[int(np.round(np.abs(time_scr[0])*sampling_rate))::]
