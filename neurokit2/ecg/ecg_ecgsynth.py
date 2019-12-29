@@ -3,35 +3,36 @@ import pandas as pd
 import numpy as np
 import scipy
 import math
+import matplotlib.pyplot as plt
 
 from ..signal import signal_resample
 
+# set seed for reproduciblity.
+# SEED = 333
+# np.random.seed(SEED)
 
-def _ecg_simulate_ecgsynth(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfratio=0.5, sfint=256, ti=[-70, -15, 0, 15, 100], ai=[1.2, -5, 30, -7.5, 0.75], bi=[0.25, 0.1, 0.1, 0.1, 0.4]):
+
+def _ecg_simulate_ecgsynth(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfratio=0.5, sfint=512,
+                           ti=(-70, -15, 0, 15, 100), ai=(1.2, -5, 30, -7.5, 0.75), bi=(0.25, 0.1, 0.1, 0.1, 0.4)):
     """
     References
     -----------
     This function is a python translation of the matlab script by Patrick McSharry & Gari Clifford (2013). All credits go to them.
     """
-# Set parameter default values
-#    sfecg = 256;
-#    N = 256;
-#    Anoise = 0;
-#    hrmean = 60;
-#    hrstd = 1;
-#    lfhfratio = 0.5;
-#    sfint = 512;
-#    ti = [-70, -15, 0, 15, 100];
-#    ai=[1.2 -5 30 -7.5 0.75];
-#    bi=[0.25 0.1 0.1 0.1 0.4];
 
+    if not isinstance(ti, np.ndarray):
+        ti = np.array(ti)
+    if not isinstance(ai, np.ndarray):
+        ai = np.array(ai)
+    if not isinstance(bi, np.ndarray):
+        bi = np.array(bi)
 
-    ti = np.array(ti)*np.pi/180
+    ti = ti*np.pi/180
 
     # Adjust extrema parameters for mean heart rate
-    hrfact =  np.sqrt(hrmean/60)
+    hrfact = np.sqrt(hrmean/60)
     hrfact2 = np.sqrt(hrfact)
-    bi = hrfact*np.array(bi)
+    bi = hrfact * bi
     ti = np.array([hrfact2, hrfact, 1, hrfact, hrfact2])*ti
 
     # Check that sfint is an integer multiple of sfecg
@@ -48,15 +49,14 @@ def _ecg_simulate_ecgsynth(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfr
     fhistd = 0.01
     fid = 1
 
-
     # Calculate time scales for rr and total output
     sfrr = 1
     trr = 1/sfrr
     tstep = 1/sfecg
     rrmean = 60/hrmean
-    n = (np.ceil(np.log2(N*rrmean/trr)))**2
+    n = 2**(np.ceil(np.log2(N*rrmean/trr)))
 
-    rr0 = _ecg_simulate_rrprocess(flo,fhi,flostd,fhistd,lfhfratio,hrmean,hrstd,sfrr,n)
+    rr0 = _ecg_simulate_rrprocess(flo, fhi, flostd, fhistd, lfhfratio, hrmean, hrstd, sfrr, n)
 
     # Upsample rr time series from 1 Hz to sfint Hz
     rr = signal_resample(rr0, sampling_rate=1, desired_sampling_rate=sfint)
@@ -64,82 +64,79 @@ def _ecg_simulate_ecgsynth(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfr
     # Make the rrn time series
     dt = 1/sfint
     rrn = np.zeros(len(rr))
-    tecg=0
+    tecg = 0
     i = 0
     while i < len(rr):
-       tecg = tecg+rr[i]
-       ip = int(np.round(tecg/dt))
-       rrn[i:ip] = rr[i]
-       i = ip+1
+        tecg = tecg+rr[i]
+        ip = int(np.round(tecg/dt))
+        rrn[i:ip] = rr[i]
+        i = ip
     Nt = ip
 
     # Integrate system using fourth order Runge-Kutta
-    x0 = [1, 0, 0.04]
+    x0 = np.array([1, 0, 0.04])
 
-    # ------- THIS IS WHERE THINGS START TO GET COMPLICATED
-#    Tspan = np.arange(0, (Nt-1)*dt, dt)
-    Tspan = np.linspace(0, (Nt-1)*dt, len(rrn))
-#    T, X0 = _ecg_simulate_derivsecgsyn(t=Tspan, rr=rrn, ti=ti, x=x0, flag=[], sfint, ti, ai, bi)
-    dxdt = _ecg_simulate_derivsecgsyn(Tspan=Tspan, rrn=rrn, ti=ti, x0=x0, sfint=sfint, ai=ai, bi=bi)
+    # tspan is a tuple of (min, max) which defines the lower and upper bound of t in ODE
+    # t_eval is the list of desired t points for ODE
+    # in Matlab, ode45 can accepts both tspan and t_eval in one argument
+    Tspan = [0, (Nt-1)*dt]
+    t_eval = np.linspace(0, (Nt-1)*dt, Nt)
+
+    # as passing extra arguments to derivative function is not supported yet in solve_ivp
+    # lambda function is used to serve the purpose
+    result = scipy.integrate.solve_ivp(lambda t, x: _ecg_simulate_derivsecgsyn(t, x, rrn, ti, sfint, ai, bi),
+                                       Tspan,
+                                       x0,
+                                       t_eval=t_eval
+                                       )
+    T = result.t
+    X0 = result.y
 
     # downsample to required sfecg
-    X = dxdt[np.arange(0,len(dxdt),q).astype(int)]
+    X = X0[:, np.arange(0, X0.shape[1], q).astype(int)]
 
     # Scale signal to lie between -0.4 and 1.2 mV
-    z = X.copy()
+    z = X[2, :].copy()
     zmin = np.min(z)
     zmax = np.max(z)
     zrange = zmax - zmin
-    z = (z - zmin)*(1.6)/zrange -0.4
+    z = (z - zmin)*1.6/zrange - 0.4
 
     # include additive uniformly distributed measurement noise
     eta = 2*np.random.uniform(len(z))-1
     s = z + Anoise*eta
 
-    return(s)
+    return s
 
 
-
-
-
-
-
-def _ecg_simulate_derivsecgsyn(Tspan, rrn, ti, x0=[1, 0, 0.04], sfint=512, ai=[1.2, -5, 30, -7.5, 0.75], bi=[0.25, 0.1 , 0.1 , 0.1 , 0.4 ]):
-
+def _ecg_simulate_derivsecgsyn(t, x, rr, ti, sfint, ai, bi):
     xi = np.cos(ti)
     yi = np.sin(ti)
-    ta = math.atan2(x0[1], x0[0])
-    r0 = 1
-    a0 = 1.0 - np.sqrt(x0[0]**2 + x0[1]**2)/r0
-    ip = np.floor(Tspan*sfint).astype(int)
-    # w0 = 2*np.pi/rrn[ip.astype(int)]
-    w0 = 2*np.pi/rrn[ip[ip <= np.max(rrn)]]
 
+    ta = math.atan2(x[1], x[0])
+    r0 = 1
+    a0 = 1.0 - np.sqrt(x[0] ** 2 + x[1] ** 2) / r0
+
+    ip = np.floor(t * sfint).astype(int)
+    w0 = 2*np.pi/rr[min(ip, len(rr)-1)]
+    # w0 = 2*np.pi/rr[ip[ip <= np.max(rr)]]
 
     fresp = 0.25
-    zbase = 0.005*np.sin(2*np.pi*fresp*Tspan)
+    zbase = 0.005 * np.sin(2*np.pi*fresp*t)
 
-    dx1dt = a0*x0[0] - w0*x0[1]
-    dx2dt = a0*x0[1] + w0*x0[0]
+    dx1dt = a0 * x[0] - w0 * x[1]
+    dx2dt = a0 * x[1] + w0 * x[0]
 
-    dti = np.remainder(ta - ti, 2*np.pi)
-    dx3dt = -np.sum(ai * dti * np.exp(-0.5*(dti/bi)**2)) - 1*(x0[2] - zbase)
+    # matlab rem and numpy rem are different
+    # dti = np.remainder(ta - ti, 2*np.pi)
+    dti = (ta - ti) - np.round((ta - ti) / 2 / np.pi) * 2 * np.pi
+    dx3dt = -np.sum(ai * dti * np.exp(-0.5 * (dti / bi) ** 2)) - 1 * (x[2] - zbase)
 
-    dxdt = np.concatenate([dx1dt, dx2dt, dx3dt])
-    return(dxdt)
-
-
-
-
+    dxdt = np.array([dx1dt, dx2dt, dx3dt])
+    return dxdt
 
 
-
-
-
-
-def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfratio=0.5, hrmean=60, hrstd=1, sfrr=1, n=64):
-
-
+def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfratio=0.5, hrmean=60, hrstd=1, sfrr=1, n=256):
     w1 = 2*np.pi*flo
     w2 = 2*np.pi*fhi
     c1 = 2*np.pi*flostd
@@ -150,7 +147,7 @@ def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfrat
     rrstd = 60*hrstd/(hrmean*hrmean)
 
     df = sfrr/n
-    w = np.arange(n-1)*2*np.pi*df
+    w = np.arange(n)*2*np.pi*df
     dw1 = w-w1
     dw2 = w-w2
 
@@ -168,5 +165,14 @@ def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfrat
     xstd = np.std(x)
     ratio = rrstd/xstd
     rr = rrmean + x*ratio
-    return(rr)
+    return rr
 
+
+if __name__ == '__main__':
+    s = _ecg_simulate_ecgsynth()
+    x = np.linspace(0, len(s)-1, len(s))
+    num_points = 4000
+
+    num_points = min(num_points, len(s))
+    plt.plot(x[:num_points], s[:num_points])
+    plt.show()
