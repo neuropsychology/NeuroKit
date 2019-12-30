@@ -10,45 +10,6 @@ from ..stats import standardize
 
 
 
-
-def _signal_findpeaks_distances(peaks):
-
-    if len(peaks) <= 2:
-        distances = np.full(len(peaks), np.nan)
-    else:
-        distances_next = np.concatenate([[np.nan], np.abs(np.diff(peaks))])
-        distances_prev = np.concatenate([np.abs(np.diff(peaks[::-1])), [np.nan]])
-        distances = np.array([np.nanmin(i) for i in list(zip(distances_next, distances_prev))])
-
-    return(distances)
-
-
-
-
-
-
-def _signal_findpeaks(signal):
-    peaks, _ = scipy.signal.find_peaks(signal)
-
-    # Get info
-    distances = _signal_findpeaks_distances(peaks)
-    heights, left_base, right_base = scipy.signal.peak_prominences(signal, peaks)
-    widths, width_heights, left_ips, right_ips = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
-
-    # Prepare output
-    info = {"Distance": distances,
-            "Height": heights,
-            "Width": widths}
-
-    return(peaks, info)
-
-
-
-
-
-
-
-
 def signal_findpeaks(signal, distance_min=None, height_min=None, width_min=None, distance_max=None, height_max=None, width_max=None, relative_distance_min=None, relative_height_min=None, relative_width_min=None, relative_distance_max=None, relative_height_max=None, relative_width_max=None):
     """Find peaks in a signal.
 
@@ -58,6 +19,10 @@ def signal_findpeaks(signal, distance_min=None, height_min=None, width_min=None,
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
+    distance_min, height_min, width_min, distance_max, height_max, width_max : float
+        The minimum or maximum distance (between peaks, in number of sample points), height (i.e., amplitude in terms of absolute values) or width of the peaks (in number of sample points). For example, `distance_min=20` will remove all peaks which distance with the previous peak is smaller or equal to 20 sample points.
+    relative_distance_min, relative_height_min, relative_width_min, relative_distance_max, relative_height_max, relative_width_max : float
+        The minimum or maximum distance (between peaks), height (i.e., amplitude) or width of the peaks in terms of standard deviation from the sample. For example, `relative_distance_min=-2.96` will remove all peaks which distance lies below 2.96 standard deviations from the mean of the distances.
 
     Returns
     ----------
@@ -138,4 +103,44 @@ def signal_findpeaks(signal, distance_min=None, height_min=None, width_min=None,
     info["Height"] = info["Height"][keep]
     info["Width"] = info["Width"][keep]
 
-    return(peaks, info)
+    return peaks, info
+
+
+
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+
+
+def _signal_findpeaks_distances(peaks):
+
+    if len(peaks) <= 2:
+        distances = np.full(len(peaks), np.nan)
+    else:
+        distances_next = np.concatenate([[np.nan], np.abs(np.diff(peaks))])
+        distances_prev = np.concatenate([np.abs(np.diff(peaks[::-1])), [np.nan]])
+        distances = np.array([np.nanmin(i) for i in list(zip(distances_next, distances_prev))])
+
+    return distances
+
+
+
+
+
+
+def _signal_findpeaks(signal):
+    peaks, _ = scipy.signal.find_peaks(signal)
+
+    # Get info
+    distances = _signal_findpeaks_distances(peaks)
+    heights, left_base, right_base = scipy.signal.peak_prominences(signal, peaks)
+    widths, width_heights, left_ips, right_ips = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
+
+    # Prepare output
+    info = {"Distance": distances,
+            "Height": heights,
+            "Width": widths}
+
+    return peaks, info
