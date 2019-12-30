@@ -18,6 +18,7 @@ Contributors
 * `Chuan-Peng Hu <https://github.com/hcp4715>`_ *(Universitatsmedizin Mainz, Germany)*
 * `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 * `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
+* `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
 * `You? <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
 
 More details `here <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.

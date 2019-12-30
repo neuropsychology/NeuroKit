@@ -10,7 +10,7 @@ import neurokit2 as nk
 # Generate synthetic signals
 ecg = nk.ecg_simulate(duration=10, heart_rate=70)
 rsp = nk.rsp_simulate(duration=10, respiratory_rate=15)
-eda = nk.eda_simulate(duration=10, n_peaks=3)
+eda = nk.eda_simulate(duration=10, n_scr=3)
 emg = nk.emg_simulate(duration=10, n_bursts=2)
 
 # Visualise biosignals

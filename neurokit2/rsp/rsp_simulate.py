@@ -45,7 +45,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>> rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
     >>> rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
     >>> pd.DataFrame({"RSP_Simple": rsp1,
-                      "RSP_Complex": rsp2}).plot()
+                      "RSP_Complex": rsp2}).plot(subplots=True)
 
     References
     ----------
@@ -78,7 +78,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                                           respiratory_rate=respiratory_rate)
         rsp = rsp[0:length]
 
-    # Add random (gaussian distributed) noise
+    # Add random noise
     if noise > 0:
         rsp = signal_distord(rsp,
                              sampling_rate=sampling_rate,

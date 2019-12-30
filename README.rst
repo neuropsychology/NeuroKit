@@ -37,6 +37,11 @@ To install NeuroKit, run this command in your terminal:
 
     pip install https://github.com/neuropsychology/neurokit/zipball/master
 
+Contribution
+------------
+
+NeuroKit2 is meant to be a all-level-friendly collaborative project. Plus, it tries to credit all contributions and contributors, so that your involvement pays off also on your CV. Thus, if you have some ideas for **improvement**, **new features**, or just wanna **learn Python** and do something useful at the same time, do not hesitate and check-out the `CONTRIBUTION GUIDE <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_.
+
 
 Documentation
 --------------
@@ -73,7 +78,7 @@ Simulate physiological signals
     # Generate synthetic signals
     ecg = nk.ecg_simulate(duration=10, heart_rate=70)
     rsp = nk.rsp_simulate(duration=10, respiratory_rate=15)
-    eda = nk.eda_simulate(duration=10, n_peaks=3)
+    eda = nk.eda_simulate(duration=10, n_scr=3)
     emg = nk.emg_simulate(duration=10, n_bursts=2)
 
     # Visualise biosignals
@@ -106,20 +111,44 @@ Respiration (RSP) processing
 Signal processing
 ^^^^^^^^^^^^^^^^^^
 
-NeuroKit includes functions to facilitate signal processing:
+Signal cleaning
+""""""""""""""""
 
+- `signal_distord() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_distord>`_: Add noise of a given frequency, amplitude and shape to a signal.
 - `signal_binarize() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_binarize>`_: Convert a continuous signal into zeros and ones depending on a given threshold.
-- `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_: Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
+- `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Apply a lowpass, highpass or bandpass filter to the signal.
+- `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
+- `signal_smooth() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_smooth>`_: Signal smoothing using the convolution of a filter kernel.
+
+
+Signal preprocessing
+""""""""""""""""""""
+
 - `signal_resample() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_resample>`_: Up- or down-sample a signal.
 - `signal_interpolate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_interpolate>`_: Interpolate (fills the values between data points) a signal using different methods.
-- `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Apply a lowpass, highpass or bandpass filter to the signal.
-- `signal_smooth() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_smooth>`_: Signal smoothing using the convolution of a filter kernel.
-- `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
-- `signal_zerocrossings() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_zerocrossings>`_: Locate the indices where the signal crosses zero.
-- `signal_distord() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_distord>`_: Add noise of a given frequency, amplitude and shape to a signal.
 - `signal_merge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_merge>`_: Arbitrary addition of two signals with different time ranges.
 
+Signal processing
+""""""""""""""""""
 
+- `signal_zerocrossings() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_zerocrossings>`_: Locate the indices where the signal crosses zero.
+- `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_: Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
+- `signal_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_plot>`_: Plot signal with events as vertical lines.
+
+Other Utilities
+^^^^^^^^^^^^^^^^^^
+
+Read data
+""""""""""""""""""
+
+- `read_acqknowledge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge>`_: Read and format a BIOPAC’s AcqKnowledge file into a pandas’ dataframe.
+
+Events *(stimuli triggers and markers)*
+""""""""""""""""""""""""""""""""""""""""""
+
+- `events_find() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find>`_: Find and select events in a continuous signal (e.g., from a photosensor).
+- `events_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot>`_: Plot events in signal.
+- `events_to_mne() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_to_mne>`_: Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG.
 
 Alternatives
 -------------

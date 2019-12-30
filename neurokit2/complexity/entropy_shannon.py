@@ -22,6 +22,9 @@ def entropy_shannon(signal):
     float
         The Shannon entropy as float value.
 
+    See Also
+    --------
+    entropy_approximate, entropy_sample, entropy_fuzzy
 
     Examples
     ----------

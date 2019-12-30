@@ -39,9 +39,9 @@ def test_complexity():
     assert np.allclose(nk.entropy_sample(signal, 2, 0.2*np.std(signal, ddof=1)) - entropy_sample_entropy(signal, 2), 0)
     assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - nolds.sampen(signal, 2, 0.2), 0)
     assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - entro_py_sampen(signal, 2, 0.2, scale=False), 0)
+    assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - pyeeg_samp_entropy(signal, 2, 0.2), 0)
 
     assert nk.entropy_sample(signal, 2, 0.2) != pyentrp.sample_entropy(signal, 2, 0.2)[1]
-    assert nk.entropy_sample(signal, 2, 0.2) != pyeeg_samp_entropy(signal, 2, 0.2)
 
 
 
@@ -125,7 +125,7 @@ def pyeeg_ap_entropy(X, M, R):
 def pyeeg_samp_entropy(X, M, R):
     N = len(X)
 
-    Em = pyeeg_embed_seq(X, 1, M)
+    Em = pyeeg_embed_seq(X, 1, M)[:-1]
     A = np.tile(Em, (len(Em), 1, 1))
     B = np.transpose(A, [1, 0, 2])
     D = np.abs(A - B)  # D[i,j,k] = |Em[i][k] - Em[j][k]|
@@ -137,7 +137,7 @@ def pyeeg_samp_entropy(X, M, R):
         np.tile(X[M:], (N - M, 1)) - np.tile(X[M:], (N - M, 1)).T
     )
 
-    Cmp = np.logical_and(Dp <= R, InRange[:-1, :-1]).sum(axis=0)
+    Cmp = np.logical_and(Dp <= R, InRange).sum(axis=0)
 
     # Avoid taking log(0)
     Samp_En = np.log(np.sum(Cm + 1e-100) / np.sum(Cmp + 1e-100))
