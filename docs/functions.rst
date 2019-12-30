@@ -39,8 +39,9 @@ EMG
 .. autofunction:: neurokit2.emg_simulate
 
 
-Signal Processing
------------------
+General Signal Processing
+--------------------------
+
 
 Signal cleaning
 """"""""""""""""
@@ -81,8 +82,8 @@ Signal processing
 
 
 
-Events *(stimuli triggers and markers)*
-----------------------------------------
+Events
+-------
 
 .. autofunction:: neurokit2.events_find
 
