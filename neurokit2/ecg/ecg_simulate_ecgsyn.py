@@ -193,4 +193,3 @@ def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfrat
     ratio = rrstd/xstd
     rr = rrmean + x*ratio
     return rr
-

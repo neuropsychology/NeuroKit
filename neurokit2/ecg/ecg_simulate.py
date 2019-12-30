@@ -110,7 +110,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
 
 def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 heart_rate=60, random_state=42):
+                             heart_rate=70, random_state=42):
     """Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.
     It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
     This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
