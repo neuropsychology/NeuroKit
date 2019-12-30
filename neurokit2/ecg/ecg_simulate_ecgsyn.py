@@ -1,24 +1,51 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
 import scipy
 import math
-import matplotlib.pyplot as plt
+
 
 from ..signal import signal_resample
 
-# set seed for reproduciblity.
-# SEED = 333
-# np.random.seed(SEED)
 
 
-def _ecg_simulate_ecgsynth(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfratio=0.5, sfint=512,
-                           ti=(-70, -15, 0, 15, 100), ai=(1.2, -5, 30, -7.5, 0.75), bi=(0.25, 0.1, 0.1, 0.1, 0.4)):
+
+
+def _ecg_simulate_ecgsyn(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfratio=0.5, sfint=512,
+                         ti=(-70, -15, 0, 15, 100), ai=(1.2, -5, 30, -7.5, 0.75), bi=(0.25, 0.1, 0.1, 0.1, 0.4),
+                         random_state=42):
     """
-    References
-    -----------
-    This function is a python translation of the matlab script by Patrick McSharry & Gari Clifford (2013). All credits go to them.
+    This function is a python translation of the matlab script by `McSharry & Clifford (2013) <https://physionet.org/content/ecgsyn>`_.
+
+    Parameters
+    ----------
+    % Operation uses the following parameters (default values in []s):
+    % sfecg: ECG sampling frequency [256 Hertz]
+    % N: approximate number of heart beats [256]
+    % Anoise: Additive uniformly distributed measurement noise [0 mV]
+    % hrmean: Mean heart rate [60 beats per minute]
+    % hrstd: Standard deviation of heart rate [1 beat per minute]
+    % lfhfratio: LF/HF ratio [0.5]
+    % sfint: Internal sampling frequency [256 Hertz]
+    % Order of extrema: (P Q R S T)
+    % ti = angles of extrema (in degrees)
+    % ai = z-position of extrema
+    % bi = Gaussian width of peaks
+
+    Examples
+    --------
+    >>> import matplotlib.pyplot as plt
+    >>>
+    >>> s = _ecg_simulate_ecgsynth()
+    >>> x = np.linspace(0, len(s)-1, len(s))
+    >>> num_points = 4000
+    >>>
+    >>> num_points = min(num_points, len(s))
+    >>> plt.plot(x[:num_points], s[:num_points])
+    >>> plt.show()
     """
+    # Seed the random generator for reproducible results
+    np.random.seed(random_state)
+
 
     if not isinstance(ti, np.ndarray):
         ti = np.array(ti)
@@ -167,12 +194,3 @@ def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfrat
     rr = rrmean + x*ratio
     return rr
 
-
-if __name__ == '__main__':
-    s = _ecg_simulate_ecgsynth()
-    x = np.linspace(0, len(s)-1, len(s))
-    num_points = 4000
-
-    num_points = min(num_points, len(s))
-    plt.plot(x[:num_points], s[:num_points])
-    plt.show()

@@ -1,9 +1,18 @@
 """Top-level package for NeuroKit."""
 
+# Info
+__version__ = '0.0.5'
+__citation__ = 'Not yet available.'
+__cite__ = __citation__
+
+
+# Maintainer info
 __author__ = """NeuroKit development team"""
 __email__ = 'dom.makowski@gmail.com'
-__version__ = '0.0.5'
 
+
+
+# Export content of submodules
 from .misc import *
 from .stats import *
 from .complexity import *
