@@ -39,8 +39,6 @@ def rsp_plot(rsp_signal, duration=60):
 
     fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
     plt.subplots_adjust(hspace=0.2)
-
-    # Plot clean versus raw signal
     ax0.set_title("Signal and Breathing Extrema")
     ax0.plot(rsp_signal["Time"], rsp_signal["RSP_Raw"], color='grey', label='Raw', zorder=1)
     ax0.plot(rsp_signal["Time"], rsp_signal["RSP_Clean"], color='blue', label='Cleaned', zorder=1)
@@ -48,16 +46,12 @@ def rsp_plot(rsp_signal, duration=60):
     ax0.legend(loc='upper right')
     ax0.scatter(rsp_signal["Time"][peaks], rsp_signal["RSP_Clean"][peaks], color='red', zorder=2)
     ax0.scatter(rsp_signal["Time"][troughs], rsp_signal["RSP_Clean"][troughs], color='orange', zorder=2)
-
-    # Plot breathing rate
     ax1.set_title("Breathing Rate")
     ax1.plot(rsp_signal["Time"], rsp_signal["RSP_Rate"], color='purple', label='Data')
     rate_mean = [np.mean(rsp_signal["RSP_Rate"])]*len(rsp_signal["RSP_Rate"])
     ax1.plot(rsp_signal["Time"], rate_mean, label='Mean', linestyle='--', color='purple')
     ax1.set_ylabel('Breaths per minute (Bpm)')
     ax1.legend(loc='upper right')
-
-    # Plot breathing amplitude
     ax2.set_title("Breathing Amplitude")
     ax2.plot(rsp_signal["Time"], rsp_signal["RSP_Amplitude"], color='brown', label='Data')
     amplitude_mean = [np.mean(rsp_signal["RSP_Amplitude"])]*len(rsp_signal["RSP_Amplitude"])
@@ -66,6 +60,3 @@ def rsp_plot(rsp_signal, duration=60):
     ax2.legend(loc='upper right')
     plt.show()
     return fig
-
-
-
