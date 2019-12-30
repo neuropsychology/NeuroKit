@@ -11,7 +11,7 @@ import scipy.stats
 
 def test_ecg_simulate():
 
-    ecg1 = nk.ecg_simulate(duration=20, length=5000)
+    ecg1 = nk.ecg_simulate(duration=20, length=5000, method="simple", noise=0)
     assert len(ecg1) == 5000
 
     ecg2 = nk.ecg_simulate(duration=20, length=5000, heart_rate=500)
