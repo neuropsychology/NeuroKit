@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
 
 from ..signal import signal_merge
-
+from ..signal import signal_distord
 
 def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                  n_scr=1, drift=-0.01, random_state=42):
@@ -19,7 +18,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         The desired sampling rate (in Hz, i.e., samples/second) or the desired
         length of the signal (in samples).
     noise : float
-        Noise level (gaussian noise).
+        Noise level (amplitude of the laplace noise).
     n_scr : int
         Desired number of skin conductance responses (SCRs), i.e., peaks.
     drift : float or list
@@ -76,8 +75,13 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
         eda = signal_merge(signal1=eda, signal2=scr, time1=time, time2=time_scr)
 
-    # Add random (gaussian distributed) noise
-    eda += np.random.normal(0, noise, len(eda))
+    # Add random noise
+    if noise > 0:
+        eda = signal_distord(eda,
+                             sampling_rate=sampling_rate,
+                             noise_amplitude=noise,
+                             noise_frequency=[5, 10, 100],
+                             noise_shape="laplace")
     return eda
 
 

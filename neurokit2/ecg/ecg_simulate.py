@@ -9,7 +9,7 @@ from .ecg_simulate_ecgsyn import _ecg_simulate_ecgsyn
 
 
 def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 heart_rate=60, method="ecgsyn", random_state=42):
+                 heart_rate=70, method="ecgsyn", random_state=42):
     """Simulate an ECG/EKG signal
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies wavelets to roughly approximate cardiac cycles.
