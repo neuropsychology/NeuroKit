@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from ..signal import signal_distord
+
 
 def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                  respiratory_rate=15, method="breathmetrics", random_state=42):
@@ -17,7 +19,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         The desired sampling rate (in Hz, i.e., samples/second) or the desired
         length of the signal (in samples).
     noise : float
-        Noise level (gaussian noise).
+        Noise level (amplitude of the laplace noise).
     respiratory_rate : float
         Desired number of breath cycles in one minute.
     method : str
@@ -40,10 +42,10 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>> import numpy as np
     >>> import neurokit2 as nk
     >>>
-    >>> rsp1 = nk.rsp_simulate(duration = 30, method="sinusoidal")
-    >>> rsp2 = nk.rsp_simulate(duration = 30, method="breathmetrics")
+    >>> rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
+    >>> rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
     >>> pd.DataFrame({"RSP_Simple": rsp1,
-                      "RSP_Complex": rsp2}).plot()
+                      "RSP_Complex": rsp2}).plot(subplots=True)
 
     References
     ----------
@@ -68,17 +70,22 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         rsp = _rsp_simulate_sinusoidal(duration=duration,
                                        length=length,
                                        sampling_rate=sampling_rate,
-                                       noise=noise,
                                        respiratory_rate=respiratory_rate)
     else:
         rsp = _rsp_simulate_breathmetrics(duration=duration,
                                           length=length,
                                           sampling_rate=sampling_rate,
-                                          noise=noise,
                                           respiratory_rate=respiratory_rate)
         rsp = rsp[0:length]
 
-    return(rsp)
+    # Add random noise
+    if noise > 0:
+        rsp = signal_distord(rsp,
+                             sampling_rate=sampling_rate,
+                             noise_amplitude=noise,
+                             noise_frequency=[5, 10, 100],
+                             noise_shape="laplace")
+    return rsp
 
 
 
@@ -106,10 +113,7 @@ def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000,
     # function
     rsp = amplitude*np.sin(2*np.pi*x*frequency)
 
-    # Add random (gaussian distributed) noise
-    rsp += np.random.normal(0, noise, len(rsp))
-
-    return(rsp)
+    return rsp
 
 
 
@@ -349,7 +353,7 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
         'Average Exhale Pause Length': avg_exhale_pauseLength / sampling_rate
     }
 
-    return(simulated_respiration, raw_features, feature_stats)
+    return simulated_respiration, raw_features, feature_stats
 
 
 
@@ -357,7 +361,7 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
 
 
 def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000,
-                                noise=0.01, respiratory_rate=15):
+                                respiratory_rate=15):
     """
     """
     n_cycles = int(respiratory_rate / 60 * duration)
@@ -370,5 +374,5 @@ def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000,
                 nCycles=int(n_cycles * 1.5),
                 sampling_rate=sampling_rate,
                 breathing_rate=respiratory_rate/60,
-                signal_noise=noise*10)
-    return(rsp)
+                signal_noise=0)
+    return rsp

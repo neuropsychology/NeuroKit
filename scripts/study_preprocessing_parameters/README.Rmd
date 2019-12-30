@@ -1,0 +1,156 @@
+---
+output: 
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(easystats)
+
+options(digits=2)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi=450,
+  fig.path = "figures/"
+)
+
+df <- read.csv("data.csv") %>% 
+  mutate(Filter_Order=as.factor(Filter_Order),
+         Detrend_Order=as.factor(Detrend_Order))
+```
+
+# How to Preprocess ECG, RSP and EDA Signals: A Simulation Study
+
+
+
+## Respiration (RSP)
+
+### Effect of Noise
+
+#### Frequency
+<details><summary>See code</summary>
+<p>
+```{r, echo = TRUE, warning=FALSE, message=FALSE}
+fig <- df %>%
+  ggplot(aes(x = Noise_Frequency, y = Difference_Mean, color=Noise_Amplitude)) +
+  geom_point() +
+  theme_modern() +
+  scale_color_viridis_c()
+```
+</p>
+</details>
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+fig
+```
+
+#### Amplitude
+<details><summary>See code</summary>
+<p>
+```{r, echo = TRUE, warning=FALSE, message=FALSE}
+fig <- df %>%
+  ggplot(aes(x = Noise_Amplitude, y = Difference_Mean, color=Noise_Frequency)) +
+  geom_point() +
+  theme_modern() +
+  scale_color_viridis_c()
+```
+</p>
+</details>
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+fig
+```
+
+
+
+### Detrending
+
+
+<details><summary>See code</summary>
+<p>
+```{r, echo = TRUE, warning=FALSE, message=FALSE}
+model <- lm(Difference_Mean ~ Detrend_Position * Detrend_Order + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=df) 
+
+table <- model %>%
+  parameters::model_parameters()
+
+fig <- model %>% 
+  estimate_means() %>% 
+  ggplot(aes(x = Detrend_Order, y = Mean, color=Detrend_Position)) +
+  geom_line(aes(group=Detrend_Position), position = position_dodge(width = 0.2)) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
+  theme_modern() +
+  ylab("Mean Difference")
+```
+</p>
+</details>
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+table[stringr::str_detect(table$Parameter, "Detrend"),]
+fig
+```
+
+
+
+### Filter
+
+
+<details><summary>See code</summary>
+<p>
+```{r, echo = TRUE, warning=FALSE, message=FALSE}
+data <- df %>% 
+  filter(Detrend_Order == 3 & Detrend_Position == "Second") %>% 
+  
+model <- lm(Difference_Mean ~ Filter_Order + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=data) 
+model <- lm(Difference_Mean ~ Filter_Order + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=df) 
+
+table <- model %>%
+  parameters::model_parameters()
+
+fig <- model %>% 
+  estimate_means() %>% 
+  ggplot(aes(x = Filter_Order, y = Mean)) +
+  geom_line(aes(group=1), position = position_dodge(width = 0.2)) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
+  theme_modern() +
+  ylab("Mean Difference")
+```
+</p>
+</details>
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+table[stringr::str_detect(table$Parameter, "Filter"),]
+fig
+```
+
+
+### Optimal Parameters
+
+<details><summary>See code</summary>
+<p>
+```{r, echo = TRUE, warning=FALSE, message=FALSE}
+data <- df %>% 
+  mutate(Optimal = ifelse(Detrend_Order == 3 & Detrend_Position == "Second" & Filter_Order == 2, TRUE, FALSE))
+
+model <- lm(Difference_Mean ~ Optimal + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=data) 
+
+table <- model %>%
+  parameters::model_parameters()
+
+fig <- model %>% 
+  estimate_means() %>% 
+  ggplot(aes(x = Optimal, y = Mean)) +
+  geom_line(aes(group=1), position = position_dodge(width = 0.2)) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
+  theme_modern() +
+  ylab("Mean Difference")
+```
+</p>
+</details>
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+table[stringr::str_detect(table$Parameter, "Filter"),]
+fig
+```

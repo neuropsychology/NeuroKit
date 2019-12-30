@@ -21,10 +21,9 @@ def find_version():
 
 
 # Dependencies
-requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'mne', 'bioread', 'matplotlib==3.0.0']
+requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'mne', 'bioread', 'matplotlib']
 setup_requirements = ['pytest-runner', 'numpy']
-test_requirements = requirements + ['pytest', 'coverage', 'pyentrp']
-
+test_requirements = requirements + ['pytest', 'coverage', 'pyentrp', 'nolds']
 
 # Setup
 setup(
@@ -43,10 +42,10 @@ setup(
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
+    packages=find_packages(),
     include_package_data=True,
     keywords='neurokit2',
     name='neurokit2',
-    packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite='pytest',
     tests_require=test_requirements,

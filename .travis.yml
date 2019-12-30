@@ -30,12 +30,12 @@ install:
   - pip install ".[test]"
     # Testing
   - pip install pyentrp
+  - pip install nolds
 
 script:
     - python setup.py install
     - tox
     - pytest
-    #- coverage run tests/test_all.py
 
 after_success:
     - codecov

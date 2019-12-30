@@ -59,8 +59,7 @@ def _events_find(event_channel, threshold="auto", threshold_keep="above"):
 # ==============================================================================
 # ==============================================================================
 def events_find(event_channel, threshold="auto", threshold_keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0, discard_first=0, discard_last=0):
-    """
-    Find and select events based on a continuous signal.
+    """Find and select events in a continuous signal (e.g., from a photosensor).
 
     Parameters
     ----------
