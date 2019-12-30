@@ -135,6 +135,20 @@ Signal processing
 - `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_: Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
 - `signal_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_plot>`_: Plot signal with events as vertical lines.
 
+Other Utilities
+^^^^^^^^^^^^^^^^^^
+
+Read data
+""""""""""""""""""
+
+- `read_acqknowledge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge>`_: Read and format a BIOPAC’s AcqKnowledge file into a pandas’ dataframe.
+
+Events *(stimuli triggers and markers)*
+""""""""""""""""""""""""""""""""""""""""""
+
+- `events_find() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find>`_: Find and select events in a continuous signal (e.g., from a photosensor).
+- `events_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot>`_: Plot events in signal.
+- `events_to_mne() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_to_mne>`_: Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG.
 
 Alternatives
 -------------

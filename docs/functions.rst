@@ -81,8 +81,8 @@ Signal processing
 
 
 
-Events
--------
+Events *(stimuli triggers and markers)*
+----------------------------------------
 
 .. autofunction:: neurokit2.events_find
 
@@ -92,7 +92,7 @@ Events
 
 
 
-Data
------
+Read data
+----------
 
 .. autofunction:: neurokit2.read_acqknowledge
