@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import neurokit2 as nk
+#import neurokit2 as nk
 
 
 # =============================================================================
@@ -22,7 +22,7 @@ data.plot(subplots=True, layout=(4, 1))
 
 
 # Save it
-plot = data.plot(subplots=True, layout=(4, 1))
+plot = data.plot(subplots=True, layout=(4, 1), color=['#f44336', "#2196F3", "#9C27B0", "#FF9800"])
 plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
 
 
