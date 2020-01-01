@@ -39,7 +39,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
     fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
     plt.subplots_adjust(hspace=0.2)
-    ax0.set_title("Raw and Cleaned RPS")
+    ax0.set_title("Raw and Cleaned RSP")
     ax0.plot(x_axis, rsp_signals["RSP_Raw"], color='#607D8B', label='Raw', zorder=1)
     ax0.plot(x_axis, rsp_signals["RSP_Clean"], color='#2196F3', label='Cleaned', zorder=1)
     ax0.set_ylabel('Amplitude (m)')
