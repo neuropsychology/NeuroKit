@@ -70,7 +70,7 @@ def test_rsp_findpeaks():
 def test_rsp_rate():
 
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                          respiratory_rate=15, method="sinusoidal")
+                          respiratory_rate=15, method="sinusoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_findpeaks(rsp_cleaned)
 
@@ -82,7 +82,7 @@ def test_rsp_rate():
                        desired_length=test_length)
     assert data.shape == (test_length, 2)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
-    assert int(data["RSP_Amplitude"].mean()) == 2003
+    assert int(data["RSP_Amplitude"].mean()) == 2000
 
     # test with peaks and troughs passed in separately
     test_length = 300
@@ -90,20 +90,20 @@ def test_rsp_rate():
                        sampling_rate=1000, desired_length=test_length)
     assert data.shape == (test_length, 2)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
-    assert int(data["RSP_Amplitude"].mean()) == 2003
+    assert int(data["RSP_Amplitude"].mean()) == 2000
 
     # test with DataFrame containing peaks and troughs
     data = nk.rsp_rate(signals, sampling_rate=1000)
     assert data.shape == (signals.shape[0], 2)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
-    assert int(data["RSP_Amplitude"].mean()) == 2003
+    assert int(data["RSP_Amplitude"].mean()) == 2000
 
     # test with dict containing peaks and troughs
     test_length = 30000
     data = nk.rsp_rate(info, sampling_rate=1000, desired_length=test_length)
     assert data.shape == (test_length, 2)
     assert np.abs(data["RSP_Rate"].mean() - 15) < 0.2
-    assert int(data["RSP_Amplitude"].mean()) == 2003
+    assert int(data["RSP_Amplitude"].mean()) == 2000
 
 
 def test_rsp_process():
@@ -126,7 +126,7 @@ def test_rsp_plot():
     # this will identify the latest figure
     fig = plt.gcf()
     assert len(fig.axes) == 3
-    titles = ["Signal and Breathing Extrema",
+    titles = ["Raw and Cleaned RSP",
               "Breathing Rate",
               "Breathing Amplitude"]
     for (ax, title) in zip(fig.get_axes(), titles):

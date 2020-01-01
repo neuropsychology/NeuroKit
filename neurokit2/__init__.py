@@ -3,6 +3,7 @@
 # Info
 __version__ = '0.0.5'
 __citation__ = 'Not yet available.'
+__bibtex__ = __citation__
 __cite__ = __citation__
 
 
