@@ -22,6 +22,10 @@ data.plot(subplots=True, layout=(4, 1))
 
 
 # Save it
+data = pd.DataFrame({"ECG": nk.ecg_simulate(duration=10, heart_rate=70, noise=0),
+                     "RSP": nk.rsp_simulate(duration=10, respiratory_rate=15, noise=0),
+                     "EDA": nk.eda_simulate(duration=10, n_scr=3, noise=0),
+                     "EMG": nk.emg_simulate(duration=10, n_bursts=2, noise=0)})
 plot = data.plot(subplots=True, layout=(4, 1), color=['#f44336', "#2196F3", "#9C27B0", "#FF9800"])
 plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
 
