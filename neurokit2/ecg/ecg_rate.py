@@ -11,23 +11,23 @@ def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
     Parameters
     ----------
     peaks : list, array, DataFrame, Series or dict
-        The samples at which the R-peaks. If a dict or a DataFrame is passed,
-        it is assumed that these containers were obtained with
+        The samples at which the R-peaks occur. If a dict or a DataFrame is
+        passed, it is assumed that these containers were obtained with
         `ecg_findpeaks()`.
     sampling_rate : int
         The sampling frequency of the signal that contains the R-peaks (in Hz,
         i.e., samples/second). Defaults to 1000.
     desired_length : int
-        By default, the returned geart rate has the same number of elements as
+        By default, the returned heart rate has the same number of elements as
         peaks. If set to an integer, the returned heart rate will be
-        interpolated between R-peaks over desired_length samples. Has not
-        effect if a DataFrame is passed in as the peaks argument. Defaults to
+        interpolated between R-peaks over `desired_length` samples. Has no
+        effect if a DataFrame is passed in as the `peaks` argument. Defaults to
         None.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame containing heart rate accessible with the key 'ECG_Rate'.
+        A DataFrame containing heart rate accessible with the key "ECG_Rate".
 
     See Also
     --------

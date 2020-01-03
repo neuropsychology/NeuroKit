@@ -31,10 +31,10 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
     signals : DataFrame
         A DataFrame of same length as the input signal in which occurences of
         R-peaks marked as "1" in a list of zeros with the same length as
-        signal. Accessible with the keys "ECG_Peaks".
+        `ecg_cleaned`. Accessible with the keys "ECG_Peaks".
     info : dict
         A dictionary containing additional information, in this case the
-        samples at which R-peaks occur, accessible with the key 'ECG_Peaks'.
+        samples at which R-peaks occur, accessible with the key "ECG_Peaks".
 
     See Also
     --------

@@ -23,12 +23,12 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     Returns
     -------
     signals : DataFrame
-        A DataFrame of the same length as the input signal containing the
+        A DataFrame of the same length as the `ecg_signal` containing the
         following columns:
         - *"ECG_Raw"*: the raw signal.
         - *"ECG_Clean"*: the cleaned signal.
-        - *"ECG_Peaks"*: the inhalation peaks marked as "1" in a list of zeros.
-        - *"RSP_Rate"*: breathing rate interpolated between inhalation peaks.
+        - *"ECG_Peaks"*: the R-peaks marked as "1" in a list of zeros.
+        - *"ECG_Rate"*: heart rate interpolated between R-peaks.
     info : dict
         A dictionary containing the samples at which the R-peaks occur,
         accessible with the key "ECG_Peaks".
