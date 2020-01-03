@@ -2,12 +2,12 @@
 
 import numpy as np
 import pandas as pd
-import neurokit2 as nk
+from ..signal import signal_smooth
 import matplotlib.pyplot as plt
 from scipy.signal import find_peaks
 
 
-def ecg_findpeaks(ecg_signal, sampling_rate=1000, method="neurokit",
+def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
                   enable_plot=False):
     """Find R-peaks in an ECG signal.
 
@@ -15,14 +15,16 @@ def ecg_findpeaks(ecg_signal, sampling_rate=1000, method="neurokit",
 
     Parameters
     ----------
-    ecg_signal : list, array or Series
-        Raw ECG signal.
+    ecg_cleaned : list, array or Series
+        The cleaned ECG channel as returned by `ecg_clean()`.
     sampling_rate : int
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
+        Defaults to 1000.
     method : string
-        The algorithm to be used for R-peak detection.
-    enable_plot : boolean, optional
+        The algorithm to be used for R-peak detection. Defaults to "neurokit".
+    enable_plot : boolean
         Visualize the thresholds used in the algorithm specified by `method`.
+        Defaults to False.
 
     Returns
     -------
@@ -33,6 +35,14 @@ def ecg_findpeaks(ecg_signal, sampling_rate=1000, method="neurokit",
     info : dict
         A dictionary containing additional information, in this case the
         samples at which R-peaks occur, accessible with the key 'ECG_Peaks'.
+
+    See Also
+    --------
+    ecg_clean, ecg_rate, ecg_process, ecg_plot
+
+    Examples
+    --------
+    >>>
     """
     # Determine method and search R-peaks.
     peakfun = False
@@ -44,11 +54,11 @@ def ecg_findpeaks(ecg_signal, sampling_rate=1000, method="neurokit",
     if not peakfun:
         print("NeuroKit error: Please choose a valid method.")
 
-    peaks = peakfun(signal=ecg_signal, sampling_rate=sampling_rate,
+    peaks = peakfun(signal=ecg_cleaned, sampling_rate=sampling_rate,
                     enable_plot=enable_plot)
 
     # Prepare output.
-    peaks_signal = np.zeros(len(ecg_signal))
+    peaks_signal = np.zeros(len(ecg_cleaned))
     peaks_signal[peaks] = 1
     signals = pd.DataFrame({"ECG_Peaks": peaks_signal})
 
@@ -61,35 +71,30 @@ def _ecg_findpeaks_pantompkins():
     # TODO
     pass
 
-def moving_average(signal, window_size):
-    return np.convolve(signal, np.ones((window_size,)) / window_size,
-                       mode='same')
 
 def _ecg_findpeaks_nk(signal, sampling_rate, smoothwindow=.1, avgwindow=.75,
                       gradthreshweight=1.5, minlenweight=0.4, mindelay=0.3,
                       enable_plot=False):
-    # All tune-able parameters are specified as keyword arguments.
-
+    """
+    All tune-able parameters are specified as keyword arguments. The `signal`
+    must be the highpass-filtered raw ECG with a lowcut of .5 Hz.
+    """
     if enable_plot is True:
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
 
-    # Remove slow drift and dc offset (IMO no need to pull this out).
-    filt = nk.signal_filter(signal, sampling_rate, lowcut=.5,
-                            method="butterworth", order=5)
-
     # Compute the ECG's gradient as well as the gradient threshold. Run with
     # enable_plot=True in order to get an idea of the threshold.
-    grad = np.gradient(filt)
+    grad = np.gradient(signal)
     absgrad = np.abs(grad)
     smooth_kernel = int(np.rint(smoothwindow * sampling_rate))
     avg_kernel = int(np.rint(avgwindow * sampling_rate))
-    smoothgrad = nk.signal_smooth(absgrad, kernel="boxcar", size=smooth_kernel)
-    avggrad = nk.signal_smooth(smoothgrad, kernel="boxcar", size=avg_kernel)
+    smoothgrad = signal_smooth(absgrad, kernel="boxcar", size=smooth_kernel)
+    avggrad = signal_smooth(smoothgrad, kernel="boxcar", size=avg_kernel)
     gradthreshold = gradthreshweight * avggrad
     mindelay = int(np.rint(sampling_rate * mindelay))
 
     if enable_plot is True:
-        ax1.plot(filt)
+        ax1.plot(signal)
         ax2.plot(smoothgrad)
         ax2.plot(gradthreshold)
 
@@ -131,6 +136,6 @@ def _ecg_findpeaks_nk(signal, sampling_rate, smoothwindow=.1, avgwindow=.75,
     peaks.pop(0)
 
     if enable_plot is True:
-        ax1.scatter(peaks, filt[peaks], c="r")
+        ax1.scatter(peaks, signal[peaks], c="r")
 
     return np.asarray(peaks).astype(int)
