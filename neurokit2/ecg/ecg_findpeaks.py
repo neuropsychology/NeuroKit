@@ -106,8 +106,8 @@ def _ecg_findpeaks_pantompkins():
 # NeuroKit
 # =============================================================================
 def _ecg_findpeaks_neurokit(signal, sampling_rate, smoothwindow=.1, avgwindow=.75,
-                      gradthreshweight=1.5, minlenweight=0.4, mindelay=0.3,
-                      show=False):
+                            gradthreshweight=1.5, minlenweight=0.4, mindelay=0.3,
+                            show=False):
     """
     All tune-able parameters are specified as keyword arguments. The `signal`
     must be the highpass-filtered raw ECG with a lowcut of .5 Hz.

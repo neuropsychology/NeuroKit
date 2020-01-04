@@ -69,7 +69,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
     # Plot heart rate.
     ax1.set_title("Heart Rate")
-    ax1.set_ylabel("Beats per minute")
+    ax1.set_ylabel("Beats per minute (bpm)")
 
     ax1.plot(x_axis, ecg_signals["ECG_Rate"], color="#FF5722", label="Signal")
     rate_mean = ecg_signals["ECG_Rate"].mean()
