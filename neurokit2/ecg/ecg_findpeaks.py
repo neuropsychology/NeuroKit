@@ -44,35 +44,57 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
     --------
     >>>
     """
-    # Determine method and search R-peaks.
-    peakfun = False
-    method = method.lower()
-    if method == "neurokit":
-        peakfun = _ecg_findpeaks_nk
-    elif method == "pamtompkins":
-        peakfun = _ecg_findpeaks_pantompkins
-    if not peakfun:
-        print("NeuroKit error: Please choose a valid method.")
+    # Try retrieving right column
+    if isinstance(ecg_cleaned, pd.DataFrame):
+        try:
+            ecg_cleaned = ecg_cleaned["RSP_Clean"]
+        except NameError:
+            try:
+                ecg_cleaned = ecg_cleaned["ECG_Raw"]
+            except NameError:
+                ecg_cleaned = ecg_cleaned["RSP"]
 
-    peaks = peakfun(signal=ecg_cleaned, sampling_rate=sampling_rate,
-                    enable_plot=enable_plot)
+    cleaned = np.array(ecg_cleaned)
+
+    method = method.lower()  # remove capitalised letters
+
+    # Run peak detection algorithm
+    if method == "neurokit":
+        peaks = _ecg_findpeaks_neurokit(cleaned,
+                                        sampling_rate,
+                                        smoothwindow=.1,
+                                        avgwindow=.75,
+                                        gradthreshweight=1.5,
+                                        minlenweight=0.4,
+                                        mindelay=0.3,
+                                        enable_plot=False)
+    elif method == "pamtompkins":
+        peaks = _ecg_findpeaks_pantompkins()
+    else:
+        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be "
+                         "one of 'neurokit' or 'pamtompkins'.")
+
 
     # Prepare output.
-    peaks_signal = np.zeros(len(ecg_cleaned))
+    peaks_signal = np.zeros(len(cleaned))
     peaks_signal[peaks] = 1
     signals = pd.DataFrame({"ECG_Peaks": peaks_signal})
 
     info = {"ECG_Peaks": peaks}
 
-    return(signals, info)
+    return signals, info
+
+
 
 
 def _ecg_findpeaks_pantompkins():
-    # TODO
-    pass
+    raise ValueError("NeuroKit error: ecg_findpeaks(): pamtompkins 'method' "
+                     "is not implemented yet.")
 
 
-def _ecg_findpeaks_nk(signal, sampling_rate, smoothwindow=.1, avgwindow=.75,
+
+
+def _ecg_findpeaks_neurokit(signal, sampling_rate, smoothwindow=.1, avgwindow=.75,
                       gradthreshweight=1.5, minlenweight=0.4, mindelay=0.3,
                       enable_plot=False):
     """

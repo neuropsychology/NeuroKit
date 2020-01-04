@@ -19,7 +19,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     sampling_rate : int
         The sampling frequency of rsp_signal (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
+        The processing pipeline to apply. Can be one of 'khodadad2018' (default) or 'biosppy'.
 
     Returns
     -------

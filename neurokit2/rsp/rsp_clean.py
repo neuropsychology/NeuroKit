@@ -22,7 +22,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     sampling_rate : int
         The sampling frequency of rsp_signal (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
+        The processing pipeline to apply. Can be one of 'khodadad2018' (default) or 'biosppy'.
 
     Returns
     -------
@@ -46,12 +46,13 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
             "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
     >>> signals.plot()
     """
-    if method.lower() in ["khodadad", "khodadad2018"]:
+    method = method.lower()  # remove capitalised letters
+    if method in ["khodadad", "khodadad2018"]:
         clean = _rsp_clean_khodadad2018(rsp_signal, sampling_rate)
-    elif method.lower() == "biosppy":
+    elif method == "biosppy":
         clean = _rsp_clean_biosppy(rsp_signal, sampling_rate)
     else:
-        raise ValueError("NeuroKit error: rsp_clean(): 'defaults' should be "
+        raise ValueError("NeuroKit error: rsp_clean(): 'method' should be "
                          "one of 'khodadad2018' or 'biosppy'.")
 
     return clean

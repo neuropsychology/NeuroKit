@@ -16,7 +16,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : str
-        The processing pipeline to apply. Defaultsd to "neurokit".
+        The processing pipeline to apply. Can be one of 'neurokit' (default).
 
     Returns
     -------
@@ -29,25 +29,37 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     Examples
     --------
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> import neurokit2 as nk
     >>>
+    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
+    >>> signals = pd.DataFrame({
+            "RSP_Raw": ecg,
+            "RSP_NeuroKit": nk.ecg_clean(ecg, sampling_rate=1000, method="neurokit")})
+    >>> signals.plot()
     """
-    # Determine method and clean ECG.
-    cleanfun = False
-    method = method.lower()
-    if method == "neurokit":
-        cleanfun = _ecg_clean_nk
-    if not cleanfun:
-        print("NeuroKit error: Please choose a valid method.")
-        return
-
-    clean = cleanfun(signal=ecg_signal, sampling_rate=sampling_rate)
-
+    method = method.lower()  # remove capitalised letters
+    if method in ["neurokit", "nk"]:
+        clean = _ecg_clean_nk(ecg_signal, sampling_rate=sampling_rate)
+    else:
+        raise ValueError("NeuroKit error: ecg_clean(): 'method' should be "
+                         "one of 'neurokit'.")
     return clean
 
 
+
+
+
+# =============================================================================
+# Neurokit
+# =============================================================================
 def _ecg_clean_nk(signal, sampling_rate):
 
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(signal=signal, sampling_rate=sampling_rate,
-                          lowcut=.5, method="butterworth", order=5)
+    clean = signal_filter(signal=signal,
+                          sampling_rate=sampling_rate,
+                          lowcut=.5,
+                          method="butterworth",
+                          order=5)
     return clean

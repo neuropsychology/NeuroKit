@@ -17,7 +17,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     rsp_cleaned : list, array or Series
         The cleaned respiration channel as returned by `rsp_clean`
     method : str
-        The processing pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
+        The processing pipeline to apply. Can be one of 'khodadad2018' (default) or 'biosppy'.
     outlier_threshold : float
         Extrema that have a vertical distance smaller than (outlier_threshold *
         average vertical distance) to any direct neighbour are removed as
@@ -56,7 +56,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     # Try retrieving right column
     if isinstance(rsp_cleaned, pd.DataFrame):
         try:
-            rsp_cleaned = rsp_cleaned["RSP_Filtered"]
+            rsp_cleaned = rsp_cleaned["RSP_Clean"]
         except NameError:
             try:
                 rsp_cleaned = rsp_cleaned["RSP_Raw"]
@@ -67,10 +67,14 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
 
 
     # Find peaks
-    if method.lower() in ["khodadad", "khodadad2018"]:
+    method = method.lower()  # remove capitalised letters
+    if method in ["khodadad", "khodadad2018"]:
         peaks, troughs = _rsp_findpeaks_khodadad(cleaned, outlier_threshold)
-    elif method.lower() == "biosppy":
+    elif method == "biosppy":
         peaks, troughs = _rsp_findpeaks_biosppy(cleaned)
+    else:
+        raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be "
+                         "one of 'khodadad2018' or 'biosppy'.")
 
 
     # Prepare output
@@ -84,7 +88,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
 
     info = {"RSP_Peaks": peaks,
             "RSP_Troughs": troughs}
-    return(signals, info)
+    return signals, info
 
 
 
