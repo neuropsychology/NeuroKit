@@ -196,4 +196,3 @@ def _signal_filter_windowlength(window_length="default", sampling_rate=1000):
         if (window_length % 2) == 0:
             window_length + 1
     return window_length
-
