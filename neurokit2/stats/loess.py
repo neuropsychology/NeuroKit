@@ -58,7 +58,7 @@ def loess(y, X=None, alpha=0.75, order=2):
 
 
     assert (order == 1) or (order == 2), "Deg has to be 1 or 2"
-    assert (alpha > 0) and (alpha <=1), "Alpha has to be between 0 and 1"
+    assert (alpha > 0) and (alpha <= 1), "Alpha has to be between 0 and 1"
     assert len(X) == len(y), "Length of X and y are different"
 
 
@@ -66,14 +66,11 @@ def loess(y, X=None, alpha=0.75, order=2):
 
     n = len(X)
     span = int(np.ceil(alpha * n))
-    #y_hat = np.zeros(n)
-    #x_space = np.zeros_like(X)
 
     y_hat = np.zeros(len(X_domain))
     x_space = np.zeros_like(X_domain)
 
     for i, val in enumerate(X_domain):
-    #for i, val in enumerate(X):
         distance = abs(X - val)
         sorted_dist = np.sort(distance)
         ind = np.argsort(distance)
@@ -93,8 +90,7 @@ def loess(y, X=None, alpha=0.75, order=2):
         Y = np.matmul(np.matmul(A.T, W), Ny)
         Q, R = scipy.linalg.qr(V)
         p = scipy.linalg.solve_triangular(R, np.matmul(Q.T, Y))
-        #p = np.matmul(scipy.linalg.pinv(R), np.matmul(Q.T, Y))
-        #p = np.matmul(scipy.linalg.pinv(V), Y)
+
         y_hat[i] = np.polyval(p, val)
         x_space[i] = val
 
