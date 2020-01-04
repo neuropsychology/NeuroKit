@@ -54,7 +54,7 @@ def test_ecg_findpeaks():
     assert signals.shape == (10000, 1)
     assert np.allclose(signals["ECG_Peaks"].values.sum(dtype=np.int64), 11)
     assert info["ECG_Peaks"].shape[0] == 11
-    assert np.allclose(info["ECG_Peaks"].values.sum(dtype=np.int64), 56552)
+    assert np.allclose(info["ECG_Peaks"].sum(dtype=np.int64), 56552)
 
 
 def test_ecg_rate():
