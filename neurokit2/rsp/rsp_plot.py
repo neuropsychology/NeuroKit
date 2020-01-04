@@ -15,13 +15,11 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = nk.rsp_simulate(duration=90)
-    >>> rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> nk.rsp_plot(rsp_signals, sampling_rate=1000)
+    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+    >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+    >>> nk.rsp_plot(signals)
 
     See Also
     --------

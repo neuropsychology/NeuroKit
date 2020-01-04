@@ -44,13 +44,11 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = np.cos(np.linspace(start=0, stop=40, num=20000))
+    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> signals, info = nk.rsp_findpeaks(cleaned["RSP_Filtered"])
+    >>> signals, info = nk.rsp_findpeaks(cleaned)
     >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
     """
     # Try retrieving right column

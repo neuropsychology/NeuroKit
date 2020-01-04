@@ -29,7 +29,6 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     Examples
     --------
-    >>> import numpy as np
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>

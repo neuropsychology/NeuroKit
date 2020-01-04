@@ -42,7 +42,12 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
 
     Examples
     --------
+    >>> import neurokit2 as nk
     >>>
+    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
+    >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
+    >>> signals, info = nk.ecg_findpeaks(cleaned)
+    >>> nk.events_plot(info["ECG_Peaks"], cleaned)
     """
     # Try retrieving right column
     if isinstance(ecg_cleaned, pd.DataFrame):

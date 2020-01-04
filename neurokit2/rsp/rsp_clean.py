@@ -35,7 +35,6 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     Examples
     --------
-    >>> import numpy as np
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>

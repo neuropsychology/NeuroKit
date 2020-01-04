@@ -45,16 +45,15 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = np.cos(np.linspace(start=0, stop=50, num=10000))
-    >>> signals, info = nk.rsp_findpeaks(rsp)
+    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+    >>> signals, info = nk.rsp_findpeaks(cleaned)
     >>>
     >>> data = nk.rsp_rate(signals)
-    >>> data["RSP_Signal"] = rsp  # Add the signal back
-    >>> nk.standardize(data).plot()
+    >>> data["RSP_Signal"] = cleaned  # Add the signal back
+    >>> data.plot(subplots=True)
     """
     if isinstance(peaks, dict):
         troughs = peaks["RSP_Troughs"]
@@ -109,7 +108,7 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
                                                   desired_length=desired_length)
 
     signals = pd.DataFrame.from_dict(out)
-    return(signals)
+    return signals
 
 
 

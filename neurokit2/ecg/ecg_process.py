@@ -39,7 +39,11 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     Examples
     --------
+    >>> import neurokit2 as nk
     >>>
+    >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
+    >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
+    >>> nk.ecg_plot(signals)
 
     """
     ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate,
@@ -54,4 +58,4 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     signals = pd.DataFrame({"ECG_Raw": ecg_signal,
                             "ECG_Clean": ecg_cleaned})
     signals = pd.concat([signals, extrema_signal, rate], axis=1)
-    return(signals, info)
+    return signals, info

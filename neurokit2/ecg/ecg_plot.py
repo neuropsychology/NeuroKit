@@ -19,7 +19,11 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
     Examples
     --------
+    >>> import neurokit2 as nk
     >>>
+    >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
+    >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
+    >>> nk.ecg_plot(signals)
 
     See Also
     --------
@@ -57,7 +61,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
     ax0.plot(x_axis, ecg_signals["ECG_Raw"], color='#B0BEC5', label='Raw',
              zorder=1)
-    ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#2196F3',
+    ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#f44336',
              label="Cleaned", zorder=1)
     ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks], color="red",
                 label="R-peaks", zorder=2)
@@ -68,9 +72,9 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     ax1.set_title("Heart Rate")
     ax1.set_ylabel("Beats per minute")
 
-    ax1.plot(x_axis, ecg_signals["ECG_Rate"], color="#4CAF50", label="Signal")
+    ax1.plot(x_axis, ecg_signals["ECG_Rate"], color="#FF5722", label="Signal")
     rate_mean = ecg_signals["ECG_Rate"].mean()
-    ax1.axhline(y=rate_mean, label="Mean", linestyle="--", color="#4CAF50")
+    ax1.axhline(y=rate_mean, label="Mean", linestyle="--", color="#FF5722")
 
     ax1.legend(loc="upper right")
 

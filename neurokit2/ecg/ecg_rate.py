@@ -35,7 +35,14 @@ def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
 
     Examples
     --------
+    >>> import neurokit2 as nk
     >>>
+    >>> ecg = nk.ecg_simulate(duration=15, heart_rate=80)
+    >>> signals, info = nk.ecg_findpeaks(ecg)
+    >>>
+    >>> data = nk.ecg_rate(signals)
+    >>> data["ECG_Signal"] = ecg  # Add the signal back
+    >>> data.plot(subplots=True)
     """
     if isinstance(peaks, dict):
         peaks = peaks["ECG_Peaks"]
@@ -50,8 +57,9 @@ def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
     # Sanity checks.
     if len(peaks) <= 3:
         print("NeuroKit warning: ecg_rate(): too few peaks detected to "
-              "compute the rate.")
-        return
+              "compute the rate. Returning empty variable(s).")
+        return pd.DataFrame({"ECG_Rate": np.full(desired_length, np.nan)})
+
 
     # Calculate period in msec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for
@@ -67,4 +75,4 @@ def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
 
     # Prepare output
     signals = pd.DataFrame(rate, columns=["ECG_Rate"])
-    return(signals)
+    return signals
