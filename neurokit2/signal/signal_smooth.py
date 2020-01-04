@@ -2,33 +2,41 @@
 import numpy as np
 import scipy.signal
 
+from ..stats import loess
 
-def signal_smooth(signal, kernel='boxzen', size=10):
+def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=0.1):
     """Signal smoothing.
 
-    This implementation uses the convolution of a filter kernel with the input
-    signal to compute the smoothed signal (Smith, 1997).
+    Signal smoothing can be achieved using either the convolution of a filter kernel with the input
+    signal to compute the smoothed signal (Smith, 1997) or a LOESS regression.
 
     Parameters
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
-    kernel : str, array, optional
-        Type of kernel to use; if array, use directly as the kernel. Can be one
+    method : str
+        Can be one of 'convolution' (default) or 'loess'.
+    kernel : str, array
+        Only used if `method` is 'convolution'. Type of kernel to use; if array, use directly as the kernel. Can be one
         of 'median', 'boxzen', 'boxcar', 'triang', 'blackman', 'hamming',
         'hann', 'bartlett', 'flattop', 'parzen', 'bohman', 'blackmanharris',
         'nuttall', 'barthann', 'kaiser' (needs beta), 'gaussian' (needs std),
         'general_gaussian' (needs power, width), 'slepian' (needs width) or
         'chebwin' (needs attenuation).
-    size : int, optional
-        Size of the kernel; ignored if kernel is an array.
+    size : int
+        Only used if `method` is 'convolution'. Size of the kernel; ignored if kernel is an array.
+    alpha : float
+        Only used if `method` is 'loess'. The parameter which controls the degree of smoothing.
 
     Returns
     -------
-    signal : array
+    array
         Smoothed signal.
-    params : dict
-        Smoother parameters.
+
+
+    See Also
+    ---------
+    loess
 
     Examples
     --------
@@ -37,7 +45,7 @@ def signal_smooth(signal, kernel='boxzen', size=10):
     >>> import neurokit2 as nk
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000))
-    >>> distorted = nk.signal_distord(signal, noise_amplitude=[0.3, 0.2, 0.1], noise_frequency=[5, 10, 50])
+    >>> distorted = nk.signal_distord(signal, noise_amplitude=[0.3, 0.2, 0.1, 0.05], noise_frequency=[5, 10, 50, 500])
     >>>
     >>> size = len(signal)/100
     >>> signals = pd.DataFrame({
@@ -45,8 +53,12 @@ def signal_smooth(signal, kernel='boxzen', size=10):
             "Median": nk.signal_smooth(distorted, kernel='median', size=size-1),
             "BoxZen": nk.signal_smooth(distorted, kernel='boxzen', size=size),
             "Triang": nk.signal_smooth(distorted, kernel='triang', size=size),
-            "Blackman": nk.signal_smooth(distorted, kernel='blackman', size=size)})
+            "Blackman": nk.signal_smooth(distorted, kernel='blackman', size=size),
+            "Loess_01": nk.signal_smooth(distorted, method='loess', alpha=0.1),
+            "Loess_02": nk.signal_smooth(distorted, method='loess', alpha=0.2),
+            "Loess_05": nk.signal_smooth(distorted, method='loess', alpha=0.5)})
     >>> signals.plot()
+    >>> signals[50:150].plot()  # Magnify
 
     References
     ----------
@@ -64,19 +76,27 @@ def signal_smooth(signal, kernel='boxzen', size=10):
         raise TypeError("NeuroKit error: signal_smooth(): 'size' "
                         "should be between 1 and length of the signal.")
 
-    if kernel == 'boxzen':
-        # hybrid method
-        # 1st pass - boxcar kernel
-        x = _signal_smoothing(signal, kernel='boxcar', size=size)
+    method = method.lower()
 
-        # 2nd pass - parzen kernel
-        smoothed = _signal_smoothing(x, kernel='parzen', size=size)
+    # LOESS
+    if method in ["loess", "lowess"]:
+        smoothed = loess(signal, alpha=alpha)
 
-    elif kernel == 'median':
-        smoothed = _signal_smoothing_median(signal, size)
-
+    # Convolution
     else:
-        smoothed = _signal_smoothing(signal, kernel=kernel, size=size)
+        if kernel == 'boxzen':
+            # hybrid method
+            # 1st pass - boxcar kernel
+            x = _signal_smoothing(signal, kernel='boxcar', size=size)
+
+            # 2nd pass - parzen kernel
+            smoothed = _signal_smoothing(x, kernel='parzen', size=size)
+
+        elif kernel == 'median':
+            smoothed = _signal_smoothing_median(signal, size)
+
+        else:
+            smoothed = _signal_smoothing(signal, kernel=kernel, size=size)
 
     return smoothed
 
