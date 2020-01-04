@@ -30,7 +30,7 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
         desired_length samples. Has not effect if a DataFrame is passed in as
         the peaks argument.
     method : str
-        The processing pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
+        The processing pipeline to apply. Can be one of 'khodadad2018' (default) or 'biosppy'.
 
     Returns
     -------
@@ -45,16 +45,15 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = np.cos(np.linspace(start=0, stop=50, num=10000))
-    >>> signals, info = nk.rsp_findpeaks(rsp)
+    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+    >>> signals, info = nk.rsp_findpeaks(cleaned)
     >>>
     >>> data = nk.rsp_rate(signals)
-    >>> data["RSP_Signal"] = rsp  # Add the signal back
-    >>> nk.standardize(data).plot()
+    >>> data["RSP_Signal"] = cleaned  # Add the signal back
+    >>> data.plot(subplots=True)
     """
     if isinstance(peaks, dict):
         troughs = peaks["RSP_Troughs"]
@@ -89,13 +88,8 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
     # Get rate
     rate = 60 / period
 
-    if method.lower() == "biosppy":
-        rate, peaks, troughs = _rsp_rate_outliers(rate, peaks,
-                                                  troughs=troughs,
-                                                  threshold_absolute=35)
-
-        # Smooth with moving average
-        rate = signal_smooth(signal=rate, kernel='boxcar', size=3)
+    # Preprocessing
+    rate, peaks, troughs = _rsp_rate_preprocessing(rate, peaks, troughs=troughs, method=method)
 
     # Interpolate all statistics to length of the breathing signal
     rate = signal_interpolate(rate,
@@ -114,7 +108,7 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
                                                   desired_length=desired_length)
 
     signals = pd.DataFrame.from_dict(out)
-    return(signals)
+    return signals
 
 
 
@@ -123,6 +117,31 @@ def rsp_rate(peaks, troughs=None, sampling_rate=1000, desired_length=None, metho
 # =============================================================================
 # Internals
 # =============================================================================
+def _rsp_rate_preprocessing(rate, peaks, troughs=None, method="biosppy"):
+
+    method = method.lower()  # remove capitalised letters
+    if method == "biosppy":
+        rate, peaks, troughs = _rsp_rate_outliers(rate,
+                                                  peaks,
+                                                  troughs=troughs,
+                                                  threshold_absolute=35)
+
+        # Smooth with moving average
+        rate = signal_smooth(signal=rate, kernel='boxcar', size=3)
+
+    elif method == "khodadad2018":
+        pass
+    else:
+        raise ValueError("NeuroKit error: rsp_rate(): 'method' should be "
+                         "one of 'khodadad2018' or 'biosppy'.")
+    return rate, peaks, troughs
+
+
+
+
+
+
+
 def _rsp_rate_outliers(rate, peaks, troughs=None, threshold_absolute=35):
 
     if threshold_absolute is None:

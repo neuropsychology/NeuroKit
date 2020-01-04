@@ -31,7 +31,7 @@ This is a work in progress project meant as a continuation of `NeuroKit.py <http
 Installation
 ------------
 
-To install NeuroKit, run this command in your terminal:
+To install NeuroKit2, run this command in your terminal:
 
 .. code-block::
 
@@ -91,12 +91,30 @@ Simulate physiological signals
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
+Cardiac activity (ECG) processing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    # Generate 30 seconds of ECG signal
+    ecg = nk.ecg_simulate(duration=30, heart_rate=70)
+
+    # Process it
+    signals, info = nk.ecg_process(ecg)
+
+    # Visualise the processing
+    nk.ecg_plot(signals)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
+
+
 Respiration (RSP) processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    # Generate one minute of respiratory signal
+    # Generate one minute of respiratory (RSP) signal
     rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
 
     # Process it
@@ -116,10 +134,10 @@ Signal cleaning
 
 - `signal_distord() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_distord>`_: Add noise of a given frequency, amplitude and shape to a signal.
 - `signal_binarize() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_binarize>`_: Convert a continuous signal into zeros and ones depending on a given threshold.
-- `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Apply a lowpass, highpass or bandpass filter to the signal.
+- `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
 - `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
 - `signal_smooth() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_smooth>`_: Signal smoothing using the convolution of a filter kernel.
-
+- `signal_psd() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_psd>`_: Compute the Power Spectral Density (PSD).
 
 Signal preprocessing
 """"""""""""""""""""
@@ -149,6 +167,17 @@ Events *(stimuli triggers and markers)*
 - `events_find() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find>`_: Find and select events in a continuous signal (e.g., from a photosensor).
 - `events_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot>`_: Plot events in signal.
 - `events_to_mne() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_to_mne>`_: Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG.
+
+
+Design
+-------------
+
+NeuroKit2 is designed to provide a consistent, accessible yet flexible API. 
+
+- **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form `signaltype_functiongoal()`) to achieve equivalent goals, such as `*_clean()`, `*_findpeaks()`, `*_process()`, `*_plot()` (replace the star with the signal type, e.g., `ecg_clean()`).
+- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence powerful high-level "master" functions, such as `*_process()`, that performs cleaning, preprocessing and processing, and with sensible defaults.
+- **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as `*_clean()`, `*_rate()`), offering more control and flexibility over their parameters.
+
 
 Alternatives
 -------------

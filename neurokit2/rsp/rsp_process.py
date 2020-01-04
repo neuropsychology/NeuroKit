@@ -19,7 +19,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     sampling_rate : int
         The sampling frequency of rsp_signal (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of 'khodadad2018' or 'biosppy'.
+        The processing pipeline to apply. Can be one of 'khodadad2018' (default) or 'biosppy'.
 
     Returns
     -------
@@ -44,13 +44,11 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = np.cos(np.linspace(start=0, stop=50, num=10000))
+    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> nk.signal_plot(nk.standardize(signals))
+    >>> nk.rsp_plot(signals)
     """
     rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate, method=method)
 
@@ -61,4 +59,4 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,
                             "RSP_Clean": rsp_cleaned})
     signals = pd.concat([signals, extrema_signal, rate], axis=1)
-    return(signals, info)
+    return signals, info

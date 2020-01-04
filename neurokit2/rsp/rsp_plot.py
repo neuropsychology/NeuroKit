@@ -15,13 +15,11 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
     Examples
     --------
-    >>> import numpy as np
-    >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = nk.rsp_simulate(duration=90)
-    >>> rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> nk.rsp_plot(rsp_signals, sampling_rate=1000)
+    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+    >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+    >>> nk.rsp_plot(signals)
 
     See Also
     --------
@@ -67,7 +65,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     # Rate
     ax1.set_title("Breathing Rate")
 #    ax1.set_ylabel('Inhales per minute')
-    ax1.plot(x_axis, rsp_signals["RSP_Rate"], color='#4CAF50', label='Signal')
+    ax1.plot(x_axis, rsp_signals["RSP_Rate"], color='#4CAF50', label='Rate')
     rate_mean = [np.mean(rsp_signals["RSP_Rate"])]*len(rsp_signals["RSP_Rate"])
     ax1.plot(x_axis, rate_mean, label='Mean', linestyle='--', color='#4CAF50')
     ax1.legend(loc='upper right')
@@ -76,7 +74,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
         ax2.set_title("Breathing Amplitude")
 #        ax2.set_ylabel('a.u.')
 
-        ax2.plot(x_axis, rsp_signals["RSP_Amplitude"], color='#009688', label='Signal')
+        ax2.plot(x_axis, rsp_signals["RSP_Amplitude"], color='#009688', label='Amplitude')
         amplitude_mean = [np.mean(rsp_signals["RSP_Amplitude"])]*len(rsp_signals["RSP_Amplitude"])
         ax2.plot(x_axis, amplitude_mean, label='Mean', linestyle='--', color='#009688')
         ax2.legend(loc='upper right')
