@@ -6,14 +6,20 @@ import scipy.signal
 def signal_smooth(signal, kernel='boxzen', size=10):
     """Signal smoothing.
 
-    This implementation uses the convolution of a filter kernel with the input signal to compute the smoothed signal (Smith, 1997).
+    This implementation uses the convolution of a filter kernel with the input
+    signal to compute the smoothed signal (Smith, 1997).
 
     Parameters
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     kernel : str, array, optional
-        Type of kernel to use; if array, use directly as the kernel. Can be one of 'median', 'boxzen', 'boxcar', 'triang', 'blackman', 'hamming', 'hann', 'bartlett', 'flattop', 'parzen', 'bohman', 'blackmanharris', 'nuttall', 'barthann', 'kaiser' (needs beta), 'gaussian' (needs std), 'general_gaussian' (needs power, width), 'slepian' (needs width) or 'chebwin' (needs attenuation).
+        Type of kernel to use; if array, use directly as the kernel. Can be one
+        of 'median', 'boxzen', 'boxcar', 'triang', 'blackman', 'hamming',
+        'hann', 'bartlett', 'flattop', 'parzen', 'bohman', 'blackmanharris',
+        'nuttall', 'barthann', 'kaiser' (needs beta), 'gaussian' (needs std),
+        'general_gaussian' (needs power, width), 'slepian' (needs width) or
+        'chebwin' (needs attenuation).
     size : int, optional
         Size of the kernel; ignored if kernel is an array.
 
@@ -44,7 +50,8 @@ def signal_smooth(signal, kernel='boxzen', size=10):
 
     References
     ----------
-    - Smith, S. W. (1997). The scientist and engineer's guide to digital signal processing.
+    - Smith, S. W. (1997). The scientist and engineer's guide to digital signal
+    processing.
     """
     length = len(signal)
 
@@ -52,8 +59,7 @@ def signal_smooth(signal, kernel='boxzen', size=10):
         raise TypeError("NeuroKit error: signal_smooth(): 'kernel' "
                         "should be a string.")
 
-
-    # check length
+    # Check length.
     if size > length or size < 1:
         raise TypeError("NeuroKit error: signal_smooth(): 'size' "
                         "should be between 1 and length of the signal.")
@@ -75,36 +81,31 @@ def signal_smooth(signal, kernel='boxzen', size=10):
     return smoothed
 
 
-
-
-
 # =============================================================================
 # Internals
 # =============================================================================
 def _signal_smoothing_median(signal, size=5):
-    # median filter
+
+    # Enforce odd kernel size.
     if size % 2 == 0:
-        raise ValueError("NeuroKit error: signal_smooth(): When the "
-                         "kernel is 'median', 'size' must be odd.")
+        size += 1
 
     smoothed = scipy.signal.medfilt(signal, kernel_size=int(size))
-
     return smoothed
-
-
 
 
 def _signal_smoothing(signal, kernel="boxcar", size=5):
 
-    # Get window
+    # Get window.
     size = int(size)
     window = scipy.signal.get_window(kernel, size)
     w = window / window.sum()
 
-    # Extend signal edges to avoid boundary effects
-    x = np.concatenate((signal[0] * np.ones(size), signal, signal[-1] * np.ones(size)))
+    # Extend signal edges to avoid boundary effects.
+    x = np.concatenate((signal[0] * np.ones(size), signal,
+                        signal[-1] * np.ones(size)))
 
-    # convolve
+    # Compute moving average.
     smoothed = np.convolve(w, x, mode='same')
     smoothed = smoothed[size:-size]
     return smoothed
