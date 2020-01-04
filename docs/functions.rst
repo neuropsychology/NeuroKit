@@ -8,6 +8,15 @@ ECG
 
 .. autofunction:: neurokit2.ecg_simulate
 
+.. autofunction:: neurokit2.ecg_clean
+
+.. autofunction:: neurokit2.ecg_findpeaks
+
+.. autofunction:: neurokit2.ecg_rate
+
+.. autofunction:: neurokit2.ecg_process
+
+.. autofunction:: neurokit2.ecg_plot
 
 
 RSP
@@ -55,6 +64,8 @@ Signal cleaning
 .. autofunction:: neurokit2.signal_detrend
 
 .. autofunction:: neurokit2.signal_smooth
+
+.. autofunction:: neurokit2.signal_psd
 
 
 Signal preprocessing

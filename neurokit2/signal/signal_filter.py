@@ -7,7 +7,7 @@ import scipy.signal
 
 
 def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_length="default"):
-    """Filter a signal.
+    """Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
 
     Apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided) or bandpass (if both are provided) filter to the signal.
 
