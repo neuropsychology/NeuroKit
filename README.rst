@@ -91,12 +91,30 @@ Simulate physiological signals
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
+Cardiac activity (ECG) processing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    # Generate 30 seconds of ECG signal
+    ecg = nk.ecg_simulate(duration=30, heart_rate=70)
+
+    # Process it
+    signals, info = nk.ecg_process(ecg)
+
+    # Visualise the processing
+    nk.ecg_plot(signals)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
+
+
 Respiration (RSP) processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
-    # Generate one minute of respiratory signal
+    # Generate one minute of respiratory (RSP) signal
     rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
 
     # Process it

@@ -30,12 +30,29 @@ plot = data.plot(subplots=True, layout=(4, 1), color=['#f44336', "#2196F3", "#9C
 plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
 
 
+# =============================================================================
+# Cardiac activity (ECG) processing
+# =============================================================================
+
+# Generate 30 seconds of ECG signal
+ecg = nk.ecg_simulate(duration=30, heart_rate=70, random_state=333)
+
+# Process it
+signals, info = nk.ecg_process(ecg)
+
+# Visualise the processing
+nk.ecg_plot(signals)
+
+# Save it
+plot = nk.ecg_plot(signals)
+plot.savefig("README_ecg.png", dpi=300)
+
 
 # =============================================================================
 # Respiration (RSP) processing
 # =============================================================================
 
-# Generate one minute of respiratory signal
+# Generate one minute of respiratory (RSP) signal
 rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
 
 # Process it

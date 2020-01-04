@@ -52,7 +52,8 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     extrema_signal, info = ecg_findpeaks(ecg_cleaned=ecg_cleaned,
                                          sampling_rate=sampling_rate,
-                                         method=method)
+                                         method=method,
+                                         show=False)
 
     rate = ecg_rate(extrema_signal, sampling_rate=sampling_rate)
 
