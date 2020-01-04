@@ -60,9 +60,9 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
     ax0.plot(x_axis, ecg_signals["ECG_Raw"], color='#B0BEC5', label='Raw',
              zorder=1)
-    ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#f44336',
+    ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#E91E63',
              label="Cleaned", zorder=1)
-    ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks], color="red",
+    ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks], color="#FFC107",
                 label="R-peaks", zorder=2)
 
     ax0.legend(loc="upper right")
@@ -73,7 +73,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
     ax1.plot(x_axis, ecg_signals["ECG_Rate"], color="#FF5722", label="Signal")
     rate_mean = ecg_signals["ECG_Rate"].mean()
-    ax1.axhline(y=rate_mean, label="Mean", linestyle="--", color="#FF5722")
+    ax1.axhline(y=rate_mean, label="Mean", linestyle="--", color="#FF9800")
 
     ax1.legend(loc="upper right")
 

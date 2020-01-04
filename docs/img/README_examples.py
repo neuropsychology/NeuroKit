@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import neurokit2 as nk
+#import neurokit2 as nk
 
 
 # =============================================================================
@@ -34,8 +34,8 @@ plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
 # Cardiac activity (ECG) processing
 # =============================================================================
 
-# Generate 30 seconds of ECG signal
-ecg = nk.ecg_simulate(duration=15, heart_rate=70, random_state=333)
+# Generate 20 seconds of ECG signal
+ecg = nk.ecg_simulate(duration=20, heart_rate=70, random_state=333)
 
 # Process it
 signals, info = nk.ecg_process(ecg)

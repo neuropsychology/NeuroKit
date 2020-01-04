@@ -96,8 +96,8 @@ Cardiac activity (ECG) processing
 
 .. code-block:: python
 
-    # Generate 30 seconds of ECG signal
-    ecg = nk.ecg_simulate(duration=30, heart_rate=70)
+    # Generate 20 seconds of ECG signal
+    ecg = nk.ecg_simulate(duration=20, heart_rate=70)
 
     # Process it
     signals, info = nk.ecg_process(ecg)
