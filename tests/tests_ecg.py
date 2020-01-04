@@ -91,10 +91,7 @@ def test_ecg_process():
                                    method="neurokit")
     # Only check array dimensions and column names since functions called by
     # ecg_process have already been unit tested
-    assert signals.shape == (10000, 4)
-    for i in zip(signals.columns,
-                 ["ECG_Raw", "ECG_Clean", "ECG_Peaks", "ECG_Rate"]):
-        assert i[0] == i[1]
+    assert np.array(["ECG_Raw", "ECG_Clean", "ECG_Peaks", "ECG_Rate"]) in signals.columns.values
 
 
 def test_ecg_plot():
