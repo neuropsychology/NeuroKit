@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 from ..signal import signal_filter
 
 

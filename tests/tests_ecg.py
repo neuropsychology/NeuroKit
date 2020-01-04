@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt

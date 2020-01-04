@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-
 import pandas as pd
+
 from .ecg_clean import ecg_clean
 from .ecg_findpeaks import ecg_findpeaks
 from .ecg_rate import ecg_rate
+
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     """"Process an ECG signal.

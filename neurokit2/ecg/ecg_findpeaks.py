@@ -2,13 +2,15 @@
 
 import numpy as np
 import pandas as pd
-from ..signal import signal_smooth
 import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
+import scipy.signal
+
+from ..signal import signal_smooth
 
 
-def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
-                  enable_plot=False):
+
+
+def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
     """Find R-peaks in an ECG signal.
 
     Find R-peaks in an ECG signal using the specified method.
@@ -22,9 +24,9 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Defaults to "neurokit".
-    enable_plot : boolean
-        Visualize the thresholds used in the algorithm specified by `method`.
-        Defaults to False.
+    show : bool
+        If True, will return a plot to visualizing the thresholds used in the
+        algorithm. Useful for debugging.
 
     Returns
     -------
@@ -72,7 +74,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
                                         gradthreshweight=1.5,
                                         minlenweight=0.4,
                                         mindelay=0.3,
-                                        enable_plot=False)
+                                        show=show)
     elif method == "pamtompkins":
         peaks = _ecg_findpeaks_pantompkins()
     else:
@@ -91,26 +93,30 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
 
 
 
-
+# =============================================================================
+# Pantompkins
+# =============================================================================
 def _ecg_findpeaks_pantompkins():
     raise ValueError("NeuroKit error: ecg_findpeaks(): pamtompkins 'method' "
                      "is not implemented yet.")
 
 
 
-
+# =============================================================================
+# NeuroKit
+# =============================================================================
 def _ecg_findpeaks_neurokit(signal, sampling_rate, smoothwindow=.1, avgwindow=.75,
                       gradthreshweight=1.5, minlenweight=0.4, mindelay=0.3,
-                      enable_plot=False):
+                      show=False):
     """
     All tune-able parameters are specified as keyword arguments. The `signal`
     must be the highpass-filtered raw ECG with a lowcut of .5 Hz.
     """
-    if enable_plot is True:
+    if show is True:
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
 
     # Compute the ECG's gradient as well as the gradient threshold. Run with
-    # enable_plot=True in order to get an idea of the threshold.
+    # show=True in order to get an idea of the threshold.
     grad = np.gradient(signal)
     absgrad = np.abs(grad)
     smooth_kernel = int(np.rint(smoothwindow * sampling_rate))
@@ -120,7 +126,7 @@ def _ecg_findpeaks_neurokit(signal, sampling_rate, smoothwindow=.1, avgwindow=.7
     gradthreshold = gradthreshweight * avggrad
     mindelay = int(np.rint(sampling_rate * mindelay))
 
-    if enable_plot is True:
+    if show is True:
         ax1.plot(signal)
         ax2.plot(smoothgrad)
         ax2.plot(gradthreshold)
@@ -146,12 +152,12 @@ def _ecg_findpeaks_neurokit(signal, sampling_rate, smoothwindow=.1, avgwindow=.7
         if len_qrs < min_len:
             continue
 
-        if enable_plot is True:
+        if show is True:
             ax2.axvspan(beg, end, facecolor="m", alpha=0.5)
 
         # Find local maxima and their prominence within QRS.
         data = signal[beg:end]
-        locmax, props = find_peaks(data, prominence=(None, None))
+        locmax, props = scipy.signal.find_peaks(data, prominence=(None, None))
 
         if locmax.size > 0:
             # Identify most prominent local maximum.
@@ -162,7 +168,8 @@ def _ecg_findpeaks_neurokit(signal, sampling_rate, smoothwindow=.1, avgwindow=.7
 
     peaks.pop(0)
 
-    if enable_plot is True:
+    if show is True:
         ax1.scatter(peaks, signal[peaks], c="r")
 
-    return np.asarray(peaks).astype(int)
+    peaks = np.asarray(peaks).astype(int)  # Convert to int
+    return peaks
