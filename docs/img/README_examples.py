@@ -35,7 +35,7 @@ plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
 # =============================================================================
 
 # Generate 30 seconds of ECG signal
-ecg = nk.ecg_simulate(duration=30, heart_rate=70, random_state=333)
+ecg = nk.ecg_simulate(duration=15, heart_rate=70, random_state=333)
 
 # Process it
 signals, info = nk.ecg_process(ecg)
