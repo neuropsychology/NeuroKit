@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-
 from ..signal import signal_detrend
 from ..signal import signal_filter
 
@@ -8,11 +6,16 @@ from ..signal import signal_filter
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """Preprocess a respiration (RSP) signal.
 
-    Respiration (RSP) signal cleaning using different sets of parameters,
-    such as:
+    Clean a respiration signal using different sets of parameters, such as:
 
-    - `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_: linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter).
-    - `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_: second order 0.1 - 0.35 Hz bandpass Butterworth filter followed by a constant detrending.
+    - `Khodadad et al. (2018)
+    <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_:
+        linear detrending followed by a fifth order 2Hz low-pass IIR
+        Butterworth filter).
+    - `BioSPPy
+    <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_:
+        second order 0.1 - 0.35 Hz bandpass Butterworth filter followed by a
+        constant detrending.
 
     Parameters
     ----------
@@ -20,9 +23,10 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         The raw respiration channel (as measured, for instance, by a
         respiration belt).
     sampling_rate : int
-        The sampling frequency of rsp_signal (in Hz, i.e., samples/second).
+        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of 'khodadad2018' (default) or 'biosppy'.
+        The processing pipeline to apply. Can be one of "khodadad2018"
+        (default) or "biosppy".
 
     Returns
     -------
@@ -31,7 +35,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     See Also
     --------
-    rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
+    rsp_findpeaks, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
 
     Examples
     --------
@@ -63,7 +67,8 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
     """The algorithm is based on (but not an exact
     implementation of) the "Zero-crossing algorithm with amplitude threshold"
-    by `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_.
+    by `Khodadad et al. (2018)
+    <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_.
     """
     # Detrend and lowpass-filter the signal to be able to reliably detect
     # zero crossings in raw signal.
@@ -71,6 +76,7 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
     clean = signal_filter(clean, sampling_rate=sampling_rate,
                           lowcut=None, highcut=2,
                           method="butterworth", order=5)
+
     return clean
 
 
@@ -78,10 +84,12 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
 # BioSPPy
 # =============================================================================
 def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
-    """Uses the same defaults as `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
+    """Uses the same defaults as `BioSPPy
+    <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
     """
     clean = signal_filter(rsp_signal, sampling_rate=sampling_rate,
                           lowcut=0.1, highcut=0.35,
                           method="butterworth", order=2)
     clean = signal_detrend(clean, order=0)
+
     return clean
