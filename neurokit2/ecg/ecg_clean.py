@@ -84,7 +84,7 @@ def _ecg_clean_biosppy(signal, sampling_rate=1000):
         order += 1  # Enforce odd number
 
     # -> filter_signal()
-    frequency=[3, 45]
+    frequency = [3, 45]
 
     #   -> get_filter()
     #     -> _norm_freq()
@@ -98,5 +98,3 @@ def _ecg_clean_biosppy(signal, sampling_rate=1000):
     filtered = scipy.signal.filtfilt(b, a, signal)
 
     return filtered
-
-
