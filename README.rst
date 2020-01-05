@@ -173,7 +173,7 @@ Events *(stimuli triggers and markers)*
 Design
 =======
 
-NeuroKit2 is designed to provide a consistent, accessible yet flexible API. 
+*NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
 
 - **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
 - **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing, and with sensible defaults.

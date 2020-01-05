@@ -3,6 +3,8 @@ import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt
 
+import biosppy
+
 
 def test_rsp_simulate():
     rsp1 = nk.rsp_simulate(duration=20, length=3000)
@@ -30,8 +32,8 @@ def test_rsp_clean():
     khodadad2018 = nk.rsp_clean(rsp, sampling_rate=1000, method="khodadad2018")
     assert len(rsp) == len(khodadad2018)
 
-    biosppy = nk.rsp_clean(rsp, sampling_rate=1000, method="biosppy")
-    assert len(rsp) == len(biosppy)
+    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=1000, method="biosppy")
+    assert len(rsp) == len(rsp_biosppy)
 
 
     # Check if filter was applied.
