@@ -42,6 +42,7 @@ setup(
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/x-rst',
     packages=find_packages(),
     include_package_data=True,
     keywords='neurokit2',
