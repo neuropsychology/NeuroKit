@@ -59,10 +59,10 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
 # =============================================================================
 # Neurokit
 # =============================================================================
-def _ecg_clean_nk(signal, sampling_rate=1000):
+def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
 
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(signal=signal,
+    clean = signal_filter(signal=ecg_signal,
                           sampling_rate=sampling_rate,
                           lowcut=0.5,
                           method="butterworth",
@@ -74,7 +74,7 @@ def _ecg_clean_nk(signal, sampling_rate=1000):
 # =============================================================================
 # Biosppy
 # =============================================================================
-def _ecg_clean_biosppy(signal, sampling_rate=1000):
+def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
     """
     adapted from https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69
     """
@@ -95,6 +95,6 @@ def _ecg_clean_biosppy(signal, sampling_rate=1000):
     b = scipy.signal.firwin(numtaps=order, cutoff=frequency, pass_zero=False)
 
     # _filter_signal()
-    filtered = scipy.signal.filtfilt(b, a, signal)
+    filtered = scipy.signal.filtfilt(b, a, ecg_signal)
 
     return filtered
