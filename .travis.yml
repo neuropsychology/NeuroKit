@@ -31,6 +31,7 @@ install:
     # Testing
   - pip install pyentrp
   - pip install nolds
+  - pip install biosppy
 
 script:
     - python setup.py install

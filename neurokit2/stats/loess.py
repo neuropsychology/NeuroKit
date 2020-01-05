@@ -34,7 +34,7 @@ def loess(y, X=None, alpha=0.75, order=2):
 
     See Also
     ----------
-    signal_smooth
+    signal_smooth, signal_detrend
 
     Examples
     ---------

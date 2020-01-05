@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 import scipy.signal
+import biosppy
+
 
 # =============================================================================
 # Signal
@@ -97,7 +99,6 @@ def test_signal_filter():
     signal += np.cos(np.linspace(start=0, stop=100, num=1000)) # High freq
     filtered = nk.signal_filter(signal, highcut=10)
     assert np.std(signal) > np.std(filtered)
-
 
 def test_signal_interpolate():
 

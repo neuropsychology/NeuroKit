@@ -3,6 +3,7 @@ import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt
 
+import biosppy
 
 def test_ecg_simulate():
 
@@ -19,6 +20,7 @@ def test_ecg_simulate():
 #    pd.DataFrame({"ECG1":ecg1, "ECG3": ecg3}).plot()
     assert (len(nk.signal_findpeaks(ecg2, height_min=0.6)[0]) >
             len(nk.signal_findpeaks(ecg3, height_min=0.6)[0]))
+
 
 
 def test_ecg_clean():
@@ -40,6 +42,15 @@ def test_ecg_clean():
 
     assert np.sum(fft_raw[freqs < .5]) > np.sum(fft_nk[freqs < .5])
 
+    # Compariosn to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69)
+    ecg_biosppy = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="biosppy")
+    original, _, _ = biosppy.tools.filter_signal(signal=ecg,
+                                                 ftype='FIR',
+                                                 band='bandpass',
+                                                 order=int(0.3 * sampling_rate),
+                                                 frequency=[3, 45],
+                                                 sampling_rate=sampling_rate)
+    assert np.allclose((ecg_biosppy - original).mean(), 0, atol=1e-6)
 
 def test_ecg_findpeaks():
 

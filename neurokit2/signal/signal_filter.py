@@ -81,7 +81,7 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
     elif method in ["butter", "butterworth"]:
         filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
     elif method in ["fir"]:
-        filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut)
+        filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_length=window_length)
     else:
         raise ValueError("NeuroKit error: signal_filter(): 'method' should be "
                          "one of 'butterworth', 'savgol' or 'fir'.")
@@ -105,9 +105,12 @@ def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_length="de
 # =============================================================================
 # FIR
 # =============================================================================
-def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None):
+def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, window_length="default"):
     """Filter a signal using a FIR filter.
     """
+    if isinstance(window_length, str):
+        window_length = "auto"
+
     filtered = mne.filter.filter_data(
             signal,
             sfreq=sampling_rate,
@@ -115,7 +118,7 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None):
             h_freq=highcut,
             method='fir',
             fir_window='hamming',
-            filter_length='auto',
+            filter_length=window_length,
             l_trans_bandwidth='auto',
             h_trans_bandwidth='auto',
             phase='zero-double',
