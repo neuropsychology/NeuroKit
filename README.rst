@@ -17,8 +17,8 @@
         :target: https://pypi.python.org/pypi/neurokit2
         
 .. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
-   :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
-   :alt: Maintainability
+       :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
+       :alt: Maintainability
    
 
   
@@ -29,7 +29,7 @@ This is a work in progress project meant as a continuation of `NeuroKit.py <http
 
 
 Installation
-------------
+============
 
 To install NeuroKit2, run this command in your terminal:
 
@@ -38,13 +38,13 @@ To install NeuroKit2, run this command in your terminal:
     pip install https://github.com/neuropsychology/neurokit/zipball/master
 
 Contribution
-------------
+============
 
 NeuroKit2 is meant to be a all-level-friendly collaborative project. Additionally, it tries to credit all contributors, so that your involvement pays off on your CV. Thus, if you have some ideas for **improvement**, **new features**, or just wanna **learn Python** and do something useful at the same time, do not hesitate and check-out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
 
 
 Documentation
---------------
+=============
 
 .. image:: https://readthedocs.org/projects/neurokit2/badge/?version=latest
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
@@ -64,10 +64,10 @@ Click on the links above and check out our tutorials:
 -  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
 
 Examples
--------------
+========
 
 Simulate physiological signals
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------
 
 .. code-block:: python
 
@@ -92,7 +92,7 @@ Simulate physiological signals
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
 Cardiac activity (ECG) processing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------
 
 .. code-block:: python
 
@@ -110,7 +110,7 @@ Cardiac activity (ECG) processing
 
 
 Respiration (RSP) processing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 
 .. code-block:: python
 
@@ -127,10 +127,10 @@ Respiration (RSP) processing
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_respiration.png
 
 Signal processing
-^^^^^^^^^^^^^^^^^^
+-----------------
 
 Signal cleaning
-""""""""""""""""
+^^^^^^^^^^^^^^^^
 
 - `signal_distord() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_distord>`_: Add noise of a given frequency, amplitude and shape to a signal.
 - `signal_binarize() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_binarize>`_: Convert a continuous signal into zeros and ones depending on a given threshold.
@@ -140,37 +140,37 @@ Signal cleaning
 - `signal_psd() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_psd>`_: Compute the Power Spectral Density (PSD).
 
 Signal preprocessing
-""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^
 
 - `signal_resample() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_resample>`_: Up- or down-sample a signal.
 - `signal_interpolate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_interpolate>`_: Interpolate (fills the values between data points) a signal using different methods.
 - `signal_merge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_merge>`_: Arbitrary addition of two signals with different time ranges.
 
 Signal processing
-""""""""""""""""""
+^^^^^^^^^^^^^^^^^
 
 - `signal_zerocrossings() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_zerocrossings>`_: Locate the indices where the signal crosses zero.
 - `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_: Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
 - `signal_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_plot>`_: Plot signal with events as vertical lines.
 
 Other Utilities
-^^^^^^^^^^^^^^^^^^
+---------------
 
 Read data
-""""""""""""""""""
+^^^^^^^^^^
 
 - `read_acqknowledge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge>`_: Read and format a BIOPAC’s AcqKnowledge file into a pandas’ dataframe.
 
 Events *(stimuli triggers and markers)*
-""""""""""""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - `events_find() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find>`_: Find and select events in a continuous signal (e.g., from a photosensor).
 - `events_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot>`_: Plot events in signal.
-- `events_to_mne() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_to_mne>`_: Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG.
+- `events_to_mne() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_to_mne>`_: Create `MNE <https://github.com/mne-tools/mne-python>`_ compatible events for integration with M/EEG.
 
 
 Design
--------------
+=======
 
 NeuroKit2 is designed to provide a consistent, accessible yet flexible API. 
 
@@ -180,13 +180,13 @@ NeuroKit2 is designed to provide a consistent, accessible yet flexible API.
 
 
 Alternatives
--------------
+============
 
 Here's a list of great alternative packages that you should check-out:
 
 
 General
-^^^^^^^
+--------
 
 - `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
 - `PySiology <https://github.com/Gabrock94/Pysiology>`_
@@ -195,7 +195,7 @@ General
 
 
 ECG
-^^^^
+----
 
 - `hrv <https://github.com/rhenanbartels/hrv>`_
 - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
@@ -203,7 +203,7 @@ ECG
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
 
 EDA
-^^^^
+---
 
 - `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
 - `cvxEDA <https://github.com/lciti/cvxEDA>`_
@@ -212,14 +212,14 @@ EDA
 - `EDA <https://github.com/mateusjoffily/EDA>`_ *(matlab)*
 
 EEG
-^^^^
+----
 
 - `MNE <https://github.com/mne-tools/mne-python>`_
 - `unfold <https://github.com/unfoldtoolbox/unfold>`_ *(matlab)*
   
   
 Eye-Tracking
-^^^^^^^^^^^^
+-------------
 
 - `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
 - `PyTrack <https://github.com/titoghose/PyTrack>`_
