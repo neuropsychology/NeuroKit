@@ -20,7 +20,8 @@
        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
        :alt: Maintainability
    
-
+.. image:: https://zenodo.org/badge/218212111.svg
+   :target: https://zenodo.org/badge/latestdoi/218212111
   
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
