@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-from ..events.events_plot import _events_plot
+from ..events.events_plot import events_plot
 
 
 def signal_plot(signal):
@@ -28,20 +28,31 @@ def signal_plot(signal):
                              "Signal3": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
     >>> nk.signal_plot(data)
     """
+    # Sanitize format
     if isinstance(signal, pd.DataFrame) is False:
-        signal = pd.DataFrame({"Signal": signal})
+        if len(np.array(signal).shape) > 1:
+            signal = pd.DataFrame(np.array(signal).T)
+            signal.columns = np.char.add(np.full(len(signal.columns), "Signal"), np.array(np.arange(len(signal.columns)) + 1, dtype=np.str))
+        else:
+            signal = pd.DataFrame({"Signal": signal})
 
-    events = []
+    # Guess continuous and events columns
+    continuous_columns = list(signal.columns.values)
+    events_columns = []
     for col in signal.columns:
         vector = signal[col]
         if vector.nunique() == 2:
             indices = np.where(vector == np.max(vector.unique()))
             if bool(np.any(np.diff(indices) == 1)) is False:
-                events.append(indices[0])
-            else:
-                vector.plot()
-        else:
-            vector.plot()
+                events_columns.append(col)
+                continuous_columns.remove(col)
 
-    if len(events) > 0:
-        _events_plot(events)
+    # Plot accordingly
+    if len(events_columns) > 0:
+        events = []
+        for col in events_columns:
+            events.append([signal[col].values])
+
+        events_plot(events, signal=signal[continuous_columns])
+    else:
+        signal[continuous_columns].plot()
