@@ -39,7 +39,7 @@ def test_rsp_clean():
     # Check if filter was applied.
     fft_raw = np.fft.rfft(rsp)
     fft_khodadad2018 = np.fft.rfft(khodadad2018)
-    fft_biosppy = np.fft.rfft(biosppy)
+    fft_biosppy = np.fft.rfft(rsp_biosppy)
 
     freqs = np.fft.rfftfreq(len(rsp), 1/sampling_rate)
 #    assert np.sum(fft_raw[freqs > 2]) > np.sum(fft_khodadad2018[freqs > 2])
