@@ -86,7 +86,7 @@ Simulate physiological signals
                          "RSP": rsp,
                          "EDA": eda,
                          "EMG": emg})
-    data.plot(subplots=True, layout=(4, 1))
+    data.plot(subplots=True)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png

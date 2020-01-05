@@ -18,7 +18,7 @@ data = pd.DataFrame({"ECG": ecg,
                      "RSP": rsp,
                      "EDA": eda,
                      "EMG": emg})
-data.plot(subplots=True, layout=(4, 1))
+data.plot(subplots=True)
 
 
 # Save it
