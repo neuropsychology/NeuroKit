@@ -43,10 +43,11 @@ def rsp_amplitude(rsp_signal, extrema, desired_length=None):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> signals, info = nk.rsp_findpeaks(cleaned)
+    >>> extrema, info = nk.rsp_findpeaks(cleaned)
     >>>
-    >>> amplitude = nk.rsp_amplitude(rsp, signals)
+    >>> amplitude = nk.rsp_amplitude(rsp, extrema)
     """
+    # Sanity checks
     error_msg0 = ("NeuroKit error: Please provide one of the containers "
                   "returned by `rsp_findpeaks()` as `extrema` argument.")
     error_msg1 = ("NeuroKit error: Please provide one of the containers "
@@ -57,27 +58,24 @@ def rsp_amplitude(rsp_signal, extrema, desired_length=None):
             peaks = extrema["RSP_Peaks"]
             troughs = extrema["RSP_Troughs"]
         except (TypeError, KeyError):
-            print(error_msg0)
-            return
+            raise TypeError(error_msg0)
     elif isinstance(extrema, pd.DataFrame):
         try:
             desired_length = extrema["RSP_Peaks"].size
             peaks = np.where(extrema["RSP_Peaks"] == 1)[0]
             troughs = np.where(extrema["RSP_Troughs"] == 1)[0]
         except (TypeError, KeyError):
-            print(error_msg0)
-            return
+            raise TypeError(error_msg0)
     else:
         raise TypeError(error_msg0)
 
     # To consistenty calculate amplitude, peaks and troughs must have the same
     # number of elements, and the first trough must precede the first peak.
     if peaks.size != troughs.size:
-        print(error_msg1)
-        return
+        raise TypeError(error_msg1)
     if peaks[0] <= troughs[0]:
-        print(error_msg1)
-        return
+        raise TypeError(error_msg1)
+
 
     # Determine length of final signal to return.
     if desired_length is None:
