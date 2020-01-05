@@ -42,7 +42,7 @@ def test_ecg_clean():
 
     assert np.sum(fft_raw[freqs < .5]) > np.sum(fft_nk[freqs < .5])
 
-    # Compariosn to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69)
+    # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69)
     ecg_biosppy = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="biosppy")
     original, _, _ = biosppy.tools.filter_signal(signal=ecg,
                                                  ftype='FIR',

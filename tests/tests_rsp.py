@@ -47,6 +47,17 @@ def test_rsp_clean():
     # Check if detrending was applied.
     assert np.mean(rsp) > np.mean(khodadad2018)
 
+    # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py#L62)
+    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
+    original, _, _ = biosppy.tools.filter_signal(signal=rsp,
+                                                 ftype='butter',
+                                                 band='bandpass',
+                                                 order=2,
+                                                 frequency=[0.1, 0.35],
+                                                 sampling_rate=sampling_rate)
+    original = nk.signal_detrend(original, order=0)
+    assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
+
 
 def test_rsp_findpeaks():
 

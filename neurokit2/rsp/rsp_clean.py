@@ -92,7 +92,7 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
     """
     # Parameters
     order = 2
-    frequency = [3, 45]
+    frequency = [0.1, 0.35]
     frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     # Filtering
