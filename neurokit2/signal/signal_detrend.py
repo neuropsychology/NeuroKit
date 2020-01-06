@@ -4,7 +4,8 @@ import pandas as pd
 
 import scipy.sparse
 
-from ..stats import loess
+from ..stats import fit_loess
+from ..stats import fit_polynomial
 
 
 def signal_detrend(signal, method="polynomial", order=1, regularization=500, alpha=0.75):
@@ -19,7 +20,7 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     method : str
         Can be one of 'polynomial' (default; traditional detrending of a given order) or 'tarvainen2002' to use the smoothness priors approach described by Tarvainen (2002) (mostly used in HRV analyses as a lowpass filter to remove complex trends), or 'loess' for LOESS smoothing trend removal.
     order : int
-        The order of the polynomial. 0, 1 or > 1 for a baseline ('constant detrend', i.e., remove only the mean), linear (remove the linear trend) or polynomial detrending.
+        Only used if `method` is 'polynomial'. The order of the polynomial. 0, 1 or > 1 for a baseline ('constant detrend', i.e., remove only the mean), linear (remove the linear trend) or polynomial detrending, respectively. Can also be 'auto', it which case it will attempt to find the optimal order to minimize the RMSE.
     regularization : int
         Only used if `method='tarvainen2002'`. The regularization parameter (default to 500).
     alpha : float
@@ -32,7 +33,7 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
 
     See Also
     --------
-    signal_filter, loess
+    signal_filter, fit_loess
 
     Examples
     --------
@@ -81,7 +82,7 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
 # Internals
 # =============================================================================
 def _signal_detrend_loess(signal, alpha=0.75):
-    detrended = np.array(signal) - loess(signal, alpha=alpha)
+    detrended = np.array(signal) - fit_loess(signal, alpha=alpha)
     return detrended
 
 
@@ -89,10 +90,8 @@ def _signal_detrend_loess(signal, alpha=0.75):
 
 
 def _signal_detrend_polynomial(signal, order=1):
-    x_axis = np.linspace(0, 100, num=len(signal))
-
-    # Generating weights and model for polynomial function with a given degree
-    trend = np.polyval(np.polyfit(x_axis, signal, order), x_axis)
+    # Get polynomial fit
+    trend = fit_polynomial(signal, X=None, order=order)
 
     # detrend
     detrended = np.array(signal) - trend

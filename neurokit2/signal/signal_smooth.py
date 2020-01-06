@@ -2,7 +2,8 @@
 import numpy as np
 import scipy.signal
 
-from ..stats import loess
+from ..stats import fit_loess
+
 
 def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=0.1):
     """Signal smoothing.
@@ -36,7 +37,7 @@ def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=
 
     See Also
     ---------
-    loess
+    fit_loess
 
     Examples
     --------
@@ -80,7 +81,7 @@ def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=
 
     # LOESS
     if method in ["loess", "lowess"]:
-        smoothed = loess(signal, alpha=alpha)
+        smoothed = fit_loess(signal, alpha=alpha)
 
     # Convolution
     else:
