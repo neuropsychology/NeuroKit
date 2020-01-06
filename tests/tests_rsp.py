@@ -3,6 +3,8 @@ import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt
 
+import biosppy
+
 
 def test_rsp_simulate():
     rsp1 = nk.rsp_simulate(duration=20, length=3000)
@@ -30,14 +32,14 @@ def test_rsp_clean():
     khodadad2018 = nk.rsp_clean(rsp, sampling_rate=1000, method="khodadad2018")
     assert len(rsp) == len(khodadad2018)
 
-    biosppy = nk.rsp_clean(rsp, sampling_rate=1000, method="biosppy")
-    assert len(rsp) == len(biosppy)
+    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=1000, method="biosppy")
+    assert len(rsp) == len(rsp_biosppy)
 
 
     # Check if filter was applied.
     fft_raw = np.fft.rfft(rsp)
     fft_khodadad2018 = np.fft.rfft(khodadad2018)
-    fft_biosppy = np.fft.rfft(biosppy)
+    fft_biosppy = np.fft.rfft(rsp_biosppy)
 
     freqs = np.fft.rfftfreq(len(rsp), 1/sampling_rate)
 #    assert np.sum(fft_raw[freqs > 2]) > np.sum(fft_khodadad2018[freqs > 2])
@@ -46,6 +48,17 @@ def test_rsp_clean():
 
     # Check if detrending was applied.
     assert np.mean(rsp) > np.mean(khodadad2018)
+
+    # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py#L62)
+    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
+    original, _, _ = biosppy.tools.filter_signal(signal=rsp,
+                                                 ftype='butter',
+                                                 band='bandpass',
+                                                 order=2,
+                                                 frequency=[0.1, 0.35],
+                                                 sampling_rate=sampling_rate)
+    original = nk.signal_detrend(original, order=0)
+    assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
 
 
 def test_rsp_findpeaks():

@@ -9,7 +9,7 @@ import scipy.linalg
 
 
 
-def loess(y, X=None, alpha=0.75, order=2):
+def fit_loess(y, X=None, alpha=0.75, order=2):
     """Local Polynomial Regression (LOESS)
 
     Performs a LOWESS (LOcally WEighted Scatter-plot Smoother) regression.
@@ -34,7 +34,7 @@ def loess(y, X=None, alpha=0.75, order=2):
 
     See Also
     ----------
-    signal_smooth, signal_detrend
+    signal_smooth, signal_detrend, fit_error
 
     Examples
     ---------
@@ -46,15 +46,15 @@ def loess(y, X=None, alpha=0.75, order=2):
     >>>
     >>> pd.DataFrame({
             "Raw": distorted,
-            "Loess_1": nk.loess(distorted, order=1),
-            "Loess_2": nk.loess(distorted, order=2)}).plot()
+            "Loess_1": nk.fit_loess(distorted, order=1),
+            "Loess_2": nk.fit_loess(distorted, order=2)}).plot()
 
     References
     ----------
     - https://simplyor.netlify.com/loess-from-scratch-in-python-animation.en-us/
     """
     if X is None:
-        X = np.linspace(0, 1, len(y))
+        X = np.linspace(0, 100, len(y))
 
 
     assert (order == 1) or (order == 2), "Deg has to be 1 or 2"
@@ -67,7 +67,7 @@ def loess(y, X=None, alpha=0.75, order=2):
     n = len(X)
     span = int(np.ceil(alpha * n))
 
-    y_hat = np.zeros(len(X_domain))
+    y_predicted = np.zeros(len(X_domain))
     x_space = np.zeros_like(X_domain)
 
     for i, val in enumerate(X_domain):
@@ -91,7 +91,7 @@ def loess(y, X=None, alpha=0.75, order=2):
         Q, R = scipy.linalg.qr(V)
         p = scipy.linalg.solve_triangular(R, np.matmul(Q.T, Y))
 
-        y_hat[i] = np.polyval(p, val)
+        y_predicted[i] = np.polyval(p, val)
         x_space[i] = val
 
-    return y_hat
+    return y_predicted

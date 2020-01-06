@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import numpy as np
+import scipy.signal
+
 from ..signal import signal_detrend
 from ..signal import signal_filter
 
@@ -87,9 +90,16 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
     """Uses the same defaults as `BioSPPy
     <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
     """
-    clean = signal_filter(rsp_signal, sampling_rate=sampling_rate,
-                          lowcut=0.1, highcut=0.35,
-                          method="butterworth", order=2)
-    clean = signal_detrend(clean, order=0)
+    # Parameters
+    order = 2
+    frequency = [0.1, 0.35]
+    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
+
+    # Filtering
+    b, a = scipy.signal.butter(N=order, Wn=frequency, btype='bandpass', analog=False)
+    filtered = scipy.signal.filtfilt(b, a, rsp_signal)
+
+    # Baseline detrending
+    clean = signal_detrend(filtered, order=0)
 
     return clean

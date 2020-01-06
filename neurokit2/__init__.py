@@ -1,7 +1,7 @@
 """Top-level package for NeuroKit."""
 
 # Info
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 __citation__ = 'Not yet available.'
 __bibtex__ = __citation__
 __cite__ = __citation__

@@ -20,7 +20,8 @@
        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
        :alt: Maintainability
    
-
+.. image:: https://zenodo.org/badge/218212111.svg
+   :target: https://zenodo.org/badge/latestdoi/218212111
   
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
@@ -172,11 +173,11 @@ Events *(stimuli triggers and markers)*
 Design
 =======
 
-NeuroKit2 is designed to provide a consistent, accessible yet flexible API. 
+*NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
 
-- **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form `signaltype_functiongoal()`) to achieve equivalent goals, such as `*_clean()`, `*_findpeaks()`, `*_process()`, `*_plot()` (replace the star with the signal type, e.g., `ecg_clean()`).
-- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence powerful high-level "master" functions, such as `*_process()`, that performs cleaning, preprocessing and processing, and with sensible defaults.
-- **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as `*_clean()`, `*_rate()`), offering more control and flexibility over their parameters.
+- **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
+- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing, and with sensible defaults.
+- **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
 
 
 Alternatives
