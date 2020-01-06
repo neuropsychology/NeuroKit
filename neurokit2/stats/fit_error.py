@@ -55,7 +55,7 @@ def fit_error(y, y_predicted, n_parameters=2):
     # Root mean squared error
     RMSE = np.sqrt(SSE / n)
 
-   # Adjusted r-squared
+    # Adjusted r-squared
     # For optimization use 1 - adjR2 since we want to minimize the function
     SST = np.std(y) * n
     R2 = SSE / SST
