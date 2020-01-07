@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-#import neurokit2 as nk
+import neurokit2 as nk
 
 import matplotlib.pyplot as plt
 
@@ -108,7 +108,7 @@ for noise_amplitude in np.linspace(0.01, 1, 5):
     print("---")
     for noise_frequency in np.linspace(1, 250, 5):
         print("%.2f" %(noise_frequency/150*100))
-        rsp, info = rsp_generate(duration=60, sampling_rate=500, respiratory_rate=15, method="Simple")
+        rsp, info = rsp_generate(duration=300, sampling_rate=500, respiratory_rate=15, method="Simple")
         distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
 
         # None
