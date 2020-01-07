@@ -103,7 +103,7 @@ fig
 <p>
 ```{r, echo = TRUE, warning=FALSE, message=FALSE}
 data <- df %>% 
-  filter(Detrend_Order == 3 & Detrend_Position == "Second") %>% 
+  filter(Detrend_Order == 3 & Detrend_Position == "Second")
   
 model <- lm(Difference_Mean ~ Filter_Order + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=data) 
 model <- lm(Difference_Mean ~ Filter_Order + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=df) 

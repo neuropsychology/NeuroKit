@@ -92,6 +92,10 @@ def test_signal_detrend():
     rez_scipy = scipy.signal.detrend(signal, type="constant")
     assert np.allclose(np.mean(rez_nk - rez_scipy), 0, atol=0.000001)
 
+    # Tarvainen
+    rez_nk = nk.signal_detrend(signal, method="tarvainen2002", regularization=500)
+    assert np.allclose(np.mean(rez_nk - signal), -2.88438737697, atol=0.000001)
+
 
 def test_signal_filter():
 
