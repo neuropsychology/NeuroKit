@@ -78,13 +78,15 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
     method = method.lower()
     if method in ["sg", "savgol", "savitzky-golay"]:
         filtered = _signal_filter_savgol(signal, sampling_rate, order, window_length=window_length)
-    elif method in ["butter", "butterworth"]:
-        filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
-    elif method in ["fir"]:
-        filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_length=window_length)
     else:
-        raise ValueError("NeuroKit error: signal_filter(): 'method' should be "
-                         "one of 'butterworth', 'savgol' or 'fir'.")
+        # Tam insert warning
+        if method in ["butter", "butterworth"]:
+            filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
+        elif method in ["fir"]:
+            filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_length=window_length)
+        else:
+            raise ValueError("NeuroKit error: signal_filter(): 'method' should be "
+                             "one of 'butterworth', 'savgol' or 'fir'.")
     return filtered
 
 

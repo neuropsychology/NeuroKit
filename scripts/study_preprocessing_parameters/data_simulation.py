@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 # =============================================================================
 # RSP - Functions
 # =============================================================================
-def rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=15, method="simple"):
+def rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=15, method="Complex"):
 
     if method == "Simple":
         actual_method = "sinusoidal"
@@ -36,7 +36,7 @@ def rsp_distord(rsp, info, noise_amplitude=0.1, noise_frequency=100):
 
 
 
-def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=0, filter_order=5, filter_lowcut=None, filter_highcut=2):
+def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=0, filter_type="butterworth", filter_order=5, filter_lowcut=None, filter_highcut=2):
     sampling_rate = info["Sampling_Rate"][0]
 
     if detrend_position == "First":
@@ -48,11 +48,11 @@ def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=
         actual_filter_lowcut = filter_lowcut
 
     distorted = nk.signal_filter(signal=distorted,
-                           sampling_rate=sampling_rate,
-                           lowcut=actual_filter_lowcut,
-                           highcut=filter_highcut,
-                           method="butterworth",
-                           butterworth_order=filter_order)
+                                 sampling_rate=sampling_rate,
+                                 lowcut=actual_filter_lowcut,
+                                 highcut=filter_highcut,
+                                 method=filter_type,
+                                 order=filter_order)
 
     if detrend_position == "Second":
         distorted = nk.signal_detrend(distorted, order=detrend_order)
@@ -66,6 +66,7 @@ def rsp_custom_process(distorted, info, detrend_position="First", detrend_order=
 
     info["Detrend_Order"] = [detrend_order]
     info["Detrend_Position"] = [detrend_position]
+    info["Filter_Type"] = [filter_type]
     info["Filter_Order"] = [filter_order]
     info["Filter_Low"] = [filter_lowcut]
     info["Filter_High"] = [filter_highcut]
@@ -94,7 +95,7 @@ for noise_amplitude in np.linspace(0.01, 1, 5):
     print("---")
     for noise_frequency in np.linspace(1, 150, 5):
         print("%.2f" %(noise_frequency/150*100))
-        for simulation in ["Simple", "Complex"]:
+        for simulation in ["Complex"]:
             for detrend_position in ["First", "Second", "None"]:
                 for detrend_order in [0, 1, 2, 3, 4, 5, 6]:
                     for filter_order in [1, 2, 3, 4, 5, 6]:
