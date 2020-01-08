@@ -79,14 +79,15 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
     if method in ["sg", "savgol", "savitzky-golay"]:
         filtered = _signal_filter_savgol(signal, sampling_rate, order, window_length=window_length)
     else:
-        # Tam insert warning
+        if sampling_rate <= 2 * highcut:
+            print ("NeuroKit warning: the sampling rate is too low. Sampling rate must exceed the Nyquist rate to avoid aliasing problem. In this analysis, the sampling rate has to be higher than", 2 * highcut, "Hz.")
         if method in ["butter", "butterworth"]:
             filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["fir"]:
             filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_length=window_length)
         else:
             raise ValueError("NeuroKit error: signal_filter(): 'method' should be "
-                             "one of 'butterworth', 'savgol' or 'fir'.")
+                                 "one of 'butterworth', 'savgol' or 'fir'.")
     return filtered
 
 
