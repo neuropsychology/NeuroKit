@@ -11,7 +11,7 @@ from ..stats import fit_polynomial
 def signal_detrend(signal, method="polynomial", order=1, regularization=500, alpha=0.75):
     """Polynomial detrending of signal.
 
-    Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
+    Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend). One can also use other methods, such as smoothness priors approach described by Tarvainen (2002) or LOESS regression, but these scale badly for long signals.
 
     Parameters
     ----------
