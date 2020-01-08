@@ -77,6 +77,13 @@ def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
 # Internals
 # =============================================================================
 
+# TODO
+#def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000, artifacts_frequency=0, artifacts_amplitude=0.1):
+#    return noise
+
+
+
+
 def _signal_distord_powerline(signal, signal_sd=None, sampling_rate=1000, powerline_frequency=50, powerline_amplitude=0.1):
     freqs = list(np.arange(powerline_frequency, sampling_rate, powerline_frequency))
     noise = _signal_distord_noise_multifrequency(signal,
@@ -123,5 +130,6 @@ def _signal_distord_noise(signal, noise_duration, noise_amplitude=0.1, noise_sha
         raise ValueError("NeuroKit error: signal_distord(): 'noise_shape' "
                          "should be one of 'gaussian' or 'laplace'.")
 
-    noise = signal_resample(noise, desired_length=len(signal), method="interpolation")
+    if len(noise) != len(signal):
+        noise = signal_resample(noise, desired_length=len(signal), method="interpolation")
     return noise
