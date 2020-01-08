@@ -137,9 +137,9 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
 def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
     """Filter a signal using IIR Butterworth SOS method.
     """
-    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut)
+    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, normalize=True, sampling_rate=sampling_rate)
 
-    sos = scipy.signal.butter(order, freqs, btype=filter_type, output='sos', fs=sampling_rate)
+    sos = scipy.signal.butter(order, freqs, btype=filter_type, output='sos', fs=sampling_rate, analog = False)
     filtered = scipy.signal.sosfiltfilt(sos, signal)
     return filtered
 
@@ -175,7 +175,7 @@ def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=
 # =============================================================================
 # Internals
 # =============================================================================
-def _signal_filter_sanitize(lowcut=None, highcut=None):
+def _signal_filter_sanitize(lowcut=None, highcut=None, normalize=False, sampling_rate=1000):
     if lowcut is not None and highcut is not None:
         if lowcut > highcut:
             filter_type = "bandstop"
@@ -188,6 +188,10 @@ def _signal_filter_sanitize(lowcut=None, highcut=None):
     elif highcut is not None:
         freqs = [highcut]
         filter_type = "lowpass"
+
+    # Normalize frequency to Nyquist Frequency (Fs/2).
+    if normalize is True:
+        freqs = np.array(freqs) / (sampling_rate / 2)
 
     return freqs, filter_type
 
