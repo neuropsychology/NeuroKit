@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 
 from ..signal import signal_interpolate
-from ..signal import signal_findpeaks
 
 
 def signal_rate(peaks, sampling_rate=1000, desired_length=None):
@@ -29,8 +28,8 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame containing a generic signal rate accessible with the key "SIGNAL_Rate".
+    array
+        A vector containing the rate.
 
     See Also
     --------
@@ -40,14 +39,11 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = signal_simulate(duration=10, sampling_rate=1000)
-    >>> peaks, info = signal_findpeaks(signal)
+    >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
+    >>> peaks, info = nk.signal_findpeaks(signal)
     >>>
-    >>> data = signal_rate(peaks)
-    >>> if not isinstance(signal, pd.DataFrame):
-            signal = pd.DataFrame(signal)
-    >>> data["Signal"] = signal # Add the signal back
-    >>> data.plot(subplots=True)
+    >>> rate = nk.signal_rate(peaks)
+    >>> nk.signal_plot(rate)
     """
     # Sanity checks
     if desired_length is None:
@@ -55,17 +51,15 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
             desired_length = max(peaks)
         elif isinstance(peaks, pd.DataFrame):
             desired_length = len(peaks)
+            peaks = np.where(peaks == 1)[0]
     elif desired_length < len(peaks):
         raise ValueError("NeuroKit error: signal_rate(): 'desired_length' cannot be lower than the length of the signal. Please input a greater 'desired_length'.")
-
-    if isinstance(peaks, pd.DataFrame):
-        peaks = np.where(peaks == 1)[0]
 
     # Calculate period in msec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for
     # interpolation later) by prepending the mean of all periods.
     period = np.ediff1d(peaks, to_begin=0) / sampling_rate
-    period[0] = np.mean(period)
+    period[0] = np.mean(period[1::])
     rate = 60 / period
 
     # Interpolate all statistics to desired length.
