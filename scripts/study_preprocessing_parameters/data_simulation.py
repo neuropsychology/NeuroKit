@@ -128,13 +128,13 @@ def rsp_quality(rate, info, cleaned, rsp):
 # =============================================================================
 # RSP - Visualize noise
 # =============================================================================
-rsp, info = rsp_generate(duration=60, sampling_rate=200, method="Simple")
-data = pd.DataFrame({"Original": data})
-for noise_frequency in np.linspace(0.5, 95, 10):
-
-    distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
-    data["Distorted_" + str(round(noise_frequency, 2))] = distorted
-
+#rsp, info = rsp_generate(duration=60, sampling_rate=200, method="Simple")
+#data = pd.DataFrame({"Original": data})
+#for noise_frequency in np.linspace(0.5, 95, 10):
+#
+#    distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
+#    data["Distorted_" + str(round(noise_frequency, 2))] = distorted
+#
 
 
 
