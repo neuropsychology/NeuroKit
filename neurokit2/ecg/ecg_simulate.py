@@ -74,7 +74,6 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         ecg = _ecg_simulate_daubechies(duration=duration,
                                        length=length,
                                        sampling_rate=sampling_rate,
-                                       noise=noise,
                                        heart_rate=heart_rate)
     else:
         approx_number_beats = int(np.round(duration * (heart_rate / 60)))
