@@ -58,13 +58,12 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
                           "provided. Please provide indices of peaks.")
             peaks_signal = peaks[col[0]].values
             peaks = np.where(peaks_signal == 1)[0]
-    elif desired_length < len(peaks):
+        else:
+            desired_length = len(peaks)
+
+    if desired_length < len(peaks):
         raise ValueError("NeuroKit error: signal_rate(): 'desired_length' cannot",
                          " be lower than the length of the signal. Please input a greater 'desired_length'.")
-
-    # Determine length of final signal to return.
-    if desired_length is None:
-        desired_length = len(peaks)
 
     # Sanity checks.
     if len(peaks) <= 3:
