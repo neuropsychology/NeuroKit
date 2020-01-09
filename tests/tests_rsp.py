@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 import biosppy
 
+np.random.seed(42)
 
 def test_rsp_simulate():
     rsp1 = nk.rsp_simulate(duration=20, length=3000)
