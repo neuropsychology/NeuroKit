@@ -80,16 +80,16 @@ def test_ecg_rate():
 
     # Test with dictionary.
     test_length = 30
-    data = nk.ecg_rate(peaks=info, sampling_rate=sampling_rate,
+    rate = nk.ecg_rate(peaks=info, sampling_rate=sampling_rate,
                        desired_length=test_length)
 
-    assert data.shape == (test_length, 1)
-    assert np.abs(data["ECG_Rate"].mean() - 70.5) < 0.1
+    assert rate.shape == (test_length, )
+    assert np.abs(rate.mean() - 70.5) < 0.1
 
     # Test with DataFrame.
-    data = nk.ecg_rate(peaks=signals, sampling_rate=sampling_rate)
-    assert data.shape == (ecg.size, 1)
-    assert np.abs(data["ECG_Rate"].mean() - 70.5) < 0.2
+    rate = nk.ecg_rate(peaks=signals, sampling_rate=sampling_rate)
+    assert rate.shape == (ecg.size, )
+    assert np.abs(rate.mean() - 70.5) < 0.2
 
 
 def test_ecg_process():

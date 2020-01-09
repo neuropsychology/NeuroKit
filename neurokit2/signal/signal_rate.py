@@ -90,6 +90,13 @@ def _signal_rate_sanitize(peaks, desired_length=None):
         peaks_signal = peaks[col[0]].values
         peaks = np.where(peaks_signal == 1)[0]
 
+    if isinstance(peaks, dict):
+        col = [col for col in list(peaks.keys()) if 'Peaks' in col]
+        if len(col) == 0:
+            TypeError("NeuroKit error: signal_rate(): wrong type of input ",
+                      "provided. Please provide indices of peaks.")
+        peaks = peaks[col[0]]
+
 
     # Sanity checks.
     if len(peaks) <= 3:

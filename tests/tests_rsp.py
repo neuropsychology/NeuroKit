@@ -91,13 +91,13 @@ def test_rsp_rate():
     test_length = 30
     rate = nk.rsp_rate(peaks=info, sampling_rate=1000,
                        desired_length=test_length)
-    assert rate.shape == (test_length, 1)
-    assert np.abs(rate["RSP_Rate"].mean() - 15) < 0.2
+    assert rate.shape == (test_length, )
+    assert np.abs(rate.mean() - 15) < 0.2
 
     # Test with DataFrame.
     rate = nk.rsp_rate(signals, sampling_rate=1000)
-    assert rate.shape == (signals.shape[0], 1)
-    assert np.abs(rate["RSP_Rate"].mean() - 15) < 0.2
+    assert rate.shape == (signals.shape[0], )
+    assert np.abs(rate.mean() - 15) < 0.2
 
 
 def test_rsp_amplitude():
@@ -111,13 +111,13 @@ def test_rsp_amplitude():
     test_length = 60
     amplitude = nk.rsp_amplitude(rsp_signal=rsp, extrema=info,
                                  desired_length=test_length)
-    assert amplitude.shape == (test_length, 1)
-    assert np.abs(amplitude["RSP_Amplitude"].mean() - 1) < 0.01
+    assert amplitude.shape == (test_length, )
+    assert np.abs(amplitude.mean() - 1) < 0.01
 
     # Test with DataFrame.
     amplitude = nk.rsp_amplitude(rsp_signal=rsp, extrema=signals)
-    assert amplitude.shape == (rsp.size, 1)
-    assert np.abs(amplitude["RSP_Amplitude"].mean() - 1) < 0.01
+    assert amplitude.shape == (rsp.size, )
+    assert np.abs(amplitude.mean() - 1) < 0.01
 
 
 def test_rsp_process():
