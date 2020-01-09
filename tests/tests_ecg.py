@@ -89,7 +89,7 @@ def test_ecg_rate():
     # Test with DataFrame.
     rate = nk.ecg_rate(peaks=signals, sampling_rate=sampling_rate)
     assert rate.shape == (ecg.size, )
-    assert np.abs(rate.mean() - 70.5) < 0.2
+    assert np.allclose(rate.mean(), 70, atol=1)
 
 
 def test_ecg_process():
