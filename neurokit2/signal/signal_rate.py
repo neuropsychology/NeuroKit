@@ -58,7 +58,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     elif desired_length < len(peaks):
         raise ValueError("NeuroKit error: signal_rate(): 'desired_length' cannot be lower than the length of the signal. Please input a greater 'desired_length'.")
 
-    if isinstance (peaks, pd.DataFrame):
+    if isinstance(peaks, pd.DataFrame):
         peaks = np.where(peaks == 1)[0]
 
     # Calculate period in msec, based on peak to peak difference and make sure
