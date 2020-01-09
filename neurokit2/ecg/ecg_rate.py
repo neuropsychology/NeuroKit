@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-from ..signal import signal_interpolate
+from ..signal import signal_rate
 
 
 def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
@@ -46,7 +46,6 @@ def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
     """
     # Get rate values
     rate = signal_rate(peaks, sampling_rate, desired_length=desired_length)
-
 
     # Prepare output
     signals = pd.DataFrame(rate, columns=["ECG_Rate"])
