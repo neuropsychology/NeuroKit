@@ -45,15 +45,32 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     >>> rate = nk.signal_rate(peaks)
     >>> nk.signal_plot(rate)
     """
-    # Sanity checks
+    # Format input.
     if desired_length is None:
         if isinstance(peaks, np.ndarray):
             desired_length = max(peaks)
         elif isinstance(peaks, pd.DataFrame):
             desired_length = len(peaks)
-            peaks = np.where(peaks == 1)[0]
+            # Attempt to retrieve column
+            col = [col for col in peaks.columns if 'Peaks' in col]
+            if len(col) == 0:
+                TypeError("NeuroKit error: signal_rate(): wrong type of input ",
+                          "provided. Please provide indices of peaks.")
+            peaks_signal = peaks[col[0]].values
+            peaks = np.where(peaks_signal == 1)[0]
     elif desired_length < len(peaks):
-        raise ValueError("NeuroKit error: signal_rate(): 'desired_length' cannot be lower than the length of the signal. Please input a greater 'desired_length'.")
+        raise ValueError("NeuroKit error: signal_rate(): 'desired_length' cannot",
+                         " be lower than the length of the signal. Please input a greater 'desired_length'.")
+
+    # Determine length of final signal to return.
+    if desired_length is None:
+        desired_length = len(peaks)
+
+    # Sanity checks.
+    if len(peaks) <= 3:
+        print("NeuroKit warning: signal_rate(): too few peaks detected to "
+              "compute the rate. Returning empty vector.")
+        return np.full(desired_length, np.nan)
 
     # Calculate period in msec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for
@@ -63,7 +80,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     rate = 60 / period
 
     # Interpolate all statistics to desired length.
-    rate = signal_interpolate(rate, x_axis=peaks,
-                              desired_length=desired_length)
+    if desired_length != len(peaks):
+        rate = signal_interpolate(rate, x_axis=peaks, desired_length=desired_length)
 
     return rate
