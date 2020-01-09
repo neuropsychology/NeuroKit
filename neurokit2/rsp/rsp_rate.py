@@ -58,9 +58,8 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None,
         desired_length = len(peaks["RSP_Peaks"])
         peaks = np.where(peaks["RSP_Peaks"] == 1)[0]
     if len(peaks) <= 3:
-        print("NeuroKit warning: rsp_rate(): too few peaks detected to "
-              "compute the rate.")
-        return
+        raise ValueError("NeuroKit warning: rsp_rate(): too few peaks detected to "
+                        "compute the rate.")
 
     # Find length of final signal to return.
     if desired_length is None:

@@ -40,15 +40,16 @@ plot_effectnoise <- function(df){
     p + 
       geom_point2(size=2, alpha=0.1) +
       theme_modern() +
-      scale_color_viridis_c()
+      scale_color_viridis_d()
   }
   
-  fig1 <- geoms(ggplot(df, aes(x = Noise_Frequency, y = Difference_Rate_Mean, color=Noise_Amplitude)))
+  # fig1 <- geoms(ggplot(df, aes(x = Noise_Frequency, y = Difference_Rate_Mean, color=Noise_Amplitude)))
   fig2 <- geoms(ggplot(df, aes(x = Noise_Amplitude, y = Difference_Rate_Mean, color=Noise_Frequency)))
-  fig3 <- geoms(ggplot(df, aes(x = Noise_Frequency, y = Difference_Cleaned_Mean, color=Noise_Amplitude)))
+  # fig3 <- geoms(ggplot(df, aes(x = Noise_Frequency, y = Difference_Cleaned_Mean, color=Noise_Amplitude)))
   fig4 <- geoms(ggplot(df, aes(x = Noise_Amplitude, y = Difference_Cleaned_Mean, color=Noise_Frequency)))
   
-  cowplot::plot_grid(fig1, fig2, fig3, fig4, nrow=2)
+  # cowplot::plot_grid(fig1, fig2, fig3, fig4, nrow=2)
+  cowplot::plot_grid(fig2, fig4)
 }
 ```
 </p>
@@ -61,7 +62,8 @@ plot_effectnoise <- function(df){
 <details><summary>See code</summary>
 <p>
 ```{r, echo = TRUE, warning=FALSE, message=FALSE}
-df <- read.csv("data_RSP_filtering.csv")
+df <- read.csv("data_RSP_filtering.csv") %>% 
+  mutate(Filter_Bandpass = paste0(insight::format_value(Filter_Low), ", ", insight::format_value(Filter_High)))
 
 plot_effectnoise(df)
 ```
@@ -75,18 +77,19 @@ plot_effectnoise(df)
 <details><summary>See code</summary>
 <p>
 ```{r, echo = TRUE, warning=FALSE, message=FALSE}
-model <- lm(Difference_Cleaned_Mean ~ Filter_Type + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=df) 
+model <- lm(Difference_Cleaned_Mean ~ Filter_Type * Filter_Bandpass, data=df) 
 
 table <- model %>%
   parameters::model_parameters()
 
 fig <- model %>% 
   estimate_means() %>% 
-  ggplot(aes(x = Filter_Type, y = Mean)) +
-  geom_line(aes(group=1), position = position_dodge(width = 0.2)) +
-  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
+  ggplot(aes(x = Filter_Type, y = Mean, color=Filter_Bandpass)) +
+  geom_line(aes(group=Filter_Bandpass), position = position_dodge(width = 0.2)) +
+  # geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
   theme_modern() +
-  ylab("Mean Difference")
+  ylab("Mean Difference") +
+  theme(axis.text.x = element_text(angle = 45, vjust=1))
 ```
 </p>
 </details>

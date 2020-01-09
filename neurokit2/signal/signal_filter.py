@@ -203,6 +203,12 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
                   "In this analysis, the sampling rate has to be higher than",
                   2 * highcut, "Hz.")
 
+    # Replace 0 by none
+    if lowcut is not None and lowcut == 0:
+        lowcut = None
+    if highcut is not None and highcut == 0:
+        highcut = None
+
     # Format
     if lowcut is not None and highcut is not None:
         if lowcut > highcut:

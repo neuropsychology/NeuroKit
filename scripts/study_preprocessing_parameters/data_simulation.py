@@ -30,20 +30,32 @@ def rsp_generate(duration=90, sampling_rate=1000, respiratory_rate=None, method=
 
 def rsp_distord(rsp, info, noise_amplitude=0.1, noise_frequency=None):
 
+    # Frequency
     if noise_frequency is None:
-        n_frequencies = np.random.randint(0, 10)
-        noise_frequency = np.random.uniform(0.1, 200, n_frequencies) # To max frequency
-        noise_frequency = np.array(noise_frequency, dtype=np.int)
+        n_frequencies = np.random.randint(1, 5)
+        noise_frequency = np.random.uniform(0.05, 100, n_frequencies) # To max frequency
+        noise_frequency = np.round(noise_frequency, 2).tolist()
 
     distorted = nk.signal_distord(rsp,
                                   noise_amplitude=noise_amplitude,
                                   noise_frequency=noise_frequency,
                                   noise_shape="laplace",
                                   powerline_frequency=50,
-                                  powerline_amplitude=noise_amplitude)
+                                  powerline_amplitude=0.1)
+
+    # Artifacts
+    artifacts_frequency = np.random.uniform(0.05, 1)
+    artifacts_amplitude = np.random.uniform(0, 2)
+    distorted = nk.signal_distord(distorted,
+                                  noise_amplitude=0,
+                                  powerline_amplitude=0,
+                                  artifacts_amplitude=artifacts_amplitude,
+                                  artifacts_frequency=artifacts_frequency)
 
     info["Noise_Amplitude"] = [noise_amplitude]
     info["Noise_Frequency"] = [noise_frequency]
+    info["Artifacts_Amplitude"] = [artifacts_amplitude]
+    info["Artifacts_Frequency"] = [artifacts_frequency]
     info["Noise_Number"] = [n_frequencies]
     return distorted, info
 
@@ -59,15 +71,10 @@ def rsp_custom_process(distorted, info, detrend_position="First", detrend_method
                                       regularization=detrend_regularization,
                                       alpha=detrend_alpha)
 
-    if filter_lowcut == 0:
-        actual_filter_lowcut = None
-    else:
-        actual_filter_lowcut = filter_lowcut
-
     if filter_type != "None":
         distorted = nk.signal_filter(signal=distorted,
                                      sampling_rate=sampling_rate,
-                                     lowcut=actual_filter_lowcut,
+                                     lowcut=filter_lowcut,
                                      highcut=filter_highcut,
                                      method=filter_type,
                                      order=filter_order)
@@ -93,7 +100,7 @@ def rsp_custom_process(distorted, info, detrend_position="First", detrend_method
     info["Detrend_Position"] = [detrend_position]
 
     info["Filter_Method"] = [filter_type]
-    if filter_type == "Butterworth":
+    if filter_type != "FIR":
         info["Filter_Type"] = [filter_type + "_" + str(filter_order)]
     else:
         info["Filter_Type"] = [filter_type]
@@ -129,48 +136,52 @@ def rsp_quality(rate, info, cleaned, rsp):
 # RSP - Visualize noise
 # =============================================================================
 #rsp, info = rsp_generate(duration=60, sampling_rate=200, method="Simple")
-#data = pd.DataFrame({"Original": data})
-#for noise_frequency in np.linspace(0.5, 95, 10):
+#data = pd.DataFrame({"Original": rsp})
+#for noise_amplitude in np.linspace(0.01, 1, 7):
 #
-#    distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
-#    data["Distorted_" + str(round(noise_frequency, 2))] = distorted
+#    # Noise frequency
+#    distorted, _ = rsp_distord(rsp.copy(), info, noise_amplitude=noise_amplitude, noise_frequency=None)
+#    data["Distorted_" + str(np.round(noise_amplitude, 2))] = distorted
 #
-
+## Visualize
+#df = data[0:2000]
+#for i, column in enumerate(df.drop('Original', axis=1)):
+#   plt.plot(df[column], marker='', color='grey', linewidth=1, alpha=(i/len(df.columns))*0.5)
+#plt.plot(df['Original'], marker='', color='red', linewidth=3)
 
 
 
 # =============================================================================
-# RSP - Filter
-# =============================================================================
-#all_data = []
-#for noise_amplitude in np.linspace(0.01, 1, 10):
-#    print("---")
-#    print(noise_amplitude*100)
-#    print("---")
-#    for noise_frequency in np.linspace(0.5, 95, 10):
-##        print("%.2f" %(noise_frequency))
-#        rsp, info = rsp_generate(duration=60, sampling_rate=200, respiratory_rate=15, method="Simple")
-#        distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=noise_frequency)
-#
-#        rate, info, cleaned = rsp_custom_process(distorted, info, detrend_position="None", filter_type="None")
-#        data = rsp_quality(rate, info, cleaned, rsp)
-#        all_data += [data]
-#
-#        for filter_highcut in np.linspace(35, 60, 10):
-#
-#            for filter_type in ["Butterworth", "FIR"]:
-#                if filter_type == "FIR":
-#                    rate, info, cleaned = rsp_custom_process(distorted, info, detrend_position="None", filter_type=filter_type, filter_highcut=filter_highcut)
-#                    data = rsp_quality(rate, info, cleaned, rsp)
-#                    all_data += [data]
-#                else:
-#                    for filter_order in range(10):
-#                        rate, info, cleaned = rsp_custom_process(distorted, info, detrend_position="None", filter_type=filter_type, filter_order=filter_order, filter_highcut=filter_highcut)
-#                        data = rsp_quality(rate, info, cleaned, rsp)
-#                        all_data += [data]
-#
-#    data = pd.concat(all_data)
-#    data.to_csv("data_RSP_filtering.csv")
+# RSP - Filter# =============================================================================
+all_data = []
+for noise_amplitude in np.linspace(0.01, 1, 30):
+    print("---")
+    print(noise_amplitude*100)
+    print("---")
+    respiratory_rate = np.random.uniform(10, 20)
+    rsp, info = rsp_generate(duration=60, sampling_rate=200, respiratory_rate=respiratory_rate, method="Simple")
+    distorted, info = rsp_distord(rsp, info, noise_amplitude=noise_amplitude, noise_frequency=None)
+    print("Noise freq:", info["Noise_Frequency"][0])
+
+    rate, info, cleaned = rsp_custom_process(distorted, info, detrend_position="None", filter_type="None")
+    data = rsp_quality(rate, info, cleaned, rsp)
+    all_data += [data]
+
+    for filter_highcut in np.linspace(18/60, 80/60, 3):
+        for filter_lowcut in np.linspace(5/60, 10/60, 3):
+            for filter_type in ["Butterworth", "Bessel", "FIR"]:
+                if filter_type == "FIR":
+                    rate, info, cleaned = rsp_custom_process(distorted, info, detrend_position="None", filter_type=filter_type, filter_highcut=filter_highcut, filter_lowcut=filter_lowcut)
+                    data = rsp_quality(rate, info, cleaned, rsp)
+                    all_data += [data]
+                else:
+                    for filter_order in range(10):
+                        rate, info, cleaned = rsp_custom_process(distorted, info, detrend_position="None", filter_type=filter_type, filter_order=filter_order+2, filter_highcut=filter_highcut, filter_lowcut=filter_lowcut)
+                        data = rsp_quality(rate, info, cleaned, rsp)
+                        all_data += [data]
+
+    data = pd.concat(all_data)
+    data.to_csv("data_RSP_filtering.csv")
 
 
 
