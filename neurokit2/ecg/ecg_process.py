@@ -58,6 +58,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     rate = ecg_rate(extrema_signal, sampling_rate=sampling_rate)
 
     signals = pd.DataFrame({"ECG_Raw": ecg_signal,
-                            "ECG_Clean": ecg_cleaned})
-    signals = pd.concat([signals, extrema_signal, rate], axis=1)
+                            "ECG_Clean": ecg_cleaned,
+                            "ECG_Rate": rate})
+    signals = pd.concat([signals, extrema_signal], axis=1)
     return signals, info

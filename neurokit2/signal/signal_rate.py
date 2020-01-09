@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-from ..signal import signal_interpolate
+from .signal_interpolate import signal_interpolate
 
 
 def signal_rate(peaks, sampling_rate=1000, desired_length=None):
@@ -46,30 +46,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     >>> nk.signal_plot(rate)
     """
     # Format input.
-    if desired_length is None:
-        if isinstance(peaks, np.ndarray):
-            desired_length = max(peaks)
-        elif isinstance(peaks, pd.DataFrame):
-            desired_length = len(peaks)
-            # Attempt to retrieve column
-            col = [col for col in peaks.columns if 'Peaks' in col]
-            if len(col) == 0:
-                TypeError("NeuroKit error: signal_rate(): wrong type of input ",
-                          "provided. Please provide indices of peaks.")
-            peaks_signal = peaks[col[0]].values
-            peaks = np.where(peaks_signal == 1)[0]
-        else:
-            desired_length = len(peaks)
-
-    if desired_length < len(peaks):
-        raise ValueError("NeuroKit error: signal_rate(): 'desired_length' cannot",
-                         " be lower than the length of the signal. Please input a greater 'desired_length'.")
-
-    # Sanity checks.
-    if len(peaks) <= 3:
-        print("NeuroKit warning: signal_rate(): too few peaks detected to "
-              "compute the rate. Returning empty vector.")
-        return np.full(desired_length, np.nan)
+    peaks, desired_length = _signal_rate_sanitize(peaks, desired_length)
 
     # Calculate period in msec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for
@@ -83,3 +60,41 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
         rate = signal_interpolate(rate, x_axis=peaks, desired_length=desired_length)
 
     return rate
+
+
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+
+def _signal_rate_sanitize(peaks, desired_length=None):
+    # Retrieve length.
+    if desired_length is None:
+        if isinstance(peaks, np.ndarray):
+            desired_length = np.max(peaks)
+        else:
+            desired_length = len(peaks)
+
+    if desired_length < len(peaks):
+        raise ValueError("NeuroKit error: signal_rate(): 'desired_length' cannot",
+                         " be lower than the length of the signal. Please input a greater 'desired_length'.")
+
+
+    # Attempt to retrieve column.
+    if isinstance(peaks, pd.DataFrame):
+        col = [col for col in peaks.columns if 'Peaks' in col]
+        if len(col) == 0:
+            TypeError("NeuroKit error: signal_rate(): wrong type of input ",
+                      "provided. Please provide indices of peaks.")
+        peaks_signal = peaks[col[0]].values
+        peaks = np.where(peaks_signal == 1)[0]
+
+
+    # Sanity checks.
+    if len(peaks) <= 3:
+        print("NeuroKit warning: signal_rate(): too few peaks detected to "
+              "compute the rate. Returning empty vector.")
+        return np.full(desired_length, np.nan)
+
+    return peaks, desired_length

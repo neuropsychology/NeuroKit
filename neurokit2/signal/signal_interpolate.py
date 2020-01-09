@@ -83,4 +83,4 @@ def signal_interpolate(signal, desired_length=None, method="quadratic",
 
     interpolated = interpolation_function(new_x)
 
-    return(interpolated)
+    return interpolated

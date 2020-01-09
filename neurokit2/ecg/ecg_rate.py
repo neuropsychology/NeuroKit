@@ -26,8 +26,8 @@ def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame containing heart rate accessible with the key "ECG_Rate".
+    array
+        A DataFrame containing heart rate accessible.
 
     See Also
     --------
@@ -40,13 +40,10 @@ def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
     >>> ecg = nk.ecg_simulate(duration=15, heart_rate=80)
     >>> signals, info = nk.ecg_findpeaks(ecg)
     >>>
-    >>> data = nk.ecg_rate(signals)
-    >>> data["ECG_Signal"] = ecg  # Add the signal back
-    >>> data.plot(subplots=True)
+    >>> rate = nk.ecg_rate(signals)
+    >>> nk.signal_plot([ecg, rate], subplots=True)
     """
     # Get rate values
     rate = signal_rate(peaks, sampling_rate, desired_length=desired_length)
 
-    # Prepare output
-    signals = pd.DataFrame(rate, columns=["ECG_Rate"])
-    return signals
+    return rate

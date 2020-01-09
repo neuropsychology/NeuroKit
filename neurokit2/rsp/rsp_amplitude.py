@@ -29,9 +29,8 @@ def rsp_amplitude(rsp_signal, extrema, desired_length=None):
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame containing the respiratory amplitude accessible with the
-        key "RSP_Amplitude"
+    array
+        A vector containing the respiratory amplitude.
 
     See Also
     --------
@@ -89,6 +88,4 @@ def rsp_amplitude(rsp_signal, extrema, desired_length=None):
     amplitude = signal_interpolate(amplitude, x_axis=peaks,
                                    desired_length=desired_length)
 
-    signals = pd.DataFrame(amplitude, columns=["RSP_Amplitude"])
-
-    return signals
+    return amplitude
