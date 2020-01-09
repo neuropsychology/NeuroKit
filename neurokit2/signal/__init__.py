@@ -1,5 +1,6 @@
 """Submodule for NeuroKit."""
 
+from .signal_simulate import signal_simulate
 from .signal_binarize import signal_binarize
 from .signal_resample import signal_resample
 from .signal_zerocrossings import signal_zerocrossings
