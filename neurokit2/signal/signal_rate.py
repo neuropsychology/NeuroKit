@@ -7,12 +7,12 @@ from ..signal import signal_findpeaks
 
 
 def signal_rate(peaks, sampling_rate=1000, desired_length=None):
-    """Calculate signal rate from R-peaks.
+    """Calculate signal rate from a series of peaks.
 
     Parameters
     ----------
     peaks : list, array, DataFrame, Series or dict
-        The samples at which the R-peaks occur. If an array is
+        The samples at which thepeaks occur. If an array is
         passed, it is assumed that these containers were obtained with
         `signal_findpeaks()`. If a DataFrame is passed, it is assumed it is of the same length as
         the input signal in which occurrences of R-peaks are marked as "1", with such containers
@@ -34,7 +34,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
 
     See Also
     --------
-    signal_findpeaks, signal_plot
+    signal_findpeaks, signal_plot, rsp_rate, ecg_rate
 
     Examples
     --------
@@ -72,7 +72,4 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     rate = signal_interpolate(rate, x_axis=peaks,
                               desired_length=desired_length)
 
-    # Prepare output
-    signals = pd.DataFrame(rate, columns=["SIGNAL_Rate"])
-
-    return signals
+    return rate
