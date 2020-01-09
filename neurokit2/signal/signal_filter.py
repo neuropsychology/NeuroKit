@@ -90,8 +90,6 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
     if method in ["sg", "savgol", "savitzky-golay"]:
         filtered = _signal_filter_savgol(signal, sampling_rate, order, window_length=window_length)
     else:
-        if sampling_rate <= 2 * highcut:
-            print ("NeuroKit warning: the sampling rate is too low. Sampling rate must exceed the Nyquist rate to avoid aliasing problem. In this analysis, the sampling rate has to be higher than", 2 * highcut, "Hz.")
         if method in ["butter", "butterworth"]:
             filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["butter_ba", "butterworth_ba"]:
@@ -102,7 +100,8 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
             filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_length=window_length)
         else:
             raise ValueError("NeuroKit error: signal_filter(): 'method' should be "
-                                 "one of 'butterworth', 'savgol' or 'fir'.")
+                             "one of 'butterworth', 'butterworth_ba', 'bessel',"
+                             " 'savgol' or 'fir'.")
     return filtered
 
 
@@ -195,6 +194,16 @@ def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None,
 # Utility
 # =============================================================================
 def _signal_filter_sanitize(lowcut=None, highcut=None, normalize=False, sampling_rate=1000):
+
+    # Sanity checks
+    if isinstance(highcut, int):
+        if sampling_rate <= 2 * highcut:
+            print("NeuroKit warning: the sampling rate is too low. Sampling rate"
+                  " must exceed the Nyquist rate to avoid aliasing problem. "
+                  "In this analysis, the sampling rate has to be higher than",
+                  2 * highcut, "Hz.")
+
+    # Format
     if lowcut is not None and highcut is not None:
         if lowcut > highcut:
             filter_type = "bandstop"
