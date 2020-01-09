@@ -40,7 +40,7 @@ plot_effectnoise <- function(df){
     p + 
       geom_point2(size=2, alpha=0.1) +
       theme_modern() +
-      scale_color_viridis_d()
+      scale_color_viridis_d(guide=FALSE)
   }
   
   # fig1 <- geoms(ggplot(df, aes(x = Noise_Frequency, y = Difference_Rate_Mean, color=Noise_Amplitude)))
@@ -77,7 +77,8 @@ plot_effectnoise(df)
 <details><summary>See code</summary>
 <p>
 ```{r, echo = TRUE, warning=FALSE, message=FALSE}
-model <- lm(Difference_Cleaned_Mean ~ Filter_Type * Filter_Bandpass, data=df) 
+data <- select(df, Difference_Cleaned_Mean, Filter_Type, Filter_Bandpass)
+model <- lm(Difference_Cleaned_Mean ~ Filter_Type * Filter_Bandpass, data=data[complete.cases(data),])
 
 table <- model %>%
   parameters::model_parameters()
@@ -89,7 +90,7 @@ fig <- model %>%
   # geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
   theme_modern() +
   ylab("Mean Difference") +
-  theme(axis.text.x = element_text(angle = 45, vjust=1))
+  theme(axis.text.x = element_text(angle = 45, hjust=1))
 ```
 </p>
 </details>

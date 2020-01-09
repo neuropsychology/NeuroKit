@@ -57,7 +57,7 @@ def test_ecg_findpeaks():
     sampling_rate = 1000
     noise = 0.05
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=42)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
     signals, info = nk.ecg_findpeaks(ecg_cleaned_nk, method="neurokit")
@@ -73,7 +73,7 @@ def test_ecg_rate():
     sampling_rate = 1000
     noise = 0.05
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=42)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
     signals, info = nk.ecg_findpeaks(ecg_cleaned_nk, method="neurokit")
