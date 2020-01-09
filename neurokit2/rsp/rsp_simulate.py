@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from ..signal import signal_simulate
 from ..signal import signal_distord
 
 
@@ -98,20 +99,17 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 # =============================================================================
 # Simple Sinusoidal Model
 # =============================================================================
-def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000,
-                             noise=0.01, respiratory_rate=15, amplitude=0.5):
+def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, respiratory_rate=15):
     """
     Generate an artificial (synthetic) respiratory signal by trigonometric sine
     wave that roughly approximates a single respiratory cycle.
     """
     # Generate values along the length of the duration
-    x = np.linspace(0, duration, int(length))
-
-    frequency = respiratory_rate / 60
-
-    # Compute the value of sine computed by the following trigonometric
-    # function
-    rsp = amplitude*np.sin(2*np.pi*x*frequency)
+    rsp = signal_simulate(duration=duration,
+                          length=length,
+                          sampling_rate=sampling_rate,
+                          frequency=respiratory_rate/60,
+                          amplitude=0.5)
 
     return rsp
 

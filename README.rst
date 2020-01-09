@@ -20,9 +20,6 @@
        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
        :alt: Maintainability
    
-.. image:: https://zenodo.org/badge/218212111.svg
-   :target: https://zenodo.org/badge/latestdoi/218212111
-  
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
@@ -179,6 +176,15 @@ Design
 - **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing, and with sensible defaults.
 - **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
 
+Citation
+=========
+
+.. image:: https://zenodo.org/badge/218212111.svg
+   :target: https://zenodo.org/badge/latestdoi/218212111
+  
+  
+No citation yet :'(
+
 
 Alternatives
 ============
@@ -202,6 +208,7 @@ ECG
 - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
 - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
+- `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_
 
 EDA
 ---

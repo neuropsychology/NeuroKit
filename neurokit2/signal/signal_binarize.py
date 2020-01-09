@@ -6,18 +6,6 @@ import numpy as np
 
 
 
-def _signal_binarize(signal, threshold="auto"):
-    if threshold == "auto":
-        threshold = np.mean([np.max(signal), np.min(signal)])
-
-    binary = signal.copy()
-    binary[signal > threshold] = 1
-    binary[signal <= threshold] = 0
-    return(binary)
-
-
-
-
 
 
 
@@ -59,6 +47,20 @@ def signal_binarize(signal, threshold="auto"):
     else:
         signal = _signal_binarize(signal, threshold=threshold)
 
-    return(signal)
+    return signal
 
+
+
+
+
+
+
+def _signal_binarize(signal, threshold="auto"):
+    if threshold == "auto":
+        threshold = np.mean([np.max(signal), np.min(signal)])
+
+    binary = signal.copy()
+    binary[signal > threshold] = 1
+    binary[signal <= threshold] = 0
+    return binary
 

@@ -2,11 +2,12 @@
 import numpy as np
 import pandas as pd
 
+from .signal_simulate import signal_simulate
 from .signal_resample import signal_resample
 from ..misc import listify
 
 
-def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_frequency=100, noise_shape="laplace", powerline_amplitude=0, powerline_frequency=50):
+def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_frequency=100, noise_shape="laplace", powerline_amplitude=0, powerline_frequency=50, artifacts_frequency=0, artifacts_amplitude=0.1):
     """Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
@@ -36,17 +37,21 @@ def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=10, num=10000))
-    >>> signals = pd.DataFrame({
+    >>> signal = nk.signal_simulate(duration=10, frequency=0.5)
+    >>>
+    >>> # Noise
+    >>> pd.DataFrame({
             "Freq100": nk.signal_distord(signal, noise_frequency=200),
             "Freq50": nk.signal_distord(signal, noise_frequency=50),
             "Freq10": nk.signal_distord(signal, noise_frequency=10),
             "Freq5": nk.signal_distord(signal, noise_frequency=5),
-            "Raw": signal})
-    >>> signals.plot()
+            "Raw": signal}).plot()
     >>>
-    >>> distorted = nk.signal_distord(signal, noise_amplitude=[0.3, 0.2, 0.1], noise_frequency=[5, 10, 20], powerline_amplitude=0.05)
-    >>> nk.signal_plot(distorted)
+    >>> # Artifacts
+    >>> pd.DataFrame({
+            "1Hz": nk.signal_distord(signal, noise_amplitude=0, artifacts_frequency=1, artifacts_amplitude=0.5),
+            "5Hz": nk.signal_distord(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2),
+            "Raw": signal}).plot()
     """
     # Basic noise
     noise = _signal_distord_noise_multifrequency(signal,
@@ -63,6 +68,15 @@ def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
                                            sampling_rate=sampling_rate,
                                            powerline_amplitude=powerline_amplitude,
                                            powerline_frequency=powerline_frequency)
+
+    # Artifacts
+    if artifacts_frequency > 0:
+        noise += _signal_distord_artifacts(signal,
+                                           signal_sd=np.std(signal, ddof=1),
+                                           sampling_rate=sampling_rate,
+                                           artifacts_frequency=artifacts_frequency,
+                                           artifacts_amplitude=artifacts_amplitude)
+
     distorted = signal + noise
 
     return distorted
@@ -76,6 +90,29 @@ def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
 # =============================================================================
 # Internals
 # =============================================================================
+
+# TODO
+def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000, artifacts_frequency=0, artifacts_amplitude=0.1):
+
+    # Generate oscillatory signal of given frequency
+    artifacts = signal_simulate(length=len(signal),
+                                sampling_rate=sampling_rate,
+                                frequency=artifacts_frequency,
+                                amplitude=1)
+
+    # Binarize
+    artifacts[artifacts > 0.95] = 1
+    artifacts[artifacts <= 0.95] = 0
+
+    # Replace ones with artifact values
+    if signal_sd is not None:
+        artifacts_amplitude = artifacts_amplitude * signal_sd
+    artifacts = artifacts * artifacts_amplitude
+
+    return artifacts
+
+
+
 
 def _signal_distord_powerline(signal, signal_sd=None, sampling_rate=1000, powerline_frequency=50, powerline_amplitude=0.1):
     freqs = list(np.arange(powerline_frequency, sampling_rate, powerline_frequency))
@@ -123,5 +160,6 @@ def _signal_distord_noise(signal, noise_duration, noise_amplitude=0.1, noise_sha
         raise ValueError("NeuroKit error: signal_distord(): 'noise_shape' "
                          "should be one of 'gaussian' or 'laplace'.")
 
-    noise = signal_resample(noise, desired_length=len(signal), method="interpolation")
+    if len(noise) != len(signal):
+        noise = signal_resample(noise, desired_length=len(signal), method="interpolation")
     return noise
