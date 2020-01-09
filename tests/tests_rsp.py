@@ -28,7 +28,7 @@ def test_rsp_clean():
 
     sampling_rate = 1000
     rsp = nk.rsp_simulate(duration=120, sampling_rate=sampling_rate,
-                          respiratory_rate=15)
+                          respiratory_rate=15, random_state=42)
 
     khodadad2018 = nk.rsp_clean(rsp, sampling_rate=1000, method="khodadad2018")
     assert len(rsp) == len(khodadad2018)
