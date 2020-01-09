@@ -78,7 +78,7 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
     clean = signal_detrend(rsp_signal, order=1)
     clean = signal_filter(clean, sampling_rate=sampling_rate,
                           lowcut=None, highcut=2,
-                          method="butterworth", order=5)
+                          method="butterworth_ba", order=5)
 
     return clean
 
