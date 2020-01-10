@@ -26,6 +26,8 @@ knitr::opts_chunk$set(
 # How to Preprocess ECG, RSP and EDA Signals: A Simulation Study
 
 
+The closest to 0, the better. 
+
 
 ## Respiration (RSP)
 
@@ -62,8 +64,7 @@ plot_effectnoise <- function(df){
 <details><summary>See code</summary>
 <p>
 ```{r, echo = TRUE, warning=FALSE, message=FALSE}
-df <- read.csv("data_RSP_filtering.csv") %>% 
-  mutate(Filter_Bandpass = paste0(insight::format_value(Filter_Low), ", ", insight::format_value(Filter_High)))
+df <- read.csv("data_RSP_filtering.csv")
 
 plot_effectnoise(df)
 ```
@@ -73,106 +74,102 @@ plot_effectnoise(df)
 
 #### Filter Type
 
-##### Effect on Signal
+
+
 <details><summary>See code</summary>
 <p>
 ```{r, echo = TRUE, warning=FALSE, message=FALSE}
-data <- select(df, Difference_Cleaned_Mean, Filter_Type, Filter_Bandpass)
-model <- lm(Difference_Cleaned_Mean ~ Filter_Type * Filter_Bandpass, data=data[complete.cases(data),])
+data <- select(df, Difference_Cleaned_Mean, Difference_Rate_Mean, Filter_Type)
+m1 <- lm(Difference_Rate_Mean ~ Filter_Type, data=data[complete.cases(data),])
+m2 <- lm(Difference_Cleaned_Mean ~ Filter_Type, data=data[complete.cases(data),])
 
-table <- model %>%
-  parameters::model_parameters()
-
-fig <- model %>% 
+table <- m1 %>% 
   estimate_means() %>% 
-  ggplot(aes(x = Filter_Type, y = Mean, color=Filter_Bandpass)) +
-  geom_line(aes(group=Filter_Bandpass), position = position_dodge(width = 0.2)) +
-  # geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
+  mutate(Index = "Rate Difference") %>% 
+  rbind(m2 %>% 
+          estimate_means() %>% 
+          mutate(Index = "Signal Difference")) %>% 
+  mutate(Index = fct_relevel(Index, "Signal Difference", "Rate Difference"))
+
+fig <- table %>% 
+  filter(!is.na(Mean), Filter_Type!="None") %>% 
+  ggplot(aes(x = Filter_Type, y = Mean, color=Filter_Type)) +
+  geom_line(aes(group=1), position = position_dodge(width = 0.2)) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width=0.2)) +
+  # geom_hline(yintercept=0, linetype="dotted") +
   theme_modern() +
   ylab("Mean Difference") +
-  theme(axis.text.x = element_text(angle = 45, hjust=1))
+  scale_color_viridis_d(guide = FALSE) +
+  theme(axis.text.x = element_text(angle = 45, hjust=1),
+        axis.title.y = element_blank(),
+        strip.placement = "outside") +
+  facet_wrap(~Index, scales = "free_y", nrow = 2, strip.position = "left")
 ```
 </p>
 </details>
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-table[stringr::str_detect(table$Parameter, "Filter_Type"),]
 fig
 ```
 
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+table %>% 
+  mutate(Diff = abs(Mean)) %>%
+  group_by(Index) %>% 
+  top_n(-5, Diff) %>% 
+  select(Index, Filter_Type, Mean) %>% 
+  arrange(desc(Index), abs(Mean))
+```
 
 
-##### Effect on Rate
+#### Filter Band
+
 <details><summary>See code</summary>
 <p>
 ```{r, echo = TRUE, warning=FALSE, message=FALSE}
-model <- lm(Difference_Rate_Mean ~ Filter_Type + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=df) 
+data <- df %>% 
+  select(Difference_Cleaned_Mean, Difference_Rate_Mean, Filter_Type, Filter_Band) %>% 
+  filter(Filter_Type %in% c("FIR", "Bessel_9", "Butterworth_9"))
+m1 <- lm(Difference_Rate_Mean ~ Filter_Type * Filter_Band, data=data[complete.cases(data),])
+m2 <- lm(Difference_Cleaned_Mean ~ Filter_Type * Filter_Band, data=data[complete.cases(data),])
 
-table <- model %>%
-  parameters::model_parameters()
-
-fig <- model %>% 
+table <- m1 %>% 
   estimate_means() %>% 
-  ggplot(aes(x = Filter_Type, y = Mean)) +
-  geom_line(aes(group=1), position = position_dodge(width = 0.2)) +
-  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
+  mutate(Index = "Rate Difference") %>% 
+  rbind(m2 %>% 
+          estimate_means() %>% 
+          mutate(Index = "Signal Difference")) %>% 
+  mutate(Index = fct_relevel(Index, "Signal Difference", "Rate Difference")) %>%
+  separate(Filter_Band, c("Low", "High"), ", ", remove=FALSE) 
+
+fig <- table %>% 
+  filter(!is.na(Mean), Filter_Type!="None") %>% 
+  ggplot(aes(x = Filter_Type, y = Mean, color=Low, shape=High)) +
+  # geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width=0.3)) +
+  geom_point(position = position_dodge(width=0.5), size=4) +
+  # geom_line(aes(group=Filter_Band))  +
+  geom_hline(aes(yintercept=0), linetype="dotted") +
   theme_modern() +
-  ylab("Mean Difference")
+  ylab("Mean Difference") +
+  scale_color_viridis_d() +
+  theme(axis.text.x = element_text(angle = 45, hjust=1),
+        axis.title.y = element_blank(),
+        strip.placement = "outside") +
+  facet_wrap(~Index, scales = "free_y", nrow = 2, strip.position = "left")
 ```
 </p>
 </details>
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-table[stringr::str_detect(table$Parameter, "Filter_Type"),]
 fig
 ```
 
-#### Filter Highcut
 
-##### Effect on Signal
-<details><summary>See code</summary>
-<p>
-```{r, echo = TRUE, warning=FALSE, message=FALSE}
-model <- lm(Difference_Cleaned_Mean ~ Filter_Type * Filter_High + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=df) 
+#### Best Filter Parameters
 
-table <- model %>%
-  parameters::model_parameters()
-
-fig <- model %>% 
-  estimate_link(target=c("Filter_Type", "Filter_High")) %>% 
-  ggplot(aes(x = Filter_High, y = Predicted, color=Filter_Type)) +
-  geom_line(aes(group=Filter_Type), position = position_dodge(width = 0.2)) +
-  # geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
-  theme_modern() +
-  ylab("Mean Difference")
-```
-</p>
-</details>
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-table[stringr::str_detect(table$Parameter, "Detrend"),]
-fig
-```
-
-
-
-##### Effect on Rate
-<details><summary>See code</summary>
-<p>
-```{r, echo = TRUE, warning=FALSE, message=FALSE}
-model <- lm(Difference_Rate_Mean ~ Filter_Type * Filter_High + (poly(Noise_Amplitude, 2) * poly(Noise_Frequency, 2)), data=df) 
-
-table <- model %>%
-  parameters::model_parameters()
-
-fig <- model %>% 
-  estimate_link(target=c("Filter_Type", "Filter_High")) %>% 
-  ggplot(aes(x = Filter_High, y = Predicted, color=Filter_Type)) +
-  geom_line(aes(group=Filter_Type), position = position_dodge(width = 0.2)) +
-  # geom_pointrange(aes(ymin=CI_low, ymax=CI_high), position = position_dodge(width = 0.2)) +
-  theme_modern() +
-  ylab("Mean Difference")
-```
-</p>
-</details>
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-table[stringr::str_detect(table$Parameter, "Detrend"),]
-fig
+table %>% 
+  mutate(Diff = abs(Mean)) %>%
+  group_by(Index) %>% 
+  top_n(-6, Diff) %>% 
+  select(Index, Filter_Type, Filter_Band, Mean) %>% 
+  arrange(Index, abs(Mean))
 ```
