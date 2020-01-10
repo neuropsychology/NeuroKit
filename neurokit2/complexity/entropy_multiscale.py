@@ -79,5 +79,5 @@ def _entropy_multiscale_granularizesignal(signal, scale):
     n = len(signal)
     b = int(np.fix(n / scale))
     temp = np.reshape(signal[0:b*scale], (b, scale))
-    cts = np.mean(temp, axis = 1)
+    cts = np.mean(temp, axis=1)
     return cts
