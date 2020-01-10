@@ -42,8 +42,11 @@ def test_complexity():
     assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - pyeeg_samp_entropy(signal, 2, 0.2), 0)
 
     assert nk.entropy_sample(signal, 2, 0.2) != pyentrp.sample_entropy(signal, 2, 0.2)[1]
+    assert nk.entropy_sample(signal, 2, 0.2*np.sqrt(np.var(signal))) != MultiscaleEntropy_sample_entropy(signal, 2, 0.2)[0.2][2]
 
-
+    # MSE
+#    assert nk.entropy_multiscale(signal, 2, 0.2*np.sqrt(np.var(signal))) != np.trapz(MultiscaleEntropy_mse(signal, [i+1 for i in range(10)], 2, 0.2, return_type="list"))
+#    assert nk.entropy_multiscale(signal, 2, 0.2*np.std(signal, ddof=1)) != np.trapz(pyentrp.multiscale_entropy(signal, 2, 0.2, 10))
 
     # Fuzzy
     assert np.allclose(nk.entropy_fuzzy(signal, 2, 0.2, 1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0)
@@ -314,3 +317,183 @@ def entro_py_scale(x, axis=None):
 def entro_py_remove_baseline(x, axis=None):
     x -= np.mean(x, axis=axis, keepdims=True)
     return x
+
+
+
+
+
+
+
+
+
+
+
+
+
+# =============================================================================
+# MultiscaleEntropy https://github.com/reatank/MultiscaleEntropy/blob/master/MultiscaleEntropy/mse.py
+# =============================================================================
+
+import math
+from collections.abc import Iterable
+
+def MultiscaleEntropy_init_return_type(return_type):
+    if return_type == 'dict':
+        return {}
+    else:
+        return []
+
+def MultiscaleEntropy_check_type(x, num_type, name):
+    if isinstance(x, num_type):
+        tmp = [x]
+    elif not isinstance(x, Iterable):
+        raise ValueError(name + ' should be a ' + num_type.__name__ + ' or an iterator of ' + num_type.__name__)
+    else:
+        tmp = []
+        for i in x:
+            tmp.append(i)
+            if not isinstance(i, num_type):
+                raise ValueError(name + ' should be a ' + num_type.__name__ + ' or an iterator of ' + num_type.__name__)
+    return tmp
+
+# sum of seperate intervals of x
+def MultiscaleEntropy_coarse_grain(x, scale_factor):
+    x = np.array(x)
+    x_len = len(x)
+    if x_len % scale_factor:
+        padded_len = (1+int(x_len/scale_factor))*scale_factor
+    else:
+        padded_len = x_len
+    tmp_x = np.zeros(padded_len)
+    tmp_x[:x_len] = x
+    tmp_x = np.reshape(tmp_x, (int(padded_len/scale_factor), scale_factor))
+    ans = np.reshape(np.sum(tmp_x, axis=1), (-1))/scale_factor
+
+    return ans
+
+def MultiscaleEntropy_sample_entropy(x, m=[2], r=[0.15], sd=None, return_type='dict', safe_mode=False):
+    '''[Sample Entropy, the threshold will be r*sd]
+
+    Arguments:
+        x {[input signal]} -- [an iterator of numbers]
+
+    Keyword Arguments:
+        m {list} -- [m in sample entropy] (default: {[2]})
+        r {list} -- [r in sample entropy] (default: {[0.15]})
+        sd {number} -- [standard derivation of x, if None, will be calculated] (default: {None})
+        return_type {str} -- [can be dict or list] (default: {'dict'})
+        safe_mode {bool} -- [if set True, type checking will be skipped] (default: {False})
+
+    Raises:
+        ValueError -- [some values too big]
+
+    Returns:
+        [dict or list as return_type indicates] -- [if dict, nest as [scale_factor][m][r] for each value of m, r; if list, nest as [i][j] for lengths of m, r]
+    '''
+    # type checking
+    if not safe_mode:
+        m = MultiscaleEntropy_check_type(m, int, 'm')
+        r = MultiscaleEntropy_check_type(r, float, 'r')
+        if not (sd == None) and not (isinstance(sd, float) or isinstance(sd, int)):
+            raise ValueError('sd should be a number')
+    try:
+        x = np.array(x)
+    except:
+        raise ValueError('x should be a sequence of numbers')
+    # value checking
+    if len(x) < max(m):
+        raise ValueError('the max m is bigger than x\'s length')
+
+    # initialization
+    if sd == None:
+        sd = np.sqrt(np.var(x))
+    ans = MultiscaleEntropy_init_return_type(return_type)
+
+    # calculation
+    for i, rr in enumerate(r):
+        threshold = rr * sd
+        if return_type == 'dict':
+            ans[rr] = MultiscaleEntropy_init_return_type(return_type)
+        else:
+            ans.append(MultiscaleEntropy_init_return_type(return_type))
+        count = {}
+        tmp_m = []
+        for mm in m:
+            tmp_m.append(mm)
+            tmp_m.append(mm+1)
+        tmp_m = list(set(tmp_m))
+        for mm in tmp_m:
+            count[mm] = 0
+
+        for j in range(1, len(x)-min(m)+1):
+            cont = 0
+            for inc in range(0, len(x)-j):
+                if abs(x[inc]-x[j+inc]) < threshold:
+                    cont += 1
+                elif cont > 0:
+                    for mm in tmp_m:
+                        tmp = cont - mm + 1
+                        count[mm] += tmp if tmp > 0 else 0
+                    cont = 0
+            if cont > 0:
+                for mm in tmp_m:
+                    tmp = cont - mm + 1
+                    count[mm] += tmp if tmp > 0 else 0
+        for mm in m:
+            if count[mm+1] == 0 or count[mm] == 0:
+                t = len(x)-mm+1
+                tmp = -math.log(1/(t*(t-1)))
+            else:
+                tmp = -math.log(count[mm+1]/count[mm])
+            if return_type == 'dict':
+                ans[rr][mm] = tmp
+            else:
+                ans[i].append(tmp)
+    return ans
+
+def MultiscaleEntropy_mse(x, scale_factor=[i for i in range(1,21)], m=[2], r=[0.15], return_type='dict', safe_mode=False):
+    '''[Multiscale Entropy]
+
+    Arguments:
+        x {[input signal]} -- [an iterator of numbers]
+
+    Keyword Arguments:
+        scale_factor {list} -- [scale factors of coarse graining] (default: {[i for i in range(1,21)]})
+        m {list} -- [m in sample entropy] (default: {[2]})
+        r {list} -- [r in sample entropy] (default: {[0.15]})
+        return_type {str} -- [can be dict or list] (default: {'dict'})
+        safe_mode {bool} -- [if set True, type checking will be skipped] (default: {False})
+
+    Raises:
+        ValueError -- [some values too big]
+
+    Returns:
+        [dict or list as return_type indicates] -- [if dict, nest as [scale_factor][m][r] for each value of scale_factor, m, r; if list nest as [i][j][k] for lengths of scale_factor, m, r]
+    '''
+    # type checking
+    if not safe_mode:
+        m = MultiscaleEntropy_check_type(m, int, 'm')
+        r = MultiscaleEntropy_check_type(r, float, 'r')
+        scale_factor = MultiscaleEntropy_check_type(scale_factor, int, 'scale_factor')
+    try:
+        x = np.array(x)
+    except:
+        print('x should be a sequence of numbers')
+    # value checking
+    if max(scale_factor) > len(x):
+        raise ValueError('the max scale_factor is bigger than x\'s length')
+
+    # calculation
+    sd = np.sqrt(np.var(x))
+    ms_en = MultiscaleEntropy_init_return_type(return_type)
+    for s_f in scale_factor:
+        y = MultiscaleEntropy_coarse_grain(x, s_f)
+        if return_type == 'dict':
+            ms_en[s_f] = MultiscaleEntropy_sample_entropy(y, m, r, sd, 'dict', True)
+        else:
+            ms_en.append(MultiscaleEntropy_sample_entropy(y, m, r, sd, 'list', True))
+
+    if return_type == "list":
+        ms_en = [i[0] for i in ms_en]
+        ms_en = [i[0] for i in ms_en]
+    return ms_en

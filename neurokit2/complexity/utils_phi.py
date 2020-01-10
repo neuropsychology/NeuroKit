@@ -12,7 +12,7 @@ def _get_embedded(signal, order, r, metric='chebyshev', approximate=True):
     if approximate is False:
         embedded = embedded[:-1]
     count = sklearn.neighbors.KDTree(embedded, metric=metric).query_radius(embedded, r, count_only=True).astype(np.float64)
-    return(embedded, count)
+    return embedded, count
 
 
 
@@ -42,4 +42,15 @@ def _phi(signal, order, r="default", metric='chebyshev', approximate=True):
     else:
         phi[0] = np.mean((count1 - 1) / (embedded1.shape[0] - 1))
         phi[1] = np.mean((count2 - 1) / (embedded2.shape[0] - 1))
-    return(phi)
+    return phi
+
+
+
+
+def _phi_divide(phi):
+    if phi[0] == 0:
+        return -np.inf
+    division = np.divide(phi[1], phi[0])
+    if division == 0:
+        return np.inf
+    return -np.log(division)

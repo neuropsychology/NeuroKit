@@ -18,7 +18,7 @@ def entropy_approximate(signal, order=2, r="default"):
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     order : int
-        The Embedding dimension (often denoted as 'm'), i.e., the length of compared run of data. Typically 1, 2 or 3.
+        The embedding dimension (often denoted as 'm'), i.e., the length of compared run of data. Typically 1, 2 or 3.
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
 
@@ -36,9 +36,9 @@ def entropy_approximate(signal, order=2, r="default"):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=30, num=100))
+    >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> nk.entropy_approximate(signal[0:100])
-    0.17364897858477146
+    0.2227235476697098
 
 
     References

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+
 from .rsp_clean import rsp_clean
 from .rsp_findpeaks import rsp_findpeaks
 from .rsp_rate import rsp_rate
@@ -70,7 +71,9 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     amplitude = rsp_amplitude(rsp_signal, extrema_signal)
 
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,
-                            "RSP_Clean": rsp_cleaned})
-    signals = pd.concat([signals, extrema_signal, rate, amplitude], axis=1)
+                            "RSP_Clean": rsp_cleaned,
+                            "RSP_Rate": rate,
+                            "RSP_Amplitude": amplitude})
+    signals = pd.concat([signals, extrema_signal], axis=1)
 
     return signals, info

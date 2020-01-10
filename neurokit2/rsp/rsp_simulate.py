@@ -6,7 +6,7 @@ from ..signal import signal_distord
 
 
 def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 respiratory_rate=15, method="breathmetrics", random_state=42):
+                 respiratory_rate=15, method="breathmetrics", random_state=None):
     """Simulate a respiratory signal.
 
     Generate an artificial (synthetic) respiratory signal of a given duration
@@ -59,7 +59,6 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     --------
     rsp_clean, rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
 """
-
     # Seed the random generator for reproducible results
     np.random.seed(random_state)
 
@@ -86,6 +85,9 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
                              noise_shape="laplace")
+
+    # Reset random seed (so it doesn't affect global)
+    np.random.seed(None)
     return rsp
 
 

@@ -5,7 +5,7 @@ from ..signal import signal_merge
 from ..signal import signal_distord
 
 def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 n_scr=1, drift=-0.01, random_state=42):
+                 n_scr=1, drift=-0.01, random_state=None):
     """Simulate Electrodermal Activity (EDA) signal.
 
     Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.
@@ -82,6 +82,8 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
                              noise_shape="laplace")
+    # Reset random seed (so it doesn't affect global)
+    np.random.seed(None)
     return eda
 
 

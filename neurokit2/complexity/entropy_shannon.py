@@ -6,7 +6,7 @@ import numpy as np
 
 
 def entropy_shannon(signal):
-    """Compute the Shannon entrop (SE).
+    """Compute the Shannon entropy (SE).
 
     Entropy is a measure of unpredictability of the state, or equivalently, of its average information content. Shannon entropy (SE) is one of the first and most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy quantifies the amount of information in a variable.
 
@@ -30,9 +30,9 @@ def entropy_shannon(signal):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=30, num=100))
+    >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> nk.entropy_shannon(signal)
-    6.6438561897747395
+    10.965784284661922
 
 
     References

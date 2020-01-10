@@ -57,7 +57,7 @@ def test_ecg_findpeaks():
     sampling_rate = 1000
     noise = 0.05
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=42)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
     signals, info = nk.ecg_findpeaks(ecg_cleaned_nk, method="neurokit")
@@ -73,23 +73,23 @@ def test_ecg_rate():
     sampling_rate = 1000
     noise = 0.05
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
+    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=42)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
     signals, info = nk.ecg_findpeaks(ecg_cleaned_nk, method="neurokit")
 
     # Test with dictionary.
     test_length = 30
-    data = nk.ecg_rate(peaks=info, sampling_rate=sampling_rate,
+    rate = nk.ecg_rate(peaks=info, sampling_rate=sampling_rate,
                        desired_length=test_length)
 
-    assert data.shape == (test_length, 1)
-    assert np.abs(data["ECG_Rate"].mean() - 70.5) < 0.1
+    assert rate.shape == (test_length, )
+    assert np.allclose(rate.mean(), 70, atol=1)
 
     # Test with DataFrame.
-    data = nk.ecg_rate(peaks=signals, sampling_rate=sampling_rate)
-    assert data.shape == (ecg.size, 1)
-    assert np.abs(data["ECG_Rate"].mean() - 70.5) < 0.2
+    rate = nk.ecg_rate(peaks=signals, sampling_rate=sampling_rate)
+    assert rate.shape == (ecg.size, )
+    assert np.allclose(rate.mean(), 70, atol=1)
 
 
 def test_ecg_process():
@@ -98,11 +98,10 @@ def test_ecg_process():
     noise = 0.05
 
     ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
-    signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate,
-                                   method="neurokit")
+    signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate, method="neurokit")
     # Only check array dimensions and column names since functions called by
     # ecg_process have already been unit tested
-    assert np.array(["ECG_Raw", "ECG_Clean", "ECG_Peaks", "ECG_Rate"]) in signals.columns.values
+    assert all(elem in ["ECG_Raw", "ECG_Clean", "ECG_Peaks", "ECG_Rate"]  for elem in np.array(signals.columns.values, dtype=str))
 
 
 def test_ecg_plot():

@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+
+from ..signal.signal_rate import signal_rate
+from ..signal.signal_rate import _signal_rate_sanitize
 from ..signal import signal_interpolate
 from ..signal import signal_smooth
+
+
 
 
 def rsp_rate(peaks, sampling_rate=1000, desired_length=None,
@@ -31,9 +36,8 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None,
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame containing the respiration rate accessible with the key
-        "RSP_Rate".
+    array
+        A vector containing the respiration rate.
 
     See Also
     --------
@@ -47,42 +51,22 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None,
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     >>> signals, info = nk.rsp_findpeaks(cleaned)
     >>>
-    >>> data = nk.rsp_rate(signals)
-    >>> data["RSP_Signal"] = cleaned  # Add the signal back
-    >>> data.plot(subplots=True)
+    >>> rate = nk.rsp_rate(signals)
+    >>> nk.signal_plot([rsp, rate], subplots=True)
     """
-    # Sanity checks.
-    if isinstance(peaks, dict):
-        peaks = peaks["RSP_Peaks"]
-    elif isinstance(peaks, pd.DataFrame):
-        desired_length = len(peaks["RSP_Peaks"])
-        peaks = np.where(peaks["RSP_Peaks"] == 1)[0]
-    if len(peaks) <= 3:
-        print("NeuroKit warning: rsp_rate(): too few peaks detected to "
-              "compute the rate.")
-        return
+    # Format input.
+    peaks, desired_length = _signal_rate_sanitize(peaks, desired_length)
 
-    # Find length of final signal to return.
-    if desired_length is None:
-        desired_length = len(peaks)
-
-    # Calculate period in msec, based on horizontal peak to peak difference and
-    # make sure that rate has the same number of elements as peaks (important
-    # for interpolation later) by prepending the mean of all periods.
-    period = np.ediff1d(peaks, to_begin=0) / sampling_rate
-    period[0] = np.mean(period)
-    rate = 60 / period
+    # Get rate values
+    rate = signal_rate(peaks, sampling_rate, desired_length=len(peaks))
 
     # Preprocessing.
     rate, peaks = _rsp_rate_preprocessing(rate, peaks, method=method)
 
     # Interpolate rates to desired_length samples.
-    rate = signal_interpolate(rate, x_axis=peaks,
-                              desired_length=desired_length)
+    rate = signal_interpolate(rate, x_axis=peaks, desired_length=desired_length)
 
-    signals = pd.DataFrame(rate, columns=["RSP_Rate"])
-
-    return signals
+    return rate
 
 
 # =============================================================================

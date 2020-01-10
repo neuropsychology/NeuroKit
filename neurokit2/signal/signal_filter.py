@@ -152,7 +152,7 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
 def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
     """Filter a signal using IIR Butterworth SOS method.
     """
-    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, normalize=False, sampling_rate=sampling_rate)
+    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
     sos = scipy.signal.butter(order, freqs, btype=filter_type, output='sos', fs=sampling_rate)
     filtered = scipy.signal.sosfiltfilt(sos, signal)
@@ -163,9 +163,9 @@ def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highc
     """Filter a signal using IIR Butterworth B/A method.
     """
     # Get coefficients
-    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, normalize=True, sampling_rate=sampling_rate)
+    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
-    b, a = scipy.signal.butter(order, freqs, btype=filter_type, output='ba')
+    b, a = scipy.signal.butter(order, freqs, btype=filter_type, output='ba', fs=sampling_rate)
     try:
         filtered = scipy.signal.filtfilt(b, a, signal, method="gust")
     except ValueError:
@@ -179,7 +179,7 @@ def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highc
 # =============================================================================
 
 def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
-    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, normalize=False, sampling_rate=sampling_rate)
+    freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
     sos = scipy.signal.bessel(order, freqs, btype=filter_type, output='sos', fs=sampling_rate)
     filtered = scipy.signal.sosfiltfilt(sos, signal)
@@ -193,7 +193,7 @@ def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None,
 # =============================================================================
 # Utility
 # =============================================================================
-def _signal_filter_sanitize(lowcut=None, highcut=None, normalize=False, sampling_rate=1000):
+def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, normalize=False):
 
     # Sanity checks
     if isinstance(highcut, int):
@@ -202,6 +202,12 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, normalize=False, sampling
                   " must exceed the Nyquist rate to avoid aliasing problem. "
                   "In this analysis, the sampling rate has to be higher than",
                   2 * highcut, "Hz.")
+
+    # Replace 0 by none
+    if lowcut is not None and lowcut == 0:
+        lowcut = None
+    if highcut is not None and highcut == 0:
+        highcut = None
 
     # Format
     if lowcut is not None and highcut is not None:
@@ -218,6 +224,7 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, normalize=False, sampling
         filter_type = "lowpass"
 
     # Normalize frequency to Nyquist Frequency (Fs/2).
+    # However, no need to normalize if `fs` argument is provided to the scipy filter
     if normalize is True:
         freqs = np.array(freqs) / (sampling_rate / 2)
 

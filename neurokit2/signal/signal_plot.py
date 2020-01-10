@@ -5,7 +5,7 @@ import pandas as pd
 from ..events.events_plot import events_plot
 
 
-def signal_plot(signal):
+def signal_plot(signal, subplots=False):
     """Plot signal with events as vertical lines.
 
     Parameters
@@ -55,4 +55,4 @@ def signal_plot(signal):
 
         events_plot(events, signal=signal[continuous_columns])
     else:
-        signal[continuous_columns].plot()
+        signal[continuous_columns].plot(subplots=subplots)

@@ -9,7 +9,7 @@ from ..signal import signal_distord
 
 
 def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 heart_rate=70, method="ecgsyn", random_state=42):
+                 heart_rate=70, method="ecgsyn", random_state=None):
     """Simulate an ECG/EKG signal
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies wavelets to roughly approximate cardiac cycles.
@@ -60,6 +60,9 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50(3), 289-294.
     - https://github.com/diarmaidocualain/ecg_simulation
     """
+    # Seed the random generator for reproducible results
+    np.random.seed(random_state)
+
     # Generate number of samples automatically if length is unspecified
     if length is None:
         length = duration * sampling_rate
@@ -71,9 +74,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         ecg = _ecg_simulate_daubechies(duration=duration,
                                        length=length,
                                        sampling_rate=sampling_rate,
-                                       noise=noise,
-                                       heart_rate=heart_rate,
-                                       random_state=random_state)
+                                       heart_rate=heart_rate)
     else:
         approx_number_beats = int(np.round(duration * (heart_rate / 60)))
         ecg = _ecg_simulate_ecgsyn(sfecg=sampling_rate,
@@ -85,8 +86,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                                    sfint=sampling_rate,
                                    ti=(-70, -15, 0, 15, 100),
                                    ai=(1.2, -5, 30, -7.5, 0.75),
-                                   bi=(0.25, 0.1, 0.1, 0.1, 0.4),
-                                   random_state=random_state)
+                                   bi=(0.25, 0.1, 0.1, 0.1, 0.4))
         # Cut to match expected length
         ecg = ecg[0:length]
 
@@ -98,6 +98,8 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                              noise_frequency=[5, 10, 100],
                              noise_shape="laplace")
 
+    # Reset random seed (so it doesn't affect global)
+    np.random.seed(None)
     return(ecg)
 
 
@@ -111,16 +113,12 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 # =============================================================================
 # Daubechies
 # =============================================================================
-def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                             heart_rate=70, random_state=42):
+def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000,
+                             heart_rate=70):
     """Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.
     It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
     This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
     """
-
-    # Seed the random generator for reproducible results
-    np.random.seed(random_state)
-
     # The "Daubechies" wavelet is a rough approximation to a real, single, cardiac cycle
     cardiac = scipy.signal.wavelets.daub(10)
 
@@ -134,7 +132,7 @@ def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, noise
     ecg = np.tile(cardiac , num_heart_beats)
 
     # Add random (gaussian distributed) noise
-    ecg += np.random.normal(0, noise, len(ecg))
+#    ecg += np.random.normal(0, noise, len(ecg))
 
     # Resample
     ecg = signal_resample(ecg,
@@ -150,8 +148,7 @@ def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, noise
 # ECGSYN
 # =============================================================================
 def _ecg_simulate_ecgsyn(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfratio=0.5, sfint=512,
-                         ti=(-70, -15, 0, 15, 100), ai=(1.2, -5, 30, -7.5, 0.75), bi=(0.25, 0.1, 0.1, 0.1, 0.4),
-                         random_state=42):
+                         ti=(-70, -15, 0, 15, 100), ai=(1.2, -5, 30, -7.5, 0.75), bi=(0.25, 0.1, 0.1, 0.1, 0.4)):
     """
     This function is a python translation of the matlab script by `McSharry & Clifford (2013) <https://physionet.org/content/ecgsyn>`_.
 
@@ -182,9 +179,6 @@ def _ecg_simulate_ecgsyn(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfrat
     >>> plt.plot(x[:num_points], s[:num_points])
     >>> plt.show()
     """
-    # Seed the random generator for reproducible results
-    np.random.seed(random_state)
-
 
     if not isinstance(ti, np.ndarray):
         ti = np.array(ti)

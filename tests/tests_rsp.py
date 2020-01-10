@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 import biosppy
 
+np.random.seed(42)
 
 def test_rsp_simulate():
     rsp1 = nk.rsp_simulate(duration=20, length=3000)
@@ -27,7 +28,7 @@ def test_rsp_clean():
 
     sampling_rate = 1000
     rsp = nk.rsp_simulate(duration=120, sampling_rate=sampling_rate,
-                          respiratory_rate=15)
+                          respiratory_rate=15, random_state=42)
 
     khodadad2018 = nk.rsp_clean(rsp, sampling_rate=1000, method="khodadad2018")
     assert len(rsp) == len(khodadad2018)
@@ -64,7 +65,7 @@ def test_rsp_clean():
 def test_rsp_findpeaks():
 
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                          respiratory_rate=15)
+                          respiratory_rate=15, random_state=42)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_findpeaks(rsp_cleaned)
     assert signals.shape == (120000, 2)
@@ -90,13 +91,13 @@ def test_rsp_rate():
     test_length = 30
     rate = nk.rsp_rate(peaks=info, sampling_rate=1000,
                        desired_length=test_length)
-    assert rate.shape == (test_length, 1)
-    assert np.abs(rate["RSP_Rate"].mean() - 15) < 0.2
+    assert rate.shape == (test_length, )
+    assert np.abs(rate.mean() - 15) < 0.2
 
     # Test with DataFrame.
     rate = nk.rsp_rate(signals, sampling_rate=1000)
-    assert rate.shape == (signals.shape[0], 1)
-    assert np.abs(rate["RSP_Rate"].mean() - 15) < 0.2
+    assert rate.shape == (signals.shape[0], )
+    assert np.abs(rate.mean() - 15) < 0.2
 
 
 def test_rsp_amplitude():
@@ -110,13 +111,13 @@ def test_rsp_amplitude():
     test_length = 60
     amplitude = nk.rsp_amplitude(rsp_signal=rsp, extrema=info,
                                  desired_length=test_length)
-    assert amplitude.shape == (test_length, 1)
-    assert np.abs(amplitude["RSP_Amplitude"].mean() - 1) < 0.01
+    assert amplitude.shape == (test_length, )
+    assert np.abs(amplitude.mean() - 1) < 0.01
 
     # Test with DataFrame.
     amplitude = nk.rsp_amplitude(rsp_signal=rsp, extrema=signals)
-    assert amplitude.shape == (rsp.size, 1)
-    assert np.abs(amplitude["RSP_Amplitude"].mean() - 1) < 0.01
+    assert amplitude.shape == (rsp.size, )
+    assert np.abs(amplitude.mean() - 1) < 0.01
 
 
 def test_rsp_process():

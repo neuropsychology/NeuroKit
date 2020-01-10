@@ -4,7 +4,7 @@ import numpy as np
 
 from .utils_embed import _embed
 from .utils_get_r import _get_r
-
+from .utils_phi import _phi_divide
 
 def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
     """
@@ -58,7 +58,7 @@ def entropy_fuzzy(signal, order=2, r="default", n=1):
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     order : int
-        The Embedding dimension (often denoted as 'm'), i.e., the length of compared run of data. Typically 1, 2 or 3.
+        The embedding dimension (often denoted as 'm'), i.e., the length of compared run of data. Typically 1, 2 or 3.
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
     n : float, optional
@@ -78,10 +78,11 @@ def entropy_fuzzy(signal, order=2, r="default", n=1):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=30, num=100))
-    >>> nk.entropy_fuzzy(signal[0:100])
-    0.5240030033696856
+    >>> signal = nk.signal_simulate(duration=2, frequency=5)
+    >>> nk.entropy_fuzzy(signal)
+    0.08481168552031555
     """
     r = _get_r(signal, r=r)
     phi = _entropy_sample(signal, order=order, r=r, n=1, fuzzy=True)
-    return -np.log(np.divide(phi[1], phi[0]))
+
+    return _phi_divide(phi)
