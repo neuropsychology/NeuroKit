@@ -52,10 +52,11 @@ def entropy_multiscale(signal, order=2, r="default"):
         Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients. Shock, 30(1), 17-22.
     """
     r = _get_r(signal, r=r)
+    max_scale = len(signal)  # Set to max
 
     # Initalize mse vector
-    mse = np.zeros(len(signal))
-    for i in range(len(signal)):
+    mse = np.zeros(max_scale)
+    for i in range(max_scale):
         temp = _entropy_multiscale_granularizesignal(signal, i+1)
         if len(temp) >= 4:
             mse[i] = entropy_sample(temp, order, r)
