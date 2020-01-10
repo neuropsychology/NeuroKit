@@ -98,11 +98,10 @@ def test_ecg_process():
     noise = 0.05
 
     ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
-    signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate,
-                                   method="neurokit")
+    signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate, method="neurokit")
     # Only check array dimensions and column names since functions called by
     # ecg_process have already been unit tested
-    assert np.array(["ECG_Raw", "ECG_Clean", "ECG_Peaks", "ECG_Rate"]) in signals.columns.values
+    assert np.array(["ECG_Raw", "ECG_Clean", "ECG_Peaks", "ECG_Rate"], dtype=str) in np.array(signals.columns.values, dtype=str)
 
 
 def test_ecg_plot():
