@@ -155,4 +155,3 @@ def _events_find(event_channel, threshold="auto", threshold_keep="above"):
     events["onset"] = np.array(events["onset"])
     events["duration"] = np.array(events["duration"])
     return events
-
