@@ -12,13 +12,13 @@ def test_events_find():
 
     signal = np.cos(np.linspace(start=0, stop=20, num=1000))
     events = nk.events_find(signal)
-    assert list(events["Onset"]) == [0, 236, 550, 864]
+    assert list(events["onset"]) == [0, 236, 550, 864]
 
     events = nk.events_find(signal, duration_min = 150)
-    assert list(events["Onset"]) == [236, 550]
+    assert list(events["onset"]) == [236, 550]
 
     events = nk.events_find(signal, inter_min = 300)
-    assert list(events["Onset"]) == [0, 550, 864]
+    assert list(events["onset"]) == [0, 550, 864]
 
 
 
@@ -27,7 +27,7 @@ def test_events_to_mne():
     signal = np.cos(np.linspace(start=0, stop=20, num=1000))
     events = nk.events_find(signal)
     events, event_id = nk.events_to_mne(events)
-    assert event_id == {'Event': 0}
+    assert event_id == {'event': 0}
 
 
 
