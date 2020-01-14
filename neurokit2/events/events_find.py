@@ -9,56 +9,7 @@ from ..signal import signal_binarize
 
 
 
-
-
-
-
-
-def _events_find(event_channel, threshold="auto", threshold_keep="above"):
-    """Internal function
-    """
-    binary = signal_binarize(event_channel, threshold=threshold)
-
-    if threshold_keep.lower() != 'above':
-        binary = np.abs(binary - 1)  # Reverse if events are below
-
-    # Initialize data
-    events = {"Onset":[], "Duration":[]}
-
-    index = 0
-    for event, group in (itertools.groupby(binary)):
-        duration = len(list(group))
-        if event == 1:
-            events["Onset"].append(index)
-            events["Duration"].append(duration)
-        index += duration
-
-    # Convert to array
-    events["Onset"] = np.array(events["Onset"])
-    events["Duration"] = np.array(events["Duration"])
-    return(events)
-
-
-
-
-
-
-
-
-
-
-
-
-
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-# ==============================================================================
-def events_find(event_channel, threshold="auto", threshold_keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0, discard_first=0, discard_last=0):
+def events_find(event_channel, threshold="auto", threshold_keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0, discard_first=0, discard_last=0, event_labels=None, event_conditions=None):
     """Find and select events in a continuous signal (e.g., from a photosensor).
 
     Parameters
@@ -77,11 +28,15 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
         The minimum duration after an event for the subsequent event to be considered as such (in time points). Useful when spurious consecutive events are created due to very high sampling rate.
     discard_first, discard_last : int
         Discard first or last n events. Useful if the experiment stats or ends with some spurious events. If discard_first=0 and discard_last=0, no first event or last event is removed.
+    event_labels : list
+        A list containing unique event identifiers. If `None`, will use the event index number.
+    event_conditions : list
+        An optional list containing, for each event, for example the trial category, group or experimental conditions.
 
     Returns
     ----------
     dict
-        Dict containing two arrays, 'onset' for events onsets and 'duration' for events durations.
+        Dict containing 3 or 4 arrays, 'onset' for event onsets, 'duration' for event durations, 'label' for the event identifiers and the optional 'conditions' passed to `event_conditions`.
 
     See Also
     --------
@@ -93,48 +48,101 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+    >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
     >>> events
-    {'Onset': array([  0, 236, 550, 864]), 'Duration': array([ 79, 157, 157, 136])}
+    {'onset': array([   1, 1000, 2000, 3000]),'duration': array([499, 500, 500, 500])}
     >>>
-    >>> nk.events_plot(signal, events)
+    >>> nk.events_plot(events, signal)
     """
     events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
 
     # Warning when no events detected
-    if len(events["Onset"]) == 0:
+    if len(events["onset"]) == 0:
         print("NeuroKit warning: events_find(): No events found. Check your event_channel or adjust 'threhsold' or 'keep' arguments.")
-        return(events)
+        return events
 
     # Remove based on duration
-    to_keep = np.full(len(events["Onset"]), True)
-    to_keep[events["Duration"] < duration_min] = False
+    to_keep = np.full(len(events["onset"]), True)
+    to_keep[events["duration"] < duration_min] = False
     if duration_max is not None:
-        to_keep[events["Duration"] > duration_max] = False
-    events["Onset"] = events["Onset"][to_keep]
-    events["Duration"] = events["Duration"][to_keep]
+        to_keep[events["duration"] > duration_max] = False
+    events["onset"] = events["onset"][to_keep]
+    events["duration"] = events["duration"][to_keep]
 
     # Remove based on index
     if start_at > 0:
-        events["Onset"] = events["Onset"][events["Onset"] >= start_at]
-        events["Duration"] = events["Duration"][events["Onset"] >= start_at]
+        events["onset"] = events["onset"][events["onset"] >= start_at]
+        events["duration"] = events["duration"][events["onset"] >= start_at]
     if end_at is not None:
-        events["Onset"] = events["Onset"][events["Onset"] <= end_at]
-        events["Duration"] = events["Duration"][events["Onset"] <= end_at]
+        events["onset"] = events["onset"][events["onset"] <= end_at]
+        events["duration"] = events["duration"][events["onset"] <= end_at]
 
     # Remove based on interval min
     if inter_min > 0:
-        inter = np.diff(events["Onset"])
-        events["Onset"] = np.concatenate([events["Onset"][0:1], events["Onset"][1::][inter >= inter_min]])
-        events["Duration"] = np.concatenate([events["Duration"][0:1], events["Duration"][1::][inter >= inter_min]])
+        inter = np.diff(events["onset"])
+        events["onset"] = np.concatenate([events["onset"][0:1], events["onset"][1::][inter >= inter_min]])
+        events["duration"] = np.concatenate([events["duration"][0:1], events["duration"][1::][inter >= inter_min]])
 
     # Remove first and last n
     if discard_first > 0:
-        events["Onset"] = events["Onset"][discard_first:]
-        events["Duration"] = events["Duration"][discard_first:]
+        events["onset"] = events["onset"][discard_first:]
+        events["duration"] = events["duration"][discard_first:]
     if discard_last > 0:
-        events["Onset"] = events["Onset"][0:-1*discard_last]
-        events["Duration"] = events["Duration"][0:-1*discard_last]
+        events["onset"] = events["onset"][0:-1*discard_last]
+        events["duration"] = events["duration"][0:-1*discard_last]
 
-    return(events)
+    # Labels
+    if event_labels is None:
+        event_labels = (np.arange(len(events["duration"]))+1).astype(np.str)
+
+    if len(list(set(event_labels))) != len(events["duration"]):
+        raise ValueError("NeuroKit error: events_find(): oops, it seems like the `event_labels` that you provided are not unique (all different). Please provide " + str(len(events["duration"])) + " distinct labels.")
+
+    if len(event_labels) != len(events["duration"]):
+        raise ValueError("NeuroKit error: events_find(): oops, it seems like you provided " + str(len(event_labels)) + " `event_labels`, but " + str(len(events["duration"])) + " events got detected :(. Check your event names or the event signal!")
+
+    events["label"] = event_labels
+
+    # Condition
+    if event_conditions is not None:
+        if len(event_conditions) != len(events["duration"]):
+            raise ValueError("NeuroKit error: events_find(): oops, it seems like you provided " + str(len(event_conditions)) + " `event_conditions`, but " + str(len(events["duration"])) + " events got detected :(. Check your event conditions or the event signal!")
+        events["condition"] = event_conditions
+
+    return events
+
+
+
+
+
+
+
+
+
+
+
+def _events_find(event_channel, threshold="auto", threshold_keep="above"):
+    """Internal function
+    """
+    binary = signal_binarize(event_channel, threshold=threshold)
+
+    if threshold_keep.lower() != 'above':
+        binary = np.abs(binary - 1)  # Reverse if events are below
+
+    # Initialize data
+    events = {"onset":[], "duration":[]}
+
+    index = 0
+    for event, group in (itertools.groupby(binary)):
+        duration = len(list(group))
+        if event == 1:
+            events["onset"].append(index)
+            events["duration"].append(duration)
+        index += duration
+
+    # Convert to array
+    events["onset"] = np.array(events["onset"])
+    events["duration"] = np.array(events["duration"])
+    return events
+
