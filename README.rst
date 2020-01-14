@@ -84,7 +84,7 @@ Simulate physiological signals
                          "RSP": rsp,
                          "EDA": eda,
                          "EMG": emg})
-    data.plot(subplots=True)
+    nk.signal_plot(data, subplots=True)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
@@ -94,14 +94,14 @@ Cardiac activity (ECG) processing
 
 .. code-block:: python
 
-    # Generate 20 seconds of ECG signal
-    ecg = nk.ecg_simulate(duration=20, heart_rate=70)
+    # Generate 20 seconds of ECG signal (recorded at 250 samples / second)
+    ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70, random_state=333)
 
     # Process it
-    signals, info = nk.ecg_process(ecg)
+    signals, info = nk.ecg_process(ecg, sampling_rate=250)
 
     # Visualise the processing
-    nk.ecg_plot(signals)
+    nk.ecg_plot(signals, sampling_rate=250)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
@@ -112,14 +112,14 @@ Respiration (RSP) processing
 
 .. code-block:: python
 
-    # Generate one minute of respiratory (RSP) signal
-    rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
+    # Generate one minute of respiratory (RSP) signal (recorded at 250 samples / second)
+    rsp = nk.rsp_simulate(duration=60, sampling_rate=250, respiratory_rate=15)
 
     # Process it
-    signals, info = nk.rsp_process(rsp)
+    signals, info = nk.rsp_process(rsp, sampling_rate=250)
 
     # Visualise the processing
-    nk.rsp_plot(signals)
+    nk.rsp_plot(signals, sampling_rate=250)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_respiration.png

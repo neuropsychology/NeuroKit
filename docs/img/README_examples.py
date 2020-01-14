@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import neurokit2 as nk
+#import neurokit2 as nk
 
 
 # =============================================================================
@@ -18,7 +18,7 @@ data = pd.DataFrame({"ECG": ecg,
                      "RSP": rsp,
                      "EDA": eda,
                      "EMG": emg})
-data.plot(subplots=True)
+nk.signal_plot(data, subplots=True)
 
 
 # Save it
@@ -34,17 +34,17 @@ plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
 # Cardiac activity (ECG) processing
 # =============================================================================
 
-# Generate 20 seconds of ECG signal
-ecg = nk.ecg_simulate(duration=20, heart_rate=70, random_state=333)
+# Generate 20 seconds of ECG signal (recorded at 250 samples / second)
+ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70, random_state=333)
 
 # Process it
-signals, info = nk.ecg_process(ecg)
+signals, info = nk.ecg_process(ecg, sampling_rate=250)
 
 # Visualise the processing
-nk.ecg_plot(signals)
+nk.ecg_plot(signals, sampling_rate=250)
 
 # Save it
-plot = nk.ecg_plot(signals)
+plot = nk.ecg_plot(signals, sampling_rate=250)
 plot.savefig("README_ecg.png", dpi=300)
 
 
@@ -52,15 +52,15 @@ plot.savefig("README_ecg.png", dpi=300)
 # Respiration (RSP) processing
 # =============================================================================
 
-# Generate one minute of respiratory (RSP) signal
-rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
+# Generate one minute of respiratory (RSP) signal (recorded at 250 samples / second)
+rsp = nk.rsp_simulate(duration=60, sampling_rate=250, respiratory_rate=15)
 
 # Process it
-signals, info = nk.rsp_process(rsp)
+signals, info = nk.rsp_process(rsp, sampling_rate=250)
 
 # Visualise the processing
-nk.rsp_plot(signals)
+nk.rsp_plot(signals, sampling_rate=250)
 
 # Save it
-plot = nk.rsp_plot(signals)
+plot = nk.rsp_plot(signals, sampling_rate=250)
 plot.savefig("README_respiration.png", dpi=300)
