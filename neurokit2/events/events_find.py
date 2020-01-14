@@ -92,23 +92,7 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
         events["onset"] = events["onset"][0:-1*discard_last]
         events["duration"] = events["duration"][0:-1*discard_last]
 
-    # Labels
-    if event_labels is None:
-        event_labels = (np.arange(len(events["duration"]))+1).astype(np.str)
-
-    if len(list(set(event_labels))) != len(events["duration"]):
-        raise ValueError("NeuroKit error: events_find(): oops, it seems like the `event_labels` that you provided are not unique (all different). Please provide " + str(len(events["duration"])) + " distinct labels.")
-
-    if len(event_labels) != len(events["duration"]):
-        raise ValueError("NeuroKit error: events_find(): oops, it seems like you provided " + str(len(event_labels)) + " `event_labels`, but " + str(len(events["duration"])) + " events got detected :(. Check your event names or the event signal!")
-
-    events["label"] = event_labels
-
-    # Condition
-    if event_conditions is not None:
-        if len(event_conditions) != len(events["duration"]):
-            raise ValueError("NeuroKit error: events_find(): oops, it seems like you provided " + str(len(event_conditions)) + " `event_conditions`, but " + str(len(events["duration"])) + " events got detected :(. Check your event conditions or the event signal!")
-        events["condition"] = event_conditions
+    events = _events_find_label(events, event_labels=event_labels, event_conditions=event_conditions)
 
     return events
 
@@ -116,6 +100,32 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
 
 
 
+# =============================================================================
+# Internals
+# =============================================================================
+
+def _events_find_label(events, event_labels=None, event_conditions=None, function_name="events_find"):
+    # Get n events
+    n = len(events["onset"])
+
+    # Labels
+    if event_labels is None:
+        event_labels = (np.arange(n)+1).astype(np.str)
+
+    if len(list(set(event_labels))) != n:
+        raise ValueError("NeuroKit error: " + function_name + "(): oops, it seems like the `event_labels` that you provided are not unique (all different). Please provide " + str(n) + " distinct labels.")
+
+    if len(event_labels) != n:
+        raise ValueError("NeuroKit error: " + function_name + "(): oops, it seems like you provided " + str(n) + " `event_labels`, but " + str(n) + " events got detected :(. Check your event names or the event signal!")
+
+    events["label"] = event_labels
+
+    # Condition
+    if event_conditions is not None:
+        if len(event_conditions) != n:
+            raise ValueError("NeuroKit error: " + function_name + "(): oops, it seems like you provided " + str(n) + " `event_conditions`, but " + str(n) + " events got detected :(. Check your event conditions or the event signal!")
+        events["condition"] = event_conditions
+    return events
 
 
 

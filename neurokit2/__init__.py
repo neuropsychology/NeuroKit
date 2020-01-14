@@ -19,6 +19,7 @@ from .stats import *
 from .complexity import *
 from .signal import *
 from .events import *
+from .epochs import *
 from .data import *
 
 from .ecg import *
