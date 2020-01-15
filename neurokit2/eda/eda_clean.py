@@ -5,39 +5,27 @@ import scipy.signal
 from ..signal import signal_smooth
 
 
-def eda_clean(rsp_signal, sampling_rate=1000, method="biosppy"):
-    """Preprocess a respiration (RSP) signal.
+def eda_clean(eda_signal, sampling_rate=1000, method="biosppy"):
+    """Preprocess Electrodermal Activity (EDA) signal.
 
-    Clean a respiration signal using different sets of parameters, such as:
-
-    - `Khodadad et al. (2018)
-    <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_:
-        linear detrending followed by a fifth order 2Hz low-pass IIR
-        Butterworth filter).
-    - `BioSPPy
-    <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_:
-        second order 0.1 - 0.35 Hz bandpass Butterworth filter followed by a
-        constant detrending.
 
     Parameters
     ----------
-    rsp_signal : list, array or Series
-        The raw respiration channel (as measured, for instance, by a
-        respiration belt).
+    eda_signal : list, array or Series
+        The raw EDA signal.
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "khodadad2018"
-        (default) or "biosppy".
+        The processing pipeline to apply. Can be one of 'biosppy' (default).
 
     Returns
     -------
     array
-        Vector containing the cleaned respiratory signal.
+        Vector containing the cleaned EDA signal.
 
     See Also
     --------
-    rsp_findpeaks, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
+    eda_simulate, eda_decompose
 
     Examples
     --------
@@ -52,7 +40,7 @@ def eda_clean(rsp_signal, sampling_rate=1000, method="biosppy"):
     """
     method = method.lower()  # remove capitalised letters
     if method == "biosppy":
-        clean = _eda_clean_biosppy(rsp_signal, sampling_rate)
+        clean = _eda_clean_biosppy(eda_signal, sampling_rate)
     else:
         raise ValueError("NeuroKit error: eda_clean(): 'method' should be "
                          "one of 'biosppy'.")
