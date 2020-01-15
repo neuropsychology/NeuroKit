@@ -15,7 +15,7 @@ def signal_simulate(duration=10, length=None, sampling_rate=1000,
 
     Parameters
     ----------
-    duration : int
+    duration : float
         Desired length of duration (s).
     sampling_rate, length : int
         The desired sampling rate (in Hz, i.e., samples/second) or the desired
@@ -44,7 +44,7 @@ def signal_simulate(duration=10, length=None, sampling_rate=1000,
     if length is None:
         length = duration * sampling_rate
 
-    signal = np.zeros(length)
+    signal = np.zeros(int(length))
 
     params = listify(frequency=frequency, amplitude=amplitude)
     for i in range(len(params["frequency"])):

@@ -6,15 +6,15 @@ import numpy as np
 
 
 
-def events_to_mne(events, conditions=None):
+def events_to_mne(events, event_conditions=None):
     """Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG..
 
     Parameters
     ----------
     events : list, ndarray or dict
-        Events onset location. If a dict is passed (e.g., from 'events_find()'), will select only the 'Onset' list.
-    conditions : list
-        A list of same length as events containing the stimuli types/conditions.
+        Events onset location. Can also be a dict obtained through 'events_find()'.
+    event_conditions : list
+        An optional list containing, for each event, for example the trial category, group or experimental conditions.
 
 
     Returns
@@ -32,31 +32,44 @@ def events_to_mne(events, conditions=None):
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+    >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
     >>> events, event_id = nk.events_to_mne(events)
+    >>> events
+    array([[   1,    0,    0],
+           [1000,    0,    0],
+           [2000,    0,    0],
+           [3000,    0,    0]])
     >>> event_id
-    {'Event': 0}
+    {'event': 0}
+    >>>
+    >>> # Conditions
+    >>> events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
+    >>> events, event_id = nk.events_to_mne(events)
+    >>> event_id
+    {'B': 0, 'A': 1}
     """
 
     if isinstance(events, dict):
-        events = events["Onset"]
+        if 'condition' in events.keys():
+            event_conditions = events["condition"]
+        events = events["onset"]
 
     event_id = {}
 
-    if conditions is None:
-        conditions = ["Event"] * len(events)
+    if event_conditions is None:
+        event_conditions = ["event"] * len(events)
 
     # Sanity check
-    if len(conditions) != len(events):
-        raise ValueError("NeuroKit error: events_to_mne(): 'conditions' argument of different length than event onsets.")
+    if len(event_conditions) != len(events):
+        raise ValueError("NeuroKit error: events_to_mne(): 'event_conditions' argument of different length than event onsets.")
 
 
-    event_names = list(set(conditions))
+    event_names = list(set(event_conditions))
     event_index = list(range(len(event_names)))
     for i in enumerate(event_names):
-        conditions = [event_index[i[0]] if x==i[1] else x for x in conditions]
+        event_conditions = [event_index[i[0]] if x==i[1] else x for x in event_conditions]
         event_id[i[1]] = event_index[i[0]]
 
-    events = np.array([events, [0]*len(events), conditions]).T
-    return(events, event_id)
+    events = np.array([events, [0]*len(events), event_conditions]).T
+    return events, event_id

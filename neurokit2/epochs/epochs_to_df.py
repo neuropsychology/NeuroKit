@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+import pandas as pd
+import numpy as np
+
+
+
+
+def epochs_to_df(epochs):
+    """
+    Convert epochs to a DataFrame.
+
+    Parameters
+    ----------
+    epochs : dict
+        A dict containing one DataFrame per event/trial. Usually obtained via `epochs_create()`.
+
+
+    Returns
+    ----------
+    DataFrame
+        A DataFrame containing all epochs identifiable by the 'Label' column, which time axis is stored in the 'Time' column.
+
+
+    See Also
+    ----------
+    events_find, events_plot, epochs_create, epochs_plot
+
+    Examples
+    ----------
+    >>> import neurokit2 as nk
+    >>> import pandas as pd
+    >>>
+    >>> # Get data
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>>
+    >>> # Find events
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> nk.events_plot(events, data)
+    >>>
+    >>> # Create epochs
+    >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_duration=3)
+    >>> data = nk.epochs_to_df(epochs)
+    """
+    data = pd.concat(epochs)
+    data["Time"] = data.index.get_level_values(1).values
+    data = data.reset_index(drop=True)
+
+    return data

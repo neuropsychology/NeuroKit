@@ -1,6 +1,7 @@
 """Submodule for NeuroKit."""
 
 from .standardize import standardize
+from .hdi import hdi
 from .fit_loess import fit_loess
 from .fit_polynomial import fit_polynomial
 from .fit_polynomial import fit_polynomial_findorder
