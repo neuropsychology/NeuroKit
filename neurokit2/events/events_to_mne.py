@@ -7,7 +7,7 @@ import numpy as np
 
 
 def events_to_mne(events, conditions=None):
-    """Create MNE compatible events.
+    """Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG..
 
     Parameters
     ----------

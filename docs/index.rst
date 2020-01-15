@@ -6,6 +6,7 @@ Welcome to NeuroKit's documentation!
 
    installation
    news
+   tutorials/index
    functions
    contributing
    credits

@@ -6,28 +6,18 @@ import numpy as np
 
 
 
-def _signal_binarize(signal, threshold="auto"):
-    if threshold == "auto":
-        threshold = np.mean([np.max(signal), np.min(signal)])
-
-    binary = signal.copy()
-    binary[signal > threshold] = 1
-    binary[signal <= threshold] = 0
-    return(binary)
-
-
-
-
 
 
 
 def signal_binarize(signal, threshold="auto"):
     """Binarize a continuous signal.
 
+    Convert a continuous signal into zeros and ones depending on a given threshold.
+
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel.
+        The signal channel in the form of a vector of values.
     threshold : float
         The threshold value by which to select the events. If "auto", takes the value between the max and the min.
 
@@ -57,6 +47,20 @@ def signal_binarize(signal, threshold="auto"):
     else:
         signal = _signal_binarize(signal, threshold=threshold)
 
-    return(signal)
+    return signal
 
+
+
+
+
+
+
+def _signal_binarize(signal, threshold="auto"):
+    if threshold == "auto":
+        threshold = np.mean([np.max(signal), np.min(signal)])
+
+    binary = signal.copy()
+    binary[signal > threshold] = 1
+    binary[signal <= threshold] = 0
+    return binary
 

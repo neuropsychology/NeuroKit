@@ -21,10 +21,9 @@ def find_version():
 
 
 # Dependencies
-requirements = ['numpy', 'pandas', 'scipy', 'mne', 'bioread']
-setup_requirements = ['pytest-runner']
-test_requirements = requirements + ['pytest', 'coverage']
-
+requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'mne', 'bioread', 'matplotlib']
+setup_requirements = ['pytest-runner', 'numpy']
+test_requirements = requirements + ['pytest', 'coverage', 'pyentrp', 'nolds', 'biosppy']
 
 # Setup
 setup(
@@ -39,14 +38,15 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="The Python Toolbox for Neurophysiological Signal Processing (EEG, EDA, ECG, EMG...).",
+    description="The Python Toolbox for Neurophysiological Signal Processing.",
     install_requires=requirements,
     license="MIT license",
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/x-rst',
+    packages=find_packages(),
     include_package_data=True,
     keywords='neurokit2',
     name='neurokit2',
-    packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite='pytest',
     tests_require=test_requirements,
