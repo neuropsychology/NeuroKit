@@ -30,6 +30,7 @@ install:
   - pip install ".[test]"
     # Testing
   - pip install bioread
+  - pip install mne
   - pip install pyentrp
   - pip install nolds
   - pip install biosppy
