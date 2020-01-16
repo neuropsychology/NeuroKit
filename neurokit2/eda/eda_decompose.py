@@ -51,6 +51,12 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="cvxEDA"):
     >>> data["EDA_Raw"] = eda_signal
     >>> out = nk1.bio
     >>> data.plot()
+
+    References
+    -----------
+    - cvxEDA: https://github.com/lciti/cvxEDA
+    - Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43). Springer International Publishing.
+    - Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering, 63(4), 797-804.
     """
     method = method.lower()  # remove capitalised letters
     if method == "cvxeda":
@@ -134,14 +140,11 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
            Sparse QP solver to be used, see cvxopt.solvers.qp
        reltol : float
            Solver options, see http://cvxopt.org/userguide/coneprog.html#algorithm-parameters
-
-
-    References
-    -----------
-    - cvxEDA: https://github.com/lciti/cvxEDA
-    - Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43). Springer International Publishing.
-    - Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering, 63(4), 797-804.
     """
+    # Internal functions
+    def _cvx(m, n):
+        return cvxopt.spmatrix([], [], [], (m, n))
+
     frequency = 1/sampling_rate
 
     n = len(eda_signal)
@@ -183,16 +186,16 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
 
     old_options = cvxopt.solvers.options.copy()
     cvxopt.solvers.options.clear()
-    cvxopt.solvers.options.update({'reltol': reltol})
+    cvxopt.solvers.options.update({'reltol': reltol,
+                                   'show_progress': False})
     if solver == 'conelp':
         # Use conelp
-        z = lambda m, n: cvxopt.spmatrix([], [], [], (m, n))
-        G = cvxopt.sparse([[-A, z(2, n), M, z(nB+2, n)], [z(n+2, nC), C, z(nB+2, nC)],
-                            [z(n, 1), -1, 1, z(n+nB+2, 1)], [z(2*n+2, 1), -1, 1, z(nB, 1)],
-                            [z(n+2, nB), B, z(2, nB), cvxopt.spmatrix(1.0, range(nB), range(nB))]])
-        h = cvxopt.matrix([z(n, 1), .5, .5, eda, .5, .5, z(nB, 1)])
-        c = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T, z(nC, 1), 1, gamma, z(nB, 1)])
-        res = cvxopt.solvers.conelp(c, G, h, dims={'l':n, 'q':[n+2, nB+2], 's':[]})
+        G = cvxopt.sparse([[-A, _cvx(2, n), M, _cvx(nB+2, n)], [_cvx(n+2, nC), C, _cvx(nB+2, nC)],
+                            [_cvx(n, 1), -1, 1, _cvx(n+nB+2, 1)], [_cvx(2*n+2, 1), -1, 1, _cvx(nB, 1)],
+                            [_cvx(n+2, nB), B, _cvx(2, nB), cvxopt.spmatrix(1.0, range(nB), range(nB))]])
+        h = cvxopt.matrix([_cvx(n, 1), .5, .5, eda, .5, .5, _cvx(nB, 1)])
+        c = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T, _cvx(nC, 1), 1, gamma, _cvx(nB, 1)])
+        res = cvxopt.solvers.conelp(c, G, h, dims={'l': n, 'q': [n+2, nB+2], 's': []})
         obj = res['primal objective']
     else:
         # Use qp
@@ -217,3 +220,7 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
                         "EDA_Phasic": np.array(phasic)[:, 0]})
 
     return out
+
+
+
+
