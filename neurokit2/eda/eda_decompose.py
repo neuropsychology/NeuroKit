@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-import cvxopt
 
 from ..signal import signal_smooth
 from ..signal import signal_filter
@@ -47,7 +46,7 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="cvxEDA"):
     >>> data.plot()
     >>>
     >>> eda_signal = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")["EDA"]
-    >>> data = nk.eda_decompose(nk.standardize(eda_signal), sampling_rate=200, solver='conelp')
+    >>> data = nk.eda_decompose(nk.standardize(eda_signal), sampling_rate=200)
     >>> data["EDA_Raw"] = eda_signal
     >>> out = nk1.bio
     >>> data.plot()
@@ -141,6 +140,14 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
        reltol : float
            Solver options, see http://cvxopt.org/userguide/coneprog.html#algorithm-parameters
     """
+    # Try loading cvx
+    try:
+        import cvxopt
+    except ImportError:
+        raise ImportError("NeuroKit error: eda_decompose(): the 'cvxopt' "
+                          "module is required for this method oto run. ",
+                          "Please install it (`pip install cvxopt`).")
+
     # Internal functions
     def _cvx(m, n):
         return cvxopt.spmatrix([], [], [], (m, n))
@@ -165,7 +172,7 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
 
     # spline
     delta_knot_s = int(round(delta_knot / frequency))
-    spl = np.r_[np.arange(1., delta_knot_s), np.arange(delta_knot_s, 0., -1.)] # order 1
+    spl = np.r_[np.arange(1., delta_knot_s), np.arange(delta_knot_s, 0., -1.)]  # order 1
     spl = np.convolve(spl, spl, 'full')
     spl /= max(spl)
     # matrix of spline regressors

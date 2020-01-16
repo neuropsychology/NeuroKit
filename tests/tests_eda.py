@@ -50,3 +50,20 @@ def test_eda_clean():
     assert np.allclose((eda_biosppy - original).mean(), 0, atol=1e-5)
 
 
+def test_eda_decompose():
+
+    sampling_rate = 1000
+    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
+                          n_scr=6, noise=0.01, drift=0.01, random_state=42)
+
+
+    cvxEDA = nk.eda_decompose(nk.standardize(eda), method='cvxeda')
+    assert len(cvxEDA) == len(eda)
+
+
+    smoothMedian = nk.eda_decompose(nk.standardize(eda), method='smoothmedian')
+    assert len(smoothMedian) == len(eda)
+
+
+    highpass = nk.eda_decompose(nk.standardize(eda), method='highpass')
+    assert len(highpass) == len(eda)

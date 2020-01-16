@@ -21,9 +21,9 @@ def find_version():
 
 
 # Dependencies
-requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'mne', 'bioread', 'matplotlib', 'cvxopt']
+requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'mne', 'bioread', 'matplotlib']
 setup_requirements = ['pytest-runner', 'numpy']
-test_requirements = requirements + ['pytest', 'coverage', 'pyentrp', 'nolds', 'biosppy']
+test_requirements = requirements + ['pytest', 'coverage', 'pyentrp', 'nolds', 'biosppy', 'cvxopt']
 
 # Setup
 setup(
