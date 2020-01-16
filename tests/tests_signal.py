@@ -140,3 +140,30 @@ def test_signal_merge():
     signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
     assert len(signal) == 150
     assert signal[0] == signal2[0] + signal2[0]
+
+def test_signal_rate():
+
+    # Test with array.
+    signal = nk.signal_simulate(duration=10, sampling_rate=1000,
+                             frequency=1)
+    signals, info = nk.signal_findpeaks(signal)
+    rate = nk.signal_rate(peaks=signals, sampling_rate=1000,
+                       desired_length=None)
+    assert rate.shape[0] == np.max(signals)
+
+    # Test with dictionary.produced from signal_findpeaks.
+    assert info[list(info.keys())[0]].shape == (signals.shape[0], )
+
+    # Test with DataFrame.
+    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
+                       respiratory_rate=15, method="sinuosoidal", noise=0)
+    rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+    signals, info = nk.rsp_findpeaks(rsp_cleaned)
+    rate = nk.signal_rate(signals, sampling_rate=1000)
+    assert rate.shape == (signals.shape[0], )
+
+    # Test with dictionary.produced from rsp_findpeaks.
+    test_length = 30
+    rate = nk.signal_rate(info, sampling_rate=1000,
+                       desired_length=test_length)
+    assert rate.shape == (test_length, )
