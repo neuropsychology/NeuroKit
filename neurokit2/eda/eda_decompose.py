@@ -168,8 +168,8 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
     # matrix of spline regressors
     i = np.c_[np.arange(-(len(spl)//2), (len(spl)+1)//2)] + np.r_[np.arange(0, n, delta_knot_s)]
     nB = i.shape[1]
-    j = np.tile(np.arange(nB), (len(spl),1))
-    p = np.tile(spl, (nB,1)).T
+    j = np.tile(np.arange(nB), (len(spl), 1))
+    p = np.tile(spl, (nB, 1)).T
     valid = (i >= 0) & (i < n)
     B = cvxopt.spmatrix(p[valid], i[valid], j[valid])
 
@@ -178,7 +178,7 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
     nC = C.size[1]
 
     # Solve the problem:
-    # .5*(M*q + B*l + C*d - eda)^2 + alpha*sum(A,1)*p + .5*gamma*l'*l
+    # .5*(M*q + B*l + C*d - eda)^2 + alpha*sum(A, 1)*p + .5*gamma*l'*l
     # s.t. A*q >= 0
 
     old_options = cvxopt.solvers.options.copy()
@@ -186,32 +186,32 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
     cvxopt.solvers.options.update({'reltol': reltol})
     if solver == 'conelp':
         # Use conelp
-        z = lambda m,n: cvxopt.spmatrix([],[],[],(m,n))
-        G = cvxopt.sparse([[-A,z(2,n),M,z(nB+2,n)],[z(n+2,nC),C,z(nB+2,nC)],
-                            [z(n,1),-1,1,z(n+nB+2,1)],[z(2*n+2,1),-1,1,z(nB,1)],
-                            [z(n+2,nB),B,z(2,nB),cvxopt.spmatrix(1.0, range(nB), range(nB))]])
-        h = cvxopt.matrix([z(n,1),.5,.5,eda,.5,.5,z(nB,1)])
-        c = cvxopt.matrix([(cvxopt.matrix(alpha, (1,n)) * A).T,z(nC,1),1,gamma,z(nB,1)])
-        res = cvxopt.solvers.conelp(c, G, h, dims={'l':n,'q':[n+2,nB+2],'s':[]})
+        z = lambda m, n: cvxopt.spmatrix([], [], [], (m, n))
+        G = cvxopt.sparse([[-A, z(2, n), M, z(nB+2, n)], [z(n+2, nC), C, z(nB+2, nC)],
+                            [z(n, 1), -1, 1, z(n+nB+2, 1)], [z(2*n+2, 1), -1, 1, z(nB, 1)],
+                            [z(n+2, nB), B, z(2, nB), cvxopt.spmatrix(1.0, range(nB), range(nB))]])
+        h = cvxopt.matrix([z(n, 1), .5, .5, eda, .5, .5, z(nB, 1)])
+        c = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T, z(nC, 1), 1, gamma, z(nB, 1)])
+        res = cvxopt.solvers.conelp(c, G, h, dims={'l':n, 'q':[n+2, nB+2], 's':[]})
         obj = res['primal objective']
     else:
         # Use qp
         Mt, Ct, Bt = M.T, C.T, B.T
         H = cvxopt.sparse([[Mt*M, Ct*M, Bt*M], [Mt*C, Ct*C, Bt*C],
                            [Mt*B, Ct*B, Bt*B+gamma*cvxopt.spmatrix(1.0, range(nB), range(nB))]])
-        f = cvxopt.matrix([(cvxopt.matrix(alpha, (1,n)) * A).T - Mt*eda,  -(Ct*eda), -(Bt*eda)])
-        res = cvxopt.solvers.qp(H, f, cvxopt.spmatrix(-A.V, A.I, A.J, (n,len(f))), cvxopt.matrix(0., (n,1)), solver=solver)
+        f = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T - Mt*eda, -(Ct*eda), -(Bt*eda)])
+        res = cvxopt.solvers.qp(H, f, cvxopt.spmatrix(-A.V, A.I, A.J, (n, len(f))), cvxopt.matrix(0., (n, 1)), solver=solver)
         obj = res['primal objective'] + .5 * (eda.T * eda)
     cvxopt.solvers.options.clear()
     cvxopt.solvers.options.update(old_options)
 
-    l = res['x'][-nB:]
-    d = res['x'][n:n+nC]
-    tonic = B*l + C*d
+    tonic_splines = res['x'][-nB:]
+    drift = res['x'][n:n+nC]
+    tonic = B * tonic_splines + C * drift
     q = res['x'][:n]
-    p = A * q
+    smna_driver = A * q
     phasic = M * q
-    e = eda - phasic - tonic
+    residuals = eda - phasic - tonic
 
     out = pd.DataFrame({"EDA_Tonic": np.array(tonic)[:, 0],
                         "EDA_Phasic": np.array(phasic)[:, 0]})
