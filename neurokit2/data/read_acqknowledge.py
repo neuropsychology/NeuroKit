@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 import os
-import bioread
 
 import pandas as pd
 import numpy as np
 
 from ..signal import signal_resample
+
+
 
 def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", impute_missing=True):
     """Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
@@ -38,7 +39,13 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", im
     >>>
     >>> data, sampling_rate = nk.read_acqknowledge('file.acq')
     """
-
+    # Try loading bioread
+    try:
+        import bioread
+    except ImportError:
+        raise ImportError("NeuroKit error: read_acqknowledge(): the 'bioread' "
+                          "module is required for this function to run. ",
+                          "Please install it first (`pip install bioread`).")
 
 
     # Check filename
@@ -93,4 +100,4 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", im
 
     # Final dataframe
     df = pd.DataFrame(data)
-    return(df, sampling_rate)
+    return df, sampling_rate

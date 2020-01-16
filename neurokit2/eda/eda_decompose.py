@@ -145,8 +145,8 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
         import cvxopt
     except ImportError:
         raise ImportError("NeuroKit error: eda_decompose(): the 'cvxopt' "
-                          "module is required for this method oto run. ",
-                          "Please install it (`pip install cvxopt`).")
+                          "module is required for this method to run. ",
+                          "Please install it first (`pip install cvxopt`).")
 
     # Internal functions
     def _cvx(m, n):
