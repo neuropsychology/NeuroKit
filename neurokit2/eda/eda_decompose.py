@@ -190,9 +190,11 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
                                    'show_progress': False})
     if solver == 'conelp':
         # Use conelp
-        G = cvxopt.sparse([[-A, _cvx(2, n), M, _cvx(nB+2, n)], [_cvx(n+2, nC), C, _cvx(nB+2, nC)],
-                            [_cvx(n, 1), -1, 1, _cvx(n+nB+2, 1)], [_cvx(2*n+2, 1), -1, 1, _cvx(nB, 1)],
-                            [_cvx(n+2, nB), B, _cvx(2, nB), cvxopt.spmatrix(1.0, range(nB), range(nB))]])
+        G = cvxopt.sparse([[-A, _cvx(2, n), M, _cvx(nB+2, n)],
+                           [_cvx(n+2, nC), C, _cvx(nB+2, nC)],
+                           [_cvx(n, 1), -1, 1, _cvx(n+nB+2, 1)],
+                           [_cvx(2*n+2, 1), -1, 1, _cvx(nB, 1)],
+                           [_cvx(n+2, nB), B, _cvx(2, nB), cvxopt.spmatrix(1.0, range(nB), range(nB))]])
         h = cvxopt.matrix([_cvx(n, 1), .5, .5, eda, .5, .5, _cvx(nB, 1)])
         c = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T, _cvx(nC, 1), 1, gamma, _cvx(nB, 1)])
         res = cvxopt.solvers.conelp(c, G, h, dims={'l': n, 'q': [n+2, nB+2], 's': []})
@@ -220,7 +222,3 @@ def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, del
                         "EDA_Phasic": np.array(phasic)[:, 0]})
 
     return out
-
-
-
-
