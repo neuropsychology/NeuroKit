@@ -7,32 +7,39 @@ import scipy.signal
 
 from ..signal import signal_smooth
 from ..signal import signal_zerocrossings
-
+from ..signal import signal_findpeaks
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
-    """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
+    """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
-    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
+    Identify Skin Conductance Responses (i.e., peaks) in Electrodermal Activity (EDA).
 
     Parameters
     ----------
-    eda_signal : list, array or Series
-        The raw EDA signal.
+    eda_phasic : list, array or Series
+        The phasic component of the EDA signal (from `eda_phasic()`).
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "cvxEDA"
-        (default) or "biosppy".
+        The processing pipeline to apply. Can be one of "gamboa2008"
+        (default) or "kim2004".
 
     Returns
     -------
-    DataFrame
-        DataFrame containing the 'Tonic' and the 'Phasic' components as columns.
+    signals : DataFrame
+        A DataFrame of same length as the input signal in which occurences of
+        inhalation peaks and exhalation troughs are marked as "1" in lists of
+        zeros with the same length as `eda_phasic`. Accessible with the keys
+        "SCR_Peaks".
+    info : dict
+        A dictionary containing additional information, in this case the
+        samples at which inhalation peaks and exhalation troughs occur,
+        accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
 
     See Also
     --------
-    eda_simulate, eda_clean, eda_decompose
+    eda_simulate, eda_clean, eda_phasic, eda_process, eda_plot
 
 
 
@@ -43,7 +50,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     >>> # Get phasic component
     >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
     >>> eda_cleaned = nk.eda_clean(eda_signal)
-    >>> eda = nk.eda_decompose(eda_cleaned)
+    >>> eda = nk.eda_phasic(eda_cleaned)
     >>> eda_phasic = eda["EDA_Phasic"]
     >>>
     >>> # Find peaks
@@ -51,14 +58,22 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     >>> signals, info_kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
     >>> nk.events_plot([info_gamboa2008["SCR_Peaks"], info_kim2004["SCR_Peaks"]], eda_phasic)
     """
+    # Try to retrieve the right column if a dataframe is passed
+    if isinstance(eda_phasic, pd.DataFrame):
+        try:
+            eda_phasic = eda_phasic["EDA_Phasic"]
+        except KeyError:
+            raise KeyError("NeuroKit error: eda_findpeaks(): Please provide an array as the input signal.")
+
+
     method = method.lower()  # remove capitalised letters
     if method in ["gamboa2008", "gamboa"]:
         info = _eda_findpeaks_gamboa2008(eda_phasic)
-    elif method in ["kim", "kbk", "kim2004"]:
+    elif method in ["kim", "kbk", "kim2004", 'biosppy']:
         info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=0.1)
     else:
         raise ValueError("NeuroKit error: eda_findpeaks(): 'method' should be "
-                         "one of 'gamboa2008'.")
+                         "one of 'gamboa2008' or 'kim2004'.")
 
     # Prepare output.
     peaks_signal = np.zeros(len(eda_phasic))
@@ -73,6 +88,16 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
 # =============================================================================
 # Methods
 # =============================================================================
+
+def _eda_findpeaks_neurokit(eda_phasic):
+    peaks = signal_findpeaks(eda_phasic, )
+
+    # output
+    info = {"SCR_Onset": onsets,
+            "SCR_Peaks": peaks,
+            "SCR_Amplitude": amplitudes}
+    return info
+
 
 
 
