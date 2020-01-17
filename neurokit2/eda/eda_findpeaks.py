@@ -112,10 +112,12 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
 def _eda_findpeaks_neurokit(eda_phasic, sampling_rate=1000):
     peaks = signal_findpeaks(eda_phasic, relative_width_min=0.025)
 
+    amplitudes = eda_phasic[peaks['Peaks']]
+
     # output
     info = {"SCR_Onset": peaks['Onset'],
             "SCR_Peaks": peaks['Peaks'],
-            "SCR_Amplitude": peaks['Height']}
+            "SCR_Amplitude": amplitudes}
     return info
 
 

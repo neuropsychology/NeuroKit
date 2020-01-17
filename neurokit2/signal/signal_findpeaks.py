@@ -6,8 +6,8 @@ import scipy.signal
 import scipy.misc
 
 from ..stats import standardize
-
-
+from .signal_zerocrossings import signal_zerocrossings
+from ..misc import findclosest
 
 
 def signal_findpeaks(signal, height_min=None, width_min=None, height_max=None, width_max=None, relative_height_min=None, relative_width_min=None, relative_height_max=None, relative_width_max=None):
@@ -94,8 +94,8 @@ def signal_findpeaks(signal, height_min=None, width_min=None, height_max=None, w
     info["Distance"] = _signal_findpeaks_distances(info["Peaks"])
     info["Height"] = info["Height"][keep]
     info["Width"] = info["Width"][keep]
-    info["Onset"] = info["Onset"][keep]
-    info["Offset"] = info["Offset"][keep]
+    info["Onset"] = _signal_findpeaks_base(info["Peaks"], signal, what="onset")
+    info["Offset"] = _signal_findpeaks_base(info["Peaks"], signal, what="offset")
 
     return info
 
@@ -121,6 +121,23 @@ def _signal_findpeaks_distances(peaks):
 
 
 
+def _signal_findpeaks_base(peaks, signal, what="onset"):
+    if what == "onset":
+        direction = "smaller"
+    else:
+        direction = "greater"
+
+    # Compute gradient (sort of derivative)
+    gradient = np.gradient(signal)
+
+    # Find zero-crossings
+    zeros = signal_zerocrossings(gradient)
+
+    onsets = np.zeros(len(peaks), np.int)
+    for i, peak in enumerate(peaks):
+        onsets[i] = findclosest(peak, zeros, direction=direction, strictly=True)
+
+    return onsets
 
 
 
@@ -129,15 +146,13 @@ def _signal_findpeaks_scipy(signal):
 
     # Get info
     distances = _signal_findpeaks_distances(peaks)
-    heights, onsets, offsets = scipy.signal.peak_prominences(signal, peaks)
+    heights, left_base, right_base = scipy.signal.peak_prominences(signal, peaks)
     widths, width_heights, left_ips, right_ips = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
 
     # Prepare output
     info = {"Peaks": peaks,
             "Distance": distances,
             "Height": heights,
-            "Onset": onsets,
-            "Offset": offsets,
             "Width": widths}
 
     return info
