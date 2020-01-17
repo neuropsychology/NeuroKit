@@ -16,7 +16,7 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="highpass"):
     eda_signal : list, array or Series
         The raw EDA signal.
     sampling_rate : int
-        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of raw EDA signal (in Hz, i.e., samples/second).
     method : str
         The processing pipeline to apply. Can be one of "cvxEDA"
         (default) or "biosppy".

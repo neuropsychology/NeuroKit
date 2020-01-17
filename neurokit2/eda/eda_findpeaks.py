@@ -11,24 +11,37 @@ from ..signal import signal_zerocrossings
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
-    """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
+    """Identify extrema in a Skin Conductance Response (SCR) signal.
 
-    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
+    Identify SCR peaks in the Phasic component of a preprocessed SCR signal 
+    using different sets of parameters, such as:
+
+    - `Gamboa, H. (2008)
+    <http://www.lx.it.pt/~afred/pub/thesisHugoGamboa.pdf>`_
+    - `Kim et al. (2004)
+    <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.102.7385&rep=rep1&type=pdf>`_
 
     Parameters
     ----------
-    eda_signal : list, array or Series
-        The raw EDA signal.
+    eda_phasic : list, array or Series
+        The 'Phasic' components of decomposed EDA signal
     sampling_rate : int
-        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "cvxEDA"
-        (default) or "biosppy".
+        The processing pipeline to apply. Can be one of "gamboa2008"
+        (default) or "kim2004".
 
     Returns
     -------
-    DataFrame
-        DataFrame containing the 'Tonic' and the 'Phasic' components as columns.
+    signals : DataFrame
+        A DataFrame of same length as the input signal in which occurences of
+        SCR peaks are marked as "1" in lists of zeros with the same length as
+        `eda_cleaned`. Accessible with the keys "SCR_Peaks".
+    info : dict
+        A dictionary containing additional information, in this case the 
+        aplitude of the SCR, the samples at which the SCR onset and the 
+        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onset",
+        and "SCR_Peaks" respectively.
 
     See Also
     --------
