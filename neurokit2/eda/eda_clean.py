@@ -3,9 +3,9 @@ import numpy as np
 import scipy.signal
 
 from ..signal import signal_smooth
+from ..signal import signal_filter
 
-
-def eda_clean(eda_signal, sampling_rate=1000, method="biosppy"):
+def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     """Preprocess Electrodermal Activity (EDA) signal.
 
 
@@ -16,7 +16,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="biosppy"):
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of 'biosppy' (default).
+        The processing pipeline to apply. Can be one of 'neurokit' (default) or 'biosppy'.
 
     Returns
     -------
@@ -25,7 +25,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="biosppy"):
 
     See Also
     --------
-    eda_simulate, eda_decompose, eda_findpeaks
+    eda_simulate, eda_decompose, eda_findpeaks, eda_process, eda_plot
 
     Examples
     --------
@@ -35,17 +35,32 @@ def eda_clean(eda_signal, sampling_rate=1000, method="biosppy"):
     >>> eda = nk.eda_simulate(duration=30, sampling_rate=100, n_scr=10, noise=0.01, drift=0.02)
     >>> signals = pd.DataFrame({
             "EDA_Raw": eda,
-            "EDA_BioSPPy": nk.eda_clean(eda, method='biosppy')})
+            "EDA_BioSPPy": nk.eda_clean(eda, sampling_rate=100, method='biosppy'),
+            "EDA_NeuroKit": nk.eda_clean(eda, sampling_rate=100, method='neurokit')})
     >>> signals.plot()
     """
     method = method.lower()  # remove capitalised letters
     if method == "biosppy":
         clean = _eda_clean_biosppy(eda_signal, sampling_rate)
+    elif method in ["default", "neurokit", "nk"]:
+        clean = _eda_clean_neurokit(eda_signal, sampling_rate)
     else:
         raise ValueError("NeuroKit error: eda_clean(): 'method' should be "
                          "one of 'biosppy'.")
 
     return clean
+
+
+
+# =============================================================================
+# NK
+# =============================================================================
+def _eda_clean_neurokit(eda_signal, sampling_rate=1000):
+
+    # Filtering
+    filtered = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=5, method="butterworth", order=4)
+
+    return filtered
 
 
 

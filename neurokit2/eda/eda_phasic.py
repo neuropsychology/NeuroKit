@@ -6,7 +6,7 @@ from ..signal import signal_smooth
 from ..signal import signal_filter
 
 
-def eda_decompose(eda_signal, sampling_rate=1000, method="highpass"):
+def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
 
     Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
@@ -28,7 +28,7 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="highpass"):
 
     See Also
     --------
-    eda_simulate, eda_clean, eda_findpeaks
+    eda_simulate, eda_clean, eda_findpeaks, eda_process, eda_plot
 
 
     Examples
@@ -37,9 +37,9 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="highpass"):
     >>>
     >>> # Decompose using different algorithms
     >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1)
-    >>> cvxEDA = nk.eda_decompose(nk.standardize(eda_signal), method='cvxeda')
-    >>> smoothMedian = nk.eda_decompose(nk.standardize(eda_signal), method='smoothmedian')
-    >>> highpass = nk.eda_decompose(nk.standardize(eda_signal), method='highpass')
+    >>> cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method='cvxeda')
+    >>> smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method='smoothmedian')
+    >>> highpass = nk.eda_phasic(nk.standardize(eda_signal), method='highpass')
     >>>
     >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'),
                           smoothMedian.add_suffix('_SmoothMedian'),
@@ -48,7 +48,7 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="highpass"):
     >>> data.plot()
     >>>
     >>> eda_signal = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")["EDA"]
-    >>> data = nk.eda_decompose(nk.standardize(eda_signal), sampling_rate=200)
+    >>> data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=200)
     >>> data["EDA_Raw"] = eda_signal
     >>> out = nk1.bio
     >>> data.plot()
@@ -61,11 +61,11 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="highpass"):
     """
     method = method.lower()  # remove capitalised letters
     if method == "cvxeda":
-        data = _eda_decompose_cvxeda(eda_signal, sampling_rate)
+        data = _eda_phasic_cvxeda(eda_signal, sampling_rate)
     elif method in ["median", "smoothmedian"]:
-        data = _eda_decompose_mediansmooth(eda_signal, sampling_rate)
+        data = _eda_phasic_mediansmooth(eda_signal, sampling_rate)
     elif method in ["highpass", "biopac", "acqknowledge"]:
-        data = _eda_decompose_highpass(eda_signal, sampling_rate)
+        data = _eda_phasic_highpass(eda_signal, sampling_rate)
     else:
         raise ValueError("NeuroKit error: eda_clean(): 'method' should be "
                          "one of 'biosppy'.")
@@ -78,7 +78,7 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="highpass"):
 # =============================================================================
 # Acqknowledge
 # =============================================================================
-def _eda_decompose_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4):
+def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4):
     """
     One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
@@ -95,7 +95,7 @@ def _eda_decompose_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor
 
 
 
-def _eda_decompose_highpass(eda_signal, sampling_rate=1000):
+def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
     """
     One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
@@ -114,7 +114,7 @@ def _eda_decompose_highpass(eda_signal, sampling_rate=1000):
 # =============================================================================
 # cvxEDA
 # =============================================================================
-def _eda_decompose_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, delta_knot=10., alpha=8e-4, gamma=1e-2, solver=None, reltol=1e-9):
+def _eda_phasic_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, delta_knot=10., alpha=8e-4, gamma=1e-2, solver=None, reltol=1e-9):
     """
     A convex optimization approach to electrodermal activity processing (CVXEDA).
 

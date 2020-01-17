@@ -52,7 +52,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     elif sampling_rate is None:
         ax1.set_xlabel("Samples")
 
-    fig.suptitle("Electrocardiogram (ECG) Processing", fontweight="bold")
+    fig.suptitle("Electrocardiogram (ECG)", fontweight="bold")
     plt.subplots_adjust(hspace=0.2)
 
     # Plot cleaned and raw ECG as well as R-peaks.

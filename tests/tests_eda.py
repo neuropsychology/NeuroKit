@@ -53,22 +53,22 @@ def test_eda_clean():
 
 
 
-def test_eda_decompose():
+def test_eda_phasic():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
                           n_scr=6, noise=0.01, drift=0.01, random_state=42)
 
 
-    cvxEDA = nk.eda_decompose(nk.standardize(eda), method='cvxeda')
+    cvxEDA = nk.eda_phasic(nk.standardize(eda), method='cvxeda')
     assert len(cvxEDA) == len(eda)
 
 
-    smoothMedian = nk.eda_decompose(nk.standardize(eda), method='smoothmedian')
+    smoothMedian = nk.eda_phasic(nk.standardize(eda), method='smoothmedian')
     assert len(smoothMedian) == len(eda)
 
 
-    highpass = nk.eda_decompose(nk.standardize(eda), method='highpass')
+    highpass = nk.eda_phasic(nk.standardize(eda), method='highpass')
     assert len(highpass) == len(eda)
 
 
@@ -81,7 +81,7 @@ def test_eda_findpeaks():
     sampling_rate = 1000
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
                           n_scr=6, noise=0, drift=0.01, random_state=42)
-    eda_phasic = nk.eda_decompose(nk.standardize(eda), method='highpass')["EDA_Phasic"]
+    eda_phasic = nk.eda_phasic(nk.standardize(eda), method='highpass')["EDA_Phasic"]
 
 
     signals, info = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
