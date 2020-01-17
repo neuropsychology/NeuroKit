@@ -8,6 +8,8 @@ import scipy.signal
 from ..signal import signal_smooth
 from ..signal import signal_zerocrossings
 from ..signal import signal_findpeaks
+from ..signal import signal_smooth
+
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
@@ -57,7 +59,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
     >>> eda_cleaned = nk.eda_clean(eda_signal)
     >>> eda = nk.eda_phasic(eda_cleaned)
-    >>> eda_phasic = eda["EDA_Phasic"]
+    >>> eda_phasic = eda["EDA_Phasic"].values
     >>>
     >>> # Find peaks
     >>> signals, info_gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
@@ -93,8 +95,8 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     onset_signal = np.zeros(len(eda_phasic))
     onset_signal[info["SCR_Onset"]] = 1
 
-    amplitude_signal = peaks_signal.copy()
-    amplitude_signal[peaks_signal == 1] = info["SCR_Amplitude"]
+    amplitude_signal = np.zeros(len(eda_phasic))
+    amplitude_signal[info["SCR_Peaks"]] = info["SCR_Amplitude"]
 
     signals = pd.DataFrame({"SCR_Peaks": peaks_signal,
                             "SCR_Onset": onset_signal,
@@ -110,6 +112,8 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
 # =============================================================================
 
 def _eda_findpeaks_neurokit(eda_phasic, sampling_rate=1000):
+
+#    eda_phasic = signal_smooth(eda_phasic, method='convolution', kernel='boxzen', size=int(0.05 * sampling_rate)+1)
     peaks = signal_findpeaks(eda_phasic, relative_width_min=0.025)
 
     amplitudes = eda_phasic[peaks['Peaks']]
