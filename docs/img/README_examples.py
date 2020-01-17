@@ -30,6 +30,25 @@ plot = data.plot(subplots=True, layout=(4, 1), color=['#f44336', "#2196F3", "#9C
 plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
 
 
+
+# =============================================================================
+# Electrodermal Activity (EDA) processing
+# =============================================================================
+
+# Generate 30 seconds of EDA signal (recorded at 250 samples / second)
+eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=5, drift=0.01)
+
+# Process it
+signals, info = nk.eda_process(eda, sampling_rate=250)
+
+# Visualise the processing
+nk.eda_plot(signals, sampling_rate=250)
+
+# Save it
+plot = nk.eda_plot(signals, sampling_rate=250)
+plot.savefig("README_eda.png", dpi=300)
+
+
 # =============================================================================
 # Cardiac activity (ECG) processing
 # =============================================================================
@@ -64,3 +83,4 @@ nk.rsp_plot(signals, sampling_rate=250)
 # Save it
 plot = nk.rsp_plot(signals, sampling_rate=250)
 plot.savefig("README_respiration.png", dpi=300)
+

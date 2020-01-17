@@ -89,13 +89,31 @@ Simulate physiological signals
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
+
+Electrodermal Activity (EDA) processing
+----------------------------------------
+
+.. code-block:: python
+
+    # Generate 30 seconds of EDA signal (recorded at 250 samples / second)
+    eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=5, drift=0.01)
+
+    # Process it
+    signals, info = nk.eda_process(eda, sampling_rate=250)
+
+    # Visualise the processing
+    nk.eda_plot(signals, sampling_rate=250)
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
+
+
 Cardiac activity (ECG) processing
 ---------------------------------
 
 .. code-block:: python
 
     # Generate 20 seconds of ECG signal (recorded at 250 samples / second)
-    ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70, random_state=333)
+    ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70)
 
     # Process it
     signals, info = nk.ecg_process(ecg, sampling_rate=250)

@@ -93,7 +93,9 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     peaks_signal[info["SCR_Peaks"]] = 1
 
     onset_signal = np.zeros(len(eda_phasic))
-    onset_signal[info["SCR_Onset"]] = 1
+    onsets = info["SCR_Onset"]
+    onsets = onsets[~np.isnan(onsets)].astype(np.int)
+    onset_signal[onsets] = 1
 
     amplitude_signal = np.zeros(len(eda_phasic))
     amplitude_signal[info["SCR_Peaks"]] = info["SCR_Amplitude"]

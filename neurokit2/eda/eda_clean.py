@@ -58,7 +58,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
 def _eda_clean_neurokit(eda_signal, sampling_rate=1000):
 
     # Filtering
-    filtered = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=5, method="butterworth", order=4)
+    filtered = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=4, method="butterworth", order=4)
 
     return filtered
 

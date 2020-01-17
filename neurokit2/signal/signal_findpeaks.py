@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 
 import scipy.signal
 import scipy.misc
@@ -127,15 +126,11 @@ def _signal_findpeaks_base(peaks, signal, what="onset"):
     else:
         direction = "greater"
 
-    # Compute gradient (sort of derivative)
-    gradient = np.gradient(signal)
+    troughs, _ = scipy.signal.find_peaks(-1*signal)
 
-    # Find zero-crossings
-    zeros = signal_zerocrossings(gradient)
-
-    onsets = np.zeros(len(peaks), np.int)
+    onsets = np.zeros(len(peaks))
     for i, peak in enumerate(peaks):
-        onsets[i] = findclosest(peak, zeros, direction=direction, strictly=True)
+        onsets[i] = findclosest(peak, troughs, direction=direction, strictly=True)
 
     return onsets
 

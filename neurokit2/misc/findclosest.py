@@ -26,6 +26,16 @@ def findclosest(number, numbers, direction="both", strictly=False):
     >>> import neurokit2 as nk
     >>> nk.findclosest(1.8, [3, 5, 6, 1, 2])
     """
+    try:
+        closest = _findclosest(number, numbers, direction, strictly)
+    except ValueError:
+        closest = np.nan
+    return closest
+
+
+
+
+def _findclosest(number, numbers, direction="both", strictly=False):
     if direction == "both":
         closest = min(numbers, key=lambda x: np.abs(x-number))
     if direction == "smaller":
