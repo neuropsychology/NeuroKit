@@ -113,7 +113,6 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
 
 def _eda_findpeaks_neurokit(eda_phasic, sampling_rate=1000):
 
-#    eda_phasic = signal_smooth(eda_phasic, method='convolution', kernel='boxzen', size=int(0.05 * sampling_rate)+1)
     peaks = signal_findpeaks(eda_phasic, relative_width_min=0.025)
 
     amplitudes = eda_phasic[peaks['Peaks']]

@@ -27,7 +27,7 @@ def findclosest(number, numbers, direction="both", strictly=False):
     >>> nk.findclosest(1.8, [3, 5, 6, 1, 2])
     """
     if direction == "both":
-        closest = min(numbers, key=lambda x:np.abs(x-number))
+        closest = min(numbers, key=lambda x: np.abs(x-number))
     if direction == "smaller":
         if strictly is True:
             closest = max(x for x in numbers if x < number)
