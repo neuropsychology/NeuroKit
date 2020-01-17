@@ -13,14 +13,20 @@ from ..signal import signal_findpeaks
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
-    Identify Skin Conductance Responses (i.e., peaks) in Electrodermal Activity (EDA).
+    Identify Skin Conductance Responses (SCR) peaks in the phasic component of
+    Electrodermal Activity (EDA) with different possible methods, such as:
+
+    - `Gamboa, H. (2008)
+    <http://www.lx.it.pt/~afred/pub/thesisHugoGamboa.pdf>`_
+    - `Kim et al. (2004)
+    <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.102.7385&rep=rep1&type=pdf>`_
 
     Parameters
     ----------
     eda_phasic : list, array or Series
         The phasic component of the EDA signal (from `eda_phasic()`).
     sampling_rate : int
-        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
     method : str
         The processing pipeline to apply. Can be one of "gamboa2008"
         (default) or "kim2004".
@@ -29,13 +35,13 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     -------
     signals : DataFrame
         A DataFrame of same length as the input signal in which occurences of
-        inhalation peaks and exhalation troughs are marked as "1" in lists of
-        zeros with the same length as `eda_phasic`. Accessible with the keys
-        "SCR_Peaks".
+        SCR peaks are marked as "1" in lists of zeros with the same length as
+        `eda_cleaned`. Accessible with the keys "SCR_Peaks".
     info : dict
         A dictionary containing additional information, in this case the
-        samples at which inhalation peaks and exhalation troughs occur,
-        accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
+        aplitude of the SCR, the samples at which the SCR onset and the
+        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onset",
+        and "SCR_Peaks" respectively.
 
     See Also
     --------
