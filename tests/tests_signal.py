@@ -146,13 +146,13 @@ def test_signal_rate():
     # Test with array.
     signal = nk.signal_simulate(duration=10, sampling_rate=1000,
                              frequency=1)
-    signals, info = nk.signal_findpeaks(signal)
-    rate = nk.signal_rate(peaks=signals, sampling_rate=1000,
+    info = nk.signal_findpeaks(signal)
+    rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000,
                        desired_length=None)
-    assert rate.shape[0] == np.max(signals)
+    assert rate.shape[0] == np.max(info["Peaks"])
 
     # Test with dictionary.produced from signal_findpeaks.
-    assert info[list(info.keys())[0]].shape == (signals.shape[0], )
+    assert info[list(info.keys())[0]].shape == (info["Peaks"].shape[0], )
 
     # Test with DataFrame.
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
