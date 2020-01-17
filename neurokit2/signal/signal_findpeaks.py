@@ -61,7 +61,7 @@ def signal_findpeaks(signal, height_min=None, width_min=None, height_max=None, w
     --------
     scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths
     """
-    info = _signal_findpeaks(signal)
+    info = _signal_findpeaks_scipy(signal)
 
     keep = np.full(len(info["Peaks"]), True)
 
@@ -124,14 +124,13 @@ def _signal_findpeaks_distances(peaks):
 
 
 
-def _signal_findpeaks(signal):
+def _signal_findpeaks_scipy(signal):
     peaks, _ = scipy.signal.find_peaks(signal)
 
     # Get info
     distances = _signal_findpeaks_distances(peaks)
-    heights, left_base, right_base = scipy.signal.peak_prominences(signal, peaks)
+    heights, onsets, offsets = scipy.signal.peak_prominences(signal, peaks)
     widths, width_heights, left_ips, right_ips = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
-    _, _, onsets, offsets = scipy.signal.peak_widths(signal, peaks, rel_height=1)
 
     # Prepare output
     info = {"Peaks": peaks,

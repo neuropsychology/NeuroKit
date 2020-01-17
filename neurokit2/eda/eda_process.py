@@ -7,7 +7,7 @@ from .eda_findpeaks import eda_findpeaks
 
 
 
-def eda_process(eda_signal, sampling_rate=1000, method="khodadad2018"):
+def eda_process(eda_signal, sampling_rate=1000):
     """Process Electrodermal Activity (EDA).
 
     Convenience function that automatically processes electrodermal activity (EDA) signal.
@@ -54,7 +54,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="khodadad2018"):
     eda_decomposed = eda_phasic(eda_cleaned, sampling_rate=sampling_rate)
 
     # Find peaks
-    peaks, info = eda_findpeaks(eda_decomposed["EDA_Phasic"], sampling_rate=sampling_rate, method="gamboa2008")
+    peaks, info = eda_findpeaks(eda_decomposed["EDA_Phasic"], sampling_rate=sampling_rate, method="neurokit")
 
     # Store
     signals = pd.DataFrame({"EDA_Raw": eda_signal,

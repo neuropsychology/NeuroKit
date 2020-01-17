@@ -62,7 +62,10 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     >>> # Find peaks
     >>> signals, info_gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
     >>> signals, info_kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
-    >>> nk.events_plot([info_gamboa2008["SCR_Peaks"], info_kim2004["SCR_Peaks"]], eda_phasic)
+    >>> signals, info_neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
+    >>> nk.events_plot([info_gamboa2008["SCR_Peaks"],
+                        info_kim2004["SCR_Peaks"],
+                        info_neurokit["SCR_Peaks"]], eda_phasic)
     """
     # Try to retrieve the right column if a dataframe is passed
     if isinstance(eda_phasic, pd.DataFrame):
@@ -77,14 +80,25 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
         info = _eda_findpeaks_gamboa2008(eda_phasic)
     elif method in ["kim", "kbk", "kim2004", 'biosppy']:
         info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=0.1)
+    elif method in ['neurokit', 'neurokit2', 'nk']:
+        info = _eda_findpeaks_neurokit(eda_phasic, sampling_rate=sampling_rate)
     else:
         raise ValueError("NeuroKit error: eda_findpeaks(): 'method' should be "
-                         "one of 'gamboa2008' or 'kim2004'.")
+                         "one of 'neurokit', 'gamboa2008' or 'kim2004'.")
 
     # Prepare output.
     peaks_signal = np.zeros(len(eda_phasic))
     peaks_signal[info["SCR_Peaks"]] = 1
-    signals = pd.DataFrame({"SCR_Peaks": peaks_signal})
+
+    onset_signal = np.zeros(len(eda_phasic))
+    onset_signal[info["SCR_Onset"]] = 1
+
+    amplitude_signal = peaks_signal.copy()
+    amplitude_signal[peaks_signal == 1] = info["SCR_Amplitude"]
+
+    signals = pd.DataFrame({"SCR_Peaks": peaks_signal,
+                            "SCR_Onset": onset_signal,
+                            "SCR_Amplitude": amplitude_signal})
 
     return signals, info
 
@@ -95,13 +109,13 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
 # Methods
 # =============================================================================
 
-def _eda_findpeaks_neurokit(eda_phasic):
-    peaks = signal_findpeaks(eda_phasic, )
+def _eda_findpeaks_neurokit(eda_phasic, sampling_rate=1000):
+    peaks = signal_findpeaks(eda_phasic, relative_width_min=0.025)
 
     # output
-    info = {"SCR_Onset": onsets,
-            "SCR_Peaks": peaks,
-            "SCR_Amplitude": amplitudes}
+    info = {"SCR_Onset": peaks['Onset'],
+            "SCR_Peaks": peaks['Peaks'],
+            "SCR_Amplitude": peaks['Height']}
     return info
 
 

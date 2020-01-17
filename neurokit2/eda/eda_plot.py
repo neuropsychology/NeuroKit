@@ -24,6 +24,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     eda_process
     """
     peaks = np.where(eda_signals["SCR_Peaks"] == 1)[0]
+    onsets = np.where(eda_signals["SCR_Onset"] == 1)[0]
 
     fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 
@@ -54,12 +55,14 @@ def eda_plot(eda_signals, sampling_rate=None):
 
 
     # Plot Phasic.
-    ax1.set_title("Phasic Component")
+    ax1.set_title("Phasic Component and Skin Conductance Responses (SCR)")
     ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic')
 
     # Add peaks
+    ax1.scatter(x_axis[onsets], eda_signals["EDA_Phasic"][onsets], color='#FF5722',
+                label="SCR - Onsets", zorder=2)
     ax1.scatter(x_axis[peaks], eda_signals["EDA_Phasic"][peaks], color='#FF9800',
-                label="Skin Conductance Responses (SCRs)", zorder=2)
+                label="SCR - Peaks", zorder=2)
     ax1.legend(loc='upper right')
 
     # Plot Tonic.
