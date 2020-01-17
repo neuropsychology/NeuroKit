@@ -46,7 +46,7 @@ def eda_process(eda_signal, sampling_rate=1000):
     >>> import neurokit2 as nk
     >>>
     >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
-    >>> signals, info = nk.eda_process(rsp, sampling_rate=1000)
+    >>> signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
     >>> nk.eda_plot(signals)
     """
     # Preprocess
@@ -54,7 +54,7 @@ def eda_process(eda_signal, sampling_rate=1000):
     eda_decomposed = eda_phasic(eda_cleaned, sampling_rate=sampling_rate)
 
     # Find peaks
-    peaks, info = eda_findpeaks(eda_decomposed["EDA_Phasic"], sampling_rate=sampling_rate, method="neurokit")
+    peaks, info = eda_findpeaks(eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method="neurokit")
 
     # Store
     signals = pd.DataFrame({"EDA_Raw": eda_signal,

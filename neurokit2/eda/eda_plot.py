@@ -15,8 +15,8 @@ def eda_plot(eda_signals, sampling_rate=None):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> eda = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
-    >>> signals, info = nk.eda_process(eda, sampling_rate=1000)
+    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
+    >>> signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
     >>> nk.eda_plot(signals)
 
     See Also
