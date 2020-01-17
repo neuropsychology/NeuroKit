@@ -124,12 +124,12 @@ def test_signal_interpolate():
 def test_signal_findpeaks():
 
     signal1 = np.cos(np.linspace(start=0, stop=30, num=1000))
-    peaks1, info1 = nk.signal_findpeaks(signal1)
+    info1 = nk.signal_findpeaks(signal1)
 
     signal2 = np.concatenate([np.arange(0, 20, 0.1), np.arange(17, 30, 0.1),
                               np.arange(30, 10, -0.1)])
-    peaks2, info2 = nk.signal_findpeaks(signal2)
-    assert len(peaks1) > len(peaks2)
+    info2 = nk.signal_findpeaks(signal2)
+    assert len(info1["Peaks"]) > len(info2["Peaks"])
 
 
 def test_signal_merge():

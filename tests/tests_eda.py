@@ -50,6 +50,9 @@ def test_eda_clean():
     assert np.allclose((eda_biosppy - original).mean(), 0, atol=1e-5)
 
 
+
+
+
 def test_eda_decompose():
 
     sampling_rate = 1000
@@ -67,3 +70,24 @@ def test_eda_decompose():
 
     highpass = nk.eda_decompose(nk.standardize(eda), method='highpass')
     assert len(highpass) == len(eda)
+
+
+
+
+
+
+def test_eda_findpeaks():
+
+    sampling_rate = 1000
+    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
+                          n_scr=6, noise=0, drift=0.01, random_state=42)
+    eda_phasic = nk.eda_decompose(nk.standardize(eda), method='highpass')["EDA_Phasic"]
+
+
+    signals, info = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
+    onsets, peaks, amplitudes = biosppy.eda.basic_scr(eda_phasic, sampling_rate=1000)
+    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1e-5)
+
+    signals, info = nk.eda_findpeaks(eda_phasic, method="kim2004")
+    onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
+    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1)

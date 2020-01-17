@@ -6,8 +6,10 @@ from ..signal import signal_smooth
 from ..signal import signal_filter
 
 
-def eda_decompose(eda_signal, sampling_rate=1000, method="cvxEDA"):
+def eda_decompose(eda_signal, sampling_rate=1000, method="highpass"):
     """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
+
+    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
 
     Parameters
     ----------
@@ -26,7 +28,7 @@ def eda_decompose(eda_signal, sampling_rate=1000, method="cvxEDA"):
 
     See Also
     --------
-    eda_simulate, eda_clean
+    eda_simulate, eda_clean, eda_findpeaks
 
 
     Examples

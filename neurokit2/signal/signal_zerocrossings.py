@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+
 def signal_zerocrossings(signal):
     """Locate the indices where the signal crosses zero.
 
@@ -19,7 +20,6 @@ def signal_zerocrossings(signal):
     Examples
     --------
     >>> import numpy as np
-    >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=15, num=1000))
