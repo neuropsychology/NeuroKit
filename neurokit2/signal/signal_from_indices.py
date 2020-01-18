@@ -30,12 +30,12 @@ def _signal_from_indices(indices, length, value=1):
 
 
 
-def _signals_from_peakinfo(peak_info, peak_indices, length):
+def _signals_from_peakinfo(info, peak_indices, length):
     signals = {}
-    for feature in peak_info.keys():
+    for feature in info.keys():
         if "Peak" in str(feature) or "Onset" in str(feature):
-            signals[feature] = _signal_from_indices(peak_info[feature], length, 1)
+            signals[feature] = _signal_from_indices(info[feature], length, 1)
         else:
-            signals[feature] = _signal_from_indices(peak_indices, length, peak_info[feature])
+            signals[feature] = _signal_from_indices(peak_indices, length, info[feature])
     signals = pd.DataFrame(signals)
     return signals
