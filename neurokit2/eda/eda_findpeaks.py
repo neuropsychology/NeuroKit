@@ -10,6 +10,8 @@ from ..signal import signal_zerocrossings
 from ..signal import signal_findpeaks
 from ..signal.signal_from_indices import _signals_from_peakinfo
 
+from ..misc import findclosest
+
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
     """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
@@ -247,18 +249,38 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
 def _eda_findpeaks_getfeatures(info, eda_phasic, sampling_rate=1000):
 
+    # Onset
     onset = info['SCR_Onset']
     notnull = ~np.isnan(onset)
     onset_int = onset[notnull].astype(np.int)
 
+    # Amplitudes
     amplitude = np.full(len(info["SCR_Height"]), np.nan)
     amplitude[notnull] = info["SCR_Height"][notnull] - eda_phasic[onset_int]
 
+    # Rise times
     risetime = np.full(len(info["SCR_Peaks"]), np.nan)
     risetime[notnull] = (info["SCR_Peaks"][notnull] - onset[notnull]) / sampling_rate
+
+    # (Half) Recovery times
+    recovery = np.full(len(info["SCR_Peaks"]), np.nan)
+    recovery_time = np.full(len(info["SCR_Peaks"]), np.nan)
+    recovery_values = amplitude / 2
+    for i, peak_index in enumerate(info["SCR_Peaks"]):
+        try:
+            segment = eda_phasic[peak_index:info["SCR_Peaks"][i+1]]
+        except IndexError:
+            segment = eda_phasic[peak_index::]
+        recovery_value = findclosest(recovery_values[i], segment, direction="smaller", strictly=False)
+        if np.abs(recovery_values[i]-recovery_value) < recovery_values[i] / 100:
+            segment_index = np.where(segment == recovery_value)[0]
+            recovery[i] = peak_index + segment_index
+            recovery_time[i] = segment_index / sampling_rate
 
 
     info["SCR_Amplitude"] = amplitude
     info["SCR_RiseTime"] = risetime
+    info["SCR_Recovery"] = recovery
+    info["SCR_RecoveryTime"] = recovery_time
 
     return info
