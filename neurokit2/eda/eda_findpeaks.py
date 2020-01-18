@@ -8,11 +8,10 @@ import scipy.signal
 from ..signal import signal_smooth
 from ..signal import signal_zerocrossings
 from ..signal import signal_findpeaks
-from ..signal import signal_smooth
 
 
 
-def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
+def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
     """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
     Identify Skin Conductance Responses (SCR) peaks in the phasic component of
@@ -30,8 +29,10 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     sampling_rate : int
         The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "gamboa2008"
-        (default) or "kim2004".
+        The processing pipeline to apply. Can be one of "neurokit" (default),
+        "gamboa2008" or "kim2004" (the default in BioSPPy).
+    amplitude_min : float
+        Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude SCRs (peaks) as relative to the largest amplitude in the signal.
 
     Returns
     -------
@@ -68,6 +69,11 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     >>> nk.events_plot([info_gamboa2008["SCR_Peaks"],
                         info_kim2004["SCR_Peaks"],
                         info_neurokit["SCR_Peaks"]], eda_phasic)
+
+    References
+    ----------
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
+    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
     """
     # Try to retrieve the right column if a dataframe is passed
     if isinstance(eda_phasic, pd.DataFrame):
@@ -81,9 +87,9 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
     if method in ["gamboa2008", "gamboa"]:
         info = _eda_findpeaks_gamboa2008(eda_phasic)
     elif method in ["kim", "kbk", "kim2004", 'biosppy']:
-        info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=0.1)
+        info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
     elif method in ['neurokit', 'neurokit2', 'nk']:
-        info = _eda_findpeaks_neurokit(eda_phasic, sampling_rate=sampling_rate)
+        info = _eda_findpeaks_neurokit(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
     else:
         raise ValueError("NeuroKit error: eda_findpeaks(): 'method' should be "
                          "one of 'neurokit', 'gamboa2008' or 'kim2004'.")
@@ -113,9 +119,9 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="gamboa2008"):
 # Methods
 # =============================================================================
 
-def _eda_findpeaks_neurokit(eda_phasic, sampling_rate=1000):
+def _eda_findpeaks_neurokit(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
-    peaks = signal_findpeaks(eda_phasic, relative_width_min=0.025)
+    peaks = signal_findpeaks(eda_phasic, relative_height_min=amplitude_min, relative_max=True)
 
     amplitudes = eda_phasic[peaks['Peaks']]
 

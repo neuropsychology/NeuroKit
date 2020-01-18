@@ -54,7 +54,7 @@ def eda_process(eda_signal, sampling_rate=1000):
     eda_decomposed = eda_phasic(eda_cleaned, sampling_rate=sampling_rate)
 
     # Find peaks
-    peaks, info = eda_findpeaks(eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method="neurokit")
+    peaks, info = eda_findpeaks(eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method="neurokit", amplitude_min=0.1)
 
     # Store
     signals = pd.DataFrame({"EDA_Raw": eda_signal,
