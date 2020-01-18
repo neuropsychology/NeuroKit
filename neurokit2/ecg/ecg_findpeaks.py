@@ -66,13 +66,13 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     # Run peak detection algorithm
     if method == "neurokit":
         rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned,
-                                        sampling_rate,
-                                        smoothwindow=.1,
-                                        avgwindow=.75,
-                                        gradthreshweight=1.5,
-                                        minlenweight=0.4,
-                                        mindelay=0.3,
-                                        show=show)
+                                         sampling_rate,
+                                         smoothwindow=.1,
+                                         avgwindow=.75,
+                                         gradthreshweight=1.5,
+                                         minlenweight=0.4,
+                                         mindelay=0.3,
+                                         show=show)
     elif method == "pamtompkins":
         rpeaks = _ecg_findpeaks_pantompkins()
     else:
@@ -81,7 +81,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
 
     # Prepare output.
-    info={"ECG_Peaks": rpeaks}
+    info = {"ECG_Peaks": rpeaks}
     signals = _signals_from_peakinfo(info, peak_indices=info["ECG_Peaks"], length=len(ecg_cleaned))
 
     return signals, info
