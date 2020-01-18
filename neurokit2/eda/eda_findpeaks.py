@@ -65,12 +65,12 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     >>> eda_phasic = eda["EDA_Phasic"].values
     >>>
     >>> # Find peaks
-    >>> signals, info_gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
-    >>> signals, info_kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
-    >>> signals, info_neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
-    >>> nk.events_plot([info_gamboa2008["SCR_Peaks"],
-                        info_kim2004["SCR_Peaks"],
-                        info_neurokit["SCR_Peaks"]], eda_phasic)
+    >>> signals, gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
+    >>> signals, kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
+    >>> signals, neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
+    >>> nk.events_plot([gamboa2008["SCR_Peaks"],
+                        kim2004["SCR_Peaks"],
+                        neurokit["SCR_Peaks"]], eda_phasic)
 
     References
     ----------
@@ -90,7 +90,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         info = _eda_findpeaks_gamboa2008(eda_phasic)
     elif method in ["kim", "kbk", "kim2004", 'biosppy']:
         info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
-    elif method in ['neurokit', 'neurokit2', 'nk']:
+    elif method in ["nk", "nk2", "neurokit", "neurokit2"]:
         info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
     else:
         raise ValueError("NeuroKit error: eda_findpeaks(): 'method' should be "

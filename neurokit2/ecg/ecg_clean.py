@@ -18,8 +18,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : str
-        The processing pipeline to apply. Can be one of 'neurokit' (default)
-        or 'biosppy'.
+        The processing pipeline to apply. Can be one of 'neurokit' (default),
+        'biosppy' or 'pamtompkins1985'.
 
     Returns
     -------
@@ -39,14 +39,22 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> signals = pd.DataFrame({
             "ECG_Raw": ecg,
             "ECG_NeuroKit": nk.ecg_clean(ecg, sampling_rate=1000, method="neurokit"),
-            "ECG_BioSPPy":nk.ecg_clean(ecg, sampling_rate=1000, method="biosppy")})
+            "ECG_BioSPPy":nk.ecg_clean(ecg, sampling_rate=1000, method="biosppy"),
+            "ECG_PanTompkins":nk.ecg_clean(ecg, sampling_rate=1000, method="pantompkins1985")})
     >>> signals.plot()
+
+    References
+    --------------
+    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
+    In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
     """
     method = method.lower()  # remove capitalised letters
-    if method in ["neurokit", "nk"]:
-        clean = _ecg_clean_nk(ecg_signal, sampling_rate=sampling_rate)
+    if method in ["nk", "nk2", "neurokit", "neurokit2"]:
+        clean = _ecg_clean_nk(ecg_signal, sampling_rate)
     elif method in ["biosppy"]:
-        clean = _ecg_clean_biosppy(ecg_signal, sampling_rate=sampling_rate)
+        clean = _ecg_clean_biosppy(ecg_signal, sampling_rate)
+    elif method in ["pantompkins", "pantompkins1985"]:
+        clean = _ecg_clean_pantompkins(ecg_signal, sampling_rate)
     else:
         raise ValueError("NeuroKit error: ecg_clean(): 'method' should be "
                          "one of 'neurokit' or 'biosppy'.")
@@ -96,5 +104,25 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 
     # _filter_signal()
     filtered = scipy.signal.filtfilt(b, a, ecg_signal)
+
+    return filtered
+
+
+# =============================================================================
+# Pan & Tompkins (1985)
+# =============================================================================
+
+def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
+    """
+    adapted from https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69
+    """
+
+    f1 = 5/sampling_rate
+    f2 = 15/sampling_rate
+    order = 1
+
+    b, a = scipy.signal.butter(order, [f1*2, f2*2], btype='bandpass')
+
+    filtered = scipy.signal.lfilter(b, a, ecg_signal)
 
     return filtered
