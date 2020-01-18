@@ -228,7 +228,7 @@ ECG
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
 - `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_
 - `pyedr <https://github.com/jusjusjus/pyedr>`_
-- `Sysyole <https://github.com/embodied-computation-group/systole>`_
+- `Systole <https://github.com/embodied-computation-group/systole>`_
 
 EDA
 ---
