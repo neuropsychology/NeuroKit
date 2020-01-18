@@ -338,7 +338,7 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     """
     From https://github.com/berndporr/py-ecg-detectors/
     """
-    min_distance = int(0.25*sampling_rate)
+    min_distance = int(0.25 * sampling_rate)
 
     signal_peaks = [0]
     noise_peaks = []
@@ -358,25 +358,25 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
 
     for i in range(len(detection)):
 
-        if i>0 and i<len(detection)-1:
-            if detection[i-1]<detection[i] and detection[i+1]<detection[i]:
+        if i > 0 and i < len(detection) - 1:
+            if detection[i-1] < detection[i] and detection[i+1] < detection[i]:
                 peak = i
                 peaks.append(i)
 
-                if detection[peak]>threshold_I1 and (peak-signal_peaks[-1])>0.3*sampling_rate:
+                if detection[peak] > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
 
                     signal_peaks.append(peak)
                     indexes.append(index)
-                    SPKI = 0.125*detection[signal_peaks[-1]] + 0.875*SPKI
+                    SPKI = 0.125 * detection[signal_peaks[-1]] + 0.875 * SPKI
                     if RR_missed!=0:
-                        if signal_peaks[-1]-signal_peaks[-2]>RR_missed:
-                            missed_section_peaks = peaks[indexes[-2]+1:indexes[-1]]
+                        if signal_peaks[-1] - signal_peaks[-2] > RR_missed:
+                            missed_section_peaks = peaks[indexes[-2] + 1:indexes[-1]]
                             missed_section_peaks2 = []
                             for missed_peak in missed_section_peaks:
-                                if missed_peak-signal_peaks[-2]>min_distance and signal_peaks[-1]-missed_peak>min_distance and detection[missed_peak]>threshold_I2:
+                                if missed_peak - signal_peaks[-2] > min_distance and signal_peaks[-1] - missed_peak > min_distance and detection[missed_peak] > threshold_I2:
                                     missed_section_peaks2.append(missed_peak)
 
-                            if len(missed_section_peaks2)>0:
+                            if len(missed_section_peaks2) > 0:
                                 missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
                                 missed_peaks.append(missed_peak)
                                 signal_peaks.append(signal_peaks[-1])
@@ -384,17 +384,17 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
 
                 else:
                     noise_peaks.append(peak)
-                    NPKI = 0.125*detection[noise_peaks[-1]] + 0.875*NPKI
+                    NPKI = 0.125 * detection[noise_peaks[-1]] + 0.875 * NPKI
 
-                threshold_I1 = NPKI + 0.25*(SPKI-NPKI)
-                threshold_I2 = 0.5*threshold_I1
+                threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
+                threshold_I2 = 0.5 * threshold_I1
 
-                if len(signal_peaks)>8:
+                if len(signal_peaks) > 8:
                     RR = np.diff(signal_peaks[-9:])
                     RR_ave = int(np.mean(RR))
-                    RR_missed = int(1.66*RR_ave)
+                    RR_missed = int(1.66 * RR_ave)
 
-                index = index+1
+                index = index + 1
 
     signal_peaks.pop(0)
 

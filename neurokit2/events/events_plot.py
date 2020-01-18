@@ -37,9 +37,9 @@ def _events_plot(events, color="red", linestyle="--"):
         handles, labels = plt.gca().get_legend_handles_labels()
         newLabels, newHandles = [], []
         for handle, label in zip(handles, labels):
-          if label not in newLabels:
-            newLabels.append(label)
-            newHandles.append(handle)
+            if label not in newLabels:
+                newLabels.append(label)
+                newHandles.append(handle)
         plt.legend(newHandles, newLabels)
 
 
