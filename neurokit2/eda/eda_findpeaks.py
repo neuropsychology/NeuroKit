@@ -8,7 +8,7 @@ import scipy.signal
 from ..signal import signal_smooth
 from ..signal import signal_zerocrossings
 from ..signal import signal_findpeaks
-
+from ..signal.signal_from_indices import _signals_from_peakinfo
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
@@ -89,26 +89,16 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     elif method in ["kim", "kbk", "kim2004", 'biosppy']:
         info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
     elif method in ['neurokit', 'neurokit2', 'nk']:
-        info = _eda_findpeaks_neurokit(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
+        info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
     else:
         raise ValueError("NeuroKit error: eda_findpeaks(): 'method' should be "
                          "one of 'neurokit', 'gamboa2008' or 'kim2004'.")
 
+    # Get additional features (recovery time, rise time etc.)
+    info = _eda_findpeaks_getfeatures(info, eda_phasic, sampling_rate)
+
     # Prepare output.
-    peaks_signal = np.zeros(len(eda_phasic))
-    peaks_signal[info["SCR_Peaks"]] = 1
-
-    onset_signal = np.zeros(len(eda_phasic))
-    onsets = info["SCR_Onset"]
-    onsets = onsets[~np.isnan(onsets)].astype(np.int)
-    onset_signal[onsets] = 1
-
-    amplitude_signal = np.zeros(len(eda_phasic))
-    amplitude_signal[info["SCR_Peaks"]] = info["SCR_Amplitude"]
-
-    signals = pd.DataFrame({"SCR_Peaks": peaks_signal,
-                            "SCR_Onset": onset_signal,
-                            "SCR_Amplitude": amplitude_signal})
+    signals = _signals_from_peakinfo(info, peak_indices=info["SCR_Peaks"], length=len(eda_phasic))
 
     return signals, info
 
@@ -119,16 +109,14 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
 # Methods
 # =============================================================================
 
-def _eda_findpeaks_neurokit(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
+def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 
     peaks = signal_findpeaks(eda_phasic, relative_height_min=amplitude_min, relative_max=True)
 
-    amplitudes = eda_phasic[peaks['Peaks']]
-
-    # output
     info = {"SCR_Onset": peaks['Onset'],
             "SCR_Peaks": peaks['Peaks'],
-            "SCR_Amplitude": amplitudes}
+            "SCR_Height": eda_phasic[peaks['Peaks']]}
+
     return info
 
 
@@ -176,7 +164,7 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
     # output
     info = {"SCR_Onset": onsets,
             "SCR_Peaks": peaks,
-            "SCR_Amplitude": amplitudes}
+            "SCR_Height": amplitudes}
     return info
 
 
@@ -246,6 +234,31 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     # output
     info = {"SCR_Onset": onsets,
             "SCR_Peaks": pks,
-            "SCR_Amplitude": amps}
+            "SCR_Height": amps}
+
+    return info
+
+
+
+
+# =============================================================================
+# Utility
+# =============================================================================
+
+def _eda_findpeaks_getfeatures(info, eda_phasic, sampling_rate=1000):
+
+    onset = info['SCR_Onset']
+    notnull = ~np.isnan(onset)
+    onset_int = onset[notnull].astype(np.int)
+
+    amplitude = np.full(len(info["SCR_Height"]), np.nan)
+    amplitude[notnull] = info["SCR_Height"][notnull] - eda_phasic[onset_int]
+
+    risetime = np.full(len(info["SCR_Peaks"]), np.nan)
+    risetime[notnull] = (info["SCR_Peaks"][notnull] - onset[notnull]) / sampling_rate
+
+
+    info["SCR_Amplitude"] = amplitude
+    info["SCR_RiseTime"] = risetime
 
     return info
