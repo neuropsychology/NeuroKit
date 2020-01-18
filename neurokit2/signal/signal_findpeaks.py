@@ -100,16 +100,16 @@ def _signal_findpeaks_keep(info, what="Height", below=None, above=None, relative
     if below is None and above is None:
         return info
 
-
     keep = np.full(len(info["Peaks"]), True)
 
-    what = info[what]
     if relative_max is True:
-        what = what / np.max(what)
+        what = info[what] / np.max(info[what])
     elif relative_median is True:
-        what = standardize(what, robust=True)
+        what = standardize(info[what], robust=True)
     elif relative_mean is True:
-        what = standardize(what)
+        what = standardize(info[what])
+    else:
+        what = info[what]
 
 
     if below is not None:
