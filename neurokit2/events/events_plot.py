@@ -37,6 +37,7 @@ def _events_plot(events, color="red", linestyle="--"):
 
 
 
+
 def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     """
     Plot events in signal.
@@ -44,7 +45,7 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     Parameters
     ----------
     events : list, ndarray or dict
-        Events onset location. Can also be a list of lists, in which case it will mark them with different colors. If a dict is passed (e.g., from 'events_find()'), will select only the 'Onset' list.
+        Events onset location. Can also be a list of lists, in which case it will mark them with different colors. If a dict is passed (e.g., from 'events_find()'), will select only the 'onset' list.
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
     show : bool
@@ -64,22 +65,36 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     >>>
     >>> nk.events_plot([1, 3, 5])
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+    >>> # With signal
+    >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
     >>> nk.events_plot(events, signal)
     >>>
-    >>> events1 = events["Onset"]
-    >>> events2 = np.arange(0, 1000, 100)
+    >>> # Different events
+    >>> events1 = events["onset"]
+    >>> events2 = np.linspace(0, len(signal), 8)
     >>> nk.events_plot([events1, events2], signal)
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=70, num=1000))
+    >>> # Conditions
+    >>> events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
+    >>> nk.events_plot(events, signal)
+    >>>
+    >>> # Different colors for all events
+    >>> signal = nk.signal_simulate(duration=20)
     >>> events = nk.events_find(signal)
-    >>> events = [[i] for i in events['Onset']]
+    >>> events = [[i] for i in events['onset']]
     >>> nk.events_plot(events, signal)
     """
 
     if isinstance(events, dict):
-        events = events["Onset"]
+        if 'condition' in events.keys():
+            events_list = []
+            for condition in set(events["condition"]):
+                events_list.append([x for x, y in zip(events["onset"], events["condition"]) if y == condition])
+            events = events_list
+        else:
+            events = events["onset"]
+
 
     if signal is None:
         signal = np.full(events[-1]+1, 0)

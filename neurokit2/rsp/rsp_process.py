@@ -32,7 +32,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     Returns
     -------
     signals : DataFrame
-        A DataFrame f same length as `rsp_signal` containing the following
+        A DataFrame of same length as `rsp_signal` containing the following
         columns:
 
         - *"RSP_Raw"*: the raw signal.

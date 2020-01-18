@@ -40,9 +40,9 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
-    >>> peaks, info = nk.signal_findpeaks(signal)
+    >>> info = nk.signal_findpeaks(signal)
     >>>
-    >>> rate = nk.signal_rate(peaks)
+    >>> rate = nk.signal_rate(peaks=info["Peaks"])
     >>> nk.signal_plot(rate)
     """
     # Format input.

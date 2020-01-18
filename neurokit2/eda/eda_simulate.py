@@ -4,6 +4,7 @@ import numpy as np
 from ..signal import signal_merge
 from ..signal import signal_distord
 
+
 def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                  n_scr=1, drift=-0.01, random_state=None):
     """Simulate Electrodermal Activity (EDA) signal.

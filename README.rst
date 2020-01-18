@@ -84,24 +84,42 @@ Simulate physiological signals
                          "RSP": rsp,
                          "EDA": eda,
                          "EMG": emg})
-    data.plot(subplots=True)
+    nk.signal_plot(data, subplots=True)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
+
+
+Electrodermal Activity (EDA) processing
+----------------------------------------
+
+.. code-block:: python
+
+    # Generate 30 seconds of EDA signal (recorded at 250 samples / second)
+    eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=5, drift=0.01)
+
+    # Process it
+    signals, info = nk.eda_process(eda, sampling_rate=250)
+
+    # Visualise the processing
+    nk.eda_plot(signals, sampling_rate=250)
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
+
 
 Cardiac activity (ECG) processing
 ---------------------------------
 
 .. code-block:: python
 
-    # Generate 20 seconds of ECG signal
-    ecg = nk.ecg_simulate(duration=20, heart_rate=70)
+    # Generate 20 seconds of ECG signal (recorded at 250 samples / second)
+    ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70)
 
     # Process it
-    signals, info = nk.ecg_process(ecg)
+    signals, info = nk.ecg_process(ecg, sampling_rate=250)
 
     # Visualise the processing
-    nk.ecg_plot(signals)
+    nk.ecg_plot(signals, sampling_rate=250)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
@@ -112,14 +130,14 @@ Respiration (RSP) processing
 
 .. code-block:: python
 
-    # Generate one minute of respiratory (RSP) signal
-    rsp = nk.rsp_simulate(duration=60, respiratory_rate=15)
+    # Generate one minute of respiratory (RSP) signal (recorded at 250 samples / second)
+    rsp = nk.rsp_simulate(duration=60, sampling_rate=250, respiratory_rate=15)
 
     # Process it
-    signals, info = nk.rsp_process(rsp)
+    signals, info = nk.rsp_process(rsp, sampling_rate=250)
 
     # Visualise the processing
-    nk.rsp_plot(signals)
+    nk.rsp_plot(signals, sampling_rate=250)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_respiration.png
@@ -209,6 +227,8 @@ ECG
 - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
 - `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_
+- `pyedr <https://github.com/jusjusjus/pyedr>`_
+- `Sysyole <https://github.com/embodied-computation-group/systole>`_
 
 EDA
 ---

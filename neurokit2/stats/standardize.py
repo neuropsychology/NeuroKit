@@ -9,21 +9,6 @@ import scipy.stats
 
 
 
-
-def _standardize(data, robust=False):
-
-    if robust is False:
-        z = (data - np.mean(data, axis=0))/np.std(data, axis=0)
-    else:
-        z = (data - np.median(data, axis=0))/scipy.stats.median_absolute_deviation(data, axis=0, nan_policy="omit")
-
-    return(z)
-
-
-
-
-
-
 def standardize(data, robust=False):
     """Standardization of data
 
@@ -62,4 +47,17 @@ def standardize(data, robust=False):
     else:
         data = _standardize(data, robust=robust)
 
-    return(data)
+    return data
+
+
+
+
+
+def _standardize(data, robust=False):
+
+    if robust is False:
+        z = (data - np.mean(data, axis=0))/np.std(data, axis=0)
+    else:
+        z = (data - np.median(data, axis=0))/scipy.stats.median_absolute_deviation(data, axis=0, nan_policy="omit")
+
+    return z
