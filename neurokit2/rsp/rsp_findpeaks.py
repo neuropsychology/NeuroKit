@@ -127,7 +127,7 @@ def _rsp_findpeaks_phase(signals):
     inspiration[np.where(signals["RSP_Troughs"] == 1)] = 1.0
 
     last_element = np.where(~np.isnan(inspiration))[0][-1]  # Avoid filling beyond the last peak/trough
-    inspiration[0:last_element] = pd.Series(inspiration).fillna(method = "pad").values[0:last_element]
+    inspiration[0:last_element] = pd.Series(inspiration).fillna(method="pad").values[0:last_element]
 
     return inspiration
 
