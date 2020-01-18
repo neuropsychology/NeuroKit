@@ -108,7 +108,7 @@ def _signal_findpeaks_keep(info, what="Height", below=None, above=None, relative
         what = what / np.max(what)
     elif relative_median is True:
         what = standardize(what, robust=True)
-    else:
+    elif relative_mean is True:
         what = standardize(what)
 
 
