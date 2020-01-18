@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import scipy.signal
 
 from ..signal import signal_smooth
-
+from ..signal.signal_from_indices import _signals_from_peakinfo
 
 
 
@@ -61,33 +61,28 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
             except NameError:
                 ecg_cleaned = ecg_cleaned["RSP"]
 
-    cleaned = np.array(ecg_cleaned)
-
     method = method.lower()  # remove capitalised letters
 
     # Run peak detection algorithm
     if method == "neurokit":
-        peaks = _ecg_findpeaks_neurokit(cleaned,
-                                        sampling_rate,
-                                        smoothwindow=.1,
-                                        avgwindow=.75,
-                                        gradthreshweight=1.5,
-                                        minlenweight=0.4,
-                                        mindelay=0.3,
-                                        show=show)
+        rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned,
+                                         sampling_rate,
+                                         smoothwindow=.1,
+                                         avgwindow=.75,
+                                         gradthreshweight=1.5,
+                                         minlenweight=0.4,
+                                         mindelay=0.3,
+                                         show=show)
     elif method == "pamtompkins":
-        peaks = _ecg_findpeaks_pantompkins()
+        rpeaks = _ecg_findpeaks_pantompkins()
     else:
         raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be "
                          "one of 'neurokit' or 'pamtompkins'.")
 
 
     # Prepare output.
-    peaks_signal = np.zeros(len(cleaned))
-    peaks_signal[peaks] = 1
-    signals = pd.DataFrame({"ECG_Peaks": peaks_signal})
-
-    info = {"ECG_Peaks": peaks}
+    info = {"ECG_Peaks": rpeaks}
+    signals = _signals_from_peakinfo(info, peak_indices=info["ECG_Peaks"], length=len(ecg_cleaned))
 
     return signals, info
 

@@ -9,7 +9,7 @@ from .signal_zerocrossings import signal_zerocrossings
 from ..misc import findclosest
 
 
-def signal_findpeaks(signal, height_min=None, width_min=None, height_max=None, width_max=None, relative_height_min=None, relative_width_min=None, relative_height_max=None, relative_width_max=None):
+def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_min=None, relative_height_max=None, relative_mean=True, relative_median=False, relative_max=False):
     """Find peaks in a signal.
 
     Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
@@ -18,10 +18,12 @@ def signal_findpeaks(signal, height_min=None, width_min=None, height_max=None, w
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
-    distance_min, height_min, width_min, distance_max, height_max, width_max : float
-        The minimum or maximum distance (between peaks, in number of sample points), height (i.e., amplitude in terms of absolute values) or width of the peaks (in number of sample points). For example, `distance_min=20` will remove all peaks which distance with the previous peak is smaller or equal to 20 sample points.
-    relative_distance_min, relative_height_min, relative_width_min, relative_distance_max, relative_height_max, relative_width_max : float
-        The minimum or maximum distance (between peaks), height (i.e., amplitude) or width of the peaks in terms of standard deviation from the sample. For example, `relative_distance_min=-2.96` will remove all peaks which distance lies below 2.96 standard deviations from the mean of the distances.
+    height_min, distance_max : float
+        The minimum or maximum height (i.e., amplitude in terms of absolute values). For example, `height_min=20` will remove all peaks which height is smaller or equal to 20 (in the provided signal's values).
+    relative_height_min, relative_height_max : float
+        The minimum or maximum height (i.e., amplitude) relative to the sample (see below).
+    relative_mean, relative_median, relative_max : bool
+        If a relative threshold is specified, how should it be computed (i.e., relative to what?). `relative_mean=True` will use Z-scores. For example, `relative_height_min=-2.96` will remove all peaks which height lies below 2.96 standard deviations from the mean of the heights. Relative to median uses a more robust form of standardization (see `standardize`), and relative to max will consider the maximum height as the reference.
 
     Returns
     ----------
@@ -31,8 +33,8 @@ def signal_findpeaks(signal, height_min=None, width_min=None, height_max=None, w
             - 'Distance' contains, for each peak, the closest distance with another peak. Note that these values will be recomputed after filtering to match the selected peaks.
             - 'Height' contains the prominence of each peak. See `scipy.signal.peak_prominences()`.
             - 'Width' contains the width of each peak. See `scipy.signal.peak_widths()`.
-            - 'Onset' contains the onset, start (or left trough), of each peak. See `scipy.signal.peak_widths()`.
-            - 'Offset' contains the offset, end (or right trough), of each peak. See `scipy.signal.peak_widths()`.
+            - 'Onset' contains the onset, start (or left trough), of each peak.
+            - 'Offset' contains the offset, end (or right trough), of each peak.
 
     Examples
     ---------
@@ -58,43 +60,30 @@ def signal_findpeaks(signal, height_min=None, width_min=None, height_max=None, w
 
     See Also
     --------
-    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths
+    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks, ecg_findpeaks, rsp_findpeaks
     """
     info = _signal_findpeaks_scipy(signal)
 
-    keep = np.full(len(info["Peaks"]), True)
+    # Absolute
+    info = _signal_findpeaks_keep(info, what="Height",
+                                  below=height_max,
+                                  above=height_min,
+                                  relative_mean=False,
+                                  relative_median=False,
+                                  relative_max=False)
 
-    # Absolute indices - min
-    if height_min is not None:
-        keep[info["Height"] < height_min] = False
-    if width_min is not None:
-        keep[info["Width"] < width_min] = False
-
-    # Absolute indices - max
-    if height_max is not None:
-        keep[info["Height"] > height_max] = False
-    if width_max is not None:
-        keep[info["Width"] > width_max] = False
-
-    # Relative indices - min
-    if relative_height_min is not None:
-        keep[standardize(info["Height"]) < relative_height_min] = False
-    if relative_width_min is not None:
-        keep[standardize(info["Width"]) < relative_width_min] = False
-
-    # Relative indices - max
-    if relative_height_max is not None:
-        keep[standardize(info["Height"]) > relative_height_max] = False
-    if relative_width_max is not None:
-        keep[standardize(info["Width"]) > relative_width_max] = False
+    # Relative
+    info = _signal_findpeaks_keep(info, what="Height",
+                                  below=relative_height_max,
+                                  above=relative_height_min,
+                                  relative_mean=relative_mean,
+                                  relative_median=relative_median,
+                                  relative_max=relative_max)
 
     # Filter
-    info["Peaks"] = info["Peaks"][keep]
     info["Distance"] = _signal_findpeaks_distances(info["Peaks"])
-    info["Height"] = info["Height"][keep]
-    info["Width"] = info["Width"][keep]
-    info["Onset"] = _signal_findpeaks_base(info["Peaks"], signal, what="onset")
-    info["Offset"] = _signal_findpeaks_base(info["Peaks"], signal, what="offset")
+    info["Onset"] = _signal_findpeaks_findbase(info["Peaks"], signal, what="onset")
+    info["Offset"] = _signal_findpeaks_findbase(info["Peaks"], signal, what="offset")
 
     return info
 
@@ -103,8 +92,52 @@ def signal_findpeaks(signal, height_min=None, width_min=None, height_max=None, w
 
 
 # =============================================================================
-# Internals
+# Filtering peaks
 # =============================================================================
+
+def _signal_findpeaks_keep(info, what="Height", below=None, above=None, relative_mean=False, relative_median=False, relative_max=False):
+
+    if below is None and above is None:
+        return info
+
+    keep = np.full(len(info["Peaks"]), True)
+
+    if relative_max is True:
+        what = info[what] / np.max(info[what])
+    elif relative_median is True:
+        what = standardize(info[what], robust=True)
+    elif relative_mean is True:
+        what = standardize(info[what])
+    else:
+        what = info[what]
+
+
+    if below is not None:
+        keep[what > below] = False
+    if above is not None:
+        keep[what < above] = False
+
+    info = _signal_findpeaks_filter(info, keep)
+    return info
+
+
+
+
+
+
+
+def _signal_findpeaks_filter(info, keep):
+    for key in info.keys():
+        info[key] = info[key][keep]
+
+    return info
+
+
+
+# =============================================================================
+# Helpers
+# =============================================================================
+
 
 
 def _signal_findpeaks_distances(peaks):
@@ -120,7 +153,7 @@ def _signal_findpeaks_distances(peaks):
 
 
 
-def _signal_findpeaks_base(peaks, signal, what="onset"):
+def _signal_findpeaks_findbase(peaks, signal, what="onset"):
     if what == "onset":
         direction = "smaller"
     else:
@@ -128,11 +161,11 @@ def _signal_findpeaks_base(peaks, signal, what="onset"):
 
     troughs, _ = scipy.signal.find_peaks(-1*signal)
 
-    onsets = np.zeros(len(peaks))
+    bases = np.zeros(len(peaks))
     for i, peak in enumerate(peaks):
-        onsets[i] = findclosest(peak, troughs, direction=direction, strictly=True)
+        bases[i] = findclosest(peak, troughs, direction=direction, strictly=True)
 
-    return onsets
+    return bases
 
 
 
