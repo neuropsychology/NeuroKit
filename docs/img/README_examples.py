@@ -83,4 +83,3 @@ nk.rsp_plot(signals, sampling_rate=250)
 # Save it
 plot = nk.rsp_plot(signals, sampling_rate=250)
 plot.savefig("README_respiration.png", dpi=300)
-

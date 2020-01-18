@@ -19,4 +19,4 @@ def test_emg_simulate():
 
     emg3 = nk.emg_simulate(duration=20, length=5000, n_bursts=1, duration_bursts=2.0)
 #    pd.DataFrame({"EMG1":emg1, "EMG3": emg3}).plot()
-    assert len(nk.signal_findpeaks(emg3, height_min=1.0)[0]) > len(nk.signal_findpeaks(emg1, height_min=1.0)[0])
+    assert len(nk.signal_findpeaks(emg3, height_min=1.0)["Peaks"]) > len(nk.signal_findpeaks(emg1, height_min=1.0)["Peaks"])
