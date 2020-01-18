@@ -1,8 +1,9 @@
 # Config file for automatic testing at travis-ci.org
 
 language: python
+dist: xenial
 python:
-  - "nightly"
+  #- "nightly"
   - "3.8-dev"
   - "3.8"
   - "3.7"
