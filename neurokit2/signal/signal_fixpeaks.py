@@ -133,8 +133,6 @@ def _signal_fixpeaks_interpolate_missing(peaks, interval, interval_max, sampling
 
 
 def _signal_fixpeaks_period_to_location(period, sampling_rate=1000, first_location=0):
-    """
-    """
     location = np.cumsum(period * sampling_rate)
     location = location - (location[0] - first_location)
     return location.astype(np.int)
