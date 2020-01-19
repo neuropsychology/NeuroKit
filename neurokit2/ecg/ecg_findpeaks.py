@@ -65,10 +65,11 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     References
     --------------
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
-    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
-    In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
     - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in
 Cardiology, 2003, pages 259–262, 2003.
+    - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
+    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
+    In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
     """
     # Try retrieving right column
     if isinstance(ecg_cleaned, pd.DataFrame):
@@ -91,6 +92,8 @@ Cardiology, 2003, pages 259–262, 2003.
         rpeaks = _ecg_findpeaks_gamboa(ecg_cleaned, sampling_rate)
     elif method in ["ssf", "slopesumfunction", "zong", "zong2003"]:
         rpeaks = _ecg_findpeaks_ssf(ecg_cleaned, sampling_rate)
+    elif method in ["hamilton", "hamilton2002"]:
+        rpeaks = _ecg_findpeaks_hamilton(ecg_cleaned, sampling_rate)
     else:
         raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be "
                          "one of 'neurokit' or 'pamtompkins'.")
@@ -205,13 +208,86 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
 
 
 
+# =============================================================================
+# Hamilton (2002)
+# =============================================================================
+def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
+    """
+    From https://github.com/berndporr/py-ecg-detectors/
 
+    - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
+    """
+    diff = abs(np.diff(signal))
 
+    b = np.ones(int(0.08*sampling_rate))
+    b = b/int(0.08*sampling_rate)
+    a = [1]
+
+    ma = scipy.signal.lfilter(b, a, diff)
+
+    ma[0:len(b)*2] = 0
+
+    n_pks = []
+    n_pks_ave = 0.0
+    s_pks = []
+    s_pks_ave = 0.0
+    QRS = [0]
+    RR = []
+    RR_ave = 0.0
+
+    th = 0.0
+
+    i = 0
+    idx = []
+    peaks = []
+
+    for i in range(len(ma)):
+
+        if i > 0 and i < len(ma) - 1:
+            if ma[i-1] < ma[i] and ma[i+1] < ma[i]:
+                peak = i
+                peaks.append(i)
+
+                if ma[peak] > th and (peak-QRS[-1]) > 0.3*sampling_rate:
+                    QRS.append(peak)
+                    idx.append(i)
+                    s_pks.append(ma[peak])
+                    if len(n_pks) > 8:
+                        s_pks.pop(0)
+                    s_pks_ave = np.mean(s_pks)
+
+                    if RR_ave != 0.0:
+                        if QRS[-1]-QRS[-2] > 1.5 * RR_ave:
+                            missed_peaks = peaks[idx[-2]+1:idx[-1]]
+                            for missed_peak in missed_peaks:
+                                if missed_peak - peaks[idx[-2]] > int(0.360 * sampling_rate) and ma[missed_peak] > 0.5 * th:
+                                    QRS.append(missed_peak)
+                                    QRS.sort()
+                                    break
+
+                    if len(QRS) > 2:
+                        RR.append(QRS[-1]-QRS[-2])
+                        if len(RR) > 8:
+                            RR.pop(0)
+                        RR_ave = int(np.mean(RR))
+
+                else:
+                    n_pks.append(ma[peak])
+                    if len(n_pks) > 8:
+                        n_pks.pop(0)
+                    n_pks_ave = np.mean(n_pks)
+
+                th = n_pks_ave + 0.45*(s_pks_ave-n_pks_ave)
+
+                i += 1
+
+    QRS.pop(0)
+
+    return QRS
 
 # =============================================================================
 # Gamboa (2008)
 # =============================================================================
-
 def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
     """
     From https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834
@@ -260,7 +336,6 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
 # =============================================================================
 # Slope Sum Function (SSF) - Zong et al. (2003)
 # =============================================================================
-
 def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, after=0.01):
     """
     From https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448
@@ -322,7 +397,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
         else:
             section = signal[i-window_size:i]
 
-        if i!=0:
+        if i != 0:
             mwa[i] = np.mean(section)
         else:
             mwa[i] = signal[i]
@@ -368,7 +443,7 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
                     signal_peaks.append(peak)
                     indexes.append(index)
                     SPKI = 0.125 * detection[signal_peaks[-1]] + 0.875 * SPKI
-                    if RR_missed!=0:
+                    if RR_missed != 0:
                         if signal_peaks[-1] - signal_peaks[-2] > RR_missed:
                             missed_section_peaks = peaks[indexes[-2] + 1:indexes[-1]]
                             missed_section_peaks2 = []
