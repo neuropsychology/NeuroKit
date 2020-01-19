@@ -2,7 +2,6 @@
 import numpy as np
 import pandas as pd
 
-from ..signal.signal_from_indices import _signals_from_peakinfo
 
 
 def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
@@ -33,11 +32,6 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame of same length as the input signal in which occurences of
-        inhalation peaks and exhalation troughs are marked as "1" in lists of
-        zeros with the same length as `rsp_cleaned`. Accessible with the keys
-        "RSP_Peaks" and "RSP_Troughs" respectively.
     info : dict
         A dictionary containing additional information, in this case the
         samples at which inhalation peaks and exhalation troughs occur,
@@ -53,7 +47,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     >>>
     >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> signals, info = nk.rsp_findpeaks(cleaned)
+    >>> info = nk.rsp_findpeaks(cleaned)
     >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
     """
     # Try retrieving correct column
@@ -78,10 +72,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
         raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be "
                          "one of 'khodadad2018' or 'biosppy'.")
 
-    # Prepare output
-    signals = _signals_from_peakinfo(info, peak_indices=info["RSP_Peaks"], length=len(rsp_cleaned))
-
-    return signals, info
+    return info
 
 
 

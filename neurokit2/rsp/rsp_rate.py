@@ -48,7 +48,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> signals, info = nk.rsp_findpeaks(cleaned)
+    >>> signals, info = nk.rsp_fixpeaks(nk.rsp_findpeaks(cleaned), desired_length=len(cleaned))
     >>>
     >>> rate = nk.rsp_rate(signals)
     >>> nk.signal_plot([rsp, rate], subplots=True)

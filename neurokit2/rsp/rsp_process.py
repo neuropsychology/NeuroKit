@@ -2,6 +2,7 @@
 import pandas as pd
 
 from .rsp_clean import rsp_clean
+from .rsp_fixpeaks import rsp_fixpeaks
 from .rsp_findpeaks import rsp_findpeaks
 from .rsp_phase import rsp_phase
 from .rsp_rate import rsp_rate
@@ -64,11 +65,11 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate,
                             method=method)
 
-    peaks_signal, info = rsp_findpeaks(rsp_cleaned, method=method,
-                                         outlier_threshold=0.3)
+    info = rsp_findpeaks(rsp_cleaned, method=method, outlier_threshold=0.3)
+    peaks_signal, info = rsp_fixpeaks(info, desired_length=len(rsp_cleaned))
 
     phase = rsp_phase(peaks_signal)
-    amplitude = rsp_amplitude(peaks_signal)
+    amplitude = rsp_amplitude(rsp_cleaned, peaks_signal)
 
     rate = rsp_rate(peaks_signal, sampling_rate=sampling_rate, method=method)
 

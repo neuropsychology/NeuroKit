@@ -3,10 +3,10 @@ import numpy as np
 import pandas as pd
 
 from ..signal import signal_interpolate
-from ..signal.signal_formatpeaks import _signal_formatpeaks
+from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
-def rsp_amplitude(peaks, troughs=None, desired_length=None):
+def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     """Compute respiratory amplitude.
 
     Compute respiratory amplitude given the raw respiration signal and its
@@ -14,6 +14,8 @@ def rsp_amplitude(peaks, troughs=None, desired_length=None):
 
     Parameters
     ----------
+    rsp_cleaned : list, array or Series
+        The cleaned respiration channel as returned by `rsp_clean()`.
     peaks, troughs : list, array, DataFrame, Series or dict
         The samples at which the inhalation peaks occur. If a dict or a
         DataFrame is passed, it is assumed that these containers were obtained
@@ -39,16 +41,13 @@ def rsp_amplitude(peaks, troughs=None, desired_length=None):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> extrema, info = nk.rsp_findpeaks(cleaned)
+    >>> signals, info = nk.rsp_fixpeaks(nk.rsp_findpeaks(cleaned), desired_length=len(cleaned))
     >>>
-    >>> amplitude = nk.rsp_amplitude(rsp, extrema)
+    >>> amplitude = nk.rsp_amplitude(cleaned, signals)
+    >>> nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
     """
     # Format input.
-    original_input = peaks
-    peaks, desired_length = _signal_formatpeaks(original_input, desired_length, key="Peaks")
-    if troughs is None:
-        troughs, _ = _signal_formatpeaks(original_input, desired_length, key="Troughs")
-
+    peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, len(rsp_cleaned))
 
     # To consistenty calculate amplitude, peaks and troughs must have the same
     # number of elements, and the first trough must precede the first peak.
@@ -60,10 +59,9 @@ def rsp_amplitude(peaks, troughs=None, desired_length=None):
 
     # Calculate amplitude in units of the raw signal, based on vertical
     # difference of each peak to the preceding trough.
-    amplitude = np.abs(peaks - troughs)
+    amplitude = rsp_cleaned[peaks] - rsp_cleaned[troughs]
 
     # Interpolate amplitude to desired_length samples.
-    amplitude = signal_interpolate(amplitude, x_axis=peaks,
-                                   desired_length=desired_length)
+    amplitude = signal_interpolate(amplitude, x_axis=peaks, desired_length=desired_length)
 
     return amplitude
