@@ -3,6 +3,7 @@ import numpy as np
 import scipy.signal
 
 from ..signal import signal_filter
+from ..signal import signal_detrend
 
 
 def emg_clean(emg_signal, sampling_rate=1000, method="neurokit"):
