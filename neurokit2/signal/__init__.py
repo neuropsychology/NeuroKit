@@ -14,3 +14,4 @@ from .signal_findpeaks import signal_findpeaks
 from .signal_rate import signal_rate
 from .signal_merge import signal_merge
 from .signal_plot import signal_plot
+from .signal_phase import signal_phase

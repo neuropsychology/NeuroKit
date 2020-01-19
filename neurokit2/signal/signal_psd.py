@@ -11,7 +11,6 @@ def signal_psd(signal, sampling_rate=1000, show=True):
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
-        or "bandstop".
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool

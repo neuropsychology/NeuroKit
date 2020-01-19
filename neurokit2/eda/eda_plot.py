@@ -55,8 +55,8 @@ def eda_plot(eda_signals, sampling_rate=None):
 
 
     # Plot Phasic.
-    ax1.set_title("Phasic Component and Skin Conductance Responses (SCR)")
-    ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic')
+    ax1.set_title("Skin Conductance Response (SCR)")
+    ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic Component')
 
     # Add peaks
     ax1.scatter(x_axis[onsets], eda_signals["EDA_Phasic"][onsets], color='#FF5722',
@@ -66,9 +66,9 @@ def eda_plot(eda_signals, sampling_rate=None):
     ax1.legend(loc='upper right')
 
     # Plot Tonic.
-    ax2.set_title("Tonic Component")
+    ax2.set_title("Skin Conductance Level (SCL)")
     ax2.plot(x_axis, eda_signals["EDA_Tonic"], color='#673AB7',
-             label='Tonic')
+             label='Tonic Component')
     ax2.legend(loc='upper right')
 
     plt.show()
