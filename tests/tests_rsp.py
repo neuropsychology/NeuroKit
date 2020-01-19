@@ -68,7 +68,7 @@ def test_rsp_findpeaks():
                           respiratory_rate=15, random_state=42)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_findpeaks(rsp_cleaned)
-    assert signals.shape == (120000, 2)
+    assert signals.shape == (120000, 3)
     assert signals["RSP_Peaks"].sum() == 28
     assert signals["RSP_Troughs"].sum() == 28
     assert info["RSP_Peaks"].shape[0] == 28
@@ -128,13 +128,14 @@ def test_rsp_process():
 
     # Only check array dimensions since functions called by rsp_process have
     # already been unit tested.
-    assert signals.shape == (120000, 6)
+    assert signals.shape == (120000, 7)
     assert np.array(["RSP_Raw",
                      "RSP_Clean",
                      "RSP_Peaks",
                      "RSP_Troughs",
                      "RSP_Rate",
-                     "RSP_Amplitude"]) in signals.columns.values
+                     "RSP_Amplitude",
+                     "RSP_Inspiration"]) in signals.columns.values
 
 
 def test_rsp_plot():

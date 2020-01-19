@@ -31,7 +31,16 @@ def _events_plot(events, color="red", linestyle="--"):
         # Loop through sublists
         for i, event in enumerate(events):
             for j in events[i]:
-                plt.axvline(j, color=color[i], linestyle=linestyle[i])
+                plt.axvline(j, color=color[i], linestyle=linestyle[i], label=str(i))
+
+        # Display only one legend per event type
+        handles, labels = plt.gca().get_legend_handles_labels()
+        newLabels, newHandles = [], []
+        for handle, label in zip(handles, labels):
+            if label not in newLabels:
+                newLabels.append(label)
+                newHandles.append(handle)
+        plt.legend(newHandles, newLabels)
 
 
 

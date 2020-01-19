@@ -33,7 +33,7 @@ def _signal_from_indices(indices, length, value=1):
 def _signals_from_peakinfo(info, peak_indices, length):
     signals = {}
     for feature in info.keys():
-        if "Peak" in str(feature) or "Onset" in str(feature) or "Trough" in str(feature):
+        if any(x in str(feature) for x in ["Peak", "Onset", "Trough", "Recovery"]):
             signals[feature] = _signal_from_indices(info[feature], length, 1)
         else:
             signals[feature] = _signal_from_indices(peak_indices, length, info[feature])
