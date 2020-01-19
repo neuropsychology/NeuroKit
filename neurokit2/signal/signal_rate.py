@@ -66,6 +66,12 @@ def _signal_period(peaks, sampling_rate=1000, desired_length=None):
     # Format input.
     peaks, desired_length = _signal_formatpeaks(peaks, desired_length)
 
+    # Sanity checks.
+    if len(peaks) <= 3:
+        print("NeuroKit warning: _signal_formatpeaks(): too few peaks detected to "
+              "compute the rate. Returning empty vector.")
+        return np.full(desired_length, np.nan)
+
     # Calculate period in msec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for
     # interpolation later) by prepending the mean of all periods.

@@ -1,0 +1,59 @@
+# -*- coding: utf-8 -*-
+import numpy as np
+import pandas as pd
+
+from ..signal.signal_formatpeaks import _signal_formatpeaks
+
+
+
+
+def rsp_phase(peaks, troughs=None, desired_length=None):
+    """Compute respiratory phase (inspiration and expiration).
+
+    Finds the respiratory phase, labelled as 1 for inspiration and 0 for expiration.
+    Parameters
+    ----------
+    peaks, troughs : list, array, DataFrame, Series or dict
+        The samples at which the inhalation peaks occur. If a dict or a
+        DataFrame is passed, it is assumed that these containers were obtained
+        with `rsp_findpeaks()`.
+    desired_length : int
+        By default, the returned respiration rate has the same number of
+        elements as `peaks`. If set to an integer, the returned rate will be
+        interpolated between `peaks` over `desired_length` samples. Has no
+        effect if a DataFrame is passed in as the `peaks` argument.
+
+    Returns
+    -------
+    array
+        A vector containing the respiration phase.
+
+    See Also
+    --------
+    rsp_clean, rsp_findpeaks, rsp_amplitude, rsp_process, rsp_plot
+
+    Examples
+    --------
+    >>> import neurokit2 as nk
+    >>>
+    >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
+    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+    >>> signals, info = nk.rsp_findpeaks(cleaned)
+    >>>
+    >>> phase = nk.rsp_phase(signals)
+    >>> nk.standardize(pd.DataFrame({"RSP": rsp, "Phase": phase})).plot()
+    """
+    # Format input.
+    original_input = peaks
+    peaks, desired_length = _signal_formatpeaks(original_input, desired_length, key="Peaks")
+    if troughs is None:
+        troughs, _ = _signal_formatpeaks(original_input, desired_length, key="Troughs")
+
+    inspiration = np.full(desired_length, np.nan)
+    inspiration[peaks] = 0.0
+    inspiration[troughs] = 1.0
+
+    last_element = np.where(~np.isnan(inspiration))[0][-1]  # Avoid filling beyond the last peak/trough
+    inspiration[0:last_element] = pd.Series(inspiration).fillna(method="pad").values[0:last_element]
+
+    return inspiration

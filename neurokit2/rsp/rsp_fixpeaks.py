@@ -10,7 +10,7 @@ from ..signal import signal_smooth
 
 
 
-def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad2018"):
+def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000, desired_length=None):
     """Compute respiration (RSP) rate.
 
     Compute respiration rate with the specified method.

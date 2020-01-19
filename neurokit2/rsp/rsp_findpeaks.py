@@ -81,9 +81,6 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     # Prepare output
     signals = _signals_from_peakinfo(info, peak_indices=info["RSP_Peaks"], length=len(rsp_cleaned))
 
-    # Add respiration phase
-    signals["RSP_Inspiration"] = _rsp_findpeaks_phase(signals)
-
     return signals, info
 
 
@@ -121,20 +118,6 @@ def _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0.3):
 # =============================================================================
 # Internals
 # =============================================================================
-def _rsp_findpeaks_phase(signals):
-    inspiration = np.full(len(signals), np.nan)
-    inspiration[np.where(signals["RSP_Peaks"] == 1)] = 0.0
-    inspiration[np.where(signals["RSP_Troughs"] == 1)] = 1.0
-
-    last_element = np.where(~np.isnan(inspiration))[0][-1]  # Avoid filling beyond the last peak/trough
-    inspiration[0:last_element] = pd.Series(inspiration).fillna(method="pad").values[0:last_element]
-
-    return inspiration
-
-
-
-
-
 def _rsp_findpeaks_extrema(rsp_cleaned):
     # Detect zero crossings (note that these are zero crossings in the raw
     # signal, not in its gradient).
