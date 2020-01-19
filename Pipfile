@@ -23,6 +23,7 @@ sklearn = "*"
 matplotlib = "*"
 pyentrp = "*"
 cvxopt = "*"
+pywt = "*"
 
 [packages]
 neurokit2 = {path = ".", editable = true}

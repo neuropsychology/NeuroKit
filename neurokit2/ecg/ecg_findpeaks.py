@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# - * - coding: utf-8 - * -
 
 import numpy as np
 import pandas as pd
@@ -24,7 +24,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        or 'pamtompkins1985'.
+        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010',
+        'engzeemod2012' or 'kalidas2017'.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the
         algorithm. Useful for debugging.
@@ -53,23 +54,33 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> nk.events_plot(info["ECG_Peaks"], cleaned)
     >>>
     >>> # Different methods
-    >>> _, neurokit = nk.ecg_findpeaks(cleaned, method="neurokit")
-    >>> _, pantompkins1985 = nk.ecg_findpeaks(cleaned, method="pantompkins1985")
-    >>> _, gamboa2008 = nk.ecg_findpeaks(cleaned, method="gamboa2008")
-    >>> _, ssf = nk.ecg_findpeaks(cleaned, method="ssf")
+    >>> _, neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
+    >>> _, pantompkins1985 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
+    >>> _, hamilton2002 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
+    >>> _, christov2004 = nk.ecg_findpeaks(ecg, method="christov2004")
+    >>> _, gamboa2008 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="gamboa2008"), method="gamboa2008")
+    >>> _, elgendi2010 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
+    >>> _, engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
+    >>> _, kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
+    >>>
+    >>> # Visualize
     >>> nk.events_plot([neurokit["ECG_Peaks"],
                         pantompkins1985["ECG_Peaks"],
+                        hamilton2002["ECG_Peaks"],
+                        christov2004["ECG_Peaks"],
                         gamboa2008["ECG_Peaks"],
-                        ssf["ECG_Peaks"]], cleaned)
+                        elgendi2010["ECG_Peaks"],
+                        engzeemod2012["ECG_Peaks"],
+                        kalidas2017["ECG_Peaks"]], cleaned)
 
     References
     --------------
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
-    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in
-Cardiology, 2003, pages 259–262, 2003.
+    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
-    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
-    In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
+    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm. In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
+    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
+    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
     """
     # Try retrieving right column
     if isinstance(ecg_cleaned, pd.DataFrame):
@@ -94,6 +105,14 @@ Cardiology, 2003, pages 259–262, 2003.
         rpeaks = _ecg_findpeaks_ssf(ecg_cleaned, sampling_rate)
     elif method in ["hamilton", "hamilton2002"]:
         rpeaks = _ecg_findpeaks_hamilton(ecg_cleaned, sampling_rate)
+    elif method in ["christov", "christov2004"]:
+        rpeaks = _ecg_findpeaks_christov(ecg_cleaned, sampling_rate)
+    elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
+        rpeaks = _ecg_findpeaks_engzee(ecg_cleaned, sampling_rate)
+    elif method in ["elgendi", "elgendi2010"]:
+        rpeaks = _ecg_findpeaks_elgendi(ecg_cleaned, sampling_rate)
+    elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
+        rpeaks = _ecg_findpeaks_kalidas(ecg_cleaned, sampling_rate)
     else:
         raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be "
                          "one of 'neurokit' or 'pamtompkins'.")
@@ -196,11 +215,11 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
     """
     diff = np.diff(signal)
 
-    squared = diff*diff
+    squared = diff * diff
 
-    N = int(0.12*sampling_rate)
+    N = int(0.12 * sampling_rate)
     mwa = _ecg_findpeaks_MWA(squared, N)
-    mwa[:int(0.2*sampling_rate)] = 0
+    mwa[:int(0.2 * sampling_rate)] = 0
 
     mwa_peaks = _ecg_findpeaks_peakdetect(mwa, sampling_rate)
 
@@ -219,13 +238,13 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
     """
     diff = abs(np.diff(signal))
 
-    b = np.ones(int(0.08*sampling_rate))
-    b = b/int(0.08*sampling_rate)
+    b = np.ones(int(0.08 * sampling_rate))
+    b = b/int(0.08 * sampling_rate)
     a = [1]
 
     ma = scipy.signal.lfilter(b, a, diff)
 
-    ma[0:len(b)*2] = 0
+    ma[0:len(b) * 2] = 0
 
     n_pks = []
     n_pks_ave = 0.0
@@ -244,11 +263,11 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
     for i in range(len(ma)):
 
         if i > 0 and i < len(ma) - 1:
-            if ma[i-1] < ma[i] and ma[i+1] < ma[i]:
+            if ma[i-1] < ma[i] and ma[i + 1] < ma[i]:
                 peak = i
                 peaks.append(i)
 
-                if ma[peak] > th and (peak-QRS[-1]) > 0.3*sampling_rate:
+                if ma[peak] > th and (peak-QRS[-1]) > 0.3 * sampling_rate:
                     QRS.append(peak)
                     idx.append(i)
                     s_pks.append(ma[peak])
@@ -258,7 +277,7 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
 
                     if RR_ave != 0.0:
                         if QRS[-1]-QRS[-2] > 1.5 * RR_ave:
-                            missed_peaks = peaks[idx[-2]+1:idx[-1]]
+                            missed_peaks = peaks[idx[-2] + 1:idx[-1]]
                             for missed_peak in missed_peaks:
                                 if missed_peak - peaks[idx[-2]] > int(0.360 * sampling_rate) and ma[missed_peak] > 0.5 * th:
                                     QRS.append(missed_peak)
@@ -277,60 +296,13 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
                         n_pks.pop(0)
                     n_pks_ave = np.mean(n_pks)
 
-                th = n_pks_ave + 0.45*(s_pks_ave-n_pks_ave)
+                th = n_pks_ave + 0.45 * (s_pks_ave-n_pks_ave)
 
                 i += 1
 
     QRS.pop(0)
 
     return QRS
-
-# =============================================================================
-# Gamboa (2008)
-# =============================================================================
-def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
-    """
-    From https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834
-
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
-    """
-
-    # convert to samples
-    v_100ms = int(0.1 * sampling_rate)
-    v_300ms = int(0.3 * sampling_rate)
-    hist, edges = np.histogram(signal, 100, density=True)
-
-    TH = 0.01
-    F = np.cumsum(hist)
-
-    v0 = edges[np.nonzero(F > TH)[0][0]]
-    v1 = edges[np.nonzero(F < (1 - TH))[0][-1]]
-
-    nrm = max([abs(v0), abs(v1)])
-    norm_signal = signal / float(nrm)
-
-    d2 = np.diff(norm_signal, 2)
-
-    b = np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2
-    b = np.intersect1d(b, np.nonzero(-d2 > tol)[0])
-
-    if len(b) < 3:
-        rpeaks = []
-    else:
-        b = b.astype('float')
-        rpeaks = []
-        previous = b[0]
-        for i in b[1:]:
-            if i - previous > v_300ms:
-                previous = i
-                rpeaks.append(np.argmax(signal[int(i):int(i + v_100ms)]) + i)
-
-    rpeaks = sorted(list(set(rpeaks)))
-    rpeaks = np.array(rpeaks, dtype='int')
-    return rpeaks
-
-
-
 
 
 # =============================================================================
@@ -380,6 +352,399 @@ Cardiology, 2003, pages 259–262, 2003.
     rpeaks.sort()
     rpeaks = np.array(rpeaks, dtype='int')
     return rpeaks
+
+
+
+# =============================================================================
+# Christov (2004)
+# =============================================================================
+def _ecg_findpeaks_christov(signal, sampling_rate=1000):
+    """
+    From https://github.com/berndporr/py-ecg-detectors/
+
+    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.
+    """
+    total_taps = 0
+
+    b = np.ones(int(0.02 * sampling_rate))
+    b = b/int(0.02 * sampling_rate)
+    total_taps += len(b)
+    a = [1]
+
+    MA1 = scipy.signal.lfilter(b, a, signal)
+
+    b = np.ones(int(0.028 * sampling_rate))
+    b = b/int(0.028 * sampling_rate)
+    total_taps += len(b)
+    a = [1]
+
+    MA2 = scipy.signal.lfilter(b, a, MA1)
+
+    Y = []
+    for i in range(1, len(MA2)-1):
+
+        diff = abs(MA2[i + 1]-MA2[i-1])
+
+        Y.append(diff)
+
+    b = np.ones(int(0.040 * sampling_rate))
+    b = b/int(0.040 * sampling_rate)
+    total_taps += len(b)
+    a = [1]
+
+    MA3 = scipy.signal.lfilter(b, a, Y)
+
+    MA3[0:total_taps] = 0
+
+    ms50 = int(0.05 * sampling_rate)
+    ms200 = int(0.2 * sampling_rate)
+    ms1200 = int(1.2 * sampling_rate)
+    ms350 = int(0.35 * sampling_rate)
+
+    M = 0
+    newM5 = 0
+    M_list = []
+    MM = []
+    M_slope = np.linspace(1.0, 0.6, ms1200-ms200)
+    F = 0
+    F_list = []
+    R = 0
+    RR = []
+    Rm = 0
+    R_list = []
+
+    MFR = 0
+    MFR_list = []
+
+    QRS = []
+
+    for i in range(len(MA3)):
+
+        # M
+        if i < 5 * sampling_rate:
+            M = 0.6 * np.max(MA3[:i + 1])
+            MM.append(M)
+            if len(MM) > 5:
+                MM.pop(0)
+
+        elif QRS and i < QRS[-1] + ms200:
+            newM5 = 0.6 * np.max(MA3[QRS[-1]:i])
+            if newM5 > 1.5 * MM[-1]:
+                newM5 = 1.1 * MM[-1]
+
+        elif QRS and i == QRS[-1] + ms200:
+            if newM5 == 0:
+                newM5 = MM[-1]
+            MM.append(newM5)
+            if len(MM) > 5:
+                MM.pop(0)
+            M = np.mean(MM)
+
+        elif QRS and i > QRS[-1] + ms200 and i < QRS[-1] + ms1200:
+
+            M = np.mean(MM) * M_slope[i-(QRS[-1] + ms200)]
+
+        elif QRS and i > QRS[-1] + ms1200:
+            M = 0.6 * np.mean(MM)
+
+        # F
+        if i > ms350:
+            F_section = MA3[i-ms350:i]
+            max_latest = np.max(F_section[-ms50:])
+            max_earliest = np.max(F_section[:ms50])
+            F = F + ((max_latest-max_earliest)/150.0)
+
+        # R
+        if QRS and i < QRS[-1] + int((2.0/3.0 * Rm)):
+
+            R = 0
+
+        elif QRS and i > QRS[-1] + int((2.0/3.0 * Rm)) and i < QRS[-1] + Rm:
+
+            dec = (M-np.mean(MM))/1.4
+            R = 0 + dec
+
+        MFR = M + F + R
+        M_list.append(M)
+        F_list.append(F)
+        R_list.append(R)
+        MFR_list.append(MFR)
+
+        if not QRS and MA3[i] > MFR:
+            QRS.append(i)
+
+        elif QRS and i > QRS[-1] + ms200 and MA3[i] > MFR:
+            QRS.append(i)
+            if len(QRS) > 2:
+                RR.append(QRS[-1] - QRS[-2])
+                if len(RR) > 5:
+                    RR.pop(0)
+                Rm = int(np.mean(RR))
+
+    QRS.pop(0)
+
+    return QRS
+
+
+
+# =============================================================================
+# Gamboa (2008)
+# =============================================================================
+def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
+    """
+    From https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834
+
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
+    """
+
+    # convert to samples
+    v_100ms = int(0.1 * sampling_rate)
+    v_300ms = int(0.3 * sampling_rate)
+    hist, edges = np.histogram(signal, 100, density=True)
+
+    TH = 0.01
+    F = np.cumsum(hist)
+
+    v0 = edges[np.nonzero(F > TH)[0][0]]
+    v1 = edges[np.nonzero(F < (1 - TH))[0][-1]]
+
+    nrm = max([abs(v0), abs(v1)])
+    norm_signal = signal / float(nrm)
+
+    d2 = np.diff(norm_signal, 2)
+
+    b = np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2
+    b = np.intersect1d(b, np.nonzero(-d2 > tol)[0])
+
+    if len(b) < 3:
+        rpeaks = []
+    else:
+        b = b.astype('float')
+        rpeaks = []
+        previous = b[0]
+        for i in b[1:]:
+            if i - previous > v_300ms:
+                previous = i
+                rpeaks.append(np.argmax(signal[int(i):int(i + v_100ms)]) + i)
+
+    rpeaks = sorted(list(set(rpeaks)))
+    rpeaks = np.array(rpeaks, dtype='int')
+    return rpeaks
+
+
+
+
+
+
+
+# =============================================================================
+# Engzee Modified (2012)
+# =============================================================================
+def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
+    """
+    From https://github.com/berndporr/py-ecg-detectors/
+
+    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
+    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+    """
+    engzee_fake_delay = 0
+
+    diff = np.zeros(len(signal))
+    for i in range(4, len(diff)):
+        diff[i] = signal[i]-signal[i-4]
+
+    ci = [1, 4, 6, 4, 1]
+    low_pass = scipy.signal.lfilter(ci, 1, diff)
+
+    low_pass[:int(0.2 * sampling_rate)] = 0
+
+    ms200 = int(0.2 * sampling_rate)
+    ms1200 = int(1.2 * sampling_rate)
+    ms160 = int(0.16 * sampling_rate)
+    neg_threshold = int(0.01 * sampling_rate)
+
+    M = 0
+    M_list = []
+    neg_m = []
+    MM = []
+    M_slope = np.linspace(1.0, 0.6, ms1200-ms200)
+
+    QRS = []
+    r_peaks = []
+
+    counter = 0
+
+    thi_list = []
+    thi = False
+    thf_list = []
+    thf = False
+
+    for i in range(len(low_pass)):
+
+        # M
+        if i < 5 * sampling_rate:
+            M = 0.6 * np.max(low_pass[:i + 1])
+            MM.append(M)
+            if len(MM) > 5:
+                MM.pop(0)
+
+        elif QRS and i < QRS[-1] + ms200:
+
+            newM5 = 0.6 * np.max(low_pass[QRS[-1]:i])
+
+            if newM5 > 1.5 * MM[-1]:
+                newM5 = 1.1 * MM[-1]
+
+        elif QRS and i == QRS[-1] + ms200:
+            MM.append(newM5)
+            if len(MM) > 5:
+                MM.pop(0)
+            M = np.mean(MM)
+
+        elif QRS and i > QRS[-1] + ms200 and i < QRS[-1] + ms1200:
+
+            M = np.mean(MM) * M_slope[i-(QRS[-1] + ms200)]
+
+        elif QRS and i > QRS[-1] + ms1200:
+            M = 0.6 * np.mean(MM)
+
+        M_list.append(M)
+        neg_m.append(-M)
+
+        if not QRS and low_pass[i] > M:
+            QRS.append(i)
+            thi_list.append(i)
+            thi = True
+
+        elif QRS and i > QRS[-1] + ms200 and low_pass[i] > M:
+            QRS.append(i)
+            thi_list.append(i)
+            thi = True
+
+        if thi and i < thi_list[-1] + ms160:
+            if low_pass[i] < -M and low_pass[i-1] > -M:
+                # thf_list.append(i)
+                thf = True
+
+            if thf and low_pass[i] < -M:
+                thf_list.append(i)
+                counter += 1
+
+            elif low_pass[i] > -M and thf:
+                counter = 0
+                thi = False
+                thf = False
+
+        elif thi and i > thi_list[-1] + ms160:
+            counter = 0
+            thi = False
+            thf = False
+
+        if counter > neg_threshold:
+            unfiltered_section = signal[thi_list[-1] - int(0.01 * sampling_rate):i]
+            r_peaks.append(engzee_fake_delay + np.argmax(unfiltered_section) + thi_list[-1] - int(0.01 * sampling_rate))
+            counter = 0
+            thi = False
+            thf = False
+
+    return r_peaks
+
+
+
+
+# =============================================================================
+# Stationary Wavelet Transform  (SWT) - Kalidas and Tamil (2017)
+# =============================================================================
+def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
+    """
+    From https://github.com/berndporr/py-ecg-detectors/
+
+    - Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform for Automated ECG Analysis. In: 2017 IEEE 17th International Conference on Bioinformatics and Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.
+    """
+    # Try loading pywt
+    try:
+        import pywt
+    except ImportError:
+        raise ImportError("NeuroKit error: ecg_findpeaks(): the 'pywt' "
+                          "module is required for this method to run. ",
+                          "Please install it first (`pip install pywt`).")
+
+    swt_level = 3
+    padding = -1
+    for i in range(1000):
+        if (len(signal) + i) % 2 ** swt_level == 0:
+            padding = i
+            break
+
+    if padding > 0:
+        signal = np.pad(signal, (0, padding), 'edge')
+    elif padding == -1:
+        print("Padding greater than 1000 required\n")
+
+    swt_ecg = pywt.swt(signal, 'db3', level=swt_level)
+    swt_ecg = np.array(swt_ecg)
+    swt_ecg = swt_ecg[0, 1, :]
+
+    squared = swt_ecg * swt_ecg
+
+    f1 = 0.01/sampling_rate
+    f2 = 10/sampling_rate
+
+    b, a = scipy.signal.butter(3, [f1 * 2, f2 * 2], btype='bandpass')
+    filtered_squared = scipy.signal.lfilter(b, a, squared)
+
+    filt_peaks = _ecg_findpeaks_peakdetect(filtered_squared, sampling_rate)
+
+    return filt_peaks
+
+
+
+
+
+# =============================================================================
+# Elgendi et al. (2010)
+# =============================================================================
+def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
+    """
+    From https://github.com/berndporr/py-ecg-detectors/
+
+    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010). 428-431.
+    """
+
+    window1 = int(0.12 * sampling_rate)
+    mwa_qrs = _ecg_findpeaks_MWA(abs(signal), window1)
+
+    window2 = int(0.6 * sampling_rate)
+    mwa_beat = _ecg_findpeaks_MWA(abs(signal), window2)
+
+    blocks = np.zeros(len(signal))
+    block_height = np.max(signal)
+
+    for i in range(len(mwa_qrs)):
+        if mwa_qrs[i] > mwa_beat[i]:
+            blocks[i] = block_height
+        else:
+            blocks[i] = 0
+
+    QRS = []
+
+    for i in range(1, len(blocks)):
+        if blocks[i-1] == 0 and blocks[i] == block_height:
+            start = i
+
+        elif blocks[i-1] == block_height and blocks[i] == 0:
+            end = i-1
+
+            if end-start > int(0.08 * sampling_rate):
+                detection = np.argmax(signal[start:end + 1]) + start
+                if QRS:
+                    if detection-QRS[-1] > int(0.3 * sampling_rate):
+                        QRS.append(detection)
+                else:
+                    QRS.append(detection)
+
+    return QRS
+
 
 
 # =============================================================================
@@ -434,7 +799,7 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     for i in range(len(detection)):
 
         if i > 0 and i < len(detection) - 1:
-            if detection[i-1] < detection[i] and detection[i+1] < detection[i]:
+            if detection[i-1] < detection[i] and detection[i + 1] < detection[i]:
                 peak = i
                 peaks.append(i)
 

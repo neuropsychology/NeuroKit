@@ -19,7 +19,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         Defaults to 1000.
     method : str
         The processing pipeline to apply. Can be one of 'neurokit' (default),
-        'biosppy' or 'pamtompkins1985'.
+        'biosppy', 'pamtompkins1985', 'hamilton2002', 'elgendi2010', 'engzeemod2012'.
 
     Returns
     -------
@@ -41,7 +41,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
             "ECG_NeuroKit": nk.ecg_clean(ecg, sampling_rate=1000, method="neurokit"),
             "ECG_BioSPPy":nk.ecg_clean(ecg, sampling_rate=1000, method="biosppy"),
             "ECG_PanTompkins":nk.ecg_clean(ecg, sampling_rate=1000, method="pantompkins1985"),
-            "ECG_Hamilton":nk.ecg_clean(ecg, sampling_rate=1000, method="hamilton2002")})
+            "ECG_Hamilton":nk.ecg_clean(ecg, sampling_rate=1000, method="hamilton2002"),
+            "ECG_Elgendi":nk.ecg_clean(ecg, sampling_rate=1000, method="elgendi2010"),
+            "ECG_EngZeeMod":nk.ecg_clean(ecg, sampling_rate=1000, method="engzeemod2012")})
     >>> signals.plot()
 
     References
@@ -53,12 +55,20 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     method = method.lower()  # remove capitalised letters
     if method in ["nk", "nk2", "neurokit", "neurokit2"]:
         clean = _ecg_clean_nk(ecg_signal, sampling_rate)
-    elif method in ["biosppy"]:
+    elif method in ["biosppy", "gamboa2008"]:
         clean = _ecg_clean_biosppy(ecg_signal, sampling_rate)
     elif method in ["pantompkins", "pantompkins1985"]:
         clean = _ecg_clean_pantompkins(ecg_signal, sampling_rate)
     elif method in ["hamilton", "hamilton2002"]:
         clean = _ecg_clean_hamilton(ecg_signal, sampling_rate)
+    elif method in ["elgendi", "elgendi2010"]:
+        clean = _ecg_clean_elgendi(ecg_signal, sampling_rate)
+    elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
+        clean = _ecg_clean_engzee(ecg_signal, sampling_rate)
+    elif method in ["christov", "christov2004", "ssf", "slopesumfunction", "zong",
+                    "zong2003", "kalidas2017", "swt", "kalidas", "kalidastamil",
+                    "kalidastamil2017"]:
+        clean = ecg_signal
     else:
         raise ValueError("NeuroKit error: ecg_clean(): 'method' should be "
                          "one of 'neurokit' or 'biosppy'.")
@@ -132,6 +142,29 @@ def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
 
 
 
+
+# =============================================================================
+# Elgendi et al. (2010)
+# =============================================================================
+def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
+    """
+    From https://github.com/berndporr/py-ecg-detectors/
+
+    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010). 428-431.
+    """
+
+    f1 = 8/sampling_rate
+    f2 = 20/sampling_rate
+
+    b, a = scipy.signal.butter(2, [f1*2, f2*2], btype='bandpass')
+
+    filtered = scipy.signal.lfilter(b, a, ecg_signal)
+
+    return filtered
+
+
+
+
 # =============================================================================
 # Hamilton (2002)
 # =============================================================================
@@ -145,6 +178,26 @@ def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
 
     b, a = scipy.signal.butter(1, [f1*2, f2*2], btype='bandpass')
 
+    filtered = scipy.signal.lfilter(b, a, ecg_signal)
+
+    return filtered
+
+
+
+# =============================================================================
+# Engzee Modified (2012)
+# =============================================================================
+def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
+    """
+    From https://github.com/berndporr/py-ecg-detectors/
+
+    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
+    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+    """
+
+    f1 = 48/sampling_rate
+    f2 = 52/sampling_rate
+    b, a = scipy.signal.butter(4, [f1*2, f2*2], btype='bandstop')
     filtered = scipy.signal.lfilter(b, a, ecg_signal)
 
     return filtered
