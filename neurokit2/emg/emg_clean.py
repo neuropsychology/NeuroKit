@@ -85,7 +85,7 @@ def _emg_clean_biosppy(emg_signal, sampling_rate=1000):
 
     # Filtering
     b, a = scipy.signal.butter(N=order, Wn=frequency, btype='highpass', analog=False)
-    filtered = scipy.signal.filtfilt(b, a, emg)
+    filtered = scipy.signal.filtfilt(b, a, emg_signal)
 
     # Baseline detrending
     clean = signal_detrend(filtered, order=0)
