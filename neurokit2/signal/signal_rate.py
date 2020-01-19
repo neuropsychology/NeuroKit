@@ -5,6 +5,8 @@ import pandas as pd
 from .signal_interpolate import signal_interpolate
 from .signal_formatpeaks import _signal_formatpeaks
 
+
+
 def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     """Calculate signal rate from a series of peaks.
 
@@ -45,6 +47,22 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     >>> rate = nk.signal_rate(peaks=info["Peaks"])
     >>> nk.signal_plot(rate)
     """
+
+    period = _signal_period(peaks, sampling_rate, desired_length)
+    rate = 60 / period
+
+    return rate
+
+
+
+
+
+
+
+def _signal_period(peaks, sampling_rate=1000, desired_length=None):
+    """
+    Return the peak interval in seconds.
+    """
     # Format input.
     peaks, desired_length = _signal_formatpeaks(peaks, desired_length)
 
@@ -53,14 +71,9 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     # interpolation later) by prepending the mean of all periods.
     period = np.ediff1d(peaks, to_begin=0) / sampling_rate
     period[0] = np.mean(period[1::])
-    rate = 60 / period
 
     # Interpolate all statistics to desired length.
     if desired_length != len(peaks):
-        rate = signal_interpolate(rate, x_axis=peaks, desired_length=desired_length)
+        period = signal_interpolate(period, x_axis=peaks, desired_length=desired_length)
 
-    return rate
-
-
-
-
+    return period

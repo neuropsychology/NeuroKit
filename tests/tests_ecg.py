@@ -80,14 +80,14 @@ def test_ecg_rate():
 
     # Test with dictionary.
     test_length = 30
-    rate = nk.ecg_rate(peaks=info, sampling_rate=sampling_rate,
+    rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate,
                        desired_length=test_length)
 
     assert rate.shape == (test_length, )
     assert np.allclose(rate.mean(), 70, atol=1)
 
     # Test with DataFrame.
-    rate = nk.ecg_rate(peaks=signals, sampling_rate=sampling_rate)
+    rate = nk.ecg_rate(rpeaks=signals, sampling_rate=sampling_rate)
     assert rate.shape == (ecg.size, )
     assert np.allclose(rate.mean(), 70, atol=1)
 

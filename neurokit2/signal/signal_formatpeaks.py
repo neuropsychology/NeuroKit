@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-import scipy.signal
 
 
 def _signal_formatpeaks(peaks, desired_length=None):
