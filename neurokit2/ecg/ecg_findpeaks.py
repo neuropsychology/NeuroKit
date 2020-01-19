@@ -665,9 +665,9 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
     try:
         import pywt
     except ImportError:
-        raise ImportError("NeuroKit error: ecg_findpeaks(): the 'pywt' "
+        raise ImportError("NeuroKit error: ecg_findpeaks(): the 'PyWavelets' "
                           "module is required for this method to run. ",
-                          "Please install it first (`pip install pywt`).")
+                          "Please install it first (`pip install PyWavelets`).")
 
     swt_level = 3
     padding = -1
