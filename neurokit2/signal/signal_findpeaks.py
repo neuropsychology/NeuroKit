@@ -60,7 +60,7 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
 
     See Also
     --------
-    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks, ecg_findpeaks, rsp_findpeaks
+    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks, ecg_findpeaks, rsp_findpeaks, signal_fixpeaks
     """
     info = _signal_findpeaks_scipy(signal)
 

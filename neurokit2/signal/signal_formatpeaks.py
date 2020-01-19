@@ -34,7 +34,7 @@ def _signal_formatpeaks(peaks, desired_length=None):
 
 
     # Sanity checks.
-    if len(peaks) <= 3:
+    if len(peaks) < 2:
         print("NeuroKit warning: signal_rate(): too few peaks detected to "
               "compute the rate. Returning empty vector.")
         return np.full(desired_length, np.nan)

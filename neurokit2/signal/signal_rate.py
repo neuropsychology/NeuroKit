@@ -35,7 +35,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
 
     See Also
     --------
-    signal_findpeaks, signal_plot, rsp_rate, ecg_rate
+    signal_findpeaks, signal_fixpeaks, signal_plot, rsp_rate, ecg_rate
 
     Examples
     --------
@@ -73,7 +73,7 @@ def _signal_period(peaks, sampling_rate=1000, desired_length=None):
     period[0] = np.mean(period[1::])
 
     # Interpolate all statistics to desired length.
-    if desired_length != len(peaks):
+    if desired_length != np.size(peaks):
         period = signal_interpolate(period, x_axis=peaks, desired_length=desired_length)
 
     return period

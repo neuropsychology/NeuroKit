@@ -11,6 +11,7 @@ from .signal_distord import signal_distord
 from .signal_interpolate import signal_interpolate
 from .signal_detrend import signal_detrend
 from .signal_findpeaks import signal_findpeaks
+from .signal_fixpeaks import signal_fixpeaks
 from .signal_rate import signal_rate
 from .signal_merge import signal_merge
 from .signal_plot import signal_plot
