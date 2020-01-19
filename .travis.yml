@@ -4,8 +4,8 @@ language: python
 dist: xenial
 python:
   #- "nightly"
-  - "3.8-dev"
-  - "3.8"
+  #- "3.8-dev"
+  #- "3.8"
   - "3.7"
   - "3.6"
   - "3.5"
@@ -36,6 +36,7 @@ install:
   - pip install nolds
   - pip install biosppy
   - pip install cvxopt
+  - pip install PyWavelets
 
 script:
     - python setup.py install

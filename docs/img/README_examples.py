@@ -36,7 +36,7 @@ plot[0][0].get_figure().savefig("README_simulation.png", dpi=300)
 # =============================================================================
 
 # Generate 30 seconds of EDA signal (recorded at 250 samples / second)
-eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=5, drift=0.01)
+eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=5, drift=0.1)
 
 # Process it
 signals, info = nk.eda_process(eda, sampling_rate=250)

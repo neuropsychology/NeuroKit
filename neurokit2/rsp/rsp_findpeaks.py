@@ -2,6 +2,8 @@
 import numpy as np
 import pandas as pd
 
+from ..signal.signal_from_indices import _signals_from_peakinfo
+
 
 def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     """Identify extrema in a respiration (RSP) signal.
@@ -49,12 +51,12 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+    >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     >>> signals, info = nk.rsp_findpeaks(cleaned)
     >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
     """
-    # Try retrieving correct column.
+    # Try retrieving correct column
     if isinstance(rsp_cleaned, pd.DataFrame):
         try:
             rsp_cleaned = rsp_cleaned["RSP_Clean"]
@@ -69,31 +71,32 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     # Find peaks
     method = method.lower()  # remove capitalised letters
     if method in ["khodadad", "khodadad2018"]:
-        peaks, troughs = _rsp_findpeaks_khodadad(cleaned, outlier_threshold)
+        info = _rsp_findpeaks_khodadad(cleaned, outlier_threshold)
     elif method == "biosppy":
-        peaks, troughs = _rsp_findpeaks_biosppy(cleaned)
+        info = _rsp_findpeaks_biosppy(cleaned)
     else:
         raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be "
                          "one of 'khodadad2018' or 'biosppy'.")
 
-    # Prepare output.
-    peaks_signal = np.full(len(rsp_cleaned), 0)
-    peaks_signal[peaks] = 1
-    troughs_signal = np.full(len(rsp_cleaned), 0)
-    troughs_signal[troughs] = 1
+    # Prepare output
+    signals = _signals_from_peakinfo(info, peak_indices=info["RSP_Peaks"], length=len(rsp_cleaned))
 
-    signals = pd.DataFrame({"RSP_Peaks": peaks_signal,
-                            "RSP_Troughs": troughs_signal})
+    # Add respiration phase
+    signals["RSP_Inspiration"] = _rsp_findpeaks_phase(signals)
 
-    info = {"RSP_Peaks": peaks,
-            "RSP_Troughs": troughs}
     return signals, info
+
+
+
+
+
 
 # =============================================================================
 # Methods
 # =============================================================================
 def _rsp_findpeaks_biosppy(rsp_cleaned):
     return _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0)
+
 
 
 def _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0.3):
@@ -103,11 +106,35 @@ def _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0.3):
                                                   outlier_threshold=outlier_threshold)
     peaks, troughs = _rsp_findpeaks_sanitize(extrema, amplitudes)
 
-    return peaks, troughs
+    info = {"RSP_Peaks": peaks,
+            "RSP_Troughs": troughs}
+    return info
+
+
+
+
+
+
+
+
 
 # =============================================================================
 # Internals
 # =============================================================================
+def _rsp_findpeaks_phase(signals):
+    inspiration = np.full(len(signals), np.nan)
+    inspiration[np.where(signals["RSP_Peaks"] == 1)] = 0.0
+    inspiration[np.where(signals["RSP_Troughs"] == 1)] = 1.0
+
+    last_element = np.where(~np.isnan(inspiration))[0][-1]  # Avoid filling beyond the last peak/trough
+    inspiration[0:last_element] = pd.Series(inspiration).fillna(method="pad").values[0:last_element]
+
+    return inspiration
+
+
+
+
+
 def _rsp_findpeaks_extrema(rsp_cleaned):
     # Detect zero crossings (note that these are zero crossings in the raw
     # signal, not in its gradient).
