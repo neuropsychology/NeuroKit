@@ -5,12 +5,12 @@ import pandas as pd
 from ..signal import signal_rate
 
 
-def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
+def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     """Calculate heart rate from R-peaks.
 
     Parameters
     ----------
-    peaks : list, array, DataFrame, Series or dict
+    rpeaks : list, array, DataFrame, Series or dict
         The samples at which the R-peaks occur. If a dict or a DataFrame is
         passed, it is assumed that these containers were obtained with
         `ecg_findpeaks()`.
@@ -44,6 +44,6 @@ def ecg_rate(peaks, sampling_rate=1000, desired_length=None):
     >>> nk.signal_plot([ecg, rate], subplots=True)
     """
     # Get rate values
-    rate = signal_rate(peaks, sampling_rate, desired_length=desired_length)
+    rate = signal_rate(rpeaks, sampling_rate, desired_length=desired_length)
 
     return rate

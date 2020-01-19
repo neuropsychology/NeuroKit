@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_rate import signal_rate
-from ..signal.signal_rate import _signal_rate_sanitize
+from ..signal.signal_formatpeaks import _signal_formatpeaks
 from ..signal import signal_interpolate
 from ..signal import signal_smooth
 
@@ -55,7 +55,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None,
     >>> nk.signal_plot([rsp, rate], subplots=True)
     """
     # Format input.
-    peaks, desired_length = _signal_rate_sanitize(peaks, desired_length)
+    peaks, desired_length = _signal_formatpeaks(peaks, desired_length)
 
     # Get rate values
     rate = signal_rate(peaks, sampling_rate, desired_length=len(peaks))
