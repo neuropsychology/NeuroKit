@@ -2,25 +2,27 @@
 import numpy as np
 import scipy.signal
 
-from ..signal import signal_filter
 from ..signal import signal_detrend
 
 
-def emg_clean(emg_signal, sampling_rate=1000, method="neurokit"):
-    """Clean an EMG signal.
+def emg_clean(emg_signal, sampling_rate=1000):
+    """Preprocess an electromyography (emg) signal.
 
-    Prepare a raw EMG signal for R-peak detection with the specified method.
+    Clean an EMG signal using a set of parameters, such as:
+    - `BioSPPy
+    <https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/emg.py>>`_:
+        fourth order 100 Hz highpass Butterworth filter followed by a
+        constant detrending.
 
     Parameters
     ----------
     emg_signal : list, array or Series
-        The raw ECG channel.
+        The raw EMG channel.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : str
-        The processing pipeline to apply. Can be one of 'neurokit' (default)
-        or 'biosppy'.
+        The processing pipeline to apply, according to BioSPPy.
 
     Returns
     -------
@@ -39,44 +41,8 @@ def emg_clean(emg_signal, sampling_rate=1000, method="neurokit"):
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000)
     >>> signals = pd.DataFrame({
             "EMG_Raw": emg,
-            "EMG_NeuroKit": nk.emg_clean(emg, sampling_rate=1000, method="neurokit"),
-            "EMG_BioSPPy":nk.emg_clean(emg, sampling_rate=1000, method="biosppy")})
+            "EMG_Cleaned":nk.emg_clean(emg, sampling_rate=1000)})
     >>> signals.plot()
-    """
-    method = method.lower()  # remove capitalised letters
-    if method in ["neurokit", "nk"]:
-        clean = _emg_clean_nk(emg_signal, sampling_rate=sampling_rate)
-    elif method in ["biosppy"]:
-        clean = _emg_clean_biosppy(emg_signal, sampling_rate=sampling_rate)
-    else:
-        raise ValueError("NeuroKit error: emg_clean(): 'method' should be "
-                         "one of 'neurokit' or 'biosppy'.")
-    return clean
-
-
-
-
-
-
-# =============================================================================
-# Neurokit
-# =============================================================================
-def _emg_clean_nk(emg_signal, sampling_rate=1000):
-
-    clean = signal_filter(signal=emg_signal,
-                          sampling_rate=sampling_rate,
-                          lowcut=0.5,
-                          method="butterworth",
-                          order=4)
-    return clean
-
-
-# =============================================================================
-# BioSPPy
-# =============================================================================
-def _emg_clean_biosppy(emg_signal, sampling_rate=1000):
-    """Uses the same defaults as `BioSPPy
-    <https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/emg.py>`_.
     """
     # Parameters
     order = 4
