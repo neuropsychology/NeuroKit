@@ -35,9 +35,9 @@ def emg_process(emg_signal, sampling_rate=1000):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> emg = emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
-    >>> signals = emg_process(emg, sampling_rate=1000)
-    >>> emg_plot(signals)
+    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
+    >>> signals = nk.emg_process(emg, sampling_rate=1000)
+    >>> nk.emg_plot(signals)
     """
     # Clean signal
     emg_cleaned = emg_clean(emg_signal, sampling_rate=sampling_rate)
