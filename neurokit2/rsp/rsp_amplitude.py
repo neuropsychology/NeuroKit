@@ -33,7 +33,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
+    rsp_clean, rsp_peaks, rsp_rate, rsp_process, rsp_plot
 
     Examples
     --------
@@ -41,7 +41,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> signals, info = nk.rsp_fixpeaks(nk.rsp_findpeaks(cleaned), desired_length=len(cleaned))
+    >>> info, signals = nk.rsp_peaks(cleaned)
     >>>
     >>> amplitude = nk.rsp_amplitude(cleaned, signals)
     >>> nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)

@@ -12,6 +12,7 @@ from .signal_interpolate import signal_interpolate
 from .signal_detrend import signal_detrend
 from .signal_findpeaks import signal_findpeaks
 from .signal_fixpeaks import signal_fixpeaks
+from .signal_formatpeaks import signal_formatpeaks
 from .signal_rate import signal_rate
 from .signal_merge import signal_merge
 from .signal_plot import signal_plot

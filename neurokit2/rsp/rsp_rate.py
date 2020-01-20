@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_rate import signal_rate
-from ..signal.signal_formatpeaks import _signal_formatpeaks
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_interpolate
 from ..signal import signal_smooth
 
@@ -40,7 +40,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, rsp_amplitude, rsp_process, rsp_plot
+    rsp_clean, rsp_peaks, rsp_amplitude, rsp_process, rsp_plot
 
     Examples
     --------
@@ -48,13 +48,13 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> signals, info = nk.rsp_fixpeaks(nk.rsp_findpeaks(cleaned), desired_length=len(cleaned))
+    >>> info, peak_signal = nk.rsp_peaks(cleaned)
     >>>
-    >>> rate = nk.rsp_rate(signals)
+    >>> rate = nk.rsp_rate(peak_signal)
     >>> nk.signal_plot([rsp, rate], subplots=True)
     """
     # Format input.
-    peaks, desired_length = _signal_formatpeaks(peaks, desired_length)
+    peaks, desired_length = _signal_formatpeaks_sanitize(peaks, desired_length)
 
     # Get rate values
     rate = signal_rate(peaks, sampling_rate, desired_length=len(peaks))

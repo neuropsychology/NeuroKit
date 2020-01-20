@@ -2,11 +2,11 @@
 import pandas as pd
 
 from .rsp_clean import rsp_clean
-from .rsp_fixpeaks import rsp_fixpeaks
-from .rsp_findpeaks import rsp_findpeaks
 from .rsp_phase import rsp_phase
+from .rsp_peaks import rsp_peaks
 from .rsp_rate import rsp_rate
 from .rsp_amplitude import rsp_amplitude
+
 
 
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
@@ -62,22 +62,27 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
     >>> nk.rsp_plot(signals)
     """
+    # Clean signal
     rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate,
                             method=method)
 
-    info = rsp_findpeaks(rsp_cleaned, method=method, outlier_threshold=0.3)
-    peaks_signal, info = rsp_fixpeaks(info, desired_length=len(rsp_cleaned))
+    # Extract, fix and format peaks
+    info, peak_signal = rsp_peaks(rsp_cleaned,
+                                  sampling_rate=sampling_rate,
+                                  method=method,
+                                  outlier_threshold=0.3)
 
-    phase = rsp_phase(peaks_signal)
-    amplitude = rsp_amplitude(rsp_cleaned, peaks_signal)
+    # Get additional parameters
+    phase = rsp_phase(peak_signal)
+    amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
+    rate = rsp_rate(peak_signal, sampling_rate=sampling_rate, method=method)
 
-    rate = rsp_rate(peaks_signal, sampling_rate=sampling_rate, method=method)
-
+    # Prepare output
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,
                             "RSP_Clean": rsp_cleaned,
                             "RSP_Inspiration": phase,
                             "RSP_Amplitude": amplitude,
                             "RSP_Rate": rate})
-    signals = pd.concat([signals, peaks_signal], axis=1)
+    signals = pd.concat([signals, peak_signal], axis=1)
 
     return signals, info

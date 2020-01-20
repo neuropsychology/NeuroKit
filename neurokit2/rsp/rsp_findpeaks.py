@@ -4,21 +4,19 @@ import pandas as pd
 
 
 
-def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
-    """Identify extrema in a respiration (RSP) signal.
+def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", outlier_threshold=0.3):
+    """Extract extrema in a respiration (RSP) signal.
 
     Identify inhalation peaks and exhalation troughs in a preprocessed
-    respiration signal using different sets of parameters, such as:
-
-    - `Khodadad et al. (2018)
-    <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
-    - `BioSPPy
-    <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_
+    respiration signal using different sets of parameters. See `rsp_peaks()` for details.
 
     Parameters
     ----------
     rsp_cleaned : list, array or Series
         The cleaned respiration channel as returned by `rsp_clean()`.
+    sampling_rate : int
+        The sampling frequency of 'rsp_cleaned' (in Hz,
+        i.e., samples/second).
     method : str
         The processing pipeline to apply. Can be one of "khodadad2018"
         (default) or "biosppy".
@@ -39,7 +37,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
 
     See Also
     --------
-    rsp_clean, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
+    rsp_clean, rsp_fixpeaks, rsp_peaks, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
 
     Examples
     --------

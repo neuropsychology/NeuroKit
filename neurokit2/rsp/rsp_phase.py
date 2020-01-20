@@ -4,7 +4,6 @@ import pandas as pd
 
 
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
-from ..signal.signal_formatpeaks import _signal_formatpeaks
 
 
 
@@ -32,7 +31,7 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, rsp_amplitude, rsp_process, rsp_plot
+    rsp_clean, rsp_peaks, rsp_amplitude, rsp_process, rsp_plot
 
     Examples
     --------
@@ -40,9 +39,9 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     >>>
     >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> signals, info = nk.rsp_fixpeaks(nk.rsp_findpeaks(cleaned), desired_length=len(cleaned))
+    >>> info, peak_signal = nk.rsp_peaks(cleaned)
     >>>
-    >>> phase = nk.rsp_phase(signals)
+    >>> phase = nk.rsp_phase(peak_signal)
     >>> nk.standardize(pd.DataFrame({"RSP": rsp, "Phase": phase})).plot()
     """
     # Format input.

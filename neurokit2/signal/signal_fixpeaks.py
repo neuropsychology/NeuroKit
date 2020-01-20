@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-from .signal_formatpeaks import _signal_formatpeaks
+from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_rate import _signal_period
 from ..stats import standardize
 
@@ -55,7 +55,7 @@ def signal_fixpeaks(peaks, sampling_rate=1000, interval_min=None, interval_max=N
     >>> nk.events_plot([peaks_corrected, peaks], signal)
     """
     # Format input.
-    peaks, desired_length = _signal_formatpeaks(peaks)
+    peaks, desired_length = _signal_formatpeaks_sanitize(peaks)
 
 
     # Minimum

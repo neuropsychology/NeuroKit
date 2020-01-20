@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import scipy.signal
 
 from ..signal import signal_smooth
-from ..signal.signal_from_indices import _signals_from_peakinfo
+from ..signal import signal_formatpeaks
 
 
 
@@ -120,7 +120,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     # Prepare output.
     info = {"ECG_Peaks": rpeaks}
-    signals = _signals_from_peakinfo(info, peak_indices=info["ECG_Peaks"], length=len(ecg_cleaned))
+    signals = signal_formatpeaks(info, peak_indices=info["ECG_Peaks"], length=len(ecg_cleaned))
 
     return signals, info
 

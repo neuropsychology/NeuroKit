@@ -8,7 +8,7 @@ import scipy.signal
 from ..signal import signal_smooth
 from ..signal import signal_zerocrossings
 from ..signal import signal_findpeaks
-from ..signal.signal_from_indices import _signals_from_peakinfo
+from ..signal import signal_formatpeaks
 
 from ..misc import findclosest
 
@@ -100,7 +100,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     info = _eda_findpeaks_getfeatures(info, eda_phasic, sampling_rate)
 
     # Prepare output.
-    signals = _signals_from_peakinfo(info, peak_indices=info["SCR_Peaks"], length=len(eda_phasic))
+    signals = signal_formatpeaks(info, peak_indices=info["SCR_Peaks"], length=len(eda_phasic))
 
     return signals, info
 

@@ -49,10 +49,10 @@ def signal_plot(signal, subplots=False):
 
     # Plot accordingly
     if len(events_columns) > 0:
-        events = np.array([])
+        events = []
         for col in events_columns:
             vector = signal[col]
-            events = np.append(events, np.where(vector == np.max(vector.unique())))
+            events.append(np.where(vector == np.max(vector.unique()))[0])
 
         events_plot(events, signal=signal[continuous_columns])
     else:

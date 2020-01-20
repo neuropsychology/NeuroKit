@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from .signal_interpolate import signal_interpolate
-from .signal_formatpeaks import _signal_formatpeaks
+from .signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
 
@@ -64,7 +64,7 @@ def _signal_period(peaks, sampling_rate=1000, desired_length=None):
     Return the peak interval in seconds.
     """
     # Format input.
-    peaks, desired_length = _signal_formatpeaks(peaks, desired_length)
+    peaks, desired_length = _signal_formatpeaks_sanitize(peaks, desired_length)
 
     # Sanity checks.
     if len(peaks) <= 3:
