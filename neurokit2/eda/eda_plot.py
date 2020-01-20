@@ -24,7 +24,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     eda_process
     """
     peaks = np.where(eda_signals["SCR_Peaks"] == 1)[0]
-    onsets = np.where(eda_signals["SCR_Onset"] == 1)[0]
+    onsets = np.where(eda_signals["SCR_Onsets"] == 1)[0]
 
     fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 

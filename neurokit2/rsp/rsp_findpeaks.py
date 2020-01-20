@@ -4,10 +4,10 @@ import pandas as pd
 
 
 
-def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", outlier_threshold=0.3):
+def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
     """Extract extrema in a respiration (RSP) signal.
 
-    Identify inhalation peaks and exhalation troughs in a preprocessed
+    Low-level function used by `rsp_peaks()` to identify inhalation peaks and exhalation troughs in a preprocessed
     respiration signal using different sets of parameters. See `rsp_peaks()` for details.
 
     Parameters
@@ -20,7 +20,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", outlie
     method : str
         The processing pipeline to apply. Can be one of "khodadad2018"
         (default) or "biosppy".
-    outlier_threshold : float
+    amplitude_min : float
         Only applies if method is "khodadad2018". Extrema that have a vertical
         distance smaller than (outlier_threshold * average vertical distance)
         to any direct neighbour are removed as false positive outliers. I.e.,
@@ -63,7 +63,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", outlie
     # Find peaks
     method = method.lower()  # remove capitalised letters
     if method in ["khodadad", "khodadad2018"]:
-        info = _rsp_findpeaks_khodadad(cleaned, outlier_threshold)
+        info = _rsp_findpeaks_khodadad(cleaned, amplitude_min)
     elif method == "biosppy":
         info = _rsp_findpeaks_biosppy(cleaned)
     else:
@@ -81,15 +81,15 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", outlie
 # Methods
 # =============================================================================
 def _rsp_findpeaks_biosppy(rsp_cleaned):
-    return _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0)
+    return _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0)
 
 
 
-def _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0.3):
+def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
 
     extrema = _rsp_findpeaks_extrema(rsp_cleaned)
     extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema,
-                                                  outlier_threshold=outlier_threshold)
+                                                  amplitude_min=amplitude_min)
     peaks, troughs = _rsp_findpeaks_sanitize(extrema, amplitudes)
 
     info = {"RSP_Peaks": peaks,
@@ -153,14 +153,14 @@ def _rsp_findpeaks_extrema(rsp_cleaned):
     return extrema
 
 
-def _rsp_findpeaks_outliers(rsp_cleaned, extrema, outlier_threshold=0.3):
+def _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=0.3):
 
     # Only consider those extrema that have a minimum vertical distance to
     # their direct neighbor, i.e., define outliers in absolute amplitude
     # difference between neighboring extrema.
     vertical_diff = np.abs(np.diff(rsp_cleaned[extrema]))
     average_diff = np.mean(vertical_diff)
-    min_diff = np.where(vertical_diff > (average_diff * outlier_threshold))[0]
+    min_diff = np.where(vertical_diff > (average_diff * amplitude_min))[0]
     extrema = extrema[min_diff]
 
     # Make sure that the alternation of peaks and troughs is unbroken. If

@@ -2,19 +2,15 @@
 import numpy as np
 import pandas as pd
 
-from ..signal.signal_rate import signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from ..signal import signal_interpolate
-from ..signal import signal_smooth
-
 
 
 
 
 def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000):
-    """Correct and format RSP peaks.
+    """Correct RSP peaks.
 
-    Compute respiration rate with the specified method.
+    Low-level function used by `rsp_peaks()` to correct the peaks found by `rsp_findpeaks()`. Doesn't do anything for now for RSP. See `rsp_peaks()` for details.
 
     Parameters
     ----------
@@ -22,11 +18,6 @@ def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000):
         The samples at which the inhalation peaks occur. If a dict or a
         DataFrame is passed, it is assumed that these containers were obtained
         with `rsp_findpeaks()`.
-    desired_length : int
-        By default, the returned respiration rate has the same number of
-        elements as `peaks`. If set to an integer, the returned rate will be
-        interpolated between `peaks` over `desired_length` samples. Has no
-        effect if a DataFrame is passed in as the `peaks` argument.
     sampling_rate : int
         The sampling frequency of the signal that contains the peaks (in Hz,
         i.e., samples/second).

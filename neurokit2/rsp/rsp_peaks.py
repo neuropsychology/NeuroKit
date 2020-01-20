@@ -7,7 +7,7 @@ from .rsp_fixpeaks import rsp_fixpeaks
 from ..signal import signal_formatpeaks
 
 
-def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", outlier_threshold=0.3):
+def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
     """Identify extrema in a respiration (RSP) signal.
 
     This function `rsp_findpeaks()` and `rsp_fixpeaks` to identify and process inhalation peaks and exhalation troughs in a preprocessed respiration signal using different sets of parameters, such as:
@@ -28,7 +28,7 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", outlier_th
     method : str
         The processing pipeline to apply. Can be one of "khodadad2018"
         (default) or "biosppy".
-    outlier_threshold : float
+    amplitude_min : float
         Only applies if method is "khodadad2018". Extrema that have a vertical
         distance smaller than (outlier_threshold * average vertical distance)
         to any direct neighbour are removed as false positive outliers. I.e.,
@@ -64,7 +64,7 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", outlier_th
     >>> data = pd.concat([pd.DataFrame({"RSP": rsp}), peak_signal], axis=1)
     >>> nk.signal_plot(data)
     """
-    info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, outlier_threshold=0.3)
+    info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
     info = rsp_fixpeaks(info, sampling_rate=sampling_rate)
     peak_signal = signal_formatpeaks(info,
                                       desired_length=len(rsp_cleaned),

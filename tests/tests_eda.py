@@ -76,7 +76,7 @@ def test_eda_phasic():
 
 
 
-def test_eda_findpeaks():
+def test_eda_peaks():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
@@ -84,10 +84,10 @@ def test_eda_findpeaks():
     eda_phasic = nk.eda_phasic(nk.standardize(eda), method='highpass')["EDA_Phasic"]
 
 
-    signals, info = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
+    info, signals = nk.eda_peaks(eda_phasic, method="gamboa2008")
     onsets, peaks, amplitudes = biosppy.eda.basic_scr(eda_phasic, sampling_rate=1000)
     assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1e-5)
 
-    signals, info = nk.eda_findpeaks(eda_phasic, method="kim2004")
+    info, signals = nk.eda_peaks(eda_phasic, method="kim2004")
     onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
     assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1)

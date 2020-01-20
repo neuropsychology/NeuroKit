@@ -3,7 +3,7 @@ import pandas as pd
 
 from .eda_clean import eda_clean
 from .eda_phasic import eda_phasic
-from .eda_findpeaks import eda_findpeaks
+from .eda_peaks import eda_peaks
 
 
 
@@ -54,12 +54,12 @@ def eda_process(eda_signal, sampling_rate=1000):
     eda_decomposed = eda_phasic(eda_cleaned, sampling_rate=sampling_rate)
 
     # Find peaks
-    peaks, info = eda_findpeaks(eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method="neurokit", amplitude_min=0.1)
+    info, peak_signal = eda_peaks(eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method="neurokit", amplitude_min=0.1)
 
     # Store
     signals = pd.DataFrame({"EDA_Raw": eda_signal,
                             "EDA_Clean": eda_cleaned})
 
-    signals = pd.concat([signals, eda_decomposed, peaks], axis=1)
+    signals = pd.concat([signals, eda_decomposed, peak_signal], axis=1)
 
     return signals, info

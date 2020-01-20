@@ -70,7 +70,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     info, peak_signal = rsp_peaks(rsp_cleaned,
                                   sampling_rate=sampling_rate,
                                   method=method,
-                                  outlier_threshold=0.3)
+                                  amplitude_min=0.3)
 
     # Get additional parameters
     phase = rsp_phase(peak_signal)
