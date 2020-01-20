@@ -100,13 +100,13 @@ def _emg_linear_envelope(emg_cleaned, sampling_rate=1000, freqs=[10, 400], lfreq
     """
     if np.size(freqs) == 2:
         # band-pass filter
-        b, a = scipy.signal.butter(2, np.array(freqs)/(sampling_rate/2.), btype = 'bandpass')
+        b, a = scipy.signal.butter(2, np.array(freqs)/(sampling_rate/2.), btype='bandpass')
         emg_signal = scipy.signal.filtfilt(b, a, emg_cleaned)
     if np.size(lfreq) == 1:
         # full-wave rectification
         envelope = abs(emg_cleaned)
         # low-pass Butterworth filter
-        b, a = scipy.signal.butter(2, np.array(lfreq)/(sampling_rate/2.), btype = 'low')
+        b, a = scipy.signal.butter(2, np.array(lfreq)/(sampling_rate/2.), btype='low')
         envelope = scipy.signal.filtfilt(b, a, envelope)
 
 

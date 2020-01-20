@@ -61,14 +61,11 @@ def emg_plot(emg_signals, sampling_rate=None):
     ax0.legend(loc="upper right")
 
     # Plot Amplitude.
-    if "EMG_Amplitude" in list(emg_signals.columns):
-        ax1.set_title("Amplitude of Muscle Activation")
-        ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#D0360E", label="Amplitude")
-        amplitude_mean = emg_signals["EMG_Amplitude"].mean()
-        ax1.axhline(y=amplitude_mean, label="Mean", linestyle="--", color="#D0360E")
-        ax1.legend(loc="upper right")
+    ax1.set_title("Amplitude of Muscle Activation")
+    ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#D0360E", label="Amplitude")
+    amplitude_mean = emg_signals["EMG_Amplitude"].mean()
+    ax1.axhline(y=amplitude_mean, label="Mean", linestyle="--", color="#D0360E")
+    ax1.legend(loc="upper right")
 
     plt.show()
     return fig
-
-
