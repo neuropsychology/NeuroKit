@@ -65,10 +65,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     ax0.legend(loc='upper right')
 
      # Shade region to mark inspiration and expiration.
-    inhale = np.where(rsp_signals["RSP_Inspiration"] == 1)[0]
-    exhale = np.where(rsp_signals["RSP_Inspiration"] == 0)[0]
-
-    trough_signal, peak_signal = _rsp_plot_phase(rsp_signals, troughs, peaks)
+#    trough_signal, peak_signal = _rsp_plot_phase(rsp_signals, troughs, peaks)
     exhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
     exhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
     exhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
