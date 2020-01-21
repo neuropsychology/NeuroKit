@@ -41,7 +41,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     plt.subplots_adjust(hspace=0.2)
 
     # Plot cleaned and raw respiration as well as peaks and troughs.
-    ax0.set_title("Raw and Cleaned EDA")
+    ax0.set_title("Raw and Cleaned Signal")
     fig.suptitle('Electrodermal Activity (EDA)', fontweight='bold')
 
     ax0.plot(x_axis, eda_signals["EDA_Raw"], color='#B0BEC5', label='Raw',
