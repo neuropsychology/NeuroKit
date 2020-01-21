@@ -29,7 +29,7 @@ def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
     info : dict
         A dictionary containing additional information, in this case the
         aplitude of the SCR, the samples at which the SCR onset and the
-        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onset",
+        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onsets",
         and "SCR_Peaks" respectively.
 
     See Also

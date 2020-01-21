@@ -50,7 +50,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
     >>>
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> info, peak_signal = nk.ecg_peaks(cleaned)
+    >>> peak_signal, info = nk.ecg_peaks(cleaned)
     >>> nk.events_plot(info["ECG_R_Peaks"], cleaned)
 
     References

@@ -67,7 +67,7 @@ def test_rsp_peaks():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, random_state=42)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    info, signals = nk.rsp_peaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
     assert signals.shape == (120000, 2)
     assert signals["RSP_Peaks"].sum() == 28
     assert signals["RSP_Troughs"].sum() == 28
@@ -85,7 +85,7 @@ def test_rsp_rate():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, method="sinusoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    info, signals = nk.rsp_peaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
     test_length = 30
@@ -105,7 +105,7 @@ def test_rsp_amplitude():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, method="sinusoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    info, signals = nk.rsp_peaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
     amplitude = nk.rsp_amplitude(rsp, signals)
