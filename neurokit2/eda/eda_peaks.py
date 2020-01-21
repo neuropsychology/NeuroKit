@@ -87,7 +87,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
                                      desired_length=len(eda_phasic),
                                      peak_indices=info["SCR_Peaks"])
 
-    return info, peak_signal
+    return peak_signal, info
 
 
 
