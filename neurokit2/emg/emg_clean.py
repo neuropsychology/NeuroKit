@@ -22,7 +22,7 @@ def emg_clean(emg_signal, sampling_rate=1000):
         The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : str
-        The processing pipeline to apply, according to BioSPPy.
+        The processing pipeline to apply. Can be one of 'biosppy' (default).
 
     Returns
     -------
