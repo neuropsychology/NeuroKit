@@ -56,7 +56,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     plt.subplots_adjust(hspace=0.2)
 
     # Plot cleaned and raw ECG as well as R-peaks.
-    ax0.set_title("Raw and Cleaned Signal with R-peaks")
+    ax0.set_title("Raw and Cleaned Signal")
 
     ax0.plot(x_axis, ecg_signals["ECG_Raw"], color='#B0BEC5', label='Raw',
              zorder=1)

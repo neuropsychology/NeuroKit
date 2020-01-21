@@ -145,7 +145,7 @@ def test_rsp_plot():
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 3
-    titles = ["Raw and Cleaned RSP",
+    titles = ["Raw and Cleaned Signal",
               "Breathing Rate",
               "Breathing Amplitude"]
     for (ax, title) in zip(fig.get_axes(), titles):
