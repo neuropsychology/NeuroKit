@@ -8,11 +8,11 @@ Core team
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
 * `Tam Pham <https://github.com/Tam-Pham>`_ *(Nanyang Technological University, Singapore)*
 * `Jan C. Brammer <https://github.com/JohnDoenut>`_ *(Radboud University, Netherlands)*
+* `Zen Juen Lau <https://github.com/zen-juen>`_ *(Nanyang Technological University, Singapore)*
 
 Contributors
 ------------
 
-* `Zen Juen Lau <https://github.com/zen-juen>`_ *(Nanyang Technological University, Singapore)*
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
 * `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Gansheng Tan <https://github.com/GanshengT>`_ *(CentraleSupélec, France)*

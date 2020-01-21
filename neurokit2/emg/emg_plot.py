@@ -53,18 +53,16 @@ def emg_plot(emg_signals, sampling_rate=None):
 
 
     # Plot cleaned and raw EMG.
-    ax0.set_title("Raw and Cleaned EMG")
-    ax0.plot(x_axis, emg_signals["EMG_Raw"], color='#E24556', label='Raw',
+    ax0.set_title("Raw and Cleaned Signal")
+    ax0.plot(x_axis, emg_signals["EMG_Raw"], color='#B0BEC5', label='Raw',
              zorder=1)
-    ax0.plot(x_axis, emg_signals["EMG_Clean"], color='#F99820',
+    ax0.plot(x_axis, emg_signals["EMG_Clean"], color='#FFC107',
              label="Cleaned", zorder=1)
     ax0.legend(loc="upper right")
 
     # Plot Amplitude.
-    ax1.set_title("Amplitude of Muscle Activation")
-    ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#D0360E", label="Amplitude")
-    amplitude_mean = emg_signals["EMG_Amplitude"].mean()
-    ax1.axhline(y=amplitude_mean, label="Mean", linestyle="--", color="#D0360E")
+    ax1.set_title("Muscle Activation")
+    ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#FF9800", label="Amplitude")
     ax1.legend(loc="upper right")
 
     plt.show()

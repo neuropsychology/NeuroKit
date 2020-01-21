@@ -158,7 +158,7 @@ def test_signal_rate():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                        respiratory_rate=15, method="sinuosoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
     rate = nk.signal_rate(signals, sampling_rate=1000)
     assert rate.shape == (signals.shape[0], )
 

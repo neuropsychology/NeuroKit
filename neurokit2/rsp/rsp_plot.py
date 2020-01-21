@@ -46,18 +46,19 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     plt.subplots_adjust(hspace=0.2)
 
     # Plot cleaned and raw respiration as well as peaks and troughs.
-    ax0.set_title("Raw and Cleaned RSP")
+    ax0.set_title("Raw and Cleaned Signal")
     fig.suptitle('Respiration (RSP)', fontweight='bold')
 
     ax0.plot(x_axis, rsp_signals["RSP_Raw"], color='#B0BEC5', label='Raw',
              zorder=1)
     ax0.plot(x_axis, rsp_signals["RSP_Clean"], color='#2196F3',
-             label='Cleaned', zorder=1)
+             label='Cleaned', zorder=2)
 
     ax0.scatter(x_axis[peaks], rsp_signals["RSP_Clean"][peaks], color='red',
-                label="Inhalation Peaks", zorder=2)
+                label="Inhalation Peaks", zorder=3)
     ax0.scatter(x_axis[troughs], rsp_signals["RSP_Clean"][troughs],
-                color='orange', label="Exhalation Troughs", zorder=2)
+                color='orange', label="Exhalation Troughs", zorder=4)
+
     ax0.legend(loc='upper right')
 
 

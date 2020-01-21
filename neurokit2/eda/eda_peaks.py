@@ -39,7 +39,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     info : dict
         A dictionary containing additional information, in this case the
         aplitude of the SCR, the samples at which the SCR onset and the
-        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onset",
+        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onsets",
         and "SCR_Peaks" respectively.
     signals : DataFrame
         A DataFrame of same length as the input signal in which occurences of
@@ -63,9 +63,9 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     >>> eda_phasic = eda["EDA_Phasic"].values
     >>>
     >>> # Find peaks
-    >>> gamboa2008, _ = nk.eda_peaks(eda_phasic, method="gamboa2008")
-    >>> kim2004, _ = nk.eda_peaks(eda_phasic, method="kim2004")
-    >>> neurokit, _ = nk.eda_peaks(eda_phasic, method="neurokit")
+    >>> _, gamboa2008 = nk.eda_peaks(eda_phasic, method="gamboa2008")
+    >>> _, kim2004 = nk.eda_peaks(eda_phasic, method="kim2004")
+    >>> _, neurokit = nk.eda_peaks(eda_phasic, method="neurokit")
     >>> nk.events_plot([gamboa2008["SCR_Peaks"],
                         kim2004["SCR_Peaks"],
                         neurokit["SCR_Peaks"]], eda_phasic)
@@ -87,7 +87,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
                                      desired_length=len(eda_phasic),
                                      peak_indices=info["SCR_Peaks"])
 
-    return info, peak_signal
+    return peak_signal, info
 
 
 

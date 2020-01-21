@@ -41,28 +41,32 @@ def eda_plot(eda_signals, sampling_rate=None):
     plt.subplots_adjust(hspace=0.2)
 
     # Plot cleaned and raw respiration as well as peaks and troughs.
-    ax0.set_title("Raw and Cleaned EDA")
+    ax0.set_title("Raw and Cleaned Signal")
     fig.suptitle('Electrodermal Activity (EDA)', fontweight='bold')
 
     ax0.plot(x_axis, eda_signals["EDA_Raw"], color='#B0BEC5', label='Raw',
              zorder=1)
     ax0.plot(x_axis, eda_signals["EDA_Clean"], color='#9C27B0',
-             label='Cleaned', zorder=1)
+             label='Cleaned', zorder=2)
     ax0.legend(loc='upper right')
 
 
 
 
 
-    # Plot Phasic.
-    ax1.set_title("Skin Conductance Response (SCR)")
-    ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic Component')
 
+    ax1.set_title("Skin Conductance Response (SCR)")
     # Add peaks
     ax1.scatter(x_axis[onsets], eda_signals["EDA_Phasic"][onsets], color='#FF5722',
-                label="SCR - Onsets", zorder=2)
+                label="SCR - Onsets")
     ax1.scatter(x_axis[peaks], eda_signals["EDA_Phasic"][peaks], color='#FF9800',
-                label="SCR - Peaks", zorder=2)
+                label="SCR - Peaks")
+
+
+    # Plot Phasic.
+    ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic Component')
+
+
     ax1.legend(loc='upper right')
 
     # Plot Tonic.
