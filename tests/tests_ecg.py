@@ -52,7 +52,7 @@ def test_ecg_clean():
                                                  sampling_rate=sampling_rate)
     assert np.allclose((ecg_biosppy - original).mean(), 0, atol=1e-6)
 
-def test_ecg_findpeaks():
+def test_ecg_peaks():
 
     sampling_rate = 1000
     noise = 0.05
@@ -60,12 +60,12 @@ def test_ecg_findpeaks():
     ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=42)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
-    signals, info = nk.ecg_findpeaks(ecg_cleaned_nk, method="neurokit")
+    signals, info = nk.ecg_peaks(ecg_cleaned_nk, method="neurokit")
 
     assert signals.shape == (10000, 1)
-    assert np.allclose(signals["ECG_Peaks"].values.sum(dtype=np.int64), 11)
-    assert info["ECG_Peaks"].shape[0] == 11
-    assert np.allclose(info["ECG_Peaks"].sum(dtype=np.int64), 56552, atol=1)
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 11)
+    assert info["ECG_R_Peaks"].shape[0] == 11
+    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 56552, atol=1)
 
 
 def test_ecg_rate():
@@ -76,7 +76,7 @@ def test_ecg_rate():
     ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=42)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
-    signals, info = nk.ecg_findpeaks(ecg_cleaned_nk, method="neurokit")
+    signals, info = nk.ecg_peaks(ecg_cleaned_nk, method="neurokit")
 
     # Test with dictionary.
     test_length = 30

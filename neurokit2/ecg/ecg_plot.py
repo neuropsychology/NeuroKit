@@ -43,7 +43,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
         x_axis = np.arange(0, ecg_signals.shape[0])
 
     # Extract R-peaks.
-    peaks = np.where(ecg_signals["ECG_Peaks"] == 1)[0]
+    peaks = np.where(ecg_signals["ECG_R_Peaks"] == 1)[0]
 
     # Prepare figure.
     fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
