@@ -65,20 +65,9 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     ax0.legend(loc='upper right')
 
      # Shade region to mark inspiration and expiration.
-#    trough_signal, peak_signal = _rsp_plot_phase(rsp_signals, troughs, peaks)
-    exhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
-    exhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
-    exhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
-    exhale_signal = exhale_signal.fillna(method="backfill")
-    ax0.plot(exhale_signal, alpha=1)
-    ax0.fill_between(x_axis[exhale], exhale_signal[exhale], rsp_signals["RSP_Clean"][exhale], where=rsp_signals["RSP_Clean"][exhale]>=exhale_signal[exhale], color='#A9A9A9', alpha=0.5)
-
-    inhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
-    inhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
-    inhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
-    inhale_signal = inhale_signal.fillna(method="ffill")
-    ax0.plot(inhale_signal, alpha=1)
-    ax0.fill_between(x_axis[inhale], inhale_signal[inhale], rsp_signals["RSP_Clean"][inhale], where=rsp_signals["RSP_Clean"][inhale]>=inhale_signal[inhale], color='#D3D3D3', alpha=0.5)
+    exhale_signal, inhale_signal = _rsp_plot_phase(rsp_signals, troughs, peaks)
+    ax0.fill_between(x_axis[exhale], exhale_signal[exhale], rsp_signals["RSP_Clean"][exhale], where=rsp_signals["RSP_Clean"][exhale]>exhale_signal[exhale], color='#B0BEC5', linestyle="None")
+    ax0.fill_between(x_axis[inhale], inhale_signal[inhale], rsp_signals["RSP_Clean"][inhale], where=rsp_signals["RSP_Clean"][inhale]>inhale_signal[inhale], color='#CFD8DC', linestyle="None")
 
     # Plot rate and optionally amplitude.
     ax1.set_title("Breathing Rate")
@@ -107,12 +96,14 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 # =============================================================================
 def _rsp_plot_phase(rsp_signals, troughs, peaks):
     # Format input
-    trough_signal = pd.Series(np.full(len(rsp_signals), np.nan))
-    trough_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
-    trough_signal = trough_signal.fillna(method="ffill")
-    peak_signal = pd.Series(np.full(len(rsp_signals), np.nan))
-    peak_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
-    peak_signal = peak_signal.fillna(method="backfill")
+    exhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
+    exhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
+    exhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
+    exhale_signal = exhale_signal.fillna(method="backfill")
 
+    inhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
+    inhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
+    inhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
+    inhale_signal = inhale_signal.fillna(method="ffill")
 
-    return (trough_signal)
+    return (exhale_signal, inhale_signal)
