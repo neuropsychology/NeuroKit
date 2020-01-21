@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
-import scipy.interpolate
+import scipy.interpolate as interpolate
 
 def rsp_plot(rsp_signals, sampling_rate=None):
     """Visualize respiration (RSP) data.
@@ -25,8 +25,11 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     --------
     rsp_process
     """
+    # Mark peaks, troughs and phases.
     peaks = np.where(rsp_signals["RSP_Peaks"] == 1)[0]
     troughs = np.where(rsp_signals["RSP_Troughs"] == 1)[0]
+    inhale = np.where(rsp_signals["RSP_Inspiration"] == 1)[0]
+    exhale = np.where(rsp_signals["RSP_Inspiration"] == 0)[0]
 
     if "RSP_Amplitude" in list(rsp_signals.columns):
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
@@ -61,6 +64,24 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
     ax0.legend(loc='upper right')
 
+     # Shade region to mark inspiration and expiration.
+    inhale = np.where(rsp_signals["RSP_Inspiration"] == 1)[0]
+    exhale = np.where(rsp_signals["RSP_Inspiration"] == 0)[0]
+
+    trough_signal, peak_signal = _rsp_plot_phase(rsp_signals, troughs, peaks)
+    exhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
+    exhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
+    exhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
+    exhale_signal = exhale_signal.fillna(method="backfill")
+    ax0.plot(exhale_signal, alpha=1)
+    ax0.fill_between(x_axis[exhale], exhale_signal[exhale], rsp_signals["RSP_Clean"][exhale], where=rsp_signals["RSP_Clean"][exhale]>=exhale_signal[exhale], color='#A9A9A9', alpha=0.5)
+
+    inhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
+    inhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
+    inhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
+    inhale_signal = inhale_signal.fillna(method="ffill")
+    ax0.plot(inhale_signal, alpha=1)
+    ax0.fill_between(x_axis[inhale], inhale_signal[inhale], rsp_signals["RSP_Clean"][inhale], where=rsp_signals["RSP_Clean"][inhale]>=inhale_signal[inhale], color='#D3D3D3', alpha=0.5)
 
     # Plot rate and optionally amplitude.
     ax1.set_title("Breathing Rate")
@@ -84,21 +105,17 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
 
 
-def _rsp_plot_phase(rsp_signals, ax0):
-    # Shade region to mark inspiration and expiration.
-    inhale = np.where(rsp_signals["RSP_Inspiration"] == 1)[0]
-    exhale = np.where(rsp_signals["RSP_Inspiration"] == 0)[0]
-    f = scipy.interpolate.interp1d(x_axis[troughs], rsp_signals["RSP_Clean"][troughs], fill_value='extrapolate')
-    inhale_line = pd.DataFrame(f(x_axis[inhale]))
-    inhale_index = rsp_signals["RSP_Clean"][inhale].index
-    inhale_line = inhale_line.set_index(pd.Index(inhale_index))
+# =============================================================================
+# Internals
+# =============================================================================
+def _rsp_plot_phase(rsp_signals, troughs, peaks):
+    # Format input
+    trough_signal = pd.Series(np.full(len(rsp_signals), np.nan))
+    trough_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
+    trough_signal = trough_signal.fillna(method="ffill")
+    peak_signal = pd.Series(np.full(len(rsp_signals), np.nan))
+    peak_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
+    peak_signal = peak_signal.fillna(method="backfill")
 
-    exhale_line = pd.DataFrame(f(x_axis[exhale]))
-    exhale_index = rsp_signals["RSP_Clean"][exhale].index
-    exhale_line = exhale_line.set_index(pd.Index(exhale_index))
 
-    ax0.scatter(x_axis[inhale], rsp_signals["RSP_Clean"][inhale], color='#999999', alpha=0)
-    ax0.fill_between(x_axis[inhale], inhale_line, rsp_signals["RSP_Clean"][inhale], where=rsp_signals["RSP_Clean"][inhale]>=inhale_line, color='lightblue', alpha=0.8, hatch='-')
-
-    ax0.scatter(x_axis[exhale], rsp_signals["RSP_Clean"][exhale], color='#999999', alpha=0)
-    ax0.fill_between(x_axis[exhale], exhale_line, rsp_signals["RSP_Clean"][exhale], where=rsp_signals["RSP_Clean"][exhale]>=exhale_line, color='lightblue', alpha=0.8, hatch='-')
+    return (trough_signal)
