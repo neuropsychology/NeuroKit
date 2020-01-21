@@ -47,13 +47,14 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> nk.ecg_plot(signals)
 
     """
-    ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate,
+    ecg_cleaned = ecg_clean(ecg_signal,
+                            sampling_rate=sampling_rate,
                             method=method)
 
     peak_signal, info = ecg_peaks(ecg_cleaned=ecg_cleaned,
                                   sampling_rate=sampling_rate,
-                                         method=method,
-                                         show=False)
+                                  method=method,
+                                  show=False)
 
     rate = ecg_rate(peak_signal, sampling_rate=sampling_rate)
 

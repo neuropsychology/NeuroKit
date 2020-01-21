@@ -65,7 +65,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
     info = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate, method=method)
     info = ecg_fixpeaks(info, sampling_rate=sampling_rate)
     peak_signal = signal_formatpeaks(info,
-                                      desired_length=len(ecg_cleaned),
-                                      peak_indices=info["ECG_R_Peaks"])
+                                     desired_length=len(ecg_cleaned),
+                                     peak_indices=info["ECG_R_Peaks"])
 
     return peak_signal, info
