@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import matplotlib.pyplot as plt
+import pandas as pd
 
+import matplotlib.pyplot as plt
+import scipy.interpolate
 
 def rsp_plot(rsp_signals, sampling_rate=None):
     """Visualize respiration (RSP) data.
@@ -16,8 +18,8 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     >>> import neurokit2 as nk
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-    >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> nk.rsp_plot(signals)
+    >>> rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+    >>> nk.rsp_plot(rsp_signals)
 
     See Also
     --------
@@ -56,7 +58,6 @@ def rsp_plot(rsp_signals, sampling_rate=None):
                 label="Inhalation Peaks", zorder=2)
     ax0.scatter(x_axis[troughs], rsp_signals["RSP_Clean"][troughs],
                 color='orange', label="Exhalation Troughs", zorder=2)
-
     ax0.legend(loc='upper right')
 
 
@@ -79,3 +80,24 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
     plt.show()
     return fig
+
+
+
+def _rsp_plot_phase(rsp_signals, ax0):
+    # Shade region to mark inspiration and expiration.
+    inhale = np.where(rsp_signals["RSP_Inspiration"] == 1)[0]
+    exhale = np.where(rsp_signals["RSP_Inspiration"] == 0)[0]
+    f = scipy.interpolate.interp1d(x_axis[troughs], rsp_signals["RSP_Clean"][troughs], fill_value='extrapolate')
+    inhale_line = pd.DataFrame(f(x_axis[inhale]))
+    inhale_index = rsp_signals["RSP_Clean"][inhale].index
+    inhale_line = inhale_line.set_index(pd.Index(inhale_index))
+
+    exhale_line = pd.DataFrame(f(x_axis[exhale]))
+    exhale_index = rsp_signals["RSP_Clean"][exhale].index
+    exhale_line = exhale_line.set_index(pd.Index(exhale_index))
+
+    ax0.scatter(x_axis[inhale], rsp_signals["RSP_Clean"][inhale], color='#999999', alpha=0)
+    ax0.fill_between(x_axis[inhale], inhale_line, rsp_signals["RSP_Clean"][inhale], where=rsp_signals["RSP_Clean"][inhale]>=inhale_line, color='lightblue', alpha=0.8, hatch='-')
+
+    ax0.scatter(x_axis[exhale], rsp_signals["RSP_Clean"][exhale], color='#999999', alpha=0)
+    ax0.fill_between(x_axis[exhale], exhale_line, rsp_signals["RSP_Clean"][exhale], where=rsp_signals["RSP_Clean"][exhale]>=exhale_line, color='lightblue', alpha=0.8, hatch='-')
