@@ -33,7 +33,7 @@ plot[0][0].get_figure().savefig("README_simulation.png", dpi=300, h_pad=3)
 # Electrodermal Activity (EDA) processing
 # =============================================================================
 
-# Generate 30 seconds of EDA signal (recorded at 250 samples / second)
+# Generate 10 seconds of EDA signal (recorded at 250 samples / second) with 2 SCR peaks
 eda = nk.eda_simulate(duration=10, sampling_rate=250, n_scr=2, drift=0.1)
 
 # Process it
