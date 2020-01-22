@@ -86,7 +86,7 @@ def _eda_plot_segments(eda_signals, ax, x_axis, onsets, peaks, half_recovery):
     # Mark onsets, peaks, and half-recovery.
     scat_onset = ax.scatter(x_axis[onsets], eda_signals["EDA_Phasic"][onsets], color='#FFA726', label="SCR - Onsets", zorder=2)
     scat_peak = ax.scatter(x_axis[peaks], eda_signals["EDA_Phasic"][peaks], color='#1976D2', label="SCR - Peaks", zorder=2)
-    scat_halfr = ax.scatter(x_axis[half_recovery], eda_signals["EDA_Phasic"][half_recovery], color='#FDD835', label = 'SCR - Half-Recovery', zorder=2)
+    scat_halfr = ax.scatter(x_axis[half_recovery], eda_signals["EDA_Phasic"][half_recovery], color='#FDD835', label='SCR - Half-Recovery', zorder=2)
     end_onset = pd.Series(eda_signals["EDA_Phasic"][onsets].values, eda_signals["EDA_Phasic"][peaks].index)
     scat_endonset = ax.scatter(end_onset.index, end_onset.values, alpha=0)
 
@@ -102,9 +102,7 @@ def _eda_plot_segments(eda_signals, ax, x_axis, onsets, peaks, half_recovery):
 
     # Half recovery.
     halfr_end = scat_halfr.get_offsets()
-    halfr_start = [(peak_top[i,0], halfr_end[i,1]) for i in position]
+    halfr_start = [(peak_top[i, 0], halfr_end[i, 1]) for i in position]
     halfr_coord = [(halfr_start[i], halfr_end[i]) for i in position]
 
     return(risetime_coord, amplitude_coord, halfr_coord)
-
-
