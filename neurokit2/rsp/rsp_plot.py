@@ -97,7 +97,7 @@ def _rsp_plot_phase(rsp_signals, troughs, peaks):
 
     exhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
     exhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
-    exhale_signal[peaks-1] = rsp_signals["RSP_Clean"][peaks].values
+    exhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
     exhale_signal = exhale_signal.fillna(method="backfill")
 
     inhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
