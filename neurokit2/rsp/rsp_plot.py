@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
-import scipy.interpolate as interpolate
 
 def rsp_plot(rsp_signals, sampling_rate=None):
     """Visualize respiration (RSP) data.
@@ -55,7 +54,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     ax0.plot(x_axis, rsp_signals["RSP_Raw"], color='#B0BEC5', label='Raw',
              zorder=1)
     ax0.plot(x_axis, rsp_signals["RSP_Clean"], color='#2196F3',
-             label='Cleaned', zorder=2)
+             label='Cleaned', zorder=2, linewidth=1.5)
 
     ax0.scatter(x_axis[peaks], rsp_signals["RSP_Clean"][peaks], color='red',
                 label="Inhalation Peaks", zorder=3)
@@ -66,12 +65,13 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
      # Shade region to mark inspiration and expiration.
     exhale_signal, inhale_signal = _rsp_plot_phase(rsp_signals, troughs, peaks)
-    ax0.fill_between(x_axis[exhale], exhale_signal[exhale], rsp_signals["RSP_Clean"][exhale], where=rsp_signals["RSP_Clean"][exhale]>exhale_signal[exhale], color='#B0BEC5', linestyle="None")
-    ax0.fill_between(x_axis[inhale], inhale_signal[inhale], rsp_signals["RSP_Clean"][inhale], where=rsp_signals["RSP_Clean"][inhale]>inhale_signal[inhale], color='#CFD8DC', linestyle="None")
+
+    ax0.fill_between(x_axis[exhale], exhale_signal[exhale], rsp_signals["RSP_Clean"][exhale], where=rsp_signals["RSP_Clean"][exhale]>exhale_signal[exhale], color='#CFD8DC', linestyle="None")
+    ax0.fill_between(x_axis[inhale], inhale_signal[inhale], rsp_signals["RSP_Clean"][inhale], where=rsp_signals["RSP_Clean"][inhale]>inhale_signal[inhale], color='#ECEFF1', linestyle="None")
 
     # Plot rate and optionally amplitude.
     ax1.set_title("Breathing Rate")
-    ax1.plot(x_axis, rsp_signals["RSP_Rate"], color='#4CAF50', label='Rate')
+    ax1.plot(x_axis, rsp_signals["RSP_Rate"], color='#4CAF50', label='Rate', linewidth=1.5)
     rate_mean = np.mean(rsp_signals["RSP_Rate"])
     ax1.axhline(y=rate_mean, label='Mean', linestyle='--', color='#4CAF50')
     ax1.legend(loc='upper right')
@@ -80,7 +80,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
         ax2.set_title("Breathing Amplitude")
 
         ax2.plot(x_axis, rsp_signals["RSP_Amplitude"], color='#009688',
-                 label='Amplitude')
+                 label='Amplitude', linewidth=1.5)
         amplitude_mean = np.mean(rsp_signals["RSP_Amplitude"])
         ax2.axhline(y=amplitude_mean, label='Mean', linestyle='--',
                     color='#009688')
@@ -95,10 +95,10 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 # Internals
 # =============================================================================
 def _rsp_plot_phase(rsp_signals, troughs, peaks):
-    # Format input
+
     exhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
     exhale_signal[troughs] = rsp_signals["RSP_Clean"][troughs].values
-    exhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
+    exhale_signal[peaks-1] = rsp_signals["RSP_Clean"][peaks].values
     exhale_signal = exhale_signal.fillna(method="backfill")
 
     inhale_signal = pd.Series(np.full(len(rsp_signals), np.nan))
@@ -106,4 +106,4 @@ def _rsp_plot_phase(rsp_signals, troughs, peaks):
     inhale_signal[peaks] = rsp_signals["RSP_Clean"][peaks].values
     inhale_signal = inhale_signal.fillna(method="ffill")
 
-    return (exhale_signal, inhale_signal)
+    return exhale_signal, inhale_signal

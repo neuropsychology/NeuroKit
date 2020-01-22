@@ -115,7 +115,7 @@ def test_ecg_plot():
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 2
-    titles = ["Raw and Cleaned ECG with R-peaks",
+    titles = ["Raw and Cleaned Signal",
               "Heart Rate"]
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
