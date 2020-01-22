@@ -62,7 +62,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     ax1.add_collection(risetime)
     amplitude = matplotlib.collections.LineCollection(amplitude_coord, colors='#1976D2', linewidths=1, linestyle='solid')
     ax1.add_collection(amplitude)
-    halfr = matplotlib.collections<LineCollection(halfr_coord, colors='#FDD835', linewidths=1, linestyle='dashed')
+    halfr = matplotlib.collections.LineCollection(halfr_coord, colors='#FDD835', linewidths=1, linestyle='dashed')
     ax1.add_collection(halfr)
 
     # Plot Phasic.
