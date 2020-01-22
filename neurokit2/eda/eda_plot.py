@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
+
 import matplotlib.pyplot as plt
-from matplotlib.collections import LineCollection
+import matplotlib.collections
 
 def eda_plot(eda_signals, sampling_rate=None):
     """Visualize electrodermal activity (EDA) data.
@@ -57,11 +58,11 @@ def eda_plot(eda_signals, sampling_rate=None):
     ax1.set_title("Skin Conductance Response (SCR)")
     # Mark segments.
     risetime_coord, amplitude_coord, halfr_coord = _eda_plot_segments(eda_signals, ax1, x_axis, onsets, peaks, half_recovery)
-    risetime = LineCollection(risetime_coord, colors='#FFA726', linewidths=1, linestyle='dashed')
+    risetime = matplotlib.collections.LineCollection(risetime_coord, colors='#FFA726', linewidths=1, linestyle='dashed')
     ax1.add_collection(risetime)
-    amplitude = LineCollection(amplitude_coord, colors='#1976D2', linewidths=1, linestyle='solid')
+    amplitude = matplotlib.collections.LineCollection(amplitude_coord, colors='#1976D2', linewidths=1, linestyle='solid')
     ax1.add_collection(amplitude)
-    halfr = LineCollection(halfr_coord, colors='#FDD835', linewidths=1, linestyle='dashed')
+    halfr = matplotlib.collections.LineCollection(halfr_coord, colors='#FDD835', linewidths=1, linestyle='dashed')
     ax1.add_collection(halfr)
 
     # Plot Phasic.

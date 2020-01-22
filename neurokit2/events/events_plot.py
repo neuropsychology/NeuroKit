@@ -112,10 +112,11 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
 
     # Plot if necessary
     if show:
-        signal.plot()
+        fig = signal.plot().get_figure()
         _events_plot(events, color=color, linestyle=linestyle)
+        return fig
 
     else:
         signal["Event_Onset"] = 0
         signal.iloc[events] = 1
-        return(signal)
+        return signal
