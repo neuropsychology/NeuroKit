@@ -30,7 +30,7 @@ You can plot all individual heart beats, synchronized by their R peaks by doing 
 	# Plotting all epochs of heart beat together
 	nk.epochs_plot(epochs)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/example_heartbeatplot.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/examples_heartbeatplot.png
 
 To have a more comprehensive overview of your ECG data, you can plot all ECG data (ECG_Raw, ECG_Clean, ECG_Rate and R-peaks) by using `ecg_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_plot>`_ 
 
@@ -38,4 +38,4 @@ To have a more comprehensive overview of your ECG data, you can plot all ECG dat
 
 	nk.ecg_plot(signals)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/example_ecgplot.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/examples_ecgplot.png
