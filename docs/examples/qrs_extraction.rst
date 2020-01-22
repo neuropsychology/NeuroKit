@@ -24,7 +24,7 @@ Once you have a raw ECG signal in the shape of a vector (i.e., a one-dimensional
     # Automatically process the (raw) ECG signal
     signals, info = nk.ecg_process(ecg_signal, sampling_rate=250)
 
-This function outputs two elements, a *dataframe* containing the different signals (raw, cleaned etc.) and a *dictionary* containing various additional information (peaks location, ...).
+This function outputs two elements, a *dataframe* containing the different signals (raw, cleaned, etc.) and a *dictionary* containing various additional information (peaks location, ...).
 
 Extract R-peaks location
 -------------------------
