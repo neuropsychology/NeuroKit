@@ -140,7 +140,26 @@ Respiration (RSP) processing
     nk.rsp_plot(signals, sampling_rate=250)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_respiration.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_rsp.png
+
+
+Electromyography (EMG) processing
+----------------------------
+
+.. code-block:: python
+
+    # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
+	emg = nk.emg_simulate(duration=10, sampling_rate=250)
+
+    # Process it
+    signals = nk.emg_process(emg, sampling_rate=250)
+
+    # Visualise the processing
+    nk.emg_plot(signals, sampling_rate=250)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
+
 
 Signal processing
 -----------------
