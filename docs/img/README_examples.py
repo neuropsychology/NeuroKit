@@ -34,7 +34,7 @@ plot[0][0].get_figure().savefig("README_simulation.png", dpi=300, h_pad=3)
 # =============================================================================
 
 # Generate 30 seconds of EDA signal (recorded at 250 samples / second)
-eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=5, drift=0.1)
+eda = nk.eda_simulate(duration=10, sampling_rate=250, n_scr=2, drift=0.1)
 
 # Process it
 signals, info = nk.eda_process(eda, sampling_rate=250)
@@ -88,7 +88,7 @@ plot.savefig("README_rsp.png", dpi=300, h_pad=3)
 # =============================================================================
 
 # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
-emg = nk.emg_simulate(duration=10, sampling_rate=250)
+emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
 
 # Process it
 signals = nk.emg_process(emg, sampling_rate=250)

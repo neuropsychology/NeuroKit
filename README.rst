@@ -96,7 +96,7 @@ Electrodermal Activity (EDA) processing
 .. code-block:: python
 
     # Generate 30 seconds of EDA signal (recorded at 250 samples / second)
-    eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=5, drift=0.01)
+    eda = nk.eda_simulate(duration=10, sampling_rate=250, n_scr=2 drift=0.01)
 
     # Process it
     signals, info = nk.eda_process(eda, sampling_rate=250)
@@ -149,7 +149,7 @@ Electromyography (EMG) processing
 .. code-block:: python
 
     # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
-	emg = nk.emg_simulate(duration=10, sampling_rate=250)
+	emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
 
     # Process it
     signals = nk.emg_process(emg, sampling_rate=250)

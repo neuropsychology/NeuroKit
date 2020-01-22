@@ -56,6 +56,9 @@ def eda_plot(eda_signals, sampling_rate=None):
 
     # Plot skin cnoductance response.
     ax1.set_title("Skin Conductance Response (SCR)")
+    # Plot Phasic.
+    ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic Component', linewidth=1.5, zorder=1)
+    ax1.legend(loc='upper right')
     # Mark segments.
     risetime_coord, amplitude_coord, halfr_coord = _eda_plot_segments(eda_signals, ax1, x_axis, onsets, peaks, half_recovery)
     risetime = matplotlib.collections.LineCollection(risetime_coord, colors='#FFA726', linewidths=1, linestyle='dashed')
@@ -65,9 +68,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     halfr = matplotlib.collections.LineCollection(halfr_coord, colors='#FDD835', linewidths=1, linestyle='dashed')
     ax1.add_collection(halfr)
 
-    # Plot Phasic.
-    ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic Component', linewidth=1.5)
-    ax1.legend(loc='upper right')
+
 
     # Plot Tonic.
     ax2.set_title("Skin Conductance Level (SCL)")
@@ -106,4 +107,4 @@ def _eda_plot_segments(eda_signals, ax, x_axis, onsets, peaks, half_recovery):
     halfr_start = [(peak_top[i, 0], halfr_end[i, 1]) for i in position]
     halfr_coord = [(halfr_start[i], halfr_end[i]) for i in position]
 
-    return(risetime_coord, amplitude_coord, halfr_coord)
+    return risetime_coord, amplitude_coord, halfr_coord
