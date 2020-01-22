@@ -48,23 +48,18 @@ def epochs_plot(epochs, legend=True):
     cols = data.columns.values
     cols = [x for x in cols if x not in ["Time", "Condition", "Label", "Index"]]
 
+    if show:
+        if len(cols) == 1:
+            fig, ax = plt.subplots()
+            _epochs_plot(data, ax, cols[0], legend=True)
+        else:
+            fig, ax = plt.subplots(nrows=len(cols))
+            for i, col in enumerate(cols):
+                _epochs_plot(data, ax=ax[i], col=col, legend=True)
+        return fig
 
-    if len(cols) == 1:
-        fig, ax = plt.subplots()
-        _epochs_plot(data, ax, cols[0], legend=True)
     else:
-        fig, ax = plt.subplots(nrows=len(cols))
-        for i, col in enumerate(cols):
-            _epochs_plot(data, ax=ax[i], col=col, legend=True)
-
-    return fig, ax
-
-
-
-
-
-
-
+        return data
 
 def _epochs_plot(data, ax, col, legend=True):
 
