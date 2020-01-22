@@ -2,28 +2,25 @@
 import numpy as np
 import pandas as pd
 
-from ..signal.signal_from_indices import _signals_from_peakinfo
 
 
-def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
-    """Identify extrema in a respiration (RSP) signal.
+def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
+    """Extract extrema in a respiration (RSP) signal.
 
-    Identify inhalation peaks and exhalation troughs in a preprocessed
-    respiration signal using different sets of parameters, such as:
-
-    - `Khodadad et al. (2018)
-    <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
-    - `BioSPPy
-    <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_
+    Low-level function used by `rsp_peaks()` to identify inhalation peaks and exhalation troughs in a preprocessed
+    respiration signal using different sets of parameters. See `rsp_peaks()` for details.
 
     Parameters
     ----------
     rsp_cleaned : list, array or Series
         The cleaned respiration channel as returned by `rsp_clean()`.
+    sampling_rate : int
+        The sampling frequency of 'rsp_cleaned' (in Hz,
+        i.e., samples/second).
     method : str
         The processing pipeline to apply. Can be one of "khodadad2018"
         (default) or "biosppy".
-    outlier_threshold : float
+    amplitude_min : float
         Only applies if method is "khodadad2018". Extrema that have a vertical
         distance smaller than (outlier_threshold * average vertical distance)
         to any direct neighbour are removed as false positive outliers. I.e.,
@@ -33,11 +30,6 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame of same length as the input signal in which occurences of
-        inhalation peaks and exhalation troughs are marked as "1" in lists of
-        zeros with the same length as `rsp_cleaned`. Accessible with the keys
-        "RSP_Peaks" and "RSP_Troughs" respectively.
     info : dict
         A dictionary containing additional information, in this case the
         samples at which inhalation peaks and exhalation troughs occur,
@@ -45,7 +37,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
 
     See Also
     --------
-    rsp_clean, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
+    rsp_clean, rsp_fixpeaks, rsp_peaks, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
 
     Examples
     --------
@@ -53,7 +45,7 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     >>>
     >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> signals, info = nk.rsp_findpeaks(cleaned)
+    >>> info = nk.rsp_findpeaks(cleaned)
     >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
     """
     # Try retrieving correct column
@@ -71,20 +63,14 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
     # Find peaks
     method = method.lower()  # remove capitalised letters
     if method in ["khodadad", "khodadad2018"]:
-        info = _rsp_findpeaks_khodadad(cleaned, outlier_threshold)
+        info = _rsp_findpeaks_khodadad(cleaned, amplitude_min)
     elif method == "biosppy":
         info = _rsp_findpeaks_biosppy(cleaned)
     else:
         raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be "
                          "one of 'khodadad2018' or 'biosppy'.")
 
-    # Prepare output
-    signals = _signals_from_peakinfo(info, peak_indices=info["RSP_Peaks"], length=len(rsp_cleaned))
-
-    # Add respiration phase
-    signals["RSP_Inspiration"] = _rsp_findpeaks_phase(signals)
-
-    return signals, info
+    return info
 
 
 
@@ -95,15 +81,15 @@ def rsp_findpeaks(rsp_cleaned, method="khodadad2018", outlier_threshold=0.3):
 # Methods
 # =============================================================================
 def _rsp_findpeaks_biosppy(rsp_cleaned):
-    return _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0)
+    return _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0)
 
 
 
-def _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0.3):
+def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
 
     extrema = _rsp_findpeaks_extrema(rsp_cleaned)
     extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema,
-                                                  outlier_threshold=outlier_threshold)
+                                                  amplitude_min=amplitude_min)
     peaks, troughs = _rsp_findpeaks_sanitize(extrema, amplitudes)
 
     info = {"RSP_Peaks": peaks,
@@ -121,20 +107,6 @@ def _rsp_findpeaks_khodadad(rsp_cleaned, outlier_threshold=0.3):
 # =============================================================================
 # Internals
 # =============================================================================
-def _rsp_findpeaks_phase(signals):
-    inspiration = np.full(len(signals), np.nan)
-    inspiration[np.where(signals["RSP_Peaks"] == 1)] = 0.0
-    inspiration[np.where(signals["RSP_Troughs"] == 1)] = 1.0
-
-    last_element = np.where(~np.isnan(inspiration))[0][-1]  # Avoid filling beyond the last peak/trough
-    inspiration[0:last_element] = pd.Series(inspiration).fillna(method="pad").values[0:last_element]
-
-    return inspiration
-
-
-
-
-
 def _rsp_findpeaks_extrema(rsp_cleaned):
     # Detect zero crossings (note that these are zero crossings in the raw
     # signal, not in its gradient).
@@ -181,14 +153,14 @@ def _rsp_findpeaks_extrema(rsp_cleaned):
     return extrema
 
 
-def _rsp_findpeaks_outliers(rsp_cleaned, extrema, outlier_threshold=0.3):
+def _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=0.3):
 
     # Only consider those extrema that have a minimum vertical distance to
     # their direct neighbor, i.e., define outliers in absolute amplitude
     # difference between neighboring extrema.
     vertical_diff = np.abs(np.diff(rsp_cleaned[extrema]))
     average_diff = np.mean(vertical_diff)
-    min_diff = np.where(vertical_diff > (average_diff * outlier_threshold))[0]
+    min_diff = np.where(vertical_diff > (average_diff * amplitude_min))[0]
     extrema = extrema[min_diff]
 
     # Make sure that the alternation of peaks and troughs is unbroken. If

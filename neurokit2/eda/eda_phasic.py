@@ -28,7 +28,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 
     See Also
     --------
-    eda_simulate, eda_clean, eda_findpeaks, eda_process, eda_plot
+    eda_simulate, eda_clean, eda_peaks, eda_process, eda_plot
 
 
     Examples

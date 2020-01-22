@@ -62,13 +62,13 @@ def test_rsp_clean():
     assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
 
 
-def test_rsp_findpeaks():
+def test_rsp_peaks():
 
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, random_state=42)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned)
-    assert signals.shape == (120000, 3)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
+    assert signals.shape == (120000, 2)
     assert signals["RSP_Peaks"].sum() == 28
     assert signals["RSP_Troughs"].sum() == 28
     assert info["RSP_Peaks"].shape[0] == 28
@@ -85,7 +85,7 @@ def test_rsp_rate():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, method="sinusoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
     test_length = 30
@@ -105,17 +105,15 @@ def test_rsp_amplitude():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, method="sinusoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
-    test_length = 60
-    amplitude = nk.rsp_amplitude(rsp_signal=rsp, extrema=info,
-                                 desired_length=test_length)
-    assert amplitude.shape == (test_length, )
+    amplitude = nk.rsp_amplitude(rsp, signals)
+    assert amplitude.shape == (rsp.size, )
     assert np.abs(amplitude.mean() - 1) < 0.01
 
     # Test with DataFrame.
-    amplitude = nk.rsp_amplitude(rsp_signal=rsp, extrema=signals)
+    amplitude = nk.rsp_amplitude(rsp, info)
     assert amplitude.shape == (rsp.size, )
     assert np.abs(amplitude.mean() - 1) < 0.01
 
@@ -147,7 +145,7 @@ def test_rsp_plot():
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 3
-    titles = ["Raw and Cleaned RSP",
+    titles = ["Raw and Cleaned Signal",
               "Breathing Rate",
               "Breathing Amplitude"]
     for (ax, title) in zip(fig.get_axes(), titles):

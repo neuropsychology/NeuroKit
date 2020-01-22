@@ -45,7 +45,7 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
     >>>
     >>> signal = nk.signal_simulate(duration=5)
     >>> info = nk.signal_findpeaks(signal)
-    >>> nk.events_plot([info["Onset"], info["Peaks"]], signal)
+    >>> nk.events_plot([info["Onsets"], info["Peaks"]], signal)
     >>>
     >>> signal = nk.signal_distord(signal)
     >>> info = nk.signal_findpeaks(signal, height_min=1, width_min=2)
@@ -60,7 +60,7 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
 
     See Also
     --------
-    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks, ecg_findpeaks, rsp_findpeaks
+    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks, ecg_findpeaks, rsp_findpeaks, signal_fixpeaks
     """
     info = _signal_findpeaks_scipy(signal)
 
@@ -82,8 +82,8 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
 
     # Filter
     info["Distance"] = _signal_findpeaks_distances(info["Peaks"])
-    info["Onset"] = _signal_findpeaks_findbase(info["Peaks"], signal, what="onset")
-    info["Offset"] = _signal_findpeaks_findbase(info["Peaks"], signal, what="offset")
+    info["Onsets"] = _signal_findpeaks_findbase(info["Peaks"], signal, what="onset")
+    info["Offsets"] = _signal_findpeaks_findbase(info["Peaks"], signal, what="offset")
 
     return info
 

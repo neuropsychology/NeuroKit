@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 import scipy.signal
 
 from ..signal import signal_smooth
-from ..signal.signal_from_indices import _signals_from_peakinfo
+from ..signal import signal_formatpeaks
 
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
     """Find R-peaks in an ECG signal.
 
-    Find R-peaks in an ECG signal using the specified method.
+    Low-level function used by `ecg_peaks()` to identify R-peaks in an ECG signal using a different set of algorithms. See `ecg_peaks()` for details.
 
     Parameters
     ----------
@@ -32,17 +32,13 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame of same length as the input signal in which occurences of
-        R-peaks marked as "1" in a list of zeros with the same length as
-        `ecg_cleaned`. Accessible with the keys "ECG_Peaks".
     info : dict
         A dictionary containing additional information, in this case the
-        samples at which R-peaks occur, accessible with the key "ECG_Peaks".
+        samples at which R-peaks occur, accessible with the key "ECG_R_Peaks".
 
     See Also
     --------
-    ecg_clean, ecg_rate, ecg_process, ecg_plot
+    ecg_clean, ecg_fixpeaks, ecg_peaks, ecg_rate, ecg_process, ecg_plot
 
     Examples
     --------
@@ -54,24 +50,24 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> nk.events_plot(info["ECG_Peaks"], cleaned)
     >>>
     >>> # Different methods
-    >>> _, neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
-    >>> _, pantompkins1985 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
-    >>> _, hamilton2002 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
-    >>> _, christov2004 = nk.ecg_findpeaks(ecg, method="christov2004")
-    >>> _, gamboa2008 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="gamboa2008"), method="gamboa2008")
-    >>> _, elgendi2010 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
-    >>> _, engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
-    >>> _, kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
+    >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
+    >>> pantompkins1985 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
+    >>> hamilton2002 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
+    >>> christov2004 = nk.ecg_findpeaks(ecg, method="christov2004")
+    >>> gamboa2008 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="gamboa2008"), method="gamboa2008")
+    >>> elgendi2010 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
+    >>> engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
+    >>> kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
     >>>
     >>> # Visualize
-    >>> nk.events_plot([neurokit["ECG_Peaks"],
-                        pantompkins1985["ECG_Peaks"],
-                        hamilton2002["ECG_Peaks"],
-                        christov2004["ECG_Peaks"],
-                        gamboa2008["ECG_Peaks"],
-                        elgendi2010["ECG_Peaks"],
-                        engzeemod2012["ECG_Peaks"],
-                        kalidas2017["ECG_Peaks"]], cleaned)
+    >>> nk.events_plot([neurokit["ECG_R_Peaks"],
+                        pantompkins1985["ECG_R_Peaks"],
+                        hamilton2002["ECG_R_Peaks"],
+                        christov2004["ECG_R_Peaks"],
+                        gamboa2008["ECG_R_Peaks"],
+                        elgendi2010["ECG_R_Peaks"],
+                        engzeemod2012["ECG_R_Peaks"],
+                        kalidas2017["ECG_R_Peaks"]], cleaned)
 
     References
     --------------
@@ -119,10 +115,9 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
 
     # Prepare output.
-    info = {"ECG_Peaks": rpeaks}
-    signals = _signals_from_peakinfo(info, peak_indices=info["ECG_Peaks"], length=len(ecg_cleaned))
+    info = {"ECG_R_Peaks": rpeaks}
 
-    return signals, info
+    return info
 
 
 

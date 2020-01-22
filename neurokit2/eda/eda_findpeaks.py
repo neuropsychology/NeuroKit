@@ -8,7 +8,7 @@ import scipy.signal
 from ..signal import signal_smooth
 from ..signal import signal_zerocrossings
 from ..signal import signal_findpeaks
-from ..signal.signal_from_indices import _signals_from_peakinfo
+from ..signal import signal_formatpeaks
 
 from ..misc import findclosest
 
@@ -16,13 +16,8 @@ from ..misc import findclosest
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
     """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
-    Identify Skin Conductance Responses (SCR) peaks in the phasic component of
-    Electrodermal Activity (EDA) with different possible methods, such as:
-
-    - `Gamboa, H. (2008)
-    <http://www.lx.it.pt/~afred/pub/thesisHugoGamboa.pdf>`_
-    - `Kim et al. (2004)
-    <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.102.7385&rep=rep1&type=pdf>`_
+    Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in the phasic component of
+    Electrodermal Activity (EDA) with different possible methods. See `eda_peaks()` for details.
 
     Parameters
     ----------
@@ -38,19 +33,15 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
 
     Returns
     -------
-    signals : DataFrame
-        A DataFrame of same length as the input signal in which occurences of
-        SCR peaks are marked as "1" in lists of zeros with the same length as
-        `eda_cleaned`. Accessible with the keys "SCR_Peaks".
     info : dict
         A dictionary containing additional information, in this case the
         aplitude of the SCR, the samples at which the SCR onset and the
-        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onset",
+        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onsets",
         and "SCR_Peaks" respectively.
 
     See Also
     --------
-    eda_simulate, eda_clean, eda_phasic, eda_process, eda_plot
+    eda_simulate, eda_clean, eda_phasic, eda_fixpeaks, eda_peaks, eda_process, eda_plot
 
 
 
@@ -65,9 +56,9 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     >>> eda_phasic = eda["EDA_Phasic"].values
     >>>
     >>> # Find peaks
-    >>> signals, gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
-    >>> signals, kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
-    >>> signals, neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
+    >>> gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
+    >>> kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
+    >>> neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
     >>> nk.events_plot([gamboa2008["SCR_Peaks"],
                         kim2004["SCR_Peaks"],
                         neurokit["SCR_Peaks"]], eda_phasic)
@@ -96,13 +87,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         raise ValueError("NeuroKit error: eda_findpeaks(): 'method' should be "
                          "one of 'neurokit', 'gamboa2008' or 'kim2004'.")
 
-    # Get additional features (recovery time, rise time etc.)
-    info = _eda_findpeaks_getfeatures(info, eda_phasic, sampling_rate)
-
-    # Prepare output.
-    signals = _signals_from_peakinfo(info, peak_indices=info["SCR_Peaks"], length=len(eda_phasic))
-
-    return signals, info
+    return info
 
 
 
@@ -115,7 +100,7 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 
     peaks = signal_findpeaks(eda_phasic, relative_height_min=amplitude_min, relative_max=True)
 
-    info = {"SCR_Onset": peaks['Onset'],
+    info = {"SCR_Onsets": peaks['Onsets'],
             "SCR_Peaks": peaks['Peaks'],
             "SCR_Height": eda_phasic[peaks['Peaks']]}
 
@@ -164,7 +149,7 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
     amplitudes = np.array([np.max(eda_phasic[peaks[i]:onsets[i]]) for i in range(li)])
 
     # output
-    info = {"SCR_Onset": onsets,
+    info = {"SCR_Onsets": onsets,
             "SCR_Peaks": peaks,
             "SCR_Height": amplitudes}
     return info
@@ -234,53 +219,8 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     onsets = ZC[::2]
 
     # output
-    info = {"SCR_Onset": onsets,
+    info = {"SCR_Onsets": onsets,
             "SCR_Peaks": pks,
             "SCR_Height": amps}
-
-    return info
-
-
-
-
-# =============================================================================
-# Utility
-# =============================================================================
-
-def _eda_findpeaks_getfeatures(info, eda_phasic, sampling_rate=1000):
-
-    # Onset
-    onset = info['SCR_Onset']
-    notnull = ~np.isnan(onset)
-    onset_int = onset[notnull].astype(np.int)
-
-    # Amplitudes
-    amplitude = np.full(len(info["SCR_Height"]), np.nan)
-    amplitude[notnull] = info["SCR_Height"][notnull] - eda_phasic[onset_int]
-
-    # Rise times
-    risetime = np.full(len(info["SCR_Peaks"]), np.nan)
-    risetime[notnull] = (info["SCR_Peaks"][notnull] - onset[notnull]) / sampling_rate
-
-    # (Half) Recovery times
-    recovery = np.full(len(info["SCR_Peaks"]), np.nan)
-    recovery_time = np.full(len(info["SCR_Peaks"]), np.nan)
-    recovery_values = amplitude / 2
-    for i, peak_index in enumerate(info["SCR_Peaks"]):
-        try:
-            segment = eda_phasic[peak_index:info["SCR_Peaks"][i+1]]
-        except IndexError:
-            segment = eda_phasic[peak_index::]
-        recovery_value = findclosest(recovery_values[i], segment, direction="smaller", strictly=False)
-        if np.abs(recovery_values[i]-recovery_value) < recovery_values[i] / 100:
-            segment_index = np.where(segment == recovery_value)[0]
-            recovery[i] = peak_index + segment_index
-            recovery_time[i] = segment_index / sampling_rate
-
-
-    info["SCR_Amplitude"] = amplitude
-    info["SCR_RiseTime"] = risetime
-    info["SCR_Recovery"] = recovery
-    info["SCR_RecoveryTime"] = recovery_time
 
     return info

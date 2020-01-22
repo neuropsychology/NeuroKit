@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from .epochs_to_df import epochs_to_df
 
 
-def epochs_plot(epochs, legend=True):
+def epochs_plot(epochs, legend=True, show=True):
     """
     Plot epochs.
 
@@ -15,6 +15,10 @@ def epochs_plot(epochs, legend=True):
     ----------
     epochs : dict
         A dict containing one DataFrame per event/trial. Usually obtained via `epochs_create()`.
+    legend : bool
+        Display the legend (the key of each epoch).
+    show : bool
+        If True, will return a plot. If False, will return a DataFrame that can be plotted externally.
 
     Returns
     ----------
@@ -48,21 +52,18 @@ def epochs_plot(epochs, legend=True):
     cols = data.columns.values
     cols = [x for x in cols if x not in ["Time", "Condition", "Label", "Index"]]
 
+    if show:
+        if len(cols) == 1:
+            fig, ax = plt.subplots()
+            _epochs_plot(data, ax, cols[0], legend=True)
+        else:
+            fig, ax = plt.subplots(nrows=len(cols))
+            for i, col in enumerate(cols):
+                _epochs_plot(data, ax=ax[i], col=col, legend=True)
+        return fig
 
-    if len(cols) == 1:
-        fig, ax = plt.subplots()
-        _epochs_plot(data, ax, cols[0], legend=True)
     else:
-        fig, ax = plt.subplots(nrows=len(cols))
-        for i, col in enumerate(cols):
-            _epochs_plot(data, ax=ax[i], col=col, legend=True)
-
-    return fig, ax
-
-
-
-
-
+        return data
 
 
 

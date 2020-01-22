@@ -2,7 +2,7 @@
 import pandas as pd
 
 from .ecg_clean import ecg_clean
-from .ecg_findpeaks import ecg_findpeaks
+from .ecg_peaks import ecg_peaks
 from .ecg_rate import ecg_rate
 
 
@@ -28,7 +28,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
         following columns:
         - *"ECG_Raw"*: the raw signal.
         - *"ECG_Clean"*: the cleaned signal.
-        - *"ECG_Peaks"*: the R-peaks marked as "1" in a list of zeros.
+        - *"ECG_R_Peaks"*: the R-peaks marked as "1" in a list of zeros.
         - *"ECG_Rate"*: heart rate interpolated between R-peaks.
     info : dict
         A dictionary containing the samples at which the R-peaks occur,
@@ -47,18 +47,19 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> nk.ecg_plot(signals)
 
     """
-    ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate,
+    ecg_cleaned = ecg_clean(ecg_signal,
+                            sampling_rate=sampling_rate,
                             method=method)
 
-    extrema_signal, info = ecg_findpeaks(ecg_cleaned=ecg_cleaned,
-                                         sampling_rate=sampling_rate,
-                                         method=method,
-                                         show=False)
+    peak_signal, info = ecg_peaks(ecg_cleaned=ecg_cleaned,
+                                  sampling_rate=sampling_rate,
+                                  method=method,
+                                  show=False)
 
-    rate = ecg_rate(extrema_signal, sampling_rate=sampling_rate)
+    rate = ecg_rate(peak_signal, sampling_rate=sampling_rate)
 
     signals = pd.DataFrame({"ECG_Raw": ecg_signal,
                             "ECG_Clean": ecg_cleaned,
                             "ECG_Rate": rate})
-    signals = pd.concat([signals, extrema_signal], axis=1)
+    signals = pd.concat([signals, peak_signal], axis=1)
     return signals, info
