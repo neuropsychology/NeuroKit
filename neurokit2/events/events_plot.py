@@ -7,44 +7,6 @@ import matplotlib.pyplot as plt
 
 
 
-def _events_plot(events, color="red", linestyle="--"):
-    # Check if events is list of lists
-    try:
-        len(events[0])
-        is_listoflists = True
-    except TypeError:
-        is_listoflists = False
-
-    if is_listoflists is False:
-        # Loop through sublists
-        for event in events:
-            plt.axvline(event, color=color, linestyle=linestyle)
-
-    else:
-        # Convert color and style to list
-        if isinstance(color, str):
-            color_map = matplotlib.cm.get_cmap('rainbow')
-            color = color_map(np.linspace(0, 1, num=len(events)))
-        if isinstance(linestyle, str):
-            linestyle = np.full(len(events), linestyle)
-
-        # Loop through sublists
-        for i, event in enumerate(events):
-            for j in events[i]:
-                plt.axvline(j, color=color[i], linestyle=linestyle[i], label=str(i))
-
-        # Display only one legend per event type
-        handles, labels = plt.gca().get_legend_handles_labels()
-        newLabels, newHandles = [], []
-        for handle, label in zip(handles, labels):
-            if label not in newLabels:
-                newLabels.append(label)
-                newHandles.append(handle)
-        plt.legend(newHandles, newLabels)
-
-
-
-
 
 
 def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
@@ -120,3 +82,45 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
         signal["Event_Onset"] = 0
         signal.iloc[events] = 1
         return signal
+
+
+
+
+
+
+
+
+def _events_plot(events, color="red", linestyle="--"):
+    # Check if events is list of lists
+    try:
+        len(events[0])
+        is_listoflists = True
+    except TypeError:
+        is_listoflists = False
+
+    if is_listoflists is False:
+        # Loop through sublists
+        for event in events:
+            plt.axvline(event, color=color, linestyle=linestyle)
+
+    else:
+        # Convert color and style to list
+        if isinstance(color, str):
+            color_map = matplotlib.cm.get_cmap('rainbow')
+            color = color_map(np.linspace(0, 1, num=len(events)))
+        if isinstance(linestyle, str):
+            linestyle = np.full(len(events), linestyle)
+
+        # Loop through sublists
+        for i, event in enumerate(events):
+            for j in events[i]:
+                plt.axvline(j, color=color[i], linestyle=linestyle[i], label=str(i))
+
+        # Display only one legend per event type
+        handles, labels = plt.gca().get_legend_handles_labels()
+        newLabels, newHandles = [], []
+        for handle, label in zip(handles, labels):
+            if label not in newLabels:
+                newLabels.append(label)
+                newHandles.append(handle)
+        plt.legend(newHandles, newLabels)
