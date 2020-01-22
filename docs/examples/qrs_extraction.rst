@@ -1,7 +1,7 @@
 Extract and Visualize Heartbeats (QRS)
 ========================================
 
-This example shows how to use Neurokit to extract and visualize the QRS complex in electrocardiogram (ECG) signal.
+This example shows how to use NeuroKit to extract and visualize the QRS complexes (individual heartbeats) from an electrocardiogram (ECG).
 
 Extract the cleaned ECG signal
 -------------------------------
