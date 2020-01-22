@@ -38,7 +38,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     # Determine unit of x-axis.
     last_ax = fig.get_axes()[-1]
     if sampling_rate is not None:
-        last_ax.set_xlabel("Seconds")
+        last_ax.set_xlabel("Time (seconds)")
         x_axis = np.linspace(0, len(rsp_signals) / sampling_rate,
                              len(rsp_signals))
     else:
