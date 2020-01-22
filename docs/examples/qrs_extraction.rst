@@ -1,9 +1,11 @@
 Extract and visualize heartbeats (QRS)
 ========================================
+
 This example shows how to use Neurokit to extract and visualise the QRS complex in electrocardiogram (ECG) signals.
 
 Simulate and process an ECG signal
 ------------------------------------
+
 You can use `ecg_process() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_process>`_ to process your raw ECG signal. It is a convenient function that automatically processes your ECG signal following neurokit pipeline.
 
 .. code-block:: python
