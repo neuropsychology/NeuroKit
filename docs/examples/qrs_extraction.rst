@@ -44,7 +44,7 @@ Great. We can visualize the R-peaks location in the signal to make sure it got d
     # Visualize R-peaks in ECG signal
     nk.events_plot(rpeaks, cleaned_ecg)
     
-TAM ADD FIG.
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/qrs_extraction1.png
 
 
 Create segments of signal around the heart beats
@@ -71,7 +71,7 @@ You can now plot all these individual heart beats, synchronized by their R peaks
     # Plotting all the heart beats
     nk.epochs_plot(epochs)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/examples_heartbeatplot.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/qrs_extraction2.png
 
 
 
@@ -86,4 +86,4 @@ You can get all of this and more in one line by using the `ecg_plot() <https://n
 
     nk.ecg_plot(signals)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/examples_ecgplot.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/qrs_extraction3.png
