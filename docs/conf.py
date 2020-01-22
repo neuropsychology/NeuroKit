@@ -26,7 +26,7 @@ import sys
 sys.path.insert(0, os.path.abspath('../'))
 
 
-MOCK_MODULES = ['neurokit2', 'numpy', 'pandas', 'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'sklearn', 'sklearn.neighbors', 'mne', 'bioread', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.cm', 'cvxopt', 'pywt', 'PyWavelets']
+MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'sklearn', 'sklearn.neighbors', 'mne', 'bioread', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.cm', 'cvxopt', 'pywt', 'PyWavelets']
 
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
