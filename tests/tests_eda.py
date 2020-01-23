@@ -81,7 +81,7 @@ def test_eda_peaks():
     sampling_rate = 1000
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
                           n_scr=6, noise=0, drift=0.01, random_state=42)
-    eda_phasic = nk.eda_phasic(nk.standardize(eda), method='highpass')["EDA_Phasic"]
+    eda_phasic = nk.eda_phasic(nk.standardize(eda), method='highpass')["EDA_Phasic"].values
 
 
     signals, info = nk.eda_peaks(eda_phasic, method="gamboa2008")
