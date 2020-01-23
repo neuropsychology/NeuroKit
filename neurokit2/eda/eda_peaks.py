@@ -79,8 +79,11 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     info = eda_findpeaks(eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=0.1)
     info = eda_fixpeaks(info, sampling_rate=sampling_rate)
 
-    # Get additional features (recovery time, rise time etc.)
-    info = _eda_peaks_getfeatures(info, eda_phasic, sampling_rate)
+    # Get additional features (rise time, half recovery time, etc.)
+    info = _eda_peaks_getfeatures(info,
+                                  eda_phasic,
+                                  sampling_rate,
+                                  recovery_percentage=0.5)
 
     # Prepare output.
     peak_signal = signal_formatpeaks(info,
@@ -98,7 +101,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
 # Utility
 # =============================================================================
 
-def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000):
+def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percentage=0.5):
 
     # Onset
     onset = info['SCR_Onsets']
@@ -116,7 +119,8 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000):
     # (Half) Recovery times
     recovery = np.full(len(info["SCR_Peaks"]), np.nan)
     recovery_time = np.full(len(info["SCR_Peaks"]), np.nan)
-    recovery_values = amplitude / 2
+    recovery_values = eda_phasic[onset_int] + (amplitude * recovery_percentage)
+
     for i, peak_index in enumerate(info["SCR_Peaks"]):
         # Get segment between peak and next peak
         try:
@@ -127,6 +131,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000):
         # Adjust segment (cut when it reaches minimum to avoid picking out values on the rise of the next peak)
         segment = segment[0:np.argmin(segment)]
 
+        # Find recovery time
         recovery_value = findclosest(recovery_values[i], segment, direction="smaller", strictly=False)
 
         # Keep value if indeed close the theorethical halfrecovery value (with 1% of error)
@@ -138,7 +143,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000):
             recovery[i] = np.nan
             recovery_time[i] = np.nan
 
-
+    # Save ouput
     info["SCR_Amplitude"] = amplitude
     info["SCR_RiseTime"] = risetime
     info["SCR_Recovery"] = recovery
