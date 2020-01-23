@@ -61,16 +61,24 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     ax0.scatter(x_axis[troughs], rsp_signals["RSP_Clean"][troughs],
                 color='orange', label="Exhalation Troughs", zorder=4)
 
-    ax0.legend(loc='upper right')
-
     # Shade region to mark inspiration and expiration.
     exhale_signal, inhale_signal = _rsp_plot_phase(rsp_signals, troughs, peaks)
-    ax0.fill_between(x_axis[exhale], exhale_signal[exhale], rsp_signals["RSP_Clean"][exhale], where=rsp_signals["RSP_Clean"][exhale] > exhale_signal[exhale], color='#CFD8DC', linestyle="None")
-    ax0.fill_between(x_axis[inhale], inhale_signal[inhale], rsp_signals["RSP_Clean"][inhale], where=rsp_signals["RSP_Clean"][inhale] > inhale_signal[inhale], color='#ECEFF1', linestyle="None")
+
+    ax0.fill_between(x_axis[exhale], exhale_signal[exhale],
+                     rsp_signals["RSP_Clean"][exhale],
+                     where=rsp_signals["RSP_Clean"][exhale] > exhale_signal[exhale],
+                     color='#CFD8DC', linestyle="None", label="exhalation")
+    ax0.fill_between(x_axis[inhale], inhale_signal[inhale],
+                     rsp_signals["RSP_Clean"][inhale],
+                     where=rsp_signals["RSP_Clean"][inhale] > inhale_signal[inhale],
+                     color='#ECEFF1', linestyle="None", label="inhalation")
+
+    ax0.legend(loc='upper right')
 
     # Plot rate and optionally amplitude.
     ax1.set_title("Breathing Rate")
-    ax1.plot(x_axis, rsp_signals["RSP_Rate"], color='#4CAF50', label='Rate', linewidth=1.5)
+    ax1.plot(x_axis, rsp_signals["RSP_Rate"], color='#4CAF50', label='Rate',
+             linewidth=1.5)
     rate_mean = np.mean(rsp_signals["RSP_Rate"])
     ax1.axhline(y=rate_mean, label='Mean', linestyle='--', color='#4CAF50')
     ax1.legend(loc='upper right')
