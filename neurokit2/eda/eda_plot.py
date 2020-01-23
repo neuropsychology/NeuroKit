@@ -58,15 +58,16 @@ def eda_plot(eda_signals, sampling_rate=None):
     ax1.set_title("Skin Conductance Response (SCR)")
     # Plot Phasic.
     ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic Component', linewidth=1.5, zorder=1)
-    ax1.legend(loc='upper right')
+
     # Mark segments.
-    risetime_coord, amplitude_coord, halfr_coord = _eda_plot_segments(eda_signals, ax1, x_axis, onsets, peaks, half_recovery)
+    risetime_coord, amplitude_coord, halfr_coord = _eda_plot_dashedsegments(eda_signals, ax1, x_axis, onsets, peaks, half_recovery)
     risetime = matplotlib.collections.LineCollection(risetime_coord, colors='#FFA726', linewidths=1, linestyle='dashed')
     ax1.add_collection(risetime)
     amplitude = matplotlib.collections.LineCollection(amplitude_coord, colors='#1976D2', linewidths=1, linestyle='solid')
     ax1.add_collection(amplitude)
     halfr = matplotlib.collections.LineCollection(halfr_coord, colors='#FDD835', linewidths=1, linestyle='dashed')
     ax1.add_collection(halfr)
+    ax1.legend(loc='upper right')
 
 
 
@@ -84,11 +85,11 @@ def eda_plot(eda_signals, sampling_rate=None):
 # =============================================================================
 # Internals
 # =============================================================================
-def _eda_plot_segments(eda_signals, ax, x_axis, onsets, peaks, half_recovery):
+def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recovery):
     # Mark onsets, peaks, and half-recovery.
     scat_onset = ax.scatter(x_axis[onsets], eda_signals["EDA_Phasic"][onsets], color='#FFA726', label="SCR - Onsets", zorder=2)
     scat_peak = ax.scatter(x_axis[peaks], eda_signals["EDA_Phasic"][peaks], color='#1976D2', label="SCR - Peaks", zorder=2)
-    scat_halfr = ax.scatter(x_axis[half_recovery], eda_signals["EDA_Phasic"][half_recovery], color='#FDD835', label='SCR - Half-Recovery', zorder=2)
+    scat_halfr = ax.scatter(x_axis[half_recovery], eda_signals["EDA_Phasic"][half_recovery], color='#FDD835', label='SCR - Half recovery', zorder=2)
     end_onset = pd.Series(eda_signals["EDA_Phasic"][onsets].values, eda_signals["EDA_Phasic"][peaks].index)
     scat_endonset = ax.scatter(end_onset.index, end_onset.values, alpha=0)
 
