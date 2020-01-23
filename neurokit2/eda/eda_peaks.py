@@ -124,14 +124,19 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000):
         except IndexError:
             segment = eda_phasic[peak_index::]
 
-        # Adjust segment (cut when it reaches minimum)
+        # Adjust segment (cut when it reaches minimum to avoid picking out values on the rise of the next peak)
         segment = segment[0:np.argmin(segment)]
 
         recovery_value = findclosest(recovery_values[i], segment, direction="smaller", strictly=False)
+
+        # Keep value if indeed close the theorethical halfrecovery value (with 1% of error)
         if np.abs(recovery_values[i]-recovery_value) < recovery_values[i] / 100:
             segment_index = np.where(segment == recovery_value)[0]
             recovery[i] = peak_index + segment_index
             recovery_time[i] = segment_index / sampling_rate
+        else:
+            recovery[i] = np.nan
+            recovery_time[i] = np.nan
 
 
     info["SCR_Amplitude"] = amplitude
