@@ -113,7 +113,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
 
     # Peaks (remove peaks with no onset)
     valid_peaks = np.logical_and(info["SCR_Peaks"] > np.nanmin(info['SCR_Onsets']),
-                                  ~np.isnan(info['SCR_Onsets']))
+                                 ~np.isnan(info['SCR_Onsets']))
     peaks = info["SCR_Peaks"][valid_peaks]
 
     # Onsets (remove onsets with no peaks)
