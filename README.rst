@@ -148,7 +148,7 @@ Respiration (RSP) processing
 
 
 Electromyography (EMG) processing
-----------------------------
+---------------------------------
 
 .. code-block:: python
 
