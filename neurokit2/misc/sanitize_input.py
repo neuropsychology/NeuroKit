@@ -42,7 +42,7 @@ def sanitize_input_vector(x, message="NeuroKit error: we expect the user to prov
         shape = out.shape
         if len(shape) == 1:
             pass
-        elif len(shape) != 1 and len(shape) == 2 and  shape[1] == 1:
+        elif len(shape) != 1 and len(shape) == 2 and shape[1] == 1:
             out = out[:, 0]
         else:
             raise ValueError(message + " Current input of shape " + str(shape))
