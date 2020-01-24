@@ -4,6 +4,7 @@ import scipy.signal
 
 from ..signal import signal_detrend
 from ..signal import signal_filter
+from ..misc import sanitize_input
 
 
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
@@ -52,6 +53,11 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
             "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
     >>> signals.plot()
     """
+    rsp_signal = sanitize_input(rsp_signal,
+                                message="NeuroKit error: rsp_clean(): we "
+                                "expect the user to provide a vector, i.e., "
+                                "a one-dimensional array (such as a list of values).")
+
     method = method.lower()  # remove capitalised letters
     if method in ["khodadad", "khodadad2018"]:
         clean = _rsp_clean_khodadad2018(rsp_signal, sampling_rate)

@@ -3,6 +3,7 @@ import numpy as np
 import scipy.signal
 
 from ..signal import signal_filter
+from ..misc import sanitize_input
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
@@ -52,6 +53,12 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
     """
+    ecg_signal = sanitize_input(ecg_signal,
+                                message="NeuroKit error: ecg_clean(): we "
+                                "expect the user to provide a vector, i.e., "
+                                "a one-dimensional array (such as a list of values).")
+
+
     method = method.lower()  # remove capitalised letters
     if method in ["nk", "nk2", "neurokit", "neurokit2"]:
         clean = _ecg_clean_nk(ecg_signal, sampling_rate)
