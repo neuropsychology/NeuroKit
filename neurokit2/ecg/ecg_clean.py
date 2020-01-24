@@ -54,9 +54,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
     """
     ecg_signal = sanitize_input(ecg_signal,
-                        message="NeuroKit error: ecg_clean(): we "
-                        "expect the user to provide a vector, i.e., "
-                        "a one-dimensional array (such as a list of values).")
+                                message="NeuroKit error: ecg_clean(): we "
+                                "expect the user to provide a vector, i.e., "
+                                "a one-dimensional array (such as a list of values).")
 
 
     method = method.lower()  # remove capitalised letters

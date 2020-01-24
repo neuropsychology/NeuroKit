@@ -42,9 +42,9 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     >>> signals.plot()
     """
     eda_signal = sanitize_input(eda_signal,
-                            message="NeuroKit error: eda_clean(): we "
-                            "expect the user to provide a vector, i.e., "
-                            "a one-dimensional array (such as a list of values).")
+                                message="NeuroKit error: eda_clean(): we "
+                                "expect the user to provide a vector, i.e., "
+                                "a one-dimensional array (such as a list of values).")
 
 
     method = method.lower()  # remove capitalised letters
