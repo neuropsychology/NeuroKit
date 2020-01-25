@@ -26,7 +26,8 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or experimental conditions.
-    baseline_correction :
+    baseline_correction : bool
+        If True, will substract the mean value of the baseline (until `epochs_start`).
 
 
     Returns
@@ -57,6 +58,9 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
     >>>
     >>> # Baseline correction
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_duration=3, baseline_correction=True)
+    >>> nk.epochs_plot(epochs)
+    >>>
+    >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_duration=3, baseline_correction=[0, 1])
     >>> nk.epochs_plot(epochs)
     """
     # Sanitize events input
@@ -90,9 +94,9 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
         epoch["Index"] = epoch.index.values
         epoch.index = np.linspace(start=parameters["start"][i], stop=parameters["start"][i] + parameters["duration"][i], num=len(epoch), endpoint=True)
 
-        if baseline_correction is True:
-            baseline_end = 0 if epochs_start <= 0 else epochs_start
-            epoch = epoch - epoch.loc[:baseline_end].mean()
+        # Baseline correction
+        if baseline_correction is not False:
+            epoch = _epochs_create_baseline(epoch, baseline_correction, epochs_duration=epochs_duration, epochs_start=epochs_start)
 
         # Add additional
         epoch["Label"] = parameters["label"][i]
@@ -103,3 +107,35 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
         epochs[label] = epoch
 
     return epochs
+
+
+
+
+
+
+
+
+
+def _epochs_create_baseline(epoch, baseline_correction=False, epochs_duration=1, epochs_start=0):
+    if isinstance(baseline_correction, list):
+        if baseline_correction[0] is None:
+            baseline_correction[0] = epochs_start
+        if baseline_correction[1] is None:
+            baseline_correction[1] = 0
+        baseline = epoch.loc[baseline_correction[0]:baseline_correction[1]].mean()
+
+    elif baseline_correction is True:
+        if epochs_start <= 0:
+            baseline = epoch.loc[:0].mean()
+        else:
+           baseline = epoch.loc[:epochs_start].mean()
+
+    elif isinstance(baseline_correction, int):
+        baseline = epoch.loc[baseline_correction].mean()
+
+
+
+    else:
+        baseline = 0
+
+    return epoch - baseline
