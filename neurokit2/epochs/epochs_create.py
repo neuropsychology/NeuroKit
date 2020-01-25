@@ -128,7 +128,7 @@ def _epochs_create_baseline(epoch, baseline_correction=False, epochs_duration=1,
         if epochs_start <= 0:
             baseline = epoch.loc[:0].mean()
         else:
-           baseline = epoch.loc[:epochs_start].mean()
+            baseline = epoch.loc[:epochs_start].mean()
 
     elif isinstance(baseline_correction, int):
         baseline = epoch.loc[baseline_correction].mean()
