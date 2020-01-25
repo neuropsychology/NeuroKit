@@ -6,7 +6,7 @@ This example shows how to use NeuroKit to extract and visualize the QRS complexe
 Extract the cleaned ECG signal
 -------------------------------
 
-In this example, we will use a simulated ECG signal. However, you can use any of your signal (for instance, extracted from the dataframe using <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge>`_).
+In this example, we will use a simulated ECG signal. However, you can use any of your signal (for instance, extracted from the dataframe using `read_acqknowledge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge>`_).
 
 .. code-block:: python
     
@@ -23,6 +23,9 @@ Once you have a raw ECG signal in the shape of a vector (i.e., a one-dimensional
 
     # Automatically process the (raw) ECG signal
     signals, info = nk.ecg_process(ecg_signal, sampling_rate=250)
+
+.. note::
+    It is critical that you specify the correct sampling rate of your signal throughout many functions, as this allows NeuroKit to understand the signal in term of actual time.
 
 This function outputs two elements, a *dataframe* containing the different signals (raw, cleaned, etc.) and a *dictionary* containing various additional information (peaks location, ...).
 
