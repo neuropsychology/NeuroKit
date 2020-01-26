@@ -7,7 +7,7 @@ from .ecg_rate import ecg_rate
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
-    """"Process an ECG signal.
+    """Process an ECG signal.
 
     Convenience function that automatically processes an ECG signal.
 
@@ -36,7 +36,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     See Also
     --------
-    ecg_clean, ecg_findpeaks, ecg_rate, ecg_plot
+    ecg_clean, ecg_findpeaks, ecg_fixpeaks, ecg_rate, ecg_plot
 
     Examples
     --------
@@ -47,16 +47,15 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> nk.ecg_plot(signals)
 
     """
-    ecg_cleaned = ecg_clean(ecg_signal,
-                            sampling_rate=sampling_rate,
+    ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate,
                             method=method)
 
-    peak_signal, info = ecg_peaks(ecg_cleaned=ecg_cleaned,
-                                  sampling_rate=sampling_rate,
-                                  method=method,
-                                  show=False)
-
-    rate = ecg_rate(peak_signal, sampling_rate=sampling_rate)
+    peak_signal, info, artifacts = ecg_peaks(ecg_cleaned=ecg_cleaned,
+                                             sampling_rate=sampling_rate,
+                                             method=method,
+                                             return_artifacts=True)
+    rate = ecg_rate(info, artifacts=artifacts, sampling_rate=sampling_rate,
+                    desired_length=len(ecg_cleaned))
 
     signals = pd.DataFrame({"ECG_Raw": ecg_signal,
                             "ECG_Clean": ecg_cleaned,
