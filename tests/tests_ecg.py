@@ -52,44 +52,105 @@ def test_ecg_clean():
                                                  sampling_rate=sampling_rate)
     assert np.allclose((ecg_biosppy - original).mean(), 0, atol=1e-6)
 
+
 def test_ecg_peaks():
 
     sampling_rate = 1000
-    noise = 0.05
+    noise = 0.15
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=42)
+    ecg = nk.ecg_simulate(duration=120, sampling_rate=sampling_rate,
+                          noise=noise, random_state=42)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
+
+    # Test without request to return artifacts.
     signals, info = nk.ecg_peaks(ecg_cleaned_nk, method="neurokit")
 
-    assert signals.shape == (10000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 11)
-    assert info["ECG_R_Peaks"].shape[0] == 11
-    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 56552, atol=1)
+    assert signals.shape == (120000, 1)
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 151)
+    assert info["ECG_R_Peaks"].shape[0] == 151
+    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 9223479,
+                       atol=1)
+
+    # Test with request to return artifacts.
+    signals, info, artifacts = nk.ecg_peaks(ecg_cleaned_nk,
+                                            return_artifacts=True,
+                                            method="neurokit")
+
+    assert signals.shape == (120000, 1)
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 151)
+    assert info["ECG_R_Peaks"].shape[0] == 151
+    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 9223479,
+                       atol=1)
+    assert np.sum(artifacts["etopic"]) == 399
+    assert np.sum(artifacts["missed"]) == 0
+    assert np.sum(artifacts["extra"]) == 636
+    assert np.sum(artifacts["longshort"]) == 649
 
 
 def test_ecg_rate():
 
     sampling_rate = 1000
-    noise = 0.05
+    noise = 0.15
 
-    ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise, random_state=42)
+    ecg = nk.ecg_simulate(duration=120, sampling_rate=sampling_rate,
+                          noise=noise, random_state=42)
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
-    signals, info = nk.ecg_peaks(ecg_cleaned_nk, method="neurokit")
 
-    # Test with dictionary.
-    test_length = 30
+    signals, info, artifacts = nk.ecg_peaks(ecg_cleaned_nk,
+                                            return_artifacts=True,
+                                            method="neurokit")
+
+    # Test without artifact correction and without desired length.
+    rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate)
+
+    assert rate.shape == (info["ECG_R_Peaks"].size, )
+    assert np.allclose(rate.mean(), 81, atol=1)
+
+    # Test without artifact correction and with desired length.
+    test_length = 1200
     rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate,
                        desired_length=test_length)
 
     assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 70, atol=1)
+    assert np.allclose(rate.mean(), 81, atol=1)
 
-    # Test with DataFrame.
-    rate = nk.ecg_rate(rpeaks=signals, sampling_rate=sampling_rate)
-    assert rate.shape == (ecg.size, )
-    assert np.allclose(rate.mean(), 70, atol=1)
+    # Test with artifact correction and without desired length.
+    rate = nk.ecg_rate(rpeaks=info, artifacts=artifacts,
+                       sampling_rate=sampling_rate)
+
+    assert rate.shape == (143, )
+    assert np.allclose(rate.mean(), 75, atol=1)
+
+    # Test with artifact correction and with desired length.
+    test_length = 1200
+    rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate,
+                       artifacts=artifacts, desired_length=test_length)
+
+    assert rate.shape == (test_length, )
+    assert np.allclose(rate.mean(), 75, atol=1)
+
+
+def test_ecg_fixpeaks():
+
+    sampling_rate = 1000
+    noise = 0.15
+
+    ecg = nk.ecg_simulate(duration=120, sampling_rate=sampling_rate,
+                          noise=noise, random_state=42)
+
+    rpeaks = nk.ecg_findpeaks(ecg)
+
+    artifacts = nk.ecg_fixpeaks(rpeaks)
+
+    assert np.sum(artifacts["etopic"]) == 401
+    assert np.sum(artifacts["missed"]) == 0
+    assert np.sum(artifacts["extra"]) == 715
+    assert np.sum(artifacts["longshort"]) == 655
+
+    # TODO: simulate speific types of artifacts at specific indices and assert
+    # their detection.
 
 
 def test_ecg_process():
@@ -98,10 +159,12 @@ def test_ecg_process():
     noise = 0.05
 
     ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
-    signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate, method="neurokit")
+    signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate,
+                                   method="neurokit")
     # Only check array dimensions and column names since functions called by
     # ecg_process have already been unit tested
-    assert all(elem in ["ECG_Raw", "ECG_Clean", "ECG_R_Peaks", "ECG_Rate"]  for elem in np.array(signals.columns.values, dtype=str))
+    assert all(elem in ["ECG_Raw", "ECG_Clean", "ECG_R_Peaks", "ECG_Rate"]
+               for elem in np.array(signals.columns.values, dtype=str))
 
 
 def test_ecg_plot():
