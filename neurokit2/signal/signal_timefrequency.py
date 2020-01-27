@@ -4,7 +4,7 @@ import pandas as pd
 import scipy.signal
 
 
-def signal_psd(signal, sampling_rate=1000, method="mne", show=True):
+def signal_psd(signal, sampling_rate=1000, show=True):
     """Compute the Power Spectral Density (PSD).
 
     Parameters
@@ -37,42 +37,5 @@ def signal_psd(signal, sampling_rate=1000, method="mne", show=True):
     >>> nk.signal_psd(signal, method="mne")
     >>> nk.signal_psd(signal, method="scipy")
     """
-
-    # MNE
-    if method == "mne":
-        try:
-            import mne
-            power, frequency = mne.time_frequency.psd_array_multitaper(signal,
-                                                                       sfreq=sampling_rate,
-                                                                       fmin=0,
-                                                                       fmax=np.inf,
-                                                                       adaptive=False,
-                                                                       normalization='full',
-                                                                       verbose=False)
-        except ImportError:
-            print("NeuroKit warning: signal_psd(): the 'mne'",
-                  "module is required for the 'mne' method to run.",
-                  "Please install it first (`pip install mne`). In",
-                  "the meantime, 'method' has been set to 'scipy'.")
-            method = "scipy"
-
-    # Scipy
-    if method == "scipy":
-        frequency, power = scipy.signal.welch(signal,
-                                              fs=sampling_rate,
-                                              scaling='spectrum',
-                                              detrend=False,
-                                              average='median')
-
-    # Store results
-    data = pd.DataFrame({"Frequency": frequency,
-                         "Power": power})
-
-    if show is True:
-        ax = data.plot(x="Frequency", y="Power", logy=True, title='Power Spectral Density (PSD)')
-        ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
-        return ax
-    else:
-        return data
-
-
+    # Do something
+    return signal
