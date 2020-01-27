@@ -52,8 +52,8 @@ def signal_psd(signal, sampling_rate=1000, method="mne", show=True):
         except ImportError:
             print("NeuroKit warning: signal_psd(): the 'mne'",
                   "module is required for the 'mne' method to run.",
-                  "Please install it first (`pip install mne`). In",
-                  "the meantime, 'method' has been set to 'scipy'.")
+                  "Please install it first (`pip install mne`). For now,",
+                  "'method' has been set to 'scipy'.")
             method = "scipy"
 
     # Scipy
@@ -74,5 +74,3 @@ def signal_psd(signal, sampling_rate=1000, method="mne", show=True):
         return ax
     else:
         return data
-
-
