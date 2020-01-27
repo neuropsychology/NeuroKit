@@ -8,5 +8,4 @@ Contents:
    
    qrs_extraction
    test
-   :ref:`an alternative text <test.ipynb>`
 
