@@ -136,7 +136,7 @@ def _ecg_fixpeaks_lipponen2019_plot(artifacts, info):
               (-1, -c1 * -1 + c2),
               (-1, max(s12))]
     poly0 = matplotlib.patches.Polygon(verts0, alpha=0.3, facecolor="r", edgecolor=None,
-                    label="etopic periods")
+                                       label="etopic periods")
     ax3.add_patch(poly0)
     verts1 = [(1, -c1 * 1 - c2),
               (1, min(s12)),
@@ -155,14 +155,14 @@ def _ecg_fixpeaks_lipponen2019_plot(artifacts, info):
               (-1, 1),
               (-1, max(s22))]
     poly2 = matplotlib.patches.Polygon(verts2, alpha=0.3, facecolor="r", edgecolor=None,
-                    label="short periods")
+                                       label="short periods")
     ax4.add_patch(poly2)
     verts3 = [(1, -1),
               (1, min(s22)),
               (max(drrs), min(s22)),
               (max(drrs), -1)]
     poly3 = matplotlib.patches.Polygon(verts3, alpha=0.3, facecolor="y", edgecolor=None,
-                    label="long periods")
+                                       label="long periods")
     ax4.add_patch(poly3)
     ax4.legend(loc="upper right")
 
@@ -313,4 +313,3 @@ def _threshold_normalization(data, alpha, window_half):
         # normalize data by threshold (remove padding)
         data_th = np.divide(data_pad[wh:wh + data.size], th)
     return data_th, th
-
