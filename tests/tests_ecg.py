@@ -67,10 +67,8 @@ def test_ecg_peaks():
     signals, info = nk.ecg_peaks(ecg_cleaned_nk, method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 151)
-    assert info["ECG_R_Peaks"].shape[0] == 151
-    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 9223479,
-                       atol=1)
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 152, atol=1)
+    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 9283853, atol=1)
 
     # Test with request to return artifacts.
     signals, info, artifacts = nk.ecg_peaks(ecg_cleaned_nk,
@@ -78,14 +76,12 @@ def test_ecg_peaks():
                                             method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 151)
-    assert info["ECG_R_Peaks"].shape[0] == 151
-    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 9223479,
-                       atol=1)
-    assert np.sum(artifacts["etopic"]) == 399
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 152, atol=1)
+    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 9283853, atol=1)
+    assert np.sum(artifacts["ectopic"]) == 258
     assert np.sum(artifacts["missed"]) == 0
-    assert np.sum(artifacts["extra"]) == 636
-    assert np.sum(artifacts["longshort"]) == 649
+    assert np.sum(artifacts["extra"]) == 715
+    assert np.sum(artifacts["longshort"]) == 655
 
 
 def test_ecg_rate():
