@@ -8,7 +8,7 @@ def listify(**kwargs):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> listify(a=3, b=[3, 5], c=[3])
+    >>> nk.listify(a=3, b=[3, 5], c=[3])
     """
     args = kwargs
     maxi = 1

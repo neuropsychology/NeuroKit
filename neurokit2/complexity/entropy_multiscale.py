@@ -7,7 +7,7 @@ from .utils_get_r import _get_r
 from .entropy_sample import entropy_sample
 
 
-def entropy_multiscale(signal, order=2, r="default"):
+def entropy_multiscale(signal, order=2, r="default", scale="max"):
     """Compute the multiscale entropy (MSE).
 
 
@@ -19,6 +19,9 @@ def entropy_multiscale(signal, order=2, r="default"):
         The embedding dimension (often denoted as 'm'), i.e., the length of compared run of data. Typically 1, 2 or 3.
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
+    scale : str, int or list
+        A list of scale factors of coarse graining. If 'max' (default), will use all scales until the length of the signal. If an integer, will create a range until the specified int.
+
 
 
     Returns
@@ -52,11 +55,16 @@ def entropy_multiscale(signal, order=2, r="default"):
         Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients. Shock, 30(1), 17-22.
     """
     r = _get_r(signal, r=r)
-    max_scale = len(signal)  # Set to max
+
+    # Select scale
+    if scale is None or isinstance(scale, str):
+        scale = range(len(signal))  # Set to max
+    elif isinstance(scale, int):
+        scale = range(scale)
 
     # Initalize mse vector
-    mse = np.zeros(max_scale)
-    for i in range(max_scale):
+    mse = np.zeros(len(scale))
+    for i in scale:
         temp = _entropy_multiscale_granularizesignal(signal, i+1)
         if len(temp) >= 4:
             mse[i] = entropy_sample(temp, order, r)

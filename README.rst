@@ -60,6 +60,10 @@ Click on the links above and check out our tutorials:
 
 -  `Intall Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
+-  `Extract and Visualize Heartbeats (QRS) <https://neurokit2.readthedocs.io/en/latest/examples/qrs_extraction.html>`_
+
+
+
 
 Examples
 ========
@@ -90,13 +94,13 @@ Simulate physiological signals
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
 
-Electrodermal Activity (EDA) processing
-----------------------------------------
+Electrodermal Activity (EDA)
+-----------------------------
 
 .. code-block:: python
 
-    # Generate 30 seconds of EDA signal (recorded at 250 samples / second)
-    eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=5, drift=0.01)
+    # Generate 10 seconds of EDA signal (recorded at 250 samples / second) with 2 SCR peaks
+    eda = nk.eda_simulate(duration=10, sampling_rate=250, n_scr=2 drift=0.01)
 
     # Process it
     signals, info = nk.eda_process(eda, sampling_rate=250)
@@ -107,8 +111,8 @@ Electrodermal Activity (EDA) processing
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
 
 
-Cardiac activity (ECG) processing
----------------------------------
+Cardiac activity (ECG)
+-----------------------
 
 .. code-block:: python
 
@@ -125,8 +129,8 @@ Cardiac activity (ECG) processing
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
 
 
-Respiration (RSP) processing
-----------------------------
+Respiration (RSP)
+------------------
 
 .. code-block:: python
 
@@ -143,13 +147,13 @@ Respiration (RSP) processing
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_rsp.png
 
 
-Electromyography (EMG) processing
-----------------------------
+Electromyography (EMG)
+-----------------------
 
 .. code-block:: python
 
     # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
-	emg = nk.emg_simulate(duration=10, sampling_rate=250)
+	emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
 
     # Process it
     signals = nk.emg_process(emg, sampling_rate=250)

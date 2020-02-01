@@ -75,12 +75,21 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
     - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
     """
+    if isinstance(eda_phasic, pd.DataFrame) or isinstance(eda_phasic, pd.Series):
+        try:
+            eda_phasic = eda_phasic["EDA_Phasic"]
+        except KeyError:
+            eda_phasic = eda_phasic.values
+
     # Get basic
     info = eda_findpeaks(eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=0.1)
     info = eda_fixpeaks(info, sampling_rate=sampling_rate)
 
-    # Get additional features (recovery time, rise time etc.)
-    info = _eda_peaks_getfeatures(info, eda_phasic, sampling_rate)
+    # Get additional features (rise time, half recovery time, etc.)
+    info = _eda_peaks_getfeatures(info,
+                                  eda_phasic,
+                                  sampling_rate,
+                                  recovery_percentage=0.5)
 
     # Prepare output.
     peak_signal = signal_formatpeaks(info,
@@ -98,39 +107,65 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
 # Utility
 # =============================================================================
 
-def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000):
+def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percentage=0.5):
 
-    # Onset
-    onset = info['SCR_Onsets']
-    notnull = ~np.isnan(onset)
-    onset_int = onset[notnull].astype(np.int)
+    # Sanity checks -----------------------------------------------------------
+
+    # Peaks (remove peaks with no onset)
+    valid_peaks = np.logical_and(info["SCR_Peaks"] > np.nanmin(info['SCR_Onsets']),
+                                 ~np.isnan(info['SCR_Onsets']))
+    peaks = info["SCR_Peaks"][valid_peaks]
+
+    # Onsets (remove onsets with no peaks)
+    valid_onsets = ~np.isnan(info['SCR_Onsets'])
+    valid_onsets[valid_onsets] = info["SCR_Onsets"][valid_onsets] < np.nanmax(info['SCR_Peaks'])
+    onsets = info["SCR_Onsets"][valid_onsets].astype(np.int)
+
+    if len(onsets) != len(peaks):
+        raise ValueError("NeuroKit error: eda_peaks(): Peaks and onsets don't ",
+                         "match, so cannot get amplitude safely. Check why using `find_peaks()`.")
+
+    # Amplitude and Rise Time -------------------------------------------------
 
     # Amplitudes
     amplitude = np.full(len(info["SCR_Height"]), np.nan)
-    amplitude[notnull] = info["SCR_Height"][notnull] - eda_phasic[onset_int]
+    amplitude[valid_peaks] = info["SCR_Height"][valid_peaks] - eda_phasic[onsets]
 
     # Rise times
     risetime = np.full(len(info["SCR_Peaks"]), np.nan)
-    risetime[notnull] = (info["SCR_Peaks"][notnull] - onset[notnull]) / sampling_rate
+    risetime[valid_peaks] = (peaks - onsets) / sampling_rate
+
+    # Save info
+    info["SCR_Amplitude"] = amplitude
+    info["SCR_RiseTime"] = risetime
+
+    # Recovery time -----------------------------------------------------------
 
     # (Half) Recovery times
     recovery = np.full(len(info["SCR_Peaks"]), np.nan)
     recovery_time = np.full(len(info["SCR_Peaks"]), np.nan)
-    recovery_values = amplitude / 2
-    for i, peak_index in enumerate(info["SCR_Peaks"]):
+    recovery_values = eda_phasic[onsets] + (amplitude[valid_peaks] * recovery_percentage)
+
+    for i, peak_index in enumerate(peaks):
+        # Get segment between peak and next peak
         try:
-            segment = eda_phasic[peak_index:info["SCR_Peaks"][i+1]]
+            segment = eda_phasic[peak_index:peaks[i+1]]
         except IndexError:
             segment = eda_phasic[peak_index::]
+
+        # Adjust segment (cut when it reaches minimum to avoid picking out values on the rise of the next peak)
+        segment = segment[0:np.argmin(segment)]
+
+        # Find recovery time
         recovery_value = findclosest(recovery_values[i], segment, direction="smaller", strictly=False)
+
+        # Keep value if indeed close the theorethical halfrecovery value (with 1% of error)
         if np.abs(recovery_values[i]-recovery_value) < recovery_values[i] / 100:
-            segment_index = np.where(segment == recovery_value)[0]
-            recovery[i] = peak_index + segment_index
-            recovery_time[i] = segment_index / sampling_rate
+            segment_index = np.where(segment == recovery_value)[0][0]
+            recovery[np.where(valid_peaks)[0][i]] = peak_index + segment_index
+            recovery_time[np.where(valid_peaks)[0][i]] = segment_index / sampling_rate
 
-
-    info["SCR_Amplitude"] = amplitude
-    info["SCR_RiseTime"] = risetime
+    # Save ouput
     info["SCR_Recovery"] = recovery
     info["SCR_RecoveryTime"] = recovery_time
 

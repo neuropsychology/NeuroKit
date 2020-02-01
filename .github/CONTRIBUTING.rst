@@ -16,7 +16,7 @@ You can still contribute to the `documentation <https://github.com/neuropsycholo
 
 - *"I'd like to help, but I don't know where to start"*
 
-You can look around the **issue section** to find some features / ideas / bugs to start working on. You can also open a new issue **just to say that you're there, interested in helping out**. We might have some ideas adapted to your skills.
+You can look around the `issue section <https://github.com/neuropsychology/NeuroKit/issues>`_ to find some features / ideas / bugs to start working on. You can also open a new issue **just to say that you're there, interested in helping out**. We might have some ideas adapted to your skills.
 
 - *"I'm not sure if my suggestion or idea is worthwile"*
 
@@ -24,7 +24,7 @@ Enough with the impostor syndrom! All suggestions and opinions are good, and eve
 
 - *"Why should I waste my time with this? Do I get any credit?"*
 
-Software contributions are getting more and more valued in the academic world, so it is a good time to collaborate with us! All contributors will be added within the `**authors list** <https://neurokit2.readthedocs.io/en/latest/credits.html>`_. We're also very keen on including them to eventual academic publications.
+Software contributions are getting more and more valued in the academic world, so it is a good time to collaborate with us! All contributors will be added within the `authors list <https://neurokit2.readthedocs.io/en/latest/credits.html>`_. We're also very keen on including them to eventual academic publications.
 
 
 **Anyway, starting is the most important! You will then enter a *whole new world, a new fantastic point of view*... So fork this repo, do some changes and submit them. We will then work together to make the best out of it :)**
