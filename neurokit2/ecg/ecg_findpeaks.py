@@ -46,8 +46,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>>
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> signals, info = nk.ecg_findpeaks(cleaned)
-    >>> nk.events_plot(info["ECG_Peaks"], cleaned)
+    >>> info = nk.ecg_findpeaks(cleaned)
+    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned)
     >>>
     >>> # Different methods
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
