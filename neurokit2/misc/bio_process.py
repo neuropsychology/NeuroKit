@@ -8,7 +8,7 @@ from ..eda import eda_process
 from ..emg import emg_process
 
 
-def bio_process(ecg=None, rsp=None, eda=None, emg=None, sampling_rate=1000):
+def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
     """Automated processing of bio signals. Wrapper for other bio processing functions of electrocardiography signals (ECG), respiration signals (RSP), electrodermal activity (EDA) and electromyography signals (EMG).
 
     Parameters
@@ -22,6 +22,8 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, sampling_rate=1000):
         The raw EDA channel.
     emg : list, array or Series
         The raw EMG channel.
+    keep : DataFrame
+        Dataframe or channels to add by concatenation to the processed dataframe (for instance, the Photosensor channel).
     sampling_rate : int
         The sampling frequency of the signals (in Hz, i.e., samples/second).
         Defaults to 1000.
@@ -45,31 +47,40 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, sampling_rate=1000):
     >>>
     >>> bio_processed = nk.bio_process(ecg=ecg_signal, rsp=ecg_signal, eda=eda_signal, emg=emg_signal)
     >>>
-    >>> # Visualize ECG signals
-    >>> nk.standardize(bio_processed["ECG"]).plot()
-    >>> # Visualize RSP signals
-    >>> nk.standardize(bio_processed["RSP"]).plot()
+    >>> # Visualize all signals
+    >>> nk.standardize(bio_processed["df"]).plot()
     """
     bio_processed = {}
+    bio_df = pd.DataFrame({})
 
     # ECG
     if ecg is not None:
         ecg_signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate)
         bio_processed["ECG"] = ecg_signals[["ECG_Raw", "ECG_Clean", "ECG_Rate", "ECG_R_Peaks"]]
+        bio_df = pd.concat([bio_df, ecg_signals[["ECG_Raw", "ECG_Clean", "ECG_Rate", "ECG_R_Peaks"]]], axis=1)
 
     # RSP
     if rsp is not None:
         rsp_signals, info = nk.rsp_process(rsp, sampling_rate=sampling_rate)
         bio_processed["RSP"] = rsp_signals[["RSP_Raw", "RSP_Clean", "RSP_Rate", "RSP_Amplitude"]]
+        bio_df = pd.concat([bio_df, rsp_signals[["RSP_Raw", "RSP_Clean", "RSP_Rate", "RSP_Amplitude"]]], axis=1)
 
     # EDA
     if eda is not None:
         eda_signals, info = nk.eda_process(eda, sampling_rate=sampling_rate)
         bio_processed["EDA"] = eda_signals[["EDA_Raw", "EDA_Clean", "EDA_Tonic", "EDA_Phasic", "SCR_Onsets", "SCR_Peaks", "SCR_Amplitude", "SCR_Recovery"]]
+        bio_df = pd.concat([bio_df, eda_signals[["EDA_Raw", "EDA_Clean", "EDA_Tonic", "EDA_Phasic", "SCR_Onsets", "SCR_Peaks", "SCR_Amplitude", "SCR_Recovery"]]], axis=1)
 
     # EMG
     if emg is not None:
         emg_signals = nk.emg_process(emg, sampling_rate=sampling_rate)
         bio_processed["EMG"] = emg_signals[["EMG_Raw", "EMG_Clean", "EMG_Amplitude"]]
+        bio_df = pd.concat([bio_df, emg_signals[["EMG_Raw", "EMG_Clean", "EMG_Amplitude"]]], axis=1)
+
+    # Additional channels to keep
+    if keep is not None:
+        keep = keep.reset_index(drop=True)
+        bio_df = pd.concat([bio_df, keep], axis=1)
+    bio_processed["df"] = bio_df
 
     return(bio_processed)
