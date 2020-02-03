@@ -70,7 +70,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None, artifacts=None):
 
         extra_idcs = artifacts["extra"]
         missed_idcs = artifacts["missed"]
-        etopic_idcs = artifacts["etopic"]
+        ectopic_idcs = artifacts["ectopic"]
         longshort_idcs = artifacts["longshort"]
 
         # Delete extra peaks.
@@ -81,7 +81,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None, artifacts=None):
     #        print('extra: {}'.format(peaks[extra_idcs]))
             # Update remaining indices.
             missed_idcs = update_indices(extra_idcs, missed_idcs, -1)
-            etopic_idcs = update_indices(extra_idcs, etopic_idcs, -1)
+            ectopic_idcs = update_indices(extra_idcs, ectopic_idcs, -1)
             longshort_idcs = update_indices(extra_idcs, longshort_idcs, -1)
 
         # Add missing peaks.
@@ -96,12 +96,12 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None, artifacts=None):
             rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
     #        print('missed: {}'.format(peaks[missed_idcs]))
             # Update remaining indices.
-            etopic_idcs = update_indices(missed_idcs, etopic_idcs, 1)
+            ectopic_idcs = update_indices(missed_idcs, ectopic_idcs, 1)
             longshort_idcs = update_indices(missed_idcs, longshort_idcs, 1)
 
-        # Interpolate etopic as well as long or short peaks (important to do
+        # Interpolate ectopic as well as long or short peaks (important to do
         # this after peaks are deleted and/or added).
-        interp_idcs = np.concatenate((etopic_idcs, longshort_idcs)).astype(int)
+        interp_idcs = np.concatenate((ectopic_idcs, longshort_idcs)).astype(int)
         if interp_idcs.size > 0:
             interp_idcs.sort(kind='mergesort')
             # Ignore the artifacts during interpolation
