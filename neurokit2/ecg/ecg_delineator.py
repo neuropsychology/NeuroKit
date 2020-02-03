@@ -90,7 +90,7 @@ def _ecg_peaks_delineator(signal, rpeaks, sampling_rate=500):
     peaks = []
     for index_cur, index_next in zip(keep_peaks[:-1], keep_peaks[1:]):
         # look for a pair of negative-positive maxima
-        correct_sign = cwtmatr[4, :][index_cur] < 0 and cwtmatr[4,:][index_next] > 0
+        correct_sign = cwtmatr[4, :][index_cur] < 0 and cwtmatr[4, :][index_next] > 0
 #       near = (index_next - index_cur) < max_wv_peak_dist #limit 2
 #       if near and correct_sign:
         if correct_sign:
