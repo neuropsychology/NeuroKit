@@ -4,6 +4,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.signal
 
+from ..signal import signal_zerocrossings
+
 def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=500):
     """Delineate QRS complex.
     Function to delineate the QRS complex.
@@ -92,7 +94,7 @@ def _ecg_peaks_delineator(signal, rpeaks, sampling_rate=500):
 #       near = (index_next - index_cur) < max_wv_peak_dist #limit 2
 #       if near and correct_sign:
         if correct_sign:
-            peaks.append(nk.signal_zerocrossings(
+            peaks.append(signal_zerocrossings(
                     cwtmatr[4,:][index_cur:index_next])[0] + index_cur)
 
     # delineate T P peaks
