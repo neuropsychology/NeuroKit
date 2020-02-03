@@ -43,14 +43,6 @@ def ecg_delineator(rpeaks, sampling_rate=500):
     - Martínez, J. P., Almeida, R., Olmos, S., Rocha, A. P., & Laguna, P. (2004). A wavelet-based ECG delineator: evaluation on standard databases. IEEE Transactions on biomedical engineering, 51(4), 570-581.
 
     """
-    # Try loading pywt
-    try:
-        import pywt
-    except ImportError:
-        raise ImportError("NeuroKit error: ecg_delineator(): the 'PyWavelets' "
-                          "module is required for this method to run. ",
-                          "Please install it first (`pip install PyWavelets`).")
-
     # P-Peaks and T-Peaks
     ppeaks, tpeaks = _ecg_peaks_delineator(rpeaks, sampling_rate)
     info = {"ECG_P_Peaks":ppeaks,
@@ -59,6 +51,13 @@ def ecg_delineator(rpeaks, sampling_rate=500):
 
 
 def _ecg_peaks_delineator(rpeaks, sampling_rate=500):
+    # Try loading pywt
+    try:
+        import pywt
+    except ImportError:
+        raise ImportError("NeuroKit error: ecg_delineator(): the 'PyWavelets' "
+                          "module is required for this method to run. ",
+                          "Please install it first (`pip install PyWavelets`).")
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, freqs = pywt.cwt(ecg, scales, 'gaus1', sampling_period=1.0/sampling_rate)
