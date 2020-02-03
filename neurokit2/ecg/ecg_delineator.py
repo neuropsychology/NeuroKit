@@ -49,8 +49,8 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=500):
     """
     # P-Peaks and T-Peaks
     ppeaks, tpeaks = _ecg_peaks_delineator(ecg_cleaned, rpeaks, sampling_rate)
-    info = {"ECG_P_Peaks":ppeaks,
-            "ECG_T_Peaks":tpeaks}
+    info = {"ECG_P_Peaks": ppeaks,
+            "ECG_T_Peaks": tpeaks}
     return info
 
 
@@ -69,12 +69,12 @@ def _ecg_peaks_delineator(signal, rpeaks, sampling_rate=500):
     # search between R-peaks for significant peaks in cwt of scales 2^4
     keep_peaks = []
     for i in range(len(rpeaks)-1):
-        search_window = cwtmatr[4,rpeaks[i]:rpeaks[i+1]]
+        search_window = cwtmatr[4, rpeaks[i]:rpeaks[i+1]]
         height = 0.125*np.sqrt(np.mean(np.square(search_window)))
         peaks, heights = scipy.signal.find_peaks(np.abs(search_window), height=height)
         peaks = peaks + rpeaks[i]
-        threshold1 = 0.125*max(search_window) # min height of peaks
-        threshold2 = 0.8*max(search_window) # max height of peaks
+        threshold1 = 0.125*max(search_window)  # min height of peaks
+        threshold2 = 0.8*max(search_window)  # max height of peaks
         significant_index = [j for j in range(len(peaks))
                              if heights["peak_heights"][j] > threshold1
                              and heights["peak_heights"][j] < threshold2]
@@ -90,12 +90,12 @@ def _ecg_peaks_delineator(signal, rpeaks, sampling_rate=500):
     peaks = []
     for index_cur, index_next in zip(keep_peaks[:-1], keep_peaks[1:]):
         # look for a pair of negative-positive maxima
-        correct_sign = cwtmatr[4,:][index_cur] < 0 and cwtmatr[4,:][index_next] > 0
+        correct_sign = cwtmatr[4, :][index_cur] < 0 and cwtmatr[4,:][index_next] > 0
 #       near = (index_next - index_cur) < max_wv_peak_dist #limit 2
 #       if near and correct_sign:
         if correct_sign:
             peaks.append(signal_zerocrossings(
-                    cwtmatr[4,:][index_cur:index_next])[0] + index_cur)
+                    cwtmatr[4, :][index_cur:index_next])[0] + index_cur)
 
     # delineate T P peaks
     tpeaks = []
