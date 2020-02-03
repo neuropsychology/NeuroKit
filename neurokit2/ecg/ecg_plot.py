@@ -91,7 +91,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     ax2.plot(heartbeats_pivoted, label="Signal")
 
     ax2.legend(loc="upper right")
-    ax2.legend(fontsize = 'x-small')
+    ax2.legend(fontsize='x-small')
 
     plt.show()
     return fig
