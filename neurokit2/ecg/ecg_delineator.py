@@ -47,9 +47,10 @@ def ecg_delineator(rpeaks, sampling_rate=500):
     try:
         import pywt
     except ImportError:
-        raise ImportError("NeuroKit error: ecg_delineator(): the 'pywt' "
+        raise ImportError("NeuroKit error: ecg_delineator(): the 'PyWavelets' "
                           "module is required for this method to run. ",
-                          "Please install it first (`pip install pywt`).")
+                          "Please install it first (`pip install PyWavelets`).")
+
     # P-Peaks and T-Peaks
     ppeaks, tpeaks = _ecg_peaks_delineator(rpeaks, sampling_rate)
     info = {"ECG_P_Peaks":ppeaks,
