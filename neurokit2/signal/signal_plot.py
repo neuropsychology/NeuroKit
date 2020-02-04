@@ -57,3 +57,6 @@ def signal_plot(signal, subplots=False):
         events_plot(events, signal=signal[continuous_columns])
     else:
         signal[continuous_columns].plot(subplots=subplots)
+
+    # Tidy legend locations
+    [ax.legend(loc=1) for ax in plt.gcf().axes]
