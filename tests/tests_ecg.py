@@ -181,6 +181,8 @@ def test_ecg_plot():
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     assert fig.get_axes()[1].get_xlabel() == "Samples"
+    np.testing.assert_array_equal(fig.axes[0].get_xticks(),
+                                  fig.axes[1].get_xticks())
     plt.close(fig)
 
     # Plot data over seconds.
@@ -194,4 +196,6 @@ def test_ecg_plot():
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
+    np.testing.assert_array_equal(fig.axes[0].get_xticks(),
+                                  fig.axes[1].get_xticks())
     plt.close(fig)
