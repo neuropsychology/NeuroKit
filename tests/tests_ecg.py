@@ -115,7 +115,9 @@ def test_ecg_rate():
     rate = nk.ecg_rate(rpeaks=info, artifacts=artifacts,
                        sampling_rate=sampling_rate)
 
-    assert rate.shape == (info["ECG_R_Peaks"].size, )
+    assert rate.shape == (info["ECG_R_Peaks"].size
+                          - len(artifacts["extra"])
+                          + len(artifacts["missed"]), )
     assert np.allclose(rate.mean(), 75, atol=2)
 
     # Test with artifact correction and with desired length.
@@ -172,9 +174,10 @@ def test_ecg_plot():
     nk.ecg_plot(ecg_summary)
     # This will identify the latest figure.
     fig = plt.gcf()
-    assert len(fig.axes) == 2
+    assert len(fig.axes) == 3
     titles = ["Raw and Cleaned Signal",
-              "Heart Rate"]
+              "Heart Rate",
+              "Individual Heart Beats"]
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     assert fig.get_axes()[1].get_xlabel() == "Samples"
