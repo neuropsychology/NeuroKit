@@ -45,6 +45,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None, artifacts=None):
     --------
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
+    >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> rpeaks = nk.ecg_findpeaks(ecg)
     >>> artifacts = nk.ecg_fixpeaks(rpeaks, show=True)
     >>> rate_corrected = nk.ecg_rate(rpeaks, artifacts=artifacts,
