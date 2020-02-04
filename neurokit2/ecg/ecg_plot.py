@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from .ecg import ecg_findpeaks
+from ..ecg import ecg_findpeaks
 from ..epochs_to_df import epochs_to_df
 from ..epochs_to_df import epochs_create
 
