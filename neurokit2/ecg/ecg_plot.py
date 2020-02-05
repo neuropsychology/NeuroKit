@@ -86,9 +86,8 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     # Plot individual heart beats
     ax2.set_title("Individual Heart Beats")
 
-    heartbeats_df, cols = _ecg_plot_heartbeats(ecg_signals, ax=ax2)
-    heartbeats_pivoted = heartbeats_df.pivot(index='Time', columns='Label', values=cols)
-    ax2.plot(heartbeats_pivoted, label="Signal")
+    heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"], peaks=peaks, ax=ax2)
+    ax2.plot(heartbeats["Time"].values, heartbeats["Signal"].values, legend="")
 
     ax2.legend(loc="upper right")
     ax2.legend(fontsize='x-small')
@@ -102,12 +101,9 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 # =============================================================================
 # Internals
 # =============================================================================
-def _ecg_plot_heartbeats(ecg_signals, ax):
+def _ecg_plot_heartbeats(ecg, peaks, ax):
     # Extract heart beats
-    events = ecg_findpeaks(ecg_signals)
-    heartbeats = epochs_create(ecg_signals["ECG_Clean"], events=events["ECG_R_Peaks"], epochs_duration=0.6, epochs_start=-0.3)
-    heartbeats_df = epochs_to_df(heartbeats)
+    heartbeats = epochs_create(ecg, events=peaks, epochs_duration=0.6, epochs_start=-0.3)
+    heartbeats = epochs_to_df(heartbeats)
 
-    cols = heartbeats_df.columns.values
-    cols = [x for x in cols if x not in ["Time", "Label", "Index"]]
-    return heartbeats_df, cols
+    return heartbeats
