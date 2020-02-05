@@ -219,6 +219,7 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
 
     mwa_peaks = _ecg_findpeaks_peakdetect(mwa, sampling_rate)
 
+    mwa_peaks = np.array(mwa_peaks, dtype='int')
     return mwa_peaks
 
 
@@ -298,6 +299,7 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
 
     QRS.pop(0)
 
+    QRS = np.array(QRS, dtype='int')
     return QRS
 
 
@@ -478,7 +480,7 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000):
                 Rm = int(np.mean(RR))
 
     QRS.pop(0)
-
+    QRS = np.array(QRS, dtype='int')
     return QRS
 
 
@@ -643,6 +645,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
             thi = False
             thf = False
 
+    r_peaks = np.array(r_peaks, dtype='int')
     return r_peaks
 
 
@@ -691,6 +694,7 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
 
     filt_peaks = _ecg_findpeaks_peakdetect(filtered_squared, sampling_rate)
 
+    filt_peaks = np.array(filt_peaks, dtype='int')
     return filt_peaks
 
 
@@ -739,6 +743,7 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
                 else:
                     QRS.append(detection)
 
+    QRS = np.array(QRS, dtype='int')
     return QRS
 
 

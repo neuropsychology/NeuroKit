@@ -205,8 +205,8 @@ def test_ecg_findpeaks():
 
     sampling_rate = 1000
 
-    ecg = nk.ecg_simulate(duration=60, sampling_rate=sampling_rate,
-                          random_state=42)
+    ecg = nk.ecg_simulate(duration=60, sampling_rate=sampling_rate, noise=0,
+                          method="simple", random_state=42)
 
     ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                method="neurokit")
@@ -214,41 +214,42 @@ def test_ecg_findpeaks():
     # Test neurokit methodwith show=True
     info_nk = nk.ecg_findpeaks(ecg_cleaned, show=True)
 
-    assert info_nk["ECG_R_Peaks"].size == 70
+    assert info_nk["ECG_R_Peaks"].size == 69
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 2
 
     # Test pantompkins1985 method
-    info_pantom = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"),
+    info_pantom = nk.ecg_findpeaks(nk.ecg_clean(ecg,
+                                   method="pantompkins1985"),
                                    method="pantompkins1985")
-    assert len(info_pantom["ECG_R_Peaks"]) == 72
+    assert info_pantom["ECG_R_Peaks"].size == 70
 
     # Test hamilton2002 method
-#    info_hamilton = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"),
-#                                   method="hamilton2002")
-#    assert len(info_hamilton["ECG_R_Peaks"]) == 81
+    info_hamilton = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"),
+                                   method="hamilton2002")
+    assert info_hamilton["ECG_R_Peaks"].size == 69
 
     # Test christov2004 method
-    info_christov = nk.ecg_findpeaks(ecg, method="christov2004")
-    assert len(info_christov["ECG_R_Peaks"]) == 94
+    info_christov = nk.ecg_findpeaks(ecg_cleaned, method="christov2004")
+    assert info_christov["ECG_R_Peaks"].size == 288
 
     # Test gamboa2008 method
-    info_gamboa = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="gamboa2008"),
-                                     method="gamboa2008")
-    assert info_gamboa["ECG_R_Peaks"].size == 70
+    info_gamboa = nk.ecg_findpeaks(ecg_cleaned, method="gamboa2008")
+    assert info_gamboa["ECG_R_Peaks"].size == 69
 
     # Test elgendi2010 method
     info_elgendi = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"),
                                    method="elgendi2010")
-    assert len(info_elgendi["ECG_R_Peaks"]) == 69
+    assert info_elgendi["ECG_R_Peaks"].size == 70
 
     # Test engzeemod2012 method
-    info_engzeemod = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"),
+    info_engzeemod = nk.ecg_findpeaks(nk.ecg_clean(ecg,
+                                    method="engzeemod2012"),
                                     method="engzeemod2012")
-    assert len(info_engzeemod["ECG_R_Peaks"]) == 69
+    assert info_engzeemod["ECG_R_Peaks"].size == 70
 
     # Test kalidas2017 method
     info_kalidas = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"),
                                       method="kalidas2017")
-    assert len(info_kalidas["ECG_R_Peaks"]) == 72
+    assert info_kalidas["ECG_R_Peaks"].size == 69
