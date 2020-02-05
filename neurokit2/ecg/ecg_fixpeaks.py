@@ -21,7 +21,7 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
         i.e., samples/second).
     recursive : bool
         Whether or not to apply the artifact correction recursively (results
-        in superior artifact correction)
+        in superior artifact correction).
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
 
@@ -39,18 +39,16 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
     --------
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
-    >>> import numpy as np
-    >>>
-    >>> # Get peaks
-    >>> ecg_signal = nk.ecg_simulate(20)
-    >>> rpeaks = nk.ecg_findpeaks(ecg_signal)
-    >>>
-    >>> # Add artifacts
-    >>> rpeaks["ECG_R_Peaks"] = np.delete(rpeaks["ECG_R_Peaks"], [4, 8])
-    >>> artifacts = nk.ecg_fixpeaks(rpeaks, show=True)
-    >>> rate_corrected = nk.ecg_rate(rpeaks, artifacts=artifacts,
+
+    >>> ecg = nk.ecg_simulate(duration=240, noise=0.1, heart_rate=70,
+    >>>                       random_state=41)
+    >>> rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
+    >>> artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks_uncorrected,
+    >>>                                               recursive=True,
+    >>>                                               show=True)
+    >>> rate_corrected = nk.ecg_rate(rpeaks_uncorrected,
     >>>                              desired_length=len(ecg))
-    >>> rate_uncorrected = nk.ecg_rate(rpeaks, desired_length=len(ecg))
+    >>> rate_uncorrected = nk.ecg_rate(rpeaks, desired_length=len(ecg_signal))
     >>>
     >>> fig, ax = plt.subplots()
     >>> ax.plot(rate_uncorrected, label="heart rate without artifact correction")
@@ -59,13 +57,12 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
 
     References
     ----------
-    - Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for
-    heart rate variability time series artefact correction using novel beat
-    classification. Journal of medical engineering & technology, 43(3), 173-181.
-    10.1080/03091902.2019.1640306
+    - Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart
+    rate variability time series artefact correction using novel beat
+    classification. Journal of medical engineering & technology, 43(3),
+    173-181. 10.1080/03091902.2019.1640306
 
     """
-
     # Format input.
     rpeaks = rpeaks["ECG_R_Peaks"]
     artifacts, subspaces = _find_artifacts_lipponen2019(rpeaks, sampling_rate)

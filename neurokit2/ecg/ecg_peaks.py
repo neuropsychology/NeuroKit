@@ -6,7 +6,7 @@ from ..signal import signal_formatpeaks
 
 
 def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
-              return_artifacts=False):
+              correct_artifacts=False):
     """Find R-peaks in an ECG signal.
 
     Find R-peaks in an ECG signal using the specified method.
@@ -22,9 +22,9 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
         'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010',
         'engzeemod2012' or 'kalidas2017'.
-    return_artifacts : bool
-        Whether or not to identify and return artifacts as defined by Jukka A.
-        Lipponen & Mika P. Tarvainen (2019): A robust algorithm for heart rate
+    correct_artifacts : bool
+        Whether or not to identify artifacts as defined by Jukka A. Lipponen &
+        Mika P. Tarvainen (2019): A robust algorithm for heart rate
         variability time series artefact correction using novel beat
         classification, Journal of Medical Engineering & Technology,
         DOI: 10.1080/03091902.2019.1640306.
@@ -38,9 +38,6 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
     info : dict
         A dictionary containing additional information, in this case the
         samples at which R-peaks occur, accessible with the key "ECG_R_Peaks".
-    artifacts : dict
-        A dictionary containing the indices of artifacts, accessible with the
-        keys "etopic", "missed", "extra", and "longshort".
 
     See Also
     --------
@@ -52,8 +49,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
     >>>
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> peak_signal, info, artifacts = nk.ecg_peaks(cleaned,
-    >>>                                             return_artifacts=True)
+    >>> signals, info = nk.ecg_peaks(cleaned, correct_artifacts=True)
     >>> nk.events_plot(info["ECG_R_Peaks"], cleaned)
 
     References
@@ -65,13 +61,18 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
     - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
     - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
     """
-    info = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate,
-                         method=method)
-    peak_signal = signal_formatpeaks(info, desired_length=len(ecg_cleaned),
-                                     peak_indices=info["ECG_R_Peaks"])
-    if return_artifacts:
-        artifacts = ecg_fixpeaks(info, sampling_rate=sampling_rate)
-        return peak_signal, info, artifacts
+    rpeaks = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate,
+                           method=method)
 
-    else:
-        return peak_signal, info
+    if correct_artifacts:
+        _, rpeaks = ecg_fixpeaks(rpeaks,
+                                 sampling_rate=sampling_rate,
+                                 recursive=True)
+
+    instant_peaks = signal_formatpeaks(rpeaks,
+                                       desired_length=len(ecg_cleaned),
+                                       peak_indices=rpeaks["ECG_R_Peaks"])
+    signals = instant_peaks
+    info = rpeaks
+
+    return signals, info
