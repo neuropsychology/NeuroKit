@@ -107,7 +107,7 @@ def test_ecg_rate():
                        desired_length=test_length)
 
     assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 81, atol=2)
+    assert np.allclose(rate.mean(), 81, atol=1)
 
 
 def test_ecg_fixpeaks():
