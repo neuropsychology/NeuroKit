@@ -93,8 +93,8 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
     ax2.get_legend().remove()
 
-    #ax2.legend(loc="upper right")
-    #ax2.legend(fontsize='x-small')
+    # ax2.legend(loc="upper right")
+    # ax2.legend(fontsize='x-small')
 
     return fig
 
