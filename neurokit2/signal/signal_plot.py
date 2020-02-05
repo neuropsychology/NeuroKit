@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
-from ..events.events_plot import events_plot
+from ..events import events_plot
 
 
 def signal_plot(signal, subplots=False):
@@ -56,7 +57,8 @@ def signal_plot(signal, subplots=False):
 
         events_plot(events, signal=signal[continuous_columns])
     else:
-        signal[continuous_columns].plot(subplots=subplots)
+#        signal[continuous_columns].plot(subplots=subplots)
+        signal[continuous_columns].plot()
 
     # Tidy legend locations
     [ax.legend(loc=1) for ax in plt.gcf().axes]
