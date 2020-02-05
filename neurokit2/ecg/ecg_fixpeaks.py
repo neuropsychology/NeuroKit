@@ -5,8 +5,6 @@ import matplotlib.patches
 import scipy.signal
 import scipy.stats
 
-from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-
 
 def ecg_fixpeaks(rpeaks, sampling_rate=1000, show=False):
     """Correct R-peaks location based on their interval (RRi).
@@ -63,115 +61,19 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, show=False):
     10.1080/03091902.2019.1640306
 
     """
+
     # Format input.
-    rpeaks, desired_length = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
+    rpeaks = rpeaks["ECG_R_Peaks"]
+    artifacts, subspaces = _find_artifacts(rpeaks, sampling_rate)
+    rpeaks_corrected = _fix_artifacts(rpeaks, artifacts, sampling_rate)
 
-    artifacts, info = _ecg_fixpeaks_lipponen2019(rpeaks, sampling_rate)
-    if show is True:
-        _ecg_fixpeaks_lipponen2019_plot(artifacts, info)
+    if show:
+        _plot_artifacts(artifacts, subspaces)
 
-    return artifacts
-
-
-
+    return artifacts, {"ECG_R_Peaks": rpeaks_corrected}
 
 
-
-# =============================================================================
-# Lipponen & Tarvainen (2019).
-# =============================================================================
-def _ecg_fixpeaks_lipponen2019_plot(artifacts, info):
-    """
-    """
-    # Extract parameters
-    longshort_idcs = artifacts["longshort"]
-    ectopic_idcs = artifacts["ectopic"]
-    extra_idcs = artifacts["extra"]
-    missed_idcs = artifacts["missed"]
-
-    rr = info["rr"]
-    drrs = info["drrs"]
-    mrrs = info["mrrs"]
-    s12 = info["s12"]
-    s22 = info["s22"]
-    c1 = info["c1"]
-    c2 = info["c2"]
-
-
-
-
-    # Visualize artifact type indices.
-    fig0, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
-    ax0.set_title("Artifact types", fontweight="bold")
-    ax0.plot(rr, label="heart period")
-    ax0.scatter(longshort_idcs, rr[longshort_idcs], marker='x', c='m',
-                s=100, zorder=3, label="long/short")
-    ax0.scatter(ectopic_idcs, rr[ectopic_idcs], marker='x', c='g', s=100,
-                zorder=3, label="ectopic")
-    ax0.scatter(extra_idcs, rr[extra_idcs], marker='x', c='y', s=100,
-                zorder=3, label="false positive")
-    ax0.scatter(missed_idcs, rr[missed_idcs], marker='x', c='r', s=100,
-                zorder=3, label="false negative")
-    ax0.legend(loc="upper right")
-
-    # Visualize first threshold.
-    ax1.set_title("Consecutive-difference criterion", fontweight="bold")
-    ax1.plot(np.abs(drrs), label="difference consecutive heart periods")
-    ax1.axhline(1, c='r', label="artifact threshold")
-    ax1.legend(loc="upper right")
-
-    ax2.set_title("Difference-from-median criterion", fontweight="bold")
-    ax2.plot(np.abs(mrrs), label="difference from median over 11 periods")
-    ax2.axhline(3, c="r", label="artifact threshold")
-    ax2.legend(loc="upper right")
-
-    # Visualize decision boundaries.
-    fig2, (ax3, ax4) = plt.subplots(nrows=1, ncols=2)
-    ax3.set_title("Subspace 1", fontweight="bold")
-    ax3.set_xlabel("S11")
-    ax3.set_ylabel("S12")
-    ax3.scatter(drrs, s12, marker="x", label="heart periods")
-    verts0 = [(min(drrs), max(s12)),
-              (min(drrs), -c1 * min(drrs) + c2),
-              (-1, -c1 * -1 + c2),
-              (-1, max(s12))]
-    poly0 = matplotlib.patches.Polygon(verts0, alpha=0.3, facecolor="r", edgecolor=None,
-                    label="etopic periods")
-    ax3.add_patch(poly0)
-    verts1 = [(1, -c1 * 1 - c2),
-              (1, min(s12)),
-              (max(drrs), min(s12)),
-              (max(drrs), -c1 * max(drrs) - c2)]
-    poly1 = matplotlib.patches.Polygon(verts1, alpha=0.3, facecolor="r", edgecolor=None)
-    ax3.add_patch(poly1)
-    ax3.legend(loc="upper right")
-
-    ax4.set_title("Subspace 2", fontweight="bold")
-    ax4.set_xlabel("S21")
-    ax4.set_ylabel("S22")
-    ax4.scatter(drrs, s22, marker="x", label="heart periods")
-    verts2 = [(min(drrs), max(s22)),
-              (min(drrs), 1),
-              (-1, 1),
-              (-1, max(s22))]
-    poly2 = matplotlib.patches.Polygon(verts2, alpha=0.3, facecolor="r", edgecolor=None,
-                    label="short periods")
-    ax4.add_patch(poly2)
-    verts3 = [(1, -1),
-              (1, min(s22)),
-              (max(drrs), min(s22)),
-              (max(drrs), -1)]
-    poly3 = matplotlib.patches.Polygon(verts3, alpha=0.3, facecolor="y", edgecolor=None,
-                    label="long periods")
-    ax4.add_patch(poly3)
-    ax4.legend(loc="upper right")
-
-
-
-
-
-
-def _ecg_fixpeaks_lipponen2019(rpeaks, sampling_rate=1000):
+def _find_artifacts(rpeaks, sampling_rate):
 
     # Set free parameters.
     c1 = 0.13
@@ -289,13 +191,126 @@ def _ecg_fixpeaks_lipponen2019(rpeaks, sampling_rate=1000):
     artifacts = {"ectopic": ectopic_idcs, "missed": missed_idcs,
                  "extra": extra_idcs, "longshort": longshort_idcs}
 
-    info = {"rr": rr, "drrs": drrs, "mrrs": mrrs, "c1": c1, "c2": c2, "s12": s12, "s22": s22}
+    subspaces = {"drrs": drrs, "mrrs": mrrs, "s12": s12, "s22": s22}
 
-    return artifacts, info
-
-
+    return artifacts, subspaces
 
 
+def _fix_artifacts(rpeaks, artifacts, sampling_rate):
+
+    extra_idcs = artifacts["extra"]
+    missed_idcs = artifacts["missed"]
+    etopic_idcs = artifacts["ectopic"]
+    longshort_idcs = artifacts["longshort"]
+
+    # Delete extra peaks.
+    if extra_idcs:
+        rpeaks = np.delete(rpeaks, extra_idcs)
+        # Update remaining indices.
+        missed_idcs = _update_indices(extra_idcs, missed_idcs, -1)
+        etopic_idcs = _update_indices(extra_idcs, etopic_idcs, -1)
+        longshort_idcs = _update_indices(extra_idcs, longshort_idcs, -1)
+
+    # Add missing peaks.
+    if missed_idcs:
+        # Calculate the position(s) of new beat(s).
+        prev_rpeaks = rpeaks[[i - 1 for i in missed_idcs]]
+        next_rpeaks = rpeaks[missed_idcs]
+        added_rpeaks = prev_rpeaks + (next_rpeaks - prev_rpeaks) / 2
+        # Add the new peaks.
+        rpeaks = np.insert(rpeaks, missed_idcs, added_rpeaks)
+        # Update remaining indices.
+        etopic_idcs = _update_indices(missed_idcs, etopic_idcs, 1)
+        longshort_idcs = _update_indices(missed_idcs, longshort_idcs, 1)
+
+    # Interpolate etopic as well as long or short peaks (important to do
+    # this after peaks are deleted and/or added).
+    interp_idcs = np.concatenate((etopic_idcs, longshort_idcs)).astype(int)
+    if interp_idcs.size > 0:
+        interp_idcs.sort(kind='mergesort')
+        prev_rpeaks = rpeaks[[i - 1 for i in interp_idcs]]
+        next_rpeaks = rpeaks[[i + 1 for i in interp_idcs]]
+        rpeaks_interp = prev_rpeaks + (next_rpeaks - prev_rpeaks) / 2
+        # Shift the R-peaks from the old to the new position.
+        rpeaks = np.delete(rpeaks, interp_idcs)
+        rpeaks = np.concatenate((rpeaks, rpeaks_interp)).astype(int)
+        rpeaks.sort(kind="mergesort")
+        rpeaks = np.unique(rpeaks)
+
+
+    return rpeaks
+
+
+def _plot_artifacts():
+
+    pass
+
+#     # Visualize the thresholds and detected artifacts.
+#     # Visualize artifact type indices.
+#     fig0, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
+#     ax0.set_title("Artifact types", fontweight="bold")
+#     ax0.plot(rr, label="heart period")
+#     ax0.scatter(longshort_idcs, rr[longshort_idcs], marker='x', c='m',
+#                 s=100, zorder=3, label="long/short")
+#     ax0.scatter(etopic_idcs, rr[etopic_idcs], marker='x', c='g', s=100,
+#                 zorder=3, label="etopic")
+#     ax0.scatter(extra_idcs, rr[extra_idcs], marker='x', c='y', s=100,
+#                 zorder=3, label="false positive")
+#     ax0.scatter(missed_idcs, rr[missed_idcs], marker='x', c='r', s=100,
+#                 zorder=3, label="false negative")
+#     ax0.legend(loc="upper right")
+
+#     # Visualize first threshold.
+#     ax1.set_title("Consecutive-difference criterion", fontweight="bold")
+#     ax1.plot(np.abs(drrs), label="difference consecutive heart periods")
+#     ax1.axhline(1, c='r', label="artifact threshold")
+#     ax1.legend(loc="upper right")
+
+#     ax2.set_title("Difference-from-median criterion", fontweight="bold")
+#     ax2.plot(np.abs(mrrs), label="difference from median over 11 periods")
+#     ax2.axhline(3, c="r", label="artifact threshold")
+#     ax2.legend(loc="upper right")
+
+#     # Visualize decision boundaries.
+#     fig2, (ax3, ax4) = plt.subplots(nrows=1, ncols=2)
+#     ax3.set_title("Subspace 1", fontweight="bold")
+#     ax3.set_xlabel("S11")
+#     ax3.set_ylabel("S12")
+#     ax3.scatter(drrs, s12, marker="x", label="heart periods")
+#     verts0 = [(min(drrs), max(s12)),
+#               (min(drrs), -c1 * min(drrs) + c2),
+#               (-1, -c1 * -1 + c2),
+#               (-1, max(s12))]
+#     poly0 = Polygon(verts0, alpha=0.3, facecolor="r", edgecolor=None,
+#                     label="etopic periods")
+#     ax3.add_patch(poly0)
+#     verts1 = [(1, -c1 * 1 - c2),
+#               (1, min(s12)),
+#               (max(drrs), min(s12)),
+#               (max(drrs), -c1 * max(drrs) - c2)]
+#     poly1 = Polygon(verts1, alpha=0.3, facecolor="r", edgecolor=None)
+#     ax3.add_patch(poly1)
+#     ax3.legend(loc="upper right")
+
+#     ax4.set_title("Subspace 2", fontweight="bold")
+#     ax4.set_xlabel("S21")
+#     ax4.set_ylabel("S22")
+#     ax4.scatter(drrs, s22, marker="x", label="heart periods")
+#     verts2 = [(min(drrs), max(s22)),
+#               (min(drrs), 1),
+#               (-1, 1),
+#               (-1, max(s22))]
+#     poly2 = Polygon(verts2, alpha=0.3, facecolor="r", edgecolor=None,
+#                     label="short periods")
+#     ax4.add_patch(poly2)
+#     verts3 = [(1, -1),
+#               (1, min(s22)),
+#               (max(drrs), min(s22)),
+#               (max(drrs), -1)]
+#     poly3 = Polygon(verts3, alpha=0.3, facecolor="y", edgecolor=None,
+#                     label="long periods")
+#     ax4.add_patch(poly3)
+#     ax4.legend(loc="upper right")
 
 
 def _threshold_normalization(data, alpha, window_half):
@@ -313,4 +328,50 @@ def _threshold_normalization(data, alpha, window_half):
         # normalize data by threshold (remove padding)
         data_th = np.divide(data_pad[wh:wh + data.size], th)
     return data_th, th
+
+
+def _update_indices(source_idcs, update_idcs, update):
+    """
+    for every element s in source_idcs, change every element u in update_idcs
+    accoridng to update, if u is larger than s
+    """
+    update_idcs_buffer = update_idcs
+    for s in source_idcs:
+        # for each list, find the indices (of indices) that need to be updated
+        updates = [i for i, j in enumerate(update_idcs) if j > s]
+#        print('updates: {}'.format(updates))
+        for u in updates:
+            update_idcs_buffer[u] += update
+#        print('update_idcs: {}'.format(update_idcs_buffer))
+    return update_idcs_buffer
+
+
+
+
+
+###############################################################################
+import neurokit2 as nk
+import matplotlib.pyplot as plt
+
+# Generate 20 seconds of ECG signal (recorded at 250 samples / second)
+ecg = nk.ecg_simulate(duration=120, noise=0.15, heart_rate=70, random_state=43)
+
+
+rpeaks = nk.ecg_findpeaks(ecg)
+
+artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, 1000)
+
+rate = nk.ecg_rate(rpeaks, desired_length=len(ecg))
+rate_corrected = nk.ecg_rate(rpeaks_corrected, desired_length=len(ecg))
+
+
+fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
+
+ax0.plot(ecg, zorder=1)
+ax0.scatter(rpeaks["ECG_R_Peaks"], ecg[rpeaks["ECG_R_Peaks"]], c="r", zorder=2)
+ax0.scatter(rpeaks_corrected["ECG_R_Peaks"],
+            ecg[rpeaks_corrected["ECG_R_Peaks"]], c="g", zorder=2)
+
+ax1.plot(rate, c="r")
+ax1.plot(rate_corrected, c="g")
 
