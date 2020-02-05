@@ -92,7 +92,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     method = method.lower()  # remove capitalised letters
     # Run peak detection algorithm
     if method in ["nk", "nk2", "neurokit", "neurokit2"]:
-        rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned, sampling_rate)
+        rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned, sampling_rate,
+                                         show=show)
     elif method in ["pantompkins", "pantompkins1985"]:
         rpeaks = _ecg_findpeaks_pantompkins(ecg_cleaned, sampling_rate)
     elif method in ["gamboa2008", "gamboa"]:

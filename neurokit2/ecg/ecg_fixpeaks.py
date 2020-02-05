@@ -38,6 +38,7 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, show=False):
     --------
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
+    >>> import numpy as np
     >>>
     >>> # Get peaks
     >>> ecg_signal = nk.ecg_simulate(20)
