@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-
-from ..signal import signal_resample
 import numpy as np
 
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
+from ..signal import signal_resample
 
-def ecg_rate(rpeaks, artifacts=None, sampling_rate=1000, desired_length=None):
+
+
+def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None, artifacts=None):
     """Calculate heart rate from R-peaks.
 
     Parameters
@@ -12,14 +14,6 @@ def ecg_rate(rpeaks, artifacts=None, sampling_rate=1000, desired_length=None):
     rpeaks : dict
         The samples at which the R-peak occur. Dict returned by
         `ecg_findpeaks()`.
-    artifacts : dict
-        Dictionary containing indices of erroneous inter-beat-intervals,
-        obtained from either `ecg_fixpeaks()` or `ecg_process()`. Default is
-        None. If a dict is provided, heart rate will be corrected according to
-        Jukka A. Lipponen & Mika P. Tarvainen (2019): A robust algorithm for
-        heart rate variability time series artefact correction using novel beat
-        classification, Journal of Medical Engineering & Technology,
-        DOI: 10.1080/03091902.2019.1640306.
     sampling_rate : int
         The sampling frequency of the signal that contains the R-peaks (in Hz,
         i.e., samples/second). Defaults to 1000.
@@ -29,6 +23,14 @@ def ecg_rate(rpeaks, artifacts=None, sampling_rate=1000, desired_length=None):
         interpolated between R-peaks over `desired_length` samples. Has no
         effect if a DataFrame is passed in as the `peaks` argument. Defaults to
         None.
+    artifacts : dict
+        Dictionary containing indices of erroneous inter-beat-intervals,
+        obtained from either `ecg_fixpeaks()` or `ecg_process()`. Default is
+        None. If a dict is provided, heart rate will be corrected according to
+        Jukka A. Lipponen & Mika P. Tarvainen (2019): A robust algorithm for
+        heart rate variability time series artefact correction using novel beat
+        classification, Journal of Medical Engineering & Technology,
+        DOI: 10.1080/03091902.2019.1640306.
 
     Returns
     -------
@@ -43,6 +45,7 @@ def ecg_rate(rpeaks, artifacts=None, sampling_rate=1000, desired_length=None):
     --------
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
+    >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> rpeaks = nk.ecg_findpeaks(ecg)
     >>> artifacts = nk.ecg_fixpeaks(rpeaks, show=True)
     >>> rate_corrected = nk.ecg_rate(rpeaks, artifacts=artifacts,
@@ -55,7 +58,7 @@ def ecg_rate(rpeaks, artifacts=None, sampling_rate=1000, desired_length=None):
     >>> ax.legend(loc="upper right")
     """
     # Get R-peaks indices from DataFrame or dict.
-    rpeaks = rpeaks["ECG_R_Peaks"]
+    rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
 
     # Sanity check artifacts.
     if isinstance(artifacts, dict):
@@ -68,7 +71,7 @@ def ecg_rate(rpeaks, artifacts=None, sampling_rate=1000, desired_length=None):
 
         extra_idcs = artifacts["extra"]
         missed_idcs = artifacts["missed"]
-        etopic_idcs = artifacts["etopic"]
+        ectopic_idcs = artifacts["ectopic"]
         longshort_idcs = artifacts["longshort"]
 
         # Delete extra peaks.
@@ -79,7 +82,7 @@ def ecg_rate(rpeaks, artifacts=None, sampling_rate=1000, desired_length=None):
     #        print('extra: {}'.format(peaks[extra_idcs]))
             # Update remaining indices.
             missed_idcs = update_indices(extra_idcs, missed_idcs, -1)
-            etopic_idcs = update_indices(extra_idcs, etopic_idcs, -1)
+            ectopic_idcs = update_indices(extra_idcs, ectopic_idcs, -1)
             longshort_idcs = update_indices(extra_idcs, longshort_idcs, -1)
 
         # Add missing peaks.
@@ -94,12 +97,12 @@ def ecg_rate(rpeaks, artifacts=None, sampling_rate=1000, desired_length=None):
             rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
     #        print('missed: {}'.format(peaks[missed_idcs]))
             # Update remaining indices.
-            etopic_idcs = update_indices(missed_idcs, etopic_idcs, 1)
+            ectopic_idcs = update_indices(missed_idcs, ectopic_idcs, 1)
             longshort_idcs = update_indices(missed_idcs, longshort_idcs, 1)
 
-        # Interpolate etopic as well as long or short peaks (important to do
+        # Interpolate ectopic as well as long or short peaks (important to do
         # this after peaks are deleted and/or added).
-        interp_idcs = np.concatenate((etopic_idcs, longshort_idcs)).astype(int)
+        interp_idcs = np.concatenate((ectopic_idcs, longshort_idcs)).astype(int)
         if interp_idcs.size > 0:
             interp_idcs.sort(kind='mergesort')
             # Ignore the artifacts during interpolation

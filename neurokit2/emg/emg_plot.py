@@ -21,8 +21,8 @@ def emg_plot(emg_signals, sampling_rate=None):
     >>> import neurokit2 as nk
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
-    >>> signals = nk.emg_process(emg, sampling_rate=1000)
-    >>> nk.emg_plot(signals)
+    >>> emg_signals = emg_process(emg, sampling_rate=1000)
+    >>> emg_plot(emg_signals)
 
     See Also
     --------
@@ -32,7 +32,6 @@ def emg_plot(emg_signals, sampling_rate=None):
     if not isinstance(emg_signals, pd.DataFrame):
         print("NeuroKit error: The `emg_signals` argument must be the "
               "DataFrame returned by `emg_process()`.")
-        return
 
     # Determine what to display on the x-axis.
     if sampling_rate is not None:
@@ -64,7 +63,23 @@ def emg_plot(emg_signals, sampling_rate=None):
     ax1.set_title("Muscle Activation")
     ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#FF9800",
              label="Amplitude", linewidth=1.5)
-    ax1.legend(loc="upper right")
+
+    # Mark onsets
+    onsets = np.array(np.where(emg_signals["EMG_Onsets"] == 1))
+    onsets = list(list(i) for i in onsets)[0]
+    for i in onsets:
+        if i == np.min(emg_signals.index.values) or i == np.max(emg_signals.index.values):
+            onsets.remove(i) # Sanity checks
+        else:
+            ax1.axvline(x=i, color="#FF0000", label="Onsets and Offsets",
+                        linestyle="--", linewidth=1.0,)
+    handles, labels = fig.gca().get_legend_handles_labels() # Remove duplicate labels
+    newLabels, newHandles = [], []
+    for handle, label in zip(handles, labels):
+        if label not in newLabels:
+            newLabels.append(label)
+            newHandles.append(handle)
+    ax1.legend(newLabels, loc="upper right")
 
     plt.show()
     return fig

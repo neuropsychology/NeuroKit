@@ -43,7 +43,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     Examples
     ----------
     >>> import pandas as pd
-    >>> import neurokit as nk
+    >>> import neurokit2 as nk
     >>>
     >>> ecg1 = nk.ecg_simulate(duration=10, method="simple")
     >>> ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")

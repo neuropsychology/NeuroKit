@@ -43,8 +43,8 @@ def epochs_plot(epochs, legend=True, show=True):
     >>>
     >>> # Example with ECG Peaks
     >>> signal = nk.ecg_simulate(duration=10)
-    >>> events, info = nk.ecg_findpeaks(signal)
-    >>> epochs = nk.epochs_create(signal, events=info["ECG_Peaks"], epochs_duration=1, epochs_start=-0.5)
+    >>> events = nk.ecg_findpeaks(signal)
+    >>> epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_duration=1, epochs_start=-0.5)
     >>> nk.epochs_plot(epochs)
     """
     data = epochs_to_df(epochs)
@@ -55,19 +55,17 @@ def epochs_plot(epochs, legend=True, show=True):
     if show:
         if len(cols) == 1:
             fig, ax = plt.subplots()
-            _epochs_plot(data, ax, cols[0], legend=True)
+            _epochs_plot(data, ax, cols[0], legend=legend)
         else:
             fig, ax = plt.subplots(nrows=len(cols))
             for i, col in enumerate(cols):
-                _epochs_plot(data, ax=ax[i], col=col, legend=True)
+                _epochs_plot(data, ax=ax[i], col=col, legend=legend)
         return fig
 
     else:
         return data
 
-
-
-def _epochs_plot(data, ax, col, legend=True):
+def _epochs_plot(data, ax, col, legend):
 
     if "Condition" in data.columns:
         grouped = data.groupby('Condition')

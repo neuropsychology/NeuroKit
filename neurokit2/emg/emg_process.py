@@ -3,6 +3,8 @@ import pandas as pd
 
 from .emg_clean import emg_clean
 from .emg_amplitude import emg_amplitude
+from .emg_onsets import emg_onsets
+from ..signal import signal_formatpeaks
 
 
 def emg_process(emg_signal, sampling_rate=1000):
@@ -25,7 +27,10 @@ def emg_process(emg_signal, sampling_rate=1000):
 
         - *"EMG_Raw"*: the raw signal.
         - *"EMG_Clean"*: the cleaned signal.
-        - *"EMG_Amplitude"*: the signal amplitude, or the activation level of the signal.
+        - *"EMG_Amplitude"*: the signal amplitude,
+        or the activation level of the signal.
+        - *"EMG_Onsets"*: the onsets and offsets of the amplitude,
+        marked as "1" in a list of zeros.
 
     See Also
     --------
@@ -45,9 +50,14 @@ def emg_process(emg_signal, sampling_rate=1000):
     # Get amplitude
     amplitude = emg_amplitude(emg_cleaned)
 
+    # Get onsets
+    info = emg_onsets(amplitude, threshold=0)
+    onsets = signal_formatpeaks(info, desired_length=len(emg_cleaned))
+
     # Prepare output
     signals = pd.DataFrame({"EMG_Raw": emg_signal,
                             "EMG_Clean": emg_cleaned,
                             "EMG_Amplitude": amplitude})
+    signals = pd.concat([signals, onsets], axis=1)
 
     return signals

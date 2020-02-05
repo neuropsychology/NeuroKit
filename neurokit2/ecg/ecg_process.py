@@ -45,17 +45,19 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
     >>> nk.ecg_plot(signals)
-
     """
-    ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate,
+    ecg_cleaned = ecg_clean(ecg_signal,
+                            sampling_rate=sampling_rate,
                             method=method)
 
     peak_signal, info, artifacts = ecg_peaks(ecg_cleaned=ecg_cleaned,
                                              sampling_rate=sampling_rate,
                                              method=method,
                                              return_artifacts=True)
-    rate = ecg_rate(info, artifacts=artifacts, sampling_rate=sampling_rate,
-                    desired_length=len(ecg_cleaned))
+    rate = ecg_rate(info,
+                    sampling_rate=sampling_rate,
+                    desired_length=len(ecg_cleaned),
+                    artifacts=artifacts)
 
     signals = pd.DataFrame({"ECG_Raw": ecg_signal,
                             "ECG_Clean": ecg_cleaned,

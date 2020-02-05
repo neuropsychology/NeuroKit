@@ -3,6 +3,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from ..ecg import ecg_findpeaks
+from ..epochs import epochs_to_df
+from ..epochs import epochs_create
+
 
 def ecg_plot(ecg_signals, sampling_rate=None):
     """Visualize ECG data.
@@ -28,12 +32,10 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     --------
     ecg_process
     """
-
     # Sanity-check input.
     if not isinstance(ecg_signals, pd.DataFrame):
         print("NeuroKit error: The `ecg_signals` argument must be the "
               "DataFrame returned by `ecg_process()`.")
-        return
 
     # Determine what to display on the x-axis.
     if sampling_rate is not None:
@@ -46,14 +48,18 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     peaks = np.where(ecg_signals["ECG_R_Peaks"] == 1)[0]
 
     # Prepare figure.
-    fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
+    fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=False)
     if sampling_rate is not None:
+        ax0.set_xlabel("Time (seconds)")
         ax1.set_xlabel("Time (seconds)")
+        ax2.set_xlabel("Time (seconds)")
     elif sampling_rate is None:
+        ax0.set_xlabel("Samples")
         ax1.set_xlabel("Samples")
+        ax2.set_xlabel("Samples")
 
     fig.suptitle("Electrocardiogram (ECG)", fontweight="bold")
-    plt.subplots_adjust(hspace=0.2)
+    plt.subplots_adjust(hspace=0.5)
 
     # Plot cleaned and raw ECG as well as R-peaks.
     ax0.set_title("Raw and Cleaned Signal")
@@ -77,5 +83,31 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
     ax1.legend(loc="upper right")
 
+    # Plot individual heart beats
+    ax2.set_title("Individual Heart Beats")
+
+    heartbeats_df, cols = _ecg_plot_heartbeats(ecg_signals, ax=ax2)
+    heartbeats_pivoted = heartbeats_df.pivot(index='Time', columns='Label', values=cols)
+    ax2.plot(heartbeats_pivoted, label="Signal")
+
+    ax2.legend(loc="upper right")
+    ax2.legend(fontsize='x-small')
+
     plt.show()
     return fig
+
+
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _ecg_plot_heartbeats(ecg_signals, ax):
+    # Extract heart beats
+    events = ecg_findpeaks(ecg_signals)
+    heartbeats = epochs_create(ecg_signals["ECG_Clean"], events=events["ECG_R_Peaks"], epochs_duration=0.6, epochs_start=-0.3)
+    heartbeats_df = epochs_to_df(heartbeats)
+
+    cols = heartbeats_df.columns.values
+    cols = [x for x in cols if x not in ["Time", "Label", "Index"]]
+    return heartbeats_df, cols
