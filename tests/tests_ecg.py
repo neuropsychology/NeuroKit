@@ -171,7 +171,7 @@ def test_ecg_plot():
     ecg_summary, _ = nk.ecg_process(ecg, sampling_rate=1000, method="neurokit")
 
     # Plot data over samples.
-    nk.ecg_plot(ecg_summary, sampling rate=1000)
+    nk.ecg_plot(ecg_summary, sampling_rate=1000)
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 3
