@@ -57,7 +57,6 @@ def signal_plot(signal, subplots=False):
 
         events_plot(events, signal=signal[continuous_columns])
     else:
-#        signal[continuous_columns].plot(subplots=subplots)
         signal[continuous_columns].plot()
 
     # Tidy legend locations

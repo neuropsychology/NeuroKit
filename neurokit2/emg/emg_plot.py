@@ -69,11 +69,11 @@ def emg_plot(emg_signals, sampling_rate=None):
     onsets = list(list(i) for i in onsets)[0]
     for i in onsets:
         if i == np.min(emg_signals.index.values) or i == np.max(emg_signals.index.values):
-            onsets.remove(i) # Sanity checks
+            onsets.remove(i)  # Sanity checks
         else:
             ax1.axvline(x=i, color="#FF0000", label="Onsets and Offsets",
                         linestyle="--", linewidth=1.0,)
-    handles, labels = fig.gca().get_legend_handles_labels() # Remove duplicate labels
+    handles, labels = fig.gca().get_legend_handles_labels()  # Remove duplicate labels
     newLabels, newHandles = [], []
     for handle, label in zip(handles, labels):
         if label not in newLabels:

@@ -9,16 +9,21 @@ Core team
 * `Tam Pham <https://github.com/Tam-Pham>`_ *(Nanyang Technological University, Singapore)*
 * `Jan C. Brammer <https://github.com/JohnDoenut>`_ *(Radboud University, Netherlands)*
 * `Zen Juen Lau <https://github.com/zen-juen>`_ *(Nanyang Technological University, Singapore)*
+* `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
+
+Experts
+-------------
+
+* `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
+* `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
+
 
 Contributors
-------------
+-------------
 
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
-* `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Gansheng Tan <https://github.com/GanshengT>`_ *(CentraleSupélec, France)*
 * `Chuan-Peng Hu <https://github.com/hcp4715>`_ *(Universitatsmedizin Mainz, Germany)*
-* `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
-* `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
 * `@ucohen <https://github.com/ucohen>`_
 * `Anthony Gatti <https://github.com/gattia>`_ *(McMaster University, Canada)*
 * `Julien Lamour <https://github.com/lamourj>`_ *(Smood, Switzerland)*

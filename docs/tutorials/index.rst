@@ -6,6 +6,6 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
-   recording
+   understandingNeuroKit
 
 
