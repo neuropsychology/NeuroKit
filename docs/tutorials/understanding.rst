@@ -3,7 +3,7 @@ Understanding NeuroKit
 
 **Let's start by reviewing some basic coding principles that might help you get familiar with NeuroKit**
 
-If you are reading this, it could be because you don't feel comfortable enough with Python and NeuroKit **(yet), and you impatiently want to get to know it in order to start looking at your data.
+If you are reading this, it could be because you don't feel comfortable enough with Python and NeuroKit *(yet)*, and you impatiently want to get to know it in order to start looking at your data.
 
 **"Tous les chemins mènent à Rome"** *(all roads lead to Rome)*
 
@@ -84,13 +84,13 @@ Python directory
 
 Windows 
 """""""
-* ``C:\Users\<username>\anaconda3\`` 
+* ``C:\Users\<username>\anaconda3\``
     
 (if the directory doesn't match, just search for the folder name ``anaconda3`` or ``miniconda3``. 
 
 Mac
 """"
-* ``/Users/<username>/anaconda3`` .
+* ``/Users/<username>/anaconda3``
 
 Or, if you're using `WinPython <https://winpython.github.io/>`_ it should be in the folder of its installation (e.g., ``C:\Users\<username>\Desktop\WPy-3710\``).
 
