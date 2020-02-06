@@ -2,6 +2,10 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.gridspec
+import mplcursors
+from cycler import cycler
+
 
 from ..ecg import ecg_findpeaks
 from ..epochs import epochs_to_df
@@ -37,29 +41,29 @@ def ecg_plot(ecg_signals, sampling_rate=None):
         print("NeuroKit error: The `ecg_signals` argument must be the "
               "DataFrame returned by `ecg_process()`.")
 
-    # Determine what to display on the x-axis.
-    if sampling_rate is not None:
-        x_axis = np.linspace(0, ecg_signals.shape[0] / sampling_rate,
-                             ecg_signals.shape[0])
-    else:
-        x_axis = np.arange(0, ecg_signals.shape[0])
-
     # Extract R-peaks.
     peaks = np.where(ecg_signals["ECG_R_Peaks"] == 1)[0]
 
-    # Prepare figure.
-    fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=False)
+    # Prepare figure and set axes.
     if sampling_rate is not None:
+        x_axis = np.linspace(0, ecg_signals.shape[0] / sampling_rate,
+                             ecg_signals.shape[0])
+        gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[1-1/np.pi, 1/np.pi])
+        fig = plt.figure(constrained_layout=True)
+        ax0 = fig.add_subplot(gs[0, :-1])
+        ax1 = fig.add_subplot(gs[1, :-1])
+        ax2 = fig.add_subplot(gs[:, -1])
         ax0.set_xlabel("Time (seconds)")
         ax1.set_xlabel("Time (seconds)")
         ax2.set_xlabel("Time (seconds)")
     elif sampling_rate is None:
+        x_axis = np.arange(0, ecg_signals.shape[0])
+        fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
         ax0.set_xlabel("Samples")
         ax1.set_xlabel("Samples")
-        ax2.set_xlabel("Samples")
 
     fig.suptitle("Electrocardiogram (ECG)", fontweight="bold")
-    plt.subplots_adjust(hspace=0.5)
+    plt.subplots_adjust(hspace=0.3, wspace=0.1)
 
     # Plot cleaned and raw ECG as well as R-peaks.
     ax0.set_title("Raw and Cleaned Signal")
@@ -68,37 +72,46 @@ def ecg_plot(ecg_signals, sampling_rate=None):
              zorder=1)
     ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#E91E63',
              label="Cleaned", zorder=1, linewidth=1.5)
-    ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks], color="#FFC107",
-                label="R-peaks", zorder=2)
-
-    ax0.legend(loc="upper right")
+    ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks],
+                color="#FFC107", label="R-peaks", zorder=2)
 
     # Plot heart rate.
     ax1.set_title("Heart Rate")
     ax1.set_ylabel("Beats per minute (bpm)")
 
-    ax1.plot(x_axis, ecg_signals["ECG_Rate"], color="#FF5722", label="Rate", linewidth=1.5)
+    ax1.plot(x_axis, ecg_signals["ECG_Rate"],
+             color="#FF5722", label="Rate", linewidth=1.5)
     rate_mean = ecg_signals["ECG_Rate"].mean()
     ax1.axhline(y=rate_mean, label="Mean", linestyle="--", color="#FF9800")
 
     ax1.legend(loc="upper right")
 
-    # Plot individual heart beats
+    # Plot individual heart beats.
     ax2.set_title("Individual Heart Beats")
 
-    heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"], peaks=peaks,
-                                      sampling_rate=sampling_rate)
+    heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"],
+                                      peaks=peaks, sampling_rate=sampling_rate)
+    heartbeats_pivoted = heartbeats.pivot(index='Time',
+                                          columns='Label', values='Signal')
+    ax2.plot(heartbeats_pivoted)
 
-    heartbeats.pivot(index='Time', columns='Label', values='Signal').plot(ax=ax2)
+    cmap = plt.cm.coolwarm     # Aesthetics of heart beats
+    plt.rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(
+            0, 1, int(heartbeats["Label"].nunique()))))
 
-    ax2.get_legend().remove()
+    labels = list(heartbeats_pivoted)
+    labels = ['Channel ' + x for x in labels]
 
-    # ax2.legend(loc="upper right")
-    # ax2.legend(fontsize='x-small')
+    lines = []
+    for i, x in zip(labels, heartbeats_pivoted):
+        line, = ax2.plot(heartbeats_pivoted[x], label='%s' % i)
+        lines.append(line)
 
+    mplcursors.cursor(lines, hover=True, highlight=True).connect(
+            "add", lambda sel: sel.annotation.set_text(sel.artist.get_label()))
+
+    plt.show()
     return fig
-
-
 
 
 # =============================================================================
@@ -106,7 +119,8 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 # =============================================================================
 def _ecg_plot_heartbeats(ecg, peaks, sampling_rate=None):
     # Extract heart beats
-    heartbeats = epochs_create(ecg, events=peaks, epochs_duration=0.6, epochs_start=-0.3, sampling_rate=sampling_rate)
+    heartbeats = epochs_create(ecg, events=peaks,epochs_duration=0.7,
+                               epochs_start=-0.3, sampling_rate=sampling_rate)
     heartbeats = epochs_to_df(heartbeats)
 
     return heartbeats
