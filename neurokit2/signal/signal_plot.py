@@ -13,7 +13,8 @@ def signal_plot(signal, subplots=False):
     ----------
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
-
+    subsubplots : bool
+        If True, each signal is plotted in a subplot.
 
     Examples
     ----------
@@ -57,7 +58,7 @@ def signal_plot(signal, subplots=False):
 
         events_plot(events, signal=signal[continuous_columns])
     else:
-        signal[continuous_columns].plot()
+        signal[continuous_columns].plot(subplots=subplots)
 
     # Tidy legend locations
     [ax.legend(loc=1) for ax in plt.gcf().axes]
