@@ -43,7 +43,8 @@ def test_ecg_clean():
     assert np.sum(fft_raw[freqs < .5]) > np.sum(fft_nk[freqs < .5])
 
     # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69)
-    ecg_biosppy = nk.ecg_clean(ecg, sampling_rate=sampling_rate, method="biosppy")
+    ecg_biosppy = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
+                               method="biosppy")
     original, _, _ = biosppy.tools.filter_signal(signal=ecg,
                                                  ftype='FIR',
                                                  band='bandpass',
@@ -63,25 +64,23 @@ def test_ecg_peaks():
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
 
-    # Test without request to return artifacts.
-    signals, info = nk.ecg_peaks(ecg_cleaned_nk, method="neurokit")
+    # Test without request to correct artifacts.
+    signals, info = nk.ecg_peaks(ecg_cleaned_nk, correct_artifacts=False,
+                                 method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 152, atol=1)
-#    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 9283853, atol=1)
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 152,
+                       atol=1)
 
-    # Test with request to return artifacts.
-    signals, info, artifacts = nk.ecg_peaks(ecg_cleaned_nk,
-                                            return_artifacts=True,
-                                            method="neurokit")
+    # Test with request to correct artifacts.
+    signals, info = nk.ecg_peaks(ecg_cleaned_nk,
+                                 correct_artifacts=True,
+                                 method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 152, atol=1)
-#    assert np.allclose(info["ECG_R_Peaks"].sum(dtype=np.int64), 9283853, atol=1)
-    assert all(isinstance(x, int) for x in artifacts["ectopic"])
-    assert all(isinstance(x, int) for x in artifacts["missed"])
-    assert all(isinstance(x, int) for x in artifacts["extra"])
-    assert all(isinstance(x, int) for x in artifacts["longshort"])
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 142,
+                       atol=1)
+
 
 def test_ecg_rate():
 
@@ -93,40 +92,22 @@ def test_ecg_rate():
     ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                   method="neurokit")
 
-    signals, info, artifacts = nk.ecg_peaks(ecg_cleaned_nk,
-                                            return_artifacts=True,
-                                            method="neurokit")
+    signals, info = nk.ecg_peaks(ecg_cleaned_nk,
+                                 method="neurokit")
 
-    # Test without artifact correction and without desired length.
+    # Test without desired length.
     rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate)
 
     assert rate.shape == (info["ECG_R_Peaks"].size, )
-    assert np.allclose(rate.mean(), 81, atol=2)
+    assert np.allclose(rate.mean(), 81, atol=1)
 
-    # Test without artifact correction and with desired length.
+    # Test with desired length.
     test_length = 1200
     rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate,
                        desired_length=test_length)
 
     assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 81, atol=2)
-
-    # Test with artifact correction and without desired length.
-    rate = nk.ecg_rate(rpeaks=info, artifacts=artifacts,
-                       sampling_rate=sampling_rate)
-
-    assert rate.shape == (info["ECG_R_Peaks"].size
-                          - len(artifacts["extra"])
-                          + len(artifacts["missed"]), )
-    assert np.allclose(rate.mean(), 75, atol=2)
-
-    # Test with artifact correction and with desired length.
-    test_length = 1200
-    rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate,
-                       artifacts=artifacts, desired_length=test_length)
-
-    assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 75, atol=2)
+    assert np.allclose(rate.mean(), 81, atol=1)
 
 
 def test_ecg_fixpeaks():
@@ -139,7 +120,22 @@ def test_ecg_fixpeaks():
 
     rpeaks = nk.ecg_findpeaks(ecg)
 
-    artifacts = nk.ecg_fixpeaks(rpeaks)
+    # Test with recursive artifact correction.
+    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, recursive=True)
+
+    assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
+                       8673071, atol=1)
+
+    assert all(isinstance(x, int) for x in artifacts["ectopic"])
+    assert all(isinstance(x, int) for x in artifacts["missed"])
+    assert all(isinstance(x, int) for x in artifacts["extra"])
+    assert all(isinstance(x, int) for x in artifacts["longshort"])
+
+    # Test with non-recursive artifact correction.
+    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, recursive=False)
+
+    assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
+                       8704723, atol=1)
 
     assert all(isinstance(x, int) for x in artifacts["ectopic"])
     assert all(isinstance(x, int) for x in artifacts["missed"])
