@@ -99,7 +99,7 @@ def test_ecg_rate():
     rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate)
 
     assert rate.shape == (info["ECG_R_Peaks"].size, )
-    assert np.allclose(rate.mean(), 81, atol=1)
+    assert np.allclose(rate.mean(), 81, atol=2)
 
     # Test with desired length.
     test_length = 1200
@@ -107,7 +107,7 @@ def test_ecg_rate():
                        desired_length=test_length)
 
     assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 81, atol=1)
+    assert np.allclose(rate.mean(), 81, atol=2)
 
 
 def test_ecg_fixpeaks():
@@ -116,7 +116,7 @@ def test_ecg_fixpeaks():
     noise = 0.15
 
     ecg = nk.ecg_simulate(duration=120, sampling_rate=sampling_rate,
-                          noise=noise, random_state=42)
+                          noise=noise, method="simple", random_state=42)
 
     rpeaks = nk.ecg_findpeaks(ecg)
 
@@ -124,7 +124,7 @@ def test_ecg_fixpeaks():
     artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, recursive=True)
 
     assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
-                       8673071, atol=1)
+                       7383418, atol=1)
 
     assert all(isinstance(x, int) for x in artifacts["ectopic"])
     assert all(isinstance(x, int) for x in artifacts["missed"])
@@ -135,7 +135,7 @@ def test_ecg_fixpeaks():
     artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, recursive=False)
 
     assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
-                       8704723, atol=1)
+                       7383418, atol=1)
 
     assert all(isinstance(x, int) for x in artifacts["ectopic"])
     assert all(isinstance(x, int) for x in artifacts["missed"])
@@ -167,13 +167,12 @@ def test_ecg_plot():
     ecg_summary, _ = nk.ecg_process(ecg, sampling_rate=1000, method="neurokit")
 
     # Plot data over samples.
-    nk.ecg_plot(ecg_summary, sampling_rate=1000)
+    nk.ecg_plot(ecg_summary)
     # This will identify the latest figure.
     fig = plt.gcf()
-    assert len(fig.axes) == 3
+    assert len(fig.axes) == 2
     titles = ["Raw and Cleaned Signal",
-              "Heart Rate",
-              "Individual Heart Beats"]
+              "Heart Rate"]
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     assert fig.get_axes()[1].get_xlabel() == "Samples"

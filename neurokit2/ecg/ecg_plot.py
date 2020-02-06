@@ -83,24 +83,27 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     ax1.legend(loc="upper right")
 
     # Plot individual heart beats.
-    ax2.set_title("Individual Heart Beats")
+    if sampling_rate is not None:
+        ax2.set_title("Individual Heart Beats")
 
-    heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"],
-                        peaks=peaks, sampling_rate=sampling_rate)
-    heartbeats_pivoted = heartbeats.pivot(index='Time',
-                        columns='Label', values='Signal')
+        heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"],
+                                          peaks=peaks,
+                                          sampling_rate=sampling_rate)
 
-    ax2.plot(heartbeats_pivoted)
+        heartbeats_pivoted = heartbeats.pivot(index='Time',
+                                              columns='Label',
+                                              values='Signal')
 
-    cmap = iter(plt.cm.coolwarm(np.linspace(0, 1,
-          num=int(heartbeats["Label"].nunique()))))  # Aesthetics of heart beats
+        ax2.plot(heartbeats_pivoted)
 
-    lines = []
-    for x, color in zip(heartbeats_pivoted, cmap):
-        line, = ax2.plot(heartbeats_pivoted[x], color=color)
-        lines.append(line)
+        cmap = iter(plt.cm.YlOrRd(
+                np.linspace(0, 1, num=int(heartbeats["Label"].nunique()))))  # Aesthetics of heart beats
 
-    plt.show()
+        lines = []
+        for x, color in zip(heartbeats_pivoted, cmap):
+            line, = ax2.plot(heartbeats_pivoted[x], color=color)
+            lines.append(line)
+
     return fig
 
 
