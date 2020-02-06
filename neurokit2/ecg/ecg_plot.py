@@ -3,14 +3,10 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.gridspec
-import mplcursors
-from cycler import cycler
-
 
 from ..ecg import ecg_findpeaks
 from ..epochs import epochs_to_df
 from ..epochs import epochs_create
-
 
 def ecg_plot(ecg_signals, sampling_rate=None):
     """Visualize ECG data.
@@ -90,25 +86,19 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     ax2.set_title("Individual Heart Beats")
 
     heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"],
-                                      peaks=peaks, sampling_rate=sampling_rate)
+                        peaks=peaks, sampling_rate=sampling_rate)
     heartbeats_pivoted = heartbeats.pivot(index='Time',
-                                          columns='Label', values='Signal')
+                        columns='Label', values='Signal')
+
     ax2.plot(heartbeats_pivoted)
 
-    cmap = plt.cm.coolwarm     # Aesthetics of heart beats
-    plt.rcParams['axes.prop_cycle'] = cycler(color=cmap(np.linspace(
-            0, 1, int(heartbeats["Label"].nunique()))))
-
-    labels = list(heartbeats_pivoted)
-    labels = ['Channel ' + x for x in labels]
+    cmap = iter(plt.cm.coolwarm(np.linspace(0, 1,
+          num=int(heartbeats["Label"].nunique()))))  # Aesthetics of heart beats
 
     lines = []
-    for i, x in zip(labels, heartbeats_pivoted):
-        line, = ax2.plot(heartbeats_pivoted[x], label='%s' % i)
+    for x, color in zip(heartbeats_pivoted, cmap):
+        line, = ax2.plot(heartbeats_pivoted[x], color=color)
         lines.append(line)
-
-    mplcursors.cursor(lines, hover=True, highlight=True).connect(
-            "add", lambda sel: sel.annotation.set_text(sel.artist.get_label()))
 
     plt.show()
     return fig
@@ -119,8 +109,8 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 # =============================================================================
 def _ecg_plot_heartbeats(ecg, peaks, sampling_rate=None):
     # Extract heart beats
-    heartbeats = epochs_create(ecg, events=peaks,epochs_duration=0.7,
-                               epochs_start=-0.3, sampling_rate=sampling_rate)
+    heartbeats = epochs_create(ecg, events=peaks, epochs_duration=0.85,
+                               epochs_start=-0.35, sampling_rate=sampling_rate)
     heartbeats = epochs_to_df(heartbeats)
 
     return heartbeats
