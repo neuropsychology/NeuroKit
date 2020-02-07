@@ -28,3 +28,4 @@ from .eda import *
 from .emg import *
 from .ppg import *
 from .eeg import *
+from .bio import *

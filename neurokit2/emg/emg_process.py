@@ -41,7 +41,7 @@ def emg_process(emg_signal, sampling_rate=1000):
     >>> import neurokit2 as nk
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
-    >>> signals = nk.emg_process(emg, sampling_rate=1000)
+    >>> signals, info = nk.emg_process(emg, sampling_rate=1000)
     >>> nk.emg_plot(signals)
     """
     # Clean signal
@@ -60,4 +60,4 @@ def emg_process(emg_signal, sampling_rate=1000):
                             "EMG_Amplitude": amplitude})
     signals = pd.concat([signals, onsets], axis=1)
 
-    return signals
+    return signals, info

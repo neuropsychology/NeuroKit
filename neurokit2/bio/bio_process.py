@@ -45,42 +45,50 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> bio_processed = nk.bio_process(ecg=ecg_signal, rsp=ecg_signal, eda=eda_signal, emg=emg_signal)
+    >>> ecg = nk.ecg_simulate(duration=30, sampling_rate=250)
+    >>> rsp = nk.rsp_simulate(duration=30, sampling_rate=250)
+    >>> eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=3)
+    >>> emg = nk.emg_simulate(duration=30, sampling_rate=250, n_bursts=3)
+    >>>
+    >>> bio_df, bio_info = nk.bio_process(ecg=ecg,
+                                          rsp=rsp,
+                                          eda=eda,
+                                          emg=emg,
+                                          sampling_rate=250)
     >>>
     >>> # Visualize all signals
-    >>> nk.standardize(bio_processed["df"]).plot()
+    >>> nk.standardize(bio_df).plot(subplots=True)
     """
-    bio_processed = {}
+    bio_info = {}
     bio_df = pd.DataFrame({})
 
     # ECG
     if ecg is not None:
-        ecg_signals, info = ecg_process(ecg, sampling_rate=sampling_rate)
-        bio_processed["ECG"] = ecg_signals[["ECG_Raw", "ECG_Clean", "ECG_Rate", "ECG_R_Peaks"]]
-        bio_df = pd.concat([bio_df, ecg_signals[["ECG_Raw", "ECG_Clean", "ECG_Rate", "ECG_R_Peaks"]]], axis=1)
+        ecg_signals, ecg_info = ecg_process(ecg, sampling_rate=sampling_rate)
+        bio_info.update(ecg_info)
+        bio_df = pd.concat([bio_df, ecg_signals], axis=1)
 
     # RSP
     if rsp is not None:
-        rsp_signals, info = rsp_process(rsp, sampling_rate=sampling_rate)
-        bio_processed["RSP"] = rsp_signals[["RSP_Raw", "RSP_Clean", "RSP_Rate", "RSP_Amplitude"]]
-        bio_df = pd.concat([bio_df, rsp_signals[["RSP_Raw", "RSP_Clean", "RSP_Rate", "RSP_Amplitude"]]], axis=1)
+        rsp_signals, rsp_info = rsp_process(rsp, sampling_rate=sampling_rate)
+        bio_info.update(rsp_info)
+        bio_df = pd.concat([bio_df, rsp_signals], axis=1)
 
     # EDA
     if eda is not None:
-        eda_signals, info = eda_process(eda, sampling_rate=sampling_rate)
-        bio_processed["EDA"] = eda_signals[["EDA_Raw", "EDA_Clean", "EDA_Tonic", "EDA_Phasic", "SCR_Onsets", "SCR_Peaks", "SCR_Amplitude", "SCR_Recovery"]]
-        bio_df = pd.concat([bio_df, eda_signals[["EDA_Raw", "EDA_Clean", "EDA_Tonic", "EDA_Phasic", "SCR_Onsets", "SCR_Peaks", "SCR_Amplitude", "SCR_Recovery"]]], axis=1)
+        eda_signals, eda_info = eda_process(eda, sampling_rate=sampling_rate)
+        bio_info.update(eda_info)
+        bio_df = pd.concat([bio_df, eda_signals], axis=1)
 
     # EMG
     if emg is not None:
-        emg_signals = emg_process(emg, sampling_rate=sampling_rate)
-        bio_processed["EMG"] = emg_signals[["EMG_Raw", "EMG_Clean", "EMG_Amplitude"]]
-        bio_df = pd.concat([bio_df, emg_signals[["EMG_Raw", "EMG_Clean", "EMG_Amplitude"]]], axis=1)
+        emg_signals, emg_info = emg_process(emg, sampling_rate=sampling_rate)
+        bio_info.update(eda_info)
+        bio_df = pd.concat([bio_df, emg_signals], axis=1)
 
     # Additional channels to keep
     if keep is not None:
         keep = keep.reset_index(drop=True)
         bio_df = pd.concat([bio_df, keep], axis=1)
-    bio_processed["df"] = bio_df
 
-    return(bio_processed)
+    return bio_df, bio_info
