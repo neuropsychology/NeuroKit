@@ -23,7 +23,7 @@ In the Documentation section of the README, you'll find links to the `readthedoc
         :alt: Documentation Status
         
         
-.. Hint:: Did you know that you can access the documentation website using the `rtfd` domain name (`https://neurokit2.rtfd.io/`), which stands for **READ THE F**** DOCS** :)
+.. Hint:: Did you know that you can access the documentation website using the `rtfd` domain name (`https://neurokit2.rtfd.io/`), which stands for **READ THE F\*\*\*\* DOCS** :)
 
 
 And a link to the `API (or Application Program Interface <https://neurokit2.readthedocs.io/en/latest/functions.html>`_, containing the list of functions) like this one:
