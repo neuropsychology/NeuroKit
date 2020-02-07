@@ -776,7 +776,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     signal_3 = cwtmatr[3, :]
     epsilon_3 = np.sqrt(np.mean(np.square(signal_3)))
     peaks_3, _ = scipy.signal.find_peaks(np.abs(signal_3), height=epsilon_3)
-    ## Keep only peaks_3 that are nearest to peaks_4
+    # Keep only peaks_3 that are nearest to peaks_4
     peaks_3_keep = np.zeros_like(peaks_4)
     for i in range(len(peaks_4)):
         peaks_distance = abs(peaks_4[i] - peaks_3)
@@ -786,7 +786,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     signal_2 = cwtmatr[2, :]
     epsilon_2 = np.sqrt(np.mean(np.square(signal_2)))
     peaks_2, _ = scipy.signal.find_peaks(np.abs(signal_2), height=epsilon_2)
-    ## Keep only peaks_2 that are nearest to peaks_3
+    # Keep only peaks_2 that are nearest to peaks_3
     peaks_2_keep = np.zeros_like(peaks_4)
     for i in range(len(peaks_4)):
         peaks_distance = abs(peaks_3_keep[i] - peaks_2)
@@ -796,7 +796,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     signal_1 = cwtmatr[1, :]
     epsilon_1 = np.sqrt(np.mean(np.square(signal_1)))
     peaks_1, _ = scipy.signal.find_peaks(np.abs(signal_1), height=epsilon_1)
-    ## Keep only peaks_1 that are nearest to peaks_2
+    # Keep only peaks_1 that are nearest to peaks_2
     peaks_1_keep = np.zeros_like(peaks_4)
     for i in range(len(peaks_4)):
         peaks_distance = abs(peaks_2_keep[i] - peaks_1)
@@ -815,8 +815,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     rpeaks = np.array(rpeaks, dtype='int')
     return rpeaks
 
-
-#=============================================================================
+# =============================================================================
 # Utilities
 # =============================================================================
 
