@@ -29,8 +29,9 @@ def emg_process(emg_signal, sampling_rate=1000):
         - *"EMG_Clean"*: the cleaned signal.
         - *"EMG_Amplitude"*: the signal amplitude,
         or the activation level of the signal.
-        - *"EMG_Onsets"*: the onsets and offsets of the amplitude,
-        marked as "1" in a list of zeros.
+        - *"EMG_Activity*": the activity of the signal for which amplitude exceeds the threshold specified, marked as "1" in a list of zeros.
+        - *"EMG_Onsets"*: the onsets of the amplitude, marked as "1" in a list of zeros.
+        - *"EMG_Offsets"*: the offsets of the amplitude, marked as "1" in a list of zeros.
 
     See Also
     --------
@@ -52,9 +53,10 @@ def emg_process(emg_signal, sampling_rate=1000):
 
     # Get onsets
     activity_signal, info = emg_activation(emg_amplitude, threshold=0.01)
-    markers = {"EMG_Onsets": info["EMG_Onsets"],
-               "EMG_Offsets": info["EMG_Offsets"]}
-    markers_ = signal_formatpeaks(markers, desired_length=len(emg_cleaned))
+    onset_dict = {"EMG_Onsets": info["EMG_Onsets"]}
+    offset_dict = {"EMG_Offsets": info["EMG_Offsets"]}
+    onsets = signal_formatpeaks(onset_dict, desired_length=len(emg_cleaned), peak_indices=onset_dict["EMG_Onsets"])
+    offsets = signal_formatpeaks(offset_dict, desired_length=len(emg_cleaned), peak_indices=offset_dict["EMG_Offsets"])
 
     # Prepare output
     signals = pd.DataFrame({"EMG_Raw": emg_signal,
