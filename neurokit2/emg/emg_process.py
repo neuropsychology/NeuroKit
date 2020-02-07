@@ -3,7 +3,7 @@ import pandas as pd
 
 from .emg_clean import emg_clean
 from .emg_amplitude import emg_amplitude
-from .emg_onsets import emg_onsets
+from .emg_activation import emg_activation
 from ..signal import signal_formatpeaks
 
 
@@ -41,7 +41,7 @@ def emg_process(emg_signal, sampling_rate=1000):
     >>> import neurokit2 as nk
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
-    >>> signals, info = nk.emg_process(emg, sampling_rate=1000)
+    >>> signals, info = emg_process(emg, sampling_rate=1000)
     >>> nk.emg_plot(signals)
     """
     # Clean signal
@@ -51,13 +51,16 @@ def emg_process(emg_signal, sampling_rate=1000):
     amplitude = emg_amplitude(emg_cleaned)
 
     # Get onsets
-    info = emg_onsets(amplitude, threshold=0)
-    onsets = signal_formatpeaks(info, desired_length=len(emg_cleaned))
+    activity_signal, info = emg_activation(emg_amplitude, threshold=0.01)
+    markers = {"EMG_Onsets": info["EMG_Onsets"],
+               "EMG_Offsets": info["EMG_Offsets"]}
+    markers_ = signal_formatpeaks(markers, desired_length=len(emg_cleaned))
 
     # Prepare output
     signals = pd.DataFrame({"EMG_Raw": emg_signal,
                             "EMG_Clean": emg_cleaned,
                             "EMG_Amplitude": amplitude})
-    signals = pd.concat([signals, onsets], axis=1)
+
+    signals = pd.concat([signals, activity_signal, onsets, offsets], axis=1)
 
     return signals, info
