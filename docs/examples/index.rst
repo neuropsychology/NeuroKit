@@ -8,5 +8,5 @@ Contents:
    
    qrs_extraction
    eda_features
-   event_features
+   event_related_analysis
 
