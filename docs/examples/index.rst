@@ -7,6 +7,6 @@ Contents:
    :maxdepth: 1
    
    qrs_extraction
-   eda_features
+   eda_analysis
    event_related_analysis
 
