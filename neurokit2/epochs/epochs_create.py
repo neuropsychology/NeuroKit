@@ -81,9 +81,9 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
     # Then extend data by the max samples in epochs * NaN
     epoch_max_duration = int(max((i * sampling_rate
                                   for i in parameters["duration"])))
-    extension = pd.DataFrame({"Signal": [np.nan] * (epoch_max_duration)})
-    data = data.append(extension, ignore_index=True)
-    data = extension.append(data, ignore_index=True)
+    buffer = pd.DataFrame(index=range(epoch_max_duration), columns=data.columns)
+    data = data.append(buffer, ignore_index=True, sort=False)
+    data = buffer.append(data, ignore_index=True, sort=False)
 
     # Adjust the Onset of the events
     parameters["onset"] = [i + epoch_max_duration for i in parameters["onset"]]
