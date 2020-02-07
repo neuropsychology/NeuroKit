@@ -7,6 +7,7 @@ import scipy.signal
 
 from ..signal import signal_smooth
 from ..signal import signal_formatpeaks
+from ..signal import signal_zerocrossings
 
 
 
@@ -24,8 +25,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010',
-        'engzeemod2012' or 'kalidas2017'.
+        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017' or 'martinez2003'.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the
         algorithm. Useful for debugging.
@@ -53,11 +53,12 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
     >>> pantompkins1985 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
     >>> hamilton2002 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
-    >>> christov2004 = nk.ecg_findpeaks(ecg, method="christov2004")
+    >>> christov2004 = nk.ecg_findpeaks(cleaned, method="christov2004")
     >>> gamboa2008 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="gamboa2008"), method="gamboa2008")
     >>> elgendi2010 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
     >>> engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
     >>> kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
+    >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
     >>>
     >>> # Visualize
     >>> nk.events_plot([neurokit["ECG_R_Peaks"],
@@ -67,7 +68,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
                         gamboa2008["ECG_R_Peaks"],
                         elgendi2010["ECG_R_Peaks"],
                         engzeemod2012["ECG_R_Peaks"],
-                        kalidas2017["ECG_R_Peaks"]], cleaned)
+                        kalidas2017["ECG_R_Peaks"]],
+                        martinez2003["ECG_R_Peaks"]], cleaned)
 
     References
     --------------
@@ -110,6 +112,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         rpeaks = _ecg_findpeaks_elgendi(ecg_cleaned, sampling_rate)
     elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
         rpeaks = _ecg_findpeaks_kalidas(ecg_cleaned, sampling_rate)
+    elif method in ["martinez2003", "martinez"]:
+        rpeaks = _ecg_findpeaks_WT(ecg_cleaned, sampling_rate)
     else:
         raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be "
                          "one of 'neurokit' or 'pamtompkins'.")
@@ -747,8 +751,72 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
     return QRS
 
 
-
 # =============================================================================
+# Continuous Wavelet Transform (CWT) - Martinez et al. (2003)
+# =============================================================================
+#
+def _ecg_findpeaks_WT(signal, sampling_rate=1000):
+    # Try loading pywt
+    try:
+        import pywt
+    except ImportError:
+        raise ImportError("NeuroKit error: ecg_delineator(): the 'PyWavelets' "
+                          "module is required for this method to run. ",
+                          "Please install it first (`pip install PyWavelets`).")
+    # first derivative of the Gaissian signal
+    scales = np.array([1, 2, 4, 8, 16])
+    cwtmatr, freqs = pywt.cwt(signal, scales, 'gaus1', sampling_period=1.0/sampling_rate)
+
+    # For wt of scale 2^4
+    signal_4 = cwtmatr[4, :]
+    epsilon_4 = np.sqrt(np.mean(np.square(signal_4)))
+    peaks_4, _ = scipy.signal.find_peaks(np.abs(signal_4), height=epsilon_4)
+
+    # For wt of scale 2^3
+    signal_3 = cwtmatr[3, :]
+    epsilon_3 = np.sqrt(np.mean(np.square(signal_3)))
+    peaks_3, _ = scipy.signal.find_peaks(np.abs(signal_3), height=epsilon_3)
+    ## Keep only peaks_3 that are nearest to peaks_4
+    peaks_3_keep = np.zeros_like(peaks_4)
+    for i in range(len(peaks_4)):
+        peaks_distance = abs(peaks_4[i] - peaks_3)
+        peaks_3_keep[i] = peaks_3[np.argmin(peaks_distance)]
+
+    # For wt of scale 2^2
+    signal_2 = cwtmatr[2, :]
+    epsilon_2 = np.sqrt(np.mean(np.square(signal_2)))
+    peaks_2, _ = scipy.signal.find_peaks(np.abs(signal_2), height=epsilon_2)
+    ## Keep only peaks_2 that are nearest to peaks_3
+    peaks_2_keep = np.zeros_like(peaks_4)
+    for i in range(len(peaks_4)):
+        peaks_distance = abs(peaks_3_keep[i] - peaks_2)
+        peaks_2_keep[i] = peaks_2[np.argmin(peaks_distance)]
+
+    # For wt of scale 2^1
+    signal_1 = cwtmatr[1, :]
+    epsilon_1 = np.sqrt(np.mean(np.square(signal_1)))
+    peaks_1, _ = scipy.signal.find_peaks(np.abs(signal_1), height=epsilon_1)
+    ## Keep only peaks_1 that are nearest to peaks_2
+    peaks_1_keep = np.zeros_like(peaks_4)
+    for i in range(len(peaks_4)):
+        peaks_distance = abs(peaks_2_keep[i] - peaks_1)
+        peaks_1_keep[i] = peaks_1[np.argmin(peaks_distance)]
+
+    # Find R peaks
+    max_R_peak_dist = int(0.1 * sampling_rate)
+    rpeaks = []
+    for index_cur, index_next in zip(peaks_1_keep[:-1], peaks_1_keep[1:]):
+        correct_sign = signal_1[index_cur] < 0 and signal_1[index_next] > 0  # limit 1
+        near = (index_next - index_cur) < max_R_peak_dist  # limit 2
+        if near and correct_sign:
+            rpeaks.append(signal_zerocrossings(
+                    signal_1[index_cur:index_next])[0] + index_cur)
+
+    rpeaks = np.array(rpeaks, dtype='int')
+    return rpeaks
+
+
+#=============================================================================
 # Utilities
 # =============================================================================
 
