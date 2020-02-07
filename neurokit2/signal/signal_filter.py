@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import mne
 
 import scipy.signal
 
@@ -125,6 +124,13 @@ def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_length="de
 def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, window_length="default"):
     """Filter a signal using a FIR filter.
     """
+    try:
+        import mne
+    except ImportError:
+        raise ImportError("NeuroKit error: signal_filter(): the 'mne' "
+                          "module is required for this method to run. ",
+                          "Please install it first (`pip install mne`).")
+
     if isinstance(window_length, str):
         window_length = "auto"
 

@@ -2,9 +2,11 @@
 import pandas as pd
 
 from .rsp_clean import rsp_clean
-from .rsp_findpeaks import rsp_findpeaks
+from .rsp_phase import rsp_phase
+from .rsp_peaks import rsp_peaks
 from .rsp_rate import rsp_rate
 from .rsp_amplitude import rsp_amplitude
+
 
 
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
@@ -32,7 +34,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     Returns
     -------
     signals : DataFrame
-        A DataFrame f same length as `rsp_signal` containing the following
+        A DataFrame of same length as `rsp_signal` containing the following
         columns:
 
         - *"RSP_Raw"*: the raw signal.
@@ -60,20 +62,27 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
     >>> nk.rsp_plot(signals)
     """
+    # Clean signal
     rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate,
                             method=method)
 
-    extrema_signal, info = rsp_findpeaks(rsp_cleaned, method=method,
-                                         outlier_threshold=0.3)
+    # Extract, fix and format peaks
+    peak_signal, info = rsp_peaks(rsp_cleaned,
+                                  sampling_rate=sampling_rate,
+                                  method=method,
+                                  amplitude_min=0.3)
 
-    rate = rsp_rate(extrema_signal, sampling_rate=sampling_rate, method=method)
+    # Get additional parameters
+    phase = rsp_phase(peak_signal)
+    amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
+    rate = rsp_rate(peak_signal, sampling_rate=sampling_rate, method=method)
 
-    amplitude = rsp_amplitude(rsp_signal, extrema_signal)
-
+    # Prepare output
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,
                             "RSP_Clean": rsp_cleaned,
-                            "RSP_Rate": rate,
-                            "RSP_Amplitude": amplitude})
-    signals = pd.concat([signals, extrema_signal], axis=1)
+                            "RSP_Inspiration": phase,
+                            "RSP_Amplitude": amplitude,
+                            "RSP_Rate": rate})
+    signals = pd.concat([signals, peak_signal], axis=1)
 
     return signals, info

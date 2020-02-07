@@ -41,9 +41,6 @@ def standardize(data, robust=False):
     # Return appropriate type
     if isinstance(data, list):
         data = list(_standardize(np.array(data), robust=robust))
-    elif isinstance(data, pd.Series) or isinstance(data, pd.DataFrame):
-        z = _standardize(data.values, robust=robust)
-        data[:] = z
     else:
         data = _standardize(data, robust=robust)
 
@@ -55,6 +52,7 @@ def standardize(data, robust=False):
 
 def _standardize(data, robust=False):
 
+    # Compute standardized
     if robust is False:
         z = (data - np.mean(data, axis=0))/np.std(data, axis=0)
     else:

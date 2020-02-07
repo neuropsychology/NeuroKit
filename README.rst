@@ -58,10 +58,24 @@ Documentation
         
 Click on the links above and check out our tutorials:
 
--  `Intall Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
+Tutorials
+---------
+
+-  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
+-  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
+
 
 Examples
+--------
+
+-  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/qrs_extraction.html>`_
+-  `Electrodermal Activity (EDA) Analysis <https://neurokit2.readthedocs.io/en/latest/examples/eda_analysis.html>`_
+
+
+
+
+Overview
 ========
 
 Simulate physiological signals
@@ -89,13 +103,31 @@ Simulate physiological signals
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
-Cardiac activity (ECG) processing
----------------------------------
+
+Electrodermal Activity (EDA)
+-----------------------------
+
+.. code-block:: python
+
+    # Generate 10 seconds of EDA signal (recorded at 250 samples / second) with 2 SCR peaks
+    eda = nk.eda_simulate(duration=10, sampling_rate=250, n_scr=2 drift=0.01)
+
+    # Process it
+    signals, info = nk.eda_process(eda, sampling_rate=250)
+
+    # Visualise the processing
+    nk.eda_plot(signals, sampling_rate=250)
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
+
+
+Cardiac activity (ECG)
+-----------------------
 
 .. code-block:: python
 
     # Generate 20 seconds of ECG signal (recorded at 250 samples / second)
-    ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70, random_state=333)
+    ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70)
 
     # Process it
     signals, info = nk.ecg_process(ecg, sampling_rate=250)
@@ -107,8 +139,8 @@ Cardiac activity (ECG) processing
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
 
 
-Respiration (RSP) processing
-----------------------------
+Respiration (RSP)
+------------------
 
 .. code-block:: python
 
@@ -122,7 +154,26 @@ Respiration (RSP) processing
     nk.rsp_plot(signals, sampling_rate=250)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_respiration.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_rsp.png
+
+
+Electromyography (EMG)
+-----------------------
+
+.. code-block:: python
+
+    # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
+	emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
+
+    # Process it
+    signals = nk.emg_process(emg, sampling_rate=250)
+
+    # Visualise the processing
+    nk.emg_plot(signals, sampling_rate=250)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
+
 
 Signal processing
 -----------------
@@ -209,6 +260,8 @@ ECG
 - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
 - `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_
+- `pyedr <https://github.com/jusjusjus/pyedr>`_
+- `Systole <https://github.com/embodied-computation-group/systole>`_
 
 EDA
 ---

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import mne
-
 import pandas as pd
 import numpy as np
 
@@ -40,6 +38,14 @@ def eeg_add_channel(raw, channel, channel_type=None, channel_name=None, sync_ind
     >>>
     >>> raw = nk.eeg_add_channel(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg")
     """
+    # Try loading bioread
+    try:
+        import mne
+    except ImportError:
+        raise ImportError("NeuroKit error: eeg_add_channel(): the 'mne' "
+                          "module is required for this function to run. ",
+                          "Please install it first (`pip install mne`).")
+
     if channel_name is None:
         if isinstance(channel, pd.Series):
             if channel.name is not None:

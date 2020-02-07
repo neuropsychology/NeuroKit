@@ -21,9 +21,9 @@ def find_version():
 
 
 # Dependencies
-requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'mne', 'bioread', 'matplotlib', 'cvxopt']
+requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'matplotlib']
 setup_requirements = ['pytest-runner', 'numpy']
-test_requirements = requirements + ['pytest', 'coverage', 'pyentrp', 'nolds', 'biosppy']
+test_requirements = requirements + ['pytest', 'coverage', 'bioread', 'mne', 'pyentrp', 'nolds', 'biosppy', 'cvxopt', 'PyWavelets']
 
 # Setup
 setup(
@@ -37,6 +37,8 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     description="The Python Toolbox for Neurophysiological Signal Processing.",
     install_requires=requirements,

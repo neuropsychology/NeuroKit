@@ -1,5 +1,5 @@
 Functions
-#################
+==========
 
 
 
@@ -28,6 +28,8 @@ RSP
 
 .. autofunction:: neurokit2.rsp_findpeaks
 
+.. autofunction:: neurokit2.rsp_amplitude
+
 .. autofunction:: neurokit2.rsp_rate
 
 .. autofunction:: neurokit2.rsp_process
@@ -40,12 +42,28 @@ EDA
 
 .. autofunction:: neurokit2.eda_simulate
 
+.. autofunction:: neurokit2.eda_clean
+
+.. autofunction:: neurokit2.eda_decompose
+
+.. autofunction:: neurokit2.eda_findpeaks
+
 
 
 EMG
 -------
 
 .. autofunction:: neurokit2.emg_simulate
+
+EEG
+-------
+
+.. autofunction:: neurokit2.eeg_add_channel
+
+PPG
+-------
+
+.. autofunction:: neurokit2.ppg_simulate
 
 
 General Signal Processing
@@ -85,11 +103,9 @@ Signal processing
 
 .. autofunction:: neurokit2.signal_findpeaks
 
+.. autofunction:: neurokit2.signal_rate
+
 .. autofunction:: neurokit2.signal_plot
-
-
-
-
 
 
 
@@ -108,3 +124,27 @@ Read data
 ----------
 
 .. autofunction:: neurokit2.read_acqknowledge
+
+
+Epoch data
+-----------
+
+.. autofunction:: neurokit2.epochs_create
+
+.. autofunction:: neurokit2.epochs_plot
+
+.. autofunction:: neurokit2.epochs_to_df
+
+
+Statistics
+-----------
+
+.. autofunction:: neurokit2.fit_error
+
+.. autofunction:: neurokit2.fit_loess
+
+.. autofunction:: neurokit2.fit_polynomial
+
+.. autofunction:: neurokit2.hdi
+
+.. autofunction:: neurokit2.standardize

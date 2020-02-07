@@ -14,14 +14,14 @@ def test_rsp_simulate():
     rsp2 = nk.rsp_simulate(duration=20, length=3000, respiratory_rate=80)
 #    pd.DataFrame({"RSP1":rsp1, "RSP2":rsp2}).plot()
 #    pd.DataFrame({"RSP1":rsp1, "RSP2":rsp2}).hist()
-    assert (len(nk.signal_findpeaks(rsp1, height_min=0.2)[0]) <
-            len(nk.signal_findpeaks(rsp2, height_min=0.2)[0]))
+    assert (len(nk.signal_findpeaks(rsp1, height_min=0.2)["Peaks"]) <
+            len(nk.signal_findpeaks(rsp2, height_min=0.2)["Peaks"]))
 
     rsp3 = nk.rsp_simulate(duration=20, length=3000, method="sinusoidal")
     rsp4 = nk.rsp_simulate(duration=20, length=3000, method="breathmetrics")
 #    pd.DataFrame({"RSP3":rsp3, "RSP4":rsp4}).plot()
-    assert (len(nk.signal_findpeaks(rsp3, height_min=0.2)[0]) >
-            len(nk.signal_findpeaks(rsp4, height_min=0.2)[0]))
+    assert (len(nk.signal_findpeaks(rsp3, height_min=0.2)["Peaks"]) >
+            len(nk.signal_findpeaks(rsp4, height_min=0.2)["Peaks"]))
 
 
 def test_rsp_clean():
@@ -62,12 +62,12 @@ def test_rsp_clean():
     assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
 
 
-def test_rsp_findpeaks():
+def test_rsp_peaks():
 
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, random_state=42)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
     assert signals.shape == (120000, 2)
     assert signals["RSP_Peaks"].sum() == 28
     assert signals["RSP_Troughs"].sum() == 28
@@ -85,7 +85,7 @@ def test_rsp_rate():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, method="sinusoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
     test_length = 30
@@ -105,17 +105,15 @@ def test_rsp_amplitude():
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
                           respiratory_rate=15, method="sinusoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_findpeaks(rsp_cleaned)
+    signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
-    test_length = 60
-    amplitude = nk.rsp_amplitude(rsp_signal=rsp, extrema=info,
-                                 desired_length=test_length)
-    assert amplitude.shape == (test_length, )
+    amplitude = nk.rsp_amplitude(rsp, signals)
+    assert amplitude.shape == (rsp.size, )
     assert np.abs(amplitude.mean() - 1) < 0.01
 
     # Test with DataFrame.
-    amplitude = nk.rsp_amplitude(rsp_signal=rsp, extrema=signals)
+    amplitude = nk.rsp_amplitude(rsp, info)
     assert amplitude.shape == (rsp.size, )
     assert np.abs(amplitude.mean() - 1) < 0.01
 
@@ -128,13 +126,14 @@ def test_rsp_process():
 
     # Only check array dimensions since functions called by rsp_process have
     # already been unit tested.
-    assert signals.shape == (120000, 6)
+    assert signals.shape == (120000, 7)
     assert np.array(["RSP_Raw",
                      "RSP_Clean",
                      "RSP_Peaks",
                      "RSP_Troughs",
                      "RSP_Rate",
-                     "RSP_Amplitude"]) in signals.columns.values
+                     "RSP_Amplitude",
+                     "RSP_Inspiration"]) in signals.columns.values
 
 
 def test_rsp_plot():
@@ -146,7 +145,7 @@ def test_rsp_plot():
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 3
-    titles = ["Raw and Cleaned RSP",
+    titles = ["Raw and Cleaned Signal",
               "Breathing Rate",
               "Breathing Amplitude"]
     for (ax, title) in zip(fig.get_axes(), titles):

@@ -17,10 +17,13 @@ pytest = "*"
 isort = "*"
 yapf = "*"
 bioread = "*"
+mne = "*"
 scipy = "*"
 sklearn = "*"
 matplotlib = "*"
 pyentrp = "*"
+cvxopt = "*"
+PyWavelets = "*"
 
 [packages]
 neurokit2 = {path = ".", editable = true}

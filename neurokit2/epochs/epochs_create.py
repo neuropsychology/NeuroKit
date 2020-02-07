@@ -6,7 +6,7 @@ from ..events.events_find import _events_find_label
 from ..misc import listify
 
 
-def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_start=0, event_labels=None, event_conditions=None):
+def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_start=0, event_labels=None, event_conditions=None, baseline_correction=False):
     """
     Epoching a dataframe.
 
@@ -26,6 +26,7 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or experimental conditions.
+    baseline_correction :
 
 
     Returns
@@ -36,7 +37,7 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
 
     See Also
     ----------
-    events_find, events_plot, epochs_to_df
+    events_find, events_plot, epochs_to_df, epochs_plot
 
     Examples
     ----------
@@ -52,6 +53,11 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
     >>>
     >>> # Create epochs
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_duration=3)
+    >>> nk.epochs_plot(epochs)
+    >>>
+    >>> # Baseline correction
+    >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_duration=3, baseline_correction=True)
+    >>> nk.epochs_plot(epochs)
     """
     # Sanitize events input
     if isinstance(events, dict) is False:
@@ -70,6 +76,18 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
 
     # Create epochs
     parameters = listify(onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, duration=epochs_duration)
+
+    # Find the maximum numbers in an epoch
+    # Then extend data by the max samples in epochs * NaN
+    epoch_max_duration = int(max((i * sampling_rate
+                                  for i in parameters["duration"])))
+    buffer = pd.DataFrame(index=range(epoch_max_duration), columns=data.columns)
+    data = data.append(buffer, ignore_index=True, sort=False)
+    data = buffer.append(data, ignore_index=True, sort=False)
+
+    # Adjust the Onset of the events
+    parameters["onset"] = [i + epoch_max_duration for i in parameters["onset"]]
+
     epochs = {}
     for i, label in enumerate(parameters["label"]):
 
@@ -83,6 +101,10 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
         # Correct index
         epoch["Index"] = epoch.index.values
         epoch.index = np.linspace(start=parameters["start"][i], stop=parameters["start"][i] + parameters["duration"][i], num=len(epoch), endpoint=True)
+
+        if baseline_correction is True:
+            baseline_end = 0 if epochs_start <= 0 else epochs_start
+            epoch = epoch - epoch.loc[:baseline_end].mean()
 
         # Add additional
         epoch["Label"] = parameters["label"][i]

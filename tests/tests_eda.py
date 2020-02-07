@@ -9,14 +9,14 @@ import biosppy
 
 def test_eda_simulate():
 
-    eda1 = nk.eda_simulate(duration=10, length=None, n_scr=1)
-    assert len(nk.signal_findpeaks(eda1, height_min=0.6)[0]) == 1
+    eda1 = nk.eda_simulate(duration=10, length=None, n_scr=1, random_state=333)
+    assert len(nk.signal_findpeaks(eda1, height_min=0.6)["Peaks"]) == 1
 
-    eda2 = nk.eda_simulate(duration=10, length=None, n_scr=5)
-    assert len(nk.signal_findpeaks(eda2, height_min=0.6)[0]) == 5
+    eda2 = nk.eda_simulate(duration=10, length=None, n_scr=5, random_state=333)
+    assert len(nk.signal_findpeaks(eda2, height_min=0.6)["Peaks"]) == 5
 #   pd.DataFrame({"EDA1": eda1, "EDA2": eda2}).plot()
 
-    assert len(nk.signal_findpeaks(eda2, height_min=0.6)[0]) > len(nk.signal_findpeaks(eda1, height_min=0.6)[0])
+    assert len(nk.signal_findpeaks(eda2, height_min=0.6)["Peaks"]) > len(nk.signal_findpeaks(eda1, height_min=0.6)["Peaks"])
 
 
 
@@ -50,3 +50,44 @@ def test_eda_clean():
     assert np.allclose((eda_biosppy - original).mean(), 0, atol=1e-5)
 
 
+
+
+
+def test_eda_phasic():
+
+    sampling_rate = 1000
+    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
+                          n_scr=6, noise=0.01, drift=0.01, random_state=42)
+
+
+    cvxEDA = nk.eda_phasic(nk.standardize(eda), method='cvxeda')
+    assert len(cvxEDA) == len(eda)
+
+
+    smoothMedian = nk.eda_phasic(nk.standardize(eda), method='smoothmedian')
+    assert len(smoothMedian) == len(eda)
+
+
+    highpass = nk.eda_phasic(nk.standardize(eda), method='highpass')
+    assert len(highpass) == len(eda)
+
+
+
+
+
+
+def test_eda_peaks():
+
+    sampling_rate = 1000
+    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
+                          n_scr=6, noise=0, drift=0.01, random_state=42)
+    eda_phasic = nk.eda_phasic(nk.standardize(eda), method='highpass')["EDA_Phasic"].values
+
+
+    signals, info = nk.eda_peaks(eda_phasic, method="gamboa2008")
+    onsets, peaks, amplitudes = biosppy.eda.basic_scr(eda_phasic, sampling_rate=1000)
+    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1e-5)
+
+    signals, info = nk.eda_peaks(eda_phasic, method="kim2004")
+    onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
+    assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1)
