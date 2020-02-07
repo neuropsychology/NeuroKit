@@ -8,3 +8,4 @@ from .ecg_peaks import ecg_peaks
 from .ecg_rate import ecg_rate
 from .ecg_process import ecg_process
 from .ecg_plot import ecg_plot
+from .ecg_delineator import ecg_delineator

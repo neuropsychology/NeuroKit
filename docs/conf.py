@@ -26,7 +26,7 @@ import sys
 sys.path.insert(0, os.path.abspath('../'))
 
 
-MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'sklearn', 'sklearn.neighbors', 'mne', 'bioread', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.collections', 'matplotlib.cm', 'cvxopt', 'pywt']
+MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'sklearn', 'sklearn.neighbors', 'mne', 'bioread', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.collections', 'matplotlib.cm', 'matplotlib.patches', 'matplotlib.gridspec', 'cvxopt', 'pywt']
 
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
@@ -51,6 +51,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx_rtd_theme',
+    'nbsphinx'
 ]
 
 napoleon_google_docstring = False

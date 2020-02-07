@@ -30,10 +30,14 @@ def eda_process(eda_signal, sampling_rate=1000):
 
         - *"EDA_Raw"*: the raw signal.
         - *"EDA_Clean"*: the cleaned signal.
-        - *"EDA_Phasic"*: the inhalation peaks marked as "1" in a list of zeros.
-        - *"EDA_Tonic"*: the exhalation troughs marked as "1" in a list of
-                            zeros.
-        - *"SCR_Peaks"*: breathing rate interpolated between inhalation peaks.
+        - *"EDA_Tonic"*: the tonic component of the signal, or the Tonic Skin Conductance Level (SCL).
+        - *"EDA_Phasic"*: the phasic component of the signal, or the Phasic Skin Conductance Response (SCR).
+        - *"SCR_Onsets"*: the samples at which the onsets of the peaks occur, marked as "1" in a list of zeros.
+        - *"SCR_Peaks"*: the samples at which the peaks occur, marked as "1" in a list of zeros.
+        - *"SCR_Height"*: the SCR amplitude of the signal including the Tonic component. Note that cumulative effects of close- occurring SCRs might lead to an underestimation of the amplitude.
+        - *"SCR_Amplitude"*: the SCR amplitude of the signal excluding the Tonic component.
+        - *"SCR_RiseTime"*: the time taken for SCR onset to reach peak amplitude within the SCR.
+        - *"SCR_Recovery"*: the samples at which SCR peaks recover (decline) to half amplitude, marked as "1" in a list of zeros.
     info : dict
         A dictionary containing the information of each SCR peak (see `eda_findpeaks()`).
 

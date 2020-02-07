@@ -7,7 +7,7 @@ from .ecg_rate import ecg_rate
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
-    """"Process an ECG signal.
+    """Process an ECG signal.
 
     Convenience function that automatically processes an ECG signal.
 
@@ -36,7 +36,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     See Also
     --------
-    ecg_clean, ecg_findpeaks, ecg_rate, ecg_plot
+    ecg_clean, ecg_findpeaks, ecg_fixpeaks, ecg_rate, ecg_plot
 
     Examples
     --------
@@ -45,21 +45,22 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
     >>> nk.ecg_plot(signals)
-
     """
     ecg_cleaned = ecg_clean(ecg_signal,
                             sampling_rate=sampling_rate,
                             method=method)
 
-    peak_signal, info = ecg_peaks(ecg_cleaned=ecg_cleaned,
-                                  sampling_rate=sampling_rate,
-                                  method=method,
-                                  show=False)
-
-    rate = ecg_rate(peak_signal, sampling_rate=sampling_rate)
+    instant_peaks, rpeaks, = ecg_peaks(ecg_cleaned=ecg_cleaned,
+                                       sampling_rate=sampling_rate,
+                                       method=method,
+                                       correct_artifacts=True)
+    rate = ecg_rate(rpeaks,
+                    sampling_rate=sampling_rate,
+                    desired_length=len(ecg_cleaned))
 
     signals = pd.DataFrame({"ECG_Raw": ecg_signal,
                             "ECG_Clean": ecg_cleaned,
                             "ECG_Rate": rate})
-    signals = pd.concat([signals, peak_signal], axis=1)
+    signals = pd.concat([signals, instant_peaks], axis=1)
+    info = rpeaks
     return signals, info

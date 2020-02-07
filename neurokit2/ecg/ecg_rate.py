@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 
-from ..signal import signal_rate
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
+from ..signal import signal_resample
+
 
 
 def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
@@ -10,9 +11,8 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
 
     Parameters
     ----------
-    rpeaks : list, array, DataFrame, Series or dict
-        The samples at which the R-peaks occur. If a dict or a DataFrame is
-        passed, it is assumed that these containers were obtained with
+    rpeaks : dict
+        The samples at which the R-peak occur. Dict returned by
         `ecg_findpeaks()`.
     sampling_rate : int
         The sampling frequency of the signal that contains the R-peaks (in Hz,
@@ -27,23 +27,43 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     Returns
     -------
     array
-        A DataFrame containing heart rate accessible.
+        A Numpy array containing the heart rate.
 
     See Also
     --------
-    ecg_clean, ecg_findpeaks, ecg_process, ecg_plot
+    ecg_clean, ecg_findpeaks, ecg_fixpeaks, ecg_process, ecg_plot
 
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import matplotlib.pyplot as plt
     >>>
-    >>> ecg = nk.ecg_simulate(duration=15, heart_rate=80)
-    >>> signals, info = nk.ecg_findpeaks(ecg)
+    >>> ecg = nk.ecg_simulate(duration=240, noise=0.1, heart_rate=70,
+    >>>                       random_state=41)
+    >>> rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
+    >>> artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks_uncorrected,
+    >>>                                               recursive=True,
+    >>>                                               show=True)
+    >>> rate_corrected = nk.ecg_rate(rpeaks_uncorrected,
+    >>>                              desired_length=len(ecg))
+    >>> rate_uncorrected = nk.ecg_rate(rpeaks, desired_length=len(ecg_signal))
     >>>
-    >>> rate = nk.ecg_rate(signals)
-    >>> nk.signal_plot([ecg, rate], subplots=True)
+    >>> fig, ax = plt.subplots()
+    >>> ax.plot(rate_uncorrected, label="heart rate without artifact correction")
+    >>> ax.plot(rate_corrected, label="heart rate with artifact correction")
+    >>> ax.legend(loc="upper right")
     """
-    # Get rate values
-    rate = signal_rate(rpeaks, sampling_rate, desired_length=desired_length)
+    # Get R-peaks indices from DataFrame or dict.
+    rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
+
+    rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
+
+    # The rate corresponding to the first peak is set to the mean RR.
+    rr[0] = np.mean(rr)
+    rate = 60 / rr
+
+    if desired_length:
+        rate = signal_resample(rate, desired_length=desired_length,
+                               sampling_rate=sampling_rate)
 
     return rate

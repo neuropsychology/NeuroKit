@@ -94,8 +94,8 @@ Simulate physiological signals
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
 
-Electrodermal Activity (EDA) processing
-----------------------------------------
+Electrodermal Activity (EDA)
+-----------------------------
 
 .. code-block:: python
 
@@ -111,8 +111,8 @@ Electrodermal Activity (EDA) processing
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
 
 
-Cardiac activity (ECG) processing
----------------------------------
+Cardiac activity (ECG)
+-----------------------
 
 .. code-block:: python
 
@@ -129,8 +129,8 @@ Cardiac activity (ECG) processing
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
 
 
-Respiration (RSP) processing
-----------------------------
+Respiration (RSP)
+------------------
 
 .. code-block:: python
 
@@ -147,8 +147,8 @@ Respiration (RSP) processing
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_rsp.png
 
 
-Electromyography (EMG) processing
-----------------------------
+Electromyography (EMG)
+-----------------------
 
 .. code-block:: python
 

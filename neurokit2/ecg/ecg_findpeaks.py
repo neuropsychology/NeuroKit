@@ -46,8 +46,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>>
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> signals, info = nk.ecg_findpeaks(cleaned)
-    >>> nk.events_plot(info["ECG_Peaks"], cleaned)
+    >>> info = nk.ecg_findpeaks(cleaned)
+    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned)
     >>>
     >>> # Different methods
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
@@ -92,7 +92,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     method = method.lower()  # remove capitalised letters
     # Run peak detection algorithm
     if method in ["nk", "nk2", "neurokit", "neurokit2"]:
-        rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned, sampling_rate)
+        rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned, sampling_rate,
+                                         show=show)
     elif method in ["pantompkins", "pantompkins1985"]:
         rpeaks = _ecg_findpeaks_pantompkins(ecg_cleaned, sampling_rate)
     elif method in ["gamboa2008", "gamboa"]:
@@ -218,6 +219,7 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
 
     mwa_peaks = _ecg_findpeaks_peakdetect(mwa, sampling_rate)
 
+    mwa_peaks = np.array(mwa_peaks, dtype='int')
     return mwa_peaks
 
 
@@ -297,6 +299,7 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
 
     QRS.pop(0)
 
+    QRS = np.array(QRS, dtype='int')
     return QRS
 
 
@@ -477,7 +480,7 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000):
                 Rm = int(np.mean(RR))
 
     QRS.pop(0)
-
+    QRS = np.array(QRS, dtype='int')
     return QRS
 
 
@@ -642,6 +645,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
             thi = False
             thf = False
 
+    r_peaks = np.array(r_peaks, dtype='int')
     return r_peaks
 
 
@@ -690,6 +694,7 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
 
     filt_peaks = _ecg_findpeaks_peakdetect(filtered_squared, sampling_rate)
 
+    filt_peaks = np.array(filt_peaks, dtype='int')
     return filt_peaks
 
 
@@ -738,6 +743,7 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
                 else:
                     QRS.append(detection)
 
+    QRS = np.array(QRS, dtype='int')
     return QRS
 
 
