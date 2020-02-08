@@ -22,7 +22,7 @@ def emg_plot(emg_signals, sampling_rate=None):
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
     >>> emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
-    >>> nk.emg_plot(emg_signals)
+    >>> emg_plot(emg_signals)
 
     See Also
     --------
@@ -31,7 +31,6 @@ def emg_plot(emg_signals, sampling_rate=None):
     # Mark onsets, offsets, activity
     onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0]
     offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0]
-    activity = np.where(emg_signals["EMG_Activity"] == 1)[0]
 
     # Sanity-check input.
     if not isinstance(emg_signals, pd.DataFrame):
@@ -42,14 +41,8 @@ def emg_plot(emg_signals, sampling_rate=None):
     if sampling_rate is not None:
         x_axis = np.linspace(0, emg_signals.shape[0] / sampling_rate,
                              emg_signals.shape[0])
-#        onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0] / sampling_rate
-#        offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0] / sampling_rate
-#        activity = np.where(emg_signals["EMG_Activity"] == 1)[0] / sampling_rate
     else:
         x_axis = np.arange(0, emg_signals.shape[0])
-#        onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0]
-#        offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0]
-#        activity = np.where(emg_signals["EMG_Activity"] == 1)[0]
 
     # Prepare figure.
     fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
@@ -75,31 +68,20 @@ def emg_plot(emg_signals, sampling_rate=None):
              label=None, linewidth=1.5)
 
     # Mark onsets and offsets.
-    ax1.scatter(x_axis[onsets], emg_signals["EMG_Amplitude"][onsets], color='#f54269',
-                label="Onsets", zorder=3)
-    ax1.scatter(x_axis[offsets], emg_signals["EMG_Amplitude"][offsets], color='#e85de1',
-                label="Offsets", zorder=3)
-    ax1.legend(loc='upper right')
+    ax1.scatter(x_axis[onsets], emg_signals["EMG_Amplitude"][onsets],
+                color='#f54269', label="Onsets", zorder=3)
+    ax1.scatter(x_axis[offsets], emg_signals["EMG_Amplitude"][offsets],
+                color='#e85de1', label="Offsets", zorder=3)
 
     # Shade activity regions.
-    if sampling_rate is not None: # Modify locations based on sampling_rate
-        onsets = onsets / sampling_rate
-        offsets = offsets / sampling_rate
-    else:
-        onsets = onsets
-        offsets = offsets
-
-#    activity_signal = _emg_plot_activity(emg_signals, onsets, offsets)
-
-    for i, j in zip(list(onsets), list(offsets)):
-        onset_line = ax1.axvline(i, alpha=0)
-        offset_line = ax1.axvline(j, alpha=0)
-
-     ax1.fill_betweenx(emg_signals["EMG_Amplitude"], onset_line, offset_line, facecolor='green')
+    activity_signal = _emg_plot_activity(emg_signals, onsets, offsets)
+    ax1.fill_between(x_axis, emg_signals["EMG_Amplitude"], activity_signal,
+                     where=emg_signals["EMG_Amplitude"] > activity_signal,
+                     color='#f7c568', alpha=0.5, label='Regions of Activity')
+    ax1.legend(loc='upper right')
 
     plt.show()
     return fig
-
 
 
 # =============================================================================
@@ -111,5 +93,10 @@ def _emg_plot_activity(emg_signals, onsets, offsets):
     activity_signal[onsets] = emg_signals["EMG_Amplitude"][onsets].values
     activity_signal[offsets] = emg_signals["EMG_Amplitude"][offsets].values
     activity_signal = activity_signal.fillna(method="backfill")
+
+    if np.any(activity_signal.isna()):
+        index = np.min(np.where(activity_signal.isna() == True)) - 1
+    value_to_fill = activity_signal[index]
+    activity_signal = activity_signal.fillna(value_to_fill)
 
     return activity_signal
