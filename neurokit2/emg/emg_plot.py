@@ -67,18 +67,33 @@ def emg_plot(emg_signals, sampling_rate=None):
     ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#FF9800",
              label=None, linewidth=1.5)
 
-    # Mark onsets and offsets.
-    ax1.scatter(x_axis[onsets], emg_signals["EMG_Amplitude"][onsets],
-                color='#f54269', label="Onsets", zorder=3)
-    ax1.scatter(x_axis[offsets], emg_signals["EMG_Amplitude"][offsets],
-                color='#e85de1', label="Offsets", zorder=3)
-
     # Shade activity regions.
     activity_signal = _emg_plot_activity(emg_signals, onsets, offsets)
     ax1.fill_between(x_axis, emg_signals["EMG_Amplitude"], activity_signal,
                      where=emg_signals["EMG_Amplitude"] > activity_signal,
                      color='#f7c568', alpha=0.5, label='Regions of Activity')
-    ax1.legend(loc='upper right')
+
+    # Mark onsets and offsets.
+    if sampling_rate is not None:
+        onsets = onsets / sampling_rate
+        offsets = offsets / sampling_rate
+    else:
+        onsets = onsets
+        offsets = offsets
+
+    for i, j in zip(list(onsets), list(offsets)):
+        ax1.axvline(i, color='#9da1a6', linestyle='--', label='Onsets', zorder=3)
+        ax1.axvline(j, color='#c1c5c9', linestyle='--', label='Offsets', zorder=3)
+
+    # Remove duplicate labels
+    handles, labels = ax1.get_legend_handles_labels()
+    handle_list, label_list = [], []
+    for handle, label in zip(handles, labels):
+        if label not in label_list:
+            handle_list.append(handle)
+            label_list.append(label)
+
+    ax1.legend(*[*zip(*{l:h for h, l in zip(*ax1.get_legend_handles_labels())}.items())][::-1], loc='upper right')
 
     plt.show()
     return fig
