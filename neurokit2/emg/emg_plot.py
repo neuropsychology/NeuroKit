@@ -21,24 +21,35 @@ def emg_plot(emg_signals, sampling_rate=None):
     >>> import neurokit2 as nk
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
-    >>> emg_signals = nk.emg_process(emg, sampling_rate=1000)
+    >>> emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
     >>> nk.emg_plot(emg_signals)
 
     See Also
     --------
     ecg_process
     """
+    # Mark onsets, offsets, activity
+    onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0]
+    offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0]
+    activity = np.where(emg_signals["EMG_Activity"] == 1)[0]
+
     # Sanity-check input.
     if not isinstance(emg_signals, pd.DataFrame):
         print("NeuroKit error: The `emg_signals` argument must be the "
               "DataFrame returned by `emg_process()`.")
 
-    # Determine what to display on the x-axis.
+    # Determine what to display on the x-axis, mark activity.
     if sampling_rate is not None:
         x_axis = np.linspace(0, emg_signals.shape[0] / sampling_rate,
                              emg_signals.shape[0])
+#        onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0] / sampling_rate
+#        offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0] / sampling_rate
+#        activity = np.where(emg_signals["EMG_Activity"] == 1)[0] / sampling_rate
     else:
         x_axis = np.arange(0, emg_signals.shape[0])
+#        onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0]
+#        offsets = np.where(emg_signals["EMG_Offsets"] == 1)[0]
+#        activity = np.where(emg_signals["EMG_Activity"] == 1)[0]
 
     # Prepare figure.
     fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
@@ -49,7 +60,6 @@ def emg_plot(emg_signals, sampling_rate=None):
 
     fig.suptitle("Electromyography (EMG)", fontweight="bold")
     plt.subplots_adjust(hspace=0.2)
-
 
     # Plot cleaned and raw EMG.
     ax0.set_title("Raw and Cleaned Signal")
@@ -62,24 +72,44 @@ def emg_plot(emg_signals, sampling_rate=None):
     # Plot Amplitude.
     ax1.set_title("Muscle Activation")
     ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#FF9800",
-             label="Amplitude", linewidth=1.5)
+             label=None, linewidth=1.5)
 
-    # Mark onsets
-#    onsets = np.array(np.where(emg_signals["EMG_Onsets"] == 1))
-#    onsets = list(list(i) for i in onsets)[0]
-#    for i in onsets:
-#        if i == np.min(emg_signals.index.values) or i == np.max(emg_signals.index.values):
-#            onsets.remove(i)  # Sanity checks
-#        else:
-#            ax1.axvline(x=i, color="#FF0000", label="Onsets and Offsets",
-#                        linestyle="--", linewidth=1.0,)
-#    handles, labels = fig.gca().get_legend_handles_labels()  # Remove duplicate labels
-#    newLabels, newHandles = [], []
-#    for handle, label in zip(handles, labels):
-#        if label not in newLabels:
-#            newLabels.append(label)
-#            newHandles.append(handle)
-#    ax1.legend(newLabels, loc="upper right")
+    # Mark onsets and offsets.
+    ax1.scatter(x_axis[onsets], emg_signals["EMG_Amplitude"][onsets], color='#f54269',
+                label="Onsets", zorder=3)
+    ax1.scatter(x_axis[offsets], emg_signals["EMG_Amplitude"][offsets], color='#e85de1',
+                label="Offsets", zorder=3)
+    ax1.legend(loc='upper right')
+
+    # Shade activity regions.
+    if sampling_rate is not None: # Modify locations based on sampling_rate
+        onsets = onsets / sampling_rate
+        offsets = offsets / sampling_rate
+    else:
+        onsets = onsets
+        offsets = offsets
+
+#    activity_signal = _emg_plot_activity(emg_signals, onsets, offsets)
+
+    for i, j in zip(list(onsets), list(offsets)):
+        onset_line = ax1.axvline(i, alpha=0)
+        offset_line = ax1.axvline(j, alpha=0)
+
+     ax1.fill_betweenx(emg_signals["EMG_Amplitude"], onset_line, offset_line, facecolor='green')
 
     plt.show()
     return fig
+
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _emg_plot_activity(emg_signals, onsets, offsets):
+
+    activity_signal = pd.Series(np.full(len(emg_signals), np.nan))
+    activity_signal[onsets] = emg_signals["EMG_Amplitude"][onsets].values
+    activity_signal[offsets] = emg_signals["EMG_Amplitude"][offsets].values
+    activity_signal = activity_signal.fillna(method="backfill")
+
+    return activity_signal

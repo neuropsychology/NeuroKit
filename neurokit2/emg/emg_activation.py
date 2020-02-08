@@ -54,7 +54,7 @@ def emg_activation(emg_amplitude, threshold=0.01):
     if not isinstance(emg_amplitude, np.ndarray):
         emg_amplitude = np.atleast_1d(emg_amplitude).astype('float64')
     if threshold > np.max(emg_amplitude):
-        raise ValueError("NeuroKit error: emg_onsets(): threshold"
+        raise ValueError("NeuroKit error: emg_activation(): threshold"
                          "specified exceeds the maximum of the signal"
                          "amplitude.")
 
