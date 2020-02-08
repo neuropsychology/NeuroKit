@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
 from ..signal import signal_formatpeaks
 
@@ -18,13 +19,15 @@ def emg_activation(emg_amplitude, threshold=0.01):
     -------
     info : dict
         A dictionary containing additional information,
-        in this case the samples at which the onsets of the amplitude occur,
-        accessible with the key "EMG_Onsets".
+        in this case the samples at which the onsets, offsets, and periods of
+        activations of the EMG signal occur, accessible with the
+        key "EMG_Onsets", "EMG_Offsets", and "EMG_Activity" respectively.
     activity_signal : DataFrame
         A DataFrame of same length as the input signal in which occurences of
-        EMG activity (above the threshold) are marked as "1" in
-        lists of zeros with the same length as `emg_amplitude`.
-        Accessible with the keys "EMG_Activity".
+        onsets, offsets, and activity (above the threshold) of the EMG signal
+        are marked as "1" in lists of zeros with the same length as
+        `emg_amplitude`. Accessible with the keys "EMG_Onsets",
+        "EMG_Offsets", and "EMG_Activity" respectively.
 
     See Also
     --------
@@ -39,7 +42,7 @@ def emg_activation(emg_amplitude, threshold=0.01):
     >>> cleaned = nk.emg_clean(emg, sampling_rate=1000)
     >>> emg_amplitude = nk.emg_amplitude(cleaned)
     >>>
-    >>> _,info = nk.emg_activation(emg_amplitude, threshold=0.1)
+    >>> activity_signal,info = nk.emg_activation(emg_amplitude, threshold=0.1)
     >>> nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]],
                        emg_amplitude)
 
@@ -78,9 +81,33 @@ def emg_activation(emg_amplitude, threshold=0.01):
     info = {"EMG_Onsets": onsets,
             "EMG_Offsets": offsets,
             "EMG_Activity": activations}
-    info_emg_activity = {"EMG_Activity": activations}
-    activity_signal = signal_formatpeaks(info_emg_activity,
-                                         desired_length=len(emg_amplitude),
-                                         peak_indices=info_emg_activity["EMG_Activity"])
+    info_activity = {"EMG_Activity": activations}
+    info_onsets = {"EMG_Onsets": onsets}
+    info_offsets = {"EMG_Offsets": offsets}
+
+    df_activity = signal_formatpeaks(info_activity,
+                                     desired_length=len(emg_amplitude),
+                                     peak_indices=info_activity["EMG_Activity"])
+    df_onsets = signal_formatpeaks(info_onsets,
+                                   desired_length=len(emg_amplitude),
+                                   peak_indices=info_onsets["EMG_Onsets"])
+    df_offsets = signal_formatpeaks(info_offsets,
+                                    desired_length=len(emg_amplitude),
+                                    peak_indices=info_offsets["EMG_Offsets"])
+
+    # Modify output produced by signal_formatpeaks.
+    for x in range(len(emg_amplitude)):
+        if df_activity["EMG_Activity"][x] != 0:
+            if df_activity.index[x] == df_activity.index.get_loc(x):
+                df_activity["EMG_Activity"][x] = 1
+            else:
+                df_activity["EMG_Activity"][x] = 0
+        if df_offsets["EMG_Offsets"][x] != 0:
+            if df_offsets.index[x] == df_offsets.index.get_loc(x):
+                df_offsets["EMG_Offsets"][x] = 1
+            else:
+                df_offsets["EMG_Offsets"][x] = 0
+
+    activity_signal = pd.concat([df_activity, df_onsets, df_offsets], axis=1)
 
     return activity_signal, info
