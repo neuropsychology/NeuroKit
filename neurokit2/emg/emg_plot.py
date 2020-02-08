@@ -22,7 +22,7 @@ def emg_plot(emg_signals, sampling_rate=None):
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
     >>> emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
-    >>> emg_plot(emg_signals)
+    >>> nk.emg_plot(emg_signals)
 
     See Also
     --------
@@ -95,7 +95,7 @@ def _emg_plot_activity(emg_signals, onsets, offsets):
     activity_signal = activity_signal.fillna(method="backfill")
 
     if np.any(activity_signal.isna()):
-        index = np.min(np.where(activity_signal.isna() == True)) - 1
+        index = np.min(np.where(activity_signal.isna())) - 1
     value_to_fill = activity_signal[index]
     activity_signal = activity_signal.fillna(value_to_fill)
 
