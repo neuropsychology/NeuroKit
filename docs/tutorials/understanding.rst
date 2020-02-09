@@ -9,7 +9,7 @@ If you are reading this, it could be because you don't feel comfortable enough w
 
     Let me start by saying that there are multiple ways you'll be able to access the documentation in order to get to know different functions, follow examples and other tutorials. So keep in mind that you will eventually find your own workflow, and that these tricks are shared simply to help you get to know your options.
 
-First : readthedocs
+1. readthedocs
 -------------------
 
 You probably already saw the `README <https://github.com/neuropsychology/NeuroKit/blob/master/README.rst>`_ file that shows up on NeuroKit's Github home page (right after the list of directories). It contains a brief overview of the project, some examples and figures. *But, most importantly, there are the links that will take you to the Documentation*. 
@@ -54,7 +54,7 @@ Example
     An small **example** of the function should also be found. You can copy paste it in your Python kernel, or in a Jupyter Notebook, to see what it does.
 
 
-Second : the code on Github 
+2. the code on Github 
 ---------------------------
 
 Now that you're familiar with *readthedocs* website, let's go back to the `repo <https://github.com/neuropsychology/NeuroKit>`_. What you have to keep in mind is that *everything you saw in the previous section is* **in the Github repository**. The website pages, the lines that you are currently reading, are stored in the repository, which is then automatically uploaded to the website. Everything is cross-referenced, everything relates to the core which can be found in the repo. If you got here, you probably already know that a repository is like a *tree containing different branches* or directories that eventually lead you to a **script**, in which you can find a **function**.
@@ -70,7 +70,7 @@ Ready for inception ? let's find the location of the file you're currently readi
 See! It's super handy because you can visit the scripts without downloading it. Github also renders Jupyter Notebook quite well, so you can not only see the script, but also figures and markdown sections where the coder discusses results.
 
 
-Third : the code on YOUR machine
+3.: the code on YOUR machine
 --------------------------------
 
 Now, you're probably telling yourself :
