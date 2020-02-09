@@ -6,7 +6,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
-   qrs_extraction
-   eda_analysis
-   event_related_analysis
+   example_heartbeats
+   example_eda
+   example_eventrelated
 

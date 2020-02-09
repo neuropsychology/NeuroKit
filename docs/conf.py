@@ -52,8 +52,16 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx_rtd_theme',
     'nbsphinx',
-    'sphinx-nbexamples'
+    'sphinx_nbexamples'
 ]
+
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+# sphinx-nbexamples
+process_examples = not os.path.exists(os.path.join(os.path.dirname(__file__), 'examples'))
+not_document_data = 'sphinx_nbexamples.gallery_config'
+
 
 napoleon_google_docstring = False
 napoleon_use_param = False
