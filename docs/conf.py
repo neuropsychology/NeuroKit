@@ -60,6 +60,7 @@ on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 # sphinx-nbexamples
 process_examples = not os.path.exists(os.path.join(os.path.dirname(__file__), 'examples'))
+not_document_data = 'sphinx_nbexamples.gallery_config'
 
 
 napoleon_google_docstring = False
