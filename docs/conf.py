@@ -59,7 +59,7 @@ extensions = [
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 
 # sphinx-nbexamples
-process_examples = not os.path.exists(osp.join(osp.dirname(__file__), 'examples'))
+process_examples = not os.path.exists(os.path.join(os.path.dirname(__file__), 'examples'))
 
 
 napoleon_google_docstring = False
