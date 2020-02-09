@@ -51,8 +51,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx_rtd_theme',
-    'nbsphinx',
-    'sphinx-nbexamples'
+    'nbsphinx'
 ]
 
 napoleon_google_docstring = False
