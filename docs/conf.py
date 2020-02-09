@@ -55,6 +55,13 @@ extensions = [
     'sphinx_nbexamples'
 ]
 
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+# sphinx-nbexamples
+process_examples = not os.path.exists(osp.join(osp.dirname(__file__), 'examples'))
+
+
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True
