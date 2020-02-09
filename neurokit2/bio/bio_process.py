@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import pandas as pd
 
 from ..ecg import ecg_process
@@ -8,7 +7,7 @@ from ..eda import eda_process
 from ..emg import emg_process
 
 
-def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
+def bio_process(data=None, ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
     """Automated processing of bio signals.
 
     Wrapper for other bio processing functions of
@@ -17,6 +16,11 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
 
     Parameters
     ----------
+    data : DataFrame
+        The DataFrame containing all the respective signals
+        (e.g., ecg, rsp, Photosensor etc.). If provided,
+        there is no need to fill in the other arguments
+        denoting the channel inputs. Defaults to None.
     ecg : list, array or Series
         The raw ECG channel.
     rsp : list, array or Series
@@ -67,7 +71,7 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
     >>> eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=3)
     >>> emg = nk.emg_simulate(duration=30, sampling_rate=250, n_bursts=3)
     >>>
-    >>> bio_df, bio_info = nk.bio_process(ecg=ecg,
+    >>> bio_df, bio_info = bio_process(ecg=ecg,
                                           rsp=rsp,
                                           eda=eda,
                                           emg=emg,
@@ -75,16 +79,47 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
     >>>
     >>> # Visualize all signals
     >>> nk.standardize(bio_df).plot(subplots=True)
+    >>>
+    >>> # If `data` argument provided
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>> bio_df, bio_info = nk.bio_process(data=data, sampling_rate=100)
     """
     bio_info = {}
     bio_df = pd.DataFrame({})
+
+    # Data
+    if data is not None:
+        if "ECG" in data.keys():
+            ecg = data["ECG"]
+        else:
+            ecg = None
+        if "RSP" in data.keys():
+            rsp = data["RSP"]
+        else:
+            rsp = None
+        if "EDA" in data.keys():
+            eda = data["EDA"]
+        else:
+            eda = None
+        if "EMG" in data.keys():
+            emg = data["EMG"]
+        else:
+            emg = None
+        if "Photosensor" in data.keys():
+            keep = data["Photosensor"]
+#
+#    for key in data.keys():
+#        col = [key not in ["ECG", "RSP", "EDA", "EMG"]]
+#
+#        if any(key not in str(key) in ["ECG", "RSP", "EDA", "EMG"]):
+#            keep = data[keys[0]].values
+#        peak_indices = [key for key in info.keys() if "Peaks" in key]
 
     # ECG
     if ecg is not None:
         ecg_signals, ecg_info = ecg_process(ecg, sampling_rate=sampling_rate)
         bio_info.update(ecg_info)
         bio_df = pd.concat([bio_df, ecg_signals], axis=1)
-
 
     # RSP
     if rsp is not None:
