@@ -71,7 +71,7 @@ def bio_process(data=None, ecg=None, rsp=None, eda=None, emg=None, keep=None, sa
     >>> eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=3)
     >>> emg = nk.emg_simulate(duration=30, sampling_rate=250, n_bursts=3)
     >>>
-    >>> bio_df, bio_info = bio_process(ecg=ecg,
+    >>> bio_df, bio_info = nk.bio_process(ecg=ecg,
                                           rsp=rsp,
                                           eda=eda,
                                           emg=emg,
@@ -105,15 +105,13 @@ def bio_process(data=None, ecg=None, rsp=None, eda=None, emg=None, keep=None, sa
             emg = data["EMG"]
         else:
             emg = None
-        if "Photosensor" in data.keys():
-            keep = data["Photosensor"]
-#
-#    for key in data.keys():
-#        col = [key not in ["ECG", "RSP", "EDA", "EMG"]]
-#
-#        if any(key not in str(key) in ["ECG", "RSP", "EDA", "EMG"]):
-#            keep = data[keys[0]].values
-#        peak_indices = [key for key in info.keys() if "Peaks" in key]
+
+        cols = ["ECG", "RSP", "EDA", "EMG"]
+        keep_keys = [key for key in data.keys() if key not in cols]
+        if len(keep_keys) != 0:
+            keep = data[keep_keys]
+        else:
+            keep = None
 
     # ECG
     if ecg is not None:
