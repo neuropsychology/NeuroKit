@@ -81,26 +81,26 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
 
     # ECG
     if ecg is not None:
-        ecg_signals, ecg_info = nk.ecg_process(ecg, sampling_rate=sampling_rate)
+        ecg_signals, ecg_info = ecg_process(ecg, sampling_rate=sampling_rate)
         bio_info.update(ecg_info)
         bio_df = pd.concat([bio_df, ecg_signals], axis=1)
 
 
     # RSP
     if rsp is not None:
-        rsp_signals, rsp_info = nk.rsp_process(rsp, sampling_rate=sampling_rate)
+        rsp_signals, rsp_info = rsp_process(rsp, sampling_rate=sampling_rate)
         bio_info.update(rsp_info)
         bio_df = pd.concat([bio_df, rsp_signals], axis=1)
 
     # EDA
     if eda is not None:
-        eda_signals, eda_info = nk.eda_process(eda, sampling_rate=sampling_rate)
+        eda_signals, eda_info = eda_process(eda, sampling_rate=sampling_rate)
         bio_info.update(eda_info)
         bio_df = pd.concat([bio_df, eda_signals], axis=1)
 
     # EMG
     if emg is not None:
-        emg_signals, emg_info = nk.emg_process(emg, sampling_rate=sampling_rate)
+        emg_signals, emg_info = emg_process(emg, sampling_rate=sampling_rate)
         bio_info.update(emg_info)
         bio_df = pd.concat([bio_df, emg_signals], axis=1)
 
