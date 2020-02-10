@@ -43,7 +43,7 @@ def emg_activation(emg_amplitude, threshold='default'):
     >>> cleaned = nk.emg_clean(emg, sampling_rate=250)
     >>> emg_amplitude = nk.emg_amplitude(cleaned)
     >>>
-    >>> activity_signal,info = emg_activation(emg_amplitude, threshold)
+    >>> activity_signal,info = nk.emg_activation(emg_amplitude, threshold)
     >>> nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]],
                        emg_amplitude)
 
