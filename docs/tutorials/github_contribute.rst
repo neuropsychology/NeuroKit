@@ -25,7 +25,7 @@ Clonning allows you to make a *local* copy of any repositories on Github.
 
 Go to **File** menu, click **Clone Repository** and since you have forked Neurokit2, you should be able to find it easily under **Your repositories**. 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/clone_nk.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/clone_nk.PNG
 
 Choose the local path of where you want to save your *local* copy and as simple as that, you have a working repository in your computer.
 
@@ -64,6 +64,6 @@ Go to your *remote* repository on Github page, the *New Pull Request* button is 
 And now, all that is left is for the maintainers of the package to review your work and they can either request additional changes or merge it to the original repository. 
 
 Useful links
-=============
+-------------
 - `Understand Neurokit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html/>`_
 - `Contributing guide <https://neurokit2.readthedocs.io/en/latest/contributing.html/>`_
