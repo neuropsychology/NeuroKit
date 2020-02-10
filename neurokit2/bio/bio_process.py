@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import numpy as np
 
 from ..ecg import ecg_process
 from ..rsp import rsp_process
 from ..eda import eda_process
 from ..emg import emg_process
+from ..misc import sanitize_input
 
 
-def bio_process(data=None, ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
+def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
     """Automated processing of bio signals.
 
     Wrapper for other bio processing functions of
@@ -71,7 +73,7 @@ def bio_process(data=None, ecg=None, rsp=None, eda=None, emg=None, keep=None, sa
     >>> eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=3)
     >>> emg = nk.emg_simulate(duration=30, sampling_rate=250, n_bursts=3)
     >>>
-    >>> bio_df, bio_info = nk.bio_process(ecg=ecg,
+    >>> bio_df, bio_info = bio_process(ecg=ecg,
                                           rsp=rsp,
                                           eda=eda,
                                           emg=emg,
@@ -79,60 +81,68 @@ def bio_process(data=None, ecg=None, rsp=None, eda=None, emg=None, keep=None, sa
     >>>
     >>> # Visualize all signals
     >>> nk.standardize(bio_df).plot(subplots=True)
-    >>>
-    >>> # If `data` argument provided
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
-    >>> bio_df, bio_info = nk.bio_process(data=data, sampling_rate=100)
     """
     bio_info = {}
     bio_df = pd.DataFrame({})
 
-    # Data
-    if data is not None:
-        if "ECG" in data.keys():
-            ecg = data["ECG"]
-        else:
-            ecg = None
-        if "RSP" in data.keys():
-            rsp = data["RSP"]
-        else:
-            rsp = None
-        if "EDA" in data.keys():
-            eda = data["EDA"]
-        else:
-            eda = None
-        if "EMG" in data.keys():
-            emg = data["EMG"]
-        else:
-            emg = None
+    # Error check if first argument is a Dataframe.
+    if ecg is not None:
+        if isinstance(ecg, pd.DataFrame):
+            data = ecg.copy()
+            if "RSP" in data.keys():
+                rsp = data["RSP"]
+            else:
+                rsp = None
+            if "EDA" in data.keys():
+                eda = data["EDA"]
+            else:
+                eda = None
+            if "EMG" in data.keys():
+                emg = data["EMG"]
+            else:
+                emg = None
+            if "ECG" in data.keys():
+                ecg = data["ECG"]
+            elif "EKG" in data.keys():
+                ecg = data["EKG"]
+            else:
+                ecg = None
+            cols = ["ECG", "EKG", "RSP", "EDA", "EMG"]
+            keep_keys = [key for key in data.keys() if key not in cols]
+            if len(keep_keys) != 0:
+                keep = data[keep_keys]
+            else:
+                keep = None
+        elif isinstance(ecg, np.ndarray):
+            ecg = ecg
 
-        cols = ["ECG", "RSP", "EDA", "EMG"]
-        keep_keys = [key for key in data.keys() if key not in cols]
-        if len(keep_keys) != 0:
-            keep = data[keep_keys]
-        else:
-            keep = None
+    # Set warning message for sanitize input
+    message = "NeuroKit error: bio_process(): we expect the user to provide a vector, i.e., a one-dimensional array (such as a list of values)."
 
     # ECG
     if ecg is not None:
+        ecg = sanitize_input(ecg, message=message)
         ecg_signals, ecg_info = ecg_process(ecg, sampling_rate=sampling_rate)
         bio_info.update(ecg_info)
         bio_df = pd.concat([bio_df, ecg_signals], axis=1)
 
     # RSP
     if rsp is not None:
+        rsp = sanitize_input(rsp, message=message)
         rsp_signals, rsp_info = rsp_process(rsp, sampling_rate=sampling_rate)
         bio_info.update(rsp_info)
         bio_df = pd.concat([bio_df, rsp_signals], axis=1)
 
     # EDA
     if eda is not None:
+        eda = sanitize_input(eda, message=message)
         eda_signals, eda_info = eda_process(eda, sampling_rate=sampling_rate)
         bio_info.update(eda_info)
         bio_df = pd.concat([bio_df, eda_signals], axis=1)
 
     # EMG
     if emg is not None:
+        emg = sanitize_input(emg, message=message)
         emg_signals, emg_info = emg_process(emg, sampling_rate=sampling_rate)
         bio_info.update(emg_info)
         bio_df = pd.concat([bio_df, emg_signals], axis=1)
