@@ -5,7 +5,7 @@ import pandas as pd
 from ..signal import signal_formatpeaks
 
 
-def emg_activation(emg_amplitude, threshold=0.01):
+def emg_activation(emg_amplitude, threshold='default'):
     """Detects onset in EMG signal based on the amplitude threshold.
 
     Parameters
@@ -13,7 +13,8 @@ def emg_activation(emg_amplitude, threshold=0.01):
     emg_amplitude : array
         The amplitude of the emg signal, obtained from `emg_amplitude()`.
     threshold : float
-        The minimum amplitude to detect as onset. Defaults to 0.01.
+        The minimum amplitude to detect as onset. Defaults to one tenth of the
+        standard deviation of `emg_amplitude`.
 
     Returns
     -------
@@ -38,11 +39,11 @@ def emg_activation(emg_amplitude, threshold=0.01):
     >>> import neurokit2 as nk
     >>>
     >>> # Simulate signal and obtain amplitude
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
-    >>> cleaned = nk.emg_clean(emg, sampling_rate=1000)
+    >>> emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
+    >>> cleaned = nk.emg_clean(emg, sampling_rate=250)
     >>> emg_amplitude = nk.emg_amplitude(cleaned)
     >>>
-    >>> activity_signal,info = nk.emg_activation(emg_amplitude, threshold=0.1)
+    >>> activity_signal,info = emg_activation(emg_amplitude, threshold)
     >>> nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]],
                        emg_amplitude)
 
@@ -50,6 +51,11 @@ def emg_activation(emg_amplitude, threshold=0.01):
     ----------
     - BioSPPy: https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/emg.py
     """
+    if threshold == 'default':
+        threshold = (1/10)*np.std(emg_amplitude)
+    else:
+        threshold = threshold
+
     # Sanity checks.
     if not isinstance(emg_amplitude, np.ndarray):
         emg_amplitude = np.atleast_1d(emg_amplitude).astype('float64')
