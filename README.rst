@@ -174,6 +174,12 @@ Electromyography (EMG)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
 
+PPG, BVP, EGG, ...
+-------------------
+
+Consider `helping us developing it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
+
+
 
 Signal processing
 -----------------
