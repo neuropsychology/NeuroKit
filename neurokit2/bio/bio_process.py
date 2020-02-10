@@ -73,7 +73,7 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
     >>> eda = nk.eda_simulate(duration=30, sampling_rate=250, n_scr=3)
     >>> emg = nk.emg_simulate(duration=30, sampling_rate=250, n_bursts=3)
     >>>
-    >>> bio_df, bio_info = bio_process(ecg=ecg,
+    >>> bio_df, bio_info = nk.bio_process(ecg=ecg,
                                           rsp=rsp,
                                           eda=eda,
                                           emg=emg,
