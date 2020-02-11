@@ -9,4 +9,5 @@ Contents:
    example_heartbeats
    example_eda
    example_eventrelated
+   example_custom
 
