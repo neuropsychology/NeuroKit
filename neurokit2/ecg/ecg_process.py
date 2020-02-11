@@ -6,17 +6,17 @@ from .ecg_peaks import ecg_peaks
 from .ecg_rate import ecg_rate
 
 
-def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
+def ecg_process(ecg, sampling_rate=1000, method="neurokit"):
     """Process an ECG signal.
 
     Convenience function that automatically processes an ECG signal.
 
     Parameters
     ----------
-    ecg_signal : list, array or Series
+    ecg : list, array or Series
         The raw ECG channel.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of `ecg` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : str
         The processing pipeline to apply. Defaults to "neurokit".
@@ -24,7 +24,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     Returns
     -------
     signals : DataFrame
-        A DataFrame of the same length as the `ecg_signal` containing the
+        A DataFrame of the same length as the `ecg` containing the
         following columns:
         - *"ECG_Raw"*: the raw signal.
         - *"ECG_Clean"*: the cleaned signal.
@@ -46,7 +46,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
     >>> nk.ecg_plot(signals)
     """
-    ecg_cleaned = ecg_clean(ecg_signal,
+    ecg_cleaned = ecg_clean(ecg,
                             sampling_rate=sampling_rate,
                             method=method)
 
@@ -58,7 +58,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
                     sampling_rate=sampling_rate,
                     desired_length=len(ecg_cleaned))
 
-    signals = pd.DataFrame({"ECG_Raw": ecg_signal,
+    signals = pd.DataFrame({"ECG_Raw": ecg,
                             "ECG_Clean": ecg_cleaned,
                             "ECG_Rate": rate})
     signals = pd.concat([signals, instant_peaks], axis=1)

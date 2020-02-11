@@ -6,7 +6,7 @@ from .emg_amplitude import emg_amplitude
 from .emg_activation import emg_activation
 
 
-def emg_process(emg_signal, sampling_rate=1000):
+def emg_process(emg, sampling_rate=1000):
     """Process a electromyography (EMG) signal.
 
     Convenience function that automatically processes
@@ -14,15 +14,15 @@ def emg_process(emg_signal, sampling_rate=1000):
 
     Parameters
     ----------
-    emg_signal : list, array or Series
+    emg : list, array or Series
         The raw electromyography channel.
     sampling_rate : int
-        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
+        The sampling frequency of `emg` (in Hz, i.e., samples/second).
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `emg_signal` containing the following
+        A DataFrame of same length as `emg` containing the following
         columns:
 
         - *"EMG_Raw"*: the raw signal.
@@ -52,7 +52,7 @@ def emg_process(emg_signal, sampling_rate=1000):
     >>> nk.emg_plot(signals)
     """
     # Clean signal
-    emg_cleaned = emg_clean(emg_signal, sampling_rate=sampling_rate)
+    emg_cleaned = emg_clean(emg, sampling_rate=sampling_rate)
 
     # Get amplitude
     amplitude = emg_amplitude(emg_cleaned)
@@ -61,7 +61,7 @@ def emg_process(emg_signal, sampling_rate=1000):
     activity_signal, info = emg_activation(amplitude, threshold='default')
 
     # Prepare output
-    signals = pd.DataFrame({"EMG_Raw": emg_signal,
+    signals = pd.DataFrame({"EMG_Raw": emg,
                             "EMG_Clean": emg_cleaned,
                             "EMG_Amplitude": amplitude})
 
