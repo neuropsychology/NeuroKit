@@ -9,7 +9,7 @@ from .rsp_amplitude import rsp_amplitude
 
 
 
-def rsp_process(rsp, sampling_rate=1000, method="khodadad2018"):
+def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """Process a respiration (RSP) signal.
 
     Convenience function that automatically processes a respiration signal with
@@ -22,11 +22,11 @@ def rsp_process(rsp, sampling_rate=1000, method="khodadad2018"):
 
     Parameters
     ----------
-    rsp : list, array or Series
+    rsp_signal : list, array or Series
         The raw respiration channel (as measured, for instance, by a
         respiration belt).
     sampling_rate : int
-        The sampling frequency of `rsp` (in Hz, i.e., samples/second).
+        The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
     method : str
         The processing pipeline to apply. Can be one of "khodadad2018"
         (default) or "biosppy".
@@ -34,7 +34,7 @@ def rsp_process(rsp, sampling_rate=1000, method="khodadad2018"):
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `rsp` containing the following
+        A DataFrame of same length as `rsp_signal` containing the following
         columns:
 
         - *"RSP_Raw"*: the raw signal.
@@ -63,7 +63,7 @@ def rsp_process(rsp, sampling_rate=1000, method="khodadad2018"):
     >>> nk.rsp_plot(signals)
     """
     # Clean signal
-    rsp_cleaned = rsp_clean(rsp, sampling_rate=sampling_rate,
+    rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate,
                             method=method)
 
     # Extract, fix and format peaks
@@ -78,7 +78,7 @@ def rsp_process(rsp, sampling_rate=1000, method="khodadad2018"):
     rate = rsp_rate(peak_signal, sampling_rate=sampling_rate, method=method)
 
     # Prepare output
-    signals = pd.DataFrame({"RSP_Raw": rsp,
+    signals = pd.DataFrame({"RSP_Raw": rsp_signal,
                             "RSP_Clean": rsp_cleaned,
                             "RSP_Inspiration": phase,
                             "RSP_Amplitude": amplitude,

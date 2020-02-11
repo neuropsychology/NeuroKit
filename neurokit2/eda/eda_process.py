@@ -7,14 +7,14 @@ from .eda_peaks import eda_peaks
 
 
 
-def eda_process(eda, sampling_rate=1000):
+def eda_process(eda_signal, sampling_rate=1000):
     """Process Electrodermal Activity (EDA).
 
     Convenience function that automatically processes electrodermal activity (EDA) signal.
 
     Parameters
     ----------
-    eda : list, array or Series
+    eda_signal : list, array or Series
         The raw EDA signal.
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
@@ -25,7 +25,7 @@ def eda_process(eda, sampling_rate=1000):
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `eda` containing the following
+        A DataFrame of same length as `eda_signal` containing the following
         columns:
 
         - *"EDA_Raw"*: the raw signal.
@@ -49,12 +49,12 @@ def eda_process(eda, sampling_rate=1000):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> eda = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
-    >>> signals, info = nk.eda_process(eda, sampling_rate=1000)
+    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
+    >>> signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
     >>> nk.eda_plot(signals)
     """
     # Preprocess
-    eda_cleaned = eda_clean(eda, sampling_rate=sampling_rate, method="neurokit")
+    eda_cleaned = eda_clean(eda_signal, sampling_rate=sampling_rate, method="neurokit")
     eda_decomposed = eda_phasic(eda_cleaned, sampling_rate=sampling_rate)
 
     # Find peaks
@@ -64,7 +64,7 @@ def eda_process(eda, sampling_rate=1000):
                                   amplitude_min=0.1)
 
     # Store
-    signals = pd.DataFrame({"EDA_Raw": eda,
+    signals = pd.DataFrame({"EDA_Raw": eda_signal,
                             "EDA_Clean": eda_cleaned})
 
     signals = pd.concat([signals, eda_decomposed, peak_signal], axis=1)
