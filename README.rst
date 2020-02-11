@@ -69,9 +69,10 @@ Tutorials
 Examples
 --------
 
--  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/qrs_extraction.html>`_
--  `Electrodermal Activity (EDA) Analysis <https://neurokit2.readthedocs.io/en/latest/examples/eda_analysis.html>`_
-
+-  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/example_heartbeats.html>`_
+-  `Electrodermal Activity (EDA) Analysis <https://neurokit2.readthedocs.io/en/latest/examples/example_eda.html>`_
+-  `Customize your Processing Pipeline <https://neurokit2.readthedocs.io/en/latest/examples/example_custom.html>`_
+-  `Event-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/example_eventrelated.html>`_
 
 
 
