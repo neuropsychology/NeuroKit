@@ -44,9 +44,10 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     >>> artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks_uncorrected,
     >>>                                               recursive=True,
     >>>                                               show=True)
-    >>> rate_corrected = nk.ecg_rate(rpeaks_uncorrected,
+    >>> rate_corrected = nk.ecg_rate(rpeaks_corrected,
     >>>                              desired_length=len(ecg))
-    >>> rate_uncorrected = nk.ecg_rate(rpeaks, desired_length=len(ecg_signal))
+    >>> rate_uncorrected = nk.ecg_rate(rpeaks_uncorrected,
+                                       desired_length=len(ecg))
     >>>
     >>> fig, ax = plt.subplots()
     >>> ax.plot(rate_uncorrected, label="heart rate without artifact correction")

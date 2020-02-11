@@ -1,7 +1,7 @@
 """Top-level package for NeuroKit."""
 
 # Info
-__version__ = '0.0.81'
+__version__ = '0.0.9'
 __citation__ = 'Not yet available.'
 __bibtex__ = __citation__
 __cite__ = __citation__
@@ -28,3 +28,4 @@ from .eda import *
 from .emg import *
 from .ppg import *
 from .eeg import *
+from .bio import *

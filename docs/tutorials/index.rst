@@ -8,5 +8,6 @@ Contents:
    
    understanding
    recording
+   github_contribute
 
 

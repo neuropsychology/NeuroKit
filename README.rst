@@ -58,14 +58,25 @@ Documentation
         
 Click on the links above and check out our tutorials:
 
--  `Intall Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
+Tutorials
+---------
+
+-  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
--  `Extract and Visualize Heartbeats (QRS) <https://neurokit2.readthedocs.io/en/latest/examples/qrs_extraction.html>`_
-
-
+-  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 
 
 Examples
+--------
+
+-  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/example_heartbeats.html>`_
+-  `Electrodermal Activity (EDA) Analysis <https://neurokit2.readthedocs.io/en/latest/examples/example_eda.html>`_
+-  `Customize your Processing Pipeline <https://neurokit2.readthedocs.io/en/latest/examples/example_custom.html>`_
+-  `Event-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/example_eventrelated.html>`_
+
+
+
+Overview
 ========
 
 Simulate physiological signals
@@ -116,8 +127,8 @@ Cardiac activity (ECG)
 
 .. code-block:: python
 
-    # Generate 20 seconds of ECG signal (recorded at 250 samples / second)
-    ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70)
+    # Generate 15 seconds of ECG signal (recorded at 250 samples / second)
+    ecg = nk.ecg_simulate(duration=15, sampling_rate=250, heart_rate=70)
 
     # Process it
     signals, info = nk.ecg_process(ecg, sampling_rate=250)
@@ -163,6 +174,12 @@ Electromyography (EMG)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
+
+PPG, BVP, EGG, ...
+-------------------
+
+Consider `helping us developing it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
+
 
 
 Signal processing

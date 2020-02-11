@@ -248,3 +248,12 @@ def test_ecg_findpeaks():
     info_kalidas = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"),
                                       method="kalidas2017")
     assert info_kalidas["ECG_R_Peaks"].size == 69
+
+    # Test martinez2003 method
+    ecg = nk.ecg_simulate(duration=60, sampling_rate=sampling_rate, noise=0,
+                          random_state=42)
+    ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
+                               method="neurokit")
+    info_martinez = nk.ecg_findpeaks(ecg_cleaned, method="martinez2003")
+    assert np.allclose(info_martinez["ECG_R_Peaks"].size,
+                       69, atol=1)

@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import neurokit2 as nk
 
 
@@ -27,7 +28,9 @@ data = pd.DataFrame({"ECG": nk.ecg_simulate(duration=10, heart_rate=70, noise=0)
                      "EDA": nk.eda_simulate(duration=10, n_scr=3, noise=0),
                      "EMG": nk.emg_simulate(duration=10, n_bursts=2, noise=0)})
 plot = data.plot(subplots=True, layout=(4, 1), color=['#f44336', "#2196F3", "#9C27B0", "#FF9800"])
-plot[0][0].get_figure().savefig("README_simulation.png", dpi=300, h_pad=3)
+fig = plt.gcf()
+fig.set_size_inches(10, 6, forward=True)
+fig.savefig("README_simulation.png", dpi=300, h_pad=3)
 
 # =============================================================================
 # Electrodermal Activity (EDA) processing
@@ -51,8 +54,8 @@ plot.savefig("README_eda.png", dpi=300, h_pad=3)
 # Cardiac activity (ECG) processing
 # =============================================================================
 
-# Generate 20 seconds of ECG signal (recorded at 250 samples / second)
-ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70, random_state=333)
+# Generate 15 seconds of ECG signal (recorded at 250 samples / second)
+ecg = nk.ecg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_state=333)
 
 # Process it
 signals, info = nk.ecg_process(ecg, sampling_rate=250)
@@ -91,7 +94,7 @@ plot.savefig("README_rsp.png", dpi=300, h_pad=3)
 emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
 
 # Process it
-signals = nk.emg_process(emg, sampling_rate=250)
+signals, _ = nk.emg_process(emg, sampling_rate=250)
 
 # Visualise the processing
 nk.emg_plot(signals, sampling_rate=250)

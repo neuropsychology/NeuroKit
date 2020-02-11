@@ -8,3 +8,4 @@ dependencies:
   - ipykernel
   - pip:
     - nbsphinx
+    - sphinx-nbexamples

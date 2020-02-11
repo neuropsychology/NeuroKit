@@ -50,7 +50,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     >>> info, peak_signal = nk.rsp_peaks(cleaned)
     >>>
-    >>> rate = nk.rsp_rate(peak_signal)
+    >>> rate = nk.rsp_rate(peak_signal, desired_length=len(rsp))
     >>> nk.signal_plot([rsp, rate], subplots=True)
     """
     # Format input.
