@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
+from ..epochs import _df_to_epochs
+
 
 def signal_erp(epochs):
     """Performs event-related analysis on epochs.
 
     Parameters
     ----------
-    epochs : dict
-        A dict containing one DataFrame per event/trial.
-        Usually obtained via `epochs_create()`.
+    epochs : dict, DataFrame
+        A dict containing one DataFrame per event/trial,
+        usually obtained via `epochs_create()`, or a DataFrame
+        containing all epochs, usually obtained via `epochs_to_df()`.
 
     Returns
     -------
@@ -29,16 +32,24 @@ def signal_erp(epochs):
     >>> events = nk.signal_findpeaks(signal)
     >>>
     >>> # Create epochs
-    >>> epochs = nk.epochs_create(signal, events=events["Peaks"], epochs_duration=3, epochs_start=-0.1)
+    >>> epochs = nk.epochs_create(signal, events=events["Peaks"], epochs_duration=5, epochs_start=-0.1)
     >>> signal_erp(epochs)
     """
+    # Sanity checks
+    if isinstance(epochs, pd.DataFrame):
+        epochs = _df_to_epochs(epochs) # Convert df to dict
+
+    if not isinstance(epochs, dict):
+        raise ValueError("NeuroKit error: signal_erp(): Please specify an input"
+                         "that is of the correct form i.e., either a dictionary"
+                         "or dataframe.")
+
     # Extract features and build dataframe
     df = {}  # Initialize an empty dict
     for epoch_index in epochs:
         df[epoch_index] = {}  # Initialize an empty dict for the current epoch
         epoch = epochs[epoch_index]
 
-        # ECG
         minimum = epoch["Signal"].loc[0:len(epoch)].min()
         maximum = epoch["Signal"].loc[0:len(epoch)].max()
 
