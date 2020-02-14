@@ -27,17 +27,19 @@ def signal_erp(epochs):
 
     Examples
     --------
+    >>> import neurokit2 as nk
+    >>>
     >>> # Simulate signal
     >>> signal = nk.signal_simulate(duration=10, frequency=1)
     >>> events = nk.signal_findpeaks(signal)
     >>>
     >>> # Create epochs
     >>> epochs = nk.epochs_create(signal, events=events["Peaks"], epochs_duration=5, epochs_start=-0.1)
-    >>> signal_erp(epochs)
+    >>> nk.signal_erp(epochs)
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs) # Convert df to dict
+        epochs = _df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: signal_erp(): Please specify an input"
