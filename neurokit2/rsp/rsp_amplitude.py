@@ -47,7 +47,8 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     >>> nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
     """
     # Format input.
-    peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, len(rsp_cleaned))
+    peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs,
+                                                            len(rsp_cleaned))
 
     # To consistenty calculate amplitude, peaks and troughs must have the same
     # number of elements, and the first trough must precede the first peak.
@@ -62,6 +63,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     amplitude = rsp_cleaned[peaks] - rsp_cleaned[troughs]
 
     # Interpolate amplitude to desired_length samples.
-    amplitude = signal_interpolate(amplitude, x_axis=peaks, desired_length=desired_length)
+    amplitude = signal_interpolate(peaks, amplitude,
+                                   desired_length=desired_length)
 
     return amplitude
