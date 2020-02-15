@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from scipy.interpolate import interp1d
-
+import scipy.interpolate
 
 def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     """Interpolate a signal.
@@ -62,10 +61,10 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
                  x, signal, 'o')
     """
     # Create interpolation function
-    interpolation_function = interp1d(x_values, y_values, kind=method,
-                                      bounds_error=False,
-                                      fill_value=([y_values[0]],
-                                                  [y_values[-1]]))
+    interpolation_function = scipy.interpolate.interp1d(x_values,
+                                                        y_values, kind=method,
+                                                        bounds_error=False,
+                                                        fill_value=([y_values[0]], [y_values[-1]]))
 
     new_x = np.arange(desired_length)
 
