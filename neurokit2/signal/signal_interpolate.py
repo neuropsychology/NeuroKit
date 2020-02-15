@@ -1,24 +1,28 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import scipy.interpolate
+from scipy.interpolate import interp1d
 
 
-def signal_interpolate(signal, desired_length=None, method="quadratic",
-                       x_axis=None, new_x=None):
+def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     """Interpolate a signal.
 
     Interpolate (fills the values between data points) a signal using different methods.
 
     Parameters
     ----------
-    signal : list, array or Series
-        The signal channel in the form of a vector of values.
+    x_values : list, array or Series
+        The samples corresponding to the values to be interpolated.
+    y_values : list, array or Series
+        The values to be interpolated.
     desired_length : int
-        The desired length of the signal.
+        The amount of samples over which to interpolate the y_values.
     method : str
-        Method of interpolation. Can be 'linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic', 'previous' or 'next'.  'zero', 'slinear', 'quadratic' and 'cubic' refer to a spline interpolation of zeroth, first, second or third order; 'previous' and 'next' simply return the previous or next value of the point) or as an integer specifying the order of the spline interpolator to use.
-    x_axis : list, array or Series
-        An optional vector of same length as 'signal' corresponding to the x-axis.
+        Method of interpolation. Can be 'linear', 'nearest', 'zero', 'slinear',
+        'quadratic', 'cubic', 'previous' or 'next'.  'zero', 'slinear',
+        'quadratic' and 'cubic' refer to a spline interpolation of zeroth,
+        first, second or third order; 'previous' and 'next' simply return the
+        previous or next value of the point) or as an integer specifying the
+        order of the spline interpolator to use.
 
     Returns
     -------
@@ -57,29 +61,13 @@ def signal_interpolate(signal, desired_length=None, method="quadratic",
     >>> plt.plot(new_x, interpolated, '-',
                  x, signal, 'o')
     """
-    # Sanity checks
-    if desired_length is None:
-        if new_x is not None:
-            desired_length = new_x
-        else:
-            raise ValueError("NeuroKit error: signal_interpolate(): either 'desired_length' or 'new_x' must be provided.")
-    if desired_length < len(signal):
-        raise ValueError("NeuroKit error: signal_interpolate(): 'desired_length' cannot be lower than the length of the signal. You might be looking for 'signal_resample()'")
-
-    # Create x axis
-    if x_axis is None:
-        x_axis = np.arange(0, len(signal))
-
     # Create interpolation function
-    interpolation_function = scipy.interpolate.interp1d(
-            x_axis,
-            np.ravel(signal),
-            kind=method,
-            bounds_error=False,
-            fill_value=([signal[0]], [signal[-1]]))
+    interpolation_function = interp1d(x_values, y_values, kind=method,
+                                      bounds_error=False,
+                                      fill_value=([y_values[0]],
+                                                  [y_values[-1]]))
 
-    if new_x is None:
-        new_x = np.linspace(x_axis[0], x_axis[-1], num=desired_length)
+    new_x = np.arange(desired_length)
 
     interpolated = interpolation_function(new_x)
 

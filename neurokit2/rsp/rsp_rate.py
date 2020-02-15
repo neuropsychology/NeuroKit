@@ -63,7 +63,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
     rate, peaks = _rsp_rate_preprocessing(rate, peaks, method=method)
 
     # Interpolate rates to desired_length samples.
-    rate = signal_interpolate(rate, x_axis=peaks, desired_length=desired_length)
+    rate = signal_interpolate(peaks, rate, desired_length=desired_length)
 
     return rate
 
