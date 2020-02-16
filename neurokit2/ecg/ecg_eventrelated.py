@@ -19,8 +19,9 @@ def ecg_eventrelated(epochs):
     -------
     DataFrame
         A dataframe containing the analyzed ECG features
-        (i.e., heart rate variability and number of R peaks)
         for each epoch, with each epoch indicated by the Index column.
+        The analyzed features consist of the mean and minimum
+        ECG rate, both adjusted for baseline.
 
     See Also
     --------
@@ -69,7 +70,7 @@ def ecg_eventrelated(epochs):
         # Sanitize input
         n = np.array(epoch.columns)
         if len([i for i, item in enumerate(n) if "ECG" in item]) == 0:
-            raise ValueError("NeuroKit error: ecg_erp(): input does not"
+            raise ValueError("NeuroKit error: ecg_eventrelated(): input does not"
                              "have any processed signals related to ECG.")
 
         # If epoching starts before event
