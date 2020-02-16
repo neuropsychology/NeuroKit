@@ -4,7 +4,7 @@ import pandas as pd
 from ..epochs import _df_to_epochs
 
 
-def signal_erp(epochs):
+def signal_eventrelated(epochs):
     """Performs event-related analysis on epochs.
 
     Parameters
@@ -35,7 +35,7 @@ def signal_erp(epochs):
     >>>
     >>> # Create epochs
     >>> epochs = nk.epochs_create(signal, events=events["Peaks"], epochs_duration=5, epochs_start=-0.1)
-    >>> nk.signal_erp(epochs)
+    >>> nk.signal_eventrelated(epochs)
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):

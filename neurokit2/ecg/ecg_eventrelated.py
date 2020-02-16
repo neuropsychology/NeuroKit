@@ -5,7 +5,7 @@ import numpy as np
 from ..epochs import _df_to_epochs
 
 
-def ecg_erp(epochs):
+def ecg_eventrelated(epochs):
     """Performs event-related ECG analysis on epochs.
 
     Parameters
@@ -49,7 +49,7 @@ def ecg_erp(epochs):
     >>> epochs = nk.epochs_create(df, events,
                                   sampling_rate=100,
                                   epochs_duration=3, epochs_start=-0.1)
-    >>> nk.ecg_erp(epochs)
+    >>> nk.ecg_eventrelated(epochs)
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
@@ -72,16 +72,17 @@ def ecg_erp(epochs):
             raise ValueError("NeuroKit error: ecg_erp(): input does not"
                              "have any processed signals related to ECG.")
 
+        # If epoching starts before event
         if any(epoch.index < 0):
-            ecg_baseline = epoch["ECG_Rate"][epoch.index < 0].mean()  # Baseline
-            ecg_mean = epoch["ECG_Rate"][epoch.index > 0].mean()  # Mean heart rate when active
-            ecg_df[epoch_index]["ECG_Rate"] = ecg_mean - ecg_baseline  # Correct for baseline
-            ecg_max_peak = np.sum(epoch["ECG_R_Peaks"][epoch.index > 0])
-            ecg_df[epoch_index]["R_Peaks"] = ecg_max_peak
+            ecg_mean_baseline = epoch["ECG_Rate"][epoch.index < 0].mean()
+            ecg_mean = epoch["ECG_Rate"][epoch.index > 0].mean()
+            ecg_df[epoch_index]["Mean_ECG_Rate"] = ecg_mean - ecg_mean_baseline
+            ecg_min_baseline = epoch["ECG_Rate"][epoch.index < 0].min()
+            ecg_min = epoch["ECG_Rate"][epoch.index > 0].min()
+            ecg_df[epoch_index]["Min_ECG_Rate"] = ecg_min - ecg_min_baseline
         else:
-            ecg_df[epoch_index]["ECG_Rate"] = epoch["ECG_Rate"].mean()
-            ecg_max_peak = np.sum(epoch["ECG_R_Peaks"])
-            ecg_df[epoch_index]["R_Peaks"] = ecg_max_peak
+            ecg_df[epoch_index]["Mean_ECG_Rate"] = epoch["ECG_Rate"].mean()
+            ecg_df[epoch_index]["Min_ECG_Rate"] = epoch["ECG_Rate"].min()
 
     ecg_df = pd.DataFrame.from_dict(ecg_df, orient="index")  # Convert to a dataframe
 
