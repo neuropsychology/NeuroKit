@@ -56,7 +56,7 @@ def ecg_eventrelated(epochs):
         epochs = _df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: ecg_erp(): Please specify an input"
+        raise ValueError("NeuroKit error: ecg_eventrelated(): Please specify an input"
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe.")
 

@@ -42,8 +42,9 @@ def signal_eventrelated(epochs):
         epochs = _df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: signal_erp(): Please specify an input"
-                         "that is of the correct form i.e., either a dictionary"
+        raise ValueError("NeuroKit error: signal_eventrelated():"
+                         "Please specify an input that is of"
+                         "the correct form i.e., either a dictionary"
                          "or dataframe.")
 
     # Extract features and build dataframe
