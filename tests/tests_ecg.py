@@ -78,7 +78,7 @@ def test_ecg_peaks():
                                  method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 150,
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 151,
                        atol=1)
 
 
