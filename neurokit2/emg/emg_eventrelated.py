@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 
 from ..epochs import _df_to_epochs
+from ..ecg import _eventrelated_addinfo
 
 
 def emg_eventrelated(epochs):
@@ -19,10 +20,12 @@ def emg_eventrelated(epochs):
     -------
     DataFrame
         A dataframe containing the analyzed EMG features for each epoch,
-        with each epoch indicated by the Index column. The analyzed features
-        consist of the mean and maximum EMG amplitude (not adjusted for baseline)
-        as well as whether there is muscular activation following the onset
-        of the event.
+        with each epoch indicated by the `Label` column (if not present,
+        by the `Index` column). The analyzed features consist of the following:
+        - *"EMG_Amplitude_Max"*: the maximum amplitude of the activity.
+        - *"EMG_Amplitude_Mean"*: the mean amplitude of the activity.
+        - *"EMG_Activation"*: indication of whether there is muscular activation
+        following the onset of the event (1 if present, 0 if absent).
 
     See Also
     --------
@@ -32,12 +35,12 @@ def emg_eventrelated(epochs):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
+    >>> # Example with simulated data
+    >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, n_bursts=3)
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> events = nk.events_find(emg_signals["EMG_Onsets"])
-    >>> epochs = nk.epochs_create(emg_signals, events,
+    >>> epochs = nk.epochs_create(emg_signals, events=[5000, 10000, 15000],
                                   sampling_rate=1000,
-                                  epochs_duration=4, epochs_start=-0.1)
+                                  epochs_duration=2, epochs_start=-0.1)
     >>> nk.emg_eventrelated(epochs)
     """
     # Sanity checks
@@ -49,6 +52,13 @@ def emg_eventrelated(epochs):
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe.")
 
+    # Warning for epoch length (can be adjusted)
+    for i in epochs:
+        if (len(epochs[i]) > 10000):
+            print("Neurokit warning: emg_eventrelated():"
+                  "Epoch length is too long. You might want to use"
+                  "emg_periodrelated().")
+
     # Extract features and build dataframe
     emg_df = {}  # Initialize an empty dict
     for epoch_index in epochs:
@@ -57,13 +67,24 @@ def emg_eventrelated(epochs):
 
         # Sanitize input
         n = np.array(epoch.columns)
-        if len([i for i, item in enumerate(n) if "EMG" in item]) == 0:
+        if len([i for i, item in enumerate(n) if "EMG_Amplitude" in item]) == 0:
             raise ValueError("NeuroKit error: emg_eventrelated(): input does not"
-                             "have any processed signals related to EMG.")
+                             "have an `EMG_Amplitude` column. Will skip all"
+                             "amplitude-related features.")
+        if len([i for i, item in enumerate(n) if "EMG_Onsets" in item]) == 0:
+            raise ValueError("NeuroKit error: emg_eventrelated(): input does not"
+                             "have an `EMG_Onsets` column. Will not indicate"
+                             "whether muscular activation follows event onset.")
 
-        emg_df[epoch_index]["Mean_EMG_Amplitude"] = epoch["EMG_Amplitude"].mean()
-        emg_df[epoch_index]["Max_EMG_Amplitude"] = epoch["EMG_Amplitude"].max()
-        emg_df[epoch_index]["Presence_of_Activation"] = epoch["EMG_Onsets"][epoch.index > 0].iloc[0]
+        # Amplitude
+        emg_df[epoch_index]["EMG_Amplitude_Mean"] = epoch["EMG_Amplitude"].mean()
+        emg_df[epoch_index]["EMG_Amplitude_Max"] = epoch["EMG_Amplitude"].max()
+
+        # Activation following event
+        emg_df[epoch_index]["EMG_Activation"] = epoch["EMG_Onsets"][epoch.index > 0].iloc[0]
+
+        # Fill with more info
+        emg_df[epoch_index] = _eventrelated_addinfo(epoch, emg_df[epoch_index])
 
     emg_df = pd.DataFrame.from_dict(emg_df, orient="index")  # Convert to a dataframe
 

@@ -20,7 +20,8 @@ def rsp_eventrelated(epochs):
     -------
     DataFrame
         A dataframe containing the analyzed RSP features for each epoch,
-        with each epoch indicated by the Index column. The analyzed features
+        with each epoch indicated by the `Label` column (if not
+        present, by the `Index` column). The analyzed features
         consist of the following:
         - *"RSP_Rate_Max"*: the maximum respiratory rate after stimulus onset.
         - *"RSP_Rate_Min"*: the minimum respiratory rate after stimulus onset.

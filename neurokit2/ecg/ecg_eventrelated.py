@@ -20,8 +20,9 @@ def ecg_eventrelated(epochs):
     -------
     DataFrame
         A dataframe containing the analyzed ECG features
-        for each epoch, with each epoch indicated by the Index column.
-        The analyzed features consist of the following:
+        for each epoch, with each epoch indicated by the `Label` column
+        (if not present, by the `Index` column). The analyzed
+        features consist of the following:
         - *"ECG_Rate_Max"*: the maximum heart rate after stimulus onset.
         - *"ECG_Rate_Min"*: the minimum heart rate after stimulus onset.
         - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
