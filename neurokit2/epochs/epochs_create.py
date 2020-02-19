@@ -59,6 +59,15 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_duration=3, baseline_correction=True)
     >>> nk.epochs_plot(epochs)
     """
+    # Santize data input
+    if isinstance(data, tuple):  # If a tuple of data and info is passed
+        data = data[0]
+
+    if isinstance(data, list) or isinstance(data, np.ndarray) or isinstance(data, pd.Series):
+        data = pd.DataFrame({"Signal": list(data)})
+
+
+
     # Sanitize events input
     if isinstance(events, dict) is False:
         events = _events_find_label({"onset": events}, event_labels=event_labels, event_conditions=event_conditions)
@@ -67,11 +76,6 @@ def epochs_create(data, events, sampling_rate=1000, epochs_duration=1, epochs_st
     event_labels = list(events["label"])
     if 'condition' in events.keys():
         event_conditions = list(events["condition"])
-
-
-    # Santize data input
-    if isinstance(data, list) or isinstance(data, np.ndarray) or isinstance(data, pd.Series):
-        data = pd.DataFrame({"Signal": list(data)})
 
 
     # Create epochs

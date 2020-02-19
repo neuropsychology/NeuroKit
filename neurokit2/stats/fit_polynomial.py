@@ -27,7 +27,7 @@ def fit_polynomial(y, X=None, order=2):
     Returns
     -------
     array
-        Prediciton of the regression.
+        Prediction of the regression.
 
     See Also
     ----------

@@ -32,7 +32,15 @@ def ecg_eventrelated(epochs):
     >>> import neurokit2 as nk
     >>> import pandas as pd
     >>>
-    >>> # Example with data
+    >>> # Example with simulated data
+    >>> ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
+    >>> epochs = nk.epochs_create(ecg,
+                                  events=[5000, 10000, 15000],
+                                  epochs_start=-0.1,
+                                  epochs_duration=3)
+    >>> nk.ecg_eventrelated(epochs)
+    >>>
+    >>> # Example with real data
     >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
     >>>
     >>> # Process the data
@@ -59,7 +67,7 @@ def ecg_eventrelated(epochs):
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: ecg_eventrelated(): Please specify an input"
                          "that is of the correct form i.e., either a dictionary"
-                         "or dataframe.")
+                         "or dataframe as returned by `epochs_create()`.")
 
     # Extract features and build dataframe
     ecg_df = {}  # Initialize an empty dict
@@ -67,24 +75,45 @@ def ecg_eventrelated(epochs):
         ecg_df[epoch_index] = {}  # Initialize an empty dict for the current epoch
         epoch = epochs[epoch_index]
 
-        # Sanitize input
-        n = np.array(epoch.columns)
-        if len([i for i, item in enumerate(n) if "ECG" in item]) == 0:
-            raise ValueError("NeuroKit error: ecg_eventrelated(): input does not"
-                             "have any processed signals related to ECG.")
-
-        # If epoching starts before event
-        if any(epoch.index < 0):
-            ecg_mean_baseline = epoch["ECG_Rate"][epoch.index < 0].mean()
-            ecg_mean = epoch["ECG_Rate"][epoch.index > 0].mean()
-            ecg_df[epoch_index]["Mean_ECG_Rate"] = ecg_mean - ecg_mean_baseline
-            ecg_min_baseline = epoch["ECG_Rate"][epoch.index < 0].min()
-            ecg_min = epoch["ECG_Rate"][epoch.index > 0].min()
-            ecg_df[epoch_index]["Min_ECG_Rate"] = ecg_min - ecg_min_baseline
-        else:
-            ecg_df[epoch_index]["Mean_ECG_Rate"] = epoch["ECG_Rate"].mean()
-            ecg_df[epoch_index]["Min_ECG_Rate"] = epoch["ECG_Rate"].min()
+        # Rate
+        ecg_df[epoch_index] = _ecg_eventrelated_rate(epoch)
 
     ecg_df = pd.DataFrame.from_dict(ecg_df, orient="index")  # Convert to a dataframe
 
     return ecg_df
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+
+def _ecg_eventrelated_rate(epoch):
+
+    output = {}
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "ECG_Rate" in i]) == 0:
+        print("NeuroKit warning: ecg_eventrelated(): input does not"
+              "have an `ECG_Rate` column. Will skip all rate-related features.")
+        return output
+
+    # Get baseline
+    if np.min(epoch.index) <= 0:
+        baseline = epoch["ECG_Rate"][epoch.index <= 0].values
+        signal = epoch["ECG_Rate"][epoch.index > 0].values
+    else:
+        baseline = epoch["ECG_Rate"][np.min(epoch.index):np.min(epoch.index)].values
+        signal = epoch["ECG_Rate"][epoch.index > np.min(epoch.index)].values
+
+
+    # Min / Mean
+    output["ECG_Rate_Max"] = np.max(signal) - np.mean(baseline)
+    output["ECG_Rate_Min"] = np.min(signal) - np.mean(baseline)
+    output["ECG_Rate_Mean"] = np.mean(signal) - np.mean(baseline)
+
+    # Modelling
+    # TODO
+#    nk.fit_polynomial(signal, order=2)
+    return output
+
