@@ -55,7 +55,8 @@ def ecg_delineator(ecg, rpeaks, sampling_rate=500, cleaning=False):
         rpeaks = rpeaks["ECG_R_Peaks"]
 
     # P-Peaks and T-Peaks
-    tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate)
+    tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks,
+                                       sampling_rate=sampling_rate)
 
     # qrs onsets and offsets
     qrs_onsets, qrs_offsets = _onset_offset_delineator(rpeaks,
