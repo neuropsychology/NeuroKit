@@ -144,8 +144,8 @@ def _ecg_eventrelated_rate(epoch, output={}):
     output["ECG_Rate_Trend_Quadratic"] = coefs[0]
     output["ECG_Rate_Trend_Linear"] = coefs[1]
     output["ECG_Rate_Trend_R2"] = fit_r2(
-            y = signal - np.mean(baseline),
-            y_predicted = np.polyval(coefs, index),
+            y=signal - np.mean(baseline),
+            y_predicted=np.polyval(coefs, index),
             adjusted=False,
             n_parameters=3)
 
