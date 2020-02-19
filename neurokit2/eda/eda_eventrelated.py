@@ -52,7 +52,7 @@ def eda_eventrelated(epochs):
     >>> epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000],
                                   sampling_rate=1000,
                                   epochs_duration=2, epochs_start=-0.1)
-    >>> eda_eventrelated(epochs)
+    >>> nk.eda_eventrelated(epochs)
     >>>
     >>> # Example with real data
     >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
