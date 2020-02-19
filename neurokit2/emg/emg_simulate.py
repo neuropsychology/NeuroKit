@@ -67,7 +67,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     total_duration_bursts = np.sum(duration_bursts)
     if total_duration_bursts > duration:
-        raise ValueError("NeuroKit error: emg_simulate(): The total duration" \
+        raise ValueError("NeuroKit error: emg_simulate(): The total duration"
                          " of bursts cannot exceed the total duration")
 
     # Generate bursts

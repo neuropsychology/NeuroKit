@@ -93,6 +93,7 @@ def find_version():
     result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"), open('../neurokit2/__init__.py').read())
     return result.group(1)
 
+
 version = find_version()
 # The full version, including alpha/beta/rc tags.
 release = version
@@ -224,6 +225,6 @@ texinfo_documents = [
 
 
 #Other
-add_module_names = False # so functions aren’t prepended with the name of the package/module
-add_function_parentheses = True # to ensure that parentheses are added to the end of all function names
+add_module_names = False  # so functions aren’t prepended with the name of the package/module
+add_function_parentheses = True  # to ensure that parentheses are added to the end of all function names
 
