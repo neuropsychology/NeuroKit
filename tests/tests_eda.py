@@ -115,5 +115,7 @@ def test_eda_plot():
 
     # Plot data over seconds.
     nk.eda_plot(eda_summary, sampling_rate=sampling_rate)
+    # This will identify the latest figure.
+    fig = plt.gcf()
     assert fig.get_axes()[2].get_xlabel() == "Seconds"
 
