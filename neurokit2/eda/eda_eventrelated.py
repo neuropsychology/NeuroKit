@@ -3,10 +3,11 @@ import pandas as pd
 import numpy as np
 
 from ..epochs import _df_to_epochs
+from ..ecg import _eventrelated_addinfo
 
 
 def eda_eventrelated(epochs):
-    """Performs event-related ECG analysis on epochs.
+    """Performs event-related EDA analysis on epochs.
 
     Parameters
     ----------
@@ -19,10 +20,22 @@ def eda_eventrelated(epochs):
     -------
     DataFrame
         A dataframe containing the analyzed EDA features
-        for each epoch, with each epoch indicated by the Index column.
-        The analyzed features consist of whether EDA activation
-        occurs following the event (i.e., presence of an SCR onset) and if so,
-        its corresponding peak amplitude, time of peak, rise time and recovery time.
+        for each epoch, with each epoch indicated by the `Label` column
+        (if not present, by the `Index` column). The analyzed features consist
+        the following:
+        - *"EDA_Activation"*: indication of whether Skin Conductance Response
+        (SCR) occurs following the event (1 if an SCR onset is present and 0
+        if absent) and if so, its corresponding peak amplitude,
+        time of peak, rise and recovery time. If there is no occurrence of
+        SCR, nans are displayed for the below features.
+        - *"EDA_Peak_Amplitude"*: the peak amplitude of
+        the first SCR in each epoch.
+        - *"EDA_Peak_Amplitude_Time"*: the timepoint of each first SCR
+        peak amplitude.
+        - *"EDA_RiseTime"*: the risetime of each first SCR
+        i.e., the time it takes for SCR to reach peak amplitude from onset.
+        - *"EDA_RecoveryTime"*: the half-recovery time of each first SCR i.e.,
+        the time it takes for SCR to decrease to half amplitude.
 
     See Also
     --------
@@ -33,15 +46,19 @@ def eda_eventrelated(epochs):
     >>> import neurokit2 as nk
     >>> import pandas as pd
     >>>
-    >>> # Example with data
+    >>> # Example with simulated data
+    >>> eda = nk.eda_simulate(duration=15, n_scr=3)
+    >>> eda_signals, info = nk.eda_process(eda, sampling_rate=1000)
+    >>> epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000],
+                                  sampling_rate=1000,
+                                  epochs_duration=2, epochs_start=-0.1)
+    >>> eda_eventrelated(epochs)
+    >>>
+    >>> # Example with real data
     >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
     >>>
     >>> # Process the data
-    >>> df, info = nk.bio_process(ecg=data["ECG"],
-                                          rsp=data["RSP"],
-                                          eda=data["EDA"],
-                                          keep=data["Photosensor"],
-                                          sampling_rate=100)
+    >>> df, info = nk.bio_process(eda=data["EDA"], sampling_rate=100)
     >>> events = nk.events_find(data["Photosensor"],
                                 threshold_keep='below',
                                 event_conditions=["Negative",
@@ -62,52 +79,85 @@ def eda_eventrelated(epochs):
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe.")
 
+    # Warning for epoch length (can be adjusted)
+    for i in epochs:
+        if (len(epochs[i]) > 10000):
+            print("Neurokit warning: eda_eventrelated():"
+                  "Epoch length is too long. You might want to use"
+                  "eda_periodrelated().")
+
     # Extract features and build dataframe
     eda_df = {}  # Initialize an empty dict
     for epoch_index in epochs:
         eda_df[epoch_index] = {}  # Initialize an empty dict for the current epoch
         epoch = epochs[epoch_index]
 
-        # Sanitize input
-        n = np.array(epoch.columns)
-        if len([i for i, item in enumerate(n) if "EDA" in item]) == 0:
-            raise ValueError("NeuroKit error: eda_eventrelated(): input does not"
-                             "have any processed signals related to EDA.")
-
         # Detect activity following the event
         activations = len(np.where(epoch["SCR_Onsets"][epoch.index > 0] != 0))
         if any(epoch["SCR_Onsets"][epoch.index > 0] != 0):
-            eda_df[epoch_index]["Presence_of_Activation"] = activations
+            eda_df[epoch_index]["EDA_Activation"] = activations
         else:
-            eda_df[epoch_index]["Presence_of_Activation"] = 0
+            eda_df[epoch_index]["EDA_Activation"] = 0
 
         # Analyze based on if activations are present
-        if (eda_df[epoch_index]["Presence_of_Activation"] != 0):
-
-            # Calculate amplitude and time of peak
-            first_activation = np.where(epoch["SCR_Amplitude"][epoch.index > 0] != 0)[0][0]
-            peak_amplitude = epoch["SCR_Amplitude"][epoch.index > 0].iloc[first_activation]
-            eda_df[epoch_index]["Peak_Amplitude"] = peak_amplitude
-            eda_df[epoch_index]["Time_of_Peak"] = epoch["SCR_Amplitude"][epoch.index > 0].index[first_activation]
-
-            # Calculate rise time
-            rise_time = epoch["SCR_RiseTime"][epoch.index > 0].iloc[first_activation]
-            eda_df[epoch_index]["Rise_Time"] = rise_time
-
-            # Calculate recovery time
-            if any(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0):
-                recovery_time = np.where(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0)[0][0]
-                eda_df[epoch_index]["Recovery_Time"] = recovery_time
-            else:
-                eda_df[epoch_index]["Recovery_Time"] = "NA"
-
-        # Otherwise NA elsewhere
+        if (eda_df[epoch_index]["EDA_Activation"] != 0):
+            eda_df[epoch_index] = _eda_eventrelated_features(epochs[epoch_index],
+                                                             eda_df[epoch_index])
         else:
-            eda_df[epoch_index]["Peak_Amplitude"] = "NA"
-            eda_df[epoch_index]["Time_of_Peak"] = "NA"
-            eda_df[epoch_index]["Rise_Time"] = "NA"
-            eda_df[epoch_index]["Recovery_Time"] = "NA"
+            eda_df[epoch_index]["EDA_Peak_Amplitude"] = np.nan
+            eda_df[epoch_index]["EDA_Peak_Amplitude_Time"] = np.nan
+            eda_df[epoch_index]["EDA_RiseTime"] = np.nan
+            eda_df[epoch_index]["EDA_RecoveryTime"] = np.nan
+
+        # Fill with more info
+        eda_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
+                                                    eda_df[epoch_index])
 
     eda_df = pd.DataFrame.from_dict(eda_df, orient="index")  # Convert to a dataframe
 
     return eda_df
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _eda_eventrelated_features(epoch, output={}):
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "SCR_Amplitude" in i]) == 0:
+        print("NeuroKit warning: eda_eventrelated(): input does not"
+              "have an `SCR_Amplitude` column. Will skip computation"
+              "of SCR peak amplitude.")
+        return output
+
+    if len([i for i in colnames if "SCR_RecoveryTime" in i]) == 0:
+        print("NeuroKit warning: eda_eventrelated(): input does not"
+              "have an `SCR_RecoveryTime` column. Will skip computation"
+              "of SCR half-recovery times.")
+        return output
+
+    if len([i for i in colnames if "SCR_RiseTime" in i]) == 0:
+        print("NeuroKit warning: eda_eventrelated(): input does not"
+              "have an `SCR_RiseTime` column. Will skip computation"
+              "of SCR rise times.")
+        return output
+
+    # Peak amplitude and Time of peak
+    first_activation = np.where(epoch["SCR_Amplitude"][epoch.index > 0] != 0)[0][0]
+    peak_amplitude = epoch["SCR_Amplitude"][epoch.index > 0].iloc[first_activation]
+    output["EDA_Peak_Amplitude"] = peak_amplitude
+    output["EDA_Peak_Amplitude_Time"] = epoch["SCR_Amplitude"][epoch.index > 0].index[first_activation]
+
+    # Rise Time
+    rise_time = epoch["SCR_RiseTime"][epoch.index > 0].iloc[first_activation]
+    output["EDA_RiseTime"] = rise_time
+
+    # Recovery Time
+    if any(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0):
+        recovery_time = np.where(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0)[0][0]
+        output["EDA_RecoveryTime"] = recovery_time
+    else:
+        output["EDA_RecoveryTime"] = np.nan
+
+    return output
