@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import neurokit2 as nk
+import matplotlib.pyplot as plt
 
 import scipy.stats
 import biosppy
@@ -40,3 +41,30 @@ def test_emg_clean():
                                                  sampling_rate=sampling_rate)
     emg_cleaned_biosppy = nk.signal_detrend(original, order=0)
     assert np.allclose((emg_cleaned - emg_cleaned_biosppy).mean(), 0, atol=1e-6)
+
+def test_emg_plot():
+
+    sampling_rate=1000
+
+    emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
+    emg_summary, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
+
+    # Plot data over samples.
+    nk.emg_plot(emg_summary)
+    # This will identify the latest figure.
+    fig = plt.gcf()
+    assert len(fig.axes) == 2
+    titles = ["Raw and Cleaned Signal",
+              "Muscle Activation"]
+    for (ax, title) in zip(fig.get_axes(), titles):
+        assert ax.get_title() == title
+    assert fig.get_axes()[1].get_xlabel() == "Samples"
+    np.testing.assert_array_equal(fig.axes[0].get_xticks(),
+                                  fig.axes[1].get_xticks())
+    plt.close(fig)
+
+    # Plot data over time.
+    nk.emg_plot(emg_summary, sampling_rate=sampling_rate)
+    # This will identify the latest figure.
+    fig = plt.gcf()
+    assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
