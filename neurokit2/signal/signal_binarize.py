@@ -63,4 +63,3 @@ def _signal_binarize(signal, threshold="auto"):
     binary[signal > threshold] = 1
     binary[signal <= threshold] = 0
     return binary
-

@@ -95,8 +95,8 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", im
             if len(data[channel]) > length:
                 data[channel] = data[channel][0:length]
             if len(data[channel]) < length:
-                  data[channel] = np.concatenate([data[channel],
-                                                 np.full((length-len(data[channel])), data[channel][-1])])
+                data[channel] = np.concatenate([data[channel],
+                                               np.full((length-len(data[channel])), data[channel][-1])])
 
     # Final dataframe
     df = pd.DataFrame(data)

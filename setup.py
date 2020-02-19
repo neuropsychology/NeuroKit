@@ -19,7 +19,6 @@ def find_version():
     return result.group(1)
 
 
-
 # Dependencies
 requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'matplotlib']
 setup_requirements = ['pytest-runner', 'numpy']

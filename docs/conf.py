@@ -146,26 +146,25 @@ html_static_path = ['_static']
 htmlhelp_basename = 'neurokit2doc'
 
 
-
 # Bootstrap theme
-#html_theme = 'bootstrap'
-#html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
-#html_theme_options = {
-#    'source_link_position': "footer",
-#    'bootswatch_theme': "readable",
-#    'navbar_sidebarrel': False,
-#    'nosidebar': True,
-#    'navbar_pagenav': False,
-#    'bootstrap_version': "3",
-#    'navbar_links': [
-#                     ("Installation", "installation"),
-#                     ("What's new", "news"),
-#                     ("Functions", "functions"),
-#                     ("Contributing", "contributing"),
-#                     ("Authors", "credits")
-#                     ],
+# html_theme = 'bootstrap'
+# html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+# html_theme_options = {
+#     'source_link_position': "footer",
+#     'bootswatch_theme': "readable",
+#     'navbar_sidebarrel': False,
+#     'nosidebar': True,
+#     'navbar_pagenav': False,
+#     'bootstrap_version': "3",
+#     'navbar_links': [
+#                      ("Installation", "installation"),
+#                      ("What's new", "news"),
+#                      ("Functions", "functions"),
+#                      ("Contributing", "contributing"),
+#                      ("Authors", "credits")
+#                      ],
 #
-#    }
+#     }
 
 
 # -- Options for LaTeX output ------------------------------------------

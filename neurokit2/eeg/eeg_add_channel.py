@@ -76,5 +76,3 @@ def eeg_add_channel(raw, channel, channel_type=None, channel_name=None, sync_ind
     raw.add_channels([channel], force_update_info=True)
 
     return(raw)
-
-
