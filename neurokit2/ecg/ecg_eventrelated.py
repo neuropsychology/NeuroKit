@@ -28,11 +28,12 @@ def ecg_eventrelated(epochs):
         - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
         - *"ECG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
         - *"ECG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
-        A quadratic polynomial was used to model the rate features.
-        - *"ECG_Rate_Trend_Quadratic"*: a quadratic coefficient of degree 2.
-        - *"ECG_Rate_Trend_Linear"*: a quadratic coefficient of degree 1.
-        - *"ECG_Rate_Trend_R2"*: the fit error index of the
-        quadratic model, produced by `fit_r2()`.
+        We also include the following *experimental* features related to the
+        parameters of a quadratic model.
+        - *"ECG_Rate_Trend_Linear"*: The parameter corresponding to the linear trend.
+        - *"ECG_Rate_Trend_Quadratic"*: The parameter corresponding to the curvature.
+        - *"ECG_Rate_Trend_R2"*: the quality of the quadratic model. If too low,
+        the parameters might not be reliable or meaningful.
 
     See Also
     --------
