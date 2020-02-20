@@ -51,7 +51,7 @@ def eda_eventrelated(epochs):
     >>> eda_signals, info = nk.eda_process(eda, sampling_rate=1000)
     >>> epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000],
                                   sampling_rate=1000,
-                                  epochs_duration=2, epochs_start=-0.1)
+                                  epochs_start=-0.1, epochs_end=1.9)
     >>> nk.eda_eventrelated(epochs)
     >>>
     >>> # Example with real data
@@ -67,7 +67,7 @@ def eda_eventrelated(epochs):
                                                   "Negative"])
     >>> epochs = nk.epochs_create(df, events,
                                   sampling_rate=100,
-                                  epochs_duration=7, epochs_start=-0.1)
+                                  epochs_start=-0.1, epochs_end=6.9)
     >>> nk.eda_eventrelated(epochs)
     """
     # Sanity checks

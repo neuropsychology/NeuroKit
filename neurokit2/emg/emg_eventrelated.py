@@ -40,7 +40,7 @@ def emg_eventrelated(epochs):
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     >>> epochs = nk.epochs_create(emg_signals, events=[5000, 10000, 15000],
                                   sampling_rate=1000,
-                                  epochs_duration=2, epochs_start=-0.1)
+                                  epochs_start=-0.1, epochs_end=1.9)
     >>> nk.emg_eventrelated(epochs)
     """
     # Sanity checks

@@ -49,7 +49,7 @@ def ecg_eventrelated(epochs):
     >>> epochs = nk.epochs_create(ecg,
                                   events=[5000, 10000, 15000],
                                   epochs_start=-0.1,
-                                  epochs_duration=2)
+                                  epochs_end=1.9)
     >>> nk.ecg_eventrelated(epochs)
     >>>
     >>> # Example with real data
@@ -65,7 +65,7 @@ def ecg_eventrelated(epochs):
                                                   "Negative"])
     >>> epochs = nk.epochs_create(df, events,
                                   sampling_rate=100,
-                                  epochs_duration=2, epochs_start=-0.1)
+                                  epochs_start=-0.1, epochs_end=1.9)
     >>> nk.ecg_eventrelated(epochs)
     """
     # Sanity checks

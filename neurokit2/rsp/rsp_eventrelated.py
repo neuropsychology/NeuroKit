@@ -53,7 +53,7 @@ def rsp_eventrelated(epochs):
     >>> epochs = nk.epochs_create(rsp,
                                   events=[5000, 10000, 15000],
                                   epochs_start=-0.1,
-                                  epochs_duration=2)
+                                  epochs_end=1.9)
     >>> nk.rsp_eventrelated(epochs)
     >>>
     >>> # Example with real data
@@ -69,7 +69,7 @@ def rsp_eventrelated(epochs):
                                                   "Negative"])
     >>> epochs = nk.epochs_create(df, events,
                                   sampling_rate=100,
-                                  epochs_duration=3, epochs_start=-0.1)
+                                  epochs_start=-0.1, epochs_end=2.9)
     >>> nk.rsp_eventrelated(epochs)
     """
     # Sanity checks
