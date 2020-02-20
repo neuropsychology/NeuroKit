@@ -66,20 +66,20 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
 
     method = method.lower()  # remove capitalised letters
     if method in ["derivative", "gradient"]:
-       waves =  _ecg_delineator_derivative(ecg_cleaned,
+        waves = _ecg_delineator_derivative(ecg_cleaned,
                                            rpeaks=rpeaks,
                                            sampling_rate=sampling_rate)
     if method in ["wavelet", "cwt", "continuous wavelet"]:
-       waves =  _ecg_delineator_wavelet(ecg_cleaned,
+        waves = _ecg_delineator_wavelet(ecg_cleaned,
                                         rpeaks=rpeaks,
                                         sampling_rate=sampling_rate)
 
-#    instant_peaks = signal_formatpeaks(waves,
-#                                       desired_length=len(ecg_cleaned))
-#    signals = instant_peaks
+    instant_peaks = signal_formatpeaks(waves,
+                                       desired_length=len(ecg_cleaned))
+    signals = instant_peaks
 
-#    return signals, waves
-    return waves
+    return signals, waves
+#    return waves
 
 
 # =============================================================================
@@ -142,6 +142,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             height = 0.0
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                        prominence=prominence)
+
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             search_window = - cwtmatr[4, index_peak - half_wave_width: index_peak]
 
@@ -149,6 +150,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             height = 0.0
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                            prominence=prominence)
+
         if len(wt_peaks) == 0:
             print("Fail to find onset at index: %d", index_peak)
             continue
@@ -170,6 +172,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             candidate_onsets = np.where(-cwtmatr[4, nfirst-100: nfirst] <
                                         epsilon_onset)[0] + nfirst - 100
+
         candidate_onsets = candidate_onsets.tolist() + [leftbase]
         onsets.append(max(candidate_onsets))
 
@@ -179,11 +182,13 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             prominence = 0.50*max(search_window)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                                  prominence=prominence)
+
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
-            search_window =  cwtmatr[4, index_peak: index_peak + half_wave_width]
+            search_window = cwtmatr[4, index_peak: index_peak + half_wave_width]
             prominence = 0.10*max(search_window)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                            prominence=prominence)
+
         if len(wt_peaks) == 0:
             print("Fail to find offset at index: %d", index_peak)
             continue
@@ -204,10 +209,13 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             candidate_offsets = np.where((cwtmatr[4, nlast: nlast + 100]) <
                                          epsilon_offset)[0] + nlast
+
         candidate_offsets = candidate_offsets.tolist() + [rightbase]
         offsets.append(min(candidate_offsets))
 
     return onsets, offsets
+
+
 
 def _peaks_delineator(ecg, rpeaks, cleaning=False, sampling_rate=1000):
     # Try loading pywt
@@ -240,6 +248,7 @@ def _peaks_delineator(ecg, rpeaks, cleaning=False, sampling_rate=1000):
         significant_index = []
         significant_index = [j for j in range(len(peaks_tp)) if
                              heights_tp["peak_heights"][j] > threshold]
+
         significant_peaks_tp = []
         for index in significant_index:
             significant_peaks_tp.append(peaks_tp[index])
@@ -280,7 +289,7 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
 # =============================================================================
 def _ecg_delineator_derivative(ecg, rpeaks=None, sampling_rate=1000):
 
-# Initialize
+    # Initialize
     heartbeats = epochs_create(ecg, rpeaks, sampling_rate=sampling_rate, epochs_start=-0.35, epochs_end=0.5)
 
     Q_list = []
@@ -351,7 +360,9 @@ def _ecg_delineator_derivative_P(rpeak, heartbeat, R, Q):
 
     segment = heartbeat.iloc[:Q]  # Select left of Q wave
     P = signal_findpeaks(segment["Signal"],
-                            height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
+                         height_min=0.05 * (segment["Signal"].max() -
+                                            segment["Signal"].min()))
+
     if len(P["Peaks"]) == 0:
         return np.nan, None
     P = P["Peaks"][-1]  # Select most right-hand side
@@ -364,7 +375,9 @@ def _ecg_delineator_derivative_P(rpeak, heartbeat, R, Q):
 def _ecg_delineator_derivative_S(rpeak, heartbeat, R):
     segment = heartbeat[0:]  # Select right hand side
     S = signal_findpeaks(-segment["Signal"],
-                            height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
+                         height_min=0.05 * (segment["Signal"].max() -
+                                            segment["Signal"].min()))
+
     if len(S["Peaks"]) == 0:
         return np.nan, None
 
@@ -379,7 +392,9 @@ def _ecg_delineator_derivative_T(rpeak, heartbeat, R, S):
 
     segment = heartbeat.iloc[R + S:]  # Select right of S wave
     T = signal_findpeaks(segment["Signal"],
-                            height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
+                         height_min=0.05 * (segment["Signal"].max() -
+                                            segment["Signal"].min()))
+
     if len(T["Peaks"]) == 0:
         return np.nan, None
 
