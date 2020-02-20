@@ -38,13 +38,13 @@ def epochs_plot(epochs, legend=True, show=True):
     >>> # Example with data
     >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
     >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_duration=1)
+    >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
     >>> nk.epochs_plot(epochs)
     >>>
     >>> # Example with ECG Peaks
     >>> signal = nk.ecg_simulate(duration=10)
     >>> events = nk.ecg_findpeaks(signal)
-    >>> epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_duration=1, epochs_start=-0.5)
+    >>> epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_start=-0.5, epochs_end=0.5)
     >>> nk.epochs_plot(epochs)
     """
     data = epochs_to_df(epochs)

@@ -38,7 +38,7 @@ def epochs_to_df(epochs):
     >>> nk.events_plot(events, data)
     >>>
     >>> # Create epochs
-    >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_duration=3)
+    >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=3)
     >>> data = nk.epochs_to_df(epochs)
     """
     data = pd.concat(epochs)
