@@ -1,139 +1,176 @@
-#def _ecg_wave_detector(ecg_cleaned, rpeaks=None, sampling_rate=1000):
-#    """
-#    - **Cardiac Cycle**: A typical ECG heartbeat consists of a P wave, a QRS complex and a T wave.The P wave represents the wave of depolarization that spreads from the SA-node throughout the atria. The QRS complex reflects the rapid depolarization of the right and left ventricles. Since the ventricles are the largest part of the heart, in terms of mass, the QRS complex usually has a much larger amplitude than the P-wave. The T wave represents the ventricular repolarization of the ventricles. On rare occasions, a U wave can be seen following the T wave. The U wave is believed to be related to the last remnants of ventricular repolarization.
-#
-#    Examples
-#    ----------
-#    >>> import neurokit2 as nk
-#    >>> ecg_cleaned = nk.ecg_clean(nk.ecg_simulate(duration=5))
-#    >>> _, rpeaks = nk.ecg_peaks(ecg_cleaned)
-#    """
-#    # Sanitize input
-#    if rpeaks is None:
-#        rpeaks = nk.ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)["ECG_R_Peaks"]
-#
-#    if isinstance(rpeaks, dict):
-#        rpeaks = rpeaks["ECG_R_Peaks"]
-#
-#
-#    # Initialize
-#    heartbeats = nk.epochs_create(ecg_cleaned, rpeaks, sampling_rate=sampling_rate, epochs_start=1, epochs_end=3)
-#
-#    for i in range(len(rpeaks)):
-#        heartbeat = heartbeats[str(i+1)]
-#
-#        # Q
-#
-#
-#    q_waves = []
-#    p_waves = []
-#    q_waves_starts = []
-#    s_waves = []
-#    t_waves = []
-#    t_waves_starts = []
-#    t_waves_ends = []
-#    for index, rpeak in enumerate(rpeaks[:-3]):
-#
-#        try:
-#            epoch_before = np.array(ecg)[int(rpeaks[index-1]):int(rpeak)]
-#            epoch_before = epoch_before[int(len(epoch_before)/2):len(epoch_before)]
-#            epoch_before = list(reversed(epoch_before))
-#
-#            q_wave_index = np.min(find_peaks(epoch_before))
-#            q_wave = rpeak - q_wave_index
-#            p_wave_index = q_wave_index + np.argmax(epoch_before[q_wave_index:])
-#            p_wave = rpeak - p_wave_index
-#
-#            inter_pq = epoch_before[q_wave_index:p_wave_index]
-#            inter_pq_derivative = np.gradient(inter_pq, 2)
-#            q_start_index = find_closest_in_list(len(inter_pq_derivative)/2, find_peaks(inter_pq_derivative))
-#            q_start = q_wave - q_start_index
-#
-#            q_waves.append(q_wave)
-#            p_waves.append(p_wave)
-#            q_waves_starts.append(q_start)
-#        except ValueError:
-#            pass
-#        except IndexError:
-#            pass
-#
-#        try:
-#            epoch_after = np.array(ecg)[int(rpeak):int(rpeaks[index+1])]
-#            epoch_after = epoch_after[0:int(len(epoch_after)/2)]
-#
-#            s_wave_index = np.min(find_peaks(epoch_after))
-#            s_wave = rpeak + s_wave_index
-#            t_wave_index = s_wave_index + np.argmax(epoch_after[s_wave_index:])
-#            t_wave = rpeak + t_wave_index
-#
-#            inter_st = epoch_after[s_wave_index:t_wave_index]
-#            inter_st_derivative = np.gradient(inter_st, 2)
-#            t_start_index = find_closest_in_list(len(inter_st_derivative)/2, find_peaks(inter_st_derivative))
-#            t_start = s_wave + t_start_index
-#            t_end = np.min(find_peaks(epoch_after[t_wave_index:]))
-#            t_end = t_wave + t_end
-#
-#            s_waves.append(s_wave)
-#            t_waves.append(t_wave)
-#            t_waves_starts.append(t_start)
-#            t_waves_ends.append(t_end)
-#        except ValueError:
-#            pass
-#        except IndexError:
-#            pass
-#
-## pd.Series(epoch_before).plot()
-##    t_waves = []
-##    for index, rpeak in enumerate(rpeaks[0:-1]):
-##
-##        epoch = np.array(ecg)[int(rpeak):int(rpeaks[index+1])]
-##        pd.Series(epoch).plot()
-##
-##        # T wave
-##        middle = (rpeaks[index+1] - rpeak) / 2
-##        quarter = middle/2
-##
-##        epoch = np.array(ecg)[int(rpeak+quarter):int(rpeak+middle)]
-##
-##        try:
-##            t_wave = int(rpeak+quarter) + np.argmax(epoch)
-##            t_waves.append(t_wave)
-##        except ValueError:
-##            pass
-##
-##    p_waves = []
-##    for index, rpeak in enumerate(rpeaks[1:]):
-##        index += 1
-##        # Q wave
-##        middle = (rpeak - rpeaks[index-1]) / 2
-##        quarter = middle/2
-##
-##        epoch = np.array(ecg)[int(rpeak-middle):int(rpeak-quarter)]
-##
-##        try:
-##            p_wave = int(rpeak-quarter) + np.argmax(epoch)
-##            p_waves.append(p_wave)
-##        except ValueError:
-##            pass
-##
-##    q_waves = []
-##    for index, p_wave in enumerate(p_waves):
-##        epoch = np.array(ecg)[int(p_wave):int(rpeaks[rpeaks>p_wave][0])]
-##
-##        try:
-##            q_wave = p_wave + np.argmin(epoch)
-##            q_waves.append(q_wave)
-##        except ValueError:
-##            pass
-##
-##    # TODO: manage to find the begininng of the Q and the end of the T wave so we can extract the QT interval
-#
-#
-#    ecg_waves = {"T_Waves": t_waves,
-#                 "P_Waves": p_waves,
-#                 "Q_Waves": q_waves,
-#                 "S_Waves": s_waves,
-#                 "Q_Waves_Onsets": q_waves_starts,
-#                 "T_Waves_Onsets": t_waves_starts,
-#                 "T_Waves_Ends": t_waves_ends}
-#    return(ecg_waves)
+import numpy as np
+
+from ..signal import signal_findpeaks
+from ..signal import signal_smooth
+from ..epochs import epochs_create
+from .ecg import ecg_peaks
+
+
+
+def _ecg_delineator_derivative(ecg_cleaned, rpeaks=None, sampling_rate=1000):
+    """
+    - **Cardiac Cycle**: A typical ECG heartbeat consists of a P wave, a QRS complex and a T wave.The P wave represents the wave of depolarization that spreads from the SA-node throughout the atria. The QRS complex reflects the rapid depolarization of the right and left ventricles. Since the ventricles are the largest part of the heart, in terms of mass, the QRS complex usually has a much larger amplitude than the P-wave. The T wave represents the ventricular repolarization of the ventricles. On rare occasions, a U wave can be seen following the T wave. The U wave is believed to be related to the last remnants of ventricular repolarization.
+
+    Examples
+    ----------
+    >>> import neurokit2 as nk
+    >>> ecg_cleaned = nk.ecg_clean(nk.ecg_simulate(duration=5))
+    >>> _, rpeaks = nk.ecg_peaks(ecg_cleaned)
+    >>> waves = _ecg_delineator_derivative(ecg_cleaned, rpeaks)
+    >>>
+    >>> # Visualize the peaks of the waves
+    >>> nk.events_plot([
+            waves["ECG_P_Peaks"],
+            waves["ECG_Q_Peaks"],
+            waves["ECG_S_Peaks"],
+            waves["ECG_T_Peaks"]],
+            ecg_cleaned)
+    >>>
+    >>> # Visualize the onsets and offsets of the waves
+    >>> nk.events_plot([
+            waves["ECG_P_Onsets"],
+            waves["ECG_T_Offsets"]],
+            ecg_cleaned)
+    """
+    # Sanitize input
+    if rpeaks is None:
+        rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)["ECG_R_Peaks"]
+
+    if isinstance(rpeaks, dict):
+        rpeaks = rpeaks["ECG_R_Peaks"]
+
+    # Initialize
+    heartbeats = epochs_create(ecg_cleaned, rpeaks, sampling_rate=sampling_rate, epochs_start=-0.35, epochs_end=0.5)
+
+    Q_list = []
+    P_list = []
+    S_list = []
+    T_list = []
+
+    P_onsets = []
+    T_offsets = []
+
+    for i, rpeak in enumerate(rpeaks):
+        heartbeat = heartbeats[str(i+1)]
+
+        # Get index of heartbeat
+        R = heartbeat.index.get_loc(np.min(heartbeat.index.values[heartbeat.index.values > 0]))
+
+        # Peaks ------
+        # Q wave
+        Q_index, Q = _ecg_delineator_derivative_Q(rpeak, heartbeat, R)
+        Q_list.append(Q_index)
+
+        # P wave
+        P_index, P = _ecg_delineator_derivative_P(rpeak, heartbeat, R, Q)
+        P_list.append(P_index)
+
+        # S wave
+        S_index, S = _ecg_delineator_derivative_S(rpeak, heartbeat, R)
+        S_list.append(S_index)
+
+        # T wave
+        T_index, T = _ecg_delineator_derivative_T(rpeak, heartbeat, R, S)
+        T_list.append(T_index)
+
+        # Onsets/Offsets ------
+        P_onsets.append(_ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P))
+        T_offsets.append(_ecg_delineator_derivative_T_offset(rpeak, heartbeat, R, T))
+
+
+    out = {"ECG_P_Peaks": P_list,
+           "ECG_Q_Peaks": Q_list,
+           "ECG_S_Peaks": S_list,
+           "ECG_T_Peaks": T_list,
+           "ECG_P_Onsets": P_onsets,
+           "ECG_T_Offsets": T_offsets}
+    return out
+
+
+
+
+# =============================================================================
+# Peaks
+# =============================================================================
+def _ecg_delineator_derivative_Q(rpeak, heartbeat, R):
+    segment = heartbeat[:0]  # Select left hand side
+
+    Q = signal_findpeaks(-1*segment["Signal"],
+                            height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
+    if len(Q["Peaks"]) == 0:
+        return np.nan, None
+    Q = Q["Peaks"][-1]  # Select most right-hand side
+    from_R = R - Q  # Relative to R
+    return rpeak - from_R, Q
+
+
+
+def _ecg_delineator_derivative_P(rpeak, heartbeat, R, Q):
+    if Q is None:
+        return np.nan, None
+
+    segment = heartbeat.iloc[:Q]  # Select left of Q wave
+    P = signal_findpeaks(segment["Signal"],
+                            height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
+    if len(P["Peaks"]) == 0:
+        return np.nan, None
+    P = P["Peaks"][-1]  # Select most right-hand side
+    from_R = R - P  # Relative to R
+    return rpeak - from_R, P
+
+
+
+
+def _ecg_delineator_derivative_S(rpeak, heartbeat, R):
+    segment = heartbeat[0:]  # Select right hand side
+    S = signal_findpeaks(-segment["Signal"],
+                            height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
+    if len(S["Peaks"]) == 0:
+        return np.nan, None
+
+    S = S["Peaks"][0]  # Select most left-hand side
+    return rpeak + S, S
+
+
+
+def _ecg_delineator_derivative_T(rpeak, heartbeat, R, S):
+    if S is None:
+        return np.nan, None
+
+    segment = heartbeat.iloc[R + S:]  # Select right of S wave
+    T = signal_findpeaks(segment["Signal"],
+                            height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
+    if len(T["Peaks"]) == 0:
+        return np.nan, None
+
+    T = S + T["Peaks"][0]  # Select most left-hand side
+    return rpeak + T, T
+
+# =============================================================================
+# Offsets / Onsets
+# =============================================================================
+
+def _ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P):
+    if P is None:
+        return np.nan, None
+
+    segment = heartbeat.iloc[:P]  # Select left of P wave
+    signal = signal_smooth(segment["Signal"].values, size=R/10)
+    signal = np.gradient(np.gradient(signal))
+    P_onset = np.argmax(signal)
+
+    from_R = R - P_onset  # Relative to R
+    return rpeak - from_R
+
+
+
+def _ecg_delineator_derivative_T_offset(rpeak, heartbeat, R, T):
+    if T is None:
+        return np.nan, None
+
+    segment = heartbeat.iloc[R + T:]  # Select left of P wave
+    signal = signal_smooth(segment["Signal"].values, size=R/10)
+    signal = np.gradient(np.gradient(signal))
+    T_offset = np.argmax(signal)
+
+    return rpeak + T + T_offset

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import scipy.signal
 
 from ..stats import fit_loess
@@ -66,6 +67,9 @@ def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=
     - Smith, S. W. (1997). The scientist and engineer's guide to digital signal
     processing.
     """
+    if isinstance(signal, pd.Series):
+        signal = signal.values
+
     length = len(signal)
 
     if isinstance(kernel, str) is False:
