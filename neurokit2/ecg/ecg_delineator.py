@@ -50,6 +50,10 @@ def ecg_delineator(ecg, rpeaks, sampling_rate=500, cleaning=False):
     - Martínez, J. P., Almeida, R., Olmos, S., Rocha, A. P., & Laguna, P. (2004). A wavelet-based ECG delineator: evaluation on standard databases. IEEE Transactions on biomedical engineering, 51(4), 570-581.
 
     """
+    # Sanitize inputs
+    if rpeaks is None:
+        rpeaks = nk.ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)["ECG_R_Peaks"]
+
     # Try retrieving right column
     if isinstance(rpeaks, dict):
         rpeaks = rpeaks["ECG_R_Peaks"]
@@ -102,7 +106,8 @@ def _onset_offset_delineator(peaks, peak_type="rpeaks", sampling_rate=500):
                                        prominence=prominence)
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             search_window = - cwtmatr[4, index_peak - half_wave_width: index_peak]
-            prominence = 0.50*max(search_window)
+
+            prominence = 0.10*max(search_window)
             height = 0.0
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                            prominence=prominence)
@@ -133,12 +138,13 @@ def _onset_offset_delineator(peaks, peak_type="rpeaks", sampling_rate=500):
         # find offset
         if peak_type == "rpeaks":
             search_window = - cwtmatr[2, index_peak: index_peak + half_wave_width]
-            prominence = 0.5*max(search_window)
+            prominence = 0.50*max(search_window)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                                  prominence=prominence)
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             search_window =  cwtmatr[4, index_peak: index_peak + half_wave_width]
-            prominence = 0.5*max(search_window)
+
+            prominence = 0.10*max(search_window)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                            prominence=prominence)
         if len(wt_peaks) == 0:
