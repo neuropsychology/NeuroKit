@@ -72,12 +72,19 @@ def ecg_delineator(ecg, rpeaks, sampling_rate=500, cleaning=False):
                                                    peak_type="ppeaks",
                                                    sampling_rate=sampling_rate)
 
+    # tpeaks onsets and offsets
+    t_onsets, t_offsets = _onset_offset_delineator(tpeaks,
+                                                   peak_type="tpeaks",
+                                                   sampling_rate=sampling_rate)
+
     info = {"ECG_P_Peaks": ppeaks,
             "ECG_T_Peaks": tpeaks,
             "ECG_R_Onsets": qrs_onsets,
             "ECG_R_Offsets": qrs_offsets,
             "ECG_P_Onsets": p_onsets,
-            "ECG_P_Offsets": p_offsets}
+            "ECG_P_Offsets": p_offsets,
+            "ECG_T_Onsets": t_onsets,
+            "ECG_T_Offsets": t_offsets}
     return info
 
 
@@ -143,7 +150,6 @@ def _onset_offset_delineator(peaks, peak_type="rpeaks", sampling_rate=500):
                                                  prominence=prominence)
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             search_window =  cwtmatr[4, index_peak: index_peak + half_wave_width]
-
             prominence = 0.10*max(search_window)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                            prominence=prominence)
