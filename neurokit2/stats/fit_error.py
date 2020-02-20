@@ -23,7 +23,7 @@ def fit_error(y, y_predicted, n_parameters=2):
     Returns
     -------
     dict
-        A dictionnary containing different indices of fit error.
+        A dictionary containing different indices of fit error.
 
     See Also
     --------

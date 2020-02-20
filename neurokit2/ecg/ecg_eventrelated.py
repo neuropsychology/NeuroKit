@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs import _df_to_epochs
+from ..epochs import epochs_to_df
 from ..stats import fit_r2
 
 
@@ -20,9 +20,20 @@ def ecg_eventrelated(epochs):
     -------
     DataFrame
         A dataframe containing the analyzed ECG features
-        for each epoch, with each epoch indicated by the Index column.
-        The analyzed features consist of the mean and minimum
-        ECG rate, both adjusted for baseline.
+        for each epoch, with each epoch indicated by the `Label` column
+        (if not present, by the `Index` column). The analyzed
+        features consist of the following:
+        - *"ECG_Rate_Max"*: the maximum heart rate after stimulus onset.
+        - *"ECG_Rate_Min"*: the minimum heart rate after stimulus onset.
+        - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
+        - *"ECG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
+        - *"ECG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
+        We also include the following *experimental* features related to the
+        parameters of a quadratic model.
+        - *"ECG_Rate_Trend_Linear"*: The parameter corresponding to the linear trend.
+        - *"ECG_Rate_Trend_Quadratic"*: The parameter corresponding to the curvature.
+        - *"ECG_Rate_Trend_R2"*: the quality of the quadratic model. If too low,
+        the parameters might not be reliable or meaningful.
 
     See Also
     --------
@@ -38,7 +49,7 @@ def ecg_eventrelated(epochs):
     >>> epochs = nk.epochs_create(ecg,
                                   events=[5000, 10000, 15000],
                                   epochs_start=-0.1,
-                                  epochs_duration=2)
+                                  epochs_end=1.9)
     >>> nk.ecg_eventrelated(epochs)
     >>>
     >>> # Example with real data
@@ -54,19 +65,25 @@ def ecg_eventrelated(epochs):
                                                   "Negative"])
     >>> epochs = nk.epochs_create(df, events,
                                   sampling_rate=100,
-                                  epochs_duration=2, epochs_start=-0.1)
+                                  epochs_start=-0.1, epochs_end=1.9)
     >>> nk.ecg_eventrelated(epochs)
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
+        epochs = epochs_to_df._df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: ecg_eventrelated(): Please specify an input"
+        raise ValueError("NeuroKit error: ecg_eventrelated():"
+                         "Please specify an input"
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe as returned by `epochs_create()`.")
 
-    # TODO: warning if epoch length is too long ("you might want to use ecg_periodrelated()")
+    # Warning for epoch length (can be adjusted)
+    for i in epochs:
+        if (len(epochs[i]) > 10000):
+            print("Neurokit warning: ecg_eventrelated():"
+                  "Epoch length is too long. You might want to use"
+                  "ecg_periodrelated().")
 
     # Extract features and build dataframe
     ecg_df = {}  # Initialize an empty dict
@@ -93,9 +110,12 @@ def ecg_eventrelated(epochs):
 
 def _eventrelated_addinfo(epoch, output={}):
 
+    # Add label
     if "Label" in epoch.columns:
         if len(set(epoch["Label"])) == 1:
             output["Label"] = epoch["Label"].values[0]
+
+    # Add condition
     if "Condition" in epoch.columns:
         if len(set(epoch["Condition"])) == 1:
             output["Condition"] = epoch["Condition"].values[0]
