@@ -231,10 +231,7 @@ def _peaks_delineator(ecg, rpeaks, cleaning=False, sampling_rate=1000):
         # search for T peaks and P peaks from R peaks
         start = rpeaks[i] + search_boundary
         end = rpeaks[i + 1] - search_boundary
-        if cleaning is not False:
-            search_window = cwtmatr_clean[4, start:end]
-        else:
-            search_window = cwtmatr[4, start:end]
+        search_window = cwtmatr[4, start:end]
         height = 0.25*np.sqrt(np.mean(np.square(search_window)))
         peaks_tp, heights_tp = find_peaks(np.abs(search_window), height=height)
         peaks_tp = peaks_tp + rpeaks[i] + search_boundary
