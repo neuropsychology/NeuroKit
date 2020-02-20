@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import neurokit2 as nk
+import matplotlib.pyplot as plt
 
 # =============================================================================
 # Events
@@ -37,3 +38,30 @@ def test_events_plot():
     events = nk.events_find(signal)
     data = nk.events_plot(events, signal, show=False)
     assert len(data['Event_Onset']) == 1000
+
+    # Different events
+    events1 = events["onset"]
+    events2 = np.linspace(0, len(signal), 8)
+    nk.events_plot([events1, events2], signal)
+    fig = plt.gcf()
+    assert len(fig.axes[0].get_xticks()) == 6
+
+    for ax in fig.get_axes():
+        handles, labels = ax.get_legend_handles_labels()
+    assert len(handles) == len(events1) + len(events2) + 1
+    assert len(labels) == len(handles)
+
+    plt.close(fig)
+
+    # Different conditions
+    events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
+    nk.events_plot(events, signal)
+    fig = plt.gcf()
+
+    for ax in fig.get_axes():
+        handles, labels = ax.get_legend_handles_labels()
+    assert len(handles) == len(events) + 1
+    assert len(labels) == len(handles)
+
+    plt.close(fig)
+
