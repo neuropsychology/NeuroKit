@@ -69,23 +69,27 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
         waves = _ecg_delineator_derivative(ecg_cleaned,
                                            rpeaks=rpeaks,
                                            sampling_rate=sampling_rate)
-    if method in ["wavelet", "cwt", "continuous wavelet"]:
-        waves = _ecg_delineator_wavelet(ecg_cleaned,
-                                        rpeaks=rpeaks,
-                                        sampling_rate=sampling_rate)
+    if method in ["cwt", "continuous wavelet transform"]:
+        waves = _ecg_delinator_cwt(ecg_cleaned,
+                                   rpeaks=rpeaks,
+                                   sampling_rate=sampling_rate)
+    if method in ["dwt", "discrete wavelet transform"]:
+        waves = _ecg_delinator_dwt(ecg_cleaned,
+                                   rpeaks,
+                                   sampling_rate=sampling_rate)
+    return waves
 
-    instant_peaks = signal_formatpeaks(waves,
-                                       desired_length=len(ecg_cleaned))
-    signals = instant_peaks
 
-    return signals, waves
-#    return waves
+def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
+    # P-Peaks and T-Peaks
+    # tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
+    raise NotImplemented
 
 
 # =============================================================================
 # WAVELET METHOD
 # =============================================================================
-def _ecg_delineator_wavelet(ecg, rpeaks=None, sampling_rate=1000):
+def _ecg_delinator_cwt(ecg, rpeaks=None, sampling_rate=1000):
 
     # P-Peaks and T-Peaks
     tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks,
