@@ -44,7 +44,6 @@ def test_events_plot():
     events2 = np.linspace(0, len(signal), 8)
     nk.events_plot([events1, events2], signal)
     fig = plt.gcf()
-    assert len(fig.axes[0].get_xticks()) == 6
 
     for ax in fig.get_axes():
         handles, labels = ax.get_legend_handles_labels()
@@ -64,4 +63,3 @@ def test_events_plot():
     assert len(labels) == len(handles)
 
     plt.close(fig)
-
