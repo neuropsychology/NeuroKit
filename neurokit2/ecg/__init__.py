@@ -10,4 +10,3 @@ from .ecg_process import ecg_process
 from .ecg_plot import ecg_plot
 from .ecg_delineator import ecg_delineator
 from .ecg_eventrelated import ecg_eventrelated
-from .ecg_eventrelated import _eventrelated_addinfo

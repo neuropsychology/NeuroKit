@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs import _df_to_epochs
+from ..epochs import epochs_to_df
 from ..stats import fit_r2
 
 
@@ -70,7 +70,7 @@ def ecg_eventrelated(epochs):
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
+        epochs = epochs_to_df._df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: ecg_eventrelated():"

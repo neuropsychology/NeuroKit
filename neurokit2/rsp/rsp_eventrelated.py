@@ -2,8 +2,8 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs import _df_to_epochs
-from ..ecg import _eventrelated_addinfo
+from ..epochs import epochs_to_df
+from ..ecg import ecg_eventrelated
 
 
 def rsp_eventrelated(epochs):
@@ -74,7 +74,7 @@ def rsp_eventrelated(epochs):
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
+        epochs = epochs_to_df._df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: rsp_eventrelated():"
@@ -108,7 +108,7 @@ def rsp_eventrelated(epochs):
                                                             rsp_df[epoch_index])
 
         # Fill with more info
-        rsp_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
+        rsp_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index],
                                                     rsp_df[epoch_index])
 
     rsp_df = pd.DataFrame.from_dict(rsp_df, orient="index")  # Convert to a dataframe

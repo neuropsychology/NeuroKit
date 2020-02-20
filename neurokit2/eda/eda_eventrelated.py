@@ -2,8 +2,8 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs import _df_to_epochs
-from ..ecg import _eventrelated_addinfo
+from ..epochs import epochs_to_df
+from ..ecg import ecg_eventrelated
 
 
 def eda_eventrelated(epochs):
@@ -72,7 +72,7 @@ def eda_eventrelated(epochs):
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
+        epochs = epochs_to_df._df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: eda_eventrelated(): Please specify an input"
@@ -110,7 +110,7 @@ def eda_eventrelated(epochs):
             eda_df[epoch_index]["EDA_RecoveryTime"] = np.nan
 
         # Fill with more info
-        eda_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
+        eda_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index],
                                                     eda_df[epoch_index])
 
     eda_df = pd.DataFrame.from_dict(eda_df, orient="index")  # Convert to a dataframe
