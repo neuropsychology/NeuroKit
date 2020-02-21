@@ -78,9 +78,9 @@ def ecg_eventrelated(epochs):
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe as returned by `epochs_create()`.")
 
-    # Warning for epoch length (can be adjusted)
+    # Warning for long epochs
     for i in epochs:
-        if (len(epochs[i]) > 10000):
+        if (np.max(epochs[i].index.values) > 5):
             print("Neurokit warning: ecg_eventrelated():"
                   "Epoch length is too long. You might want to use"
                   "ecg_periodrelated().")

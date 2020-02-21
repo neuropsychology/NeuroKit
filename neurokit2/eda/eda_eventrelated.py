@@ -81,7 +81,7 @@ def eda_eventrelated(epochs):
 
     # Warning for epoch length (can be adjusted)
     for i in epochs:
-        if (len(epochs[i]) > 10000):
+        if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: eda_eventrelated():"
                   "Epoch length is too long. You might want to use"
                   "eda_periodrelated().")
