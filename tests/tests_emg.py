@@ -68,3 +68,19 @@ def test_emg_plot():
     # This will identify the latest figure.
     fig = plt.gcf()
     assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
+
+def test_emg_eventrelated():
+
+    emg = nk.emg_simulate(duration=20, sampling_rate=1000, n_bursts=3)
+    emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
+    epochs = nk.epochs_create(emg_signals, events=[5000, 10000, 15000],
+                              sampling_rate=1000,
+                              epochs_start=-0.1, epochs_end=1.9)
+    emg_eventrelated = nk.emg_eventrelated(epochs)
+
+    # Test amplitude features
+    assert np.alltrue(np.array(emg_eventrelated["EMG_Amplitude_Mean"]) <
+                      np.array(emg_eventrelated["EMG_Amplitude_Max"]))
+
+    assert len(emg_eventrelated["Label"]) == 3
+    assert len(emg_eventrelated.columns) == 4
