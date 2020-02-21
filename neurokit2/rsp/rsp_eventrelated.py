@@ -82,9 +82,9 @@ def rsp_eventrelated(epochs):
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe.")
 
-    # Warning for epoch length (can be adjusted)
+    # Warning for long epochs
     for i in epochs:
-        if (len(epochs[i]) > 10000):
+        if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: rsp_eventrelated():"
                   "Epoch length is too long. You might want to use"
                   "rsp_periodrelated().")
@@ -108,8 +108,7 @@ def rsp_eventrelated(epochs):
                                                             rsp_df[epoch_index])
 
         # Fill with more info
-        rsp_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index],
-                                                    rsp_df[epoch_index])
+        rsp_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index], rsp_df[epoch_index])
 
     rsp_df = pd.DataFrame.from_dict(rsp_df, orient="index")  # Convert to a dataframe
 

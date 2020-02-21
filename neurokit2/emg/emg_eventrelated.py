@@ -52,9 +52,9 @@ def emg_eventrelated(epochs):
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe.")
 
-    # Warning for epoch length (can be adjusted)
+    # Warning for long epochs
     for i in epochs:
-        if (len(epochs[i]) > 10000):
+        if (np.max(epochs[i].index.values) > 5):
             print("Neurokit warning: emg_eventrelated():"
                   "Epoch length is too long. You might want to use"
                   "emg_periodrelated().")
@@ -81,7 +81,11 @@ def emg_eventrelated(epochs):
         emg_df[epoch_index]["EMG_Amplitude_Max"] = epoch["EMG_Amplitude"].max()
 
         # Activation following event
-        emg_df[epoch_index]["EMG_Activation"] = epoch["EMG_Onsets"][epoch.index > 0].iloc[0]
+        activations = len(np.where(epoch["EMG_Onsets"][epoch.index > 0] != 0))
+        if any(epoch["EMG_Onsets"][epoch.index > 0] != 0):
+            emg_df[epoch_index]["EMG_Activation"] = activations
+        else:
+            emg_df[epoch_index]["EMG_Activation"] = 0
 
         # Fill with more info
         emg_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epoch, emg_df[epoch_index])

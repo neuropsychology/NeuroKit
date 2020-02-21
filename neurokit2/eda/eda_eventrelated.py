@@ -81,7 +81,7 @@ def eda_eventrelated(epochs):
 
     # Warning for epoch length (can be adjusted)
     for i in epochs:
-        if (len(epochs[i]) > 10000):
+        if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: eda_eventrelated():"
                   "Epoch length is too long. You might want to use"
                   "eda_periodrelated().")
@@ -110,8 +110,7 @@ def eda_eventrelated(epochs):
             eda_df[epoch_index]["EDA_RecoveryTime"] = np.nan
 
         # Fill with more info
-        eda_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index],
-                                                    eda_df[epoch_index])
+        eda_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index], eda_df[epoch_index])
 
     eda_df = pd.DataFrame.from_dict(eda_df, orient="index")  # Convert to a dataframe
 
