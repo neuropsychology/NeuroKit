@@ -110,8 +110,7 @@ def eda_eventrelated(epochs):
             eda_df[epoch_index]["EDA_RecoveryTime"] = np.nan
 
         # Fill with more info
-        eda_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo
-        (epochs[epoch_index], eda_df[epoch_index])
+        eda_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index], eda_df[epoch_index])
 
     eda_df = pd.DataFrame.from_dict(eda_df, orient="index")  # Convert to a dataframe
 
