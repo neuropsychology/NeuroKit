@@ -1,4 +1,4 @@
-#import TruScanEEGpy
+import TruScanEEGpy
 import pandas as pd
 import mne
 
