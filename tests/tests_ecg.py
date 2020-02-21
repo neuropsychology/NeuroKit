@@ -257,3 +257,21 @@ def test_ecg_findpeaks():
     info_martinez = nk.ecg_findpeaks(ecg_cleaned, method="martinez2003")
     assert np.allclose(info_martinez["ECG_R_Peaks"].size,
                        69, atol=1)
+
+
+def test_ecg_eventrelated():
+
+    ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
+    epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000],
+                              epochs_start=-0.1, epochs_end=1.9)
+    ecg_eventrelated = nk.ecg_eventrelated(epochs)
+
+    # Test rate features
+    assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Min"]) <
+                      np.array(ecg_eventrelated["ECG_Rate_Mean"]))
+
+    assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Mean"]) <
+                      np.array(ecg_eventrelated["ECG_Rate_Max"]))
+
+    assert len(ecg_eventrelated["Label"]) == 3
+    assert len(ecg_eventrelated.columns) == 9
