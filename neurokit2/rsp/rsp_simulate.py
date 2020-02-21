@@ -313,6 +313,11 @@ def _rsp_simulate_breathmetrics_original(nCycles=100,
         simulated_respiration = np.hstack([simulated_respiration, this_breath])
         i = i + len(this_breath) - 1
 
+    # Smooth signal
+    simulated_respiration = signal_smooth(simulated_respiration,
+                                          kernel='boxzen',
+                                          size=sampling_rate/2)
+
     if signal_noise == 0:
         signal_noise = 0.0001
 
