@@ -73,8 +73,8 @@ def test_rsp_peaks():
     assert signals["RSP_Troughs"].sum() == 28
     assert info["RSP_Peaks"].shape[0] == 28
     assert info["RSP_Troughs"].shape[0] == 28
-    assert np.allclose(info["RSP_Peaks"].sum(), 1643787)
-    assert np.allclose(info["RSP_Troughs"].sum(), 1586275)
+    assert np.allclose(info["RSP_Peaks"].sum(), 1643832)
+    assert np.allclose(info["RSP_Troughs"].sum(), 1586316)
     # Assert that extrema start with a trough and end with a peak.
     assert info["RSP_Peaks"][0] > info["RSP_Troughs"][0]
     assert info["RSP_Peaks"][-1] > info["RSP_Troughs"][-1]
