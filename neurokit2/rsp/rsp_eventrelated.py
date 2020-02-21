@@ -108,8 +108,8 @@ def rsp_eventrelated(epochs):
                                                             rsp_df[epoch_index])
 
         # Fill with more info
-        rsp_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index],
-                                                    rsp_df[epoch_index])
+        rsp_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo
+        (epochs[epoch_index], rsp_df[epoch_index])
 
     rsp_df = pd.DataFrame.from_dict(rsp_df, orient="index")  # Convert to a dataframe
 

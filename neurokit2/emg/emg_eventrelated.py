@@ -88,7 +88,8 @@ def emg_eventrelated(epochs):
             emg_df[epoch_index]["EMG_Activation"] = 0
 
         # Fill with more info
-        emg_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epoch, emg_df[epoch_index])
+        emg_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo
+        (epoch, emg_df[epoch_index])
 
     emg_df = pd.DataFrame.from_dict(emg_df, orient="index")  # Convert to a dataframe
 
