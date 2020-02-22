@@ -20,7 +20,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
     peaks : list, array, DataFrame, Series or dict
         The samples at which the inhalation peaks occur. If a dict or a
         DataFrame is passed, it is assumed that these containers were obtained
-        with `rsp_findpeaks()`.
+        with `rsp_peaks()`.
     sampling_rate : int
         The sampling frequency of the signal that contains the peaks (in Hz,
         i.e., samples/second).
@@ -63,7 +63,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
     rate, peaks = _rsp_rate_preprocessing(rate, peaks, method=method)
 
     # Interpolate rates to desired_length samples.
-    rate = signal_interpolate(peaks, rate, desired_length=desired_length)
+    rate = signal_interpolate(peaks, rate, desired_length=desired_length, method='quadratic')
 
     return rate
 

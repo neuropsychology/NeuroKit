@@ -50,19 +50,15 @@ def _signal_from_indices(indices, desired_length=None, value=1):
 
 
 def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
-    # Retrieve length.
-    if desired_length is None:
-        if isinstance(peaks, np.ndarray):
-            desired_length = np.max(peaks)
-        else:
-            desired_length = len(peaks)
-
-    if desired_length < len(peaks):
-        raise ValueError("NeuroKit error: _signal_formatpeaks(): 'desired_length' cannot",
-                         " be lower than the length of the signal. Please input a greater 'desired_length'.")
-
-
     # Attempt to retrieve column.
+    if isinstance(peaks, tuple):
+        if isinstance(peaks[0], dict):
+            peaks = peaks[0]
+        elif isinstance(peaks[1], dict):
+            peaks = peaks[1]
+        else:
+            peaks = peaks[0]
+
     if isinstance(peaks, pd.DataFrame):
         col = [col for col in peaks.columns if key in col]
         if len(col) == 0:
@@ -77,6 +73,16 @@ def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
             TypeError("NeuroKit error: _signal_formatpeaks(): wrong type of input ",
                       "provided. Please provide indices of peaks.")
         peaks = peaks[col[0]]
+
+
+
+    # Retrieve length.
+    if desired_length is None:
+        desired_length = len(peaks)
+
+    if desired_length < len(peaks):
+        raise ValueError("NeuroKit error: _signal_formatpeaks(): 'desired_length' cannot",
+                         " be lower than the length of the signal. Please input a greater 'desired_length'.")
 
 
     return peaks, desired_length

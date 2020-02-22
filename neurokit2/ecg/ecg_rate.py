@@ -3,6 +3,7 @@ import numpy as np
 
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_resample
+from ..signal import signal_interpolate
 
 
 
@@ -13,7 +14,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     ----------
     rpeaks : dict
         The samples at which the R-peak occur. Dict returned by
-        `ecg_findpeaks()`.
+        `ecg_peaks()`.
     sampling_rate : int
         The sampling frequency of the signal that contains the R-peaks (in Hz,
         i.e., samples/second). Defaults to 1000.
@@ -55,7 +56,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     >>> ax.legend(loc="upper right")
     """
     # Get R-peaks indices from DataFrame or dict.
-    rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
+    rpeaks, desired_length = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
 
     rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
 
@@ -63,8 +64,10 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     rr[0] = np.mean(rr)
     rate = 60 / rr
 
-    if desired_length:
-        rate = signal_resample(rate, desired_length=desired_length,
-                               sampling_rate=sampling_rate)
+    rate = signal_interpolate(rpeaks, rate, desired_length=desired_length, method='quadratic')
+
+#    if desired_length:
+#        rate = signal_resample(rate, desired_length=desired_length,
+#                               sampling_rate=sampling_rate)
 
     return rate
