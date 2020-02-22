@@ -23,7 +23,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
         with `rsp_peaks()`.
     sampling_rate : int
         The sampling frequency of the signal that contains the peaks (in Hz,
-        i.e., samples/second).
+        i.e., samples/second). Defaults to 1000Hz.
     desired_length : int
         By default, the returned respiration rate has the same number of
         elements as `peaks`. If set to an integer, the returned rate will be

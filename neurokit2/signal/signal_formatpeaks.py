@@ -66,6 +66,8 @@ def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
                       "provided. Please provide indices of peaks.")
         peaks_signal = peaks[col[0]].values
         peaks = np.where(peaks_signal == 1)[0]
+        if desired_length is None:
+            desired_length = len(peaks_signal)
 
     if isinstance(peaks, dict):
         col = [col for col in list(peaks.keys()) if key in col]
