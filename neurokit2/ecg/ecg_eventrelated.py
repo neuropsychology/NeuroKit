@@ -2,9 +2,8 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs import epochs_to_df
+from ..epochs.epochs_to_df import _df_to_epochs
 from ..stats import fit_r2
-from ..misc import eventrelated_addinfo
 
 def ecg_eventrelated(epochs):
     """Performs event-related ECG analysis on epochs.
@@ -70,7 +69,7 @@ def ecg_eventrelated(epochs):
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = epochs_to_df._df_to_epochs(epochs)  # Convert df to dict
+        epochs = _df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: ecg_eventrelated():"
@@ -96,7 +95,7 @@ def ecg_eventrelated(epochs):
                                                      ecg_df[epoch_index])
 
         # Fill with more info
-        ecg_df[epoch_index] = eventrelated_addinfo._eventrelated_addinfo(epochs[epoch_index],
+        ecg_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
                                                     ecg_df[epoch_index])
 
     ecg_df = pd.DataFrame.from_dict(ecg_df, orient="index")  # Convert to a dataframe
@@ -110,6 +109,18 @@ def ecg_eventrelated(epochs):
 
 
 
+def _eventrelated_addinfo(epoch, output={}):
+
+    # Add label
+    if "Label" in epoch.columns:
+        if len(set(epoch["Label"])) == 1:
+            output["Label"] = epoch["Label"].values[0]
+
+    # Add condition
+    if "Condition" in epoch.columns:
+        if len(set(epoch["Condition"])) == 1:
+            output["Condition"] = epoch["Condition"].values[0]
+    return output
 
 
 
