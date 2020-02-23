@@ -4,6 +4,7 @@ import pathlib
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import logging
 
 
 SHOW_DEBUG_PLOTS = False
@@ -66,4 +67,6 @@ def test_find_qrs_bounds(test_data):
                                test_data['ECG_R_Onsets'],
                                atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
 
-
+    np.testing.assert_allclose(ecg_characteristics['ECG_R_Offsets'][:3],
+                               test_data['ECG_R_Offsets'],
+                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])

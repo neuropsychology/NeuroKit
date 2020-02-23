@@ -93,17 +93,19 @@ def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
     ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=250)
     dwtmatr = compute_dwt_multiscales(ecg, 5)
 
-    # for idx in [0, 1, 2, 3]:
-    #     plt.plot(dwtmatr[idx], label=f'W[{idx}]')
-    # plt.plot(ecg, '--')
-    # plt.legend()
-    # plt.grid(True)
-    # plt.show()
+    for idx in [0, 1, 2, 3]:
+        plt.plot(dwtmatr[idx], label=f'W[{idx}]')
+    plt.plot(ecg, '--')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 
     rpeaks_resampled = _resample_points(rpeaks, sampling_rate, 250)
     # rpeaks_resampled = (rpeaks * 250 / sampling_rate).astype(int)
     tpeaks, ppeaks = _dwt_delinate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=250, debug=False)
-    qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(ecg, rpeaks_resampled, dwtmatr, sampling_rate=250, debug=False)
+    qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(
+        ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks,
+        sampling_rate=250, debug=False)
 
     # P-Peaks and T-Peaks
     # tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
@@ -115,8 +117,27 @@ def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
     )
 
 
-def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False):
-    return np.array([407, 973, 1559]) / 2, np.array([456, 1021, 1605]) / 2
+def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
+    onsets = []
+    for i in range(len(rpeaks) - 1):
+        # look for qrs onsets
+        srch_idx_start = ppeaks[i]
+        srch_idx_end = rpeaks[i]
+        if srch_idx_start is np.nan or srch_idx_end is np.nan:
+            onsets.append(np.nan)
+            continue
+        dwt_local = dwtmatr[2, srch_idx_start: srch_idx_end]
+        onset_slope_peaks, onset_slope_data = scipy.signal.find_peaks(-dwt_local)
+        epsilon_onset = 0.5 * -dwt_local[onset_slope_peaks[-1]]
+        candidate_onsets = np.where(- dwt_local[:onset_slope_peaks[-1]] < epsilon_onset)[0]
+        onsets.append(candidate_onsets[-1] + srch_idx_start)
+
+        # events_plot(candidate_onsets, dwt_local)
+        # plt.plot(ecg[srch_idx_start: srch_idx_end], '--')
+        # plt.show()
+
+    return np.array(onsets), np.array([456, 1021, 1605]) / 2
+
 
 def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False, dwt_delay=0.0):
     qrs_duration = 0.05
