@@ -128,68 +128,51 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
     tpeaks = []
     ppeaks = []
     for i in range(len(rpeaks)-1):
-        # search for T peaks from R peaks
-        srch_idx_start = rpeaks[i] + srch_bndry
-        srch_idx_end = rpeaks[i + 1] - srch_bndry * 6
+        for find in ['tpeak', 'ppeak']:
 
-        dwt_local = dwtmatr[3, srch_idx_start:srch_idx_end]
-        height = 0.25*np.sqrt(np.mean(np.square(dwt_local)))
-        peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
-        peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp['peak_heights'][j]]
+            if find == 'tpeak':
+                # search for T peaks from R peaks
+                srch_idx_start = rpeaks[i] + srch_bndry
+                srch_idx_end = rpeaks[i + 1] - srch_bndry * 6
+                dwt_local = dwtmatr[3, srch_idx_start:srch_idx_end]
+            elif find == 'ppeak':
+                # search for P peaks from Rpeaks
+                srch_idx_start = rpeaks[i] - int(p_qrs_duration * sampling_rate)
+                srch_idx_end = rpeaks[i] - srch_bndry
+                dwt_local = dwtmatr[2, srch_idx_start:srch_idx_end]
 
-        peaks_tp = list(filter(lambda p: np.abs(dwt_local[p]) > 0.125 * max(dwt_local), peaks_tp))
-        if dwt_local[0] > 0:  # just append
-            peaks_tp = [0] + peaks_tp
+            height = 0.25*np.sqrt(np.mean(np.square(dwt_local)))
+            peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
+            peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp['peak_heights'][j]]
 
-        candidate_t_peaks = []
-        for idx_peak, idx_peak_nxt in zip(peaks_tp[:-1], peaks_tp[1:]):
-            correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
-            if correct_sign:
-                idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
-                # account for delay
-                candidate_t_peaks.append(idx_zero + int(dwt_delay * sampling_rate))
+            peaks_tp = list(filter(lambda p: np.abs(dwt_local[p]) > 0.125 * max(dwt_local), peaks_tp))
+            if dwt_local[0] > 0:  # just append
+                peaks_tp = [0] + peaks_tp
 
-        # filtering? use a simple rule now
-        if len(candidate_t_peaks) > 0:
-            tpeaks.append(candidate_t_peaks[0] + srch_idx_start)
-        else:
-            tpeaks.append(np.nan)
+            candidate_peaks = []
+            for idx_peak, idx_peak_nxt in zip(peaks_tp[:-1], peaks_tp[1:]):
+                correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
+                if correct_sign:
+                    idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
+                    # account for delay
+                    candidate_peaks.append(idx_zero + int(dwt_delay * sampling_rate))
 
-        if debug:
-            events_plot(candidate_t_peaks, dwt_local)
-            plt.plot(ecg[srch_idx_start: srch_idx_end])
-            plt.show()
+            # filtering? use a simple rule now
+            if find == 'tpeak':
+                if len(candidate_peaks) > 0:
+                    tpeaks.append(candidate_peaks[0] + srch_idx_start)
+                else:
+                    tpeaks.append(np.nan)
+            elif find == 'ppeak':
+                if len(candidate_peaks) > 0:
+                    ppeaks.append(candidate_peaks[0] + srch_idx_start)
+                else:
+                    ppeaks.append(np.nan)
 
-        # search for P peaks from Rpeaks
-        srch_idx_start = rpeaks[i] - int(p_qrs_duration * sampling_rate)
-        srch_idx_end = rpeaks[i] - srch_bndry
-
-        dwt_local = dwtmatr[2, srch_idx_start:srch_idx_end]
-        height = 0.25*np.sqrt(np.mean(np.square(dwt_local)))
-        peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
-        peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp['peak_heights'][j]]
-
-        peaks_tp = list(filter(lambda p: np.abs(dwt_local[p]) > 0.125 * max(dwt_local), peaks_tp))
-        if dwt_local[0] > 0:  # just append
-            peaks_tp = [0] + peaks_tp
-
-        candidate_p_peaks = []
-        for idx_peak, idx_peak_nxt in zip(peaks_tp[:-1], peaks_tp[1:]):
-            correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
-            if correct_sign:
-                idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
-                # account for delay
-                candidate_p_peaks.append(idx_zero + int(dwt_delay * sampling_rate))
-
-        if debug:
-            events_plot(candidate_p_peaks, dwt_local)
-            plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
-            plt.legend()
-            plt.show()
-        if len(candidate_p_peaks) > 0:
-            ppeaks.append(candidate_p_peaks[0] + srch_idx_start)
-        else:
-            ppeaks.append(np.nan)
+            if debug:
+                events_plot(candidate_peaks, dwt_local)
+                plt.plot(ecg[srch_idx_start: srch_idx_end])
+                plt.show()
 
     return tpeaks, ppeaks
 
