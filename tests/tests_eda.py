@@ -129,7 +129,6 @@ def test_eda_eventrelated():
     eda_eventrelated = nk.eda_eventrelated(epochs)
 
     no_activation = np.where(eda_eventrelated["EDA_Activation"] == 0)[0][0]
-    assert np.count_nonzero(eda_eventrelated.values[no_activation])
     assert int(pd.DataFrame(eda_eventrelated.values
                             [no_activation]).isna().sum()) == 4
 
