@@ -2,16 +2,18 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
+import scipy.signal
 
-from ..signal import signal_zerocrossings
-from ..signal import signal_detrend
-from ..signal import signal_smooth
-from ..signal import signal_filter
-from ..signal import signal_findpeaks
-from ..signal import signal_formatpeaks
+from ..signal import (signal_zerocrossings,
+                      signal_resample,
+                      signal_detrend,
+                      signal_smooth,
+                      signal_filter,
+                      signal_findpeaks,
+                      signal_formatpeaks)
 from .ecg_peaks import ecg_peaks
 from ..epochs import epochs_create
+from ..events import events_plot
 
 
 def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
@@ -80,10 +82,110 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
     return waves
 
 
+###############################################################################
+#                             WAVELET METHOD (DWT)                             #
+###############################################################################
+def _resample_points(peaks, sampling_rate, desired_sampling_rate):
+    return (np.array(peaks) * desired_sampling_rate / sampling_rate).astype(int)
+
+
 def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
+    ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=250)
+    dwtmatr = compute_dwt_multiscales(ecg, 5)
+    rpeaks_resampled = _resample_points(rpeaks, sampling_rate, 250)
+    # rpeaks_resampled = (rpeaks * 250 / sampling_rate).astype(int)
+    tpeaks, ppeaks = _dwt_delinate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=250, debug=False)
+
     # P-Peaks and T-Peaks
     # tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
-    return None
+    return dict(ECG_T_Peaks=_resample_points(tpeaks, 250, desired_sampling_rate=sampling_rate))
+
+    # return {"ECG_P_Peaks": ppeaks,
+    #         "ECG_T_Peaks": tpeaks,
+    #         "ECG_R_Onsets": qrs_onsets,
+    #         "ECG_R_Offsets": qrs_offsets,
+    #         "ECG_P_Onsets": p_onsets,
+    #         "ECG_P_Offsets": p_offsets,
+    #         "ECG_T_Onsets": t_onsets,
+    #         "ECG_T_Offsets": t_offsets}
+
+
+def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False, dwt_delay=0.056):
+    qrs_duration = 0.05
+    srch_bndry = int(0.9 * qrs_duration * sampling_rate / 2)
+    significant_peaks_groups = []
+    tpeaks = []
+    for i in range(len(rpeaks)-1):
+        # search for T peaks from R peaks
+        srch_idx_start = rpeaks[i] + srch_bndry
+        srch_idx_end = rpeaks[i + 1] - srch_bndry * 6
+
+        dwt_local = dwtmatr[3, srch_idx_start:srch_idx_end]
+        height = 0.25*np.sqrt(np.mean(np.square(dwt_local)))
+        peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
+        peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp['peak_heights'][j]]
+
+        peaks_tp = list(filter(lambda p: np.abs(dwt_local[p]) > 0.125 * max(dwt_local), peaks_tp))
+        if dwt_local[0] > 0:  # just append
+            peaks_tp = [0] + peaks_tp
+
+        candidate_t_peaks = []
+        for idx_peak, idx_peak_nxt in zip(peaks_tp[:-1], peaks_tp[1:]):
+            correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
+            if correct_sign:
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
+                # account for delay
+                candidate_t_peaks.append(idx_zero + int(dwt_delay * sampling_rate))
+
+        # filtering? use a simple rule now
+        if len(candidate_t_peaks) > 0:
+            tpeaks.append(candidate_t_peaks[0] + srch_idx_start)
+        else:
+            tpeaks.append(np.nan)
+
+        if debug:
+            events_plot(candidate_t_peaks, dwt_local)
+            plt.plot(ecg[srch_idx_start: srch_idx_end])
+            plt.show()
+    return tpeaks, None
+
+
+def compute_dwt_multiscales(ecg: np.ndarray, max_degree):
+    """Return multiscales wavelet transforms.
+
+    Args:
+        ecg (FIXME): FIXME
+        max_degree (FIXME): FIXME
+
+    Returns:
+        out (FIXME): FIXME
+    """
+    def _apply_H_filter(signal_i, power=0):
+        zeros = np.zeros(2 ** power - 1)
+        timedelay = 2 ** power
+        banks = np.r_[
+            1.0 / 8, zeros, 3.0 / 8, zeros, 3.0 / 8, zeros, 1.0 / 8,
+        ]
+        signal_f = scipy.signal.convolve(signal_i, banks, mode='same')
+        signal_f[:-timedelay] = signal_f[timedelay:]  # timeshift: 2 steps
+        return signal_f
+
+    def _apply_G_filter(signal_i, power=0):
+        zeros = np.zeros(2 ** power - 1)
+        timedelay = 2 ** power
+        banks = np.r_[2, zeros, -2]
+        signal_f = scipy.signal.convolve(signal_i, banks, mode='same')
+        signal_f[:-timedelay] = signal_f[timedelay:]  # timeshift: 1 step
+        return signal_f
+
+    dwtmatr = []
+    intermediate_ret = np.array(ecg)
+    for deg in range(max_degree):
+        S_deg = _apply_G_filter(intermediate_ret, power=deg)
+        T_deg = _apply_H_filter(intermediate_ret, power=deg)
+        dwtmatr.append(S_deg)
+        intermediate_ret = np.array(T_deg)
+    return np.array(dwtmatr)
 
 
 # =============================================================================
@@ -144,7 +246,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             search_window = cwtmatr[2, index_peak - half_wave_width: index_peak]
             prominence = 0.20*max(search_window)
             height = 0.0
-            wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height,
                                        prominence=prominence)
 
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
@@ -152,7 +254,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
 
             prominence = 0.10*max(search_window)
             height = 0.0
-            wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height,
                                            prominence=prominence)
 
         if len(wt_peaks) == 0:
@@ -184,13 +286,13 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         if peak_type == "rpeaks":
             search_window = - cwtmatr[2, index_peak: index_peak + half_wave_width]
             prominence = 0.50*max(search_window)
-            wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height,
                                                  prominence=prominence)
 
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             search_window = cwtmatr[4, index_peak: index_peak + half_wave_width]
             prominence = 0.10*max(search_window)
-            wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height,
                                            prominence=prominence)
 
         if len(wt_peaks) == 0:
@@ -245,7 +347,7 @@ def _peaks_delineator(ecg, rpeaks, cleaning=False, sampling_rate=1000):
         end = rpeaks[i + 1] - search_boundary
         search_window = cwtmatr[4, start:end]
         height = 0.25*np.sqrt(np.mean(np.square(search_window)))
-        peaks_tp, heights_tp = find_peaks(np.abs(search_window), height=height)
+        peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(search_window), height=height)
         peaks_tp = peaks_tp + rpeaks[i] + search_boundary
         # set threshold for heights of peaks to find significant peaks in wavelet
         threshold = 0.125*max(search_window)
