@@ -142,7 +142,7 @@ def test_signal_rate():
     info = nk.signal_findpeaks(signal)
     rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000,
                        desired_length=None)
-    assert rate.shape[0] == np.max(info["Peaks"])
+    assert rate.shape[0] == len(info["Peaks"])
 
     # Test with dictionary.produced from signal_findpeaks.
     assert info[list(info.keys())[0]].shape == (info["Peaks"].shape[0], )
