@@ -107,7 +107,7 @@ def test_ecg_rate():
                        desired_length=test_length)
 
     assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 81, atol=2)
+    assert np.allclose(rate.mean(), 76, atol=2)
 
 
 def test_ecg_fixpeaks():
@@ -275,3 +275,9 @@ def test_ecg_eventrelated():
 
     assert len(ecg_eventrelated["Label"]) == 3
     assert len(ecg_eventrelated.columns) == 9
+
+    assert all(elem in ["ECG_Rate_Max", "ECG_Rate_Min", "ECG_Rate_Mean",
+                        "ECG_Rate_Max_Time", "ECG_Rate_Min_Time",
+                        "ECG_Rate_Trend_Quadratic",
+                        "ECG_Rate_Trend_Linear", "ECG_Rate_Trend_R2", "Label"]
+               for elem in np.array(ecg_eventrelated.columns.values, dtype=str))

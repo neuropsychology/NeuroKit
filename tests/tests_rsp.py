@@ -174,3 +174,9 @@ def test_rsp_eventrelated():
 
     assert np.alltrue(np.array(rsp_eventrelated["RSP_Amplitude_Mean"]) <
                       np.array(rsp_eventrelated["RSP_Amplitude_Max"]))
+
+    assert all(elem in ["RSP_Rate_Max", "RSP_Rate_Min", "RSP_Rate_Mean",
+                        "RSP_Rate_Max_Time", "RSP_Rate_Min_Time",
+                        "RSP_Amplitude_Max", "RSP_Amplitude_Min",
+                        "RSP_Amplitude_Mean", "RSP_Inspiration", "Label"]
+               for elem in np.array(rsp_eventrelated.columns.values, dtype=str))

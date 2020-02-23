@@ -128,6 +128,16 @@ def test_eda_eventrelated():
                               epochs_start=-0.1, epochs_end=1.9)
     eda_eventrelated = nk.eda_eventrelated(epochs)
 
+    no_activation = np.where(eda_eventrelated["EDA_Activation"] == 0)[0][0]
+    assert np.count_nonzero(eda_eventrelated.values[no_activation])
+    assert int(pd.DataFrame(eda_eventrelated.values
+                            [no_activation]).isna().sum()) == 4
+
     assert len(eda_eventrelated["Label"]) == 3
     assert len(eda_eventrelated.columns) == 6
 
+    assert all(elem in ["EDA_Activation", "EDA_Peak_Amplitude",
+                        "EDA_Peak_Amplitude_Time",
+                        "EDA_RiseTime", "EDA_RecoveryTime",
+                        "Label"]
+               for elem in np.array(eda_eventrelated.columns.values, dtype=str))
