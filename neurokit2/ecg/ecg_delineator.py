@@ -83,7 +83,7 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
 def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
     # P-Peaks and T-Peaks
     # tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
-    raise NotImplemented
+    return None
 
 
 # =============================================================================
