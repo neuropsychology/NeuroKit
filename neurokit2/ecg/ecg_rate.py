@@ -56,7 +56,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     >>> ax.legend(loc="upper right")
     """
     # Get R-peaks indices from DataFrame or dict.
-    rpeaks, desired_length = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
+    rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
 
     rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
 

@@ -54,7 +54,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
                                        sampling_rate=sampling_rate,
                                        method=method,
                                        correct_artifacts=True)
-    rate = ecg_rate(instant_peaks,
+    rate = ecg_rate(rpeaks,
                     sampling_rate=sampling_rate,
                     desired_length=len(ecg_cleaned))
 
