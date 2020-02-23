@@ -92,13 +92,24 @@ def _resample_points(peaks, sampling_rate, desired_sampling_rate):
 def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
     ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=250)
     dwtmatr = compute_dwt_multiscales(ecg, 5)
+
+    # for idx in [0, 1, 2, 3]:
+    #     plt.plot(dwtmatr[idx], label=f'W[{idx}]')
+    # plt.plot(ecg, '--')
+    # plt.legend()
+    # plt.grid(True)
+    # plt.show()
+
     rpeaks_resampled = _resample_points(rpeaks, sampling_rate, 250)
     # rpeaks_resampled = (rpeaks * 250 / sampling_rate).astype(int)
     tpeaks, ppeaks = _dwt_delinate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=250, debug=False)
 
     # P-Peaks and T-Peaks
     # tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
-    return dict(ECG_T_Peaks=_resample_points(tpeaks, 250, desired_sampling_rate=sampling_rate))
+    return dict(
+        ECG_T_Peaks=_resample_points(tpeaks, 250, desired_sampling_rate=sampling_rate),
+        ECG_P_Peaks=_resample_points(ppeaks, 250, desired_sampling_rate=sampling_rate)
+    )
 
     # return {"ECG_P_Peaks": ppeaks,
     #         "ECG_T_Peaks": tpeaks,
@@ -110,11 +121,12 @@ def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
     #         "ECG_T_Offsets": t_offsets}
 
 
-def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False, dwt_delay=0.056):
+def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False, dwt_delay=0.0):
     qrs_duration = 0.05
+    p_qrs_duration = 0.5
     srch_bndry = int(0.9 * qrs_duration * sampling_rate / 2)
-    significant_peaks_groups = []
     tpeaks = []
+    ppeaks = []
     for i in range(len(rpeaks)-1):
         # search for T peaks from R peaks
         srch_idx_start = rpeaks[i] + srch_bndry
@@ -147,7 +159,39 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
             events_plot(candidate_t_peaks, dwt_local)
             plt.plot(ecg[srch_idx_start: srch_idx_end])
             plt.show()
-    return tpeaks, None
+
+        # search for P peaks from Rpeaks
+        srch_idx_start = rpeaks[i] - int(p_qrs_duration * sampling_rate)
+        srch_idx_end = rpeaks[i] - srch_bndry
+
+        dwt_local = dwtmatr[2, srch_idx_start:srch_idx_end]
+        height = 0.25*np.sqrt(np.mean(np.square(dwt_local)))
+        peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
+        peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp['peak_heights'][j]]
+
+        peaks_tp = list(filter(lambda p: np.abs(dwt_local[p]) > 0.125 * max(dwt_local), peaks_tp))
+        if dwt_local[0] > 0:  # just append
+            peaks_tp = [0] + peaks_tp
+
+        candidate_p_peaks = []
+        for idx_peak, idx_peak_nxt in zip(peaks_tp[:-1], peaks_tp[1:]):
+            correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
+            if correct_sign:
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
+                # account for delay
+                candidate_p_peaks.append(idx_zero + int(dwt_delay * sampling_rate))
+
+        if debug:
+            events_plot(candidate_p_peaks, dwt_local)
+            plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
+            plt.legend()
+            plt.show()
+        if len(candidate_p_peaks) > 0:
+            ppeaks.append(candidate_p_peaks[0] + srch_idx_start)
+        else:
+            ppeaks.append(np.nan)
+
+    return tpeaks, ppeaks
 
 
 def compute_dwt_multiscales(ecg: np.ndarray, max_degree):
@@ -166,7 +210,7 @@ def compute_dwt_multiscales(ecg: np.ndarray, max_degree):
         banks = np.r_[
             1.0 / 8, zeros, 3.0 / 8, zeros, 3.0 / 8, zeros, 1.0 / 8,
         ]
-        signal_f = scipy.signal.convolve(signal_i, banks, mode='same')
+        signal_f = scipy.signal.convolve(signal_i, banks, mode='full')
         signal_f[:-timedelay] = signal_f[timedelay:]  # timeshift: 2 steps
         return signal_f
 
@@ -174,7 +218,7 @@ def compute_dwt_multiscales(ecg: np.ndarray, max_degree):
         zeros = np.zeros(2 ** power - 1)
         timedelay = 2 ** power
         banks = np.r_[2, zeros, -2]
-        signal_f = scipy.signal.convolve(signal_i, banks, mode='same')
+        signal_f = scipy.signal.convolve(signal_i, banks, mode='full')
         signal_f[:-timedelay] = signal_f[timedelay:]  # timeshift: 1 step
         return signal_f
 
@@ -185,6 +229,7 @@ def compute_dwt_multiscales(ecg: np.ndarray, max_degree):
         T_deg = _apply_H_filter(intermediate_ret, power=deg)
         dwtmatr.append(S_deg)
         intermediate_ret = np.array(T_deg)
+    dwtmatr = [arr[:len(ecg)] for arr in dwtmatr]  # rescale transforms to the same length
     return np.array(dwtmatr)
 
 

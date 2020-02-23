@@ -10,7 +10,6 @@ SHOW_DEBUG_PLOTS = False
 MAX_SIGNAL_DIFF = 0.01  # seconds
 
 
-
 @pytest.fixture(name='test_data')
 def fixture_load_ecg_data():
     """Load ecg signal and sampling rate."""
@@ -25,6 +24,11 @@ def fixture_load_ecg_data():
 
     ecg, sampling_rate = _get_signal('bad_500.csv', sampling_rate=500)
     rpeaks = nk.ecg_findpeaks(ecg, sampling_rate=sampling_rate, method='martinez')['ECG_R_Peaks']
+
+    if SHOW_DEBUG_PLOTS:
+        plt.plot(ecg)
+        plt.show()
+
     yield dict(ecg=ecg, sampling_rate=sampling_rate, rpeaks=rpeaks)
 
 
@@ -35,15 +39,11 @@ def test_find_T_peaks_correctly(test_data):
     np.testing.assert_allclose(ecg_characteristics['ECG_T_Peaks'][:3],
                                [537, 1031, 1682], atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
 
-    # plt.plot(ecg_signal)
-    # plt.show()
 
+def test_find_P_peaks_correctly(test_data):
+    ecg_characteristics = nk.ecg_delineator(
+        test_data['ecg'], test_data['rpeaks'], test_data['sampling_rate'], method='dwt')
 
-# def test_find_P_peaks_correctly(test_data):
-#     ecg_signal, sampling_rate = test_data
-#     rpeaks = nk.ecg_findpeaks(ecg_signal, sampling_rate=sampling_rate, method='martinez')['ECG_R_Peaks']
-#     ecg_characteristics = nk.ecg_delineator(ecg_signal, rpeaks, sampling_rate, method='dwt')
-
-#     np.testing.assert_allclose(ecg_characteristics['ECG_T_Peaks'][:3],
-#                                [537, 1031, 1682], atol=MAX_SIGNAL_DIFF * sampling_rate)
+    np.testing.assert_allclose(ecg_characteristics['ECG_P_Peaks'][:3],
+                               [364, 931, 1516], atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
 
