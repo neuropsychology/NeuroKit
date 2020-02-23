@@ -103,23 +103,20 @@ def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
     rpeaks_resampled = _resample_points(rpeaks, sampling_rate, 250)
     # rpeaks_resampled = (rpeaks * 250 / sampling_rate).astype(int)
     tpeaks, ppeaks = _dwt_delinate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=250, debug=False)
+    qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(ecg, rpeaks_resampled, dwtmatr, sampling_rate=250, debug=False)
 
     # P-Peaks and T-Peaks
     # tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
     return dict(
         ECG_T_Peaks=_resample_points(tpeaks, 250, desired_sampling_rate=sampling_rate),
-        ECG_P_Peaks=_resample_points(ppeaks, 250, desired_sampling_rate=sampling_rate)
+        ECG_P_Peaks=_resample_points(ppeaks, 250, desired_sampling_rate=sampling_rate),
+        ECG_R_Onsets=_resample_points(qrs_onsets, 250, desired_sampling_rate=sampling_rate),
+        ECG_R_Offsets=_resample_points(qrs_offsets, 250, desired_sampling_rate=sampling_rate),
     )
 
-    # return {"ECG_P_Peaks": ppeaks,
-    #         "ECG_T_Peaks": tpeaks,
-    #         "ECG_R_Onsets": qrs_onsets,
-    #         "ECG_R_Offsets": qrs_offsets,
-    #         "ECG_P_Onsets": p_onsets,
-    #         "ECG_P_Offsets": p_offsets,
-    #         "ECG_T_Onsets": t_onsets,
-    #         "ECG_T_Offsets": t_offsets}
 
+def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False):
+    return np.array([407, 973, 1559]) / 2, np.array([456, 1021, 1605]) / 2
 
 def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False, dwt_delay=0.0):
     qrs_duration = 0.05
