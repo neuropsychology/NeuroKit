@@ -92,10 +92,9 @@ def eda_eventrelated(epochs):
         eda_df[epoch_index] = {}  # Initialize an empty dict for the current epoch
         epoch = epochs[epoch_index]
 
-        # Detect activity following the event
-        activations = len(np.where(epoch["SCR_Onsets"][epoch.index > 0] != 0))
-        if any(epoch["SCR_Onsets"][epoch.index > 0] != 0):
-            eda_df[epoch_index]["EDA_Activation"] = activations
+        # Detect activity following the events
+        if any(epoch["SCR_Peaks"][epoch.index > 0] == 1) and any(epoch["SCR_Onsets"][epoch.index > 0] == 1):
+            eda_df[epoch_index]["EDA_Activation"] = 1
         else:
             eda_df[epoch_index]["EDA_Activation"] = 0
 
