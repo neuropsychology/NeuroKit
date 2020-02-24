@@ -164,7 +164,7 @@ Electromyography (EMG)
 .. code-block:: python
 
     # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
-	emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
+    emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
 
     # Process it
     signals = nk.emg_process(emg, sampling_rate=250)
@@ -179,50 +179,6 @@ PPG, BVP, EGG, ...
 -------------------
 
 Consider `helping us developing it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
-
-
-
-Signal processing
------------------
-
-Signal cleaning
-^^^^^^^^^^^^^^^^
-
-- `signal_distord() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_distord>`_: Add noise of a given frequency, amplitude and shape to a signal.
-- `signal_binarize() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_binarize>`_: Convert a continuous signal into zeros and ones depending on a given threshold.
-- `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
-- `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
-- `signal_smooth() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_smooth>`_: Signal smoothing using the convolution of a filter kernel.
-- `signal_psd() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_psd>`_: Compute the Power Spectral Density (PSD).
-
-Signal preprocessing
-^^^^^^^^^^^^^^^^^^^^
-
-- `signal_resample() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_resample>`_: Up- or down-sample a signal.
-- `signal_interpolate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_interpolate>`_: Interpolate (fills the values between data points) a signal using different methods.
-- `signal_merge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_merge>`_: Arbitrary addition of two signals with different time ranges.
-
-Signal processing
-^^^^^^^^^^^^^^^^^
-
-- `signal_zerocrossings() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_zerocrossings>`_: Locate the indices where the signal crosses zero.
-- `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_: Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
-- `signal_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_plot>`_: Plot signal with events as vertical lines.
-
-Other Utilities
----------------
-
-Read data
-^^^^^^^^^^
-
-- `read_acqknowledge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge>`_: Read and format a BIOPAC’s AcqKnowledge file into a pandas’ dataframe.
-
-Events *(stimuli triggers and markers)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- `events_find() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find>`_: Find and select events in a continuous signal (e.g., from a photosensor).
-- `events_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot>`_: Plot events in signal.
-- `events_to_mne() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_to_mne>`_: Create `MNE <https://github.com/mne-tools/mne-python>`_ compatible events for integration with M/EEG.
 
 
 Design
@@ -241,7 +197,29 @@ Citation
    :target: https://zenodo.org/badge/latestdoi/218212111
   
   
-No citation yet :'(
+You can run:
+
+.. code-block:: python
+
+    print(nk.__cite__)
+
+.. code-block:: console
+
+You can cite NeuroKit as follows:
+
+    - Makowski, D., Pham, T., L Juen, Z., Brammer, J., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved February 24, 2020, from https://github.com/neuropsychology/NeuroKit
+
+
+    Full bibtex reference is the following:
+
+    @misc{neurokit,
+      doi = {10.5281/ZENODO.3597887},
+      url = {https://github.com/neuropsychology/NeuroKit},
+      author = {Makowski, Dominique and Pham, Tam and L Juen, Zen and Brammer, Jan C. and Pham, Hung and Lesspinasse, Fran\c{c}ois and S H Chen, Annabel},
+      title = {NeuroKit: The Python Toolbox for Neurophysiological Signal Processing},
+      publisher = {Zenodo},
+      year = {2020},
+    }
 
 
 Alternatives
