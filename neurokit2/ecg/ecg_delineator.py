@@ -89,7 +89,7 @@ def _resample_points(peaks, sampling_rate, desired_sampling_rate):
     return (np.array(peaks) * desired_sampling_rate / sampling_rate).astype(int)
 
 
-def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
+def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate, base_sampling_rate=2000):
     ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=2000)
     dwtmatr = compute_dwt_multiscales(ecg, 9)
 
@@ -101,18 +101,17 @@ def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
     # plt.grid(True)
     # plt.show()
 
-    rpeaks_resampled = _resample_points(rpeaks, sampling_rate, 2000)
-    tpeaks, ppeaks = _dwt_delinate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=2000, debug=False)
+    rpeaks_resampled = _resample_points(rpeaks, sampling_rate, base_sampling_rate)
+    tpeaks, ppeaks = _dwt_delinate_tp_peaks(
+        ecg, rpeaks_resampled, dwtmatr, sampling_rate=base_sampling_rate, debug=False)
     qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(
-        ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks,
-        sampling_rate=2000, debug=False)
+        ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=base_sampling_rate, debug=False)
 
-    # P-Peaks and T-Peaks
     return dict(
-        ECG_T_Peaks=_resample_points(tpeaks, 2000, desired_sampling_rate=sampling_rate),
-        ECG_P_Peaks=_resample_points(ppeaks, 2000, desired_sampling_rate=sampling_rate)[1:],
-        ECG_R_Onsets=_resample_points(qrs_onsets, 2000, desired_sampling_rate=sampling_rate)[1:],
-        ECG_R_Offsets=_resample_points(qrs_offsets, 2000, desired_sampling_rate=sampling_rate),
+        ECG_T_Peaks=_resample_points(tpeaks, base_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_P_Peaks=_resample_points(ppeaks, base_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
+        ECG_R_Onsets=_resample_points(qrs_onsets, base_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
+        ECG_R_Offsets=_resample_points(qrs_offsets, base_sampling_rate, desired_sampling_rate=sampling_rate),
     )
 
 
