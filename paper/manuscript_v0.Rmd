@@ -1,0 +1,75 @@
+---
+title: 'NeuroKit2: The Python Toolbox for Neurophysiological Signal Processing'
+author: 
+  - name          : "Dominique Makowski"
+    affiliation   : " 1,*"
+    corresponding : no    # Define only one corresponding author
+    address       : "HSS 04-18, 48 Nanyang Avenue, Singapore"
+    email         : "dmakowski@ntu.edu.sg"
+  - name          : "Tam Pham"
+    affiliation   : " 1"
+  - name          : "Zen J. Lau"
+    affiliation   : " 1"
+affiliation:
+  - id            : "1"
+    institution   : "School of Social Sciences, Nanyang Technological University, Singapore"
+authornote: |
+  * Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
+abstract: |
+   The Neurokit2 toolbox is an open-source Python package aimed at providing users with comprehensive functionality and flexibility in neurophysiological signal processing. It developed from a collaborative project aimed at offering programming ease for both novice and advanced users to perform elaborate analyses of neurophysiological data. 
+
+   Algorithms first for basic and high-level analysis such as..... Allows users to perform elaborate    can extend functionaliy and implement new algorithms
+   
+   from a collaborative project
+
+keywords          : "neurophysiology, python, programming, signal processing"
+wordcount         : ""
+bibliography      : ["bibliography.bib"]
+floatsintext      : yes
+figsintext        : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : yes
+mask              : no
+draft             : no
+documentclass     : "apa6"
+classoption       : "man"
+output: 
+  papaja::apa6_word:
+    keep_tex: FALSE
+  papaja::apa6_pdf:
+    keep_tex: FALSE
+header-includes:
+   - \usepackage[labelfont=bf, font={color=gray,small}]{caption}
+   - \usepackage{float}
+   - \usepackage[document]{ragged2e}
+---
+
+\justify
+
+```{r setup, include=FALSE}
+library("papaja")
+library("kableExtra")
+#knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
