@@ -90,31 +90,29 @@ def _resample_points(peaks, sampling_rate, desired_sampling_rate):
 
 
 def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
-    ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=250)
-    dwtmatr = compute_dwt_multiscales(ecg, 5)
+    ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=2000)
+    dwtmatr = compute_dwt_multiscales(ecg, 9)
 
     # # only for debugging
     # for idx in [0, 1, 2, 3]:
-    #     plt.plot(dwtmatr[idx], label=f'W[{idx}]')
+    #     plt.plot(dwtmatr[idx + 3], label=f'W[{idx}]')
     # plt.plot(ecg, '--')
     # plt.legend()
     # plt.grid(True)
     # plt.show()
 
-    rpeaks_resampled = _resample_points(rpeaks, sampling_rate, 250)
-    # rpeaks_resampled = (rpeaks * 250 / sampling_rate).astype(int)
-    tpeaks, ppeaks = _dwt_delinate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=250, debug=False)
+    rpeaks_resampled = _resample_points(rpeaks, sampling_rate, 2000)
+    tpeaks, ppeaks = _dwt_delinate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=2000, debug=False)
     qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(
         ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks,
-        sampling_rate=250, debug=False)
+        sampling_rate=2000, debug=False)
 
     # P-Peaks and T-Peaks
-    # tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
     return dict(
-        ECG_T_Peaks=_resample_points(tpeaks, 250, desired_sampling_rate=sampling_rate),
-        ECG_P_Peaks=_resample_points(ppeaks, 250, desired_sampling_rate=sampling_rate),
-        ECG_R_Onsets=_resample_points(qrs_onsets, 250, desired_sampling_rate=sampling_rate),
-        ECG_R_Offsets=_resample_points(qrs_offsets, 250, desired_sampling_rate=sampling_rate),
+        ECG_T_Peaks=_resample_points(tpeaks, 2000, desired_sampling_rate=sampling_rate),
+        ECG_P_Peaks=_resample_points(ppeaks, 2000, desired_sampling_rate=sampling_rate)[1:],
+        ECG_R_Onsets=_resample_points(qrs_onsets, 2000, desired_sampling_rate=sampling_rate),
+        ECG_R_Offsets=_resample_points(qrs_offsets, 2000, desired_sampling_rate=sampling_rate),
     )
 
 
@@ -159,6 +157,7 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
     qrs_duration = 0.05
     p_qrs_duration = 0.5
     srch_bndry = int(0.9 * qrs_duration * sampling_rate / 2)
+    degree = int(np.log2(sampling_rate / 250))
     tpeaks = []
     ppeaks = []
     for i in range(len(rpeaks)-1):
@@ -167,19 +166,20 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
             if find == 'tpeak':
                 # search for T peaks from R peaks
                 srch_idx_start = rpeaks[i] + srch_bndry
-                srch_idx_end = rpeaks[i + 1] - srch_bndry * 6
-                dwt_local = dwtmatr[3, srch_idx_start:srch_idx_end]
+                srch_idx_end = rpeaks[i + 1] - srch_bndry * 8
+                dwt_local = dwtmatr[3 + degree, srch_idx_start:srch_idx_end]
             elif find == 'ppeak':
                 # search for P peaks from Rpeaks
                 srch_idx_start = rpeaks[i] - int(p_qrs_duration * sampling_rate)
                 srch_idx_end = rpeaks[i] - srch_bndry
-                dwt_local = dwtmatr[2, srch_idx_start:srch_idx_end]
+                dwt_local = dwtmatr[2 + degree, srch_idx_start:srch_idx_end]
+                if len(dwt_local) == 0:
+                    ppeaks.append(np.nan)
+                    continue
 
-            height = 0.25*np.sqrt(np.mean(np.square(dwt_local)))
+            height = 0.05*np.sqrt(np.mean(np.square(dwt_local)))
             peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
-            peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp['peak_heights'][j]]
-
-            peaks_tp = list(filter(lambda p: np.abs(dwt_local[p]) > 0.125 * max(dwt_local), peaks_tp))
+            peaks_tp = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks_tp))
             if dwt_local[0] > 0:  # just append
                 peaks_tp = [0] + peaks_tp
 
@@ -191,6 +191,15 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
                     # account for delay
                     candidate_peaks.append(idx_zero + int(dwt_delay * sampling_rate))
 
+            # if find == 'tpeak':
+            #     continue
+            # if len(candidate_peaks) > 0:
+            #     events_plot(candidate_peaks, dwt_local)
+            # else:
+            #     plt.plot(dwt_local)
+            # plt.plot(ecg[srch_idx_start: srch_idx_end])
+            # plt.show()
+
             # filtering? use a simple rule now
             if find == 'tpeak':
                 if len(candidate_peaks) > 0:
@@ -199,14 +208,9 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
                     tpeaks.append(np.nan)
             elif find == 'ppeak':
                 if len(candidate_peaks) > 0:
-                    ppeaks.append(candidate_peaks[0] + srch_idx_start)
+                    ppeaks.append(candidate_peaks[-1] + srch_idx_start)
                 else:
                     ppeaks.append(np.nan)
-
-            if debug:
-                events_plot(candidate_peaks, dwt_local)
-                plt.plot(ecg[srch_idx_start: srch_idx_end])
-                plt.show()
 
     return tpeaks, ppeaks
 
