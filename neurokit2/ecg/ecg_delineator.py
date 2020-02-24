@@ -44,10 +44,10 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=500)
+    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> rpeaks = nk.ecg_findpeaks(cleaned)
-    >>> info = nk.ecg_delineator(cleaned, rpeaks, sampling_rate=500)
+    >>> _, rpeaks = nk.ecg_peaks(cleaned)
+    >>> info = nk.ecg_delineator(cleaned, rpeaks, sampling_rate=1000)
     >>> nk.events_plot(info["ECG_P_Peaks"], cleaned)
     >>> nk.events_plot(info2["ECG_T_Peaks"], cleaned)
 
