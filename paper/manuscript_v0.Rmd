@@ -1,5 +1,5 @@
 ---
-title: 'NeuroKit2: The Python Toolbox for Neurophysiological Signal Processing'
+title: 'NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing'
 author: 
   - name          : "Dominique Makowski"
     affiliation   : " 1,*"
@@ -18,7 +18,7 @@ authornote: |
 abstract: |
    The Neurokit2 toolbox is an open-source Python package aimed at providing users with comprehensive and flexible functionality in neurophysiological signal processing. It developed from a collaborative project aimed at offering programming ease for both novice and advanced users to perform elaborate analyses of electrocardiogram (ECG), respiratory (RSP), electrodermal activity (EDA), and electromyography (EMG) data. It comprises of a consistent set of user-friendly, high-level functions that implements an all-in-one cleaning, preprocessing, and processing pipeline with sensible defaults. At the same time, greater flexibility and parametric control can be achieved by using Neurokit2's mid-level functions to build a custom analysis pipeline. [talk about novelty?]
 
-keywords          : "neurophysiology, python, programming, signal processing"
+keywords          : "neurophysiology, python, open source, programming, signal processing, ECG, EDA, EMG, RSP"
 wordcount         : ""
 bibliography      : ["bibliography.bib"]
 floatsintext      : yes
@@ -52,18 +52,32 @@ library("kableExtra")
 
 # Introduction
 
+The field of cognitive neuroscience and psychology is increasingly relying on neurophysiological methods often used in conjunction with software tools for processing large data sets. This is because such an approach offers low monetary cost and high user convenience in the background of the field's progressive growth of better algorithms and computational methods. However, as these methods are often not easily accessible and user-friendly, neurophysiological processing remains a challenge for researchers without formal programming training.
 
-# Materials and Methods
+## Overview of the Neurokit2 Project
 
-## Organization and software components
+To address the current gaps, NeuroKit2 is a free, open-source Python package written by neuroscientists and psychologists for neuroscientists and psychologists. It developed from a collaborative environment that continues to welcome contributors from different allied fields - till its present state, continual improvements to code functionality and flexibility are ongoing. Its implementation has been thoroughly tested in the existing reference software and it is well-documented with tutorials and examples. More importantly, the toolbox was designed to provide a consistent yet powerful and flexible API. It offers clear code organization across different signals (e.g., electrocardiogram (ECG), respiration (RSP), electrodermal activity (EDA), electromyography (EMG)) for different processing purposes. On one hand, it comprises of high-level functions that streamlines and incorporates all stages of signal processing, and on the other hand, mid-level functions (e.g., for cleaning data, extracting signal rate etc.) can be modified easily for user preference. Advanced users will find this useful for implementing their own algorithms and building their own custom analysis pipeline, giving them more parametric control. Hence, Neurokit2 is made accessible and reliable for users of various programming levels.
 
-## Core functions
+In this paper, we will provide an overview of the Neurokit2 Toolbox, its code organization and its various features.
 
-```{r cars}
-summary(cars)
+
+
+
+# Software Description
+
+Neurokit2 was developed using Python drawing on well-established existing libraries such as **Numpy**, **Pandas**, **SciPy**, **MatplotLib** etc. The toolbox comprises of multiple modules: ecg, rsp, eda, emg, ppg, signal, eeg, epochs, events, complexity, bio, misc and stats.
+
+The ecg, rsp, eda, and emg modules encompass mid-level functions for simulating an artificial signal, cleaning, finding peaks (and fixing wrongly detected peaks), rate extraction, and plotting. Other mid-level functions specific to the signal also exist, such as delineating the QRS complex of an ECG signal and onset detection in EMG signal. They also comprise of high-level functions meant to implement a default processing pipeline as well as to perform event-related analysis on epochs of the signal. 
+
+
+```{r table, echo=FALSE}
+ecg = c("ecg_clean()", "ecg_delineator()", "ecg_eventrelated()", "ecg_findpeaks()", "ecg_findpeaks()", "ecg_fixpeaks()", "ecg_peaks()", "ecg_plot()", "ecg_process()", "ecg_rate()", "ecg_rate()", "ecg_rsp()", "ecg_simulate()")
+events = c("events_find()", "events_plot()", "events_to_mne()")
+write.csv(table, "figures/table.csv", row.names = FALSE)
 ```
 
-# Results
+
+
 
 ```{r pressure, echo=FALSE}
 plot(pressure)
