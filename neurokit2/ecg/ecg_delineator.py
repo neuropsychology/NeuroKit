@@ -58,7 +58,7 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
     """
     # Sanitize inputs
     if rpeaks is None:
-        rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)["ECG_R_Peaks"]
+        _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)["ECG_R_Peaks"]
 
     # Try retrieving right column
     if isinstance(rpeaks, dict):
@@ -74,12 +74,22 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
                                         rpeaks=rpeaks,
                                         sampling_rate=sampling_rate)
 
-    instant_peaks = signal_formatpeaks(waves,
-                                       desired_length=len(ecg_cleaned))
-    signals = instant_peaks
+    # Sanity checks -----------------------------------------------------------
 
-    return signals, waves
-#    return waves
+    # Remove NaN in Peaks, Onsets, and Offsets
+
+#    waves["ECG_T_Offsets"]= np.array(waves["waves"], dtype='float')
+#
+#    for feature in waves.keys():
+#        valid_feature = ~np.isnan(waves[feature])
+#        waves[feature] = waves[feature][valid_feature].astype(np.int)
+#
+#    instant_peaks = signal_formatpeaks(waves,
+#                                       desired_length=len(ecg_cleaned))
+#    signals = instant_peaks
+#
+#    return signals, waves
+    return waves
 
 
 # =============================================================================
@@ -213,7 +223,10 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         candidate_offsets = candidate_offsets.tolist() + [rightbase]
         offsets.append(min(candidate_offsets))
 
+    onsets = np.array(onsets, dtype='int')
+    offsets = np.array(offsets, dtype='int')
     return onsets, offsets
+
 
 
 
@@ -255,6 +268,9 @@ def _peaks_delineator(ecg, rpeaks, cleaning=False, sampling_rate=1000):
         significant_peaks_groups.append(_find_tppeaks(ecg, significant_peaks_tp, sampling_rate=sampling_rate))
 
     tpeaks, ppeaks = zip(*[(g[0], g[-1]) for g in significant_peaks_groups])
+
+    tpeaks = np.array(tpeaks, dtype='int')
+    ppeaks = np.array(ppeaks, dtype='int')
     return tpeaks, ppeaks
 
 
@@ -327,6 +343,12 @@ def _ecg_delineator_derivative(ecg, rpeaks=None, sampling_rate=1000):
         P_onsets.append(_ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P))
         T_offsets.append(_ecg_delineator_derivative_T_offset(rpeak, heartbeat, R, T))
 
+#    P_list = np.array(P_list, dtype='float')
+#    Q_list = np.array(Q_list, dtype='float')
+#    S_list = np.array(S_list, dtype='float')
+#    T_list = np.array(T_list, dtype='float')
+#    P_onsets = np.array(P_onsets, dtype='float')
+#    T_offsets = np.array(T_offsets, dtype='float')
 
     out = {"ECG_P_Peaks": P_list,
            "ECG_Q_Peaks": Q_list,
