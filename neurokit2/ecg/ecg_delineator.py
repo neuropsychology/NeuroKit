@@ -32,9 +32,19 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
 
     Returns
     -------
-    info : dict
-        A dictionary containing additional information, in this case the
-        samples at which P-peaks and T-peaks occur, accessible with the key "ECG_P_Peaks" and "ECG_R_Peaks" respectively.
+    waves : dict
+        A dictionary containing additional information.
+        For derivative method, the dictionary contains the
+        samples at which P-peaks, Q-peaks, S-peaks, T-peaks, P-onsets and T-
+        offsets occur, accessible with the key "ECG_P_Peaks", "ECG_Q_Peaks",
+        "ECG_S_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets"
+        respectively.
+
+        For continuous wavelet method, the dictionary contains the samples at
+        which P-peaks, T-peaks, P-onsets, P-offsets, T-onsets, T-offsets, QRS-
+        onsets and QRS-offsets occur, accessible with the key "ECG_P_Peaks",
+        "ECG_T_Peaks", "ECG_P_Onsets", "ECG_P_Offsets", "ECG_T_Onsets",
+        "ECG_T_Offsets", "ECG_R_Onsets", "ECG_R_Offsets" respectively.
 
     See Also
     --------
