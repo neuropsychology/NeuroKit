@@ -9,3 +9,5 @@ from .ecg_rate import ecg_rate
 from .ecg_process import ecg_process
 from .ecg_plot import ecg_plot
 from .ecg_delineator import ecg_delineator
+from .ecg_eventrelated import ecg_eventrelated
+from .ecg_rsp import ecg_rsp

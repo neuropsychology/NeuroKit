@@ -6,3 +6,4 @@ from .emg_amplitude import emg_amplitude
 from .emg_process import emg_process
 from .emg_plot import emg_plot
 from .emg_activation import emg_activation
+from .emg_eventrelated import emg_eventrelated

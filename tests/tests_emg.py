@@ -1,8 +1,10 @@
 import numpy as np
 import pandas as pd
 import neurokit2 as nk
+import matplotlib.pyplot as plt
 
 import scipy.stats
+import biosppy
 
 # =============================================================================
 # EMG
@@ -20,3 +22,79 @@ def test_emg_simulate():
     emg3 = nk.emg_simulate(duration=20, length=5000, n_bursts=1, duration_bursts=2.0)
 #    pd.DataFrame({"EMG1":emg1, "EMG3": emg3}).plot()
     assert len(nk.signal_findpeaks(emg3, height_min=1.0)["Peaks"]) > len(nk.signal_findpeaks(emg1, height_min=1.0)["Peaks"])
+
+
+def test_emg_clean():
+
+    sampling_rate=1000
+
+    emg = nk.emg_simulate(duration=20, sampling_rate=sampling_rate)
+    emg_cleaned = nk.emg_clean(emg, sampling_rate=sampling_rate)
+
+    assert emg.size == emg_cleaned.size
+
+    # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/emg.py)
+    original, _, _ = biosppy.tools.filter_signal(signal=emg,
+                                                 ftype='butter',
+                                                 band='highpass',
+                                                 order=4,
+                                                 frequency=100,
+                                                 sampling_rate=sampling_rate)
+    emg_cleaned_biosppy = nk.signal_detrend(original, order=0)
+    assert np.allclose((emg_cleaned - emg_cleaned_biosppy).mean(), 0, atol=1e-6)
+
+
+def test_emg_plot():
+
+    sampling_rate=1000
+
+    emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
+    emg_summary, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
+
+    # Plot data over samples.
+    nk.emg_plot(emg_summary)
+    # This will identify the latest figure.
+    fig = plt.gcf()
+    assert len(fig.axes) == 2
+    titles = ["Raw and Cleaned Signal",
+              "Muscle Activation"]
+    for (ax, title) in zip(fig.get_axes(), titles):
+        assert ax.get_title() == title
+    assert fig.get_axes()[1].get_xlabel() == "Samples"
+    np.testing.assert_array_equal(fig.axes[0].get_xticks(),
+                                  fig.axes[1].get_xticks())
+    plt.close(fig)
+
+    # Plot data over time.
+    nk.emg_plot(emg_summary, sampling_rate=sampling_rate)
+    # This will identify the latest figure.
+    fig = plt.gcf()
+    assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
+
+
+def test_emg_eventrelated():
+
+    emg = nk.emg_simulate(duration=20, sampling_rate=1000, n_bursts=3)
+    emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
+    epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000],
+                              sampling_rate=1000,
+                              epochs_start=-0.1, epochs_end=1.9)
+    emg_eventrelated = nk.emg_eventrelated(epochs)
+
+    # Test amplitude features
+    no_activation = np.where(emg_eventrelated["EMG_Activation"] == 0)[0][0]
+    assert int(pd.DataFrame(emg_eventrelated.values
+                            [no_activation]).isna().sum()) == 4
+
+    assert np.alltrue(np.nansum(np.array(
+            emg_eventrelated["EMG_Amplitude_Mean"])) <
+                            np.nansum(np.array(
+                                    emg_eventrelated["EMG_Amplitude_Max"])))
+
+    assert len(emg_eventrelated["Label"]) == 3
+    assert len(emg_eventrelated.columns) == 6
+
+    assert all(elem in ["EMG_Activation", "EMG_Amplitude_Mean",
+                        "EMG_Amplitude_Max", "EMG_Amplitude_Max_Time",
+                        "EMG_Bursts", "Label"]
+               for elem in np.array(emg_eventrelated.columns.values, dtype=str))

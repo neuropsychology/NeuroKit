@@ -7,8 +7,8 @@
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://img.shields.io/travis/neuropsychology/NeuroKit.svg
-        :target: https://travis-ci.org/neuropsychology/NeuroKit
+.. image:: https://travis-ci.org/neuropsychology/NeuroKit.svg?branch=master
+    :target: https://travis-ci.org/neuropsychology/NeuroKit
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit

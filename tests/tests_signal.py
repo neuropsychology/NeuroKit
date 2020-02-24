@@ -109,14 +109,7 @@ def test_signal_interpolate():
     x_axis = np.linspace(start=10, stop=30, num=10)
     signal = np.cos(x_axis)
 
-    interpolated = nk.signal_interpolate(signal, desired_length=1000)
-    assert len(interpolated) == 1000
-
-    new_x = np.linspace(start=0, stop=40, num=1000)
-    interpolated = nk.signal_interpolate(signal,
-                                         desired_length=1000,
-                                         x_axis=x_axis,
-                                         new_x=new_x)
+    interpolated = nk.signal_interpolate(x_axis, signal, desired_length=1000)
     assert len(interpolated) == 1000
     assert interpolated[0] == signal[0]
 
@@ -149,7 +142,7 @@ def test_signal_rate():
     info = nk.signal_findpeaks(signal)
     rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000,
                        desired_length=None)
-    assert rate.shape[0] == np.max(info["Peaks"])
+    assert rate.shape[0] == len(info["Peaks"])
 
     # Test with dictionary.produced from signal_findpeaks.
     assert info[list(info.keys())[0]].shape == (info["Peaks"].shape[0], )

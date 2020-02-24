@@ -129,7 +129,7 @@ def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000,
     num_heart_beats = int(duration * heart_rate / 60)
 
     # Concatenate together the number of heart beats needed
-    ecg = np.tile(cardiac , num_heart_beats)
+    ecg = np.tile(cardiac, num_heart_beats)
 
     # Add random (gaussian distributed) noise
 #    ecg += np.random.normal(0, noise, len(ecg))

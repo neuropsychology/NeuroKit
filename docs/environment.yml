@@ -3,9 +3,9 @@ channels:
 dependencies:
   - python>=3.5
   - sphinx>=1.4
+  - pip
   - pandoc
   - nbconvert
   - ipykernel
   - pip:
     - nbsphinx
-    - sphinx-nbexamples

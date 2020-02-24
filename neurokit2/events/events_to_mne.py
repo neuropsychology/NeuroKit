@@ -68,7 +68,7 @@ def events_to_mne(events, event_conditions=None):
     event_names = list(set(event_conditions))
     event_index = list(range(len(event_names)))
     for i in enumerate(event_names):
-        event_conditions = [event_index[i[0]] if x==i[1] else x for x in event_conditions]
+        event_conditions = [event_index[i[0]] if x == i[1] else x for x in event_conditions]
         event_id[i[1]] = event_index[i[0]]
 
     events = np.array([events, [0]*len(events), event_conditions]).T

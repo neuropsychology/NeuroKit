@@ -73,8 +73,8 @@ def test_rsp_peaks():
     assert signals["RSP_Troughs"].sum() == 28
     assert info["RSP_Peaks"].shape[0] == 28
     assert info["RSP_Troughs"].shape[0] == 28
-    assert np.allclose(info["RSP_Peaks"].sum(), 1643787)
-    assert np.allclose(info["RSP_Troughs"].sum(), 1586275)
+    assert np.allclose(info["RSP_Peaks"].sum(), 1643832)
+    assert np.allclose(info["RSP_Troughs"].sum(), 1586316)
     # Assert that extrema start with a trough and end with a peak.
     assert info["RSP_Peaks"][0] > info["RSP_Troughs"][0]
     assert info["RSP_Peaks"][-1] > info["RSP_Troughs"][-1]
@@ -151,3 +151,32 @@ def test_rsp_plot():
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     plt.close(fig)
+
+def test_rsp_eventrelated():
+
+    rsp, info = nk.rsp_process(nk.rsp_simulate(duration=20))
+    epochs = nk.epochs_create(rsp,
+                              events=[5000, 10000, 15000],
+                              epochs_start=-0.1,
+                              epochs_end=1.9)
+    rsp_eventrelated = nk.rsp_eventrelated(epochs)
+
+    # Test rate features
+    assert np.alltrue(np.array(rsp_eventrelated["RSP_Rate_Min"]) <
+                      np.array(rsp_eventrelated["RSP_Rate_Mean"]))
+
+    assert np.alltrue(np.array(rsp_eventrelated["RSP_Rate_Mean"]) <
+                      np.array(rsp_eventrelated["RSP_Rate_Max"]))
+
+    # Test amplitude features
+    assert np.alltrue(np.array(rsp_eventrelated["RSP_Amplitude_Min"]) <
+                      np.array(rsp_eventrelated["RSP_Amplitude_Mean"]))
+
+    assert np.alltrue(np.array(rsp_eventrelated["RSP_Amplitude_Mean"]) <
+                      np.array(rsp_eventrelated["RSP_Amplitude_Max"]))
+
+    assert all(elem in ["RSP_Rate_Max", "RSP_Rate_Min", "RSP_Rate_Mean",
+                        "RSP_Rate_Max_Time", "RSP_Rate_Min_Time",
+                        "RSP_Amplitude_Max", "RSP_Amplitude_Min",
+                        "RSP_Amplitude_Mean", "RSP_Inspiration", "Label"]
+               for elem in np.array(rsp_eventrelated.columns.values, dtype=str))

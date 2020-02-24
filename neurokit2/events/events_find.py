@@ -141,7 +141,7 @@ def _events_find(event_channel, threshold="auto", threshold_keep="above"):
         binary = np.abs(binary - 1)  # Reverse if events are below
 
     # Initialize data
-    events = {"onset":[], "duration":[]}
+    events = {"onset": [], "duration": []}
 
     index = 0
     for event, group in (itertools.groupby(binary)):

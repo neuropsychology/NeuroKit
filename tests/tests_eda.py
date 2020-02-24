@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 import biosppy
+import matplotlib.pyplot as plt
 
 # =============================================================================
 # EDA
@@ -73,9 +74,6 @@ def test_eda_phasic():
 
 
 
-
-
-
 def test_eda_peaks():
 
     sampling_rate = 1000
@@ -91,3 +89,54 @@ def test_eda_peaks():
     signals, info = nk.eda_peaks(eda_phasic, method="kim2004")
     onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
     assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1)
+
+def test_eda_plot():
+
+    sampling_rate = 1000
+    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
+                          n_scr=6, noise=0, drift=0.01, random_state=42)
+    eda_summary, _ =nk.eda_process(eda, sampling_rate=sampling_rate)
+
+    # Plot data over samples.
+    nk.eda_plot(eda_summary)
+    # This will identify the latest figure.
+    fig = plt.gcf()
+    assert len(fig.axes) == 3
+    titles = ["Raw and Cleaned Signal",
+              "Skin Conductance Response (SCR)",
+              "Skin Conductance Level (SCL)"]
+    for (ax, title) in zip(fig.get_axes(), titles):
+        assert ax.get_title() == title
+    assert fig.get_axes()[2].get_xlabel() == "Samples"
+    np.testing.assert_array_equal(fig.axes[0].get_xticks(),
+                                  fig.axes[1].get_xticks(),
+                                  fig.axes[2].get_xticks())
+    plt.close(fig)
+
+    # Plot data over seconds.
+    nk.eda_plot(eda_summary, sampling_rate=sampling_rate)
+    # This will identify the latest figure.
+    fig = plt.gcf()
+    assert fig.get_axes()[2].get_xlabel() == "Seconds"
+
+def test_eda_eventrelated():
+
+    eda = nk.eda_simulate(duration=15, n_scr=3)
+    eda_signals, info = nk.eda_process(eda, sampling_rate=1000)
+    epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000],
+                              sampling_rate=1000,
+                              epochs_start=-0.1, epochs_end=1.9)
+    eda_eventrelated = nk.eda_eventrelated(epochs)
+
+    no_activation = np.where(eda_eventrelated["EDA_Activation"] == 0)[0][0]
+    assert int(pd.DataFrame(eda_eventrelated.values
+                            [no_activation]).isna().sum()) == 4
+
+    assert len(eda_eventrelated["Label"]) == 3
+    assert len(eda_eventrelated.columns) == 6
+
+    assert all(elem in ["EDA_Activation", "EDA_Peak_Amplitude",
+                        "EDA_Peak_Amplitude_Time",
+                        "EDA_RiseTime", "EDA_RecoveryTime",
+                        "Label"]
+               for elem in np.array(eda_eventrelated.columns.values, dtype=str))

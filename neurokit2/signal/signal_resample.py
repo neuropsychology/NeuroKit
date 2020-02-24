@@ -81,7 +81,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     if method.lower() == "fft":
         resampled = _resample_fft(signal, desired_length)
     elif method.lower() == "poly":
-        resampled =  _resample_poly(signal, desired_length)
+        resampled = _resample_poly(signal, desired_length)
     elif method.lower() == "numpy":
         resampled =  _resample_numpy(signal, desired_length)
     elif method.lower() == "pandas":
@@ -128,7 +128,7 @@ def _resample_pandas(signal, desired_length):
     resampled_signal = pd.Series(signal, index=index)
 
     # Create resampling factor
-    resampling_factor = str(1/(desired_length / len(signal))) + "L"
+    resampling_factor = str(np.round(1/(desired_length / len(signal)), 6)) + "L"
 
     # Resample
     resampled_signal = resampled_signal.resample(resampling_factor).bfill().values
