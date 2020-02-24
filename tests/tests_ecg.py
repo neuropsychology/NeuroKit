@@ -281,3 +281,34 @@ def test_ecg_eventrelated():
                         "ECG_Rate_Trend_Quadratic",
                         "ECG_Rate_Trend_Linear", "ECG_Rate_Trend_R2", "Label"]
                for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
+
+
+
+def test_ecg_delineator():
+
+    sampling_rate = 1000
+
+    # test with simulated signals
+    ecg = nk.ecg_simulate(duration=20, sampling_rate=sampling_rate)
+    _, rpeaks = nk.ecg_peaks(ecg, sampling_rate=sampling_rate)
+    number_rpeaks = len(rpeaks['ECG_R_Peaks'])
+
+    # Method 1: derivative
+    waves_derivative = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
+    assert len(waves_derivative['ECG_P_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_Q_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_S_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_T_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_P_Onsets']) == number_rpeaks
+    assert len(waves_derivative['ECG_T_Offsets']) == number_rpeaks
+
+    # Method 2: CWT
+    waves_cwt = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
+    assert len(waves_cwt['ECG_P_Peaks']) == number_rpeaks -1
+    assert len(waves_cwt['ECG_T_Peaks']) == number_rpeaks -1
+    assert len(waves_cwt['ECG_R_Onsets']) == number_rpeaks
+    assert len(waves_cwt['ECG_R_Offsets']) == number_rpeaks
+    assert len(waves_cwt['ECG_P_Onsets']) == number_rpeaks -1
+    assert len(waves_cwt['ECG_P_Offsets']) == number_rpeaks -1
+    assert len(waves_cwt['ECG_T_Onsets']) == number_rpeaks -1
+    assert len(waves_cwt['ECG_T_Offsets']) == number_rpeaks -1
