@@ -2,9 +2,8 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs import epochs_to_df
-from ..epochs import df_to_epochs
-from ..misc import eventrelated_addinfo
+from ..epochs.epochs_to_df import _df_to_epochs
+from ..ecg.ecg_eventrelated import _eventrelated_addinfo
 
 
 def emg_eventrelated(epochs):
@@ -23,10 +22,16 @@ def emg_eventrelated(epochs):
         A dataframe containing the analyzed EMG features for each epoch,
         with each epoch indicated by the `Label` column (if not present,
         by the `Index` column). The analyzed features consist of the following:
-        - *"EMG_Amplitude_Max"*: the maximum amplitude of the activity.
-        - *"EMG_Amplitude_Mean"*: the mean amplitude of the activity.
         - *"EMG_Activation"*: indication of whether there is muscular activation
-        following the onset of the event (1 if present, 0 if absent).
+        following the onset of the event (1 if present, 0 if absent) and if so,
+        its corresponding amplitude features and the number of activations
+        in each epoch. If there is no activation, nans are displayed for the
+        below features.
+        - *"EMG_Amplitude_Mean"*: the mean amplitude of the activity.
+        - *"EMG_Amplitude_Max"*: the maximum amplitude of the activity.
+        - *"EMG_Amplitude_Max_Time"*: the time of maximum amplitude.
+        - *"EMG_Bursts"*: the number of activations, or bursts of activity,
+        within each epoch.
 
     See Also
     --------
@@ -39,14 +44,14 @@ def emg_eventrelated(epochs):
     >>> # Example with simulated data
     >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, n_bursts=3)
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> epochs = nk.epochs_create(emg_signals, events=[5000, 10000, 15000],
+    >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000],
                                   sampling_rate=1000,
                                   epochs_start=-0.1, epochs_end=1.9)
     >>> nk.emg_eventrelated(epochs)
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = df_to_epochs._df_to_epochs(epochs)  # Convert df to dict
+        epochs = _df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: emg_eventrelated(): Please specify an input"
@@ -66,31 +71,60 @@ def emg_eventrelated(epochs):
         emg_df[epoch_index] = {}  # Initialize an empty dict for the current epoch
         epoch = epochs[epoch_index]
 
-        # Sanitize input
-        n = np.array(epoch.columns)
-        if len([i for i, item in enumerate(n) if "EMG_Amplitude" in item]) == 0:
-            raise ValueError("NeuroKit error: emg_eventrelated(): input does not"
-                             "have an `EMG_Amplitude` column. Will skip all"
-                             "amplitude-related features.")
-        if len([i for i, item in enumerate(n) if "EMG_Onsets" in item]) == 0:
-            raise ValueError("NeuroKit error: emg_eventrelated(): input does not"
-                             "have an `EMG_Onsets` column. Will not indicate"
-                             "whether muscular activation follows event onset.")
-
-        # Amplitude
-        emg_df[epoch_index]["EMG_Amplitude_Mean"] = epoch["EMG_Amplitude"].mean()
-        emg_df[epoch_index]["EMG_Amplitude_Max"] = epoch["EMG_Amplitude"].max()
-
         # Activation following event
-        activations = len(np.where(epoch["EMG_Onsets"][epoch.index > 0] != 0))
         if any(epoch["EMG_Onsets"][epoch.index > 0] != 0):
-            emg_df[epoch_index]["EMG_Activation"] = activations
+            emg_df[epoch_index]["EMG_Activation"] = 1
         else:
             emg_df[epoch_index]["EMG_Activation"] = 0
 
+        # Analyze features based on activation
+        if (emg_df[epoch_index]["EMG_Activation"] == 1):
+            emg_df[epoch_index] = _emg_eventrelated_features(epochs[epoch_index],
+                                                             emg_df[epoch_index])
+        else:
+            emg_df[epoch_index]["EMG_Amplitude_Mean"] = np.nan
+            emg_df[epoch_index]["EMG_Amplitude_Max"] = np.nan
+            emg_df[epoch_index]["EMG_Amplitude_Max_Time"] = np.nan
+            emg_df[epoch_index]["EMG_Bursts"] = np.nan
+
         # Fill with more info
-        emg_df[epoch_index] = eventrelated_addinfo._eventrelated_addinfo(epoch, emg_df[epoch_index])
+        emg_df[epoch_index] = _eventrelated_addinfo(epoch, emg_df[epoch_index])
 
     emg_df = pd.DataFrame.from_dict(emg_df, orient="index")  # Convert to a dataframe
 
     return emg_df
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _emg_eventrelated_features(epoch, output={}):
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "EMG_Onsets" in i]) == 0:
+        print("NeuroKit warning: emg_eventrelated(): input does not"
+              "have an `EMG_Onsets` column. Unable to process EMG features.")
+        return output
+
+    if len([i for i in colnames if "EMG_Activity" or "EMG_Amplitude" in i]) == 0:
+        print("NeuroKit warning: emg_eventrelated(): input does not"
+              "have an `EMG_Activity` column or `EMG_Amplitude` column."
+              "Will skip computation of EMG amplitudes.")
+        return output
+
+    # Peak amplitude and Time of peak
+    activations = len(np.where(epoch["EMG_Onsets"][epoch.index > 0] == 1)[0])
+    activated_signal = np.where(epoch["EMG_Activity"][epoch.index > 0] == 1)
+    mean = np.array(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]).mean()
+    maximum = np.array(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal]).max()
+
+    index_time = np.where(epoch["EMG_Amplitude"][epoch.index > 0] == maximum)[0]
+    time = np.array(epoch["EMG_Amplitude"][epoch.index > 0].index[index_time])[0]
+
+    output["EMG_Amplitude_Mean"] = mean
+    output["EMG_Amplitude_Max"] = maximum
+    output["EMG_Amplitude_Max_Time"] = time
+    output["EMG_Bursts"] = activations
+
+    return output

@@ -1,20 +1,27 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import scipy.signal
+import itertools
 
 
-def signal_phase(signal):
+def signal_phase(signal, method="radians"):
     """Compute the phase of the signal.
 
     The real phase has the property to rotate uniformly, leading to a
     uniform distribution density. The prophase typically doesn't fulfill
     this property. The following functions applies a nonlinear transformation to
-    the phase signal that makes its distribution exactly uniform.
+    the phase signal that makes its distribution exactly uniform. If a binary vector is
+    provided (containing 2 unique values), the function will compute the phase of completion
+    of each phase as denoted by each value.
 
     Parameters
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
+    method : str
+        The values in which the phase is expressed. Can be 'radians' (default), 'degrees'
+        (for values between 0 and 360) or 'percents' (for values between 0 and 1).
 
     See Also
     --------
@@ -34,9 +41,45 @@ def signal_phase(signal):
     >>> nk.signal_plot([signal, phase])
     >>>
     >>> rsp = nk.rsp_simulate(duration=30)
-    >>> phase = nk.signal_phase(rsp)
+    >>> phase = nk.signal_phase(rsp, method="degrees")
     >>> nk.signal_plot([rsp, phase])
+    >>>
+    >>> # Percentage of completion of two phases
+    >>> signal = nk.signal_binarize(nk.signal_simulate(duration=10))
+    >>> phase = nk.signal_phase(signal, method="percents")
+    >>> nk.signal_plot([signal, phase])
     """
+    # If binary signal
+    if len(set(signal)) == 2:
+        phase = _signal_phase_binary(signal)
+    else:
+        phase = _signal_phase_prophase(signal)
+
+    if method.lower() in ["degree", "degrees"]:
+        phase = np.rad2deg(phase)
+    if method.lower() in ["perc", "percent", "percents", "percentage"]:
+        phase = np.rad2deg(phase) / 360
+    return phase
+
+
+
+# =============================================================================
+# Method
+# =============================================================================
+def _signal_phase_binary(signal):
+
+    phase = itertools.chain.from_iterable(
+            np.linspace(0, 1, sum(1 for i in v))
+            for _, v in itertools.groupby(signal))
+    phase = np.array(list(phase))
+
+    # Convert to radiant
+    phase = np.deg2rad(phase * 360)
+    return phase
+
+
+
+def _signal_phase_prophase(signal):
     pi2 = 2.0*np.pi
 
     # Get pro-phase

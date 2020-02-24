@@ -3,6 +3,7 @@ import numpy as np
 
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_resample
+from ..signal import signal_interpolate
 
 
 
@@ -13,10 +14,10 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     ----------
     rpeaks : dict
         The samples at which the R-peak occur. Dict returned by
-        `ecg_findpeaks()`.
+        `ecg_peaks()`.
     sampling_rate : int
         The sampling frequency of the signal that contains the R-peaks (in Hz,
-        i.e., samples/second). Defaults to 1000.
+        i.e., samples/second). Defaults to 1000Hz.
     desired_length : int
         By default, the returned heart rate has the same number of elements as
         peaks. If set to an integer, the returned heart rate will be
@@ -64,7 +65,10 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     rate = 60 / rr
 
     if desired_length:
-        rate = signal_resample(rate, desired_length=desired_length,
-                               sampling_rate=sampling_rate)
+        rate = signal_interpolate(rpeaks, rate, desired_length=desired_length, method='quadratic')
+
+#    if desired_length:
+#        rate = signal_resample(rate, desired_length=desired_length,
+#                               sampling_rate=sampling_rate)
 
     return rate

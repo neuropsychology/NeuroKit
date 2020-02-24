@@ -119,3 +119,24 @@ def test_eda_plot():
     fig = plt.gcf()
     assert fig.get_axes()[2].get_xlabel() == "Seconds"
 
+def test_eda_eventrelated():
+
+    eda = nk.eda_simulate(duration=15, n_scr=3)
+    eda_signals, info = nk.eda_process(eda, sampling_rate=1000)
+    epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000],
+                              sampling_rate=1000,
+                              epochs_start=-0.1, epochs_end=1.9)
+    eda_eventrelated = nk.eda_eventrelated(epochs)
+
+    no_activation = np.where(eda_eventrelated["EDA_Activation"] == 0)[0][0]
+    assert int(pd.DataFrame(eda_eventrelated.values
+                            [no_activation]).isna().sum()) == 4
+
+    assert len(eda_eventrelated["Label"]) == 3
+    assert len(eda_eventrelated.columns) == 6
+
+    assert all(elem in ["EDA_Activation", "EDA_Peak_Amplitude",
+                        "EDA_Peak_Amplitude_Time",
+                        "EDA_RiseTime", "EDA_RecoveryTime",
+                        "Label"]
+               for elem in np.array(eda_eventrelated.columns.values, dtype=str))

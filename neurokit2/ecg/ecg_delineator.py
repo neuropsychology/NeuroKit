@@ -151,7 +151,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             prominence = 0.20*max(search_window)
             height = 0.0
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
-                                       prominence=prominence)
+                                                 prominence=prominence)
 
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             search_window = - cwtmatr[4, index_peak - half_wave_width: index_peak]
@@ -159,7 +159,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             prominence = 0.10*max(search_window)
             height = 0.0
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
-                                           prominence=prominence)
+                                                 prominence=prominence)
 
         if len(wt_peaks) == 0:
             print("Fail to find onset at index: %d", index_peak)
@@ -197,7 +197,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             search_window = cwtmatr[4, index_peak: index_peak + half_wave_width]
             prominence = 0.10*max(search_window)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
-                                           prominence=prominence)
+                                                 prominence=prominence)
 
         if len(wt_peaks) == 0:
             print("Fail to find offset at index: %d", index_peak)
@@ -367,7 +367,8 @@ def _ecg_delineator_derivative_Q(rpeak, heartbeat, R):
     segment = heartbeat[:0]  # Select left hand side
 
     Q = signal_findpeaks(-1*segment["Signal"],
-                            height_min=0.05 * (segment["Signal"].max() - segment["Signal"].min()))
+                         height_min=0.05 * (segment["Signal"].max() -
+                                            segment["Signal"].min()))
     if len(Q["Peaks"]) == 0:
         return np.nan, None
     Q = Q["Peaks"][-1]  # Select most right-hand side
