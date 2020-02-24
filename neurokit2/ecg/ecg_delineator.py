@@ -111,12 +111,13 @@ def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate):
     return dict(
         ECG_T_Peaks=_resample_points(tpeaks, 2000, desired_sampling_rate=sampling_rate),
         ECG_P_Peaks=_resample_points(ppeaks, 2000, desired_sampling_rate=sampling_rate)[1:],
-        ECG_R_Onsets=_resample_points(qrs_onsets, 2000, desired_sampling_rate=sampling_rate),
+        ECG_R_Onsets=_resample_points(qrs_onsets, 2000, desired_sampling_rate=sampling_rate)[1:],
         ECG_R_Offsets=_resample_points(qrs_offsets, 2000, desired_sampling_rate=sampling_rate),
     )
 
 
 def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
+    degree = int(np.log2(sampling_rate / 250))
     onsets = []
     offsets = []
     for i in range(len(rpeaks) - 1):
@@ -126,7 +127,7 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             onsets.append(np.nan)
             continue
-        dwt_local = dwtmatr[2, srch_idx_start: srch_idx_end]
+        dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
         onset_slope_peaks, onset_slope_data = scipy.signal.find_peaks(-dwt_local)
         epsilon_onset = 0.5 * -dwt_local[onset_slope_peaks[-1]]
         candidate_onsets = np.where(- dwt_local[:onset_slope_peaks[-1]] < epsilon_onset)[0]
@@ -138,7 +139,7 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             offsets.append(np.nan)
             continue
-        dwt_local = dwtmatr[2, srch_idx_start: srch_idx_end]
+        dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
         onset_slope_peaks, onset_slope_data = scipy.signal.find_peaks(dwt_local)
         epsilon_offset = 0.5 * dwt_local[onset_slope_peaks[0]]
         candidate_offsets = np.where(dwt_local[onset_slope_peaks[0]:] < epsilon_offset)[0] + onset_slope_peaks[0]
