@@ -17,6 +17,11 @@ def test_bio_process():
                                       emg=emg,
                                       sampling_rate=sampling_rate)
 
+    assert all(bio_info["EMG_Offsets"] > bio_info["EMG_Onsets"])
+    assert all(bio_info["RSP_Peaks"] > bio_info["RSP_Troughs"])
+    assert len(bio_info["RSP_Peaks"]) == len(bio_info["RSP_Troughs"])
+    assert len(bio_info["SCR_Peaks"]) == len(bio_info["SCR_Onsets"])
+
     assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate', 'ECG_R_Peaks',
                         'RSP_Raw', 'RSP_Clean', 'RSP_Inspiration',
                         'RSP_Amplitude', 'RSP_Rate', 'RSP_Peaks', 'RSP_Troughs',
