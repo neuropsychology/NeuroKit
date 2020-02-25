@@ -4,9 +4,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from ..events import events_plot
+from ..stats import standardize as nk_standardize
 
 
-def signal_plot(signal, subplots=False):
+def signal_plot(signal, subplots=False, standardize=False):
     """Plot signal with events as vertical lines.
 
     Parameters
@@ -15,6 +16,8 @@ def signal_plot(signal, subplots=False):
         Signal array (can be a dataframe with many signals).
     subsubplots : bool
         If True, each signal is plotted in a subplot.
+    standardize : bool
+        If True, all signals will have the same scale (useful for visualisation).
 
     Examples
     ----------
@@ -22,19 +25,29 @@ def signal_plot(signal, subplots=False):
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+    >>> signal = nk.signal_simulate(length=1000)
     >>> nk.signal_plot(signal)
     >>>
-    >>> data = pd.DataFrame({"Signal1": np.cos(np.linspace(start=0, stop=20, num=1000)),
-                             "Signal2": np.sin(np.linspace(start=0, stop=20, num=1000)),
-                             "Signal3": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
+                             "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
+                             "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
     >>> nk.signal_plot(data)
+    >>> nk.signal_plot([signal, data], standardize=True)
     """
     # Sanitize format
     if isinstance(signal, pd.DataFrame) is False:
-        if len(np.array(signal).shape) > 1:
-            signal = pd.DataFrame(np.array(signal).T)
-            signal.columns = np.char.add(np.full(len(signal.columns), "Signal"), np.array(np.arange(len(signal.columns)) + 1, dtype=np.str))
+
+        # If list is passed
+        if isinstance(signal, list) or len(np.array(signal).shape) > 1:
+            out = pd.DataFrame()
+            for i, content in enumerate(signal):
+                if isinstance(content, pd.DataFrame) or isinstance(content, pd.Series):
+                    out = pd.concat([out, content], axis=1, sort=True)
+                else:
+                    out = pd.concat([out, pd.DataFrame({"Signal" + str(i + 1): content})], axis=1, sort=True)
+            signal = out
+
+        # If vector is passed
         else:
             signal = pd.DataFrame({"Signal": signal})
 
@@ -58,7 +71,10 @@ def signal_plot(signal, subplots=False):
 
         events_plot(events, signal=signal[continuous_columns])
     else:
-        signal[continuous_columns].plot(subplots=subplots)
+        if standardize is True:
+            nk_standardize(signal[continuous_columns]).plot(subplots=subplots)
+        else:
+            signal[continuous_columns].plot(subplots=subplots)
 
     # Tidy legend locations
     [ax.legend(loc=1) for ax in plt.gcf().axes]
