@@ -88,18 +88,15 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
 
     # Remove NaN in Peaks, Onsets, and Offsets
 
-#    waves["ECG_T_Offsets"]= np.array(waves["waves"], dtype='float')
-#
-#    for feature in waves.keys():
-#        valid_feature = ~np.isnan(waves[feature])
-#        waves[feature] = waves[feature][valid_feature].astype(np.int)
-#
-#    instant_peaks = signal_formatpeaks(waves,
-#                                       desired_length=len(ecg_cleaned))
-#    signals = instant_peaks
-#
-#    return signals, waves
-    return waves
+    for feature in waves.keys():
+        waves[feature] = [x for x in waves[feature] if str(x) != 'nan']
+
+    instant_peaks = signal_formatpeaks(waves,
+                                       desired_length=len(ecg_cleaned))
+    signals = instant_peaks
+
+    return signals, waves
+
 
 
 # =============================================================================
@@ -212,6 +209,9 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                                  prominence=prominence)
 
+        if len(wt_peaks) == 0:
+            print("Fail to find offsets at index: %d", index_peak)
+            continue
         nlast = wt_peaks[0] + index_peak
         if peak_type == "rpeaks":
             if wt_peaks_data['peak_heights'][0] > 0:
@@ -440,7 +440,7 @@ def _ecg_delineator_derivative_T(rpeak, heartbeat, R, S):
 
 def _ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P):
     if P is None:
-        return np.nan, None
+        return np.nan
 
     segment = heartbeat.iloc[:P]  # Select left of P wave
     signal = signal_smooth(segment["Signal"].values, size=R/10)
@@ -454,7 +454,7 @@ def _ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P):
 
 def _ecg_delineator_derivative_T_offset(rpeak, heartbeat, R, T):
     if T is None:
-        return np.nan, None
+        return np.nan
 
     segment = heartbeat.iloc[R + T:]  # Select left of P wave
     signal = signal_smooth(segment["Signal"].values, size=R/10)
