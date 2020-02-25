@@ -4,6 +4,7 @@ import neurokit2 as nk
 import matplotlib.pyplot as plt
 
 import biosppy
+import os
 
 def test_ecg_simulate():
 
@@ -294,7 +295,7 @@ def test_ecg_delineator():
     number_rpeaks = len(rpeaks['ECG_R_Peaks'])
 
     # Method 1: derivative
-    waves_derivative = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
+    _, waves_derivative = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
     assert len(waves_derivative['ECG_P_Peaks']) == number_rpeaks
     assert len(waves_derivative['ECG_Q_Peaks']) == number_rpeaks
     assert len(waves_derivative['ECG_S_Peaks']) == number_rpeaks
@@ -303,7 +304,7 @@ def test_ecg_delineator():
     assert len(waves_derivative['ECG_T_Offsets']) == number_rpeaks
 
     # Method 2: CWT
-    waves_cwt = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
+    _, waves_cwt = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
     assert len(waves_cwt['ECG_P_Peaks']) == number_rpeaks -1
     assert len(waves_cwt['ECG_T_Peaks']) == number_rpeaks -1
     assert len(waves_cwt['ECG_R_Onsets']) == number_rpeaks
@@ -312,3 +313,30 @@ def test_ecg_delineator():
     assert len(waves_cwt['ECG_P_Offsets']) == number_rpeaks -1
     assert len(waves_cwt['ECG_T_Onsets']) == number_rpeaks -1
     assert len(waves_cwt['ECG_T_Offsets']) == number_rpeaks -1
+
+    # test with real signals
+    path_data = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
+    ecg = os.path.join(path_data, "example_ecg_1000hz.csv")
+    _, rpeaks = nk.ecg_peaks(ecg, sampling_rate=sampling_rate)
+    number_rpeaks = len(rpeaks['ECG_R_Peaks'])
+
+    # Method 1: derivative
+    _, waves_derivative2 = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
+    assert len(waves_derivative2['ECG_P_Peaks']) == number_rpeaks
+    assert len(waves_derivative2['ECG_Q_Peaks']) == number_rpeaks
+    assert len(waves_derivative2['ECG_S_Peaks']) == number_rpeaks
+    assert len(waves_derivative2['ECG_T_Peaks']) == number_rpeaks
+    assert len(waves_derivative2['ECG_P_Onsets']) == number_rpeaks
+    assert len(waves_derivative2['ECG_T_Offsets']) == number_rpeaks
+
+    # Method 2: CWT
+    _, waves_cwt2 = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
+    assert len(waves_cwt2['ECG_P_Peaks']) == 48
+    assert len(waves_cwt2['ECG_T_Peaks']) == 48
+    assert len(waves_cwt2['ECG_R_Onsets']) == 49
+    assert len(waves_cwt2['ECG_R_Offsets']) == 22
+    assert len(waves_cwt2['ECG_P_Onsets']) == 48
+    assert len(waves_cwt2['ECG_P_Offsets']) == 48
+    assert len(waves_cwt2['ECG_T_Onsets']) == 48
+    assert len(waves_cwt2['ECG_T_Offsets']) == 48
+
