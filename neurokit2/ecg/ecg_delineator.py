@@ -194,7 +194,10 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
                                         epsilon_onset)[0] + nfirst - 100
 
         candidate_onsets = candidate_onsets.tolist() + [leftbase]
-        onsets.append(max(candidate_onsets))
+        if len(candidate_onsets) == 0:
+            onsets.append(np.nan)
+        else:
+            onsets.append(max(candidate_onsets))
 
         # find offset
         if peak_type == "rpeaks":
@@ -209,9 +212,6 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                                  prominence=prominence)
 
-        if len(wt_peaks) == 0:
-            print("Fail to find offset at index: %d", index_peak)
-            continue
         nlast = wt_peaks[0] + index_peak
         if peak_type == "rpeaks":
             if wt_peaks_data['peak_heights'][0] > 0:
@@ -231,7 +231,10 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
                                          epsilon_offset)[0] + nlast
 
         candidate_offsets = candidate_offsets.tolist() + [rightbase]
-        offsets.append(min(candidate_offsets))
+        if len(candidate_offsets) == 0:
+            offsets.append(np.nan)
+        else:
+            offsets.append(min(candidate_offsets))
 
     onsets = np.array(onsets, dtype='int')
     offsets = np.array(offsets, dtype='int')
