@@ -339,4 +339,3 @@ def test_ecg_delineator():
     assert len(waves_cwt2['ECG_P_Offsets']) == 48
     assert len(waves_cwt2['ECG_T_Onsets']) == 48
     assert len(waves_cwt2['ECG_T_Offsets']) == 48
-
