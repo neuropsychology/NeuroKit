@@ -49,6 +49,18 @@ def test_find_T_peaks(test_data):
                                atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
 
 
+def test_find_P_onsets_offsets(test_data):
+    ecg_characteristics = run_test_func(test_data)
+    # nk.events_plot([ecg_characteristics['ECG_P_Offsets'], test_data['ECG_P_Offsets'][:-1]], test_data['ecg'])
+    # plt.show()
+    np.testing.assert_allclose(ecg_characteristics['ECG_P_Onsets'],
+                               test_data['ECG_P_Onsets'][:-1],
+                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
+    np.testing.assert_allclose(ecg_characteristics['ECG_P_Offsets'],
+                               test_data['ECG_P_Offsets'][:-1],
+                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
+
+
 def test_find_P_peaks(test_data):
     ecg_characteristics = run_test_func(test_data)
     np.testing.assert_allclose(ecg_characteristics['ECG_P_Peaks'],
@@ -67,13 +79,4 @@ def test_find_qrs_onsets(test_data):
                                test_data['ECG_R_Offsets'][1:],
                                atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
 
-
-# def test_find_T_onsets_offsets(test_data):
-#     ecg_characteristics = nk.ecg_delineator(
-#         test_data['ecg'], test_data['rpeaks'], test_data['sampling_rate'], method='dwt')
-
-#     for attribute in ['ECG_T_Onsets', 'ECG_T_Offsets']:
-#         np.testing.assert_allclose(ecg_characteristics[attribute][:3],
-#                                    test_data[attribute],
-#                                    atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
 

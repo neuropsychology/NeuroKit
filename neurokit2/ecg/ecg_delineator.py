@@ -76,7 +76,7 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
                                    rpeaks=rpeaks,
                                    sampling_rate=sampling_rate)
     if method in ["dwt", "discrete wavelet transform"]:
-        waves = _ecg_delinator_dwt(ecg_cleaned,
+        waves = _dwt_ecg_delinator(ecg_cleaned,
                                    rpeaks,
                                    sampling_rate=sampling_rate)
     return waves
@@ -85,34 +85,90 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
 ###############################################################################
 #                             WAVELET METHOD (DWT)                             #
 ###############################################################################
-def _resample_points(peaks, sampling_rate, desired_sampling_rate):
+def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
+    """Resample given points to a different sampling rate."""
     return (np.array(peaks) * desired_sampling_rate / sampling_rate).astype(int)
 
 
-def _ecg_delinator_dwt(ecg, rpeaks, sampling_rate, base_sampling_rate=2000):
-    ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=2000)
-    dwtmatr = compute_dwt_multiscales(ecg, 9)
+def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
+    """Delinate ecg signal using discrete wavelet transforms.
 
-    # # only for debugging
-    # for idx in [0, 1, 2, 3]:
-    #     plt.plot(dwtmatr[idx + 3], label=f'W[{idx}]')
-    # plt.plot(ecg, '--')
-    # plt.legend()
-    # plt.grid(True)
-    # plt.show()
+    Args:
+     ecg: Signal.
+     sampling_rate: Sampling rate of input signal.
+     analysis_sampling_rate: Sampling rate for analysis.
 
-    rpeaks_resampled = _resample_points(rpeaks, sampling_rate, base_sampling_rate)
+    Returns:
+     Dictionary of the points.
+
+    """
+    ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=analysis_sampling_rate)
+    dwtmatr = _dwt_compute_multiscales(ecg, 9)
+
+    # only for debugging
+    for idx in [0, 1, 2, 3]:
+        plt.plot(dwtmatr[idx + 3], label=f'W[{idx}]')
+    plt.plot(ecg, '--')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
     tpeaks, ppeaks = _dwt_delinate_tp_peaks(
-        ecg, rpeaks_resampled, dwtmatr, sampling_rate=base_sampling_rate, debug=False)
+        ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
     qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(
-        ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=base_sampling_rate, debug=False)
+        ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate, debug=False)
+    ponsets, poffsets = _dwt_delinate_tp_onsets_offsets(
+        ecg, ppeaks, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
 
     return dict(
-        ECG_T_Peaks=_resample_points(tpeaks, base_sampling_rate, desired_sampling_rate=sampling_rate),
-        ECG_P_Peaks=_resample_points(ppeaks, base_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
-        ECG_R_Onsets=_resample_points(qrs_onsets, base_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
-        ECG_R_Offsets=_resample_points(qrs_offsets, base_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_T_Peaks=_dwt_resample_points(tpeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_P_Peaks=_dwt_resample_points(ppeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
+        ECG_P_Onsets=_dwt_resample_points(ponsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
+        ECG_P_Offsets=_dwt_resample_points(poffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_R_Onsets=_dwt_resample_points(qrs_onsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
+        ECG_R_Offsets=_dwt_resample_points(qrs_offsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
     )
+
+
+def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False):
+    degree = int(np.log2(sampling_rate / 250))
+    duration = 0.3
+    onset_weight = 0.4
+    offset_weight = 0.4
+    onsets = []
+    offsets = []
+    for i in range(len(peaks)):
+        # look for onsets
+        srch_idx_start = peaks[i] - int(duration * sampling_rate)
+        srch_idx_end = peaks[i]
+        if srch_idx_start is np.nan or srch_idx_end is np.nan:
+            onsets.append(np.nan)
+            continue
+        dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
+        onset_slope_peaks, onset_slope_data = scipy.signal.find_peaks(dwt_local)
+        epsilon_onset = onset_weight * dwt_local[onset_slope_peaks[-1]]
+        candidate_onsets = np.where(dwt_local[:onset_slope_peaks[-1]] < epsilon_onset)[0]
+        onsets.append(candidate_onsets[-1] + srch_idx_start)
+
+        # look for offset
+        srch_idx_start = peaks[i]
+        srch_idx_end = peaks[i] + int(duration * sampling_rate)
+        if srch_idx_start is np.nan or srch_idx_end is np.nan:
+            onsets.append(np.nan)
+            continue
+        dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
+        offset_slope_peaks, offset_slope_data = scipy.signal.find_peaks(-dwt_local)
+        epsilon_offset = - offset_weight * dwt_local[offset_slope_peaks[0]]
+        candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0]:] < epsilon_offset)[0] + offset_slope_peaks[0]
+        offsets.append(candidate_offsets[0] + srch_idx_start)
+
+        # # only for debugging
+        # events_plot([candidate_offsets, offset_slope_peaks], dwt_local)
+        # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
+        # plt.show()
+
+    return np.array(onsets), np.array(offsets)
 
 
 def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
@@ -120,7 +176,7 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
     onsets = []
     offsets = []
     for i in range(len(rpeaks) - 1):
-        # look for qrs onsets
+        # look for onsets
         srch_idx_start = ppeaks[i]
         srch_idx_end = rpeaks[i]
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
@@ -132,7 +188,13 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
         candidate_onsets = np.where(- dwt_local[:onset_slope_peaks[-1]] < epsilon_onset)[0]
         onsets.append(candidate_onsets[-1] + srch_idx_start)
 
-        # look for qrs offsets
+        # # only for debugging
+        # events_plot(candidate_onsets, -dwt_local)
+        # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
+        # plt.legend()
+        # plt.show()
+
+        # look for offsets
         srch_idx_start = rpeaks[i]
         srch_idx_end = tpeaks[i]
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
@@ -144,11 +206,6 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
         candidate_offsets = np.where(dwt_local[onset_slope_peaks[0]:] < epsilon_offset)[0] + onset_slope_peaks[0]
 
         offsets.append(candidate_offsets[0] + srch_idx_start)
-
-        # # only for debugging
-        # events_plot(candidate_offsets, dwt_local)
-        # plt.plot(ecg[srch_idx_start: srch_idx_end], '--')
-        # plt.show()
 
     return np.array(onsets), np.array(offsets)
 
@@ -215,7 +272,7 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
     return tpeaks, ppeaks
 
 
-def compute_dwt_multiscales(ecg: np.ndarray, max_degree):
+def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
     """Return multiscales wavelet transforms.
 
     Args:
