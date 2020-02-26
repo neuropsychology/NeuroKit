@@ -83,11 +83,11 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     elif method.lower() == "poly":
         resampled = _resample_poly(signal, desired_length)
     elif method.lower() == "numpy":
-        resampled =  _resample_numpy(signal, desired_length)
+        resampled = _resample_numpy(signal, desired_length)
     elif method.lower() == "pandas":
-        resampled =  _resample_pandas(signal, desired_length)
+        resampled = _resample_pandas(signal, desired_length)
     else:
-        resampled =  _resample_interpolation(signal, desired_length)
+        resampled = _resample_interpolation(signal, desired_length)
 
     return(resampled)
 

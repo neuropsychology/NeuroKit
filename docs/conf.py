@@ -223,7 +223,7 @@ texinfo_documents = [
 ]
 
 
-#Other
+# Other
 add_module_names = False  # so functions aren’t prepended with the name of the package/module
 add_function_parentheses = True  # to ensure that parentheses are added to the end of all function names
 

@@ -53,7 +53,7 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", im
         filename += ".acq"
 
     if os.path.exists(filename) is False:
-        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't find" \
+        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't find"
                          " the following file: " + filename)
 
 
@@ -88,7 +88,7 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="numpy", im
     # Sanitize lengths
     lengths = []
     for channel in data:
-       lengths += [len(data[channel])]
+        lengths += [len(data[channel])]
     if len(set(lengths)) > 1:  # If different lengths
         length = pd.Series(lengths).mode()[0]  # Find most common (target length)
         for channel in data:
