@@ -1,2 +1,4 @@
+build:
+  image: stable
 conda:
   file: docs/environment.yml
