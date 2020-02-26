@@ -19,12 +19,17 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000):
     >>> ecg, info = nk.ecg_process(ecg)
     >>> hrv = nk.ecg_hrv(ecg)
     >>> hrv
+
+    References
+    ----------
+    - Stein, P. K. (2002). Assessing heart rate variability from real-world
+      Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
     """
     # Sanitize input
     ecg_rate, rpeaks = _ecg_hrv_formatinput(ecg_rate, rpeaks, sampling_rate)
 
     # Get raw and interpolated R-R intervals
-    rri = np.diff(rpeaks) / sampling_rate
+    rri = np.diff(rpeaks) / sampling_rate * 1000
     ecg_period = ecg_rate / 60 * sampling_rate
 
     timedomain = _ecg_hrv_timedomain(rri)
@@ -41,21 +46,28 @@ def _ecg_hrv_timedomain(rri):
 
     # Mean based
     out["RMSSD"] = np.sqrt(np.mean(np.diff(rri) ** 2))
-    out["meanNN"] = np.mean(rri)
-    out["sdNN"] = np.std(rri, ddof=1)  # make it calculate N-1
-    out["cvNN"] = out["sdNN"] / out["meanNN"]
-    out["CVSD"] = out["RMSSD"] / out["meanNN"]
+    out["MeanNN"] = np.mean(rri)
+    out["SDNN"] = np.std(rri, ddof=1)
+    out["SDSD"] = np.std(np.diff(rri), ddof=1)
+    out["CVNN"] = out["SDNN"] / out["MeanNN"]
+    out["CVSD"] = out["RMSSD"] / out["MeanNN"]
 
     # Robust
-    out["medianNN"] = np.median(np.abs(rri))
-    out["madNN"] = scipy.stats.median_absolute_deviation(rri)
-    out["mcvNN"] = out["madNN"] / out["medianNN"]
+    out["MedianNN"] = np.median(np.abs(rri))
+    out["MadNN"] = scipy.stats.median_absolute_deviation(rri)
+    out["MCVNN"] = out["MadNN"] / out["MedianNN"]
 
     # Extreme-based
     nn50 = np.sum(np.abs(np.diff(rri)) > 50)
     nn20 = np.sum(np.abs(np.diff(rri)) > 20)
     out["pNN50"] = nn50 / len(rri) * 100
     out["pNN20"] = nn20 / len(rri) * 100
+
+    # Histogram-based
+    bar_y, bar_x = np.histogram(rri, bins="auto")
+    out["TINN"] = np.max(bar_x) - np.min(bar_x) # Triangular Interpolation of the NN Interval Histogram
+    out["HTI"] = len(rri) / np.max(bar_y) # HRV Triangular Index
+
     return out
 
 
