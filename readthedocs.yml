@@ -1,3 +1,7 @@
-image: stable
+build:
+  image: stable
 conda:
   file: docs/environment.yml
+python:
+    setup_py_install: true
+    version: 3.6
