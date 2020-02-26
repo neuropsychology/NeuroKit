@@ -1,3 +1,5 @@
+build:
+  image: stable
 channels:
   - conda-forge
 dependencies:
