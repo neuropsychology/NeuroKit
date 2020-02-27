@@ -62,7 +62,8 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     """
     # Create interpolation function
     interpolation_function = scipy.interpolate.interp1d(x_values,
-                                                        y_values, kind=method,
+                                                        y_values,
+                                                        kind=method,
                                                         bounds_error=False,
                                                         fill_value=([y_values[0]], [y_values[-1]]))
 
