@@ -36,7 +36,7 @@ def rsp_eventrelated(epochs):
         after stimulus onset.
         - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude
         after stimulus onset.
-        - *"RSP_Inspiration"*: indication of whether the onset of the event
+        - *"RSP_Phase"*: indication of whether the onset of the event
         concurs with respiratory inspiration (1) or expiration (0).
 
     See Also
@@ -186,7 +186,7 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
         return output
 
     # Indication ofinspiration
-    inspiration = epoch["RSP_Inspiration"][epoch.index > 0].iloc[0]
-    output["RSP_Inspiration"] = inspiration
+    inspiration = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
+    output["RSP_Phase"] = inspiration
 
     return output
