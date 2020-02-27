@@ -20,9 +20,11 @@
 # Optionally set the version of Python and requirements required to build your docs
 # python:
 #   setup_py_install: true
-    
+
+# build:
+#   image: stable
+
 conda:
   file: docs/environment.yml
     
-# build:
-#   image: stable
+
