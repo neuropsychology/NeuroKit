@@ -169,7 +169,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
                                                  prominence=prominence)
 
         if len(wt_peaks) == 0:
-            print("Fail to find onset at index: %d", index_peak)
+            # print("Fail to find onset at index: %d", index_peak)
             continue
         # The last peak is nfirst in (Martinez, 2004)
         nfirst = wt_peaks[-1] + index_peak - half_wave_width
@@ -210,7 +210,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
                                                  prominence=prominence)
 
         if len(wt_peaks) == 0:
-            print("Fail to find offsets at index: %d", index_peak)
+            # print("Fail to find offsets at index: %d", index_peak)
             continue
         nlast = wt_peaks[0] + index_peak
         if peak_type == "rpeaks":

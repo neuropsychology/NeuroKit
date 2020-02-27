@@ -285,7 +285,7 @@ def test_ecg_eventrelated():
 
 
 
-def test_ecg_delineator():
+def test_ecg_delineate():
 
     sampling_rate = 1000
 
@@ -295,7 +295,7 @@ def test_ecg_delineator():
     number_rpeaks = len(rpeaks['ECG_R_Peaks'])
 
     # Method 1: derivative
-    _, waves_derivative = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
+    _, waves_derivative = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate)
     assert len(waves_derivative['ECG_P_Peaks']) == number_rpeaks
     assert len(waves_derivative['ECG_Q_Peaks']) == number_rpeaks
     assert len(waves_derivative['ECG_S_Peaks']) == number_rpeaks
@@ -304,7 +304,7 @@ def test_ecg_delineator():
     assert len(waves_derivative['ECG_T_Offsets']) == number_rpeaks
 
     # Method 2: CWT
-    _, waves_cwt = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
+    _, waves_cwt = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
     assert len(waves_cwt['ECG_P_Peaks']) == number_rpeaks -1
     assert len(waves_cwt['ECG_T_Peaks']) == number_rpeaks -1
     assert len(waves_cwt['ECG_R_Onsets']) == number_rpeaks
@@ -321,7 +321,7 @@ def test_ecg_delineator():
     number_rpeaks = len(rpeaks['ECG_R_Peaks'])
 
     # Method 1: derivative
-    _, waves_derivative2 = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate)
+    _, waves_derivative2 = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate)
     assert len(waves_derivative2['ECG_P_Peaks']) == number_rpeaks
     assert len(waves_derivative2['ECG_Q_Peaks']) == number_rpeaks
     assert len(waves_derivative2['ECG_S_Peaks']) == number_rpeaks
@@ -330,7 +330,7 @@ def test_ecg_delineator():
     assert len(waves_derivative2['ECG_T_Offsets']) == number_rpeaks
 
     # Method 2: CWT
-    _, waves_cwt2 = nk.ecg_delineator(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
+    _, waves_cwt2 = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
     assert len(waves_cwt2['ECG_P_Peaks']) == 48
     assert len(waves_cwt2['ECG_T_Peaks']) == 48
     assert len(waves_cwt2['ECG_R_Onsets']) == 49
