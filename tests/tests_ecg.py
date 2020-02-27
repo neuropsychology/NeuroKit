@@ -290,7 +290,7 @@ def test_ecg_delineate():
     sampling_rate = 1000
 
     # test with simulated signals
-    ecg = nk.ecg_simulate(duration=20, sampling_rate=sampling_rate)
+    ecg = nk.ecg_simulate(duration=20, sampling_rate=sampling_rate, random_state=42)
     _, rpeaks = nk.ecg_peaks(ecg, sampling_rate=sampling_rate)
     number_rpeaks = len(rpeaks['ECG_R_Peaks'])
 
@@ -305,14 +305,14 @@ def test_ecg_delineate():
 
     # Method 2: CWT
     _, waves_cwt = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
-    assert len(waves_cwt['ECG_P_Peaks']) == number_rpeaks -1
-    assert len(waves_cwt['ECG_T_Peaks']) == number_rpeaks -1
-    assert len(waves_cwt['ECG_R_Onsets']) == number_rpeaks
-    assert len(waves_cwt['ECG_R_Offsets']) == number_rpeaks
-    assert len(waves_cwt['ECG_P_Onsets']) == number_rpeaks -1
-    assert len(waves_cwt['ECG_P_Offsets']) == number_rpeaks -1
-    assert len(waves_cwt['ECG_T_Onsets']) == number_rpeaks -1
-    assert len(waves_cwt['ECG_T_Offsets']) == number_rpeaks -1
+    assert len(waves_cwt['ECG_P_Peaks']) == 22
+    assert len(waves_cwt['ECG_T_Peaks']) == 22
+    assert len(waves_cwt['ECG_R_Onsets']) == 23
+    assert len(waves_cwt['ECG_R_Offsets']) == 23
+    assert len(waves_cwt['ECG_P_Onsets']) == 22
+    assert len(waves_cwt['ECG_P_Offsets']) == 22
+    assert len(waves_cwt['ECG_T_Onsets']) == 21
+    assert len(waves_cwt['ECG_T_Offsets']) == 20
 
     # test with real signals
     path_data = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
