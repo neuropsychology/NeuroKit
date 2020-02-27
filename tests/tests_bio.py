@@ -17,10 +17,19 @@ def test_bio_process():
                                       emg=emg,
                                       sampling_rate=sampling_rate)
 
-    assert all(bio_info["EMG_Offsets"] > bio_info["EMG_Onsets"])
+    # SCR components
+    scr = [val for key, val in bio_info.items() if "SCR" in key]
+    assert all(len(elem) == len(scr[0]) for elem in scr)
+    assert all(bio_info["SCR_Onsets"] < bio_info["SCR_Peaks"])
+    assert all(bio_info["SCR_Peaks"] < bio_info["SCR_Recovery"])
+
+    # RSP
     assert all(bio_info["RSP_Peaks"] > bio_info["RSP_Troughs"])
     assert len(bio_info["RSP_Peaks"]) == len(bio_info["RSP_Troughs"])
-    assert len(bio_info["SCR_Peaks"]) == len(bio_info["SCR_Onsets"])
+
+    # EMG
+    assert all(bio_info["EMG_Offsets"] > bio_info["EMG_Onsets"])
+    assert len(bio_info["EMG_Offsets"] == len(bio_info["EMG_Onsets"]))
 
     assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate', 'ECG_R_Peaks',
                         'RSP_Raw', 'RSP_Clean', 'RSP_Inspiration',

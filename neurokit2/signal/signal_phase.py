@@ -50,7 +50,7 @@ def signal_phase(signal, method="radians"):
     >>> nk.signal_plot([signal, phase])
     """
     # If binary signal
-    if len(set(signal)) == 2:
+    if len(set(np.array(signal)[~np.isnan(np.array(signal))])) == 2:
         phase = _signal_phase_binary(signal)
     else:
         phase = _signal_phase_prophase(signal)
@@ -69,7 +69,7 @@ def signal_phase(signal, method="radians"):
 def _signal_phase_binary(signal):
 
     phase = itertools.chain.from_iterable(
-            np.linspace(0, 1, sum(1 for i in v))
+            np.linspace(0, 1, sum([1 for i in v]))
             for _, v in itertools.groupby(signal))
     phase = np.array(list(phase))
 
