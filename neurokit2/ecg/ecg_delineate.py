@@ -14,7 +14,7 @@ from .ecg_peaks import ecg_peaks
 from ..epochs import epochs_create
 
 
-def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
+def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
     """Delineate QRS complex.
     Function to delineate the QRS complex.
 
