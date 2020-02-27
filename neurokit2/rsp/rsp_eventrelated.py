@@ -179,9 +179,9 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
 
     # Sanitize input
     colnames = epoch.columns.values
-    if len([i for i in colnames if "RSP_Inspiration" in i]) == 0:
+    if len([i for i in colnames if "RSP_Phase" in i]) == 0:
         print("NeuroKit warning: rsp_eventrelated(): input does not"
-              "have an `RSP_Inspiration` column. Will not indicate whether"
+              "have an `RSP_Phase` column. Will not indicate whether"
               "event onset concurs with inspiration.")
         return output
 
