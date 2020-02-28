@@ -113,7 +113,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 def _ecg_plot_heartbeats(ecg, peaks, sampling_rate=None):
     # Extract heart beats
     heartbeats = epochs_create(ecg, events=peaks, epochs_start=-0.35,
-                               epochs_end=1.2, sampling_rate=sampling_rate)
+                               epochs_end=0.55, sampling_rate=sampling_rate)
     heartbeats = epochs_to_df(heartbeats)
 
     return heartbeats
