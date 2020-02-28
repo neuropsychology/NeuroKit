@@ -46,6 +46,10 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
         "ECG_T_Peaks", "ECG_P_Onsets", "ECG_P_Offsets", "ECG_T_Onsets",
         "ECG_T_Offsets", "ECG_R_Onsets", "ECG_R_Offsets" respectively.
 
+    signals : DataFrame
+        A DataFrame of same length as the input signal in which occurences of
+        peaks, onsets and offsets marked as "1" in a list of zeros.
+
     See Also
     --------
     ecg_clean, ecg_fixpeaks, ecg_peaks, ecg_rate, ecg_process, ecg_plot
@@ -57,7 +61,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> _, rpeaks = nk.ecg_peaks(cleaned)
-    >>> info = nk.ecg_delineator(cleaned, rpeaks, sampling_rate=1000)
+    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000)
     >>> nk.events_plot(info["ECG_P_Peaks"], cleaned)
     >>> nk.events_plot(info2["ECG_T_Peaks"], cleaned)
 
