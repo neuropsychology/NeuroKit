@@ -120,9 +120,15 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
         ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate, debug=False)
     ponsets, poffsets = _dwt_delinate_tp_onsets_offsets(
         ecg, ppeaks, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
+    tonsets, toffsets = _dwt_delinate_tp_onsets_offsets(
+        ecg, tpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False,
+        onset_weight=0.6, duration=0.6
+    )
 
     return dict(
         ECG_T_Peaks=_dwt_resample_points(tpeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_T_Onsets=_dwt_resample_points(tonsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[:-1],
+        ECG_T_Offsets=_dwt_resample_points(toffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_P_Peaks=_dwt_resample_points(ppeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
         ECG_P_Onsets=_dwt_resample_points(ponsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
         ECG_P_Offsets=_dwt_resample_points(poffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
@@ -131,11 +137,10 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
     )
 
 
-def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False):
+def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False, duration=0.3,
+                                    duration_offset=0.3,
+                                    onset_weight=0.4, offset_weight=0.4):
     degree = int(np.log2(sampling_rate / 250))
-    duration = 0.3
-    onset_weight = 0.4
-    offset_weight = 0.4
     onsets = []
     offsets = []
     for i in range(len(peaks)):
@@ -147,21 +152,32 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
             continue
         dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
         onset_slope_peaks, onset_slope_data = scipy.signal.find_peaks(dwt_local)
-        epsilon_onset = onset_weight * dwt_local[onset_slope_peaks[-1]]
-        candidate_onsets = np.where(dwt_local[:onset_slope_peaks[-1]] < epsilon_onset)[0]
-        onsets.append(candidate_onsets[-1] + srch_idx_start)
+        try:
+            epsilon_onset = onset_weight * dwt_local[onset_slope_peaks[-1]]
+            candidate_onsets = np.where(dwt_local[:onset_slope_peaks[-1]] < epsilon_onset)[0]
+            onsets.append(candidate_onsets[-1] + srch_idx_start)
+        except IndexError:
+            onsets.append(np.nan)
+
+        # # only for debugging
+        # events_plot([candidate_onsets, onset_slope_peaks], dwt_local)
+        # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
+        # plt.show()
 
         # look for offset
         srch_idx_start = peaks[i]
-        srch_idx_end = peaks[i] + int(duration * sampling_rate)
+        srch_idx_end = peaks[i] + int(duration_offset * sampling_rate)
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             onsets.append(np.nan)
             continue
         dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
         offset_slope_peaks, offset_slope_data = scipy.signal.find_peaks(-dwt_local)
-        epsilon_offset = - offset_weight * dwt_local[offset_slope_peaks[0]]
-        candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0]:] < epsilon_offset)[0] + offset_slope_peaks[0]
-        offsets.append(candidate_offsets[0] + srch_idx_start)
+        try:
+            epsilon_offset = - offset_weight * dwt_local[offset_slope_peaks[0]]
+            candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0]:] < epsilon_offset)[0] + offset_slope_peaks[0]
+            offsets.append(candidate_offsets[0] + srch_idx_start)
+        except IndexError:
+            offsets.append(np.nan)
 
         # # only for debugging
         # events_plot([candidate_offsets, offset_slope_peaks], dwt_local)

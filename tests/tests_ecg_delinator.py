@@ -37,6 +37,14 @@ def setup_load_ecg_data():
     yield test_data
 
 
+def helper_plot(attribute, ecg_characteristics, test_data):
+    peaks = [ecg_characteristics[attribute], test_data[attribute]]
+    print('0: computed\n1: data')
+    ecg = test_data['ecg']
+    nk.events_plot(peaks, ecg)
+    plt.show()
+
+
 def run_test_func(test_data):
     return nk.ecg_delineator(
         test_data['ecg'], test_data['rpeaks'], test_data['sampling_rate'], method='dwt')
@@ -49,10 +57,18 @@ def test_find_T_peaks(test_data):
                                atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
 
 
+def test_find_T_onsets_offsets(test_data):
+    ecg_characteristics = run_test_func(test_data)
+    np.testing.assert_allclose(ecg_characteristics['ECG_T_Onsets'],
+                               test_data['ECG_T_Onsets'][:-1],
+                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
+    np.testing.assert_allclose(ecg_characteristics['ECG_T_Offsets'],
+                               test_data['ECG_T_Offsets'][:-1],
+                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
+
+
 def test_find_P_onsets_offsets(test_data):
     ecg_characteristics = run_test_func(test_data)
-    # nk.events_plot([ecg_characteristics['ECG_P_Offsets'], test_data['ECG_P_Offsets'][:-1]], test_data['ecg'])
-    # plt.show()
     np.testing.assert_allclose(ecg_characteristics['ECG_P_Onsets'],
                                test_data['ECG_P_Onsets'][:-1],
                                atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
