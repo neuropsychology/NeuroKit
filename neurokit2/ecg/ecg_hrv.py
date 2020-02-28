@@ -97,6 +97,10 @@ def _ecg_hrv_frequency(ecg_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04
 
 def _ecg_hrv_formatinput(ecg_rate, rpeaks=None, sampling_rate=1000):
 
+    if isinstance(ecg_rate, tuple):
+        ecg_rate = ecg_rate[0]
+        rpeaks = None
+
     if isinstance(ecg_rate, pd.DataFrame):
         df = ecg_rate.copy()
         cols = [col for col in df.columns if 'ECG_Rate' in col]
