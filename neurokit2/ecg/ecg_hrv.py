@@ -1,11 +1,10 @@
 import pandas as pd
 import numpy as np
-import scipy.stats
 
 from .ecg_rate import ecg_rate as nk_ecg_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_power
-
+from ..stats import mad
 
 
 
@@ -60,7 +59,7 @@ def _ecg_hrv_time(rri):
 
     # Robust
     out["MedianNN"] = np.median(np.abs(rri))
-    out["MadNN"] = scipy.stats.median_absolute_deviation(rri)
+    out["MadNN"] = mad(rri)
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]
 
     # Extreme-based
