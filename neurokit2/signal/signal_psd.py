@@ -16,7 +16,7 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
     show : bool
         If True, will return a plot. If False, will return the density values that can be plotted externally.
     method : str
-        Either 'multitapers' (default; requires the 'mne' package), 'burg' (requires the 'spectrum' package) or 'welch' (requires the 'scipy' package).
+        Either 'multitapers' (default; requires the 'mne' package), or 'welch' (requires the 'scipy' package).
     min_frequency, max_frequency : float
         The minimum and maximum frequencies.
     precision : int
@@ -64,22 +64,6 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
             print("NeuroKit warning: signal_psd(): the 'mne'",
                   "module is required for the 'mne' method to run.",
                   "Please install it first (`pip install mne`). For now,",
-                  "'method' has been set to 'welch'.")
-            method = "welch"
-
-    # BURG
-    if method.lower() in ["burg", "pburg", "spectrum"]:
-        try:
-            import spectrum
-            burg = spectrum.pburg(data=signal, order=16, NFFT=None, sampling=sampling_rate)
-            burg.scale_by_freq = False
-            burg()
-            power = np.array(burg.frequencies())
-            frequency = burg.psd
-        except ImportError:
-            print("NeuroKit warning: signal_psd(): the 'spectrum'",
-                  "module is required for the 'burg' method to run.",
-                  "Please install it first (`pip install spectrum`). For now,",
                   "'method' has been set to 'welch'.")
             method = "welch"
 
