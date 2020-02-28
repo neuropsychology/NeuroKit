@@ -188,7 +188,7 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
     # Indication ofinspiration
     inspiration = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
     output["RSP_Phase"] = inspiration
-    percentage = epoch["RSP_PhaseCompleted"][epoch.index > 0].iloc[0]
+    percentage = epoch["RSP_PhaseCompletion"][epoch.index > 0].iloc[0]
     output["RSP_PhaseCompleted"] = percentage
 
     return output
