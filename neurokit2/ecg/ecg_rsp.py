@@ -44,18 +44,21 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="charlton2016"):
     >>> # Get ECG Derived Respiration (EDR)
     >>> edr = nk.ecg_rsp(ecg_rate, sampling_rate=100)
     >>> nk.standardize(pd.DataFrame({"EDR": edr,
-                                    "RSP": data["RSP"]})).plot()
+                                     "RSP": data["RSP"]})).plot()
     >>>
     >>> # Method comparison (the closer to 0 the better)
     >>> nk.standardize(pd.DataFrame(
             {"sarkar2015": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015") - data["RSP"],
-             "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016") - data["RSP"]})).plot()
+             "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016") - data["RSP"],
+             "soni2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="soni2019") - data["RSP"]})).plot()
     """
     method = method.lower()
     if method in ["sarkar2015"]:
         rsp = _ecg_rsp_sarkar2015(ecg_rate, sampling_rate=sampling_rate)
     elif method in ["charlton2016"]:
         rsp = _ecg_rsp_charlton2016(ecg_rate, sampling_rate=sampling_rate)
+    elif method in ["soni2019"]:
+        rsp = _ecg_rsp_soni2019(ecg_rate, sampling_rate=sampling_rate)
     else:
         raise ValueError("NeuroKit error: ecg_rsp(): 'method' should be "
                          "one of 'sarkar2015' or 'charlton2016'.")
@@ -90,6 +93,18 @@ def _ecg_rsp_charlton2016(ecg_rate, sampling_rate=1000):
                         sampling_rate=sampling_rate,
                         lowcut=4/60,
                         highcut=60/60,
+                        method="butterworth",
+                        order=6)
+    return rsp
+
+
+def _ecg_rsp_soni2019(ecg_rate, sampling_rate=1000):
+    """
+    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6329220/
+    """
+    rsp = signal_filter(ecg_rate,
+                        sampling_rate=sampling_rate,
+                        highcut=0.5,
                         method="butterworth",
                         order=6)
     return rsp

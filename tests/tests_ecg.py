@@ -339,3 +339,22 @@ def test_ecg_delineate():
     assert len(waves_cwt2['ECG_P_Offsets']) == 48
     assert len(waves_cwt2['ECG_T_Onsets']) == 48
     assert len(waves_cwt2['ECG_T_Offsets']) == 48
+
+
+
+
+
+
+
+
+def test_ecg_hrv():
+    ecg60 = nk.ecg_simulate(duration=30, sampling_rate=500, heart_rate=60, random_state=42)
+    ecg90 = nk.ecg_simulate(duration=30, sampling_rate=500, heart_rate=90, random_state=42)
+
+    # Get HRV dicts
+    hrv60 = nk.ecg_hrv(nk.ecg_process(ecg60)).to_dict(orient="index")[0]
+    hrv90 = nk.ecg_hrv(nk.ecg_process(ecg90)).to_dict(orient="index")[0]
+
+    assert hrv90["HRV_HF"] > hrv60["HRV_HF"]
+    assert hrv90["HRV_LF"] < hrv60["HRV_LF"]
+    assert hrv90["HRV_MeanNN"] < hrv60["HRV_MeanNN"]
