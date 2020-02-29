@@ -138,6 +138,7 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
         ECG_R_Offsets=_dwt_resample_points(qrs_offsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
     )
 
+
 def _dwt_compensate_degree(sampling_rate):
     return int(np.log2(sampling_rate / 250))
 
@@ -147,71 +148,66 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
                            p_qrs_duration=0.5,
                            degree_tpeak=3, degree_ppeak=2,
                            epsilon_T_weight=0.25,
-                           epsilon_P_weight=0.02,
+                           epsilon_P_weight=0.02
 ):
     srch_bndry = int(0.9 * qrs_duration * sampling_rate / 2)
     degree_add = _dwt_compensate_degree(sampling_rate)
-    tpeaks = []
-    ppeaks = []
+    peaks_dict = {
+        'tpeak': [], 'ppeak': []
+    }
     for i in range(len(rpeaks)-1):
-        for find in ['tpeak', 'ppeak']:
-            if find == 'tpeak':
+        for attribute in ['tpeak', 'ppeak']:
+            if attribute == 'tpeak':
                 # search for T peaks from R peaks
                 srch_idx_start = rpeaks[i] + srch_bndry
                 srch_idx_end = rpeaks[i + 1] - srch_bndry * 8
                 dwt_local = dwtmatr[degree_tpeak + degree_add, srch_idx_start:srch_idx_end]
                 height = epsilon_T_weight * np.sqrt(np.mean(np.square(dwt_local)))
-            elif find == 'ppeak':
+            elif attribute == 'ppeak':
                 # search for P peaks from Rpeaks
                 srch_idx_start = rpeaks[i] - int(p_qrs_duration * sampling_rate)
                 srch_idx_end = rpeaks[i] - srch_bndry
                 dwt_local = dwtmatr[degree_ppeak + degree_add, srch_idx_start:srch_idx_end]
-                if len(dwt_local) == 0:
-                    ppeaks.append(np.nan)
-                    continue
                 height = epsilon_P_weight * np.sqrt(np.mean(np.square(dwt_local)))
+            if len(dwt_local) == 0:
+                peaks_dict[attribute].append(np.nan)
+                continue
 
-            peaks_tp, heights_tp = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
-            peaks_tp = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks_tp))
+            peaks, peak_heights = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
+            peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))
             if dwt_local[0] > 0:  # just append
-                peaks_tp = [0] + peaks_tp
+                peaks = [0] + peaks
 
+            # detect morphology
             candidate_peaks = []
-            for idx_peak, idx_peak_nxt in zip(peaks_tp[:-1], peaks_tp[1:]):
+            for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
                 correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
                 if correct_sign:
                     idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
-                    # account for delay
-                    candidate_peaks.append(idx_zero + int(dwt_delay * sampling_rate))
+                    candidate_peaks.append(idx_zero)
 
-            # if find == 'tpeak':
-            #     continue
-            # if len(candidate_peaks) > 0:
-            #     events_plot(candidate_peaks, dwt_local)
-            # else:
-            #     plt.plot(dwt_local)
-            # plt.plot(ecg[srch_idx_start: srch_idx_end])
-            # plt.show()
+            if len(candidate_peaks) == 0:
+                peaks_dict[attribute].append(np.nan)
+                continue
 
             # filtering? use a simple rule now
-            if find == 'tpeak':
-                if len(candidate_peaks) > 0:
-                    tpeaks.append(candidate_peaks[0] + srch_idx_start)
-                else:
-                    tpeaks.append(np.nan)
-            elif find == 'ppeak':
-                if len(candidate_peaks) > 0:
-                    ppeaks.append(candidate_peaks[-1] + srch_idx_start)
-                else:
-                    ppeaks.append(np.nan)
+            if attribute == 'tpeak':
+                peaks_dict['tpeak'].append(candidate_peaks[0] + srch_idx_start)
+            elif attribute == 'ppeak':
+                peaks_dict['ppeak'].append(candidate_peaks[-1] + srch_idx_start)
 
-    return tpeaks, ppeaks
+    return peaks_dict['tpeak'], peaks_dict['ppeak']
 
 
-def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False, duration=0.3,
+def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False,
+                                    duration=0.3,
                                     duration_offset=0.3,
-                                    onset_weight=0.4, offset_weight=0.4):
-    degree = int(np.log2(sampling_rate / 250))
+                                    onset_weight=0.4,
+                                    offset_weight=0.4,
+                                    degree_onset=2,
+                                    degree_offset=2
+):
+    degree = _dwt_compensate_degree(sampling_rate)
     onsets = []
     offsets = []
     for i in range(len(peaks)):
@@ -221,7 +217,7 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             onsets.append(np.nan)
             continue
-        dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
+        dwt_local = dwtmatr[degree_onset + degree, srch_idx_start: srch_idx_end]
         onset_slope_peaks, onset_slope_data = scipy.signal.find_peaks(dwt_local)
         try:
             epsilon_onset = onset_weight * dwt_local[onset_slope_peaks[-1]]
@@ -241,7 +237,7 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             onsets.append(np.nan)
             continue
-        dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
+        dwt_local = dwtmatr[degree_offset + degree, srch_idx_start: srch_idx_end]
         offset_slope_peaks, offset_slope_data = scipy.signal.find_peaks(-dwt_local)
         try:
             epsilon_offset = - offset_weight * dwt_local[offset_slope_peaks[0]]

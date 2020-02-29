@@ -79,7 +79,7 @@ Difference statistics
 Difference:
 {diff}
 """
-    helper_plot(attribute, ecg_characteristics, test_data)
+    # helper_plot(attribute, ecg_characteristics, test_data)
     assert diff.std() < 0.1 * test_data['sampling_rate'], report
     assert diff.mean() < 0.1 * test_data['sampling_rate'], report
 
