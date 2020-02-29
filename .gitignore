@@ -109,3 +109,4 @@ try.py
 
 # emacs temp file
 *~
+data/eeg_restingstate_3000hz.edf

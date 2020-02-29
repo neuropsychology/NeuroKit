@@ -10,16 +10,11 @@ from ..misc import sanitize_input
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """Preprocess a respiration (RSP) signal.
 
-    Clean a respiration signal using different sets of parameters, such as:
-
-    - `Khodadad et al. (2018)
-    <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_:
-        linear detrending followed by a fifth order 2Hz low-pass IIR
-        Butterworth filter).
-    - `BioSPPy
-    <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_:
-        second order 0.1 - 0.35 Hz bandpass Butterworth filter followed by a
-        constant detrending.
+    Clean a respiration signal using different sets of parameters, such as
+    'khodadad2018' (linear detrending followed by a fifth order 2Hz low-pass
+    IIR Butterworth filter) or `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_
+    (second order 0.1 - 0.35 Hz bandpass Butterworth filter followed by a
+    constant detrending).
 
     Parameters
     ----------
@@ -52,6 +47,11 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
             "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
             "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
     >>> signals.plot()
+
+    References
+    ----------
+    - `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
+
     """
     rsp_signal = sanitize_input(rsp_signal,
                                 message="NeuroKit error: rsp_clean(): we "

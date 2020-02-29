@@ -2,8 +2,8 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs import epochs_to_df
-from ..ecg import ecg_eventrelated
+from ..epochs.epochs_to_df import _df_to_epochs
+from ..ecg.ecg_eventrelated import _eventrelated_addinfo
 
 
 def rsp_eventrelated(epochs):
@@ -36,7 +36,7 @@ def rsp_eventrelated(epochs):
         after stimulus onset.
         - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude
         after stimulus onset.
-        - *"RSP_Inspiration"*: indication of whether the onset of the event
+        - *"RSP_Phase"*: indication of whether the onset of the event
         concurs with respiratory inspiration (1) or expiration (0).
 
     See Also
@@ -74,7 +74,7 @@ def rsp_eventrelated(epochs):
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = epochs_to_df._df_to_epochs(epochs)  # Convert df to dict
+        epochs = _df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: rsp_eventrelated():"
@@ -82,9 +82,9 @@ def rsp_eventrelated(epochs):
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe.")
 
-    # Warning for epoch length (can be adjusted)
+    # Warning for long epochs
     for i in epochs:
-        if (len(epochs[i]) > 10000):
+        if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: rsp_eventrelated():"
                   "Epoch length is too long. You might want to use"
                   "rsp_periodrelated().")
@@ -108,8 +108,7 @@ def rsp_eventrelated(epochs):
                                                             rsp_df[epoch_index])
 
         # Fill with more info
-        rsp_df[epoch_index] = ecg_eventrelated._eventrelated_addinfo(epochs[epoch_index],
-                                                    rsp_df[epoch_index])
+        rsp_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index], rsp_df[epoch_index])
 
     rsp_df = pd.DataFrame.from_dict(rsp_df, orient="index")  # Convert to a dataframe
 
@@ -180,14 +179,16 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
 
     # Sanitize input
     colnames = epoch.columns.values
-    if len([i for i in colnames if "RSP_Inspiration" in i]) == 0:
+    if len([i for i in colnames if "RSP_Phase" in i]) == 0:
         print("NeuroKit warning: rsp_eventrelated(): input does not"
-              "have an `RSP_Inspiration` column. Will not indicate whether"
+              "have an `RSP_Phase` column. Will not indicate whether"
               "event onset concurs with inspiration.")
         return output
 
     # Indication ofinspiration
-    inspiration = epoch["RSP_Inspiration"][epoch.index > 0].iloc[0]
-    output["RSP_Inspiration"] = inspiration
+    inspiration = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
+    output["RSP_Phase"] = inspiration
+    percentage = epoch["RSP_PhaseCompletion"][epoch.index > 0].iloc[0]
+    output["RSP_PhaseCompletion"] = percentage
 
     return output

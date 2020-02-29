@@ -2,9 +2,8 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs import epochs_to_df
+from ..epochs.epochs_to_df import _df_to_epochs
 from ..stats import fit_r2
-
 
 def ecg_eventrelated(epochs):
     """Performs event-related ECG analysis on epochs.
@@ -70,7 +69,7 @@ def ecg_eventrelated(epochs):
     """
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):
-        epochs = epochs_to_df._df_to_epochs(epochs)  # Convert df to dict
+        epochs = _df_to_epochs(epochs)  # Convert df to dict
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: ecg_eventrelated():"
@@ -78,9 +77,9 @@ def ecg_eventrelated(epochs):
                          "that is of the correct form i.e., either a dictionary"
                          "or dataframe as returned by `epochs_create()`.")
 
-    # Warning for epoch length (can be adjusted)
+    # Warning for long epochs
     for i in epochs:
-        if (len(epochs[i]) > 10000):
+        if (np.max(epochs[i].index.values) > 5):
             print("Neurokit warning: ecg_eventrelated():"
                   "Epoch length is too long. You might want to use"
                   "ecg_periodrelated().")
@@ -108,6 +107,8 @@ def ecg_eventrelated(epochs):
 # Internals
 # =============================================================================
 
+
+
 def _eventrelated_addinfo(epoch, output={}):
 
     # Add label
@@ -120,9 +121,6 @@ def _eventrelated_addinfo(epoch, output={}):
         if len(set(epoch["Condition"])) == 1:
             output["Condition"] = epoch["Condition"].values[0]
     return output
-
-
-
 
 
 
