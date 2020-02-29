@@ -4,7 +4,7 @@ import neurokit2 as nk
 import matplotlib.pyplot as plt
 
 import biosppy
-import os
+
 
 def test_ecg_simulate():
 
@@ -121,8 +121,8 @@ def test_ecg_fixpeaks():
 
     rpeaks = nk.ecg_findpeaks(ecg)
 
-    # Test with recursive artifact correction.
-    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, recursive=True)
+    # Test with iterative artifact correction.
+    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, iterative=True)
 
     assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
                        7383418, atol=1)
@@ -132,8 +132,8 @@ def test_ecg_fixpeaks():
     assert all(isinstance(x, int) for x in artifacts["extra"])
     assert all(isinstance(x, int) for x in artifacts["longshort"])
 
-    # Test with non-recursive artifact correction.
-    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, recursive=False)
+    # Test with non-iterative artifact correction.
+    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, iterative=False)
 
     assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
                        7383418, atol=1)
