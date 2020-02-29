@@ -126,14 +126,15 @@ def test_rsp_process():
 
     # Only check array dimensions since functions called by rsp_process have
     # already been unit tested.
-    assert signals.shape == (120000, 7)
+    assert signals.shape == (120000, 8)
     assert np.array(["RSP_Raw",
                      "RSP_Clean",
-                     "RSP_Peaks",
-                     "RSP_Troughs",
-                     "RSP_Rate",
                      "RSP_Amplitude",
-                     "RSP_Inspiration"]) in signals.columns.values
+                     "RSP_Rate",
+                     "RSP_Phase",
+                     "RSP_PhaseCompletion",
+                     "RSP_Peaks",
+                     "RSP_Troughs",]) in signals.columns.values
 
 
 def test_rsp_plot():
@@ -178,5 +179,6 @@ def test_rsp_eventrelated():
     assert all(elem in ["RSP_Rate_Max", "RSP_Rate_Min", "RSP_Rate_Mean",
                         "RSP_Rate_Max_Time", "RSP_Rate_Min_Time",
                         "RSP_Amplitude_Max", "RSP_Amplitude_Min",
-                        "RSP_Amplitude_Mean", "RSP_Inspiration", "Label"]
+                        "RSP_Amplitude_Mean", "RSP_Phase",
+                        "RSP_PhaseCompletion", "Label"]
                for elem in np.array(rsp_eventrelated.columns.values, dtype=str))

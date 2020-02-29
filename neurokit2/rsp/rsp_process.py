@@ -41,10 +41,15 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         - *"RSP_Clean"*: the cleaned signal.
         - *"RSP_Peaks"*: the inhalation peaks marked as "1" in a list of zeros.
         - *"RSP_Troughs"*: the exhalation troughs marked as "1" in a list of
-                            zeros.
+          zeros.
         - *"RSP_Rate"*: breathing rate interpolated between inhalation peaks.
         - *"RSP_Amplitude"*: breathing amplitude interpolated between
-                                inhalation peaks.
+          inhalation peaks.
+        - *"RSP_Phase"*: breathing phase, marked by "1" for inspiration
+          and "0" for expiration.
+        - *"RSP_PhaseCompletion"*: breathing phase completion, expressed in
+          percentage (from 0 to 1), representing the stage of the current
+          respiratory phase.
     info : dict
         A dictionary containing the samples at which inhalation peaks and
         exhalation troughs occur, accessible with the keys "RSP_Peaks", and
@@ -80,9 +85,8 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     # Prepare output
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,
                             "RSP_Clean": rsp_cleaned,
-                            "RSP_Inspiration": phase,
                             "RSP_Amplitude": amplitude,
                             "RSP_Rate": rate})
-    signals = pd.concat([signals, peak_signal], axis=1)
+    signals = pd.concat([signals, phase, peak_signal], axis=1)
 
     return signals, info

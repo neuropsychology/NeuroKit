@@ -4,6 +4,7 @@ import neurokit2 as nk
 import matplotlib.pyplot as plt
 
 import biosppy
+import os
 
 def test_ecg_simulate():
 
@@ -281,3 +282,47 @@ def test_ecg_eventrelated():
                         "ECG_Rate_Trend_Quadratic",
                         "ECG_Rate_Trend_Linear", "ECG_Rate_Trend_R2", "Label"]
                for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
+
+
+
+def test_ecg_delineate():
+
+    sampling_rate = 1000
+
+    # test with simulated signals
+    ecg = nk.ecg_simulate(duration=20, sampling_rate=sampling_rate, random_state=42)
+    _, rpeaks = nk.ecg_peaks(ecg, sampling_rate=sampling_rate)
+    number_rpeaks = len(rpeaks['ECG_R_Peaks'])
+
+    # Method 1: derivative
+    _, waves_derivative = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate)
+    assert len(waves_derivative['ECG_P_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_Q_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_S_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_T_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_P_Onsets']) == number_rpeaks
+    assert len(waves_derivative['ECG_T_Offsets']) == number_rpeaks
+
+    # Method 2: CWT
+    _, waves_cwt = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
+    assert np.allclose(len(waves_cwt['ECG_P_Peaks']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_T_Peaks']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_R_Onsets']), 23, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_R_Offsets']), 23, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_P_Onsets']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_P_Offsets']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_T_Onsets']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_T_Offsets']), 22, atol=1)
+
+
+def test_ecg_hrv():
+    ecg60 = nk.ecg_simulate(duration=30, sampling_rate=200, heart_rate=60, random_state=42)
+    ecg90 = nk.ecg_simulate(duration=30, sampling_rate=200, heart_rate=90, random_state=42)
+
+    # Get HRV dicts
+    hrv60 = nk.ecg_hrv(nk.ecg_process(ecg60, sampling_rate=200), sampling_rate=200).to_dict(orient="index")[0]
+    hrv90 = nk.ecg_hrv(nk.ecg_process(ecg90, sampling_rate=200), sampling_rate=200).to_dict(orient="index")[0]
+
+#    assert hrv90["HRV_HF"] > hrv60["HRV_HF"]
+#    assert hrv90["HRV_LF"] < hrv60["HRV_LF"]
+    assert hrv90["HRV_MeanNN"] < hrv60["HRV_MeanNN"]

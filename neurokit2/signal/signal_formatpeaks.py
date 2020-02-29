@@ -12,7 +12,7 @@ def signal_formatpeaks(info, desired_length, peak_indices=None):
 
     signals = {}
     for feature in info.keys():
-        if any(x in str(feature) for x in ["Peak", "Onset", "Trough", "Recovery"]):
+        if any(x in str(feature) for x in ["Peak", "Onset", "Offset", "Trough", "Recovery"]):
             signals[feature] = _signal_from_indices(info[feature], desired_length, 1)
         else:
             signals[feature] = _signal_from_indices(peak_indices, desired_length, info[feature])

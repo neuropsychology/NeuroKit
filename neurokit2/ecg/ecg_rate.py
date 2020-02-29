@@ -61,7 +61,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
 
     # The rate corresponding to the first peak is set to the mean RR.
-    rr[0] = np.mean(rr)
+    rr[0] = np.mean(rr[1:])
     rate = 60 / rr
 
     if desired_length:
