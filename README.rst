@@ -240,8 +240,9 @@ General
 ECG
 ----
 
-- `hrv <https://github.com/rhenanbartels/hrv>`_
 - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
+- `hrv <https://github.com/rhenanbartels/hrv>`_
+- `hrv-analysis <https://github.com/Aura-healthcare/hrvanalysis>`_
 - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
 - `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_
