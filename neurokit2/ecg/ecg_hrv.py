@@ -5,7 +5,7 @@ from .ecg_rate import ecg_rate as nk_ecg_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_power
 from ..stats import mad
-
+from ..complexity import entropy_sample
 
 
 def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000):
@@ -35,6 +35,7 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000):
     hrv = {}  # Initialize empty dict
     hrv.update(_ecg_hrv_time(rri))
     hrv.update(_ecg_hrv_frequency(ecg_period))
+    hrv.update(_ecg_hrv_nonlinear(rri, ecg_period))
 
     hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
     return hrv
@@ -47,13 +48,14 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000):
 
 
 def _ecg_hrv_time(rri):
+    diff_rri = np.diff(rri)
     out = {}  # Initialize empty dict
 
     # Mean based
-    out["RMSSD"] = np.sqrt(np.mean(np.diff(rri) ** 2))
+    out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
     out["MeanNN"] = np.mean(rri)
     out["SDNN"] = np.std(rri, ddof=1)
-    out["SDSD"] = np.std(np.diff(rri), ddof=1)
+    out["SDSD"] = np.std(diff_rri, ddof=1)
     out["CVNN"] = out["SDNN"] / out["MeanNN"]
     out["CVSD"] = out["RMSSD"] / out["MeanNN"]
 
@@ -63,17 +65,21 @@ def _ecg_hrv_time(rri):
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]
 
     # Extreme-based
-    nn50 = np.sum(np.abs(np.diff(rri)) > 50)
-    nn20 = np.sum(np.abs(np.diff(rri)) > 20)
+    nn50 = np.sum(np.abs(diff_rri) > 50)
+    nn20 = np.sum(np.abs(diff_rri) > 20)
     out["pNN50"] = nn50 / len(rri) * 100
     out["pNN20"] = nn20 / len(rri) * 100
 
-    # Histogram-based
+    # Geometrical domain
+    bar_y, bar_x = np.histogram(rri, bins=range(300, 2000, 8))
     bar_y, bar_x = np.histogram(rri, bins="auto")
     out["TINN"] = np.max(bar_x) - np.min(bar_x)  # Triangular Interpolation of the NN Interval Histogram
     out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
 
     return out
+
+
+
 
 
 def _ecg_hrv_frequency(ecg_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5), method="welch"):
@@ -88,6 +94,28 @@ def _ecg_hrv_frequency(ecg_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04
 #    out["LnHF"] = np.log(out["HF"])
     return out
 
+
+
+
+
+def _ecg_hrv_nonlinear(rri, ecg_period):
+    diff_rri = np.diff(rri)
+    out = {}
+
+    # Poincaré plot
+    out["SD1"] = np.sqrt(np.std(diff_rri, ddof=1) ** 2 * 0.5)
+    out["SD2"] = np.sqrt(2 * np.std(rri, ddof=1) ** 2 - 0.5 * np.std(diff_rri, ddof=1) ** 2)
+    out["SD2SD1"] = out["SD2"] / out["SD1"]
+
+    # CSI / CVI
+    T = 4 * out["SD1"]
+    L = 4 * out["SD2"]
+    out["CSI"] = L / T
+    out["CVI"] = np.log10(L * T)
+    out["CSI_Modified"] = L ** 2 / T
+
+    out["SampEn"] = entropy_sample(rri, order=2, r=0.2*np.std(rri, ddof=1))
+    return out
 
 
 # =============================================================================
