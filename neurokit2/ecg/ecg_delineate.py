@@ -94,11 +94,9 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
         waves = _dwt_ecg_delinator(ecg_cleaned,
                                    rpeaks,
                                    sampling_rate=sampling_rate)
-    return waves
     # Remove NaN in Peaks, Onsets, and Offsets
-
     for feature in waves.keys():
-        waves[feature] = [x for x in waves[feature] if str(x) != 'nan']
+        waves[feature] = [x for x in waves[feature] if ~np.isnan(x)]
 
     instant_peaks = signal_formatpeaks(waves,
                                        desired_length=len(ecg_cleaned))

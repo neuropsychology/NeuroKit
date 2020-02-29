@@ -53,8 +53,11 @@ def helper_plot(attribute, ecg_characteristics, test_data):
 
 
 def run_test_func(test_data):
-    return nk.ecg_delineator(
+    _, waves = nk.ecg_delineate(
         test_data['ecg'], test_data['rpeaks'], test_data['sampling_rate'], method='dwt')
+    for key in waves:
+        waves[key] = np.array(waves[key])
+    return waves
 
 
 @pytest.mark.parametrize('attribute', [
