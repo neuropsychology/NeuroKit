@@ -87,7 +87,9 @@ def ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative")
 ###############################################################################
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     """Resample given points to a different sampling rate."""
-    return (np.array(peaks) * desired_sampling_rate / sampling_rate).astype(int)
+    peaks_resample = (np.array(peaks) * desired_sampling_rate / sampling_rate)
+    peaks_resample = peaks_resample[~np.isnan(peaks_resample)].astype(int)
+    return peaks_resample
 
 
 def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
@@ -105,13 +107,13 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
     ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=analysis_sampling_rate)
     dwtmatr = _dwt_compute_multiscales(ecg, 9)
 
-    # only for debugging
-    for idx in [0, 1, 2, 3]:
-        plt.plot(dwtmatr[idx + 3], label=f'W[{idx}]')
-    plt.plot(ecg, '--')
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+    # # only for debugging
+    # for idx in [0, 1, 2, 3]:
+    #     plt.plot(dwtmatr[idx + 3], label=f'W[{idx}]')
+    # plt.plot(ecg, '--')
+    # plt.legend()
+    # plt.grid(True)
+    # plt.show()
 
     rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
     tpeaks, ppeaks = _dwt_delinate_tp_peaks(

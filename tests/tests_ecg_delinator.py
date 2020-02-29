@@ -34,6 +34,12 @@ def setup_load_ecg_data():
     rpeaks = nk.ecg_findpeaks(ecg, sampling_rate=sampling_rate, method='martinez')['ECG_R_Peaks']
     test_data = dict(ecg=ecg, sampling_rate=sampling_rate, rpeaks=rpeaks)
     test_data.update(annots)
+    test_data['ECG_P_Peaks'] = test_data['ECG_P_Peaks'][:-1]
+    test_data['ECG_P_Onsets'] = test_data['ECG_P_Onsets'][:-1]
+    test_data['ECG_T_Onsets'] = test_data['ECG_T_Onsets'][:-1]
+    test_data['ECG_P_Offsets'] = test_data['ECG_P_Offsets'][:-1]
+    test_data['ECG_R_Onsets'] = test_data['ECG_R_Onsets'][:-1]
+    test_data['ECG_R_Offsets'] = test_data['ECG_R_Offsets'][1:]
     yield test_data
 
 
@@ -50,49 +56,27 @@ def run_test_func(test_data):
         test_data['ecg'], test_data['rpeaks'], test_data['sampling_rate'], method='dwt')
 
 
-def test_find_T_peaks(test_data):
+@pytest.mark.parametrize('attribute', [
+    'ECG_T_Peaks',
+    'ECG_T_Onsets',
+    'ECG_T_Offsets',
+    'ECG_P_Peaks', 'ECG_P_Onsets', 'ECG_P_Offsets',
+    'ECG_R_Onsets', 'ECG_R_Offsets'
+])
+def test_find_ecg_characteristics(attribute, test_data):
     ecg_characteristics = run_test_func(test_data)
-    np.testing.assert_allclose(ecg_characteristics['ECG_T_Peaks'],
-                               test_data['ECG_T_Peaks'],
-                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
-
-
-def test_find_T_onsets_offsets(test_data):
-    ecg_characteristics = run_test_func(test_data)
-    np.testing.assert_allclose(ecg_characteristics['ECG_T_Onsets'],
-                               test_data['ECG_T_Onsets'][:-1],
-                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
-    np.testing.assert_allclose(ecg_characteristics['ECG_T_Offsets'],
-                               test_data['ECG_T_Offsets'][:-1],
-                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
-
-
-def test_find_P_onsets_offsets(test_data):
-    ecg_characteristics = run_test_func(test_data)
-    np.testing.assert_allclose(ecg_characteristics['ECG_P_Onsets'],
-                               test_data['ECG_P_Onsets'][:-1],
-                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
-    np.testing.assert_allclose(ecg_characteristics['ECG_P_Offsets'],
-                               test_data['ECG_P_Offsets'][:-1],
-                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
-
-
-def test_find_P_peaks(test_data):
-    ecg_characteristics = run_test_func(test_data)
-    np.testing.assert_allclose(ecg_characteristics['ECG_P_Peaks'],
-                               test_data['ECG_P_Peaks'][:-1],
-                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
-
-
-def test_find_qrs_onsets(test_data):
-    ecg_characteristics = run_test_func(test_data)
-
-    np.testing.assert_allclose(ecg_characteristics['ECG_R_Onsets'],
-                               test_data['ECG_R_Onsets'][:-1],
-                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
-
-    np.testing.assert_allclose(ecg_characteristics['ECG_R_Offsets'],
-                               test_data['ECG_R_Offsets'][1:],
-                               atol=MAX_SIGNAL_DIFF * test_data['sampling_rate'])
-
-
+    corresponding_points = []  #: List of missing peaks attribute
+    for peak_index in test_data[attribute]:
+        min_idx = np.argmin(np.abs(ecg_characteristics[attribute] - peak_index))
+        corresponding_points.append(ecg_characteristics[attribute][min_idx])
+    corresponding_points = np.array(corresponding_points)
+    diff = corresponding_points - test_data[attribute]
+    diff = diff[diff.abs() < 0.5 * test_data['sampling_rate']]  # remove obvious failure
+    report = f"""
+Difference statistics
+{diff.describe()}
+Difference:
+{diff}
+"""
+    assert diff.std() < 0.1 * test_data['sampling_rate'], report
+    assert diff.mean() < 0.1 * test_data['sampling_rate'], report
