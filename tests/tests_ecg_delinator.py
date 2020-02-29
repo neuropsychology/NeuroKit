@@ -48,6 +48,7 @@ def helper_plot(attribute, ecg_characteristics, test_data):
     print('0: computed\n1: data')
     ecg = test_data['ecg']
     nk.events_plot(peaks, ecg)
+    plt.title(attribute)
     plt.show()
 
 
@@ -78,5 +79,7 @@ Difference statistics
 Difference:
 {diff}
 """
+    helper_plot(attribute, ecg_characteristics, test_data)
     assert diff.std() < 0.1 * test_data['sampling_rate'], report
     assert diff.mean() < 0.1 * test_data['sampling_rate'], report
+
