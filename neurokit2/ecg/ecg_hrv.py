@@ -81,11 +81,11 @@ def _ecg_hrv_frequency(ecg_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
     out = power.to_dict(orient="index")[0]
 
-    total_power = out["ULF"] + out["VLF"] + out["LF"] + out["HF"] + out["VHF"]
-    out["LFHF"] = out["LF"] / out["HF"]
-    out["LFn"] = out["LF"] / total_power
-    out["HFn"] = out["HF"] / total_power
-    out["LnHF"] = np.log(out["HF"])
+#    total_power = out["ULF"] + out["VLF"] + out["LF"] + out["HF"] + out["VHF"]
+#    out["LFHF"] = out["LF"] / out["HF"]
+#    out["LFn"] = out["LF"] / total_power
+#    out["HFn"] = out["HF"] / total_power
+#    out["LnHF"] = np.log(out["HF"])
     return out
 
 
