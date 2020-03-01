@@ -170,8 +170,7 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
                            p_qrs_duration=0.5,
                            degree_tpeak=3, degree_ppeak=2,
                            epsilon_T_weight=0.25,
-                           epsilon_P_weight=0.02
-):
+                           epsilon_P_weight=0.02):
     srch_bndry = int(0.9 * qrs_duration * sampling_rate / 2)
     degree_add = _dwt_compensate_degree(sampling_rate)
     peaks_dict = {
@@ -227,8 +226,7 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
                                     onset_weight=0.4,
                                     offset_weight=0.4,
                                     degree_onset=2,
-                                    degree_offset=2
-):
+                                    degree_offset=2):
     degree = _dwt_compensate_degree(sampling_rate)
     onsets = []
     offsets = []
@@ -458,7 +456,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             search_window = - cwtmatr[2, index_peak: index_peak + half_wave_width]
             prominence = 0.50*max(search_window)
             wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height,
-                                                 prominence=prominence)
+                                                              prominence=prominence)
 
         elif peak_type == "tpeaks" or peak_type == "ppeaks":
             search_window = cwtmatr[4, index_peak: index_peak + half_wave_width]
