@@ -4,7 +4,6 @@ import pathlib
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import logging
 
 
 SHOW_DEBUG_PLOTS = False
@@ -76,13 +75,12 @@ def test_find_ecg_characteristics(attribute, test_data):
     corresponding_points = np.array(corresponding_points)
     diff = corresponding_points - test_data[attribute]
     diff = diff[diff.abs() < 0.5 * test_data['sampling_rate']]  # remove obvious failure
-    report = f"""
+    report = """
 Difference statistics
-{diff.describe()}
+{diff_describe}
 Difference:
 {diff}
-"""
+""".format(diff_describe=diff.describe(), diff=diff)
     # helper_plot(attribute, ecg_characteristics, test_data)
     assert diff.std() < 0.1 * test_data['sampling_rate'], report
     assert diff.mean() < 0.1 * test_data['sampling_rate'], report
-
