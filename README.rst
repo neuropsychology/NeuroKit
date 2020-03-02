@@ -207,7 +207,7 @@ You can run:
 
 You can cite NeuroKit as follows:
 
-    - Makowski, D., Pham, T., L Juen, Z., Brammer, J.C., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved February 24, 2020, from https://github.com/neuropsychology/NeuroKit
+    - Makowski, D., Pham, T., L Juen, Z., Brammer, J. C., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved February 24, 2020, from https://github.com/neuropsychology/NeuroKit
 
 
     Full bibtex reference is the following:
@@ -240,8 +240,9 @@ General
 ECG
 ----
 
-- `hrv <https://github.com/rhenanbartels/hrv>`_
 - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
+- `hrv <https://github.com/rhenanbartels/hrv>`_
+- `hrv-analysis <https://github.com/Aura-healthcare/hrvanalysis>`_
 - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
 - `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_
