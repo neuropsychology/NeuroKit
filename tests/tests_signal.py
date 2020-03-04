@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 import scipy.signal
-import biosppy
 
 
 # =============================================================================
@@ -103,6 +102,26 @@ def test_signal_filter():
     signal += np.cos(np.linspace(start=0, stop=100, num=1000)) # High freq
     filtered = nk.signal_filter(signal, highcut=10)
     assert np.std(signal) > np.std(filtered)
+
+    # Generate 10 seconds of signal with 2 Hz oscillation and added 50Hz powerline-noise.
+    sampling_rate = 250
+    samples = np.arange(10 * sampling_rate)
+
+    signal = np.sin(2 * np.pi * 2 * (samples / sampling_rate))
+    powerline = np.sin(2 * np.pi * 50 * (samples / sampling_rate))
+
+    signal_corrupted = signal + powerline
+    signal_clean = nk.signal_filter(signal_corrupted,
+                                    sampling_rate=sampling_rate,
+                                    method="powerline")
+
+    # figure, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
+    # ax0.plot(signal_corrupted)
+    # ax1.plot(signal)
+    # ax2.plot(signal_clean * 100)
+
+    assert np.allclose(sum(signal_clean * 100 - signal), -2, atol=0.2)    # multiply by 100 to compensate amplitude dampening
+
 
 def test_signal_interpolate():
 

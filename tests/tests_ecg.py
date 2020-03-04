@@ -23,7 +23,6 @@ def test_ecg_simulate():
             len(nk.signal_findpeaks(ecg3, height_min=0.6)["Peaks"]))
 
 
-
 def test_ecg_clean():
 
     sampling_rate = 1000
@@ -70,7 +69,7 @@ def test_ecg_peaks():
                                  method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 152,
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139,
                        atol=1)
 
     # Test with request to correct artifacts.
@@ -79,7 +78,7 @@ def test_ecg_peaks():
                                  method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 151,
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139,
                        atol=1)
 
 
@@ -100,7 +99,7 @@ def test_ecg_rate():
     rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate)
 
     assert rate.shape == (info["ECG_R_Peaks"].size, )
-    assert np.allclose(rate.mean(), 81, atol=2)
+    assert np.allclose(rate.mean(), 70, atol=1)
 
     # Test with desired length.
     test_length = 1200
@@ -108,7 +107,7 @@ def test_ecg_rate():
                        desired_length=test_length)
 
     assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 76, atol=2)
+    assert np.allclose(rate.mean(), 70, atol=2)
 
 
 def test_ecg_fixpeaks():
@@ -282,7 +281,6 @@ def test_ecg_eventrelated():
                         "ECG_Rate_Trend_Quadratic",
                         "ECG_Rate_Trend_Linear", "ECG_Rate_Trend_R2", "Label"]
                for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
-
 
 
 def test_ecg_delineate():
