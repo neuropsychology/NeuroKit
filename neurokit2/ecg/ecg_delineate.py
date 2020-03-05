@@ -355,7 +355,7 @@ def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
 
 
 # =============================================================================
-# WAVELET METHOD
+#                              WAVELET METHOD (CWT)
 # =============================================================================
 def _ecg_delinator_cwt(ecg, rpeaks=None, sampling_rate=1000):
 
@@ -569,7 +569,7 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
     return tppeaks
 
 # =============================================================================
-# Derivative Method
+#                              DERIVATIVE METHOD
 # =============================================================================
 def _ecg_delineator_derivative(ecg, rpeaks=None, sampling_rate=1000):
 
