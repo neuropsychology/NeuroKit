@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.patches import Ellipse
 
 from .ecg_rate import ecg_rate as nk_ecg_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
@@ -8,16 +10,55 @@ from ..stats import mad
 from ..complexity import entropy_sample
 
 
-def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000):
-    """
+def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
+    """ Computes time domain and frequency domain features for Heart Rate Variability (HRV) analysis.
+
+    Parameters
+    ----------
+    ecg_rate : array
+        Array containing the heart rate, produced by `ecg_rate()`.
+    rpeaks : dict
+        The samples at which the R-peaks occur. Dict returned by
+        `ecg_peaks()`. Defaults to None.
+    sampling_rate : int
+        The sampling frequency of the signal (in Hz, i.e., samples/second).
+    show : bool
+        If True, will return a Poincaré plot. Defaults to False. The labels SD1 and SD2 represent the
+        variability of the heart rate or more specifically, the spread of the data along the minor
+        and major axis of the ellipse.
+
+
+    Returns
+    -------
+    DataFrame
+        DataFrame consisting of the computed HRV metrics, which includes:
+            - "*HRV_RMSSD*": the square root of the mean of the sum of successive differences between adjacent RR intervals.
+            - "*HRV_MeanNN*": the mean of the RR intervals.
+            - "*HRV_SDNN*": the standard deviation of the successive RR intervals.
+            - "*HRV_SDSD*": the standard deviation of the differences between successive RR intervals.
+            - "*HRV_MedianNN*": the median of the absolute values of the differences between successive RR intervals.
+            - "*HRV_ULF*": variability, or signal power, in the lowest frequency i.e., .0 to .0033 Hz by default.
+            - "*HRV_VLF*": variability, or signal power, in very low frequency i.e., .0033 to .04 Hz by default.
+            - "*HRV_LF*": variability, or signal power, in low frequency i.e., .04 to .15 Hz by default.
+            - "*HRV_HF*": variability, or signal power, in high frequency i.e., .15 to .4 Hz by default.
+            - "*HRV_VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
+
+    See Also
+    --------
+    ecg_rate, ecg_peak, signal_power
+
     Examples
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> ecg = nk.ecg_simulate(duration=120)
+    >>> ecg = nk.ecg_simulate(duration=240, noise=0.1)
     >>> ecg, info = nk.ecg_process(ecg)
-    >>> hrv = nk.ecg_hrv(ecg)
+    >>> hrv = nk.ecg_hrv(ecg, show=True)
     >>> hrv
+    >>>
+    >>> rpeaks = nk.ecg_findpeaks(ecg)
+    >>> ecg_rate = nk.ecg_rate(rpeaks)
+    >>>
 
     References
     ----------
@@ -38,6 +79,10 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000):
     hrv.update(_ecg_hrv_nonlinear(rri, ecg_period))
 
     hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
+
+    if show:
+        _ecg_hrv_plot(rri, ecg_period)
+
     return hrv
 
 
@@ -153,3 +198,46 @@ def _ecg_hrv_formatinput(ecg_rate, rpeaks=None, sampling_rate=1000):
         rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
 
     return ecg_rate, rpeaks
+
+
+def _ecg_hrv_plot(rri, ecg_period):
+    # Axes
+    ax1 = rri[:-1]
+    ax2 = rri[1:]
+
+    # Compute features
+    poincare_features = _ecg_hrv_nonlinear(rri, ecg_period)
+    sd1 = poincare_features["SD1"]
+    sd2 = poincare_features["SD2"]
+    mean_rri = np.mean(rri)
+
+    # Plot
+    fig = plt.figure(figsize=(12, 12))
+    ax = fig.add_subplot(111)
+    plt.title("Poincaré Plot", fontsize=20)
+    plt.xlabel('RR_n (s)', fontsize=15)
+    plt.ylabel('RR_n+1 (s)', fontsize=15)
+    plt.xlim(min(rri) - 10, max(rri) + 10)
+    plt.ylim(min(rri) - 10, max(rri) + 10)
+    ax.scatter(ax1, ax2, c='b', s=4)
+
+    # Ellipse plot feature
+    ellipse = Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2 + 1,
+                      height=2 * sd1 + 1, angle=45, linewidth=2,
+                      fill=False)
+    ax.add_patch(ellipse)
+    ellipse = Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2,
+                      height=2 * sd1, angle=45)
+    ellipse.set_alpha(0.02)
+    ellipse.set_facecolor("blue")
+    ax.add_patch(ellipse)
+
+    # Arrow plot feature
+    sd1_arrow = ax.arrow(mean_rri, mean_rri, -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
+                         linewidth=3, ec='r', fc="r", label="SD1")
+    sd2_arrow = ax.arrow(mean_rri, mean_rri, sd2 * np.sqrt(2) / 2, sd2 * np.sqrt(2) / 2,
+                         linewidth=3, ec='y', fc="y", label="SD2")
+
+    plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
+
+    return fig

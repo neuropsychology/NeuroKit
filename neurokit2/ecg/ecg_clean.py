@@ -97,6 +97,9 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
                           lowcut=0.5,
                           method="butterworth",
                           order=5)
+    clean = signal_filter(signal=clean,
+                          sampling_rate=sampling_rate,
+                          method="powerline")
     return clean
 
 
