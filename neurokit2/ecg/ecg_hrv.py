@@ -12,7 +12,7 @@ from ..complexity import entropy_sample
 
 def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     """ Computes time domain and frequency domain features for Heart Rate Variability (HRV) analysis.
-    
+
     Parameters
     ----------
     ecg_rate : array
@@ -23,9 +23,11 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool
-        If True, will return a Poincaré plot. Defaults to False.
-    
-    
+        If True, will return a Poincaré plot. Defaults to False. The labels SD1 and SD2 represent the
+        variability of the heart rate or more specifically, the spread of the data along the minor
+        and major axis of the ellipse.
+
+
     Returns
     -------
     DataFrame
@@ -44,20 +46,20 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     See Also
     --------
     ecg_rate, ecg_peak, signal_power
-    
+
     Examples
     --------
     >>> import neurokit2 as nk
     >>>
     >>> ecg = nk.ecg_simulate(duration=240, noise=0.1)
     >>> ecg, info = nk.ecg_process(ecg)
-    >>> hrv = nk.ecg_hrv(ecg)
+    >>> hrv = nk.ecg_hrv(ecg, show=True)
     >>> hrv
     >>>
     >>> rpeaks = nk.ecg_findpeaks(ecg)
     >>> ecg_rate = nk.ecg_rate(rpeaks)
     >>>
-    
+
     References
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
@@ -77,7 +79,7 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     hrv.update(_ecg_hrv_nonlinear(rri, ecg_period))
 
     hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
-    
+
     if show:
         _ecg_hrv_plot(rri, ecg_period)
 
@@ -208,7 +210,7 @@ def _ecg_hrv_plot(rri, ecg_period):
     sd1 = poincare_features["SD1"]
     sd2 = poincare_features["SD2"]
     mean_rri = np.mean(rri)
-    
+
     # Plot
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111)
@@ -217,8 +219,8 @@ def _ecg_hrv_plot(rri, ecg_period):
     plt.ylabel('RR_n+1 (s)', fontsize=15)
     plt.xlim(min(rri) - 10, max(rri) + 10)
     plt.ylim(min(rri) - 10, max(rri) + 10)
-    ax.scatter(ax1, ax2, c='b', s=2)
-    
+    ax.scatter(ax1, ax2, c='b', s=4)
+
     # Ellipse plot feature
     ellipse = Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2 + 1,
                       height=2 * sd1 + 1, angle=45, linewidth=2,
@@ -226,7 +228,7 @@ def _ecg_hrv_plot(rri, ecg_period):
     ax.add_patch(ellipse)
     ellipse = Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2,
                       height=2 * sd1, angle=45)
-    ellipse.set_alpha(0.05)
+    ellipse.set_alpha(0.02)
     ellipse.set_facecolor("blue")
     ax.add_patch(ellipse)
 
@@ -235,7 +237,7 @@ def _ecg_hrv_plot(rri, ecg_period):
                          linewidth=3, ec='r', fc="r", label="SD1")
     sd2_arrow = ax.arrow(mean_rri, mean_rri, sd2 * np.sqrt(2) / 2, sd2 * np.sqrt(2) / 2,
                          linewidth=3, ec='y', fc="y", label="SD2")
-    
+
     plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
-    
+
     return fig

@@ -127,7 +127,7 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
     out = {}
     out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = power
     return out
-#
+
 #def _signal_power_continuous_plot(signal, frequency_band, sampling_rate=1000):
 #    if frequency_band=
 #
