@@ -69,12 +69,6 @@ As Neurokit2 does not have a Graphical User Interface (GUI), the user will need 
 
 The package comprises of multiple modules: ecg, rsp, eda, emg, ppg, signal, eeg, epochs, events, complexity, bio, misc and stats.
 
-
-**DO you want to go into details here?**
-The ecg, rsp, eda, and emg modules encompass mid-level functions for simulating an artificial signal, cleaning, finding peaks (and fixing wrongly detected peaks), rate extraction, and plotting. Other mid-level functions specific to the signal also exist, such as delineating the QRS complex of an ECG signal and onset detection in EMG signal. They also comprise of high-level functions meant to implement a default processing pipeline as well as to perform event-related analysis on epochs of the signal. 
-
-**OR**
-
 The ecg, rsp, eda, and emg modules are tailored to the processing and analysis of the respective signals. They encompass mid-level functions and each performs a specific part of the processing pipeline such as *cleaning* to increase the signal-to-noise ratio, *extraction of information* to better quantify the signal, *plotting* to visualize the extracted features on the signal, and *extraction of features* for event-related analysis on epochs of signal or period-related analysis for signal with longer duration. Generally, users can start writing their processing scripts by calling the mid-level functions one-by-one, according to the order of steps that they have in their processing pipelines. And if users do not have a specific pipeline in mind, Neurokit2 provides a single high-level function in each module called **_process** to perform every step in one command line, following the Neurokit2 default pipeline. 
 
 Besides the signal-specific modules, there are modules with functions that also perform specific steps in the processing pipeline but are non-specific to any type of signal. Such as *events* to support incorporation and visualization of event markers in the signal or *epochs* to chunk signals into event-related segments. 

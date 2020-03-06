@@ -227,7 +227,7 @@ def test_ecg_findpeaks():
 
     # Test christov2004 method
     info_christov = nk.ecg_findpeaks(ecg_cleaned, method="christov2004")
-    assert info_christov["ECG_R_Peaks"].size == 288
+    assert info_christov["ECG_R_Peaks"].size == 273
 
     # Test gamboa2008 method
     info_gamboa = nk.ecg_findpeaks(ecg_cleaned, method="gamboa2008")
