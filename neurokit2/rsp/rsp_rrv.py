@@ -92,7 +92,7 @@ def rsp_rrv(rsp_rate, peaks, sampling_rate=1000, show=False):
     rrv = pd.DataFrame.from_dict(rrv, orient='index').T.add_prefix("RRV_")
 
     if show:
-        _ecg_hrv_plot(bbi, rsp_period)
+        _rsp_rrv_plot(bbi, rsp_period)
 
     return rrv
 
@@ -109,7 +109,7 @@ def _rsp_rrv_time(bbi):
     # Mean based
     out["SDBB"] = np.std(bbi, ddof=1)
     out["RMSSD"] = np.sqrt(np.mean(diff_bbi ** 2))
-    out["SDSD"] = np.std(diff_rri, ddof=1)
+    out["SDSD"] = np.std(diff_bbi, ddof=1)
 #    out["MeanNN"] = np.mean(rri)
 #    out["CVNN"] = out["SDNN"] / out["MeanNN"]
 #    out["CVSD"] = out["RMSSD"] / out["MeanNN"]
@@ -158,7 +158,6 @@ def _rsp_rrv_frequency(rsp_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04
 
 
 
-
 def _rsp_rrv_nonlinear(bbi, rsp_period):
     diff_bbi = np.diff(bbi)
     out = {}
@@ -178,12 +177,10 @@ def _rsp_rrv_nonlinear(bbi, rsp_period):
     # Entropy
     out["ApEn"] = entropy_approximate(bbi, order=2)
     out["SampEn"] = entropy_sample(bbi, order=2, r=0.2*np.std(bbi, ddof=1))
-    out["RenEn"] =
+#    out["RenEn"] =
 
     # DFA
-    out["Detrended"] = sqrt(((np.sum(bbi - np.mean(bbi))) - (np.sum(bbi - np.mean(bbi)))) ** 2 / len(bbi))
-
-    #
+#    out["Detrended"] = sqrt(((np.sum(bbi - np.mean(bbi))) - (np.sum(bbi - np.mean(bbi)))) ** 2 / len(bbi))
 
     return out
 
@@ -207,7 +204,7 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
                 raise ValueError("NeuroKit error: _rsp_rrv_formatinput(): Wrong input,"
                                  "we couldn't extract rsp_rate and peaks indices.")
             else:
-                rsp_rate = nk.rsp_rate(peaks, sampling_rate=sampling_rate, desired_length=len(df))
+                rsp_rate = nk_rsp_rate(peaks, sampling_rate=sampling_rate, desired_length=len(df))
         else:
             rsp_rate = df[cols[0]].values
 
@@ -240,8 +237,8 @@ def _rsp_rrv_plot(bbi, rsp_period):
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111)
     plt.title("Poincaré Plot", fontsize=20)
-    plt.xlabel('RR_n (s)', fontsize=15)
-    plt.ylabel('RR_n+1 (s)', fontsize=15)
+    plt.xlabel('BB_n (s)', fontsize=15)
+    plt.ylabel('BB_n+1 (s)', fontsize=15)
     plt.xlim(min(bbi) - 10, max(bbi) + 10)
     plt.ylim(min(bbi) - 10, max(bbi) + 10)
     ax.scatter(ax1, ax2, c='b', s=4)
