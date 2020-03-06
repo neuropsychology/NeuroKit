@@ -180,6 +180,10 @@ def _rsp_rrv_nonlinear(bbi, rsp_period):
 #    out["RenEn"] =
 
     # DFA
+ #   dfa_1 = np.sum(bbi - np.mean(bbi))
+
+
+#    out["Detrended"] = sqrt( / len(bbi))
 #    out["Detrended"] = sqrt(((np.sum(bbi - np.mean(bbi))) - (np.sum(bbi - np.mean(bbi)))) ** 2 / len(bbi))
 
     return out
