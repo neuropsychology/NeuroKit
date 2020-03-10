@@ -117,3 +117,40 @@ def emg_activation(emg_amplitude, threshold='default'):
     activity_signal = pd.concat([df_activity, df_onsets, df_offsets], axis=1)
 
     return activity_signal, info
+
+
+
+
+
+
+
+
+
+#def _emg_activation_powerbased(emg_cleaned, sampling_rate=1000, threshold=0.75):
+#    """
+#    >>> emg_cleaned = nk.emg_simulate(duration=20, n_bursts=3)
+#    >>> binarized_energy, info = _emg_activation_powerbased(emg_cleaned)
+#    >>> nk.signal_plot([emg_cleaned, binarized_energy], standardize=True)
+#    >>> nk.events_plot(info["EMG_Onsets"], emg_cleaned)
+#    >>> nk.events_plot(info["EMG_Onsets"], energy.values)
+#    """
+#
+#    # Preprocessing
+#    signal = np.abs(emg_cleaned)  # getting absolute value of the EMG channel
+#
+#    # Parameters
+#    window = np.int(0.5 * sampling_rate)  # related to the duration of a movement
+##    step = 100  # equivalent to resolution
+#
+#    # rolling window
+#    energy = pd.Series(signal).rolling(window, win_type='boxcar').sum()  # [::step]
+#
+#    # Get onsets
+#    binarized_energy = nk.signal_binarize(energy.fillna(0), threshold=energy.quantile(threshold))
+#    activations = nk.events_find(binarized_energy, duration_min=window)
+#
+#    # Prepare Output.
+#    info = {"EMG_Onsets": activations["onset"],
+#            "EMG_Offsets": activations["onset"] + activations["duration"]}
+#
+#    return binarized_energy, info
