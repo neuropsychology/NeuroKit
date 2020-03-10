@@ -66,14 +66,10 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> ecg = nk.ecg_simulate(duration=240, noise=0.1)
+    >>> ecg = nk.ecg_simulate(duration=240)
     >>> ecg, info = nk.ecg_process(ecg)
     >>> hrv = nk.ecg_hrv(ecg, show=True)
     >>> hrv
-    >>>
-    >>> rpeaks = nk.ecg_findpeaks(ecg)
-    >>> ecg_rate = nk.ecg_rate(rpeaks)
-    >>>
 
     References
     ----------

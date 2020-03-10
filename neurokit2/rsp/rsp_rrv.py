@@ -11,7 +11,7 @@ from ..complexity import entropy_sample
 from ..complexity import entropy_approximate
 
 
-def rsp_rrv(rsp_rate, peaks, sampling_rate=1000, show=False):
+def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     """Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
 
     Parameters
@@ -56,16 +56,10 @@ def rsp_rrv(rsp_rate, peaks, sampling_rate=1000, show=False):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = nk.rsp_simulate(duration=240)
-    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> info, peak_signal = nk.rsp_peaks(cleaned)
-    >>> peaks = peak_signal["RSP_Peaks"]
-    >>> rsp_rate = nk.rsp_rate(peak_signal, desired_length=len(rsp))
-    >>>
+    >>> rsp = nk.rsp_simulate(duration=360)
     >>> rsp, info = nk.rsp_process(rsp)
     >>> rrv = nk.rsp_rrv(rsp, show=True)
     >>> rrv
-    >>>
     >>>
 
     References
