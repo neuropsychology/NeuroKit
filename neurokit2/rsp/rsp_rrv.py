@@ -137,9 +137,9 @@ def _rsp_rrv_time(bbi):
 
 
 
-def _rsp_rrv_frequency(rsp_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5), method="welch"):
-    power = signal_power(rsp_period, frequency_band=[ulf, vlf, lf, hf, vhf], sampling_rate=1000, method=method, max_frequency=0.5)
-    power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
+def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), method="welch"):
+    power = signal_power(rsp_period, frequency_band=[vlf, lf, hf], sampling_rate=1000, method=method, max_frequency=0.5)
+    power.columns = ["VLF", "LF", "HF"]
     out = power.to_dict(orient="index")[0]
 
     # Normalized
