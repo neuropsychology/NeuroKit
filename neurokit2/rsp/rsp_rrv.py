@@ -36,14 +36,12 @@ def rsp_rrv(rsp_rate, peaks, sampling_rate=1000, show=False):
             - "*RRV_SDSD*": the standard deviation of the successive differences between adjacent breath-to-breath intervals.
             - "*RRV_BBx*": the number of successive interval differences that are greater than x seconds.
             - "*RRV-pBBx*": the proportion of breath-to-breath intervals that are greater than x seconds, out of the total number of intervals.
-            - "*RRV_ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz by default.
-            - "*RRV_VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz by default.
+            - "*RRV_VLF*": spectral power density pertaining to very low frequency band i.e., 0 to .04 Hz by default.
             - "*RRV_LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
             - "*RRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
-            - "*RRV_VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
             - "*RRV_LFHF*": the ratio of low frequency power to high frequency power.
-            - "*RRV_nLF*": the normalized low frequency, obtained by dividing the low frequency power by the difference between total power and very low frequency power.
-            - "*RRV_nHF*": the normalized high frequency, obtained by dividing the low frequency power by the difference between total power and very low frequency power.
+            - "*RRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
+            - "*RRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by total power.
             - "*RRV_SD1*": SD1 is a measure of the spread of breath-to-breath intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term variability.
             - "*RRV_SD2*": SD2 is a measure of the spread of breath-to-breath intervals on the Poincaré plot along the line of identity. It is an index of long-term variability.
             - "*RRV_SD2SD1*": the ratio between short and long term fluctuations of the breath-to-breath intervals (SD2 divided by SD1).
@@ -145,14 +143,9 @@ def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4
     # Normalized
     total_power = np.sum(power.values)
     out["LFHF"] = out["LF"] / out["HF"]
-    out["nLF"] = out["LF"] / (total_power - out["VLF"])
-    out["nHF"] = out["HF"] / (total_power - out["VLF"])
+    out["LFn"] = out["LF"] / total_power
+    out["HFn"] = out["HF"] / total_power
 
-#    total_power = out["ULF"] + out["VLF"] + out["LF"] + out["HF"] + out["VHF"]
-#    out["LFHF"] = out["LF"] / out["HF"]
-#    out["LFn"] = out["LF"] / total_power
-#    out["HFn"] = out["HF"] / total_power
-#    out["LnHF"] = np.log(out["HF"])
     return out
 
 

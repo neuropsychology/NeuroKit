@@ -48,8 +48,8 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
             - "*HRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
             - "*HRV_VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
             - "*HRV_LFHF*": the ratio of low frequency power to high frequency power.
-            - "*HRV_nLF*": the normalized low frequency, obtained by dividing the low frequency power by the difference between total power and very low frequency power.
-            - "*HRV_nHF*": the normalized high frequency, obtained by dividing the low frequency power by the difference between total power and very low frequency power.
+            - "*HRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
+            - "*HRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
             - "*HRV_SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term RR interval fluctuations i.e., beat-to-beat variability.
             - "*HRV_SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line of identity. It is an index of long-term RR interval fluctuations.
             - "*HRV_SD2SD1*": the ratio between short and long term fluctuations of the RR intervals (SD2 divided by SD1).
@@ -150,14 +150,11 @@ def _ecg_hrv_frequency(ecg_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04
     # Normalized
     total_power = np.sum(power.values)
     out["LFHF"] = out["LF"] / out["HF"]
-    out["nLF"] = out["LF"] / (total_power - out["VLF"])
-    out["nHF"] = out["HF"] / (total_power - out["VLF"])
+    out["LFn"] = out["LF"] / total_power
+    out["HFn"] = out["HF"] / total_power
 
-#    total_power = out["ULF"] + out["VLF"] + out["LF"] + out["HF"] + out["VHF"]
-#    out["LFHF"] = out["LF"] / out["HF"]
-#    out["LFn"] = out["LF"] / total_power
-#    out["HFn"] = out["HF"] / total_power
-#    out["LnHF"] = np.log(out["HF"])
+    # Log
+    out["LnHF"] = np.log(out["HF"])
     return out
 
 
