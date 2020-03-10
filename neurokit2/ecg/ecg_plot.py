@@ -86,7 +86,9 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     if sampling_rate is not None:
         ax2.set_title("Individual Heart Beats")
 
+        heart_rate = np.mean(ecg_signals["ECG_Rate"])
         heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"],
+                                          heart_rate=heart_rate,
                                           peaks=peaks,
                                           sampling_rate=sampling_rate)
 
@@ -110,10 +112,14 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 # =============================================================================
 # Internals
 # =============================================================================
-def _ecg_plot_heartbeats(ecg, peaks, sampling_rate=None):
+def _ecg_plot_heartbeats(ecg, heart_rate, peaks, sampling_rate=None):
     # Extract heart beats
-    heartbeats = epochs_create(ecg, events=peaks, epochs_start=-0.35,
-                               epochs_end=0.55, sampling_rate=sampling_rate)
+#    m = 1 - (0.0125 * heart_rate)
+    m = heart_rate/80
+    heartbeats = epochs_create(ecg, events=peaks,
+                                  epochs_start=-0.3/m,
+                                  epochs_end=0.5/m,
+                                  sampling_rate=sampling_rate)
     heartbeats = epochs_to_df(heartbeats)
 
     return heartbeats
