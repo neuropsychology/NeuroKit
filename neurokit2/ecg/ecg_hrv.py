@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Ellipse
+import matplotlib.patches
 
 from .ecg_rate import ecg_rate as nk_ecg_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
@@ -240,12 +240,12 @@ def _ecg_hrv_plot(rri, ecg_period):
     ax.scatter(ax1, ax2, c='b', s=4)
 
     # Ellipse plot feature
-    ellipse = Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2 + 1,
-                      height=2 * sd1 + 1, angle=45, linewidth=2,
-                      fill=False)
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2 + 1,
+                                         height=2 * sd1 + 1, angle=45, linewidth=2,
+                                         fill=False)
     ax.add_patch(ellipse)
-    ellipse = Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2,
-                      height=2 * sd1, angle=45)
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2,
+                                         height=2 * sd1, angle=45)
     ellipse.set_alpha(0.02)
     ellipse.set_facecolor("blue")
     ax.add_patch(ellipse)
