@@ -120,6 +120,11 @@ def _eventrelated_addinfo(epoch, output={}):
     if "Condition" in epoch.columns:
         if len(set(epoch["Condition"])) == 1:
             output["Condition"] = epoch["Condition"].values[0]
+
+    # Add participant_id
+    if "Participant" in epoch.columns:
+        if len(set(epoch["Participant"])) == 1:
+            output["Participant"] = epoch["Participant"].values[0]
     return output
 
 

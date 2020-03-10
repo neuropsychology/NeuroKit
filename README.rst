@@ -23,7 +23,7 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This is a work in progress project meant as a continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community of people** around this collaborative project. If you're interested by getting involved, do `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_
+This is a work-in-progress project continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community** around this collaborative project. If you're interested in getting involved, `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_
 
 
 Installation
@@ -38,7 +38,7 @@ To install NeuroKit2, run this command in your terminal:
 Contribution
 ============
 
-NeuroKit2 is meant to be a all-level-friendly collaborative project. Additionally, it tries to credit all contributors, so that your involvement pays off on your CV. Thus, if you have some ideas for **improvement**, **new features**, or just wanna **learn Python** and do something useful at the same time, do not hesitate and check-out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
+NeuroKit2 is a collaborative project for contributors with all levels of development expertise. Additionally, we credit all contributors, so that your involvement pays off on your CV. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
 
 
 Documentation
@@ -178,7 +178,7 @@ Electromyography (EMG)
 PPG, BVP, EGG, ...
 -------------------
 
-Consider `helping us developing it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
+Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
 
 Design
@@ -187,7 +187,7 @@ Design
 *NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
 
 - **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
-- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
+- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
 - **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
 
 Citation
@@ -207,7 +207,7 @@ You can run:
 
 You can cite NeuroKit as follows:
 
-    - Makowski, D., Pham, T., L Juen, Z., Brammer, J., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved February 24, 2020, from https://github.com/neuropsychology/NeuroKit
+    - Makowski, D., Pham, T., L Juen, Z., Brammer, J. C., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved February 24, 2020, from https://github.com/neuropsychology/NeuroKit
 
 
     Full bibtex reference is the following:
@@ -225,7 +225,7 @@ You can cite NeuroKit as follows:
 Alternatives
 ============
 
-Here's a list of great alternative packages that you should check-out:
+Here's a list of great alternative packages that you should check out:
 
 
 General

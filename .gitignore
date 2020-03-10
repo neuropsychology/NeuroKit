@@ -106,4 +106,7 @@ try_stuff.py
 try-stuff.py
 trystuff.py
 try.py
+
+# emacs temp file
+*~
 data/eeg_restingstate_3000hz.edf

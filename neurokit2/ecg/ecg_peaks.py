@@ -67,7 +67,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
     if correct_artifacts:
         _, rpeaks = ecg_fixpeaks(rpeaks,
                                  sampling_rate=sampling_rate,
-                                 recursive=True)
+                                 iterative=True)
 
     instant_peaks = signal_formatpeaks(rpeaks,
                                        desired_length=len(ecg_cleaned),

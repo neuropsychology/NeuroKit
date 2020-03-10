@@ -19,6 +19,8 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, *
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     continuous : bool
         Compute instant frequency, or continuous power.
+    show : bool
+        If True, will return a Poincaré plot. Defaults to False.
     **kwargs
         Keyword arguments to be passed to `signal_psd()`.
 
@@ -125,3 +127,10 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
     out = {}
     out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = power
     return out
+
+# def _signal_power_continuous_plot(signal, frequency_band, sampling_rate=1000):
+    # if frequency_band=
+
+    # frequency_band=[(0.12, 0.15), (0.15, 0.4)],
+
+    # ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5)

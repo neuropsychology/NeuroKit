@@ -54,24 +54,35 @@ library("kableExtra")
 
 The field of cognitive neuroscience and psychology is increasingly relying on neurophysiological methods often used in conjunction with software tools for processing large data sets. This is because such an approach offers low monetary cost and high user convenience in the background of the field's progressive growth of better algorithms and computational methods. However, as these methods are often not easily accessible and user-friendly, neurophysiological processing remains a challenge for researchers without formal programming training.
 
-## Overview of the Neurokit2 Project
-
 To address the current gaps, NeuroKit2 is a free, open-source Python package written by neuroscientists and psychologists for neuroscientists and psychologists. It developed from a collaborative environment that continues to welcome contributors from different allied fields - till its present state, continual improvements to code functionality and flexibility are ongoing. Its implementation has been thoroughly tested in the existing reference software and it is well-documented with tutorials and examples. More importantly, the toolbox was designed to provide a consistent yet powerful and flexible API. It offers clear code organization across different signals (e.g., electrocardiogram (ECG), respiration (RSP), electrodermal activity (EDA), electromyography (EMG)) for different processing purposes. On one hand, it comprises of high-level functions that streamlines and incorporates all stages of signal processing, and on the other hand, mid-level functions (e.g., for cleaning data, extracting signal rate etc.) can be modified easily for user preference. Advanced users will find this useful for implementing their own algorithms and building their own custom analysis pipeline, giving them more parametric control. Hence, Neurokit2 is made accessible and reliable for users of various programming levels.
 
-In this paper, we will provide an overview of the Neurokit2 Toolbox, its code organization and its various features.
+In this paper, we will provide an overview of the Neurokit2 package, its code organization and its various features.
 
 
+# Materials and methods
 
+## Organization of the package
 
-# Software Description
+Neurokit2 was developed using Python drawing on well-established existing libraries such as **Numpy**, **Pandas**, **SciPy**, **MatplotLib** etc. As stated above, one of primary goal of the package is to provide easy-to-use functions, catering to programming novices, but at the same time allowing maximal flexibility for advanced users. 
 
-Neurokit2 was developed using Python drawing on well-established existing libraries such as **Numpy**, **Pandas**, **SciPy**, **MatplotLib** etc. The toolbox comprises of multiple modules: ecg, rsp, eda, emg, ppg, signal, eeg, epochs, events, complexity, bio, misc and stats.
+As Neurokit2 does not have a Graphical User Interface (GUI), the user will need to have some basic knowledge of Python in order to start. However, to assist beginners, Neurokit2 comes with very detailed tutorials and examples that could ease the initial integration, including guides to download and install Python and examples to write command lines and scripts. One does not have to know *"coding"* to use Neurokit. 
 
-The ecg, rsp, eda, and emg modules encompass mid-level functions for simulating an artificial signal, cleaning, finding peaks (and fixing wrongly detected peaks), rate extraction, and plotting. Other mid-level functions specific to the signal also exist, such as delineating the QRS complex of an ECG signal and onset detection in EMG signal. They also comprise of high-level functions meant to implement a default processing pipeline as well as to perform event-related analysis on epochs of the signal. 
+The package comprises of multiple modules: ecg, rsp, eda, emg, ppg, signal, eeg, epochs, events, complexity, bio, misc and stats.
 
+The ecg, rsp, eda, and emg modules are tailored to the processing and analysis of the respective signals. They encompass mid-level functions and each performs a specific part of the processing pipeline such as *cleaning* to increase the signal-to-noise ratio, *extraction of information* to better quantify the signal, *plotting* to visualize the extracted features on the signal, and *extraction of features* for event-related analysis on epochs of signal or period-related analysis for signal with longer duration. Generally, users can start writing their processing scripts by calling the mid-level functions one-by-one, according to the order of steps that they have in their processing pipelines. And if users do not have a specific pipeline in mind, Neurokit2 provides a single high-level function in each module called **_process** to perform every step in one command line, following the Neurokit2 default pipeline. 
+
+Besides the signal-specific modules, there are modules with functions that also perform specific steps in the processing pipeline but are non-specific to any type of signal. Such as *events* to support incorporation and visualization of event markers in the signal or *epochs* to chunk signals into event-related segments. 
+
+Usually not as user-friendly as the aforementioned modules, there are modules with low-level functions, such as signal, complexity, misc and stats, that support the implementation of core functionality in other modules. Unless the users wish to, they do not need to call these low-level functions into the processing scripts. 
+
+Last but not least, there is a high-level function in the bio module that allows processing of all types of signals at once. As powerful as it might sound, this function basically combines the high-level function of each signal type into one script, allowing users who do not wish to stray from Neurokit2 default processing pipeline to perform all steps in one command line. 
+ 
+## Description of Neurokit2 functions
+
+One of the strengths of this package is its consistency. For each type of signals (ECG, RSP, EDA, EMG...), the same function names, in the form **signaltype_functiongoal()**, can be called to achieve equivalent goal. Therefore, in each signal-specific module, users can expect to find functions with similar names such as **signaltype_clean()**, **signaltype_findpeaks()**, **signaltype_plot()** or **signaltype_process()**. Following, we will elaborate on the functions that are signal-specific but designed to perform the same processing task in the pipeline. 
 
 ```{r table, echo=FALSE}
-ecg = c("ecg_clean()", "ecg_delineator()", "ecg_eventrelated()", "ecg_findpeaks()", "ecg_findpeaks()", "ecg_fixpeaks()", "ecg_peaks()", "ecg_plot()", "ecg_process()", "ecg_rate()", "ecg_rate()", "ecg_rsp()", "ecg_simulate()")
+ecg = c("ecg_clean()", "ecg_delineate()", "ecg_eventrelated()", "ecg_findpeaks()", "ecg_findpeaks()", "ecg_fixpeaks()", "ecg_peaks()", "ecg_plot()", "ecg_process()", "ecg_rate()", "ecg_rate()", "ecg_rsp()", "ecg_simulate()")
 events = c("events_find()", "events_plot()", "events_to_mne()")
 write.csv(table, "figures/table.csv", row.names = FALSE)
 ```

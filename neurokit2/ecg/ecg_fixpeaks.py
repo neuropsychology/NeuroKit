@@ -6,7 +6,7 @@ import scipy.signal
 import scipy.stats
 
 
-def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
+def ecg_fixpeaks(rpeaks, sampling_rate=1000, iterative=True, show=False):
     """Correct R-peaks location based on their interval (RRi).
 
     Identify erroneous inter-beat-intervals. Lipponen & Tarvainen (2019).
@@ -19,8 +19,8 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
     sampling_rate : int
         The sampling frequency of the signal that contains the peaks (in Hz,
         i.e., samples/second).
-    recursive : bool
-        Whether or not to apply the artifact correction recursively (results
+    iterative : bool
+        Whether or not to apply the artifact correction repeatedly (results
         in superior artifact correction).
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
@@ -44,7 +44,7 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
     >>>                       random_state=41)
     >>> rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
     >>> artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks_uncorrected,
-    >>>                                               recursive=True,
+    >>>                                               iterative=True,
     >>>                                               show=True)
     >>> rate_corrected = nk.ecg_rate(rpeaks_uncorrected,
     >>>                              desired_length=len(ecg))
@@ -69,8 +69,8 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
     rpeaks_corrected = _fix_artifacts_lipponen2019(rpeaks, artifacts,
                                                    sampling_rate)
 
-    if recursive:
-        # Recursively apply the artifact correction until the number of
+    if iterative:
+        # Iteratively apply the artifact correction until the number of
         # artifact reaches an equilibrium (i.e., the number of artifacts
         # does not change anymore from one iteration to the next)
         n_artifacts_previous = np.inf
@@ -114,11 +114,11 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
     rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
     # For subsequent analysis it is important that the first element has
     # a value in a realistic range (e.g., for median filtering).
-    rr[0] = np.mean(rr)
+    rr[0] = np.mean(rr[1:])
 
     # Compute differences of consecutive periods.
     drrs = np.ediff1d(rr, to_begin=0)
-    drrs[0] = np.mean(drrs)
+    drrs[0] = np.mean(drrs[1:])
     # Normalize by threshold.
     drrs, _ = _threshold_normalization(drrs, alpha, window_half)
 
@@ -178,12 +178,14 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
 
         # If none of the two equations is true.
         # Based on Figure 2b.
-        if np.logical_or(np.abs(drrs[i]) > 1, np.abs(mrrs[i]) > 3):
-            # Long beat.
-            eq3 = np.logical_and(drrs[i] > 1, s22[i] < -1)
-            eq4 = np.abs(mrrs[i]) > 3
-            # Short beat.
-            eq5 = np.logical_and(drrs[i] < -1, s22[i] > 1)
+        if ~np.any([np.abs(drrs[i]) > 1, np.abs(mrrs[i]) > 3]):
+            continue
+
+        # Long beat.
+        eq3 = np.logical_and(drrs[i] > 1, s22[i] < -1)
+        eq4 = np.abs(mrrs[i]) > 3
+        # Short beat.
+        eq5 = np.logical_and(drrs[i] < -1, s22[i] > 1)
 
         if ~np.any([eq3, eq4, eq5]):
             # If none of the three equations is true: normal beat.
@@ -242,8 +244,12 @@ def _fix_artifacts_lipponen2019(rpeaks, artifacts, sampling_rate):
     # Add missing peaks.
     if missed_idcs:
         # Calculate the position(s) of new beat(s). Make sure to not generate
-        # negative indices.
-        prev_rpeaks = rpeaks[[i - 1 for i in missed_idcs if i >= 1]]
+        # negative indices. prev_peaks and next_peaks must have the same
+        # number of elements.
+        missed_idcs = np.array(missed_idcs)
+        valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(rpeaks))
+        missed_idcs = missed_idcs[valid_idcs]
+        prev_rpeaks = rpeaks[[i - 1 for i in missed_idcs]]
         next_rpeaks = rpeaks[missed_idcs]
         added_rpeaks = prev_rpeaks + (next_rpeaks - prev_rpeaks) / 2
         # Add the new peaks before the missed indices (see numpy docs).
@@ -259,8 +265,13 @@ def _fix_artifacts_lipponen2019(rpeaks, artifacts, sampling_rate):
         interp_idcs.sort(kind='mergesort')
         # Make sure to not generate negative indices, or indices that exceed
         # the total number of peaks.
-        prev_rpeaks = rpeaks[[i - 1 for i in interp_idcs if i >= 1]]
-        next_rpeaks = rpeaks[[i + 1 for i in interp_idcs if i < len(rpeaks)]]
+        # Make sure to not generate negative indices, or indices that exceed
+        # the total number of peaks. prev_peaks and next_peaks must have the
+        # same number of elements.
+        valid_idcs = np.logical_and(interp_idcs > 1, interp_idcs < len(rpeaks))
+        interp_idcs = interp_idcs[valid_idcs]
+        prev_rpeaks = rpeaks[[i - 1 for i in interp_idcs]]
+        next_rpeaks = rpeaks[[i + 1 for i in interp_idcs]]
         rpeaks_interp = prev_rpeaks + (next_rpeaks - prev_rpeaks) / 2
         # Shift the R-peaks from the old to the new position.
         rpeaks = np.delete(rpeaks, interp_idcs)

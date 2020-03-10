@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.patches
 
 from .ecg_rate import ecg_rate as nk_ecg_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
@@ -8,15 +10,65 @@ from ..stats import mad
 from ..complexity import entropy_sample
 
 
-def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000):
-    """
+def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
+    """ Computes time domain and frequency domain features for Heart Rate Variability (HRV) analysis.
+
+    Parameters
+    ----------
+    ecg_rate : array
+        Array containing the heart rate, produced by `ecg_rate()`.
+    rpeaks : dict
+        The samples at which the R-peaks occur. Dict returned by
+        `ecg_peaks()`. Defaults to None.
+    sampling_rate : int
+        The sampling frequency of the signal (in Hz, i.e., samples/second).
+    show : bool
+        If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the next successive one. The ellipse centers around the average RR interval. Defaults to False.
+
+    Returns
+    -------
+    DataFrame
+        DataFrame consisting of the computed HRV metrics, which includes:
+            - "*HRV_RMSSD*": the square root of the mean of the sum of successive differences between adjacent RR intervals.
+            - "*HRV_MeanNN*": the mean of the RR intervals.
+            - "*HRV_SDNN*": the standard deviation of the RR intervals.
+            - "*HRV_SDSD*": the standard deviation of the successive differences between RR intervals.
+            - "*HRV_CVNN*": the standard deviation of the RR intervals (SDNN) divided by the mean of the RR intervals (MeanNN).
+            - "*HRV_CVSD*": the root mean square of the sum of successive differences (RMSSD) divided by the mean of the RR intervals (MeanNN).
+            - "*HRV_MedianNN*": the median of the absolute values of the successive differences between RR intervals.
+            - "*HRV_MadNN*": the median absolute deviation of the RR intervals.
+            - "*HCVNN*": the median absolute deviation of the RR intervals (MadNN) divided by the median of the absolute differences of their successive differences (MedianNN).
+            - "*pNN50*": the proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
+            - "*pNN20*": the proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
+            - "*HRV_TINN*": a geometrical parameter of the HRV, or more specifically, the baseline width of the RR intervals distribution obtained by triangular interpolation, where the error of least squares determines the triangle. It is an approximation of the RR interval distribution.
+            - "*HRV_HTI*": the HRV triangular index, measuring the total number of RR intervals divded by the height of the RR intervals histogram.
+            - "*HRV_ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz by default.
+            - "*HRV_VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz by default.
+            - "*HRV_LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
+            - "*HRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
+            - "*HRV_VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
+            - "*HRV_LFHF*": the ratio of low frequency power to high frequency power.
+            - "*HRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
+            - "*HRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
+            - "*HRV_SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term RR interval fluctuations i.e., beat-to-beat variability.
+            - "*HRV_SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line of identity. It is an index of long-term RR interval fluctuations.
+            - "*HRV_SD2SD1*": the ratio between short and long term fluctuations of the RR intervals (SD2 divided by SD1).
+            - "*HRV_CSI*": the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability of the Poincaré plot by its transverse variability.
+            - "*HRV_CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and transverse variability.
+            - "*HRV_CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal variability by its transverse variability. Usually used in seizure research.
+            - "*HRV_SampEn*": the sample entropy measure of HRV, calculated by `entropy_sample()`.
+
+    See Also
+    --------
+    ecg_rate, ecg_peak, signal_power, entropy_sample
+
     Examples
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> ecg = nk.ecg_simulate(duration=120)
+    >>> ecg = nk.ecg_simulate(duration=240)
     >>> ecg, info = nk.ecg_process(ecg)
-    >>> hrv = nk.ecg_hrv(ecg)
+    >>> hrv = nk.ecg_hrv(ecg, show=True)
     >>> hrv
 
     References
@@ -38,6 +90,10 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000):
     hrv.update(_ecg_hrv_nonlinear(rri, ecg_period))
 
     hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
+
+    if show:
+        _ecg_hrv_plot(rri, ecg_period)
+
     return hrv
 
 
@@ -87,11 +143,14 @@ def _ecg_hrv_frequency(ecg_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
     out = power.to_dict(orient="index")[0]
 
-#    total_power = out["ULF"] + out["VLF"] + out["LF"] + out["HF"] + out["VHF"]
-#    out["LFHF"] = out["LF"] / out["HF"]
-#    out["LFn"] = out["LF"] / total_power
-#    out["HFn"] = out["HF"] / total_power
-#    out["LnHF"] = np.log(out["HF"])
+    # Normalized
+    total_power = np.sum(power.values)
+    out["LFHF"] = out["LF"] / out["HF"]
+    out["LFn"] = out["LF"] / total_power
+    out["HFn"] = out["HF"] / total_power
+
+    # Log
+    out["LnHF"] = np.log(out["HF"])
     return out
 
 
@@ -153,3 +212,46 @@ def _ecg_hrv_formatinput(ecg_rate, rpeaks=None, sampling_rate=1000):
         rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
 
     return ecg_rate, rpeaks
+
+
+def _ecg_hrv_plot(rri, ecg_period):
+    # Axes
+    ax1 = rri[:-1]
+    ax2 = rri[1:]
+
+    # Compute features
+    poincare_features = _ecg_hrv_nonlinear(rri, ecg_period)
+    sd1 = poincare_features["SD1"]
+    sd2 = poincare_features["SD2"]
+    mean_rri = np.mean(rri)
+
+    # Plot
+    fig = plt.figure(figsize=(12, 12))
+    ax = fig.add_subplot(111)
+    plt.title("Poincaré Plot", fontsize=20)
+    plt.xlabel('RR_n (s)', fontsize=15)
+    plt.ylabel('RR_n+1 (s)', fontsize=15)
+    plt.xlim(min(rri) - 10, max(rri) + 10)
+    plt.ylim(min(rri) - 10, max(rri) + 10)
+    ax.scatter(ax1, ax2, c='b', s=4)
+
+    # Ellipse plot feature
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2 + 1,
+                                         height=2 * sd1 + 1, angle=45, linewidth=2,
+                                         fill=False)
+    ax.add_patch(ellipse)
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2,
+                                         height=2 * sd1, angle=45)
+    ellipse.set_alpha(0.02)
+    ellipse.set_facecolor("blue")
+    ax.add_patch(ellipse)
+
+    # Arrow plot feature
+    sd1_arrow = ax.arrow(mean_rri, mean_rri, -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
+                         linewidth=3, ec='r', fc="r", label="SD1")
+    sd2_arrow = ax.arrow(mean_rri, mean_rri, sd2 * np.sqrt(2) / 2, sd2 * np.sqrt(2) / 2,
+                         linewidth=3, ec='y', fc="y", label="SD2")
+
+    plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
+
+    return fig
