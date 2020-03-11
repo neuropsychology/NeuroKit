@@ -47,6 +47,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
             - "*RRV_SD2SD1*": the ratio between short and long term fluctuations of the breath-to-breath intervals (SD2 divided by SD1).
             - "*RRV_ApEn*": the approximate entropy of RRV, calculated by `entropy_approximate()`.
             - "*RRV_SampEn*": the sample entropy of RRV, calculated by `entropy_sample()`.
+            - "*RRV_DFA*": the fluctuation value generated from Detrended Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath intervals.
 
     See Also
     --------
@@ -56,10 +57,12 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> rsp = nk.rsp_simulate(duration=360)
-    >>> rsp, info = nk.rsp_process(rsp)
-    >>> rrv = nk.rsp_rrv(rsp, show=True)
-    >>> rrv
+    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+    >>> info, peaks = nk.rsp_peaks(cleaned)
+    >>>
+    >>> rsp_rate = nk.rsp_rate(peaks, desired_length=len(rsp))
+    >>> rrv = nk.rsp_rrv(rsp_rate, peaks, sampling_rate=1000, show=True)
     >>>
 
     References
@@ -80,6 +83,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     rrv.update(_rsp_rrv_time(bbi))
     rrv.update(_rsp_rrv_frequency(rsp_period))
     rrv.update(_rsp_rrv_nonlinear(bbi, rsp_period))
+    rrv.update(_rsp_rrv_dfa(bbi))
 
     rrv = pd.DataFrame.from_dict(rrv, orient='index').T.add_prefix("RRV_")
 
@@ -164,17 +168,35 @@ def _rsp_rrv_nonlinear(bbi, rsp_period):
     # Entropy
     out["ApEn"] = entropy_approximate(bbi, order=2)
     out["SampEn"] = entropy_sample(bbi, order=2, r=0.2*np.std(bbi, ddof=1))
-#    out["RenEn"] =
-
-    # DFA
-    # dfa_1 = np.sum(bbi - np.mean(bbi))
-
-
-#    out["Detrended"] = sqrt( / len(bbi))
-#    out["Detrended"] = sqrt(((np.sum(bbi - np.mean(bbi))) - (np.sum(bbi - np.mean(bbi)))) ** 2 / len(bbi))
 
     return out
 
+
+def _rsp_rrv_dfa(bbi):
+    out = {}
+
+    # Determine signal profile
+    integrated_time_series = np.cumsum(bbi - np.mean(bbi))
+    length = 10
+
+    # Divide profile
+    window_shape = (integrated_time_series.shape[0]//length, length)
+    N = window_shape[0] * window_shape[1]
+    window_data = np.reshape(integrated_time_series[0:N], window_shape)
+
+    # Local trend
+    x = np.arange(length)
+    rms = np.zeros(window_data.shape[0])
+
+    for i, window in enumerate(window_data):
+        coeff = np.polyfit(x, window, 1)
+        fit = np.polyval(coeff, x)
+        # RMS per window
+        rms[i] = np.sqrt(np.mean((window - fit) ** 2))
+
+    out["DFA"] = np.mean(rms)
+
+    return out
 
 # =============================================================================
 # Internals
@@ -201,7 +223,7 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
 
     if peaks is None:
         try:
-            peaks, _ = _signal_formatpeaks_sanitize(df, desired_length=None)
+            peaks, _ = _signal_formatpeaks_sanitize(rsp_rate, desired_length=None)
         except NameError:
             raise ValueError("NeuroKit error: _rsp_rrv_formatinput():"
                              "Wrong input, we couldn't extract"
