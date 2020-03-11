@@ -198,10 +198,15 @@ def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None,
 # =============================================================================
 
 def _signal_filter_powerline(signal, sampling_rate):
-    """This is a way of smoothing out 50Hz power-line noise from the signal as
-    implemented in BioSPPy. Effectively a notch filter."""
-    b = np.ones(int(0.02 * sampling_rate)) / 50.
-    a = [1]
+    """Filter out 50 Hz powerline noise by smoothing the signal with a moving
+    average kernel with the width of one period of 50Hz.
+    """
+
+    if sampling_rate >= 100:
+        b = np.ones(int(sampling_rate / 50))
+    else:
+        b = np.ones(2)
+    a = [len(b)]
     y = scipy.signal.filtfilt(b, a, signal, method="pad")
     return y
 
