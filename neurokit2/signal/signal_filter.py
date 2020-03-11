@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import scipy.signal
-from ..signal import signal_smooth
 
 
 def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_length="default"):
@@ -203,11 +202,12 @@ def _signal_filter_powerline(signal, sampling_rate):
     average kernel with the width of one period of 50Hz.
     """
 
-    if sampling_rate < 100:
-        return signal
-
-    window = int(np.rint(sampling_rate / 50))
-    y = signal_smooth(signal, size=window)
+    if sampling_rate >= 100:
+        b = np.ones(int(sampling_rate / 50))
+    else:
+        b = np.ones(2)
+    a = [len(b)]
+    y = scipy.signal.filtfilt(b, a, signal, method="pad")
     return y
 
 

@@ -121,7 +121,7 @@ def test_signal_filter():
     # ax1.plot(signal)
     # ax2.plot(signal_clean * 100)
 
-    assert np.allclose(sum(signal_clean - signal), 0.2, atol=0.1)
+    assert np.allclose(sum(signal_clean - signal), -2, atol=0.2)
 
 def test_signal_interpolate():
 
