@@ -99,7 +99,7 @@ def test_ecg_rate():
     rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate)
 
     assert rate.shape == (info["ECG_R_Peaks"].size, )
-    assert np.allclose(rate.mean(), 70, atol=1)
+    assert np.allclose(rate.mean(), 70, atol=2)
 
     # Test with desired length.
     test_length = 1200

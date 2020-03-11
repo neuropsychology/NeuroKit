@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import scipy.signal
+from ..signal import signal_smooth
 
 
 def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_length="default"):
@@ -198,11 +199,15 @@ def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None,
 # =============================================================================
 
 def _signal_filter_powerline(signal, sampling_rate):
-    """This is a way of smoothing out 50Hz power-line noise from the signal as
-    implemented in BioSPPy. Effectively a notch filter."""
-    b = np.ones(int(0.02 * sampling_rate)) / 50.
-    a = [1]
-    y = scipy.signal.filtfilt(b, a, signal, method="pad")
+    """Filter out 50 Hz powerline noise by smoothing the signal with a moving
+    average kernel with the width of one period of 50Hz.
+    """
+
+    if sampling_rate < 100:
+        return signal
+
+    window = int(np.rint(sampling_rate / 50))
+    y = signal_smooth(signal, size=window)
     return y
 
 
