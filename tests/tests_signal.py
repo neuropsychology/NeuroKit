@@ -115,13 +115,13 @@ def test_signal_filter():
                                     sampling_rate=sampling_rate,
                                     method="powerline")
 
+    # import matplotlib.pyplot as plt
     # figure, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
     # ax0.plot(signal_corrupted)
     # ax1.plot(signal)
     # ax2.plot(signal_clean * 100)
 
-    assert np.allclose(sum(signal_clean * 100 - signal), -2, atol=0.2)    # multiply by 100 to compensate amplitude dampening
-
+    assert np.allclose(sum(signal_clean - signal), 0.2, atol=0.1)
 
 def test_signal_interpolate():
 
