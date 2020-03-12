@@ -69,8 +69,6 @@ def eda_plot(eda_signals, sampling_rate=None):
     ax1.add_collection(halfr)
     ax1.legend(loc='upper right')
 
-
-
     # Plot Tonic.
     ax2.set_title("Skin Conductance Level (SCL)")
     ax2.plot(x_axis, eda_signals["EDA_Tonic"], color='#673AB7',
@@ -78,8 +76,6 @@ def eda_plot(eda_signals, sampling_rate=None):
     ax2.legend(loc='upper right')
     plt.show()
     return fig
-
-
 
 
 # =============================================================================
@@ -91,7 +87,7 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
     scat_peak = ax.scatter(x_axis[peaks], eda_signals["EDA_Phasic"][peaks], color='#1976D2', label="SCR - Peaks", zorder=2)
     scat_halfr = ax.scatter(x_axis[half_recovery], eda_signals["EDA_Phasic"][half_recovery], color='#FDD835', label='SCR - Half recovery', zorder=2)
     end_onset = pd.Series(eda_signals["EDA_Phasic"][onsets].values, eda_signals["EDA_Phasic"][peaks].index)
-    scat_endonset = ax.scatter(end_onset.index, end_onset.values, alpha=0)
+    scat_endonset = ax.scatter(x_axis[end_onset.index], end_onset.values, alpha=0)
 
     # Rise time.
     position = [i for i in range(0, len(onsets))]
