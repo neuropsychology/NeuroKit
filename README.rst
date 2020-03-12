@@ -207,7 +207,7 @@ You can run:
 
     You can cite NeuroKit as follows:
 
-    - Makowski, D., Pham, T., L Juen, Z., Brammer, J. C., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
 
 
     Full bibtex reference:
