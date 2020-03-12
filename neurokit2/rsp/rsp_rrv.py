@@ -84,7 +84,6 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     rrv.update(_rsp_rrv_time(bbi))
     rrv.update(_rsp_rrv_frequency(rsp_period))
     rrv.update(_rsp_rrv_nonlinear(bbi, rsp_period))
-    rrv.update(_rsp_rrv_dfa(bbi))
 
     rrv = pd.DataFrame.from_dict(rrv, orient='index').T.add_prefix("RRV_")
 
