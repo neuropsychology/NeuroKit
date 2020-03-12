@@ -2,7 +2,6 @@
 import numpy as np
 
 
-
 def complexity_dfa(signal, windows=None, overlap=True, order=1):
     """
     Computes Detrended Fluctuation Analysis (DFA) on the time series data.
@@ -67,7 +66,7 @@ def complexity_dfa(signal, windows=None, overlap=True, order=1):
             d = np.array([integrated[i:i + window] for i in range(0, len(integrated) - window, window // 2)])
         else:
             d = integrated[:N - (N % window)]
-            d = d.reshape((integrated_time_series.shape[0] // window, window))
+            d = d.reshape((integrated.shape[0] // window, window))
 
         # Local trend
         x = np.arange(window)
