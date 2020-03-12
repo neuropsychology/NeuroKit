@@ -47,7 +47,7 @@ def complexity_dfa(signal, windows=None, overlap=True, order=1):
             windows = [4, 5, 6, 7, 8, 9]
         else:
             windows = [N-2, N-1]
-            print ("NeuroKit warning: complexity_dfa(): DFA with less than ten data points is unreliable.")
+            print("NeuroKit warning: complexity_dfa(): DFA with less than ten data points is unreliable.")
 
     if len(windows) < 2:
         raise ValueError("NeuroKit error: complexity_dfa(): more than one window is needed.")
