@@ -54,13 +54,7 @@ extensions = [
     'sphinx_rtd_theme',
     'nbsphinx',
     'sphinx_nbexamples',
-    'sphinx_gallery.gen_gallery',
 ]
-
-sphinx_gallery_conf = {
-     'examples_dirs': '../examples',   # path to your example scripts
-     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
-}
 
 
 # on_rtd is whether we are on readthedocs.org
