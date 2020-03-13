@@ -48,7 +48,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
             - "*RRV_SD2SD1*": the ratio between short and long term fluctuations of the breath-to-breath intervals (SD2 divided by SD1).
             - "*RRV_ApEn*": the approximate entropy of RRV, calculated by `entropy_approximate()`.
             - "*RRV_SampEn*": the sample entropy of RRV, calculated by `entropy_sample()`.
-            - "*RRV_DFA*": the fluctuation value generated from Detrended Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath intervals.
+            - "*RRV_DFA*": the fluctuation value generated from Detrended Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath intervals. However, this is designed to analyze time series data over several hours.
 
     See Also
     --------
