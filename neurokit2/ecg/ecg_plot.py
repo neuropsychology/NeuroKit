@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec
 
 from ..ecg import ecg_findpeaks
+from .ecg_delineate import _ecg_delineate_beatwindow
 from ..epochs import epochs_to_df
 from ..epochs import epochs_create
 
@@ -86,11 +87,13 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     if sampling_rate is not None:
         ax2.set_title("Individual Heart Beats")
 
-        heart_rate = np.mean(ecg_signals["ECG_Rate"])
-        heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"],
-                                          heart_rate=heart_rate,
-                                          peaks=peaks,
-                                          sampling_rate=sampling_rate)
+        epochs_start, epochs_end = _ecg_delineate_beatwindow(heart_rate=ecg_signals["ECG_Rate"],
+                                                             sampling_rate=sampling_rate)
+        heartbeats = epochs_create(ecg, events=peaks,
+                               epochs_start=epochs_start,
+                               epochs_end=epochs_end,
+                               sampling_rate=sampling_rate)
+        heartbeats = epochs_to_df(heartbeats)
 
         heartbeats_pivoted = heartbeats.pivot(index='Time',
                                               columns='Label',
@@ -108,17 +111,3 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
     return fig
 
-
-# =============================================================================
-# Internals
-# =============================================================================
-def _ecg_plot_heartbeats(ecg, heart_rate, peaks, sampling_rate=None):
-    # Extract heart beats
-    m = heart_rate/80
-    heartbeats = epochs_create(ecg, events=peaks,
-                               epochs_start=-0.3/m,
-                               epochs_end=0.5/m,
-                               sampling_rate=sampling_rate)
-    heartbeats = epochs_to_df(heartbeats)
-
-    return heartbeats

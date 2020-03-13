@@ -597,7 +597,13 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
 def _ecg_delineator_derivative(ecg, rpeaks=None, sampling_rate=1000):
 
     # Initialize
-    heartbeats = epochs_create(ecg, rpeaks, sampling_rate=sampling_rate, epochs_start=-0.35, epochs_end=0.5)
+    epochs_start, epochs_end = _ecg_delineate_beatwindow(rpeaks=rpeaks,
+                                                         sampling_rate=sampling_rate)
+    heartbeats = epochs_create(ecg,
+                               rpeaks,
+                               sampling_rate=sampling_rate,
+                               epochs_start=epochs_start,
+                               epochs_end=epochs_end)
 
     Q_list = []
     P_list = []
@@ -732,3 +738,24 @@ def _ecg_delineator_derivative_T_offset(rpeak, heartbeat, R, T):
     T_offset = np.argmax(signal)
 
     return rpeak + T + T_offset
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _ecg_delineate_beatwindow(heart_rate=None, rpeaks=None, sampling_rate=1000):
+
+    # Extract heart rate
+    if heart_rate is not None:
+        heart_rate = np.mean(heart_rate)
+    if rpeaks is not None:
+        heart_rate = np.diff(rpeaks) / sampling_rate * 60
+
+    # Modulator
+    m = heart_rate/80
+
+    # Window
+    epochs_start = -0.35/m
+    epochs_end = 0.5/m,
+
+    return epochs_start, epochs_end
