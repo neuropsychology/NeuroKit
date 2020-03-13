@@ -64,9 +64,9 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> _, rpeaks = nk.ecg_peaks(cleaned)
-    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000)
-    >>> nk.events_plot(info["ECG_P_Peaks"], cleaned)
-    >>> nk.events_plot(info2["ECG_T_Peaks"], cleaned)
+    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000, method="derivative")
+    >>> nk.events_plot(waves["ECG_P_Peaks"], cleaned)
+    >>> nk.events_plot(waves["ECG_T_Peaks"], cleaned)
 
     References
     --------------
@@ -75,7 +75,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
     """
     # Sanitize inputs
     if rpeaks is None:
-        _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)["ECG_R_Peaks"]
+        _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
 
     # Try retrieving right column
     if isinstance(rpeaks, dict):
@@ -104,9 +104,23 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
 
     return signals, waves
 
-###############################################################################
-#                             WAVELET METHOD (DWT)                             #
-###############################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# =============================================================================
+# WAVELET METHOD (DWT)
+# =============================================================================
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     """Resample given points to a different sampling rate."""
     peaks_resample = (np.array(peaks) * desired_sampling_rate / sampling_rate)
@@ -354,8 +368,17 @@ def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
 
 
 
+
+
+
+
+
+
+
+
+
 # =============================================================================
-#                              WAVELET METHOD (CWT)
+# WAVELET METHOD (CWT)
 # =============================================================================
 def _ecg_delinator_cwt(ecg, rpeaks=None, sampling_rate=1000):
 
@@ -611,12 +634,6 @@ def _ecg_delineator_derivative(ecg, rpeaks=None, sampling_rate=1000):
         P_onsets.append(_ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P))
         T_offsets.append(_ecg_delineator_derivative_T_offset(rpeak, heartbeat, R, T))
 
-#    P_list = np.array(P_list, dtype='float')
-#    Q_list = np.array(Q_list, dtype='float')
-#    S_list = np.array(S_list, dtype='float')
-#    T_list = np.array(T_list, dtype='float')
-#    P_onsets = np.array(P_onsets, dtype='float')
-#    T_offsets = np.array(T_offsets, dtype='float')
 
     out = {"ECG_P_Peaks": P_list,
            "ECG_Q_Peaks": Q_list,
@@ -656,7 +673,7 @@ def _ecg_delineator_derivative_P(rpeak, heartbeat, R, Q):
 
     if len(P["Peaks"]) == 0:
         return np.nan, None
-    P = P["Peaks"][-1]  # Select most right-hand side
+    P = P["Peaks"][np.argmax(P["Height"])]  # Select heighest
     from_R = R - P  # Relative to R
     return rpeak - from_R, P
 
@@ -671,7 +688,6 @@ def _ecg_delineator_derivative_S(rpeak, heartbeat, R):
 
     if len(S["Peaks"]) == 0:
         return np.nan, None
-
     S = S["Peaks"][0]  # Select most left-hand side
     return rpeak + S, S
 
@@ -688,8 +704,7 @@ def _ecg_delineator_derivative_T(rpeak, heartbeat, R, S):
 
     if len(T["Peaks"]) == 0:
         return np.nan, None
-
-    T = S + T["Peaks"][0]  # Select most left-hand side
+    T = S + T["Peaks"][np.argmax(T["Height"])]  # Select heighest
     return rpeak + T, T
 
 
