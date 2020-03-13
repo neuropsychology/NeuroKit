@@ -89,10 +89,11 @@ def ecg_plot(ecg_signals, sampling_rate=None):
 
         epochs_start, epochs_end = _ecg_delineate_beatwindow(heart_rate=ecg_signals["ECG_Rate"],
                                                              sampling_rate=sampling_rate)
-        heartbeats = epochs_create(ecg, events=peaks,
-                               epochs_start=epochs_start,
-                               epochs_end=epochs_end,
-                               sampling_rate=sampling_rate)
+        heartbeats = epochs_create(ecg_signals["ECG_Clean"],
+                                   events=peaks,
+                                   epochs_start=epochs_start,
+                                   epochs_end=epochs_end,
+                                   sampling_rate=sampling_rate)
         heartbeats = epochs_to_df(heartbeats)
 
         heartbeats_pivoted = heartbeats.pivot(index='Time',
