@@ -111,4 +111,3 @@ def ecg_plot(ecg_signals, sampling_rate=None):
             lines.append(line)
 
     return fig
-
