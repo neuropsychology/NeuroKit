@@ -314,31 +314,32 @@ def test_ecg_delineate():
 
 
 def test_ecg_hrv():
-    ecg90 = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=90, random_state=42)
-    ecg110 = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
+    ecg_slow = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=70, random_state=42)
+    ecg_fast = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
 
-    ecg90, _ = nk.ecg_process(ecg90)
-    ecg110, _ = nk.ecg_process(ecg110)
+    ecg_slow, _ = nk.ecg_process(ecg_slow)
+    ecg_fast, _ = nk.ecg_process(ecg_fast)
 
-    ecg90_hrv = nk.ecg_hrv(ecg90)
-    ecg110_hrv = nk.ecg_hrv(ecg110)
+    ecg_slow_hrv = nk.ecg_hrv(ecg_slow)
+    ecg_fast_hrv = nk.ecg_hrv(ecg_fast)
 
-    assert np.array(ecg110_hrv["HRV_RMSSD"]) < np.array(ecg90_hrv["HRV_RMSSD"])
-    assert np.array(ecg110_hrv["HRV_MeanNN"]) < np.array(ecg90_hrv["HRV_MeanNN"])
-    assert np.array(ecg110_hrv["HRV_SDNN"]) < np.array(ecg90_hrv["HRV_SDNN"])
-    assert np.array(ecg110_hrv["HRV_CVNN"]) < np.array(ecg90_hrv["HRV_CVNN"])
-    assert np.array(ecg110_hrv["HRV_CVSD"]) < np.array(ecg90_hrv["HRV_CVSD"])
-    assert np.array(ecg110_hrv["HRV_MedianNN"]) < np.array(ecg90_hrv["HRV_MedianNN"])
-    assert np.array(ecg110_hrv["HRV_MadNN"]) < np.array(ecg90_hrv["HRV_MadNN"])
-    assert np.array(ecg110_hrv["HRV_MCVNN"]) < np.array(ecg90_hrv["HRV_MCVNN"])
-    assert np.array(ecg110_hrv["HRV_pNN50"]) == np.array(ecg90_hrv["HRV_pNN50"]) == np.array(ecg110_hrv["HRV_pNN20"]) == np.array(ecg90_hrv["HRV_pNN20"]) == 0
-    assert np.array(ecg110_hrv["HRV_TINN"]) < np.array(ecg90_hrv["HRV_TINN"])
-#    assert np.array(ecg110_hrv["HRV_HTI"]) > np.array(ecg90_hrv["HRV_HTI"])
-    assert np.array(ecg110_hrv["HRV_ULF"]) == np.array(ecg90_hrv["HRV_ULF"]) == 0
-    assert np.array(ecg110_hrv["HRV_VLF"]) < np.array(ecg90_hrv["HRV_VLF"])
-    assert np.array(ecg110_hrv["HRV_HF"]) < np.array(ecg90_hrv["HRV_HF"])
-    assert np.array(ecg110_hrv["HRV_LF"]) < np.array(ecg90_hrv["HRV_LF"])
-#    assert np.array(ecg110_hrv["HRV_VHF"]) > np.array(ecg90_hrv["HRV_VHF"])
+    assert np.array(ecg_fast_hrv["HRV_RMSSD"]) < np.array(ecg_slow_hrv["HRV_RMSSD"])
+    assert np.array(ecg_fast_hrv["HRV_MeanNN"]) < np.array(ecg_slow_hrv["HRV_MeanNN"])
+    assert np.array(ecg_fast_hrv["HRV_SDNN"]) < np.array(ecg_slow_hrv["HRV_SDNN"])
+    assert np.array(ecg_fast_hrv["HRV_CVNN"]) < np.array(ecg_slow_hrv["HRV_CVNN"])
+    assert np.array(ecg_fast_hrv["HRV_CVSD"]) < np.array(ecg_slow_hrv["HRV_CVSD"])
+    assert np.array(ecg_fast_hrv["HRV_MedianNN"]) < np.array(ecg_slow_hrv["HRV_MedianNN"])
+    assert np.array(ecg_fast_hrv["HRV_MadNN"]) < np.array(ecg_slow_hrv["HRV_MadNN"])
+    assert np.array(ecg_fast_hrv["HRV_MCVNN"]) < np.array(ecg_slow_hrv["HRV_MCVNN"])
+    assert np.array(ecg_fast_hrv["HRV_pNN50"]) == np.array(ecg_slow_hrv["HRV_pNN50"])
+    assert np.array(ecg_fast_hrv["HRV_pNN20"]) < np.array(ecg_slow_hrv["HRV_pNN20"])
+    assert np.array(ecg_fast_hrv["HRV_TINN"]) < np.array(ecg_slow_hrv["HRV_TINN"])
+    assert np.array(ecg_fast_hrv["HRV_HTI"]) > np.array(ecg_slow_hrv["HRV_HTI"])
+    assert np.array(ecg_fast_hrv["HRV_ULF"]) == np.array(ecg_slow_hrv["HRV_ULF"]) == 0
+    assert np.array(ecg_fast_hrv["HRV_VLF"]) < np.array(ecg_slow_hrv["HRV_VLF"])
+    assert np.array(ecg_fast_hrv["HRV_HF"]) < np.array(ecg_slow_hrv["HRV_HF"])
+    assert np.array(ecg_fast_hrv["HRV_LF"]) < np.array(ecg_slow_hrv["HRV_LF"])
+    assert np.array(ecg_fast_hrv["HRV_VHF"]) > np.array(ecg_slow_hrv["HRV_VHF"])
 
     assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
                         'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
@@ -347,4 +348,4 @@ def test_ecg_hrv():
                         'HRV_LFn', 'HRV_HFn', 'HRV_LnHF',
                         'HRV_SD1', 'HRV_SD2', 'HRV_SD2SD1', 'HRV_CSI', 'HRV_CVI',
                         'HRV_CSI_Modified', 'HRV_SampEn']
-               for elem in np.array(ecg110_hrv.columns.values, dtype=str))
+               for elem in np.array(ecg_fast_hrv.columns.values, dtype=str))
