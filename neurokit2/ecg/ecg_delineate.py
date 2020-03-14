@@ -756,6 +756,6 @@ def _ecg_delineate_beatwindow(heart_rate=None, rpeaks=None, sampling_rate=1000):
 
     # Window
     epochs_start = -0.35/m
-    epochs_end = 0.5/m,
+    epochs_end = 0.5/m
 
     return epochs_start, epochs_end
