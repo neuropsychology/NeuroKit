@@ -46,7 +46,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
         x_axis = np.linspace(0, ecg_signals.shape[0] / sampling_rate,
                              ecg_signals.shape[0])
         gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[1-1/np.pi, 1/np.pi])
-        fig = plt.figure(constrained_layout=True)
+        fig = plt.figure(constrained_layout=False)
         ax0 = fig.add_subplot(gs[0, :-1])
         ax1 = fig.add_subplot(gs[1, :-1])
         ax2 = fig.add_subplot(gs[:, -1])

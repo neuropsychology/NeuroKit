@@ -749,7 +749,7 @@ def _ecg_delineate_beatwindow(heart_rate=None, rpeaks=None, sampling_rate=1000):
     if heart_rate is not None:
         heart_rate = np.mean(heart_rate)
     if rpeaks is not None:
-        heart_rate = np.diff(rpeaks) / sampling_rate * 60
+        heart_rate = np.mean(np.diff(rpeaks) / sampling_rate * 60)
 
     # Modulator
     m = heart_rate/80
