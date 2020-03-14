@@ -337,9 +337,9 @@ def test_ecg_hrv():
 #    assert ecg_fast_hrv["HRV_HTI"][0] > ecg_slow_hrv["HRV_HTI"][0]
     assert ecg_fast_hrv["HRV_ULF"][0] == ecg_slow_hrv["HRV_ULF"][0] == 0
     assert ecg_fast_hrv["HRV_VLF"][0] < ecg_slow_hrv["HRV_VLF"][0]
-    assert ecg_fast_hrv["HRV_HF"][0] < ecg_slow_hrv["HRV_HF"][0]
     assert ecg_fast_hrv["HRV_LF"][0] < ecg_slow_hrv["HRV_LF"][0]
-    assert ecg_fast_hrv["HRV_VHF"][0] > ecg_slow_hrv["HRV_VHF"][0]
+#    assert ecg_fast_hrv["HRV_HF"][0] < ecg_slow_hrv["HRV_HF"][0]
+#    assert ecg_fast_hrv["HRV_VHF"][0] > ecg_slow_hrv["HRV_VHF"][0]
 
     assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
                         'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
