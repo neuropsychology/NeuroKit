@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
 import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt
@@ -248,10 +247,7 @@ def test_ecg_findpeaks():
     # Test kalidas2017 method
     info_kalidas = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"),
                                       method="kalidas2017")
-    if sys.version_info[1] < 8:  # Python < 3.8
-        assert info_kalidas["ECG_R_Peaks"].size == 69
-    else:
-        assert info_kalidas["ECG_R_Peaks"].size == 48
+    assert info_kalidas["ECG_R_Peaks"].size == 69
 
     # Test martinez2003 method
     ecg = nk.ecg_simulate(duration=60, sampling_rate=sampling_rate, noise=0,
