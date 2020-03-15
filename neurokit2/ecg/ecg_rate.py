@@ -56,7 +56,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
     >>> ax.legend(loc="upper right")
     """
     # Get R-peaks indices from DataFrame or dict.
-    rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
+    rpeaks, desired_length = _signal_formatpeaks_sanitize(rpeaks, desired_length=desired_length)
 
     rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
 
@@ -66,9 +66,5 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None):
 
     if desired_length:
         rate = signal_interpolate(rpeaks, rate, desired_length=desired_length, method='quadratic')
-
-#    if desired_length:
-#        rate = signal_resample(rate, desired_length=desired_length,
-#                               sampling_rate=sampling_rate)
 
     return rate
