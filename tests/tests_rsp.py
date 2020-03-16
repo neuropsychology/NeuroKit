@@ -207,7 +207,6 @@ def test_rsp_rrv():
     # assert np.array(rsp110_rrv["RRV_HTI"]) > np.array(rsp90_rrv["RRV_HTI"])
     assert np.array(rsp110_rrv["RRV_HF"]) < np.array(rsp90_rrv["RRV_HF"])
     assert np.array(rsp110_rrv["RRV_LF"]) < np.array(rsp90_rrv["RRV_LF"])
-    assert np.array(rsp110_rrv["RRV_VHF"]) > np.array(rsp90_rrv["RRV_VHF"])
 
     assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
                         'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF',
