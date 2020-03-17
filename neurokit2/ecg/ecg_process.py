@@ -5,6 +5,7 @@ from .ecg_clean import ecg_clean
 from .ecg_peaks import ecg_peaks
 from .ecg_rate import ecg_rate
 from .ecg_delineate import ecg_delineate
+from .ecg_phase import ecg_phase
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
