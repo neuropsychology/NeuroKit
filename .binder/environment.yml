@@ -1,0 +1,6 @@
+dependencies:
+- neurokit2
+- pandas
+- matplotlib
+- seaborn
+- numpy
