@@ -17,7 +17,7 @@ from ..epochs import epochs_create
 from ..events import events_plot
 
 
-def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
+def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak"):
     """Delineate QRS complex.
     Function to delineate the QRS complex.
 
@@ -32,6 +32,8 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
     sampling_rate : int
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 500.
+    method : str
+        Can be one of 'peak' (default) for a peak-based method, 'cwt' for continuous wavelet transform or 'dwt' for discrete wavelet transform.
 
     Returns
     -------
@@ -43,7 +45,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
         "ECG_S_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets"
         respectively.
 
-        For continuous wavelet method, the dictionary contains the samples at
+        For wavelet methods, the dictionary contains the samples at
         which P-peaks, T-peaks, P-onsets, P-offsets, T-onsets, T-offsets, QRS-
         onsets and QRS-offsets occur, accessible with the key "ECG_P_Peaks",
         "ECG_T_Peaks", "ECG_P_Onsets", "ECG_P_Offsets", "ECG_T_Onsets",
@@ -82,15 +84,15 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
         rpeaks = rpeaks["ECG_R_Peaks"]
 
     method = method.lower()  # remove capitalised letters
-    if method in ["derivative", "gradient"]:
-        waves = _ecg_delineator_derivative(ecg_cleaned,
-                                           rpeaks=rpeaks,
-                                           sampling_rate=sampling_rate)
-    if method in ["cwt", "continuous wavelet transform"]:
+    if method in ["peak", "derivative", "gradient"]:
+        waves = _ecg_delineator_peak(ecg_cleaned,
+                                     rpeaks=rpeaks,
+                                     sampling_rate=sampling_rate)
+    elif method in ["cwt", "continuous wavelet transform"]:
         waves = _ecg_delinator_cwt(ecg_cleaned,
                                    rpeaks=rpeaks,
                                    sampling_rate=sampling_rate)
-    if method in ["dwt", "discrete wavelet transform"]:
+    elif method in ["dwt", "discrete wavelet transform"]:
         waves = _dwt_ecg_delinator(ecg_cleaned,
                                    rpeaks,
                                    sampling_rate=sampling_rate)
@@ -594,7 +596,7 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
 # =============================================================================
 #                              DERIVATIVE METHOD
 # =============================================================================
-def _ecg_delineator_derivative(ecg, rpeaks=None, sampling_rate=1000):
+def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
 
     # Initialize
     epochs_start, epochs_end = _ecg_delineate_beatwindow(rpeaks=rpeaks,
@@ -621,24 +623,24 @@ def _ecg_delineator_derivative(ecg, rpeaks=None, sampling_rate=1000):
 
         # Peaks ------
         # Q wave
-        Q_index, Q = _ecg_delineator_derivative_Q(rpeak, heartbeat, R)
+        Q_index, Q = _ecg_delineator_peak_Q(rpeak, heartbeat, R)
         Q_list.append(Q_index)
 
         # P wave
-        P_index, P = _ecg_delineator_derivative_P(rpeak, heartbeat, R, Q)
+        P_index, P = _ecg_delineator_peak_P(rpeak, heartbeat, R, Q)
         P_list.append(P_index)
 
         # S wave
-        S_index, S = _ecg_delineator_derivative_S(rpeak, heartbeat, R)
+        S_index, S = _ecg_delineator_peak_S(rpeak, heartbeat, R)
         S_list.append(S_index)
 
         # T wave
-        T_index, T = _ecg_delineator_derivative_T(rpeak, heartbeat, R, S)
+        T_index, T = _ecg_delineator_peak_T(rpeak, heartbeat, R, S)
         T_list.append(T_index)
 
         # Onsets/Offsets ------
-        P_onsets.append(_ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P))
-        T_offsets.append(_ecg_delineator_derivative_T_offset(rpeak, heartbeat, R, T))
+        P_onsets.append(_ecg_delineator_peak_P_onset(rpeak, heartbeat, R, P))
+        T_offsets.append(_ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T))
 
 
     out = {"ECG_P_Peaks": P_list,
@@ -654,7 +656,7 @@ def _ecg_delineator_derivative(ecg, rpeaks=None, sampling_rate=1000):
 # Internal
 # --------------------------
 
-def _ecg_delineator_derivative_Q(rpeak, heartbeat, R):
+def _ecg_delineator_peak_Q(rpeak, heartbeat, R):
     segment = heartbeat[:0]  # Select left hand side
 
     Q = signal_findpeaks(-1*segment["Signal"],
@@ -668,7 +670,7 @@ def _ecg_delineator_derivative_Q(rpeak, heartbeat, R):
 
 
 
-def _ecg_delineator_derivative_P(rpeak, heartbeat, R, Q):
+def _ecg_delineator_peak_P(rpeak, heartbeat, R, Q):
     if Q is None:
         return np.nan, None
 
@@ -686,7 +688,7 @@ def _ecg_delineator_derivative_P(rpeak, heartbeat, R, Q):
 
 
 
-def _ecg_delineator_derivative_S(rpeak, heartbeat, R):
+def _ecg_delineator_peak_S(rpeak, heartbeat, R):
     segment = heartbeat[0:]  # Select right hand side
     S = signal_findpeaks(-segment["Signal"],
                          height_min=0.05 * (segment["Signal"].max() -
@@ -699,7 +701,7 @@ def _ecg_delineator_derivative_S(rpeak, heartbeat, R):
 
 
 
-def _ecg_delineator_derivative_T(rpeak, heartbeat, R, S):
+def _ecg_delineator_peak_T(rpeak, heartbeat, R, S):
     if S is None:
         return np.nan, None
 
@@ -714,7 +716,7 @@ def _ecg_delineator_derivative_T(rpeak, heartbeat, R, S):
     return rpeak + T, T
 
 
-def _ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P):
+def _ecg_delineator_peak_P_onset(rpeak, heartbeat, R, P):
     if P is None:
         return np.nan
 
@@ -728,7 +730,7 @@ def _ecg_delineator_derivative_P_onset(rpeak, heartbeat, R, P):
 
 
 
-def _ecg_delineator_derivative_T_offset(rpeak, heartbeat, R, T):
+def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
     if T is None:
         return np.nan
 
@@ -749,13 +751,13 @@ def _ecg_delineate_beatwindow(heart_rate=None, rpeaks=None, sampling_rate=1000):
     if heart_rate is not None:
         heart_rate = np.mean(heart_rate)
     if rpeaks is not None:
-        heart_rate = np.diff(rpeaks) / sampling_rate * 60
+        heart_rate = np.mean(np.diff(rpeaks) / sampling_rate * 60)
 
     # Modulator
     m = heart_rate/80
 
     # Window
     epochs_start = -0.35/m
-    epochs_end = 0.5/m,
+    epochs_end = 0.5/m
 
     return epochs_start, epochs_end

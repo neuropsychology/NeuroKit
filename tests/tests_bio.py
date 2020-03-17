@@ -32,6 +32,11 @@ def test_bio_process():
     assert len(bio_info["EMG_Offsets"] == len(bio_info["EMG_Onsets"]))
 
     assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate', 'ECG_R_Peaks',
+                        "ECG_P_Peaks", "ECG_Q_Peaks", "ECG_S_Peaks",
+                        "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
+                        "ECG_Atrial_Phase", "ECG_Ventricular_Phase",
+                        "ECG_Atrial_PhaseCompletion",
+                        "ECG_Ventricular_PhaseCompletion",
                         'RSP_Raw', 'RSP_Clean', 'RSP_Amplitude', 'RSP_Rate',
                         'RSP_Phase', 'RSP_PhaseCompletion',
                         'RSP_Peaks', 'RSP_Troughs',

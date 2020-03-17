@@ -4,7 +4,7 @@ import numpy as np
 from ..signal import signal_filter
 
 
-def ecg_rsp(ecg_rate, sampling_rate=1000, method="charlton2016"):
+def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     """
     Extract ECG Derived Respiration (EDR)
 
@@ -18,12 +18,8 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="charlton2016"):
     sampling_rate : int
         The sampling frequency of the signal that contains the R-peaks (in Hz,
         i.e., samples/second). Defaults to 1000Hz.
-    desired_length : int
-        By default, the returned heart rate has the same number of elements as
-        peaks. If set to an integer, the returned heart rate will be
-        interpolated between R-peaks over `desired_length` samples. Has no
-        effect if a DataFrame is passed in as the `peaks` argument. Defaults to
-        None.
+    method : str
+        Can be one of 'vangent2019' (default), 'soni2019', 'charlton2016' or 'sarkar2015'.
 
     Returns
     -------
@@ -48,63 +44,31 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="charlton2016"):
     >>>
     >>> # Method comparison (the closer to 0 the better)
     >>> nk.standardize(pd.DataFrame(
-            {"sarkar2015": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015") - data["RSP"],
-             "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016") - data["RSP"],
-             "soni2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="soni2019") - data["RSP"]})).plot()
+            {"True RSP": data["RSP"],
+             "vangent2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="vangent2019"),
+             "sarkar2015": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015"),
+             "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016"),
+             "soni2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="soni2019")})).plot()
+
+    References
+    ----------
+    - van Gent, P., Farah, H., van Nes, N., & van Arem, B. (2019). HeartPy: A novel heart rate algorithm for the analysis of noisy signals. Transportation research part F: traffic psychology and behaviour, 66, 368-378.
+    - Sarkar, S., Bhattacherjee, S., & Pal, S. (2015). Extraction of respiration signal from ECG for respiratory rate estimation.
+    - Charlton, P. H., Bonnici, T., Tarassenko, L., Clifton, D. A., Beale, R., & Watkinson, P. J. (2016). An assessment of algorithms to estimate respiratory rate from the electrocardiogram and photoplethysmogram. Physiological measurement, 37(4), 610.
+    - Soni, R., & Muniyandi, M. (2019). Breath rate variability: a novel measure to study the meditation effects. International Journal of Yoga, 12(1), 45.
     """
     method = method.lower()
-    if method in ["sarkar2015"]:
-        rsp = _ecg_rsp_sarkar2015(ecg_rate, sampling_rate=sampling_rate)
-    elif method in ["charlton2016"]:
-        rsp = _ecg_rsp_charlton2016(ecg_rate, sampling_rate=sampling_rate)
-    elif method in ["soni2019"]:
-        rsp = _ecg_rsp_soni2019(ecg_rate, sampling_rate=sampling_rate)
+    if method in ["sarkar2015"]:  # https://www.researchgate.net/publication/304221962_Extraction_of_respiration_signal_from_ECG_for_respiratory_rate_estimation
+        rsp = signal_filter(ecg_rate, sampling_rate, lowcut=0.1, highcut=0.7, order=6)
+    elif method in ["charlton2016"]:  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5390977/#__ffn_sectitle
+        rsp = signal_filter(ecg_rate, sampling_rate, lowcut=4/60, highcut=60/60, order=6)
+    elif method in ["soni2019"]:  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6329220/
+        rsp = signal_filter(ecg_rate, sampling_rate, highcut=0.5, order=6)
+    elif method in ["vangent2019"]:  # https://github.com/paulvangentcom/heartrate_analysis_python/blob/1597e8c0b2602829428b22d8be88420cd335e939/heartpy/analysis.py#L541
+        rsp = signal_filter(ecg_rate, sampling_rate, lowcut=0.1, highcut=0.4, order=2)
     else:
         raise ValueError("NeuroKit error: ecg_rsp(): 'method' should be "
-                         "one of 'sarkar2015' or 'charlton2016'.")
+                         "one of 'sarkar2015', 'charlton2016', 'soni2019' or "
+                         "'vangent2019'.")
 
-    return rsp
-
-
-
-# =============================================================================
-# Methods
-# =============================================================================
-def _ecg_rsp_sarkar2015(ecg_rate, sampling_rate=1000):
-    """
-    https://www.researchgate.net/publication/304221962_Extraction_of_respiration_signal_from_ECG_for_respiratory_rate_estimation
-    """
-    rsp = signal_filter(ecg_rate,
-                        sampling_rate=sampling_rate,
-                        lowcut=0.1,
-                        highcut=0.7,
-                        method="butterworth",
-                        order=6)
-    return rsp
-
-
-
-def _ecg_rsp_charlton2016(ecg_rate, sampling_rate=1000):
-    """
-    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5390977/#__ffn_sectitle
-    """
-    # 4-60 Bpm bandpass
-    rsp = signal_filter(ecg_rate,
-                        sampling_rate=sampling_rate,
-                        lowcut=4/60,
-                        highcut=60/60,
-                        method="butterworth",
-                        order=6)
-    return rsp
-
-
-def _ecg_rsp_soni2019(ecg_rate, sampling_rate=1000):
-    """
-    https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6329220/
-    """
-    rsp = signal_filter(ecg_rate,
-                        sampling_rate=sampling_rate,
-                        highcut=0.5,
-                        method="butterworth",
-                        order=6)
     return rsp
