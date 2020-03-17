@@ -4,6 +4,7 @@ import pandas as pd
 from .ecg_clean import ecg_clean
 from .ecg_peaks import ecg_peaks
 from .ecg_rate import ecg_rate
+from .ecg_delineate import ecg_delineate
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
@@ -30,6 +31,30 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
         - *"ECG_Clean"*: the cleaned signal.
         - *"ECG_R_Peaks"*: the R-peaks marked as "1" in a list of zeros.
         - *"ECG_Rate"*: heart rate interpolated between R-peaks.
+        - *"ECG_P_Peaks"*: the P-peaks marked as "1" in a list of zeros
+        - *"ECG_Q_Peaks"*: the Q-peaks marked as "1" in a list of zeros .
+        - *"ECG_S_Peaks"*: the S-peaks marked as "1" in a list of zeros.
+        - *"ECG_T_Peaks"*: the T-peaks marked as "1" in a list of zeros.
+        - *"ECG_P_Onsets"*: the P-onsets marked as "1" in a list of zeros.
+        - *"ECG_P_Offsets"*: the P-offsets marked as "1" in a list of zeros
+                            (only when method in `ecg_delineate` is wavelet).
+        - *"ECG_T_Onsets"*: the T-onsets marked as "1" in a list of zeros
+                            (only when method in `ecg_delineate` is wavelet).
+        - *"ECG_T_Offsets"*: the T-offsets marked as "1" in a list of zeros.
+        - *"ECG_R_Onsets"*: the R-onsets marked as "1" in a list of zeros
+                            (only when method in `ecg_delineate` is wavelet).
+        - *"ECG_R_Offsets"*: the R-offsets marked as "1" in a list of zeros
+                            (only when method in `ecg_delineate` is wavelet).
+        - *"Atrial_Phase"*: cardiac phase, marked by "1" for systole
+          and "0" for diastole.
+        - *"Ventricular_Phase"*: cardiac phase, marked by "1" for systole
+          and "0" for diastole.
+          *"ECG_Atrial_PhaseCompletion"*: cardiac phase (atrial) completion,
+          expressed in percentage (from 0 to 1), representing the stage of the
+          current cardiac phase.
+          *"ECG_Ventricular_PhaseCompletion"*: cardiac phase (ventricular)
+          completion, expressed in percentage (from 0 to 1), representing the
+          stage of the current cardiac phase.
     info : dict
         A dictionary containing the samples at which the R-peaks occur,
         accessible with the key "ECG_Peaks".
@@ -49,11 +74,12 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     ecg_cleaned = ecg_clean(ecg_signal,
                             sampling_rate=sampling_rate,
                             method=method)
-
+    # R-peaks
     instant_peaks, rpeaks, = ecg_peaks(ecg_cleaned=ecg_cleaned,
                                        sampling_rate=sampling_rate,
                                        method=method,
                                        correct_artifacts=True)
+
     rate = ecg_rate(rpeaks,
                     sampling_rate=sampling_rate,
                     desired_length=len(ecg_cleaned))
@@ -61,6 +87,16 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     signals = pd.DataFrame({"ECG_Raw": ecg_signal,
                             "ECG_Clean": ecg_cleaned,
                             "ECG_Rate": rate})
-    signals = pd.concat([signals, instant_peaks], axis=1)
+
+    # Additional info of the ecg signal
+    delineated_signal, waves = ecg_delineate(ecg_cleaned=ecg_cleaned,
+                                             rpeaks=rpeaks,
+                                             sampling_rate=sampling_rate)
+
+    cardiac_phase = ecg_phase(ecg_cleaned=ecg_cleaned,
+                              rpeaks=rpeaks,
+                              delineate_info=waves)
+
+    signals = pd.concat([signals, instant_peaks, delineated_signal, cardiac_phase], axis=1)
     info = rpeaks
     return signals, info
