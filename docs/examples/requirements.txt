@@ -1,0 +1,5 @@
+neurokit2==0.0.14
+pandas==0.24.*
+matplotlib==3.*
+seaborn==0.9.*
+numpy==1.*
