@@ -22,6 +22,8 @@ ECG
 
 .. autofunction:: neurokit2.ecg_eventrelated
 
+.. autofunction:: neurokit2.ecg_phase
+
 
 RSP
 -------

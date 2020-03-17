@@ -43,7 +43,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="derivative"):
         "ECG_S_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets"
         respectively.
 
-        For continuous wavelet method, the dictionary contains the samples at
+        For wavelet methods, the dictionary contains the samples at
         which P-peaks, T-peaks, P-onsets, P-offsets, T-onsets, T-offsets, QRS-
         onsets and QRS-offsets occur, accessible with the key "ECG_P_Peaks",
         "ECG_T_Peaks", "ECG_P_Onsets", "ECG_P_Offsets", "ECG_T_Onsets",
