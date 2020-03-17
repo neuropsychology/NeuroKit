@@ -28,7 +28,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
         A DataFrame of same length as `ecg_signal` containing the following
         columns:
 
-        - *"Atrial_Phase"*: cardiac phase, marked by "1" for systole
+        - *"ECG_Phase_Artrial"*: cardiac phase, marked by "1" for systole
           and "0" for diastole.
         - *"Ventricular_Phase"*: cardiac phase, marked by "1" for systole
           and "0" for diastole.
