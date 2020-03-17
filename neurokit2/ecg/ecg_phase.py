@@ -30,7 +30,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
 
         - *"ECG_Phase_Artrial"*: cardiac phase, marked by "1" for systole
           and "0" for diastole.
-        - *"Ventricular_Phase"*: cardiac phase, marked by "1" for systole
+        - *"ECG_Ventricular_Phase"*: cardiac phase, marked by "1" for systole
           and "0" for diastole.
           *"ECG_Atrial_PhaseCompletion"*: cardiac phase (atrial) completion,
           expressed in percentage (from 0 to 1), representing the stage of the
@@ -109,8 +109,8 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
 
 
 
-    out = pd.DataFrame({"Atrial_Phase": atrial,
-                        "Ventricular_Phase": ventricular,
+    out = pd.DataFrame({"ECG_Atrial_Phase": atrial,
+                        "ECG_Ventricular_Phase": ventricular,
                         "ECG_Atrial_PhaseCompletion": atrial_completion,
                         "ECG_Ventricular_PhaseCompletion": ventricular_comletion})
 
