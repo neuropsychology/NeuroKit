@@ -11,7 +11,11 @@ from ..complexity import entropy_sample
 
 
 def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
-    """ Computes time domain and frequency domain features for Heart Rate Variability (HRV) analysis.
+    """ Computes indices of Heart Rate Variability (HRV).
+
+    Different metrics of HRV exist. Note that a minimum recording is recommended for some
+    indices to be meaninful. For instance, 1, 2 and 5 minutes of good signal are the
+    recomended minimums for HF, LF and LF/HF, respectively.
 
     Parameters
     ----------
@@ -29,34 +33,39 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     -------
     DataFrame
         DataFrame consisting of the computed HRV metrics, which includes:
-            - "*HRV_RMSSD*": the square root of the mean of the sum of successive differences between adjacent RR intervals.
-            - "*HRV_MeanNN*": the mean of the RR intervals.
-            - "*HRV_SDNN*": the standard deviation of the RR intervals.
-            - "*HRV_SDSD*": the standard deviation of the successive differences between RR intervals.
-            - "*HRV_CVNN*": the standard deviation of the RR intervals (SDNN) divided by the mean of the RR intervals (MeanNN).
-            - "*HRV_CVSD*": the root mean square of the sum of successive differences (RMSSD) divided by the mean of the RR intervals (MeanNN).
-            - "*HRV_MedianNN*": the median of the absolute values of the successive differences between RR intervals.
-            - "*HRV_MadNN*": the median absolute deviation of the RR intervals.
-            - "*HCVNN*": the median absolute deviation of the RR intervals (MadNN) divided by the median of the absolute differences of their successive differences (MedianNN).
-            - "*pNN50*": the proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
-            - "*pNN20*": the proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
-            - "*HRV_TINN*": a geometrical parameter of the HRV, or more specifically, the baseline width of the RR intervals distribution obtained by triangular interpolation, where the error of least squares determines the triangle. It is an approximation of the RR interval distribution.
-            - "*HRV_HTI*": the HRV triangular index, measuring the total number of RR intervals divded by the height of the RR intervals histogram.
-            - "*HRV_ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz by default.
-            - "*HRV_VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz by default.
-            - "*HRV_LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
-            - "*HRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
-            - "*HRV_VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
-            - "*HRV_LFHF*": the ratio of low frequency power to high frequency power.
-            - "*HRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
-            - "*HRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
-            - "*HRV_SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term RR interval fluctuations i.e., beat-to-beat variability.
-            - "*HRV_SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line of identity. It is an index of long-term RR interval fluctuations.
-            - "*HRV_SD2SD1*": the ratio between short and long term fluctuations of the RR intervals (SD2 divided by SD1).
-            - "*HRV_CSI*": the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability of the Poincaré plot by its transverse variability.
-            - "*HRV_CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and transverse variability.
-            - "*HRV_CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal variability by its transverse variability. Usually used in seizure research.
-            - "*HRV_SampEn*": the sample entropy measure of HRV, calculated by `entropy_sample()`.
+            - **Time Domain**
+                - "*HRV_RMSSD*": the square root of the mean of the sum of successive differences between adjacent RR intervals.
+                - "*HRV_MeanNN*": the mean of the RR intervals.
+                - "*HRV_SDNN*": the standard deviation of the RR intervals.
+                - "*HRV_SDSD*": the standard deviation of the successive differences between RR intervals.
+                - "*HRV_CVNN*": the standard deviation of the RR intervals (SDNN) divided by the mean of the RR intervals (MeanNN).
+                - "*HRV_CVSD*": the root mean square of the sum of successive differences (RMSSD) divided by the mean of the RR intervals (MeanNN).
+                - "*HRV_MedianNN*": the median of the absolute values of the successive differences between RR intervals.
+                - "*HRV_MadNN*": the median absolute deviation of the RR intervals.
+                - "*HCVNN*": the median absolute deviation of the RR intervals (MadNN) divided by the median of the absolute differences of their successive differences (MedianNN).
+                - "*pNN50*": the proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
+                - "*pNN20*": the proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
+                - "*HRV_TINN*": a geometrical parameter of the HRV, or more specifically, the baseline width of the RR intervals distribution obtained by triangular interpolation, where the error of least squares determines the triangle. It is an approximation of the RR interval distribution.
+                - "*HRV_HTI*": the HRV triangular index, measuring the total number of RR intervals divded by the height of the RR intervals histogram.
+
+            - **Frequency Domain**:
+                - "*HRV_ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz by default.
+                - "*HRV_VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz by default.
+                - "*HRV_LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
+                - "*HRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
+                - "*HRV_VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
+                - "*HRV_LFHF*": the ratio of low frequency power to high frequency power.
+                - "*HRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
+                - "*HRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
+
+            - **Non-linear Domain**:
+                - "*HRV_SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term RR interval fluctuations i.e., beat-to-beat variability.
+                - "*HRV_SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line of identity. It is an index of long-term RR interval fluctuations.
+                - "*HRV_SD2SD1*": the ratio between short and long term fluctuations of the RR intervals (SD2 divided by SD1).
+                - "*HRV_CSI*": the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability of the Poincaré plot by its transverse variability.
+                - "*HRV_CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and transverse variability.
+                - "*HRV_CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal variability by its transverse variability. Usually used in seizure research.
+                - "*HRV_SampEn*": the sample entropy measure of HRV, calculated by `entropy_sample()`.
 
     See Also
     --------
@@ -75,6 +84,7 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
       Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
+    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms. Frontiers in public health, 5, 258.
     """
     # Sanitize input
     ecg_rate, rpeaks = _ecg_hrv_formatinput(ecg_rate, rpeaks, sampling_rate)

@@ -215,7 +215,7 @@ You can run:
     @misc{neurokit,
       doi = {10.5281/ZENODO.3597887},
       url = {https://github.com/neuropsychology/NeuroKit},
-      author = {Makowski, Dominique and Pham, Tam and L Juen, Zen and Brammer, Jan C. and Pham, Hung and Lesspinasse, Fran\c{c}ois and S H Chen, Annabel},
+      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lesspinasse, Fran\c{c}ois and S H Chen, Annabel},
       title = {NeuroKit: The Python Toolbox for Neurophysiological Signal Processing},
       publisher = {Zenodo},
       year = {2020},

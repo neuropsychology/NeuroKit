@@ -51,8 +51,10 @@ def test_complexity():
     # Fuzzy
     assert np.allclose(nk.entropy_fuzzy(signal, 2, 0.2, 1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0)
 
-
-
+    # DFA
+    signal = nk.signal_simulate(duration=2, frequency=5)
+    assert nk.complexity_dfa(signal) == nolds.dfa(signal, fit_exp="poly")
+    assert isinstance(nk.complexity_dfa(signal), np.float)
 
 # =============================================================================
 # Pyeeg
