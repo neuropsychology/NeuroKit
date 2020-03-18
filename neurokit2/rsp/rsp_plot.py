@@ -27,8 +27,8 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     # Mark peaks, troughs and phases.
     peaks = np.where(rsp_signals["RSP_Peaks"] == 1)[0]
     troughs = np.where(rsp_signals["RSP_Troughs"] == 1)[0]
-    inhale = np.where(rsp_signals["RSP_Inspiration"] == 1)[0]
-    exhale = np.where(rsp_signals["RSP_Inspiration"] == 0)[0]
+    inhale = np.where(rsp_signals["RSP_Phase"] == 1)[0]
+    exhale = np.where(rsp_signals["RSP_Phase"] == 0)[0]
 
     if "RSP_Amplitude" in list(rsp_signals.columns):
         fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)

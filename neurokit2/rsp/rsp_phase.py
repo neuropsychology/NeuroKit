@@ -4,7 +4,7 @@ import pandas as pd
 
 
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
-
+from ..signal import signal_phase
 
 
 
@@ -26,8 +26,15 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
 
     Returns
     -------
-    array
-        A vector containing the respiration phase.
+    signals : DataFrame
+        A DataFrame of same length as `rsp_signal` containing the following
+        columns:
+
+        - *"RSP_Inspiration"*: breathing phase, marked by "1" for inspiration
+          and "0" for expiration.
+        - *"RSP_PhaseCompletion"*: breathing phase completion, expressed in
+          percentage (from 0 to 1), representing the stage of the current
+          respiratory phase.
 
     See Also
     --------
@@ -39,14 +46,15 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     >>>
     >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> info, peak_signal = nk.rsp_peaks(cleaned)
+    >>> peak_signal, info = nk.rsp_peaks(cleaned)
     >>>
     >>> phase = nk.rsp_phase(peak_signal)
-    >>> nk.standardize(pd.DataFrame({"RSP": rsp, "Phase": phase})).plot()
+    >>> nk.signal_plot([rsp, phase], standardize=True)
     """
     # Format input.
     peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, desired_length)
 
+    # Phase
     inspiration = np.full(desired_length, np.nan)
     inspiration[peaks] = 0.0
     inspiration[troughs] = 1.0
@@ -54,4 +62,10 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     last_element = np.where(~np.isnan(inspiration))[0][-1]  # Avoid filling beyond the last peak/trough
     inspiration[0:last_element] = pd.Series(inspiration).fillna(method="pad").values[0:last_element]
 
-    return inspiration
+    # Phase Completion
+    completion = signal_phase(inspiration, method="percent")
+
+    out = pd.DataFrame({"RSP_Phase": inspiration,
+                        "RSP_PhaseCompletion": completion})
+
+    return out

@@ -4,13 +4,13 @@ import pandas as pd
 from .emg_clean import emg_clean
 from .emg_amplitude import emg_amplitude
 from .emg_activation import emg_activation
-from ..signal import signal_formatpeaks
 
 
 def emg_process(emg_signal, sampling_rate=1000):
     """Process a electromyography (EMG) signal.
 
-    Convenience function that automatically processes a electromyography signal.
+    Convenience function that automatically processes
+    an electromyography signal.
 
     Parameters
     ----------
@@ -29,9 +29,15 @@ def emg_process(emg_signal, sampling_rate=1000):
         - *"EMG_Clean"*: the cleaned signal.
         - *"EMG_Amplitude"*: the signal amplitude,
         or the activation level of the signal.
-        - *"EMG_Activity*": the activity of the signal for which amplitude exceeds the threshold specified, marked as "1" in a list of zeros.
-        - *"EMG_Onsets"*: the onsets of the amplitude, marked as "1" in a list of zeros.
-        - *"EMG_Offsets"*: the offsets of the amplitude, marked as "1" in a list of zeros.
+        - *"EMG_Activity*": the activity of the signal for which amplitude
+        exceeds the threshold specified, marked as "1" in a list of zeros.
+        - *"EMG_Onsets"*: the onsets of the amplitude,
+        marked as "1" in a list of zeros.
+        - *"EMG_Offsets"*: the offsets of the amplitude,
+        marked as "1" in a list of zeros.
+    info : dict
+        A dictionary containing the information of each
+        amplitude onset, offset, and peak activity (see `emg_activation()`).
 
     See Also
     --------
@@ -42,7 +48,7 @@ def emg_process(emg_signal, sampling_rate=1000):
     >>> import neurokit2 as nk
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
-    >>> signals, info = emg_process(emg, sampling_rate=1000)
+    >>> signals, info = nk.emg_process(emg, sampling_rate=1000)
     >>> nk.emg_plot(signals)
     """
     # Clean signal
@@ -51,18 +57,14 @@ def emg_process(emg_signal, sampling_rate=1000):
     # Get amplitude
     amplitude = emg_amplitude(emg_cleaned)
 
-    # Get onsets
-    activity_signal, info = emg_activation(emg_amplitude, threshold=0.01)
-    onset_dict = {"EMG_Onsets": info["EMG_Onsets"]}
-    offset_dict = {"EMG_Offsets": info["EMG_Offsets"]}
-    onsets = signal_formatpeaks(onset_dict, desired_length=len(emg_cleaned), peak_indices=onset_dict["EMG_Onsets"])
-    offsets = signal_formatpeaks(offset_dict, desired_length=len(emg_cleaned), peak_indices=offset_dict["EMG_Offsets"])
+    # Get onsets, offsets, and periods of activity
+    activity_signal, info = emg_activation(amplitude, threshold='default')
 
     # Prepare output
     signals = pd.DataFrame({"EMG_Raw": emg_signal,
                             "EMG_Clean": emg_cleaned,
                             "EMG_Amplitude": amplitude})
 
-    signals = pd.concat([signals, activity_signal, onsets, offsets], axis=1)
+    signals = pd.concat([signals, activity_signal], axis=1)
 
     return signals, info

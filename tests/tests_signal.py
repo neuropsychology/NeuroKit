@@ -2,7 +2,6 @@ import numpy as np
 import pandas as pd
 import neurokit2 as nk
 import scipy.signal
-import biosppy
 
 
 # =============================================================================
@@ -104,19 +103,32 @@ def test_signal_filter():
     filtered = nk.signal_filter(signal, highcut=10)
     assert np.std(signal) > np.std(filtered)
 
+    # Generate 10 seconds of signal with 2 Hz oscillation and added 50Hz powerline-noise.
+    sampling_rate = 250
+    samples = np.arange(10 * sampling_rate)
+
+    signal = np.sin(2 * np.pi * 2 * (samples / sampling_rate))
+    powerline = np.sin(2 * np.pi * 50 * (samples / sampling_rate))
+
+    signal_corrupted = signal + powerline
+    signal_clean = nk.signal_filter(signal_corrupted,
+                                    sampling_rate=sampling_rate,
+                                    method="powerline")
+
+    # import matplotlib.pyplot as plt
+    # figure, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
+    # ax0.plot(signal_corrupted)
+    # ax1.plot(signal)
+    # ax2.plot(signal_clean * 100)
+
+    assert np.allclose(sum(signal_clean - signal), -2, atol=0.2)
+
 def test_signal_interpolate():
 
     x_axis = np.linspace(start=10, stop=30, num=10)
     signal = np.cos(x_axis)
 
-    interpolated = nk.signal_interpolate(signal, desired_length=1000)
-    assert len(interpolated) == 1000
-
-    new_x = np.linspace(start=0, stop=40, num=1000)
-    interpolated = nk.signal_interpolate(signal,
-                                         desired_length=1000,
-                                         x_axis=x_axis,
-                                         new_x=new_x)
+    interpolated = nk.signal_interpolate(x_axis, signal, desired_length=1000)
     assert len(interpolated) == 1000
     assert interpolated[0] == signal[0]
 
@@ -149,7 +161,7 @@ def test_signal_rate():
     info = nk.signal_findpeaks(signal)
     rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000,
                        desired_length=None)
-    assert rate.shape[0] == np.max(info["Peaks"])
+    assert rate.shape[0] == len(info["Peaks"])
 
     # Test with dictionary.produced from signal_findpeaks.
     assert info[list(info.keys())[0]].shape == (info["Peaks"].shape[0], )

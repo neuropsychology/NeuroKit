@@ -7,7 +7,7 @@ from .utils_get_r import _get_r
 from .entropy_sample import entropy_sample
 
 
-def entropy_multiscale(signal, order=2, r="default", scale="max"):
+def entropy_multiscale(signal, order=2, r="default", scale="default"):
     """Compute the multiscale entropy (MSE).
 
 
@@ -20,7 +20,7 @@ def entropy_multiscale(signal, order=2, r="default", scale="max"):
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
     scale : str, int or list
-        A list of scale factors of coarse graining. If 'max' (default), will use all scales until the length of the signal. If an integer, will create a range until the specified int.
+        A list of scale factors of coarse graining. If 'default', will use ``rqnge(len(signal) / (order + 10))`` (see discussion `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_). If 'max', will use all scales until the length of the signal. If an integer, will create a range until the specified int.
 
 
 
@@ -39,7 +39,7 @@ def entropy_multiscale(signal, order=2, r="default", scale="max"):
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> nk.entropy_multiscale(signal)
-    53.64066922587802
+    38.26359811291708
 
 
     References
@@ -57,8 +57,10 @@ def entropy_multiscale(signal, order=2, r="default", scale="max"):
     r = _get_r(signal, r=r)
 
     # Select scale
-    if scale is None or isinstance(scale, str):
+    if scale is None or scale == "max":
         scale = range(len(signal))  # Set to max
+    elif scale == "default":
+        scale = range(int(len(signal) / (order + 10)))  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
     elif isinstance(scale, int):
         scale = range(scale)
 

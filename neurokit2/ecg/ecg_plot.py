@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec
 
 from ..ecg import ecg_findpeaks
+from .ecg_delineate import _ecg_delineate_beatwindow
 from ..epochs import epochs_to_df
 from ..epochs import epochs_create
 
@@ -45,7 +46,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
         x_axis = np.linspace(0, ecg_signals.shape[0] / sampling_rate,
                              ecg_signals.shape[0])
         gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[1-1/np.pi, 1/np.pi])
-        fig = plt.figure(constrained_layout=True)
+        fig = plt.figure(constrained_layout=False)
         ax0 = fig.add_subplot(gs[0, :-1])
         ax1 = fig.add_subplot(gs[1, :-1])
         ax2 = fig.add_subplot(gs[:, -1])
@@ -86,9 +87,14 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     if sampling_rate is not None:
         ax2.set_title("Individual Heart Beats")
 
-        heartbeats = _ecg_plot_heartbeats(ecg=ecg_signals["ECG_Clean"],
-                                          peaks=peaks,
-                                          sampling_rate=sampling_rate)
+        epochs_start, epochs_end = _ecg_delineate_beatwindow(heart_rate=ecg_signals["ECG_Rate"],
+                                                             sampling_rate=sampling_rate)
+        heartbeats = epochs_create(ecg_signals["ECG_Clean"],
+                                   events=peaks,
+                                   epochs_start=epochs_start,
+                                   epochs_end=epochs_end,
+                                   sampling_rate=sampling_rate)
+        heartbeats = epochs_to_df(heartbeats)
 
         heartbeats_pivoted = heartbeats.pivot(index='Time',
                                               columns='Label',
@@ -105,15 +111,3 @@ def ecg_plot(ecg_signals, sampling_rate=None):
             lines.append(line)
 
     return fig
-
-
-# =============================================================================
-# Internals
-# =============================================================================
-def _ecg_plot_heartbeats(ecg, peaks, sampling_rate=None):
-    # Extract heart beats
-    heartbeats = epochs_create(ecg, events=peaks, epochs_duration=0.85,
-                               epochs_start=-0.35, sampling_rate=sampling_rate)
-    heartbeats = epochs_to_df(heartbeats)
-
-    return heartbeats

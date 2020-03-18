@@ -18,6 +18,12 @@ ECG
 
 .. autofunction:: neurokit2.ecg_plot
 
+.. autofunction:: neurokit2.ecg_delineate
+
+.. autofunction:: neurokit2.ecg_eventrelated
+
+.. autofunction:: neurokit2.ecg_phase
+
 
 RSP
 -------
@@ -35,6 +41,8 @@ RSP
 .. autofunction:: neurokit2.rsp_process
 
 .. autofunction:: neurokit2.rsp_plot
+
+.. autofunction:: neurokit2.rsp_eventrelated
 
 
 EDA

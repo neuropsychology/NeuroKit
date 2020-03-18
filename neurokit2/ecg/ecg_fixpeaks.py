@@ -6,7 +6,7 @@ import scipy.signal
 import scipy.stats
 
 
-def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
+def ecg_fixpeaks(rpeaks, sampling_rate=1000, iterative=True, show=False):
     """Correct R-peaks location based on their interval (RRi).
 
     Identify erroneous inter-beat-intervals. Lipponen & Tarvainen (2019).
@@ -19,8 +19,8 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
     sampling_rate : int
         The sampling frequency of the signal that contains the peaks (in Hz,
         i.e., samples/second).
-    recursive : bool
-        Whether or not to apply the artifact correction recursively (results
+    iterative : bool
+        Whether or not to apply the artifact correction repeatedly (results
         in superior artifact correction).
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
@@ -29,7 +29,7 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
     -------
     artifacts : dict
         A dictionary containing the indices of artifacts, accessible with the
-        keys "etopic", "missed", "extra", and "longshort".
+        keys "ectopic", "missed", "extra", and "longshort".
 
     See Also
     --------
@@ -44,7 +44,7 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
     >>>                       random_state=41)
     >>> rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
     >>> artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks_uncorrected,
-    >>>                                               recursive=True,
+    >>>                                               iterative=True,
     >>>                                               show=True)
     >>> rate_corrected = nk.ecg_rate(rpeaks_uncorrected,
     >>>                              desired_length=len(ecg))
@@ -69,8 +69,8 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
     rpeaks_corrected = _fix_artifacts_lipponen2019(rpeaks, artifacts,
                                                    sampling_rate)
 
-    if recursive:
-        # Recursively apply the artifact correction until the number of
+    if iterative:
+        # Iteratively apply the artifact correction until the number of
         # artifact reaches an equilibrium (i.e., the number of artifacts
         # does not change anymore from one iteration to the next)
         n_artifacts_previous = np.inf
@@ -102,7 +102,7 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, recursive=True, show=False):
 # =============================================================================
 def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
 
-    # Set free parameters.
+    # Set fixed parameters.
     c1 = 0.13
     c2 = 0.17
     alpha = 5.2
@@ -114,11 +114,11 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
     rr = np.ediff1d(rpeaks, to_begin=0) / sampling_rate
     # For subsequent analysis it is important that the first element has
     # a value in a realistic range (e.g., for median filtering).
-    rr[0] = np.mean(rr)
+    rr[0] = np.mean(rr[1:])
 
     # Compute differences of consecutive periods.
     drrs = np.ediff1d(rr, to_begin=0)
-    drrs[0] = np.mean(drrs)
+    drrs[0] = np.mean(drrs[1:])
     # Normalize by threshold.
     drrs, _ = _threshold_normalization(drrs, alpha, window_half)
 
@@ -163,7 +163,7 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
 
     for i in range(rpeaks.size - 2):
 
-        # Check for etopic peaks.
+        # Check for ectopic peaks.
         if np.abs(drrs[i]) <= 1:
             continue
 
@@ -178,15 +178,17 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
 
         # If none of the two equations is true.
         # Based on Figure 2b.
-        if np.logical_or(np.abs(drrs[i]) > 1, np.abs(mrrs[i]) > 3):
-            # Long beat.
-            eq3 = np.logical_and(drrs[i] > 1, s22[i] < -1)
-            eq4 = np.abs(mrrs[i]) > 3
-            # Short beat.
-            eq5 = np.logical_and(drrs[i] < -1, s22[i] > 1)
+        if ~np.any([np.abs(drrs[i]) > 1, np.abs(mrrs[i]) > 3]):
+            continue
+
+        # Long beat.
+        eq3 = np.logical_and(drrs[i] > 1, s22[i] < -1)
+        eq4 = np.abs(mrrs[i]) > 3
+        # Short beat.
+        eq5 = np.logical_and(drrs[i] < -1, s22[i] > 1)
 
         if ~np.any([eq3, eq4, eq5]):
-            # Of none of the three equations is true: normal beat.
+            # If none of the three equations is true: normal beat.
             continue
 
         # If any of the three equations is true: check for missing or extra
@@ -198,7 +200,7 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
         eq7 = np.abs(rr[i] + rr[i + 1] - medrr[i]) < th2[i]
 
         # Check if short or extra.
-        if np.any([eq3, eq4]):
+        if eq5:
             if eq7:
                 extra_idcs.append(i)
             else:
@@ -206,7 +208,7 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
                 if np.abs(drrs[i + 1]) < np.abs(drrs[i + 2]):
                     longshort_idcs.append(i + 1)
         # Check if long or missing.
-        if eq5:
+        if np.any([eq3, eq4]):
             if eq6:
                 missed_idcs.append(i)
             else:
@@ -228,7 +230,7 @@ def _fix_artifacts_lipponen2019(rpeaks, artifacts, sampling_rate):
 
     extra_idcs = artifacts["extra"]
     missed_idcs = artifacts["missed"]
-    etopic_idcs = artifacts["ectopic"]
+    ectopic_idcs = artifacts["ectopic"]
     longshort_idcs = artifacts["longshort"]
 
     # Delete extra peaks.
@@ -236,26 +238,38 @@ def _fix_artifacts_lipponen2019(rpeaks, artifacts, sampling_rate):
         rpeaks = np.delete(rpeaks, extra_idcs)
         # Update remaining indices.
         missed_idcs = _update_indices(extra_idcs, missed_idcs, -1)
-        etopic_idcs = _update_indices(extra_idcs, etopic_idcs, -1)
+        ectopic_idcs = _update_indices(extra_idcs, ectopic_idcs, -1)
         longshort_idcs = _update_indices(extra_idcs, longshort_idcs, -1)
 
     # Add missing peaks.
     if missed_idcs:
-        # Calculate the position(s) of new beat(s).
+        # Calculate the position(s) of new beat(s). Make sure to not generate
+        # negative indices. prev_peaks and next_peaks must have the same
+        # number of elements.
+        missed_idcs = np.array(missed_idcs)
+        valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(rpeaks))
+        missed_idcs = missed_idcs[valid_idcs]
         prev_rpeaks = rpeaks[[i - 1 for i in missed_idcs]]
         next_rpeaks = rpeaks[missed_idcs]
         added_rpeaks = prev_rpeaks + (next_rpeaks - prev_rpeaks) / 2
-        # Add the new peaks.
+        # Add the new peaks before the missed indices (see numpy docs).
         rpeaks = np.insert(rpeaks, missed_idcs, added_rpeaks)
         # Update remaining indices.
-        etopic_idcs = _update_indices(missed_idcs, etopic_idcs, 1)
+        ectopic_idcs = _update_indices(missed_idcs, ectopic_idcs, 1)
         longshort_idcs = _update_indices(missed_idcs, longshort_idcs, 1)
 
-    # Interpolate etopic as well as long or short peaks (important to do
+    # Interpolate ectopic as well as long or short peaks (important to do
     # this after peaks are deleted and/or added).
-    interp_idcs = np.concatenate((etopic_idcs, longshort_idcs)).astype(int)
+    interp_idcs = np.concatenate((ectopic_idcs, longshort_idcs)).astype(int)
     if interp_idcs.size > 0:
         interp_idcs.sort(kind='mergesort')
+        # Make sure to not generate negative indices, or indices that exceed
+        # the total number of peaks.
+        # Make sure to not generate negative indices, or indices that exceed
+        # the total number of peaks. prev_peaks and next_peaks must have the
+        # same number of elements.
+        valid_idcs = np.logical_and(interp_idcs > 1, interp_idcs < len(rpeaks))
+        interp_idcs = interp_idcs[valid_idcs]
         prev_rpeaks = rpeaks[[i - 1 for i in interp_idcs]]
         next_rpeaks = rpeaks[[i + 1 for i in interp_idcs]]
         rpeaks_interp = prev_rpeaks + (next_rpeaks - prev_rpeaks) / 2
@@ -305,13 +319,14 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax1.axhline(1, c='r', label="artifact threshold")
     ax1.legend(loc="upper right")
 
+    # Visualize second threshold.
     ax2.set_title("Difference-from-median criterion", fontweight="bold")
     ax2.plot(np.abs(mrrs), label="difference from median over 11 periods")
     ax2.axhline(3, c="r", label="artifact threshold")
     ax2.legend(loc="upper right")
 
-    # Visualize decision boundaries.
-    fig2, (ax3, ax4) = plt.subplots(nrows=1, ncols=2)
+    # Visualize subspaces.
+    fig1, (ax3, ax4) = plt.subplots(nrows=1, ncols=2)
     ax3.set_title("Subspace 1", fontweight="bold")
     ax3.set_xlabel("S11")
     ax3.set_ylabel("S12")
@@ -321,7 +336,7 @@ def _plot_artifacts_lipponen2019(artifacts, info):
               (-1, -c1 * -1 + c2),
               (-1, max(s12))]
     poly0 = matplotlib.patches.Polygon(verts0, alpha=0.3, facecolor="r",
-                                       edgecolor=None, label="etopic periods")
+                                       edgecolor=None, label="ectopic periods")
     ax3.add_patch(poly0)
     verts1 = [(1, -c1 * 1 - c2),
               (1, min(s12)),

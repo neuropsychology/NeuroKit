@@ -26,10 +26,11 @@ import sys
 sys.path.insert(0, os.path.abspath('../'))
 
 
-MOCK_MODULES = ['numpy', 'pandas', 'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'sklearn', 'sklearn.neighbors', 'mne', 'bioread', 'matplotlib', 'matplotlib.pyplot', 'matplotlib.collections', 'matplotlib.cm', 'matplotlib.patches', 'matplotlib.gridspec', 'cvxopt', 'pywt']
+MOCK_MODULES = ['pandas', 'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'sklearn', 'sklearn.neighbors', 'mne', 'bioread', 'cvxopt', 'pywt']
 
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
+
 
 
 # -- General configuration ---------------------------------------------
@@ -51,8 +52,18 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.viewcode',
     'sphinx_rtd_theme',
-    'nbsphinx'
+    'nbsphinx',
+    'sphinx_nbexamples',
 ]
+
+
+# on_rtd is whether we are on readthedocs.org
+on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
+
+# sphinx-nbexamples
+process_examples = not os.path.exists(os.path.join(os.path.dirname(__file__), 'examples'))
+not_document_data = 'sphinx_nbexamples.gallery_config'
+
 
 napoleon_google_docstring = False
 napoleon_use_param = False
@@ -83,6 +94,7 @@ author = u"Dominique Makowski"
 def find_version():
     result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"), open('../neurokit2/__init__.py').read())
     return result.group(1)
+
 
 version = find_version()
 # The full version, including alpha/beta/rc tags.
@@ -136,26 +148,25 @@ html_static_path = ['_static']
 htmlhelp_basename = 'neurokit2doc'
 
 
-
 # Bootstrap theme
-#html_theme = 'bootstrap'
-#html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
-#html_theme_options = {
-#    'source_link_position': "footer",
-#    'bootswatch_theme': "readable",
-#    'navbar_sidebarrel': False,
-#    'nosidebar': True,
-#    'navbar_pagenav': False,
-#    'bootstrap_version': "3",
-#    'navbar_links': [
-#                     ("Installation", "installation"),
-#                     ("What's new", "news"),
-#                     ("Functions", "functions"),
-#                     ("Contributing", "contributing"),
-#                     ("Authors", "credits")
-#                     ],
+# html_theme = 'bootstrap'
+# html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+# html_theme_options = {
+#     'source_link_position': "footer",
+#     'bootswatch_theme': "readable",
+#     'navbar_sidebarrel': False,
+#     'nosidebar': True,
+#     'navbar_pagenav': False,
+#     'bootstrap_version': "3",
+#     'navbar_links': [
+#                      ("Installation", "installation"),
+#                      ("What's new", "news"),
+#                      ("Functions", "functions"),
+#                      ("Contributing", "contributing"),
+#                      ("Authors", "credits")
+#                      ],
 #
-#    }
+#     }
 
 
 # -- Options for LaTeX output ------------------------------------------
@@ -214,7 +225,7 @@ texinfo_documents = [
 ]
 
 
-#Other
-add_module_names = False # so functions aren’t prepended with the name of the package/module
-add_function_parentheses = True # to ensure that parentheses are added to the end of all function names
+# Other
+add_module_names = False  # so functions aren’t prepended with the name of the package/module
+add_function_parentheses = True  # to ensure that parentheses are added to the end of all function names
 

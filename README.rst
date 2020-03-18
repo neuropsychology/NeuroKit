@@ -7,8 +7,8 @@
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://img.shields.io/travis/neuropsychology/NeuroKit.svg
-        :target: https://travis-ci.org/neuropsychology/NeuroKit
+.. image:: https://travis-ci.org/neuropsychology/NeuroKit.svg?branch=master
+    :target: https://travis-ci.org/neuropsychology/NeuroKit
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit
@@ -23,7 +23,7 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This is a work in progress project meant as a continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community of people** around this collaborative project. If you're interested by getting involved, do `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_
+This is a work-in-progress project continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community** around this collaborative project. If you're interested in getting involved, `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_
 
 
 Installation
@@ -38,7 +38,7 @@ To install NeuroKit2, run this command in your terminal:
 Contribution
 ============
 
-NeuroKit2 is meant to be a all-level-friendly collaborative project. Additionally, it tries to credit all contributors, so that your involvement pays off on your CV. Thus, if you have some ideas for **improvement**, **new features**, or just wanna **learn Python** and do something useful at the same time, do not hesitate and check-out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
+NeuroKit2 is a collaborative project for contributors with all levels of development expertise. Additionally, we credit all contributors, so that your involvement pays off on your CV. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
 
 
 Documentation
@@ -69,9 +69,10 @@ Tutorials
 Examples
 --------
 
--  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/qrs_extraction.html>`_
--  `Electrodermal Activity (EDA) Analysis <https://neurokit2.readthedocs.io/en/latest/examples/eda_analysis.html>`_
-
+-  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/example_heartbeats.html>`_
+-  `Electrodermal Activity (EDA) Analysis <https://neurokit2.readthedocs.io/en/latest/examples/example_eda.html>`_
+-  `Customize your Processing Pipeline <https://neurokit2.readthedocs.io/en/latest/examples/example_custom.html>`_
+-  `Event-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/example_eventrelated.html>`_
 
 
 
@@ -126,8 +127,8 @@ Cardiac activity (ECG)
 
 .. code-block:: python
 
-    # Generate 20 seconds of ECG signal (recorded at 250 samples / second)
-    ecg = nk.ecg_simulate(duration=20, sampling_rate=250, heart_rate=70)
+    # Generate 15 seconds of ECG signal (recorded at 250 samples / second)
+    ecg = nk.ecg_simulate(duration=15, sampling_rate=250, heart_rate=70)
 
     # Process it
     signals, info = nk.ecg_process(ecg, sampling_rate=250)
@@ -163,7 +164,7 @@ Electromyography (EMG)
 .. code-block:: python
 
     # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
-	emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
+    emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
 
     # Process it
     signals = nk.emg_process(emg, sampling_rate=250)
@@ -174,48 +175,10 @@ Electromyography (EMG)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
 
+PPG, BVP, EGG, ...
+-------------------
 
-Signal processing
------------------
-
-Signal cleaning
-^^^^^^^^^^^^^^^^
-
-- `signal_distord() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_distord>`_: Add noise of a given frequency, amplitude and shape to a signal.
-- `signal_binarize() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_binarize>`_: Convert a continuous signal into zeros and ones depending on a given threshold.
-- `signal_filter() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_filter>`_: Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
-- `signal_detrend() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_detrend>`_: Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend).
-- `signal_smooth() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_smooth>`_: Signal smoothing using the convolution of a filter kernel.
-- `signal_psd() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_psd>`_: Compute the Power Spectral Density (PSD).
-
-Signal preprocessing
-^^^^^^^^^^^^^^^^^^^^
-
-- `signal_resample() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_resample>`_: Up- or down-sample a signal.
-- `signal_interpolate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_interpolate>`_: Interpolate (fills the values between data points) a signal using different methods.
-- `signal_merge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_merge>`_: Arbitrary addition of two signals with different time ranges.
-
-Signal processing
-^^^^^^^^^^^^^^^^^
-
-- `signal_zerocrossings() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_zerocrossings>`_: Locate the indices where the signal crosses zero.
-- `signal_findpeaks() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_findpeaks>`_: Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
-- `signal_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_plot>`_: Plot signal with events as vertical lines.
-
-Other Utilities
----------------
-
-Read data
-^^^^^^^^^^
-
-- `read_acqknowledge() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.read_acqknowledge>`_: Read and format a BIOPAC’s AcqKnowledge file into a pandas’ dataframe.
-
-Events *(stimuli triggers and markers)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- `events_find() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_find>`_: Find and select events in a continuous signal (e.g., from a photosensor).
-- `events_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_plot>`_: Plot events in signal.
-- `events_to_mne() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.events_to_mne>`_: Create `MNE <https://github.com/mne-tools/mne-python>`_ compatible events for integration with M/EEG.
+Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
 
 Design
@@ -224,7 +187,7 @@ Design
 *NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
 
 - **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
-- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
+- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
 - **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
 
 Citation
@@ -233,14 +196,36 @@ Citation
 .. image:: https://zenodo.org/badge/218212111.svg
    :target: https://zenodo.org/badge/latestdoi/218212111
   
-  
-No citation yet :'(
+You can run:
+
+.. code-block:: python
+
+    print(nk.__cite__)
+
+
+.. code-block:: console
+
+    You can cite NeuroKit as follows:
+
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
+
+
+    Full bibtex reference:
+
+    @misc{neurokit,
+      doi = {10.5281/ZENODO.3597887},
+      url = {https://github.com/neuropsychology/NeuroKit},
+      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lesspinasse, Fran\c{c}ois and S H Chen, Annabel},
+      title = {NeuroKit: The Python Toolbox for Neurophysiological Signal Processing},
+      publisher = {Zenodo},
+      year = {2020},
+    }
 
 
 Alternatives
 ============
 
-Here's a list of great alternative packages that you should check-out:
+Here's a list of great alternative packages that you should check out:
 
 
 General
@@ -255,8 +240,9 @@ General
 ECG
 ----
 
-- `hrv <https://github.com/rhenanbartels/hrv>`_
 - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
+- `hrv <https://github.com/rhenanbartels/hrv>`_
+- `hrv-analysis <https://github.com/Aura-healthcare/hrvanalysis>`_
 - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
 - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
 - `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_

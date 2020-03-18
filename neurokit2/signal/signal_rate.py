@@ -76,10 +76,10 @@ def _signal_period(peaks, sampling_rate=1000, desired_length=None):
     # that rate has the same number of elements as peaks (important for
     # interpolation later) by prepending the mean of all periods.
     period = np.ediff1d(peaks, to_begin=0) / sampling_rate
-    period[0] = np.mean(period[1::])
+    period[0] = np.mean(period[1:])
 
     # Interpolate all statistics to desired length.
     if desired_length != np.size(peaks):
-        period = signal_interpolate(period, x_axis=peaks, desired_length=desired_length)
+        period = signal_interpolate(peaks, period, desired_length=desired_length)
 
     return period

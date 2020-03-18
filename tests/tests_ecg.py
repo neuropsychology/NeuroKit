@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 import biosppy
 
+
 def test_ecg_simulate():
 
     ecg1 = nk.ecg_simulate(duration=20, length=5000, method="simple", noise=0)
@@ -20,7 +21,6 @@ def test_ecg_simulate():
 #    pd.DataFrame({"ECG1":ecg1, "ECG3": ecg3}).plot()
     assert (len(nk.signal_findpeaks(ecg2, height_min=0.6)["Peaks"]) >
             len(nk.signal_findpeaks(ecg3, height_min=0.6)["Peaks"]))
-
 
 
 def test_ecg_clean():
@@ -69,7 +69,7 @@ def test_ecg_peaks():
                                  method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 152,
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139,
                        atol=1)
 
     # Test with request to correct artifacts.
@@ -78,7 +78,7 @@ def test_ecg_peaks():
                                  method="neurokit")
 
     assert signals.shape == (120000, 1)
-    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 142,
+    assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139,
                        atol=1)
 
 
@@ -99,7 +99,7 @@ def test_ecg_rate():
     rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate)
 
     assert rate.shape == (info["ECG_R_Peaks"].size, )
-    assert np.allclose(rate.mean(), 81, atol=2)
+    assert np.allclose(rate.mean(), 70, atol=2)
 
     # Test with desired length.
     test_length = 1200
@@ -107,7 +107,7 @@ def test_ecg_rate():
                        desired_length=test_length)
 
     assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 81, atol=2)
+    assert np.allclose(rate.mean(), 70, atol=2)
 
 
 def test_ecg_fixpeaks():
@@ -120,8 +120,8 @@ def test_ecg_fixpeaks():
 
     rpeaks = nk.ecg_findpeaks(ecg)
 
-    # Test with recursive artifact correction.
-    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, recursive=True)
+    # Test with iterative artifact correction.
+    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, iterative=True)
 
     assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
                        7383418, atol=1)
@@ -131,8 +131,8 @@ def test_ecg_fixpeaks():
     assert all(isinstance(x, int) for x in artifacts["extra"])
     assert all(isinstance(x, int) for x in artifacts["longshort"])
 
-    # Test with non-recursive artifact correction.
-    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, recursive=False)
+    # Test with non-iterative artifact correction.
+    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, iterative=False)
 
     assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
                        7383418, atol=1)
@@ -156,7 +156,12 @@ def test_ecg_process():
                                    method="neurokit")
     # Only check array dimensions and column names since functions called by
     # ecg_process have already been unit tested
-    assert all(elem in ["ECG_Raw", "ECG_Clean", "ECG_R_Peaks", "ECG_Rate"]
+    assert all(elem in ["ECG_Raw", "ECG_Clean", "ECG_R_Peaks", "ECG_Rate",
+                        "ECG_P_Peaks", "ECG_Q_Peaks", "ECG_S_Peaks",
+                        "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
+                        "ECG_Atrial_Phase", "ECG_Ventricular_Phase",
+                        "ECG_Atrial_PhaseCompletion",
+                        "ECG_Ventricular_PhaseCompletion"]
                for elem in np.array(signals.columns.values, dtype=str))
 
 
@@ -227,7 +232,7 @@ def test_ecg_findpeaks():
 
     # Test christov2004 method
     info_christov = nk.ecg_findpeaks(ecg_cleaned, method="christov2004")
-    assert info_christov["ECG_R_Peaks"].size == 288
+    assert info_christov["ECG_R_Peaks"].size == 273
 
     # Test gamboa2008 method
     info_gamboa = nk.ecg_findpeaks(ecg_cleaned, method="gamboa2008")
@@ -255,4 +260,97 @@ def test_ecg_findpeaks():
     ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
                                method="neurokit")
     info_martinez = nk.ecg_findpeaks(ecg_cleaned, method="martinez2003")
-    assert info_martinez["ECG_R_Peaks"].size == 69
+    assert np.allclose(info_martinez["ECG_R_Peaks"].size,
+                       69, atol=1)
+
+
+def test_ecg_eventrelated():
+
+    ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
+    epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000],
+                              epochs_start=-0.1, epochs_end=1.9)
+    ecg_eventrelated = nk.ecg_eventrelated(epochs)
+
+    # Test rate features
+    assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Min"]) <
+                      np.array(ecg_eventrelated["ECG_Rate_Mean"]))
+
+    assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Mean"]) <
+                      np.array(ecg_eventrelated["ECG_Rate_Max"]))
+
+    assert len(ecg_eventrelated["Label"]) == 3
+    assert len(ecg_eventrelated.columns) == 9
+
+    assert all(elem in ["ECG_Rate_Max", "ECG_Rate_Min", "ECG_Rate_Mean",
+                        "ECG_Rate_Max_Time", "ECG_Rate_Min_Time",
+                        "ECG_Rate_Trend_Quadratic",
+                        "ECG_Rate_Trend_Linear", "ECG_Rate_Trend_R2", "Label"]
+               for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
+
+
+def test_ecg_delineate():
+
+    sampling_rate = 1000
+
+    # test with simulated signals
+    ecg = nk.ecg_simulate(duration=20, sampling_rate=sampling_rate, random_state=42)
+    _, rpeaks = nk.ecg_peaks(ecg, sampling_rate=sampling_rate)
+    number_rpeaks = len(rpeaks['ECG_R_Peaks'])
+
+    # Method 1: derivative
+    _, waves_derivative = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate)
+    assert len(waves_derivative['ECG_P_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_Q_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_S_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_T_Peaks']) == number_rpeaks
+    assert len(waves_derivative['ECG_P_Onsets']) == number_rpeaks
+    assert len(waves_derivative['ECG_T_Offsets']) == number_rpeaks
+
+    # Method 2: CWT
+    _, waves_cwt = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate, method='cwt')
+    assert np.allclose(len(waves_cwt['ECG_P_Peaks']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_T_Peaks']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_R_Onsets']), 23, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_R_Offsets']), 23, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_P_Onsets']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_P_Offsets']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_T_Onsets']), 22, atol=1)
+    assert np.allclose(len(waves_cwt['ECG_T_Offsets']), 22, atol=1)
+
+
+def test_ecg_hrv():
+    ecg_slow = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=70, random_state=42)
+    ecg_fast = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
+
+    ecg_slow, _ = nk.ecg_process(ecg_slow)
+    ecg_fast, _ = nk.ecg_process(ecg_fast)
+
+    ecg_slow_hrv = nk.ecg_hrv(ecg_slow)
+    ecg_fast_hrv = nk.ecg_hrv(ecg_fast)
+
+    assert ecg_fast_hrv["HRV_RMSSD"][0] < ecg_slow_hrv["HRV_RMSSD"][0]
+    assert ecg_fast_hrv["HRV_MeanNN"][0] < ecg_slow_hrv["HRV_MeanNN"][0]
+    assert ecg_fast_hrv["HRV_SDNN"][0] < ecg_slow_hrv["HRV_SDNN"][0]
+    assert ecg_fast_hrv["HRV_CVNN"][0] < ecg_slow_hrv["HRV_CVNN"][0]
+    assert ecg_fast_hrv["HRV_CVSD"][0] < ecg_slow_hrv["HRV_CVSD"][0]
+    assert ecg_fast_hrv["HRV_MedianNN"][0] < ecg_slow_hrv["HRV_MedianNN"][0]
+    assert ecg_fast_hrv["HRV_MadNN"][0] < ecg_slow_hrv["HRV_MadNN"][0]
+    assert ecg_fast_hrv["HRV_MCVNN"][0] < ecg_slow_hrv["HRV_MCVNN"][0]
+    assert ecg_fast_hrv["HRV_pNN50"][0] == ecg_slow_hrv["HRV_pNN50"][0]
+    assert ecg_fast_hrv["HRV_pNN20"][0] < ecg_slow_hrv["HRV_pNN20"][0]
+    assert ecg_fast_hrv["HRV_TINN"][0] < ecg_slow_hrv["HRV_TINN"][0]
+#    assert ecg_fast_hrv["HRV_HTI"][0] > ecg_slow_hrv["HRV_HTI"][0]
+#    assert ecg_fast_hrv["HRV_ULF"][0] == ecg_slow_hrv["HRV_ULF"][0] == 0
+#    assert ecg_fast_hrv["HRV_VLF"][0] < ecg_slow_hrv["HRV_VLF"][0]
+#    assert ecg_fast_hrv["HRV_LF"][0] < ecg_slow_hrv["HRV_LF"][0]
+#    assert ecg_fast_hrv["HRV_HF"][0] < ecg_slow_hrv["HRV_HF"][0]
+#    assert ecg_fast_hrv["HRV_VHF"][0] > ecg_slow_hrv["HRV_VHF"][0]
+
+    assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
+                        'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
+                        'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI', 'HRV_ULF',
+                        'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF',
+                        'HRV_LFn', 'HRV_HFn', 'HRV_LnHF',
+                        'HRV_SD1', 'HRV_SD2', 'HRV_SD2SD1', 'HRV_CSI', 'HRV_CVI',
+                        'HRV_CSI_Modified', 'HRV_SampEn']
+               for elem in np.array(ecg_fast_hrv.columns.values, dtype=str))

@@ -35,3 +35,4 @@ checks:
 exclude_patterns:
 - "tests/"
 - "scripts/"
+- "data/"

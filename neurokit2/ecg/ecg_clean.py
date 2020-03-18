@@ -50,8 +50,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     References
     --------------
     - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
-    In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
+      In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
+
     """
     ecg_signal = sanitize_input(ecg_signal,
                                 message="NeuroKit error: ecg_clean(): we "
@@ -96,6 +97,9 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
                           lowcut=0.5,
                           method="butterworth",
                           order=5)
+    clean = signal_filter(signal=clean,
+                          sampling_rate=sampling_rate,
+                          method="powerline")
     return clean
 
 

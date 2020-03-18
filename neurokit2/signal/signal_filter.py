@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
 import scipy.signal
-
 
 
 def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_length="default"):
@@ -81,11 +79,13 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
                       "FIR": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='fir'),
                       "Savgol": nk.signal_filter(signal, method='savgol')}).plot(subplots=True)
     """
-    # Sanity checks
-    if lowcut is None and highcut is None:
-        return signal
-
     method = method.lower()
+
+    # Sanity checks
+    if method != "powerline":
+        if lowcut is None and highcut is None:
+            return signal
+
     if method in ["sg", "savgol", "savitzky-golay"]:
         filtered = _signal_filter_savgol(signal, sampling_rate, order, window_length=window_length)
     else:
@@ -97,6 +97,8 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
             filtered = _signal_filter_bessel(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["fir"]:
             filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_length=window_length)
+        elif method in ["powerline"]:
+            filtered = _signal_filter_powerline(signal, sampling_rate)
         else:
             raise ValueError("NeuroKit error: signal_filter(): 'method' should be "
                              "one of 'butterworth', 'butterworth_ba', 'bessel',"
@@ -191,9 +193,22 @@ def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None,
     filtered = scipy.signal.sosfiltfilt(sos, signal)
     return filtered
 
+# =============================================================================
+# Poweline
+# =============================================================================
 
+def _signal_filter_powerline(signal, sampling_rate):
+    """Filter out 50 Hz powerline noise by smoothing the signal with a moving
+    average kernel with the width of one period of 50Hz.
+    """
 
-
+    if sampling_rate >= 100:
+        b = np.ones(int(sampling_rate / 50))
+    else:
+        b = np.ones(2)
+    a = [len(b)]
+    y = scipy.signal.filtfilt(b, a, signal, method="pad")
+    return y
 
 
 # =============================================================================
@@ -235,9 +250,6 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
         freqs = np.array(freqs) / (sampling_rate / 2)
 
     return freqs, filter_type
-
-
-
 
 
 def _signal_filter_windowlength(window_length="default", sampling_rate=1000):
