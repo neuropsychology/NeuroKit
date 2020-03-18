@@ -9,6 +9,7 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_power
 from ..complexity import entropy_sample
 from ..complexity import entropy_approximate
+from ..complexity import complexity_dfa
 
 
 def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
@@ -47,7 +48,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
             - "*RRV_SD2SD1*": the ratio between short and long term fluctuations of the breath-to-breath intervals (SD2 divided by SD1).
             - "*RRV_ApEn*": the approximate entropy of RRV, calculated by `entropy_approximate()`.
             - "*RRV_SampEn*": the sample entropy of RRV, calculated by `entropy_sample()`.
-            - "*RRV_DFA*": the fluctuation value generated from Detrended Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath intervals.
+            - "*RRV_DFA*": the fluctuation value generated from Detrended Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath intervals. However, this is designed to analyze time series data over several hours.
 
     See Also
     --------
@@ -83,7 +84,6 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     rrv.update(_rsp_rrv_time(bbi))
     rrv.update(_rsp_rrv_frequency(rsp_period))
     rrv.update(_rsp_rrv_nonlinear(bbi, rsp_period))
-    rrv.update(_rsp_rrv_dfa(bbi))
 
     rrv = pd.DataFrame.from_dict(rrv, orient='index').T.add_prefix("RRV_")
 
@@ -169,34 +169,11 @@ def _rsp_rrv_nonlinear(bbi, rsp_period):
     out["ApEn"] = entropy_approximate(bbi, order=2)
     out["SampEn"] = entropy_sample(bbi, order=2, r=0.2*np.std(bbi, ddof=1))
 
-    return out
-
-
-def _rsp_rrv_dfa(bbi):
-    out = {}
-
-    # Determine signal profile
-    integrated_time_series = np.cumsum(bbi - np.mean(bbi))
-    length = 10
-
-    # Divide profile
-    window_shape = (integrated_time_series.shape[0]//length, length)
-    N = window_shape[0] * window_shape[1]
-    window_data = np.reshape(integrated_time_series[0:N], window_shape)
-
-    # Local trend
-    x = np.arange(length)
-    rms = np.zeros(window_data.shape[0])
-
-    for i, window in enumerate(window_data):
-        coeff = np.polyfit(x, window, 1)
-        fit = np.polyval(coeff, x)
-        # RMS per window
-        rms[i] = np.sqrt(np.mean((window - fit) ** 2))
-
-    out["DFA"] = np.mean(rms)
+    # DFA
+    out["DFA"] = complexity_dfa(bbi, order=1)
 
     return out
+
 
 # =============================================================================
 # Internals
