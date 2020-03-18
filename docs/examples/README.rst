@@ -76,6 +76,7 @@ Respiration data analysis
 Examples dedicated to the analysis of respiratory signals, i.e. as given by a belt, or eventually, with PPG.
 
 Ideas of examples to be implemented::
+
 > Meditation experiments
 > Stress regulation
 > add yours
