@@ -19,11 +19,7 @@ Custom processing pipeline
 ``custom.ipynb``
 
 Founder : ??
-
 Description
-
-::
-
 	This notebook breaks down the default NeuroKit pipeline used in ``_process()`` functions. It guides you in creating your own pipeline with the parameters best suited for your signals.
 
 Event-related paradigm
@@ -33,9 +29,6 @@ Event-related paradigm
 Founder : ??
 
 Description
-
-::
-
 	This notebook guides you through the initialization of events and epochs creation. It shows you how easy it is to compare measures you've extracted from different conditions.
 
 Cardiac data analysis
@@ -56,9 +49,6 @@ Detecting components of the cardiac cycle
 Founder : ??
 
 Description
-
-::
-
 	This notebook illustrate how reliable the peak detection is by analyzing the morphology of each cardiac cycles. It shows you how P-QRS-T components are extracted.
 
 Electrodermal activity
@@ -78,9 +68,6 @@ Extracting information in EDA
 Founder : ??
 
 Description
-
-::
-
 	This notebook goes at the heart of the complexity of EDA analysis by break down how Tonic and Phasic components are extracted from the signal. 
 
 Respiration data analysis
@@ -99,9 +86,6 @@ Extracting Respiration Rate Variability metrics
 Founder : ??
 
 Description
-
-::
-
 	This notebook breaks down the extraction of variability metrics done by ``rsp_rrv()``
 
 Muscle activity
