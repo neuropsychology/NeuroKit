@@ -7,7 +7,7 @@ You are free to click on the link below to run everything... **without having to
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
 
-Biosignal Processing
+1. Biosignal Processing
 ==========
 Examples dedicated to processing pipelines, and measure extraction of multiple signals at a time. What's your thing ? How do you do it ? 
 
@@ -18,25 +18,25 @@ Ideas of examples to be implemented::
 > EMG overview (so many muscles to investigate)
 > add yours...
 
-Custom processing pipeline
+a) Custom processing pipeline
 ---------
 ``custom.ipynb``
 
-Founder : ??
+Contributors : ??
 
 Description
 	This notebook breaks down the default NeuroKit pipeline used in ``_process()`` functions. It guides you in creating your own pipeline with the parameters best suited for your signals.
 
-Event-related paradigm
+b) Event-related paradigm
 -------------------
 ``eventrelated.ipynb``
 
-Founder : ??
+Contributors : ??
 
 Description
 	This notebook guides you through the initialization of events and epochs creation. It shows you how easy it is to compare measures you've extracted from different conditions.
 
-Heart rate and heart cycles
+2. Heart rate and heart cycles
 ==================
 Examples dedicated to the analysis of ECG, PPG and HRV time series. Are you a fan of the `Neurovisceral integration model <https://www.researchgate.net/publication/285225132_Heart_Rate_Variability_A_Neurovisceral_Integration_Model>`_? How would you infer a cognitive or affective process with HRV ? How do you investigate the asymmetry of cardiac cycles ?
 
@@ -47,16 +47,16 @@ Ideas of examples to be implemented::
 > Comparing resting state and movie watching 
 > add yours
 
-Detecting components of the cardiac cycle
+a) Detecting components of the cardiac cycle
 ---------
 ``ecg_delineation.ipynb``
 
-Founder : ??
+Contributors : ??
 
 Description
 	This notebook illustrate how reliable the peak detection is by analyzing the morphology of each cardiac cycles. It shows you how P-QRS-T components are extracted.
 
-Electrodermal activity
+3. Electrodermal activity
 ====================
 Examples dedicated to the analysis of EDA signals. 
 
@@ -66,16 +66,16 @@ Ideas of examples to be implemented::
 > Temperature 
 > add yours 
 
-Extracting information in EDA
+a) Extracting information in EDA
 ----------
 ``eda.ipynb``
 
-Founder : ??
+Contributors : ??
 
 Description
 	This notebook goes at the heart of the complexity of EDA analysis by break down how Tonic and Phasic components are extracted from the signal. 
 
-Respiration rate and respiration cycles
+4. Respiration rate and respiration cycles
 ====================
 Examples dedicated to the analysis of respiratory signals, i.e. as given by a belt, or eventually, with PPG.
 
@@ -85,16 +85,16 @@ Ideas of examples to be implemented::
 > Stress regulation
 > add yours
 
-Extracting Respiration Rate Variability metrics
+a) Extracting Respiration Rate Variability metrics
 -----------------------------------
 ``rrv.ipynb``
 
-Founder : ??
+Contributors :
 
 Description
 	This notebook breaks down the extraction of variability metrics done by ``rsp_rrv()``
 
-Muscle activity
+5. Muscle activity
 ==========
 Examples dedicated to the analysis of EMG signals. 
 
