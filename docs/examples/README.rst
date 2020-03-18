@@ -1,13 +1,17 @@
 Cloud-based interactive examples
 ========
-This sub-repo illustrates what you can do with NeuroKit. It is supposed to reveal how easy it has become to use cutting-edge methods, and still retain the liberty to change a myriad of parameters. You are free to click on the link below to run everything... **without having to install anything!** There you'll find a Jupyterlab with notebooks ready to fire up. If you need `help figuring out the interface <https://jupyterlab.readthedocs.io/en/stable/user/interface.html>`_. (The secret is ``shift+enter``).
+The notebooks in this repo are meant to illustrate what you can do with NeuroKit. It is supposed to reveal how easy it has become to use cutting-edge methods, and still retain the liberty to change a myriad of parameters. These notebooks are organized in different sections that correspond to NeuroKit's modules.
+
+You are free to click on the link below to run everything... **without having to install anything!** There you'll find a Jupyterlab with notebooks ready to fire up. If you need `help figuring out the interface <https://jupyterlab.readthedocs.io/en/stable/user/interface.html>`_. (The secret is ``shift+enter``).
 
 .. image:: https://mybinder.org/badge_logo.svg
  :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
 
 Biosignal Processing
 ==========
-Examples dedicated to preprocessing methods, and measure extraction of multiple signals at a time. What's your thing ? How do you do it ? Ideas of examples to be implemented::
+Examples dedicated to processing pipelines, and measure extraction of multiple signals at a time. What's your thing ? How do you do it ? 
+
+Ideas of examples to be implemented::
 
 > Batch preprocessing of multiple recordings
 > PPG processing for respiration and temperature
@@ -32,9 +36,9 @@ Founder : ??
 Description
 	This notebook guides you through the initialization of events and epochs creation. It shows you how easy it is to compare measures you've extracted from different conditions.
 
-Cardiac data analysis
+Heart rate and heart cycles
 ==================
-Examples dedicated to the analysis of ECG, PPG and HRV time series. Are you a fan of the `Neurovisceral integration model <https://www.researchgate.net/publication/285225132_Heart_Rate_Variability_A_Neurovisceral_Integration_Model>`_. How would you infer a cognitive or affective process with HRV ? How do you investigate the asymmetry of cardiac cycles ?
+Examples dedicated to the analysis of ECG, PPG and HRV time series. Are you a fan of the `Neurovisceral integration model <https://www.researchgate.net/publication/285225132_Heart_Rate_Variability_A_Neurovisceral_Integration_Model>`_? How would you infer a cognitive or affective process with HRV ? How do you investigate the asymmetry of cardiac cycles ?
 
 Ideas of examples to be implemented::
 
@@ -71,7 +75,7 @@ Founder : ??
 Description
 	This notebook goes at the heart of the complexity of EDA analysis by break down how Tonic and Phasic components are extracted from the signal. 
 
-Respiration data analysis
+Respiration rate and respiration cycles
 ====================
 Examples dedicated to the analysis of respiratory signals, i.e. as given by a belt, or eventually, with PPG.
 
