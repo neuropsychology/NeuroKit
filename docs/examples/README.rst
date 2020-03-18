@@ -19,6 +19,7 @@ Custom processing pipeline
 ``custom.ipynb``
 
 Founder : ??
+
 Description
 	This notebook breaks down the default NeuroKit pipeline used in ``_process()`` functions. It guides you in creating your own pipeline with the parameters best suited for your signals.
 
