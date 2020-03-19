@@ -14,6 +14,7 @@ from ..signal import (signal_zerocrossings,
                       signal_formatpeaks)
 from .ecg_peaks import ecg_peaks
 from ..epochs import epochs_create
+from ..epochs import epochs_to_df
 from ..events import events_plot
 
 
@@ -771,3 +772,49 @@ def _ecg_delineate_beatwindow(heart_rate=None, rpeaks=None, sampling_rate=1000):
     epochs_end = 0.5/m
 
     return epochs_start, epochs_end
+
+def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_type='all', sampling_rate=1000):
+
+    # Segment the signal around the R-peaks
+    epochs = epochs_create(ecg_signal,
+                              events=rpeaks,
+                              signal_features=signals,
+                              sampling_rate=sampling_rate,
+                              epochs_start=-0.35, epochs_end=0.55)
+    data = epochs_to_df(epochs)
+    data_cols = data.columns.values
+
+    dfs = []
+    for feature in data_cols:
+        if signal_features_type == "peaks":
+            if any(x in str(feature) for x in ["Peak"]):
+                df = data[feature]
+                dfs.append(df)
+        elif signal_features_type == "bounds_R":
+            if any(x in str(feature) for x in ["ECG_R_Onsets", "ECG_R_Offsets"]):
+                df = data[feature]
+                dfs.append(df)
+        elif signal_features_type == "bounds_T":
+            if any(x in str(feature) for x in ["ECG_T_Onsets", "ECG_T_Offsets"]):
+                df = data[feature]
+                dfs.append(df)
+        elif signal_features_type == "bounds_P":
+            if any(x in str(feature) for x in ["ECG_P_Onsets", "ECG_P_Offsets"]):
+                df = data[feature]
+                dfs.append(df)
+        elif signal_features_type == "all":
+            if any(x in str(feature) for x in ["Peak", "Onset", "Offset"]):
+                df = data[feature]
+                dfs.append(df)
+    features = pd.concat(dfs, axis=1)
+
+    fig, ax = plt.subplots()
+    for label in data.Label.unique():
+        epoch_data = data[data.Label == label]
+        ax.plot(epoch_data.Time, epoch_data.Signal, label='_nolegend_')
+    for i, feature_type in enumerate(features.columns.values):
+        event_data = data[data[feature_type] == 1.0]
+        ax.scatter(event_data.Time, event_data.Signal,
+                   label=feature_type, alpha=0.5, s=200)
+        ax.legend()
+    return fig
