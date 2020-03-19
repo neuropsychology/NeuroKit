@@ -85,7 +85,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak"):
         rpeaks = rpeaks["ECG_R_Peaks"]
 
     method = method.lower()  # remove capitalised letters
-    if method in ["peak", "derivative", "gradient"]:
+    if method in ["peak", "peaks", "derivative", "gradient"]:
         waves = _ecg_delineator_peak(ecg_cleaned,
                                      rpeaks=rpeaks,
                                      sampling_rate=sampling_rate)
@@ -772,6 +772,7 @@ def _ecg_delineate_beatwindow(heart_rate=None, rpeaks=None, sampling_rate=1000):
     epochs_end = 0.5/m
 
     return epochs_start, epochs_end
+
 
 def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_type='all', sampling_rate=1000):
 
