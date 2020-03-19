@@ -107,7 +107,7 @@ def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs
 
     # if phys_event is false, parameter['duration'] will take 
     # the specied number of seconds in epoch_start and _end (that way, the epoch duration is the cycle of the physiological measure of interest)
-    if not parameters["duration"] 
+    if not parameters["duration"]:
         parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
     
     # Find the maximum numbers in an epoch
