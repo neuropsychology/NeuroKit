@@ -14,6 +14,7 @@ from ..signal import (signal_zerocrossings,
                       signal_formatpeaks)
 from .ecg_peaks import ecg_peaks
 from ..epochs import epochs_create
+from ..epochs import epochs_to_df
 from ..events import events_plot
 
 
@@ -84,7 +85,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak"):
         rpeaks = rpeaks["ECG_R_Peaks"]
 
     method = method.lower()  # remove capitalised letters
-    if method in ["peak", "derivative", "gradient"]:
+    if method in ["peak", "peaks", "derivative", "gradient"]:
         waves = _ecg_delineator_peak(ecg_cleaned,
                                      rpeaks=rpeaks,
                                      sampling_rate=sampling_rate)
@@ -771,3 +772,94 @@ def _ecg_delineate_beatwindow(heart_rate=None, rpeaks=None, sampling_rate=1000):
     epochs_end = 0.5/m
 
     return epochs_start, epochs_end
+
+
+def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_type='all', sampling_rate=1000):
+
+    """
+    Examples
+    --------
+    >>> import neurokit2 as nk
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> import matplotlib.pyplot as plt
+
+    >>> ecg_signal = np.array(pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/example_ecg_1000hz.csv"))[:, 1]
+
+    >>> # Extract R-peaks locations
+    >>> _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)
+
+    >>> # Delineate the ECG signal with ecg_delineate()
+    >>> signals, waves = nk.ecg_delineate(ecg_signal, rpeaks,
+                                          sampling_rate=1000)
+
+    >>> # Plot the ECG signal with markings on ECG peaks
+    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                            signal_features_type='peaks', sampling_rate=1000)
+
+    >>> # Plot the ECG signal with markings on boundaries of R peaks
+    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                            signal_features_type='bound_R', sampling_rate=1000)
+
+    >>> # Plot the ECG signal with markings on boundaries of P peaks
+    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                            signal_features_type='bound_P', sampling_rate=1000)
+
+    >>> # Plot the ECG signal with markings on boundaries of T peaks
+    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                            signal_features_type='bound_T', sampling_rate=1000)
+
+    >>> # Plot the ECG signal with markings on all peaks and boundaries
+    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                            signal_features_type='all', sampling_rate=1000)
+
+    """
+
+    data = pd.DataFrame({"Signal": list(ecg_signal)})
+    data = pd.concat([data, signals], axis=1)
+
+    # Try retrieving right column
+    if isinstance(rpeaks, dict):
+        rpeaks = rpeaks["ECG_R_Peaks"]
+    # Segment the signal around the R-peaks
+    epochs = epochs_create(data,
+                           events=rpeaks,
+                           sampling_rate=sampling_rate,
+                           epochs_start=-0.35, epochs_end=0.55)
+    data = epochs_to_df(epochs)
+    data_cols = data.columns.values
+
+    dfs = []
+    for feature in data_cols:
+        if signal_features_type == "peaks":
+            if any(x in str(feature) for x in ["Peak"]):
+                df = data[feature]
+                dfs.append(df)
+        elif signal_features_type == "bounds_R":
+            if any(x in str(feature) for x in ["ECG_R_Onsets", "ECG_R_Offsets"]):
+                df = data[feature]
+                dfs.append(df)
+        elif signal_features_type == "bounds_T":
+            if any(x in str(feature) for x in ["ECG_T_Onsets", "ECG_T_Offsets"]):
+                df = data[feature]
+                dfs.append(df)
+        elif signal_features_type == "bounds_P":
+            if any(x in str(feature) for x in ["ECG_P_Onsets", "ECG_P_Offsets"]):
+                df = data[feature]
+                dfs.append(df)
+        elif signal_features_type == "all":
+            if any(x in str(feature) for x in ["Peak", "Onset", "Offset"]):
+                df = data[feature]
+                dfs.append(df)
+    features = pd.concat(dfs, axis=1)
+
+    fig, ax = plt.subplots()
+    for label in data.Label.unique():
+        epoch_data = data[data.Label == label]
+        ax.plot(epoch_data.Time, epoch_data.Signal, label='_nolegend_')
+    for i, feature_type in enumerate(features.columns.values):
+        event_data = data[data[feature_type] == 1.0]
+        ax.scatter(event_data.Time, event_data.Signal,
+                   label=feature_type, alpha=0.5, s=200)
+        ax.legend()
+    return fig
