@@ -7,7 +7,7 @@ from ..events.events_find import _events_find_label
 from ..misc import listify
 
 
-def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs_start=0, epochs_end=1, event_labels=None, event_conditions=None, baseline_correction=False):
+def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs_start=0, epochs_end=1, phys_event=False, event_labels=None, event_conditions=None, baseline_correction=False):
     """
     Epoching a dataframe.
 
@@ -32,6 +32,10 @@ def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start, epochs_end : int
         Epochs start and end relative to events_onsets (in seconds). The start can be negative to start epochs before a given event (to have a baseline for instance).
+    phys_event : bol
+        Optional, if you used '_info' as the event from which to calculate an epoch. 
+        i.e. if you specify |events| as  'ecg_info['ECG_P_Peaks']', or rsp_info['RSP_Troughs']
+        Default is False.
     event_labels : list
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
@@ -69,12 +73,13 @@ def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs
     >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
     >>> nk.epochs_plot(epochs)
     """
+
     # Santize data input
     if isinstance(data, tuple):  # If a tuple of data and info is passed
         data = data[0]
 
     if isinstance(data, list) or isinstance(data, np.ndarray) or isinstance(data, pd.Series):
-        data = pd.DataFrame({"Signal": list(data)})
+        data = pd.DataFrame({"Signal": list(data)}) 
 
     if signal_features is not None:
         data = pd.concat([data, signal_features], axis=1)
@@ -82,19 +87,31 @@ def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs
     # Sanitize events input
     if isinstance(events, dict) is False:
         events = _events_find_label({"onset": events}, event_labels=event_labels, event_conditions=event_conditions)
-
+      
     event_onsets = list(events["onset"])
     event_labels = list(events["label"])
+    
     if 'condition' in events.keys():
         event_conditions = list(events["condition"])
 
+    # phys_event will take events_onset intervals, if True
+    if phys_event is True
+        phys_event = events["onset"][1:]-events['onsets'][:-1]
+    
+    
+
 
     # Create epochs
-    parameters = listify(onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end)
+    parameters = listify(onset=event_onsets, label=event_labels, condition=event_conditions, 
+                        start=epochs_start, duration=phys_event, end=epoch_end)
 
+    # if phys_event is false, parameter['duration'] will take 
+    # the specied number of seconds in epoch_start and _end (that way, the epoch duration is the cycle of the physiological measure of interest)
+    if not parameters["duration"] 
+        parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
+    
     # Find the maximum numbers in an epoch
     # Then extend data by the max samples in epochs * NaN
-    parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
     epoch_max_duration = int(max((i * sampling_rate
                                   for i in parameters["duration"])))
     buffer = pd.DataFrame(index=range(epoch_max_duration), columns=data.columns)
