@@ -94,6 +94,10 @@ def ecg_eventrelated(epochs):
         ecg_df[epoch_index] = _ecg_eventrelated_rate(epochs[epoch_index],
                                                      ecg_df[epoch_index])
 
+        # Cardiac Phase
+        ecg_df[epoch_index] = _ecg_eventrelated_phase(epochs[epoch_index],
+                                                      ecg_df[epoch_index])
+
         # Fill with more info
         ecg_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
                                                     ecg_df[epoch_index])
@@ -171,5 +175,31 @@ def _ecg_eventrelated_rate(epoch, output={}):
             y_predicted=np.polyval(coefs, index),
             adjusted=False,
             n_parameters=3)
+
+    return output
+
+
+def _ecg_eventrelated_phase(epoch, output={}):
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "ECG_Atrial_Phase" in i]) == 0:
+        print("NeuroKit warning: ecg_eventrelated(): input does not"
+              "have an `ECG_Atrial_Phase` or `ECG_Ventricular_Phase` column."
+              "Will not indicate whether event onset concurs with cardiac"
+              "phase.")
+        return output
+
+    # Indication of atrial systole
+    systole = epoch["ECG_Atrial_Phase"][epoch.index > 0].iloc[0]
+    output["ECG_Atrial_Phase"] = systole
+    percentage = epoch["ECG_Atrial_PhaseCompletion"][epoch.index > 0].iloc[0]
+    output["ECG_Atrial_PhaseCompletion"] = percentage
+
+    # Indication of ventricular systole
+    systole = epoch["ECG_Ventricular_Phase"][epoch.index > 0].iloc[0]
+    output["ECG_Ventricular_Phase"] = systole
+    percentage = epoch["ECG_Ventricular_PhaseCompletion"][epoch.index > 0].iloc[0]
+    output["ECG_Ventricular_PhaseCompletion"] = percentage
 
     return output

@@ -185,7 +185,7 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
               "event onset concurs with inspiration.")
         return output
 
-    # Indication ofinspiration
+    # Indication of inspiration
     inspiration = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
     output["RSP_Phase"] = inspiration
     percentage = epoch["RSP_PhaseCompletion"][epoch.index > 0].iloc[0]
