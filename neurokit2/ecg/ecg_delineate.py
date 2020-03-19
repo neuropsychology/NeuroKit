@@ -66,7 +66,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak"):
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> _, rpeaks = nk.ecg_peaks(cleaned)
-    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000, method="derivative")
+    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000, method="peak")
     >>> nk.events_plot(waves["ECG_P_Peaks"], cleaned)
     >>> nk.events_plot(waves["ECG_T_Peaks"], cleaned)
 
@@ -716,12 +716,19 @@ def _ecg_delineator_peak_T(rpeak, heartbeat, R, S):
     return rpeak + T, T
 
 
+
+
+
+
 def _ecg_delineator_peak_P_onset(rpeak, heartbeat, R, P):
     if P is None:
         return np.nan
 
     segment = heartbeat.iloc[:P]  # Select left of P wave
-    signal = signal_smooth(segment["Signal"].values, size=R/10)
+    try:
+        signal = signal_smooth(segment["Signal"].values, size=R/10)
+    except TypeError:
+        signal = segment["Signal"]
     signal = np.gradient(np.gradient(signal))
     P_onset = np.argmax(signal)
 
@@ -735,7 +742,10 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
         return np.nan
 
     segment = heartbeat.iloc[R + T:]  # Select left of P wave
-    signal = signal_smooth(segment["Signal"].values, size=R/10)
+    try:
+        signal = signal_smooth(segment["Signal"].values, size=R/10)
+    except TypeError:
+        signal = segment["Signal"]
     signal = np.gradient(np.gradient(signal))
     T_offset = np.argmax(signal)
 
