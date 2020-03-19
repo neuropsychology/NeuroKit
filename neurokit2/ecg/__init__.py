@@ -14,3 +14,4 @@ from .ecg_rsp import ecg_rsp
 from .ecg_hrv import ecg_hrv
 from .ecg_phase import ecg_phase
 from .ecg_respiration import ecg_respiration
+from .ecg_rsa import ecg_rsa
