@@ -60,14 +60,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> rsp, info = nk.rsp_process(rsp)
-    >>> rrv = nk.rsp_rrv(rsp, info, show=True)
-    >>>
-    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> info, peaks = nk.rsp_peaks(cleaned)
-    >>>
-    >>> rsp_rate = nk.rsp_rate(peaks, desired_length=len(rsp))
-    >>> rrv = nk.rsp_rrv(rsp_rate, peaks, sampling_rate=1000, show=True)
-    >>>
+    >>> rrv = nk.rsp_rrv(rsp, show=True)
 
     References
     ----------
