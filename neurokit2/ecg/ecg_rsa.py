@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import biosppy
+import pandas as pd
 
 
 def ecg_rsa(rsp_signals, rpeaks, sampling_rate=1000):
@@ -20,7 +20,15 @@ def ecg_rsa(rsp_signals, rpeaks, sampling_rate=1000):
     Returns
     ----------
     rsa : dict
-        Contains RSA features.
+        A dictionary containing the RSA features, which include:
+        - "*RSA_P2T_Values*": the estimate of RSA during each breath cycle, produced
+        by subtracting the shortest heart period (or RR interval) from the longest
+        heart period in ms.
+        - "*RSA_P2T_Mean*": the mean peak-to-trough across all cycles in ms
+        - "*RSA_P2T_Mean_log*": the logarithm of the mean of RSA estimates.
+        - "*RSA_P2T_Variability*": the standard deviation of all RSA estimates.
+        - "*RSA_P2T_NoRSA*": the number of breath cycles
+        from which RSA could not be calculated.
 
     Example
     ----------
@@ -31,11 +39,6 @@ def ecg_rsa(rsp_signals, rpeaks, sampling_rate=1000):
     >>> # Process the data
     >>> rsp_signals, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], sampling_rate=100)
     >>> rsa = nk.ecg_rsa(rsp_signals, info)
-
-    Returns
-    -------
-    rsa : dict
-        A dictionary containing information about the RSA features.
 
     References
     ------------
@@ -77,6 +80,8 @@ def ecg_rsa(rsp_signals, rpeaks, sampling_rate=1000):
     rsa["RSA_P2T_Mean"] = pd.Series(rsa["RSA_P2T_Values"]).mean()
     rsa["RSA_P2T_Mean_log"] = np.log(rsa["RSA_P2T_Mean"])
     rsa["RSA_P2T_Variability"] = pd.Series(rsa["RSA_P2T_Values"]).std()
+    values = pd.Series(rsa["RSA_P2T_Values"])
+    rsa["RSA_P2T_NoRSA"] = len(values.index[values.isnull()])
 
     return(rsa)
 
