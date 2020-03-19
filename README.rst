@@ -209,7 +209,7 @@ You can run:
 
     You can cite NeuroKit as follows:
 
-    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
 
 
     Full bibtex reference:
@@ -217,8 +217,8 @@ You can run:
     @misc{neurokit,
       doi = {10.5281/ZENODO.3597887},
       url = {https://github.com/neuropsychology/NeuroKit},
-      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lesspinasse, Fran\c{c}ois and S H Chen, Annabel},
-      title = {NeuroKit: The Python Toolbox for Neurophysiological Signal Processing},
+      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lesspinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
+      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
       publisher = {Zenodo},
       year = {2020},
     }

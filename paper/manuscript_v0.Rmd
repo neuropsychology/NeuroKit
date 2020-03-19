@@ -88,19 +88,30 @@ The package is available for Python [@python3] and thus benefits of its importan
 The packages is made to be reliable, and its functions are tested against existing implementations of established reference software such as *BioSPPy* [@biosppy], *hrv* [*under review*](https://github.com/openjournals/joss-reviews/issues/1867), *PySiology* [@PySiology], *HeartPy* [@HeartPy], *systole* [@Systole] or *nolds* [@nolds]. The code itself includes a comprehensive test suite to ensure stability and prevent error. Moreover, the issue tracker allows users to easily report any bugs and track their fixation. Thanks to its collaborative and open developpment, as well as its modular organization, *NeuroKit2* is being developped with a longterm perspective in mind, aiming at remaining cutting-edge through its ability to evolve, adapt, and integrate new methods as they are being developped.
 
 <!-- - Powerful and flexible: API -->
-Finally, we believe that the design philosophy contributes to a powerful (allowing to achieve a lot with very few functions) yet flexible (enabling fine control and precision over what is done) user interface. It is described below.
+Finally, we believe that the design philosophy contributes to a powerful (allowing to achieve a lot with very few functions) yet flexible (enabling fine control and precision over what is done) user interface (API), which is described below.
 
 # Design Philosophy
 
 
+*NeuroKit2* aims at being accessible to beginners and, at the same time, offering a maximal level of control of experienced users. This is achieved via the implementation of 3 levels of functions. 
+
+## Low-level: Signal Processing Base Utilities
+
+## Mid-level: Neurophysiological Processing Steps
+
+## High-level Wrappers for Processing and Analysis
 
 
 
-## Organization
+Consistency: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form signaltype_functiongoal()) to achieve equivalent goals, such as *_clean(), *_findpeaks(), *_process(), *_plot() (replace the star with the signal type, e.g., ecg_clean()).
 
-<!-- Neurokit2 was developed using Python drawing on well-established existing libraries such as **Numpy**, **Pandas**, **SciPy**, **MatplotLib** etc. As stated above, one of the primary goals of the package is to provide easy-to-use functions, catering to programming novices, but at the same time allowing maximal flexibility for advanced users. -->
 
-3 levels of functions.
+Accessibility: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as *_process(), that performs cleaning, preprocessing and processing with sensible defaults.
+Flexibility: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as *_clean(), *_rate()), offering more control and flexibility over their parameters.
+
+
+
+<!-- Neurokit2 was developed using Python drawing on well-established existing libraries such as **Numpy**, **Pandas**, **SciPy**, **MatplotLib** etc. As stated above, one of primary goal of the package is to provide easy-to-use functions, catering to programming novices, but at the same time allowing maximal flexibility for advanced users. -->
 
 
 <!--  and it is well-documented with tutorials and examples. More importantly, the toolbox was designed to provide a consistent yet powerful and flexible API. It offers clear code organization across different signals (e.g., electrocardiogram (ECG), respiration (RSP), electrodermal activity (EDA), electromyography (EMG)) for different processing purposes. On one hand, it comprises of high-level functions that streamlines and incorporates all stages of signal processing, and on the other hand, mid-level functions (e.g., for cleaning data, extracting signal rate etc.) can be modified easily for user preference. Advanced users will find this useful for implementing their own algorithms and building their own custom analysis pipeline, giving them more parametric control. Hence, Neurokit2 is made accessible and reliable for users of various programming levels. -->
