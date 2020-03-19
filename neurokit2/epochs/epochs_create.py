@@ -95,7 +95,7 @@ def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs
         event_conditions = list(events["condition"])
 
     # phys_event will take events_onset intervals, if True
-    if phys_event is True
+    if phys_event is True:
         phys_event = events["onset"][1:]-events['onsets'][:-1]
     
     
