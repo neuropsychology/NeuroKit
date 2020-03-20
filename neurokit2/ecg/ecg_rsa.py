@@ -5,7 +5,9 @@ import pandas as pd
 from ..signal import signal_filter
 from ..signal import signal_resample
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
+from ..rsp import rsp_process
 from .ecg_rate import ecg_rate as nk_ecg_rate
+from .ecg_rsp import ecg_rsp
 
 
 def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
@@ -53,7 +55,8 @@ def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
     ------------
     - Lewis, G. F., Furman, S. A., McCool, M. F., & Porges, S. W. (2012). Statistical strategies to quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology, 89(2), 349-364.
     """
-    heart_period, rpeaks = _ecg_rsa_formatinput(signals, rpeaks, sampling_rate)
+    signals, heart_period, rpeaks = _ecg_rsa_formatinput(signals,
+                                                         rpeaks, sampling_rate)
 
     # Extract cycles
     rsp_cycles = _ecg_rsa_cycles(signals)
@@ -157,12 +160,6 @@ def _ecg_rsa_formatinput(signals, rpeaks=None, sampling_rate=1000):
         rpeaks = None
 
     if isinstance(signals, pd.DataFrame):
-        rsp_cols = [col for col in signals.columns if 'RSP_Phase' in col]
-        if len(rsp_cols) != 2:
-            raise ValueError("NeuroKit error: _ecg_rsa_formatinput():"
-                             "Wrong input, we couldn't extract"
-                             "respiratory phases and cycles.")
-
         ecg_cols = [col for col in signals.columns if 'ECG_Rate' in col]
         if len(ecg_cols) == 0:
             ecg_cols = [col for col in signals.columns if 'ECG_R_Peaks' in col]
@@ -176,6 +173,21 @@ def _ecg_rsa_formatinput(signals, rpeaks=None, sampling_rate=1000):
         else:
             heart_period = signals[ecg_cols[0]].values
 
+        rsp_cols = [col for col in signals.columns if 'RSP' in col]
+        if len(rsp_cols) == 0:
+            edr = ecg_rsp(heart_period, sampling_rate=sampling_rate)
+            edr, _ = rsp_process(edr, sampling_rate)
+            signals = pd.concat([signals, edr], axis=1)
+            print("NeuroKit Warning: _ecg_rsa_formatinput():"
+                  "RSP signal not found. RSP signal is derived from ECG using"
+                  "ecg_rsp(). Please provide RSP signal.")
+        else:
+            phase_cols = [col for col in signals.columns if 'RSP_Phase' in col]
+            if len(phase_cols) != 2:
+                raise ValueError("NeuroKit error: _ecg_rsa_formatinput():"
+                                 "Wrong input, we couldn't extract"
+                                 "respiratory phases and cycles.")
+
     if rpeaks is None:
         try:
             rpeaks, _ = _signal_formatpeaks_sanitize(signals, desired_length=None)
@@ -185,4 +197,4 @@ def _ecg_rsa_formatinput(signals, rpeaks=None, sampling_rate=1000):
     else:
         rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
 
-    return heart_period, rpeaks
+    return signals, heart_period, rpeaks
