@@ -31,7 +31,7 @@ def epochs_to_df(epochs):
     >>> import pandas as pd
     >>>
     >>> # Get data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
     >>>
     >>> # Find events
     >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])

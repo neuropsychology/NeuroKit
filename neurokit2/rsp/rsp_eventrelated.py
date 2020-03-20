@@ -57,7 +57,7 @@ def rsp_eventrelated(epochs):
     >>> nk.rsp_eventrelated(epochs)
     >>>
     >>> # Example with real data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(rsp=data["RSP"], sampling_rate=100)

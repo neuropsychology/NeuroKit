@@ -42,7 +42,7 @@ def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
     ----------
     >>> import neurokit as nk
     >>>
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
     >>>
     >>> # Process the data
     >>> signals, info = nk.bio_process(ecg=data["ECG"],

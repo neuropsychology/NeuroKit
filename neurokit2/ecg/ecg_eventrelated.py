@@ -52,7 +52,7 @@ def ecg_eventrelated(epochs):
     >>> nk.ecg_eventrelated(epochs)
     >>>
     >>> # Example with real data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
