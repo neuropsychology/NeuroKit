@@ -294,7 +294,6 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
 def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
     degree = int(np.log2(sampling_rate / 250))
     onsets = []
-    offsets = []
     for i in range(len(rpeaks) - 1):
         # look for onsets
         srch_idx_start = ppeaks[i]
@@ -313,7 +312,8 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
         # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
         # plt.legend()
         # plt.show()
-
+    offsets = []
+    for i in range(len(rpeaks) - 1):
         # look for offsets
         srch_idx_start = rpeaks[i]
         srch_idx_end = tpeaks[i]
@@ -322,7 +322,13 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
             continue
         dwt_local = dwtmatr[2 + degree, srch_idx_start: srch_idx_end]
         onset_slope_peaks, onset_slope_data = scipy.signal.find_peaks(dwt_local)
+        if len(onset_slope_peaks) == 0:
+            offsets.append(np.nan)
+            continue
         epsilon_offset = 0.5 * dwt_local[onset_slope_peaks[0]]
+        if not (dwt_local[onset_slope_peaks[0]:] < epsilon_offset).any():
+            offsets.append(np.nan)
+            continue
         candidate_offsets = np.where(dwt_local[onset_slope_peaks[0]:] < epsilon_offset)[0] + onset_slope_peaks[0]
 
         offsets.append(candidate_offsets[0] + srch_idx_start)
