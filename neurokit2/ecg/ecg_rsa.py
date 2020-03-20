@@ -123,7 +123,7 @@ def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
 
     variance = []
     for epoch in epochs:
-        variance.append(np.log(epoch.var(axis=0) / 1000)) # convert ms
+        variance.append(np.log(epoch.var(axis=0) / 1000))  # convert ms
 
     rsa["RSA_PorgesBohrer"] = pd.concat(variance).mean()
 
