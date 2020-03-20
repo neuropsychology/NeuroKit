@@ -4,6 +4,8 @@ import pandas as pd
 
 from ..signal import signal_filter
 from ..signal import signal_resample
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
+from .ecg_rate import ecg_rate as nk_ecg_rate
 
 
 def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
@@ -25,16 +27,16 @@ def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
     ----------
     rsa : dict
         A dictionary containing the RSA features, which includes:
-        - "*RSA_P2T_Values*": the estimate of RSA during each breath cycle, produced
-        by subtracting the shortest heart period (or RR interval) from the longest
-        heart period in ms.
+        - "*RSA_P2T_Values*": the estimate of RSA during each breath cycle,
+        produced by subtracting the shortest heart period
+        (or RR interval) from the longest heart period in ms.
         - "*RSA_P2T_Mean*": the mean peak-to-trough across all cycles in ms
         - "*RSA_P2T_Mean_log*": the logarithm of the mean of RSA estimates.
         - "*RSA_P2T_Variability*": the standard deviation of all RSA estimates.
         - "*RSA_P2T_NoRSA*": the number of breath cycles
         from which RSA could not be calculated.
         - "*RSA_PorgesBohrer*": the Porges-Bohrer estimate of RSA, optimal
-        when the signal to noise ratio is low.
+        when the signal to noise ratio is low, in ln(ms^2).
 
     Example
     ----------
@@ -43,30 +45,17 @@ def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
     >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
     >>>
     >>> # Process the data
-    >>> signals, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], sampling_rate=100)
+    >>> signals, info = nk.bio_process(ecg=data["ECG"],
+                                       rsp=data["RSP"], sampling_rate=100)
     >>> rsa = nk.ecg_rsa(signals, info)
 
     References
     ------------
     - Lewis, G. F., Furman, S. A., McCool, M. F., & Porges, S. W. (2012). Statistical strategies to quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology, 89(2), 349-364.
     """
-    # Sanity Checks
-    if isinstance(signals, tuple):
-        signals = signals[0]
-        rpeaks = signals[1]["ECG_R_Peaks"]
-
-    if isinstance(signals, pd.DataFrame):
-        rsp_cols = [col for col in signals.columns if 'RSP_Phase' in col]
-        if len(rsp_cols) != 2:
-            raise ValueError("NeuroKit error: ecg_rsa(): we couldn't extract"
-                             "respiratory phases and cycles.")
-        ecg_cols = [col for col in signals.columns if 'ECG_Rate' in col]
-        if len(ecg_cols) == 0:
-            raise ValueError("NeuroKit error: ecg_rsa(): we couldn't extract"
-                             "heart rate signal.")
+    heart_period, rpeaks = _ecg_rsa_formatinput(signals, rpeaks, sampling_rate)
 
     # Extract cycles
-    rpeaks = rpeaks["ECG_R_Peaks"]
     rsp_cycles = _ecg_rsa_cycles(signals)
     rsp_onsets = rsp_cycles["RSP_Inspiration_Onsets"]
     rsp_cycle_center = rsp_cycles["RSP_Expiration_Onsets"]
@@ -75,7 +64,8 @@ def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
     if len(rsp_cycle_center) - len(rsp_onsets) == 0:
         rsp_cycle_center = rsp_cycle_center[:-1]
     if len(rsp_cycle_center) - len(rsp_onsets) != -1:
-        print("NeuroKit Error: ecg_rsp(): Couldn't find clean rsp cycles onsets and centers. Check your RSP signal.")
+        print("NeuroKit Error: ecg_rsp(): Couldn't find"
+              "rsp cycles onsets and centers. Check your RSP signal.")
 
     rsa = {}
 
@@ -106,17 +96,20 @@ def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
 
     # Porges-Bohrer method
     # ===============================
-    heart_period = signals["ECG_Rate"]
-
     # Re-sample at 2 Hz
-    resampled = signal_resample(heart_period, sampling_rate=100, desired_sampling_rate=2)
+    resampled = signal_resample(heart_period, sampling_rate=sampling_rate,
+                                desired_sampling_rate=2)
 
-    # Fit 21-point cubic polynomial filter (zero mean, 3rd order) with a low-pass cutoff frequency of 0.095Hz
-    trend = signal_filter(resampled, sampling_rate=2, lowcut=0.095, highcut=None, method="savgol", order=3, window_length=21)
+    # Fit 21-point cubic polynomial filter (zero mean, 3rd order)
+    # with a low-pass cutoff frequency of 0.095Hz
+    trend = signal_filter(resampled, sampling_rate=2,
+                          lowcut=0.095, highcut=None,
+                          method="savgol", order=3, window_length=21)
 
     zero_mean = resampled - trend
     # Remove variance outside bandwidth of spontaneous respiration
-    zero_mean_filtered = signal_filter(zero_mean, sampling_rate=2, lowcut=0.12, highcut=0.40)
+    zero_mean_filtered = signal_filter(zero_mean, sampling_rate=2,
+                                       lowcut=0.12, highcut=0.40)
 
     # Divide into 30-second epochs
     time = np.arange(0, len(zero_mean_filtered)) / 2
@@ -130,7 +123,7 @@ def ecg_rsa(signals, rpeaks=None, sampling_rate=1000):
 
     variance = []
     for epoch in epochs:
-        variance.append(np.log(epoch.var(axis=0)))
+        variance.append(np.log(epoch.var(axis=0) / 1000)) # convert ms
 
     rsa["RSA_PorgesBohrer"] = pd.concat(variance).mean()
 
@@ -155,3 +148,41 @@ def _ecg_rsa_cycles(signals):
                   "RSP_Cycles_Length": cycles_length}
 
     return(rsp_cycles)
+
+
+def _ecg_rsa_formatinput(signals, rpeaks=None, sampling_rate=1000):
+    # Sanity Checks
+    if isinstance(signals, tuple):
+        signals = signals[0]
+        rpeaks = None
+
+    if isinstance(signals, pd.DataFrame):
+        rsp_cols = [col for col in signals.columns if 'RSP_Phase' in col]
+        if len(rsp_cols) != 2:
+            raise ValueError("NeuroKit error: _ecg_rsa_formatinput():"
+                             "Wrong input, we couldn't extract"
+                             "respiratory phases and cycles.")
+
+        ecg_cols = [col for col in signals.columns if 'ECG_Rate' in col]
+        if len(ecg_cols) == 0:
+            ecg_cols = [col for col in signals.columns if 'ECG_R_Peaks' in col]
+            if len(ecg_cols) == 0:
+                raise ValueError("NeuroKit error: _ecg_rsa_formatinput():"
+                                 "Wrong input, we couldn't extract"
+                                 "heart rate signal.")
+            else:
+                heart_period = nk_ecg_rate(rpeaks, sampling_rate=sampling_rate,
+                                           desired_length=len(signals))
+        else:
+            heart_period = signals[ecg_cols[0]].values
+
+    if rpeaks is None:
+        try:
+            rpeaks, _ = _signal_formatpeaks_sanitize(signals, desired_length=None)
+        except NameError:
+            raise ValueError("NeuroKit error: _ecg_rsa_formatinput(): Wrong input,"
+                             "we couldn't extract rpeaks indices.")
+    else:
+        rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
+
+    return heart_period, rpeaks
