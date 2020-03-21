@@ -8,7 +8,7 @@ from ..misc import listify
 
 
 
-def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs_start=0, epochs_end=1, phys_event=False, event_labels=None, event_conditions=None, baseline_correction=False):
+def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1, phys_event=False, event_labels=None, event_conditions=None, baseline_correction=False):
     """
     Epoching a dataframe.
 
