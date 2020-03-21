@@ -183,9 +183,6 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         ecg_signals = ecg_signals[0]
         rpeaks = None
 
-    if isinstance(rsp_signals, tuple):
-        rsp_signals = rsp_signals[0]
-
     if isinstance(ecg_signals, pd.DataFrame):
         ecg_cols = [col for col in ecg_signals.columns if 'ECG_Rate' in col]
         if len(ecg_cols) == 0:
@@ -199,6 +196,17 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                                            desired_length=len(ecg_signals))
         else:
             heart_period = ecg_signals[ecg_cols[0]].values
+
+    if rsp_signals is None:
+        rsp_cols = [col for col in ecg_signals.columns if 'RSP_Phase' in col]
+        if len(rsp_cols) != 2:
+            edr = ecg_rsp(heart_period, sampling_rate=sampling_rate)
+            rsp_signals, _ = rsp_process(edr, sampling_rate)
+            print("NeuroKit Warning: _ecg_rsa_formatinput():"
+                  "RSP signal not found. RSP signal is derived from ECG using"
+                  "ecg_rsp(). Please provide RSP signal.")
+    elif isinstance(rsp_signals, tuple):
+        rsp_signals = rsp_signals[0]
 
     if isinstance(rsp_signals, pd.DataFrame):
         rsp_cols = [col for col in rsp_signals.columns if 'RSP_Phase' in col]
