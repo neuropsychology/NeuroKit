@@ -11,4 +11,5 @@ Contents:
    eventrelated
    custom
    rrv
+   ecg_delineation
 
