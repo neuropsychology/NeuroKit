@@ -57,7 +57,7 @@ def rsp_eventrelated(epochs):
     >>> nk.rsp_eventrelated(epochs)
     >>>
     >>> # Example with real data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(rsp=data["RSP"], sampling_rate=100)
@@ -185,7 +185,7 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
               "event onset concurs with inspiration.")
         return output
 
-    # Indication ofinspiration
+    # Indication of inspiration
     inspiration = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
     output["RSP_Phase"] = inspiration
     percentage = epoch["RSP_PhaseCompletion"][epoch.index > 0].iloc[0]

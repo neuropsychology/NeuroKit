@@ -47,7 +47,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     >>> data["EDA_Raw"] = eda_signal
     >>> data.plot()
     >>>
-    >>> eda_signal = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")["EDA"]
+    >>> eda_signal = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")["EDA"]
     >>> data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=200)
     >>> data["EDA_Raw"] = eda_signal
     >>> out = nk1.bio

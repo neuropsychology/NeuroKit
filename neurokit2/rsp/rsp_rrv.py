@@ -59,12 +59,8 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     >>> import neurokit2 as nk
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> info, peaks = nk.rsp_peaks(cleaned)
-    >>>
-    >>> rsp_rate = nk.rsp_rate(peaks, desired_length=len(rsp))
-    >>> rrv = nk.rsp_rrv(rsp_rate, peaks, sampling_rate=1000, show=True)
-    >>>
+    >>> rsp, info = nk.rsp_process(rsp)
+    >>> rrv = nk.rsp_rrv(rsp, show=True)
 
     References
     ----------
@@ -200,11 +196,11 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
 
     if peaks is None:
         try:
-            peaks, _ = _signal_formatpeaks_sanitize(rsp_rate, desired_length=None)
+            peaks, _ = _signal_formatpeaks_sanitize(df, desired_length=None)
         except NameError:
             raise ValueError("NeuroKit error: _rsp_rrv_formatinput():"
                              "Wrong input, we couldn't extract"
-                             "rpeaks indices.")
+                             "respiratory peaks indices.")
     else:
         peaks, _ = _signal_formatpeaks_sanitize(peaks, desired_length=None)
 

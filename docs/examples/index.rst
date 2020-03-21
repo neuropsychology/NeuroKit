@@ -6,6 +6,7 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
+   simulation
    heartbeats
    eda
    eventrelated
