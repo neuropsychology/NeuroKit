@@ -19,8 +19,8 @@
 .. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
        :alt: Maintainability
-   
-  
+
+
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
 This is a work-in-progress project continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community** around this collaborative project. If you're interested in getting involved, `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_
@@ -56,6 +56,9 @@ Documentation
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
         :alt: Tutorials
         
+.. image:: https://mybinder.org/badge_logo.svg
+		:target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
+        
 Click on the links above and check out our tutorials:
 
 Tutorials
@@ -75,6 +78,7 @@ Examples
 -  `Event-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
 -  `Respiratory Rate Variability Analysis <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
+-  `Cardiorespiratory patterns <https://neurokit2.readthedocs.io/en/latest/examples/cardiorespiratory.html>`_
 
 
 
@@ -209,7 +213,10 @@ You can run:
 
     You can cite NeuroKit as follows:
 
-    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
+
+
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lespinasse, F., & S H Chen, A. (2020). NeuroKit: The Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
+
 
 
     Full bibtex reference:
@@ -217,8 +224,8 @@ You can run:
     @misc{neurokit,
       doi = {10.5281/ZENODO.3597887},
       url = {https://github.com/neuropsychology/NeuroKit},
-      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lesspinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
-      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
+      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lespinasse, Fran\c{c}ois and S H Chen, Annabel},
+      title = {NeuroKit: The Python Toolbox for Neurophysiological Signal Processing},
       publisher = {Zenodo},
       year = {2020},
     }
