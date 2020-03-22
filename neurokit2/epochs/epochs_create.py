@@ -7,7 +7,7 @@ from ..events.events_find import _events_find_label
 from ..misc import listify
 
 
-def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs_start=0, epochs_end=1, event_labels=None, event_conditions=None, baseline_correction=False):
+def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1, event_labels=None, event_conditions=None, baseline_correction=False):
     """
     Epoching a dataframe.
 
@@ -20,14 +20,6 @@ def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs
     events : list, ndarray or dict
         Events onset location. If a dict is passed (e.g., from
        'events_find()'), will select only the 'onset' list.
-    signal_features : DataFrame
-        A DataFrame of same length as the input data in which occurences of
-        additional signal features such as peaks, waves onsets, waves offsets,
-        troughs or recovery marked as "1" in a list of zeros with the same
-        length as input data.
-        It can be the output of '_peaks' functions for the information of
-        peaks or 'ecg_delineate' function for additional the information of
-        ecg signal.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start, epochs_end : int
@@ -55,7 +47,7 @@ def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs
     >>> import pandas as pd
     >>>
     >>> # Get data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
     >>>
     >>> # Find events
     >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
@@ -75,9 +67,6 @@ def epochs_create(data, events, signal_features=None, sampling_rate=1000, epochs
 
     if isinstance(data, list) or isinstance(data, np.ndarray) or isinstance(data, pd.Series):
         data = pd.DataFrame({"Signal": list(data)})
-
-    if signal_features is not None:
-        data = pd.concat([data, signal_features], axis=1)
 
     # Sanitize events input
     if isinstance(events, dict) is False:

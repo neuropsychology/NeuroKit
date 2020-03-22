@@ -2,7 +2,7 @@
 import datetime
 
 # Info
-__version__ = '0.0.14'
+__version__ = '0.0.15'
 
 
 
@@ -10,7 +10,7 @@ __version__ = '0.0.14'
 __cite__ = """
 You can cite NeuroKit as follows:
 
-- Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit: A Python Toolbox for Neurophysiological Signal Processing. Retrieved """ + datetime.date.today().strftime("%B %d, %Y") + """, from https://github.com/neuropsychology/NeuroKit
+- Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved """ + datetime.date.today().strftime("%B %d, %Y") + """, from https://github.com/neuropsychology/NeuroKit
 
 
 Full bibtex reference:
@@ -19,7 +19,7 @@ Full bibtex reference:
   doi = {10.5281/ZENODO.3597887},
   url = {https://github.com/neuropsychology/NeuroKit},
   author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lesspinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
-  title = {NeuroKit: A Python Toolbox for Neurophysiological Signal Processing},
+  title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
   publisher = {Zenodo},
   year = {2020},
 }

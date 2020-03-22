@@ -32,7 +32,7 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     >>> import pandas as pd
     >>>
     >>> # Get heart rate
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
     >>> rpeaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>> ecg_rate = nk.ecg_rate(rpeaks, sampling_rate=100)
     >>>

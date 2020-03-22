@@ -51,7 +51,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, *
     >>> nk.signal_plot(power, standardize=True)
     >>>
     >>> # Continuous (real signal)
-    >>> signal = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")["ECG"]
+    >>> signal = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")["ECG"]
     >>> power = nk.signal_power(signal, sampling_rate=100, frequency_band=[(0.12, 0.15), (0.15, 0.4)], continuous=True)
     >>> processed, _ = nk.ecg_process(signal, sampling_rate=100)
     >>> power["ECG_Rate"] = processed["ECG_Rate"]
