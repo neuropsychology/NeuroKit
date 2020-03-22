@@ -185,56 +185,93 @@ def _dwt_compensate_degree(sampling_rate):
 def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
                            dwt_delay=0.0,
                            qrs_width=0.13,
-                           p2r_duration=0.5,
-                           degree_tpeak=3, degree_ppeak=2,
+                           p2r_duration=0.2,
+                           rt_duration=0.25,
+                           degree_tpeak=3,
+                           degree_ppeak=2,
                            epsilon_T_weight=0.25,
                            epsilon_P_weight=0.02):
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
     degree_add = _dwt_compensate_degree(sampling_rate)
-    peaks_dict = {
-        'tpeak': [], 'ppeak': []
-    }
+
+    tpeaks = []
     for i in range(len(rpeaks)-1):
-        for attribute in ['tpeak', 'ppeak']:
-            if attribute == 'tpeak':
-                # search for T peaks from R peaks
-                srch_idx_start = rpeaks[i] + srch_bndry
-                srch_idx_end = rpeaks[i] + int(p2r_duration * sampling_rate)
-                dwt_local = dwtmatr[degree_tpeak + degree_add, srch_idx_start:srch_idx_end]
-                height = epsilon_T_weight * np.sqrt(np.mean(np.square(dwt_local)))
-            elif attribute == 'ppeak':
-                # search for P peaks from Rpeaks
-                srch_idx_start = rpeaks[i] - int(p2r_duration * sampling_rate)
-                srch_idx_end = rpeaks[i] - srch_bndry
-                dwt_local = dwtmatr[degree_ppeak + degree_add, srch_idx_start:srch_idx_end]
-                height = epsilon_P_weight * np.sqrt(np.mean(np.square(dwt_local)))
-            if len(dwt_local) == 0:
-                peaks_dict[attribute].append(np.nan)
-                continue
+        # search for T peaks from R peaks
+        srch_idx_start = rpeaks[i] + srch_bndry
+        srch_idx_end = rpeaks[i] + 2 * int(rt_duration * sampling_rate)
+        dwt_local = dwtmatr[degree_tpeak + degree_add, srch_idx_start:srch_idx_end]
+        height = epsilon_T_weight * np.sqrt(np.mean(np.square(dwt_local)))
 
-            ecg_local = ecg[srch_idx_start:srch_idx_end]
-            peaks, peak_heights = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
-            peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))
-            if dwt_local[0] > 0:  # just append
-                peaks = [0] + peaks
+        if len(dwt_local) == 0:
+            tpeaks.append(np.nan)
+            continue
 
-            # detect morphology
-            candidate_peaks = []
-            candidate_peaks_height = []
-            for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
-                correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
-                if correct_sign:
-                    idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
-                    candidate_peaks.append(idx_zero)
-                    candidate_peaks_height.append(ecg_local[idx_zero])
+        ecg_local = ecg[srch_idx_start:srch_idx_end]
+        peaks, peak_heights = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
+        peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))
+        if dwt_local[0] > 0:  # just append
+            peaks = [0] + peaks
 
-            if len(candidate_peaks) == 0:
-                peaks_dict[attribute].append(np.nan)
-                continue
+        # detect morphology
+        candidate_peaks = []
+        candidate_peaks_scores = []
+        for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
+            correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
+            if correct_sign:
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
+                # This is the score assigned to each peak. The peak with the highest score will be
+                # selected.
+                score = ecg_local[idx_zero] \
+                    - (float(idx_zero) / sampling_rate - (rt_duration - 0.5 * qrs_width))
+                candidate_peaks.append(idx_zero)
+                candidate_peaks_scores.append(score)
 
-            peaks_dict[attribute].append(candidate_peaks[np.argmax(candidate_peaks_height)] + srch_idx_start)
+        if len(candidate_peaks) == 0:
+            tpeaks.append(np.nan)
+            continue
 
-    return peaks_dict['tpeak'], peaks_dict['ppeak']
+        tpeaks.append(candidate_peaks[np.argmax(candidate_peaks_scores)] + srch_idx_start)
+
+    ppeaks = []
+    for i in range(len(rpeaks)-1):
+
+        # search for P peaks from Rpeaks
+        srch_idx_start = rpeaks[i] - 2 * int(p2r_duration * sampling_rate)
+        srch_idx_end = rpeaks[i] - srch_bndry
+        dwt_local = dwtmatr[degree_ppeak + degree_add, srch_idx_start:srch_idx_end]
+        height = epsilon_P_weight * np.sqrt(np.mean(np.square(dwt_local)))
+
+        if len(dwt_local) == 0:
+            ppeaks.append(np.nan)
+            continue
+
+        ecg_local = ecg[srch_idx_start:srch_idx_end]
+        peaks, peak_heights = scipy.signal.find_peaks(np.abs(dwt_local), height=height)
+        peaks = list(filter(lambda p: np.abs(dwt_local[p]) > 0.025 * max(dwt_local), peaks))
+        if dwt_local[0] > 0:  # just append
+            peaks = [0] + peaks
+
+        # detect morphology
+        candidate_peaks = []
+        candidate_peaks_scores = []
+        for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
+            correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0
+            if correct_sign:
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak: idx_peak_nxt])[0] + idx_peak
+                # This is the score assigned to each peak. The peak with the highest score will be
+                # selected.
+                score = ecg_local[idx_zero] \
+                    - abs(float(idx_zero) / sampling_rate - p2r_duration)  # Minus p2r because of the srch_idx_start
+                candidate_peaks.append(idx_zero)
+                candidate_peaks_scores.append(score)
+
+        if len(candidate_peaks) == 0:
+            ppeaks.append(np.nan)
+            continue
+
+        ppeaks.append(candidate_peaks[np.argmax(candidate_peaks_scores)] + srch_idx_start)
+
+    return tpeaks, ppeaks
 
 
 def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False,
