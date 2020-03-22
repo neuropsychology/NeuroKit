@@ -8,7 +8,7 @@ from ..misc import listify
 
 
 
-def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1, phys_event=False, event_labels=None, event_conditions=None, baseline_correction=False):
+def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1,  event_labels=None, event_conditions=None, baseline_correction=False):
     """
     Epoching a dataframe.
 
@@ -87,30 +87,20 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
     # Create epochs
     parameters = listify(onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end)
     
-    # parameters['duration'] will take events_onset intervals if you're looking at a physiological cycle
-    if phys_event is True:
-        parameters["duration"] = events["onset"][1:]-events["onset"][:-1]
-        parameters["duration"] = np.insert(parameters["duration"], 0, events["onset"][0]) # the first interval is from 0 to first onset
-        parameters["duration"] = np.append(parameters["duration"], values = [0])
-        parameters["onset"] = np.insert(parameters["onset"], 0, 0)
-        parameters["end"] = (parameters["duration"]/sampling_rate) # epoch_end is overwritten
-        
-        
+           
     # Default ['duration'] is calculted from a priori known end and start point specified by user or default
-    else:
-        parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
+    parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
     
         #Find the maximum numbers in an epoch
-        epoch_max_duration = int(max((i * sampling_rate for i in parameters["duration"]))) 
+    epoch_max_duration = int(max((i * sampling_rate for i in parameters["duration"]))) 
 
         # Then extend data by the max samples in epochs * NaN                              
-        buffer = pd.DataFrame(index=range(epoch_max_duration), columns=data.columns)
-        data = data.append(buffer, ignore_index=True, sort=False)
-        data = buffer.append(data, ignore_index=True, sort=False)
+    buffer = pd.DataFrame(index=range(epoch_max_duration), columns=data.columns)
+    data = data.append(buffer, ignore_index=True, sort=False)
+    data = buffer.append(data, ignore_index=True, sort=False)
 
     # Adjust the Onset of the events
-    if phys_event is False:
-        parameters["onset"] = [i + epoch_max_duration for i in parameters["onset"]]
+    parameters["onset"] = [i + epoch_max_duration for i in parameters["onset"]]
 
     epochs = {}
     for i, label in enumerate(parameters["label"]):
