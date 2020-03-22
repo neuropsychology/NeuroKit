@@ -20,9 +20,6 @@
        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
        :alt: Maintainability
 
-.. image:: https://mybinder.org/badge_logo.svg
-		:target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
-
 
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
@@ -58,6 +55,9 @@ Documentation
 .. image:: https://img.shields.io/badge/tutorials-help-orange.svg?colorB=E91E63
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
         :alt: Tutorials
+        
+.. image:: https://mybinder.org/badge_logo.svg
+		:target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
         
 Click on the links above and check out our tutorials:
 
