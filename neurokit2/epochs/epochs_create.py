@@ -6,8 +6,6 @@ import numpy as np
 from ..events.events_find import _events_find_label
 from ..misc import listify
 
-
-
 def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1,  event_labels=None, event_conditions=None, baseline_correction=False):
     """
     Epoching a dataframe.
