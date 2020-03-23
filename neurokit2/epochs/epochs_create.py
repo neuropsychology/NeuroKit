@@ -25,10 +25,6 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start, epochs_end : int
         Epochs start and end relative to events_onsets (in seconds). The start can be negative to start epochs before a given event (to have a baseline for instance).
-    phys_event : bol
-        Optional. If you used '_info' as the event from which to calculate an epoch
-        i.e. if you specify |events| as  'ecg_info['ECG_P_Peaks']', or rsp_info['RSP_Troughs']
-        Default is False.
     event_labels : list
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
