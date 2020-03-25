@@ -7,8 +7,7 @@ from ..events.events_find import _events_find_label
 from ..misc import listify
 
 
-
-def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1,  event_labels=None, event_conditions=None, baseline_correction=False):
+def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1, event_labels=None, event_conditions=None, baseline_correction=False):
     """
     Epoching a dataframe.
 
@@ -62,35 +61,32 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
     >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
     >>> nk.epochs_plot(epochs)
     """
-
     # Santize data input
     if isinstance(data, tuple):  # If a tuple of data and info is passed
         data = data[0]
 
     if isinstance(data, list) or isinstance(data, np.ndarray) or isinstance(data, pd.Series):
-        data = pd.DataFrame({"Signal": list(data)}) 
+        data = pd.DataFrame({"Signal": list(data)})
 
     # Sanitize events input
     if isinstance(events, dict) is False:
         events = _events_find_label({"onset": events}, event_labels=event_labels, event_conditions=event_conditions)
-      
+
     event_onsets = list(events["onset"])
     event_labels = list(events["label"])
-    
     if 'condition' in events.keys():
         event_conditions = list(events["condition"])
 
+
     # Create epochs
     parameters = listify(onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end)
-    
-           
-    # Default ['duration'] is calculted from a priori known end and start point specified by user or default
-    parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
-    
-        #Find the maximum numbers in an epoch
-    epoch_max_duration = int(max((i * sampling_rate for i in parameters["duration"]))) 
 
-        # Then extend data by the max samples in epochs * NaN                              
+    # Find the maximum numbers in an epoch
+    # Then extend data by the max samples in epochs * NaN
+    parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
+    epoch_max_duration = int(max((i * sampling_rate
+                                  for i in parameters["duration"])))
+
     buffer = pd.DataFrame(index=range(epoch_max_duration), columns=data.columns)
     data = data.append(buffer, ignore_index=True, sort=False)
     data = buffer.append(data, ignore_index=True, sort=False)
@@ -103,12 +99,7 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
 
         # Find indices
         start = parameters["onset"][i] + (parameters["start"][i] * sampling_rate)
-        
-        if phys_event is True:
-            end = parameters['onset'][i] + parameters['duration'][i] # end is simply onset + duration for a phys cycle
-
-        else:
-            end = parameters["onset"][i] + (parameters["end"][i] * sampling_rate)
+        end = parameters["onset"][i] + (parameters["end"][i] * sampling_rate)
 
         # Slice dataframe
         epoch = data.iloc[int(start):int(end)].copy()

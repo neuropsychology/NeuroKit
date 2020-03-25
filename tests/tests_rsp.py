@@ -182,6 +182,8 @@ def test_rsp_eventrelated():
                         "RSP_Amplitude_Mean", "RSP_Phase",
                         "RSP_PhaseCompletion", "Label"]
                for elem in np.array(rsp_eventrelated.columns.values, dtype=str))
+
+
 def test_rsp_rrv():
 
     rsp90 = nk.rsp_simulate(duration=60, sampling_rate=1000, respiratory_rate=90, random_state=42)
@@ -195,21 +197,20 @@ def test_rsp_rrv():
     _, peaks110 = nk.rsp_peaks(cleaned110)
     rsp_rate110 = nk.rsp_rate(peaks110, desired_length=len(rsp110))
 
+    rsp90_rrv = nk.rsp_rrv(rsp_rate90, peaks90)
+    rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110)
 
-    rsp90_rrv = nk.rsp_rrv(rsp_rate90)
-    rsp110_rrv = nk.rsp_rrv(rsp_rate110)
+    assert np.array(rsp90_rrv["RRV_SDBB"]) < np.array(rsp110_rrv["RRV_SDBB"])
+    assert np.array(rsp90_rrv["RRV_RMSSD"]) < np.array(rsp110_rrv["RRV_RMSSD"])
+    assert np.array(rsp90_rrv["RRV_SDSD"]) < np.array(rsp110_rrv["RRV_SDSD"])
+    # assert np.array(rsp90_rrv["RRV_pNN50"]) == np.array(rsp110_rrv["RRV_pNN50"]) == np.array(rsp110_rrv["RRV_pNN20"]) == np.array(rsp90_rrv["RRV_pNN20"]) == 0
+    # assert np.array(rsp90_rrv["RRV_TINN"]) < np.array(rsp110_rrv["RRV_TINN"])
+    # assert np.array(rsp90_rrv["RRV_HTI"]) > np.array(rsp110_rrv["RRV_HTI"])
+    assert np.array(rsp90_rrv["RRV_HF"]) < np.array(rsp110_rrv["RRV_HF"])
+    assert np.array(rsp90_rrv["RRV_LF"]) < np.array(rsp110_rrv["RRV_LF"])
 
-    assert np.array(rsp110_rrv["RRV_SDBB"]) < np.array(rsp90_rrv["RRV_SDBB"])
-    assert np.array(rsp110_rrv["RRV_RMSSD"]) < np.array(rsp90_rrv["RRV_RMSSD"])
-    assert np.array(rsp110_rrv["RRV_SDSD"]) < np.array(rsp90_rrv["RRV_SDSD"])
-    # assert np.array(rsp110_rrv["RRV_pNN50"]) == np.array(rsp90_rrv["RRV_pNN50"]) == np.array(rsp110_rrv["RRV_pNN20"]) == np.array(rsp90_rrv["RRV_pNN20"]) == 0
-    # assert np.array(rsp110_rrv["RRV_TINN"]) < np.array(rsp90_rrv["RRV_TINN"])
-    # assert np.array(rsp110_rrv["RRV_HTI"]) > np.array(rsp90_rrv["RRV_HTI"])
-    assert np.array(rsp110_rrv["RRV_HF"]) < np.array(rsp90_rrv["RRV_HF"])
-    assert np.array(rsp110_rrv["RRV_LF"]) < np.array(rsp90_rrv["RRV_LF"])
-
-    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
-                        'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF',
-                        'RRV_LFn', 'RRV_HFn', 
-                        'RRV_SD1', 'RRV_SD2', 'RRV_SD2SD1','RRV_ApEn', 'RRV_SampEn', 'RRV_DFA']
-               for elem in np.array(rsp110_rrv.columns.values, dtype=str))
+#    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
+#                        'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF',
+#                        'RRV_LFn', 'RRV_HFn',
+#                        'RRV_SD1', 'RRV_SD2', 'RRV_SD2SD1','RRV_ApEn', 'RRV_SampEn', 'RRV_DFA']
+#               for elem in np.array(rsp110_rrv.columns.values, dtype=str))
