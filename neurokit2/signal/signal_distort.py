@@ -7,7 +7,10 @@ from .signal_resample import signal_resample
 from ..misc import listify
 
 
-def signal_distort(signal, sampling_rate=1000, noise_amplitude=0.1, noise_frequency=100, noise_shape="laplace", powerline_amplitude=0, powerline_frequency=50, artifacts_frequency=0, artifacts_amplitude=0.1):
+def signal_distort(signal, sampling_rate=1000, noise_amplitude=0,
+                   noise_frequency=100, noise_shape="laplace",
+                   powerline_amplitude=0, powerline_frequency=50,
+                   artifacts_amplitude=0.1, artifacts_frequency=0):
     """Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
@@ -53,21 +56,23 @@ def signal_distort(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
             "5Hz": nk.signal_distord(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2),
             "Raw": signal}).plot()
     """
+
+    noise = 0
+
     # Basic noise
-    noise = _signal_distord_noise_multifrequency(signal,
-                                                 signal_sd=np.std(signal, ddof=1),
-                                                 sampling_rate=sampling_rate,
-                                                 noise_amplitude=noise_amplitude,
-                                                 noise_frequency=noise_frequency,
-                                                 noise_shape=noise_shape)
+    if noise_amplitude > 0:
+        noise += _signal_distord_noise_multifrequency(signal,
+                                                      signal_sd=np.std(signal, ddof=1),
+                                                      sampling_rate=sampling_rate,
+                                                      noise_amplitude=noise_amplitude,
+                                                      noise_frequency=noise_frequency,
+                                                      noise_shape=noise_shape)
 
     # Powerline noise
     if powerline_amplitude > 0:
-        noise += _signal_distord_powerline(signal,
-                                           signal_sd=np.std(signal, ddof=1),
-                                           sampling_rate=sampling_rate,
-                                           powerline_amplitude=powerline_amplitude,
-                                           powerline_frequency=powerline_frequency)
+        noise += _signal_distord_powerline(signal, sampling_rate=sampling_rate,
+                                           powerline_frequency=powerline_frequency,
+                                           powerline_amplitude=powerline_amplitude)
 
     # Artifacts
     if artifacts_frequency > 0:
@@ -82,20 +87,13 @@ def signal_distort(signal, sampling_rate=1000, noise_amplitude=0.1, noise_freque
     return distorted
 
 
-
-
-
-
-
-# =============================================================================
-# Internals
-# =============================================================================
-
 # TODO
-def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000, artifacts_frequency=0, artifacts_amplitude=0.1):
+def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
+                              artifacts_frequency=0, artifacts_amplitude=0.1):
 
+    duration = len(signal) / sampling_rate
     # Generate oscillatory signal of given frequency
-    artifacts = signal_simulate(length=len(signal),
+    artifacts = signal_simulate(duration=duration,
                                 sampling_rate=sampling_rate,
                                 frequency=artifacts_frequency,
                                 amplitude=1)
@@ -112,26 +110,27 @@ def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000, artifa
     return artifacts
 
 
+def _signal_distord_powerline(signal, sampling_rate=1000,
+                              powerline_frequency=50,
+                              powerline_amplitude=0.1):
+    duration = len(signal) / sampling_rate
+    noise = signal_simulate(duration=duration, sampling_rate=sampling_rate,
+                            frequency=powerline_frequency, amplitude=1)
+    noise *= powerline_amplitude
 
-
-def _signal_distord_powerline(signal, signal_sd=None, sampling_rate=1000, powerline_frequency=50, powerline_amplitude=0.1):
-    freqs = list(np.arange(powerline_frequency, sampling_rate, powerline_frequency))
-    noise = _signal_distord_noise_multifrequency(signal,
-                                                 signal_sd=signal_sd,
-                                                 sampling_rate=sampling_rate,
-                                                 noise_amplitude=powerline_amplitude,
-                                                 noise_frequency=freqs,
-                                                 noise_shape="gaussian")
     return noise
 
 
-
-
-def _signal_distord_noise_multifrequency(signal, signal_sd=None, sampling_rate=1000, noise_amplitude=0.1, noise_frequency=100, noise_shape="laplace"):
+def _signal_distord_noise_multifrequency(signal, signal_sd=None,
+                                         sampling_rate=1000,
+                                         noise_amplitude=0.1,
+                                         noise_frequency=100,
+                                         noise_shape="laplace"):
     duration = len(signal) / sampling_rate
 
     noise = np.zeros(len(signal))
-    params = listify(noise_amplitude=noise_amplitude, noise_frequency=noise_frequency, noise_shape=noise_shape)
+    params = listify(noise_amplitude=noise_amplitude,
+                     noise_frequency=noise_frequency, noise_shape=noise_shape)
     for i in range(len(params["noise_amplitude"])):
         if params["noise_frequency"][i] <= sampling_rate:  # Skip noise of higher freq than recording
 
@@ -147,7 +146,6 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None, sampling_rate=1
             noise = _signal_distord_noise(signal, noise_duration, amplitude, shape)
             noise += noise
     return noise
-
 
 
 def _signal_distord_noise(signal, noise_duration, noise_amplitude=0.1, noise_shape="laplace"):

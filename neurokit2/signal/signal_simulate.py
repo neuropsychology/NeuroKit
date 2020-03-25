@@ -36,7 +36,7 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
                       "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
     """
     # Generate samples.
-    seconds = np.linspace(0, duration, duration * sampling_rate)
+    seconds = np.linspace(0, duration, int(np.rint(duration * sampling_rate)))
     signal = np.zeros(seconds.size)
     params = listify(frequency=frequency, amplitude=amplitude)
 
