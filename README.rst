@@ -79,7 +79,7 @@ Examples
 -  `Respiratory Rate Variability Analysis <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
 
-
+*You can try out these examples directly in your browser by* [***clicking here***](https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples).
 
 Overview
 ========
