@@ -56,7 +56,7 @@ Documentation
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
         :alt: Tutorials
 .. image:: https://mybinder.org/badge_logo.svg
-		:target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
+        :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
         
         
 Click on the links above and check out our tutorials:
@@ -72,11 +72,12 @@ Tutorials
 Examples
 --------
 
--  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
--  `Electrodermal Activity (EDA) Analysis <https://neurokit2.readthedocs.io/en/latest/examples/eda.html>`_
+-  `Simulate Artificial Physiological Signals <https://neurokit2.readthedocs.io/en/latest/examples/simulation.html>`_
 -  `Customize your Processing Pipeline <https://neurokit2.readthedocs.io/en/latest/examples/custom.html>`_
 -  `Event-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
--  `Respiratory Rate Variability Analysis <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
+-  `Analyze Electrodermal Activity (EDA) <https://neurokit2.readthedocs.io/en/latest/examples/eda.html>`_
+-  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
+-  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
 
 *You can try out these examples directly in your browser by* [***clicking here***](https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples).
