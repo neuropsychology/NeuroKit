@@ -109,7 +109,6 @@ def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, respi
     """
     # Generate values along the length of the duration
     rsp = signal_simulate(duration=duration,
-                          length=length,
                           sampling_rate=sampling_rate,
                           frequency=respiratory_rate/60,
                           amplitude=0.5)
