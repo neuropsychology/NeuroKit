@@ -3,6 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import interp1d, PchipInterpolator, Akima1DInterpolator
+from neurokit2.signal import signal_distort
 
 # Naive approximation of PPG
 # The PPG wave is described with four landmarks: wave onset, location of the
@@ -11,6 +12,61 @@ from scipy.interpolate import interp1d, PchipInterpolator, Akima1DInterpolator
 # time series). These coordinates are then interpolated at the desired
 # sampling rate to obtain the PPG signal.
 
+
+def ppg_simulate(heartrate=70, duration=120, sfreq=100):
+
+    # at the requested sampling rate, how long is a period at the requested heart
+    # rate and how often does that period fit into the requested duration?
+    period = 60 / heartrate   # in seconds
+    n_period = int(np.floor(duration / period))
+    periods = np.ones(n_period) * period
+    # seconds at which periods end
+    x_onset = np.cumsum(periods)
+    periods, x_onset = _frequency_modulation(x_onset, periods,
+                                             modulation_frequency=.05,
+                                             modulation_strength=.2)
+    y_onset = 0    # in volt Mesin et al., 2019
+
+    x_sys = x_onset + 0.175 * periods
+    y_sys = y_onset + 1.5    # express as percentage of y_onset
+
+    x_notch = x_onset + 0.4 * periods
+    y_notch = y_onset + y_sys * .5    # express as percentage of y_onset
+
+    x_dia = x_onset + 0.45 * periods
+    y_dia = y_onset + y_sys * .51    # express as percentage of y_onset
+
+    x_all = np.concatenate((x_onset, x_sys, x_notch, x_dia))
+    x_all.sort(kind="mergesort")
+    x_all = np.rint(x_all * sfreq).astype(int)
+    y_all = [y_onset, y_sys, y_notch, y_dia] * n_period
+
+    # f_cubic = interp1d(x_all, y_all, kind="cubic", bounds_error=False,
+    #                    fill_value=([y_all[0]], [y_all[-1]]))
+    # f_hermite = PchipInterpolator(x_all, y_all, extrapolate=False)
+    f_akima = Akima1DInterpolator(x_all, y_all)
+
+    samples = np.arange(0, duration * sfreq)
+
+    # ppg_cubic = f_cubic(samples)
+    # ppg_hermite = f_hermite(samples)
+    ppg_akima = f_akima(samples)
+
+    ppg_akima = signal_distort(ppg_akima, sampling_rate=sfreq,
+                               powerline_amplitude=.1)
+
+
+    fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
+    # ax0.scatter(x_onset, y_onset)
+    # ax0.scatter(x_sys, y_sys)
+    # ax0.scatter(x_notch, y_notch)
+    # ax0.scatter(x_dia, y_dia)
+    ax0.scatter(x_all, y_all, c="r")
+    # ax0.plot(ppg_cubic, c="g")
+    ax0.plot(ppg_akima, c="m")
+    # ax0.plot(ppg_hermite, c="k")
+    # ax0.plot(x_periods, modulator)
+    # ax1.scatter(x_periods_modulated, amp)
 
 def _frequency_modulation(seconds, periods, modulation_frequency,
                           modulation_strength):
@@ -44,58 +100,3 @@ def _add_noise():
 
 def _add_baselinedrift():
     pass
-
-
-sfreq = 100
-heartrate = 70    # in bpm
-duration = 120    # in seconds
-
-# at the requested sampling rate, how long is a period at the requested heart
-# rate and how often does that period fit into the requested duration?
-period = 60 / heartrate   # in seconds
-n_period = int(np.floor(duration / period))
-periods = np.ones(n_period) * period
-# seconds at which periods end
-x_onset = np.cumsum(periods)
-periods, x_onset = _frequency_modulation(x_onset, periods,
-                                         modulation_frequency=.05,
-                                         modulation_strength=.2)
-y_onset = 0    # in volt Mesin et al., 2019
-
-x_sys = x_onset + 0.175 * periods
-y_sys = y_onset + 1.5    # express as percentage of y_onset
-
-x_notch = x_onset + 0.4 * periods
-y_notch = y_onset + y_sys * .5    # express as percentage of y_onset
-
-x_dia = x_onset + 0.45 * periods
-y_dia = y_onset + y_sys * .51    # express as percentage of y_onset
-
-x_all = np.concatenate((x_onset, x_sys, x_notch, x_dia))
-x_all.sort(kind="mergesort")
-x_all = np.rint(x_all * sfreq).astype(int)
-y_all = [y_onset, y_sys, y_notch, y_dia] * n_period
-
-# f_cubic = interp1d(x_all, y_all, kind="cubic", bounds_error=False,
-#                    fill_value=([y_all[0]], [y_all[-1]]))
-# f_hermite = PchipInterpolator(x_all, y_all, extrapolate=False)
-f_akima = Akima1DInterpolator(x_all, y_all)
-
-samples = np.arange(0, duration * sfreq)
-
-# ppg_cubic = f_cubic(samples)
-# ppg_hermite = f_hermite(samples)
-ppg_akima = f_akima(samples)
-
-
-fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
-# ax0.scatter(x_onset, y_onset)
-# ax0.scatter(x_sys, y_sys)
-# ax0.scatter(x_notch, y_notch)
-# ax0.scatter(x_dia, y_dia)
-ax0.scatter(x_all, y_all, c="r")
-# ax0.plot(ppg_cubic, c="g")
-ax0.plot(ppg_akima, c="m")
-# ax0.plot(ppg_hermite, c="k")
-# ax0.plot(x_periods, modulator)
-# ax1.scatter(x_periods_modulated, amp)

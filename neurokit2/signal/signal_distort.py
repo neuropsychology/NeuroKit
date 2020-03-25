@@ -7,7 +7,7 @@ from .signal_resample import signal_resample
 from ..misc import listify
 
 
-def signal_distord(signal, sampling_rate=1000, noise_amplitude=0.1, noise_frequency=100, noise_shape="laplace", powerline_amplitude=0, powerline_frequency=50, artifacts_frequency=0, artifacts_amplitude=0.1):
+def signal_distort(signal, sampling_rate=1000, noise_amplitude=0.1, noise_frequency=100, noise_shape="laplace", powerline_amplitude=0, powerline_frequency=50, artifacts_frequency=0, artifacts_amplitude=0.1):
     """Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
