@@ -66,7 +66,7 @@ def ppg_simulate(heartrate=70, duration=120, sfreq=1000,
                                noise_amplitude=[1, .5],
                                noise_frequency=[drift, motion],
                                powerline_amplitude=.1, powerline_frequency=50,
-                               artifacts_amplitude=0, artifacts_frequency=100,
+                               artifacts_amplitude=1, artifacts_frequency=100,
                                random_state=random_state)
 
     if show:

@@ -56,17 +56,21 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
             "5Hz": nk.signal_distord(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2),
             "Raw": signal}).plot()
     """
-    # Seed the random generator for reproducible results
+    # Seed the random generator for reproducible results.
     np.random.seed(random_state)
 
-    noise = 0
+    # Make sure that noise_amplitude is a list.
+    if isinstance(noise_amplitude, (int, float)):
+        noise_amplitude = [noise_amplitude]
 
     signal_sd = np.std(signal, ddof=1)
     if signal_sd == 0:
         signal_sd = None
 
-    # Basic noise
-    if isinstance(noise_amplitude, list) or noise_amplitude > 0:
+    noise = 0
+
+    # Basic noise.
+    if min(noise_amplitude) > 0:
         noise += _signal_distord_noise_multifrequency(signal,
                                                       signal_sd=signal_sd,
                                                       sampling_rate=sampling_rate,
@@ -74,14 +78,14 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                                                       noise_frequency=noise_frequency,
                                                       noise_shape=noise_shape)
 
-    # Powerline noise
+    # Powerline noise.
     if powerline_amplitude > 0:
         noise += _signal_distord_powerline(signal, signal_sd=signal_sd,
                                            sampling_rate=sampling_rate,
                                            powerline_frequency=powerline_frequency,
                                            powerline_amplitude=powerline_amplitude)
 
-    # Artifacts
+    # Artifacts.
     if artifacts_amplitude > 0:
         noise += _signal_distord_artifacts(signal,
                                            signal_sd=signal_sd,
@@ -95,17 +99,35 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
 
 
 def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
-                              artifacts_frequency=0, artifacts_amplitude=.1):
+                              artifacts_frequency=0, artifacts_amplitude=.1,
+                              artifacts_shape="laplace"):
 
     duration = len(signal) / sampling_rate
-    # Generate oscillatory signal of given frequency
-    artifacts = signal_simulate(duration=duration, sampling_rate=sampling_rate,
-                                frequency=artifacts_frequency, amplitude=1)
 
-    # # Select burst with random onset and random duration
-    # artifact_indices = np.arange(len(artifacts))
-    # artifact_onsets =
+    noise_duration = int(duration * artifacts_frequency)
+    # Generate oscillatory signal of given frequency.
+    # artifacts = signal_simulate(duration=duration, sampling_rate=sampling_rate,
+    #                             frequency=artifacts_frequency, amplitude=1)
+    artifacts = _signal_distord_noise(signal, noise_duration,
+                                      artifacts_amplitude, artifacts_shape)
 
+    # Generate artifact burst with random onset and random duration.
+    n_artifacts = 5
+
+    min_duration = int(np.rint(len(artifacts) * .001))
+    max_duration = int(np.rint(len(artifacts) * .01))
+    artifact_durations = np.random.randint(min_duration, max_duration,
+                                           n_artifacts)
+
+    artifact_onsets = np.random.randint(0, len(artifacts) - max_duration,
+                                        n_artifacts)
+    artifact_offsets = artifact_onsets + artifact_durations
+
+    artifact_idcs = np.array([False] * len(artifacts))
+    for i in range(n_artifacts):
+        artifact_idcs[artifact_onsets[i]:artifact_offsets[i]] = True
+
+    artifacts[~artifact_idcs] = 0
 
     # Scale amplitude by the signal's standard deviation.
     if signal_sd is not None:
@@ -162,7 +184,7 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
         if signal_sd is not None:
             amp *= signal_sd
 
-        # Generate noise
+        # Make some noise!
         _base_noise = _signal_distord_noise(signal, noise_duration, amp, shape)
         base_noise += _base_noise
     return base_noise
