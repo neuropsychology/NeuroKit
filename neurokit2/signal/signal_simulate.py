@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
 from ..misc import listify
 
@@ -71,8 +70,6 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
 # =============================================================================
 def _signal_simulate_sinusoidal(x, frequency=100, amplitude=0.5):
 
-    # Compute the value of sine computed by the following trigonometric
-    # function
     signal = amplitude * np.sin(2 * np.pi * frequency * x)
 
     return signal
