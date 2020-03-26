@@ -10,3 +10,4 @@ from .eda_process import eda_process
 from .eda_plot import eda_plot
 from .eda_eventrelated import eda_eventrelated
 from .eda_intervalrelated import eda_intervalrelated
+from .eda_analyze import eda_analyze
