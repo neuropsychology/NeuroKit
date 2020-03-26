@@ -9,7 +9,8 @@ from ..misc import listify
 def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                    noise_amplitude=0, noise_frequency=100,
                    powerline_amplitude=0, powerline_frequency=50,
-                   artifacts_amplitude=0, artifacts_frequency=200):
+                   artifacts_amplitude=0, artifacts_frequency=200,
+                   random_state=None):
     """Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
@@ -55,6 +56,8 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
             "5Hz": nk.signal_distord(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2),
             "Raw": signal}).plot()
     """
+    # Seed the random generator for reproducible results
+    np.random.seed(random_state)
 
     noise = 0
 
@@ -63,7 +66,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
         signal_sd = None
 
     # Basic noise
-    if noise_amplitude > 0:
+    if isinstance(noise_amplitude, list) or noise_amplitude > 0:
         noise += _signal_distord_noise_multifrequency(signal,
                                                       signal_sd=signal_sd,
                                                       sampling_rate=sampling_rate,
@@ -99,8 +102,10 @@ def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
     artifacts = signal_simulate(duration=duration, sampling_rate=sampling_rate,
                                 frequency=artifacts_frequency, amplitude=1)
 
-    # Artifacts only at those values larger than .95.
-    artifacts[artifacts <= .95] = .1
+    # # Select burst with random onset and random duration
+    # artifact_indices = np.arange(len(artifacts))
+    # artifact_onsets =
+
 
     # Scale amplitude by the signal's standard deviation.
     if signal_sd is not None:
@@ -138,20 +143,30 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
                      noise_frequency=noise_frequency, noise_shape=noise_shape)
 
     for i in range(len(params["noise_amplitude"])):
-        if params["noise_frequency"][i] <= sampling_rate:  # Skip noise of higher freq than recording
 
-            # Parameters
-            noise_duration = int(duration * params["noise_frequency"][i])
-            if signal_sd is None:
-                amplitude = params["noise_amplitude"][i]
-            else:
-                amplitude = params["noise_amplitude"][i] * signal_sd
-            shape = params["noise_shape"][i]
+        freq = params["noise_frequency"][i]
+        amp = params["noise_amplitude"][i]
+        shape = params["noise_shape"][i]
+        # Apply a very conservative Nyquist criterion in order to ensure
+        # sufficiently sampled signals.
+        nyquist = sampling_rate * .1
+        if freq > nyquist:
+            print(f"Please choose frequencies smaller than {nyquist}.")
+            continue
+        # Also make sure that at leat one period of the frequency can be
+        # captured over the duration of the signal.
+        if (1 / freq) > duration:
+            print(f"Please choose frequencies larger than {1 / duration}.")
+            continue
 
-            # Generate noise
-            base_noise = _signal_distord_noise(signal, noise_duration,
-                                               amplitude, shape)
-            base_noise += base_noise
+        noise_duration = int(duration * freq)
+
+        if signal_sd is not None:
+            amp *= signal_sd
+
+        # Generate noise
+        _base_noise = _signal_distord_noise(signal, noise_duration, amp, shape)
+        base_noise += _base_noise
     return base_noise
 
 
