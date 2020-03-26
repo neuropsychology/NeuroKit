@@ -35,15 +35,33 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
                       "2Hz": nk.signal_simulate(duration=5, frequency=2),
                       "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
     """
-    # Generate samples.
-    seconds = np.linspace(0, duration, int(np.rint(duration * sampling_rate)))
+
+    n_samples = int(np.rint(duration * sampling_rate))
+    period = 1 / sampling_rate
+    seconds = np.arange(n_samples) * period
+
     signal = np.zeros(seconds.size)
     params = listify(frequency=frequency, amplitude=amplitude)
 
     for i in range(len(params["frequency"])):
+
+        freq = params["frequency"][i]
+        amp = params["amplitude"][i]
+        # Apply a very conservative Nyquist criterion in order to ensure
+        # sufficiently sampled signals.
+        nyquist = sampling_rate * .1
+        if freq > nyquist:
+            print(f"Please choose frequencies smaller than {nyquist}.")
+            continue
+        # Also make sure that at leat one period of the frequency can be
+        # captured over the duration of the signal.
+        if (1 / freq) > duration:
+            print(f"Please choose frequencies larger than {1 / duration}.")
+            continue
+
         signal += _signal_simulate_sinusoidal(x=seconds,
-                                              frequency=params["frequency"][i],
-                                              amplitude=params["amplitude"][i])
+                                              frequency=freq,
+                                              amplitude=amp)
 
     return signal
 
@@ -55,6 +73,6 @@ def _signal_simulate_sinusoidal(x, frequency=100, amplitude=0.5):
 
     # Compute the value of sine computed by the following trigonometric
     # function
-    signal = amplitude * np.sin(2 * np.pi * x * frequency)
+    signal = amplitude * np.sin(2 * np.pi * frequency * x)
 
     return signal
