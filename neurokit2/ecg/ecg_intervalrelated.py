@@ -32,12 +32,17 @@ def ecg_intervalrelated(data):
     >>> import neurokit2 as nk
     >>> import pandas as pd
     >>>
-    >>> # Example with real data
+    >>> # Download data
     >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
     >>>
     >>> # Process the data
-    >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
+    >>> df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
+    >>>
+    >>> # Single dataframe is passed
     >>> nk.ecg_intervalrelated(df)
+    >>>
+    >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=20)
+    >>> nk.ecg_intervalrelated(epochs)
     """
     intervals = {}
 
