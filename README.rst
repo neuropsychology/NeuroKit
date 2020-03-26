@@ -23,7 +23,25 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This is a work-in-progress project continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community** around this collaborative project. If you're interested in getting involved, `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_
+This package is the continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_, with which you can analyze your physiological data with only two lines of code.
+
+Quick Example
+=============
+
+.. code-block:: python
+
+    # Load packages
+    import neurokit2 as nk  
+    import pandas as pd
+    
+    # Download an example dataset
+    data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
+    
+    # Preprocess the data (clean signals, filter, etc.)
+    processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
+    
+    # Compute relevant features
+    results = nk.bio_analyze(processed_data, sampling_rate=100)  
 
 
 Installation
@@ -38,7 +56,7 @@ To install NeuroKit2, run this command in your terminal:
 Contribution
 ============
 
-NeuroKit2 is a collaborative project for contributors with all levels of development expertise. Additionally, we credit all contributors, so that your involvement pays off on your CV. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
+NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
 
 
 Documentation
