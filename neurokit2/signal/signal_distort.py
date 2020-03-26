@@ -151,13 +151,11 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
         # sufficiently sampled signals.
         nyquist = sampling_rate * .1
         if freq > nyquist:
-            print(f"Please choose frequencies smaller than {nyquist}.")
-            continue
+            raise ValueError(f"NeuroKit error: Please choose frequencies smaller than {nyquist}.")
         # Also make sure that at leat one period of the frequency can be
         # captured over the duration of the signal.
         if (1 / freq) > duration:
-            print(f"Please choose frequencies larger than {1 / duration}.")
-            continue
+            raise ValueError(f"NeuroKit error: Please choose frequencies larger than {1 / duration}.")
 
         noise_duration = int(duration * freq)
 

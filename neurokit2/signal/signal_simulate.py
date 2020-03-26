@@ -50,13 +50,11 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
         # sufficiently sampled signals.
         nyquist = sampling_rate * .1
         if freq > nyquist:
-            print(f"Please choose frequencies smaller than {nyquist}.")
-            continue
+            raise ValueError(f"NeuroKit error: Please choose frequencies smaller than {nyquist}.")
         # Also make sure that at leat one period of the frequency can be
         # captured over the duration of the signal.
         if (1 / freq) > duration:
-            print(f"Please choose frequencies larger than {1 / duration}.")
-            continue
+            raise ValueError(f"NeuroKit error: Please choose frequencies larger than {1 / duration}.")
 
         signal += _signal_simulate_sinusoidal(x=seconds,
                                               frequency=freq,
