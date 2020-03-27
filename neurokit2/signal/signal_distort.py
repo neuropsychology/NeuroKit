@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 
+import numpy as np
 from .signal_simulate import signal_simulate
 from .signal_resample import signal_resample
 from ..misc import listify
@@ -10,7 +10,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                    noise_amplitude=0, noise_frequency=100,
                    powerline_amplitude=0, powerline_frequency=50,
                    artifacts_amplitude=0, artifacts_frequency=200,
-                   random_state=None):
+                   n_artifacts=5, random_state=None):
     """Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
@@ -24,10 +24,27 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
     noise_amplitude : float
         The amplitude of the noise (the scale of the random function, relative
         to the standard deviation of the signal).
-    noise_frequency : int
+    noise_frequency : float
         The frequency of the noise (in Hz, i.e., samples/second).
+    powerline_amplitude : float
+        The amplitude of the powerline noise (relative to the standard
+        deviation of the signal).
+    powerline_frequency : float
+        The frequency of the powerline noise (in Hz, i.e., samples/second).
+    artifacts_amplitude : float
+        The amplitude of the artifacts (relative to the standard deviation of
+        the signal).
+    artifacts_frequency : int
+        The frequency of the artifacts (in Hz, i.e., samples/second).
+    n_artifacts : int
+        The number of artifact bursts. The bursts have a random duration
+        between 1 and 10% of the signal duration.
     noise_shape : str
-        The shape of the noise. Can be one of 'laplace' (default) or 'gaussian'.
+        The shape of the noise. Can be one of 'laplace' (default) or
+        'gaussian'.
+    random_state : int
+        Seed for the random number generator. Keep it fixed for reproducible
+        results.
 
     Returns
     -------
@@ -91,7 +108,8 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                                            signal_sd=signal_sd,
                                            sampling_rate=sampling_rate,
                                            artifacts_frequency=artifacts_frequency,
-                                           artifacts_amplitude=artifacts_amplitude)
+                                           artifacts_amplitude=artifacts_amplitude,
+                                           n_artifacts=n_artifacts)
 
     distorted = signal + noise
 
@@ -100,19 +118,15 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
 
 def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
                               artifacts_frequency=0, artifacts_amplitude=.1,
-                              artifacts_shape="laplace"):
+                              n_artifacts=5, artifacts_shape="laplace"):
 
     duration = len(signal) / sampling_rate
 
     noise_duration = int(duration * artifacts_frequency)
-    # Generate oscillatory signal of given frequency.
-    # artifacts = signal_simulate(duration=duration, sampling_rate=sampling_rate,
-    #                             frequency=artifacts_frequency, amplitude=1)
-    artifacts = _signal_distord_noise(signal, noise_duration,
-                                      artifacts_amplitude, artifacts_shape)
 
     # Generate artifact burst with random onset and random duration.
-    n_artifacts = 5
+    artifacts = _signal_distord_noise(signal, noise_duration,
+                                      artifacts_amplitude, artifacts_shape)
 
     min_duration = int(np.rint(len(artifacts) * .001))
     max_duration = int(np.rint(len(artifacts) * .01))

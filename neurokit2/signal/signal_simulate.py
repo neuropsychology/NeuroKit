@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
 from ..misc import listify
 
@@ -34,7 +35,6 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
                       "2Hz": nk.signal_simulate(duration=5, frequency=2),
                       "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
     """
-
     n_samples = int(np.rint(duration * sampling_rate))
     period = 1 / sampling_rate
     seconds = np.arange(n_samples) * period
@@ -51,7 +51,7 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
         nyquist = sampling_rate * .1
         if freq > nyquist:
             raise ValueError(f"NeuroKit error: Please choose frequencies smaller than {nyquist}.")
-        # Also make sure that at leat one period of the frequency can be
+        # Also make sure that at least one period of the frequency can be
         # captured over the duration of the signal.
         if (1 / freq) > duration:
             raise ValueError(f"NeuroKit error: Please choose frequencies larger than {1 / duration}.")
