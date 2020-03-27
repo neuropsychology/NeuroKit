@@ -128,10 +128,10 @@ def ppg_simulate(duration=120, sampling_rate=500, heartrate=70,
     # Interpolate a continuous signal between the landmarks (i.e., Cartesian
     # coordinates).
     f = Akima1DInterpolator(x_all, y_all)
-    samples = np.arange(0, duration * sampling_rate)
+    samples = np.arange(0, int(np.ceil(duration * sampling_rate)))
     ppg = f(samples)
     # Remove NAN (values outside interpolation range, i.e., after last sample).
-    ppg = ppg[~np.isnan(ppg)]
+    ppg[np.isnan(ppg)] = np.nanmean(ppg)
 
     if show:
         ax0.plot(ppg)
@@ -184,8 +184,15 @@ def _frequency_modulation(seconds, periods, modulation_frequency,
         print(f"Please choose a modulation frequency lower than {nyquist}.")
         return
 
+    # Generate a sine with mean 1.1 and amplitude modulation_strength. i.e.,
+    # ranging from 1.1 - modulation_strength to 1.1 + modulation_strength. Note
+    # That the mean must be 1.1 rather than 1 in order to not produce periods
+    # of duration 0 (i.e., at minimum the duration period is scaled down to
+    # .1 * period instead of 0 * period).
     modulator = modulation_strength * np.sin(2 * np.pi * modulation_frequency *
-                                             seconds) + 1
+                                             seconds) + 1.1
+    plt.figure()
+    plt.plot(modulator)
     periods_modulated = periods * modulator
     seconds_modulated = np.cumsum(periods_modulated)
     seconds_modulated -= seconds_modulated[0]    # make sure seconds start at zero
