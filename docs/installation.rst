@@ -36,7 +36,7 @@ The difference between the two is straightforward, *miniconda* is recommended if
 4. Run :code:`conda env create <yourenvname>`; activate it every time you open up conda by running :code:`conda activate <yourenvname>`
 5. Is pip (package installer for python) installed in this env? Prompt Anaconda using :code:`pip list` it'll show you all the packages installed in that conda env
 
-.. image:: https://raw.github.com/sangfrois/Neurokit/dev/docs/img/TUTO-conda-prompt.jpg
+.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/tutorial_installation_conda.jpg
 
 Mac OS
 ^^^^^^^^^
