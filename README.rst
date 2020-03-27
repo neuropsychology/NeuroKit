@@ -98,11 +98,10 @@ Examples
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
 
-*You can try out these examples directly in your browser by* [***clicking here***](https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples).
+*You can try out these examples directly in your browser by clicking on the badge here*
 
-
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/workflow.png
-        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
+.. image:: https://mybinder.org/badge_logo.svg
+        :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples.
 
 
 Citation
