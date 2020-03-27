@@ -18,7 +18,7 @@ from ..epochs import epochs_to_df
 from ..events import events_plot
 
 
-def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak"):
+def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak", show=False, show_type='peaks'):
     """Delineate QRS complex.
     Function to delineate the QRS complex.
 
@@ -35,6 +35,11 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak"):
         Defaults to 500.
     method : str
         Can be one of 'peak' (default) for a peak-based method, 'cwt' for continuous wavelet transform or 'dwt' for discrete wavelet transform.
+    show : bool
+        If True, will return a plot to visualizing the delineated waves
+        information.
+    show_type: str
+        The type of delineated waves information showed in the plot
 
     Returns
     -------
@@ -97,6 +102,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak"):
         waves = _dwt_ecg_delinator(ecg_cleaned,
                                    rpeaks,
                                    sampling_rate=sampling_rate)
+
     # Remove NaN in Peaks, Onsets, and Offsets
     for feature in waves.keys():
         waves[feature] = [x for x in waves[feature] if ~np.isnan(x)]
@@ -105,18 +111,11 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak"):
                                        desired_length=len(ecg_cleaned))
     signals = instant_peaks
 
+    if show is True:
+        _ecg_delineate_plot(ecg_cleaned, rpeaks=rpeaks, signals=signals, signal_features_type=show_type, sampling_rate=sampling_rate)
+
+
     return signals, waves
-
-
-
-
-
-
-
-
-
-
-
 
 
 
