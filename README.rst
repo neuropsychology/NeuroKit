@@ -23,7 +23,25 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This is a work-in-progress project continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_. We are looking to build a **community** around this collaborative project. If you're interested in getting involved, `let us know! <https://github.com/neuropsychology/NeuroKit/issues/3>`_
+This package is the continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_, with which you can analyze your physiological data with only two lines of code.
+
+Quick Example
+=============
+
+.. code-block:: python
+
+    # Load packages
+    import neurokit2 as nk  
+    import pandas as pd
+    
+    # Download an example dataset
+    data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
+    
+    # Preprocess the data (clean signals, filter, etc.)
+    processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
+    
+    # Compute relevant features
+    results = nk.bio_analyze(processed_data, sampling_rate=100)  
 
 
 Installation
@@ -38,7 +56,7 @@ To install NeuroKit2, run this command in your terminal:
 Contribution
 ============
 
-NeuroKit2 is a collaborative project for contributors with all levels of development expertise. Additionally, we credit all contributors, so that your involvement pays off on your CV. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
+NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
 
 
 Documentation
@@ -67,7 +85,7 @@ Tutorials
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
-
+-  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 
 Examples
 --------
@@ -81,6 +99,53 @@ Examples
 -  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
 
 *You can try out these examples directly in your browser by* [***clicking here***](https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples).
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/workflow.png
+        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
+
+
+Citation
+=========
+
+.. image:: https://zenodo.org/badge/218212111.svg
+   :target: https://zenodo.org/badge/latestdoi/218212111
+  
+You can run:
+
+.. code-block:: python
+
+    print(nk.__cite__)
+
+
+.. code-block:: console
+
+    You can cite NeuroKit as follows:
+
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lespinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
+
+
+    Full bibtex reference:
+
+    @misc{neurokit,
+      doi = {10.5281/ZENODO.3597887},
+      url = {https://github.com/neuropsychology/NeuroKit},
+      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lespinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
+      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
+      publisher = {Zenodo},
+      year = {2020},
+    }
+
+
+Design
+=======
+
+*NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
+
+- **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
+- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
+- **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
+
 
 Overview
 ========
@@ -187,45 +252,6 @@ PPG, BVP, EGG, ...
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
 
-Design
-=======
-
-*NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
-
-- **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
-- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
-- **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
-
-Citation
-=========
-
-.. image:: https://zenodo.org/badge/218212111.svg
-   :target: https://zenodo.org/badge/latestdoi/218212111
-  
-You can run:
-
-.. code-block:: python
-
-    print(nk.__cite__)
-
-
-.. code-block:: console
-
-    You can cite NeuroKit as follows:
-
-    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lespinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
-
-
-    Full bibtex reference:
-
-    @misc{neurokit,
-      doi = {10.5281/ZENODO.3597887},
-      url = {https://github.com/neuropsychology/NeuroKit},
-      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lespinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
-      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
-      publisher = {Zenodo},
-      year = {2020},
-    }
 
 
 Alternatives

@@ -79,10 +79,10 @@ def ecg_eventrelated(epochs):
 
     # Warning for long epochs
     for i in epochs:
-        if (np.max(epochs[i].index.values) > 5):
+        if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: ecg_eventrelated():"
                   "Epoch length is too long. You might want to use"
-                  "ecg_periodrelated().")
+                  "ecg_intervalrelated().")
 
     # Extract features and build dataframe
     ecg_df = {}  # Initialize an empty dict

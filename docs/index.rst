@@ -8,6 +8,7 @@ Welcome to NeuroKit's documentation!
    news
    tutorials/index
    examples/index
+   datasets
    functions
    contributing
    credits
