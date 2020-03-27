@@ -60,10 +60,10 @@ def emg_eventrelated(epochs):
 
     # Warning for long epochs
     for i in epochs:
-        if (np.max(epochs[i].index.values) > 5):
+        if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: emg_eventrelated():"
                   "Epoch length is too long. You might want to use"
-                  "emg_periodrelated().")
+                  "emg_intervalrelated().")
 
     # Extract features and build dataframe
     emg_df = {}  # Initialize an empty dict

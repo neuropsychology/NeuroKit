@@ -84,7 +84,7 @@ def eda_eventrelated(epochs):
         if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: eda_eventrelated():"
                   "Epoch length is too long. You might want to use"
-                  "eda_periodrelated().")
+                  "eda_intervalrelated().")
 
     # Extract features and build dataframe
     eda_df = {}  # Initialize an empty dict
