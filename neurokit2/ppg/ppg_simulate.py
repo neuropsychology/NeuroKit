@@ -191,8 +191,6 @@ def _frequency_modulation(seconds, periods, modulation_frequency,
     # .1 * period instead of 0 * period).
     modulator = modulation_strength * np.sin(2 * np.pi * modulation_frequency *
                                              seconds) + 1.1
-    plt.figure()
-    plt.plot(modulator)
     periods_modulated = periods * modulator
     seconds_modulated = np.cumsum(periods_modulated)
     seconds_modulated -= seconds_modulated[0]    # make sure seconds start at zero
