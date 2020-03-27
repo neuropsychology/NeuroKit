@@ -85,7 +85,7 @@ Tutorials
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
-
+-  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 
 Examples
 --------
@@ -99,6 +99,10 @@ Examples
 -  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
 
 *You can try out these examples directly in your browser by* [***clicking here***](https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples).
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/workflow.png
+        :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
 
 Overview
 ========
