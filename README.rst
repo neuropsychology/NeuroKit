@@ -104,6 +104,49 @@ Examples
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/workflow.png
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
 
+
+Citation
+=========
+
+.. image:: https://zenodo.org/badge/218212111.svg
+   :target: https://zenodo.org/badge/latestdoi/218212111
+  
+You can run:
+
+.. code-block:: python
+
+    print(nk.__cite__)
+
+
+.. code-block:: console
+
+    You can cite NeuroKit as follows:
+
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lespinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
+
+
+    Full bibtex reference:
+
+    @misc{neurokit,
+      doi = {10.5281/ZENODO.3597887},
+      url = {https://github.com/neuropsychology/NeuroKit},
+      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lespinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
+      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
+      publisher = {Zenodo},
+      year = {2020},
+    }
+
+
+Design
+=======
+
+*NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
+
+- **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
+- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
+- **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
+
+
 Overview
 ========
 
@@ -209,45 +252,6 @@ PPG, BVP, EGG, ...
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
 
-Design
-=======
-
-*NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
-
-- **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
-- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
-- **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
-
-Citation
-=========
-
-.. image:: https://zenodo.org/badge/218212111.svg
-   :target: https://zenodo.org/badge/latestdoi/218212111
-  
-You can run:
-
-.. code-block:: python
-
-    print(nk.__cite__)
-
-
-.. code-block:: console
-
-    You can cite NeuroKit as follows:
-
-    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lespinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
-
-
-    Full bibtex reference:
-
-    @misc{neurokit,
-      doi = {10.5281/ZENODO.3597887},
-      url = {https://github.com/neuropsychology/NeuroKit},
-      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lespinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
-      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
-      publisher = {Zenodo},
-      year = {2020},
-    }
 
 
 Alternatives
