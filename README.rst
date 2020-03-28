@@ -25,8 +25,7 @@
 
 This package is the continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_, with which you can analyze your physiological data with only two lines of code.
 
-.. only:: comment
-
+..
     Quick Example
     =============
 
