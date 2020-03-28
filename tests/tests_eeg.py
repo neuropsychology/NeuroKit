@@ -23,7 +23,7 @@ def test_eeg_add_channel():
     df1 = raw1.to_data_frame()
 
     # test if the column of channel is added
-    assert len(df1.columns) == 377
+    assert len(df1.columns) == 378
 
     # test if the NaN is appended properly to the added channel to account for difference in distance between two signals
     sync_index_raw=100
