@@ -87,7 +87,7 @@ def rsp_eventrelated(epochs):
         if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: rsp_eventrelated():"
                   "Epoch length is too long. You might want to use"
-                  "rsp_periodrelated().")
+                  "rsp_intervalrelated().")
 
     # Extract features and build dataframe
     rsp_df = {}  # Initialize an empty dict
