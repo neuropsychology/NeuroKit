@@ -8,7 +8,7 @@ def test_bio_process():
     # Create data
     ecg = nk.ecg_simulate(duration=30, sampling_rate=sampling_rate)
     rsp = nk.rsp_simulate(duration=30, sampling_rate=sampling_rate)
-    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate, n_scr=3)
+    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate, scr_number=3)
     emg = nk.emg_simulate(duration=30, sampling_rate=sampling_rate, n_bursts=3)
 
     bio_df, bio_info = nk.bio_process(ecg=ecg,
