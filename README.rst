@@ -112,7 +112,11 @@ Citation
 
 .. image:: https://zenodo.org/badge/218212111.svg
    :target: https://zenodo.org/badge/latestdoi/218212111
-  
+
+.. image:: https://img.shields.io/badge/details-authors-purple.svg?colorB=9C27B0
+   :target: https://neurokit2.readthedocs.io/en/latest/credits.html
+   
+
 You can run:
 
 .. code-block:: python
