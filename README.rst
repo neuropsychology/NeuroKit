@@ -123,19 +123,20 @@ You can run:
 
 .. code-block:: python
 
-    print(nk.__cite__)
+    nk.cite()
 
 
 .. code-block:: tex
 
-    You can cite NeuroKit as follows:
+    You can cite NeuroKit2 as follows:
 
-    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lespinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
-
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., 
+      Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological 
+      Signal Processing. Retrieved March 28, 2020, from https://github.com/neuropsychology/NeuroKit
 
     Full bibtex reference:
 
-    @misc{neurokit,
+    @misc{neurokit2,
       doi = {10.5281/ZENODO.3597887},
       url = {https://github.com/neuropsychology/NeuroKit},
       author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lespinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
