@@ -144,26 +144,30 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
         ppg = signal_distort(ppg, sampling_rate=sampling_rate,
                              noise_amplitude=drift,
                              noise_frequency=drift_freq,
-                             random_state=random_state)
+                             random_state=random_state,
+                             silent=True)
     # Add motion artifacts.
     if motion_amplitude > 0:
         motion_freq = .5
         ppg = signal_distort(ppg, sampling_rate=sampling_rate,
                              noise_amplitude=motion_amplitude,
                              noise_frequency=motion_freq,
-                             random_state=random_state)
+                             random_state=random_state,
+                             silent=True)
     # Add high frequency bursts.
     if burst_amplitude > 0:
         ppg = signal_distort(ppg, sampling_rate=sampling_rate,
                              artifacts_amplitude=burst_amplitude,
                              artifacts_frequency=100,
                              n_artifacts=burst_number,
-                             random_state=random_state)
+                             random_state=random_state,
+                             silent=True)
     # Add powerline noise.
     if powerline_amplitude > 0:
         ppg = signal_distort(ppg, sampling_rate=sampling_rate,
                              powerline_amplitude=powerline_amplitude,
-                             powerline_frequency=50, random_state=random_state)
+                             powerline_frequency=50, random_state=random_state,
+                             silent=True)
 
     if show:
         ax1.plot(ppg)

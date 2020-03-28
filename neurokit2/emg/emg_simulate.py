@@ -99,4 +99,4 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                           desired_length=length,
                           desired_sampling_rate=sampling_rate)
 
-    return(emg)
+    return emg
