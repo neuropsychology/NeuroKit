@@ -2,7 +2,7 @@
 import numpy as np
 
 from ..signal import signal_merge
-from ..signal import signal_distord
+from ..signal import signal_distort
 
 
 def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
@@ -78,7 +78,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     # Add random noise
     if noise > 0:
-        eda = signal_distord(eda,
+        eda = signal_distort(eda,
                              sampling_rate=sampling_rate,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
