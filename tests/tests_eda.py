@@ -10,10 +10,10 @@ import matplotlib.pyplot as plt
 
 def test_eda_simulate():
 
-    eda1 = nk.eda_simulate(duration=10, length=None, n_scr=1, random_state=333)
+    eda1 = nk.eda_simulate(duration=10, length=None, scr_number=1, random_state=333)
     assert len(nk.signal_findpeaks(eda1, height_min=0.6)["Peaks"]) == 1
 
-    eda2 = nk.eda_simulate(duration=10, length=None, n_scr=5, random_state=333)
+    eda2 = nk.eda_simulate(duration=10, length=None, scr_number=5, random_state=333)
     assert len(nk.signal_findpeaks(eda2, height_min=0.6)["Peaks"]) == 5
 #   pd.DataFrame({"EDA1": eda1, "EDA2": eda2}).plot()
 
@@ -27,7 +27,7 @@ def test_eda_clean():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
-                          n_scr=6, noise=0.01, drift=0.01, random_state=42)
+                          scr_number=6, noise=0.01, drift=0.01, random_state=42)
 
     clean = nk.eda_clean(eda, sampling_rate=sampling_rate)
     assert len(clean) == len(eda)
@@ -58,7 +58,7 @@ def test_eda_phasic():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
-                          n_scr=6, noise=0.01, drift=0.01, random_state=42)
+                          scr_number=6, noise=0.01, drift=0.01, random_state=42)
 
 
     cvxEDA = nk.eda_phasic(nk.standardize(eda), method='cvxeda')
@@ -78,7 +78,7 @@ def test_eda_peaks():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
-                          n_scr=6, noise=0, drift=0.01, random_state=42)
+                          scr_number=6, noise=0, drift=0.01, random_state=42)
     eda_phasic = nk.eda_phasic(nk.standardize(eda), method='highpass')["EDA_Phasic"].values
 
 
@@ -94,7 +94,7 @@ def test_eda_plot():
 
     sampling_rate = 1000
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
-                          n_scr=6, noise=0, drift=0.01, random_state=42)
+                          scr_number=6, noise=0, drift=0.01, random_state=42)
     eda_summary, _ =nk.eda_process(eda, sampling_rate=sampling_rate)
 
     # Plot data over samples.
@@ -121,7 +121,7 @@ def test_eda_plot():
 
 def test_eda_eventrelated():
 
-    eda = nk.eda_simulate(duration=15, n_scr=3)
+    eda = nk.eda_simulate(duration=15, scr_number=3)
     eda_signals, info = nk.eda_process(eda, sampling_rate=1000)
     epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000],
                               sampling_rate=1000,
