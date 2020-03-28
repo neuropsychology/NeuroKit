@@ -6,10 +6,10 @@ from scipy.interpolate import Akima1DInterpolator
 from neurokit2.signal import signal_distort
 
 
-def ppg_simulate(duration=120, sampling_rate=500, heart_rate=70,
-                 frequency_modulation=.3, ibi_randomness=.25,
-                 drift_amplitude=1, motion_amplitude=.5,
-                 powerline_amplitude=.1, burst_amplitude=1, burst_number=5,
+def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
+                 frequency_modulation=0.3, ibi_randomness=0.25,
+                 drift=1, motion_amplitude=0.5,
+                 powerline_amplitude=.1, burst_number=0, burst_amplitude=1,
                  random_state=None, show=False):
     """Simulate a photoplethysmogram (PPG) signal.
 
@@ -25,7 +25,7 @@ def ppg_simulate(duration=120, sampling_rate=500, heart_rate=70,
         Desired recording length in seconds. The default is 120.
     sampling_rate : int
         The desired sampling rate (in Hz, i.e., samples/second). The default is
-        500.
+        1000.
     heart_rate : int
         Desired simulated heart rate (in beats per minute). The default is 70.
     frequency_modulation : float
@@ -35,20 +35,20 @@ def ppg_simulate(duration=120, sampling_rate=500, heart_rate=70,
     ibi_randomness : float
         Float between 0 and 1. Determines how much random noise there is in the
         duration of each PPG wave (0 corresponds to abscence of variation). The
-        default is .25.
-    drift_amplitude : float
+        default is 0.25.
+    drift : float
         Float between 0 and 1. Determines how pronounced the baseline drift
         (.05 Hz) is (0 corresponds to abscence of baseline drift). The default
         is 1.
     motion_amplitude : float
         Float between 0 and 1. Determines how pronounced the motion artifact
         (.5 Hz) is (0 corresponds to abscence of motion artifact). The default
-        is .5.
+        is 0.5.
     powerline_amplitude : float
         Float between 0 and 1. Determines how pronounced the powerline artifact
         (50 Hz) is (0 corresponds to abscence of powerline artifact). Note that
         powerline_amplitude > 0 is only possible if sampling_rate is >= 500.
-        The default is .1.
+        The default is 0.1.
     burst_amplitude : float
         Float between 0 and 1. Determines how pronounced high frequency burst
         artifacts are (0 corresponds to abscence of bursts). The default is 1.
@@ -138,12 +138,12 @@ def ppg_simulate(duration=120, sampling_rate=500, heart_rate=70,
         ax0.plot(ppg)
 
     # Add baseline drift.
-    if drift_amplitude > 0:
+    if drift > 0:
         drift_freq = .05
         if drift_freq < (1 / duration) * 2:
             drift_freq = (1 / duration) * 2
         ppg = signal_distort(ppg, sampling_rate=sampling_rate,
-                             noise_amplitude=drift_amplitude,
+                             noise_amplitude=drift,
                              noise_frequency=drift_freq,
                              random_state=random_state)
     # Add motion artifacts.
