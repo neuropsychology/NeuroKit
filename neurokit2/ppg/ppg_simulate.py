@@ -6,7 +6,7 @@ from scipy.interpolate import Akima1DInterpolator
 from neurokit2.signal import signal_distort
 
 
-def ppg_simulate(duration=120, sampling_rate=500, heartrate=70,
+def ppg_simulate(duration=120, sampling_rate=500, heart_rate=70,
                  frequency_modulation=.3, ibi_randomness=.25,
                  drift_amplitude=1, motion_amplitude=.5,
                  powerline_amplitude=.1, burst_amplitude=1, burst_number=5,
@@ -26,7 +26,7 @@ def ppg_simulate(duration=120, sampling_rate=500, heartrate=70,
     sampling_rate : int
         The desired sampling rate (in Hz, i.e., samples/second). The default is
         500.
-    heartrate : int
+    heart_rate : int
         Desired simulated heart rate (in beats per minute). The default is 70.
     frequency_modulation : float
         Float between 0 and 1. Determines how pronounced respiratory sinus
@@ -72,15 +72,16 @@ def ppg_simulate(duration=120, sampling_rate=500, heartrate=70,
     >>> import neurokit2 as nk
     >>>
     >>> ppg = ppg = nk.ppg_simulate(duration=40, sampling_rate=500,
-    >>>                             heartrate=75, random_state=42, show=True)
+    >>>                             heart_rate=75, random_state=42, show=True)
 
     See Also
     --------
+    ecg_simulate, rsp_simulate, eda_simulate, emg_simulate
     """
     # At the requested sampling rate, how long is a period at the requested
     # heart-rate and how often does that period fit into the requested
     # duration?
-    period = 60 / heartrate   # in seconds
+    period = 60 / heart_rate   # in seconds
     n_period = int(np.floor(duration / period))
     periods = np.ones(n_period) * period
 
