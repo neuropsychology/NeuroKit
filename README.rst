@@ -102,11 +102,12 @@ Examples
 
 *You can try out these examples directly in your browser by* [***clicking here***](https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples).
 
+- **Don't know which tutorial is suited for your case?** Follow this flowchart:
+
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/workflow.png
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
-
-
+        
 Citation
 =========
 
