@@ -6,9 +6,9 @@ from neurokit2.signal import signal_distort
 
 
 def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
-                 frequency_modulation=0.3, ibi_randomness=0.25,
+                 frequency_modulation=0.3, ibi_randomness=0.1,
                  drift=0, motion_amplitude=0.1,
-                 powerline_amplitude=0.1, burst_number=0, burst_amplitude=1,
+                 powerline_amplitude=0.01, burst_number=0, burst_amplitude=1,
                  random_state=None, show=False):
     """Simulate a photoplethysmogram (PPG) signal.
 
@@ -29,28 +29,28 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
         Desired simulated heart rate (in beats per minute). The default is 70.
     frequency_modulation : float
         Float between 0 and 1. Determines how pronounced respiratory sinus
-        arrythmia (RSA) is (0 corresponds to abscence of RSA). The default is
-        .3.
+        arrythmia (RSA) is (0 corresponds to absence of RSA). The default is
+        0.3.
     ibi_randomness : float
         Float between 0 and 1. Determines how much random noise there is in the
-        duration of each PPG wave (0 corresponds to abscence of variation). The
-        default is 0.25.
+        duration of each PPG wave (0 corresponds to absence of variation). The
+        default is 0.1.
     drift : float
         Float between 0 and 1. Determines how pronounced the baseline drift
-        (.05 Hz) is (0 corresponds to abscence of baseline drift). The default
+        (.05 Hz) is (0 corresponds to absence of baseline drift). The default
         is 1.
     motion_amplitude : float
         Float between 0 and 1. Determines how pronounced the motion artifact
-        (.5 Hz) is (0 corresponds to abscence of motion artifact). The default
-        is 0.5.
+        (0.5 Hz) is (0 corresponds to absence of motion artifact). The default
+        is 0.1.
     powerline_amplitude : float
         Float between 0 and 1. Determines how pronounced the powerline artifact
-        (50 Hz) is (0 corresponds to abscence of powerline artifact). Note that
-        powerline_amplitude > 0 is only possible if sampling_rate is >= 500.
+        (50 Hz) is (0 corresponds to absence of powerline artifact). Note that
+        powerline_amplitude > 0 is only possible if 'sampling_rate' is >= 500.
         The default is 0.1.
     burst_amplitude : float
         Float between 0 and 1. Determines how pronounced high frequency burst
-        artifacts are (0 corresponds to abscence of bursts). The default is 1.
+        artifacts are (0 corresponds to absence of bursts). The default is 1.
     burst_number : int
         Determines how many high frequency burst artifacts occur. The default
         is 0.
