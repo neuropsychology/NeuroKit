@@ -9,7 +9,7 @@ from ..misc import listify
 def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                    noise_amplitude=0, noise_frequency=100,
                    powerline_amplitude=0, powerline_frequency=50,
-                   artifacts_amplitude=0, artifacts_frequency=200,
+                   artifacts_amplitude=0, artifacts_frequency=100,
                    n_artifacts=5, random_state=None, silent=False):
     """Signal distortion.
 
@@ -231,7 +231,7 @@ def _signal_distord_noise(signal, sampling_rate=1000, noise_frequency=100,
                   f" signal above {1 / noise_frequency} seconds.")
         return signal
 
-    noise_duration = int(duration * sampling_rate)
+    noise_duration = int(duration * noise_frequency)
 
     if noise_shape in ["normal", "gaussian"]:
         _noise = np.random.normal(0, noise_amplitude, noise_duration)
