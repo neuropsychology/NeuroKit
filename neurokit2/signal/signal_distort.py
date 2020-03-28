@@ -9,7 +9,7 @@ from ..misc import listify
 def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                    noise_amplitude=0, noise_frequency=100,
                    powerline_amplitude=0, powerline_frequency=50,
-                   artifacts_amplitude=0, artifacts_frequency=200,
+                   artifacts_amplitude=0, artifacts_frequency=100,
                    n_artifacts=5, random_state=None, silent=False):
     """Signal distortion.
 
@@ -113,7 +113,8 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                                            sampling_rate=sampling_rate,
                                            artifacts_frequency=artifacts_frequency,
                                            artifacts_amplitude=artifacts_amplitude,
-                                           n_artifacts=n_artifacts)
+                                           n_artifacts=n_artifacts,
+                                           silent=silent)
 
     distorted = signal + noise
 
@@ -122,15 +123,15 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
 
 def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
                               artifacts_frequency=0, artifacts_amplitude=.1,
-                              n_artifacts=5, artifacts_shape="laplace"):
-
-    duration = len(signal) / sampling_rate
-
-    noise_duration = int(duration * artifacts_frequency)
+                              n_artifacts=5, artifacts_shape="laplace",
+                              silent=False):
 
     # Generate artifact burst with random onset and random duration.
-    artifacts = _signal_distord_noise(signal, noise_duration,
-                                      artifacts_amplitude, artifacts_shape)
+    artifacts = _signal_distord_noise(signal, sampling_rate=sampling_rate,
+                                      noise_frequency=artifacts_frequency,
+                                      noise_amplitude=artifacts_amplitude,
+                                      noise_shape=artifacts_shape,
+                                      silent=silent)
 
     min_duration = int(np.rint(len(artifacts) * .001))
     max_duration = int(np.rint(len(artifacts) * .01))
@@ -157,15 +158,13 @@ def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
 
 def _signal_distord_powerline(signal, signal_sd=None, sampling_rate=1000,
                               powerline_frequency=50,
-                              powerline_amplitude=.1,
-                              silent=False):
+                              powerline_amplitude=.1, silent=False):
 
     duration = len(signal) / sampling_rate
     powerline_noise = signal_simulate(duration=duration,
                                       sampling_rate=sampling_rate,
                                       frequency=powerline_frequency,
-                                      amplitude=1,
-                                      silent=silent)
+                                      amplitude=1, silent=silent)
 
     if signal_sd is not None:
         powerline_amplitude *= signal_sd
@@ -180,7 +179,6 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
                                          noise_frequency=100,
                                          noise_shape="laplace",
                                          silent=False):
-    duration = len(signal) / sampling_rate
     base_noise = np.zeros(len(signal))
     params = listify(noise_amplitude=noise_amplitude,
                      noise_frequency=noise_frequency, noise_shape=noise_shape)
@@ -190,41 +188,50 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
         freq = params["noise_frequency"][i]
         amp = params["noise_amplitude"][i]
         shape = params["noise_shape"][i]
-        # Apply a very conservative Nyquist criterion in order to ensure
-        # sufficiently sampled signals.
-        nyquist = sampling_rate * .1
-        if freq > nyquist:
-            if silent is False:
-                print(f"NeuroKit warning: Skipping requested noise frequency"
-                      f" of {freq} Hz since it cannot be resolved at the"
-                      f" sampling rate of {sampling_rate} Hz. Please increase"
-                      f" sampling rate to {freq * 10} Hz or choose frequencies"
-                      f" smaller than or equal to {nyquist} Hz.")
-            continue
-        # Also make sure that at leat one period of the frequency can be
-        # captured over the duration of the signal.
-        if (1 / freq) > duration:
-            if silent is False:
-                print(f"NeuroKit warning: Skipping requested noise frequency"
-                      f" of {freq} Hz since it's period of {1 / freq} seconds"
-                      f" exceeds the signal duration of {duration} seconds."
-                      f" Please choose noise frequencies larger than"
-                      f" {1 / duration} Hz or increase the duration of the"
-                      f" signal above {1 / freq} seconds.")
-            continue
-        noise_duration = int(duration * freq)
 
         if signal_sd is not None:
             amp *= signal_sd
 
         # Make some noise!
-        _base_noise = _signal_distord_noise(signal, noise_duration, amp, shape)
+        _base_noise = _signal_distord_noise(signal,
+                                            sampling_rate=sampling_rate,
+                                            noise_frequency=freq,
+                                            noise_amplitude=amp,
+                                            noise_shape=shape, silent=silent)
         base_noise += _base_noise
+
     return base_noise
 
 
-def _signal_distord_noise(signal, noise_duration, noise_amplitude=.1,
-                          noise_shape="laplace"):
+def _signal_distord_noise(signal, sampling_rate=1000, noise_frequency=100,
+                          noise_amplitude=.1, noise_shape="laplace",
+                          silent=False):
+
+    # Apply a very conservative Nyquist criterion in order to ensure
+    # sufficiently sampled signals.
+    nyquist = sampling_rate * .1
+    if noise_frequency > nyquist:
+        if not silent:
+            print(f"NeuroKit warning: Skipping requested noise frequency"
+                  f" of {noise_frequency} Hz since it cannot be resolved at"
+                  f" the sampling rate of {sampling_rate} Hz. Please increase"
+                  f" sampling rate to {noise_frequency * 10} Hz or choose"
+                  f" frequencies smaller than or equal to {nyquist} Hz.")
+        return signal
+    # Also make sure that at leat one period of the frequency can be
+    # captured over the duration of the signal.
+    duration = len(signal) / sampling_rate
+    if (1 / noise_frequency) > duration:
+        if not silent:
+            print(f"NeuroKit warning: Skipping requested noise frequency"
+                  f" of {noise_frequency} Hz since it's period of {1 / noise_frequency}"
+                  f" seconds exceeds the signal duration of {duration} seconds."
+                  f" Please choose noise frequencies larger than"
+                  f" {1 / duration} Hz or increase the duration of the"
+                  f" signal above {1 / noise_frequency} seconds.")
+        return signal
+
+    noise_duration = int(duration * noise_frequency)
 
     if noise_shape in ["normal", "gaussian"]:
         _noise = np.random.normal(0, noise_amplitude, noise_duration)
