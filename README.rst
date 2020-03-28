@@ -23,7 +23,7 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This package is the continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_, with which you can analyze your physiological data with only two lines of code.
+This package is the continuation of `NeuroKit1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package with which you can analyze your physiological data with only two lines of code.
 
 ..
     Quick Example
@@ -169,12 +169,14 @@ Simulate physiological signals
 
     # Generate synthetic signals
     ecg = nk.ecg_simulate(duration=10, heart_rate=70)
+    ppg = nk.ppg_simulate(duration=10, heart_rate=70)
     rsp = nk.rsp_simulate(duration=10, respiratory_rate=15)
-    eda = nk.eda_simulate(duration=10, n_scr=3)
-    emg = nk.emg_simulate(duration=10, n_bursts=2)
+    eda = nk.eda_simulate(duration=10, scr_number=3)
+    emg = nk.emg_simulate(duration=10, burst_number=2)
 
     # Visualise biosignals
     data = pd.DataFrame({"ECG": ecg,
+                         "PPG": ppg,
                          "RSP": rsp,
                          "EDA": eda,
                          "EMG": emg})
@@ -190,7 +192,7 @@ Electrodermal Activity (EDA)
 .. code-block:: python
 
     # Generate 10 seconds of EDA signal (recorded at 250 samples / second) with 2 SCR peaks
-    eda = nk.eda_simulate(duration=10, sampling_rate=250, n_scr=2 drift=0.01)
+    eda = nk.eda_simulate(duration=10, sampling_rate=250, scr_number=2 drift=0.01)
 
     # Process it
     signals, info = nk.eda_process(eda, sampling_rate=250)
@@ -243,7 +245,7 @@ Electromyography (EMG)
 .. code-block:: python
 
     # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
-    emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
+    emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
 
     # Process it
     signals = nk.emg_process(emg, sampling_rate=250)
@@ -254,11 +256,20 @@ Electromyography (EMG)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
 
-PPG, BVP, EGG, ...
--------------------
+Photoplethysmography (PPG/BVP)
+-------------------------------
+
+.. code-block:: python
+
+    # Generate 15 seconds of PPG signal (recorded at 250 samples / second)
+    ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70)
+
+
+
+Electrogastrography (EGG)
+--------------------------
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
-
 
 
 
