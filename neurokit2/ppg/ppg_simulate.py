@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import Akima1DInterpolator
@@ -8,8 +7,8 @@ from neurokit2.signal import signal_distort
 
 def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
                  frequency_modulation=0.3, ibi_randomness=0.25,
-                 drift=1, motion_amplitude=0.5,
-                 powerline_amplitude=.1, burst_number=0, burst_amplitude=1,
+                 drift=0, motion_amplitude=0.1,
+                 powerline_amplitude=0.1, burst_number=0, burst_amplitude=1,
                  random_state=None, show=False):
     """Simulate a photoplethysmogram (PPG) signal.
 
@@ -54,7 +53,7 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
         artifacts are (0 corresponds to abscence of bursts). The default is 1.
     burst_number : int
         Determines how many high frequency burst artifacts occur. The default
-        is 5.
+        is 0.
     show : bool
         If true, returns a plot of the landmarks and interpolated PPG. Useful
         for debugging.
