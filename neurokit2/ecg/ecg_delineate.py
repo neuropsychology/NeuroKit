@@ -898,7 +898,7 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
     fig, ax = plt.subplots()
     for label in data.Label.unique():
         epoch_data = data[data.Label == label]
-        ax.plot(epoch_data.Time, epoch_data.Signal, label='_nolegend_')
+        ax.plot(epoch_data.Time, epoch_data.Signal, color='grey', alpha=0.2,  label='_nolegend_')
     for i, feature_type in enumerate(features.columns.values):
         event_data = data[data[feature_type] == 1.0]
         ax.scatter(event_data.Time, event_data.Signal,
