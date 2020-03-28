@@ -6,7 +6,7 @@ from ..signal import signal_distort
 
 
 def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 n_scr=1, drift=-0.01, random_state=None):
+                 scr_number=1, drift=-0.01, random_state=None):
     """Simulate Electrodermal Activity (EDA) signal.
 
     Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.
@@ -20,7 +20,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         length of the signal (in samples).
     noise : float
         Noise level (amplitude of the laplace noise).
-    n_scr : int
+    scr_number : int
         Desired number of skin conductance responses (SCRs), i.e., peaks.
     drift : float or list
         The slope of a linear drift of the signal.
@@ -37,7 +37,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>> import neurokit as nk
     >>> import pandas as pd
     >>>
-    >>> eda = nk.eda_simulate(duration=10, n_scr=3)
+    >>> eda = nk.eda_simulate(duration=10, scr_number=3)
     >>> nk.signal_plot(eda)
 
     See Also
@@ -60,7 +60,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     eda += (drift * np.linspace(0, duration, length))
     time = [0, duration]
 
-    start_peaks = np.linspace(0, duration, n_scr, endpoint=False)
+    start_peaks = np.linspace(0, duration, scr_number, endpoint=False)
 
     for start_peak in start_peaks:
         relative_time_peak = np.abs(np.random.normal(0, 5, size=1)) + 3.0745

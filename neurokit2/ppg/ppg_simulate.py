@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.interpolate import Akima1DInterpolator
 from neurokit2.signal import signal_distort
 
 
-def ppg_simulate(duration=120, sampling_rate=500, heartrate=70,
-                 frequency_modulation=.3, ibi_randomness=.25,
-                 drift_amplitude=1, motion_amplitude=.5,
-                 powerline_amplitude=.1, burst_amplitude=1, burst_number=5,
+def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
+                 frequency_modulation=0.3, ibi_randomness=0.1,
+                 drift=0, motion_amplitude=0.1,
+                 powerline_amplitude=0.01, burst_number=0, burst_amplitude=1,
                  random_state=None, show=False):
     """Simulate a photoplethysmogram (PPG) signal.
 
@@ -25,36 +24,36 @@ def ppg_simulate(duration=120, sampling_rate=500, heartrate=70,
         Desired recording length in seconds. The default is 120.
     sampling_rate : int
         The desired sampling rate (in Hz, i.e., samples/second). The default is
-        500.
-    heartrate : int
+        1000.
+    heart_rate : int
         Desired simulated heart rate (in beats per minute). The default is 70.
     frequency_modulation : float
         Float between 0 and 1. Determines how pronounced respiratory sinus
-        arrythmia (RSA) is (0 corresponds to abscence of RSA). The default is
-        .3.
+        arrythmia (RSA) is (0 corresponds to absence of RSA). The default is
+        0.3.
     ibi_randomness : float
         Float between 0 and 1. Determines how much random noise there is in the
-        duration of each PPG wave (0 corresponds to abscence of variation). The
-        default is .25.
-    drift_amplitude : float
+        duration of each PPG wave (0 corresponds to absence of variation). The
+        default is 0.1.
+    drift : float
         Float between 0 and 1. Determines how pronounced the baseline drift
-        (.05 Hz) is (0 corresponds to abscence of baseline drift). The default
+        (.05 Hz) is (0 corresponds to absence of baseline drift). The default
         is 1.
     motion_amplitude : float
         Float between 0 and 1. Determines how pronounced the motion artifact
-        (.5 Hz) is (0 corresponds to abscence of motion artifact). The default
-        is .5.
+        (0.5 Hz) is (0 corresponds to absence of motion artifact). The default
+        is 0.1.
     powerline_amplitude : float
         Float between 0 and 1. Determines how pronounced the powerline artifact
-        (50 Hz) is (0 corresponds to abscence of powerline artifact). Note that
-        powerline_amplitude > 0 is only possible if sampling_rate is >= 500.
-        The default is .1.
+        (50 Hz) is (0 corresponds to absence of powerline artifact). Note that
+        powerline_amplitude > 0 is only possible if 'sampling_rate' is >= 500.
+        The default is 0.1.
     burst_amplitude : float
         Float between 0 and 1. Determines how pronounced high frequency burst
-        artifacts are (0 corresponds to abscence of bursts). The default is 1.
+        artifacts are (0 corresponds to absence of bursts). The default is 1.
     burst_number : int
         Determines how many high frequency burst artifacts occur. The default
-        is 5.
+        is 0.
     show : bool
         If true, returns a plot of the landmarks and interpolated PPG. Useful
         for debugging.
@@ -72,15 +71,16 @@ def ppg_simulate(duration=120, sampling_rate=500, heartrate=70,
     >>> import neurokit2 as nk
     >>>
     >>> ppg = ppg = nk.ppg_simulate(duration=40, sampling_rate=500,
-    >>>                             heartrate=75, random_state=42, show=True)
+    >>>                             heart_rate=75, random_state=42, show=True)
 
     See Also
     --------
+    ecg_simulate, rsp_simulate, eda_simulate, emg_simulate
     """
     # At the requested sampling rate, how long is a period at the requested
     # heart-rate and how often does that period fit into the requested
     # duration?
-    period = 60 / heartrate   # in seconds
+    period = 60 / heart_rate   # in seconds
     n_period = int(np.floor(duration / period))
     periods = np.ones(n_period) * period
 
@@ -137,12 +137,12 @@ def ppg_simulate(duration=120, sampling_rate=500, heartrate=70,
         ax0.plot(ppg)
 
     # Add baseline drift.
-    if drift_amplitude > 0:
+    if drift > 0:
         drift_freq = .05
         if drift_freq < (1 / duration) * 2:
             drift_freq = (1 / duration) * 2
         ppg = signal_distort(ppg, sampling_rate=sampling_rate,
-                             noise_amplitude=drift_amplitude,
+                             noise_amplitude=drift,
                              noise_frequency=drift_freq,
                              random_state=random_state)
     # Add motion artifacts.
