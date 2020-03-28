@@ -7,8 +7,8 @@ Core team
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
 * `Tam Pham <https://github.com/Tam-Pham>`_ *(Nanyang Technological University, Singapore)*
-* `Jan C. Brammer <https://github.com/JanCBrammer>`_ *(Radboud University, Netherlands)*
 * `Zen Juen Lau <https://github.com/zen-juen>`_ *(Nanyang Technological University, Singapore)*
+* `Jan C. Brammer <https://github.com/JanCBrammer>`_ *(Radboud University, Netherlands)*
 * `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 
 Experts

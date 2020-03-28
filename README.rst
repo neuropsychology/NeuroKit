@@ -23,7 +23,7 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This package is the continuation of `NeuroKit.py <https://github.com/neuropsychology/NeuroKit.py>`_, with which you can analyze your physiological data with only two lines of code.
+This package is the continuation of `NeuroKit1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package with which you can analyze your physiological data with only two lines of code.
 
 ..
     Quick Example
@@ -74,6 +74,7 @@ Documentation
 .. image:: https://img.shields.io/badge/tutorials-help-orange.svg?colorB=E91E63
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
         :alt: Tutorials
+        
 .. image:: https://mybinder.org/badge_logo.svg
         :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
         
@@ -99,9 +100,10 @@ Examples
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
 
-*You can try out these examples directly in your browser by* `**clicking here** <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
-- **Don't know which tutorial is suited for your case?** Follow this flowchart:
+*You can try out these examples directly in your browser by* `clicking here <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
+
+**Don't know which tutorial is suited for your case?** Follow this flowchart:
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/workflow.png
@@ -112,24 +114,29 @@ Citation
 
 .. image:: https://zenodo.org/badge/218212111.svg
    :target: https://zenodo.org/badge/latestdoi/218212111
-  
+
+.. image:: https://img.shields.io/badge/details-authors-purple.svg?colorB=9C27B0
+   :target: https://neurokit2.readthedocs.io/en/latest/credits.html
+   
+
 You can run:
 
 .. code-block:: python
 
-    print(nk.__cite__)
+    nk.cite()
 
 
 .. code-block:: tex
 
-    You can cite NeuroKit as follows:
+    You can cite NeuroKit2 as follows:
 
-    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lespinasse, F., Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing. Retrieved March 10, 2020, from https://github.com/neuropsychology/NeuroKit
-
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Pham, H., Lesspinasse, F., 
+      Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological 
+      Signal Processing. Retrieved March 28, 2020, from https://github.com/neuropsychology/NeuroKit
 
     Full bibtex reference:
 
-    @misc{neurokit,
+    @misc{neurokit2,
       doi = {10.5281/ZENODO.3597887},
       url = {https://github.com/neuropsychology/NeuroKit},
       author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Pham, Hung and Lespinasse, Fran\c{c}ois and Schölzel, Christopher and S H Chen, Annabel},
@@ -138,15 +145,15 @@ You can run:
       year = {2020},
     }
 
+..
+    Design
+    =======
 
-Design
-=======
+    *NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
 
-*NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
-
-- **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
-- **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
-- **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
+    - **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
+    - **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
+    - **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
 
 
 Overview
@@ -163,12 +170,14 @@ Simulate physiological signals
 
     # Generate synthetic signals
     ecg = nk.ecg_simulate(duration=10, heart_rate=70)
+    ppg = nk.ppg_simulate(duration=10, heart_rate=70)
     rsp = nk.rsp_simulate(duration=10, respiratory_rate=15)
-    eda = nk.eda_simulate(duration=10, n_scr=3)
-    emg = nk.emg_simulate(duration=10, n_bursts=2)
+    eda = nk.eda_simulate(duration=10, scr_number=3)
+    emg = nk.emg_simulate(duration=10, burst_number=2)
 
     # Visualise biosignals
     data = pd.DataFrame({"ECG": ecg,
+                         "PPG": ppg,
                          "RSP": rsp,
                          "EDA": eda,
                          "EMG": emg})
@@ -184,7 +193,7 @@ Electrodermal Activity (EDA)
 .. code-block:: python
 
     # Generate 10 seconds of EDA signal (recorded at 250 samples / second) with 2 SCR peaks
-    eda = nk.eda_simulate(duration=10, sampling_rate=250, n_scr=2 drift=0.01)
+    eda = nk.eda_simulate(duration=10, sampling_rate=250, scr_number=2 drift=0.01)
 
     # Process it
     signals, info = nk.eda_process(eda, sampling_rate=250)
@@ -237,7 +246,7 @@ Electromyography (EMG)
 .. code-block:: python
 
     # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
-    emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
+    emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
 
     # Process it
     signals = nk.emg_process(emg, sampling_rate=250)
@@ -248,11 +257,20 @@ Electromyography (EMG)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
 
-PPG, BVP, EGG, ...
--------------------
+Photoplethysmography (PPG/BVP)
+-------------------------------
+
+.. code-block:: python
+
+    # Generate 15 seconds of PPG signal (recorded at 250 samples / second)
+    ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70)
+
+
+
+Electrogastrography (EGG)
+--------------------------
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
-
 
 
 

@@ -2,7 +2,7 @@
 import numpy as np
 
 from ..signal import signal_simulate
-from ..signal import signal_distord
+from ..signal import signal_distort
 from ..signal import signal_smooth
 
 
@@ -81,11 +81,13 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     # Add random noise
     if noise > 0:
-        rsp = signal_distord(rsp,
+        rsp = signal_distort(rsp,
                              sampling_rate=sampling_rate,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
-                             noise_shape="laplace")
+                             noise_shape="laplace",
+                             random_state=random_state,
+                             silent=True)
 
     # Reset random seed (so it doesn't affect global)
     np.random.seed(None)
@@ -109,7 +111,6 @@ def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, respi
     """
     # Generate values along the length of the duration
     rsp = signal_simulate(duration=duration,
-                          length=length,
                           sampling_rate=sampling_rate,
                           frequency=respiratory_rate/60,
                           amplitude=0.5)

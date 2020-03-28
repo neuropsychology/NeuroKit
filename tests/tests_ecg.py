@@ -124,7 +124,7 @@ def test_ecg_fixpeaks():
     artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, iterative=True)
 
     assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
-                       7383418, atol=1)
+                       8624462, atol=1)
 
     assert all(isinstance(x, int) for x in artifacts["ectopic"])
     assert all(isinstance(x, int) for x in artifacts["missed"])
@@ -135,7 +135,7 @@ def test_ecg_fixpeaks():
     artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, iterative=False)
 
     assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
-                       7383418, atol=1)
+                       8622997, atol=1)
 
     assert all(isinstance(x, int) for x in artifacts["ectopic"])
     assert all(isinstance(x, int) for x in artifacts["missed"])

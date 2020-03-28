@@ -10,12 +10,14 @@ import neurokit2 as nk
 
 # Generate synthetic signals
 ecg = nk.ecg_simulate(duration=10, heart_rate=70)
+ppg = nk.ppg_simulate(duration=10, heart_rate=70)
 rsp = nk.rsp_simulate(duration=10, respiratory_rate=15)
-eda = nk.eda_simulate(duration=10, n_scr=3)
-emg = nk.emg_simulate(duration=10, n_bursts=2)
+eda = nk.eda_simulate(duration=10, scr_number=3)
+emg = nk.emg_simulate(duration=10, burst_number=2)
 
 # Visualise biosignals
 data = pd.DataFrame({"ECG": ecg,
+                     "PPG": ppg,
                      "RSP": rsp,
                      "EDA": eda,
                      "EMG": emg})
@@ -24,12 +26,14 @@ nk.signal_plot(data, subplots=True)
 
 # Save it
 data = pd.DataFrame({"ECG": nk.ecg_simulate(duration=10, heart_rate=70, noise=0),
+                     "PPG": nk.ppg_simulate(duration=10, heart_rate=70, powerline_amplitude=0),
                      "RSP": nk.rsp_simulate(duration=10, respiratory_rate=15, noise=0),
-                     "EDA": nk.eda_simulate(duration=10, n_scr=3, noise=0),
-                     "EMG": nk.emg_simulate(duration=10, n_bursts=2, noise=0)})
-plot = data.plot(subplots=True, layout=(4, 1), color=['#f44336', "#2196F3", "#9C27B0", "#FF9800"])
+                     "EDA": nk.eda_simulate(duration=10, scr_number=3, noise=0),
+                     "EMG": nk.emg_simulate(duration=10, burst_number=2, noise=0)})
+plot = data.plot(subplots=True, layout=(5, 1), color=['#f44336', "#E91E63", "#2196F3", "#9C27B0", "#FF9800"])
 fig = plt.gcf()
 fig.set_size_inches(10, 6, forward=True)
+[ax.legend(loc=1) for ax in plt.gcf().axes]
 fig.savefig("README_simulation.png", dpi=300, h_pad=3)
 
 # =============================================================================
@@ -37,7 +41,7 @@ fig.savefig("README_simulation.png", dpi=300, h_pad=3)
 # =============================================================================
 
 # Generate 10 seconds of EDA signal (recorded at 250 samples / second) with 2 SCR peaks
-eda = nk.eda_simulate(duration=10, sampling_rate=250, n_scr=2, drift=0.1)
+eda = nk.eda_simulate(duration=10, sampling_rate=250, scr_number=2, drift=0.1)
 
 # Process it
 signals, info = nk.eda_process(eda, sampling_rate=250)
@@ -91,7 +95,7 @@ plot.savefig("README_rsp.png", dpi=300, h_pad=3)
 # =============================================================================
 
 # Generate 10 seconds of EMG signal (recorded at 250 samples / second)
-emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
+emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
 
 # Process it
 signals, _ = nk.emg_process(emg, sampling_rate=250)
@@ -103,3 +107,10 @@ nk.emg_plot(signals, sampling_rate=250)
 plot = nk.emg_plot(signals, sampling_rate=250)
 plot.set_size_inches(10, 6, forward=True)
 plot.savefig("README_emg.png", dpi=300, h_pad=3)
+
+# =============================================================================
+# Photoplethysmography (PPG/BVP)
+# =============================================================================
+
+# Generate 15 seconds of PPG signal (recorded at 250 samples / second)
+ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_state=333)

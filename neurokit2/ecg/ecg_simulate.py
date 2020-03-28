@@ -5,7 +5,7 @@ import scipy
 import math
 
 from ..signal import signal_resample
-from ..signal import signal_distord
+from ..signal import signal_distort
 
 
 def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
@@ -92,11 +92,13 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     # Add random noise
     if noise > 0:
-        ecg = signal_distord(ecg,
+        ecg = signal_distort(ecg,
                              sampling_rate=sampling_rate,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
-                             noise_shape="laplace")
+                             noise_shape="laplace",
+                             random_state=random_state,
+                             silent=True)
 
     # Reset random seed (so it doesn't affect global)
     np.random.seed(None)
