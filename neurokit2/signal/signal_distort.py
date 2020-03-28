@@ -103,7 +103,8 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
         noise += _signal_distord_powerline(signal, signal_sd=signal_sd,
                                            sampling_rate=sampling_rate,
                                            powerline_frequency=powerline_frequency,
-                                           powerline_amplitude=powerline_amplitude)
+                                           powerline_amplitude=powerline_amplitude,
+                                           silent=silent)
 
     # Artifacts.
     if artifacts_amplitude > 0:
@@ -156,13 +157,15 @@ def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
 
 def _signal_distord_powerline(signal, signal_sd=None, sampling_rate=1000,
                               powerline_frequency=50,
-                              powerline_amplitude=.1):
+                              powerline_amplitude=.1,
+                              silent=False):
 
     duration = len(signal) / sampling_rate
     powerline_noise = signal_simulate(duration=duration,
                                       sampling_rate=sampling_rate,
                                       frequency=powerline_frequency,
-                                      amplitude=1)
+                                      amplitude=1,
+                                      silent=silent)
 
     if signal_sd is not None:
         powerline_amplitude *= signal_sd
@@ -191,7 +194,7 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
         # sufficiently sampled signals.
         nyquist = sampling_rate * .1
         if freq > nyquist:
-            if not silent:
+            if silent is False:
                 print(f"NeuroKit warning: Skipping requested noise frequency"
                       f" of {freq} Hz since it cannot be resolved at the"
                       f" sampling rate of {sampling_rate} Hz. Please increase"
@@ -201,7 +204,7 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
         # Also make sure that at leat one period of the frequency can be
         # captured over the duration of the signal.
         if (1 / freq) > duration:
-            if not silent:
+            if silent is False:
                 print(f"NeuroKit warning: Skipping requested noise frequency"
                       f" of {freq} Hz since it's period of {1 / freq} seconds"
                       f" exceeds the signal duration of {duration} seconds."
