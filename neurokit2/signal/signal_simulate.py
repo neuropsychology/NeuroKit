@@ -5,7 +5,7 @@ from ..misc import listify
 
 
 def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
-                    amplitude=0.5):
+                    amplitude=0.5, silent=False):
     """Simulate a continuous signal.
 
     Parameters
@@ -50,11 +50,24 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
         # sufficiently sampled signals.
         nyquist = sampling_rate * .1
         if freq > nyquist:
-            raise ValueError(f"NeuroKit error: Please choose frequencies smaller than {nyquist}.")
-        # Also make sure that at least one period of the frequency can be
+            if not silent:
+                print(f"NeuroKit warning: Skipping requested noise frequency"
+                      f" of {freq} Hz since it cannot be resolved at the"
+                      f" sampling rate of {sampling_rate} Hz. Please increase"
+                      f" sampling rate to {freq * 10} Hz or choose frequencies"
+                      f" smaller than or equal to {nyquist} Hz.")
+            continue
+        # Also make sure that at leat one period of the frequency can be
         # captured over the duration of the signal.
         if (1 / freq) > duration:
-            raise ValueError(f"NeuroKit error: Please choose frequencies larger than {1 / duration}.")
+            if not silent:
+                print(f"NeuroKit warning: Skipping requested noise frequency"
+                      f" of {freq} Hz since it's period of {1 / freq} seconds"
+                      f" exceeds the signal duration of {duration} seconds."
+                      f" Please choose noise frequencies larger than"
+                      f" {1 / duration} Hz or increase the duration of the"
+                      f" signal above {1 / freq} seconds.")
+            continue
 
         signal += _signal_simulate_sinusoidal(x=seconds,
                                               frequency=freq,

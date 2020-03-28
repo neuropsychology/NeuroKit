@@ -10,7 +10,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                    noise_amplitude=0, noise_frequency=100,
                    powerline_amplitude=0, powerline_frequency=50,
                    artifacts_amplitude=0, artifacts_frequency=200,
-                   n_artifacts=5, random_state=None):
+                   n_artifacts=5, random_state=None, silent=False):
     """Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
@@ -45,6 +45,8 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
     random_state : int
         Seed for the random number generator. Keep it fixed for reproducible
         results.
+    silent : bool
+        Whether or not to display warning messages.
 
     Returns
     -------
@@ -93,7 +95,8 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                                                       sampling_rate=sampling_rate,
                                                       noise_amplitude=noise_amplitude,
                                                       noise_frequency=noise_frequency,
-                                                      noise_shape=noise_shape)
+                                                      noise_shape=noise_shape,
+                                                      silent=silent)
 
     # Powerline noise.
     if powerline_amplitude > 0:
@@ -172,7 +175,8 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
                                          sampling_rate=1000,
                                          noise_amplitude=.1,
                                          noise_frequency=100,
-                                         noise_shape="laplace"):
+                                         noise_shape="laplace",
+                                         silent=False):
     duration = len(signal) / sampling_rate
     base_noise = np.zeros(len(signal))
     params = listify(noise_amplitude=noise_amplitude,
@@ -187,12 +191,24 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
         # sufficiently sampled signals.
         nyquist = sampling_rate * .1
         if freq > nyquist:
-            raise ValueError(f"NeuroKit error: Please choose frequencies smaller than {nyquist}.")
+            if not silent:
+                print(f"NeuroKit warning: Skipping requested noise frequency"
+                      f" of {freq} Hz since it cannot be resolved at the"
+                      f" sampling rate of {sampling_rate} Hz. Please increase"
+                      f" sampling rate to {freq * 10} Hz or choose frequencies"
+                      f" smaller than or equal to {nyquist} Hz.")
+            continue
         # Also make sure that at leat one period of the frequency can be
         # captured over the duration of the signal.
         if (1 / freq) > duration:
-            raise ValueError(f"NeuroKit error: Please choose frequencies larger than {1 / duration}.")
-
+            if not silent:
+                print(f"NeuroKit warning: Skipping requested noise frequency"
+                      f" of {freq} Hz since it's period of {1 / freq} seconds"
+                      f" exceeds the signal duration of {duration} seconds."
+                      f" Please choose noise frequencies larger than"
+                      f" {1 / duration} Hz or increase the duration of the"
+                      f" signal above {1 / freq} seconds.")
+            continue
         noise_duration = int(duration * freq)
 
         if signal_sd is not None:
