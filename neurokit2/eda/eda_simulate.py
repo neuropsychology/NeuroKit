@@ -82,7 +82,8 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
                              sampling_rate=sampling_rate,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
-                             noise_shape="laplace")
+                             noise_shape="laplace",
+                             silent=True)
     # Reset random seed (so it doesn't affect global)
     np.random.seed(None)
     return eda
