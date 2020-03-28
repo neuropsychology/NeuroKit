@@ -86,6 +86,7 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
 
     # Seconds at which waves begin.
     x_onset = np.cumsum(periods)
+    x_onset -= x_onset[0]    # make sure seconds start at zero
     # Add respiratory sinus arrythmia (frequency modulation).
     periods, x_onset = _frequency_modulation(x_onset, periods,
                                              modulation_frequency=.05,
@@ -212,7 +213,7 @@ def _random_x_offset(x, x_diff, offset_weight):
 
     for i in x_diff:
         max_offset = offset_weight * i
-        offset = np.random.uniform(0, max_offset)    # unpack with [0]
+        offset = np.random.uniform(0, max_offset)
         offsets.append(offset)
 
     x[1:] -= offsets
