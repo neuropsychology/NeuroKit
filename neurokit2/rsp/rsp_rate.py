@@ -30,8 +30,8 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
         interpolated between `peaks` over `desired_length` samples. Has no
         effect if a DataFrame is passed in as the `peaks` argument.
     method : str
-        The processing pipeline to apply. Can be one of "khodadad2018"
-        (default) or "biosppy".
+        The processing pipeline to apply. Can be one of 'khodadad2018'
+        (default) or 'biosppy'.
 
     Returns
     -------
