@@ -10,32 +10,49 @@ from ..signal import signal_formatpeaks
 
 def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi",
                   show=False):
-    """
+    """Find systolic peaks in a photoplethysmogram (PPG) signal.
 
 
     Parameters
     ----------
-    ppg_cleaned : TYPE
-        DESCRIPTION.
-    sampling_rate : TYPE, optional
-        DESCRIPTION. The default is 1000.
-    method : TYPE, optional
-        DESCRIPTION. The default is "elgendi".
-    show : TYPE, optional
-        DESCRIPTION. The default is False.
-
-    Raises
-    ------
-    ValueError
-        DESCRIPTION.
+    ppg_cleaned : list, array or Series
+        The cleaned PPG channel as returned by `ppg_clean()`.
+    sampling_rate : int
+        The sampling frequency of the PPG (in Hz, i.e., samples/second). The
+        default is 1000.
+    method : str
+        The processing pipeline to apply. Can be one of "elgendi". The default
+        is "elgendi".
+    show : bool
+        If True, returns a plot of the thresholds used during peak detection.
+        Useful for debugging. The default is False.
 
     Returns
     -------
-    info : TYPE
-        DESCRIPTION.
+    info : dict
+        A dictionary containing additional information, in this case the
+        samples at which systolic peaks occur, accessible with the key
+        "PPG_Peaks".
 
+    See Also
+    --------
+    ppg_simulate, ppg_clean
+
+    Examples
+    --------
+    >>> import neurokit2 as nk
+    >>> import matplotlib.pyplot as plt
+    >>>
+    >>> ppg = nk.ppg_simulate(heart_rate=75, duration=30)
+    >>> ppg_clean = nk.ppg_clean(ppg)
+    >>> info = nk.ppg_findpeaks(ppg_clean)
+    >>> peaks = info["PPG_Peaks"]
+    >>>
+    >>> plt.plot(ppg, label="raw PPG")
+    >>> plt.plot(ppg_clean, label="clean PPG")
+    >>> plt.scatter(peaks, ppg[peaks], c="r", label="systolic peaks")
+    >>> plt.legend()
     """
-
     method = method.lower()
     if method in ["elgendi"]:
         peaks = _ppg_findpeaks_elgendi(ppg_cleaned, sampling_rate, show=show)

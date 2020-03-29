@@ -27,12 +27,19 @@ def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
 
     See Also
     --------
-    ppg_findpeaks
+    ppg_simulate, ppg_findpeaks
 
     Examples
     --------
     >>> import neurokit2 as nk
-
+    >>> import matplotlib.pyplot as plt
+    >>>
+    >>> ppg = nk.ppg_simulate(heart_rate=75, duration=30)
+    >>> ppg_clean = nk.ppg_clean(ppg)
+    >>>
+    >>> plt.plot(ppg, label="raw PPG")
+    >>> plt.plot(ppg_clean, label="clean PPG")
+    >>> plt.legend()
     """
     ppg_signal = sanitize_input(ppg_signal,
                                 message="NeuroKit error: ppg_clean(): Please"
