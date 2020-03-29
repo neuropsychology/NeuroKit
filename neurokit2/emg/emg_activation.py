@@ -1,20 +1,34 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import sklearn.mixture
 
+from ..events import events_find
 from ..signal import signal_formatpeaks
 
 
-def emg_activation(emg_amplitude, threshold='default'):
+def emg_activation(emg_amplitude, sampling_rate=1000, method="mixture", threshold='default', duration_min="default"):
     """Detects onset in EMG signal based on the amplitude threshold.
 
     Parameters
     ----------
     emg_amplitude : array
         The amplitude of the emg signal, obtained from `emg_amplitude()`.
+    sampling_rate : int
+        The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
+     method : str
+        The algorithm used to discriminate between activity and baseline. Can be one of 'mixture'
+        (default) or 'threshold'. If 'mixture', will use a Gaussian Mixture Model to categorize
+        between the two states. If 'threshold', will consider as activated all points which
+        amplitude is superior to the threshold.
     threshold : float
-        The minimum amplitude to detect as onset. Defaults to one tenth of the
-        standard deviation of `emg_amplitude`.
+        If `method` is 'mixture', then it corresponds to the minimum probability required
+        to be considered as activated (default to 0.5). If `method` is 'threshold', then
+        it corresponds to the minimum amplitude to detect as onset. Defaults to one
+        tenth of the standard deviation of `emg_amplitude`.
+    duration_min : float
+        The minimum duration of a period of activity or non-activity in seconds.
+        If 'default', will be set to 0.05 (50 ms).
 
     Returns
     -------
@@ -39,8 +53,8 @@ def emg_activation(emg_amplitude, threshold='default'):
     >>> import neurokit2 as nk
     >>>
     >>> # Simulate signal and obtain amplitude
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
-    >>> cleaned = nk.emg_clean(emg, sampling_rate=250)
+    >>> emg = nk.emg_simulate(duration=10, burst_number=3)
+    >>> cleaned = nk.emg_clean(emg)
     >>> emg_amplitude = nk.emg_amplitude(cleaned)
     >>>
     >>> activity_signal,info = nk.emg_activation(emg_amplitude)
@@ -55,9 +69,19 @@ def emg_activation(emg_amplitude, threshold='default'):
     if not isinstance(emg_amplitude, np.ndarray):
         emg_amplitude = np.atleast_1d(emg_amplitude).astype('float64')
 
-    # Find offsets and onsets
-    activity = _emg_activation_threshold(emg_amplitude, threshold=threshold)
-    info = _emg_activation_offsets_onsets(activity)
+    # Find offsets and onsets.
+    method = method.lower()  # remove capitalised letters
+    if method == "threshold":
+        activity = _emg_activation_threshold(emg_amplitude, threshold=threshold)
+    elif method == "mixture":
+        activity = _emg_activation_mixture(emg_amplitude, threshold=threshold)
+    else:
+        raise ValueError("NeuroKit error: emg_activation(): 'method' should be "
+                         "one of 'mixture' or 'threshold'.")
+
+    # Sanitize activity.
+    info = _emg_activation_activations(activity, sampling_rate=sampling_rate, duration_min=duration_min)
+
 
     # Prepare Output.
     df_activity = signal_formatpeaks({"EMG_Activity": info["EMG_Activity"]},
@@ -94,13 +118,6 @@ def emg_activation(emg_amplitude, threshold='default'):
 # =============================================================================
 
 def _emg_activation_threshold(emg_amplitude, threshold='default'):
-    """
-    >>> emg_cleaned = nk.emg_simulate(duration=20, n_bursts=3)
-    >>> binarized_energy, info = _emg_activation_powerbased(emg_cleaned)
-    >>> nk.signal_plot([emg_cleaned, binarized_energy], standardize=True)
-    >>> nk.events_plot(info["EMG_Onsets"], emg_cleaned)
-    >>> nk.events_plot(info["EMG_Onsets"], energy.values)
-    """
 
     if threshold == 'default':
         threshold = (1/10)*np.std(emg_amplitude)
@@ -117,7 +134,24 @@ def _emg_activation_threshold(emg_amplitude, threshold='default'):
 
 
 
+def _emg_activation_mixture(emg_amplitude, threshold="default"):
 
+    if threshold == 'default':
+        threshold = 0.5
+    else:
+        threshold = threshold
+
+    # fit a Gaussian Mixture Model with two components
+    clf = sklearn.mixture.GaussianMixture(n_components=2, random_state=333)
+    clf = clf.fit(emg_amplitude.reshape(-1, 1))
+
+    # Get predicted probabilities
+    predicted = clf.predict_proba(emg_amplitude.reshape(-1, 1))[:, np.argmax(clf.means_[:, 0])]
+
+    # Cut off
+    activity = predicted >= threshold
+
+    return activity
 
 
 
@@ -156,37 +190,58 @@ def _emg_activation_threshold(emg_amplitude, threshold='default'):
 # =============================================================================
 # Internals
 # =============================================================================
+def _emg_activation_activations(activity, sampling_rate=1000, duration_min="default"):
 
-def _emg_activation_offsets_onsets(activity):
-    """
-    >>> emg_cleaned = nk.emg_simulate(duration=20, n_bursts=3)
-    >>> binarized_energy, info = _emg_activation_powerbased(emg_cleaned)
-    >>> nk.signal_plot([emg_cleaned, binarized_energy], standardize=True)
-    >>> nk.events_plot(info["EMG_Onsets"], emg_cleaned)
-    >>> nk.events_plot(info["EMG_Onsets"], energy.values)
-    """
+    if duration_min == "default":
+        duration_min = int(0.05 * sampling_rate)
 
-    # Extract indices of activated data points.
-    activated = np.nonzero(activity)[0]
-    baseline = np.nonzero(activity == False)[0]
+    activations = events_find(activity, threshold=0.5, threshold_keep='above', duration_min=duration_min)
+    activations["offset"] = activations["onset"] + activations["duration"]
 
-    onsets = np.intersect1d(activated - 1, baseline)
-    offsets = np.intersect1d(activated + 1, baseline)
+    baseline = events_find(activity == False, threshold=0.5, threshold_keep='above', duration_min=duration_min)
+    baseline["offset"] = baseline["onset"] + baseline["duration"]
 
-    # Check that indices do not include first and last sample point.
-    for i in zip(onsets, offsets):
-        if i == 0 or i == len(activity-1):
-            onsets.remove(i)
-            offsets.remove(i)
+    # Cross-comparison
+    valid = np.isin(activations["onset"], baseline["offset"])
+    onsets = activations["onset"][valid]
+    offsets = activations["offset"][valid]
 
-    # Extract indexes of activated samples
-    activations = np.array([])
+    new_activity = np.array([])
     for x, y in zip(onsets, offsets):
         activated = np.arange(x, y)
-        activations = np.append(activations, activated)
+        new_activity = np.append(new_activity, activated)
 
     # Prepare Output.
     info = {"EMG_Onsets": onsets,
             "EMG_Offsets": offsets,
-            "EMG_Activity": activations}
+            "EMG_Activity": new_activity}
+
     return info
+
+
+#def _emg_activation_offsets_onsets(activity):
+#
+#    # Extract indices of activated data points.
+#    activated = np.nonzero(activity)[0]
+#    baseline = np.nonzero(activity == False)[0]
+#
+#    onsets = np.intersect1d(activated - 1, baseline)
+#    offsets = np.intersect1d(activated + 1, baseline)
+#
+#    # Check that indices do not include first and last sample point.
+#    for i in zip(onsets, offsets):
+#        if i == 0 or i == len(activity-1):
+#            onsets.remove(i)
+#            offsets.remove(i)
+#
+#    # Extract indexes of activated samples
+#    activations = np.array([])
+#    for x, y in zip(onsets, offsets):
+#        activated = np.arange(x, y)
+#        activations = np.append(activations, activated)
+#
+#    # Prepare Output.
+#    info = {"EMG_Onsets": onsets,
+#            "EMG_Offsets": offsets,
+#            "EMG_Activity": activations}
+#    return info
