@@ -5,7 +5,7 @@ import scipy.stats
 
 
 
-def density(x, desired_length=100, bandwith=1):
+def density(x, desired_length=100, bandwith=1, show=False):
     """
     Density estimation
 
@@ -19,6 +19,8 @@ def density(x, desired_length=100, bandwith=1):
         The amount of values in the returned density estimation.
     bandwith : float
         The bandwith of the kernel. The smaller the values, the smoother the estimation.
+    show : bool
+        Display the density plot.
 
     Returns
     -------
@@ -28,6 +30,9 @@ def density(x, desired_length=100, bandwith=1):
     Examples
     --------
     >>> signal = nk.ecg_simulate(duration=20)
+    >>> x, y = nk.density(signal, bandwith=0.5, show=True)
+    >>>
+    >>> # Bandwidth comparison
     >>> x, y1 = nk.density(signal, bandwith=0.5)
     >>> x, y2 = nk.density(signal, bandwith=1)
     >>> x, y3 = nk.density(signal, bandwith=2)
@@ -41,4 +46,8 @@ def density(x, desired_length=100, bandwith=1):
 
     x = np.linspace(np.min(x), np.max(x), num=desired_length)
     y = density_function(x)
+
+    if show is True:
+        pd.DataFrame({"x": x, "y": y}).plot(x="x")
+
     return x, y

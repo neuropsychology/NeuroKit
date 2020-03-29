@@ -13,12 +13,13 @@ from ..signal import (signal_zerocrossings,
                       signal_findpeaks,
                       signal_formatpeaks)
 from .ecg_peaks import ecg_peaks
+from .ecg_segment import ecg_segment
 from ..epochs import epochs_create
 from ..epochs import epochs_to_df
 from ..events import events_plot
 
 
-def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak", show=False, show_type='peaks'):
+def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type='peaks'):
     """Delineate QRS complex.
     Function to delineate the QRS complex.
 
@@ -84,6 +85,7 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak", show=F
     # Sanitize inputs
     if rpeaks is None:
         _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
+        rpeaks = rpeaks["ECG_R_Peaks"]
 
     # Try retrieving right column
     if isinstance(rpeaks, dict):
@@ -102,6 +104,9 @@ def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak", show=F
         waves = _dwt_ecg_delinator(ecg_cleaned,
                                    rpeaks,
                                    sampling_rate=sampling_rate)
+    else:
+        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be "
+                         "one of 'peak', 'cwt' or 'dwt'.")
 
     # Remove NaN in Peaks, Onsets, and Offsets
     for feature in waves.keys():
@@ -637,18 +642,12 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
     return tppeaks
 
 # =============================================================================
-#                              DERIVATIVE METHOD
+#                              PEAK METHOD
 # =============================================================================
 def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
 
     # Initialize
-    epochs_start, epochs_end = _ecg_delineate_beatwindow(rpeaks=rpeaks,
-                                                         sampling_rate=sampling_rate)
-    heartbeats = epochs_create(ecg,
-                               rpeaks,
-                               sampling_rate=sampling_rate,
-                               epochs_start=epochs_start,
-                               epochs_end=epochs_end)
+    heartbeats = ecg_segment(ecg, rpeaks, sampling_rate)
 
     Q_list = []
     P_list = []
@@ -798,22 +797,7 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
 # =============================================================================
 # Internals
 # =============================================================================
-def _ecg_delineate_beatwindow(heart_rate=None, rpeaks=None, sampling_rate=1000):
 
-    # Extract heart rate
-    if heart_rate is not None:
-        heart_rate = np.mean(heart_rate)
-    if rpeaks is not None:
-        heart_rate = np.mean(np.diff(rpeaks) / sampling_rate * 60)
-
-    # Modulator
-    m = heart_rate/80
-
-    # Window
-    epochs_start = -0.35/m
-    epochs_end = 0.5/m
-
-    return epochs_start, epochs_end
 
 
 def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_type='all', sampling_rate=1000):

@@ -28,8 +28,8 @@ sys.path.insert(0, os.path.abspath('../'))
 
 MOCK_MODULES = ['numpy', 'pandas',
                 'matplotlib', 'matplotlib.pyplot', 'matplotlib.patches', 'matplotlib.cm', 'matplotlib.collections', 'matplotlib.gridspec',
-                'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg',
-                'sklearn', 'sklearn.neighbors',
+                'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'scipy.spatial',
+                'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets',
                 'mne', 'bioread', 'cvxopt', 'pywt']
 
 for mod_name in MOCK_MODULES:
