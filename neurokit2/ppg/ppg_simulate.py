@@ -88,27 +88,27 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
     x_onset = np.cumsum(periods)
     x_onset -= x_onset[0]    # make sure seconds start at zero
     # Add respiratory sinus arrythmia (frequency modulation).
-    periods, x_onset = _frequency_modulation(x_onset, periods,
+    periods, x_onset = _frequency_modulation(periods, x_onset,
                                              modulation_frequency=.05,
                                              modulation_strength=frequency_modulation)
     # Randomly modulate duration of waves by subracting a random value between
-    # 0 and 20% of the wave duration (see function definition).
+    # 0 and ibi_randomness% of the wave duration (see function definition).
     x_onset = _random_x_offset(x_onset, np.diff(x_onset), ibi_randomness)
     # Corresponding signal amplitudes.
     y_onset = np.random.normal(0, .1, n_period)
 
     # Seconds at which the systolic peaks occur within the waves.
-    x_sys = x_onset + 0.175 * periods
+    x_sys = x_onset + np.random.normal(.175, .01, n_period) * periods
     # Corresponding signal amplitudes.
-    y_sys = y_onset + np.random.normal(1.5, .25, n_period)
+    y_sys = y_onset + np.random.normal(1.5, .15, n_period)
 
     # Seconds at which the dicrotic notches occur within the waves.
-    x_notch = x_onset + 0.4 * periods
+    x_notch = x_onset + np.random.normal(.4, .01, n_period) * periods
     # Corresponding signal amplitudes (percentage of systolic peak height).
     y_notch = y_sys * np.random.normal(.49, .01, n_period)
 
-    # Seconds at which the diatolic peaks occur within the waves.
-    x_dia = x_onset + 0.45 * periods
+    # Seconds at which the diastolic peaks occur within the waves.
+    x_dia = x_onset + np.random.normal(.45, .01, n_period) * periods
     # Corresponding signal amplitudes (percentage of systolic peak height).
     y_dia = y_sys * np.random.normal(.51, .01, n_period)
 
@@ -129,7 +129,7 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
     # Interpolate a continuous signal between the landmarks (i.e., Cartesian
     # coordinates).
     f = Akima1DInterpolator(x_all, y_all)
-    samples = np.arange(0, int(np.ceil(duration * sampling_rate)))
+    samples = np.arange(int(np.ceil(duration * sampling_rate)))
     ppg = f(samples)
     # Remove NAN (values outside interpolation range, i.e., after last sample).
     ppg[np.isnan(ppg)] = np.nanmean(ppg)
@@ -176,26 +176,34 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
     return ppg
 
 
-def _frequency_modulation(seconds, periods, modulation_frequency,
+def _frequency_modulation(periods, seconds, modulation_frequency,
                           modulation_strength):
     """
-    modulator_frequency determines the frequeny at which respiratory sinus
-    arrythmia occues (in Hz);
-    modulator_strength must be between 0 and 1
+    modulator_frequency determines the frequency at which respiratory sinus
+    arrhythmia occurs (in Hz). modulator_strength must be between 0 and 1.
     """
+    modulation_mean = 1.1
+    # Enforce minimum inter-beat-interval of 300 milliseconds.
+    if (modulation_mean - modulation_strength) * periods[0] < .3:    # elements in periods all have the same value at this point
+        print("Skipping frequency modulation, since the modulation_strength"
+              f" {modulation_strength} leads to physiologically implausible"
+              f" wave durations of {((modulation_mean - modulation_strength) * periods[0]) * 1000}"
+              f" milliseconds.")
+        return periods, seconds
+
     # Apply a very conservative Nyquist criterion.
     nyquist = (1 / periods[0]) * .1
     if modulation_frequency > nyquist:
         print(f"Please choose a modulation frequency lower than {nyquist}.")
         return
 
-    # Generate a sine with mean 1.1 and amplitude modulation_strength. i.e.,
+    # Generate a sine with mean 1.1 and amplitude modulation_strength, that is,
     # ranging from 1.1 - modulation_strength to 1.1 + modulation_strength. Note
-    # That the mean must be 1.1 rather than 1 in order to not produce periods
+    # that the mean must be 1.1 rather than 1 in order to not produce periods
     # of duration 0 (i.e., at minimum the duration period is scaled down to
     # .1 * period instead of 0 * period).
     modulator = modulation_strength * np.sin(2 * np.pi * modulation_frequency *
-                                             seconds) + 1.1
+                                             seconds) + modulation_mean
     periods_modulated = periods * modulator
     seconds_modulated = np.cumsum(periods_modulated)
     seconds_modulated -= seconds_modulated[0]    # make sure seconds start at zero
@@ -205,10 +213,17 @@ def _frequency_modulation(seconds, periods, modulation_frequency,
 
 def _random_x_offset(x, x_diff, offset_weight):
     """
-    For each xi and the preceding xi-1, subtract offset_weight * (xi - xi-1)
-    from xi;
-    offset weight must be between 0 and 1
+    From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is
+    the wave onset preceding xi. offset_weight must be between 0 and 1.
     """
+    # Enforce minimum inter-beat-interval of 300 milliseconds.
+    min_x_diff = min(x_diff)
+    if (min_x_diff - (min_x_diff * offset_weight)) < .3:
+        print("Skipping random IBI modulation, since the offset_weight"
+              f" {offset_weight} leads to physiologically implausible wave"
+              f" durations of {(min_x_diff - (min_x_diff * offset_weight)) * 1000}"
+              f" milliseconds.")
+        return x
     offsets = []
 
     for i in x_diff:
