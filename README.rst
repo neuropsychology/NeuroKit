@@ -78,6 +78,9 @@ Documentation
 .. image:: https://mybinder.org/badge_logo.svg
         :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
         
+.. image:: https://img.shields.io/gitter/room/neuropsychology/NeuroKit.js.svg
+        :target: https://gitter.im/NeuroKit/community
+        :alt: Chat on Gitter
         
 Click on the links above and check out our tutorials:
 
