@@ -168,7 +168,7 @@ def _emg_activation_offsets_onsets(activity):
 
     # Extract indices of activated data points.
     activated = np.nonzero(activity)[0]
-    baseline = np.nonzero(activity==False)[0]
+    baseline = np.nonzero(activity == False)[0]
 
     onsets = np.intersect1d(activated - 1, baseline)
     offsets = np.intersect1d(activated + 1, baseline)
