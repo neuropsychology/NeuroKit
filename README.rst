@@ -23,7 +23,7 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This package is the continuation of `NeuroKit1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package with which you can analyze your physiological data with only two lines of code.
+This package is the continuation of `NeuroKit1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package providing an easy access to complex statistical routines for researchers and clinicians with not much experience in programming, statistics or signal theory, so that they can literally **analyze physiological data with only two lines of code**.
 
 ..
     Quick Example
@@ -272,8 +272,8 @@ Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/cont
 
 
 
-Alternatives
-============
+Alternative Packages
+=====================
 
 Here's a list of great alternative packages that you should check out:
 
@@ -320,3 +320,10 @@ Eye-Tracking
 
 - `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
 - `PyTrack <https://github.com/titoghose/PyTrack>`_
+
+
+  
+Notes
+============
+
+*Note: The authors do not give any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to leak, the authors CANNOT IN ANY WAY be held responsible.*
