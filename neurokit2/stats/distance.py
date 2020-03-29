@@ -4,6 +4,7 @@ import pandas as pd
 import scipy
 import scipy.spatial
 
+from .standardize import standardize
 
 
 
@@ -18,12 +19,13 @@ def distance(X=None, method="mahalanobis"):
     X : array or DataFrame
         A dataframe of values.
     method : str
-        The method to use. One of 'mahalanobis'.
+        The method to use. One of 'mahalanobis' or 'mean' for
+        the average distance from the mean.
 
     Returns
     -------
     array
-        DataFrame containing the probability of belongning to each cluster.
+        Vector containing the distance values.
 
 
     Examples
@@ -40,6 +42,8 @@ def distance(X=None, method="mahalanobis"):
     method = method.lower()  # remove capitalised letters
     if method in ["mahalanobis"]:
         dist = _distance_mahalanobis(X)
+    if method in ["mean", "center", "average"]:
+        dist = _distance_mean(X)
     else:
         raise ValueError("NeuroKit error: distance(): 'method' should be "
                          "one of 'mahalanobis'.")
@@ -47,6 +51,9 @@ def distance(X=None, method="mahalanobis"):
     return dist
 
 
+# =============================================================================
+# Methods
+# =============================================================================
 
 def _distance_mahalanobis(X=None):
     cov = X.cov().values
@@ -55,6 +62,15 @@ def _distance_mahalanobis(X=None):
     col_means = X.mean().values
 
     dist = np.full(len(X), np.nan)
-    for i in range(X.shape[0]):
-        dist[i] = scipy.spatial.distance.mahalanobis(X.iloc[i,:], col_means, cov) ** 2
+    for i in range(len(X)):
+        dist[i] = scipy.spatial.distance.mahalanobis(X.iloc[i,:].values, col_means, cov) ** 2
     return dist
+
+
+
+def _distance_mean(X=None):
+    Z = standardize(X)
+    dist = Z.mean(axis=1).values
+    return dist
+
+
