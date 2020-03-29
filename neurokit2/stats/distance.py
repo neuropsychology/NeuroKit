@@ -63,7 +63,7 @@ def _distance_mahalanobis(X=None):
 
     dist = np.full(len(X), np.nan)
     for i in range(len(X)):
-        dist[i] = scipy.spatial.distance.mahalanobis(X.iloc[i,:].values, col_means, cov) ** 2
+        dist[i] = scipy.spatial.distance.mahalanobis(X.iloc[i, :].values, col_means, cov) ** 2
     return dist
 
 
@@ -72,5 +72,3 @@ def _distance_mean(X=None):
     Z = standardize(X)
     dist = Z.mean(axis=1).values
     return dist
-
-
