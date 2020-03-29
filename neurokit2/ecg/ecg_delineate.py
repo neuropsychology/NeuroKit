@@ -104,6 +104,9 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
         waves = _dwt_ecg_delinator(ecg_cleaned,
                                    rpeaks,
                                    sampling_rate=sampling_rate)
+    else:
+        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be "
+                         "one of 'peak', 'cwt' or 'dwt'.")
 
     # Remove NaN in Peaks, Onsets, and Offsets
     for feature in waves.keys():
