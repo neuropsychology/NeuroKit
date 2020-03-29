@@ -85,6 +85,7 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
     # Sanitize inputs
     if rpeaks is None:
         _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
+        rpeaks = rpeaks["ECG_R_Peaks"]
 
     # Try retrieving right column
     if isinstance(rpeaks, dict):
@@ -638,7 +639,7 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
     return tppeaks
 
 # =============================================================================
-#                              DERIVATIVE METHOD
+#                              PEAK METHOD
 # =============================================================================
 def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
 

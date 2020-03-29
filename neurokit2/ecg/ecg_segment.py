@@ -1,14 +1,19 @@
 # - * - coding: utf-8 - * -
 import numpy as np
+
+from .ecg_peaks import ecg_peaks
 from ..epochs import epochs_create
-
-
 
 
 
 def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
     """
     """
+    # Sanitize inputs
+    if rpeaks is None:
+        _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
+        rpeaks = rpeaks["ECG_R_Peaks"]
+
     epochs_start, epochs_end = _ecg_segment_window(rpeaks=rpeaks,
                                                    sampling_rate=sampling_rate)
     heartbeats = epochs_create(ecg_cleaned,
