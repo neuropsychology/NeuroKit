@@ -98,7 +98,7 @@ Examples
 -  `Analyze Electrodermal Activity (EDA) <https://neurokit2.readthedocs.io/en/latest/examples/eda.html>`_
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
--  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
+-  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
 
 
 *You can try out these examples directly in your browser by* `clicking here <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
@@ -118,8 +118,6 @@ Citation
 .. image:: https://img.shields.io/badge/details-authors-purple.svg?colorB=9C27B0
    :target: https://neurokit2.readthedocs.io/en/latest/credits.html
    
-
-You can run:
 
 .. code-block:: python
 
