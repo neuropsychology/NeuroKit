@@ -6,7 +6,7 @@ __version__ = '0.0.19'
 
 
 # Maintainer info
-__author__ = """NeuroKit development team"""
+__author__ = """The NeuroKit development team"""
 __email__ = 'dom.makowski@gmail.com'
 
 

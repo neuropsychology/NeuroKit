@@ -75,6 +75,9 @@ Documentation
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
         :alt: Tutorials
         
+.. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
+   :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
+        
 .. image:: https://mybinder.org/badge_logo.svg
         :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
         
@@ -82,6 +85,7 @@ Documentation
         :target: https://gitter.im/NeuroKit/community
         :alt: Chat on Gitter
         
+
 Click on the links above and check out our tutorials:
 
 Tutorials

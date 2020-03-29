@@ -16,7 +16,7 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 
     Compute a continuous index of quality of the ECG signal, by interpolating the distance
     of each QRS segment from the average QRS segment present in the data. This index is
-    therefore relative, and 1 corresponds to heartbeats that perfectly matches the average
+    therefore relative, and 1 corresponds to heartbeats that are the closest to the average
     sample and 0 corresponds to the most distance heartbeat, from that average sample.
 
     Returns
@@ -68,4 +68,3 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000):
     quality = signal_interpolate(rpeaks, quality, desired_length=len(ecg_cleaned), method='quadratic')
 
     return quality
-

@@ -68,10 +68,12 @@ on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 process_examples = not os.path.exists(os.path.join(os.path.dirname(__file__), 'examples'))
 not_document_data = 'sphinx_nbexamples.gallery_config'
 
-
+# Style autodoc
 napoleon_google_docstring = False
+napoleon_numpy_docstring = True
 napoleon_use_param = False
-napoleon_use_ivar = True
+napoleon_use_ivar = False
+napoleon_use_rtype = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -86,9 +88,15 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
+def find_author():
+    result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__author__"), open('../neurokit2/__init__.py').read())
+    return result.group(1)
+
+
 project = u'NeuroKit'
-copyright = u"2019, Dominique Makowski"
-author = u"Dominique Makowski"
+copyright = u"2020, Dominique Makowski"
+author = str(find_author())
+
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
