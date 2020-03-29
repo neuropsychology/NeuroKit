@@ -103,12 +103,12 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
     y_sys = y_onset + np.random.normal(1.5, .15, n_period)
 
     # Seconds at which the dicrotic notches occur within the waves.
-    x_notch = x_onset + np.random.normal(.4, .01, n_period) * periods
+    x_notch = x_onset + np.random.normal(.4, .001, n_period) * periods
     # Corresponding signal amplitudes (percentage of systolic peak height).
     y_notch = y_sys * np.random.normal(.49, .01, n_period)
 
     # Seconds at which the diastolic peaks occur within the waves.
-    x_dia = x_onset + np.random.normal(.45, .01, n_period) * periods
+    x_dia = x_onset + np.random.normal(.45, .001, n_period) * periods
     # Corresponding signal amplitudes (percentage of systolic peak height).
     y_dia = y_sys * np.random.normal(.51, .01, n_period)
 
