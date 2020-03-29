@@ -38,5 +38,16 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
+        # Install test deps
+        pip install bioread
+        pip install mne
+        pip install pyentrp
+        pip install nolds
+        pip install biosppy
+        pip install cvxopt
+        pip install PyWavelets
+        # Test
         pip install pytest
-        # pytest
+        python setup.py install
+        tox
+        pytest
