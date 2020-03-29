@@ -23,7 +23,7 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This package is the continuation of `NeuroKit1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package providing an easy access to complex statistical routines for researchers and clinicians with not much experience in programming, statistics or signal theory, so that they can literally **analyze physiological data with only two lines of code**.
+This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package providing an easy access to complex statistical routines for researchers and clinicians with not much experience in programming, statistics or signal theory, so that they can literally **analyze physiological data with only two lines of code**.
 
 ..
     Quick Example

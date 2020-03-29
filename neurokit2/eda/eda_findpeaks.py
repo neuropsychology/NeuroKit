@@ -50,7 +50,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     >>> import neurokit2 as nk
     >>>
     >>> # Get phasic component
-    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
+    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
     >>> eda_cleaned = nk.eda_clean(eda_signal)
     >>> eda = nk.eda_phasic(eda_cleaned)
     >>> eda_phasic = eda["EDA_Phasic"].values
@@ -105,6 +105,10 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
             "SCR_Height": eda_phasic[peaks['Peaks']]}
 
     return info
+
+
+
+
 
 
 

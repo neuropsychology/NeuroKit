@@ -18,7 +18,7 @@ from ..epochs import epochs_to_df
 from ..events import events_plot
 
 
-def ecg_delineate(ecg_cleaned, rpeaks, sampling_rate=1000, method="peak", show=False, show_type='peaks'):
+def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type='peaks'):
     """Delineate QRS complex.
     Function to delineate the QRS complex.
 
