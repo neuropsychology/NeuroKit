@@ -30,7 +30,7 @@ def mad(x, constant=1.4826):
     -----------
     - https://en.wikipedia.org/wiki/Median_absolute_deviation
     """
-    median = np.median(np.ma.array(x).compressed())
-    mad = np.median(np.abs(x - median))
+    median = np.nanmedian(np.ma.array(x).compressed())
+    mad = np.nanmedian(np.abs(x - median))
     mad = mad*constant
     return mad

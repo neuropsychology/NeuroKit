@@ -5,6 +5,7 @@ from .hdi import hdi
 from .mad import mad
 from .density import density
 from .distance import distance
+from .rescale import rescale
 from .fit_loess import fit_loess
 from .fit_polynomial import fit_polynomial
 from .fit_polynomial import fit_polynomial_findorder
