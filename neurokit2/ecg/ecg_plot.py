@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.gridspec
 
 from ..ecg import ecg_findpeaks
-from .ecg_delineate import _ecg_delineate_beatwindow
+from .ecg_segment import ecg_segment
 from ..epochs import epochs_to_df
 from ..epochs import epochs_create
 
@@ -87,13 +87,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     if sampling_rate is not None:
         ax2.set_title("Individual Heart Beats")
 
-        epochs_start, epochs_end = _ecg_delineate_beatwindow(heart_rate=ecg_signals["ECG_Rate"],
-                                                             sampling_rate=sampling_rate)
-        heartbeats = epochs_create(ecg_signals["ECG_Clean"],
-                                   events=peaks,
-                                   epochs_start=epochs_start,
-                                   epochs_end=epochs_end,
-                                   sampling_rate=sampling_rate)
+        heartbeats = ecg_segment(ecg_signals["ECG_Clean"], peaks, sampling_rate)
         heartbeats = epochs_to_df(heartbeats)
 
         heartbeats_pivoted = heartbeats.pivot(index='Time',
