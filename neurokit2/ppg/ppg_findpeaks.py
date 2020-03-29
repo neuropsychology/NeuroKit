@@ -52,6 +52,13 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi",
     >>> plt.plot(ppg_clean, label="clean PPG")
     >>> plt.scatter(peaks, ppg[peaks], c="r", label="systolic peaks")
     >>> plt.legend()
+
+    References
+    ----------
+    - Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic
+    Peak Detection in Acceleration Photoplethysmograms Measured from Emergency
+    Responders in Tropical Conditions. PLoS ONE 8(10): e76585.
+    doi:10.1371/journal.pone.0076585.
     """
     method = method.lower()
     if method in ["elgendi"]:
