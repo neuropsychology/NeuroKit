@@ -39,11 +39,11 @@ def emg_activation(emg_amplitude, threshold='default'):
     >>> import neurokit2 as nk
     >>>
     >>> # Simulate signal and obtain amplitude
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=250, n_bursts=3)
+    >>> emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
     >>> cleaned = nk.emg_clean(emg, sampling_rate=250)
     >>> emg_amplitude = nk.emg_amplitude(cleaned)
     >>>
-    >>> activity_signal,info = nk.emg_activation(emg_amplitude, threshold)
+    >>> activity_signal,info = nk.emg_activation(emg_amplitude)
     >>> nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]],
                        emg_amplitude)
 
@@ -51,55 +51,24 @@ def emg_activation(emg_amplitude, threshold='default'):
     ----------
     - BioSPPy: https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/emg.py
     """
-    if threshold == 'default':
-        threshold = (1/10)*np.std(emg_amplitude)
-    else:
-        threshold = threshold
-
     # Sanity checks.
     if not isinstance(emg_amplitude, np.ndarray):
         emg_amplitude = np.atleast_1d(emg_amplitude).astype('float64')
-    if threshold > np.max(emg_amplitude):
-        raise ValueError("NeuroKit error: emg_activation(): threshold"
-                         "specified exceeds the maximum of the signal"
-                         "amplitude.")
 
-    # Extract indices of data points greater than or equal to threshold.
-    above = np.nonzero(emg_amplitude >= threshold)[0]
-    below = np.nonzero(emg_amplitude < threshold)[0]
-
-    onsets = np.intersect1d(above - 1, below)
-    offsets = np.intersect1d(above + 1, below)
-
-    # Check that indices do not include first and last sample point.
-    for i in zip(onsets, offsets):
-        if i == 0 or i == len(emg_amplitude-1):
-            onsets.remove(i)
-            offsets.remove(i)
-
-    # Extract indexes of activated samples
-    activations = np.array([])
-    for x, y in zip(onsets, offsets):
-        activated = np.arange(x, y)
-        activations = np.append(activations, activated)
+    # Find offsets and onsets
+    activity = _emg_activation_threshold(emg_amplitude, threshold=threshold)
+    info = _emg_activation_offsets_onsets(activity)
 
     # Prepare Output.
-    info = {"EMG_Onsets": onsets,
-            "EMG_Offsets": offsets,
-            "EMG_Activity": activations}
-    info_activity = {"EMG_Activity": activations}
-    info_onsets = {"EMG_Onsets": onsets}
-    info_offsets = {"EMG_Offsets": offsets}
-
-    df_activity = signal_formatpeaks(info_activity,
+    df_activity = signal_formatpeaks({"EMG_Activity": info["EMG_Activity"]},
                                      desired_length=len(emg_amplitude),
-                                     peak_indices=info_activity["EMG_Activity"])
-    df_onsets = signal_formatpeaks(info_onsets,
+                                     peak_indices=info["EMG_Activity"])
+    df_onsets = signal_formatpeaks({"EMG_Onsets": info["EMG_Onsets"]},
                                    desired_length=len(emg_amplitude),
-                                   peak_indices=info_onsets["EMG_Onsets"])
-    df_offsets = signal_formatpeaks(info_offsets,
+                                   peak_indices=info["EMG_Onsets"])
+    df_offsets = signal_formatpeaks({"EMG_Offsets": info["EMG_Offsets"]},
                                     desired_length=len(emg_amplitude),
-                                    peak_indices=info_offsets["EMG_Offsets"])
+                                    peak_indices=info["EMG_Offsets"])
 
     # Modify output produced by signal_formatpeaks.
     for x in range(len(emg_amplitude)):
@@ -119,6 +88,32 @@ def emg_activation(emg_amplitude, threshold='default'):
     return activity_signal, info
 
 
+
+# =============================================================================
+# Methods
+# =============================================================================
+
+def _emg_activation_threshold(emg_amplitude, threshold='default'):
+    """
+    >>> emg_cleaned = nk.emg_simulate(duration=20, n_bursts=3)
+    >>> binarized_energy, info = _emg_activation_powerbased(emg_cleaned)
+    >>> nk.signal_plot([emg_cleaned, binarized_energy], standardize=True)
+    >>> nk.events_plot(info["EMG_Onsets"], emg_cleaned)
+    >>> nk.events_plot(info["EMG_Onsets"], energy.values)
+    """
+
+    if threshold == 'default':
+        threshold = (1/10)*np.std(emg_amplitude)
+    else:
+        threshold = threshold
+
+    if threshold > np.max(emg_amplitude):
+        raise ValueError("NeuroKit error: emg_activation(): threshold"
+                         "specified exceeds the maximum of the signal"
+                         "amplitude.")
+
+    activity = emg_amplitude >= threshold
+    return activity
 
 
 
@@ -154,3 +149,44 @@ def emg_activation(emg_amplitude, threshold='default'):
 #            "EMG_Offsets": activations["onset"] + activations["duration"]}
 #
 #    return binarized_energy, info
+
+
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+
+def _emg_activation_offsets_onsets(activity):
+    """
+    >>> emg_cleaned = nk.emg_simulate(duration=20, n_bursts=3)
+    >>> binarized_energy, info = _emg_activation_powerbased(emg_cleaned)
+    >>> nk.signal_plot([emg_cleaned, binarized_energy], standardize=True)
+    >>> nk.events_plot(info["EMG_Onsets"], emg_cleaned)
+    >>> nk.events_plot(info["EMG_Onsets"], energy.values)
+    """
+
+    # Extract indices of activated data points.
+    activated = np.nonzero(activity)[0]
+    baseline = np.nonzero(activity==False)[0]
+
+    onsets = np.intersect1d(activated - 1, baseline)
+    offsets = np.intersect1d(activated + 1, baseline)
+
+    # Check that indices do not include first and last sample point.
+    for i in zip(onsets, offsets):
+        if i == 0 or i == len(activity-1):
+            onsets.remove(i)
+            offsets.remove(i)
+
+    # Extract indexes of activated samples
+    activations = np.array([])
+    for x, y in zip(onsets, offsets):
+        activated = np.arange(x, y)
+        activations = np.append(activations, activated)
+
+    # Prepare Output.
+    info = {"EMG_Onsets": onsets,
+            "EMG_Offsets": offsets,
+            "EMG_Activity": activations}
+    return info
