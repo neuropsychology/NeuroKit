@@ -39,6 +39,11 @@ jobs:
     - name: Test with pytest
       run: |
         # Install test deps
+        pip install numpy
+        pip install pandas
+        pip install scipy
+        pip install sklearn
+        pip install matplotlib
         pip install bioread
         pip install mne
         pip install pyentrp
