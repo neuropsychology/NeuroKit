@@ -25,24 +25,24 @@
 
 This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package providing an easy access to complex statistical routines for researchers and clinicians with not much experience in programming, statistics or signal theory, so that they can literally **analyze physiological data with only two lines of code**.
 
-..
-    Quick Example
-    =============
 
-    .. code-block:: python
+Quick Example
+=============
 
-        # Load packages
-        import neurokit2 as nk  
-        import pandas as pd
-        
-        # Download an example dataset
-        data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
-        
-        # Preprocess the data (clean signals, filter, etc.)
-        processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
-        
-        # Compute relevant features
-        results = nk.bio_analyze(processed_data, sampling_rate=100)  
+.. code-block:: python
+
+    # Load packages
+    import neurokit2 as nk  
+    import pandas as pd
+    
+    # Download an example dataset
+    data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
+    
+    # Preprocess the data (clean signals, filter, etc.)
+    processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
+    
+    # Compute relevant features
+    results = nk.bio_analyze(processed_data, sampling_rate=100)  
 
 
 Installation
