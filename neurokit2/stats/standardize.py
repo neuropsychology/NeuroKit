@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-import scipy.stats
+from .mad import mad
 
 
 
@@ -36,7 +36,10 @@ def standardize(data, robust=False):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> nk.standardize([3, 1, 2, 4, 6])
+    >>> nk.standardize([3, 1, 2, 4, 6, np.nan])
+    >>> nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)
+    >>> nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan],
+                                     "B": [3, 1, 2, 4, 6, 5]}))
     """
     # Return appropriate type
     if isinstance(data, list):
@@ -54,8 +57,8 @@ def _standardize(data, robust=False):
 
     # Compute standardized
     if robust is False:
-        z = (data - np.mean(data, axis=0))/np.std(data, axis=0)
+        z = (data - np.nanmean(data, axis=0))/np.nanstd(data, axis=0)
     else:
-        z = (data - np.median(data, axis=0))/scipy.stats.median_absolute_deviation(data, axis=0, nan_policy="omit")
+        z = (data - np.nanmedian(data, axis=0))/mad(data)
 
     return z

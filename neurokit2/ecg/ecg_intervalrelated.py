@@ -48,7 +48,7 @@ def ecg_intervalrelated(data, sampling_rate=1000):
     >>> # Single dataframe is passed
     >>> nk.ecg_intervalrelated(df)
     >>>
-    >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=20)
+    >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
     >>> nk.ecg_intervalrelated(epochs)
     """
     intervals = {}
@@ -57,37 +57,8 @@ def ecg_intervalrelated(data, sampling_rate=1000):
     if isinstance(data, pd.DataFrame):
         rate_cols = [col for col in data.columns if 'ECG_Rate' in col]
         if len(rate_cols) == 1:
-            intervals["Rate_Mean"] = data[rate_cols[0]].values.mean()
-            hrv = ecg_hrv(data, sampling_rate=sampling_rate)
-            intervals["HRV_RMSSD"] = float(hrv["HRV_RMSSD"])
-            intervals["HRV_MeanNN"] = float(hrv["HRV_MeanNN"])
-            intervals["HRV_SDNN"] = float(hrv["HRV_SDNN"])
-            intervals["HRV_SDSD"] = float(hrv["HRV_SDSD"])
-            intervals["HRV_CVNN"] = float(hrv["HRV_CVNN"])
-            intervals["HRV_CVSD"] = float(hrv["HRV_CVSD"])
-            intervals["HRV_MedianNN"] = float(hrv["HRV_MedianNN"])
-            intervals["HRV_MadNN"] = float(hrv["HRV_MadNN"])
-            intervals["HRV_MCVNN"] = float(hrv["HRV_MCVNN"])
-            intervals["HRV_pNN50"] = float(hrv["HRV_pNN50"])
-            intervals["HRV_pNN20"] = float(hrv["HRV_pNN20"])
-            intervals["HRV_TINN"] = float(hrv["HRV_TINN"])
-            intervals["HRV_HTI"] = float(hrv["HRV_HTI"])
-            intervals["HRV_ULF"] = float(hrv["HRV_ULF"])
-            intervals["HRV_VLF"] = float(hrv["HRV_VLF"])
-            intervals["HRV_LF"] = float(hrv["HRV_LF"])
-            intervals["HRV_HF"] = float(hrv["HRV_HF"])
-            intervals["HRV_VHF"] = float(hrv["HRV_VHF"])
-            intervals["HRV_LFHF"] = float(hrv["HRV_LFHF"])
-            intervals["HRV_LFn"] = float(hrv["HRV_LFn"])
-            intervals["HRV_HFn"] = float(hrv["HRV_HFn"])
-            intervals["HRV_LnHF"] = float(hrv["HRV_LnHF"])
-            intervals["HRV_SD1"] = float(hrv["HRV_SD1"])
-            intervals["HRV_SD2"] = float(hrv["HRV_SD2"])
-            intervals["HRV_SD2SD1"] = float(hrv["HRV_SD2SD1"])
-            intervals["HRV_CSI"] = float(hrv["HRV_CSI"])
-            intervals["HRV_CVI"] = float(hrv["HRV_CVI"])
-            intervals["HRV_CSI_Modified"] = float(hrv["HRV_CSI_Modified"])
-            intervals["HRV_SampEn"] = float(hrv["HRV_SampEn"])
+            intervals.update(_ecg_intervalrelated_formatinput(data))
+            intervals.update(_ecg_intervalrelated_hrv(data, sampling_rate))
         else:
             raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
                              "we couldn't extract heart rate. Please make sure"
@@ -99,10 +70,18 @@ def ecg_intervalrelated(data, sampling_rate=1000):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
+            # Format dataframe
+            data[index] = data[index].set_index('Index').drop(['Label'], axis=1)
+
             # Rate
             intervals[index] = _ecg_intervalrelated_formatinput(data[index],
                                                                 intervals[index])
-        ecg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
+
+            # HRV
+            intervals[index] = _ecg_intervalrelated_hrv(data[index], sampling_rate,
+                                                        intervals[index])
+
+        ecg_intervals = pd.DataFrame.from_dict(intervals, orient="index").add_prefix("ECG_")
 
     return ecg_intervals
 
@@ -111,18 +90,53 @@ def ecg_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _ecg_intervalrelated_formatinput(interval, output={}):
-    """Format input for dictionary
-    """
+def _ecg_intervalrelated_formatinput(data, output={}):
+
     # Sanitize input
-    colnames = interval.columns.values
+    colnames = data.columns.values
     if len([i for i in colnames if "ECG_Rate" in i]) == 0:
         raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
                          "we couldn't extract heart rate. Please make sure"
                          "your DataFrame contains an `ECG_Rate` column.")
         return output
 
-    signal = interval["ECG_Rate"].values
-    output["ECG_Rate_Mean"] = np.mean(signal)
+    signal = data["ECG_Rate"].values
+    output["Rate_Mean"] = np.mean(signal)
+
+    return output
+
+
+def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
+
+    hrv = ecg_hrv(data, sampling_rate=sampling_rate)
+    output["HRV_RMSSD"] = float(hrv["HRV_RMSSD"])
+    output["HRV_MeanNN"] = float(hrv["HRV_MeanNN"])
+    output["HRV_SDNN"] = float(hrv["HRV_SDNN"])
+    output["HRV_SDSD"] = float(hrv["HRV_SDSD"])
+    output["HRV_CVNN"] = float(hrv["HRV_CVNN"])
+    output["HRV_CVSD"] = float(hrv["HRV_CVSD"])
+    output["HRV_MedianNN"] = float(hrv["HRV_MedianNN"])
+    output["HRV_MadNN"] = float(hrv["HRV_MadNN"])
+    output["HRV_MCVNN"] = float(hrv["HRV_MCVNN"])
+    output["HRV_pNN50"] = float(hrv["HRV_pNN50"])
+    output["HRV_pNN20"] = float(hrv["HRV_pNN20"])
+    output["HRV_TINN"] = float(hrv["HRV_TINN"])
+    output["HRV_HTI"] = float(hrv["HRV_HTI"])
+    output["HRV_ULF"] = float(hrv["HRV_ULF"])
+    output["HRV_VLF"] = float(hrv["HRV_VLF"])
+    output["HRV_LF"] = float(hrv["HRV_LF"])
+    output["HRV_HF"] = float(hrv["HRV_HF"])
+    output["HRV_VHF"] = float(hrv["HRV_VHF"])
+    output["HRV_LFHF"] = float(hrv["HRV_LFHF"])
+    output["HRV_LFn"] = float(hrv["HRV_LFn"])
+    output["HRV_HFn"] = float(hrv["HRV_HFn"])
+    output["HRV_LnHF"] = float(hrv["HRV_LnHF"])
+    output["HRV_SD1"] = float(hrv["HRV_SD1"])
+    output["HRV_SD2"] = float(hrv["HRV_SD2"])
+    output["HRV_SD2SD1"] = float(hrv["HRV_SD2SD1"])
+    output["HRV_CSI"] = float(hrv["HRV_CSI"])
+    output["HRV_CVI"] = float(hrv["HRV_CVI"])
+    output["HRV_CSI_Modified"] = float(hrv["HRV_CSI_Modified"])
+    output["HRV_SampEn"] = float(hrv["HRV_SampEn"])
 
     return output

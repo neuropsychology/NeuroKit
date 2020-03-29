@@ -9,6 +9,7 @@ Contents:
    simulation
    custom
    eventrelated
+   intervalrelated
    eda
    rrv
    heartbeats

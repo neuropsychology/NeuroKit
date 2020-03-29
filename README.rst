@@ -23,7 +23,7 @@
   
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This package is the continuation of `NeuroKit1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package with which you can analyze your physiological data with only two lines of code.
+This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package providing an easy access to complex statistical routines for researchers and clinicians with not much experience in programming, statistics or signal theory, so that they can literally **analyze physiological data with only two lines of code**.
 
 ..
     Quick Example
@@ -75,10 +75,17 @@ Documentation
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
         :alt: Tutorials
         
+.. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
+   :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
+        
 .. image:: https://mybinder.org/badge_logo.svg
         :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
         
+.. image:: https://img.shields.io/gitter/room/neuropsychology/NeuroKit.js.svg
+        :target: https://gitter.im/NeuroKit/community
+        :alt: Chat on Gitter
         
+
 Click on the links above and check out our tutorials:
 
 Tutorials
@@ -98,7 +105,7 @@ Examples
 -  `Analyze Electrodermal Activity (EDA) <https://neurokit2.readthedocs.io/en/latest/examples/eda.html>`_
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
--  `Delineate QRS peaks, onsets and offsets <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
+-  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
 
 
 *You can try out these examples directly in your browser by* `clicking here <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
@@ -118,8 +125,6 @@ Citation
 .. image:: https://img.shields.io/badge/details-authors-purple.svg?colorB=9C27B0
    :target: https://neurokit2.readthedocs.io/en/latest/credits.html
    
-
-You can run:
 
 .. code-block:: python
 
@@ -274,8 +279,8 @@ Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/cont
 
 
 
-Alternatives
-============
+Alternative Packages
+=====================
 
 Here's a list of great alternative packages that you should check out:
 
@@ -322,3 +327,10 @@ Eye-Tracking
 
 - `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
 - `PyTrack <https://github.com/titoghose/PyTrack>`_
+
+
+  
+Notes
+============
+
+*Note: The authors do not give any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to leak, the authors CANNOT IN ANY WAY be held responsible.*

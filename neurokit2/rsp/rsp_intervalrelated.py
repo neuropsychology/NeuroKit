@@ -48,8 +48,8 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     >>> # Single dataframe is passed
     >>> nk.rsp_intervalrelated(df)
     >>>
-    >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=20)
-    >>> rsp_intervalrelated(epochs)
+    >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
+    >>> nk.rsp_intervalrelated(epochs)
     """
     intervals = {}
 
@@ -57,23 +57,8 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     if isinstance(data, pd.DataFrame):
         rate_cols = [col for col in data.columns if 'RSP_Rate' in col]
         if len(rate_cols) == 1:
-            intervals["Rate_Mean"] = data[rate_cols[0]].values.mean()
-            rrv = rsp_rrv(data, sampling_rate=sampling_rate)
-            intervals["RRV_SDBB"] = float(rrv["RRV_SDBB"])
-            intervals["RRV_RMSSD"] = float(rrv["RRV_RMSSD"])
-            intervals["RRV_SDSD"] = float(rrv["RRV_SDSD"])
-            intervals["RRV_VLF"] = float(rrv["RRV_VLF"])
-            intervals["RRV_LF"] = float(rrv["RRV_LF"])
-            intervals["RRV_HF"] = float(rrv["RRV_HF"])
-            intervals["RRV_LFHF"] = float(rrv["RRV_LFHF"])
-            intervals["RRV_LFn"] = float(rrv["RRV_LFn"])
-            intervals["RRV_HFn"] = float(rrv["RRV_HFn"])
-            intervals["RRV_SD1"] = float(rrv["RRV_SD1"])
-            intervals["RRV_SD2"] = float(rrv["RRV_SD2"])
-            intervals["RRV_SD2SD1"] = float(rrv["RRV_SD2SD1"])
-            intervals["RRV_ApEn"] = float(rrv["RRV_ApEn"])
-            intervals["RRV_SampEn"] = float(rrv["RRV_SampEn"])
-            intervals["RRV_DFA"] = float(rrv["RRV_DFA"])
+            intervals.update(_rsp_intervalrelated_formatinput(data))
+            intervals.update(_rsp_intervalrelated_rrv(data, sampling_rate))
         else:
             raise ValueError("NeuroKit error: rsp_intervalrelated(): Wrong"
                              "input, we couldn't extract breathing rate."
@@ -95,9 +80,18 @@ def rsp_intervalrelated(data, sampling_rate=1000):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
+            # Format dataframe
+            data[index] = data[index].set_index('Index').drop(['Label'], axis=1)
+
+            # Rate and Amplitude
             intervals[index] = _rsp_intervalrelated_formatinput(data[index],
                                                                 intervals[index])
-        rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index")
+
+            # RRV
+            intervals[index] = _rsp_intervalrelated_rrv(data[index], sampling_rate,
+                                                        intervals[index])
+
+        rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index").add_prefix("RSP_")
 
     return rsp_intervals
 
@@ -106,11 +100,9 @@ def rsp_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _rsp_intervalrelated_formatinput(interval, output={}):
-    """Format input for dictionary
-    """
+def _rsp_intervalrelated_formatinput(data, output={}):
     # Sanitize input
-    colnames = interval.columns.values
+    colnames = data.columns.values
     if len([i for i in colnames if "RSP_Rate" in i]) == 0:
         raise ValueError("NeuroKit error: rsp_intervalrelated(): Wrong"
                          "input, we couldn't extract breathing rate."
@@ -124,10 +116,33 @@ def _rsp_intervalrelated_formatinput(interval, output={}):
                              "contains an `RSP_Amplitude` column.")
             return output
 
-    rate = interval["RSP_Rate"].values
-    amplitude = interval["RSP_Amplitude"].values
+    rate = data["RSP_Rate"].values
+    amplitude = data["RSP_Amplitude"].values
 
-    output["RSP_Rate_Mean"] = np.mean(rate)
-    output["RSP_Amplitude_Mean"] = np.mean(amplitude)
+    output["Rate_Mean"] = np.mean(rate)
+    output["Amplitude_Mean"] = np.mean(amplitude)
+
+    return output
+
+
+def _rsp_intervalrelated_rrv(data, sampling_rate, output={}):
+
+    rrv = rsp_rrv(data, sampling_rate=sampling_rate)
+    output["RRV_SDBB"] = float(rrv["RRV_SDBB"])
+    output["RRV_RMSSD"] = float(rrv["RRV_RMSSD"])
+    output["RRV_SDSD"] = float(rrv["RRV_SDSD"])
+    output["RRV_VLF"] = float(rrv["RRV_VLF"])
+    output["RRV_LF"] = float(rrv["RRV_LF"])
+    output["RRV_HF"] = float(rrv["RRV_HF"])
+    output["RRV_LFHF"] = float(rrv["RRV_LFHF"])
+    output["RRV_LFn"] = float(rrv["RRV_LFn"])
+    output["RRV_HFn"] = float(rrv["RRV_HFn"])
+    output["RRV_SD1"] = float(rrv["RRV_SD1"])
+
+    output["RRV_SD2"] = float(rrv["RRV_SD2"])
+    output["RRV_SD2SD1"] = float(rrv["RRV_SD2SD1"])
+    output["RRV_ApEn"] = float(rrv["RRV_ApEn"])
+    output["RRV_SampEn"] = float(rrv["RRV_SampEn"])
+    output["RRV_DFA"] = float(rrv["RRV_DFA"])
 
     return output
