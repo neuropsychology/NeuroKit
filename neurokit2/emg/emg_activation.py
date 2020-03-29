@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-import sklearn.mixture
 
 from ..events import events_find
 from ..signal import signal_formatpeaks
-
+from ..signal import signal_binarize
 
 def emg_activation(emg_amplitude, sampling_rate=1000, method="mixture", threshold='default', duration_min="default"):
     """Detects onset in EMG signal based on the amplitude threshold.
@@ -121,15 +120,13 @@ def _emg_activation_threshold(emg_amplitude, threshold='default'):
 
     if threshold == 'default':
         threshold = (1/10)*np.std(emg_amplitude)
-    else:
-        threshold = threshold
 
     if threshold > np.max(emg_amplitude):
         raise ValueError("NeuroKit error: emg_activation(): threshold"
                          "specified exceeds the maximum of the signal"
                          "amplitude.")
 
-    activity = emg_amplitude >= threshold
+    activity = signal_binarize(emg_amplitude, method="threshold", threshold=threshold)
     return activity
 
 
@@ -138,19 +135,8 @@ def _emg_activation_mixture(emg_amplitude, threshold="default"):
 
     if threshold == 'default':
         threshold = 0.5
-    else:
-        threshold = threshold
 
-    # fit a Gaussian Mixture Model with two components
-    clf = sklearn.mixture.GaussianMixture(n_components=2, random_state=333)
-    clf = clf.fit(emg_amplitude.reshape(-1, 1))
-
-    # Get predicted probabilities
-    predicted = clf.predict_proba(emg_amplitude.reshape(-1, 1))[:, np.argmax(clf.means_[:, 0])]
-
-    # Cut off
-    activity = predicted >= threshold
-
+    activity = signal_binarize(emg_amplitude, method="mixture", threshold=threshold)
     return activity
 
 
@@ -198,7 +184,7 @@ def _emg_activation_activations(activity, sampling_rate=1000, duration_min="defa
     activations = events_find(activity, threshold=0.5, threshold_keep='above', duration_min=duration_min)
     activations["offset"] = activations["onset"] + activations["duration"]
 
-    baseline = events_find(activity == False, threshold=0.5, threshold_keep='above', duration_min=duration_min)
+    baseline = events_find(activity == 0, threshold=0.5, threshold_keep='above', duration_min=duration_min)
     baseline["offset"] = baseline["onset"] + baseline["duration"]
 
     # Cross-comparison
