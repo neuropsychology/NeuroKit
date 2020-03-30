@@ -19,7 +19,7 @@ def test_eeg_add_channel():
     ecg1 = nk.ecg_simulate(length=170000)
 
     # sync_index_raw > sync_index_channel
-    raw1 = nk.eeg_add_channel(raw.copy(), ecg1, channel_type="ecg", sync_index_raw=100, sync_index_channel=0)
+    raw1 = nk.mne_channel_add(raw.copy(), ecg1, channel_type="ecg", sync_index_raw=100, sync_index_channel=0)
     df1 = raw1.to_data_frame()
 
     # test if the column of channel is added
@@ -40,7 +40,7 @@ def test_eeg_add_channel():
     ecg2 = nk.ecg_simulate(length=166790)
 
     # sync_index_raw < sync_index_channel
-    raw2 = nk.eeg_add_channel(raw.copy(), ecg2, channel_type="ecg", sync_index_raw=0, sync_index_channel=100)
+    raw2 = nk.mne_channel_add(raw.copy(), ecg2, channel_type="ecg", sync_index_raw=0, sync_index_channel=100)
     df2 = raw2.to_data_frame()
 
     # test if the column of channel is added
