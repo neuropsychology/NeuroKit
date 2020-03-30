@@ -19,7 +19,7 @@ jobs:
         python-version: [3.6, 3.7, 3.8]
         exclude:
           - name: windows-latest-3.8
-            os: windows-latest
+            platform: windows-latest
             python-version: 3.8
 
     steps:
