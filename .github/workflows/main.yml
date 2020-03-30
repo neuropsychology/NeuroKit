@@ -15,7 +15,7 @@ jobs:
           - ubuntu-latest  # ubuntu-18.04
           #- macos-latest  # macOS-10.14
           #- windows-2016
-          #- windows-latest  # windows-2019
+          - windows-latest  # windows-2019
         python-version: [3.6, 3.7, 3.8]
 
     steps:
@@ -52,9 +52,9 @@ jobs:
         pip install biosppy
         pip install PyWavelets
         # Install problematic packages
-        pip install conda
-        conda install -c conda-forge cvxopt
-        #pip install cvxopt
+        #pip install conda
+        #conda install -c conda-forge cvxopt
+        pip install cvxopt
         # Test
         #pip install pytest
         #python setup.py install
