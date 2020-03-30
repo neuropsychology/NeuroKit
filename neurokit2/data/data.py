@@ -33,4 +33,3 @@ def data(dataset="bio_eventrelated_100hz"):
     data = pd.read_csv(path + dataset + ".csv")
 
     return data
-
