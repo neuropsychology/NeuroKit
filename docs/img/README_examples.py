@@ -5,6 +5,19 @@ import neurokit2 as nk
 
 
 # =============================================================================
+# Quick Example
+# =============================================================================
+
+# Download an example dataset
+data = nk.data("bio_eventrelated_100hz")
+
+# Preprocess the data (clean signals, filter, etc.)
+processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
+
+# Compute relevant features
+results = nk.bio_analyze(processed_data, sampling_rate=100)
+
+# =============================================================================
 # Simulate physiological signals
 # =============================================================================
 

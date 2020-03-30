@@ -3,6 +3,9 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
+        
+.. image:: https://img.shields.io/pypi/dm/neurokit2
+        :target: https://pypi.python.org/pypi/neurokit2
 
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
@@ -12,15 +15,12 @@
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit
-  
-.. image:: https://img.shields.io/pypi/dm/neurokit2
-        :target: https://pypi.python.org/pypi/neurokit2
-        
+
 .. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
        :alt: Maintainability
-   
-  
+
+
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
 This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package providing an easy access to complex statistical routines for researchers and clinicians with not much experience in programming, statistics or signal theory, so that they can literally **analyze physiological data with only two lines of code**.
@@ -33,10 +33,9 @@ Quick Example
 
     # Load packages
     import neurokit2 as nk  
-    import pandas as pd
     
     # Download an example dataset
-    data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
+    data = nk.data("bio_eventrelated_100hz")
     
     # Preprocess the data (clean signals, filter, etc.)
     processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
