@@ -40,7 +40,7 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
     >>>
     >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=60)
     >>> ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=True)
+    >>> nk.ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=True)
 
     """
     # Sanitize inputs
