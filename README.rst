@@ -11,14 +11,14 @@
         :target: https://pypi.python.org/pypi/neurokit2
 
 .. image:: https://travis-ci.org/neuropsychology/NeuroKit.svg?branch=master
-    :target: https://travis-ci.org/neuropsychology/NeuroKit
+        :target: https://travis-ci.org/neuropsychology/NeuroKit
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit
 
 .. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
-       :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
-       :alt: Maintainability
+        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
+        :alt: Maintainability
 
 
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
@@ -75,7 +75,7 @@ Documentation
         :alt: Tutorials
         
 .. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
-   :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
+        :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
         
 .. image:: https://mybinder.org/badge_logo.svg
         :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
@@ -189,6 +189,7 @@ Simulate physiological signals
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
+        :target: https://neurokit2.readthedocs.io/en/latest/examples/simulation.html
 
 
 Electrodermal Activity (EDA/GSR)
@@ -206,6 +207,7 @@ Electrodermal Activity (EDA/GSR)
     nk.eda_plot(signals, sampling_rate=250)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
+        :target: https://neurokit2.readthedocs.io/en/latest/examples/eda.html
 
 
 Cardiac activity (ECG)
@@ -224,6 +226,7 @@ Cardiac activity (ECG)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
+        :target: https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html
 
 
 Respiration (RSP)
@@ -242,6 +245,7 @@ Respiration (RSP)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_rsp.png
+        :target: https://neurokit2.readthedocs.io/en/latest/examples/rrv.html
 
 
 Electromyography (EMG)
@@ -260,6 +264,7 @@ Electromyography (EMG)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
+
 
 Photoplethysmography (PPG/BVP)
 -------------------------------

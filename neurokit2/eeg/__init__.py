@@ -1,3 +1,4 @@
 """Submodule for NeuroKit."""
 
-from .eeg_add_channel import eeg_add_channel
+from .mne_channel_add import mne_channel_add
+from .mne_channel_extract import mne_channel_extract

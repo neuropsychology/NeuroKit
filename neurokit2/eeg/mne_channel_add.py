@@ -6,8 +6,9 @@ import numpy as np
 
 
 
-def eeg_add_channel(raw, channel, channel_type=None, channel_name=None, sync_index_raw=0, sync_index_channel=0):
-    """
+def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_index_raw=0, sync_index_channel=0):
+    """Add channel as array to MNE
+
     Add a channel to a mne's Raw m/eeg file. It will basically synchronize the channel to the eeg data following a particular index and add it.
 
     Parameters
@@ -36,7 +37,7 @@ def eeg_add_channel(raw, channel, channel_type=None, channel_name=None, sync_ind
     >>> event_index_in_eeg = 42
     >>> event_index_in_ecg = 333
     >>>
-    >>> raw = nk.eeg_add_channel(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg")
+    >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg")
     """
     # Try loading bioread
     try:
@@ -75,4 +76,4 @@ def eeg_add_channel(raw, channel, channel_type=None, channel_name=None, sync_ind
 
     raw.add_channels([channel], force_update_info=True)
 
-    return(raw)
+    return raw
