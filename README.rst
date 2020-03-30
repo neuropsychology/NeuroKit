@@ -191,8 +191,8 @@ Simulate physiological signals
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
 
 
-Electrodermal Activity (EDA)
------------------------------
+Electrodermal Activity (EDA/GSR)
+---------------------------------
 
 .. code-block:: python
 
@@ -276,6 +276,11 @@ Electrogastrography (EGG)
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
+
+Electrooculography (EOG)
+--------------------------
+
+Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
 
 Alternative Packages
