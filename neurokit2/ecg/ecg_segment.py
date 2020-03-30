@@ -38,10 +38,9 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=60)
+    >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> nk.ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=True)
-
     """
     # Sanitize inputs
     if rpeaks is None:
@@ -88,5 +87,11 @@ def _ecg_segment_window(heart_rate=None, rpeaks=None, sampling_rate=1000):
     # Window
     epochs_start = -0.35/m
     epochs_end = 0.5/m
+
+    # Adjust for high heart rates
+    if heart_rate >= 80:
+        c = 0.1
+        epochs_start = epochs_start - c
+        epochs_end = epochs_end + c
 
     return epochs_start, epochs_end
