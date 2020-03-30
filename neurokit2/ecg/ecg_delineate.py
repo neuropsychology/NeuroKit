@@ -27,8 +27,8 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
 
     Parameters
     ----------
-    ecg : list, array or Series
-        The raw ECG signal.
+    ecg_cleaned : list, array or Series
+        The cleaned ECG channel as returned by `ecg_clean()`.
     rpeaks : list, array or Series
         The samples at which R-peaks occur. Accessible with the key "ECG_R_Peaks" in the info dictionary returned by `ecg_findpeaks()`.
     sampling_rate : int
@@ -82,12 +82,29 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
     - Martínez, J. P., Almeida, R., Olmos, S., Rocha, A. P., & Laguna, P. (2004). A wavelet-based ECG delineator: evaluation on standard databases. IEEE Transactions on biomedical engineering, 51(4), 570-581.
 
     """
-    # Sanitize inputs
+    # Sanitize input for ecg_cleaned
+    if isinstance(ecg_cleaned, pd.DataFrame):
+        cols = [col for col in ecg_cleaned.columns if 'ECG_Clean' in col]
+        if len(cols) == 0:
+            raise ValueError("NeuroKit error: ecg_delineate(): Wrong input,"
+                             "we couldn't extract cleaned signal.")
+        else:
+            ecg_cleaned = ecg_cleaned[cols[0]].values
+    elif isinstance(ecg_cleaned, dict):
+        for i in ecg_cleaned:
+            cols = [col for col in ecg_cleaned[i].columns if 'ECG_Clean' in col]
+            if len(cols) == 0:
+                raise ValueError("NeuroKit error: ecg_delineate(): Wrong input,"
+                                 "we couldn't extract cleaned signal.")
+            else:
+                signals = epochs_to_df(ecg_cleaned)
+                ecg_cleaned = signals[cols[0]].values
+
+    # Sanitize input for rpeaks
     if rpeaks is None:
         _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
         rpeaks = rpeaks["ECG_R_Peaks"]
 
-    # Try retrieving right column
     if isinstance(rpeaks, dict):
         rpeaks = rpeaks["ECG_R_Peaks"]
 
