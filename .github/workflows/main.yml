@@ -17,6 +17,9 @@ jobs:
           #- windows-2016
           - windows-latest  # windows-2019
         python-version: [3.6, 3.7, 3.8]
+        exclude:
+          - os: windows-latest
+            python-version: 3.8
 
     steps:
     - uses: actions/checkout@v1
@@ -56,7 +59,7 @@ jobs:
         #conda install -c conda-forge cvxopt
         pip install cvxopt
         # Test
-        #pip install pytest
-        #python setup.py install
-        #tox
-        #pytest
+        pip install pytest
+        python setup.py install
+        tox
+        pytest
