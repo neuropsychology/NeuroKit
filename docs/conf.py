@@ -206,11 +206,11 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (master_doc,
-    'neurokit2.tex',
-     pdf_title,
-     author,
-    'manual'),
+        (master_doc,
+         'neurokit2.tex',
+         pdf_title,
+         author,
+         'manual'),
 ]
 
 
@@ -218,10 +218,12 @@ latex_documents = [
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
-man_pages = [(master_doc,
-    'neurokit2',
-    pdf_title,
-    [author], 1)
+man_pages = [
+        (master_doc,
+         'neurokit2',
+         pdf_title,
+         [author],
+         1)
 ]
 
 
@@ -232,12 +234,12 @@ man_pages = [(master_doc,
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc,
-    'neurokit2',
-    pdf_title,
-    author,
-    'neurokit2',
-    'One line description of project.',
-    'Miscellaneous'),
+     'neurokit2',
+     pdf_title,
+     author,
+     'neurokit2',
+     'One line description of project.',
+     'Miscellaneous'),
 ]
 
 
