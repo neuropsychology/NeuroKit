@@ -90,12 +90,12 @@ master_doc = 'index'
 # General information about the project.
 def find_author():
     result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__author__"), open('../neurokit2/__init__.py').read())
-    return result.group(1)
+    return str(result.group(1))
 
 
 project = u'NeuroKit'
 copyright = u"2020, Dominique Makowski"
-author = str(find_author())
+author = find_author()
 
 
 # The version info for the project you're documenting, acts as replacement
@@ -182,6 +182,7 @@ htmlhelp_basename = 'neurokit2doc'
 
 
 # -- Options for LaTeX output ------------------------------------------
+pdf_title = u'NeuroKit2 - Documentation'
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -205,9 +206,11 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'neurokit2.tex',
-     u'NeuroKit Documentation',
-     u'Dominique Makowski', 'manual'),
+    (master_doc, 
+    'neurokit2.tex',
+     pdf_title,
+     author, 
+     'manual'),
 ]
 
 
@@ -217,7 +220,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     (master_doc, 'neurokit2',
-     u'NeuroKit Documentation',
+     pdf_title,
      [author], 1)
 ]
 
@@ -229,7 +232,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'neurokit2',
-     u'NeuroKit Documentation',
+     pdf_title,
      author,
      'neurokit2',
      'One line description of project.',
