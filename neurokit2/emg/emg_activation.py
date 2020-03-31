@@ -6,7 +6,7 @@ from ..events import events_find
 from ..signal import signal_formatpeaks
 from ..signal import signal_binarize
 
-def emg_activation(emg_amplitude, sampling_rate=1000, method="mixture", threshold='default', duration_min="default"):
+def emg_activation(emg_amplitude, sampling_rate=1000, method="threshold", threshold='default', duration_min="default"):
     """Detects onset in EMG signal based on the amplitude threshold.
 
     Parameters
@@ -22,7 +22,7 @@ def emg_activation(emg_amplitude, sampling_rate=1000, method="mixture", threshol
         amplitude is superior to the threshold.
     threshold : float
         If `method` is 'mixture', then it corresponds to the minimum probability required
-        to be considered as activated (default to 0.5). If `method` is 'threshold', then
+        to be considered as activated (default to 0.33). If `method` is 'threshold', then
         it corresponds to the minimum amplitude to detect as onset. Defaults to one
         tenth of the standard deviation of `emg_amplitude`.
     duration_min : float
@@ -134,43 +134,10 @@ def _emg_activation_threshold(emg_amplitude, threshold='default'):
 def _emg_activation_mixture(emg_amplitude, threshold="default"):
 
     if threshold == 'default':
-        threshold = 0.5
+        threshold = 0.33
 
     activity = signal_binarize(emg_amplitude, method="mixture", threshold=threshold)
     return activity
-
-
-
-#def _emg_activation_powerbased(emg_cleaned, sampling_rate=1000, threshold=0.75):
-#    """
-#    >>> emg_cleaned = nk.emg_simulate(duration=20, n_bursts=3)
-#    >>> binarized_energy, info = _emg_activation_powerbased(emg_cleaned)
-#    >>> nk.signal_plot([emg_cleaned, binarized_energy], standardize=True)
-#    >>> nk.events_plot(info["EMG_Onsets"], emg_cleaned)
-#    >>> nk.events_plot(info["EMG_Onsets"], energy.values)
-#    """
-#
-#    # Preprocessing
-#    signal = np.abs(emg_cleaned)  # getting absolute value of the EMG channel
-#
-#    # Parameters
-#    window = np.int(0.5 * sampling_rate)  # related to the duration of a movement
-##    step = 100  # equivalent to resolution
-#
-#    # rolling window
-#    energy = pd.Series(signal).rolling(window, win_type='boxcar').sum()  # [::step]
-#
-#    # Get onsets
-#    binarized_energy = nk.signal_binarize(energy.fillna(0), threshold=energy.quantile(threshold))
-#    activations = nk.events_find(binarized_energy, duration_min=window)
-#
-#    # Prepare Output.
-#    info = {"EMG_Onsets": activations["onset"],
-#            "EMG_Offsets": activations["onset"] + activations["duration"]}
-#
-#    return binarized_energy, info
-
-
 
 
 # =============================================================================
@@ -203,31 +170,3 @@ def _emg_activation_activations(activity, sampling_rate=1000, duration_min="defa
             "EMG_Activity": new_activity}
 
     return info
-
-
-#def _emg_activation_offsets_onsets(activity):
-#
-#    # Extract indices of activated data points.
-#    activated = np.nonzero(activity)[0]
-#    baseline = np.nonzero(activity == False)[0]
-#
-#    onsets = np.intersect1d(activated - 1, baseline)
-#    offsets = np.intersect1d(activated + 1, baseline)
-#
-#    # Check that indices do not include first and last sample point.
-#    for i in zip(onsets, offsets):
-#        if i == 0 or i == len(activity-1):
-#            onsets.remove(i)
-#            offsets.remove(i)
-#
-#    # Extract indexes of activated samples
-#    activations = np.array([])
-#    for x, y in zip(onsets, offsets):
-#        activated = np.arange(x, y)
-#        activations = np.append(activations, activated)
-#
-#    # Prepare Output.
-#    info = {"EMG_Onsets": onsets,
-#            "EMG_Offsets": offsets,
-#            "EMG_Activity": activations}
-#    return info

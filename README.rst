@@ -257,7 +257,7 @@ Electromyography (EMG)
     emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
 
     # Process it
-    signals = nk.emg_process(emg, sampling_rate=250)
+    signal, info = nk.emg_process(emg, sampling_rate=250)
 
     # Visualise the processing
     nk.emg_plot(signals, sampling_rate=250)
