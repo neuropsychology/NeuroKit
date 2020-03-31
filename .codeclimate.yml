@@ -22,16 +22,16 @@ checks:
   method-count:
     enabled: true
   method-lines:
-    enabled: true
+    enabled: false
   nested-control-flow:
     enabled: true
   return-statements:
     enabled: true
   similar-code:
-    enabled: true
+    enabled: false
   identical-code:
     enabled: true
-    
+
 exclude_patterns:
 - "tests/"
 - "scripts/"

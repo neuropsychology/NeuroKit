@@ -5,6 +5,19 @@ import neurokit2 as nk
 
 
 # =============================================================================
+# Quick Example
+# =============================================================================
+
+# Download an example dataset
+data = nk.data("bio_eventrelated_100hz")
+
+# Preprocess the data (clean signals, filter, etc.)
+processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
+
+# Compute relevant features
+results = nk.bio_analyze(processed_data, sampling_rate=100)
+
+# =============================================================================
 # Simulate physiological signals
 # =============================================================================
 
@@ -98,7 +111,7 @@ plot.savefig("README_rsp.png", dpi=300, h_pad=3)
 emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
 
 # Process it
-signals, _ = nk.emg_process(emg, sampling_rate=250)
+signals, info = nk.emg_process(emg, sampling_rate=250)
 
 # Visualise the processing
 nk.emg_plot(signals, sampling_rate=250)
@@ -114,3 +127,6 @@ plot.savefig("README_emg.png", dpi=300, h_pad=3)
 
 # Generate 15 seconds of PPG signal (recorded at 250 samples / second)
 ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_state=333)
+
+# Process it
+#signals, info = nk.ppg_process(emg, sampling_rate=250)

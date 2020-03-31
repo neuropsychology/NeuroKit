@@ -3,46 +3,45 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
+        
+.. image:: https://img.shields.io/pypi/dm/neurokit2
+        :target: https://pypi.python.org/pypi/neurokit2
 
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg
         :target: https://pypi.python.org/pypi/neurokit2
 
 .. image:: https://travis-ci.org/neuropsychology/NeuroKit.svg?branch=master
-    :target: https://travis-ci.org/neuropsychology/NeuroKit
+        :target: https://travis-ci.org/neuropsychology/NeuroKit
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit
-  
-.. image:: https://img.shields.io/pypi/dm/neurokit2
-        :target: https://pypi.python.org/pypi/neurokit2
-        
+
 .. image:: https://api.codeclimate.com/v1/badges/517cb22bd60238174acf/maintainability
-       :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
-       :alt: Maintainability
-   
-  
+        :target: https://codeclimate.com/github/neuropsychology/NeuroKit/maintainability
+        :alt: Maintainability
+
+
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
 This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package providing an easy access to complex statistical routines for researchers and clinicians with not much experience in programming, statistics or signal theory, so that they can literally **analyze physiological data with only two lines of code**.
 
-..
-    Quick Example
-    =============
 
-    .. code-block:: python
+Quick Example
+=============
 
-        # Load packages
-        import neurokit2 as nk  
-        import pandas as pd
-        
-        # Download an example dataset
-        data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
-        
-        # Preprocess the data (clean signals, filter, etc.)
-        processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
-        
-        # Compute relevant features
-        results = nk.bio_analyze(processed_data, sampling_rate=100)  
+.. code-block:: python
+
+    # Load packages
+    import neurokit2 as nk  
+    
+    # Download an example dataset
+    data = nk.data("bio_eventrelated_100hz")
+    
+    # Preprocess the data (clean signals, filter, etc.)
+    processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
+    
+    # Compute relevant features
+    results = nk.bio_analyze(processed_data, sampling_rate=100)  
 
 
 Installation
@@ -76,7 +75,7 @@ Documentation
         :alt: Tutorials
         
 .. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
-   :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
+        :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
         
 .. image:: https://mybinder.org/badge_logo.svg
         :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
@@ -190,10 +189,11 @@ Simulate physiological signals
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
+        :target: https://neurokit2.readthedocs.io/en/latest/examples/simulation.html
 
 
-Electrodermal Activity (EDA)
------------------------------
+Electrodermal Activity (EDA/GSR)
+---------------------------------
 
 .. code-block:: python
 
@@ -207,6 +207,7 @@ Electrodermal Activity (EDA)
     nk.eda_plot(signals, sampling_rate=250)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
+        :target: https://neurokit2.readthedocs.io/en/latest/examples/eda.html
 
 
 Cardiac activity (ECG)
@@ -225,6 +226,7 @@ Cardiac activity (ECG)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
+        :target: https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html
 
 
 Respiration (RSP)
@@ -243,6 +245,7 @@ Respiration (RSP)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_rsp.png
+        :target: https://neurokit2.readthedocs.io/en/latest/examples/rrv.html
 
 
 Electromyography (EMG)
@@ -254,13 +257,14 @@ Electromyography (EMG)
     emg = nk.emg_simulate(duration=10, sampling_rate=250, burst_number=3)
 
     # Process it
-    signals = nk.emg_process(emg, sampling_rate=250)
+    signal, info = nk.emg_process(emg, sampling_rate=250)
 
     # Visualise the processing
     nk.emg_plot(signals, sampling_rate=250)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
+
 
 Photoplethysmography (PPG/BVP)
 -------------------------------
@@ -277,6 +281,11 @@ Electrogastrography (EGG)
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
+
+Electrooculography (EOG)
+--------------------------
+
+Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
 
 Alternative Packages
