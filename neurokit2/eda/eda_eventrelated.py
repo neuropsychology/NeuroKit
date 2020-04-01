@@ -44,7 +44,6 @@ def eda_eventrelated(epochs):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Example with simulated data
     >>> eda = nk.eda_simulate(duration=15, n_scr=3)
@@ -55,7 +54,7 @@ def eda_eventrelated(epochs):
     >>> nk.eda_eventrelated(epochs)
     >>>
     >>> # Example with real data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(eda=data["EDA"], sampling_rate=100)

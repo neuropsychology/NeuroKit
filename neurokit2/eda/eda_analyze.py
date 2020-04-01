@@ -44,10 +44,9 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
 
     >>> # Example 1: Download the data for event-related analysis
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data for event-related analysis
     >>> df, info = nk.bio_process(eda=data["EDA"], sampling_rate=100)
@@ -63,7 +62,7 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
     >>> nk.eda_analyze(epochs, sampling_rate=100)
     >>>
     >>> # Example 2: Download the resting-state data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_8min_100hz.csv")
+    >>> data = nk.data("bio_resting_8min_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.eda_process(data["EDA"], sampling_rate=100)
