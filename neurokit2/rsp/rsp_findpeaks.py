@@ -159,8 +159,8 @@ def _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=0.3):
     # their direct neighbor, i.e., define outliers in absolute amplitude
     # difference between neighboring extrema.
     vertical_diff = np.abs(np.diff(rsp_cleaned[extrema]))
-    average_diff = np.mean(vertical_diff)
-    min_diff = np.where(vertical_diff > (average_diff * amplitude_min))[0]
+    median_diff = np.median(vertical_diff)
+    min_diff = np.where(vertical_diff > (median_diff * amplitude_min))[0]
     extrema = extrema[min_diff]
 
     # Make sure that the alternation of peaks and troughs is unbroken. If
