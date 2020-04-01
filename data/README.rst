@@ -13,6 +13,7 @@ Here is a list of the datasets that has been used to illustrate Neurokit functio
 
 - Download it:
 .. code-block:: python
+
 	# Reading from the url itself:
 	data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_eventrelated_100hz.csv")
 
@@ -49,6 +50,7 @@ Here is a list of the datasets that has been used to illustrate Neurokit functio
 
 - Download it:
 .. code-block:: python
+
 	# Reading from the url itself:
 	data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
 
@@ -57,11 +59,11 @@ Here is a list of the datasets that has been used to illustrate Neurokit functio
 
 
 - Used in the following docstrings:
-  - `bio_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.bio_analyze>`_
-  - `ecg_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_analyze>`_
-  - `ecg_intervalrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_intervalrelated>`_
-  - `rsp_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_analyze>`_
-  - `rsp_intervalrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_intervalrelated>`_
+ - `bio_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.bio_analyze>`_
+ - `ecg_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_analyze>`_
+ - `ecg_intervalrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_intervalrelated>`_
+ - `rsp_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_analyze>`_
+ - `rsp_intervalrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_intervalrelated>`_
 
 - Used in the following examples:
   - `Interval-related Analysis <https://neurokit2.readthedocs.io/en/dev/examples/intervalrelated.html>`_
