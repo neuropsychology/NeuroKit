@@ -34,12 +34,7 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
         The processing pipeline to apply. Can be one of 'khodadad2018'
         (default) or 'biosppy'.
     interpolation_method : str
-        Method used to interpolate the rate between peaks. Can be 'linear',
-        'nearest', 'zero', 'slinear', 'quadratic', 'cubic', 'previous' or
-        'next'.  'zero', 'slinear', 'quadratic' and 'cubic' refer to a spline
-        interpolation of zeroth, first, second or third order; 'previous' and
-        'next' simply return the previous or next value of the point) or as an
-        integer specifying the order of the spline interpolator to use.
+        Method used to interpolate the rate between peaks. See `signal_interpolate()`.
 
     Returns
     -------
