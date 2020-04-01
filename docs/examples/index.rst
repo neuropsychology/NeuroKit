@@ -13,7 +13,7 @@ Contents:
    eda
    rrv
    heartbeats
-   ecg_delineation
+   ecg_delineate
 
 Cloud-based interactive examples
 =================================

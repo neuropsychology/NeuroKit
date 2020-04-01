@@ -10,7 +10,7 @@ def data(dataset="bio_eventrelated_100hz"):
     Parameters
     ----------
     dataset : str
-        The name of the dataset. The list and description is available `here <https://github.com/neuropsychology/NeuroKit/tree/master/data#datasets>`_.
+        The name of the dataset. The list and description is available `here <https://neurokit2.readthedocs.io/en/master/datasets.html#>`_.
 
     Returns
     -------

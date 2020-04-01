@@ -827,7 +827,7 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
     >>> import pandas as pd
     >>> import matplotlib.pyplot as plt
 
-    >>> ecg_signal = np.array(pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/example_ecg_1000hz.csv"))[:, 1]
+    >>> ecg_signal = np.array(pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/ecg_1000hz.csv"))[:, 1]
 
     >>> # Extract R-peaks locations
     >>> _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)

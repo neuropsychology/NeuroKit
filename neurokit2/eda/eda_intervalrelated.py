@@ -33,10 +33,9 @@ def eda_intervalrelated(data):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Download data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_8min_100hz.csv")
+    >>> data = nk.data("bio_resting_8min_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.eda_process(data["EDA"], sampling_rate=100)

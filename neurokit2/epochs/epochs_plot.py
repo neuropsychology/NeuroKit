@@ -33,10 +33,9 @@ def epochs_plot(epochs, legend=True, show=True):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Example with data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
     >>> nk.epochs_plot(epochs)

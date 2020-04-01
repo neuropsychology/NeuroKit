@@ -42,10 +42,10 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> Example 1: Event-related analysis
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
+    >>> # Download data
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], keep=data["Photosensor"], sampling_rate=100)
@@ -64,7 +64,8 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>> nk.bio_analyze(epochs)
     >>>
     >>> Example 2: Interval-related analysis
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
+    >>> # Download data
+    >>> data = nk.data("bio_resting_5min_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], sampling_rate=100)

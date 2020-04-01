@@ -37,10 +37,9 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Download data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_resting_5min_100hz.csv")
+    >>> data = nk.data("bio_resting_5min_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.rsp_process(data["RSP"], sampling_rate=100)

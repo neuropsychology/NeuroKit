@@ -104,7 +104,7 @@ Examples
 -  `Analyze Electrodermal Activity (EDA) <https://neurokit2.readthedocs.io/en/latest/examples/eda.html>`_
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
--  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineation.html>`_
+-  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
 
 
 *You can try out these examples directly in your browser by* `clicking here <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
@@ -287,7 +287,27 @@ Electrooculography (EOG)
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
+Analysis
+--------------------------
 
+
+The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
+
+- **Event-related** (`example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_): This type of analysis refers to physiological changes immediately occuring consecutively to an event. For instance, the rapid changes following the presentation of a stimulus (e.g., an emotional stimulus). This is the analysis usually appropriate for short epochs (< 10 seconds), where each epoch is locked to a specific stimulus. In this case, using `bio_analyze()` will compute the following features:
+
+  - **Rate changes** *(ECG, PPG, RSP)*: 
+  - **Peak characteristics** *(EDA)*: amplitude, rise time, peak-time, ...
+  - ...
+  
+- **Interval-related** (*no example yet*): This type of analysis refers to the characteristics and features of the physiological activity in longer periods of time (from a few seconds to days of activity). Typical use cases are either periods of resting-state, in which the activity is recorded for several minutes while the participant is at rest, or during different conditions in which there is no specific time-locked event (e.g., watching movies, listening to music, engaging in physical activity, etc.). For instance, this type of analysis is used when people want to compare the physiological activity under different intensities of physical exercice, or for different types of movies, or for different conditions of stress. In this case, using `bio_analyze()` will compute the following features:
+
+  - **Rate characteristics** *(ECG, PPG, RSP)*: mean, variability, ...
+  - **Number of peaks** *(EDA)*:
+  - ...
+  
+
+
+  
 Alternative Packages
 =====================
 

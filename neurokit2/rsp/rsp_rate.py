@@ -10,7 +10,8 @@ from ..signal import signal_smooth
 
 
 
-def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad2018"):
+def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad2018",
+             interpolation_method="cubic"):
     """Compute respiration (RSP) rate.
 
     Compute respiration rate with the specified method.
@@ -32,6 +33,8 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
     method : str
         The processing pipeline to apply. Can be one of 'khodadad2018'
         (default) or 'biosppy'.
+    interpolation_method : str
+        Method used to interpolate the rate between peaks. See `signal_interpolate()`.
 
     Returns
     -------
@@ -63,7 +66,8 @@ def rsp_rate(peaks, sampling_rate=1000, desired_length=None, method="khodadad201
     rate, peaks = _rsp_rate_preprocessing(rate, peaks, method=method)
 
     # Interpolate rates to desired_length samples.
-    rate = signal_interpolate(peaks, rate, desired_length=desired_length, method='quadratic')
+    rate = signal_interpolate(peaks, rate, desired_length=desired_length,
+                              method=interpolation_method)
 
     return rate
 

@@ -46,7 +46,6 @@ def rsp_eventrelated(epochs):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Example with simulated data
     >>> rsp, info = nk.rsp_process(nk.rsp_simulate(duration=20))
@@ -57,8 +56,7 @@ def rsp_eventrelated(epochs):
     >>> nk.rsp_eventrelated(epochs)
     >>>
     >>> # Example with real data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
-    >>>
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>> # Process the data
     >>> df, info = nk.bio_process(rsp=data["RSP"], sampling_rate=100)
     >>> events = nk.events_find(data["Photosensor"],
