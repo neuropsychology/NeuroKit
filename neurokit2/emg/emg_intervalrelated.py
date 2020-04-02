@@ -34,7 +34,7 @@ def emg_intervalrelated(data):
     >>> import neurokit2 as nk
     >>>
     >>> # Example with simulated data
-    >>> emg = nk.emg_simulate(duration=40, sampling_rate=1000, n_bursts=3)
+    >>> emg = nk.emg_simulate(duration=40, sampling_rate=1000, burst_number=3)
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     >>>
     >>> # Single dataframe is passed
