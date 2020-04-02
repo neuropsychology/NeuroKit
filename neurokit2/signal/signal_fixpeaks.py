@@ -44,11 +44,11 @@ def signal_fixpeaks(peaks, sampling_rate=1000, interval_min=None, interval_max=N
     >>>
     >>> signal = nk.signal_simulate(duration=4, sampling_rate=1000, frequency=1)
     >>> peaks_true = nk.signal_findpeaks(signal)["Peaks"]
-    >>> peaks = np.delete(peaks_true, [1])  # Create wholes
+    >>> peaks = np.delete(peaks_true, [1])  # Create holes
 
     >>> signal = nk.signal_simulate(duration=20, sampling_rate=1000, frequency=1)
     >>> peaks_true = nk.signal_findpeaks(signal)["Peaks"]
-    >>> peaks = np.delete(peaks_true, [5, 15])  # Create wholes
+    >>> peaks = np.delete(peaks_true, [5, 15])  # Create holes
     >>> peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # Add artifacts
     >>>
     >>> peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5)
