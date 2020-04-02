@@ -128,3 +128,40 @@ def _eda_simulate_scr(sampling_rate=1000,
     ft = ft[0:len(t)]
     ft = ft/np.max(ft)
     return ft
+
+
+
+
+
+def _eda_simulate_bateman(sampling_rate=1000, t1=.75, t2=2):
+    """
+    Generates the bateman function:
+    :math:`b = e^{-t/T1} - e^{-t/T2}`
+
+    Parameters
+    ----------
+    fsamp : float
+        Sampling frequency
+    par_bat: list (T1, T2)
+
+        Parameters of the bateman function
+    Returns
+    -------
+    bateman : array
+        The bateman function
+
+    Examples
+    ----------
+    >>> bateman = _eda_simulate_bateman()
+    >>> nk.signal_plot(bateman)
+    """
+
+    idx_T1 = t1 * sampling_rate
+    idx_T2 = t2 * sampling_rate
+    len_bat = idx_T2 * 10
+    idx_bat = np.arange(len_bat)
+    bateman = np.exp(-idx_bat / idx_T2) - np.exp(-idx_bat / idx_T1)
+
+    # normalize
+    bateman = sampling_rate * bateman / np.sum(bateman)
+    return bateman
