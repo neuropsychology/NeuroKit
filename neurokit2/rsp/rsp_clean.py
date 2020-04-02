@@ -88,7 +88,7 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
     # highcut at 3 Hz (preserves breathing rates slower than 180 breath per
     # minute).
     clean = signal_filter(rsp_signal, sampling_rate=sampling_rate, lowcut=.05,
-                          highcut=3, order=2)
+                          highcut=3, order=2, method="butterworth_ba")
 
     return clean
 
