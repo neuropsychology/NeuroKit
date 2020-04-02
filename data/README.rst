@@ -19,37 +19,7 @@ ECG *(1000 hz)*
 .. code-block:: python
 
 	# Using nk.data()
-	data = nk.data(dataset="ecg_1000hz")
-
-
-ECG - pandas *(2000 hz)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 2000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_2000_pandas")
-
-
-ECG - poly *(2000 hz)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 2000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_2000_poly")
+	data = nk.data(dataset="ecg_1000hz")['ECG']
 
 
 ECG - pandas *(3000 hz)*
@@ -64,38 +34,7 @@ ECG - pandas *(3000 hz)*
 .. code-block:: python
 
 	# Using nk.data()
-	data = nk.data(dataset="ecg_3000_pandas")
-
-
-ECG - poly *(3000 hz)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 3000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_3000_poly")
-
-ECG *(3000 hz)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 3000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_3000hz")
-
-
+	data = nk.data(dataset="ecg_3000_pandas")['ECG']
 
 
 Multimodal data
