@@ -7,7 +7,7 @@ NeuroKit includes datasets that can be used for testing. These datasets are not 
 Specific signals
 ------------------------------
 
-ecg_1000hz.csv
+ECG *(1000 hz)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Properties:
@@ -22,7 +22,7 @@ ecg_1000hz.csv
 	data = nk.data(dataset="ecg_1000hz")
 
 
-ecg_2000_pandas.csv
+ECG - pandas *(2000 hz)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Properties:
@@ -37,7 +37,7 @@ ecg_2000_pandas.csv
 	data = nk.data(dataset="ecg_2000_pandas")
 
 
-ecg_2000_poly.csv
+ECG - poly *(2000 hz)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Properties:
@@ -52,7 +52,7 @@ ecg_2000_poly.csv
 	data = nk.data(dataset="ecg_2000_poly")
 
 
-ecg_3000_pandas.csv
+ECG - pandas *(3000 hz)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Properties:
@@ -67,7 +67,7 @@ ecg_3000_pandas.csv
 	data = nk.data(dataset="ecg_3000_pandas")
 
 
-ecg_3000_poly.csv
+ECG - poly *(3000 hz)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Properties:
@@ -81,7 +81,7 @@ ecg_3000_poly.csv
 	# Using nk.data()
 	data = nk.data(dataset="ecg_3000_poly")
 
-ecg_3000hz.csv
+ECG *(3000 hz)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Properties:
@@ -101,7 +101,7 @@ ecg_3000hz.csv
 Multimodal data
 ------------------------------
 
-bio_eventrelated_100hz.csv
+Event-related *(4 events)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
@@ -141,7 +141,7 @@ bio_eventrelated_100hz.csv
  - `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/dev/examples/rrv.html>`_
 
 
-bio_resting_5min_100hz.csv
+Resting state *(5 min)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Properties:
@@ -170,7 +170,7 @@ bio_resting_5min_100hz.csv
  - `Interval-related Analysis <https://neurokit2.readthedocs.io/en/dev/examples/intervalrelated.html>`_
 
 
-bio_resting_8min_100hz.csv
+Resting state *(8 min)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Properties:

@@ -183,7 +183,7 @@ htmlhelp_basename = 'neurokit2doc'
 
 # -- Options for LaTeX output ------------------------------------------
 pdf_title = u'NeuroKit2'
-author_field = u'Official Docmumentation'
+author_field = u'Official Documentation'
 
 
 latex_elements = {
@@ -240,7 +240,7 @@ texinfo_documents = [
      pdf_title,
      author_field,
      'neurokit2',
-     'One line description of project.',
+     'The Python Toolbox for Neurophysiological Signal Processing.',
      'Miscellaneous'),
 ]
 
