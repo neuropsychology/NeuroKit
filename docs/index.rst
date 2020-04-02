@@ -1,25 +1,20 @@
 Documentation
 ==============
 
-Introduction
-------------
-
-
-Nice intro.
-
 
 
 .. toctree::
    :maxdepth: 3
 
+   introduction
+   authors
+   contributing
    installation
-   news
    tutorials/index
    examples/index
    datasets
    functions
-   contributing
-   credits
+
 
 .. only:: comment
     Indices and tables
