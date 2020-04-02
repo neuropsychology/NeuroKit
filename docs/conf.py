@@ -182,7 +182,9 @@ htmlhelp_basename = 'neurokit2doc'
 
 
 # -- Options for LaTeX output ------------------------------------------
-pdf_title = u'NeuroKit2 - Documentation'
+pdf_title = u'NeuroKit2'
+author_field = u'Official Docmumentation'
+
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -209,7 +211,7 @@ latex_documents = [
         (master_doc,
          'neurokit2.tex',
          pdf_title,
-         author,
+         author_field,
          'manual'),
 ]
 
@@ -222,7 +224,7 @@ man_pages = [
         (master_doc,
          'neurokit2',
          pdf_title,
-         [author],
+         [author_field],
          1)
 ]
 
@@ -236,7 +238,7 @@ texinfo_documents = [
     (master_doc,
      'neurokit2',
      pdf_title,
-     author,
+     author_field,
      'neurokit2',
      'One line description of project.',
      'Miscellaneous'),
