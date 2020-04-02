@@ -358,3 +358,33 @@ def test_ecg_hrv():
                         'HRV_SD1', 'HRV_SD2', 'HRV_SD2SD1', 'HRV_CSI', 'HRV_CVI',
                         'HRV_CSI_Modified', 'HRV_SampEn']
                for elem in np.array(ecg_fast_hrv.columns.values, dtype=str))
+
+
+def test_ecg_intervalrelated():
+
+    data = nk.data("bio_resting_5min_100hz")
+    df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
+    columns = ['ECG_Rate_Mean', 'ECG_HRV_RMSSD', 'ECG_HRV_MeanNN', 'ECG_HRV_SDNN',
+               'ECG_HRV_SDSD', 'ECG_HRV_CVNN', 'ECG_HRV_CVSD', 'ECG_HRV_MedianNN',
+               'ECG_HRV_MadNN', 'ECG_HRV_MCVNN', 'ECG_HRV_pNN50', 'ECG_HRV_pNN20',
+               'ECG_HRV_TINN', 'ECG_HRV_HTI', 'ECG_HRV_ULF', 'ECG_HRV_VLF',
+               'ECG_HRV_LF', 'ECG_HRV_HF', 'ECG_HRV_VHF', 'ECG_HRV_LFHF',
+               'ECG_HRV_LFn', 'ECG_HRV_HFn', 'ECG_HRV_LnHF', 'ECG_HRV_SD1',
+               'ECG_HRV_SD2', 'ECG_HRV_SD2SD1', 'ECG_HRV_CSI', 'ECG_HRV_CVI',
+               'ECG_HRV_CSI_Modified', 'ECG_HRV_SampEn']
+
+    # Test with signal dataframe
+    features_df = nk.ecg_intervalrelated(df)
+
+    assert all(elem in columns for elem
+               in np.array(features_df.columns.values, dtype=str))
+    assert features_df.shape[0] == 1  # Number of rows
+
+    # Test with dict
+    epochs = nk.epochs_create(df, events=[0, 15000],
+                              sampling_rate=100, epochs_end=150)
+    features_dict = nk.ecg_intervalrelated(epochs)
+
+    assert all(elem in columns for elem
+               in np.array(features_dict.columns.values, dtype=str))
+    assert features_dict.shape[0] == 2  # Number of rows

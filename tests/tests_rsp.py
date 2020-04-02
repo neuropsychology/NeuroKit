@@ -215,3 +215,31 @@ def test_rsp_rrv():
 #                        'RRV_LFn', 'RRV_HFn',
 #                        'RRV_SD1', 'RRV_SD2', 'RRV_SD2SD1','RRV_ApEn', 'RRV_SampEn', 'RRV_DFA']
 #               for elem in np.array(rsp110_rrv.columns.values, dtype=str))
+
+
+def test_rsp_intervalrelated():
+
+    data = nk.data("bio_resting_5min_100hz")
+    df, info = nk.rsp_process(data["RSP"], sampling_rate=100)
+    columns = ['RSP_Rate_Mean', 'RSP_Amplitude_Mean', 'RSP_RRV_SDBB',
+               'RSP_RRV_RMSSD', 'RSP_RRV_SDSD', 'RSP_RRV_VLF',
+               'RSP_RRV_LF', 'RSP_RRV_HF', 'RSP_RRV_LFHF',
+               'RSP_RRV_LFn', 'RSP_RRV_HFn', 'RSP_RRV_SD1',
+               'RSP_RRV_SD2', 'RSP_RRV_SD2SD1', 'RSP_RRV_ApEn',
+               'RSP_RRV_SampEn', 'RSP_RRV_DFA']
+
+    # Test with signal dataframe
+    features_df = nk.rsp_intervalrelated(df)
+
+    assert all(elem in columns for elem
+               in np.array(features_df.columns.values, dtype=str))
+    assert features_df.shape[0] == 1  # Number of rows
+
+    # Test with dict
+    epochs = nk.epochs_create(df, events=[0, 15000],
+                              sampling_rate=100, epochs_end=150)
+    features_dict = nk.rsp_intervalrelated(epochs)
+
+    assert all(elem in columns for elem
+               in np.array(features_dict.columns.values, dtype=str))
+    assert features_dict.shape[0] == 2  # Number of rows
