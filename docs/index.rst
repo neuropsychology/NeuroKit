@@ -8,12 +8,12 @@ Documentation
 
    introduction
    authors
-   contributing
    installation
    tutorials/index
    examples/index
    datasets
    functions
+   contributing
 
 
 .. only:: comment
