@@ -1,16 +1,115 @@
-========
 Datasets
 ========
 
-Here is a list of the datasets that has been used to illustrate Neurokit functions in examples and docstrings:
+NeuroKit includes datasets that can be used for testing. These datasets are not downloaded automatically with the package (to avoid increasing its weight), but can be downloaded via the `nk.data()` function.
 
-1. bio_eventrelated_100hz.csv
+
+Specific signals
 ------------------------------
+
+ECG *(1000 hz)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 - Properties:
 
- - Contains signals ECG, EDA, Photosensor, RSP
- - Event-related signals
- - Sampling rate: 100Hz
+ - Contains ECG signal
+ - Sampling rate: 1000Hz
+
+- Download it:
+.. code-block:: python
+
+	# Using nk.data()
+	data = nk.data(dataset="ecg_1000hz")
+
+
+ECG - pandas *(2000 hz)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Properties:
+
+ - Contains ECG signal
+ - Sampling rate: 2000Hz
+
+- Download it:
+.. code-block:: python
+
+	# Using nk.data()
+	data = nk.data(dataset="ecg_2000_pandas")
+
+
+ECG - poly *(2000 hz)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Properties:
+
+ - Contains ECG signal
+ - Sampling rate: 2000Hz
+
+- Download it:
+.. code-block:: python
+
+	# Using nk.data()
+	data = nk.data(dataset="ecg_2000_poly")
+
+
+ECG - pandas *(3000 hz)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Properties:
+
+ - Contains ECG signal
+ - Sampling rate: 3000Hz
+
+- Download it:
+.. code-block:: python
+
+	# Using nk.data()
+	data = nk.data(dataset="ecg_3000_pandas")
+
+
+ECG - poly *(3000 hz)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Properties:
+
+ - Contains ECG signal
+ - Sampling rate: 3000Hz
+
+- Download it:
+.. code-block:: python
+
+	# Using nk.data()
+	data = nk.data(dataset="ecg_3000_poly")
+
+ECG *(3000 hz)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Properties:
+
+ - Contains ECG signal
+ - Sampling rate: 3000Hz
+
+- Download it:
+.. code-block:: python
+
+	# Using nk.data()
+	data = nk.data(dataset="ecg_3000hz")
+
+
+
+
+Multimodal data
+------------------------------
+
+Event-related *(4 events)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+- Properties:
+
+  - Contains signals ECG, EDA, Photosensor, RSP
+  - Event-related signals
+  - Sampling rate: 100Hz
 
 - Download it:
 .. code-block:: python
@@ -42,8 +141,9 @@ Here is a list of the datasets that has been used to illustrate Neurokit functio
  - `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/dev/examples/rrv.html>`_
 
 
-2. bio_resting_5min_100hz.csv
-------------------------------
+Resting state *(5 min)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 - Properties:
 
  - Contains signals ECG, PPG, RSP
@@ -70,8 +170,9 @@ Here is a list of the datasets that has been used to illustrate Neurokit functio
  - `Interval-related Analysis <https://neurokit2.readthedocs.io/en/dev/examples/intervalrelated.html>`_
 
 
-3. bio_resting_8min_100hz.csv
-------------------------------
+Resting state *(8 min)*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 - Properties:
 
  - Contains signals ECG, RSP, EMG_A, EMG_B, EDA, PhotoSensor
@@ -91,84 +192,3 @@ Here is a list of the datasets that has been used to illustrate Neurokit functio
  - `eda_intervalrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda_intervalrelated>`_
 
 
-4. ecg_1000hz.csv
------------------
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 1000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_1000hz")
-
-
-5. ecg_2000_pandas.csv
-----------------------
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 2000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_2000_pandas")
-
-
-6. ecg_2000_poly.csv
---------------------
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 2000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_2000_poly")
-
-
-7. ecg_3000_pandas.csv
------------------------
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 3000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_3000_pandas")
-
-
-8. ecg_3000_poly.csv
------------------------
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 3000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_3000_poly")
-
-9. ecg_3000hz.csv
------------------------
-- Properties:
-
- - Contains ECG signal
- - Sampling rate: 3000Hz
-
-- Download it:
-.. code-block:: python
-
-	# Using nk.data()
-	data = nk.data(dataset="ecg_3000hz")

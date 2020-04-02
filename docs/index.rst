@@ -1,20 +1,24 @@
-Welcome to NeuroKit's documentation!
-======================================
+Documentation
+==============
+
+
 
 .. toctree::
    :maxdepth: 3
 
+   introduction
+   authors
    installation
-   news
    tutorials/index
    examples/index
    datasets
    functions
    contributing
-   credits
 
-Indices and tables
-==================
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+
+.. only:: comment
+    Indices and tables
+    ==================
+    * :ref:`genindex`
+    * :ref:`modindex`
+    * :ref:`search`

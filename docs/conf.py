@@ -125,7 +125,7 @@ language = None
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'default'
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
@@ -182,7 +182,9 @@ htmlhelp_basename = 'neurokit2doc'
 
 
 # -- Options for LaTeX output ------------------------------------------
-pdf_title = u'NeuroKit2 - Documentation'
+pdf_title = u'NeuroKit2'
+author_field = u'Official Documentation'
+
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -209,7 +211,7 @@ latex_documents = [
         (master_doc,
          'neurokit2.tex',
          pdf_title,
-         author,
+         author_field,
          'manual'),
 ]
 
@@ -222,7 +224,7 @@ man_pages = [
         (master_doc,
          'neurokit2',
          pdf_title,
-         [author],
+         [author_field],
          1)
 ]
 
@@ -236,9 +238,9 @@ texinfo_documents = [
     (master_doc,
      'neurokit2',
      pdf_title,
-     author,
+     author_field,
      'neurokit2',
-     'One line description of project.',
+     'The Python Toolbox for Neurophysiological Signal Processing.',
      'Miscellaneous'),
 ]
 
