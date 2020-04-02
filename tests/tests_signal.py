@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import neurokit2 as nk
 import scipy.signal
 
@@ -179,3 +180,44 @@ def test_signal_rate():
     rate = nk.signal_rate(info, sampling_rate=1000,
                        desired_length=test_length)
     assert rate.shape == (test_length, )
+
+
+def test_signal_plot():
+
+    # Test with array
+    signal = nk.signal_simulate(duration=10, sampling_rate=1000)
+    nk.signal_plot(signal, sampling_rate=1000)
+    fig = plt.gcf()
+    for ax in fig.get_axes():
+        handles, labels = ax.get_legend_handles_labels()
+    assert labels == ['Signal']
+    assert len(labels) == len(handles) == len([signal])
+    assert ax.get_xlabel() == 'Time (seconds)'
+    plt.close(fig)
+
+    # Test with dataframe
+    data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0,
+                                                       stop=20, num=1000)),
+                         "Signal3": np.sin(np.linspace(start=0,
+                                                       stop=20, num=1000)),
+                         "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+    nk.signal_plot(data, sampling_rate=None)
+    fig = plt.gcf()
+    for ax in fig.get_axes():
+        handles, labels = ax.get_legend_handles_labels()
+    assert labels == list(data.columns.values)
+    assert len(labels) == len(handles) == len(data.columns)
+    assert ax.get_xlabel() == 'Samples'
+    plt.close(fig)
+
+    # Test with list
+    signal = nk.signal_binarize(nk.signal_simulate(duration=10))
+    phase = nk.signal_phase(signal, method="percents")
+    nk.signal_plot([signal, phase])
+    fig = plt.gcf()
+    for ax in fig.get_axes():
+        handles, labels = ax.get_legend_handles_labels()
+    assert labels == ['Signal1', 'Signal2']
+    assert len(labels) == len(handles) == len([signal, phase])
+    assert ax.get_xlabel() == 'Samples'
+    plt.close(fig)
