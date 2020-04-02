@@ -27,29 +27,33 @@ def test_rsp_simulate():
 
 def test_rsp_clean():
 
-    sampling_rate = 1000
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=sampling_rate,
-                          respiratory_rate=15, random_state=42)
+    sampling_rate = 100
+    duration = 120
+    rsp = nk.rsp_simulate(duration=duration, sampling_rate=sampling_rate,
+                          respiratory_rate=15, noise=.1, random_state=42)
+    # Add linear drift (to test baseline removal).
+    rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate,
+                             linear_drift=True)
 
-    khodadad2018 = nk.rsp_clean(rsp, sampling_rate=1000, method="khodadad2018")
+    khodadad2018 = nk.rsp_clean(rsp, sampling_rate=sampling_rate,
+                                method="khodadad2018")
     assert len(rsp) == len(khodadad2018)
 
-    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=1000, method="biosppy")
+    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate,
+                               method="biosppy")
     assert len(rsp) == len(rsp_biosppy)
 
-
     # Check if filter was applied.
-    fft_raw = np.fft.rfft(rsp)
-    fft_khodadad2018 = np.fft.rfft(khodadad2018)
-    fft_biosppy = np.fft.rfft(rsp_biosppy)
+    fft_raw = np.abs(np.fft.rfft(rsp))
+    fft_khodadad2018 = np.abs(np.fft.rfft(khodadad2018))
+    fft_biosppy = np.abs(np.fft.rfft(rsp_biosppy))
 
-    freqs = np.fft.rfftfreq(len(rsp), 1/sampling_rate)
-#    assert np.sum(fft_raw[freqs > 2]) > np.sum(fft_khodadad2018[freqs > 2])
-    assert np.sum(fft_raw[freqs > 2]) > np.sum(fft_biosppy[freqs > 2])
-    assert np.sum(fft_khodadad2018[freqs > 2]) > np.sum(fft_biosppy[freqs > 2])
+    freqs = np.fft.rfftfreq(len(rsp), 1 / sampling_rate)
 
-    # Check if detrending was applied.
-    assert np.mean(rsp) > np.mean(khodadad2018)
+    assert np.sum(fft_raw[freqs > 3]) > np.sum(fft_khodadad2018[freqs > 3])
+    assert np.sum(fft_raw[freqs < .05]) > np.sum(fft_khodadad2018[freqs < .05])
+    assert np.sum(fft_raw[freqs > .35]) > np.sum(fft_biosppy[freqs > .35])
+    assert np.sum(fft_raw[freqs < .1]) > np.sum(fft_biosppy[freqs < .1])
 
     # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py#L62)
     rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
@@ -74,8 +78,8 @@ def test_rsp_peaks():
     assert signals["RSP_Troughs"].sum() == 28
     assert info["RSP_Peaks"].shape[0] == 28
     assert info["RSP_Troughs"].shape[0] == 28
-    assert np.allclose(info["RSP_Peaks"].sum(), 1643765)
-    assert np.allclose(info["RSP_Troughs"].sum(), 1586481)
+    assert np.allclose(info["RSP_Peaks"].sum(), 1643817)
+    assert np.allclose(info["RSP_Troughs"].sum(), 1586588)
     # Assert that extrema start with a trough and end with a peak.
     assert info["RSP_Peaks"][0] > info["RSP_Troughs"][0]
     assert info["RSP_Peaks"][-1] > info["RSP_Troughs"][-1]
@@ -153,6 +157,7 @@ def test_rsp_plot():
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     plt.close(fig)
+
 
 def test_rsp_eventrelated():
 
