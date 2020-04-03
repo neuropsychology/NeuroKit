@@ -1,16 +1,16 @@
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg
+.. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg?logo=python&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
         
 .. image:: https://img.shields.io/pypi/dm/neurokit2
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://img.shields.io/pypi/v/neurokit2.svg
+.. image:: https://img.shields.io/pypi/v/neurokit2.svg?logo=pypi&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://travis-ci.org/neuropsychology/NeuroKit.svg?branch=master
+.. image:: https://img.shields.io/travis/neuropsychology/neurokit/master?label=Travis%20CI&logo=travis
         :target: https://travis-ci.org/neuropsychology/NeuroKit
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
