@@ -16,7 +16,7 @@ def test_read_acqknowledge():
     df, sampling_rate = nk.read_acqknowledge(os.path.join(path_data, "acqnowledge.acq"), sampling_rate=2000)
     assert sampling_rate == 2000
 
-    df, sampling_rate = nk.read_acqknowledge(os.path.join(path_data, "acqnowledge.acq"), sampling_rate='max)
+    df, sampling_rate = nk.read_acqknowledge(os.path.join(path_data, "acqnowledge.acq"), sampling_rate='max')
     assert sampling_rate == 4000
 
 def test_data():
