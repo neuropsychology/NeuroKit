@@ -11,4 +11,3 @@ dependencies:
     - nbsphinx
     - sphinx-nbexamples
     - sphinx-gallery
-    - sphinxemoji
