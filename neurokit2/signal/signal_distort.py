@@ -10,7 +10,8 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                    noise_amplitude=0, noise_frequency=100,
                    powerline_amplitude=0, powerline_frequency=50,
                    artifacts_amplitude=0, artifacts_frequency=100,
-                   n_artifacts=5, random_state=None, silent=False):
+                   n_artifacts=5, linear_drift=False, random_state=None,
+                   silent=False):
     """Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
@@ -21,6 +22,9 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
         The signal channel in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
+    noise_shape : str
+        The shape of the noise. Can be one of 'laplace' (default) or
+        'gaussian'.
     noise_amplitude : float
         The amplitude of the noise (the scale of the random function, relative
         to the standard deviation of the signal).
@@ -39,9 +43,8 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
     n_artifacts : int
         The number of artifact bursts. The bursts have a random duration
         between 1 and 10% of the signal duration.
-    noise_shape : str
-        The shape of the noise. Can be one of 'laplace' (default) or
-        'gaussian'.
+    linear_drift : bool
+        Whether or not to add linear drift to the signal.
     random_state : int
         Seed for the random number generator. Keep it fixed for reproducible
         results.
@@ -116,9 +119,20 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                                            n_artifacts=n_artifacts,
                                            silent=silent)
 
+    if linear_drift:
+        noise += _signal_linear_drift(signal)
+
     distorted = signal + noise
 
     return distorted
+
+
+def _signal_linear_drift(signal):
+
+    n_samples = len(signal)
+    linear_drift = np.arange(n_samples) * (1 / n_samples)
+
+    return linear_drift
 
 
 def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,

@@ -79,12 +79,16 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
     by `Khodadad et al. (2018)
     <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_.
     """
-    # Detrend and lowpass-filter the signal to be able to reliably detect
-    # zero crossings in raw signal.
-    clean = signal_detrend(rsp_signal, order=1)
-    clean = signal_filter(clean, sampling_rate=sampling_rate,
-                          lowcut=None, highcut=2,
-                          method="butterworth_ba", order=5)
+    # Slow baseline drifts / fluctuations must be removed from the raw
+    # breathing signal (i.e., the signal must be centered around zero) in order
+    # to be able to reliable detect zero-crossings.
+
+    # Remove baseline by applying a lowcut at .05Hz (preserves breathing rates
+    # higher than 3 breath per minute) and high frequency noise by applying a
+    # highcut at 3 Hz (preserves breathing rates slower than 180 breath per
+    # minute).
+    clean = signal_filter(rsp_signal, sampling_rate=sampling_rate, lowcut=.05,
+                          highcut=3, order=2, method="butterworth_ba")
 
     return clean
 
