@@ -2,11 +2,11 @@
 import datetime
 
 # Info
-__version__ = '0.0.21'
+__version__ = '0.0.22'
 
 
 # Maintainer info
-__author__ = """The NeuroKit development team"""
+__author__ = 'The NeuroKit development team'
 __email__ = 'dom.makowski@gmail.com'
 
 

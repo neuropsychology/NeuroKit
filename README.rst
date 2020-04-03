@@ -1,16 +1,16 @@
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg
+.. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg?logo=python&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
         
 .. image:: https://img.shields.io/pypi/dm/neurokit2
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://img.shields.io/pypi/v/neurokit2.svg
+.. image:: https://img.shields.io/pypi/v/neurokit2.svg?logo=pypi&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://travis-ci.org/neuropsychology/NeuroKit.svg?branch=master
+.. image:: https://img.shields.io/travis/neuropsychology/neurokit/master?label=Travis%20CI&logo=travis
         :target: https://travis-ci.org/neuropsychology/NeuroKit
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
@@ -27,25 +27,25 @@ This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychol
 
 
 Quick Example
-=============
+------------------
 
 .. code-block:: python
 
-    # Load packages
     import neurokit2 as nk  
     
-    # Download an example dataset
+    # Download example data
     data = nk.data("bio_eventrelated_100hz")
     
-    # Preprocess the data (clean signals, filter, etc.)
+    # Preprocess the data (filter, find peaks, etc.)
     processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
     
     # Compute relevant features
     results = nk.bio_analyze(processed_data, sampling_rate=100)  
 
+And **boom** 💥 your analysis is done 😎
 
 Installation
-============
+-------------
 
 To install NeuroKit2, run this command in your terminal:
 
@@ -54,13 +54,13 @@ To install NeuroKit2, run this command in your terminal:
     pip install https://github.com/neuropsychology/neurokit/zipball/master
 
 Contribution
-============
+-------------
 
 NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
 
 
 Documentation
-=============
+----------------
 
 .. image:: https://readthedocs.org/projects/neurokit2/badge/?version=latest
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
@@ -88,7 +88,7 @@ Documentation
 Click on the links above and check out our tutorials:
 
 Tutorials
----------
+^^^^^^^^^^
 
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
@@ -96,7 +96,7 @@ Tutorials
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 
 Examples
---------
+^^^^^^^^^^
 
 -  `Simulate Artificial Physiological Signals <https://neurokit2.readthedocs.io/en/latest/examples/simulation.html>`_
 -  `Customize your Processing Pipeline <https://neurokit2.readthedocs.io/en/latest/examples/custom.html>`_
@@ -116,7 +116,7 @@ Examples
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
         
 Citation
-=========
+---------
 
 .. image:: https://zenodo.org/badge/218212111.svg
    :target: https://zenodo.org/badge/latestdoi/218212111
@@ -151,7 +151,7 @@ Citation
 
 ..
     Design
-    =======
+    --------
 
     *NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
 
@@ -160,11 +160,11 @@ Citation
     - **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
 
 
-Overview
-========
+Preprocessing
+---------------
 
 Simulate physiological signals
-------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -193,7 +193,7 @@ Simulate physiological signals
 
 
 Electrodermal Activity (EDA/GSR)
----------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -211,7 +211,7 @@ Electrodermal Activity (EDA/GSR)
 
 
 Cardiac activity (ECG)
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -230,7 +230,7 @@ Cardiac activity (ECG)
 
 
 Respiration (RSP)
-------------------
+^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -249,7 +249,7 @@ Respiration (RSP)
 
 
 Electromyography (EMG)
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -267,7 +267,7 @@ Electromyography (EMG)
 
 
 Photoplethysmography (PPG/BVP)
--------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 
@@ -277,18 +277,18 @@ Photoplethysmography (PPG/BVP)
 
 
 Electrogastrography (EGG)
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
 
 Electrooculography (EOG)
---------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
 
 Analysis
---------------------------
+----------
 
 
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
@@ -306,16 +306,22 @@ The analysis of physiological data usually comes in two types, **event-related**
   - ...
   
 
+Popularity
+---------------------
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
+        :target: https://pypi.python.org/pypi/neurokit2
 
   
 Alternative Packages
-=====================
+---------------------
 
 Here's a list of great alternative packages that you should check out:
 
 
 General
---------
+^^^^^^^^
 
 - `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
 - `PySiology <https://github.com/Gabrock94/Pysiology>`_
@@ -323,8 +329,8 @@ General
 - `pyphysio <https://github.com/MPBA/pyphysio>`_
 
 
-ECG
-----
+ECG / PPG
+^^^^^^^^^^
 
 - `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
 - `hrv <https://github.com/rhenanbartels/hrv>`_
@@ -336,7 +342,7 @@ ECG
 - `Systole <https://github.com/embodied-computation-group/systole>`_
 
 EDA
----
+^^^^
 
 - `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
 - `cvxEDA <https://github.com/lciti/cvxEDA>`_
@@ -345,14 +351,14 @@ EDA
 - `EDA <https://github.com/mateusjoffily/EDA>`_ *(matlab)*
 
 EEG
-----
+^^^^
 
 - `MNE <https://github.com/mne-tools/mne-python>`_
 - `unfold <https://github.com/unfoldtoolbox/unfold>`_ *(matlab)*
   
   
 Eye-Tracking
--------------
+^^^^^^^^^^^^^^
 
 - `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
 - `PyTrack <https://github.com/titoghose/PyTrack>`_
@@ -360,6 +366,6 @@ Eye-Tracking
 
   
 Notes
-============
+-------
 
 *Note: The authors do not give any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to leak, the authors CANNOT IN ANY WAY be held responsible.*

@@ -3,15 +3,21 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import neurokit2 as nk
 
+import pypistats
+import datetime
+
+
+
 
 # =============================================================================
 # Quick Example
 # =============================================================================
 
-# Download an example dataset
+
+# Download example data
 data = nk.data("bio_eventrelated_100hz")
 
-# Preprocess the data (clean signals, filter, etc.)
+# Preprocess the data (filter, find peaks, etc.)
 processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
 
 # Compute relevant features
@@ -130,3 +136,73 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 
 # Process it
 #signals, info = nk.ppg_process(emg, sampling_rate=250)
+
+
+
+
+
+
+
+
+
+
+
+
+# =============================================================================
+# Popularity
+# =============================================================================
+# Pypi downloads
+data = pypistats.overall("neurokit2", total=True, format="pandas")
+
+# process
+data = data.groupby("date").sum().sort_values("date").reset_index()
+data["Trend"] = nk.fit_polynomial(data["downloads"])
+data["date"] = pd.to_datetime(data["date"]).dt.strftime('%d %b %Y')
+
+plot = data.plot(x="date", figsize=(10, 4), title="Downloads / day", legend=False)
+plot.set_xlabel(None)
+plot.figure.savefig("README_popularity.png", dpi=300)
+
+## GH stars
+#"https://seladb.github.io/StarTrack-js/#/preload?r=neuropsychology,neurokit&r=neuropsychology,neurokit.py&r=PIA-Group,BioSPPy&r=Gabrock94,Pysiology&r=Aura-healthcare,hrvanalysis&r=paulvangentcom,heartrate_analysis_python&r=embodied-computation-group,systole"
+#
+#import github
+#
+#gh = github.GitHub(username="DominiqueMakowski", password="something")
+#repo = gh.repos("neuropsychology", "NeuroKit")
+#repo = gh.repos("neuropsychology", "NeuroKit").collaborators("DominiqueMakowski")
+#
+#repo.get()
+#
+#views_14_days = repo.traffic.views.get()
+#
+#gh.repos("neuropsychology", "NeuroKit").collaborators("DominiqueMakowski").get()
+#
+#    try:
+#
+#    except:
+#        sys.exit('Username/org "' + org + '" or repo "' + repo + '" not found in github')
+#
+#    if user is not None and org != user:
+#        try:
+#            gh.repos(org, repo).collaborators(user).get()
+#        except:
+#            sys.exit('Username "' + user + '" does not have collaborator permissions in repo "' + repo + '"')
+#    views_14_days = gh.repos(org, repo).traffic.views.get()
+#    found_new_data = False
+#    for view_per_day in views_14_days['views']:
+#        timestamp = view_per_day['timestamp']
+#        data = { 'uniques': view_per_day['uniques'], 'count': view_per_day['count']}
+#        if db.get(timestamp) is None:
+#            db.set(timestamp, json.dumps(data))
+#            print timestamp, data
+#            found_new_data = True
+#        else:
+#            db_data = json.loads(db.get(timestamp))
+#            if db_data['uniques'] < data['uniques']:
+#                db.set(timestamp, json.dumps(data))
+#                print timestamp, data
+#                found_new_data = True
+#    if not found_new_data:
+#        print 'No new traffic data was found for ' + org + '/' + repo
+#    db.dump()

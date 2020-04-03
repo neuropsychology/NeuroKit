@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import os
 
 
 def data(dataset="bio_eventrelated_100hz"):
@@ -30,6 +31,10 @@ def data(dataset="bio_eventrelated_100hz"):
 
     path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
 
-    data = pd.read_csv(path + dataset + ".csv")
+    file, ext = os.path.splitext(dataset)
+    if ext == '':
+        data = pd.read_csv(path + dataset + ".csv")
+    else:
+        data = pd.read_csv(path + dataset)
 
     return data

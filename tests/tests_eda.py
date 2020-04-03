@@ -140,3 +140,26 @@ def test_eda_eventrelated():
                         "EDA_RiseTime", "EDA_RecoveryTime",
                         "Label"]
                for elem in np.array(eda_eventrelated.columns.values, dtype=str))
+
+
+def test_eda_intervalrelated():
+
+    data = nk.data("bio_resting_8min_100hz")
+    df, info = nk.eda_process(data["EDA"], sampling_rate=100)
+    columns = ['EDA_Peaks_N', 'EDA_Peaks_Amplitude_Mean']
+
+    # Test with signal dataframe
+    features_df = nk.eda_intervalrelated(df)
+
+    assert all(elem in columns for elem
+               in np.array(features_df.columns.values, dtype=str))
+    assert features_df.shape[0] == 1  # Number of rows
+
+    # Test with dict
+    epochs = nk.epochs_create(df, events=[0, 25300],
+                              sampling_rate=100, epochs_end=20)
+    features_dict = nk.eda_intervalrelated(epochs)
+
+    assert all(elem in columns for elem
+               in np.array(features_dict.columns.values, dtype=str))
+    assert features_dict.shape[0] == 2  # Number of rows
