@@ -31,10 +31,9 @@ Quick Example
 
 .. code-block:: python
 
-    # Load packages
     import neurokit2 as nk  
     
-    # Download an example dataset
+    # Download example data
     data = nk.data("bio_eventrelated_100hz")
     
     # Preprocess the data (clean signals, filter, etc.)

@@ -58,6 +58,7 @@ extensions = [
     'sphinx_rtd_theme',
     'nbsphinx',
     'sphinx_nbexamples',
+    'sphinxemoji.sphinxemoji',
 ]
 
 
