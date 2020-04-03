@@ -1,16 +1,16 @@
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/banner.png
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
 
-.. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg
+.. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg?logo=python&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
         
 .. image:: https://img.shields.io/pypi/dm/neurokit2
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://img.shields.io/pypi/v/neurokit2.svg
+.. image:: https://img.shields.io/pypi/v/neurokit2.svg?logo=pypi&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://travis-ci.org/neuropsychology/NeuroKit.svg?branch=master
+.. image:: https://img.shields.io/travis/neuropsychology/neurokit/master?label=Travis%20CI&logo=travis
         :target: https://travis-ci.org/neuropsychology/NeuroKit
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
@@ -34,18 +34,18 @@ Quick Example
 
 .. code-block:: python
 
-    # Load packages
     import neurokit2 as nk  
     
-    # Download an example dataset
+    # Download example data
     data = nk.data("bio_eventrelated_100hz")
     
-    # Preprocess the data (clean signals, filter, etc.)
+    # Preprocess the data (filter, find peaks, etc.)
     processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
     
     # Compute relevant features
     results = nk.bio_analyze(processed_data, sampling_rate=100)  
 
+And **boom** 💥 your analysis is done 😎
 
 Installation
 -------------
@@ -322,6 +322,24 @@ stress. In this case, using `bio_analyze()` will compute the following features:
   - ...
   
 
+Popularity
+---------------------
+
+.. image:: https://img.shields.io/pypi/dd/neurokit2
+        :target: https://pypi.python.org/pypi/neurokit2
+        
+.. image:: https://img.shields.io/github/stars/neuropsychology/NeuroKit   
+        :target: https://github.com/neuropsychology/NeuroKit/stargazers
+        
+.. image:: https://img.shields.io/github/forks/neuropsychology/NeuroKit   
+        :target: https://github.com/neuropsychology/NeuroKit/network
+
+.. image:: https://img.shields.io/twitter/url?style=social   
+        :target: https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fneuropsychology%2FNeuroKit
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
+        :target: https://pypi.python.org/pypi/neurokit2
 
   
 Alternative Packages

@@ -192,7 +192,7 @@ def test_signal_plot():
         handles, labels = ax.get_legend_handles_labels()
     assert labels == ['Signal']
     assert len(labels) == len(handles) == len([signal])
-    assert ax.get_xlabel() == 'Time (seconds)'
+    assert ax.get_xlabel() == 'Time (s)'
     plt.close(fig)
 
     # Test with dataframe
