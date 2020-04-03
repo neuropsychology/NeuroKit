@@ -6,7 +6,7 @@ The notebooks in this repo are meant to illustrate what you can do with NeuroKit
 You are free to click on the link below to run everything... **without having to install anything!** There you'll find a Jupyterlab with notebooks ready to fire up. If you need `help figuring out the interface <https://jupyterlab.readthedocs.io/en/stable/user/interface.html>`_. (The secret is ``shift+enter``).
 
 .. image:: https://mybinder.org/badge_logo.svg
- :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
+ :target: https://mybinder.org/v2/gh/neuropsychology/NeuroKit/master?urlpath=lab%2Ftree%2Fdocs%2Fexamples
 
 1. Biosignal Processing
 =========================
