@@ -306,6 +306,12 @@ The analysis of physiological data usually comes in two types, **event-related**
   - ...
   
 
+Popularity
+---------------------
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
+        :target: https://pypi.python.org/pypi/neurokit2
 
   
 Alternative Packages
