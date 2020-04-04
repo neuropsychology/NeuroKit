@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches
+import matplotlib.gridspec as gridspec
 import scipy.signal
 import scipy.stats
 
@@ -300,7 +301,17 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     c2 = info["c2"]
 
     # Visualize artifact type indices.
-    fig0, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
+
+    # Set grids
+    gs = matplotlib.gridspec.GridSpec(ncols=4, nrows=3,
+                                      width_ratios=[1, 2, 2, 2])
+    fig = plt.figure(constrained_layout=False)
+    ax0 = fig.add_subplot(gs[0, :-2])
+    ax1 = fig.add_subplot(gs[1, :-2])
+    ax2 = fig.add_subplot(gs[2, :-2])
+    ax3 = fig.add_subplot(gs[:, -1])
+    ax4 = fig.add_subplot(gs[:, -2])
+
     ax0.set_title("Artifact types", fontweight="bold")
     ax0.plot(rr, label="heart period")
     ax0.scatter(longshort_idcs, rr[longshort_idcs], marker='x', c='m',
@@ -326,46 +337,45 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax2.legend(loc="upper right")
 
     # Visualize subspaces.
-    fig1, (ax3, ax4) = plt.subplots(nrows=1, ncols=2)
-    ax3.set_title("Subspace 1", fontweight="bold")
-    ax3.set_xlabel("S11")
-    ax3.set_ylabel("S12")
-    ax3.scatter(drrs, s12, marker="x", label="heart periods")
+    ax4.set_title("Subspace 1", fontweight="bold")
+    ax4.set_xlabel("S11")
+    ax4.set_ylabel("S12")
+    ax4.scatter(drrs, s12, marker="x", label="heart periods")
     verts0 = [(min(drrs), max(s12)),
               (min(drrs), -c1 * min(drrs) + c2),
               (-1, -c1 * -1 + c2),
               (-1, max(s12))]
     poly0 = matplotlib.patches.Polygon(verts0, alpha=0.3, facecolor="r",
                                        edgecolor=None, label="ectopic periods")
-    ax3.add_patch(poly0)
+    ax4.add_patch(poly0)
     verts1 = [(1, -c1 * 1 - c2),
               (1, min(s12)),
               (max(drrs), min(s12)),
               (max(drrs), -c1 * max(drrs) - c2)]
     poly1 = matplotlib.patches.Polygon(verts1, alpha=0.3, facecolor="r",
                                        edgecolor=None)
-    ax3.add_patch(poly1)
-    ax3.legend(loc="upper right")
+    ax4.add_patch(poly1)
+    ax4.legend(loc="upper right")
 
-    ax4.set_title("Subspace 2", fontweight="bold")
-    ax4.set_xlabel("S21")
-    ax4.set_ylabel("S22")
-    ax4.scatter(drrs, s22, marker="x", label="heart periods")
+    ax3.set_title("Subspace 2", fontweight="bold")
+    ax3.set_xlabel("S21")
+    ax3.set_ylabel("S22")
+    ax3.scatter(drrs, s22, marker="x", label="heart periods")
     verts2 = [(min(drrs), max(s22)),
               (min(drrs), 1),
               (-1, 1),
               (-1, max(s22))]
     poly2 = matplotlib.patches.Polygon(verts2, alpha=0.3, facecolor="r",
                                        edgecolor=None, label="short periods")
-    ax4.add_patch(poly2)
+    ax3.add_patch(poly2)
     verts3 = [(1, -1),
               (1, min(s22)),
               (max(drrs), min(s22)),
               (max(drrs), -1)]
     poly3 = matplotlib.patches.Polygon(verts3, alpha=0.3, facecolor="y",
                                        edgecolor=None, label="long periods")
-    ax4.add_patch(poly3)
-    ax4.legend(loc="upper right")
+    ax3.add_patch(poly3)
+    ax3.legend(loc="upper right")
 
 
 def _threshold_normalization(data, alpha, window_half):
