@@ -51,8 +51,10 @@ def mutual_information(x, y, sigma=1, normalized=True):
     jh = np.histogram2d(x, y, bins=bins)[0]
 
     # smooth the jh with a gaussian filter of given sigma
-    scipy.ndimage.gaussian_filter(jh, sigma=sigma, mode='constant',
-                                 output=jh)
+    scipy.ndimage.gaussian_filter(jh,
+                                  sigma=sigma,
+                                  mode='constant',
+                                  output=jh)
 
     # compute marginal histograms
     jh = jh + np.finfo(float).eps
@@ -62,11 +64,9 @@ def mutual_information(x, y, sigma=1, normalized=True):
     s2 = np.sum(jh, axis=1).reshape((jh.shape[1], -1))
 
     if normalized:
-        mi = ((np.sum(s1 * np.log(s1)) + np.sum(s2 * np.log(s2)))
-                / np.sum(jh * np.log(jh))) - 1
+        mi = ((np.sum(s1 * np.log(s1)) + np.sum(s2 * np.log(s2))) / np.sum(jh * np.log(jh))) - 1
     else:
-        mi = ( np.sum(jh * np.log(jh)) - np.sum(s1 * np.log(s1))
-               - np.sum(s2 * np.log(s2)))
+        mi = (np.sum(jh * np.log(jh)) - np.sum(s1 * np.log(s1)) - np.sum(s2 * np.log(s2)))
 
     return mi
 
@@ -91,8 +91,8 @@ def _nearest_distances(X, k=1):
     '''
     knn = sklearn.neighbors.NearestNeighbors(n_neighbors=k + 1)
     knn.fit(X)
-    d, _ = knn.kneighbors(X) # the first nearest neighbor is itself
-    return d[:, -1] # returns the distance to the kth nearest neighbor
+    d, _ = knn.kneighbors(X)  # the first nearest neighbor is itself
+    return d[:, -1]  # returns the distance to the kth nearest neighbor
 
 
 
@@ -117,7 +117,7 @@ def _entropy(X, k=1):
     '''
 
     # Distance to kth nearest neighbor
-    r = _nearest_distances(X, k) # squared distances
+    r = _nearest_distances(X, k)  # squared distances
     n, d = X.shape
     volume_unit_ball = (np.pi**(.5*d)) / scipy.special.gamma(.5*d + 1)
     '''
@@ -128,4 +128,3 @@ def _entropy(X, k=1):
     '''
     return (d*np.mean(np.log(r + np.finfo(X.dtype).eps))
             + np.log(volume_unit_ball) + scipy.special.psi(n) - scipy.special.psi(k))
-
