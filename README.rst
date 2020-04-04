@@ -334,9 +334,6 @@ Popularity
 .. image:: https://img.shields.io/github/forks/neuropsychology/NeuroKit   
         :target: https://github.com/neuropsychology/NeuroKit/network
 
-.. image:: https://img.shields.io/twitter/url?style=social   
-        :target: https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fneuropsychology%2FNeuroKit
-
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
