@@ -9,8 +9,12 @@ import scipy.ndimage
 
 def mutual_information(x, y, sigma=1, normalized=True):
     """
-    Computes (normalized) mutual information between two vectors from a
-    joint histogram. By Gael Varoquaux (https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429).
+    Computes (normalized) mutual information (MI) between two vectors from a
+    joint histogram. The mutual information of two variables is
+    a measure of the mutual dependence between them. More
+    specifically, it quantifies the "amount of information" obtained
+    about one variable by observing the other variable.
+
 
     Parameters
     ----------
@@ -37,6 +41,7 @@ def mutual_information(x, y, sigma=1, normalized=True):
 
     References
     ----------
+    - Gael Varoquaux (https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429)
     - Studholme,  jhill & jhawkes (1998). "A normalized entropy measure
     of 3-D medical image alignment". in Proc. Medical Imaging 1998,
     vol. 3338, San Diego, CA, pp. 132-143.
