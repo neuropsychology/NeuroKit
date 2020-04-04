@@ -151,7 +151,7 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 import popularipy  # https://github.com/DominiqueMakowski/popularipy
 
 downloads = popularipy.pypi_downloads("neurokit2")
-stars = popularipy.github_stars("neuropsychology/neurokit", "e9c24f9a89e3b015876e797b8c1e97af59ee4c4f")
+stars = popularipy.github_stars("neuropsychology/neurokit", "accesstoken")
 
 # Plot
 data = downloads.merge(stars)

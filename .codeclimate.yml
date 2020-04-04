@@ -36,3 +36,4 @@ exclude_patterns:
 - "tests/"
 - "scripts/"
 - "data/"
+- "docs/img/"
