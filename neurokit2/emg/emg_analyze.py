@@ -93,7 +93,8 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
                 features = emg_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
-            duration = len(data) / sampling_rate
+            epoch_len = data['Label'].value_counts()[0]
+            duration = epoch_len / sampling_rate
             if duration >= 10:
                 features = emg_intervalrelated(data)
             else:

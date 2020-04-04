@@ -104,7 +104,8 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
                 features = eda_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
-            duration = len(data) / sampling_rate
+            epoch_len = data['Label'].value_counts()[0]
+            duration = epoch_len / sampling_rate
             if duration >= 10:
                 features = eda_intervalrelated(data)
             else:
