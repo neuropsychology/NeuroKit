@@ -897,6 +897,7 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
     features = pd.concat(dfs, axis=1)
 
     fig, ax = plt.subplots()
+    data.Label = data.Label.astype(int)
     for label in data.Label.unique():
         epoch_data = data[data.Label == label]
         ax.plot(epoch_data.Time, epoch_data.Signal, color='grey', alpha=0.2,  label='_nolegend_')
