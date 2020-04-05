@@ -7,3 +7,4 @@ from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .complexity_dfa import complexity_dfa
 from .mutual_information import mutual_information
+from .optimal_delay import optimal_delay
