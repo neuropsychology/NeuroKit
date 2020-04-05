@@ -4,22 +4,30 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.gridspec
 
-from ..ecg import ecg_findpeaks
+from ..ecg import ecg_fixpeaks
+from ..ecg import ecg_peaks
 from .ecg_segment import ecg_segment
 from ..epochs import epochs_to_df
-from ..epochs import epochs_create
 
-def ecg_plot(ecg_signals, sampling_rate=None):
+
+def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, artifacts=False):
     """Visualize ECG data.
 
     Parameters
     ----------
     ecg_signals : DataFrame
         DataFrame obtained from `ecg_process()`.
+    rpeaks : dict
+        The samples at which the R-peak occur. Dict returned by
+        `ecg_process()`. Defaults to None.
     sampling_rate : int
         The sampling frequency of the ECG (in Hz, i.e., samples/second). Needs
         to be supplied if the data should be plotted over time in seconds.
         Otherwise the data is plotted over samples. Defaults to None.
+        Must be specified to plot artifacts.
+    artifacts : bool
+        Whether or not to visualize artifacts and artifact thresholds,
+        produced by `ecg_fixpeaks()`. Defaults to False.
 
     Examples
     --------
@@ -35,7 +43,7 @@ def ecg_plot(ecg_signals, sampling_rate=None):
     """
     # Sanity-check input.
     if not isinstance(ecg_signals, pd.DataFrame):
-        print("NeuroKit error: The `ecg_signals` argument must be the "
+        print("NeuroKit error: ecg_plot(): The `ecg_signals` argument must be the "
               "DataFrame returned by `ecg_process()`.")
 
     # Extract R-peaks.
@@ -103,5 +111,17 @@ def ecg_plot(ecg_signals, sampling_rate=None):
         for x, color in zip(heartbeats_pivoted, cmap):
             line, = ax2.plot(heartbeats_pivoted[x], color=color)
             lines.append(line)
+
+    # Plot artifacts
+    if artifacts:
+        if sampling_rate is None:
+            raise ValueError("NeuroKit error: ecg_plot(): Sampling rate must"
+                             "be specified for artifacts to be plotted.")
+        if rpeaks is None:
+            _, rpeaks = ecg_peaks(ecg_signals["ECG_Clean"],
+                                  sampling_rate=sampling_rate)
+
+        ecg_fixpeaks(rpeaks, sampling_rate=sampling_rate,
+                     iterative=True, show=True)
 
     return fig

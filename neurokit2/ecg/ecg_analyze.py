@@ -104,7 +104,11 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
                 features = ecg_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
-            duration = len(data) / sampling_rate
+            if 'Label' in data.columns:
+                epoch_len = data['Label'].value_counts()[0]
+                duration = epoch_len / sampling_rate
+            else:
+                duration = len(data) / sampling_rate
             if duration >= 10:
                 features = ecg_intervalrelated(data)
             else:

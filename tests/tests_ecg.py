@@ -326,11 +326,11 @@ def test_ecg_hrv():
     ecg_slow = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=70, random_state=42)
     ecg_fast = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
 
-    ecg_slow, _ = nk.ecg_process(ecg_slow)
-    ecg_fast, _ = nk.ecg_process(ecg_fast)
+    ecg_slow, _ = nk.ecg_process(ecg_slow, sampling_rate=1000)
+    ecg_fast, _ = nk.ecg_process(ecg_fast, sampling_rate=1000)
 
-    ecg_slow_hrv = nk.ecg_hrv(ecg_slow)
-    ecg_fast_hrv = nk.ecg_hrv(ecg_fast)
+    ecg_slow_hrv = nk.ecg_hrv(ecg_slow, sampling_rate=1000)
+    ecg_fast_hrv = nk.ecg_hrv(ecg_fast, sampling_rate=1000)
 
     assert ecg_fast_hrv["HRV_RMSSD"][0] < ecg_slow_hrv["HRV_RMSSD"][0]
     assert ecg_fast_hrv["HRV_MeanNN"][0] < ecg_slow_hrv["HRV_MeanNN"][0]
@@ -343,12 +343,9 @@ def test_ecg_hrv():
     assert ecg_fast_hrv["HRV_pNN50"][0] == ecg_slow_hrv["HRV_pNN50"][0]
     assert ecg_fast_hrv["HRV_pNN20"][0] < ecg_slow_hrv["HRV_pNN20"][0]
     assert ecg_fast_hrv["HRV_TINN"][0] < ecg_slow_hrv["HRV_TINN"][0]
-#    assert ecg_fast_hrv["HRV_HTI"][0] > ecg_slow_hrv["HRV_HTI"][0]
-#    assert ecg_fast_hrv["HRV_ULF"][0] == ecg_slow_hrv["HRV_ULF"][0] == 0
-#    assert ecg_fast_hrv["HRV_VLF"][0] < ecg_slow_hrv["HRV_VLF"][0]
-#    assert ecg_fast_hrv["HRV_LF"][0] < ecg_slow_hrv["HRV_LF"][0]
-#    assert ecg_fast_hrv["HRV_HF"][0] < ecg_slow_hrv["HRV_HF"][0]
-#    assert ecg_fast_hrv["HRV_VHF"][0] > ecg_slow_hrv["HRV_VHF"][0]
+    assert ecg_fast_hrv["HRV_HTI"][0] > ecg_slow_hrv["HRV_HTI"][0]
+    assert ecg_fast_hrv["HRV_ULF"][0] == ecg_slow_hrv["HRV_ULF"][0] == 0
+
 
     assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
                         'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
@@ -358,6 +355,15 @@ def test_ecg_hrv():
                         'HRV_SD1', 'HRV_SD2', 'HRV_SD2SD1', 'HRV_CSI', 'HRV_CVI',
                         'HRV_CSI_Modified', 'HRV_SampEn']
                for elem in np.array(ecg_fast_hrv.columns.values, dtype=str))
+
+    # Test frequency domain
+    ecg1 = nk.ecg_simulate(duration=60, sampling_rate=2000, heart_rate=70, random_state=42)
+    hrv1 = nk.ecg_hrv(nk.ecg_process(ecg1, sampling_rate=2000)[0], sampling_rate=2000)
+
+    ecg2 = nk.signal_resample(ecg1, sampling_rate=2000, desired_sampling_rate=500)
+    hrv2 = nk.ecg_hrv(nk.ecg_process(ecg2, sampling_rate=500)[0], sampling_rate=500)
+
+    assert np.allclose(np.mean(hrv1[["HRV_HF", "HRV_LF", "HRV_VLF"]].iloc[0] - hrv2[["HRV_HF", "HRV_LF", "HRV_VLF"]].iloc[0]), 0, atol=1)
 
 
 def test_ecg_intervalrelated():

@@ -74,7 +74,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000):
     if len(rsp_cycle_center) - len(rsp_onsets) == 0:
         rsp_cycle_center = rsp_cycle_center[:-1]
     if len(rsp_cycle_center) - len(rsp_onsets) != -1:
-        print("NeuroKit Error: ecg_rsp(): Couldn't find"
+        print("NeuroKit error: ecg_rsp(): Couldn't find"
               "rsp cycles onsets and centers. Check your RSP signal.")
 
     # Methods
@@ -203,9 +203,10 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         if len(rsp_cols) != 2:
             edr = ecg_rsp(heart_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
-            print("NeuroKit Warning: _ecg_rsa_formatinput():"
-                  "RSP signal not found. RSP signal is derived from ECG using"
-                  "ecg_rsp(). Please provide RSP signal.")
+            print("NeuroKit warning: _ecg_rsa_formatinput():"
+                  "RSP signal not found. For this time, we will derive RSP"
+                  " signal from ECG using ecg_rsp(). But the results are "
+                  "definitely not reliable, so please provide a real RSP signal.")
     elif isinstance(rsp_signals, tuple):
         rsp_signals = rsp_signals[0]
 
@@ -214,7 +215,7 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         if len(rsp_cols) != 2:
             edr = ecg_rsp(heart_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
-            print("NeuroKit Warning: _ecg_rsa_formatinput():"
+            print("NeuroKit warning: _ecg_rsa_formatinput():"
                   "RSP signal not found. RSP signal is derived from ECG using"
                   "ecg_rsp(). Please provide RSP signal.")
 

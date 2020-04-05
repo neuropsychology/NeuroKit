@@ -221,3 +221,14 @@ def test_signal_plot():
     assert len(labels) == len(handles) == len([signal, phase])
     assert ax.get_xlabel() == 'Samples'
     plt.close(fig)
+
+
+def test_signal_power():
+
+    signal1 = nk.signal_simulate(duration=20, frequency=1, sampling_rate=500)
+    pwr1 = nk.signal_power(signal1, [[0.9, 1.1], [1.4, 1.6]], sampling_rate=500)
+
+    signal2 = nk.signal_simulate(duration=20, frequency=1, sampling_rate=100)
+    pwr2 = nk.signal_power(signal2, [[0.9, 1.1], [1.4, 1.6]], sampling_rate=100)
+
+    assert np.allclose(np.mean(pwr1.iloc[0] - pwr2.iloc[0]), 0, atol=0.01)

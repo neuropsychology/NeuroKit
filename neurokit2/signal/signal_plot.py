@@ -39,6 +39,14 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False):
     >>> nk.signal_plot([signal, data], standardize=True)
     """
     # Sanitize format
+    if isinstance(signal, list):
+        try:
+            for i in signal:
+                len(i)
+        except TypeError:
+            signal = np.array(signal)
+
+
     if isinstance(signal, pd.DataFrame) is False:
 
         # If list is passed

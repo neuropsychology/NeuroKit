@@ -23,7 +23,10 @@
 
 **The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
 
-This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_. It's a user-friendly package providing an easy access to complex statistical routines for researchers and clinicians with not much experience in programming, statistics or signal theory, so that they can literally **analyze physiological data with only two lines of code**.
+This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
+It's a user-friendly package providing easy access to advanced biosignal processing routines.
+Researchers and clinicians without extensive knowledge of programming or biomedical signal processing
+can **analyze physiological data with only two lines of code**.
 
 
 Quick Example
@@ -107,7 +110,7 @@ Examples
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
 
 
-*You can try out these examples directly in your browser by* `clicking here <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
+*You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
 **Don't know which tutorial is suited for your case?** Follow this flowchart:
 
@@ -198,7 +201,7 @@ Electrodermal Activity (EDA/GSR)
 .. code-block:: python
 
     # Generate 10 seconds of EDA signal (recorded at 250 samples / second) with 2 SCR peaks
-    eda = nk.eda_simulate(duration=10, sampling_rate=250, scr_number=2 drift=0.01)
+    eda = nk.eda_simulate(duration=10, sampling_rate=250, scr_number=2, drift=0.01)
 
     # Process it
     signals, info = nk.eda_process(eda, sampling_rate=250)
@@ -293,13 +296,26 @@ Analysis
 
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
 
-- **Event-related** (`example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_): This type of analysis refers to physiological changes immediately occuring consecutively to an event. For instance, the rapid changes following the presentation of a stimulus (e.g., an emotional stimulus). This is the analysis usually appropriate for short epochs (< 10 seconds), where each epoch is locked to a specific stimulus. In this case, using `bio_analyze()` will compute the following features:
+- **Event-related** (`example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_):
+This type of analysis refers to physiological changes immediately occurring in response to an event.
+For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus).
+In this situation the analysis is epoch-based. An epoch is a short chunk of the physiological signal
+(usually < 10 seconds), that is locked to a specific stimulus. In this case, using `bio_analyze()` will
+compute the following features:
 
   - **Rate changes** *(ECG, PPG, RSP)*: 
   - **Peak characteristics** *(EDA)*: amplitude, rise time, peak-time, ...
   - ...
   
-- **Interval-related** (*no example yet*): This type of analysis refers to the characteristics and features of the physiological activity in longer periods of time (from a few seconds to days of activity). Typical use cases are either periods of resting-state, in which the activity is recorded for several minutes while the participant is at rest, or during different conditions in which there is no specific time-locked event (e.g., watching movies, listening to music, engaging in physical activity, etc.). For instance, this type of analysis is used when people want to compare the physiological activity under different intensities of physical exercice, or for different types of movies, or for different conditions of stress. In this case, using `bio_analyze()` will compute the following features:
+- **Interval-related** (*no example yet*):
+This type of analysis refers to the physiological characteristics and features that occur over
+longer periods of time (from a few seconds to days of activity). Typical use cases are either
+periods of resting-state, in which the activity is recorded for several minutes while the participant
+is at rest, or during different conditions in which there is no specific time-locked event
+(e.g., watching movies, listening to music, engaging in physical activity, etc.). For instance,
+this type of analysis is used when people want to compare the physiological activity under different
+intensities of physical exercise, different types of movies, or different intensities of
+stress. In this case, using `bio_analyze()` will compute the following features:
 
   - **Rate characteristics** *(ECG, PPG, RSP)*: mean, variability, ...
   - **Number of peaks** *(EDA)*:
@@ -308,6 +324,15 @@ The analysis of physiological data usually comes in two types, **event-related**
 
 Popularity
 ---------------------
+
+.. image:: https://img.shields.io/pypi/dd/neurokit2
+        :target: https://pypi.python.org/pypi/neurokit2
+        
+.. image:: https://img.shields.io/github/stars/neuropsychology/NeuroKit   
+        :target: https://github.com/neuropsychology/NeuroKit/stargazers
+        
+.. image:: https://img.shields.io/github/forks/neuropsychology/NeuroKit   
+        :target: https://github.com/neuropsychology/NeuroKit/network
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
@@ -368,4 +393,5 @@ Eye-Tracking
 Notes
 -------
 
-*Note: The authors do not give any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to leak, the authors CANNOT IN ANY WAY be held responsible.*
+*Note: The authors do not provide any warranty. If this software causes your keyboard to blow up,
+your brain to liquify, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*

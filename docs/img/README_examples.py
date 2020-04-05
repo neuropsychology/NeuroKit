@@ -3,9 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import neurokit2 as nk
 
-import pypistats
-import datetime
-
 
 
 
@@ -151,58 +148,28 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 # =============================================================================
 # Popularity
 # =============================================================================
-# Pypi downloads
-data = pypistats.overall("neurokit2", total=True, format="pandas")
+import popularipy  # https://github.com/DominiqueMakowski/popularipy
 
-# process
-data = data.groupby("date").sum().sort_values("date").reset_index()
-data["Trend"] = nk.fit_polynomial(data["downloads"])
-data["date"] = pd.to_datetime(data["date"]).dt.strftime('%d %b %Y')
+downloads = popularipy.pypi_downloads("neurokit2")
+stars = popularipy.github_stars("neuropsychology/neurokit", "b547333010d0b1253ab44569df3efd94c8a93a63 ")
 
-plot = data.plot(x="date", figsize=(10, 4), title="Downloads / day", legend=False)
-plot.set_xlabel(None)
-plot.figure.savefig("README_popularity.png", dpi=300)
+data = downloads.merge(stars)
 
-## GH stars
-#"https://seladb.github.io/StarTrack-js/#/preload?r=neuropsychology,neurokit&r=neuropsychology,neurokit.py&r=PIA-Group,BioSPPy&r=Gabrock94,Pysiology&r=Aura-healthcare,hrvanalysis&r=paulvangentcom,heartrate_analysis_python&r=embodied-computation-group,systole"
-#
-#import github
-#
-#gh = github.GitHub(username="DominiqueMakowski", password="something")
-#repo = gh.repos("neuropsychology", "NeuroKit")
-#repo = gh.repos("neuropsychology", "NeuroKit").collaborators("DominiqueMakowski")
-#
-#repo.get()
-#
-#views_14_days = repo.traffic.views.get()
-#
-#gh.repos("neuropsychology", "NeuroKit").collaborators("DominiqueMakowski").get()
-#
-#    try:
-#
-#    except:
-#        sys.exit('Username/org "' + org + '" or repo "' + repo + '" not found in github')
-#
-#    if user is not None and org != user:
-#        try:
-#            gh.repos(org, repo).collaborators(user).get()
-#        except:
-#            sys.exit('Username "' + user + '" does not have collaborator permissions in repo "' + repo + '"')
-#    views_14_days = gh.repos(org, repo).traffic.views.get()
-#    found_new_data = False
-#    for view_per_day in views_14_days['views']:
-#        timestamp = view_per_day['timestamp']
-#        data = { 'uniques': view_per_day['uniques'], 'count': view_per_day['count']}
-#        if db.get(timestamp) is None:
-#            db.set(timestamp, json.dumps(data))
-#            print timestamp, data
-#            found_new_data = True
-#        else:
-#            db_data = json.loads(db.get(timestamp))
-#            if db_data['uniques'] < data['uniques']:
-#                db.set(timestamp, json.dumps(data))
-#                print timestamp, data
-#                found_new_data = True
-#    if not found_new_data:
-#        print 'No new traffic data was found for ' + org + '/' + repo
-#    db.dump()
+# Plot
+fig, axes = plt.subplots(2, 1, figsize=(7, 3))
+
+data.plot.area(x="Date", y="Downloads", ax=axes[0], legend=False, color="#2196F3")
+data.plot(x="Date", y="Trend", ax=axes[0], legend=False, color="#E91E63")
+data.plot.area(x="Date", y="Stars", ax=axes[1], legend=False, color="#FF9800")
+
+# Clean axes
+axes[0].xaxis.label.set_visible(False)
+axes[0].xaxis.set_ticks_position("none")
+axes[0].set_xticklabels([])
+axes[0].text(0.5, 0.9, "Downloads / Day", horizontalalignment='center', transform=axes[0].transAxes)
+axes[1].text(0.5, 0.9, "GitHub Stars", horizontalalignment='center', transform=axes[1].transAxes)
+axes[1].xaxis.label.set_visible(False)
+
+fig = plt.gcf()
+fig.set_size_inches(4*3, 2*3, forward=True)
+fig.savefig("README_popularity.png", dpi=300)

@@ -5,7 +5,8 @@ import numpy as np
 def _embed(signal, order=3, delay=1):
     """Time-delay embedding.
 
-    Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
+    Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_. It is equivalent to
+    the `delay_embedding()` function from 'nolds'.
 
     Parameters
     ----------
@@ -14,7 +15,7 @@ def _embed(signal, order=3, delay=1):
     order : int
         Embedding dimension (order).
     delay : int
-        Delay.
+        Time delay.
 
     Returns
     -------
@@ -23,7 +24,9 @@ def _embed(signal, order=3, delay=1):
 
     Examples
     ---------
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
+    >>> import neurokit2 as nk
+    >>>
+    >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> _embed(signal)
     """
     N = len(signal)
@@ -40,4 +43,4 @@ def _embed(signal, order=3, delay=1):
     for i in range(order):
         Y[i] = signal[i * delay:i * delay + Y.shape[1]]
 
-    return(Y.T)
+    return Y.T
