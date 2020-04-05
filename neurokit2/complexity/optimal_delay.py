@@ -44,13 +44,10 @@ def optimal_delay(signal, tau_max=100, show=False):
         lagged = np.roll(signal, -tau)[:-tau]
         values[i] = mutual_information(lagged, unlagged, normalized=True)
 
-        if i > 0 and optimal is None and values[i-1] < values[i]: # return first local minima
+        if i > 0 and optimal is None and values[i-1] < values[i]:  # return first local minima
             optimal = tau-1
 
     if show is True:
         signal_plot(values)
 
     return optimal
-
-
-
