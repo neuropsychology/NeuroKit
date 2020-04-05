@@ -326,11 +326,11 @@ def test_ecg_hrv():
     ecg_slow = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=70, random_state=42)
     ecg_fast = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
 
-    ecg_slow, _ = nk.ecg_process(ecg_slow)
-    ecg_fast, _ = nk.ecg_process(ecg_fast)
+    ecg_slow, _ = nk.ecg_process(ecg_slow, sampling_rate=1000)
+    ecg_fast, _ = nk.ecg_process(ecg_fast, sampling_rate=1000)
 
-    ecg_slow_hrv = nk.ecg_hrv(ecg_slow)
-    ecg_fast_hrv = nk.ecg_hrv(ecg_fast)
+    ecg_slow_hrv = nk.ecg_hrv(ecg_slow, sampling_rate=1000)
+    ecg_fast_hrv = nk.ecg_hrv(ecg_fast, sampling_rate=1000)
 
     assert ecg_fast_hrv["HRV_RMSSD"][0] < ecg_slow_hrv["HRV_RMSSD"][0]
     assert ecg_fast_hrv["HRV_MeanNN"][0] < ecg_slow_hrv["HRV_MeanNN"][0]
@@ -345,10 +345,7 @@ def test_ecg_hrv():
     assert ecg_fast_hrv["HRV_TINN"][0] < ecg_slow_hrv["HRV_TINN"][0]
     assert ecg_fast_hrv["HRV_HTI"][0] > ecg_slow_hrv["HRV_HTI"][0]
     assert ecg_fast_hrv["HRV_ULF"][0] == ecg_slow_hrv["HRV_ULF"][0] == 0
-    assert ecg_fast_hrv["HRV_VLF"][0] < ecg_slow_hrv["HRV_VLF"][0]
-    assert ecg_fast_hrv["HRV_LF"][0] < ecg_slow_hrv["HRV_LF"][0]
-    assert ecg_fast_hrv["HRV_HF"][0] < ecg_slow_hrv["HRV_HF"][0]
-    assert ecg_fast_hrv["HRV_VHF"][0] > ecg_slow_hrv["HRV_VHF"][0]
+
 
     assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
                         'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
