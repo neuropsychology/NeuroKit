@@ -61,14 +61,17 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
                                                                        normalization='full',
                                                                        verbose=False)
         except ImportError:
-            print("NeuroKit warning: signal_psd(): the 'mne'",
-                  "module is required for the 'mne' method to run.",
-                  "Please install it first (`pip install mne`). For now,",
-                  "'method' has been set to 'welch'.")
-            method = "welch"
+            raise ImportError("NeuroKit warning: signal_psd(): the 'mne'",
+                              "module is required for the 'mne' method to run.",
+                              "Please install it first (`pip install mne`).")
 
-    # Scipy
-    if method.lower() not in ["multitapers", "mne", "burg", "pburg", "spectrum"]:
+    # BURG
+    elif method.lower() in ["burg", "pburg", "spectrum"]:
+        raise ValueError("NeuroKit warning: signal_psd(): the 'BURG'",
+                         "method has not been yet implemented.")
+
+    # Welch (Scipy)
+    else:
 
         if max_frequency == np.inf:
             max_frequency = int(sampling_rate / 2)

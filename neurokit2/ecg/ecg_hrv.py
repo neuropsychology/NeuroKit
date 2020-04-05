@@ -75,10 +75,15 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> ecg = nk.ecg_simulate(duration=240)
-    >>> ecg, info = nk.ecg_process(ecg)
-    >>> hrv = nk.ecg_hrv(ecg, show=True)
+    >>> ecg = nk.ecg_simulate(duration=240, sampling_rate=1000)
+    >>> ecg, info = nk.ecg_process(ecg, sampling_rate=1000)
+    >>> hrv = nk.ecg_hrv(ecg, sampling_rate=1000, show=True)
     >>> hrv
+    >>> hrv[["HRV_HF"]]
+    >>>
+    >>> ecg = nk.ecg_simulate(duration=240, sampling_rate=200)
+    >>> ecg, info = nk.ecg_process(ecg, sampling_rate=200)
+    >>> hrv = nk.ecg_hrv(ecg, sampling_rate=200)
 
     References
     ----------
@@ -91,12 +96,12 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
 
     # Get raw and interpolated R-R intervals
     rri = np.diff(rpeaks) / sampling_rate * 1000
-    ecg_period = ecg_rate / 60 * sampling_rate
+    ecg_period = ecg_rate / 60 * 1000
 
     # Get indices
     hrv = {}  # Initialize empty dict
     hrv.update(_ecg_hrv_time(rri))
-    hrv.update(_ecg_hrv_frequency(ecg_period))
+    hrv.update(_ecg_hrv_frequency(ecg_period, sampling_rate))
     hrv.update(_ecg_hrv_nonlinear(rri, ecg_period))
 
     hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
@@ -148,8 +153,8 @@ def _ecg_hrv_time(rri):
 
 
 
-def _ecg_hrv_frequency(ecg_period, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5), method="welch"):
-    power = signal_power(ecg_period, frequency_band=[ulf, vlf, lf, hf, vhf], sampling_rate=1000, method=method, max_frequency=0.5)
+def _ecg_hrv_frequency(ecg_period, sampling_rate=1000, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5), method="welch"):
+    power = signal_power(ecg_period, frequency_band=[ulf, vlf, lf, hf, vhf], sampling_rate=sampling_rate, method=method, max_frequency=0.5)
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
     out = power.to_dict(orient="index")[0]
 
@@ -183,6 +188,7 @@ def _ecg_hrv_nonlinear(rri, ecg_period):
     out["CVI"] = np.log10(L * T)
     out["CSI_Modified"] = L ** 2 / T
 
+    # Entropy
     out["SampEn"] = entropy_sample(rri, order=2, r=0.2*np.std(rri, ddof=1))
     return out
 
@@ -222,6 +228,7 @@ def _ecg_hrv_formatinput(ecg_rate, rpeaks=None, sampling_rate=1000):
         rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
 
     return ecg_rate, rpeaks
+
 
 
 def _ecg_hrv_plot(rri, ecg_period):
