@@ -163,14 +163,14 @@ Despite not having a Graphical User Interface (GUI), NeuroKit2 is accessible to 
 import neurokit2 as nk
 
 # Download example dataset
-data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+data = nk.data("bio_eventrelated_100hz")
 
 # Process the data
 df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], emg=None, sampling_rate=100)
 
 # Find events
 events = nk.events_find(event_channel=data["Photosensor"], threshold_keep='below',
-event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+                        event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
 
 # Visualize events in the signal
 plot = nk.events_plot(events=events, signal=data)
@@ -179,18 +179,26 @@ plot = nk.events_plot(events=events, signal=data)
 epochs = nk.epochs_create(data=df, events=events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
 
 # Extract event related fetures
-ecg_event = nk.ecg_eventrelated(epochs)
-rsp_event = nk.rsp_eventrelated(epochs)
-eda_event = nk.eda_eventrelated(epochs)
+bio_features = nk.bio_analyze(epochs)
 ```
 
-**ADD HERE THE EXAMPLE ABOUT EVENT RELATED FEATURES using the example dataset**
 
 
 ## Resting-state Features 
+```{python, eval=FALSE, echo = TRUE}
+# Imports
+import neurokit2 as nk
 
+# Download example dataset
+data = nk.data("bio_resting_5min_100hz")
 
-**ADD here an example on resting feature dataset (to select from our data, downsample, transform to csv and add to the datasets)**
+# Process the data
+df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=None, emg=None, sampling_rate=100)
+
+# Extract fetures
+bio_features = nk.bio_analyze(epochs)
+```
+
 
 
 
