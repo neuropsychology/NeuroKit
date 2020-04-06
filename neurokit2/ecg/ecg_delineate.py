@@ -777,8 +777,6 @@ def _ecg_delineator_peak_T(rpeak, heartbeat, R, S):
 
 
 
-
-
 def _ecg_delineator_peak_P_onset(rpeak, heartbeat, R, P):
     if P is None:
         return np.nan
@@ -788,6 +786,10 @@ def _ecg_delineator_peak_P_onset(rpeak, heartbeat, R, P):
         signal = signal_smooth(segment["Signal"].values, size=R/10)
     except TypeError:
         signal = segment["Signal"]
+
+    if len(signal) < 2:
+        return np.nan
+
     signal = np.gradient(np.gradient(signal))
     P_onset = np.argmax(signal)
 
@@ -805,6 +807,10 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
         signal = signal_smooth(segment["Signal"].values, size=R/10)
     except TypeError:
         signal = segment["Signal"]
+
+    if len(signal) < 2:
+        return np.nan
+
     signal = np.gradient(np.gradient(signal))
     T_offset = np.argmax(signal)
 
