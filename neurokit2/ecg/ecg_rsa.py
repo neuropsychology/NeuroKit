@@ -12,8 +12,9 @@ from .ecg_rate import ecg_rate as nk_ecg_rate
 from .ecg_rsp import ecg_rsp
 
 
-def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000):
-    """
+def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
+    """Respiratory Sinus Arrhythmia (RSA)
+
     Returns Respiratory Sinus Arrhythmia (RSA) features. The Peak-to-trough (P2T) algorithm and the Porges-Bohrer methods are implemented.
 
 
@@ -32,6 +33,10 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000):
         `ecg_peaks()`, `ecg_process()`, or `bio_process()`. Defaults to None.
     sampling_rate : int
         The sampling frequency of signals (in Hz, i.e., samples/second).
+    continuous : bool
+        If False, will return RSA properties computed from the data (one value per index).
+        If True, will return continuous estimations of RSA of the same length as the signal.
+        See below for more details.
 
     Returns
     ----------
@@ -58,52 +63,68 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000):
     >>> # Process the data
     >>> ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
     >>> rsp_signals, _ = nk.rsp_process(data["RSP"], sampling_rate=100)
-    >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100)
+    >>>
+    >>> # Get RSA features
+    >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False)
+    >>> rsa
+    >>>
+    >>> # Get RSA as a continuous signal
+    >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
+    >>> nk.signal_plot([ecg_signals["ECG_Rate"],
+                        rsp_signals["RSP_Rate"],
+                        rsa], standardize=True)
 
     References
     ------------
     - Lewis, G. F., Furman, S. A., McCool, M. F., & Porges, S. W. (2012). Statistical strategies to quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology, 89(2), 349-364.
     """
-    signals, ecg_period, rpeaks = _ecg_rsa_formatinput(ecg_signals, rsp_signals,
-                                                       rpeaks, sampling_rate)
+    signals, ecg_period, rpeaks, rsp_signal = _ecg_rsa_formatinput(ecg_signals,
+                                                                   rsp_signals,
+                                                                   rpeaks,
+                                                                   sampling_rate)
 
     # Extract cycles
     rsp_cycles = _ecg_rsa_cycles(signals)
     rsp_onsets = rsp_cycles["RSP_Inspiration_Onsets"]
-    rsp_cycle_center = rsp_cycles["RSP_Expiration_Onsets"]
-    rsp_cycle_center = np.array(rsp_cycle_center)[rsp_cycle_center > rsp_onsets[0]]
+    rsp_peaks = np.argwhere(signals["RSP_Peaks"].values == 1)[:, 0]
+    rsp_peaks = np.array(rsp_peaks)[rsp_peaks > rsp_onsets[0]]
 
-    if len(rsp_cycle_center) - len(rsp_onsets) == 0:
-        rsp_cycle_center = rsp_cycle_center[:-1]
-    if len(rsp_cycle_center) - len(rsp_onsets) != -1:
+    if len(rsp_peaks) - len(rsp_onsets) == 0:
+        rsp_peaks = rsp_peaks[:-1]
+    if len(rsp_peaks) - len(rsp_onsets) != -1:
         print("NeuroKit error: ecg_rsp(): Couldn't find"
               "rsp cycles onsets and centers. Check your RSP signal.")
 
     # Methods ------------------------
-    rsa = {}  # Initialize empty dict
 
     # Peak-to-Trough
-    rsa.update(_ecg_rsa_p2t(rsp_onsets,
-                            rpeaks,
-                            sampling_rate,
-                            continuous=False,
-                            ecg_period=ecg_period,
-                            rsp_peaks=np.argwhere(signals["RSP_Peaks"].values == 1)[:, 0]))
+    rsa_p2t = _ecg_rsa_p2t(rsp_onsets,
+                           rpeaks,
+                           sampling_rate,
+                           continuous=continuous,
+                           ecg_period=ecg_period,
+                           rsp_peaks=rsp_peaks)
     # Porges-Bohrer
-    rsa.update(_ecg_rsa_pb(ecg_period, sampling_rate))
+    rsa_pb = _ecg_rsa_pb(ecg_period,
+                         sampling_rate,
+                         continuous=continuous)
 
     # Coupling
-    if "RSP_Clean" in signals.columns:
-        rsp_signal = signals["RSP_Clean"].values
-    elif "RSP_Raw" in signals.columns:
-        rsp_signal = signals["RSP_Raw"].values
-    elif "RSP" in signals.columns:
-        rsp_signal = signals["RSP"].values
-    else:
-        rsp_signal = None
+    rsa_coupling = _ecg_rsa_synchrony(ecg_period,
+                                      rsp_signal,
+                                      sampling_rate=sampling_rate,
+                                      method="correlation",
+                                      continuous=continuous)
 
-    if rsp_signal is not None:
-        rsa.update(_ecg_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=sampling_rate, method="correlation"))
+    if continuous is False:
+        rsa = {}  # Initialize empty dict
+        rsa.update(rsa_p2t)
+        rsa.update(rsa_pb)
+        rsa.update(rsa_coupling)
+    else:
+        rsa = pd.DataFrame({
+                "RSA_P2T": rsa_p2t,
+                "RSA_Coupling": rsa_coupling})
 
     return rsa
 
@@ -124,14 +145,12 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
                                                 rpeaks < cycle_end)])
 
     # Iterate over all cycles
-    rsa_values = []
-    for cycle in cycles_rri:
+    rsa_values = np.full(len(cycles_rri), np.nan)
+    for i, cycle in enumerate(cycles_rri):
         # Estimate of RSA during each breath
         RRis = np.diff(cycle) / sampling_rate
         if len(RRis) > 1:
-            rsa_values.append(np.max(RRis) - np.min(RRis))
-        else:
-            rsa_values.append(np.nan)
+            rsa_values[i] = np.max(RRis) - np.min(RRis)
 
     if continuous is False:
         rsa = {}
@@ -140,14 +159,18 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
         rsa["RSA_P2T_SD"] = np.nanstd(rsa_values, ddof=1)
         rsa["RSA_P2T_NoRSA"] = len(pd.Series(rsa_values).index[pd.Series(rsa_values).isnull()])
     else:
-        rsa = signal_interpolate(x_values=rsp_peaks, y_values=rsa_values, desired_length=len(ecg_period))
+        rsa = signal_interpolate(x_values=rsp_peaks[~np.isnan(rsa_values)],
+                                 y_values=rsa_values[~np.isnan(rsa_values)],
+                                 desired_length=len(ecg_period))
 
     return rsa
 
 
-def _ecg_rsa_pb(ecg_period, sampling_rate):
+def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
     """Porges-Bohrer method
     """
+    if continuous is True:
+        return None
 
     # Re-sample at 2 Hz
     resampled = signal_resample(ecg_period,
@@ -190,6 +213,9 @@ def _ecg_rsa_pb(ecg_period, sampling_rate):
 def _ecg_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method="correlation", continuous=False):
     """Experimental method
     """
+    if rsp_signal is None:
+        return None
+
     filtered_period = signal_filter(ecg_period, sampling_rate=sampling_rate,
                                     lowcut=0.12, highcut=0.4, order=6)
     coupling = signal_synchrony(filtered_period, rsp_signal, method=method, window_size=sampling_rate*3)
@@ -242,8 +268,9 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                                  "Wrong input, we couldn't extract"
                                  "heart rate signal.")
             else:
-                ecg_period = nk_ecg_rate(rpeaks, sampling_rate=sampling_rate,
-                                           desired_length=len(ecg_signals))
+                ecg_period = nk_ecg_rate(rpeaks,
+                                         sampling_rate=sampling_rate,
+                                         desired_length=len(ecg_signals))
         else:
             ecg_period = ecg_signals[ecg_cols[0]].values
 
@@ -279,4 +306,14 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
 
     signals = pd.concat([ecg_signals, rsp_signals], axis=1)
 
-    return signals, ecg_period, rpeaks
+    # RSP signal
+    if "RSP_Clean" in signals.columns:
+        rsp_signal = signals["RSP_Clean"].values
+    elif "RSP_Raw" in signals.columns:
+        rsp_signal = signals["RSP_Raw"].values
+    elif "RSP" in signals.columns:
+        rsp_signal = signals["RSP"].values
+    else:
+        rsp_signal = None
+
+    return signals, ecg_period, rpeaks, rsp_signal
