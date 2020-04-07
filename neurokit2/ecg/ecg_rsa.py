@@ -112,9 +112,9 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000):
 # Methods (Domains)
 # =============================================================================
 def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period=None, rsp_peaks=None):
+    """Peak-to-trough algorithm (P2T)
+    """
 
-    # Peak-to-trough algorithm (P2T)
-    # ===============================
     # Find all RSP cycles and the Rpeaks within
     cycles_rri = []
     for idx in range(len(rsp_onsets) - 1):
@@ -140,18 +140,18 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
         rsa["RSA_P2T_SD"] = np.nanstd(rsa_values, ddof=1)
         rsa["RSA_P2T_NoRSA"] = len(pd.Series(rsa_values).index[pd.Series(rsa_values).isnull()])
     else:
-        rsa = signal_interpolation(x_values=rsp_peaks, y_values=rsa_values, desired_length=len(ecg_period))
+        rsa = signal_interpolate(x_values=rsp_peaks, y_values=rsa_values, desired_length=len(ecg_period))
 
     return rsa
 
 
 def _ecg_rsa_pb(ecg_period, sampling_rate):
-    rsa = {}
+    """Porges-Bohrer method
+    """
 
-    # Porges-Bohrer method
-    # ===============================
     # Re-sample at 2 Hz
-    resampled = signal_resample(ecg_period, sampling_rate=sampling_rate,
+    resampled = signal_resample(ecg_period,
+                                sampling_rate=sampling_rate,
                                 desired_sampling_rate=2)
 
     # Fit 21-point cubic polynomial filter (zero mean, 3rd order)
@@ -179,6 +179,7 @@ def _ecg_rsa_pb(ecg_period, sampling_rate):
     for epoch in epochs:
         variance.append(np.log(epoch.var(axis=0) / 1000))  # convert ms
 
+    rsa = {}
     rsa["RSA_PorgesBohrer"] = pd.concat(variance).mean()
 
     return rsa
@@ -187,8 +188,10 @@ def _ecg_rsa_pb(ecg_period, sampling_rate):
 
 
 def _ecg_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method="correlation", continuous=False):
+    """Experimental method
+    """
     filtered_period = signal_filter(ecg_period, sampling_rate=sampling_rate,
-                                       lowcut=0.12, highcut=0.4, order=6)
+                                    lowcut=0.12, highcut=0.4, order=6)
     coupling = signal_synchrony(filtered_period, rsp_signal, method=method, window_size=sampling_rate*3)
 
     if continuous is False:
