@@ -76,8 +76,10 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
 
     # Try retrieving right column
     if isinstance(delineate_info, dict):
-        twaves_end = delineate_info['ECG_T_Offsets']
-        ppeaks = delineate_info['ECG_P_Peaks']
+        for key in delineate_info:
+            delineate_info[key] = delineate_info[key][~np.isnan(delineate_info[key])].astype(int)
+            twaves_end = delineate_info['ECG_T_Offsets']
+            ppeaks = delineate_info['ECG_P_Peaks']
 
 
 
