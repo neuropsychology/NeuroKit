@@ -44,7 +44,7 @@ def test_bio_process():
                         'SCR_Onsets', 'SCR_Peaks', 'SCR_Height', 'SCR_Amplitude',
                         'SCR_RiseTime', 'SCR_Recovery', 'SCR_RecoveryTime',
                         'EMG_Raw', 'EMG_Clean', 'EMG_Amplitude', 'EMG_Activity',
-                        'EMG_Onsets', 'EMG_Offsets']
+                        'EMG_Onsets', 'EMG_Offsets', 'RSA_P2T']
                for elem in np.array(bio_df.columns.values, dtype=str))
 
 def test_bio_analyze():
