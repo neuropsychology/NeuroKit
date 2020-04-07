@@ -119,7 +119,7 @@ def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="defa
     """
     window_size = _signal_filter_windowsize(window_size=window_size, sampling_rate=sampling_rate)
 
-    filtered = scipy.signal.savgol_filter(signal, window_size=window_size, polyorder=order)
+    filtered = scipy.signal.savgol_filter(signal, window_length=window_size, polyorder=order)
     return filtered
 
 # =============================================================================
