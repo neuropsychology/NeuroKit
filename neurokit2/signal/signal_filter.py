@@ -3,7 +3,7 @@ import numpy as np
 import scipy.signal
 
 
-def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_length="default"):
+def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_size="default"):
     """Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
 
     Apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided) or bandpass (if both are provided) filter to the signal.
@@ -23,7 +23,7 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
         Can be one of 'butterworth', 'fir', 'bessel' or 'savgol'. Note that for Butterworth, the function uses the SOS method from `scipy.signal.sosfiltfilt`, recommended for general purpose filtering. One can also specify "butterworth_ba' for a more traditional and legacy method (often implemented in other software).
     order : int
         Only used if method is 'butterworth' or 'savgol'. Order of the filter (default is 2).
-    window_length : int
+    window_size : int
         Only used if method is 'savgol'. The length of the filter window (i.e. the number of coefficients). Must be an odd integer. If 'default', will be set to the sampling rate divided by 10 (101 if the sampling rate is 1000 Hz).
 
     See Also
@@ -87,7 +87,7 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
             return signal
 
     if method in ["sg", "savgol", "savitzky-golay"]:
-        filtered = _signal_filter_savgol(signal, sampling_rate, order, window_length=window_length)
+        filtered = _signal_filter_savgol(signal, sampling_rate, order, window_size=window_size)
     else:
         if method in ["butter", "butterworth"]:
             filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
@@ -96,7 +96,7 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
         elif method in ["bessel"]:
             filtered = _signal_filter_bessel(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["fir"]:
-            filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_length=window_length)
+            filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_size=window_size)
         elif method in ["powerline"]:
             filtered = _signal_filter_powerline(signal, sampling_rate)
         else:
@@ -110,20 +110,20 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
 # Savitzky-Golay (savgol)
 # =============================================================================
 
-def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_length="default"):
+def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="default"):
     """Filter a signal using the Savitzky-Golay method.
 
     Default window size is chosen based on `Sadeghi, M., & Behnia, F. (2018). Optimum window length of Savitzky-Golay filters with arbitrary order. arXiv preprint arXiv:1808.10489. <https://arxiv.org/ftp/arxiv/papers/1808/1808.10489.pdf>`_.
     """
-    window_length = _signal_filter_windowlength(window_length=window_length, sampling_rate=sampling_rate)
+    window_size = _signal_filter_windowsize(window_size=window_size, sampling_rate=sampling_rate)
 
-    filtered = scipy.signal.savgol_filter(signal, window_length=window_length, polyorder=order)
+    filtered = scipy.signal.savgol_filter(signal, window_size=window_size, polyorder=order)
     return filtered
 
 # =============================================================================
 # FIR
 # =============================================================================
-def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, window_length="default"):
+def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, window_size="default"):
     """Filter a signal using a FIR filter.
     """
     try:
@@ -133,8 +133,8 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
                           "module is required for this method to run. ",
                           "Please install it first (`pip install mne`).")
 
-    if isinstance(window_length, str):
-        window_length = "auto"
+    if isinstance(window_size, str):
+        window_size = "auto"
 
     filtered = mne.filter.filter_data(
             signal,
@@ -143,7 +143,7 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
             h_freq=highcut,
             method='fir',
             fir_window='hamming',
-            filter_length=window_length,
+            filter_length=window_size,
             l_trans_bandwidth='auto',
             h_trans_bandwidth='auto',
             phase='zero-double',
@@ -252,9 +252,9 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
     return freqs, filter_type
 
 
-def _signal_filter_windowlength(window_length="default", sampling_rate=1000):
-    if isinstance(window_length, str):
-        window_length = int(np.round(sampling_rate/3))
-        if (window_length % 2) == 0:
-            window_length + 1
-    return window_length
+def _signal_filter_windowsize(window_size="default", sampling_rate=1000):
+    if isinstance(window_size, str):
+        window_size = int(np.round(sampling_rate/3))
+        if (window_size % 2) == 0:
+            window_size + 1
+    return window_size
