@@ -72,7 +72,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
         rpeaks = rpeaks["ECG_R_Peaks"]
 
     if delineate_info is None:
-        signals, waves = ecg_delineate(ecg_cleaned,
+        signals, delineate_info = ecg_delineate(ecg_cleaned,
                                        sampling_rate=sampling_rate,
                                        method=method)
     # Try retrieving right column
