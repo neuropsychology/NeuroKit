@@ -36,7 +36,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
     >>>
     >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
-    >>> nk.ecg_plot(signals, sampling_rate=1000)
+    >>> nk.ecg_plot(signals, sampling_rate=1000, show_type='artifacts')
 
     See Also
     --------
@@ -116,6 +116,8 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
                 line, = ax2.plot(heartbeats_pivoted[x], color=color)
                 lines.append(line)
 
+    return fig
+
     # Plot artifacts
     if show_type == 'artifacts' or show_type == 'full':
         if sampling_rate is None:
@@ -127,5 +129,3 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
 
         ecg_fixpeaks(rpeaks, sampling_rate=sampling_rate,
                      iterative=True, show=True)
-
-    return fig
