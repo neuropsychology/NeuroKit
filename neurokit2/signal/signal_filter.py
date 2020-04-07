@@ -3,7 +3,7 @@ import numpy as np
 import scipy.signal
 
 
-def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_size="default"):
+def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_size="default", powerline=50):
     """Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
 
     Apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided) or bandpass (if both are provided) filter to the signal.
@@ -25,6 +25,8 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
         Only used if method is 'butterworth' or 'savgol'. Order of the filter (default is 2).
     window_size : int
         Only used if method is 'savgol'. The length of the filter window (i.e. the number of coefficients). Must be an odd integer. If 'default', will be set to the sampling rate divided by 10 (101 if the sampling rate is 1000 Hz).
+    powerline : int
+        Only used if method is 'powerline'. The powerline frequency (normally 50 Hz or 60 Hz).
 
     See Also
     --------
@@ -98,7 +100,7 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
         elif method in ["fir"]:
             filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_size=window_size)
         elif method in ["powerline"]:
-            filtered = _signal_filter_powerline(signal, sampling_rate)
+            filtered = _signal_filter_powerline(signal, sampling_rate, powerline)
         else:
             raise ValueError("NeuroKit error: signal_filter(): 'method' should be "
                              "one of 'butterworth', 'butterworth_ba', 'bessel',"
@@ -197,13 +199,13 @@ def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None,
 # Poweline
 # =============================================================================
 
-def _signal_filter_powerline(signal, sampling_rate):
+def _signal_filter_powerline(signal, sampling_rate, powerline=50):
     """Filter out 50 Hz powerline noise by smoothing the signal with a moving
     average kernel with the width of one period of 50Hz.
     """
 
     if sampling_rate >= 100:
-        b = np.ones(int(sampling_rate / 50))
+        b = np.ones(int(sampling_rate / powerline))
     else:
         b = np.ones(2)
     a = [len(b)]

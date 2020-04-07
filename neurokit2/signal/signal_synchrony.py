@@ -103,5 +103,3 @@ def _signal_synchrony_correlation(signal1, signal2, window_size, center=False):
     synchrony = np.append(synchrony[int(window_size/2):], np.full(int(window_size/2), np.nan))
 
     return synchrony
-
-

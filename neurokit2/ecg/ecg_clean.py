@@ -100,7 +100,8 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
                           order=5)
     clean = signal_filter(signal=clean,
                           sampling_rate=sampling_rate,
-                          method="powerline")
+                          method="powerline",
+                          powerline=50)
     return clean
 
 
