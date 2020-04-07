@@ -55,7 +55,7 @@ The phase refers to the angle of the signal, calculated through the hilbert tran
     if method.lower() in ["hilbert", "phase"]:
         coupling = _signal_synchrony_hilbert(signal1, signal2)
     elif method.lower() in ["correlation"]:
-        coupling = _signal_synchrony_correlation(signal1, signal2, int(window_size))
+        coupling = _signal_synchrony_correlation(signal1, signal2, window_size=int(window_size))
 
     else:
         raise ValueError("NeuroKit error: signal_synchrony(): 'method' should be "
@@ -92,14 +92,12 @@ def _signal_synchrony_correlation(signal1, signal2, window_size, center=False):
     - center: whether to center result (Default: False, so correlation values are listed on the right.)
     '''
     data = pd.DataFrame({"y1": signal1, "y2": signal2})
-    data_len = data.shape[0]
-    half_data_len = int(data.shape[0]/2)
-    start_len = data.iloc[half_data_len:].shape[0]
 
     rolled = data.rolling(window=window_size, center=center).corr()
     synchrony = rolled["y1"].loc[rolled.index.get_level_values(1) == "y2"].values
 
     # Realign
     synchrony = np.append(synchrony[int(window_size/2):], np.full(int(window_size/2), np.nan))
+    synchrony[np.isnan(synchrony)] = np.nanmean(synchrony)
 
     return synchrony

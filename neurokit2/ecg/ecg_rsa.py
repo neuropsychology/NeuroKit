@@ -15,7 +15,12 @@ from .ecg_rsp import ecg_rsp
 def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
     """Respiratory Sinus Arrhythmia (RSA)
 
-    Returns Respiratory Sinus Arrhythmia (RSA) features. The Peak-to-trough (P2T) algorithm and the Porges-Bohrer methods are implemented.
+    Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence', is the naturally occurring variation in heart rate during the breathing cycle. Metrics to quantify it are often used as a measure of parasympathetic nervous system activity. Neurophysiology informs us that the functional output of the myelinated vagus originating from the nucleus ambiguus has a respiratory rhythm. Thus, there would a temporal relation between the respiratory rhythm being expressed in the firing of these efferent pathways and the functional effect on the heart rate rhythm manifested as RSA. Importantly, several methods exist to quantify RSA:
+
+        - The *Peak-to-trough (P2T)* algorithm measures the statistical range in milliseconds of the heart period oscillation associated with synchronous respiration. Operationally, subtracting the shortest heart period during inspiration from the longest heart period during a breath cycle produces an estimate of RSA during each breath. The peak-to-trough method makes no statistical assumption or correction (e.g., adaptive filtering) regarding other sources of variance in the heart period time series that may confound, distort, or interact with the metric such as slower periodicities and baseline trend. Although it has been proposed that the P2T method "acts as a time-domain filter dynamically centered at the exact ongoing respiratory frequency" (Grossman, 1992), the method does not transform the time series in any way, as a filtering process would. Instead the method uses knowledge of the ongoing respiratory cycle to associate segments of the heart period time series with either inhalation or exhalation (Lewis, 2012).
+
+        - The *Porges-Bohrer (PB)* algorithm TODO
+        - The *Coupling* method (EXPERIMENTAL) is based on the instantaneous phase synchrony, measured using a rolling window correlation, bewteen the respiration signal and the heart rate (filtered beween 0.12 and 0.4 Hz).
 
 
     Parameters
@@ -77,6 +82,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     References
     ------------
     - Lewis, G. F., Furman, S. A., McCool, M. F., & Porges, S. W. (2012). Statistical strategies to quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology, 89(2), 349-364.
+    - Zohar, A. H., Cloninger, C. R., & McCraty, R. (2013). Personality and heart rate variability: exploring pathways from personality to cardiac coherence and health. Open Journal of Social Sciences, 1(06), 32.
     """
     signals, ecg_period, rpeaks, rsp_signal = _ecg_rsa_formatinput(ecg_signals,
                                                                    rsp_signals,
@@ -219,6 +225,7 @@ def _ecg_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method="corre
     filtered_period = signal_filter(ecg_period, sampling_rate=sampling_rate,
                                     lowcut=0.12, highcut=0.4, order=6)
     coupling = signal_synchrony(filtered_period, rsp_signal, method=method, window_size=sampling_rate*3)
+    coupling = signal_filter(coupling, sampling_rate=sampling_rate, highcut=0.4, order=6)
 
     if continuous is False:
         rsa = {}
