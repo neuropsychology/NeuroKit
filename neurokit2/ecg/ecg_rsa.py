@@ -19,9 +19,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
 
         - The *Peak-to-trough (P2T)* algorithm measures the statistical range in milliseconds of the heart period oscillation associated with synchronous respiration. Operationally, subtracting the shortest heart period during inspiration from the longest heart period during a breath cycle produces an estimate of RSA during each breath. The peak-to-trough method makes no statistical assumption or correction (e.g., adaptive filtering) regarding other sources of variance in the heart period time series that may confound, distort, or interact with the metric such as slower periodicities and baseline trend. Although it has been proposed that the P2T method "acts as a time-domain filter dynamically centered at the exact ongoing respiratory frequency" (Grossman, 1992), the method does not transform the time series in any way, as a filtering process would. Instead the method uses knowledge of the ongoing respiratory cycle to associate segments of the heart period time series with either inhalation or exhalation (Lewis, 2012).
 
-        - The *Porges-Bohrer (PB)* algorithm assumes that the heart period time series reflects the sum of several component time series. Each of these component time series may be mediated by different neural mechanisms and may have different statistical features. The algorithm selectively extracts RSA, even when the periodic process representing RSA is superimposed on a complex baseline that may include aperiodic and slow periodic processes. Since the method is designed to remove sources of variance in the heart period time series other than the variance within the frequency band of spontaneous breathing, the method is capable of accurately quantifying RSA when the signal to noise ratio is low.
-
-        - The *Coupling* method (EXPERIMENTAL) is based on the instantaneous phase synchrony, measured using a rolling window correlation, bewteen the respiration signal and the heart rate (filtered beween 0.12 and 0.4 Hz).
+        - The *Porges-Bohrer (PB)* algorithm TODO
 
 
     Parameters
@@ -116,22 +114,14 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
                          sampling_rate,
                          continuous=continuous)
 
-    # Coupling
-    rsa_coupling = _ecg_rsa_synchrony(ecg_period,
-                                      rsp_signal,
-                                      sampling_rate=sampling_rate,
-                                      method="correlation",
-                                      continuous=continuous)
 
     if continuous is False:
         rsa = {}  # Initialize empty dict
         rsa.update(rsa_p2t)
         rsa.update(rsa_pb)
-        rsa.update(rsa_coupling)
     else:
         rsa = pd.DataFrame({
-                "RSA_P2T": rsa_p2t,
-                "RSA_Coupling": rsa_coupling})
+                "RSA_P2T": rsa_p2t})
 
     return rsa
 
@@ -217,24 +207,24 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
 
 
 
-def _ecg_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method="correlation", continuous=False):
-    """Experimental method
-    """
-    if rsp_signal is None:
-        return None
-
-    filtered_period = signal_filter(ecg_period, sampling_rate=sampling_rate,
-                                    lowcut=0.12, highcut=0.4, order=6)
-    coupling = signal_synchrony(filtered_period, rsp_signal, method=method, window_size=sampling_rate*3)
-    coupling = signal_filter(coupling, sampling_rate=sampling_rate, highcut=0.4, order=6)
-
-    if continuous is False:
-        rsa = {}
-        rsa["RSA_Synchrony_Mean"] = np.nanmean(coupling)
-        rsa["RSA_Synchrony_SD"] = np.nanstd(coupling, ddof=1)
-        return rsa
-    else:
-        return coupling
+#def _ecg_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method="correlation", continuous=False):
+#    """Experimental method
+#    """
+#    if rsp_signal is None:
+#        return None
+#
+#    filtered_period = signal_filter(ecg_period, sampling_rate=sampling_rate,
+#                                    lowcut=0.12, highcut=0.4, order=6)
+#    coupling = signal_synchrony(filtered_period, rsp_signal, method=method, window_size=sampling_rate*3)
+#    coupling = signal_filter(coupling, sampling_rate=sampling_rate, highcut=0.4, order=6)
+#
+#    if continuous is False:
+#        rsa = {}
+#        rsa["RSA_Synchrony_Mean"] = np.nanmean(coupling)
+#        rsa["RSA_Synchrony_SD"] = np.nanstd(coupling, ddof=1)
+#        return rsa
+#    else:
+#        return coupling
 
 
 
