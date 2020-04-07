@@ -17,9 +17,10 @@ from .ecg_segment import ecg_segment
 from ..epochs import epochs_create
 from ..epochs import epochs_to_df
 from ..events import events_plot
+from ..stats import standardize
 
 
-def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type='peaks'):
+def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type='peaks', check=False):
     """Delineate QRS complex.
     Function to delineate the QRS complex.
 
@@ -126,16 +127,19 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
                          "one of 'peak', 'cwt' or 'dwt'.")
 
     # Remove NaN in Peaks, Onsets, and Offsets
-    for feature in waves.keys():
-        waves[feature] = [x for x in waves[feature] if ~np.isnan(x)]
+    waves_noNA = waves
+    for feature in waves_noNA.keys():
+        waves_noNA[feature] = [x for x in waves_noNA[feature] if ~np.isnan(x)]
 
-    instant_peaks = signal_formatpeaks(waves,
+    instant_peaks = signal_formatpeaks(waves_noNA,
                                        desired_length=len(ecg_cleaned))
     signals = instant_peaks
 
     if show is True:
         _ecg_delineate_plot(ecg_cleaned, rpeaks=rpeaks, signals=signals, signal_features_type=show_type, sampling_rate=sampling_rate)
 
+    if check is True:
+        waves = _ecg_delineate_check(waves, rpeaks)
 
     return signals, waves
 
@@ -821,8 +825,6 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
 # Internals
 # =============================================================================
 
-
-
 def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_type='all', sampling_rate=1000):
 
     """
@@ -913,3 +915,43 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
                    label=feature_type, alpha=0.5, s=200)
         ax.legend()
     return fig
+
+
+
+def _ecg_delineate_check(waves, rpeaks):
+    """
+    This function replaces the delineated features with np.nan if its
+    standardized distance from R-peaks is more than 3
+    """
+    df = pd.DataFrame.from_dict(waves)
+    features_columns = df.columns
+
+    df = pd.concat([df, pd.DataFrame({'ECG_R_Peaks':rpeaks})], axis=1)
+
+    # loop through all columns to calculate the z distance
+    for column in features_columns:
+        df = _calculate_abs_z(df, features_columns)
+
+    distance_columns = [col for col in df.columns if 'Dist' in col]
+
+    # Replace with nan if distance > 3
+    for col in features_columns:
+        for i in range(len(df)):
+            if df['Dist_R_' + col][i] > 3:
+                df[col][i] = np.nan
+
+    # Return df without distance columns
+    df = df[features_columns]
+    waves = df.to_dict('list')
+    return waves
+
+
+
+def _calculate_abs_z(df, columns):
+    """
+    This function helps to calculate the absolute standardized distance
+    between R-peaks and other delineated waves features by `ecg_delineate()`
+    """
+    for column in columns:
+        df['Dist_R_' + column] = np.abs(standardize(df[column].sub(df['ECG_R_Peaks'], axis=0)))
+    return df
