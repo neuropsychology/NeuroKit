@@ -50,8 +50,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> _, rpeaks = nk.ecg_peaks(cleaned)
-    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000,
-    >>>                                   method='dwt')
+    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000)
     >>>
     >>> cardiac_phase = nk.ecg_phase(ecg_cleaned=cleaned,
     >>>                              rpeaks=rpeaks,
@@ -76,10 +75,8 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
 
     # Try retrieving right column
     if isinstance(delineate_info, dict):
-        for key in delineate_info:
-            delineate_info[key] = delineate_info[key][~np.isnan(delineate_info[key])].astype(int)
-            twaves_end = delineate_info['ECG_T_Offsets']
-            ppeaks = delineate_info['ECG_P_Peaks']
+        twaves_end = delineate_info['ECG_T_Offsets']
+        ppeaks = delineate_info['ECG_P_Peaks']
 
 
 

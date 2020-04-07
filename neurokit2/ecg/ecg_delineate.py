@@ -122,6 +122,7 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
         waves = _dwt_ecg_delinator(ecg_cleaned,
                                    rpeaks,
                                    sampling_rate=sampling_rate)
+
     else:
         raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be "
                          "one of 'peak', 'cwt' or 'dwt'.")
@@ -152,6 +153,7 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     """Resample given points to a different sampling rate."""
     peaks_resample = (np.array(peaks) * desired_sampling_rate / sampling_rate)
+    peaks_resample = [np.nan if np.isnan(x) else int(x) for x in peaks_resample.tolist()]
     return peaks_resample
 
 
@@ -178,7 +180,7 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
     # plt.grid(True)
     # plt.show()
     rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
-    rpeaks_resampled = [np.nan if np.isnan(x) else int(x) for x in rpeaks_resampled.tolist()]
+
     tpeaks, ppeaks = _dwt_delinate_tp_peaks(
         ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
     qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(
