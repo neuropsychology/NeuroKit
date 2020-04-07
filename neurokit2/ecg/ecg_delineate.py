@@ -127,9 +127,9 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
                          "one of 'peak', 'cwt' or 'dwt'.")
 
     # Remove NaN in Peaks, Onsets, and Offsets
-    waves_noNA = waves
+    waves_noNA = waves.copy()
     for feature in waves_noNA.keys():
-        waves_noNA[feature] = [x for x in waves_noNA[feature] if ~np.isnan(x)]
+        waves_noNA[feature] = [int(x) for x in waves_noNA[feature] if ~np.isnan(x)]
 
     instant_peaks = signal_formatpeaks(waves_noNA,
                                        desired_length=len(ecg_cleaned))
@@ -152,7 +152,6 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     """Resample given points to a different sampling rate."""
     peaks_resample = (np.array(peaks) * desired_sampling_rate / sampling_rate)
-    peaks_resample = peaks_resample[~np.isnan(peaks_resample)].astype(int)
     return peaks_resample
 
 
@@ -178,8 +177,8 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
     # plt.legend()
     # plt.grid(True)
     # plt.show()
-
     rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
+    rpeaks_resampled = [np.nan if np.isnan(x) else int(x) for x in rpeaks_resampled.tolist()]
     tpeaks, ppeaks = _dwt_delinate_tp_peaks(
         ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
     qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(
@@ -193,12 +192,12 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
 
     return dict(
         ECG_T_Peaks=_dwt_resample_points(tpeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
-        ECG_T_Onsets=_dwt_resample_points(tonsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[:-1],
+        ECG_T_Onsets=_dwt_resample_points(tonsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_T_Offsets=_dwt_resample_points(toffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
-        ECG_P_Peaks=_dwt_resample_points(ppeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
-        ECG_P_Onsets=_dwt_resample_points(ponsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
+        ECG_P_Peaks=_dwt_resample_points(ppeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_P_Onsets=_dwt_resample_points(ponsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_P_Offsets=_dwt_resample_points(poffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
-        ECG_R_Onsets=_dwt_resample_points(qrs_onsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate)[1:],
+        ECG_R_Onsets=_dwt_resample_points(qrs_onsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_R_Offsets=_dwt_resample_points(qrs_offsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
     )
 
@@ -220,7 +219,10 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
     degree_add = _dwt_compensate_degree(sampling_rate)
 
     tpeaks = []
-    for i in range(len(rpeaks)-1):
+    for i in range(len(rpeaks)):
+        if np.isnan(rpeaks[i]):
+            tpeaks.append(np.nan)
+            continue
         # search for T peaks from R peaks
         srch_idx_start = rpeaks[i] + srch_bndry
         srch_idx_end = rpeaks[i] + 2 * int(rt_duration * sampling_rate)
@@ -258,7 +260,10 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
         tpeaks.append(candidate_peaks[np.argmax(candidate_peaks_scores)] + srch_idx_start)
 
     ppeaks = []
-    for i in range(len(rpeaks)-1):
+    for i in range(len(rpeaks)):
+        if np.isnan(rpeaks[i]):
+            ppeaks.append(np.nan)
+            continue
 
         # search for P peaks from Rpeaks
         srch_idx_start = rpeaks[i] - 2 * int(p2r_duration * sampling_rate)
@@ -310,11 +315,16 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
     onsets = []
     offsets = []
     for i in range(len(peaks)):
+        if np.isnan(peaks[i]):
+            onsets.append(np.nan)
+            offsets.append(np.nan)
+            continue
         # look for onsets
         srch_idx_start = peaks[i] - int(duration * sampling_rate)
         srch_idx_end = peaks[i]
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             onsets.append(np.nan)
+            offsets.append(np.nan)
             continue
         dwt_local = dwtmatr[degree_onset + degree, srch_idx_start: srch_idx_end]
         onset_slope_peaks, onset_slope_data = scipy.signal.find_peaks(dwt_local)
@@ -334,7 +344,7 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
         srch_idx_start = peaks[i]
         srch_idx_end = peaks[i] + int(duration_offset * sampling_rate)
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
-            onsets.append(np.nan)
+            offsets.append(np.nan)
             continue
         dwt_local = dwtmatr[degree_offset + degree, srch_idx_start: srch_idx_end]
         offset_slope_peaks, offset_slope_data = scipy.signal.find_peaks(-dwt_local)
@@ -350,13 +360,13 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
         # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
         # plt.show()
 
-    return np.array(onsets), np.array(offsets)
+    return onsets, offsets
 
 
 def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
     degree = int(np.log2(sampling_rate / 250))
     onsets = []
-    for i in range(len(rpeaks) - 1):
+    for i in range(len(rpeaks)):
         # look for onsets
         srch_idx_start = ppeaks[i]
         srch_idx_end = rpeaks[i]
@@ -374,8 +384,9 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
         # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
         # plt.legend()
         # plt.show()
+
     offsets = []
-    for i in range(len(rpeaks) - 1):
+    for i in range(len(rpeaks)):
         # look for offsets
         srch_idx_start = rpeaks[i]
         srch_idx_end = tpeaks[i]
@@ -395,7 +406,7 @@ def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate
 
         offsets.append(candidate_offsets[0] + srch_idx_start)
 
-    return np.array(onsets), np.array(offsets)
+    return onsets, offsets
 
 
 
@@ -926,7 +937,7 @@ def _ecg_delineate_check(waves, rpeaks):
     df = pd.DataFrame.from_dict(waves)
     features_columns = df.columns
 
-    df = pd.concat([df, pd.DataFrame({'ECG_R_Peaks':rpeaks})], axis=1)
+    df = pd.concat([df, pd.DataFrame({'ECG_R_Peaks': rpeaks})], axis=1)
 
     # loop through all columns to calculate the z distance
     for column in features_columns:
