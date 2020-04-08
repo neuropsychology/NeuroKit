@@ -10,31 +10,29 @@ Specific signals
 ECG *(1000 hz)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Properties:
++----------------+-----------+---------+
+| Type           | Frequency | Signals |
++================+===========+=========+
+| Single-subject | 1000 Hz   | ECG     |
++----------------+-----------+---------+
 
-  - Contains ECG signal
-  - Sampling rate: 1000Hz
-
-- Download it:
 .. code-block:: python
 
-	# Using nk.data()
-	data = nk.data(dataset="ecg_1000hz")['ECG']
+	data = nk.data(dataset="ecg_1000hz")
 
 
 ECG - pandas *(3000 hz)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Properties:
++----------------+-----------+---------+
+| Type           | Frequency | Signals |
++================+===========+=========+
+| Single-subject | 3000 Hz   | ECG     |
++----------------+-----------+---------+
 
-  - Contains ECG signal
-  - Sampling rate: 3000Hz
-
-- Download it:
 .. code-block:: python
 
-	# Using nk.data()
-	data = nk.data(dataset="ecg_3000_pandas")['ECG']
+	data = nk.data(dataset="ecg_3000_pandas")
 
 
 Multimodal data
@@ -44,16 +42,15 @@ Event-related *(4 events)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-- Properties:
++----------------+-----------+----------------------------+
+| Type           | Frequency | Signals                    |
++================+===========+============================+
+| Single-subject | 100 Hz   | ECG, EDA, RSP, Photosensor  |
+| with events    |           |                            |
++----------------+-----------+----------------------------+
 
-   - Contains signals ECG, EDA, Photosensor, RSP
-   - Event-related signals
-   - Sampling rate: 100Hz
-
-- Download it:
 .. code-block:: python
 
-	# Using nk.data()
 	data = nk.data(dataset="bio_eventrelated_100hz")
 
 
@@ -83,16 +80,15 @@ Event-related *(4 events)*
 Resting state *(5 min)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Properties:
++----------------+-----------+----------------------------+
+| Type           | Frequency | Signals                    |
++================+===========+============================+
+| Single-subject | 100 Hz    | ECG, PPG, RSP              |
+| resting state  |           |                            |
++----------------+-----------+----------------------------+
 
-  - Contains signals ECG, PPG, RSP
-  - Resting-state signals recorded for 5 minutes
-  - Sampling rate: 100Hz
-
-- Download it:
 .. code-block:: python
 
-	# Using nk.data()
 	data = nk.data(dataset="bio_resting_5min_100hz")
 
 
@@ -112,16 +108,15 @@ Resting state *(5 min)*
 Resting state *(8 min)*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Properties:
++----------------+-----------+----------------------------+
+| Type           | Frequency | Signals                    |
++================+===========+============================+
+| Single-subject | 100 Hz    | ECG, RSP, EDA, Photosensor |
+| resting state  |           |                            |
++----------------+-----------+----------------------------+
 
-  - Contains signals ECG, RSP, EMG_A, EMG_B, EDA, PhotoSensor
-  - Resting-state signals recorded for 8 minutes
-  - Sampling rate: 100Hz
-
-- Download it:
 .. code-block:: python
 
-	# Using nk.data()
 	data = nk.data(dataset="bio_resting_8min_100hz")
 
 
