@@ -196,7 +196,7 @@ def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None,
     return filtered
 
 # =============================================================================
-# Poweline
+# Powerline
 # =============================================================================
 
 def _signal_filter_powerline(signal, sampling_rate, powerline=50):
