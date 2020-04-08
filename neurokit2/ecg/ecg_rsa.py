@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import sklearn.metrics
 
 from ..signal import signal_filter
 from ..signal import signal_resample
 from ..signal import signal_interpolate
 from ..signal import signal_synchrony
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
+from ..stats import standardize
 from ..rsp import rsp_process
 from .ecg_rate import ecg_rate as nk_ecg_rate
 from .ecg_rsp import ecg_rsp
@@ -80,6 +82,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
 
     References
     ------------
+    - Servant, D., Logier, R., Mouster, Y., & Goudemand, M. (2009). La variabilité de la fréquence cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016
     - Lewis, G. F., Furman, S. A., McCool, M. F., & Porges, S. W. (2012). Statistical strategies to quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology, 89(2), 349-364.
     - Zohar, A. H., Cloninger, C. R., & McCraty, R. (2013). Personality and heart rate variability: exploring pathways from personality to cardiac coherence and health. Open Journal of Social Sciences, 1(06), 32.
     """
@@ -228,6 +231,50 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
 
 
 
+#def _ecg_rsa_servant(ecg_period, sampling_rate=1000, continuous=False):
+#    """Servant, D., Logier, R., Mouster, Y., & Goudemand, M. (2009). La variabilité de la fréquence cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016
+#    """
+#
+#    rpeaks, _ = nk.ecg_peaks(nk.ecg_simulate(duration=90))
+#    ecg_period = nk.ecg_rate(rpeaks) / 60 * 1000
+#    sampling_rate=1000
+#
+#    if len(ecg_period) / sampling_rate <= 60:
+#        return None
+#
+#
+#    signal = nk.signal_filter(ecg_period, sampling_rate=sampling_rate,
+#                           lowcut=0.1, highcut=1, order=6)
+#    signal = nk.standardize(signal)
+#
+##    nk.signal_plot([ecg_period, signal], standardize=True)
+#
+#    troughs = nk.signal_findpeaks(-1 * signal)["Peaks"]
+#    trough_signal = nk.signal_interpolate(x_values=troughs,
+#                                          y_values=signal[troughs],
+#                                          desired_length=len(signal))
+#    first_trough = troughs[0]
+#
+#    # Initial parameters
+#    n_windows = int(len(trough_signal[first_trough:]) / sampling_rate / 16)  # How many windows of 16 s
+#    onsets = (np.arange(n_windows) * 16 * sampling_rate) + first_trough
+#
+#    areas_under_curve = np.zeros(len(onsets))
+#    for i, onset in enumerate(onsets):
+#        areas_under_curve[i] = sklearn.metrics.auc(np.linspace(0, 16, 16*sampling_rate),
+#                                                   trough_signal[onset:onset+(16*sampling_rate)])
+#    max_auc = np.max(areas_under_curve)
+#
+#    # Moving computation
+#    onsets = np.arange(first_trough, len(signal)-16*sampling_rate, step=4*sampling_rate)
+#    areas_under_curve = np.zeros(len(onsets))
+#    for i, onset in enumerate(onsets):
+#        areas_under_curve[i] = sklearn.metrics.auc(np.linspace(0, 16, 16*sampling_rate),
+#                                                   trough_signal[onset:onset+(16*sampling_rate)])
+#    rsa = (max_auc - areas_under_curve) / max_auc + 1
+#
+#    # Not sure what to do next, sent an email to Servant.
+#    pass
 
 
 
