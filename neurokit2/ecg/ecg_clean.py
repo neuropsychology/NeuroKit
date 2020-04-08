@@ -79,7 +79,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         clean = ecg_signal
     else:
         raise ValueError("NeuroKit error: ecg_clean(): 'method' should be "
-                         "one of 'neurokit' or 'biosppy'.")
+                         "one of 'neurokit', 'biosppy', 'pamtompkins1985',"
+                         " 'hamilton2002', 'elgendi2010', 'engzeemod2012'.")
     return clean
 
 
@@ -99,7 +100,8 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
                           order=5)
     clean = signal_filter(signal=clean,
                           sampling_rate=sampling_rate,
-                          method="powerline")
+                          method="powerline",
+                          powerline=50)
     return clean
 
 

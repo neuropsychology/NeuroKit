@@ -19,7 +19,8 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
         with a single 'Signal' column.
     events : list, ndarray or dict
         Events onset location. If a dict is passed (e.g., from
-       'events_find()'), will select only the 'onset' list.
+       'events_find()'), will select only the 'onset' list. If an integer is passed,
+        will use this number to create an evenly spaced list of events.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start, epochs_end : int
@@ -68,6 +69,8 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
         data = pd.DataFrame({"Signal": list(data)})
 
     # Sanitize events input
+    if isinstance(events, int):
+        events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:
         events = _events_find_label({"onset": events}, event_labels=event_labels, event_conditions=event_conditions)
 

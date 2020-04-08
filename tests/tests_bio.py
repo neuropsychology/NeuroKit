@@ -44,7 +44,7 @@ def test_bio_process():
                         'SCR_Onsets', 'SCR_Peaks', 'SCR_Height', 'SCR_Amplitude',
                         'SCR_RiseTime', 'SCR_Recovery', 'SCR_RecoveryTime',
                         'EMG_Raw', 'EMG_Clean', 'EMG_Amplitude', 'EMG_Activity',
-                        'EMG_Onsets', 'EMG_Offsets']
+                        'EMG_Onsets', 'EMG_Offsets', 'RSA_P2T']
                for elem in np.array(bio_df.columns.values, dtype=str))
 
 def test_bio_analyze():
@@ -79,7 +79,7 @@ def test_bio_analyze():
                         'RSP_Amplitude_Max', 'RSP_Amplitude_Min', 'RSP_Amplitude_Mean',
                         'RSP_Phase', 'RSP_PhaseCompletion', 'EDA_Activation',
                         'EDA_Peak_Amplitude', 'EDA_Peak_Amplitude_Time', 'EDA_RiseTime',
-                        'EDA_RecoveryTime', 'Label', 'Condition']
+                        'EDA_RecoveryTime', 'RSA_P2T', 'Label', 'Condition']
                for elem in np.array(event_related.columns.values, dtype=str))
 
     # Example with interval-related analysis
@@ -104,6 +104,8 @@ def test_bio_analyze():
                         'RSP_RRV_SDSD', 'RSP_RRV_VLF', 'RSP_RRV_LF', 'RSP_RRV_HF',
                         'RSP_RRV_LFHF', 'RSP_RRV_LFn', 'RSP_RRV_HFn', 'RSP_RRV_SD1',
                         'RSP_RRV_SD2', 'RSP_RRV_SD2SD1', 'RSP_RRV_ApEn',
-                        'RSP_RRV_SampEn', 'RSP_RRV_DFA',
+                        'RSP_RRV_SampEn', 'RSP_RRV_DFA', 'RSA_P2T_Mean',
+                        'RSA_P2T_Mean_log', 'RSA_P2T_SD',
+                        'RSA_P2T_NoRSA', 'RSA_PorgesBohrer',
                         'EDA_Peaks_N', 'EDA_Peaks_Amplitude_Mean']
                for elem in np.array(interval_related.columns.values, dtype=str))
