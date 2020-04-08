@@ -4,11 +4,10 @@ Datasets
 NeuroKit includes datasets that can be used for testing. These datasets are not downloaded automatically with the package (to avoid increasing its weight), but can be downloaded via the `nk.data()` function.
 
 
-Specific signals
-------------------------------
+
 
 ECG *(1000 hz)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
 +----------------+-----------+---------+
 | Type           | Frequency | Signals |
@@ -19,10 +18,11 @@ ECG *(1000 hz)*
 .. code-block:: python
 
 	data = nk.data(dataset="ecg_1000hz")
+    
 
 
 ECG - pandas *(3000 hz)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------
 
 +----------------+-----------+---------+
 | Type           | Frequency | Signals |
@@ -35,17 +35,17 @@ ECG - pandas *(3000 hz)*
 	data = nk.data(dataset="ecg_3000_pandas")
 
 
-Multimodal data
-------------------------------
+
+
 
 Event-related *(4 events)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+------------------------------------
 
 
 +----------------+-----------+----------------------------+
 | Type           | Frequency | Signals                    |
 +================+===========+============================+
-| Single-subject | 100 Hz   | ECG, EDA, RSP, Photosensor  |
+| Single-subject | 100 Hz    | ECG, EDA, RSP, Photosensor |
 | with events    |           |                            |
 +----------------+-----------+----------------------------+
 
@@ -77,8 +77,9 @@ Event-related *(4 events)*
   - `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/dev/examples/rrv.html>`_
 
 
+
 Resting state *(5 min)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 
 +----------------+-----------+----------------------------+
 | Type           | Frequency | Signals                    |
@@ -105,8 +106,9 @@ Resting state *(5 min)*
   - `Interval-related Analysis <https://neurokit2.readthedocs.io/en/dev/examples/intervalrelated.html>`_
 
 
+
 Resting state *(8 min)*
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 
 +----------------+-----------+----------------------------+
 | Type           | Frequency | Signals                    |
