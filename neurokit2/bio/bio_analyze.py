@@ -6,6 +6,7 @@ from ..ecg import ecg_analyze
 from ..rsp import rsp_analyze
 from ..eda import eda_analyze
 from ..emg import emg_analyze
+from ..ecg import ecg_rsa
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto"):
@@ -205,6 +206,7 @@ def _bio_analyze_rsa_event(data, sampling_rate=1000, rsa={}):
 
     if isinstance(data, pd.DataFrame):
         rsa = data.groupby('Label')['RSA_P2T'].mean()
+        # TODO Needs further fixing
 
     return rsa
 
