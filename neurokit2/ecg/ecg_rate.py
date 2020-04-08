@@ -66,7 +66,7 @@ def ecg_rate(rpeaks, sampling_rate=1000, desired_length=None, interpolation_meth
     rr[0] = np.mean(rr[1:])
     rate = 60 / rr
 
-    if desired_length:
+    if desired_length is not None:
         rate = signal_interpolate(rpeaks, rate, desired_length=desired_length,
                                   method=interpolation_method)
 
