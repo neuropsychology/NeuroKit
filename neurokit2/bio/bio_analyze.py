@@ -103,26 +103,26 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     # ECG
     ecg_data = data.copy()
     if len(ecg_cols) != 0:
-        ecg_analyzed = nk.ecg_analyze(ecg_data, sampling_rate=sampling_rate,
+        ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate,
                                    method=method)
         features = pd.concat([features, ecg_analyzed], axis=1)
 
     # RSP
     rsp_data = data.copy()
     if len(rsp_cols) != 0:
-        rsp_analyzed = nk.rsp_analyze(rsp_data, sampling_rate=sampling_rate,
+        rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate,
                                    method=method)
         features = pd.concat([features, rsp_analyzed], axis=1)
 
     # EDA
     if len(eda_cols) != 0:
-        eda_analyzed = nk.eda_analyze(data, sampling_rate=sampling_rate,
+        eda_analyzed = eda_analyze(data, sampling_rate=sampling_rate,
                                    method=method)
         features = pd.concat([features, eda_analyzed], axis=1)
 
     # EMG
     if len(emg_cols) != 0:
-        emg_analyzed = nk.emg_analyze(data, sampling_rate=sampling_rate,
+        emg_analyzed = emg_analyze(data, sampling_rate=sampling_rate,
                                    method=method)
         features = pd.concat([features, emg_analyzed], axis=1)
 
@@ -133,11 +133,12 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
         if method in ["event-related", "event", "epoch"]:
             rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
 
-        # Event-related
+        # Interval-related
         elif method in ["interval-related", "interval", "resting-state"]:
             rsa = _bio_analyze_rsa_interval(data,
                                             sampling_rate=sampling_rate)
 
+        # Auto
         elif method in ["auto"]:
             if isinstance(data, dict):
                 for i in data:
@@ -160,7 +161,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
                 else:
                     rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
 
-    features = pd.concat([features, rsa], axis=1)
+        features = pd.concat([features, rsa], axis=1)
 
     # Remove duplicate columns of Label and Condition
     if 'Label' in features.columns.values:
@@ -177,7 +178,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
 def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     "RSA features for interval-related analysis"
     if isinstance(data, pd.DataFrame):
-        rsa = nk.ecg_rsa(data, sampling_rate=sampling_rate,
+        rsa = ecg_rsa(data, sampling_rate=sampling_rate,
                          continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index").T
 
@@ -186,7 +187,7 @@ def _bio_analyze_rsa_interval(data, sampling_rate=1000):
         for index in data:
             rsa[index] = {}  # Initialize empty container
             data[index] = data[index].set_index('Index').drop(['Label'], axis=1)
-            rsa[index] = nk.ecg_rsa(data[index],
+            rsa[index] = ecg_rsa(data[index],
                                     sampling_rate=sampling_rate)
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
