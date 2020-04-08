@@ -246,7 +246,7 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
 #                           lowcut=0.1, highcut=1, order=6)
 #    signal = nk.standardize(signal)
 #
-##    nk.signal_plot([ecg_period, signal], standardize=True)
+#    nk.signal_plot([ecg_period, signal], standardize=True)
 #
 #    troughs = nk.signal_findpeaks(-1 * signal)["Peaks"]
 #    trough_signal = nk.signal_interpolate(x_values=troughs,

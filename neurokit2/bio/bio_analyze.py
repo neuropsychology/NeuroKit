@@ -180,7 +180,7 @@ def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     "RSA features for interval-related analysis"
     if isinstance(data, pd.DataFrame):
         rsa = ecg_rsa(data, sampling_rate=sampling_rate,
-                         continuous=False)
+                      continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index").T
 
     if isinstance(data, dict):
@@ -189,11 +189,10 @@ def _bio_analyze_rsa_interval(data, sampling_rate=1000):
             rsa[index] = {}  # Initialize empty container
             data[index] = data[index].set_index('Index').drop(['Label'], axis=1)
             rsa[index] = ecg_rsa(data[index],
-                                    sampling_rate=sampling_rate)
+                                 sampling_rate=sampling_rate)
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     return rsa
-
 
 
 def _bio_analyze_rsa_event(data, sampling_rate=1000, rsa={}):
