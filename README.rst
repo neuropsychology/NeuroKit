@@ -299,8 +299,6 @@ The analysis of physiological data usually comes in two types, **event-related**
 Event-related
 ^^^^^^^^^^^^^^
 
-- `*Example* <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_)
-
 This type of analysis refers to physiological changes immediately occurring in response to an event.
 For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus).
 In this situation the analysis is epoch-based. An epoch is a short chunk of the physiological signal
@@ -313,12 +311,10 @@ compute the following features:
   - **Peak characteristics** *(EDA)*: amplitude, rise time, peak-time, ...
   - ...
   
-  
+- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
 
 Interval-related
 ^^^^^^^^^^^^^^^^^
-
-- *no example yet*
 
 This type of analysis refers to the physiological characteristics and features that occur over
 longer periods of time (from a few seconds to days of activity). Typical use cases are either
@@ -335,6 +331,7 @@ stress. In this case, using `bio_analyze()` will compute the following features:
   - **Number of peaks** *(EDA)*:
   - ...
   
+(`example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_)
 
 Popularity
 ---------------------
