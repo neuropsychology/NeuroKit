@@ -8,7 +8,7 @@ from .ecg_delineate import ecg_delineate
 
 
 
-def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  sampling_rate=None):
+def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak',  sampling_rate=None):
     """Compute cardiac phase (for both atrial and ventricular).
 
     Finds the cardiac phase, labelled as 1 for systole and 0 for diastole.
@@ -61,7 +61,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
     # Sanitize inputs
     if rpeaks is None:
         if sampling_rate is not None:
-            _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)["ECG_R_Peaks"]
+            _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
         else:
             raise ValueError("rpeaks will be obtained using `nk.ecg_peaks`. "
                              "Please provide the sampling_rate of "
@@ -75,8 +75,14 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
 
     # Try retrieving right column
     if isinstance(delineate_info, dict):
-        twaves_end = delineate_info['ECG_T_Offsets']
+        toffsets = delineate_info['ECG_T_Offsets']
+        toffsets = [int(x) for x in toffsets if ~np.isnan(x)]
+        toffsets = np.array(toffsets)
+
         ppeaks = delineate_info['ECG_P_Peaks']
+        ppeaks = [int(x) for x in ppeaks if ~np.isnan(x)]
+        ppeaks = np.array(ppeaks)
+
 
 
 
@@ -96,7 +102,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='dwt',  samp
 
     # Ventricular Phase
     ventricular = np.full(len(ecg_cleaned), np.nan)
-    ventricular[twaves_end] = 0.0
+    ventricular[toffsets] = 0.0
     ventricular[rpeaks] = 1.0
 
     last_element = np.where(~np.isnan(ventricular))[0][-1]  # Avoid filling beyond the last peak/trough
