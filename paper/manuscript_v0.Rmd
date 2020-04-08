@@ -16,7 +16,7 @@ author:
     affiliation   : " 3"
   - name          : "Francois Lespinasse"
     affiliation   : " 4"
-  - name          : "Christopher Sch\"{o}lzel"
+  - name          : "Christopher Sch\\\"{o}lzel"
     affiliation   : " 5"
   - name          : "S.H. Annabel Chen"
     affiliation   : " 1, 6, 7"
@@ -28,9 +28,9 @@ affiliation:
   - id            : "3"
     institution   : "???"
   - id            : "4"
-    institution   : "Département de psychologie, Université de Montréal, Montréal"
+    institution   : "D\'{e}partement de psychologie, Universite de Montreal, Montreal, Canada"
   - id            : "5"
-    institution   : "???"
+    institution   : "Life Science Informatics, THM University of Applied Sciences, Gisslen, Germany"
   - id            : "6"
     institution   : "Centre for Research and Development in Learning, Nanyang Technological University, Singapore"
   - id            : "7"
@@ -39,7 +39,7 @@ authornote: |
   * Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
 abstract: |
    The NeuroKit2 toolbox is an open-source Python package aimed at providing users with comprehensive and flexible functionality in neurophysiological signal processing. It developed from a collaborative project aimed at offering programming ease for both novice and advanced users to perform elaborate analyses of electrocardiogram (ECG), respiratory (RSP), electrodermal activity (EDA), and electromyography (EMG) data. It comprises of a consistent set of user-friendly, high-level functions that implements an all-in-one cleaning, preprocessing, and processing pipeline with sensible defaults. At the same time, greater flexibility and parametric control can be achieved by using Neurokit2's mid-level functions to build a custom analysis pipeline. (talk about novelty?)
-keywords          : "neurophysiology, ECG, EDA, EMG, RSP"
+keywords          : "Neurophysiology, Biosignals, Python, ECG, EDA, EMG, RSP"
 wordcount         : ""
 bibliography      : ["bibliography.bib"]
 floatsintext      : yes
@@ -55,6 +55,7 @@ classoption       : "man"
 output: 
   papaja::apa6_pdf:
     keep_tex: FALSE
+    latex_engine: xelatex
   papaja::apa6_word:
     keep_tex: FALSE
 header-includes:

@@ -1,0 +1,313 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  english,
+  man,floatsintext]{apa6}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
+  pdfkeywords={Neurophysiology, Biosignals, Python, ECG, EDA, EMG, RSP},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+% Manuscript styling
+\usepackage{upgreek}
+\captionsetup{font=singlespacing,justification=justified}
+
+% Table formatting
+\usepackage{longtable}
+\usepackage{lscape}
+% \usepackage[counterclockwise]{rotating}   % Landscape page setup for large tables
+\usepackage{multirow}		% Table styling
+\usepackage{tabularx}		% Control Column width
+\usepackage[flushleft]{threeparttable}	% Allows for three part tables with a specified notes section
+\usepackage{threeparttablex}            % Lets threeparttable work with longtable
+
+% Create new environments so endfloat can handle them
+% \newenvironment{ltable}
+%   {\begin{landscape}\begin{center}\begin{threeparttable}}
+%   {\end{threeparttable}\end{center}\end{landscape}}
+\newenvironment{lltable}{\begin{landscape}\begin{center}\begin{ThreePartTable}}{\end{ThreePartTable}\end{center}\end{landscape}}
+
+% Enables adjusting longtable caption width to table width
+% Solution found at http://golatex.de/longtable-mit-caption-so-breit-wie-die-tabelle-t15767.html
+\makeatletter
+\newcommand\LastLTentrywidth{1em}
+\newlength\longtablewidth
+\setlength{\longtablewidth}{1in}
+\newcommand{\getlongtablewidth}{\begingroup \ifcsname LT@\roman{LT@tables}\endcsname \global\longtablewidth=0pt \renewcommand{\LT@entry}[2]{\global\advance\longtablewidth by ##2\relax\gdef\LastLTentrywidth{##2}}\@nameuse{LT@\roman{LT@tables}} \fi \endgroup}
+
+% \setlength{\parindent}{0.5in}
+% \setlength{\parskip}{0pt plus 0pt minus 0pt}
+
+% \usepackage{etoolbox}
+\makeatletter
+\patchcmd{\HyOrg@maketitle}
+  {\section{\normalfont\normalsize\abstractname}}
+  {\section*{\normalfont\normalsize\abstractname}}
+  {}{\typeout{Failed to patch abstract.}}
+\makeatother
+\shorttitle{SHORTTITLE}
+\author{Dominique Makowski\textsuperscript{ 1,*}, Tam Pham\textsuperscript{ 1}, Zen J. Lau\textsuperscript{ 1}, Jan C. Brammer\textsuperscript{ 2}, Hung Pham\textsuperscript{ 3}, Francois Lespinasse\textsuperscript{ 4}, Christopher Sch\"{o}lzel\textsuperscript{ 5}, \& S.H. Annabel Chen\textsuperscript{ 1, 6, 7}}
+\affiliation{
+\vspace{0.5cm}
+\textsuperscript{1} School of Social Sciences, Nanyang Technological University, Singapore\\\textsuperscript{2} ???\\\textsuperscript{3} ???\\\textsuperscript{4} D\textbackslash{}'\{\}partement de psychologie, Universite de Montreal, Montreal, Canada\\\textsuperscript{5} Life Science Informatics, THM University of Applied Sciences, Gisslen, Germany\\\textsuperscript{6} Centre for Research and Development in Learning, Nanyang Technological University, Singapore\\\textsuperscript{7} Lee Kong Chian School of Medicine, Nanyang Technological University, Singapore}
+\authornote{* Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
+
+
+}
+\keywords{Neurophysiology, Biosignals, Python, ECG, EDA, EMG, RSP\newline\indent Word count: }
+\usepackage{lineno}
+
+\linenumbers
+\usepackage{csquotes}
+\usepackage[labelfont=bf, font={color=gray,small}]{caption}
+\usepackage{float}
+\usepackage[document]{ragged2e}
+\ifxetex
+  % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
+  \usepackage{polyglossia}
+  \setmainlanguage[]{english}
+\else
+  \usepackage[shorthands=off,main=english]{babel}
+\fi
+
+\title{\textbf{NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing}}
+
+\date{}
+
+\abstract{
+The NeuroKit2 toolbox is an open-source Python package aimed at providing users with comprehensive and flexible functionality in neurophysiological signal processing. It developed from a collaborative project aimed at offering programming ease for both novice and advanced users to perform elaborate analyses of electrocardiogram (ECG), respiratory (RSP), electrodermal activity (EDA), and electromyography (EMG) data. It comprises of a consistent set of user-friendly, high-level functions that implements an all-in-one cleaning, preprocessing, and processing pipeline with sensible defaults. At the same time, greater flexibility and parametric control can be achieved by using Neurokit2's mid-level functions to build a custom analysis pipeline. (talk about novelty?)
+}
+
+\begin{document}
+\maketitle
+
+\justify
+
+The field of cognitive neuroscience and psychology is increasingly relying on neurophysiological methods. One of the reasons is that such approaches often offer low monetary cost (especially compared with other imaging techniques, such as MRI) and high user convenience (e.g., portability). At the same time, the fields of signal processing and computational data science are growing strongly, tackling issues and limitations, and pushing the horizon of possibilities and opportunities. However, as these methods are often not easily accessible and user-friendly, neurophysiological data processing remains a challenge for many researchers without a formal programming training.
+
+\emph{NeuroKit2} aims at addressing this gap by offering a free and user-friendly solution for neurophysiological data processing. It is an open-source Python package, developed in a collaborative environment that continues to welcome contributors from different countries and fields. Historically, \emph{NeuroKit2} is the re-forged successor \emph{NeuroKit} (\emph{\url{https://github.com/neuropsychology/NeuroKit.py}}), a PhD side project that ended up attracting a lot of users and success (236 GitHub stars as of 13-03-2020). The new version takes on its best features and design choices, and re-implements them in a professional and well-thaught way. It aims at being 1) accessible, 2) well-documented, 2) reliable, 4) cutting-edge and 5) powerful.
+
+The package is available for Python (Van Rossum \& Drake, 2009) and thus benefits of its important base of users, existing tutorials and large online community. It is also relatively lightweight, enabling its use as a dependency in other software. The package source code is available under a permissive license on GitHub (\emph{\url{https://github.com/neuropsychology/NeuroKit}}); along with its documentation, it is automatically built and hosted at \emph{\url{https://neurokit2.readthedocs.io/}}. Apart from instructions on installation and contribution, and a decription of the package's functions, it also includes several \enquote{hands-on} examples and tutorials providing a walk-through on how to address specific issues (for instance, how to extract and visualize individual heartbeats). New examples can be easily added by users simply by uploading a Python notebook file to the repository. This notebook file will be automatically transformed into a webpage and displayed on the website, ensuring a state of the art and evolutive documentation. The accessibility for newcomers is reinforced by the issue tracker of GitHub, where users can create public issues to inquire for help.
+
+The packages is made to be reliable, and its functions are tested against existing implementations of established reference software such as \emph{BioSPPy} (Carreiras et al., 2015), \emph{hrv} \href{https://github.com/openjournals/joss-reviews/issues/1867}{\emph{under review}}, \emph{PySiology} (Gabrieli, Azhari, \& Esposito, 2019), \emph{HeartPy} (Gent, Farah, Nes, \& Arem, 2019), \emph{systole} (Legrand \& Allen, 2020) or \emph{nolds} (Schölzel, 2020). The code itself includes a comprehensive test suite to ensure stability and prevent error. Moreover, the issue tracker allows users to easily report any bugs and track their fixation. Thanks to its collaborative and open developpment, as well as its modular organization, \emph{NeuroKit2} is being developped with a longterm perspective in mind, aiming at remaining cutting-edge through its ability to evolve, adapt, and integrate new methods as they are being developped.
+
+Finally, we believe that the design philosophy contributes to a powerful (allowing to achieve a lot with very few functions) yet flexible (enabling fine control and precision over what is done) user interface (API), which is described below.
+
+\hypertarget{design-philosophy}{%
+\section{Design Philosophy}\label{design-philosophy}}
+
+\emph{NeuroKit2} aims at being accessible to beginners and, at the same time, offering a maximal level of control of experienced users. This is achieved via the implementation of 3 levels of functions.
+
+\hypertarget{low-level-signal-processing-base-utilities}{%
+\subsection{Low-level: Signal Processing Base Utilities}\label{low-level-signal-processing-base-utilities}}
+
+\hypertarget{mid-level-neurophysiological-processing-steps}{%
+\subsection{Mid-level: Neurophysiological Processing Steps}\label{mid-level-neurophysiological-processing-steps}}
+
+\hypertarget{high-level-wrappers-for-processing-and-analysis}{%
+\subsection{High-level Wrappers for Processing and Analysis}\label{high-level-wrappers-for-processing-and-analysis}}
+
+Consistency: For each type of signals (ECG, RSP, EDA, EMG\ldots), the same function names are called (in the form signaltype\_functiongoal()) to achieve equivalent goals, such as *\_clean(), *\_findpeaks(), *\_process(), *\_plot() (replace the star with the signal type, e.g., ecg\_clean()).
+
+Accessibility: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level \enquote{master} functions, such as *\_process(), that performs cleaning, preprocessing and processing with sensible defaults.
+Flexibility: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as *\_clean(), *\_rate()), offering more control and flexibility over their parameters.
+
+\hypertarget{processing-and-analysis}{%
+\subsection{Processing and analysis}\label{processing-and-analysis}}
+
+This design withholds the promise of being able to do a full processing and features extraction of your data with only 2 functions.
+
+\hypertarget{example}{%
+\section{Example}\label{example}}
+
+Despite not having a Graphical User Interface (GUI), NeuroKit2 is accessible to people with very little knowledge of python or programming in general.
+
+\hypertarget{event-related-paradigm}{%
+\subsection{Event-related Paradigm}\label{event-related-paradigm}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Imports}
+\ImportTok{import}\NormalTok{ neurokit2 }\ImportTok{as}\NormalTok{ nk}
+
+\CommentTok{# Download example dataset}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ nk.data(}\StringTok{"bio_eventrelated_100hz"}\NormalTok{)}
+
+\CommentTok{# Process the data}
+\NormalTok{df, info }\OperatorTok{=}\NormalTok{ nk.bio_process(ecg}\OperatorTok{=}\NormalTok{data[}\StringTok{"ECG"}\NormalTok{], rsp}\OperatorTok{=}\NormalTok{data[}\StringTok{"RSP"}\NormalTok{], eda}\OperatorTok{=}\NormalTok{data[}\StringTok{"EDA"}\NormalTok{], emg}\OperatorTok{=}\VariableTok{None}\NormalTok{, sampling_rate}\OperatorTok{=}\DecValTok{100}\NormalTok{)}
+
+\CommentTok{# Find events}
+\NormalTok{events }\OperatorTok{=}\NormalTok{ nk.events_find(event_channel}\OperatorTok{=}\NormalTok{data[}\StringTok{"Photosensor"}\NormalTok{], threshold_keep}\OperatorTok{=}\StringTok{'below'}\NormalTok{,}
+\NormalTok{                        event_conditions}\OperatorTok{=}\NormalTok{[}\StringTok{"Negative"}\NormalTok{, }\StringTok{"Neutral"}\NormalTok{, }\StringTok{"Neutral"}\NormalTok{, }\StringTok{"Negative"}\NormalTok{])}
+
+\CommentTok{# Visualize events in the signal}
+\NormalTok{plot }\OperatorTok{=}\NormalTok{ nk.events_plot(events}\OperatorTok{=}\NormalTok{events, signal}\OperatorTok{=}\NormalTok{data)}
+
+\CommentTok{# Epoch the data}
+\NormalTok{epochs }\OperatorTok{=}\NormalTok{ nk.epochs_create(data}\OperatorTok{=}\NormalTok{df, events}\OperatorTok{=}\NormalTok{events, sampling_rate}\OperatorTok{=}\DecValTok{100}\NormalTok{, epochs_start}\OperatorTok{=-}\FloatTok{0.1}\NormalTok{, epochs_end}\OperatorTok{=}\FloatTok{1.9}\NormalTok{)}
+
+\CommentTok{# Extract event related fetures}
+\NormalTok{bio_features }\OperatorTok{=}\NormalTok{ nk.bio_analyze(epochs)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{resting-state-features}{%
+\subsection{Resting-state Features}\label{resting-state-features}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Imports}
+\ImportTok{import}\NormalTok{ neurokit2 }\ImportTok{as}\NormalTok{ nk}
+
+\CommentTok{# Download example dataset}
+\NormalTok{data }\OperatorTok{=}\NormalTok{ nk.data(}\StringTok{"bio_resting_5min_100hz"}\NormalTok{)}
+
+\CommentTok{# Process the data}
+\NormalTok{df, info }\OperatorTok{=}\NormalTok{ nk.bio_process(ecg}\OperatorTok{=}\NormalTok{data[}\StringTok{"ECG"}\NormalTok{], rsp}\OperatorTok{=}\NormalTok{data[}\StringTok{"RSP"}\NormalTok{], eda}\OperatorTok{=}\VariableTok{None}\NormalTok{, emg}\OperatorTok{=}\VariableTok{None}\NormalTok{, sampling_rate}\OperatorTok{=}\DecValTok{100}\NormalTok{)}
+
+\CommentTok{# Extract fetures}
+\NormalTok{bio_features }\OperatorTok{=}\NormalTok{ nk.bio_analyze(epochs)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{conflict-of-interest}{%
+\section{Conflict of Interest}\label{conflict-of-interest}}
+
+The authors declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest.
+
+\hypertarget{acknowledgements}{%
+\section{Acknowledgements}\label{acknowledgements}}
+
+All the contributors (\url{https://neurokit2.readthedocs.io/credits.html}) that reported bugs, and the users.
+
+\newpage
+
+\hypertarget{references}{%
+\section{References}\label{references}}
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+\hypertarget{refs}{}
+\leavevmode\hypertarget{ref-biosppy}{}%
+Carreiras, C., Alves, A. P., Lourenço, A., Canento, F., Silva, H., Fred, A., \& others. (2015). BioSPPy: Biosignal processing in Python. Retrieved from \url{https://github.com/PIA-Group/BioSPPy/}
+
+\leavevmode\hypertarget{ref-PySiology}{}%
+Gabrieli, G., Azhari, A., \& Esposito, G. (2019). PySiology: A python package for physiological feature extraction. In \emph{Neural approaches to dynamics of signal exchanges} (pp. 395--402). Springer Singapore. \url{https://doi.org/10.1007/978-981-13-8950-4_35}
+
+\leavevmode\hypertarget{ref-HeartPy}{}%
+Gent, P. van, Farah, H., Nes, N. van, \& Arem, B. van. (2019). HeartPy: A novel heart rate algorithm for the analysis of noisy signals. \emph{Transportation Research Part F: Traffic Psychology and Behaviour}, \emph{66}, 368--378. \url{https://doi.org/10.1016/j.trf.2019.09.015}
+
+\leavevmode\hypertarget{ref-Systole}{}%
+Legrand, N., \& Allen, M. (2020). Systole: A python toolbox for preprocessing, analyzing, and synchronizing cardiac data. Retrieved from \url{https://github.com/embodied-computation-group/systole}
+
+\leavevmode\hypertarget{ref-nolds}{}%
+Schölzel, C. (2020). NOnLinear measures for dynamical systems (nolds). Retrieved from \url{https://github.com/CSchoel/nolds}
+
+\leavevmode\hypertarget{ref-python3}{}%
+Van Rossum, G., \& Drake, F. L. (2009). \emph{Python 3 reference manual}. Scotts Valley, CA: CreateSpace.
+
+\endgroup
+
+\end{document}
