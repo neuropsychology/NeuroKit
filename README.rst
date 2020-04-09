@@ -331,7 +331,7 @@ stress. In this case, using `bio_analyze()` will compute the following features:
   - **Number of peaks** *(EDA)*:
   - ...
   
-(`example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_)
+- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_)
 
 Popularity
 ---------------------
