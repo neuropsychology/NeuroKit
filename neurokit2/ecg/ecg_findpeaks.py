@@ -823,12 +823,22 @@ def _ecg_findpeaks_MWA(signal, window_size):
     """
     From https://github.com/berndporr/py-ecg-detectors/
     """
+
     mwa = np.zeros(len(signal))
+    sums = np.cumsum(signal)
+
+    def get_mean(begin, end):
+        if begin == 0:
+            return sums[end - 1] / end
+
+        dif = sums[end - 1] - sums[begin - 1]
+        return dif / (end - begin)
+
     for i in range(len(signal)):
         if i < window_size:
             section = signal[0:i]
         else:
-            section = signal[i-window_size:i]
+            section = get_mean(i - window_size, i)
 
         if i != 0:
             mwa[i] = np.mean(section)
@@ -836,7 +846,6 @@ def _ecg_findpeaks_MWA(signal, window_size):
             mwa[i] = signal[i]
 
     return mwa
-
 
 
 
