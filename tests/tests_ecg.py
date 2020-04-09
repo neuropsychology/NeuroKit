@@ -157,7 +157,8 @@ def test_ecg_process():
     # Only check array dimensions and column names since functions called by
     # ecg_process have already been unit tested
     assert all(elem in ["ECG_Raw", "ECG_Clean", "ECG_R_Peaks", "ECG_Rate",
-                        "ECG_P_Peaks", "ECG_Q_Peaks", "ECG_S_Peaks",
+                        'ECG_Quality', "ECG_P_Peaks",
+                        "ECG_Q_Peaks", "ECG_S_Peaks",
                         "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
                         "ECG_Atrial_Phase", "ECG_Ventricular_Phase",
                         "ECG_Atrial_PhaseCompletion",
@@ -279,7 +280,7 @@ def test_ecg_eventrelated():
                       np.array(ecg_eventrelated["ECG_Rate_Max"]))
 
     assert len(ecg_eventrelated["Label"]) == 3
-    assert len(ecg_eventrelated.columns) == 13
+    assert len(ecg_eventrelated.columns) == 14
 
     assert all(elem in ["ECG_Rate_Max", "ECG_Rate_Min", "ECG_Rate_Mean",
                         "ECG_Rate_Max_Time", "ECG_Rate_Min_Time",
@@ -288,7 +289,8 @@ def test_ecg_eventrelated():
                         "ECG_Atrial_Phase",
                         "ECG_Atrial_PhaseCompletion",
                         "ECG_Ventricular_Phase",
-                        "ECG_Ventricular_PhaseCompletion", "Label"]
+                        "ECG_Ventricular_PhaseCompletion",
+                        'ECG_Quality_Mean',"Label"]
                for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
 
 

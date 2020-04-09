@@ -14,6 +14,7 @@ Contents:
    rrv
    heartbeats
    ecg_delineate
+   epochs_create
 
 Cloud-based interactive examples
 =================================

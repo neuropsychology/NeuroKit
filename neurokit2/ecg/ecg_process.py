@@ -6,6 +6,7 @@ from .ecg_peaks import ecg_peaks
 from .ecg_rate import ecg_rate
 from .ecg_delineate import ecg_delineate
 from .ecg_phase import ecg_phase
+from .ecg_quality import ecg_quality
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
@@ -85,19 +86,24 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
                     sampling_rate=sampling_rate,
                     desired_length=len(ecg_cleaned))
 
+    quality = ecg_quality(ecg_cleaned, rpeaks=None,
+                          sampling_rate=sampling_rate)
+
     signals = pd.DataFrame({"ECG_Raw": ecg_signal,
                             "ECG_Clean": ecg_cleaned,
-                            "ECG_Rate": rate})
+                            "ECG_Rate": rate,
+                            "ECG_Quality": quality})
 
     # Additional info of the ecg signal
-    delineated_signal, waves = ecg_delineate(ecg_cleaned=ecg_cleaned,
-                                             rpeaks=rpeaks,
-                                             sampling_rate=sampling_rate)
+    delineate_signal, delineate_info = ecg_delineate(ecg_cleaned=ecg_cleaned,
+                                                     rpeaks=rpeaks,
+                                                     sampling_rate=sampling_rate)
 
     cardiac_phase = ecg_phase(ecg_cleaned=ecg_cleaned,
                               rpeaks=rpeaks,
-                              delineate_info=waves)
+                              delineate_info=delineate_info)
 
-    signals = pd.concat([signals, instant_peaks, delineated_signal, cardiac_phase], axis=1)
+    signals = pd.concat([signals, instant_peaks, delineate_signal, cardiac_phase], axis=1)
+
     info = rpeaks
     return signals, info

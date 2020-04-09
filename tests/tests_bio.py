@@ -31,7 +31,8 @@ def test_bio_process():
     assert all(bio_info["EMG_Offsets"] > bio_info["EMG_Onsets"])
     assert len(bio_info["EMG_Offsets"] == len(bio_info["EMG_Onsets"]))
 
-    assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate', 'ECG_R_Peaks',
+    assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate',
+                        'ECG_Quality', 'ECG_R_Peaks',
                         "ECG_P_Peaks", "ECG_Q_Peaks", "ECG_S_Peaks",
                         "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
                         "ECG_Atrial_Phase", "ECG_Ventricular_Phase",
@@ -73,7 +74,7 @@ def test_bio_analyze():
                         'ECG_Rate_Trend_Quadratic', 'ECG_Rate_Trend_Linear',
                         'ECG_Rate_Trend_R2', 'ECG_Atrial_Phase',
                         'ECG_Atrial_PhaseCompletion', 'ECG_Ventricular_Phase',
-                        'ECG_Ventricular_PhaseCompletion',
+                        'ECG_Ventricular_PhaseCompletion', 'ECG_Quality_Mean',
                         'RSP_Rate_Max',  'RSP_Rate_Min',
                         'RSP_Rate_Mean', 'RSP_Rate_Max_Time', 'RSP_Rate_Min_Time',
                         'RSP_Amplitude_Max', 'RSP_Amplitude_Min', 'RSP_Amplitude_Mean',
