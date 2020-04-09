@@ -96,8 +96,8 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     # Additional info of the ecg signal
     delineate_signal, delineate_info = ecg_delineate(ecg_cleaned=ecg_cleaned,
-                                             rpeaks=rpeaks,
-                                             sampling_rate=sampling_rate)
+                                                     rpeaks=rpeaks,
+                                                     sampling_rate=sampling_rate)
 
     cardiac_phase = ecg_phase(ecg_cleaned=ecg_cleaned,
                               rpeaks=rpeaks,
