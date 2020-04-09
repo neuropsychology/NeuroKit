@@ -8,6 +8,7 @@ from ..ecg import ecg_fixpeaks
 from ..ecg import ecg_peaks
 from .ecg_segment import ecg_segment
 from ..epochs import epochs_to_df
+from ..stats import rescale
 
 
 def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
@@ -73,15 +74,22 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
         fig.suptitle("Electrocardiogram (ECG)", fontweight="bold")
         plt.subplots_adjust(hspace=0.3, wspace=0.1)
 
-        # Plot cleaned and raw ECG as well as R-peaks.
+        # Plot cleaned, raw ECG, R-peaks and signal quality.
         ax0.set_title("Raw and Cleaned Signal")
 
+        quality = rescale(ecg_signals["ECG_Quality"],
+                          to=[np.min(ecg_signals["ECG_Clean"]),
+                              np.max(ecg_signals["ECG_Clean"])])
+
+        ax0.plot(x_axis, quality, color='#6eb9fd', label='Quality', zorder=0)
         ax0.plot(x_axis, ecg_signals["ECG_Raw"], color='#B0BEC5', label='Raw',
                  zorder=1)
         ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#E91E63',
                  label="Cleaned", zorder=1, linewidth=1.5)
         ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks],
                     color="#FFC107", label="R-peaks", zorder=2)
+
+        ax0.legend(loc="upper right")
 
         # Plot heart rate.
         ax1.set_title("Heart Rate")
