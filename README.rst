@@ -349,56 +349,6 @@ Popularity
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
 
-  
-Alternative Packages
----------------------
-
-Here's a list of great alternative packages that you should check out:
-
-
-General
-^^^^^^^^
-
-- `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
-- `PySiology <https://github.com/Gabrock94/Pysiology>`_
-- `PsPM <https://github.com/bachlab/PsPM>`_
-- `pyphysio <https://github.com/MPBA/pyphysio>`_
-
-
-ECG / PPG
-^^^^^^^^^^
-
-- `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
-- `hrv <https://github.com/rhenanbartels/hrv>`_
-- `hrv-analysis <https://github.com/Aura-healthcare/hrvanalysis>`_
-- `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
-- `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
-- `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_
-- `pyedr <https://github.com/jusjusjus/pyedr>`_
-- `Systole <https://github.com/embodied-computation-group/systole>`_
-
-EDA
-^^^^
-
-- `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
-- `cvxEDA <https://github.com/lciti/cvxEDA>`_
-- `Pypsy <https://github.com/brennon/Pypsy>`_
-- `BreatheEasyEDA <https://github.com/johnksander/BreatheEasyEDA>`_ *(matlab)*
-- `EDA <https://github.com/mateusjoffily/EDA>`_ *(matlab)*
-
-EEG
-^^^^
-
-- `MNE <https://github.com/mne-tools/mne-python>`_
-- `unfold <https://github.com/unfoldtoolbox/unfold>`_ *(matlab)*
-  
-  
-Eye-Tracking
-^^^^^^^^^^^^^^
-
-- `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
-- `PyTrack <https://github.com/titoghose/PyTrack>`_
-
 
   
 Notes
