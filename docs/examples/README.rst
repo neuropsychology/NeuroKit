@@ -1,6 +1,9 @@
 Cloud-based interactive examples
 ==================================
 
+.. hint::
+   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_).
+   
 The notebooks in this repo are meant to illustrate what you can do with NeuroKit. It is supposed to reveal how easy it has become to use cutting-edge methods, and still retain the liberty to change a myriad of parameters. These notebooks are organized in different sections that correspond to NeuroKit's modules.
 
 You are free to click on the link below to run everything... **without having to install anything!** There you'll find a Jupyterlab with notebooks ready to fire up. If you need `help figuring out the interface <https://jupyterlab.readthedocs.io/en/stable/user/interface.html>`_. (The secret is ``shift+enter``).

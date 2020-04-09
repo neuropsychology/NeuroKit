@@ -5,6 +5,7 @@ import numpy as np
 from ..epochs.epochs_to_df import _df_to_epochs
 from ..stats import fit_r2
 
+
 def ecg_eventrelated(epochs):
     """Performs event-related ECG analysis on epochs.
 
@@ -96,6 +97,10 @@ def ecg_eventrelated(epochs):
         # Cardiac Phase
         ecg_df[epoch_index] = _ecg_eventrelated_phase(epochs[epoch_index],
                                                       ecg_df[epoch_index])
+
+        # Quality
+        ecg_df[epoch_index] = _ecg_eventrelated_quality(epochs[epoch_index],
+                                                        ecg_df[epoch_index])
 
         # Fill with more info
         ecg_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
@@ -200,5 +205,21 @@ def _ecg_eventrelated_phase(epoch, output={}):
     output["ECG_Ventricular_Phase"] = systole
     percentage = epoch["ECG_Ventricular_PhaseCompletion"][epoch.index > 0].iloc[0]
     output["ECG_Ventricular_PhaseCompletion"] = percentage
+
+    return output
+
+
+def _ecg_eventrelated_quality(epoch, output={}):
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "ECG_Quality" in i]) == 0:
+        print("NeuroKit warning: ecg_eventrelated(): input does not"
+              "have an `ECG_Quality` column. Quality of the signal"
+              "is not computed.")
+        return output
+
+    # Average signal quality over epochs
+    output["ECG_Quality_Mean"] = epoch["ECG_Quality"].mean()
 
     return output

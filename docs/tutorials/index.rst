@@ -6,8 +6,10 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
-   understanding
    recording
+   software
+   understanding
+
    github_contribute
 
 
