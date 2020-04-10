@@ -310,7 +310,7 @@ compute the following features:
 
   - **Rate changes** *(ECG, PPG, RSP)*: mean, minimum, maximum, minimum-time and maximum-time
   - **Peak characteristics** *(EDA)*: peak presence, amplitude, rise time, peak-time
-  - **Phase characteristics** *(ECG, RSP)*: phase type (inhale/exhale, systole/diastole), phase stage
+  - **Phase characteristics** *(ECG, RSP)*: phase type (inspiration/expiration, systole/diastole), phase stage
   
 - `Full example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
 

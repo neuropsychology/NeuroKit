@@ -137,7 +137,9 @@ We will present two examples that illustrate the most common use-cases. The firs
 
 ## Event-related Paradigm
 
-The data corresponds to ...
+This data is from 1 participant to whom was presented 4 images (emotional stimuli, IAPS-like emotional faces), which will be refered to as events hereafter.
+
+The data contains 2.5 minutes of physiological signals (ECG, EDA, RSP) recorded at a frequency of 100Hz (2.5 x 60 x 100 = 15000 data points). In the recording, there are four channels, three correspond to the physiological signals, and one corresponds to the event-marking channel (Photosensor).
 
 
 ```{python eventrelated, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
@@ -184,11 +186,13 @@ kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Ampl
 ```
 
 
-This extracts features like **blabla**.
+This extracts features such as the changes in rates of ECG and RSP signals (e.g. maximum, minimum and mean rate after stimulus onset, the time at which they occur), the peak characteristics of EDA signal (e.g.occurrence of skin conductance response (SCR), and if SCR is present, its corresponding peak amplitude, time of peak, rise and recovery time). In addition, for ECG and RSP signals, the information of the respiration and cardiac phases are also extracted (e.g. which type of respiration phase, inspiration/expiration, and cardiac phase, systole/diastole, occur at the onset of event, and at which stage of the cycle they are at)
 
 ## Resting-state Features 
 
-The data corresponds to ...
+The data corresponds the resting state data from 1 participant who was asked to close his/her eyes for 5 minutes, trying not to think of anything as well as not to fall asleep.
+
+The contains 5 minutes of physiological signals (ECG, PPG, RSP) recorded at a frequency of 100Hz (5 x 60 x 100 = 30000 data points).
 
 ```{python intervalrelated, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
 # Load the package
@@ -220,7 +224,7 @@ kable(py$results[c("ECG_Rate_Mean", "ECG_HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_M
 ```
 
 
-This extracts features like **blabla**.
+This extracts features such as the rate characteristics of ECG and RSP signals (e.g. the mean and the variability of heart rate - HRV and respiration rate - RRV respectively).
 
 
 # Conclusion and Future Directions
