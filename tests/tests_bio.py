@@ -78,9 +78,10 @@ def test_bio_analyze():
                         'RSP_Rate_Max',  'RSP_Rate_Min',
                         'RSP_Rate_Mean', 'RSP_Rate_Max_Time', 'RSP_Rate_Min_Time',
                         'RSP_Amplitude_Max', 'RSP_Amplitude_Min', 'RSP_Amplitude_Mean',
-                        'RSP_Phase', 'RSP_PhaseCompletion', 'EDA_Activation',
-                        'EDA_Peak_Amplitude', 'EDA_Peak_Amplitude_Time', 'EDA_RiseTime',
-                        'EDA_RecoveryTime', 'RSA_P2T', 'Label', 'Condition']
+                        'RSP_Phase', 'RSP_PhaseCompletion', 'EDA_SCR',
+                        'EDA_Peak_Amplitude', 'SCR_Peak_Amplitude',
+                        'SCR_Peak_Amplitude_Time', 'SCR_RiseTime',
+                        'SCR_RecoveryTime', 'RSA_P2T', 'Label', 'Condition']
                for elem in np.array(event_related.columns.values, dtype=str))
 
     # Example with interval-related analysis

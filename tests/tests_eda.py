@@ -135,10 +135,9 @@ def test_eda_eventrelated():
     assert len(eda_eventrelated["Label"]) == 3
     assert len(eda_eventrelated.columns) == 6
 
-    assert all(elem in ["EDA_Activation", "EDA_Peak_Amplitude",
-                        "EDA_Peak_Amplitude_Time",
-                        "EDA_RiseTime", "EDA_RecoveryTime",
-                        "Label"]
+    assert all(elem in ['Label', 'EDA_Peak_Amplitude', 'EDA_SCR',
+                        'SCR_Peak_Amplitude', 'SCR_Peak_Amplitude_Time',
+                        'SCR_RiseTime', 'SCR_RecoveryTime']
                for elem in np.array(eda_eventrelated.columns.values, dtype=str))
 
 

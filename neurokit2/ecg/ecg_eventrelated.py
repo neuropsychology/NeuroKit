@@ -116,6 +116,13 @@ def ecg_eventrelated(epochs):
 
     ecg_df = pd.DataFrame.from_dict(ecg_df, orient="index")  # Convert to a dataframe
 
+    # Move columns to front
+    colnames = ecg_df.columns.values
+    if len([i for i in colnames if "Condition" in i]) == 1:
+        ecg_df = ecg_df[['Condition'] + [col for col in ecg_df.columns if col != 'Condition']]
+    if len([i for i in colnames if "Label" in i]) == 1:
+        ecg_df = ecg_df[['Label'] + [col for col in ecg_df.columns if col != 'Label']]
+
     return ecg_df
 
 
