@@ -77,7 +77,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
         # Plot cleaned, raw ECG, R-peaks and signal quality.
         ax0.set_title("Raw and Cleaned Signal")
 
-        quality = nk.rescale(ecg_signals["ECG_Quality"],
+        quality = rescale(ecg_signals["ECG_Quality"],
                           to=[np.min(ecg_signals["ECG_Clean"]),
                               np.max(ecg_signals["ECG_Clean"])])
         minimum_line = np.full(len(x_axis), quality.min())
