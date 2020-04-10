@@ -38,6 +38,8 @@ def rsp_eventrelated(epochs):
         after stimulus onset.
         - *"RSP_Phase"*: indication of whether the onset of the event
         concurs with respiratory inspiration (1) or expiration (0).
+        - *"RSP_PhaseCompletion"*: indication of the stage of the current
+        respiration phase (0 to 1) at the onset of the event.
 
     See Also
     --------
