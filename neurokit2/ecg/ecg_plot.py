@@ -82,9 +82,11 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
                               np.max(ecg_signals["ECG_Clean"])])
         minimum_line = np.full(len(x_axis), quality.min())
 
-        ax0.plot(x_axis, quality, color='#6eb9fd', label='Quality', alpha=0, zorder=0)
+        # Plot quality area first
         ax0.fill_between(x_axis, minimum_line, quality, alpha=0.12, zorder=0,
-                         interpolate=True)
+                         interpolate=True, facecolor="#4CAF50", label='Quality')
+
+        # Plot signals
         ax0.plot(x_axis, ecg_signals["ECG_Raw"], color='#B0BEC5', label='Raw',
                  zorder=1)
         ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#E91E63',
@@ -92,7 +94,10 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
         ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks],
                     color="#FFC107", label="R-peaks", zorder=2)
 
-        ax0.legend(loc="upper right")
+        # Optimize legend
+        handles, labels = ax0.get_legend_handles_labels()
+        order = [2, 0, 1, 3]
+        ax0.legend([handles[idx] for idx in order], [labels[idx] for idx in order], loc="upper right")
 
         # Plot heart rate.
         ax1.set_title("Heart Rate")
