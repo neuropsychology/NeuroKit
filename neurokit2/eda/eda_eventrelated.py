@@ -105,7 +105,7 @@ def eda_eventrelated(epochs):
         # Analyze based on if activations are present
         if (eda_df[epoch_index]["EDA_SCR"] != 0):
             eda_df[epoch_index] = _eda_eventrelated_scr(epochs[epoch_index],
-                                                             eda_df[epoch_index])
+                                                        eda_df[epoch_index])
         else:
             eda_df[epoch_index]["SCR_Peak_Amplitude"] = np.nan
             eda_df[epoch_index]["SCR_Peak_Amplitude_Time"] = np.nan
