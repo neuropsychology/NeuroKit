@@ -354,5 +354,4 @@ Popularity
 Notes
 -------
 
-*Note: The authors do not provide any warranty. If this software causes your keyboard to blow up,
-your brain to liquify, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*
+*The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquify, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*
