@@ -21,7 +21,7 @@
         :alt: Maintainability
 
 
-**The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
+**The Python Toolbox for Neurophysiological Signal Processing**
 
 This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
 It's a user-friendly package providing easy access to advanced biosignal processing routines.
@@ -333,7 +333,7 @@ stress. In this case, using `bio_analyze()` will compute the following features:
   - **Peak characteristics** *(EDA)*: number of peaks, mean amplitude
   - ...
   
-- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_)
+- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
 Popularity
 ---------------------
