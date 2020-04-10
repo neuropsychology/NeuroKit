@@ -77,11 +77,14 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
         # Plot cleaned, raw ECG, R-peaks and signal quality.
         ax0.set_title("Raw and Cleaned Signal")
 
-        quality = rescale(ecg_signals["ECG_Quality"],
+        quality = nk.rescale(ecg_signals["ECG_Quality"],
                           to=[np.min(ecg_signals["ECG_Clean"]),
                               np.max(ecg_signals["ECG_Clean"])])
+        minimum_line = np.full(len(x_axis), quality.min())
 
-        ax0.plot(x_axis, quality, color='#6eb9fd', label='Quality', zorder=0)
+        ax0.plot(x_axis, quality, color='#6eb9fd', label='Quality', alpha=0, zorder=0)
+        ax0.fill_between(x_axis, minimum_line, quality, alpha=0.12, zorder=0,
+                         interpolate=True)
         ax0.plot(x_axis, ecg_signals["ECG_Raw"], color='#B0BEC5', label='Raw',
                  zorder=1)
         ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#E91E63',
