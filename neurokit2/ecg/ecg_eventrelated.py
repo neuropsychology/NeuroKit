@@ -5,6 +5,7 @@ import numpy as np
 from ..epochs.epochs_to_df import _df_to_epochs
 from ..stats import fit_r2
 
+
 def ecg_eventrelated(epochs):
     """Performs event-related ECG analysis on epochs.
 
@@ -27,6 +28,14 @@ def ecg_eventrelated(epochs):
         - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
         - *"ECG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
         - *"ECG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
+        - *"ECG_Atrial_Phase"*: indication of whether the onset of the event
+        concurs with respiratory systole (1) or diastole (0).
+        - *"ECG_Ventricular_Phase"*: indication of whether the onset of the
+        event concurs with respiratory systole (1) or diastole (0).
+        - *"ECG_Atrial_PhaseCompletion"*: indication of the stage of the
+        current cardiac (atrial) phase (0 to 1) at the onset of the event.
+         *"ECG_Ventricular_PhaseCompletion"*: indication of the stage of the
+        current cardiac (ventricular) phase (0 to 1) at the onset of the event.
         We also include the following *experimental* features related to the
         parameters of a quadratic model.
         - *"ECG_Rate_Trend_Linear"*: The parameter corresponding to the linear trend.
@@ -97,11 +106,22 @@ def ecg_eventrelated(epochs):
         ecg_df[epoch_index] = _ecg_eventrelated_phase(epochs[epoch_index],
                                                       ecg_df[epoch_index])
 
+        # Quality
+        ecg_df[epoch_index] = _ecg_eventrelated_quality(epochs[epoch_index],
+                                                        ecg_df[epoch_index])
+
         # Fill with more info
         ecg_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
                                                     ecg_df[epoch_index])
 
     ecg_df = pd.DataFrame.from_dict(ecg_df, orient="index")  # Convert to a dataframe
+
+    # Move columns to front
+    colnames = ecg_df.columns.values
+    if len([i for i in colnames if "Condition" in i]) == 1:
+        ecg_df = ecg_df[['Condition'] + [col for col in ecg_df.columns if col != 'Condition']]
+    if len([i for i in colnames if "Label" in i]) == 1:
+        ecg_df = ecg_df[['Label'] + [col for col in ecg_df.columns if col != 'Label']]
 
     return ecg_df
 
@@ -200,5 +220,21 @@ def _ecg_eventrelated_phase(epoch, output={}):
     output["ECG_Ventricular_Phase"] = systole
     percentage = epoch["ECG_Ventricular_PhaseCompletion"][epoch.index > 0].iloc[0]
     output["ECG_Ventricular_PhaseCompletion"] = percentage
+
+    return output
+
+
+def _ecg_eventrelated_quality(epoch, output={}):
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "ECG_Quality" in i]) == 0:
+        print("NeuroKit warning: ecg_eventrelated(): input does not"
+              "have an `ECG_Quality` column. Quality of the signal"
+              "is not computed.")
+        return output
+
+    # Average signal quality over epochs
+    output["ECG_Quality_Mean"] = epoch["ECG_Quality"].mean()
 
     return output

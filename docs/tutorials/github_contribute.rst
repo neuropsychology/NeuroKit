@@ -1,5 +1,6 @@
 How to contribute
 ==================
+
 **Neurokit2 welcomes everyone to contribute to code, documentation, testing and suggestions.**
 
 This package aims at being beginner-friendly. And if you have yet been familiar with how contribution can be done to open-source packages, this guide is for you!

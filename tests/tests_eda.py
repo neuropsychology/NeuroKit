@@ -128,17 +128,16 @@ def test_eda_eventrelated():
                               epochs_start=-0.1, epochs_end=1.9)
     eda_eventrelated = nk.eda_eventrelated(epochs)
 
-    no_activation = np.where(eda_eventrelated["EDA_Activation"] == 0)[0][0]
+    no_activation = np.where(eda_eventrelated["EDA_SCR"] == 0)[0][0]
     assert int(pd.DataFrame(eda_eventrelated.values
                             [no_activation]).isna().sum()) == 4
 
     assert len(eda_eventrelated["Label"]) == 3
-    assert len(eda_eventrelated.columns) == 6
+    assert len(eda_eventrelated.columns) == 7
 
-    assert all(elem in ["EDA_Activation", "EDA_Peak_Amplitude",
-                        "EDA_Peak_Amplitude_Time",
-                        "EDA_RiseTime", "EDA_RecoveryTime",
-                        "Label"]
+    assert all(elem in ['Label', 'EDA_Peak_Amplitude', 'EDA_SCR',
+                        'SCR_Peak_Amplitude', 'SCR_Peak_Amplitude_Time',
+                        'SCR_RiseTime', 'SCR_RecoveryTime']
                for elem in np.array(eda_eventrelated.columns.values, dtype=str))
 
 
@@ -146,7 +145,7 @@ def test_eda_intervalrelated():
 
     data = nk.data("bio_resting_8min_100hz")
     df, info = nk.eda_process(data["EDA"], sampling_rate=100)
-    columns = ['EDA_Peaks_N', 'EDA_Peaks_Amplitude_Mean']
+    columns = ['SCR_Peaks_N', 'SCR_Peaks_Amplitude_Mean']
 
     # Test with signal dataframe
     features_df = nk.eda_intervalrelated(df)

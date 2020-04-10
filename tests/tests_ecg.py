@@ -157,7 +157,8 @@ def test_ecg_process():
     # Only check array dimensions and column names since functions called by
     # ecg_process have already been unit tested
     assert all(elem in ["ECG_Raw", "ECG_Clean", "ECG_R_Peaks", "ECG_Rate",
-                        "ECG_P_Peaks", "ECG_Q_Peaks", "ECG_S_Peaks",
+                        'ECG_Quality', "ECG_P_Peaks",
+                        "ECG_Q_Peaks", "ECG_S_Peaks",
                         "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
                         "ECG_Atrial_Phase", "ECG_Ventricular_Phase",
                         "ECG_Atrial_PhaseCompletion",
@@ -279,7 +280,7 @@ def test_ecg_eventrelated():
                       np.array(ecg_eventrelated["ECG_Rate_Max"]))
 
     assert len(ecg_eventrelated["Label"]) == 3
-    assert len(ecg_eventrelated.columns) == 13
+    assert len(ecg_eventrelated.columns) == 14
 
     assert all(elem in ["ECG_Rate_Max", "ECG_Rate_Min", "ECG_Rate_Mean",
                         "ECG_Rate_Max_Time", "ECG_Rate_Min_Time",
@@ -288,7 +289,8 @@ def test_ecg_eventrelated():
                         "ECG_Atrial_Phase",
                         "ECG_Atrial_PhaseCompletion",
                         "ECG_Ventricular_Phase",
-                        "ECG_Ventricular_PhaseCompletion", "Label"]
+                        "ECG_Ventricular_PhaseCompletion",
+                        'ECG_Quality_Mean',"Label"]
                for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
 
 
@@ -370,14 +372,12 @@ def test_ecg_intervalrelated():
 
     data = nk.data("bio_resting_5min_100hz")
     df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
-    columns = ['ECG_Rate_Mean', 'ECG_HRV_RMSSD', 'ECG_HRV_MeanNN', 'ECG_HRV_SDNN',
-               'ECG_HRV_SDSD', 'ECG_HRV_CVNN', 'ECG_HRV_CVSD', 'ECG_HRV_MedianNN',
-               'ECG_HRV_MadNN', 'ECG_HRV_MCVNN', 'ECG_HRV_pNN50', 'ECG_HRV_pNN20',
-               'ECG_HRV_TINN', 'ECG_HRV_HTI', 'ECG_HRV_ULF', 'ECG_HRV_VLF',
-               'ECG_HRV_LF', 'ECG_HRV_HF', 'ECG_HRV_VHF', 'ECG_HRV_LFHF',
-               'ECG_HRV_LFn', 'ECG_HRV_HFn', 'ECG_HRV_LnHF', 'ECG_HRV_SD1',
-               'ECG_HRV_SD2', 'ECG_HRV_SD2SD1', 'ECG_HRV_CSI', 'ECG_HRV_CVI',
-               'ECG_HRV_CSI_Modified', 'ECG_HRV_SampEn']
+    columns = ['ECG_Rate_Mean', 'HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD',
+               'HRV_CVNN', 'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
+               'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI', 'HRV_ULF',
+               'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF', 'HRV_LFn',
+               'HRV_HFn', 'HRV_LnHF', 'HRV_SD1', 'HRV_SD2', 'HRV_SD2SD1',
+               'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified', 'HRV_SampEn']
 
     # Test with signal dataframe
     features_df = nk.ecg_intervalrelated(df)

@@ -31,7 +31,8 @@ def test_bio_process():
     assert all(bio_info["EMG_Offsets"] > bio_info["EMG_Onsets"])
     assert len(bio_info["EMG_Offsets"] == len(bio_info["EMG_Onsets"]))
 
-    assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate', 'ECG_R_Peaks',
+    assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate',
+                        'ECG_Quality', 'ECG_R_Peaks',
                         "ECG_P_Peaks", "ECG_Q_Peaks", "ECG_S_Peaks",
                         "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
                         "ECG_Atrial_Phase", "ECG_Ventricular_Phase",
@@ -73,13 +74,13 @@ def test_bio_analyze():
                         'ECG_Rate_Trend_Quadratic', 'ECG_Rate_Trend_Linear',
                         'ECG_Rate_Trend_R2', 'ECG_Atrial_Phase',
                         'ECG_Atrial_PhaseCompletion', 'ECG_Ventricular_Phase',
-                        'ECG_Ventricular_PhaseCompletion',
+                        'ECG_Ventricular_PhaseCompletion', 'ECG_Quality_Mean',
                         'RSP_Rate_Max',  'RSP_Rate_Min',
                         'RSP_Rate_Mean', 'RSP_Rate_Max_Time', 'RSP_Rate_Min_Time',
                         'RSP_Amplitude_Max', 'RSP_Amplitude_Min', 'RSP_Amplitude_Mean',
-                        'RSP_Phase', 'RSP_PhaseCompletion', 'EDA_Activation',
-                        'EDA_Peak_Amplitude', 'EDA_Peak_Amplitude_Time', 'EDA_RiseTime',
-                        'EDA_RecoveryTime', 'RSA_P2T', 'Label', 'Condition']
+                        'RSP_Phase', 'RSP_PhaseCompletion', 'EDA_SCR','EDA_Peak_Amplitude',
+                        'SCR_Peak_Amplitude', 'SCR_Peak_Amplitude_Time', 'SCR_RiseTime',
+                        'SCR_RecoveryTime', 'RSA_P2T', 'Label', 'Condition']
                for elem in np.array(event_related.columns.values, dtype=str))
 
     # Example with interval-related analysis
@@ -89,23 +90,23 @@ def test_bio_analyze():
     interval_related = nk.bio_analyze(df)
 
     assert len(interval_related) == 1
-    assert all(elem in ['ECG_Rate_Mean', 'ECG_HRV_RMSSD', 'ECG_HRV_MeanNN',
-                        'ECG_HRV_SDNN', 'ECG_HRV_SDSD', 'ECG_HRV_CVNN',
-                        'ECG_HRV_CVSD', 'ECG_HRV_MedianNN',
-                        'ECG_HRV_MadNN', 'ECG_HRV_MCVNN',
-                        'ECG_HRV_pNN50', 'ECG_HRV_pNN20',
-                        'ECG_HRV_TINN', 'ECG_HRV_HTI',
-                        'ECG_HRV_ULF', 'ECG_HRV_VLF',
-                        'ECG_HRV_LF', 'ECG_HRV_HF', 'ECG_HRV_VHF', 'ECG_HRV_LFHF',
-                        'ECG_HRV_LFn', 'ECG_HRV_HFn', 'ECG_HRV_LnHF', 'ECG_HRV_SD1',
-                        'ECG_HRV_SD2', 'ECG_HRV_SD2SD1', 'ECG_HRV_CSI', 'ECG_HRV_CVI',
-                        'ECG_HRV_CSI_Modified', 'ECG_HRV_SampEn', 'RSP_Rate_Mean',
-                        'RSP_Amplitude_Mean', 'RSP_RRV_SDBB', 'RSP_RRV_RMSSD',
-                        'RSP_RRV_SDSD', 'RSP_RRV_VLF', 'RSP_RRV_LF', 'RSP_RRV_HF',
-                        'RSP_RRV_LFHF', 'RSP_RRV_LFn', 'RSP_RRV_HFn', 'RSP_RRV_SD1',
-                        'RSP_RRV_SD2', 'RSP_RRV_SD2SD1', 'RSP_RRV_ApEn',
-                        'RSP_RRV_SampEn', 'RSP_RRV_DFA', 'RSA_P2T_Mean',
+    assert all(elem in ['ECG_Rate_Mean', 'HRV_RMSSD', 'HRV_MeanNN',
+                        'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
+                        'HRV_CVSD', 'HRV_MedianNN',
+                        'HRV_MadNN', 'HRV_MCVNN',
+                        'HRV_pNN50', 'HRV_pNN20',
+                        'HRV_TINN', 'HRV_HTI',
+                        'HRV_ULF', 'HRV_VLF',
+                        'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF',
+                        'HRV_LFn', 'HRV_HFn', 'HRV_LnHF', 'HRV_SD1',
+                        'HRV_SD2', 'HRV_SD2SD1', 'HRV_CSI', 'HRV_CVI',
+                        'HRV_CSI_Modified', 'HRV_SampEn', 'RSP_Rate_Mean',
+                        'RSP_Amplitude_Mean', 'RRV_SDBB', 'RRV_RMSSD',
+                        'RRV_SDSD', 'RRV_VLF', 'RRV_LF', 'RRV_HF',
+                        'RRV_LFHF', 'RRV_LFn', 'RRV_HFn', 'RRV_SD1',
+                        'RRV_SD2', 'RRV_SD2SD1', 'RRV_ApEn',
+                        'RRV_SampEn', 'RRV_DFA', 'RSA_P2T_Mean',
                         'RSA_P2T_Mean_log', 'RSA_P2T_SD',
                         'RSA_P2T_NoRSA', 'RSA_PorgesBohrer',
-                        'EDA_Peaks_N', 'EDA_Peaks_Amplitude_Mean']
+                        'SCR_Peaks_N', 'SCR_Peaks_Amplitude_Mean']
                for elem in np.array(interval_related.columns.values, dtype=str))

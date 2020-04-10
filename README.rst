@@ -93,6 +93,7 @@ Click on the links above and check out our tutorials:
 Tutorials
 ^^^^^^^^^^
 
+-  `What software for physiological signal processing <https://neurokit2.readthedocs.io/en/latest/tutorials/software.html>`_
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
@@ -307,8 +308,9 @@ compute the following features:
 
 - **Features:**
 
-  - **Rate changes** *(ECG, PPG, RSP)*: 
-  - **Peak characteristics** *(EDA)*: amplitude, rise time, peak-time, ...
+  - **Rate changes** *(ECG, PPG, RSP)*: mean, minimum, maximum, minimum-time and maximum-time
+  - **Peak characteristics** *(EDA)*: peak presence, amplitude, rise time, peak-time
+  - **Phase characteristics** *(ECG, RSP)*: phase type (inspiration/expiration, systole/diastole), phase completion
   - ...
   
 - `Full example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
@@ -327,11 +329,11 @@ stress. In this case, using `bio_analyze()` will compute the following features:
 
 - **Features:**
 
-  - **Rate characteristics** *(ECG, PPG, RSP)*: mean, variability, ...
-  - **Number of peaks** *(EDA)*:
+  - **Rate characteristics** *(ECG, PPG, RSP)*: mean, amplitude, variability (HRV, RRV)
+  - **Peak characteristics** *(EDA)*: number of peaks, mean amplitude
   - ...
   
-(`example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_)
+- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_)
 
 Popularity
 ---------------------
@@ -349,60 +351,9 @@ Popularity
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
 
-  
-Alternative Packages
----------------------
-
-Here's a list of great alternative packages that you should check out:
-
-
-General
-^^^^^^^^
-
-- `BioSPPy <https://github.com/PIA-Group/BioSPPy>`_
-- `PySiology <https://github.com/Gabrock94/Pysiology>`_
-- `PsPM <https://github.com/bachlab/PsPM>`_
-- `pyphysio <https://github.com/MPBA/pyphysio>`_
-
-
-ECG / PPG
-^^^^^^^^^^
-
-- `biopeaks <https://github.com/JohnDoenut/biopeaks>`_
-- `hrv <https://github.com/rhenanbartels/hrv>`_
-- `hrv-analysis <https://github.com/Aura-healthcare/hrvanalysis>`_
-- `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_
-- `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_
-- `ECG_analysis <https://github.com/marianpetruk/ECG_analysis>`_
-- `pyedr <https://github.com/jusjusjus/pyedr>`_
-- `Systole <https://github.com/embodied-computation-group/systole>`_
-
-EDA
-^^^^
-
-- `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_
-- `cvxEDA <https://github.com/lciti/cvxEDA>`_
-- `Pypsy <https://github.com/brennon/Pypsy>`_
-- `BreatheEasyEDA <https://github.com/johnksander/BreatheEasyEDA>`_ *(matlab)*
-- `EDA <https://github.com/mateusjoffily/EDA>`_ *(matlab)*
-
-EEG
-^^^^
-
-- `MNE <https://github.com/mne-tools/mne-python>`_
-- `unfold <https://github.com/unfoldtoolbox/unfold>`_ *(matlab)*
-  
-  
-Eye-Tracking
-^^^^^^^^^^^^^^
-
-- `PyGaze <https://github.com/esdalmaijer/PyGaze>`_
-- `PyTrack <https://github.com/titoghose/PyTrack>`_
-
 
   
 Notes
 -------
 
-*Note: The authors do not provide any warranty. If this software causes your keyboard to blow up,
-your brain to liquify, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*
+*The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquify, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*

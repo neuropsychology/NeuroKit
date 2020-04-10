@@ -8,6 +8,7 @@ from ..ecg import ecg_fixpeaks
 from ..ecg import ecg_peaks
 from .ecg_segment import ecg_segment
 from ..epochs import epochs_to_df
+from ..stats import rescale
 
 
 def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
@@ -73,15 +74,30 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
         fig.suptitle("Electrocardiogram (ECG)", fontweight="bold")
         plt.subplots_adjust(hspace=0.3, wspace=0.1)
 
-        # Plot cleaned and raw ECG as well as R-peaks.
+        # Plot cleaned, raw ECG, R-peaks and signal quality.
         ax0.set_title("Raw and Cleaned Signal")
 
+        quality = rescale(ecg_signals["ECG_Quality"],
+                          to=[np.min(ecg_signals["ECG_Clean"]),
+                              np.max(ecg_signals["ECG_Clean"])])
+        minimum_line = np.full(len(x_axis), quality.min())
+
+        # Plot quality area first
+        ax0.fill_between(x_axis, minimum_line, quality, alpha=0.12, zorder=0,
+                         interpolate=True, facecolor="#4CAF50", label='Quality')
+
+        # Plot signals
         ax0.plot(x_axis, ecg_signals["ECG_Raw"], color='#B0BEC5', label='Raw',
                  zorder=1)
         ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#E91E63',
                  label="Cleaned", zorder=1, linewidth=1.5)
         ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks],
                     color="#FFC107", label="R-peaks", zorder=2)
+
+        # Optimize legend
+        handles, labels = ax0.get_legend_handles_labels()
+        order = [2, 0, 1, 3]
+        ax0.legend([handles[idx] for idx in order], [labels[idx] for idx in order], loc="upper right")
 
         # Plot heart rate.
         ax1.set_title("Heart Rate")
