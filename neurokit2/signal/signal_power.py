@@ -81,12 +81,12 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
         for band in frequency_band:
             indexes = np.logical_and(psd["Frequency"] >= band[0], psd["Frequency"] < band[1])
             frequency_band_index.append(np.array(indexes))
-        # label?
+# label?
         ax = psd.plot(x="Frequency", y="Power", logy=True, title='Power Spectral Density (PSD)')
         for band_index in frequency_band_index:
-        # for band_index, label in zip(frequency_band_index, label_list):
+# for band_index, label in zip(frequency_band_index, label_list)
             ax.fill_between(psd["Frequency"][band_index], 0, psd["Power"][band_index])
-            # ax.fill_between(frequency[band_index], 0, power[band_index], label=label)
+# ax.fill_between(frequency[band_index], 0, power[band_index], label=label)
 
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
 
