@@ -6,7 +6,7 @@ import scipy.signal
 from .signal_psd import signal_psd
 
 
-def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, **kwargs):
+def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, **kwargs):
     """Compute the power of a signal in a given frequency band.
 
     Parameters
@@ -37,6 +37,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, *
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import numpy as np
     >>>
     >>> # Instant power
     >>> signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20)
@@ -59,7 +60,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, *
     """
 
     if continuous is False:
-        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, **kwargs)
+        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, show=show, **kwargs)
     else:
         out = _signal_power_continuous(signal, frequency_band, sampling_rate=sampling_rate)
 
@@ -72,8 +73,22 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, *
 # Instant
 # =============================================================================
 
-def _signal_power_instant(signal, frequency_band, sampling_rate=1000, **kwargs):
+def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, **kwargs):
     psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, **kwargs)
+
+    if show is True:
+        frequency_band_index = []
+        for band in frequency_band:
+            indexes = np.logical_and(psd["Frequency"] >= band[0], psd["Frequency"] < band[1])
+            frequency_band_index.append(np.array(indexes))
+        # label?
+        ax = psd.plot(x="Frequency", y="Power", logy=True, title='Power Spectral Density (PSD)')
+        for band_index in frequency_band_index:
+        # for band_index, label in zip(frequency_band_index, label_list):
+            ax.fill_between(psd["Frequency"][band_index], 0, psd["Power"][band_index])
+            # ax.fill_between(frequency[band_index], 0, power[band_index], label=label)
+
+        ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
 
     out = {}
     if isinstance(frequency_band[0], list) or isinstance(frequency_band[0], tuple):
