@@ -21,9 +21,9 @@ def eda_intervalrelated(data):
     DataFrame
         A dataframe containing the analyzed EDA features. The analyzed
         features consist of the following:
-        - *"EDA_Peaks_N"*: the number of occurrences
+        - *"SCR_Peaks_N"*: the number of occurrences
         of Skin Conductance Response (SCR).
-        - *"EDA_Peaks_Amplitude_Mean"*: the mean amplitude of the SCR peak
+        - *"SCR_Peaks_Amplitude_Mean"*: the mean amplitude of the SCR peak
         occurrences.
 
     See Also
@@ -70,7 +70,7 @@ def eda_intervalrelated(data):
                              "contains an `SCR_Amplitude` column.")
 
         eda_intervals = pd.DataFrame.from_dict(intervals,
-                                               orient="index").T.add_prefix("EDA_")
+                                               orient="index").T.add_prefix("SCR_")
 
     elif isinstance(data, dict):
         for index in data:
@@ -108,7 +108,7 @@ def _eda_intervalrelated_formatinput(interval, output={}):
     peaks = interval["SCR_Peaks"].values
     amplitude = interval["SCR_Amplitude"].values
 
-    output["EDA_Peaks_N"] = np.sum(peaks)
-    output["EDA_Peaks_Amplitude_Mean"] = np.nansum(amplitude) / np.sum(peaks)
+    output["SCR_Peaks_N"] = np.sum(peaks)
+    output["SCR_Peaks_Amplitude_Mean"] = np.nansum(amplitude) / np.sum(peaks)
 
     return output

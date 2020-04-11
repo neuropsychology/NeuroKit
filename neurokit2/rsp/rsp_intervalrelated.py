@@ -65,7 +65,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
                              "contains an `RSP_Rate` column.")
         amp_cols = [col for col in data.columns if 'RSP_Amplitude' in col]
         if len(amp_cols) == 1:
-            intervals["Amplitude_Mean"] = data[amp_cols[0]].values.mean()
+            intervals["RSP_Amplitude_Mean"] = data[amp_cols[0]].values.mean()
         else:
             raise ValueError("NeuroKit error: rsp_intervalrelated(): Wrong"
                              "input, we couldn't extract respiratory amplitude."
@@ -73,7 +73,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
                              "contains an `RSP_Amplitude` column.")
 
         rsp_intervals = pd.DataFrame.from_dict(intervals,
-                                               orient="index").T.add_prefix("RSP_")
+                                               orient="index").T
 
     elif isinstance(data, dict):
         for index in data:
@@ -90,7 +90,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
             intervals[index] = _rsp_intervalrelated_rrv(data[index], sampling_rate,
                                                         intervals[index])
 
-        rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index").add_prefix("RSP_")
+        rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
     return rsp_intervals
 
@@ -118,8 +118,8 @@ def _rsp_intervalrelated_formatinput(data, output={}):
     rate = data["RSP_Rate"].values
     amplitude = data["RSP_Amplitude"].values
 
-    output["Rate_Mean"] = np.mean(rate)
-    output["Amplitude_Mean"] = np.mean(amplitude)
+    output["RSP_Rate_Mean"] = np.mean(rate)
+    output["RSP_Amplitude_Mean"] = np.mean(amplitude)
 
     return output
 
@@ -127,21 +127,7 @@ def _rsp_intervalrelated_formatinput(data, output={}):
 def _rsp_intervalrelated_rrv(data, sampling_rate, output={}):
 
     rrv = rsp_rrv(data, sampling_rate=sampling_rate)
-    output["RRV_SDBB"] = float(rrv["RRV_SDBB"])
-    output["RRV_RMSSD"] = float(rrv["RRV_RMSSD"])
-    output["RRV_SDSD"] = float(rrv["RRV_SDSD"])
-    output["RRV_VLF"] = float(rrv["RRV_VLF"])
-    output["RRV_LF"] = float(rrv["RRV_LF"])
-    output["RRV_HF"] = float(rrv["RRV_HF"])
-    output["RRV_LFHF"] = float(rrv["RRV_LFHF"])
-    output["RRV_LFn"] = float(rrv["RRV_LFn"])
-    output["RRV_HFn"] = float(rrv["RRV_HFn"])
-    output["RRV_SD1"] = float(rrv["RRV_SD1"])
-
-    output["RRV_SD2"] = float(rrv["RRV_SD2"])
-    output["RRV_SD2SD1"] = float(rrv["RRV_SD2SD1"])
-    output["RRV_ApEn"] = float(rrv["RRV_ApEn"])
-    output["RRV_SampEn"] = float(rrv["RRV_SampEn"])
-    output["RRV_DFA"] = float(rrv["RRV_DFA"])
+    for column in rrv.columns:
+        output[column] = float(rrv[column])
 
     return output

@@ -30,6 +30,7 @@ Contributors
 * `@renatosc <https://github.com/renatosc>`_
 * `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ *(Université Laval, Canada)*
 * `@rubinovitz <https://github.com/rubinovitz>`_
+* `@purpl3F0x (Stavros Avramidis) <https://github.com/purpl3F0x>`_
 * `You? <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
 
 More details `here <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.

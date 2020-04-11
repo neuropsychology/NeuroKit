@@ -63,7 +63,7 @@ def ecg_intervalrelated(data, sampling_rate=1000):
                              "we couldn't extract heart rate. Please make sure"
                              "your DataFrame contains an `ECG_Rate` column.")
         ecg_intervals = pd.DataFrame.from_dict(intervals,
-                                               orient="index").T.add_prefix("ECG_")
+                                               orient="index").T
 
     elif isinstance(data, dict):
         for index in data:
@@ -80,7 +80,7 @@ def ecg_intervalrelated(data, sampling_rate=1000):
             intervals[index] = _ecg_intervalrelated_hrv(data[index], sampling_rate,
                                                         intervals[index])
 
-        ecg_intervals = pd.DataFrame.from_dict(intervals, orient="index").add_prefix("ECG_")
+        ecg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
     return ecg_intervals
 
@@ -100,7 +100,7 @@ def _ecg_intervalrelated_formatinput(data, output={}):
         return output
 
     signal = data["ECG_Rate"].values
-    output["Rate_Mean"] = np.mean(signal)
+    output["ECG_Rate_Mean"] = np.mean(signal)
 
     return output
 

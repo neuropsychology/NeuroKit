@@ -101,7 +101,7 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     # Get indices
     hrv = {}  # Initialize empty dict
     hrv.update(_ecg_hrv_time(rri))
-    hrv.update(_ecg_hrv_frequency(ecg_period, sampling_rate))
+    hrv.update(_ecg_hrv_frequency(ecg_period, sampling_rate, show=show))
     hrv.update(_ecg_hrv_nonlinear(rri, ecg_period))
 
     hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
@@ -153,8 +153,8 @@ def _ecg_hrv_time(rri):
 
 
 
-def _ecg_hrv_frequency(ecg_period, sampling_rate=1000, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5), method="welch"):
-    power = signal_power(ecg_period, frequency_band=[ulf, vlf, lf, hf, vhf], sampling_rate=sampling_rate, method=method, max_frequency=0.5)
+def _ecg_hrv_frequency(ecg_period, sampling_rate=1000, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5), method="welch", show=False):
+    power = signal_power(ecg_period, frequency_band=[ulf, vlf, lf, hf, vhf], sampling_rate=sampling_rate, method=method, max_frequency=0.5, show=show)
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
     out = power.to_dict(orient="index")[0]
 

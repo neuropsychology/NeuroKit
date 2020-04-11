@@ -23,18 +23,20 @@ def eda_eventrelated(epochs):
         for each epoch, with each epoch indicated by the `Label` column
         (if not present, by the `Index` column). The analyzed features consist
         the following:
-        - *"EDA_Activation"*: indication of whether Skin Conductance Response
+        - *"EDA_SCR"*: indication of whether Skin Conductance Response
         (SCR) occurs following the event (1 if an SCR onset is present and 0
         if absent) and if so, its corresponding peak amplitude,
         time of peak, rise and recovery time. If there is no occurrence of
         SCR, nans are displayed for the below features.
-        - *"EDA_Peak_Amplitude"*: the peak amplitude of
+        - "*EDA_Peak_Amplitude"*: the maximum amplitude of the phasic component
+        of the signal.
+        - *"SCR_Peak_Amplitude"*: the peak amplitude of
         the first SCR in each epoch.
-        - *"EDA_Peak_Amplitude_Time"*: the timepoint of each first SCR
+        - *"SCR_Peak_Amplitude_Time"*: the timepoint of each first SCR
         peak amplitude.
-        - *"EDA_RiseTime"*: the risetime of each first SCR
+        - *"SCR_RiseTime"*: the risetime of each first SCR
         i.e., the time it takes for SCR to reach peak amplitude from onset.
-        - *"EDA_RecoveryTime"*: the half-recovery time of each first SCR i.e.,
+        - *"SCR_RecoveryTime"*: the half-recovery time of each first SCR i.e.,
         the time it takes for SCR to decrease to half amplitude.
 
     See Also
@@ -91,26 +93,36 @@ def eda_eventrelated(epochs):
         eda_df[epoch_index] = {}  # Initialize an empty dict for the current epoch
         epoch = epochs[epoch_index]
 
+        # Maximum phasic amplitude
+        eda_df[epoch_index] = _eda_eventrelated_eda(epochs[epoch_index], eda_df[epoch_index])
+
         # Detect activity following the events
         if any(epoch["SCR_Peaks"][epoch.index > 0] == 1) and any(epoch["SCR_Onsets"][epoch.index > 0] == 1):
-            eda_df[epoch_index]["EDA_Activation"] = 1
+            eda_df[epoch_index]["EDA_SCR"] = 1
         else:
-            eda_df[epoch_index]["EDA_Activation"] = 0
+            eda_df[epoch_index]["EDA_SCR"] = 0
 
         # Analyze based on if activations are present
-        if (eda_df[epoch_index]["EDA_Activation"] != 0):
-            eda_df[epoch_index] = _eda_eventrelated_features(epochs[epoch_index],
-                                                             eda_df[epoch_index])
+        if (eda_df[epoch_index]["EDA_SCR"] != 0):
+            eda_df[epoch_index] = _eda_eventrelated_scr(epochs[epoch_index],
+                                                        eda_df[epoch_index])
         else:
-            eda_df[epoch_index]["EDA_Peak_Amplitude"] = np.nan
-            eda_df[epoch_index]["EDA_Peak_Amplitude_Time"] = np.nan
-            eda_df[epoch_index]["EDA_RiseTime"] = np.nan
-            eda_df[epoch_index]["EDA_RecoveryTime"] = np.nan
+            eda_df[epoch_index]["SCR_Peak_Amplitude"] = np.nan
+            eda_df[epoch_index]["SCR_Peak_Amplitude_Time"] = np.nan
+            eda_df[epoch_index]["SCR_RiseTime"] = np.nan
+            eda_df[epoch_index]["SCR_RecoveryTime"] = np.nan
 
         # Fill with more info
         eda_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index], eda_df[epoch_index])
 
     eda_df = pd.DataFrame.from_dict(eda_df, orient="index")  # Convert to a dataframe
+
+    # Move columns to front
+    colnames = eda_df.columns.values
+    if len([i for i in colnames if "Condition" in i]) == 1:
+        eda_df = eda_df[['Condition'] + [col for col in eda_df.columns if col != 'Condition']]
+    if len([i for i in colnames if "Label" in i]) == 1:
+        eda_df = eda_df[['Label'] + [col for col in eda_df.columns if col != 'Label']]
 
     return eda_df
 
@@ -118,7 +130,21 @@ def eda_eventrelated(epochs):
 # =============================================================================
 # Internals
 # =============================================================================
-def _eda_eventrelated_features(epoch, output={}):
+def _eda_eventrelated_eda(epoch, output={}):
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "EDA_Phasic" in i]) == 0:
+        print("NeuroKit warning: eda_eventrelated(): input does not"
+              "have an `EDA_Phasic` column. Will skip computation"
+              "of maximum amplitude of phasic EDA component.")
+        return output
+
+    output["EDA_Peak_Amplitude"] = epoch["EDA_Phasic"].max()
+    return output
+
+
+def _eda_eventrelated_scr(epoch, output={}):
 
     # Sanitize input
     colnames = epoch.columns.values
@@ -143,18 +169,18 @@ def _eda_eventrelated_features(epoch, output={}):
     # Peak amplitude and Time of peak
     first_activation = np.where(epoch["SCR_Amplitude"][epoch.index > 0] != 0)[0][0]
     peak_amplitude = epoch["SCR_Amplitude"][epoch.index > 0].iloc[first_activation]
-    output["EDA_Peak_Amplitude"] = peak_amplitude
-    output["EDA_Peak_Amplitude_Time"] = epoch["SCR_Amplitude"][epoch.index > 0].index[first_activation]
+    output["SCR_Peak_Amplitude"] = peak_amplitude
+    output["SCR_Peak_Amplitude_Time"] = epoch["SCR_Amplitude"][epoch.index > 0].index[first_activation]
 
     # Rise Time
     rise_time = epoch["SCR_RiseTime"][epoch.index > 0].iloc[first_activation]
-    output["EDA_RiseTime"] = rise_time
+    output["SCR_RiseTime"] = rise_time
 
     # Recovery Time
     if any(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0):
         recovery_time = np.where(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0)[0][0]
-        output["EDA_RecoveryTime"] = recovery_time
+        output["SCR_RecoveryTime"] = recovery_time
     else:
-        output["EDA_RecoveryTime"] = np.nan
+        output["SCR_RecoveryTime"] = np.nan
 
     return output

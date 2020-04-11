@@ -13,7 +13,6 @@ Documentation
    examples/index
    datasets
    functions
-   contributing
 
 
 .. only:: comment

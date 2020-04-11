@@ -28,6 +28,14 @@ def ecg_eventrelated(epochs):
         - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
         - *"ECG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
         - *"ECG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
+        - *"ECG_Atrial_Phase"*: indication of whether the onset of the event
+        concurs with respiratory systole (1) or diastole (0).
+        - *"ECG_Ventricular_Phase"*: indication of whether the onset of the
+        event concurs with respiratory systole (1) or diastole (0).
+        - *"ECG_Atrial_PhaseCompletion"*: indication of the stage of the
+        current cardiac (atrial) phase (0 to 1) at the onset of the event.
+         *"ECG_Ventricular_PhaseCompletion"*: indication of the stage of the
+        current cardiac (ventricular) phase (0 to 1) at the onset of the event.
         We also include the following *experimental* features related to the
         parameters of a quadratic model.
         - *"ECG_Rate_Trend_Linear"*: The parameter corresponding to the linear trend.
@@ -107,6 +115,13 @@ def ecg_eventrelated(epochs):
                                                     ecg_df[epoch_index])
 
     ecg_df = pd.DataFrame.from_dict(ecg_df, orient="index")  # Convert to a dataframe
+
+    # Move columns to front
+    colnames = ecg_df.columns.values
+    if len([i for i in colnames if "Condition" in i]) == 1:
+        ecg_df = ecg_df[['Condition'] + [col for col in ecg_df.columns if col != 'Condition']]
+    if len([i for i in colnames if "Label" in i]) == 1:
+        ecg_df = ecg_df[['Label'] + [col for col in ecg_df.columns if col != 'Label']]
 
     return ecg_df
 

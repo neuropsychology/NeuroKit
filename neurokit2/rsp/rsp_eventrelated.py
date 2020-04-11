@@ -38,6 +38,8 @@ def rsp_eventrelated(epochs):
         after stimulus onset.
         - *"RSP_Phase"*: indication of whether the onset of the event
         concurs with respiratory inspiration (1) or expiration (0).
+        - *"RSP_PhaseCompletion"*: indication of the stage of the current
+        respiration phase (0 to 1) at the onset of the event.
 
     See Also
     --------
@@ -110,8 +112,14 @@ def rsp_eventrelated(epochs):
 
     rsp_df = pd.DataFrame.from_dict(rsp_df, orient="index")  # Convert to a dataframe
 
-    return rsp_df
+    # Move columns to front
+    colnames = rsp_df.columns.values
+    if len([i for i in colnames if "Condition" in i]) == 1:
+        rsp_df = rsp_df[['Condition'] + [col for col in rsp_df.columns if col != 'Condition']]
+    if len([i for i in colnames if "Label" in i]) == 1:
+        rsp_df = rsp_df[['Label'] + [col for col in rsp_df.columns if col != 'Label']]
 
+    return rsp_df
 
 
 # =============================================================================
