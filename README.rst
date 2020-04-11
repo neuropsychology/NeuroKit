@@ -55,11 +55,13 @@ To install NeuroKit2, run this command in your terminal:
 .. code-block::
 
     pip install https://github.com/neuropsychology/neurokit/zipball/master
+    
+If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
 Contribution
 -------------
 
-NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
+NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_ guide. Once this is done, you can also read our ideas for `first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 
 
 Documentation
@@ -95,7 +97,8 @@ Tutorials
 
 -  `What software for physiological signal processing <https://neurokit2.readthedocs.io/en/latest/tutorials/software.html>`_
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
--  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
+-  `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
+-  `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 
@@ -283,13 +286,13 @@ Photoplethysmography (PPG/BVP)
 Electrogastrography (EGG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
+Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_!
 
 
 Electrooculography (EOG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
+Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_!
 
 Analysis
 ----------

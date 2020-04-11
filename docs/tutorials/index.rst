@@ -9,7 +9,9 @@ Contents:
    recording
    software
    understanding
+   contributing
+   first_contribution
 
-   github_contribute
+   
 
 
