@@ -75,11 +75,12 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
 
 def _ecg_segment_window(heart_rate=None, rpeaks=None, sampling_rate=1000):
 
-    # Extract heart rate
     if heart_rate is not None:
         heart_rate = np.mean(heart_rate)
-    if rpeaks is not None:
-        heart_rate = np.mean(ecg_rate(rpeaks, sampling_rate=sampling_rate))
+    elif rpeaks is not None:
+        heart_rate = ecg_rate(rpeaks, sampling_rate=sampling_rate)[0]  # first item is the mean by default
+    else:
+        raise RuntimeError("Both heart_rate and rpeaks are None")
 
     # Modulator
     m = heart_rate/60
