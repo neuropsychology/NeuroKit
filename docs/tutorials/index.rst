@@ -8,6 +8,7 @@ Contents:
    
    recording
    software
+   learnpython
    understanding
    contributing
    first_contribution
