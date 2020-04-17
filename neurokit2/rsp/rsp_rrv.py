@@ -73,7 +73,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
 
     # Get raw and interpolated R-R intervals
     bbi = np.diff(peaks) / sampling_rate * 1000
-    rsp_period = rsp_rate / 60 * sampling_rate
+    rsp_period = 60 * sampling_rate/ rsp_rate
 
     # Get indices
     rrv = {}  # Initialize empty dict
@@ -130,7 +130,7 @@ def _rsp_rrv_time(bbi):
 
 
 def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), method="welch"):
-    power = signal_power(rsp_period, frequency_band=[vlf, lf, hf], sampling_rate=1000, method=method, max_frequency=0.5)
+    power = signal_power(rsp_period, frequency_band=[vlf, lf, hf], sampling_rate=1000, method=method, max_frequency=0.5, resolution=0.5)
     power.columns = ["VLF", "LF", "HF"]
     out = power.to_dict(orient="index")[0]
 
