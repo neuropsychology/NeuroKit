@@ -4,7 +4,7 @@ import pandas as pd
 import scipy.signal
 
 
-def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_frequency=0, max_frequency=np.inf, window=None, resolution=0.5, precision=2**12):
+def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_frequency=0, max_frequency=np.inf, window=None):
     """Compute the Power Spectral Density (PSD).
 
     Parameters
@@ -87,7 +87,6 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
         if nperseg > len(signal) / 2:
             print("Neurokit warning: signal_psd(): The duration of recording is too short to support a sufficiently long window for high frequency resolution. Consider using a longer recording or increasing the `min_frequency`")
             nperseg = int(len(signal / 2))
-            nperseg = nperseg * resolution
 
         frequency, power = scipy.signal.welch(signal,
                                               fs=sampling_rate,
