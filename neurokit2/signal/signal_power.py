@@ -126,7 +126,7 @@ def _signal_power_instant_plot(psd, out, frequency_band):
         ax.fill_between(psd["Frequency"][band_index], 0, psd["Power"][band_index], label=label)
     ax.legend()
 
-    ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
+    ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum (ms2/Hz)")
     return ax
 
 # =============================================================================
