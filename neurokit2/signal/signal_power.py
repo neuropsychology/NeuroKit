@@ -2,11 +2,13 @@
 import numpy as np
 import pandas as pd
 import scipy.signal
+import matplotlib.pyplot as plt
+
 
 from .signal_psd import signal_psd
 
 
-def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, **kwargs):
+def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, **kwargs):
     """Compute the power of a signal in a given frequency band.
 
     Parameters
@@ -37,6 +39,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, *
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import numpy as np
     >>>
     >>> # Instant power
     >>> signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20)
@@ -59,11 +62,12 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, *
     """
 
     if continuous is False:
-        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, **kwargs)
+        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, show=show, **kwargs)
     else:
         out = _signal_power_continuous(signal, frequency_band, sampling_rate=sampling_rate)
 
     out = pd.DataFrame.from_dict(out, orient="index").T
+
     return out
 
 
@@ -72,7 +76,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, *
 # Instant
 # =============================================================================
 
-def _signal_power_instant(signal, frequency_band, sampling_rate=1000, **kwargs):
+def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, **kwargs):
     psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, **kwargs)
 
     out = {}
@@ -81,6 +85,9 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, **kwargs):
             out.update(_signal_power_instant_get(psd, band))
     else:
         out.update(_signal_power_instant_get(psd, frequency_band))
+
+    if show:
+        _signal_power_instant_plot(psd, out, frequency_band)
     return out
 
 
@@ -92,6 +99,35 @@ def _signal_power_instant_get(psd, frequency_band):
     out = {}
     out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = np.trapz(y=psd["Power"][indices], x=psd["Frequency"][indices])
     return out
+
+
+
+def _signal_power_instant_plot(psd, out, frequency_band):
+
+    # sanitize signal:
+    if isinstance(frequency_band[0], int):
+        if len(frequency_band) > 2:
+            print("NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples or a tuple of 2 integers")
+        else:
+            frequency_band = [tuple(i for i in frequency_band)]
+
+    # Get indexes for different frequency band
+    frequency_band_index = []
+    for band in frequency_band:
+        indexes = np.logical_and(psd["Frequency"] >= band[0], psd["Frequency"] < band[1])
+        frequency_band_index.append(np.array(indexes))
+    label_list = list(out.keys())
+
+    # Plot
+    ax = psd.plot(x="Frequency", y="Power", logy=False, title='Power Spectral Density (PSD)', color='lightgrey', linewidth=0.6)
+    ax.fill_between(psd["Frequency"], 0, psd["Power"], color='lightgrey', label='Signal')
+
+    for band_index, label in zip(frequency_band_index, label_list):
+        ax.fill_between(psd["Frequency"][band_index], 0, psd["Power"][band_index], label=label)
+    ax.legend()
+
+    ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
+    return ax
 
 # =============================================================================
 # Continuous
@@ -127,10 +163,3 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
     out = {}
     out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = power
     return out
-
-# def _signal_power_continuous_plot(signal, frequency_band, sampling_rate=1000):
-    # if frequency_band=
-
-    # frequency_band=[(0.12, 0.15), (0.15, 0.4)],
-
-    # ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5)

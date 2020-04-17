@@ -21,7 +21,7 @@
         :alt: Maintainability
 
 
-**The Python Toolbox for Neurophysiological Signal Processing (EDA, ECG, PPG, EMG, EEG...)**
+**The Python Toolbox for Neurophysiological Signal Processing**
 
 This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
 It's a user-friendly package providing easy access to advanced biosignal processing routines.
@@ -55,11 +55,13 @@ To install NeuroKit2, run this command in your terminal:
 .. code-block::
 
     pip install https://github.com/neuropsychology/neurokit/zipball/master
+    
+If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
 Contribution
 -------------
 
-NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_ guide.
+NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_ guide. Once this is done, you can also read our ideas for `first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 
 
 Documentation
@@ -95,7 +97,8 @@ Tutorials
 
 -  `What software for physiological signal processing <https://neurokit2.readthedocs.io/en/latest/tutorials/software.html>`_
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
--  `How to contribute <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
+-  `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
+-  `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 
@@ -105,6 +108,7 @@ Examples
 -  `Simulate Artificial Physiological Signals <https://neurokit2.readthedocs.io/en/latest/examples/simulation.html>`_
 -  `Customize your Processing Pipeline <https://neurokit2.readthedocs.io/en/latest/examples/custom.html>`_
 -  `Event-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
+-  `Interval-related Analysis <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 -  `Analyze Electrodermal Activity (EDA) <https://neurokit2.readthedocs.io/en/latest/examples/eda.html>`_
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
@@ -283,13 +287,13 @@ Photoplethysmography (PPG/BVP)
 Electrogastrography (EGG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
+Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_!
 
 
 Electrooculography (EOG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
+Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_!
 
 Analysis
 ----------
@@ -333,7 +337,7 @@ stress. In this case, using `bio_analyze()` will compute the following features:
   - **Peak characteristics** *(EDA)*: number of peaks, mean amplitude
   - ...
   
-- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_)
+- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
 Popularity
 ---------------------

@@ -8,8 +8,8 @@ Contents:
    
    recording
    software
+   learnpython
    understanding
-
-   github_contribute
-
-
+   contributing
+   first_contribution
+   resources
