@@ -104,13 +104,10 @@ def _signal_power_instant_get(psd, frequency_band):
 
 def _signal_power_instant_plot(psd, out, frequency_band):
 
-    #sanitize signal:
+    # sanitize signal:
     if isinstance(frequency_band[0], int):
         if len(frequency_band) > 2:
-            print("NeuroKit error: signal_power(): The `frequency_band`"
-                   "argument must be a list of tuples "
-                   "or a tuple of 2 integers")
-
+            print("NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples or a tuple of 2 integers")
         else:
             frequency_band = [tuple(i for i in frequency_band)]
 
