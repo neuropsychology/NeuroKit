@@ -18,21 +18,21 @@ The first thing you will need is to **install Python** on your computer (we have
 
 There is one important concept here to grasp: the difference between the **CONSOLE** and the **EDITOR**. The editor is where you write the code. It's basically a text editor (such as notepad), except that it automatically highlights the code. Importantly, you can directly *execute* a line of code (which is equivalent to copy it and paste it the *console*).
 
-For instance, you can write `1+1` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press `F9` (or `CTRL + ENTER`), it will **execute it**.
+For instance, you can write :code:`1+1` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press :code:`F9` (or :code:`CTRL + ENTER`), it will **execute it**.
 
 
 .. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_1.jpg
 
 
-As a result, you should see in the console the order that you gave and below, the **output** (which is `2`). Now, take some time to explore the settings and turn the editor background to **BLACK**. Why? Because it's more comfortable for the eyes, but most importantly, because it's cool 😎.
+As a result, you should see in the console the order that you gave and below, the **output** (which is :code:`2`). Now, take some time to explore the settings and turn the editor background to **BLACK**. Why? Because it's more comfortable for the eyes, but most importantly, because it's cool 😎.
 
 
-.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_2.jpg
+.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_2.png
 
 **Congrats, you've become a programmer**, a wizard of the modern times.
 
 
-You can now save the file (`CTRL + S`), which will be saved with a `.py` extension (i.e., a Python file). Try closing everything and reopening this file with the editor.
+You can now save the file (:code:`CTRL + S`), which will be saved with a :code:`.py` extension (i.e., a Python file). Try closing everything and reopening this file with the editor.
 
 
 Variables
@@ -40,14 +40,14 @@ Variables
 
 The second important concept is **variables**, which is a fancy name for something that you already know. Do you remember, from your mathematics classes, the famous *X*? This placeholder for any value? Well, *X* was a variable, i.e., the name refering to some other thing.
 
-So we can *assign* a value to a *variable* using the `=` sign, for instance:
+So we can *assign* a value to a *variable* using the :code:`=` sign, for instance:
 
 .. code-block:: python
 
     x = 2
     y = 3
     
-Once we execute these two lines, Python will know that `x` refers to 2 and `y` to 3. We can now write:
+Once we execute these two lines, Python will know that :code:`x` refers to :code:`2` and :code:`y` to :code:`3`. We can now write:
 
 .. code-block:: python
 
@@ -55,7 +55,7 @@ Once we execute these two lines, Python will know that `x` refers to 2 and `y` t
 
 Which will print in the console the correct result.
 
-.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_3.jpg
+.. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_3.png
 
 We can also store the output in a third variable:
 
@@ -71,7 +71,7 @@ We can also store the output in a third variable:
 Variables and data types (classes)
 ----------------------------------
 
-The next important thing to have in mind is that variables have **types**. Basic types include **integers** (numbers without decimals), **floats** (numbers with decimals), **string** (character text) or **booleans** (`True` and `False`). Depending on the type, the variables will not behave the same. For example, try:
+The next important thing to have in mind is that variables have **types**. Basic types include **integers** (numbers without decimals), **floats** (numbers with decimals), **string** (character text) or **booleans** (:code:`True` and :code:`False`). Depending on the type, the variables will not behave the same. For example, try:
 
 .. code-block:: python
 
@@ -90,13 +90,13 @@ One can change the type of a variable with the following:
     
 Also, here I used the hashtag symbol to **make comments**, i.e., writing stuff that won't be executed by Python. This is super useful to annotate each line of your code to remember what you do.
 
-Types are often the source of many errors as they usually are **incompatible** between them. For instance, you cannot add a *number* (`int` or `float`) with a *character string*. For instance, try running `3 + "a"`, it will throw a `TypeError`.
+Types are often the source of many errors as they usually are **incompatible** between them. For instance, you cannot add a *number* (:code:`int` or :code:`float`) with a *character string*. For instance, try running :code:`3 + "a"`, it will throw a :code:`TypeError`.
 
 
 Lists and dictionnaries
 ------------------------
 
-Two other important types are **lists** and **dictionnaries**. You can think of them as **containers**, as they contain multiple variables. The main difference between them is that in a **list**, you access the individual elements that it contains **by its order** (for instance, the third one), whereas in a **dictionnary**, you access an element by its name (also known as **key**), for example "the element named 'A'".
+Two other important types are **lists** and **dictionnaries**. You can think of them as **containers**, as they contain multiple variables. The main difference between them is that in a **list**, you access the individual elements that it contains **by its order** (for instance, the third one), whereas in a **dictionnary**, you access an element by its name (also known as **key**), for example *"the element named A"*.
 
 A list is created using square brackets, and a dictionnary using curly brackets. Importantly, in a dictionnary, you must specify a name to each element. Here's what it looks like:
 
@@ -129,7 +129,7 @@ There's no point in storing elements in containers if we cannot access them late
     y = mydict[x]
     print(y)
 
-If you guessed **42**, you're right, congrats! If you guessed **7**, you have likely confused the **variable** named `x` (which represents 1+1 converted to a character), with the character `"x"`. 
+If you guessed **42**, you're right, congrats! If you guessed **7**, you have likely confused the **variable** named :code:`x` (which represents 1+1 converted to a character), with the character :code:`"x"`. 
 
 
 
@@ -151,7 +151,7 @@ So if we want the 2nd element of the list, we have to ask for the 1th:
 Control flow (if and else)
 ----------------------------
 
-One important notion in programming is control flow. You want the code to do something different depending on a condition. For instance, if `x` is lower than 3, print "lower than 3". In Python, this is done as follows:
+One important notion in programming is control flow. You want the code to do something different depending on a condition. For instance, if :code:`x` is lower than 3, print "lower than 3". In Python, this is done as follows:
 
 
 
@@ -161,7 +161,7 @@ One important notion in programming is control flow. You want the code to do som
     if x < 3:
         print("lower than 3")
 
-One very important thing to notice is that the **if statement** corresponds to a "chunk" of code, as signified by the colon `:`. The chunk has to be written below, and has to be **indented** (you can ident a line or a chunk of code by pressing the `TAB` key). 
+One very important thing to notice is that the **if statement** corresponds to a "chunk" of code, as signified by the colon :code:`:`. The chunk has to be written below, and has to be **indented** (you can ident a line or a chunk of code by pressing the :code:`TAB` key). 
 
 **What is identation?**
 
@@ -173,7 +173,7 @@ One very important thing to notice is that the **if statement** corresponds to a
             indentation
             
 
-And this is very important in Python, if try runnning the following, it will **error**:
+This identation must be consistent: usually one level of identation corresponds to 4 spaces. Make sure you respect that throughout your script, as this is very important in Python. If you break the rule, it will throw an **error**. Try running the following:
 
 .. code-block:: python
 
@@ -191,7 +191,7 @@ Finally, **if** statements can be followed by **else** statements, which takes c
     else:
         print("higher")
 
-Again, note the **identation** and how the **else** statement creates a new idented chunk. 
+Again, note the **indentation** and how the **else** statement creates a new idented chunk. 
 
 
 For loops
@@ -212,11 +212,11 @@ Here, the **for loop** creates a variable (that we named `var`), that will succe
 Functions
 ------------
 
-Now that you know what a **variable** is, as well as the purpose of little things like **if**, **else**, **for**, etc., the last most common thing that you will find in code are **function** calls. In fact, we have already used some of them! Indeed, things like `print()`, `str()` and `int()` were functions. And in fact, you've probably encountered them in secondary school mathematics! Remember *f(x)*?
+Now that you know what a **variable** is, as well as the purpose of little things like **if**, **else**, **for**, etc., the last most common thing that you will find in code are **function** calls. In fact, we have already used some of them! Indeed, things like :code:`print()`, :code:`str()` and :code:`int()` were functions. And in fact, you've probably encountered them in secondary school mathematics! Remember *f(x)*?
 
 One important about functions is that *most of the time* (not always though), it takes something **in**, and returns something **out**. It's like a **factory**, you give it some raw material and it outputs some transformed things.
 
-For instance, let's say we want to transform a variable containing an `integer` into a character `string`:
+For instance, let's say we want to transform a variable containing an :code:`integer` into a character :code:`string`:
 
 .. code-block:: python
 
@@ -224,9 +224,9 @@ For instance, let's say we want to transform a variable containing an `integer` 
     x = str(x)
     print(x)
 
-As we can see, our `str()` function takes `x` as an input, and outputs the transformed version, that we can collect using the equal sign `=` and store in the `x` variable to **replace** its content.
+As we can see, our :code:`str()` function takes :code:`x` as an input, and outputs the transformed version, that we can collect using the equal sign :code:`=` and store in the :code:`x` variable to **replace** its content.
 
-Another useful function is `range()`, that creates a sequence of integers, and is often used in combination with **for** loops. Remember our previous loop:
+Another useful function is :code:`range()`, that creates a sequence of integers, and is often used in combination with **for** loops. Remember our previous loop:
 
 .. code-block:: python
 
@@ -234,7 +234,7 @@ Another useful function is `range()`, that creates a sequence of integers, and i
     for var in mylist:
         print(var)
         
-We can re-write it using the `range()` function, to create a sequence of **length 3** (which will be from `0` to `2`; remember that Python indexing starts from 0!), and extracting and printing all of the elements in the list:
+We can re-write it using the :code:`range()` function, to create a sequence of **length 3** (which will be from :code:`0` to :code:`2`; remember that Python indexing starts from 0!), and extracting and printing all of the elements in the list:
 
 .. code-block:: python
 
@@ -244,7 +244,7 @@ We can re-write it using the `range()` function, to create a sequence of **lengt
 
 It's a bit more complicated than the previous version, it's true. But that's the beauty of programming, all things can be done in a near-infinite amount of ways, allowing for your creativity to be expressed.
 
-**Exercice time!** Can you try making a loop so that we add `1` to each element of the list? The answer below:
+**Exercice time!** Can you try making a loop so that we add `:code:1` to each element of the list? The answer below:
 
 .. code-block:: python
 
@@ -274,7 +274,7 @@ Once you have imported it (you have to run that line), you can use its functions
     x = numpy.sqrt(9)
     print(x)
     
-You will notice that we have to first **write the package name**, and then a **dot**, and then the **sqrt()** function. Why is it like that? Imagine you load two packages, both having a function named `sqrt()`. How would the program know which one to use? Here, it knows that it has to look for the `sqrt()` function in the `numpy` package.
+You will notice that we have to first **write the package name**, and then a **dot**, and then the :code:`sqrt()` function. Why is it like that? Imagine you load two packages, both having a function named :code:`sqrt()`. How would the program know which one to use? Here, it knows that it has to look for the :code:`sqrt()` function in the :code:`numpy` package.
 
 You might think, *it's annoying to write the name of the package everytime*, especially if the package name is long. And this is why we sometimes use *aliases*. For instance, *numpy* is often loaded under the shortcut **np**, which makes it shorter to use:
 
@@ -295,12 +295,14 @@ In short, an array is a container, similar to a **list**. However, it can only c
 
 A list can be converted to a vector using the `array()` function from the **numpy** package:
 
+.. code-block:: python
+
     mylist = [1, 2, 3]
     myvector = np.array(mylist)
     print(myvector)
 
 
-In signal processing, vectors are often used instead of lists to store the signal values, because they are more efficient and allow to do some cool stuff with it. For instance, remember our exercice above? In which we had to add `1`to each element of the list? Well using vectors, you can do this directly like this:
+In signal processing, vectors are often used instead of lists to store the signal values, because they are more efficient and allow to do some cool stuff with it. For instance, remember our exercice above? In which we had to add :code:`1`to each element of the list? Well using vectors, you can do this directly like this:
 
 
 
@@ -317,7 +319,7 @@ Indeed, vectors allow for *vectorized* operations, which means that any operatio
 Conditional indexing
 ---------------------
 
-Arrays can also be transformed in arrays of **booleans** (`True` or `False`) using a condition, for instance:
+Arrays can also be transformed in arrays of **booleans** (:code:`True` or :code:`False`) using a condition, for instance:
 
 .. code-block:: python
 
@@ -325,7 +327,7 @@ Arrays can also be transformed in arrays of **booleans** (`True` or `False`) usi
     vector_of_bools = myvector <= 2  # <= means inferior OR equal
     print(vector_of_bools)
 
-This returns a vector of the same length but filled with `True` (if the condition is respected) or `False` otherwise. And this new vector can be used as a **mask** to index and subset the original vector. For instance, we can select all the elements of the array that fulfills this condition:
+This returns a vector of the same length but filled with :code:`True` (if the condition is respected) or :code:`False` otherwise. And this new vector can be used as a **mask** to index and subset the original vector. For instance, we can select all the elements of the array that fulfills this condition:
 
 .. code-block:: python
 
@@ -351,7 +353,7 @@ DataFrames
 
 If you've followed everything until now, congrats! You're almost there. The last important type that we are going to see is **dataframes**. A dataframe is essentially a table with rows and columns. Often, the rows represent different **observations** and the columns different **variables**.
 
-Dataframes are available in Python through the **pandas** package, another very used package, usually imported under the shortcut `pd`. A dataframe can be constructed from a *dictionnay*: the **key** will become the **variable naùe**, and the list or vector associated will become the **variable values**.
+Dataframes are available in Python through the **pandas** package, another very used package, usually imported under the shortcut :code:`pd`. A dataframe can be constructed from a *dictionnay*: the **key** will become the **variable naùe**, and the list or vector associated will become the **variable values**.
 
 .. code-block:: python
 
@@ -375,12 +377,12 @@ This creates a dataframe with 3 rows (the observations) and 2 columns (the varia
 
     print(data["Variable1"])
 
-Note that Python cares about the **case**: `tHiS` is not equivalent to `ThIs`. And `pd.DataFrame` has to be written with the *D* and *F* in capital letters. This is another common source of beginner errors, so make sure you put capital letters at the right place.
+Note that Python cares about the **case**: :code:`tHiS` is not equivalent to :code:`ThIs`. And :code:`pd.DataFrame` has to be written with the *D* and *F* in capital letters. This is another common source of beginner errors, so make sure you put capital letters at the right place.
 
 Reading data
 -------------
 
-Now that you know how to create a dataframe in Python, note that you also use **pandas** to read data from a file (`.csv`, *excel*, etc.) by its *path*:
+Now that you know how to create a dataframe in Python, note that you also use **pandas** to read data from a file (*.csv*, *excel*, etc.) by its *path*:
 
 .. code-block:: python
 
