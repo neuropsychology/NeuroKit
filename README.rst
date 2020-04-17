@@ -95,8 +95,10 @@ Click on the links above and check out our tutorials:
 Tutorials
 ^^^^^^^^^^
 
+-  `Recording good quality signals <https://neurokit2.readthedocs.io/en/latest/tutorials/recording.html>`_
 -  `What software for physiological signal processing <https://neurokit2.readthedocs.io/en/latest/tutorials/software.html>`_
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
+-  `Get familiar with Python in 10 minutes <https://neurokit2.readthedocs.io/en/latest/tutorials/learnpython.html>`_
 -  `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
 -  `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
