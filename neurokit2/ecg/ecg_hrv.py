@@ -96,9 +96,8 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     ecg_rate, rpeaks = _ecg_hrv_formatinput(ecg_rate, rpeaks, sampling_rate)
 
     # Get raw and interpolated R-R intervals
-    rri = np.diff(rpeaks) / sampling_rate * 1000 # milliseconds
-    ecg_period =  60 * 1000/ecg_rate # Express in milliseconds
-
+    rri = np.diff(rpeaks) / sampling_rate * 1000  # milliseconds
+    ecg_period = 60 * 1000/ecg_rate  # Express in milliseconds
 
     # Get indices
     hrv = {}  # Initialize empty dict

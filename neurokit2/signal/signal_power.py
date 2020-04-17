@@ -107,8 +107,10 @@ def _signal_power_instant_plot(psd, out, frequency_band):
     #sanitize signal:
     if isinstance(frequency_band[0], int):
         if len(frequency_band) > 2:
-             print("NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples "
-              "or a tuple of 2 integers")
+            print("NeuroKit error: signal_power(): The `frequency_band`"
+                   "argument must be a list of tuples "
+                   "or a tuple of 2 integers")
+
         else:
             frequency_band = [tuple(i for i in frequency_band)]
 
@@ -120,7 +122,9 @@ def _signal_power_instant_plot(psd, out, frequency_band):
     label_list = list(out.keys())
 
     # Plot
-    ax = psd.plot(x="Frequency", y="Power", logy=True, title='Power Spectral Density (PSD)', color='grey')
+    ax = psd.plot(x="Frequency", y="Power", logy=False, title='Power Spectral Density (PSD)', color='lightgrey', linewidth=0.6)
+    ax.fill_between(psd["Frequency"], 0, psd["Power"], color='lightgrey', label='Signal')
+
     for band_index, label in zip(frequency_band_index, label_list):
         ax.fill_between(psd["Frequency"][band_index], 0, psd["Power"][band_index], label=label)
     ax.legend()
