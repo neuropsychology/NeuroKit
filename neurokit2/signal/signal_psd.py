@@ -4,7 +4,7 @@ import pandas as pd
 import scipy.signal
 
 
-def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_frequency=0, max_frequency=np.inf, precision=2**12):
+def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_frequency=0, max_frequency=np.inf, window=None, resolution=0.5, precision=2**12):
     """Compute the Power Spectral Density (PSD).
 
     Parameters
@@ -19,8 +19,10 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
         Either 'multitapers' (default; requires the 'mne' package), or 'welch' (requires the 'scipy' package).
     min_frequency, max_frequency : float
         The minimum and maximum frequencies.
-    precision : int
-        The precision, used for the Welch method only (should be the power of 2).
+    window : int
+        Length of each window in seconds (for Welch method).
+    resolution : int
+        Resolution is used to adjust the window length in Welch method. It is also balance between frequency resolution and temporal resolution since the short the window length, the higher the temporal resolution and the lower the frequency resolution, vice versa.
 
     See Also
     --------
@@ -57,7 +59,7 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
                                                                        sfreq=sampling_rate,
                                                                        fmin=min_frequency,
                                                                        fmax=max_frequency,
-                                                                       adaptive=False,
+                                                                       adaptive=True,
                                                                        normalization='full',
                                                                        verbose=False)
         except ImportError:
@@ -72,25 +74,28 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
 
     # Welch (Scipy)
     else:
+        # Define window length
+        if min_frequency == 0:
+            min_frequency = 0.001  # sanitize lowest frequency
+        if window is not None:
+            nperseg = int(window * sampling_rate)
+        else:
+            # to capture at least 2 cycles of min_frequency
+            nperseg = int((2 / min_frequency) * sampling_rate)
 
-        if max_frequency == np.inf:
-            max_frequency = int(sampling_rate / 2)
-
-        if (max_frequency - min_frequency) != (sampling_rate / 2):
-            ratio = (sampling_rate / 2) / (max_frequency - min_frequency)
-            precision = int(precision * ratio)
-
-        if precision > len(signal) / 2:
-            precision = int(len(signal) / 2)
-
+        # in case duration of recording is not sufficient
+        if nperseg > len(signal) / 2:
+            print("Neurokit warning: signal_psd(): The duration of recording is too short to support a sufficiently long window for high frequency resolution. Consider using a longer recording or increasing the `min_frequency`")
+            nperseg = int(len(signal / 2))
+            nperseg = nperseg * resolution
 
         frequency, power = scipy.signal.welch(signal,
                                               fs=sampling_rate,
                                               scaling='density',
                                               detrend=False,
-                                              average='median',
-                                              window=scipy.signal.windows.hann(precision*2, False),
-                                              nfft=precision*2)
+                                              nfft=int(nperseg*2),
+                                              average='mean',
+                                              nperseg=nperseg)
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency,
