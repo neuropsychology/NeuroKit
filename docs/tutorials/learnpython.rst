@@ -171,7 +171,7 @@ One important notion in programming is control flow. You want the code to do som
 
 One very important thing to notice is that the **if statement** corresponds to a "chunk" of code, as signified by the colon :code:`:`. The chunk has to be written below, and has to be **indented** (you can ident a line or a chunk of code by pressing the :code:`TAB` key). 
 
-**What is identation?**
+*What is identation?*
 
 
 .. code-block:: console
@@ -355,7 +355,7 @@ Additionaly, we can also modify a subset of values on the fly:
 Here we assigned a new value `6` to all elements of the vector that respected the condition (were inferior or equal to 2).
     
 
-DataFrames
+Dataframes
 ------------
 
 
