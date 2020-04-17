@@ -12,7 +12,4 @@ Contents:
    understanding
    contributing
    first_contribution
-
-   
-
-
+   resources
