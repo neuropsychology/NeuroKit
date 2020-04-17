@@ -5,26 +5,31 @@ Get familiar with Python in 10 minutes
    Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_).
 
 
-You have no experience in programming? You are afraid of code? You feel betrayed because you didn't expect to code in psychology studies? **Relax!**
+You have no experience in computer science? You are afraid of code? You feel betrayed because you didn't expect to do programming in psychology studies? **Relax!** We got you covered.
 
-This tutorial will provide you with all you need to know to dive into the wonderful world of scientific programming. The goal here is not become a programmer, or a software designer, but rather to be able to use the power of programming to get some **scientific results** out.
+This tutorial will provide you with all you need to know to dive into the wonderful world of scientific programming. The goal here is not become a programmer, or a software designer, but rather to be able to use the power of programming to get **scientific results**.
 
 
 
 Setup
 ---------------
 
-The first thing you will need is to **install Python** on your computer (we have `tutorial for that <https://neurokit2.readthedocs.io/en/latest/installation.html>`_). In fact, this will do **two things**, installing Python (the *language*), and an *environment* to be able to use it. For this tutorial, we will assume you have something that looks like `Spyder <https://www.spyder-ide.org/>`_.
+The first thing you will need is to **install Python** on your computer (we have `tutorial for that <https://neurokit2.readthedocs.io/en/latest/installation.html>`_). In fact, this includes **two things**, installing Python (the *language*), and an *environment* to be able to use it. For this tutorial, we will assume you have something that looks like `Spyder <https://www.spyder-ide.org/>`_ (called an IDE). But you can use `jupyter notebooks <https://jupyter.org/>`_, or `anything else <https://www.guru99.com/python-ide-code-editor.html>`_, it doesn't really matter.
 
-There is one important concept here to grasp: the difference between the **CONSOLE** and the **EDITOR**. The editor is where you write the code. It's basically a text editor (such as notepad), except that it automatically highlights the code. Importantly, you can directly *execute* a line of code (which is equivalent to copy it and paste it the *console*).
+There is one important concept to understand here: the difference between the **CONSOLE** and the **EDITOR**. The editor is like a *cooking table* where you prepare your ingredients to make a dish, whereas the console is like the *oven*, you only open it to put the dish in it and get the result. 
 
-For instance, you can write :code:`1+1` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press :code:`F9` (or :code:`CTRL + ENTER`), it will **execute it**.
+Most of the code that you will write, you will write it in the editor. It's basically a text editor (such as notepad), except that it automatically highlights the code. Importantly, you can directly *execute* a line of code (which is equivalent to copy it and paste it the *console*).
+
+For instance, try writing :code:`1+1` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press :code:`F9` (or :code:`CTRL + ENTER`), it will **execute it**.
 
 
 .. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_1.jpg
 
 
-As a result, you should see in the console the order that you gave and below, the **output** (which is :code:`2`). Now, take some time to explore the settings and turn the editor background to **BLACK**. Why? Because it's more comfortable for the eyes, but most importantly, because it's cool 😎.
+As a result, you should see in the console the order that you gave and, below, its **output** (which is :code:`2`). 
+
+
+Now that the distinction between where we write the code and where the output appears is clear, take some time to explore the settings and turn the editor background to **BLACK**. *Why?* Because it's more comfortable for the eyes, but most importantly, because it's cool 😎.
 
 
 .. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_2.png
@@ -32,22 +37,26 @@ As a result, you should see in the console the order that you gave and below, th
 **Congrats, you've become a programmer**, a wizard of the modern times.
 
 
-You can now save the file (:code:`CTRL + S`), which will be saved with a :code:`.py` extension (i.e., a Python file). Try closing everything and reopening this file with the editor.
+You can now save the file (:code:`CTRL + S`), which will be saved with a :code:`.py` extension (i.e., a Python script). Try closing everything and reopening this file with the editor.
 
 
 Variables
 ---------------
 
-The second important concept is **variables**, which is a fancy name for something that you already know. Do you remember, from your mathematics classes, the famous *X*? This placeholder for any value? Well, *X* was a variable, i.e., the name refering to some other thing.
+The most important concept of programming is **variables**, which is a fancy name for something that you already know. Do you remember, from your mathematics classes, the famous *x*, this placeholder for any value? Well, *x* was a variable, i.e., the name refering to some other thing.
 
-So we can *assign* a value to a *variable* using the :code:`=` sign, for instance:
+.. hint::
+   A variable in programming is not equivalent to a variable in statistics, in which it refers to some specific data (for instance, *age* is variable and contains multiple observations). In programming, a variable is the name that we give to some entity.
+
+
+We can *assign* a value to a *variable* using the :code:`=` sign, for instance:
 
 .. code-block:: python
 
     x = 2
     y = 3
     
-Once we execute these two lines, Python will know that :code:`x` refers to :code:`2` and :code:`y` to :code:`3`. We can now write:
+Once we execute these two lines, Python will know that :code:`x` refers to :code:`2`, and :code:`y` to :code:`3`. We can now write:
 
 .. code-block:: python
 
@@ -63,22 +72,21 @@ We can also store the output in a third variable:
 
     x = 2
     y = 3
-   
     anothervariable = x * y
     print(anothervariable)
 
 
-Variables and data types (classes)
-----------------------------------
+Variables and data types
+-------------------------
 
-The next important thing to have in mind is that variables have **types**. Basic types include **integers** (numbers without decimals), **floats** (numbers with decimals), **string** (character text) or **booleans** (:code:`True` and :code:`False`). Depending on the type, the variables will not behave the same. For example, try:
+The next important thing to have in mind is that variables have **types**. Basic types include **integers** (numbers without decimals), **floats** (numbers with decimals), **strings** (character text) and **booleans** (:code:`True` and :code:`False`). Depending on their type, the variables will not behave in the same way. For example, try:
 
 .. code-block:: python
 
-    print(1 + 2.0)
-    print("1" + "2.0")
+    print(1 + 2)
+    print("1" + "2")
     
-What happened here? Well, quotations are used to represent **strings** (text). So in the second line, the numbers that we added were not numbers, but text. And when you add strings together in Python, it *concatenates* them.
+What happened here? Well, quotations (:code:`"I am quoted"`) are used to represent **strings** (i.e., text). So in the second line, the numbers that we added were not numbers, but text. And when you add strings together in Python, it *concatenates* them.
 
 One can change the type of a variable with the following:
 
@@ -88,7 +96,7 @@ One can change the type of a variable with the following:
     float(1)  # transform the input to a float
     str(1)  # transform the input into text
     
-Also, here I used the hashtag symbol to **make comments**, i.e., writing stuff that won't be executed by Python. This is super useful to annotate each line of your code to remember what you do.
+Also, here I used the hashtag symbol to **make comments**, i.e., writing stuff that won't be executed by Python. This is super useful to annotate each line of your code to remember what you do (and why you do it).
 
 Types are often the source of many errors as they usually are **incompatible** between them. For instance, you cannot add a *number* (:code:`int` or :code:`float`) with a *character string*. For instance, try running :code:`3 + "a"`, it will throw a :code:`TypeError`.
 
