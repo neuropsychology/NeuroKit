@@ -130,16 +130,17 @@ Overall, we believe that this code structure offers a calibrated trade-off betwe
 
 # Example
 
-
-We will present two examples that illustrate the most common use cases of *Neurokit2*. Their implementations are outlined below with their corresponding datasets. Firstly, we will show how simple it is to compute contrasts between experimental conditions using data from an event-related paradigm. In this example, one would be interested in the momentarily short-term physiological responses to some specific stimuli. The second example provided shows how *Neurokit2* can extract longer-term characteristics (features) of physiological activity, namely Heart Rate Variability (HRV). Datasets are provided along with the package, and examples are available in their interactive and static versions.
+We will present two examples that illustrate the most common use-cases. The first is an event-related paradigm, in which the interest lies in the momentarily short-term physiological changes related to specific stimuli, while the second shows how to extract the characteristics (features) of the physiological activity during a longer period of time (not necessarily tied to a specific and suddent event). The example datasets are made available with the package and can be downloaded using the `data()` function.
 
 
 ## Event-related Paradigm
 
-The `event related dataset` contains ECG, RSP and EDA signals taken from one participant to whom was presented four emotional images (from the NAPS database; @marchewka2014nencki). The dataset was shortened and downsampled for illustration purposes only. We are referencing our readers to established guidelines of sampling rate and recording length [@Quintana2016]. The data contains 2.5 minutes of signals recorded at a frequency of 100Hz. It contains four timeseries representing our three physiological modalities and a photosensor (of which the signal decreased whenever a stimulus was displayed on the screen).
+The example dataset contains ECG, RSP and EDA signals of one participant to whom were presented four emotional images [from the NAPS database; @marchewka2014nencki], in a typical (albeit highly shortened) experimental psychology paradigm.
 
-<!--I think we should label sections like : Step 1., Step 2, etc. then refer to it in the text
-Step 1. -->
+The data contains 2.5 minutes of data recorded at a frequency of 100Hz [note that the sampling rate is low for storage purposes and should be higher in actual recordings, see @Quintana2016], contains three channels correspond to the three physiological signals, and one corresponding to the marking of events via a photosensor (which signal decreased when a stimulus was displayed on the screen).
+
+
+<!--Step 1. -->
 ```{python eventrelated_data, include=TRUE, eval=TRUE, echo = TRUE}
 # Load the package
 import neurokit2 as nk
@@ -150,7 +151,7 @@ data = nk.data("bio_eventrelated_100hz")
 # Visualize 10 seconds of data (on the same scale)
 nk.signal_plot(data[900:1900], standardize=True)
 ```
-<!--here I think the figure is great, but it seems like an arbitrary slice is unimportant compared to epoch_plot()-->
+
 ```{r include=TRUE, eval=TRUE, echo = FALSE, fig.width=10, fig.height=6, fig.cap="Subset of the dataset showing one event (in orange) and the other physiological signals."}
 py$data %>%
   standardize() %>%
@@ -171,7 +172,7 @@ py$data %>%
   guides(size = guide_legend(override.aes = list(size = 2)))
 ```
 <!--Step 2.-->
-```{python eventrelated_analysis, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
+```{python epochs_creation, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
 # Process the data
 df, info = nk.bio_process(ecg=data["ECG"],
                           rsp=data["RSP"],
@@ -193,7 +194,7 @@ epochs = nk.epochs_create(data=df,
 ```
 <!-- why don't we plot epochs here instead of plotting an arbitrary slice ?
 Step 3.-->
-```
+```{python eventrelated_analysis, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
 # Extract event related features
 results = nk.bio_analyze(epochs)
 
