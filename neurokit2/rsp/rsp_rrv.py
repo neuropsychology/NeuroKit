@@ -73,7 +73,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
 
     # Get raw and interpolated R-R intervals
     bbi = np.diff(peaks) / sampling_rate * 1000
-    rsp_period = 60 * sampling_rate/ rsp_rate
+    rsp_period = 60 * sampling_rate / rsp_rate
 
     # Get indices
     rrv = {}  # Initialize empty dict

@@ -36,7 +36,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     >>> import neurokit2 as nk
     >>>
     >>> # Decompose using different algorithms
-    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1)
+    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)
     >>> cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method='cvxeda')
     >>> smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method='smoothmedian')
     >>> highpass = nk.eda_phasic(nk.standardize(eda_signal), method='highpass')
