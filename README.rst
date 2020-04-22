@@ -319,7 +319,6 @@ compute the following features:
   - **Rate changes** *(ECG, PPG, RSP)*: mean, minimum, maximum, minimum-time and maximum-time
   - **Peak characteristics** *(EDA)*: peak presence, amplitude, rise time, peak-time
   - **Phase characteristics** *(ECG, RSP)*: phase type (inspiration/expiration, systole/diastole), phase completion
-  - ...
   
 - `Full example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
 
@@ -339,7 +338,6 @@ stress. In this case, using `bio_analyze()` will compute the following features:
 
   - **Rate characteristics** *(ECG, PPG, RSP)*: mean, amplitude, variability (HRV, RRV)
   - **Peak characteristics** *(EDA)*: number of peaks, mean amplitude
-  - ...
   
 - `Full example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 

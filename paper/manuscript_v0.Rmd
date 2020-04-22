@@ -87,7 +87,7 @@ matplotlib$use("Agg", force = TRUE)
 
 
 <!-- Research gap -->
-Cognitive neuroscience and psychology is increasingly relying on neurophysiological methods to assess brain and bodily activity. Aside from theorethical considerations motivating this shift (e.g., the growth of embodied or affective neuroscience, @Kiverstein2015),<!--I think here it's best to keep it simple and general-->, practical reasons can include low monetary cost (especially compared with other imaging techniques, such as MRI or MEG), high user convenience (e.g., portability, setup speed) and wide availability (e.g., in "smart" health devices; @yuehong2016internet). At the same time, the fields of signal processing and computational data science continue to grow, pushing the horizon of possibilities and resulting in the emergence of a mryiad of new processing algorithms [@clifton2012machine]. <!--Most importantly, open-sourced benchmarking... this sentence was bit vague -->However, as these methods are often not easily accessible and user-friendly, neurophysiological data processing remains a challenge for many researchers without a formal training or experience in programming.
+Cognitive neuroscience and psychology is increasingly relying on neurophysiological methods to assess brain and bodily activity. Aside from theorethical considerations motivating this shift (e.g., the growth of embodied or affective neuroscience, @Kiverstein2015),<!--I think here it's best to keep it simple and general-->, practical reasons can include low monetary cost (especially compared with other imaging techniques, such as MRI or MEG), high user convenience (e.g., portability, setup speed) and wide availability (e.g., in "smart" health devices; @yuehong2016internet). At the same time, the fields of signal processing and computational data science continue to grow, pushing the horizon of possibilities and resulting in the emergence of a mryiad of new processing algorithms [@clifton2012machine; @roy2019deep]. However, as these methods are often not easily accessible and user-friendly, neurophysiological data processing remains a challenge for many researchers without a formal training or experience in programming.
 
 <!-- Response to gap -->
 *NeuroKit2* aims at addressing this challenge by offering a free, user-friendly, and complete solution for neurophysiological data processing. It is an open-source Python package, developed in a collaborative environment that continues to welcome contributors from different countries and fields. Historically, *NeuroKit2* is the re-forged successor *NeuroKit.py* (*https://github.com/neuropsychology/NeuroKit.py*), a PhD side project that ended up attracting a lot of users (248 GitHub stars as of 09-04-2020). The new version takes on its best features and design choices, and re-implements them in a professional and well-thought way. It aims at being 1) accessible and well-documented, 2) reliable and cutting-edge, and most importantly, 3) flexible and powerful.<!--robust can be interpreted in different ways-->
@@ -140,7 +140,6 @@ The example dataset contains ECG, RSP and EDA signals of one participant to whom
 The data contains 2.5 minutes of data recorded at a frequency of 100Hz [note that the sampling rate is low for storage purposes and should be higher in actual recordings, see @Quintana2016], contains three channels correspond to the three physiological signals, and one corresponding to the marking of events via a photosensor (which signal decreased when a stimulus was displayed on the screen).
 
 
-<!--Step 1. -->
 ```{python eventrelated_data, include=TRUE, eval=TRUE, echo = TRUE}
 # Load the package
 import neurokit2 as nk
@@ -171,7 +170,7 @@ py$data %>%
   ylab("Time (s)") +
   guides(size = guide_legend(override.aes = list(size = 2)))
 ```
-<!--Step 2.-->
+
 ```{python epochs_creation, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
 # Process the data
 df, info = nk.bio_process(ecg=data["ECG"],
@@ -192,8 +191,7 @@ epochs = nk.epochs_create(data=df,
                           epochs_start=-0.1,
                           epochs_end=4)
 ```
-<!-- why don't we plot epochs here instead of plotting an arbitrary slice ?
-Step 3.-->
+<!-- why don't we plot epochs here instead of plotting an arbitrary slice ?-->
 ```{python eventrelated_analysis, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
 # Extract event related features
 results = nk.bio_analyze(epochs)
@@ -212,7 +210,15 @@ kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Ampl
   kableExtra::kable_styling(latex_options = c("hold_position"))
 ```
 
-<!--Though event-related paradigms are often employed, standardized and reproducible pipelines for biosignal analyses are still not common practice. As a symbol of this lack of consensus, the chapter dedicated to biosignal processing in the go-to *Handbook of psychophysiology* does not even mention this issue [@Gratton2017] : Tone feels abit harsh, maybe rephrase and say why it is important. Also perhaps this paragraph if needed should be after the example is explained->. <!--We are suggesting--> Here, event-related features can be extracted with three simple steps<!--to illustrate our approach in solving this problem-->. In step 1, our example dataset is loaded along with the package. In step 2, each channel contained in the dataset is processed. While physiological modalities have their dedicated *high-level wrapper function*, data from the photosensor is processed separetely with `events_find()`. Conditions can be easily intialized by giving a list representing the order of presentation of stimuli to the `event_conditions` argument. Timeseries can then be segmented from the data into epochs corresponding to the specified window around each event. That way, `epochs_create()` will take the processed data in `df` and keep a dictionary containing only segments of the dataframe corresponding to the time window around `events`. In step 3, relevant features are computed by giving our `epochs` dictionary of dataframes to `bio_analyze()`. The features include the changes in rates of ECG and RSP signals (e.g. maximum, minimum and mean rate after stimulus onset, and the time at which they occur), and the peak characteristics of EDA signal (e.g., occurrence of skin conductance response (SCR), and if SCR is present, its corresponding peak amplitude, time of peak, rise and recovery time). In addition, respiration and cardiac cycle phases are also extracted (i.e.,  the respiration phase - inspiration/expiration - and cardiac phase - systole/diastole - occuring at the onset of event).
+
+In this example, after loading the package and the example dataset, each physiological signal is processed using `bio_process()`. Data from the photosensor is processed separetely with `events_find()`, that locates the changes in the signal corresponding to stimuli onsets.
+
+
+
+
+event-related features can be extracted with three steps.
+
+<!--Though event-related paradigms are often employed, standardized and reproducible pipelines for biosignal analyses are still not common practice. As a symbol of this lack of consensus, the chapter dedicated to biosignal processing in the go-to *Handbook of psychophysiology* does not even mention this issue [@Gratton2017] : Tone feels abit harsh, maybe rephrase and say why it is important. Also perhaps this paragraph if needed should be after the example is explained->. <!--We are suggesting-->  In step 1,  In step 2,  Conditions can be easily intialized by giving a list representing the order of presentation of stimuli to the `event_conditions` argument. Timeseries can then be segmented from the data into epochs corresponding to the specified window around each event. That way, `epochs_create()` will take the processed data in `df` and keep a dictionary containing only segments of the dataframe corresponding to the time window around `events`. In step 3, relevant features are computed by giving our `epochs` dictionary of dataframes to `bio_analyze()`. The features include the changes in rates of ECG and RSP signals (e.g. maximum, minimum and mean rate after stimulus onset, and the time at which they occur), and the peak characteristics of EDA signal (e.g., occurrence of skin conductance response (SCR), and if SCR is present, its corresponding peak amplitude, time of peak, rise and recovery time). In addition, respiration and cardiac cycle phases are also extracted (i.e.,  the respiration phase - inspiration/expiration - and cardiac phase - systole/diastole - occuring at the onset of event).
 
 This example shows the straightforward process of extracting short-term features of physiological responses/activity. <!--In fact, it should be clear that--> This pipeline can also scale up with little-or-no effort to group-level analysis by aggregating the mean of features accross subjects. We believe these steps are easy for beginners to memorize and implement, <!-- as well as intuitive--> and are sufficiently flexible for the more advanced to tweak parameters to suit their desired goal. <!-- One might say that it could speed up the process between data collection and analysis-->. 
 

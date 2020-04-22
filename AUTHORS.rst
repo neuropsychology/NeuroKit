@@ -1,6 +1,9 @@
-=======
 Authors
 =======
+
+.. hint::
+   Want to be a part of the project? Read how to `contribute and join us <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_!
+
 
 Core team
 ----------------
@@ -11,17 +14,20 @@ Core team
 * `Jan C. Brammer <https://github.com/JanCBrammer>`_ *(Radboud University, Netherlands)*
 * `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 
-Experts
--------------
-
-* `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
-* `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
-
 
 Contributors
 -------------
 
+* `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
+* `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
+* `@purpl3F0x (Stavros Avramidis) <https://github.com/purpl3F0x>`_
+
+
+
+NeuroKit1 Contributors
+-------------------------
+
 * `Gansheng Tan <https://github.com/GanshengT>`_ *(CentraleSupélec, France)*
 * `Chuan-Peng Hu <https://github.com/hcp4715>`_ *(Universitatsmedizin Mainz, Germany)*
 * `@ucohen <https://github.com/ucohen>`_
@@ -30,7 +36,6 @@ Contributors
 * `@renatosc <https://github.com/renatosc>`_
 * `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ *(Université Laval, Canada)*
 * `@rubinovitz <https://github.com/rubinovitz>`_
-* `@purpl3F0x (Stavros Avramidis) <https://github.com/purpl3F0x>`_
-* `You? <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_
+
 
 More details `here <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.

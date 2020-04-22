@@ -73,6 +73,7 @@ What is the best programming language for physiological data analysis?
   - `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_: EDA.
   - `Pypsy <https://github.com/brennon/Pypsy>`_: EDA.
   - `MNE <https://github.com/mne-tools/mne-python>`_: EEG.
+  - `tensorpac <https://github.com/EtienneCmb/tensorpac>`_: EEG.
   - `PyGaze <https://github.com/esdalmaijer/PyGaze>`_: Eye-tracking.
   - `PyTrack <https://github.com/titoghose/PyTrack>`_: Eye-tracking.
   
