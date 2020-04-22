@@ -103,6 +103,8 @@ Tutorials
 -  `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
+-  `Additional Resources <https://neurokit2.readthedocs.io/en/latest/tutorials/resources.html>`_
+
 
 Examples
 ^^^^^^^^^^

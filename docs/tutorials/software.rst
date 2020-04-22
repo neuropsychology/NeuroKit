@@ -29,7 +29,7 @@ However, it is important to understand that you don't necessarily have to **know
 
 
 .. note::
-   **TLDR**; Software, even though seemlingly appealing, are not a good investement of time or money. 
+   **TLDR**; Closed proprietary software, even though seemlingly appealing, might not a good investement of time or money. 
 
 GUI *vs.* code
 -------------
@@ -46,7 +46,7 @@ GUI *vs.* code
   - `mnelab <https://github.com/cbrnr/mnelab>`_: EEG *(Python)*.
 
 .. note::
-   **TLDR**; While GUI can be good alternative and first step to dive into programming language-based tools, coding will provide you with full freedom, incredible power and the best fit possible for your data and issues. 
+   **TLDR**; While GUIs can be good alternatives and a first step to dive into programming language-based tools, coding will provide you with more freedom, incredible power and the best fit possible for your data and issues. 
 
 
 Matlab *vs.* Python *vs.* R *vs.* Julia

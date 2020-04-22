@@ -1,4 +1,4 @@
-Recording neurophysiological activity
+Recording good quality signals
 ======================================
 
 .. hint::
