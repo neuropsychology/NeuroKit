@@ -90,6 +90,32 @@ def test_eda_peaks():
     onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
     assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1)
 
+
+def test_eda_process():
+
+    eda = nk.eda_simulate(duration=30, scr_number=5,
+                          drift=0.1, noise=0, sampling_rate=250)
+    signals, info = nk.eda_process(eda, sampling_rate=250)
+
+    assert signals.shape == (7500, 11)
+    assert np.array(["EDA_Raw",
+                     "EDA_Clean",
+                     "EDA_Tonic",
+                     "EDA_Phasic",
+                     "SCR_Onsets",
+                     "SCR_Peaks",
+                     "SCR_Height",
+                     "SCR_Amplitude",
+                     "SCR_RiseTime",
+                     "SCR_Recovery",
+                     "SCR_RecoveryTime"]) in signals.columns.values
+
+    # Check equal number of markers
+    peaks = np.where(signals["SCR_Peaks"] == 1)[0]
+    onsets = np.where(signals["SCR_Onsets"] == 1)[0]
+    recovery = np.where(signals["SCR_Recovery"] == 1)[0]
+    assert peaks.shape == onsets.shape == recovery.shape == (5,)
+
 def test_eda_plot():
 
     sampling_rate = 1000
