@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.collections
 
+
 def eda_plot(eda_signals, sampling_rate=None):
     """Visualize electrodermal activity (EDA) data.
 
@@ -17,8 +18,8 @@ def eda_plot(eda_signals, sampling_rate=None):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
-    >>> eda_signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
+    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)
+    >>> eda_signals, info = nk.eda_process(eda_signal, sampling_rate=250)
     >>> nk.eda_plot(eda_signals)
 
     See Also
@@ -60,13 +61,35 @@ def eda_plot(eda_signals, sampling_rate=None):
     ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic Component', linewidth=1.5, zorder=1)
 
     # Mark segments.
-    risetime_coord, amplitude_coord, halfr_coord = _eda_plot_dashedsegments(eda_signals, ax1, x_axis, onsets, peaks, half_recovery)
-    risetime = matplotlib.collections.LineCollection(risetime_coord, colors='#FFA726', linewidths=1, linestyle='dashed')
+    if len(half_recovery) != 0:
+        risetime_coord, amplitude_coord, halfr_coord = _eda_plot_dashedsegments(eda_signals, ax1, x_axis, onsets, peaks, half_recovery)
+        halfr = matplotlib.collections.LineCollection(halfr_coord,
+                                                      colors='#FDD835',
+                                                      linewidths=1, linestyle='dashed')
+        ax1.add_collection(halfr)
+
+    else:
+        risetime_coord, amplitude_coord = _eda_plot_dashedsegments(eda_signals, ax1, x_axis, onsets, peaks, half_recovery)
+
+    if len(half_recovery) != len(peaks):
+        print("Neurokit warning: eda_plot(): "
+              "One or more half recovery points are not close enough to the "
+              "threotical half-recovery value (i.e., > 1% of error). "
+              "Marking of these half-recovery points are omitted. "
+              "Try a higher sampling rate.")
+
+    risetime = matplotlib.collections.LineCollection(risetime_coord,
+                                                     colors='#FFA726',
+                                                     linewidths=1,
+                                                     linestyle='dashed')
     ax1.add_collection(risetime)
-    amplitude = matplotlib.collections.LineCollection(amplitude_coord, colors='#1976D2', linewidths=1, linestyle='solid')
+
+    amplitude = matplotlib.collections.LineCollection(amplitude_coord,
+                                                      colors='#1976D2',
+                                                      linewidths=1,
+                                                      linestyle='solid')
     ax1.add_collection(amplitude)
-    halfr = matplotlib.collections.LineCollection(halfr_coord, colors='#FDD835', linewidths=1, linestyle='dashed')
-    ax1.add_collection(halfr)
+
     ax1.legend(loc='upper right')
 
     # Plot Tonic.
@@ -100,8 +123,30 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
     amplitude_coord = [(peak_top[i], risetime_end[i]) for i in position]
 
     # Half recovery.
-    halfr_end = scat_halfr.get_offsets()
-    halfr_start = [(peak_top[i, 0], halfr_end[i, 1]) for i in position]
-    halfr_coord = [(halfr_start[i], halfr_end[i]) for i in position]
+    if len(half_recovery) != 0:
+        # position_halfr = [i for i in range(0, len(half_recovery))]
 
-    return risetime_coord, amplitude_coord, halfr_coord
+        # Match recovery values to correct peak values
+        peak_x_values = peak_top.data[:, 0]
+        recovery_x_values = x_axis[half_recovery]
+
+        peak_list = []
+        for i, index in enumerate(half_recovery):
+            value = findclosest(recovery_x_values[i], peak_x_values,
+                                direction="smaller", strictly=False)
+            peak_list.append(value)
+
+        peak_index = []
+        for i in np.array(peak_list):
+            index = np.where(i == peak_x_values)[0][0]
+            peak_index.append(index)
+
+        halfr_index = [x for x in range(0, len(half_recovery))]
+        halfr_end = scat_halfr.get_offsets()
+        halfr_start = [(peak_top[i, 0], halfr_end[x, 1]) for i, x in zip(peak_index, halfr_index)]
+        halfr_coord = [(halfr_start[i], halfr_end[i]) for i in halfr_index]
+
+        return risetime_coord, amplitude_coord, halfr_coord
+
+    else:
+        return risetime_coord, amplitude_coord
