@@ -18,9 +18,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
 
-    Several authors suggested different methods to guide the choice of Tau. Fraser and Swinney (1986) suggest using the first local minimum of the mutual information between the delayed and non-delayed time series, effectively identifying a value of tau for which they share the least information. Theiler (1990) suggested to select Tau such that the autocorrelation between the signal and its lagged version at Tau is the closest to 1/e.
-
-    A simple  criterion  to  compute  Tau  was  suggested  by  .  Let  )(τΨ  be  the  autocorrelation  function  (AC)  from  the  time  series  y(t).  Theiler  suggested  to  select  τ  such  that  ./1)(e≅Ψτ  Fraser  and  Swinney (1986)  propose  to  find  the  first  minimum  of  the  Auto Mutual Information  (AMI).  A  novel  method  for  simultaneously  determining  both  m  and τ proposed by  Gautama  et  al.  (2003)  and  it  is  based  on  the  minimum of the Differential Entropy (DE).
+    Several authors suggested different methods to guide the choice of Tau. Fraser and Swinney (1986) suggest using the first local minimum of the mutual information between the delayed and non-delayed time series, effectively identifying a value of tau for which they share the least information. Theiler (1990) suggested to select Tau such that the autocorrelation between the signal and its lagged version at Tau is the closest to 1/e. Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation.
 
     The code is based on http://node99.org/tutorials/ar/, but very unsure of our implementation.
     Please help us by checking-it.
@@ -32,7 +30,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     delay_max : int
         The maximum time delay (Tau) to test.
     method : str
-        Correlation method. Can be one of 'fraser1986'.
+        Correlation method. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991'.
     show : bool
         If true, will plot the mutual information values for each value of tau.
 
@@ -81,7 +79,9 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
         algorithm = "first local minimum"
     elif method in ["theiler", "theiler1990"]:
         metric = "Autocorrelation"
-        algorithm = "closest to 1/e"
+    elif method in ["casdagli", "casdagli1991 "]:
+        metric = "Autocorrelation"
+        algorithm = "closest to 0"
     else:
         raise ValueError("NeuroKit error: embedding_delay(): 'method' "
                          "not recognized.")
@@ -112,8 +112,10 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
     if algorithm == "first local minimum":
         optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"][0]
-    if algorithm == "closest to 1/e":
+    elif algorithm == "closest to 1/e":
         optimal = np.where(metric_values == findclosest(1 / np.exp(1), metric_values))[0][0]
+    elif algorithm == "closest to 0":
+        optimal = np.where(metric_values == findclosest(0, metric_values))[0][0]
     return optimal
 
 
