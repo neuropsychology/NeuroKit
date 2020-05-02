@@ -91,7 +91,7 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
     y1 = embedding(signal[:-delay], delay=delay, dimension=dimension)
     y2 = embedding(signal, delay=delay, dimension=dimension + 1)
 
-     # Find near neighbors in dimension d.
+    # Find near neighbors in dimension d.
     index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
 
     # Compute the magnification and the increase in the near-neighbor
