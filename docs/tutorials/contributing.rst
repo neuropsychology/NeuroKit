@@ -1,6 +1,10 @@
 How to use GitHub to contribute
 =================================
 
+.. hint::
+   Something unclear? Do not hesitate to open `an issue <https://github.com/neuropsychology/NeuroKit/issues>`_ or contribute some changes.
+   
+   
 **NeuroKit2 welcomes everyone to contribute to code, documentation, testing and suggestions.**
 
 This package aims at being beginner-friendly. And if you're not yet familiar with how contribution can be done to open-source packages, or with **how to use GitHub**, this guide is for you!
