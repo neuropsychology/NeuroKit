@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
+
 from .signal_simulate import signal_simulate
 from .signal_resample import signal_resample
 from ..misc import listify
@@ -66,16 +66,16 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
     >>>
     >>> # Noise
     >>> pd.DataFrame({
-            "Freq100": nk.signal_distord(signal, noise_frequency=200),
-            "Freq50": nk.signal_distord(signal, noise_frequency=50),
-            "Freq10": nk.signal_distord(signal, noise_frequency=10),
-            "Freq5": nk.signal_distord(signal, noise_frequency=5),
+            "Freq100": nk.signal_distort(signal, noise_frequency=200),
+            "Freq50": nk.signal_distort(signal, noise_frequency=50),
+            "Freq10": nk.signal_distort(signal, noise_frequency=10),
+            "Freq5": nk.signal_distort(signal, noise_frequency=5),
             "Raw": signal}).plot()
     >>>
     >>> # Artifacts
     >>> pd.DataFrame({
-            "1Hz": nk.signal_distord(signal, noise_amplitude=0, artifacts_frequency=1, artifacts_amplitude=0.5),
-            "5Hz": nk.signal_distord(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2),
+            "1Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=1, artifacts_amplitude=0.5),
+            "5Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2),
             "Raw": signal}).plot()
     """
     # Seed the random generator for reproducible results.
@@ -93,7 +93,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
 
     # Basic noise.
     if min(noise_amplitude) > 0:
-        noise += _signal_distord_noise_multifrequency(signal,
+        noise += _signal_distort_noise_multifrequency(signal,
                                                       signal_sd=signal_sd,
                                                       sampling_rate=sampling_rate,
                                                       noise_amplitude=noise_amplitude,
@@ -103,7 +103,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
 
     # Powerline noise.
     if powerline_amplitude > 0:
-        noise += _signal_distord_powerline(signal, signal_sd=signal_sd,
+        noise += _signal_distort_powerline(signal, signal_sd=signal_sd,
                                            sampling_rate=sampling_rate,
                                            powerline_frequency=powerline_frequency,
                                            powerline_amplitude=powerline_amplitude,
@@ -111,7 +111,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
 
     # Artifacts.
     if artifacts_amplitude > 0:
-        noise += _signal_distord_artifacts(signal,
+        noise += _signal_distort_artifacts(signal,
                                            signal_sd=signal_sd,
                                            sampling_rate=sampling_rate,
                                            artifacts_frequency=artifacts_frequency,
@@ -135,13 +135,13 @@ def _signal_linear_drift(signal):
     return linear_drift
 
 
-def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
+def _signal_distort_artifacts(signal, signal_sd=None, sampling_rate=1000,
                               artifacts_frequency=0, artifacts_amplitude=.1,
                               n_artifacts=5, artifacts_shape="laplace",
                               silent=False):
 
     # Generate artifact burst with random onset and random duration.
-    artifacts = _signal_distord_noise(len(signal), sampling_rate=sampling_rate,
+    artifacts = _signal_distort_noise(len(signal), sampling_rate=sampling_rate,
                                       noise_frequency=artifacts_frequency,
                                       noise_amplitude=artifacts_amplitude,
                                       noise_shape=artifacts_shape,
@@ -172,7 +172,7 @@ def _signal_distord_artifacts(signal, signal_sd=None, sampling_rate=1000,
     return artifacts
 
 
-def _signal_distord_powerline(signal, signal_sd=None, sampling_rate=1000,
+def _signal_distort_powerline(signal, signal_sd=None, sampling_rate=1000,
                               powerline_frequency=50,
                               powerline_amplitude=.1, silent=False):
 
@@ -189,7 +189,7 @@ def _signal_distord_powerline(signal, signal_sd=None, sampling_rate=1000,
     return powerline_noise
 
 
-def _signal_distord_noise_multifrequency(signal, signal_sd=None,
+def _signal_distort_noise_multifrequency(signal, signal_sd=None,
                                          sampling_rate=1000,
                                          noise_amplitude=.1,
                                          noise_frequency=100,
@@ -209,7 +209,7 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
             amp *= signal_sd
 
         # Make some noise!
-        _base_noise = _signal_distord_noise(len(signal),
+        _base_noise = _signal_distort_noise(len(signal),
                                             sampling_rate=sampling_rate,
                                             noise_frequency=freq,
                                             noise_amplitude=amp,
@@ -219,7 +219,7 @@ def _signal_distord_noise_multifrequency(signal, signal_sd=None,
     return base_noise
 
 
-def _signal_distord_noise(n_samples, sampling_rate=1000, noise_frequency=100,
+def _signal_distort_noise(n_samples, sampling_rate=1000, noise_frequency=100,
                           noise_amplitude=.1, noise_shape="laplace",
                           silent=False):
 
@@ -255,7 +255,7 @@ def _signal_distord_noise(n_samples, sampling_rate=1000, noise_frequency=100,
     elif noise_shape == "laplace":
         _noise = np.random.laplace(0, noise_amplitude, noise_duration)
     else:
-        raise ValueError("NeuroKit error: signal_distord(): 'noise_shape' "
+        raise ValueError("NeuroKit error: signal_distort(): 'noise_shape' "
                          "should be one of 'gaussian' or 'laplace'.")
 
     if len(_noise) != n_samples:
