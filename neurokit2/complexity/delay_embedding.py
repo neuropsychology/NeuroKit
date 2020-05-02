@@ -6,7 +6,7 @@ import mpl_toolkits.mplot3d
 
 
 def delay_embedding(signal, delay=1, dimension=3, show=False):
-    """Time-delay embedding of a time series (a signal).
+    """Time-delay embedding of a time series (a signal)
 
     A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide a complete description of the system at some point in time. The set of all possible states is called the 'state space'.
 
@@ -22,7 +22,7 @@ def delay_embedding(signal, delay=1, dimension=3, show=False):
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     delay : int
-        Time delay (tau).
+        Time delay (Tau).
     order : int
         Embedding dimension (m), sometimes referred to as 'order'.
     show : bool
@@ -86,9 +86,11 @@ def _delay_embedding_plot(embedded):
 
     return figure
 
+
 # =============================================================================
 # Internal plots
 # =============================================================================
+
 def _delay_embedding_plot_2D(embedded):
     figure = plt.plot(embedded[:,0], embedded[:,1])
     return figure
