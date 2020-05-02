@@ -20,7 +20,7 @@ def entropy_multiscale(signal, order=2, r="default", scale="default"):
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
     scale : str, int or list
-        A list of scale factors of coarse graining. If 'default', will use ``rqnge(len(signal) / (order + 10))`` (see discussion `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_). If 'max', will use all scales until the length of the signal. If an integer, will create a range until the specified int.
+        A list of scale factors of coarse graining. If 'default', will use ``range(len(signal) / (order + 10))`` (see discussion `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_). If 'max', will use all scales until the length of the signal. If an integer, will create a range until the specified int.
 
 
 

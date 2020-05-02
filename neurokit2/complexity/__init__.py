@@ -1,5 +1,6 @@
 """Submodule for NeuroKit."""
 
+from .delay_embedding import delay_embedding
 from .entropy_shannon import entropy_shannon
 from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample

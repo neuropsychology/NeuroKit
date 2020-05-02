@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-from .utils_embed import _embed
+from .delay_embedding import delay_embedding
 from .utils_get_r import _get_r
 from .utils_phi import _phi_divide
 
