@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
+
 from ..misc import listify
 
 
 def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
-                    amplitude=0.5, silent=False):
+                    amplitude=0.5, noise=0, silent=False):
     """Simulate a continuous signal.
 
     Parameters
@@ -19,6 +19,11 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
         second).
     amplitude : float or list
         Amplitude of the oscillations.
+    noise : float
+        Noise level (amplitude of the laplace noise).
+    silent : bool
+        If False (default), might print warnings if impossible frequencies
+        are queried.
 
     Returns
     -------
@@ -34,6 +39,7 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
     >>> pd.DataFrame({"1Hz": nk.signal_simulate(duration=5, frequency=1),
                       "2Hz": nk.signal_simulate(duration=5, frequency=2),
                       "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
+
     """
     n_samples = int(np.rint(duration * sampling_rate))
     period = 1 / sampling_rate
@@ -72,6 +78,9 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
         signal += _signal_simulate_sinusoidal(x=seconds,
                                               frequency=freq,
                                               amplitude=amp)
+        # Add random noise
+        if noise > 0:
+            signal += np.random.laplace(0, noise, len(signal))
 
     return signal
 
