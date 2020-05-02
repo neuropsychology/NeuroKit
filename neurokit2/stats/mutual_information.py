@@ -7,9 +7,11 @@ import scipy.ndimage
 
 
 
-def mutual_information(x, y, sigma=1, normalized=True):
+
+
+def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):
     """
-    Computes (normalized) mutual information (MI) between two vectors from a
+    Computes the (normalized) mutual information (MI) between two vectors from a
     joint histogram. The mutual information of two variables is
     a measure of the mutual dependence between them. More
     specifically, it quantifies the "amount of information" obtained
@@ -20,15 +22,19 @@ def mutual_information(x, y, sigma=1, normalized=True):
     ----------
     x, y : list, array or Series
         A vector of values.
+    method : str
+        Method to use. Can either be 'varoquaux' or 'nolitsa'.
+    bins : int
+        Number of bins to use while creating the histogram.
     sigma : float
-        Sigma for Gaussian smoothing of the joint histogram.
+        Sigma for Gaussian smoothing of the joint histogram. Only used if `method=='varoquaux'`.
     normalized : book
-        Compute normalised mutual information.
+        Compute normalised mutual information. Only used if `method=='varoquaux'`.
 
     Returns
     -------
     float
-        The computed similariy measure
+        The computed similariy measure.
 
     Examples
     ---------
@@ -37,17 +43,38 @@ def mutual_information(x, y, sigma=1, normalized=True):
     >>> x = [3, 3, 5, 1, 6, 3]
     >>> y = [5, 3, 1, 3, 4, 5]
     >>>
-    >>> nk.mutual_information(x, y)
+    >>> nk.mutual_information(x, y, method="varoquaux")
+    >>> nk.mutual_information(x, y, method="nolitsa")
 
     References
     ----------
-    - Gael Varoquaux (https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429)
-    - Studholme,  jhill & jhawkes (1998). "A normalized entropy measure
+    - Studholme, jhill & jhawkes (1998). "A normalized entropy measure
     of 3-D medical image alignment". in Proc. Medical Imaging 1998,
     vol. 3338, San Diego, CA, pp. 132-143.
     """
-    bins = (256, 256)
+    method = method.lower()
+    if method in ["varoquaux"]:
+        mi = _mutual_information_varoquaux(x, y, bins=bins, sigma=sigma, normalized=normalized)
+    elif method in ["shannon", "nolitsa"]:
+        mi = _mutual_information_nolitsa(x, y, bins=bins)
+    else:
+        raise ValueError("NeuroKit error: mutual_information(): 'method' "
+                         "not recognized.")
 
+    return mi
+
+
+
+
+
+
+
+# =============================================================================
+# Methods
+# =============================================================================
+def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
+    """Based on Gael Varoquaux's implementation: https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
+    """
     jh = np.histogram2d(x, y, bins=bins)[0]
 
     # smooth the jh with a gaussian filter of given sigma
@@ -72,6 +99,37 @@ def mutual_information(x, y, sigma=1, normalized=True):
 
 
 
+def _mutual_information_nolitsa(x, y, bins=256):
+    """
+    Calculate the mutual information between two random variables.
+    Calculates mutual information, I = S(x) + S(y) - S(x,y), between two
+    random variables x and y, where S(x) is the Shannon entropy.
+
+    Based on the nolitsa package: https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/delay.py#L72
+    """
+    p_x = np.histogram(x, bins)[0]
+    p_y = np.histogram(y, bins)[0]
+    p_xy = np.histogram2d(x, y, bins)[0].flatten()
+
+    # Convert frequencies into probabilities.  Also, in the limit
+    # p -> 0, p*log(p) is 0.  We need to take out those.
+    p_x = p_x[p_x > 0] / np.sum(p_x)
+    p_y = p_y[p_y > 0] / np.sum(p_y)
+    p_xy = p_xy[p_xy > 0] / np.sum(p_xy)
+
+    # Calculate the corresponding Shannon entropies.
+    h_x = np.sum(p_x * np.log2(p_x))
+    h_y = np.sum(p_y * np.log2(p_y))
+    h_xy = np.sum(p_xy * np.log2(p_xy))
+
+    return h_xy - h_x - h_y
+
+
+
+
+
+
+
 
 
 
@@ -79,7 +137,7 @@ def mutual_information(x, y, sigma=1, normalized=True):
 
 
 # =============================================================================
-# Internals
+# JUNK
 # =============================================================================
 def _nearest_distances(X, k=1):
     '''
