@@ -9,7 +9,7 @@ from .utils_phi import _phi_divide
 
 
 
-def entropy_fuzzy(signal, order=2, r="default", n=1):
+def entropy_fuzzy(signal, dimension=2, r="default", n=1):
     """
     Calculate the fuzzy entropy (FuzzyEn) of a signal. Adapted from `entro-py <https://github.com/ixjlyons/entro-py/blob/master/entropy.py>`_.
 
@@ -17,8 +17,8 @@ def entropy_fuzzy(signal, order=2, r="default", n=1):
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
-    order : int
-        The embedding dimension (often denoted as 'm'), i.e., the length of compared run of data. Typically 1, 2 or 3.
+    dimension : int
+        Embedding dimension (often denoted 'm', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
     n : float, optional
@@ -43,7 +43,7 @@ def entropy_fuzzy(signal, order=2, r="default", n=1):
     0.08481168552031555
     """
     r = _get_r(signal, r=r)
-    phi = _entropy_sample(signal, order=order, r=r, n=1, fuzzy=True)
+    phi = _entropy_sample(signal, dimension=dimension, r=r, n=1, fuzzy=True)
 
     return _phi_divide(phi)
 
@@ -54,7 +54,7 @@ def entropy_fuzzy(signal, order=2, r="default", n=1):
 # Internal
 # =============================================================================
 
-def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
+def _entropy_sample(signal, dimension=2, r="default", n=1, fuzzy=False):
     """
     Internal function adapted from https://github.com/ixjlyons/entro-py/blob/master/entropy.py
     With fixes (https://github.com/ixjlyons/entro-py/pull/2/files) by @CSchoel
@@ -65,8 +65,8 @@ def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
 
     phi = [0, 0]  # phi(m), phi(m+1)
     for j in [0, 1]:
-        m = order + j
-        npat = N - order  # https://github.com/ixjlyons/entro-py/pull/2
+        m = dimension + j
+        npat = N - dimension  # https://github.com/ixjlyons/entro-py/pull/2
 #        patterns = np.transpose(embedding(signal, m))
         patterns = np.transpose(embedding(signal, m))[:, :npat]
 
@@ -91,6 +91,6 @@ def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
             count[i] = np.sum(sim) - 1
 
 #        phi[j] = np.mean(count) / (N-m-1)
-        phi[j] = np.mean(count) / (N-order-1)  # https://github.com/ixjlyons/entro-py/pull/2
+        phi[j] = np.mean(count) / (N-dimension-1)  # https://github.com/ixjlyons/entro-py/pull/2
 
     return phi
