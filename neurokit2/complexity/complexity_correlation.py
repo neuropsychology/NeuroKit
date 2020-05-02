@@ -42,5 +42,5 @@
 #    N = len(signal)
 #
 #    orbit = _embed(data, emb_dim, lag=1)
-##    embedded2, count2 = _get_embedded(signal, order + 1, r, metric=metric, approximate=True)
+##    embedded2, count2 = _get_embedded(signal, dimension + 1, r, metric=metric, approximate=True)
 #    pass

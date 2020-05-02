@@ -7,7 +7,7 @@ from .delay_embedding import delay_embedding
 
 
 
-def _get_embedded(signal, order, r, metric='chebyshev', approximate=True):
+def _get_embedded(signal, dimension, r, metric='chebyshev', approximate=True):
     """
     """
     embedded = delay_embedding(signal, delay=1, dimension=dimension)

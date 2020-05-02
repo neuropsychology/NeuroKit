@@ -5,7 +5,7 @@ import sklearn.neighbors
 from .utils_get_embedded import _get_embedded
 
 
-def _phi(signal, order, r="default", metric='chebyshev', approximate=True):
+def _phi(signal, dimension, r="default", metric='chebyshev', approximate=True):
     """Common internal for `entropy_approximate` and `entropy_sample`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
@@ -17,10 +17,10 @@ def _phi(signal, order, r="default", metric='chebyshev', approximate=True):
     # Initialize phi
     phi = np.zeros(2)
 
-    # compute phi(order, r)
-    embedded1, count1 = _get_embedded(signal, order, r, metric=metric, approximate=approximate)
-    # compute phi(order + 1, r)
-    embedded2, count2 = _get_embedded(signal, order + 1, r, metric=metric, approximate=True)
+    # compute phi(dimension, r)
+    embedded1, count1 = _get_embedded(signal, dimension, r, metric=metric, approximate=approximate)
+    # compute phi(dimension + 1, r)
+    embedded2, count2 = _get_embedded(signal, dimension + 1, r, metric=metric, approximate=True)
 
     if approximate is True:
         phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))

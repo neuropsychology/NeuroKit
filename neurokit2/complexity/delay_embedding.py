@@ -109,23 +109,23 @@ def _delay_embedding_plot(embedded):
 # =============================================================================
 
 def _delay_embedding_plot_2D(embedded):
-    figure = plt.plot(embedded[:,0], embedded[:,1], color='#3F51B5')
+    figure = plt.plot(embedded[:, 0], embedded[:, 1], color='#3F51B5')
     return figure
 
 
 def _delay_embedding_plot_3D(embedded):
-    figure = _plot_3D_colored(x=embedded[:,0],
-                              y=embedded[:,1],
-                              z=embedded[:,2],
-                              color=embedded[:,2],
+    figure = _plot_3D_colored(x=embedded[:, 0],
+                              y=embedded[:, 1],
+                              z=embedded[:, 2],
+                              color=embedded[:, 2],
                               rotate=False)
     return figure
 
 def _delay_embedding_plot_4D(embedded):
-    figure = _plot_3D_colored(x=embedded[:,0],
-                              y=embedded[:,1],
-                              z=embedded[:,2],
-                              color=embedded[:,3],
+    figure = _plot_3D_colored(x=embedded[:, 0],
+                              y=embedded[:, 1],
+                              z=embedded[:, 2],
+                              color=embedded[:, 3],
                               rotate=False)
     return figure
 
@@ -151,9 +151,9 @@ def _plot_3D_colored(x, y, z, color=None, rotate=False):
     fig = plt.figure()
     ax = fig.gca(projection='3d')
 
-    for i in range(len(x)-1):
+    for i in range(len(x) - 1):
         seg = segments[i]
-        l, = ax.plot(seg[:,0], seg[:,1], seg[:,2], color=colors[i])
+        l, = ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i])
         l.set_solid_capstyle('round')
 
     if rotate is True:

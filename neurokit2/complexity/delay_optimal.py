@@ -113,7 +113,7 @@ def _delay_optimal_select(metric_values, algorithm="first local minimum"):
     if algorithm == "first local minimum":
         optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"][0]
     if algorithm == "closest to 1/e":
-        optimal = np.where(metric_values==findclosest(1/np.exp(1), metric_values))[0][0]
+        optimal = np.where(metric_values == findclosest(1 / np.exp(1), metric_values))[0][0]
     return optimal
 
 
@@ -126,9 +126,9 @@ def _delay_optimal_metric(signal, tau_sequence, metric="Mutual Information"):
     for i, current_tau in enumerate(tau_sequence):
         embedded = delay_embedding(signal, delay=current_tau, dimension=2)
         if metric == "Mutual Information":
-            values[i] = mutual_information(embedded[:,0], embedded[:,1], normalized=True)
+            values[i] = mutual_information(embedded[:, 0], embedded[:, 1], normalized=True)
         if metric == "Autocorrelation":
-            values[i] = cor(embedded[:,0], embedded[:,1])
+            values[i] = cor(embedded[:, 0], embedded[:, 1])
     return values
 
 
@@ -151,9 +151,9 @@ def _optimal_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mutu
 
     # Attractor
     embedded = delay_embedding(signal, delay=tau, dimension=3)
-    x = embedded[:,0]
-    y = embedded[:,1]
-    z = embedded[:,2]
+    x = embedded[:, 0]
+    y = embedded[:, 1]
+    z = embedded[:, 2]
 
     ax1 = fig.add_subplot(spec[1])
 
