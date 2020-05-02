@@ -51,16 +51,16 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> nk.signal_plot(signal)
     >>>
-    >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True, method="fraser1986")
-    >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True, method="theiler1990")
-    >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True, method="casdagli1991")
+    >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True, method="fraser1986")
+    >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True, method="theiler1990")
+    >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True, method="casdagli1991")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=120, sampling_rate=200)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200)
     >>> nk.signal_plot(signal)
     >>>
-    >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True)
+    >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True)
 
     References
     ------------
@@ -80,7 +80,8 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
         algorithm = "first local minimum"
     elif method in ["theiler", "theiler1990"]:
         metric = "Autocorrelation"
-    elif method in ["casdagli", "casdagli1991 "]:
+        algorithm = "closest to 1/e"
+    elif method in ["casdagli", "casdagli1991"]:
         metric = "Autocorrelation"
         algorithm = "closest to 0"
     else:
