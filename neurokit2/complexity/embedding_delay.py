@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
+import scipy.stats
 import scipy.signal
+import scipy.spatial
 import matplotlib
 import matplotlib.collections
 import matplotlib.pyplot as plt
@@ -18,7 +20,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
 
-    Several authors suggested different methods to guide the choice of Tau. Fraser and Swinney (1986) suggest using the first local minimum of the mutual information between the delayed and non-delayed time series, effectively identifying a value of tau for which they share the least information. Theiler (1990) suggested to select Tau such that the autocorrelation between the signal and its lagged version at Tau is the closest to 1/e. Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation.
+    Several authors suggested different methods to guide the choice of Tau. Fraser and Swinney (1986) suggest using the first local minimum of the mutual information between the delayed and non-delayed time series, effectively identifying a value of tau for which they share the least information. Theiler (1990) suggested to select Tau such that the autocorrelation between the signal and its lagged version at Tau is the closest to 1/e. Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation. Rosenstein (1993) suggests to the point close to 40% of the slope of the average displacement from the diagonal (ADFD).
 
     Parameters
     ----------
@@ -27,7 +29,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     delay_max : int
         The maximum time delay (Tau) to test.
     method : str
-        Correlation method. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991'.
+        Correlation method. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993'.
     show : bool
         If true, will plot the mutual information values for each value of tau.
 
@@ -48,9 +50,10 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> nk.signal_plot(signal)
     >>>
-    >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True, method="fraser1986")
-    >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True, method="theiler1990")
-    >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True, method="casdagli1991")
+    >>> tau = nk.embedding_delay(signal, delay_max=500, show=True, method="fraser1986")
+    >>> tau = nk.embedding_delay(signal, delay_max=500, show=True, method="theiler1990")
+    >>> tau = nk.embedding_delay(signal, delay_max=500, show=True, method="casdagli1991")
+    >>> tau = nk.embedding_delay(signal, delay_max=500, show=True, method="rosenstein1993")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
@@ -63,6 +66,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     ------------
     - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
     - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
+    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
     """
     # Initalize vectors
     if isinstance(delay_max, int):
@@ -81,6 +85,9 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     elif method in ["casdagli", "casdagli1991"]:
         metric = "Autocorrelation"
         algorithm = "closest to 0"
+    elif method in ["rosenstein", "rosenstein1993", 'adfd']:
+        metric = "Displacement"
+        algorithm = "closest to 40% of the slope"
     else:
         raise ValueError("NeuroKit error: embedding_delay(): 'method' "
                          "not recognized.")
@@ -115,6 +122,10 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
         optimal = np.where(metric_values == findclosest(1 / np.exp(1), metric_values))[0][0]
     elif algorithm == "closest to 0":
         optimal = np.where(metric_values == findclosest(0, metric_values))[0][0]
+    elif algorithm == "closest to 40% of the slope":
+        slope = np.diff(metric_values) * len(metric_values)
+        slope_in_deg = np.rad2deg(np.arctan(slope))
+        optimal = np.where(slope_in_deg == findclosest(40, slope_in_deg))[0][0]
     return optimal
 
 
@@ -127,9 +138,21 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
     for i, current_tau in enumerate(tau_sequence):
         embedded = embedding(signal, delay=current_tau, dimension=2)
         if metric == "Mutual Information":
-            values[i] = mutual_information(embedded[:, 0], embedded[:, 1], normalized=True)
+            values[i] = mutual_information(embedded[:, 0],
+                                           embedded[:, 1],
+                                           normalized=True,
+                                           method="shannon")
         if metric == "Autocorrelation":
             values[i] = cor(embedded[:, 0], embedded[:, 1])
+
+        if metric == "Displacement":
+            dimension = 2
+
+            # Reconstruct with zero time delay.
+            tau0 = embedded[:,0].repeat(dimension).reshape(len(embedded), dimension)
+            dist = np.asarray([scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)])
+            values[i] = np.mean(dist)
+
     return values
 
 
