@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import scipy.signal
 import matplotlib
+import matplotlib.collections
 import matplotlib.pyplot as plt
 
 from ..stats import cor
@@ -137,9 +138,24 @@ def _optimal_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mutu
 
     # Attractor
     embedded = delay_embedding(signal, delay=tau, dimension=3)
+    x = embedded[:,0]
+    y = embedded[:,1]
+    z = embedded[:,2]
 
     ax1 = fig.add_subplot(spec[1])
+
+    #   Chunk the data into colorbars
+    points = np.array([x, y]).T.reshape(-1, 1, 2)
+    segments = np.concatenate([points[:-1], points[1:]], axis=1)
+    norm = plt.Normalize(z.min(), z.max())
+    lc = matplotlib.collections.LineCollection(segments, cmap='plasma', norm=norm)
+    lc.set_array(z)
+    line = ax1.add_collection(lc)
+
+    #   Customize
+    ax1.set_xlim(x.min(), x.max())
+    ax1.set_ylim(x.min(), x.max())
     ax1.set_xlabel("Signal [i]")
     ax1.set_ylabel("Signal [i-" + str(tau) + "]")
-    ax1.plot(embedded[:,0], embedded[:,1], color='#3F51B5')
+
     return fig
