@@ -35,7 +35,7 @@ def embedding(signal, delay=1, dimension=3, show=False):
 
     See Also
     ------------
-    embedding_delay
+    embedding_delay, embedding_dimension
 
     Examples
     ---------
@@ -67,8 +67,6 @@ def embedding(signal, delay=1, dimension=3, show=False):
         raise ValueError("NeuroKit error: embedding(): dimension * delay should be lower than length of signal.")
     if delay < 1:
         raise ValueError("NeuroKit error: embedding(): 'delay' has to be at least 1.")
-    if dimension < 2:
-        raise ValueError("NeuroKit error: embedding(): 'dimension' has to be at least 2.")
 
     Y = np.zeros((dimension, N - (dimension - 1) * delay))
     for i in range(dimension):

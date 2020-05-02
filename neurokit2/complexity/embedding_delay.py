@@ -40,7 +40,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     See Also
     ---------
-    embedding
+    embedding_dimension, embedding
 
     Examples
     ----------
@@ -50,17 +50,17 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> nk.signal_plot(signal)
     >>>
-    >>> tau = nk.embedding_delay(signal, delay_max=500, show=True, method="fraser1986")
-    >>> tau = nk.embedding_delay(signal, delay_max=500, show=True, method="theiler1990")
-    >>> tau = nk.embedding_delay(signal, delay_max=500, show=True, method="casdagli1991")
-    >>> tau = nk.embedding_delay(signal, delay_max=500, show=True, method="rosenstein1993")
+    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="fraser1986")
+    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="theiler1990")
+    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="casdagli1991")
+    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150)[0], sampling_rate=150)
     >>> nk.signal_plot(signal)
     >>>
-    >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True)
+    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True)
 
     References
     ------------
@@ -76,7 +76,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     # Method
     method = method.lower()
-    if method in ["fraser", "fraser1986"]:
+    if method in ["fraser", "fraser1986", "tdmi"]:
         metric = "Mutual Information"
         algorithm = "first local minimum"
     elif method in ["theiler", "theiler1990"]:
@@ -100,11 +100,11 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     optimal = tau_sequence[optimal]
 
     if show is True:
-        _optimal_delay_plot(signal,
-                            metric_values=metric_values,
-                            tau_sequence=tau_sequence,
-                            tau=optimal,
-                            metric=metric)
+        _embedding_delay_plot(signal,
+                              metric_values=metric_values,
+                              tau_sequence=tau_sequence,
+                              tau=optimal,
+                              metric=metric)
 
     return optimal
 
@@ -149,7 +149,7 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
             dimension = 2
 
             # Reconstruct with zero time delay.
-            tau0 = embedded[:,0].repeat(dimension).reshape(len(embedded), dimension)
+            tau0 = embedded[:, 0].repeat(dimension).reshape(len(embedded), dimension)
             dist = np.asarray([scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)])
             values[i] = np.mean(dist)
 
@@ -159,7 +159,7 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 # =============================================================================
 # Internals
 # =============================================================================
-def _optimal_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mutual Information"):
+def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mutual Information"):
     """
     """
     fig = plt.figure(constrained_layout=False)

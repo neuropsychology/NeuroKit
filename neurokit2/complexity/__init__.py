@@ -2,6 +2,7 @@
 
 from .embedding import embedding
 from .embedding_delay import embedding_delay
+from .embedding_dimension import embedding_dimension
 from .complexity_simulate import complexity_simulate
 from .entropy_shannon import entropy_shannon
 from .entropy_approximate import entropy_approximate
