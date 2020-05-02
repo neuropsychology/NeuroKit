@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-from .delay_embedding import delay_embedding
+from .embedding import embedding
 from .utils_get_r import _get_r
 from .utils_phi import _phi_divide
 
@@ -67,8 +67,8 @@ def _entropy_sample(signal, order=2, r="default", n=1, fuzzy=False):
     for j in [0, 1]:
         m = order + j
         npat = N - order  # https://github.com/ixjlyons/entro-py/pull/2
-#        patterns = np.transpose(delay_embedding(signal, m))
-        patterns = np.transpose(delay_embedding(signal, m))[:, :npat]
+#        patterns = np.transpose(embedding(signal, m))
+        patterns = np.transpose(embedding(signal, m))[:, :npat]
 
         if fuzzy:
             patterns -= np.mean(patterns, axis=0, keepdims=True)

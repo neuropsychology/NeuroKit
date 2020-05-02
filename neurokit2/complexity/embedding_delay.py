@@ -9,12 +9,12 @@ import matplotlib.pyplot as plt
 from ..stats import cor
 from ..misc import findclosest
 from ..signal import signal_findpeaks
-from .delay_embedding import delay_embedding
+from .embedding import embedding
 from .mutual_information import mutual_information
 
 
-def delay_optimal(signal, delay_max=100, method="fraser1986", show=False):
-    """Optimal Time Delay (tau)
+def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
+    """Estimate optimal Time Delay (tau) for Time-delay embedding
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
 
@@ -43,7 +43,7 @@ def delay_optimal(signal, delay_max=100, method="fraser1986", show=False):
 
     See Also
     ---------
-    delay_embedding
+    embedding
 
     Examples
     ----------
@@ -53,15 +53,15 @@ def delay_optimal(signal, delay_max=100, method="fraser1986", show=False):
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> nk.signal_plot(signal)
     >>>
-    >>> tau = nk.delay_optimal(signal, tau_max=1000, show=True, method="fraser1986")
-    >>> tau = nk.delay_optimal(signal, tau_max=1000, show=True, method="theiler1990")
+    >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True, method="fraser1986")
+    >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True, method="theiler1990")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=120, sampling_rate=200)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200)
     >>> nk.signal_plot(signal)
     >>>
-    >>> tau = nk.delay_optimal(signal, tau_max=1000, show=True)
+    >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True)
 
     References
     ------------
@@ -83,14 +83,14 @@ def delay_optimal(signal, delay_max=100, method="fraser1986", show=False):
         metric = "Autocorrelation"
         algorithm = "closest to 1/e"
     else:
-        raise ValueError("NeuroKit error: delay_optimal(): 'method' "
+        raise ValueError("NeuroKit error: embedding_delay(): 'method' "
                          "not recognized.")
 
     # Get metric
-    metric_values = _delay_optimal_metric(signal, tau_sequence, metric=metric)
+    metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
 
     # Get optimal tau
-    optimal = _delay_optimal_select(metric_values, algorithm=algorithm)
+    optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
     optimal = tau_sequence[optimal]
 
     if show is True:
@@ -108,7 +108,7 @@ def delay_optimal(signal, delay_max=100, method="fraser1986", show=False):
 # =============================================================================
 # Methods
 # =============================================================================
-def _delay_optimal_select(metric_values, algorithm="first local minimum"):
+def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
     if algorithm == "first local minimum":
         optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"][0]
@@ -118,13 +118,13 @@ def _delay_optimal_select(metric_values, algorithm="first local minimum"):
 
 
 
-def _delay_optimal_metric(signal, tau_sequence, metric="Mutual Information"):
+def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 
     values = np.zeros(len(tau_sequence))
 
     # Loop through taus and compute all scores values
     for i, current_tau in enumerate(tau_sequence):
-        embedded = delay_embedding(signal, delay=current_tau, dimension=2)
+        embedded = embedding(signal, delay=current_tau, dimension=2)
         if metric == "Mutual Information":
             values[i] = mutual_information(embedded[:, 0], embedded[:, 1], normalized=True)
         if metric == "Autocorrelation":
@@ -150,7 +150,7 @@ def _optimal_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mutu
     ax0.legend(loc='upper right')
 
     # Attractor
-    embedded = delay_embedding(signal, delay=tau, dimension=3)
+    embedded = embedding(signal, delay=tau, dimension=3)
     x = embedded[:, 0]
     y = embedded[:, 1]
     z = embedded[:, 2]

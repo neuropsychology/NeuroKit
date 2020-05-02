@@ -190,7 +190,7 @@ def _ecg_hrv_nonlinear(rri, ecg_period):
     out["CSI_Modified"] = L ** 2 / T
 
     # Entropy
-    out["SampEn"] = entropy_sample(rri, order=2, r=0.2*np.std(rri, ddof=1))
+    out["SampEn"] = entropy_sample(rri, dimension=2, r=0.2*np.std(rri, ddof=1))
     return out
 
 
