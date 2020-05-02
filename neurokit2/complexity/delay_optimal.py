@@ -7,12 +7,13 @@ import matplotlib.collections
 import matplotlib.pyplot as plt
 
 from ..stats import cor
+from ..misc import findclosest
 from ..signal import signal_findpeaks
 from .delay_embedding import delay_embedding
 from .mutual_information import mutual_information
 
 
-def delay_optimal(signal, tau_max=100, method="fraser1986", show=False):
+def delay_optimal(signal, delay_max=100, method="fraser1986", show=False):
     """Optimal Time Delay (tau)
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
@@ -21,9 +22,6 @@ def delay_optimal(signal, tau_max=100, method="fraser1986", show=False):
 
     A simple  criterion  to  compute  Tau  was  suggested  by  .  Let  )(τΨ  be  the  autocorrelation  function  (AC)  from  the  time  series  y(t).  Theiler  suggested  to  select  τ  such  that  ./1)(e≅Ψτ  Fraser  and  Swinney (1986)  propose  to  find  the  first  minimum  of  the  Auto Mutual Information  (AMI).  A  novel  method  for  simultaneously  determining  both  m  and τ proposed by  Gautama  et  al.  (2003)  and  it  is  based  on  the  minimum of the Differential Entropy (DE).
 
-
-
-
     The code is based on http://node99.org/tutorials/ar/, but very unsure of our implementation.
     Please help us by checking-it.
 
@@ -31,8 +29,8 @@ def delay_optimal(signal, tau_max=100, method="fraser1986", show=False):
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
-    tau_max : int
-        The maximum time delay to test.
+    delay_max : int
+        The maximum time delay (Tau) to test.
     method : str
         Correlation method. Can be one of 'fraser1986'.
     show : bool
@@ -43,14 +41,20 @@ def delay_optimal(signal, tau_max=100, method="fraser1986", show=False):
     int
         Optimal time delay.
 
+    See Also
+    ---------
+    delay_embedding
+
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
+    >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> nk.signal_plot(signal)
     >>>
-    >>> tau = nk.delay_optimal(signal, tau_max=1000, show=True)
+    >>> tau = nk.delay_optimal(signal, tau_max=1000, show=True, method="fraser1986")
+    >>> tau = nk.delay_optimal(signal, tau_max=1000, show=True, method="theiler1990")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=120, sampling_rate=200)
@@ -58,18 +62,26 @@ def delay_optimal(signal, tau_max=100, method="fraser1986", show=False):
     >>> nk.signal_plot(signal)
     >>>
     >>> tau = nk.delay_optimal(signal, tau_max=1000, show=True)
+
+    References
+    ------------
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
     """
     # Initalize vectors
-    if isinstance(tau_max, int):
-        tau_sequence = np.arange(1, tau_max)
+    if isinstance(delay_max, int):
+        tau_sequence = np.arange(1, delay_max)
     else:
-        tau_sequence = np.array(tau_max)
+        tau_sequence = np.array(delay_max)
 
     # Method
     method = method.lower()
     if method in ["fraser", "fraser1986"]:
         metric = "Mutual Information"
         algorithm = "first local minimum"
+    elif method in ["theiler", "theiler1990"]:
+        metric = "Autocorrelation"
+        algorithm = "closest to 1/e"
     else:
         raise ValueError("NeuroKit error: delay_optimal(): 'method' "
                          "not recognized.")
@@ -79,6 +91,7 @@ def delay_optimal(signal, tau_max=100, method="fraser1986", show=False):
 
     # Get optimal tau
     optimal = _delay_optimal_select(metric_values, algorithm=algorithm)
+    optimal = tau_sequence[optimal]
 
     if show is True:
         _optimal_delay_plot(signal,
@@ -86,7 +99,6 @@ def delay_optimal(signal, tau_max=100, method="fraser1986", show=False):
                             tau_sequence=tau_sequence,
                             tau=optimal,
                             metric=metric)
-
 
     return optimal
 
@@ -100,7 +112,8 @@ def _delay_optimal_select(metric_values, algorithm="first local minimum"):
 
     if algorithm == "first local minimum":
         optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"][0]
-
+    if algorithm == "closest to 1/e":
+        optimal = np.where(metric_values==findclosest(1/np.exp(1), metric_values))[0][0]
     return optimal
 
 

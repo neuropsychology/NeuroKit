@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import matplotlib
+import matplotlib.animation
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d
 
@@ -22,7 +22,7 @@ def delay_embedding(signal, delay=1, dimension=3, show=False):
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     delay : int
-        Time delay (Tau).
+        Time delay (Tau). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     order : int
         Embedding dimension (m), sometimes referred to as 'order'.
     show : bool
@@ -35,16 +35,30 @@ def delay_embedding(signal, delay=1, dimension=3, show=False):
 
     See Also
     ------------
+    delay_optimal
 
     Examples
     ---------
     >>> import neurokit2 as nk
     >>>
+    >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
     >>>
     >>> embedded = nk.delay_embedding(signal, delay=50, dimension=2, show=True)
     >>> embedded = nk.delay_embedding(signal, delay=50, dimension=3, show=True)
     >>> embedded = nk.delay_embedding(signal, delay=50, dimension=4, show=True)
+    >>>
+    >>> # Realistic example
+    >>> ecg = nk.ecg_simulate(duration=60*4, sampling_rate=200)
+    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200)
+    >>>
+    >>> embedded = nk.delay_embedding(signal, delay=250, dimension=2, show=True)
+    >>> embedded = nk.delay_embedding(signal, delay=250, dimension=3, show=True)
+    >>> embedded = nk.delay_embedding(signal, delay=250, dimension=4, show=True)
+
+    References
+    -----------
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
     """
     N = len(signal)
 
@@ -103,14 +117,16 @@ def _delay_embedding_plot_3D(embedded):
     figure = _plot_3D_colored(x=embedded[:,0],
                               y=embedded[:,1],
                               z=embedded[:,2],
-                              color=embedded[:,2])
+                              color=embedded[:,2],
+                              rotate=False)
     return figure
 
 def _delay_embedding_plot_4D(embedded):
     figure = _plot_3D_colored(x=embedded[:,0],
                               y=embedded[:,1],
                               z=embedded[:,2],
-                              color=embedded[:,3])
+                              color=embedded[:,3],
+                              rotate=False)
     return figure
 
 
@@ -118,7 +134,7 @@ def _delay_embedding_plot_4D(embedded):
 # =============================================================================
 # Plotting
 # =============================================================================
-def _plot_3D_colored(x, y, z, color=None):
+def _plot_3D_colored(x, y, z, color=None, rotate=False):
     if color is None:
         color = z
 
@@ -139,5 +155,23 @@ def _plot_3D_colored(x, y, z, color=None):
         seg = segments[i]
         l, = ax.plot(seg[:,0], seg[:,1], seg[:,2], color=colors[i])
         l.set_solid_capstyle('round')
+
+    if rotate is True:
+        fig = _plot_3D_colored_rotate(fig, ax)
+
+    return fig
+
+
+
+def _plot_3D_colored_rotate(fig, ax):
+
+    def rotate(angle):
+        ax.view_init(azim=angle)
+
+    fig = matplotlib.animation.FuncAnimation(fig,
+                                             rotate,
+                                             frames=np.arange(0, 361, 1),
+                                             interval=10,
+                                             cache_frame_data=False)
 
     return fig
