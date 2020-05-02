@@ -7,21 +7,18 @@ import matplotlib.collections
 import matplotlib.pyplot as plt
 
 from ..stats import cor
+from ..stats import mutual_information
 from ..misc import findclosest
 from ..signal import signal_findpeaks
 from .embedding import embedding
-from .mutual_information import mutual_information
 
 
 def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
-    """Estimate optimal Time Delay (tau) for Time-delay embedding
+    """Estimate optimal Time Delay (tau) for time-delay embedding
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
 
     Several authors suggested different methods to guide the choice of Tau. Fraser and Swinney (1986) suggest using the first local minimum of the mutual information between the delayed and non-delayed time series, effectively identifying a value of tau for which they share the least information. Theiler (1990) suggested to select Tau such that the autocorrelation between the signal and its lagged version at Tau is the closest to 1/e. Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation.
-
-    The code is based on http://node99.org/tutorials/ar/, but very unsure of our implementation.
-    Please help us by checking-it.
 
     Parameters
     ----------
@@ -56,8 +53,8 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True, method="casdagli1991")
     >>>
     >>> # Realistic example
-    >>> ecg = nk.ecg_simulate(duration=120, sampling_rate=200)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200)
+    >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
+    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150)[0], sampling_rate=150)
     >>> nk.signal_plot(signal)
     >>>
     >>> tau = nk.embedding_delay(signal, delay_max=1000, show=True)
