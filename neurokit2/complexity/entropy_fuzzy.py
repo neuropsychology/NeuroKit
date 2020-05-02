@@ -67,14 +67,11 @@ def _entropy_sample(signal, dimension=2, r="default", n=1, fuzzy=False):
     for j in [0, 1]:
         m = dimension + j
         npat = N - dimension  # https://github.com/ixjlyons/entro-py/pull/2
-#        patterns = np.transpose(embedding(signal, m))
-        patterns = np.transpose(embedding(signal, m))[:, :npat]
+        patterns = np.transpose(embedding(signal, dimension=m, delay=1))[:, :npat]
 
         if fuzzy:
             patterns -= np.mean(patterns, axis=0, keepdims=True)
 
-#        count = np.zeros(N-m)  # https://github.com/ixjlyons/entro-py/pull/2
-#        for i in range(N-m):  # https://github.com/ixjlyons/entro-py/pull/2
         count = np.zeros(npat)
         for i in range(npat):
             if m == 1:
@@ -90,7 +87,6 @@ def _entropy_sample(signal, dimension=2, r="default", n=1, fuzzy=False):
 
             count[i] = np.sum(sim) - 1
 
-#        phi[j] = np.mean(count) / (N-m-1)
         phi[j] = np.mean(count) / (N-dimension-1)  # https://github.com/ixjlyons/entro-py/pull/2
 
     return phi

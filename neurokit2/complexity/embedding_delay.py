@@ -53,6 +53,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>>
     >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True, method="fraser1986")
     >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True, method="theiler1990")
+    >>> tau = nk.embedding_delay(signal, tau_max=1000, show=True, method="casdagli1991")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=120, sampling_rate=200)
