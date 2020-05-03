@@ -8,11 +8,11 @@ import matplotlib
 import matplotlib.collections
 import matplotlib.pyplot as plt
 
-from ..stats import autocor
 from ..stats import mutual_information
 from ..misc import findclosest
 from ..signal import signal_findpeaks
 from ..signal import signal_zerocrossings
+from ..signal import signal_autocor
 from .embedding import embedding
 
 
@@ -135,9 +135,8 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 
     if metric == "Autocorrelation":
-        values = autocor(signal)
+        values = signal_autocor(signal)
         values = values[:len(tau_sequence)]  # upper limit
-        values = values / values[0]  # standardize
 
     else:
         values = np.zeros(len(tau_sequence))
