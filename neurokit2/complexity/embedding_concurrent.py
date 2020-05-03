@@ -75,7 +75,7 @@ def embedding_concurrent(signal, delay_max=100, dimension_max=20, surrogate_iter
 
             # calculate average of surrogates entropy
             for inter in range(surrogate_iter):
-                surrogate , i, rmsd = iaaft(signal)
+                surrogate, i, rmsd = iaaft(signal)
                 surrogate_embedded = embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _differential_entropy(surrogate_embedded, k=1)
                 surrogate_list.append(surrogate_entropy)
@@ -201,7 +201,7 @@ def _differential_entropy(x, k=1, norm='max', min_dist=0.):
         log_c_d = 0  # volume of the d-dimensional unit ball
     elif norm == 'euclidean':  # euclidean norm
         p = 2
-        log_c_d = (d/2.) * np.log(np.pi) -np.log(scipy.special.gamma(d/2. +1))
+        log_c_d = (d / 2.) * np.log(np.pi) - np.log(scipy.special.gamma(d / 2. + 1))
     else:
         raise ValueError("NeuroKit error: differential_entropy(): 'method' "
                          "not recognized.")
@@ -215,7 +215,7 @@ def _differential_entropy(x, k=1, norm='max', min_dist=0.):
     # Enforce non-zero distances
     distances[distances < min_dist] = min_dist
 
-    sum_log_dist = np.sum(np.log(2*distances))  #2*radius=diameter
+    sum_log_dist = np.sum(np.log(2*distances))  # 2*radius=diameter
     h = -scipy.special.digamma(k) + scipy.special.digamma(n) + log_c_d + (d / float(n)) * sum_log_dist
 
     return h
