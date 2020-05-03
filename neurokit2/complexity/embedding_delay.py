@@ -21,7 +21,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
 
-    Several authors suggested different methods to guide the choice of Tau. Fraser and Swinney (1986) suggest using the first local minimum of the mutual information between the delayed and non-delayed time series, effectively identifying a value of tau for which they share the least information. Theiler (1990) suggested to select Tau such that the autocorrelation between the signal and its lagged version at Tau is the closest to 1/e. Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation. Rosenstein (1993) suggests to the point close to 40% of the slope of the average displacement from the diagonal (ADFD).
+    Several authors suggested different methods to guide the choice of Tau. Fraser and Swinney (1986) suggest using the first local minimum of the mutual information between the delayed and non-delayed time series, effectively identifying a value of tau for which they share the least information. Theiler (1990) suggested to select Tau where the autocorrelation between the signal and its lagged version at Tau first crosses the value 1/e. Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation. Rosenstein (1993) suggests to the point close to 40% of the slope of the average displacement from the diagonal (ADFD).
 
     Parameters
     ----------
@@ -82,10 +82,10 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
         algorithm = "first local minimum"
     elif method in ["theiler", "theiler1990"]:
         metric = "Autocorrelation"
-        algorithm = "closest to 1/e"
+        algorithm = "first 1/e crossing"
     elif method in ["casdagli", "casdagli1991"]:
         metric = "Autocorrelation"
-        algorithm = "closest to 0"
+        algorithm = "first zero crossing"
     elif method in ["rosenstein", "rosenstein1993", 'adfd']:
         metric = "Displacement"
         algorithm = "closest to 40% of the slope"
@@ -119,10 +119,10 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
     if algorithm == "first local minimum":
         optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"][0]
-    elif algorithm == "closest to 1/e":
+    elif algorithm == "first 1/e crossing":
         metric_values = metric_values - 1 / np.exp(1)
         optimal = signal_zerocrossings(metric_values)[0]
-    elif algorithm == "closest to 0":
+    elif algorithm == "first zero crossing":
         optimal = signal_zerocrossings(metric_values)[0]
     elif algorithm == "closest to 40% of the slope":
         slope = np.diff(metric_values) * len(metric_values)
