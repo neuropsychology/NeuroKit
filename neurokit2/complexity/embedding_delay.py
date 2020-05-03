@@ -8,10 +8,11 @@ import matplotlib
 import matplotlib.collections
 import matplotlib.pyplot as plt
 
-from ..stats import cor
+from ..stats import autocor
 from ..stats import mutual_information
 from ..misc import findclosest
 from ..signal import signal_findpeaks
+from ..signal import signal_zerocrossings
 from .embedding import embedding
 
 
@@ -119,9 +120,10 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
     if algorithm == "first local minimum":
         optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"][0]
     elif algorithm == "closest to 1/e":
-        optimal = np.where(metric_values == findclosest(1 / np.exp(1), metric_values))[0][0]
+        metric_values = metric_values - 1 / np.exp(1)
+        optimal = signal_zerocrossings(metric_values)[0]
     elif algorithm == "closest to 0":
-        optimal = np.where(metric_values == findclosest(0, metric_values))[0][0]
+        optimal = signal_zerocrossings(metric_values)[0]
     elif algorithm == "closest to 40% of the slope":
         slope = np.diff(metric_values) * len(metric_values)
         slope_in_deg = np.rad2deg(np.arctan(slope))
@@ -132,26 +134,29 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
 def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 
-    values = np.zeros(len(tau_sequence))
+    if metric == "Autocorrelation":
+        values = autocor(signal)
+        values = values[:len(tau_sequence)]  # upper limit
+        values = values / values[0]  # standardize
 
-    # Loop through taus and compute all scores values
-    for i, current_tau in enumerate(tau_sequence):
-        embedded = embedding(signal, delay=current_tau, dimension=2)
-        if metric == "Mutual Information":
-            values[i] = mutual_information(embedded[:, 0],
-                                           embedded[:, 1],
-                                           normalized=True,
-                                           method="shannon")
-        if metric == "Autocorrelation":
-            values[i] = cor(embedded[:, 0], embedded[:, 1])
+    else:
+        values = np.zeros(len(tau_sequence))
 
-        if metric == "Displacement":
-            dimension = 2
+        # Loop through taus and compute all scores values
+        for i, current_tau in enumerate(tau_sequence):
+            embedded = embedding(signal, delay=current_tau, dimension=2)
+            if metric == "Mutual Information":
+                values[i] = mutual_information(embedded[:, 0],
+                                               embedded[:, 1],
+                                               normalized=True,
+                                               method="shannon")
+            if metric == "Displacement":
+                dimension = 2
 
-            # Reconstruct with zero time delay.
-            tau0 = embedded[:, 0].repeat(dimension).reshape(len(embedded), dimension)
-            dist = np.asarray([scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)])
-            values[i] = np.mean(dist)
+                # Reconstruct with zero time delay.
+                tau0 = embedded[:, 0].repeat(dimension).reshape(len(embedded), dimension)
+                dist = np.asarray([scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)])
+                values[i] = np.mean(dist)
 
     return values
 
