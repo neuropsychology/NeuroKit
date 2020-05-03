@@ -4,7 +4,6 @@ from .standardize import standardize
 from .hdi import hdi
 from .mad import mad
 from .correlation import cor
-from .correlation import autocor
 from .density import density
 from .distance import distance
 from .rescale import rescale

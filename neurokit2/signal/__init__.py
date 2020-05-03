@@ -19,3 +19,4 @@ from .signal_plot import signal_plot
 from .signal_phase import signal_phase
 from .signal_power import signal_power
 from .signal_synchrony import signal_synchrony
+from .signal_autocorrelation import signal_autocor

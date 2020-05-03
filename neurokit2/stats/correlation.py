@@ -50,7 +50,3 @@ def _cor_methods(x, y, method="pearson"):
         raise ValueError("NeuroKit error: cor(): 'method' not recognized.")
 
     return r, p
-
-def autocor(x):
-    result = np.correlate(x, x, mode='full')
-    return result[result.size // 2:]
