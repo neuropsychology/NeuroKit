@@ -98,7 +98,7 @@ Unfortunately, because most of the algorithms are implemented as code, neurophys
 Being available for Python 3 [@python3], one of the most popular programming languages, *NeuroKit2's* users benefit from an important amount of existing tutorials and a large online community. The package is also relatively lightweight, using mainly standard dependencies [@scipy] such as *NumPy*, *pandas*, *SciPy*, *scikit-learn* and *MatplotLib* (with an additional system of optional dependencies), enabling its use as a dependency in other software. The package source code is available under a permissive license on GitHub (*https://github.com/neuropsychology/NeuroKit*). Its documentation, automatically built and rendered from the code, is hosted at *https://neurokit2.readthedocs.io/*. Apart from guides for installation and contribution, and a description of the package's functions, the documentation also includes several "hands-on" examples and tutorials providing a walk-through on how to address specific issues (e.g., how to extract and visualize individual heartbeats, how to analyze event-related data). New examples can be easily added by users simply by uploading a Python notebook file [@kluyver2016jupyter] to the repository. This file will be automatically transformed into a webpage and displayed on the website, ensuring a transparent and evolutive documentation. Moreover, these examples can be used interactively via a cloud-based *Binder* environment [@Jupyter2018], allowing users to try out the features directly in their browser. Finally, the accessibility for newcomers is reinforced by the issue tracker of GitHub, where users can create public issues to inquire for help.
 
 <!-- Reliability and Evolution -->
-The package aims at being reliable and trustworthy, including peer-reviewed processing pipelines and functions tested against existing implementations of established reference software such as *BioSPPy* [@biosppy], *hrv* [*under review*](https://github.com/openjournals/joss-reviews/issues/1867), *PySiology* [@PySiology], *HeartPy* [@HeartPy], *systole* [@Systole] or *nolds* [@nolds]. The code itself includes a comprehensive test suite using continuous integration tools [e.g., @travis-tobe-added] to ensure stability and prevent errors. Moreover, users are able to easily report any bugs and be notified of their fixes via the issue tracker. Thanks to its collaborative and open development as well as its modular organization, *NeuroKit2* can easily follow the latest developments and remain cutting-edge through its ability to evolve, adapt, and integrate new methods as they are emerging.
+The package aims at being reliable and trustworthy, including peer-reviewed processing pipelines and functions tested against existing implementations of established reference software such as *BioSPPy* [@biosppy], *hrv* [*under review*](https://github.com/openjournals/joss-reviews/issues/1867), *PySiology* [@PySiology], *HeartPy* [@HeartPy], *systole* [@Systole] or *nolds* [@nolds]. The code itself includes a comprehensive test suite using continuous integration tools [e.g., travis CI] to ensure stability and prevent errors. Moreover, users are able to easily report any bugs and be notified of their fixes via the issue tracker. Thanks to its collaborative and open development as well as its modular organization, *NeuroKit2* can easily follow the latest developments and remain cutting-edge through its ability to evolve, adapt, and integrate new methods as they are emerging.
 
 
 <!-- Powerful and flexible: API -->
@@ -143,15 +143,41 @@ This example dataset contains ECG, RSP and EDA signals of one participant to who
 Signals are 2.5 minutes long and are recorded at a frequency of 100Hz [note that the sampling rate is low for storage purposes and should be higher in actual recordings, see @Quintana2016]. It has 4 channels including three physiological signals, and one corresponding to the marking of events via a photosensor (which signal decreased when a stimulus appeared on the screen).
 
 
-```{python eventrelated_data, include=TRUE, eval=TRUE, echo = TRUE}
+
+```{python eventrelated_data, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
 # Load the package
 import neurokit2 as nk
 
 # Download the example dataset
 data = nk.data("bio_eventrelated_100hz")
 
-# Visualize 10 seconds of data (on the same scale)
+# Figure 1. Visualize 10 seconds of data (on the same scale)
 nk.signal_plot(data[900:1900], standardize=True)
+
+# Process the data
+df, info = nk.bio_process(ecg=data["ECG"],
+                          rsp=data["RSP"],
+                          eda=data["EDA"],
+                          sampling_rate=100)
+
+# Find events
+conditions = ["Negative", "Neutral", "Neutral", "Negative"]
+events = nk.events_find(event_channel=data["Photosensor"],
+                        threshold_keep='below',
+                        event_conditions=conditions)
+
+# Epoch the data
+epochs = nk.epochs_create(data=df,
+                          events=events,
+                          sampling_rate=100,
+                          epochs_start=-0.1,
+                          epochs_end=4)
+
+# Extract event related features
+results = nk.bio_analyze(epochs)
+
+# Show subset of results
+results[["Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude"]]
 ```
 
 ```{r include=TRUE, eval=TRUE, echo = FALSE, fig.width=10, fig.height=6, fig.cap="Subset of the dataset showing one event (in orange) and the other physiological signals."}
@@ -173,36 +199,6 @@ py$data %>%
   ylab("Time (s)") +
   guides(size = guide_legend(override.aes = list(size = 2)))
 ```
-
-```{python epochs_creation, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
-# Process the data
-df, info = nk.bio_process(ecg=data["ECG"],
-                          rsp=data["RSP"],
-                          eda=data["EDA"],
-                          sampling_rate=100)
-
-# Find events
-conditions = ["Negative", "Neutral", "Neutral", "Negative"]
-events = nk.events_find(event_channel=data["Photosensor"],
-                        threshold_keep='below',
-                        event_conditions=conditions)
-
-# Epoch the data
-epochs = nk.epochs_create(data=df,
-                          events=events,
-                          sampling_rate=100,
-                          epochs_start=-0.1,
-                          epochs_end=4)
-```
-
-```{python eventrelated_analysis, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
-# Extract event related features
-results = nk.bio_analyze(epochs)
-
-# Show subset of results
-results[["Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude"]]
-```
-
 ```{r table1word, eval=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
 # For word
 knitr::kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude")], format="markdown", digits = 3, caption = "Subset of the ouput related to event-related analysis characterizing the pattern of physiological changes related to specific stimuli.", row.names = FALSE)
