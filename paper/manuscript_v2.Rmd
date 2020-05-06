@@ -41,7 +41,7 @@ authornote: |
 abstract: |
    NeuroKit2 is an open-source, community-driven, and user-friendly Python package dedicated to neurophysiological signal processing (e.g., ECG, EDA, EMG, ...). Its design philosophy is centred on user-experience and accessibility to both novice and advanced users. The package provides general functions that enable data processing in a few lines of code using validated pipelines, as well as tools dedicated to specific processing steps, offering a trade-off between efficiency and fine-tuned control. NeuroKit2 aims at improving transparency and reproducibility in neurophysiological research, as well as fostering exploration and innovation.  
 keywords          : "Neurophysiology, Biosignals, Python, ECG, EDA, EMG"
-wordcount         : "2270"
+wordcount         : "2440"
 bibliography      : ["bibliography.bib"]
 floatsintext      : yes
 figsintext        : yes
