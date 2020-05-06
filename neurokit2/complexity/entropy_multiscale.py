@@ -7,7 +7,7 @@ from .utils_get_r import _get_r
 from .entropy_sample import entropy_sample
 
 
-def entropy_multiscale(signal, order=2, r="default", scale="default"):
+def entropy_multiscale(signal, dimension=2, r="default", scale="default"):
     """Compute the multiscale entropy (MSE).
 
 
@@ -15,12 +15,12 @@ def entropy_multiscale(signal, order=2, r="default", scale="default"):
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
-    order : int
-        The embedding dimension (often denoted as 'm'), i.e., the length of compared run of data. Typically 1, 2 or 3.
+    dimension : int
+        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
     scale : str, int or list
-        A list of scale factors of coarse graining. If 'default', will use ``rqnge(len(signal) / (order + 10))`` (see discussion `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_). If 'max', will use all scales until the length of the signal. If an integer, will create a range until the specified int.
+        A list of scale factors of coarse graining. If 'default', will use ``range(len(signal) / (dimension + 10))`` (see discussion `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_). If 'max', will use all scales until the length of the signal. If an integer, will create a range until the specified int.
 
 
 
@@ -60,7 +60,7 @@ def entropy_multiscale(signal, order=2, r="default", scale="default"):
     if scale is None or scale == "max":
         scale = range(len(signal))  # Set to max
     elif scale == "default":
-        scale = range(int(len(signal) / (order + 10)))  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
+        scale = range(int(len(signal) / (dimension + 10)))  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
     elif isinstance(scale, int):
         scale = range(scale)
 
@@ -69,7 +69,7 @@ def entropy_multiscale(signal, order=2, r="default", scale="default"):
     for i in scale:
         temp = _entropy_multiscale_granularizesignal(signal, i+1)
         if len(temp) >= 4:
-            mse[i] = entropy_sample(temp, order, r)
+            mse[i] = entropy_sample(temp, dimension, r)
 
     # Remove inf
     mse = mse[mse != np.inf]

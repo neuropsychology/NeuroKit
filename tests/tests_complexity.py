@@ -8,8 +8,8 @@ from pyentrp import entropy as pyentrp
 
 """
 For the testing of complexity, we test our implementations against existing and established ones.
-However, as some of these other implementations are not really packaged in a way
-that we can easily import them. Thus, we directly copied their content in this file
+However, some of these other implementations are not really packaged in a way
+SO THAT we can easily import them. Thus, we directly copied their content in this file
 (below the tests).
 """
 

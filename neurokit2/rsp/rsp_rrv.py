@@ -162,8 +162,8 @@ def _rsp_rrv_nonlinear(bbi, rsp_period):
 #    out["CSI_Modified"] = L ** 2 / T
 
     # Entropy
-    out["ApEn"] = entropy_approximate(bbi, order=2)
-    out["SampEn"] = entropy_sample(bbi, order=2, r=0.2*np.std(bbi, ddof=1))
+    out["ApEn"] = entropy_approximate(bbi, dimension=2)
+    out["SampEn"] = entropy_sample(bbi, dimension=2, r=0.2*np.std(bbi, ddof=1))
 
     # DFA
     out["DFA"] = complexity_dfa(bbi, order=1)

@@ -3,6 +3,7 @@
 from .standardize import standardize
 from .hdi import hdi
 from .mad import mad
+from .correlation import cor
 from .density import density
 from .distance import distance
 from .rescale import rescale
@@ -14,3 +15,4 @@ from .fit_error import fit_error
 from .fit_error import fit_mse
 from .fit_error import fit_rmse
 from .fit_error import fit_r2
+from .mutual_information import mutual_information

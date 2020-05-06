@@ -13,7 +13,7 @@ from .entropy_fuzzy import _entropy_sample
 
 
 
-def entropy_sample(signal, order=2, r="default"):
+def entropy_sample(signal, dimension=2, r="default"):
     """
     Calculate the sample entropy (SampEn) of a signal.
 
@@ -21,8 +21,8 @@ def entropy_sample(signal, order=2, r="default"):
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
-    order : int
-        The embedding dimension (often denoted as 'm'), i.e., the length of compared runs of data. Typically 1, 2 or 3.
+    dimension : int
+        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
 
@@ -45,6 +45,6 @@ def entropy_sample(signal, order=2, r="default"):
     r = _get_r(signal, r=r)
 
     # nolds and Entropy implementation:
-    phi = _phi(signal, order=order, r=r, metric='chebyshev', approximate=False)
+    phi = _phi(signal, dimension=dimension, r=r, metric='chebyshev', approximate=False)
 
     return _phi_divide(phi)
