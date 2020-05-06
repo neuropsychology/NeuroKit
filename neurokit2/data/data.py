@@ -31,6 +31,12 @@ def data(dataset="bio_eventrelated_100hz"):
 
     path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
 
+    # Specific case
+    if dataset.lower() in ["eeg", "eeg.txt"]:
+        data = pd.read_csv(path + "eeg.txt")
+        return data.values[:, 0]
+
+    # General case
     file, ext = os.path.splitext(dataset)
     if ext == '':
         data = pd.read_csv(path + dataset + ".csv")
