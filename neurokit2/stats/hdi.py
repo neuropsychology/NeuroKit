@@ -64,6 +64,6 @@ def _hdi_plot(vals, hdi_low, hdi_high, ci=0.95, **kwargs):
     where[findclosest(hdi_high, x, return_index=True)::] = True
 
     plt.plot(x, y, color="white")
-    plt.fill_between(x, y, where=where, color='#E91E63', label = "CI {:.0%} [{:.2f}, {:.2f}]".format(ci, hdi_low, hdi_high))
+    plt.fill_between(x, y, where=where, color='#E91E63', label="CI {:.0%} [{:.2f}, {:.2f}]".format(ci, hdi_low, hdi_high))
     plt.fill_between(x, y, where=~where, color='#2196F3')
     plt.legend(loc="upper right")

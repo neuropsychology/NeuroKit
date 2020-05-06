@@ -35,7 +35,7 @@ def findclosest(number, list_of_numbers, direction="both", strictly=False, retur
         closest = np.nan
 
     if return_index is True:
-        closest = np.where(np.asarray(list_of_numbers)==closest)[0]
+        closest = np.where(np.asarray(list_of_numbers) == closest)[0]
         if len(closest) == 1:
             closest = closest[0]
     return closest
