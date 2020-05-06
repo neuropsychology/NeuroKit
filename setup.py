@@ -13,6 +13,8 @@ with open('README.rst') as readme_file:
 
 with open('NEWS.rst') as history_file:
     history = history_file.read()
+history = history.replace("\n-------------------", "\n^^^^^^^^^^^^^^^^^^^").replace("\n=====", "\n-----")
+
 
 def find_version():
     result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"), open('neurokit2/__init__.py').read())
