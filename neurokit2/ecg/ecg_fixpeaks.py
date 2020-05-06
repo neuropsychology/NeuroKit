@@ -1,10 +1,8 @@
 # - * - coding: utf-8 - * -
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches
-import matplotlib.gridspec as gridspec
-import scipy.signal
-import scipy.stats
 
 
 def ecg_fixpeaks(rpeaks, sampling_rate=1000, iterative=True, show=False):
@@ -101,14 +99,9 @@ def ecg_fixpeaks(rpeaks, sampling_rate=1000, iterative=True, show=False):
 # =============================================================================
 # Lipponen & Tarvainen (2019).
 # =============================================================================
-def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
-
-    # Set fixed parameters.
-    c1 = 0.13
-    c2 = 0.17
-    alpha = 5.2
-    window_half = 45
-    medfilt_order = 11
+def _find_artifacts_lipponen2019(rpeaks, c1=0.13, c2=0.17, alpha=5.2,
+                                 window_width=91, medfilt_order=11,
+                                 sampling_rate=1000):
 
     # Compute period series (make sure it has same numer of elements as peaks);
     # peaks are in samples, convert to seconds.
@@ -117,16 +110,21 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
     # a value in a realistic range (e.g., for median filtering).
     rr[0] = np.mean(rr[1:])
 
-    # Compute differences of consecutive periods.
+    # Artifact identification #################################################
+    ###########################################################################
+
+    # Compute dRRs: time series of differences of consecutive periods (dRRs).
     drrs = np.ediff1d(rr, to_begin=0)
     drrs[0] = np.mean(drrs[1:])
     # Normalize by threshold.
-    drrs, _ = _threshold_normalization(drrs, alpha, window_half)
+    th1 = _compute_threshold(drrs, alpha, window_width)
+    drrs /= th1
 
+    # Cast dRRs to subspace s12.
     # Pad drrs with one element.
     padding = 2
     drrs_pad = np.pad(drrs, padding, "reflect")
-    # Cast drrs to two-dimesnional subspace s1.
+
     s12 = np.zeros(drrs.size)
     for d in np.arange(padding, padding + drrs.size):
 
@@ -135,87 +133,91 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
         elif drrs_pad[d] < 0:
             s12[d - padding] = np.min([drrs_pad[d - 1], drrs_pad[d + 1]])
 
-    # Cast drrs to two-dimensional subspace s2 (looping over d a second
-    # consecutive time is choice to be explicit rather than efficient).
+    # Cast dRRs to subspace s22.
     s22 = np.zeros(drrs.size)
     for d in np.arange(padding, padding + drrs.size):
 
-        if drrs_pad[d] > 0:
-            s22[d - padding] = np.max([drrs_pad[d + 1], drrs_pad[d + 2]])
-        elif drrs_pad[d] < 0:
+        if drrs_pad[d] >= 0:
             s22[d - padding] = np.min([drrs_pad[d + 1], drrs_pad[d + 2]])
+        elif drrs_pad[d] < 0:
+            s22[d - padding] = np.max([drrs_pad[d + 1], drrs_pad[d + 2]])
 
-    # Compute deviation of RRs from median RRs.
-    padding = medfilt_order // 2    # pad RR series before filtering
-    rr_pad = np.pad(rr, padding, "reflect")
-    medrr = scipy.signal.medfilt(rr_pad, medfilt_order)
-    medrr = medrr[padding:padding + rr.size]    # remove padding
+    # Compute mRRs: time series of deviation of RRs from median.
+    df = pd.DataFrame({'signal': rr})
+    medrr = df.rolling(medfilt_order, center=True,
+                       min_periods=1).median().signal.to_numpy()
     mrrs = rr - medrr
     mrrs[mrrs < 0] = mrrs[mrrs < 0] * 2
-    mrrs, th2 = _threshold_normalization(mrrs, alpha, window_half)    # normalize by threshold
+    # Normalize by threshold.
+    th2 = _compute_threshold(mrrs, alpha, window_width)
+    mrrs /= th2
 
-    # Artifact identification
-    #########################
-    # Keep track of indices that need to be interpolated, removed, or added.
+    # Artifact classification #################################################
+    ###########################################################################
+
+    # Artifact classes.
     extra_idcs = []
     missed_idcs = []
     ectopic_idcs = []
     longshort_idcs = []
 
-    for i in range(rpeaks.size - 2):
+    i = 0
+    while i < rr.size - 2:    # The flow control is implemented based on Figure 1
 
-        # Check for ectopic peaks.
-        if np.abs(drrs[i]) <= 1:
+        if np.abs(drrs[i]) <= 1:    # Figure 1
+            i += 1
             continue
-
-        # Based on Figure 2a.
-        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))
-        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))
+        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))    # Figure 2a
+        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))    # Figure 2a
 
         if np.any([eq1, eq2]):
             # If any of the two equations is true.
             ectopic_idcs.append(i)
+            i += 1
             continue
-
         # If none of the two equations is true.
-        # Based on Figure 2b.
-        if ~np.any([np.abs(drrs[i]) > 1, np.abs(mrrs[i]) > 3]):
+        if ~np.any([np.abs(drrs[i]) > 1, np.abs(mrrs[i]) > 3]):    # Figure 1
+            i += 1
             continue
+        longshort_candidates = [i]
+        # Check if the following beat also needs to be evaluated.
+        if np.abs(drrs[i + 1]) < np.abs(drrs[i + 2]):
+            longshort_candidates.append(i + 1)
 
-        # Long beat.
-        eq3 = np.logical_and(drrs[i] > 1, s22[i] < -1)
-        eq4 = np.abs(mrrs[i]) > 3
-        # Short beat.
-        eq5 = np.logical_and(drrs[i] < -1, s22[i] > 1)
+        for j in longshort_candidates:
+            # Long beat.
+            eq3 = np.logical_and(drrs[j] > 1, s22[j] < -1)    # Figure 2b
+            # Long or short.
+            eq4 = np.abs(mrrs[j]) > 3    # Figure 1
+            # Short beat.
+            eq5 = np.logical_and(drrs[j] < -1, s22[j] > 1)    # Figure 2b
 
-        if ~np.any([eq3, eq4, eq5]):
-            # If none of the three equations is true: normal beat.
-            continue
+            if ~np.any([eq3, eq4, eq5]):
+                # If none of the three equations is true: normal beat.
+                i += 1
+                continue
+            # If any of the three equations is true: check for missing or extra
+            # peaks.
 
-        # If any of the three equations is true: check for missing or extra
-        # peaks.
+            # Missing.
+            eq6 = np.abs(rr[j] / 2 - medrr[j]) < th2[j]    # Figure 1
+            # Extra.
+            eq7 = np.abs(rr[j] + rr[j + 1] - medrr[j]) < th2[j]    # Figure 1
 
-        # Missing.
-        eq6 = np.abs(rr[i] / 2 - medrr[i]) < th2[i]
-        # Extra.
-        eq7 = np.abs(rr[i] + rr[i + 1] - medrr[i]) < th2[i]
-
-        # Check if short or extra.
-        if eq5:
-            if eq7:
-                extra_idcs.append(i)
-            else:
-                longshort_idcs.append(i)
-                if np.abs(drrs[i + 1]) < np.abs(drrs[i + 2]):
-                    longshort_idcs.append(i + 1)
-        # Check if long or missing.
-        if np.any([eq3, eq4]):
-            if eq6:
-                missed_idcs.append(i)
-            else:
-                longshort_idcs.append(i)
-                if np.abs(drrs[i + 1]) < np.abs(drrs[i + 2]):
-                    longshort_idcs.append(i + 1)
+            # Check if extra.
+            if np.all([eq5, eq7]):
+                extra_idcs.append(j)
+                i += 1
+                continue
+            # Check if missing.
+            if np.all([eq3, eq6]):
+                missed_idcs.append(j)
+                i += 1
+                continue
+            # If neither classified as extra or missing, classify as "long or
+            # short".
+            longshort_idcs.append(j)
+            i += 1
 
     # Prepare output
     artifacts = {"ectopic": ectopic_idcs, "missed": missed_idcs,
@@ -229,6 +231,12 @@ def _find_artifacts_lipponen2019(rpeaks, sampling_rate=1000):
 
 def _fix_artifacts_lipponen2019(rpeaks, artifacts, sampling_rate):
 
+    # Artifact correction
+    #####################
+    # The integrity of indices must be maintained if peaks are inserted or
+    # deleted: for each deleted beat, decrease indices following that beat in
+    # all other index lists by 1. Likewise, for each added beat, increment the
+    # indices following that beat in all other lists by 1.
     extra_idcs = artifacts["extra"]
     missed_idcs = artifacts["missed"]
     ectopic_idcs = artifacts["ectopic"]
@@ -250,11 +258,11 @@ def _fix_artifacts_lipponen2019(rpeaks, artifacts, sampling_rate):
         missed_idcs = np.array(missed_idcs)
         valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(rpeaks))
         missed_idcs = missed_idcs[valid_idcs]
-        prev_rpeaks = rpeaks[[i - 1 for i in missed_idcs]]
-        next_rpeaks = rpeaks[missed_idcs]
-        added_rpeaks = prev_rpeaks + (next_rpeaks - prev_rpeaks) / 2
+        prev_peaks = rpeaks[[i - 1 for i in missed_idcs]]
+        next_peaks = rpeaks[missed_idcs]
+        added_peaks = prev_peaks + (next_peaks - prev_peaks) / 2
         # Add the new peaks before the missed indices (see numpy docs).
-        rpeaks = np.insert(rpeaks, missed_idcs, added_rpeaks)
+        rpeaks = np.insert(rpeaks, missed_idcs, added_peaks)
         # Update remaining indices.
         ectopic_idcs = _update_indices(missed_idcs, ectopic_idcs, 1)
         longshort_idcs = _update_indices(missed_idcs, longshort_idcs, 1)
@@ -265,18 +273,16 @@ def _fix_artifacts_lipponen2019(rpeaks, artifacts, sampling_rate):
     if interp_idcs.size > 0:
         interp_idcs.sort(kind='mergesort')
         # Make sure to not generate negative indices, or indices that exceed
-        # the total number of peaks.
-        # Make sure to not generate negative indices, or indices that exceed
         # the total number of peaks. prev_peaks and next_peaks must have the
         # same number of elements.
         valid_idcs = np.logical_and(interp_idcs > 1, interp_idcs < len(rpeaks))
         interp_idcs = interp_idcs[valid_idcs]
-        prev_rpeaks = rpeaks[[i - 1 for i in interp_idcs]]
-        next_rpeaks = rpeaks[[i + 1 for i in interp_idcs]]
-        rpeaks_interp = prev_rpeaks + (next_rpeaks - prev_rpeaks) / 2
+        prev_peaks = rpeaks[[i - 1 for i in interp_idcs]]
+        next_peaks = rpeaks[[i + 1 for i in interp_idcs]]
+        peaks_interp = prev_peaks + (next_peaks - prev_peaks) / 2
         # Shift the R-peaks from the old to the new position.
         rpeaks = np.delete(rpeaks, interp_idcs)
-        rpeaks = np.concatenate((rpeaks, rpeaks_interp)).astype(int)
+        rpeaks = np.concatenate((rpeaks, peaks_interp)).astype(int)
         rpeaks.sort(kind="mergesort")
         rpeaks = np.unique(rpeaks)
 
@@ -378,32 +384,27 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax3.legend(loc="upper right")
 
 
-def _threshold_normalization(data, alpha, window_half):
-    wh = window_half
-    # compute threshold
-    th = np.zeros(data.size)
-    if data.size <= 2 * wh:
-        th[:] = alpha * (scipy.stats.iqr(np.abs(data)) / 2)
-        # normalize data by threshold
-        data_th = np.divide(data, th)
-    else:
-        data_pad = np.pad(data, wh, "reflect")
-        for i in np.arange(wh, wh + data.size):
-            th[i - wh] = alpha * (scipy.stats.iqr(np.abs(data_pad[i - wh:i + wh])) / 2)
-        # normalize data by threshold (remove padding)
-        data_th = np.divide(data_pad[wh:wh + data.size], th)
-    return data_th, th
+def _compute_threshold(signal, alpha, window_width):
+
+    df = pd.DataFrame({'signal': np.abs(signal)})
+    q1 = df.rolling(window_width, center=True,
+                    min_periods=1).quantile(.25).signal.to_numpy()
+    q3 = df.rolling(window_width, center=True,
+                    min_periods=1).quantile(.75).signal.to_numpy()
+    th = alpha * ((q3 - q1) / 2)
+
+    return th
 
 
 def _update_indices(source_idcs, update_idcs, update):
     """
-    for every element s in source_idcs, change every element u in update_idcs
-    according to update, if u is larger than s
+    For every element s in source_idcs, change every element u in update_idcs
+    according to update, if u is larger than s.
     """
-    update_idcs_buffer = update_idcs
+    if not update_idcs:
+        return update_idcs
+
     for s in source_idcs:
-        # find the indices (of indices) that need to be updated
-        updates = [i for i, j in enumerate(update_idcs) if j > s]
-        for u in updates:
-            update_idcs_buffer[u] += update
-    return update_idcs_buffer
+        update_idcs = [u + update if u > s else u for u in update_idcs]
+
+    return update_idcs
