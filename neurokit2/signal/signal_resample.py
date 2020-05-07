@@ -21,7 +21,7 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     sampling_rate, desired_sampling_rate : int
         The original and desired (output) sampling frequency (in Hz, i.e., samples/second).
     method : str
-        Can be 'numpy' (default) for numpy's interpolation (see `numpy.interp()`), 'pandas' for Pandas' time series resampling, 'interpolation' (see `scipy.ndimage.zoom()`), 'poly' (see `scipy.signal.resample_poly()`) or 'FFT' (see `scipy.signal.resample()`) for the Fourier method. FFT is the most accurate (if the signal is periodic), but becomes exponentially slower as the signal length increases. In contrast, 'numpy' is the fastest, followed by 'poly', 'pandas' and 'interpolation'.
+        Can be 'interpolation' (see `scipy.ndimage.zoom()`), 'numpy' for numpy's interpolation (see `numpy.interp()`), 'pandas' for Pandas' time series resampling, 'poly' (see `scipy.signal.resample_poly()`) or 'FFT' (see `scipy.signal.resample()`) for the Fourier method. FFT is the most accurate (if the signal is periodic), but becomes exponentially slower as the signal length increases. In contrast, 'interpolation' is the fastest, followed by 'numpy', 'poly' and 'pandas'.
 
     Returns
     -------
@@ -37,7 +37,6 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     >>> signal = np.cos(np.linspace(start=0, stop=20, num=100))
     >>>
     >>> # Downsample
-    >>>
     >>> downsampled_interpolation = nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500)
     >>> downsampled_fft = nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
     >>> downsampled_poly = nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500)

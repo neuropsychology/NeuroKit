@@ -12,7 +12,7 @@ Recording
 - `Electrocardiogram (ECG) electrodes placement <https://www.youtube.com/watch?v=g5-39qux0Sc&feature=emb_title>`_
 - `Facial EMG electrodes placement <https://www.youtube.com/watch?v=iDzcGWIGfVQ&feature=emb_title>`_ 
 - `RSP belt placement <https://www.youtube.com/watch?v=eDIJ7AiKu8s&feature=emb_title>`_
-
+- `Best Practices for Collecting Physiological Data <https://phys2bids.readthedocs.io/en/latest/bestpractice.html>`_
 
 Signal quality
 ------------------

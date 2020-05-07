@@ -167,7 +167,6 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     # Remove duplicate columns of Label and Condition
     if 'Label' in features.columns.values:
         features = features.loc[:, ~features.columns.duplicated()]
-        features = features.drop(columns=['Label', 'Condition']).assign(Label=features['Label'], Condition=features['Condition'])
 
     return features
 
