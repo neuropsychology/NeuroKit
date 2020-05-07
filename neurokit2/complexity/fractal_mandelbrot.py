@@ -27,19 +27,20 @@ def fractal_mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), t
     show : bool
         Visualize the fratal.
 
-
-
     Examples
     ---------
     >>> import neurokit2 as nk
     >>>
     >>> # Mandelbrot fractal
-    >>> m = nk.fractal_mandelbrot(show=True)
-    >>> m = nk.fractal_mandelbrot(real_range=(-2, 0.75),
-                                  imaginary_range=(-1.25, 1.25),
-                                  show=True)
+    >>> nk.fractal_mandelbrot(show=True)
+    >>>
+    >>> # Zoom at seahorse valley
+    >>> nk.fractal_mandelbrot(real_range=(-0.76, -0.74),
+                              imaginary_range=(0.09, 0.11),
+                              iterations=100, show=True)
     >>>
     >>> # Draw manually
+    >>> m = nk.fractal_mandelbrot(real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25))
     >>> plt.imshow(m.T, cmap="viridis")
     >>> plt.axis("off")
     >>> plt.show()
