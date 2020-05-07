@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 def fractal_mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4, iterations=25, buddha=False, show=False):
     """Generate a Mandelbrot (or a Buddhabrot) fractal
 
-    Generates an array containing values corresponding to a Mandelbrot fractal.
+    Vectorized function to efficiently generate an array containing values corresponding to a Mandelbrot fractal.
 
     Parameters
     -----------
@@ -69,10 +69,10 @@ def fractal_mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), t
                           threshold=threshold,
                           iterations=iterations)
     else:
-        img =  _buddhabrot(size=size,
-                           real_range=real_range,
-                           imaginary_range=imaginary_range,
-                           iterations=iterations)
+        img = _buddhabrot(size=size,
+                          real_range=real_range,
+                          imaginary_range=imaginary_range,
+                          iterations=iterations)
 
     if show is True:
         plt.imshow(img, cmap="rainbow")
@@ -207,7 +207,6 @@ def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imagin
 # =============================================================================
 # Utils
 # =============================================================================
-
 
 def _mandelbrot_optimize(c):
     # Optimizations: most of the mset points lie within the

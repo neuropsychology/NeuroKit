@@ -125,8 +125,8 @@ language = None
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'monokai'  # 'default', 'monokai'
-# nbsphinx_codecell_lexer = 'ipython3'  # Doesn't do anything :/
+pygments_style = 'native'  # 'default', 'monokai'
+nbsphinx_codecell_lexer = 'default'  # Doesn't do anything :/
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
