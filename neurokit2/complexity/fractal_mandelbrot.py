@@ -141,6 +141,10 @@ def _mandelbrot_initialize(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2
 
 def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2)):
 
+    # Find original width and height (postdoc enforcing so that is has the same size than mandelbrot)
+    width = size
+    height = _mandelbrot_width2height(width, real_range, imaginary_range)
+
     # Inflate size to match -2, 2
     x = np.array((np.array(real_range) + 2) / 4 * size, int)
     size = np.int(size * (size / (x[1] - x[0])))
@@ -170,8 +174,7 @@ def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(
     # Crop parts not asked for
     xrange = np.array((np.array(real_range) + 2) / 4 * size).astype(int)
     yrange = np.array((np.array(imaginary_range) + 2) / 4 * size).astype(int)
-    yrange[1] = yrange[0] + _mandelbrot_width2height(xrange[1] - xrange[0], real_range, imaginary_range)  # Postoc fix to enforce same size as in regular mandelbrot
-    img = img[yrange[0]:yrange[1], xrange[0]:xrange[1]]
+    img = img[yrange[0]:yrange[0] + height, xrange[0]:xrange[0] + width]
     return img
 
 
