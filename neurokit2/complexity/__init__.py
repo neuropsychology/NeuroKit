@@ -11,3 +11,4 @@ from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .complexity_dfa import complexity_dfa
 from .embedding_concurrent import embedding_concurrent
+from .fractal_mandelbrot import fractal_mandelbrot
