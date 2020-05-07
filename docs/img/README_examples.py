@@ -139,11 +139,36 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 
 
 
+# =============================================================================
+# Complexity
+# =============================================================================
+
+# Generate signal
+signal = nk.signal_simulate(duration=20, sampling_rate=200, noise=0.01)
+
+# Find optimal Tau for time-delay embedding
+optimal_delay = nk.embedding_delay(signal, show=True)
+
+# Save plot
+fig = plt.gcf()
+fig.set_size_inches(10, 6)
+fig.savefig("README_embedding.png", dpi=300, h_pad=3)
 
 
+nk.entropy_sample(signal)
 
+# =============================================================================
+# Statistics
+# =============================================================================
 
+x = np.random.normal(loc=0, scale=1, size=100000)
 
+ci_min, ci_max = nk.hdi(x, ci=0.95, show=True)
+
+# Save plot
+fig = plt.gcf()
+fig.set_size_inches(10/1.5, 6/1.5)
+fig.savefig("README_hdi.png", dpi=300, h_pad=3)
 
 # =============================================================================
 # Popularity
