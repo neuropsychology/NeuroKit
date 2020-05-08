@@ -2,8 +2,6 @@
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import scipy.signal
 
 from .eda_findpeaks import eda_findpeaks
 from .eda_fixpeaks import eda_fixpeaks
@@ -160,7 +158,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
         recovery_value = findclosest(recovery_values[i], segment, direction="smaller", strictly=False)
 
         # Detect recovery points only if there are datapoints below recovery value
-        if any(segment < recovery_value):
+        if (np.min(segment) < recovery_value):
             segment_index = np.where(segment == recovery_value)[0][0]
             recovery[np.where(valid_peaks)[0][i]] = peak_index + segment_index
             recovery_time[np.where(valid_peaks)[0][i]] = segment_index / sampling_rate

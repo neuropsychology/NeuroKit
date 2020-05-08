@@ -7,7 +7,7 @@ from .embedding import embedding
 
 
 
-def embedding_dimension(signal, delay=1, dimension_max=20, show=False, **kwargs):
+def embedding_dimension(signal, delay=1, dimension_max=20, method="neighbors", show=False, **kwargs):
     """Estimate optimal Dimension (m) for time-delay embedding
 
     Parameters
@@ -15,7 +15,7 @@ def embedding_dimension(signal, delay=1, dimension_max=20, show=False, **kwargs)
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension_max : int
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order') to test.
     show : bool
@@ -58,7 +58,26 @@ def embedding_dimension(signal, delay=1, dimension_max=20, show=False, **kwargs)
     else:
         dimension_seq = np.array(dimension_max)
 
-    E1, E2 = _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwargs)
+    # Method
+    method = method.lower()
+    if method in ["neighbors"]:
+        indices, values = _embedding_dimension_neighbors(signal, dimension_max=np.max(dimension_seq), delay=delay)
+    else:
+        E1, E2 = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=show, **kwargs)
+        values = E2
+    return values
+
+
+
+
+# =============================================================================
+# Methods
+# =============================================================================
+def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwargs):
+    """
+    """
+    values = np.asarray([_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]).T
+    E1, E2 = values[0, :], values[1, :]
 
     if show is True:
         fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1)
@@ -66,20 +85,8 @@ def embedding_dimension(signal, delay=1, dimension_max=20, show=False, **kwargs)
         ax1.plot(dimension_seq, E1)
         ax2.plot(dimension_seq, E2)
 
-    return E2
+    return E1, E2
 
-
-
-
-# =============================================================================
-# Internals
-# =============================================================================
-def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwargs):
-    """
-    """
-    values = np.asarray([_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]).T
-
-    return values[0, :], values[1, :]
 
 def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric='chebyshev', window=10, maxnum=None):
     """Return E(d) and E^*(d) for a single d.
@@ -107,7 +114,7 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
 
 
 
-def _embedding_dimension_neighbors(y, metric='chebyshev', window=0, maxnum=None):
+def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='chebyshev', window=0, maxnum=None, show=False):
     """Find nearest neighbors of all points in the given array.
     Finds the nearest neighbors of all points in the given array using
     SciPy's KDTree search.
@@ -137,6 +144,10 @@ def _embedding_dimension_neighbors(y, metric='chebyshev', window=0, maxnum=None)
     dist : array
         Array containing near neighbor distances.
     """
+    y = embedding(signal, delay=delay, dimension=dimension_max)
+
+
+    # Sanity checks
     if metric == 'cityblock':
         p = 1
     elif metric == 'euclidean':
@@ -146,6 +157,7 @@ def _embedding_dimension_neighbors(y, metric='chebyshev', window=0, maxnum=None)
     else:
         raise ValueError('Unknown metric.  Should be one of "cityblock", '
                          '"euclidean", or "chebyshev".')
+
 
     tree = scipy.spatial.cKDTree(y)
     n = len(y)
@@ -176,4 +188,9 @@ def _embedding_dimension_neighbors(y, metric='chebyshev', window=0, maxnum=None)
                                 'nonzero distance.  Try increasing the '
                                 'value of maxnum.')
 
-    return np.squeeze(indices), np.squeeze(dists)
+    indices, values = np.squeeze(indices), np.squeeze(dists)
+
+    if show is True:
+        plt.plot(indices, values)
+
+    return indices, values
