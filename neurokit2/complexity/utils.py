@@ -181,3 +181,27 @@ def _get_coarsegrained(signal, scale=2):
     x = np.reshape(signal[0:b*scale], (b, scale))
     coarsed = np.mean(x, axis=1)
     return coarsed
+
+# =============================================================================
+# ADDED
+# =============================================================================
+def _get_coarsegrained_rolling(signal, scale=2):
+
+    if scale in [0, 1]:
+        return signal
+    N = len(signal)
+    j_max = N // scale
+    k_max = scale
+
+    k_coarsed = []
+
+    for k in range(1, k_max + 1):
+        k_coarsed_list = []
+        for j in range(1, j_max + 1):
+            start = (j-1) * scale + k
+            end = j * scale + k -1
+            group_mean = np.mean(signal[start - 1:end])
+            k_coarsed_list.append(group_mean)
+        k_coarsed.append(k_coarsed_list)
+
+    return np.array(k_coarsed)
