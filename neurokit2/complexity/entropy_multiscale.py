@@ -8,7 +8,7 @@ from .entropy_sample import entropy_sample
 
 
 
-def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=False, composite=False, **kwargs):
+def entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, show=False, **kwargs):
     """Compute the multiscale entropy (MSE).
 
 
@@ -24,6 +24,12 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=F
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
+    composite : bool
+        Returns the composite multiscale entropy (CMSE), more accurate than MSE.
+    fuzzy : bool
+        Returns the fuzzy multiscale entropy.
+    show : bool
+        Show the entropy values for each scale factor.
 
 
 
@@ -60,7 +66,7 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=F
         Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients. Shock, 30(1), 17-22.
     - Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012). Adaptive computation of multiscale entropy and its application in EEG signals for monitoring depth of anesthesia during surgery. Entropy, 14(6), 978-992.
     """
-    mse = _entropy_multiscale(signal, scale=scale, dimension=dimension, r=r, show=show, composite=composite, **kwargs)
+    mse = _entropy_multiscale(signal, scale=scale, dimension=dimension, r=r, composite=composite, fuzzy=fuzzy, show=show, **kwargs)
     return mse
 
 
@@ -68,7 +74,7 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=F
 # =============================================================================
 # Internal
 # =============================================================================
-def _entropy_multiscale(signal, scale="default", dimension=2, r="default", show=False, composite=False, **kwargs):
+def _entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, show=False, **kwargs):
 
     r = _get_r(signal, r=r)
     scale_factors = _get_scale(signal, scale=scale, dimension=dimension)
@@ -81,7 +87,7 @@ def _entropy_multiscale(signal, scale="default", dimension=2, r="default", show=
         if composite is False:
             y = _get_coarsegrained(signal, tau)
             if len(y) >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
-                mse[i] = entropy_sample(y, delay=1, dimension=dimension, r=r, **kwargs)
+                mse[i] = entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
 
         # Composite MSE
         else:
@@ -89,7 +95,7 @@ def _entropy_multiscale(signal, scale="default", dimension=2, r="default", show=
             if y.size >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
                 mse_y = np.full(len(y), np.nan)
                 for i in range(len(y)):
-                    mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, **kwargs)
+                    mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
                 mse[i] = np.mean(mse_y)
 
     if show is True:
@@ -103,4 +109,3 @@ def _entropy_multiscale(signal, scale="default", dimension=2, r="default", show=
     # Area under the curve, essentially the sum, normalized by the number of values (so it's close to the mean)
     mse = np.trapz(mse) / len(mse)
     return mse
-

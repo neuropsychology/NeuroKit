@@ -38,11 +38,9 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> nk.entropy_sample(signal[0:100])
+    >>> nk.entropy_sample(signal)
     """
     r = _get_r(signal, r=r)
-
-    # nolds and Entropy implementation:
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, **kwargs)
 
     return _phi_divide(phi)

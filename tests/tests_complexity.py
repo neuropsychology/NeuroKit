@@ -13,6 +13,15 @@ SO THAT we can easily import them. Thus, we directly copied their content in thi
 """
 
 
+# =============================================================================
+# Some sanity checks
+# =============================================================================
+def test_complexity_sanity():
+
+    signal = np.cos(np.linspace(start=0, stop=30, num=100))
+
+    assert np.allclose(nk.entropy_fuzzy(signal), nk.entropy_sample(signal, fuzzy=True), atol=0.000001)
+
 
 # =============================================================================
 # Comparison against R
