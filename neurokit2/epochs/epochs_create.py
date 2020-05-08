@@ -7,7 +7,7 @@ from ..events.events_find import _events_find_label
 from ..misc import listify
 
 
-def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1, event_labels=None, event_conditions=None, baseline_correction=False):
+def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_end=1, event_labels=None, event_conditions=None, baseline_correction=False):
     """
     Epoching a dataframe.
 
@@ -18,9 +18,10 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
         If a vector of values is passed, it will be transformed in a DataFrame
         with a single 'Signal' column.
     events : list, ndarray or dict
-        Events onset location. If a dict is passed (e.g., from
-       'events_find()'), will select only the 'onset' list. If an integer is passed,
-        will use this number to create an evenly spaced list of events.
+        Events onset location. If a dict is passed (e.g., from ``events_find()``),
+        will select only the 'onset' list. If an integer is passed,
+        will use this number to create an evenly spaced list of events. If None,
+        will chunk the signal into successive blocks of the set duration.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start, epochs_end : int
@@ -60,6 +61,9 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
     >>> # Baseline correction
     >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
     >>> nk.epochs_plot(epochs)
+    >>>
+    >>> # Chunk into n blocks of 1 second
+    >>> epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
     """
     # Santize data input
     if isinstance(data, tuple):  # If a tuple of data and info is passed
@@ -69,6 +73,9 @@ def epochs_create(data, events, sampling_rate=1000, epochs_start=0, epochs_end=1
         data = pd.DataFrame({"Signal": list(data)})
 
     # Sanitize events input
+    if events is None:
+        max_duration = (np.max(epochs_end) - np.min(epochs_start)) * sampling_rate
+        events = np.arange(0, len(data), max_duration)
     if isinstance(events, int):
         events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:
