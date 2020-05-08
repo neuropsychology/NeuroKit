@@ -67,9 +67,9 @@ def entropy_multiscale(signal, dimension=2, r="default", scale="default"):
     # Initalize mse vector
     mse = np.zeros(len(scale))
     for i in scale:
-        temp = _entropy_multiscale_granularizesignal(signal, i+1)
+        temp = _coarsegrained(signal, i+1)
         if len(temp) >= 4:
-            mse[i] = entropy_sample(temp, dimension, r)
+            mse[i] = entropy_sample(temp, delay=1, dimension=dimension, r=r)
 
     # Remove inf
     mse = mse[mse != np.inf]
@@ -85,10 +85,37 @@ def entropy_multiscale(signal, dimension=2, r="default", scale="default"):
 # =============================================================================
 # Internal
 # =============================================================================
+#def _coarsegrained_composite(signal, scale):
+#    """
+#    """
+#    n = len(signal)
+#    b = n // scale
+#    x = np.reshape(signal[0:b*scale], (b, scale))
+#    coarsed = np.mean(x, axis=1)
+#    return coarsed
 
-def _entropy_multiscale_granularizesignal(signal, scale):
+
+def _coarsegrained(signal, scale):
+    """Extract coarse-grained time series.
+
+    The coarse-grained time series for a scale factor Tau are obtained by
+    calculating the arithmetic mean of Tau neighboring values without overlapping.
+
+    To obtain the coarse-grained time series at a scale factor of Tau ,the original
+    time series is divided into non-overlapping windows of length Tau and the
+    data points inside each window are averaged.
+
+    This coarse-graining procedure is similar to moving averaging and the decimation of the original time series.
+    The decimation procedure shortens the length of the coarse-grained time series by a factor of Tau.
+
+    This is an efficient version of ``pd.Series(signal).rolling(window=scale).mean().iloc[0::].values[scale-1::scale]``.
+    >>> import neurokit2 as nk
+    >>> signal = nk.signal_simulate()
+    >>> scale = 2
+    >>> cs = _coarsegrained(signal, scale)
+    """
     n = len(signal)
-    b = int(np.fix(n / scale))
-    temp = np.reshape(signal[0:b*scale], (b, scale))
-    cts = np.mean(temp, axis=1)
-    return cts
+    b = n // scale
+    x = np.reshape(signal[0:b*scale], (b, scale))
+    coarsed = np.mean(x, axis=1)
+    return coarsed

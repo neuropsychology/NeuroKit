@@ -5,36 +5,6 @@ import sklearn.neighbors
 from .embedding import embedding
 
 
-def _get_embedded(signal, delay=1, dimension=2, r="default", metric='chebyshev', approximate=True):
-    """
-    Examples
-    ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay = nk.embedding_delay(signal)
-    >>>
-    >>> embbededn, count = _get_embedded(signal,
-                                         dimension,
-                                         r= 0.2 * np.std(signal, ddof=1),
-                                         delay=1,
-                                         metric='chebyshev',
-                                         approximate=False)
-    """
-    # Sanity checks
-    if metric not in sklearn.neighbors.KDTree.valid_metrics:
-        raise ValueError("NeuroKit error: _entropy_approximate_and_sample(): The given metric (%s) is not valid. The valid metric names are: %s" % (metric, sklearn.neighbors.KDTree.valid_metrics))
-
-    # Get embedded
-    embedded = embedding(signal, delay=delay, dimension=dimension)
-    if approximate is False:
-        embedded = embedded[:-1]  # Removes the last line
-
-    # Get neighbors count
-    count = sklearn.neighbors.KDTree(embedded, metric=metric).query_radius(embedded, r, count_only=True).astype(np.float64)
-
-    return embedded, count
-
 
 
 
@@ -43,7 +13,7 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", metric='chebyshev',
 # =============================================================================
 
 
-def _phi(signal, delay=1, dimension=2, r="default", metric='chebyshev', approximate=True):
+def _phi(signal, delay=1, dimension=2, r="default", distance='chebyshev', approximate=True, fuzzy=False):
     """Common internal for `entropy_approximate` and `entropy_sample`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
@@ -51,8 +21,8 @@ def _phi(signal, delay=1, dimension=2, r="default", metric='chebyshev', approxim
     # Initialize phi
     phi = np.zeros(2)
 
-    embedded1, count1 = _get_embedded(signal, delay, dimension, r, metric=metric, approximate=approximate)
-    embedded2, count2 = _get_embedded(signal, delay, dimension + 1, r, metric=metric, approximate=True)
+    embedded1, count1 = _get_embedded(signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy)
+    embedded2, count2 = _get_embedded(signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy)
 
     if approximate is True:
         phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))
@@ -75,9 +45,75 @@ def _phi_divide(phi):
 
 
 
+
+# =============================================================================
+# Get Embedded
+# =============================================================================
+
+
+def _get_embedded(signal, delay=1, dimension=2, r="default", distance='chebyshev', approximate=True, fuzzy=False):
+    """
+    Examples
+    ----------
+    >>> import neurokit2 as nk
+    >>>
+    >>> signal = nk.signal_simulate(duration=2, frequency=5)
+    >>> delay = nk.embedding_delay(signal)
+    >>>
+    >>> embbeded, count = _get_embedded(signal,
+                                        delay,
+                                        r=0.2 * np.std(signal, ddof=1),
+                                        dimension=2,
+                                        metric='chebyshev',
+                                        approximate=False)
+    """
+    # Sanity checks
+    if distance not in sklearn.neighbors.KDTree.valid_metrics:
+        raise ValueError("NeuroKit error: _get_embedded(): The given metric (%s) is not valid. The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics))
+
+    # Get embedded
+    embedded = embedding(signal, delay=delay, dimension=dimension)
+    if approximate is False:
+        embedded = embedded[:-1]  # Removes the last line
+
+    if fuzzy is False:
+        # Get neighbors count
+        count =_get_count(embedded, r=r, distance=distance)
+    else:
+        # FuzzyEn: Remove the local baselines of vectors
+        embedded -= np.mean(embedded, axis=1, keepdims=True)
+        count = _get_count_fuzzy(embedded, r=r, distance=distance, n=1)
+
+
+    return embedded, count
+
+
+# =============================================================================
+# Get Count
+# =============================================================================
+def _get_count(embedded, r, distance="chebyshev"):
+    """
+    """
+    kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
+    count = kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
+    return count
+
+
+def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
+    dist = sklearn.neighbors.DistanceMetric.get_metric(distance)
+    dist = dist.pairwise(embedded)
+
+    # TODO: can this be optimized?
+    sim = np.exp(-np.linalg.matrix_power(dist, n) / r)
+    count = np.sum(sim, axis=0)
+    return count
+
+
 # =============================================================================
 # Get R
 # =============================================================================
+
+
 
 def _get_r(signal, r="default"):
 

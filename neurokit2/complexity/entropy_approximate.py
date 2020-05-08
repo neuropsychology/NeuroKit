@@ -6,7 +6,7 @@ from .utils import _phi, _get_r
 
 
 
-def entropy_approximate(signal, delay=1, dimension=2, r="default"):
+def entropy_approximate(signal, delay=1, dimension=2, r="default", **kwargs):
     """Compute the approximate entropy (ApEn).
 
     Approximate entropy is a technique used to quantify the amount of regularity and the unpredictability of fluctuations over time-series data. The advantages of ApEn include lower computational demand (ApEn can be designed to work for small data samples (< 50 data points) and can be applied in real tim) and less sensitive to noise. However, ApEn is heavily dependent on the record length and lacks relative consistency.
@@ -50,5 +50,5 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default"):
     r = _get_r(signal, r=r)
 
     # Get phi
-    phi = _phi(signal, delay=delay, dimension=dimension, r=r, metric='chebyshev', approximate=True)
-    return(np.abs(np.subtract(phi[0], phi[1])))
+    phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=True, **kwargs)
+    return np.abs(np.subtract(phi[0], phi[1]))

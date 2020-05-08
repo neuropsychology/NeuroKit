@@ -4,14 +4,12 @@ import numpy as np
 
 
 from .utils import _phi, _phi_divide, _get_r
-from .entropy_fuzzy import _entropy_sample
 
 
 
 
 
-
-def entropy_sample(signal, delay=1, dimension=2, r="default"):
+def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
     """
     Calculate the sample entropy (SampEn) of a signal.
 
@@ -45,6 +43,6 @@ def entropy_sample(signal, delay=1, dimension=2, r="default"):
     r = _get_r(signal, r=r)
 
     # nolds and Entropy implementation:
-    phi = _phi(signal, delay=delay, dimension=dimension, r=r, metric='chebyshev', approximate=False)
+    phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, **kwargs)
 
     return _phi_divide(phi)

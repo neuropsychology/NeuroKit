@@ -3,12 +3,12 @@ import pandas as pd
 import numpy as np
 
 from .embedding import embedding
-from .utils import _get_r, _phi_divide
+from .utils import _get_r, _phi_divide, _phi
 
 
 
 
-def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1):
+def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, **kwargs):
     """
     Calculate the fuzzy entropy (FuzzyEn) of a signal. Adapted from `entro-py <https://github.com/ixjlyons/entro-py/blob/master/entropy.py>`_.
 
@@ -44,50 +44,6 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1):
     0.08481168552031555
     """
     r = _get_r(signal, r=r)
-    phi = _entropy_sample(signal, delay=delay, dimension=dimension, r=r, n=1, fuzzy=True)
+    phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, fuzzy=True, **kwargs)
 
     return _phi_divide(phi)
-
-
-
-
-# =============================================================================
-# Internal
-# =============================================================================
-
-def _entropy_sample(signal, delay=1, dimension=2, r="default", n=1, fuzzy=False):
-    """
-    Internal function adapted from https://github.com/ixjlyons/entro-py/blob/master/entropy.py
-    With fixes (https://github.com/ixjlyons/entro-py/pull/2/files) by @CSchoel
-    """
-    # Sanity checks
-    signal = np.array(signal).astype(float)
-    N = len(signal)
-
-    phi = [0, 0]  # phi(m), phi(m+1)
-    for j in [0, 1]:
-        m = dimension + j
-        npat = N - dimension  # https://github.com/ixjlyons/entro-py/pull/2
-        patterns = np.transpose(embedding(signal, dimension=m, delay=delay))[:, :npat]
-
-        if fuzzy:
-            patterns -= np.mean(patterns, axis=0, keepdims=True)
-
-        count = np.zeros(npat)
-        for i in range(npat):
-            if m == 1:
-                sub = patterns[i]
-            else:
-                sub = patterns[:, [i]]
-            dist = np.max(np.abs(patterns - sub), axis=0)
-
-            if fuzzy:
-                sim = np.exp(-np.power(dist, n) / r)
-            else:
-                sim = dist < r  # https://github.com/ixjlyons/entro-py/pull/2
-
-            count[i] = np.sum(sim) - 1
-
-        phi[j] = np.mean(count) / (N-dimension-1)  # https://github.com/ixjlyons/entro-py/pull/2
-
-    return phi

@@ -63,6 +63,7 @@ def test_complexity_vs_R():
 
     # SampEn
     sampen = nk.entropy_sample(signal[0:300], dimension=2, r=r)
+    assert np.allclose(sampen, nk.entropy_sample(signal[0:300], dimension=2, r=r, distance="infinity"), atol=0.001)
     assert np.allclose(sampen, 0.03784376, atol=0.001)
     sampen = nk.entropy_sample(signal[0:300], dimension=3, delay=2, r=r)
     assert np.allclose(sampen, 0.09185509, atol=0.01)
