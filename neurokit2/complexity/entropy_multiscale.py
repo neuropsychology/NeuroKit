@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 
-from .utils_get_r import _get_r
+from .utils import _get_r
 from .entropy_sample import entropy_sample
 
 

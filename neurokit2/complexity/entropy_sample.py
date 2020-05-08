@@ -3,9 +3,7 @@ import pandas as pd
 import numpy as np
 
 
-from .utils_phi import _phi
-from .utils_phi import _phi_divide
-from .utils_get_r import _get_r
+from .utils import _phi, _phi_divide, _get_r
 from .entropy_fuzzy import _entropy_sample
 
 
@@ -13,7 +11,7 @@ from .entropy_fuzzy import _entropy_sample
 
 
 
-def entropy_sample(signal, dimension=2, r="default"):
+def entropy_sample(signal, delay=1, dimension=2, r="default"):
     """
     Calculate the sample entropy (SampEn) of a signal.
 
@@ -21,6 +19,8 @@ def entropy_sample(signal, dimension=2, r="default"):
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
+    delay : int
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
@@ -45,6 +45,6 @@ def entropy_sample(signal, dimension=2, r="default"):
     r = _get_r(signal, r=r)
 
     # nolds and Entropy implementation:
-    phi = _phi(signal, dimension=dimension, r=r, metric='chebyshev', approximate=False)
+    phi = _phi(signal, delay=delay, dimension=dimension, r=r, metric='chebyshev', approximate=False)
 
     return _phi_divide(phi)

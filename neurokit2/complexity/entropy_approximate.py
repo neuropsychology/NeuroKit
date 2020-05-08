@@ -2,12 +2,11 @@
 import pandas as pd
 import numpy as np
 
-from .utils_phi import _phi
-from .utils_get_r import _get_r
+from .utils import _phi, _get_r
 
 
 
-def entropy_approximate(signal, dimension=2, r="default"):
+def entropy_approximate(signal, delay=1, dimension=2, r="default"):
     """Compute the approximate entropy (ApEn).
 
     Approximate entropy is a technique used to quantify the amount of regularity and the unpredictability of fluctuations over time-series data. The advantages of ApEn include lower computational demand (ApEn can be designed to work for small data samples (< 50 data points) and can be applied in real tim) and less sensitive to noise. However, ApEn is heavily dependent on the record length and lacks relative consistency.
@@ -17,10 +16,12 @@ def entropy_approximate(signal, dimension=2, r="default"):
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
+    delay : int
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
-        Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
+        Tolerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments. If 'default', will be set to 0.2 times the standard deviation of the signal.
 
     See Also
     --------
@@ -49,5 +50,5 @@ def entropy_approximate(signal, dimension=2, r="default"):
     r = _get_r(signal, r=r)
 
     # Get phi
-    phi = _phi(signal, dimension=dimension, r=r, metric='chebyshev', approximate=True)
+    phi = _phi(signal, delay=delay, dimension=dimension, r=r, metric='chebyshev', approximate=True)
     return(np.abs(np.subtract(phi[0], phi[1])))

@@ -14,18 +14,75 @@ SO THAT we can easily import them. Thus, we directly copied their content in thi
 """
 
 
+
 # =============================================================================
-# Complexity
+# Comparison against R
+# =============================================================================
+
+"""
+R code:
+
+library(TSEntropies)
+library(pracma)
+
+signal <- read.csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_eventrelated_100hz.csv")$RSP
+r <- 0.2 * sd(signal)
+
+# ApEn --------------------------------------------------------------------
+
+TSEntropies::ApEn(signal, dim=2, lag=1, r=r)
+0.04383386
+TSEntropies::ApEn(signal, dim=3, lag=2, r=1)
+0.0004269369
+pracma::approx_entropy(signal[1:200], edim=2, r=r, elag=1)
+0.03632554
+
+# SampEn ------------------------------------------------------------------
+
+TSEntropies::SampEn(signal[1:300], dim=2, lag=1, r=r)
+0.04777648
+TSEntropies::FastSampEn(signal[1:300], dim=2, lag=1, r=r)
+0.003490405
+pracma::sample_entropy(signal[1:300], edim=2, tau=1, r=r)
+0.03784376
+pracma::sample_entropy(signal[1:300], edim=3, tau=2, r=r)
+0.09185509
+"""
+
+
+def test_complexity_vs_R():
+
+    signal = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_eventrelated_100hz.csv")["RSP"].values
+    r = 0.2 * np.std(signal, ddof=1)
+
+    # ApEn
+    apen = nk.entropy_approximate(signal, dimension=2, r=r)
+    assert np.allclose(apen, 0.04383386, atol=0.0001)
+    apen = nk.entropy_approximate(signal, dimension=3, delay=2, r=1)
+    assert np.allclose(apen, 0.0004269369, atol=0.0001)
+    apen = nk.entropy_approximate(signal[0:200], dimension=2, delay=1, r=r)
+    assert np.allclose(apen, 0.03632554, atol=0.0001)
+
+    # SampEn
+    sampen = nk.entropy_sample(signal[0:300], dimension=2, r=r)
+    assert np.allclose(sampen, 0.03784376, atol=0.001)
+    sampen = nk.entropy_sample(signal[0:300], dimension=3, delay=2, r=r)
+    assert np.allclose(sampen, 0.09185509, atol=0.01)
+
+
+# =============================================================================
+# Comparison against Python implementations
 # =============================================================================
 
 
-def test_complexity():
+def test_complexity_vs_Python():
 
     signal = np.cos(np.linspace(start=0, stop=30, num=100))
 
-
     # Shannon
-    assert np.allclose(nk.entropy_shannon(signal) - pyentrp.shannon_entropy(signal), 0)
+    shannon = nk.entropy_shannon(signal)
+#    assert scipy.stats.entropy(shannon, pd.Series(signal).value_counts())
+    assert np.allclose(shannon - pyentrp.shannon_entropy(signal), 0)
 
 
     # Approximate
@@ -41,6 +98,9 @@ def test_complexity():
     assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - entro_py_sampen(signal, 2, 0.2, scale=False), 0)
     assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - pyeeg_samp_entropy(signal, 2, 0.2), 0)
 
+#    import sampen
+#    sampen.sampen2(signal[0:300], mm=2, r=r)
+
     assert nk.entropy_sample(signal, 2, 0.2) != pyentrp.sample_entropy(signal, 2, 0.2)[1]
     assert nk.entropy_sample(signal, 2, 0.2*np.sqrt(np.var(signal))) != MultiscaleEntropy_sample_entropy(signal, 2, 0.2)[0.2][2]
 
@@ -55,6 +115,32 @@ def test_complexity():
     signal = nk.signal_simulate(duration=2, frequency=5)
     assert nk.complexity_dfa(signal) == nolds.dfa(signal, fit_exp="poly")
     assert isinstance(nk.complexity_dfa(signal), np.float)
+
+
+# =============================================================================
+# Wikipedia
+# =============================================================================
+def wikipedia_sampen(signal, m=2, r=1):
+    N = len(signal)
+    B = 0.0
+    A = 0.0
+
+    # Split time series and save all templates of length m
+    xmi = np.array([signal[i : i + m] for i in range(N - m)])
+    xmj = np.array([signal[i : i + m] for i in range(N - m + 1)])
+
+    # Save all matches minus the self-match, compute B
+    B = np.sum([np.sum(np.abs(xmii - xmj).max(axis=1) <= r) - 1 for xmii in xmi])
+
+    # Similar for computing A
+    m += 1
+    xm = np.array([signal[i : i + m] for i in range(N - m + 1)])
+
+    A = np.sum([np.sum(np.abs(xmi - xm).max(axis=1) <= r) - 1 for xmi in xm])
+
+    # Return SampEn
+    return -np.log(A / B)
+
 
 # =============================================================================
 # Pyeeg

@@ -3,8 +3,7 @@ import pandas as pd
 import numpy as np
 
 from .embedding import embedding
-from .utils_get_r import _get_r
-from .utils_phi import _phi_divide
+from .utils import _get_r, _phi_divide
 
 
 
