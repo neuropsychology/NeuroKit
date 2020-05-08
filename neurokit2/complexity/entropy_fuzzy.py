@@ -10,7 +10,7 @@ from .utils import _get_r, _phi_divide, _phi
 
 def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, **kwargs):
     """
-    Calculate the fuzzy entropy (FuzzyEn) of a signal. Adapted from `entro-py <https://github.com/ixjlyons/entro-py/blob/master/entropy.py>`_.
+    Calculate the fuzzy entropy (FuzzyEn) of a signal.
 
     Parameters
     ----------
@@ -22,7 +22,7 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, **kwargs):
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
-    n : float, optional
+    n : float
         Step width of fuzzy exponential function. Larger `n` makes the function
         more rectangular. Usually in the range 1-5 (default is 1).
 

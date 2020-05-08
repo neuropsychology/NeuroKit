@@ -78,7 +78,7 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", distance='chebyshev
 
     if fuzzy is False:
         # Get neighbors count
-        count =_get_count(embedded, r=r, distance=distance)
+        count = _get_count(embedded, r=r, distance=distance)
     else:
         # FuzzyEn: Remove the local baselines of vectors
         embedded -= np.mean(embedded, axis=1, keepdims=True)
@@ -112,12 +112,60 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # =============================================================================
 # Get R
 # =============================================================================
-
-
-
 def _get_r(signal, r="default"):
 
     if isinstance(r, str) or (r is None):
         r = 0.2 * np.std(signal, ddof=1)
 
     return r
+
+
+# =============================================================================
+# Get Scale Factor
+# =============================================================================
+def _get_scale(signal, scale="default", dimension=2):
+    # Select scale
+    if scale is None or scale == "max":
+        scale = np.arange(len(signal) // 2)  # Set to max
+    elif scale == "default":
+        scale = np.arange(int(len(signal) / (dimension + 10)))  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
+    elif isinstance(scale, int):
+        scale = np.range(scale)
+
+    return scale
+
+# =============================================================================
+# Get Coarsegrained
+# =============================================================================
+#def _get_coarsegrained_all(signal, scale=2):
+#    """
+#    """
+#    max_times = len(signal) / scale
+#    return coarsed
+
+
+def _get_coarsegrained(signal, scale=2):
+    """Extract coarse-grained time series.
+
+    The coarse-grained time series for a scale factor Tau are obtained by
+    calculating the arithmetic mean of Tau neighboring values without overlapping.
+
+    To obtain the coarse-grained time series at a scale factor of Tau ,the original
+    time series is divided into non-overlapping windows of length Tau and the
+    data points inside each window are averaged.
+
+    This coarse-graining procedure is similar to moving averaging and the decimation of the original time series.
+    The decimation procedure shortens the length of the coarse-grained time series by a factor of Tau.
+
+    This is an efficient version of ``pd.Series(signal).rolling(window=scale).mean().iloc[0::].values[scale-1::scale]``.
+    >>> import neurokit2 as nk
+    >>> signal = nk.signal_simulate()
+    >>> cs = _get_coarsegrained(signal, scale=2)
+    """
+    if scale == 0:
+        return signal
+    n = len(signal)
+    b = n // scale
+    x = np.reshape(signal[0:b*scale], (b, scale))
+    coarsed = np.mean(x, axis=1)
+    return coarsed
