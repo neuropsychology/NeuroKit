@@ -3,7 +3,7 @@ import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt
 
-import biosppy
+# import biosppy
 
 
 def test_ecg_simulate():
@@ -108,42 +108,6 @@ def test_ecg_rate():
 
     assert rate.shape == (test_length, )
     assert np.allclose(rate.mean(), 70, atol=2)
-
-
-def test_ecg_fixpeaks():
-
-    sampling_rate = 1000
-    noise = 0.15
-
-    ecg = nk.ecg_simulate(duration=120, sampling_rate=sampling_rate,
-                          noise=noise, method="simple", random_state=42)
-
-    rpeaks = nk.ecg_findpeaks(ecg)
-
-    # Test with iterative artifact correction.
-    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, iterative=True)
-
-    assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
-                       8624462, atol=1)
-
-    assert all(isinstance(x, int) for x in artifacts["ectopic"])
-    assert all(isinstance(x, int) for x in artifacts["missed"])
-    assert all(isinstance(x, int) for x in artifacts["extra"])
-    assert all(isinstance(x, int) for x in artifacts["longshort"])
-
-    # Test with non-iterative artifact correction.
-    artifacts, rpeaks_corrected = nk.ecg_fixpeaks(rpeaks, iterative=False)
-
-    assert np.allclose(rpeaks_corrected["ECG_R_Peaks"].sum(dtype=np.int64),
-                       8622997, atol=1)
-
-    assert all(isinstance(x, int) for x in artifacts["ectopic"])
-    assert all(isinstance(x, int) for x in artifacts["missed"])
-    assert all(isinstance(x, int) for x in artifacts["extra"])
-    assert all(isinstance(x, int) for x in artifacts["longshort"])
-
-    # TODO: simulate speific types of artifacts at specific indices and assert
-    # their detection.
 
 
 def test_ecg_process():
