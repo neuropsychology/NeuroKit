@@ -81,7 +81,7 @@ def _phi_divide(phi):
 
 def _get_r(signal, r="default"):
 
-    if isinstance(r, str) or r == None:
+    if isinstance(r, str) or (r is None):
         r = 0.2 * np.std(signal, ddof=1)
 
     return r

@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import neurokit2 as nk
-
 import nolds
 
 from pyentrp import entropy as pyentrp
@@ -18,7 +17,6 @@ SO THAT we can easily import them. Thus, we directly copied their content in thi
 # =============================================================================
 # Comparison against R
 # =============================================================================
-
 """
 R code:
 
@@ -87,29 +85,29 @@ def test_complexity_vs_Python():
 
     # Approximate
     assert np.allclose(nk.entropy_approximate(signal), 0.17364897858477146)
-    assert np.allclose(nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) - entropy_app_entropy(signal, 2), 0)
+    assert np.allclose(nk.entropy_approximate(signal, dimension=2, r=0.2*np.std(signal, ddof=1)) - entropy_app_entropy(signal, 2), 0)
 
-    assert nk.entropy_approximate(signal, 2, 0.2*np.std(signal, ddof=1)) != pyeeg_ap_entropy(signal, 2, 0.2*np.std(signal, ddof=1))
+    assert nk.entropy_approximate(signal, dimension=2, r=0.2*np.std(signal, ddof=1)) != pyeeg_ap_entropy(signal, 2, 0.2*np.std(signal, ddof=1))
 
 
     # Sample
-    assert np.allclose(nk.entropy_sample(signal, 2, 0.2*np.std(signal, ddof=1)) - entropy_sample_entropy(signal, 2), 0)
-    assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - nolds.sampen(signal, 2, 0.2), 0)
-    assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - entro_py_sampen(signal, 2, 0.2, scale=False), 0)
-    assert np.allclose(nk.entropy_sample(signal, 2, 0.2) - pyeeg_samp_entropy(signal, 2, 0.2), 0)
+    assert np.allclose(nk.entropy_sample(signal, dimension=2, r=0.2*np.std(signal, ddof=1)) - entropy_sample_entropy(signal, 2), 0)
+    assert np.allclose(nk.entropy_sample(signal, dimension=2, r=0.2) - nolds.sampen(signal, 2, 0.2), 0)
+    assert np.allclose(nk.entropy_sample(signal, dimension=2, r=0.2) - entro_py_sampen(signal, 2, 0.2, scale=False), 0)
+    assert np.allclose(nk.entropy_sample(signal, dimension=2, r=0.2) - pyeeg_samp_entropy(signal, 2, 0.2), 0)
 
 #    import sampen
 #    sampen.sampen2(signal[0:300], mm=2, r=r)
 
-    assert nk.entropy_sample(signal, 2, 0.2) != pyentrp.sample_entropy(signal, 2, 0.2)[1]
-    assert nk.entropy_sample(signal, 2, 0.2*np.sqrt(np.var(signal))) != MultiscaleEntropy_sample_entropy(signal, 2, 0.2)[0.2][2]
+    assert nk.entropy_sample(signal, dimension=2, r=0.2) != pyentrp.sample_entropy(signal, 2, 0.2)[1]
+    assert nk.entropy_sample(signal, dimension=2, r=0.2*np.sqrt(np.var(signal))) != MultiscaleEntropy_sample_entropy(signal, 2, 0.2)[0.2][2]
 
     # MSE
 #    assert nk.entropy_multiscale(signal, 2, 0.2*np.sqrt(np.var(signal))) != np.trapz(MultiscaleEntropy_mse(signal, [i+1 for i in range(10)], 2, 0.2, return_type="list"))
 #    assert nk.entropy_multiscale(signal, 2, 0.2*np.std(signal, ddof=1)) != np.trapz(pyentrp.multiscale_entropy(signal, 2, 0.2, 10))
 
     # Fuzzy
-    assert np.allclose(nk.entropy_fuzzy(signal, 2, 0.2, 1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0)
+    assert np.allclose(nk.entropy_fuzzy(signal, dimension=2, r=0.2, delay=1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0)
 
     # DFA
     signal = nk.signal_simulate(duration=2, frequency=5)
