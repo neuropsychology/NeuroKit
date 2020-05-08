@@ -3,7 +3,7 @@ import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt
 
-# import biosppy
+import biosppy
 
 
 def test_ecg_simulate():
