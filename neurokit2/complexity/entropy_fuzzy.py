@@ -8,7 +8,7 @@ from .utils import _get_r, _phi_divide
 
 
 
-def entropy_fuzzy(signal, dimension=2, r="default", n=1):
+def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1):
     """
     Calculate the fuzzy entropy (FuzzyEn) of a signal. Adapted from `entro-py <https://github.com/ixjlyons/entro-py/blob/master/entropy.py>`_.
 
@@ -16,6 +16,8 @@ def entropy_fuzzy(signal, dimension=2, r="default", n=1):
     ----------
     signal : list, array or Series
         The signal channel in the form of a vector of values.
+    delay : int
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
@@ -42,7 +44,7 @@ def entropy_fuzzy(signal, dimension=2, r="default", n=1):
     0.08481168552031555
     """
     r = _get_r(signal, r=r)
-    phi = _entropy_sample(signal, dimension=dimension, r=r, n=1, fuzzy=True)
+    phi = _entropy_sample(signal, delay=delay, dimension=dimension, r=r, n=1, fuzzy=True)
 
     return _phi_divide(phi)
 
@@ -53,7 +55,7 @@ def entropy_fuzzy(signal, dimension=2, r="default", n=1):
 # Internal
 # =============================================================================
 
-def _entropy_sample(signal, dimension=2, r="default", n=1, fuzzy=False):
+def _entropy_sample(signal, delay=1, dimension=2, r="default", n=1, fuzzy=False):
     """
     Internal function adapted from https://github.com/ixjlyons/entro-py/blob/master/entropy.py
     With fixes (https://github.com/ixjlyons/entro-py/pull/2/files) by @CSchoel
@@ -66,7 +68,7 @@ def _entropy_sample(signal, dimension=2, r="default", n=1, fuzzy=False):
     for j in [0, 1]:
         m = dimension + j
         npat = N - dimension  # https://github.com/ixjlyons/entro-py/pull/2
-        patterns = np.transpose(embedding(signal, dimension=m, delay=1))[:, :npat]
+        patterns = np.transpose(embedding(signal, dimension=m, delay=delay))[:, :npat]
 
         if fuzzy:
             patterns -= np.mean(patterns, axis=0, keepdims=True)

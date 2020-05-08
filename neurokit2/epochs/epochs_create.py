@@ -75,7 +75,7 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
     # Sanitize events input
     if events is None:
         max_duration = (np.max(epochs_end) - np.min(epochs_start)) * sampling_rate
-        events = np.arange(0, len(data), max_duration)
+        events = np.arange(0, len(data)-max_duration, max_duration)
     if isinstance(events, int):
         events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:
