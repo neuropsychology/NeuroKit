@@ -3,11 +3,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .utils import _get_r, _get_coarsegrained, _get_scale
+from .utils import _get_r, _get_scale, _get_coarsegrained, _get_coarsegrained_rolling
 from .entropy_sample import entropy_sample
 
 
-def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=False, **kwargs):
+
+def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=False, composite=False, **kwargs):
     """Compute the multiscale entropy (MSE).
 
 
@@ -42,6 +43,8 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=F
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> nk.entropy_multiscale(signal, show=True)
     0.2326107791897362
+    >>> nk.entropy_multiscale(signal, show=True, composite=True)
+    0.2326107791897362
 
 
     References
@@ -57,15 +60,37 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=F
         Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients. Shock, 30(1), 17-22.
     - Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012). Adaptive computation of multiscale entropy and its application in EEG signals for monitoring depth of anesthesia during surgery. Entropy, 14(6), 978-992.
     """
+    mse = _entropy_multiscale(signal, scale=scale, dimension=dimension, r=r, show=show, composite=composite, **kwargs)
+    return mse
+
+
+
+# =============================================================================
+# Internal
+# =============================================================================
+def _entropy_multiscale(signal, scale="default", dimension=2, r="default", show=False, composite=False, **kwargs):
+
     r = _get_r(signal, r=r)
     scale_factors = _get_scale(signal, scale=scale, dimension=dimension)
 
     # Initalize mse vector
     mse = np.full(len(scale_factors), np.nan)
-    for tau in scale_factors:
-        y = _get_coarsegrained(signal, tau)
-        if len(y) >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
-            mse[i] = entropy_sample(y, delay=1, dimension=dimension, r=r, **kwargs)
+    for i, tau in enumerate(scale_factors):
+
+        # Regular MSE
+        if composite is False:
+            y = _get_coarsegrained(signal, tau)
+            if len(y) >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
+                mse[i] = entropy_sample(y, delay=1, dimension=dimension, r=r, **kwargs)
+
+        # Composite MSE
+        else:
+            y = _get_coarsegrained_rolling(signal, tau)
+            if y.size >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
+                mse_y = np.full(len(y), np.nan)
+                for i in range(len(y)):
+                    mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, **kwargs)
+                mse[i] = np.mean(mse_y)
 
     if show is True:
         plt.plot(scale_factors, mse)
@@ -78,6 +103,4 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", show=F
     # Area under the curve, essentially the sum, normalized by the number of values (so it's close to the mean)
     mse = np.trapz(mse) / len(mse)
     return mse
-
-
 

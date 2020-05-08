@@ -126,21 +126,32 @@ def _get_r(signal, r="default"):
 def _get_scale(signal, scale="default", dimension=2):
     # Select scale
     if scale is None or scale == "max":
-        scale = np.arange(len(signal) // 2)  # Set to max
+        scale = np.arange(1, len(signal) // 2)  # Set to max
     elif scale == "default":
-        scale = np.arange(int(len(signal) / (dimension + 10)))  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
+        scale = np.arange(1, int(len(signal) / (dimension + 10)))  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
     elif isinstance(scale, int):
-        scale = np.range(scale)
+        scale = np.range(1, scale)
 
     return scale
 
 # =============================================================================
 # Get Coarsegrained
 # =============================================================================
-#def _get_coarsegrained_all(signal, scale=2):
+#def _get_coarsegrained_rolling(signal, scale=2):
+#    """Used in composite multiscale entropy.
 #    """
-#    """
-#    max_times = len(signal) / scale
+#    if scale in [0, 1]:
+#        return np.array([signal])
+#
+#    iterations = ?
+#
+#    if n < 2:
+#        raise ValueError("NeuroKit error: _get_coarsegrained_rolling(): The signal is too short!")
+#
+#    coarsed = np.full([iterations, iterations], np.nan)
+#    for i in range(iterations):
+#        y = _get_coarsegrained(signal[?:?], scale=scale)
+#        coarsed[i, :] = y
 #    return coarsed
 
 
@@ -159,10 +170,10 @@ def _get_coarsegrained(signal, scale=2):
 
     This is an efficient version of ``pd.Series(signal).rolling(window=scale).mean().iloc[0::].values[scale-1::scale]``.
     >>> import neurokit2 as nk
-    >>> signal = nk.signal_simulate()
+    >>> signal = [0, 2, 4, 6, 8, 10]
     >>> cs = _get_coarsegrained(signal, scale=2)
     """
-    if scale == 0:
+    if scale in [0, 1]:
         return signal
     n = len(signal)
     b = n // scale
