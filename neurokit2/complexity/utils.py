@@ -137,9 +137,9 @@ def _get_scale(signal, scale="default", dimension=2):
 # =============================================================================
 # Get Coarsegrained
 # =============================================================================
-#def _get_coarsegrained_rolling(signal, scale=2):
-#    """Used in composite multiscale entropy.
-#    """
+def _get_coarsegrained_rolling(signal, scale=2):
+    """Used in composite multiscale entropy.
+    """
 #    if scale in [0, 1]:
 #        return np.array([signal])
 #
@@ -152,7 +152,8 @@ def _get_scale(signal, scale="default", dimension=2):
 #    for i in range(iterations):
 #        y = _get_coarsegrained(signal[?:?], scale=scale)
 #        coarsed[i, :] = y
-#    return coarsed
+    coarsed = 1
+    return coarsed
 
 
 def _get_coarsegrained(signal, scale=2):
