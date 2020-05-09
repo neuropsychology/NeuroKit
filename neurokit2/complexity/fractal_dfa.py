@@ -23,7 +23,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
     integrate : bool
-        It is common practice to integrate the signal (so that the resulting set can be interpreted in the framework of a random walk). Note that it leads to the flattening of the signal, which can lead to the loss of some details.
+        It is common practice to convert the signal to a random walk (i.e., detrend and integrate). Note that it leads to the flattening of the signal, which can lead to the loss of some details (see Ihlen, 2012 for an explanation).
     order : int
         The order of the trend, 1 for linear.
     show : bool
@@ -44,6 +44,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
 
     References
     -----------
+    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
     - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V., Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended fluctuation analysis: a scale-free view on neuronal oscillations. Frontiers in physiology, 3, 450.
     - `nolds <https://github.com/CSchoel/nolds/>`_
     - `Youtube introduction <https://www.youtube.com/watch?v=o0LndP2OlUI>`_
