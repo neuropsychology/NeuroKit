@@ -122,14 +122,14 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta = 0.3, 
     length = duration * sampling_rate
 
     # The fractional Gaussian noise
-    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(size = length, hurst_exponent = hurst_exponent)
+    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(size=length, hurst_exponent=hurst_exponent)
 
     # Initialise the array y
     y = np.zeros([length])
 
     # Integrate the process
     for i in range(1, length):
-       y[i] = y[i-1] - theta * y[i-1] * (1/sampling_rate) + sigma * dB[i]
+       y[i] = y[i-1] - theta * y[i-1] * (1 / sampling_rate) + sigma * dB[i]
     return y
 
 
@@ -159,29 +159,24 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
     k = np.linspace(0, size-1, size)
 
     # Correlation function
-    cor = 0.5*(np.abs(k - 1)**(2*hurst_exponent) - 2*np.abs(k)**(2*hurst_exponent) + np.abs(k + 1)**(2*hurst_exponent))
+    cor = 0.5 * (np.abs(k - 1)**(2 * hurst_exponent) - 2 * np.abs(k)**(2 * hurst_exponent) + np.abs(k + 1)**(2 * hurst_exponent))
 
     # Eigenvalues of the correlation function
-    eigenvals = np.sqrt(
-                  np.fft.fft(
-                    np.concatenate([cor[:],0,cor[1:][::-1]],axis = None).real
-                  )
-                )
+    eigenvals = np.sqrt(np.fft.fft(np.concatenate([cor[:],0,cor[1:][::-1]],axis = None).real))
 
     # Two normal distributed noises to be convoluted
     gn = np.random.normal(0.0, 1.0, size)
     gn2 = np.random.normal(0.0, 1.0, size)
 
     # This is the Davies–Harte method
-    w = np.concatenate(
-        [(eigenvals[0]   / np.sqrt(2*size)) * gn[0],
-         (eigenvals[1:size] / np.sqrt(4*size)) *(gn[1:] + 1j*gn2[1:]),
-         (eigenvals[size]   / np.sqrt(2*size)) * gn2[0],
-         (eigenvals[size+1:]/ np.sqrt(4*size)) *(gn[1:][::-1] - 1j*gn2[1:][::-1])
-        ],
-        axis = None)
+    w = np.concatenate([
+            (eigenvals[0] / np.sqrt(2 * size)) * gn[0],
+            (eigenvals[1:size] / np.sqrt(4 * size)) * (gn[1:] + 1j * gn2[1:]),
+            (eigenvals[size] / np.sqrt(2 * size)) * gn2[0],
+            (eigenvals[size + 1:]/ np.sqrt(4 * size)) * (gn[1:][::-1] - 1j * gn2[1:][::-1])
+            ], axis = None)
 
     # Perform fft. Only first N entry are useful
-    f = np.fft.fft(w).real[:size] * ( (1.0 / size) ** hurst_exponent)
+    f = np.fft.fft(w).real[:size] * ((1.0 / size)**hurst_exponent)
 
     return f
