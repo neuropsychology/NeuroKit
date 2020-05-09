@@ -140,18 +140,20 @@ def _get_scale(signal, scale="default", dimension=2):
 def _get_coarsegrained_rolling(signal, scale=2):
     """Used in composite multiscale entropy.
     """
-#    if scale in [0, 1]:
-#        return np.array([signal])
-#
-#    iterations = ?
-#
-#    if n < 2:
-#        raise ValueError("NeuroKit error: _get_coarsegrained_rolling(): The signal is too short!")
-#
-#    coarsed = np.full([iterations, iterations], np.nan)
-#    for i in range(iterations):
-#        y = _get_coarsegrained(signal[?:?], scale=scale)
-#        coarsed[i, :] = y
+    if scale in [0, 1]:
+        return np.array([signal])
+
+    n = len(signal)
+    j_max = n // scale
+    k_max = scale
+
+    if n < 2:
+        raise ValueError("NeuroKit error: _get_coarsegrained_rolling(): The signal is too short!")
+
+    coarsed = np.full([k_max, j_max], np.nan)
+    for i in range(k_max):
+        y = _get_coarsegrained(signal[i::], scale=scale)
+        coarsed[i, :] = y
     coarsed = 1
     return coarsed
 
@@ -185,7 +187,7 @@ def _get_coarsegrained(signal, scale=2):
 # =============================================================================
 # ADDED
 # =============================================================================
-def _get_coarsegrained_rolling(signal, scale=2):
+def _get_coarsegrained_rolling_tam(signal, scale=2):
 
     if scale in [0, 1]:
         return signal
