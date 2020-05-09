@@ -229,7 +229,7 @@ def test_rsp_intervalrelated():
     columns = ['RSP_Rate_Mean', 'RSP_Amplitude_Mean', 'RRV_SDBB', 'RRV_RMSSD',
                'RRV_SDSD', 'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF', 'RRV_LFn',
                'RRV_HFn', 'RRV_SD1', 'RRV_SD2', 'RRV_SD2SD1', 'RRV_ApEn',
-               'RRV_SampEn', 'RRV_DFA']
+               'RRV_SampEn']
 
     # Test with signal dataframe
     features_df = nk.rsp_intervalrelated(df)

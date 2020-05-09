@@ -142,7 +142,7 @@ def _fractal_dfa_fluctuation(segments, window, order=1, rms=False):
     trend = np.array([np.polyval(poly[j], x) for j in j_segments])
 
     if rms is True:
-        # Method from https://github.com/dokato/dfa/blob/master/dfa.py byDominik Krzeminski
+        # Method from https://github.com/dokato/dfa/blob/master/dfa.py by Dominik Krzeminski
         rms = np.sqrt(np.mean((segments - trend)**2))
         fluctuation = np.sqrt(np.mean(rms**2))
     else:

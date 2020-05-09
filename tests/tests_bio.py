@@ -105,7 +105,7 @@ def test_bio_analyze():
                         'RRV_SDSD', 'RRV_VLF', 'RRV_LF', 'RRV_HF',
                         'RRV_LFHF', 'RRV_LFn', 'RRV_HFn', 'RRV_SD1',
                         'RRV_SD2', 'RRV_SD2SD1', 'RRV_ApEn',
-                        'RRV_SampEn', 'RRV_DFA', 'RSA_P2T_Mean',
+                        'RRV_SampEn', 'RSA_P2T_Mean',
                         'RSA_P2T_Mean_log', 'RSA_P2T_SD',
                         'RSA_P2T_NoRSA', 'RSA_PorgesBohrer',
                         'SCR_Peaks_N', 'SCR_Peaks_Amplitude_Mean']
