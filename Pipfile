@@ -24,6 +24,7 @@ matplotlib = "*"
 pyentrp = "*"
 cvxopt = "*"
 PyWavelets = "*"
+PyEMD = "*"
 
 [packages]
 neurokit2 = {path = ".", editable = true}
