@@ -3,7 +3,7 @@ import numpy as np
 
 from ..misc import range_log
 
-def fractal_dfa(signal, windows=None, overlap=True, integrate=True, order=1):
+def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1):
     """Detrended Fluctuation Analysis (DFA)
 
     Computes Detrended Fluctuation Analysis (DFA) on the time series data.
@@ -13,7 +13,7 @@ def fractal_dfa(signal, windows=None, overlap=True, integrate=True, order=1):
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     windows : list
-        The lengths of the windows (number of data points in each subseries). If None, will set it to a logarithmic scale (so that each window scale hase the same weight) with a minimum of 4 and maximum of a tenth of the length (to have more than 10 windows to calculate the average fluctuation).
+        The lengths of the windows (number of data points in each subseries). If 'default', will set it to a logarithmic scale (so that each window scale hase the same weight) with a minimum of 4 and maximum of a tenth of the length (to have more than 10 windows to calculate the average fluctuation).
     overlap : bool
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
@@ -24,8 +24,8 @@ def fractal_dfa(signal, windows=None, overlap=True, integrate=True, order=1):
 
     Returns
     ----------
-    poly : float
-        The estimate alpha of the Hurst parameter.
+    dfa : float
+        The DFA coefficient.
 
     Examples
     ----------
@@ -39,7 +39,8 @@ def fractal_dfa(signal, windows=None, overlap=True, integrate=True, order=1):
     References
     -----------
     - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V., Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended fluctuation analysis: a scale-free view on neuronal oscillations. Frontiers in physiology, 3, 450.
-    - `nolds` <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>
+    - `nolds <https://github.com/CSchoel/nolds/>`_
+    - `Youtube introduction <https://www.youtube.com/watch?v=o0LndP2OlUI>`_
     """
     # Sanity checks
     n = len(signal)
@@ -96,9 +97,13 @@ def _fractal_dfa_getwindow(signal, n, window, overlap=True):
 
 
 
-def _fractal_dfa_findwindows(signal, n, windows):
+def _fractal_dfa_findwindows(signal, n, windows='default'):
+    # Convert to array
+    if isinstance(windows, list):
+        windows = np.asarray(windows)
+
     # Default windows
-    if windows is None:
+    if windows is None or isinstance(windows, str):
         if n >= 80:
             windows = range_log(4, 0.1 * n, 1.2)  # Default window
         else:
