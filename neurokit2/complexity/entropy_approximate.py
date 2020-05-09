@@ -11,6 +11,8 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", **kwargs):
 
     Approximate entropy is a technique used to quantify the amount of regularity and the unpredictability of fluctuations over time-series data. The advantages of ApEn include lower computational demand (ApEn can be designed to work for small data samples (< 50 data points) and can be applied in real tim) and less sensitive to noise. However, ApEn is heavily dependent on the record length and lacks relative consistency.
 
+    This function can be called either via ``entropy_approximate()`` or ``complexity_apen()``.
+
 
     Parameters
     ----------
@@ -38,8 +40,8 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", **kwargs):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> nk.entropy_approximate(signal[0:100])
-    0.2227235476697098
+    >>> nk.entropy_approximate(signal)
+    0.08837414074679684
 
 
     References
