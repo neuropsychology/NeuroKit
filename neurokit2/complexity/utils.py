@@ -130,7 +130,7 @@ def _get_scale(signal, scale="default", dimension=2):
     elif scale == "default":
         scale = np.arange(1, int(len(signal) / (dimension + 10)))  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
     elif isinstance(scale, int):
-        scale = np.range(1, scale)
+        scale = np.arange(1, scale)
 
     return scale
 
@@ -153,7 +153,7 @@ def _get_coarsegrained_rolling(signal, scale=2):
         raise ValueError("NeuroKit error: _get_coarsegrained_rolling(): The signal is too short!")
 
     coarsed = np.full([k_max, j_max], np.nan)
-    for k in range(k_max):
+    for k in np.arange(k_max):
         y = _get_coarsegrained(signal[k::], scale=scale, force=True)[0:j_max]
         coarsed[k, :] = y
     return coarsed

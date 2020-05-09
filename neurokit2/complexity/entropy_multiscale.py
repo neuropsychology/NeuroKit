@@ -48,9 +48,9 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> nk.entropy_multiscale(signal, show=True)
-    0.2326107791897362
+    0.22802651903377408
     >>> nk.entropy_multiscale(signal, show=True, composite=True)
-    0.2326107791897362
+    0.24786806662361438
 
 
     References

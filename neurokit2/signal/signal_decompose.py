@@ -90,5 +90,5 @@ def _signal_decompose_meanfreq(components, sampling_rate=1000):
     freqs = np.zeros(n)
 
     for i in range(n):
-        c = components[i,:] - np.mean(components[i,:])
+        c = components[i, :] - np.mean(components[i, :])
         freqs[i] = len(signal_zerocrossings(c)) / duration
