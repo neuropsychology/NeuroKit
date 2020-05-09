@@ -8,7 +8,7 @@ from .entropy_sample import entropy_sample
 
 
 
-def entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, show=False, refined=True, **kwargs):
+def entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs):
     """Multiscale entropy (MSE)
 
     Compute the multiscale entropy (MSE), the composite multiscale entropy (CMSE), the refined composite multiscale entropy (RCMSE) or their fuzzy version (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).
@@ -29,10 +29,10 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
     composite : bool
         Returns the composite multiscale entropy (CMSE), more accurate than MSE.
-    fuzzy : bool
-        Returns the fuzzy (composite) multiscale entropy (FuzzyMSE).
     refined : bool
         Returns the 'refined' composite MSE (RCMSE; Wu, 2014)
+    fuzzy : bool
+        Returns the fuzzy (composite) multiscale entropy (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).
     show : bool
         Show the entropy values for each scale factor.
 
@@ -57,7 +57,7 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
     >>> nk.entropy_multiscale(signal, show=True, composite=True)
     0.24786806662361438
     >>> nk.entropy_multiscale(signal, show=True, refined=True)
-    0.24786806662361438
+    0.2639796019815732
 
 
     References
@@ -73,7 +73,7 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
         Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients. Shock, 30(1), 17-22.
     - Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012). Adaptive computation of multiscale entropy and its application in EEG signals for monitoring depth of anesthesia during surgery. Entropy, 14(6), 978-992.
     """
-    mse = _entropy_multiscale(signal, scale=scale, dimension=dimension, r=r, composite=composite, fuzzy=fuzzy, show=show, refined=refined, **kwargs)
+    mse = _entropy_multiscale(signal, scale=scale, dimension=dimension, r=r, composite=composite, fuzzy=fuzzy, refined=refined, show=show, **kwargs)
     return mse
 
 
@@ -81,7 +81,7 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
 # =============================================================================
 # Internal
 # =============================================================================
-def _entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, show=False, refined=True, **kwargs):
+def _entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, refined=False, show=False, **kwargs):
 
     r = _get_r(signal, r=r)
     scale_factors = _get_scale(signal, scale=scale, dimension=dimension)
@@ -90,34 +90,17 @@ def _entropy_multiscale(signal, scale="default", dimension=2, r="default", compo
     mse = np.full(len(scale_factors), np.nan)
     for i, tau in enumerate(scale_factors):
 
-        # No refine
-        if refined is not True:
-            # Regular MSE
-            if composite is False:
-                y = _get_coarsegrained(signal, tau)
-                if len(y) >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
-                    mse[i] = entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
+        # Regular MSE
+        if refined is False and composite is False:
+            mse[i] = _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy)
 
-            # Composite MSE
-            else:
-                y = _get_coarsegrained_rolling(signal, tau)
-                if y.size >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
-                    mse_y = np.full(len(y), np.nan)
-                    for i in range(len(y)):
-                        mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
-                        mse[i] = np.mean(mse_y)
-
+        # Composite MSE
+        elif refined is False and composite is True:
+            mse[i] = _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy)
 
         # Refined Composite MSE
-        elif refined is True:
-            y = _get_coarsegrained_rolling(signal, tau)
-            if y.size >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
-                # get phi for all kth coarse-grained time series
-                phi_ = np.full([len(y), 2], np.nan)
-                for i in range(len(y)):
-                    phi_[i] = _phi(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, approximate=False, **kwargs)
-                # average all phi of the same dimension, then divide, then log
-                mse[i] = _phi_divide([np.mean(phi_[:, 0]), np.mean(phi_[:, 1])])
+        else:
+            mse[i] = _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy)
 
     if show is True:
         plt.plot(scale_factors, mse)
@@ -129,4 +112,43 @@ def _entropy_multiscale(signal, scale="default", dimension=2, r="default", compo
 
     # Area under the curve, essentially the sum, normalized by the number of values (so it's close to the mean)
     mse = np.trapz(mse) / len(mse)
+    return mse
+
+
+# =============================================================================
+# Methods
+# =============================================================================
+def _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs):
+    y = _get_coarsegrained(signal, tau)
+    if len(y) < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
+        return np.nan
+    mse = entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
+
+    return mse
+
+
+def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
+    y = _get_coarsegrained_rolling(signal, tau)
+    if y.size < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
+        return np.nan
+
+    mse_y = np.full(len(y), np.nan)
+    for i in np.arange(len(y)):
+        mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
+    mse = np.mean(mse_y)
+
+    return mse
+
+def _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs):
+    y = _get_coarsegrained_rolling(signal, tau)
+    if y.size < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
+        return np.nan
+
+    # get phi for all kth coarse-grained time series
+    phi_ = np.full([len(y), 2], np.nan)
+    for i in np.arange(len(y)):
+        phi_[i] = _phi(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, approximate=False, **kwargs)
+    # average all phi of the same dimension, then divide, then log
+    mse = _phi_divide([np.mean(phi_[:, 0]), np.mean(phi_[:, 1])])
+
     return mse

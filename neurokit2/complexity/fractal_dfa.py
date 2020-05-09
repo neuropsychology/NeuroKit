@@ -2,11 +2,16 @@
 import numpy as np
 
 from ..misc import range_log
+from ..stats.correlation import _cor_plot
 
-def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1):
+
+def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1, show=False):
     """Detrended Fluctuation Analysis (DFA)
 
-    Computes Detrended Fluctuation Analysis (DFA) on the time series data.
+    Computes Detrended Fluctuation Analysis (DFA) on the time series data. Detrended fluctuation analysis, much like the Hurst exponent, is used to
+    find long-term statistical dependencies in time series.
+
+    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``.
 
     Parameters
     ----------
@@ -18,9 +23,11 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
     integrate : bool
-        It is common practice to integrate the signal (so that the resulting set can be interpreted in the framework of a random walk), altough it leads to the flattening of the signal, that can lead to the loss of some details.
+        It is common practice to integrate the signal (so that the resulting set can be interpreted in the framework of a random walk). Note that it leads to the flattening of the signal, which can lead to the loss of some details.
     order : int
-        The order of the trend.
+        The order of the trend, 1 for linear.
+    show : bool
+        Visualise the trend between the window size and the fluctuations.
 
     Returns
     ----------
@@ -80,6 +87,9 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
         dfa = np.nan
     else:
         dfa = np.polyfit(np.log(windows), np.log(fluctuations), order)[0]
+
+    if show is True:
+        _cor_plot(np.log(windows), np.log(fluctuations))
 
     return dfa
 

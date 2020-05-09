@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def complexity_simulate(duration=10, sampling_rate=1000):
+def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurst_exponent=0.5, **kwargs):
     """Simulate chaotic time series.
 
     Generates time series using the discrete approximation of the
@@ -15,21 +15,30 @@ def complexity_simulate(duration=10, sampling_rate=1000):
         Desired length of duration (s).
     sampling_rate, length : int
         The desired sampling rate (in Hz, i.e., samples/second) or the desired
+    method : str
+        The method. can be 'hurst' for a (fractional) Ornstein–Uhlenbeck process or 'mackeyglass' to use the Mackey-Glass equation.
 
     Examples
     ------------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.complexity_simulate(duration=30, sampling_rate=100)
-    >>> nk.signal_plot(signal)
+    >>> signal1 = nk.complexity_simulate(duration=30, sampling_rate=100, method="ornstein")
+    >>> signal2 = nk.complexity_simulate(duration=30, sampling_rate=100, method="mackeyglass")
+    >>> nk.signal_plot([signal1, signal2])
 
     Returns
     -------
     x : array
         Array containing the time series.
     """
-    signal = _complexity_simulate_mackeyglass(duration=duration, sampling_rate=sampling_rate)
+    method = method.lower()
+    if method in ["fractal", "fractional", "husrt", "ornsteinuhlenbeck", "ornstein"]:
+        signal = _complexity_simulate_ornstein(duration=duration, sampling_rate=sampling_rate, hurst_exponent=hurst_exponent, **kwargs)
+    else:
+        signal = _complexity_simulate_mackeyglass(duration=duration, sampling_rate=sampling_rate, **kwargs)
     return signal
+
+
 
 # =============================================================================
 # Methods
@@ -88,3 +97,91 @@ def _complexity_simulate_mackeyglass(duration=10, sampling_rate=1000, x0=None, a
         x[i + 1] = A * x[i] + B * (x[i - n] / (1 + x[i - n] ** c) +
                                    x[i - n + 1] / (1 + x[i - n + 1] ** c))
     return x[n * discard::sampling_rate]
+
+
+
+def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta = 0.3, sigma = 0.1,  hurst_exponent=0.7):
+    """
+    This is based on https://github.com/LRydin/MFDFA
+
+    Parameters
+    ----------
+    theta : float
+        Drift.
+    sigma : float
+        Diffusion.
+
+    Examples
+    ----------
+    >>> signal1 = _complexity_simulate_hurst(hurst_exponent=0.3)
+    >>> signal2 = _complexity_simulate_hurst(hurst_exponent=0.7)
+    >>> signal3 = _complexity_simulate_hurst(hurst_exponent=0.7)
+    >>> nk.signal_plot([signal1, signal2, signal3])
+    """
+    # Time array
+    length = duration * sampling_rate
+
+    # The fractional Gaussian noise
+    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(size = length, hurst_exponent = hurst_exponent)
+
+    # Initialise the array y
+    y = np.zeros([length])
+
+    # Integrate the process
+    for i in range(1, length):
+       y[i] = y[i-1] - theta * y[i-1] * (1/sampling_rate) + sigma * dB[i]
+    return y
+
+
+
+def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
+    """
+    This is based on https://github.com/LRydin/MFDFA/blob/master/MFDFA/fgn.py and the work of Christopher Flynn fbm in https://github.com/crflynn/fbm and Davies, Robert B., and D. S. Harte. 'Tests for Hurst effect.' Biometrika 74, no. 1 (1987): 95-101.
+
+    Generates fractional Gaussian noise with a Hurst index H in (0,1). If
+    H = 1/2 this is simply Gaussian noise.
+    The current method employed is the Davies–Harte method, which fails for
+    H ≈ 0. A Cholesky decomposition method and the Hosking’s method will be
+    implemented in later versions.
+
+    Parameters
+    ----------
+    size : int
+        Length of fractional Gaussian noise to generate.
+    hurst_exponent : float
+        Hurst exponent H in (0,1).
+    """
+    # Sanity checks
+    assert isinstance(size, int), "Size must be an integer number"
+    assert isinstance(hurst_exponent, float), "Hurst index must be a float in (0,1)"
+
+    # Generate linspace
+    k = np.linspace(0, size-1, size)
+
+    # Correlation function
+    cor = 0.5*(np.abs(k - 1)**(2*hurst_exponent) - 2*np.abs(k)**(2*hurst_exponent) + np.abs(k + 1)**(2*hurst_exponent))
+
+    # Eigenvalues of the correlation function
+    eigenvals = np.sqrt(
+                  np.fft.fft(
+                    np.concatenate([cor[:],0,cor[1:][::-1]],axis = None).real
+                  )
+                )
+
+    # Two normal distributed noises to be convoluted
+    gn = np.random.normal(0.0, 1.0, size)
+    gn2 = np.random.normal(0.0, 1.0, size)
+
+    # This is the Davies–Harte method
+    w = np.concatenate(
+        [(eigenvals[0]   / np.sqrt(2*size)) * gn[0],
+         (eigenvals[1:size] / np.sqrt(4*size)) *(gn[1:] + 1j*gn2[1:]),
+         (eigenvals[size]   / np.sqrt(2*size)) * gn2[0],
+         (eigenvals[size+1:]/ np.sqrt(4*size)) *(gn[1:][::-1] - 1j*gn2[1:][::-1])
+        ],
+        axis = None)
+
+    # Perform fft. Only first N entry are useful
+    f = np.fft.fft(w).real[:size] * ( (1.0 / size) ** hurst_exponent)
+
+    return f

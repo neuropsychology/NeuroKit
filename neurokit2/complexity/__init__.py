@@ -17,6 +17,7 @@ from .fractal_mandelbrot import fractal_mandelbrot
 
 from .complexity_simulate import complexity_simulate
 
+
 # Aliases
 complexity_se = entropy_shannon
 complexity_apen = entropy_approximate
@@ -29,3 +30,5 @@ complexity_cmse = functools.partial(entropy_multiscale, composite=True)
 complexity_fuzzycmse = functools.partial(entropy_multiscale, composite=True, fuzzy=True)
 complexity_rcmse = functools.partial(entropy_multiscale, refined=True)
 complexity_fuzzyrcmse = functools.partial(entropy_multiscale, refined=True, fuzzy=True)
+
+complexity_dfa = fractal_dfa
