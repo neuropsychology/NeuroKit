@@ -115,7 +115,7 @@ def _entropy_multiscale(signal, scale="default", dimension=2, r="default", compo
                 # get phi for all kth coarse-grained time series
                 phi_ = np.full([len(y), 2], np.nan)
                 for i in range(len(y)):
-                    phi_[i] = _phi(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
+                    phi_[i] = _phi(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, approximate=False, **kwargs)
                 # average all phi of the same dimension, then divide, then log
                 mse[i] = _phi_divide([np.mean(phi_[:, 0]), np.mean(phi_[:, 1])])
 
