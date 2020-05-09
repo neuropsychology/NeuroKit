@@ -124,7 +124,7 @@ def _fractal_dfa_findwindows(signal, n, windows='default'):
 def _fractal_dfa_plot(windows, fluctuations, dfa):
     fluctfit = 2**np.polyval(dfa, np.log2(windows))
     plt.loglog(windows, fluctuations, 'bo')
-    plt.loglog(windows, fluctfit, 'r', label=r'$\alpha$ = %0.2f' %dfa[0])
+    plt.loglog(windows, fluctfit, 'r', label=r'$\alpha$ = %0.2f' % dfa[0])
     plt.title('DFA')
     plt.xlabel(r'$\log_{10}$(time window)')
     plt.ylabel(r'$\log_{10}$<F(t)>')

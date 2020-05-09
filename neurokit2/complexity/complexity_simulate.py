@@ -100,7 +100,7 @@ def _complexity_simulate_mackeyglass(duration=10, sampling_rate=1000, x0=None, a
 
 
 
-def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta = 0.3, sigma = 0.1,  hurst_exponent=0.7):
+def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, sigma=0.1, hurst_exponent=0.7):
     """
     This is based on https://github.com/LRydin/MFDFA
 
@@ -129,7 +129,7 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta = 0.3, 
 
     # Integrate the process
     for i in range(1, length):
-       y[i] = y[i-1] - theta * y[i-1] * (1 / sampling_rate) + sigma * dB[i]
+        y[i] = y[i-1] - theta * y[i-1] * (1 / sampling_rate) + sigma * dB[i]
     return y
 
 
@@ -162,7 +162,7 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
     cor = 0.5 * (np.abs(k - 1)**(2 * hurst_exponent) - 2 * np.abs(k)**(2 * hurst_exponent) + np.abs(k + 1)**(2 * hurst_exponent))
 
     # Eigenvalues of the correlation function
-    eigenvals = np.sqrt(np.fft.fft(np.concatenate([cor[:],0,cor[1:][::-1]],axis = None).real))
+    eigenvals = np.sqrt(np.fft.fft(np.concatenate([cor[:], 0, cor[1:][::-1]], axis=None).real))
 
     # Two normal distributed noises to be convoluted
     gn = np.random.normal(0.0, 1.0, size)
@@ -174,7 +174,7 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
             (eigenvals[1:size] / np.sqrt(4 * size)) * (gn[1:] + 1j * gn2[1:]),
             (eigenvals[size] / np.sqrt(2 * size)) * gn2[0],
             (eigenvals[size + 1:]/ np.sqrt(4 * size)) * (gn[1:][::-1] - 1j * gn2[1:][::-1])
-            ], axis = None)
+            ], axis=None)
 
     # Perform fft. Only first N entry are useful
     f = np.fft.fft(w).real[:size] * ((1.0 / size)**hurst_exponent)
