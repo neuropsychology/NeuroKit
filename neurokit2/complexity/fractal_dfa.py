@@ -2,8 +2,9 @@
 import numpy as np
 
 
-def complexity_dfa(signal, windows=None, overlap=True, order=1):
-    """
+def fractal_dfa(signal, windows=None, overlap=True, order=1):
+    """Detrended Fluctuation Analysis (DFA)
+
     Computes Detrended Fluctuation Analysis (DFA) on the time series data.
 
     Parameters

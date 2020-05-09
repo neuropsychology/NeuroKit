@@ -12,13 +12,13 @@ from .entropy_sample import entropy_sample
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 
-from .complexity_dfa import complexity_dfa
+from .fractal_dfa import fractal_dfa
 from .fractal_mandelbrot import fractal_mandelbrot
 
 from .complexity_simulate import complexity_simulate
 
 # Aliases
-complexity_shannon = entropy_shannon
+complexity_se = entropy_shannon
 complexity_apen = entropy_approximate
 complexity_sampen = entropy_sample
 complexity_fuzzyen = entropy_fuzzy

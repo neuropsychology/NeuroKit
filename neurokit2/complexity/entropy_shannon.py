@@ -6,11 +6,11 @@ import numpy as np
 
 
 def entropy_shannon(signal):
-    """Compute the Shannon entropy (SE)
+    """Shannon entropy (SE)
 
-    Entropy is a measure of unpredictability of the state, or equivalently, of its average information content. Shannon entropy (SE) is one of the first and most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy quantifies the amount of information in a variable.
+    Compute the Shannon entropy (SE). Entropy is a measure of unpredictability of the state, or equivalently, of its average information content. Shannon entropy (SE) is one of the first and most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy quantifies the amount of information in a variable.
 
-    This function can be called either via ``entropy_shannon()`` or ``complexity_shannon()``.
+    This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 
     Parameters
     ----------

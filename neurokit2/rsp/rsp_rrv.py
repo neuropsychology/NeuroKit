@@ -9,7 +9,7 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_power
 from ..complexity import entropy_sample
 from ..complexity import entropy_approximate
-from ..complexity import complexity_dfa
+from ..complexity import fractal_dfa
 
 
 def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
@@ -166,7 +166,7 @@ def _rsp_rrv_nonlinear(bbi, rsp_period):
     out["SampEn"] = entropy_sample(bbi, dimension=2, r=0.2*np.std(bbi, ddof=1))
 
     # DFA
-    out["DFA"] = complexity_dfa(bbi, order=1)
+    out["DFA"] = fractal_dfa(bbi, order=1)
 
     return out
 
