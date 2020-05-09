@@ -113,7 +113,7 @@ def _entropy_multiscale(signal, scale="default", dimension=2, r="default", compo
                 for i in range(len(y)):
                     phi_[i] = _phi(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
                 # average all phi of the same dimension, then divide, then log
-                mse[i] = _phi_divide([np.mean(phi_[:,0]), np.mean(phi_[:,1])])
+                mse[i] = _phi_divide([np.mean(phi_[:, 0]), np.mean(phi_[:, 1])])
 
     if show is True:
         plt.plot(scale_factors, mse)
