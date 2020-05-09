@@ -121,8 +121,8 @@ def test_complexity_vs_Python():
 
     # DFA
     signal = nk.signal_simulate(duration=2, frequency=5)
-    assert nk.complexity_dfa(signal) == nolds.dfa(signal, fit_exp="poly")
-    assert isinstance(nk.complexity_dfa(signal), np.float)
+    assert nk.fractal_dfa(signal) == nolds.dfa(signal, fit_exp="poly")
+    assert isinstance(nk.fractal_dfa(signal), np.float)
 
 
 # =============================================================================
