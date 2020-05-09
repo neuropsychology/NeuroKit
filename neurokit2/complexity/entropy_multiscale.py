@@ -94,7 +94,7 @@ def _entropy_multiscale(signal, scale="default", dimension=2, r="default", compo
             y = _get_coarsegrained_rolling(signal, tau)
             if y.size >= 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
                 mse_y = np.full(len(y), np.nan)
-                for i in range(len(y)):
+                for i in np.arange(len(y)):
                     mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
                 mse[i] = np.mean(mse_y)
 

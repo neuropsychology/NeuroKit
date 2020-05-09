@@ -103,8 +103,10 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
     dist = sklearn.neighbors.DistanceMetric.get_metric(distance)
     dist = dist.pairwise(embedded)
 
-    # TODO: can this be optimized?
-    sim = np.exp(-np.linalg.matrix_power(dist, n) / r)
+    if n > 1:
+        sim = np.exp(-dist**n / r)
+    else:
+        sim = np.exp(-dist / r)
     count = np.sum(sim, axis=0)
     return count
 
