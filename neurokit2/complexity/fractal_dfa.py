@@ -17,6 +17,8 @@ def fractal_dfa(signal, windows=None, overlap=True, integrate=True, order=1):
     overlap : bool
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
+    integrate : bool
+        It is common practice to integrate the signal (so that the resulting set can be interpreted in the framework of a random walk), altough it leads to the flattening of the signal, that can lead to the loss of some details.
     order : int
         The order of the trend.
 
@@ -31,7 +33,7 @@ def fractal_dfa(signal, windows=None, overlap=True, integrate=True, order=1):
     >>>
     >>> signal = nk.signal_simulate(duration=1)
     >>> nk.fractal_dfa(signal)
-    1.9619134459122758
+    2.0262713695244083
 
 
     References
@@ -41,7 +43,61 @@ def fractal_dfa(signal, windows=None, overlap=True, integrate=True, order=1):
     """
     # Sanity checks
     n = len(signal)
+    windows = _fractal_dfa_findwindows(signal, n, windows)
 
+    # Preprocessing
+    if integrate is True:
+        signal = np.cumsum(signal - np.mean(signal))  # Determine signal profile
+
+    # Divide profile
+    fluctuations = np.zeros(len(windows))
+    for i, window in enumerate(windows):
+        # Get window
+        segments = _fractal_dfa_getwindow(signal, n, window, overlap=overlap)
+
+        # Local trend
+        x = np.arange(window)
+        j_segments = np.arange(len(segments))
+
+        poly = np.array([np.polyfit(x, segments[j], order) for j in j_segments])
+        trend = np.array([np.polyval(poly[j], x) for j in j_segments])
+
+        # Calculate fluctuation around trend
+        fluctuation = np.sqrt(np.sum((segments - trend) ** 2, axis=1) / window)
+
+        # Mean fluctuation
+        mean_fluctuation = np.sum(fluctuation) / len(fluctuation)
+        fluctuations[i] = mean_fluctuation
+
+    # Filter zeros
+    nonzero = np.nonzero(fluctuations)[0]
+    windows = windows[nonzero]
+    fluctuations = fluctuations[nonzero]
+
+    # Compute trend
+    if len(fluctuations) == 0:
+        dfa = np.nan
+    else:
+        dfa = np.polyfit(np.log(windows), np.log(fluctuations), order)[0]
+
+    return dfa
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _fractal_dfa_getwindow(signal, n, window, overlap=True):
+    if overlap:
+        segments = np.array([signal[i:i + window] for i in np.arange(0, n - window, window // 2)])
+    else:
+        segments = signal[:n - (n % window)]
+        segments = segments.reshape((signal.shape[0] // window, window))
+    return segments
+
+
+
+def _fractal_dfa_findwindows(signal, n, windows):
+    # Default windows
     if windows is None:
         if n >= 80:
             windows = range_log(4, 0.1 * n, 1.2)  # Default window
@@ -55,42 +111,4 @@ def fractal_dfa(signal, windows=None, overlap=True, integrate=True, order=1):
         raise ValueError("NeuroKit error: fractal_dfa(): there must be at least 2 data points in each window")
     if np.max(windows) >= n:
         raise ValueError("NeuroKit error: fractal_dfa(): the window cannot contain more data points than the time series.")
-
-    if integrate is True:
-        # Determine signal profile
-        signal = np.cumsum(signal - np.mean(signal))
-
-
-    # Divide profile
-    fluctuations = []
-    for window in windows:
-        if overlap:
-            d = np.array([signal[i:i + window] for i in range(0, len(signal) - window, window // 2)])
-        else:
-            d = signal[:N - (N % window)]
-            d = d.reshape((signal.shape[0] // window, window))
-
-        # Local trend
-        x = np.arange(window)
-        poly = [np.polyfit(x, d[i], order) for i in range(len(d))]
-        trend = np.array([np.polyval(poly[i], x) for i in range(len(d))])
-
-        # Calculate fluctuation around trend
-        fluctuation = np.sqrt(np.sum((d - trend) ** 2, axis=1) / window)
-
-        # Mean fluctuation
-        mean_fluctuation = np.sum(fluctuation) / len(fluctuation)
-        fluctuations.append(mean_fluctuation)
-
-    fluctuations = np.array(fluctuations)
-
-    # filter zeros
-    nonzero = np.where(fluctuations != 0)
-    windows = np.array(windows)[nonzero]
-
-    if len(fluctuations) == 0:
-        poly = [np.nan, np.nan]
-    else:
-        poly = np.polyfit(np.log(windows), np.log(fluctuations), order)
-
-    return poly[0]
+    return windows
