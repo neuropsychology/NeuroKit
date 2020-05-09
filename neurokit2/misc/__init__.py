@@ -3,3 +3,4 @@
 from .listify import listify
 from .findclosest import findclosest
 from .sanitize_input import sanitize_input
+from .range_log import range_log

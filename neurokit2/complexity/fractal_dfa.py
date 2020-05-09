@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from ..misc import range_log
 
 def fractal_dfa(signal, windows=None, overlap=True, order=1):
     """Detrended Fluctuation Analysis (DFA)
@@ -35,6 +36,7 @@ def fractal_dfa(signal, windows=None, overlap=True, order=1):
 
     References
     -----------
+    - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V., Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended fluctuation analysis: a scale-free view on neuronal oscillations. Frontiers in physiology, 3, 450.
     - `nolds` <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>
     """
     # Sanity-check input
@@ -43,7 +45,7 @@ def fractal_dfa(signal, windows=None, overlap=True, order=1):
 
     if windows is None:
         if N > 70:
-            windows = _complexity_dfa_n(4, 0.1 * N, 1.2)
+            windows = range_log(4, 0.1 * N, 1.2)
         elif N > 10:
             windows = [4, 5, 6, 7, 8, 9]
         else:
@@ -98,15 +100,4 @@ def fractal_dfa(signal, windows=None, overlap=True, order=1):
 # =============================================================================
 # Internals
 # =============================================================================
-def _complexity_dfa_n(start, end, factor):
-    """Computes successively a list of integers.
-    """
-    end_i = int(np.floor(np.log(1.0 * end / start) / np.log(factor)))
-    ns = [start]
 
-    for i in range(end_i + 1):
-        n = int(np.floor(start * (factor ** i)))
-        if n > ns[-1]:
-            ns.append(n)
-
-    return ns

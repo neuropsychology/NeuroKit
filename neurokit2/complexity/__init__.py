@@ -22,8 +22,10 @@ complexity_se = entropy_shannon
 complexity_apen = entropy_approximate
 complexity_sampen = entropy_sample
 complexity_fuzzyen = entropy_fuzzy
-complexity_mse = entropy_multiscale
 
-complexity_cmse = functools.partial(entropy_multiscale, composite=True)
+complexity_mse = entropy_multiscale
 complexity_fuzzymse = functools.partial(entropy_multiscale, fuzzy=True)
+complexity_cmse = functools.partial(entropy_multiscale, composite=True)
 complexity_fuzzycmse = functools.partial(entropy_multiscale, composite=True, fuzzy=True)
+complexity_rcmse = functools.partial(entropy_multiscale, refined=True)
+complexity_fuzzyrcmse = functools.partial(entropy_multiscale, refined=True, fuzzy=True)
