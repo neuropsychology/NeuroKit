@@ -173,7 +173,7 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
             (eigenvals[0] / np.sqrt(2 * size)) * gn[0],
             (eigenvals[1:size] / np.sqrt(4 * size)) * (gn[1:] + 1j * gn2[1:]),
             (eigenvals[size] / np.sqrt(2 * size)) * gn2[0],
-            (eigenvals[size + 1:]/ np.sqrt(4 * size)) * (gn[1:][::-1] - 1j * gn2[1:][::-1])
+            (eigenvals[size + 1:] / np.sqrt(4 * size)) * (gn[1:][::-1] - 1j * gn2[1:][::-1])
             ], axis=None)
 
     # Perform fft. Only first N entry are useful
