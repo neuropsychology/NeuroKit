@@ -142,6 +142,8 @@ def _get_coarsegrained_rolling(signal, scale=2):
     """
     if scale in [0, 1]:
         return np.array([signal])
+    if scale > len(signal):
+        return np.array([])
 
     n = len(signal)
     j_max = n // scale
@@ -151,14 +153,13 @@ def _get_coarsegrained_rolling(signal, scale=2):
         raise ValueError("NeuroKit error: _get_coarsegrained_rolling(): The signal is too short!")
 
     coarsed = np.full([k_max, j_max], np.nan)
-    for i in range(k_max):
-        y = _get_coarsegrained(signal[i::], scale=scale)
-        coarsed[i, :] = y
-    coarsed = 1
+    for k in range(k_max):
+        y = _get_coarsegrained(signal[k::], scale=scale, force=True)[0:j_max]
+        coarsed[k, :] = y
     return coarsed
 
 
-def _get_coarsegrained(signal, scale=2):
+def _get_coarsegrained(signal, scale=2, force=False):
     """Extract coarse-grained time series.
 
     The coarse-grained time series for a scale factor Tau are obtained by
@@ -179,8 +180,14 @@ def _get_coarsegrained(signal, scale=2):
     if scale in [0, 1]:
         return signal
     n = len(signal)
-    b = n // scale
-    x = np.reshape(signal[0:b*scale], (b, scale))
+    if force is True:
+        # Get max j
+        j = int(np.ceil(n / scale))
+        # Extend signal by repeating the last element so that it matches the theorethical length
+        signal = np.concatenate([signal, np.repeat(signal[-1], (j * scale) - len(signal))])
+    else:
+        j = n // scale
+    x = np.reshape(signal[0:j*scale], (j, scale))
     coarsed = np.mean(x, axis=1)
     return coarsed
 
@@ -201,7 +208,7 @@ def _get_coarsegrained_rolling_tam(signal, scale=2):
         k_coarsed_list = []
         for j in range(1, j_max + 1):
             start = (j-1) * scale + k
-            end = j * scale + k -1
+            end = j * scale + k - 1
             group_mean = np.mean(signal[start - 1:end])
             k_coarsed_list.append(group_mean)
         k_coarsed.append(k_coarsed_list)
