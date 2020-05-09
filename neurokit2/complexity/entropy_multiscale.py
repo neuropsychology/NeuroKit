@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .utils import _get_r, _get_scale, _get_coarsegrained, _get_coarsegrained_rolling
+from .utils import _get_r, _get_scale, _get_coarsegrained, _get_coarsegrained_rolling, _phi, _phi_divide
 from .entropy_sample import entropy_sample
 
 
