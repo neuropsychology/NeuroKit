@@ -24,6 +24,8 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
         Tolerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments. If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
+    corrected : bool
+        Whether to output ApEn or corrected ApEn (cApEn)
 
     See Also
     --------
@@ -48,6 +50,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     -----------
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
     - Sabeti, M., Katebi, S., & Boostani, R. (2009). Entropy and complexity measures for EEG signal classification of schizophrenic and control participants. Artificial intelligence in medicine, 47(3), 263-274.
+    - Shi, B., Zhang, Y., Yuan, C., Wang, S., & Li, P. (2017). Entropy analysis of short-term heartbeat interval time series during regular walking. Entropy, 19(10), 568.
     """
     r = _get_r(signal, r=r)
 
@@ -64,6 +67,9 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
         # Limit the number of vectors to N - (dimension + 1) * delay
         upper_limit = len(signal) - (dimension + 1) * delay
+
+        # Correction to replace the ratio of count1 and count2 when either is equal to 1
+        # As when count = 1, only the vector itself is within r distance
         correction = 1 / upper_limit
 
         vector_similarity = np.full(upper_limit, np.nan)
