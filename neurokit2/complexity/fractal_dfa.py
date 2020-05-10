@@ -154,8 +154,8 @@ def _fractal_dfa_fluctuation(segments, trends, window, multifractal=False, q=2, 
     detrended = segments - trends
 
     if multifractal is True:
-        var = np.var(detrended, axis = 1)
-        fluctuation = np.float_power(np.mean(np.float_power(var, q / 2), axis = 1) / 2, 1 / q.T)
+        var = np.var(detrended, axis=1)
+        fluctuation = np.float_power(np.mean(np.float_power(var, q / 2), axis=1) / 2, 1 / q.T)
         fluctuation = np.mean(fluctuation)  # Average over qs (not sure of that!)
 
     else:
@@ -192,7 +192,7 @@ def _fractal_mfdfa_q(q=2):
     # TODO: Add log calculator for q ≈ 0
 
     # Fractal powers as floats
-    q = np.asarray_chkfinite(q, dtype = float)
+    q = np.asarray_chkfinite(q, dtype=np.float)
 
     # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
     q = q[(q < -.1) + (q > .1)]

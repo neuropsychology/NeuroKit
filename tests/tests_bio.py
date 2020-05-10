@@ -31,22 +31,7 @@ def test_bio_process():
     assert all(bio_info["EMG_Offsets"] > bio_info["EMG_Onsets"])
     assert len(bio_info["EMG_Offsets"] == len(bio_info["EMG_Onsets"]))
 
-    assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate',
-                        'ECG_Quality', 'ECG_R_Peaks',
-                        "ECG_P_Peaks", "ECG_Q_Peaks", "ECG_S_Peaks",
-                        "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
-                        "ECG_Atrial_Phase", "ECG_Ventricular_Phase",
-                        "ECG_Atrial_PhaseCompletion",
-                        "ECG_Ventricular_PhaseCompletion",
-                        'RSP_Raw', 'RSP_Clean', 'RSP_Amplitude', 'RSP_Rate',
-                        'RSP_Phase', 'RSP_PhaseCompletion',
-                        'RSP_Peaks', 'RSP_Troughs',
-                        'EDA_Raw', 'EDA_Clean', 'EDA_Tonic', 'EDA_Phasic',
-                        'SCR_Onsets', 'SCR_Peaks', 'SCR_Height', 'SCR_Amplitude',
-                        'SCR_RiseTime', 'SCR_Recovery', 'SCR_RecoveryTime',
-                        'EMG_Raw', 'EMG_Clean', 'EMG_Amplitude', 'EMG_Activity',
-                        'EMG_Onsets', 'EMG_Offsets', 'RSA_P2T']
-               for elem in np.array(bio_df.columns.values, dtype=str))
+
 
 def test_bio_analyze():
 
@@ -69,19 +54,7 @@ def test_bio_analyze():
     assert len(event_related) == len(epochs)
     labels = [int(i) for i in event_related['Label']]
     assert labels == list(np.arange(1, len(epochs)+1))
-    assert all(elem in ['ECG_Rate_Max', 'ECG_Rate_Min', 'ECG_Rate_Mean',
-                        'ECG_Rate_Max_Time', 'ECG_Rate_Min_Time',
-                        'ECG_Rate_Trend_Quadratic', 'ECG_Rate_Trend_Linear',
-                        'ECG_Rate_Trend_R2', 'ECG_Atrial_Phase',
-                        'ECG_Atrial_PhaseCompletion', 'ECG_Ventricular_Phase',
-                        'ECG_Ventricular_PhaseCompletion', 'ECG_Quality_Mean',
-                        'RSP_Rate_Max',  'RSP_Rate_Min',
-                        'RSP_Rate_Mean', 'RSP_Rate_Max_Time', 'RSP_Rate_Min_Time',
-                        'RSP_Amplitude_Max', 'RSP_Amplitude_Min', 'RSP_Amplitude_Mean',
-                        'RSP_Phase', 'RSP_PhaseCompletion', 'EDA_SCR','EDA_Peak_Amplitude',
-                        'SCR_Peak_Amplitude', 'SCR_Peak_Amplitude_Time', 'SCR_RiseTime',
-                        'SCR_RecoveryTime', 'RSA_P2T', 'Label', 'Condition']
-               for elem in np.array(event_related.columns.values, dtype=str))
+
 
     # Example with interval-related analysis
     data = nk.data("bio_resting_8min_100hz")
@@ -90,23 +63,4 @@ def test_bio_analyze():
     interval_related = nk.bio_analyze(df)
 
     assert len(interval_related) == 1
-    assert all(elem in ['ECG_Rate_Mean', 'HRV_RMSSD', 'HRV_MeanNN',
-                        'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
-                        'HRV_CVSD', 'HRV_MedianNN',
-                        'HRV_MadNN', 'HRV_MCVNN',
-                        'HRV_pNN50', 'HRV_pNN20',
-                        'HRV_TINN', 'HRV_HTI',
-                        'HRV_ULF', 'HRV_VLF',
-                        'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF',
-                        'HRV_LFn', 'HRV_HFn', 'HRV_LnHF', 'HRV_SD1',
-                        'HRV_SD2', 'HRV_SD2SD1', 'HRV_CSI', 'HRV_CVI',
-                        'HRV_CSI_Modified', 'HRV_SampEn', 'RSP_Rate_Mean',
-                        'RSP_Amplitude_Mean', 'RRV_SDBB', 'RRV_RMSSD',
-                        'RRV_SDSD', 'RRV_VLF', 'RRV_LF', 'RRV_HF',
-                        'RRV_LFHF', 'RRV_LFn', 'RRV_HFn', 'RRV_SD1',
-                        'RRV_SD2', 'RRV_SD2SD1', 'RRV_ApEn',
-                        'RRV_SampEn', 'RSA_P2T_Mean',
-                        'RSA_P2T_Mean_log', 'RSA_P2T_SD',
-                        'RSA_P2T_NoRSA', 'RSA_PorgesBohrer',
-                        'SCR_Peaks_N', 'SCR_Peaks_Amplitude_Mean']
-               for elem in np.array(interval_related.columns.values, dtype=str))
+
