@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-from .utils import _phi, _get_r
+from .utils import _phi, _get_r, _get_embedded
 
 
 
