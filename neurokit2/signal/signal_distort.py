@@ -19,7 +19,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     noise_shape : str

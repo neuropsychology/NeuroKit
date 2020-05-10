@@ -15,7 +15,7 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     method : str
         The algorithm used to discriminate between the two states. Can be one of 'mixture'
         (default) or 'threshold'. If 'mixture', will use a Gaussian Mixture Model to categorize

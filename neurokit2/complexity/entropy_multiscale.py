@@ -18,7 +18,7 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     scale : str, int or list
         A list of scale factors used for coarse graining the time series. If 'default', will use ``range(len(signal) / (dimension + 10))`` (see discussion `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_). If 'max', will use all scales until half the length of the signal. If an integer, will create a range until the specified int.
     delay : int
@@ -26,7 +26,7 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
-        Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal.
+        Tolerance (i.e., filtering level - max absolute difference between segments). If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
     composite : bool
         Returns the composite multiscale entropy (CMSE), more accurate than MSE.
     refined : bool
@@ -83,7 +83,7 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
 # =============================================================================
 def _entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, refined=False, show=False, **kwargs):
 
-    r = _get_r(signal, r=r)
+    r = _get_r(signal, r=r, dimension=dimension)
     scale_factors = _get_scale(signal, scale=scale, dimension=dimension)
 
     # Initalize mse vector

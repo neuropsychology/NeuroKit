@@ -17,7 +17,7 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     height_min, distance_max : float
         The minimum or maximum height (i.e., amplitude in terms of absolute values). For example, `height_min=20` will remove all peaks which height is smaller or equal to 20 (in the provided signal's values).
     relative_height_min, relative_height_max : float

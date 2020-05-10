@@ -10,7 +10,7 @@ def signal_zerocrossings(signal):
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
 
     Returns
     -------

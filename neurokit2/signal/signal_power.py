@@ -14,7 +14,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     frequency_band :tuple or list
         Tuple or list of tuples indicating the range of frequencies to compute the power in.
     sampling_rate : int

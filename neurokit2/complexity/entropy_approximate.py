@@ -17,13 +17,13 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", **kwargs):
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
-        Tolerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments. If 'default', will be set to 0.2 times the standard deviation of the signal.
+        Tolerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments. If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
 
     See Also
     --------
@@ -49,7 +49,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", **kwargs):
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
     - Sabeti, M., Katebi, S., & Boostani, R. (2009). Entropy and complexity measures for EEG signal classification of schizophrenic and control participants. Artificial intelligence in medicine, 47(3), 263-274.
     """
-    r = _get_r(signal, r=r)
+    r = _get_r(signal, r=r, dimension=dimension)
 
     # Get phi
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=True, **kwargs)

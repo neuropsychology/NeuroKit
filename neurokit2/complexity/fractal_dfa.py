@@ -16,7 +16,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     windows : list
         A list containing the lengths of the windows (number of data points in each subseries). Also referred to as 'lag' or 'scale'. If 'default', will set it to a logarithmic scale (so that each window scale hase the same weight) with a minimum of 4 and maximum of a tenth of the length (to have more than 10 windows to calculate the average fluctuation).
     overlap : bool
