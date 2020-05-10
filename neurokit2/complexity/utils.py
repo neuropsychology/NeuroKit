@@ -13,7 +13,7 @@ from .embedding import embedding
 # =============================================================================
 
 
-def _phi(signal, delay=1, dimension=2, r="default", distance='chebyshev', approximate=True, fuzzy=False):
+def _phi(signal, delay=1, dimension=2, r="default", distance='chebyshev', approximate=True, fuzzy=False, correct=False):
     """Common internal for `entropy_approximate` and `entropy_sample`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
@@ -23,6 +23,11 @@ def _phi(signal, delay=1, dimension=2, r="default", distance='chebyshev', approx
 
     embedded1, count1 = _get_embedded(signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy)
     embedded2, count2 = _get_embedded(signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy)
+
+    if correct is True:
+        correction = 1 / (len(signal) - (dimension + 1) * delay)
+        count1 = np.where(count1.astype(int) == 1, correction, count1)
+        count2 = np.where(count2.astype(int) == 1, correction, count2)
 
     if approximate is True:
         phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))
