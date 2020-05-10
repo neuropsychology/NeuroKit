@@ -3,6 +3,7 @@
 import pytest
 import numpy as np
 import numpy.random
+
 from neurokit2.ecg.ecg_fixpeaks import (_find_artifacts, _correct_artifacts,
                                         ecg_fixpeaks)
 
@@ -37,7 +38,7 @@ def peaks_correct(n_peaks):
     # Simulate sinusoidally changing heart periods.
     rr = np.sin(np.arange(n_peaks))
     # Add some noise.
-    rng = np.random.default_rng(42)
+    rng = numpy.random.default_rng(42)
     rr_noisy = rng.normal(rr, .1)
     # Scale to range of 250msec and offset by 1000msec. I.e., heart period
     # fluctuates in a range of 250msec around 1000msec.
