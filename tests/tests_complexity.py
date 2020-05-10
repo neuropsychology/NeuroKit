@@ -28,6 +28,9 @@ def test_complexity_sanity():
     assert np.allclose(nk.fractal_dfa(signal), 1.957966586191164, atol=0.000001)
     assert np.allclose(nk.fractal_dfa(signal, multifractal=True), 1.957966586191164, atol=0.000001)
 
+    assert np.allclose(nk.fractal_correlation(signal), 0.7884473170763334, atol=0.000001)
+    assert np.allclose(nk.fractal_correlation(signal, r="nolds"), nolds.corr_dim(signal, 2), atol=0.0001)
+
 
 # =============================================================================
 # Comparison against R
