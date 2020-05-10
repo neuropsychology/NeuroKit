@@ -63,4 +63,3 @@ def test_bio_analyze():
     interval_related = nk.bio_analyze(df)
 
     assert len(interval_related) == 1
-

@@ -2,6 +2,7 @@
 
 import pytest
 import numpy as np
+import numpy.random
 from neurokit2.ecg.ecg_fixpeaks import (_find_artifacts, _correct_artifacts,
                                         ecg_fixpeaks)
 

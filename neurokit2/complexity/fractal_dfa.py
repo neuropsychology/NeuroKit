@@ -150,7 +150,7 @@ def _fractal_dfa_trends(segments, window, order=1):
 
 
 
-def _fractal_dfa_fluctuation(segments, trends, window, multifractal=False, q=2, rms=False):
+def _fractal_dfa_fluctuation(segments, trends, window, multifractal=False, q=2, rms=True):
     detrended = segments - trends
 
     if multifractal is True:
