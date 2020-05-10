@@ -110,7 +110,7 @@ def _fractal_correlation_Corr_Dim(embedded, r_vals, dist):
     corr = np.zeros(len(r_vals))
 
     for i, r in enumerate(r_vals):
-        N = np.where(((ED < r) & (ED>0)))
+        N = np.where(((ED < r) & (ED > 0)))
         corr[i] = len(N[0]) / Npairs
 
     omit_pts = 1
@@ -148,7 +148,7 @@ def _fractal_correlation_get_r(r, signal, dist, n=None):
 
     if isinstance(r, int):
         dist_range = np.max(dist) - np.min(dist)
-        r_min, r_max =  (np.min(dist) + 0.025 * dist_range), (np.min(dist) + 0.5 * dist_range)
+        r_min, r_max = (np.min(dist) + 0.025 * dist_range), (np.min(dist) + 0.5 * dist_range)
         r_vals = np.exp2(np.linspace(np.log2(r_min), np.log2(r_max), r, endpoint=True))
 
     return r_vals
