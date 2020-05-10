@@ -11,7 +11,7 @@ from .utils import _get_r, _phi_divide, _phi
 def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, composite=False, **kwargs):
     """Fuzzy entropy (FuzzyEn)
 
-    Calculate the fuzzy entropy (FuzzyEn) of a signal.
+    Python implementations of the fuzzy entropy (FuzzyEn) of a signal.
 
     This function can be called either via ``entropy_fuzzy()`` or ``complexity_fuzzyen()``.
 

@@ -9,9 +9,9 @@ from .entropy_sample import entropy_sample
 
 
 def entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs):
-    """Multiscale entropy (MSE)
+    """Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version
 
-    Compute the multiscale entropy (MSE), the composite multiscale entropy (CMSE), the refined composite multiscale entropy (RCMSE) or their fuzzy version (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).
+    Python implementations of the multiscale entropy (MSE), the composite multiscale entropy (CMSE), the refined composite multiscale entropy (RCMSE) or their fuzzy version (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).
 
     This function can be called either via ``entropy_multiscale()`` or ``complexity_mse()``. Moreover, variants can be directly accessed via ``complexity_cmse()``, `complexity_rcmse()``, ``complexity_fuzzymse()`` and ``complexity_fuzzyrcmse()``.
 

@@ -10,8 +10,9 @@ from .utils import _phi, _phi_divide, _get_r
 
 
 def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
-    """
-    Calculate the sample entropy (SampEn) of a signal.
+    """Sample Entropy (SampEn)
+
+    Python implementation of the sample entropy (SampEn) of a signal.
 
     This function can be called either via ``entropy_sample()`` or ``complexity_sampen()``.
 
