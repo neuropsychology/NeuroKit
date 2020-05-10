@@ -13,6 +13,7 @@ from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 
 from .fractal_dfa import fractal_dfa
+from .fractal_correlation import fractal_correlation
 from .fractal_mandelbrot import fractal_mandelbrot
 
 from .complexity_simulate import complexity_simulate

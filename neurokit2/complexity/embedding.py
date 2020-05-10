@@ -79,12 +79,9 @@ def embedding(signal, delay=1, dimension=3, show=False):
     return embedded
 
 
-
-
-
-
-
-
+# =============================================================================
+# Internals
+# =============================================================================
 
 
 def _embedding_plot(embedded):

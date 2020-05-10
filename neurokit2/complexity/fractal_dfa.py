@@ -177,7 +177,7 @@ def _fractal_dfa_plot(windows, fluctuations, dfa):
     plt.loglog(windows, fluctfit, 'r', label=r'$\alpha$ = %0.3f' % dfa[0])
     plt.title('DFA')
     plt.xlabel(r'$\log_{10}$(window)')
-    plt.ylabel(r'$\log_{10}$<Fluctuation>')
+    plt.ylabel(r'$\log_{10}$(Fluctuation)')
     plt.legend()
     plt.show()
 

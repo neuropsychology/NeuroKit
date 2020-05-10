@@ -130,7 +130,7 @@ def _get_r(signal, r="default", dimension=2):
     """
     if isinstance(r, str) or (r is None):
         constant = 0.11604738531196232
-        r = constant * np.std(signal, ddof=1) *  (0.5627 * np.log(dimension) + 1.3334)
+        r = constant * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
 
     return r
 
