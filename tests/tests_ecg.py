@@ -44,13 +44,13 @@ def test_ecg_clean():
 
     # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69)
     ecg_biosppy = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
-                               method="biosppy")
+                                method="biosppy")
     original, _, _ = biosppy.tools.filter_signal(signal=ecg,
-                                                 ftype='FIR',
-                                                 band='bandpass',
-                                                 order=int(0.3 * sampling_rate),
-                                                 frequency=[3, 45],
-                                                 sampling_rate=sampling_rate)
+                                                  ftype='FIR',
+                                                  band='bandpass',
+                                                  order=int(0.3 * sampling_rate),
+                                                  frequency=[3, 45],
+                                                  sampling_rate=sampling_rate)
     assert np.allclose((ecg_biosppy - original).mean(), 0, atol=1e-6)
 
 
@@ -96,19 +96,18 @@ def test_ecg_rate():
                                  method="neurokit")
 
     # Test without desired length.
-    rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate)
+    rate = nk.signal_rate(peaks=info, sampling_rate=sampling_rate)
 
     assert rate.shape == (info["ECG_R_Peaks"].size, )
     assert np.allclose(rate.mean(), 70, atol=2)
 
     # Test with desired length.
     test_length = 1200
-    rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate,
-                       desired_length=test_length)
+    rate = nk.signal_rate(peaks=info, sampling_rate=sampling_rate,
+                          desired_length=test_length)
 
     assert rate.shape == (test_length, )
     assert np.allclose(rate.mean(), 70, atol=2)
-
 
 def test_ecg_process():
 

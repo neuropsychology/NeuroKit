@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches
 import scipy
 
-from .ecg_rate import ecg_rate as nk_ecg_rate
+from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_power
 from ..stats import mad
@@ -213,7 +213,7 @@ def _ecg_hrv_formatinput(ecg_rate, rpeaks=None, sampling_rate=1000):
                 raise ValueError("NeuroKit error: _ecg_hrv_formatinput(): Wrong input, ",
                                  "we couldn't extract ecg_rate and rpeaks indices.")
             else:
-                ecg_rate = nk_ecg_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(df))
+                ecg_rate = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(df))
         else:
             ecg_rate = df[cols[0]].values
 

@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from .signal_formatpeaks import _signal_formatpeaks_sanitize
-from .signal_rate import _signal_period
+from .signal_period import signal_period
 from ..stats import standardize
 
 

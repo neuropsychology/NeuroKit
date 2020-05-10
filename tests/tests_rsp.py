@@ -3,7 +3,7 @@ import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt
 
-import biosppy
+# import biosppy
 
 def test_rsp_simulate():
     rsp1 = nk.rsp_simulate(duration=20, length=3000, random_state=42)
@@ -55,16 +55,16 @@ def test_rsp_clean():
     assert np.sum(fft_raw[freqs > .35]) > np.sum(fft_biosppy[freqs > .35])
     assert np.sum(fft_raw[freqs < .1]) > np.sum(fft_biosppy[freqs < .1])
 
-    # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py#L62)
-    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
-    original, _, _ = biosppy.tools.filter_signal(signal=rsp,
-                                                 ftype='butter',
-                                                 band='bandpass',
-                                                 order=2,
-                                                 frequency=[0.1, 0.35],
-                                                 sampling_rate=sampling_rate)
-    original = nk.signal_detrend(original, order=0)
-    assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
+    # # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py#L62)
+    # rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
+    # original, _, _ = biosppy.tools.filter_signal(signal=rsp,
+    #                                              ftype='butter',
+    #                                              band='bandpass',
+    #                                              order=2,
+    #                                              frequency=[0.1, 0.35],
+    #                                              sampling_rate=sampling_rate)
+    # original = nk.signal_detrend(original, order=0)
+    # assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
 
 
 def test_rsp_peaks():
@@ -94,13 +94,13 @@ def test_rsp_rate():
 
     # Test with dictionary.
     test_length = 30
-    rate = nk.rsp_rate(peaks=info, sampling_rate=1000,
-                       desired_length=test_length)
+    rate = nk.signal_rate(peaks=info, sampling_rate=1000,
+                          desired_length=test_length)
     assert rate.shape == (test_length, )
     assert np.abs(rate.mean() - 15) < 0.2
 
     # Test with DataFrame.
-    rate = nk.rsp_rate(signals, sampling_rate=1000)
+    rate = nk.signal_rate(signals, sampling_rate=1000)
     assert rate.shape == (signals.shape[0], )
     assert np.abs(rate.mean() - 15) < 0.2
 
@@ -197,11 +197,11 @@ def test_rsp_rrv():
 
     cleaned90 = nk.rsp_clean(rsp90, sampling_rate=1000)
     _, peaks90 = nk.rsp_peaks(cleaned90)
-    rsp_rate90 = nk.rsp_rate(peaks90, desired_length=len(rsp90))
+    rsp_rate90 = nk.signal_rate(peaks90, desired_length=len(rsp90))
 
     cleaned110 = nk.rsp_clean(rsp110, sampling_rate=1000)
     _, peaks110 = nk.rsp_peaks(cleaned110)
-    rsp_rate110 = nk.rsp_rate(peaks110, desired_length=len(rsp110))
+    rsp_rate110 = nk.signal_rate(peaks110, desired_length=len(rsp110))
 
     rsp90_rrv = nk.rsp_rrv(rsp_rate90, peaks90)
     rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110)
