@@ -6,10 +6,13 @@ import matplotlib.pyplot as plt
 from .embedding import embedding
 from ..misc import expspace
 
+
 def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     """Correlation Dimension
 
     Python implementation of the Correlation Dimension D2 of a signal.
+
+    This function can be called either via ``fractal_correlation()`` or ``complexity_d2()``.
 
     Parameters
     ----------
