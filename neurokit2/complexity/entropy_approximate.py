@@ -6,7 +6,7 @@ from .utils import _phi, _get_r
 
 
 
-def entropy_approximate(signal, delay=1, dimension=2, r="default", **kwargs):
+def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
     """Approximate entropy (ApEn)
 
     Python implementations of the approximate entropy (ApEn). Approximate entropy is a technique used to quantify the amount of regularity and the unpredictability of fluctuations over time-series data. The advantages of ApEn include lower computational demand (ApEn can be designed to work for small data samples (< 50 data points) and can be applied in real tim) and less sensitive to noise. However, ApEn is heavily dependent on the record length and lacks relative consistency.
@@ -49,8 +49,31 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", **kwargs):
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
     - Sabeti, M., Katebi, S., & Boostani, R. (2009). Entropy and complexity measures for EEG signal classification of schizophrenic and control participants. Artificial intelligence in medicine, 47(3), 263-274.
     """
-    r = _get_r(signal, r=r, dimension=dimension)
+    r = _get_r(signal, r=r)
 
-    # Get phi
-    phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=True, **kwargs)
-    return np.abs(np.subtract(phi[0], phi[1]))
+    if corrected is False:
+        # Get phi
+        phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=True, **kwargs)
+
+        apen = np.abs(np.subtract(phi[0], phi[1]))
+
+    if corrected is True:
+
+        embedded1, count1 = _get_embedded(signal, delay=delay, dimension=dimension, r=r, distance='chebyshev', approximate=True, **kwargs)
+        embedded2, count2 = _get_embedded(signal, delay=delay, dimension=dimension + 1, r=r, distance='chebyshev', approximate=True, **kwargs)
+
+        # Limit the number of vectors to N - (dimension + 1) * delay
+        upper_limit = len(signal) - (dimension + 1) * delay
+        correction = 1 / upper_limit
+
+        vector_similarity = np.full(upper_limit, np.nan)
+
+        for i in np.arange(upper_limit):
+            if count1.astype(int)[i] != 1 and count2.astype(int)[i] != 1:
+                vector_similarity[i] = np.log(count1[i] / count2[i])
+            else:
+                vector_similarity[i] = np.log(correction)
+
+        apen = - np.mean(vector_similarity)
+
+    return apen
