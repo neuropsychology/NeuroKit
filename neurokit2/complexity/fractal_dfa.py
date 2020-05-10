@@ -11,7 +11,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     Computes Detrended Fluctuation Analysis (DFA) or Multifractal DFA on the time series data. Detrended fluctuation analysis, much like the Hurst exponent, is used to
     find long-term statistical dependencies in time series.
 
-    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``.
+    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its multifractal variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``
 
     Parameters
     ----------
@@ -44,7 +44,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     >>>
     >>> signal = nk.signal_simulate(duration=3, noise=0.05)
     >>> nk.fractal_dfa(signal, show=True)
-    >>> nk.fractal_dfa(signal, multifractal=True, q=np.arange(-3, 4), show=True)
+    >>> nk.fractal_mfdfa(signal, q=np.arange(-3, 4), show=True)
 
 
     References

@@ -32,3 +32,5 @@ complexity_rcmse = functools.partial(entropy_multiscale, refined=True)
 complexity_fuzzyrcmse = functools.partial(entropy_multiscale, refined=True, fuzzy=True)
 
 complexity_dfa = fractal_dfa
+fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
+complexity_mfdfa = fractal_mfdfa
