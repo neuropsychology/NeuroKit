@@ -18,9 +18,15 @@ SO THAT we can easily import them. Thus, we directly copied their content in thi
 # =============================================================================
 def test_complexity_sanity():
 
-    signal = np.cos(np.linspace(start=0, stop=30, num=100))
+    signal = np.cos(np.linspace(start=0, stop=30, num=1000))
 
+    # Entropy
     assert np.allclose(nk.entropy_fuzzy(signal), nk.entropy_sample(signal, fuzzy=True), atol=0.000001)
+
+    # Fractal
+    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20])), 2.1009048365682133, atol=0.000001)
+    assert np.allclose(nk.fractal_dfa(signal), 1.957966586191164, atol=0.000001)
+    assert np.allclose(nk.fractal_dfa(signal, multifractal=True), 1.957966586191164, atol=0.000001)
 
 
 # =============================================================================
@@ -120,7 +126,7 @@ def test_complexity_vs_Python():
     assert np.allclose(nk.entropy_fuzzy(signal, dimension=2, r=0.2, delay=1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0)
 
     # DFA
-    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20])) - nolds.dfa(signal, nvals=[4, 8, 12, 20], fit_exp="poly"), 0)
+    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]), rms=False) - nolds.dfa(signal, nvals=[4, 8, 12, 20], fit_exp="poly"), 0)
 
 
 # =============================================================================
