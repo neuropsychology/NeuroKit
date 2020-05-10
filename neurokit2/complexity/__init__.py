@@ -21,7 +21,10 @@ from .complexity_simulate import complexity_simulate
 
 # Aliases
 complexity_se = entropy_shannon
+
 complexity_apen = entropy_approximate
+complexity_capen = functools.partial(entropy_approximate, corrected=True)
+
 complexity_sampen = entropy_sample
 complexity_fuzzyen = entropy_fuzzy
 
@@ -32,7 +35,9 @@ complexity_fuzzycmse = functools.partial(entropy_multiscale, composite=True, fuz
 complexity_rcmse = functools.partial(entropy_multiscale, refined=True)
 complexity_fuzzyrcmse = functools.partial(entropy_multiscale, refined=True, fuzzy=True)
 
+
 complexity_dfa = fractal_dfa
 fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
 complexity_mfdfa = fractal_mfdfa
+
 complexity_d2 = fractal_correlation

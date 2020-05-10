@@ -9,9 +9,9 @@ from .utils import _phi, _get_r, _get_embedded
 def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
     """Approximate entropy (ApEn)
 
-    Python implementations of the approximate entropy (ApEn). Approximate entropy is a technique used to quantify the amount of regularity and the unpredictability of fluctuations over time-series data. The advantages of ApEn include lower computational demand (ApEn can be designed to work for small data samples (< 50 data points) and can be applied in real tim) and less sensitive to noise. However, ApEn is heavily dependent on the record length and lacks relative consistency.
+    Python implementations of the approximate entropy (ApEn) and its corrected version (cApEn). Approximate entropy is a technique used to quantify the amount of regularity and the unpredictability of fluctuations over time-series data. The advantages of ApEn include lower computational demand (ApEn can be designed to work for small data samples (< 50 data points) and can be applied in real tim) and less sensitive to noise. However, ApEn is heavily dependent on the record length and lacks relative consistency.
 
-    This function can be called either via ``entropy_approximate()`` or ``complexity_apen()``.
+    This function can be called either via ``entropy_approximate()`` or ``complexity_apen()``, and the corrected version via ``complexity_capen()``.
 
 
     Parameters
@@ -25,7 +25,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     r : float
         Tolerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments. If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
     corrected : bool
-        Whether to output ApEn or corrected ApEn (cApEn)
+        If true, will compute corrected ApEn (cApEn), see Porta (2007).
 
     See Also
     --------
@@ -43,6 +43,8 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> nk.entropy_approximate(signal)
+    0.08837414074679684
+    >>> nk.entropy_approximate(signal, corrected=True)
     0.08837414074679684
 
 
