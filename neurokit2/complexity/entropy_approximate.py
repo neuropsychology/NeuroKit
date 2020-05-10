@@ -76,7 +76,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
         for i in np.arange(upper_limit):
             if count1.astype(int)[i] != 1 and count2.astype(int)[i] != 1:
-                vector_similarity[i] = np.log(count1[i] / count2[i])
+                vector_similarity[i] = np.log(count2[i] / count1[i])
             else:
                 vector_similarity[i] = np.log(correction)
 
