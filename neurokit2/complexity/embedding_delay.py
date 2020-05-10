@@ -28,7 +28,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     signal : list, array or Series
         The signal channel in the form of a vector of values.
     delay_max : int
-        The maximum time delay (Tau) to test.
+        The maximum time delay (Tau or lag) to test.
     method : str
         Correlation method. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993'.
     show : bool
@@ -58,7 +58,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150)[0], sampling_rate=150)
+    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150), sampling_rate=150)
     >>> nk.signal_plot(signal)
     >>>
     >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True)

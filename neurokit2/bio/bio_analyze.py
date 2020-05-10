@@ -162,12 +162,11 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
                 else:
                     rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
 
-        features = pd.concat([features, rsa], axis=1)
+        features = pd.concat([features, rsa], axis=1, sort=True)
 
     # Remove duplicate columns of Label and Condition
     if 'Label' in features.columns.values:
         features = features.loc[:, ~features.columns.duplicated()]
-        features = features.drop(columns=['Label', 'Condition']).assign(Label=features['Label'], Condition=features['Condition'])
 
     return features
 

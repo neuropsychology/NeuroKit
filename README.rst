@@ -172,8 +172,8 @@ Citation
     - **Flexibility**: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as :code:`*_clean()`, :code:`*_rate()`), offering more control and flexibility over their parameters.
 
 
-Preprocessing
----------------
+Physiological Data Preprocessing
+---------------------------------
 
 Simulate physiological signals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -299,8 +299,8 @@ Electrooculography (EOG)
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_!
 
-Analysis
-----------
+Physiological Data Analysis
+----------------------------
 
 
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
@@ -320,7 +320,7 @@ compute the following features:
   - **Peak characteristics** *(EDA)*: peak presence, amplitude, rise time, peak-time
   - **Phase characteristics** *(ECG, RSP)*: phase type (inspiration/expiration, systole/diastole), phase completion
   
-- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
+- `Event-related example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
 
 Interval-related
 ^^^^^^^^^^^^^^^^^
@@ -339,7 +339,54 @@ stress. In this case, using `bio_analyze()` will compute the following features:
   - **Rate characteristics** *(ECG, PPG, RSP)*: mean, amplitude, variability (HRV, RRV)
   - **Peak characteristics** *(EDA)*: number of peaks, mean amplitude
   
-- `Full example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
+- `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
+
+
+Miscellaneous
+----------------------------
+
+Signal Processing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- TODO
+
+Complexity (Entropy, Fractal Dimensions, ...)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Optimize time-delay embedding parameters**
+
+.. code-block:: python
+
+    # Generate signal
+    signal = nk.signal_simulate(duration=20, sampling_rate=200, noise=0.01)
+
+    # Find optimal Tau for time-delay embedding
+    optimal_delay = nk.embedding_delay(signal, show=True)
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_embedding.png
+
+- **Compute complexity features**
+
+  - **Entropy**: Sample Entropy (SampEn), ...
+  - **Fractal dimensions**: ...
+  
+.. code-block:: python
+
+    nk.entropy_sample(signal)
+
+
+Statistics
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Highest Density Interval**
+
+.. code-block:: python
+
+    x = np.random.normal(loc=0, scale=1, size=100000)
+
+    ci_min, ci_max = nk.hdi(x, ci=0.95, show=True)
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_hdi.png
 
 Popularity
 ---------------------

@@ -41,7 +41,7 @@ authornote: |
 abstract: |
    NeuroKit2 is an open-source, community-driven, and user-friendly Python package dedicated to neurophysiological signal processing (e.g., ECG, EDA, EMG, ...). Its design philosophy is centred on user-experience and accessibility to both novice and advanced users. The package provides general functions that enable data processing in a few lines of code using validated pipelines, as well as tools dedicated to specific processing steps, offering a trade-off between efficiency and fine-tuned control. NeuroKit2 aims at improving transparency and reproducibility in neurophysiological research, as well as fostering exploration and innovation.  
 keywords          : "Neurophysiology, Biosignals, Python, ECG, EDA, EMG"
-wordcount         : "2270"
+wordcount         : "2440"
 bibliography      : ["bibliography.bib"]
 floatsintext      : yes
 figsintext        : yes
@@ -86,13 +86,27 @@ matplotlib$use("Agg", force = TRUE)
 
 
 
-<!-- Research gap -->
-Neurophysiological measurements increasingly gain popularity in the study of cognition and behavior. These measurements include electroencephalography (EEG), electrocardiography (ECG), electromyography (EMG) and electrodermal activity (EDA). Their popularity is driven by theoretical motivations [e.g., the growth of embodied or affective neuroscience; @Kiverstein2015] as well as practical reasons. The latter include low costs (especially compared with other imaging techniques, such as MRI or MEG), ease of use (e.g., portability, setup speed), and the increasing availability of recording devices [e.g., wearables; @yuehong2016internet]. Moreover, the extraction of meaningful information from neurophysiological signals is facilitated by current advances in signal processing algorithms [@clifton2012machine; @roy2019deep]. 
+<!-- Research gap 1 -->
+Neurophysiological measurements increasingly gain popularity in the study of cognition and behavior. 
+These measurements include electroencephalography (EEG), electrocardiography (ECG), electromyography (EMG) and electrodermal activity (EDA).
+Their popularity is driven by theoretical motivations [e.g., the growth of embodied or affective neuroscience; @Kiverstein2015] as well as practical reasons. 
+The latter include low costs (especially compared with other imaging techniques, such as MRI or MEG), ease of use (e.g., portability, setup speed), and the increasing availability of recording devices [e.g., wearables; @yuehong2016internet]. 
+Moreover, the extraction of meaningful information from neurophysiological signals is facilitated by current advances in signal processing algorithms [@clifton2012machine; @roy2019deep].
+Unfortunately, these algorithms are mostly inaccessible to researchers without experience in programming and signal processing. 
+Moreover, many software tools for neurophysiological analyses are limited to one type of signal (for instance, focused on ECG). 
+This makes it inconvenient for researchers who might have to learn and concurrently rely on different software to process multimodal data.
 
-Unfortunately, these algorithms are mostly inaccessible to researchers without experience in programming and signal processing. Moreover, many software tools for neurophysiological analyses are limited to one type of signal (for instance, focused on ECG). This makes it inconvenient for researchers who might have to learn and concurrently rely on different software to process multimodal data.
+<!-- Research gap 2 -->
+Another important issue existing in psychology and neuroscience has been coined as the "reproducibility crisis" [@topalidou2015long; @open2015estimating; @milkowski2018replicability; @maizey2019barriers], and has lead to a profound questioning and reassessment from different actors involved (researchers, publishers, fund agencies, ...).
+One of the main identified contributing factor is the actual opacity of data processing, where analysis pipelines are not described in enough details to ensure a full and exact reproduction. 
+One of the suggested response to that issue has been to provide, alongside the study, the analysis script, which in turns opens new challenges.
+Indeed, these scripts must be shareable (not always feasible with closed-source and proprietary software or programming languages), accessible (enticing documented and well-organized scripts) and reproducible (which is inherently difficult for many software relying on a graphical user interface - GUI - in which the manual point-and-click sequence is hard to automate).
 
 <!-- Response to gap -->
-*NeuroKit2* addresses these challenges by offering a free, user-friendly, and comprehensive solution for neurophysiological data processing. It is an open-source Python package, developed by a multi-disciplinary team that actively invites new collaborators. It aims at being accessible, well-documented, well-tested, cutting-edge, flexible and efficient. Historically, *NeuroKit2* is the re-forged successor *NeuroKit1*, taking on its most successful features and design choices, and re-implementing them in a professional and well-thought way.
+*NeuroKit2* addresses these challenges by offering a free, user-friendly, and comprehensive solution for neurophysiological data processing.
+It is an open-source Python package, developed by a multi-disciplinary team that actively invites new collaborators. 
+It aims at being accessible, well-documented, well-tested, cutting-edge, flexible and efficient, allowing users to select from a wide range of validated analysis pipelines as well as creating their own. 
+Historically, *NeuroKit2* is the re-forged successor *NeuroKit1* [@neurokit1], taking on its most successful features and design choices, and re-implementing them in a professional and well-thought way.
 
 <!-- Accessibility and documentation -->
 The package is implemented in Python 3 [@python3], which means that *NeuroKit2's* users benefit from an large amount of learning resources and a vibrant community. The package depends on relatively few, well established and robust packages from the Python data analysis ecosystem [@scipy] such as *NumPy*, *pandas*, *SciPy*, *scikit-learn* and *MatplotLib* (with an additional system of optional dependencies), making *NeuroKit2* itself a viable dependency in other software.

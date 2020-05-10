@@ -52,7 +52,7 @@ def _signal_from_indices(indices, desired_length=None, value=1):
 def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
     # Attempt to retrieve column.
     if isinstance(peaks, tuple):
-        if isinstance(peaks[0], dict):
+        if isinstance(peaks[0], dict) or isinstance(peaks[0], pd.DataFrame):
             peaks = peaks[0]
         elif isinstance(peaks[1], dict):
             peaks = peaks[1]

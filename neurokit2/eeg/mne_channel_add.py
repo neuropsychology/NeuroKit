@@ -39,7 +39,7 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     >>>
     >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg")
     """
-    # Try loading bioread
+    # Try loading mne
     try:
         import mne
     except ImportError:
