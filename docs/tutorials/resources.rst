@@ -2,7 +2,7 @@ Additional Resources
 ======================
 
 .. hint::
-   Would like to add something? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_).
+   Would like to add something? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
 
 
 General Neuroimaging

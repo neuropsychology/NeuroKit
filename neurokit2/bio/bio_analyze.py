@@ -2,11 +2,11 @@
 import pandas as pd
 import numpy as np
 
-from ..ecg import ecg_analyze
-from ..rsp import rsp_analyze
-from ..eda import eda_analyze
-from ..emg import emg_analyze
-from ..ecg import ecg_rsa
+from ..ecg.ecg_analyze import ecg_analyze
+from ..rsp.rsp_analyze import rsp_analyze
+from ..eda.eda_analyze import eda_analyze
+from ..emg.emg_analyze import emg_analyze
+from ..ecg.ecg_rsa import ecg_rsa
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto"):
@@ -106,26 +106,26 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     if len(ecg_cols) != 0:
         ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate,
                                    method=method)
-        features = pd.concat([features, ecg_analyzed], axis=1)
+        features = pd.concat([features, ecg_analyzed], axis=1, sort=False)
 
     # RSP
     rsp_data = data.copy()
     if len(rsp_cols) != 0:
         rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate,
                                    method=method)
-        features = pd.concat([features, rsp_analyzed], axis=1)
+        features = pd.concat([features, rsp_analyzed], axis=1, sort=False)
 
     # EDA
     if len(eda_cols) != 0:
         eda_analyzed = eda_analyze(data, sampling_rate=sampling_rate,
                                    method=method)
-        features = pd.concat([features, eda_analyzed], axis=1)
+        features = pd.concat([features, eda_analyzed], axis=1, sort=False)
 
     # EMG
     if len(emg_cols) != 0:
         emg_analyzed = emg_analyze(data, sampling_rate=sampling_rate,
                                    method=method)
-        features = pd.concat([features, emg_analyzed], axis=1)
+        features = pd.concat([features, emg_analyzed], axis=1, sort=False)
 
     # RSA
     if len(ecg_rate_col + rsp_phase_col) >= 3:
@@ -162,7 +162,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
                 else:
                     rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
 
-        features = pd.concat([features, rsa], axis=1, sort=True)
+        features = pd.concat([features, rsa], axis=1, sort=False)
 
     # Remove duplicate columns of Label and Condition
     if 'Label' in features.columns.values:
