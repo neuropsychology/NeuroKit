@@ -82,33 +82,6 @@ def test_ecg_peaks():
                        atol=1)
 
 
-def test_ecg_rate():
-
-    sampling_rate = 1000
-    noise = 0.15
-
-    ecg = nk.ecg_simulate(duration=120, sampling_rate=sampling_rate,
-                          noise=noise, random_state=42)
-    ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
-                                  method="neurokit")
-
-    signals, info = nk.ecg_peaks(ecg_cleaned_nk,
-                                 method="neurokit")
-
-    # Test without desired length.
-    rate = nk.signal_rate(peaks=info, sampling_rate=sampling_rate)
-
-    assert rate.shape == (info["ECG_R_Peaks"].size, )
-    assert np.allclose(rate.mean(), 70, atol=2)
-
-    # Test with desired length.
-    test_length = 1200
-    rate = nk.signal_rate(peaks=info, sampling_rate=sampling_rate,
-                          desired_length=test_length)
-
-    assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 70, atol=2)
-
 def test_ecg_process():
 
     sampling_rate = 1000

@@ -158,10 +158,10 @@ def test_signal_rate():
 
     # Test with array.
     signal = nk.signal_simulate(duration=10, sampling_rate=1000,
-                             frequency=1)
+                                frequency=1)
     info = nk.signal_findpeaks(signal)
     rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000,
-                       desired_length=None)
+                          desired_length=None)
     assert rate.shape[0] == len(info["Peaks"])
 
     # Test with dictionary.produced from signal_findpeaks.
@@ -169,7 +169,7 @@ def test_signal_rate():
 
     # Test with DataFrame.
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                       respiratory_rate=15, method="sinuosoidal", noise=0)
+                          respiratory_rate=15, method="sinuosoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_peaks(rsp_cleaned)
     rate = nk.signal_rate(signals, sampling_rate=1000)
@@ -178,7 +178,7 @@ def test_signal_rate():
     # Test with dictionary.produced from rsp_findpeaks.
     test_length = 30
     rate = nk.signal_rate(info, sampling_rate=1000,
-                       desired_length=test_length)
+                          desired_length=test_length)
     assert rate.shape == (test_length, )
 
 
