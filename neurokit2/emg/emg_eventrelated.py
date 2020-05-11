@@ -58,6 +58,7 @@ def emg_eventrelated(epochs, silent=False):
     # Extract features and build dataframe
     data = {}  # Initialize an empty dict
     for i in epochs.keys():
+
         data[i] = {}  # Initialize an empty dict for the current epoch
 
         # Activation following event

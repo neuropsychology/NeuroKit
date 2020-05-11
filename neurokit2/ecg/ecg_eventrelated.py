@@ -82,19 +82,6 @@ def ecg_eventrelated(epochs, silent=False):
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="ecg", silent=silent)
 
-    if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: ecg_eventrelated():"
-                         "Please specify an input"
-                         "that is of the correct form i.e., either a dictionary"
-                         "or dataframe as returned by `epochs_create()`.")
-
-    # Warning for long epochs
-    for i in epochs:
-        if (np.max(epochs[i].index.values) > 10):
-            print("Neurokit warning: ecg_eventrelated():"
-                  "The duration of your epochs seems quite long. You might want to use"
-                  "ecg_intervalrelated().")
-
     # Extract features and build dataframe
     data = {}  # Initialize an empty dict
     for i in epochs.keys():

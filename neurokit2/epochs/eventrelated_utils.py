@@ -33,6 +33,10 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
 def _eventrelated_addinfo(epoch, output={}):
 
     # Add label
+    if "Index" in epoch.columns:
+        output["Event_Onset"] = epoch.loc[np.min(np.abs(epoch.index))]["Index"]
+
+    # Add label
     if "Label" in epoch.columns:
         if len(set(epoch["Label"])) == 1:
             output["Label"] = epoch["Label"].values[0]
@@ -56,11 +60,16 @@ def _eventrelated_sanitizeoutput(data):
 
     df = pd.DataFrame.from_dict(data, orient="index")  # Convert to a dataframe
 
-    # Move columns to front
+
     colnames = df.columns.values
-    if len([i for i in colnames if "Condition" in i]) == 1:
+    if "Event_Onset" in colnames:
+        df = df.sort_values("Event_Onset")
+        df = df[['Event_Onset'] + [col for col in df.columns if col != 'Event_Onset']]
+
+    # Move columns to front
+    if 'Condition' in colnames:
         df = df[['Condition'] + [col for col in df.columns if col != 'Condition']]
-    if len([i for i in colnames if "Label" in i]) == 1:
+    if 'Label' in colnames:
         df = df[['Label'] + [col for col in df.columns if col != 'Label']]
 
     return df

@@ -80,13 +80,14 @@ def eda_eventrelated(epochs, silent=False):
     # Extract features and build dataframe
     data = {}  # Initialize an empty dict
     for i in epochs.keys():
+
         data[i] = {}  # Initialize an empty dict for the current epoch
 
         # Maximum phasic amplitude
         data[i] = _eda_eventrelated_eda(epochs[i], data[i])
 
         # Detect activity following the events
-        if any(epochs[i]["SCR_Peaks"][epochs[i].index > 0] == 1) and any(epochs[i]["SCR_Onsets"][epochs[i].index > 0] == 1):
+        if np.any(epochs[i]["SCR_Peaks"][epochs[i].index > 0] == 1) and np.any(epochs[i]["SCR_Onsets"][epochs[i].index > 0] == 1):
             data[i]["EDA_SCR"] = 1
         else:
             data[i]["EDA_SCR"] = 0
