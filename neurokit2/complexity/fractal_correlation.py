@@ -47,6 +47,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
 
     References
     -----------
+    - Bolea, J., Laguna, P., Remartínez, J. M., Rovira, E., Navarro, A., & Bailón, R. (2014). Methodological framework for estimating the correlation dimension in HRV signals. Computational and mathematical methods in medicine, 2014.
     - Boon, M. Y., Henry, B. I., Suttle, C. M., & Dain, S. J. (2008). The correlation dimension: A useful objective measure of the transient visual evoked potential?. Journal of vision, 8(1), 6-6.
     - `nolds <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>`_
     - `Corr_Dim <https://github.com/jcvasquezc/Corr_Dim>`_

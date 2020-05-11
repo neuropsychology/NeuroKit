@@ -2,7 +2,7 @@ What software for physiological signal processing
 ==================================================
 
 .. hint::
-   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_).
+   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
    
    
 If you're here, it's probably that you have (or plan to have) some **physiological data** (*aka* biosignals, e.g., ECG for cardiac activity, RSP for respiration, EDA for electrodermal activity, EMG for muscle activity etc.), that you plan to **process and analyze these signals** and that **you don't know where to start**. Whether you are an undergrad, a master or PhD student, a postdoc or a full professor, you're at the right place.
