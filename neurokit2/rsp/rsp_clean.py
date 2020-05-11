@@ -34,7 +34,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     See Also
     --------
-    rsp_findpeaks, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
+    rsp_findpeaks, signal_rate, rsp_amplitude, rsp_process, rsp_plot
 
     Examples
     --------

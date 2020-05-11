@@ -18,7 +18,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     Parameters
     ----------
     rsp_rate : array
-        Array containing the respiratory rate, produced by `rsp_rate()`.
+        Array containing the respiratory rate, produced by `signal_rate()`.
     peaks : dict
         The samples at which the inhalation peaks occur.
         Dict returned by `rsp_peaks()`. Defaults to None.
@@ -53,7 +53,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
 
     See Also
     --------
-    rsp_rate, rsp_peaks, signal_power, entropy_sample, entropy_approximate
+    signal_rate, rsp_peaks, signal_power, entropy_sample, entropy_approximate
 
     Examples
     --------

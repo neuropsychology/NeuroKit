@@ -37,7 +37,8 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018",
 
     See Also
     --------
-    rsp_clean, rsp_fixpeaks, rsp_peaks, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
+    rsp_clean, rsp_fixpeaks, rsp_peaks, signal_rate, rsp_amplitude,
+    rsp_process, rsp_plot
 
     Examples
     --------
