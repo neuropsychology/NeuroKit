@@ -49,6 +49,7 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
         binary = _signal_binarize(np.array(signal), method=method, threshold=threshold)
         signal = list(binary)
     elif isinstance(signal, pd.Series):
+        signal = signal.copy()  # Avoid annoying pandas warning
         binary = _signal_binarize(signal.values, method=method, threshold=threshold)
         signal[:] = binary
     else:
