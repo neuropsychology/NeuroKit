@@ -2,11 +2,11 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs.epochs_to_df import _df_to_epochs
+from ..bio.analyze_utils import _eventrelated_sanitycheck
 from ..stats import fit_r2
 
 
-def ecg_eventrelated(epochs):
+def ecg_eventrelated(epochs, silent=False):
     """Performs event-related ECG analysis on epochs.
 
     Parameters
@@ -15,6 +15,8 @@ def ecg_eventrelated(epochs):
         A dict containing one DataFrame per event/trial,
         usually obtained via `epochs_create()`, or a DataFrame
         containing all epochs, usually obtained via `epochs_to_df()`.
+    silent : bool
+        If True, silence possible warnings.
 
     Returns
     -------
@@ -76,8 +78,7 @@ def ecg_eventrelated(epochs):
     >>> nk.ecg_eventrelated(epochs)
     """
     # Sanity checks
-    if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
+    epochs = _eventrelated_sanitycheck(epochs, what="ecg", silent=silent)
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: ecg_eventrelated():"
@@ -89,7 +90,7 @@ def ecg_eventrelated(epochs):
     for i in epochs:
         if (np.max(epochs[i].index.values) > 10):
             print("Neurokit warning: ecg_eventrelated():"
-                  "Epoch length is too long. You might want to use"
+                  "The duration of your epochs seems quite long. You might want to use"
                   "ecg_intervalrelated().")
 
     # Extract features and build dataframe

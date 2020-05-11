@@ -2,11 +2,11 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs.epochs_to_df import _df_to_epochs
+from ..bio.analyze_utils import _eventrelated_sanitycheck
 from ..ecg.ecg_eventrelated import _eventrelated_addinfo
 
 
-def eda_eventrelated(epochs):
+def eda_eventrelated(epochs, silent=False):
     """Performs event-related EDA analysis on epochs.
 
     Parameters
@@ -15,6 +15,8 @@ def eda_eventrelated(epochs):
         A dict containing one DataFrame per event/trial,
         usually obtained via `epochs_create()`, or a DataFrame
         containing all epochs, usually obtained via `epochs_to_df()`.
+    silent : bool
+        If True, silence possible warnings.
 
     Returns
     -------
@@ -72,20 +74,7 @@ def eda_eventrelated(epochs):
     >>> nk.eda_eventrelated(epochs)
     """
     # Sanity checks
-    if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
-
-    if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: eda_eventrelated(): Please specify an input"
-                         "that is of the correct form i.e., either a dictionary"
-                         "or dataframe.")
-
-    # Warning for epoch length (can be adjusted)
-    for i in epochs:
-        if (np.max(epochs[i].index.values) > 10):
-            print("Neurokit warning: eda_eventrelated():"
-                  "Epoch length is too long. You might want to use"
-                  "eda_intervalrelated().")
+    epochs = _eventrelated_sanitycheck(epochs, what="eda", silent=silent)
 
     # Extract features and build dataframe
     eda_df = {}  # Initialize an empty dict

@@ -2,11 +2,11 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs.epochs_to_df import _df_to_epochs
+from ..bio.analyze_utils import _eventrelated_sanitycheck
 from ..ecg.ecg_eventrelated import _eventrelated_addinfo
 
 
-def rsp_eventrelated(epochs):
+def rsp_eventrelated(epochs, silent=False):
     """Performs event-related RSP analysis on epochs.
 
     Parameters
@@ -15,6 +15,8 @@ def rsp_eventrelated(epochs):
         A dict containing one DataFrame per event/trial,
         usually obtained via `epochs_create()`, or a DataFrame
         containing all epochs, usually obtained via `epochs_to_df()`.
+    silent : bool
+        If True, silence possible warnings.
 
     Returns
     -------
@@ -73,21 +75,7 @@ def rsp_eventrelated(epochs):
     >>> nk.rsp_eventrelated(epochs)
     """
     # Sanity checks
-    if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
-
-    if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: rsp_eventrelated():"
-                         "Please specify an input"
-                         "that is of the correct form i.e., either a dictionary"
-                         "or dataframe.")
-
-    # Warning for long epochs
-    for i in epochs:
-        if (np.max(epochs[i].index.values) > 10):
-            print("Neurokit warning: rsp_eventrelated():"
-                  "Epoch length is too long. You might want to use"
-                  "rsp_intervalrelated().")
+    epochs = _eventrelated_sanitycheck(epochs, what="rsp", silent=silent)
 
     # Extract features and build dataframe
     rsp_df = {}  # Initialize an empty dict
