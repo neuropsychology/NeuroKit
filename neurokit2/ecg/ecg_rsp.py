@@ -1,6 +1,3 @@
-import pandas as pd
-import numpy as np
-
 from ..signal import signal_filter
 
 
@@ -33,7 +30,7 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     >>> # Get heart rate
     >>> data = nk.data("bio_eventrelated_100hz")
     >>> rpeaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
-    >>> ecg_rate = nk.ecg_rate(rpeaks, sampling_rate=100)
+    >>> ecg_rate = nk.signal_rate(rpeaks, sampling_rate=100)
     >>>
     >>>
     >>> # Get ECG Derived Respiration (EDR)

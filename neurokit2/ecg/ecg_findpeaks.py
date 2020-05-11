@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import scipy.signal
 
 from ..signal import signal_smooth
-from ..signal import signal_formatpeaks
 from ..signal import signal_zerocrossings
 
 
@@ -38,7 +37,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     See Also
     --------
-    ecg_clean, ecg_fixpeaks, ecg_peaks, ecg_rate, ecg_process, ecg_plot
+    ecg_clean, signal_fixpeaks, ecg_peaks, signal_rate, ecg_process, ecg_plot
 
     Examples
     --------

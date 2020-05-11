@@ -63,7 +63,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     See Also
     --------
-    ecg_clean, ecg_findpeaks, ecg_fixpeaks, ecg_rate, ecg_plot
+    ecg_clean, ecg_findpeaks, ecg_plot, signal_rate, signal_fixpeaks
 
     Examples
     --------

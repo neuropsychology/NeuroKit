@@ -70,7 +70,7 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
 
     See Also
     --------
-    ecg_rate, ecg_peak, signal_power, entropy_sample
+    ecg_peak, signal_power, signal_rate, entropy_sample
 
     Examples
     --------

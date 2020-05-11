@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
 
 from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
