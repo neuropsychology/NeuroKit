@@ -20,11 +20,11 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
 
     # Warning for long epochs
     if silent is False:
-        length_mean = np.mean([np.max(epochs[i].index) - np.min(epochs[i].index)  for i in epochs.keys()])
+        length_mean = np.mean([np.max(epochs[i].index) - np.min(epochs[i].index) for i in epochs.keys()])
         if length_mean > 10:
             print("Neurokit warning: " + str(what) + "_eventrelated():"
                   "The duration of your epochs seems quite long. You might want"
-                   " to use " + str(what) + "_intervalrelated().")
+                  " to use " + str(what) + "_intervalrelated().")
     return epochs
 
 
