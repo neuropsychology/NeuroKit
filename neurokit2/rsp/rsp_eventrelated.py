@@ -2,8 +2,9 @@
 import pandas as pd
 import numpy as np
 
-from ..bio.analyze_utils import _eventrelated_sanitycheck
-from ..ecg.ecg_eventrelated import _eventrelated_addinfo
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
+from ..epochs.eventrelated_utils import _eventrelated_addinfo
 
 
 def rsp_eventrelated(epochs, silent=False):
@@ -75,39 +76,29 @@ def rsp_eventrelated(epochs, silent=False):
     >>> nk.rsp_eventrelated(epochs)
     """
     # Sanity checks
-    epochs = _eventrelated_sanitycheck(epochs, what="rsp", silent=silent)
+    epochs = _eventrelated_sanitizeinput(epochs, what="rsp", silent=silent)
 
     # Extract features and build dataframe
-    rsp_df = {}  # Initialize an empty dict
-    for epoch_index in epochs:
+    data = {}  # Initialize an empty dict
+    for i in epochs.keys():
 
-        rsp_df[epoch_index] = {}  # Initialize empty container
+        data[i] = {}  # Initialize empty container
 
         # Rate
-        rsp_df[epoch_index] = _rsp_eventrelated_rate(epochs[epoch_index],
-                                                     rsp_df[epoch_index])
+        data[i] = _rsp_eventrelated_rate(epochs[i], data[i])
 
         # Amplitude
-        rsp_df[epoch_index] = _rsp_eventrelated_amplitude(epochs[epoch_index],
-                                                          rsp_df[epoch_index])
+        data[i] = _rsp_eventrelated_amplitude(epochs[i], data[i])
 
         # Inspiration
-        rsp_df[epoch_index] = _rsp_eventrelated_inspiration(epochs[epoch_index],
-                                                            rsp_df[epoch_index])
+        data[i] = _rsp_eventrelated_inspiration(epochs[i], data[i])
 
         # Fill with more info
-        rsp_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index], rsp_df[epoch_index])
+        data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    rsp_df = pd.DataFrame.from_dict(rsp_df, orient="index")  # Convert to a dataframe
+    df = _eventrelated_sanitizeoutput(data)
 
-    # Move columns to front
-    colnames = rsp_df.columns.values
-    if len([i for i in colnames if "Condition" in i]) == 1:
-        rsp_df = rsp_df[['Condition'] + [col for col in rsp_df.columns if col != 'Condition']]
-    if len([i for i in colnames if "Label" in i]) == 1:
-        rsp_df = rsp_df[['Label'] + [col for col in rsp_df.columns if col != 'Label']]
-
-    return rsp_df
+    return df
 
 
 # =============================================================================

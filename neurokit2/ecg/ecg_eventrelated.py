@@ -2,7 +2,9 @@
 import pandas as pd
 import numpy as np
 
-from ..bio.analyze_utils import _eventrelated_sanitycheck
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
+from ..epochs.eventrelated_utils import _eventrelated_addinfo
 from ..stats import fit_r2
 
 
@@ -78,7 +80,7 @@ def ecg_eventrelated(epochs, silent=False):
     >>> nk.ecg_eventrelated(epochs)
     """
     # Sanity checks
-    epochs = _eventrelated_sanitycheck(epochs, what="ecg", silent=silent)
+    epochs = _eventrelated_sanitizeinput(epochs, what="ecg", silent=silent)
 
     if not isinstance(epochs, dict):
         raise ValueError("NeuroKit error: ecg_eventrelated():"
@@ -94,66 +96,31 @@ def ecg_eventrelated(epochs, silent=False):
                   "ecg_intervalrelated().")
 
     # Extract features and build dataframe
-    ecg_df = {}  # Initialize an empty dict
-    for epoch_index in epochs:
+    data = {}  # Initialize an empty dict
+    for i in epochs.keys():
 
-        ecg_df[epoch_index] = {}  # Initialize empty container
+        data[i] = {}  # Initialize empty container
 
         # Rate
-        ecg_df[epoch_index] = _ecg_eventrelated_rate(epochs[epoch_index],
-                                                     ecg_df[epoch_index])
+        data[i] = _ecg_eventrelated_rate(epochs[i], data[i])
 
         # Cardiac Phase
-        ecg_df[epoch_index] = _ecg_eventrelated_phase(epochs[epoch_index],
-                                                      ecg_df[epoch_index])
+        data[i] = _ecg_eventrelated_phase(epochs[i], data[i])
 
         # Quality
-        ecg_df[epoch_index] = _ecg_eventrelated_quality(epochs[epoch_index],
-                                                        ecg_df[epoch_index])
+        data[i] = _ecg_eventrelated_quality(epochs[i], data[i])
 
         # Fill with more info
-        ecg_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
-                                                    ecg_df[epoch_index])
+        data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    ecg_df = pd.DataFrame.from_dict(ecg_df, orient="index")  # Convert to a dataframe
+    df = _eventrelated_sanitizeoutput(data)
 
-    # Move columns to front
-    colnames = ecg_df.columns.values
-    if len([i for i in colnames if "Condition" in i]) == 1:
-        ecg_df = ecg_df[['Condition'] + [col for col in ecg_df.columns if col != 'Condition']]
-    if len([i for i in colnames if "Label" in i]) == 1:
-        ecg_df = ecg_df[['Label'] + [col for col in ecg_df.columns if col != 'Label']]
-
-    return ecg_df
+    return df
 
 
 # =============================================================================
 # Internals
 # =============================================================================
-
-
-
-def _eventrelated_addinfo(epoch, output={}):
-
-    # Add label
-    if "Label" in epoch.columns:
-        if len(set(epoch["Label"])) == 1:
-            output["Label"] = epoch["Label"].values[0]
-
-    # Add condition
-    if "Condition" in epoch.columns:
-        if len(set(epoch["Condition"])) == 1:
-            output["Condition"] = epoch["Condition"].values[0]
-
-    # Add participant_id
-    if "Participant" in epoch.columns:
-        if len(set(epoch["Participant"])) == 1:
-            output["Participant"] = epoch["Participant"].values[0]
-    return output
-
-
-
-
 
 
 def _ecg_eventrelated_rate(epoch, output={}):

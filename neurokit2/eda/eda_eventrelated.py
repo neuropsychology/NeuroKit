@@ -2,8 +2,9 @@
 import pandas as pd
 import numpy as np
 
-from ..bio.analyze_utils import _eventrelated_sanitycheck
-from ..ecg.ecg_eventrelated import _eventrelated_addinfo
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
+from ..epochs.eventrelated_utils import _eventrelated_addinfo
 
 
 def eda_eventrelated(epochs, silent=False):
@@ -74,46 +75,37 @@ def eda_eventrelated(epochs, silent=False):
     >>> nk.eda_eventrelated(epochs)
     """
     # Sanity checks
-    epochs = _eventrelated_sanitycheck(epochs, what="eda", silent=silent)
+    epochs = _eventrelated_sanitizeinput(epochs, what="eda", silent=silent)
 
     # Extract features and build dataframe
-    eda_df = {}  # Initialize an empty dict
-    for epoch_index in epochs:
-        eda_df[epoch_index] = {}  # Initialize an empty dict for the current epoch
-        epoch = epochs[epoch_index]
+    data = {}  # Initialize an empty dict
+    for i in epochs.keys():
+        data[i] = {}  # Initialize an empty dict for the current epoch
 
         # Maximum phasic amplitude
-        eda_df[epoch_index] = _eda_eventrelated_eda(epochs[epoch_index], eda_df[epoch_index])
+        data[i] = _eda_eventrelated_eda(epochs[i], data[i])
 
         # Detect activity following the events
-        if any(epoch["SCR_Peaks"][epoch.index > 0] == 1) and any(epoch["SCR_Onsets"][epoch.index > 0] == 1):
-            eda_df[epoch_index]["EDA_SCR"] = 1
+        if any(epochs[i]["SCR_Peaks"][epochs[i].index > 0] == 1) and any(epochs[i]["SCR_Onsets"][epochs[i].index > 0] == 1):
+            data[i]["EDA_SCR"] = 1
         else:
-            eda_df[epoch_index]["EDA_SCR"] = 0
+            data[i]["EDA_SCR"] = 0
 
         # Analyze based on if activations are present
-        if (eda_df[epoch_index]["EDA_SCR"] != 0):
-            eda_df[epoch_index] = _eda_eventrelated_scr(epochs[epoch_index],
-                                                        eda_df[epoch_index])
+        if (data[i]["EDA_SCR"] != 0):
+            data[i] = _eda_eventrelated_scr(epochs[i], data[i])
         else:
-            eda_df[epoch_index]["SCR_Peak_Amplitude"] = np.nan
-            eda_df[epoch_index]["SCR_Peak_Amplitude_Time"] = np.nan
-            eda_df[epoch_index]["SCR_RiseTime"] = np.nan
-            eda_df[epoch_index]["SCR_RecoveryTime"] = np.nan
+            data[i]["SCR_Peak_Amplitude"] = np.nan
+            data[i]["SCR_Peak_Amplitude_Time"] = np.nan
+            data[i]["SCR_RiseTime"] = np.nan
+            data[i]["SCR_RecoveryTime"] = np.nan
 
         # Fill with more info
-        eda_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index], eda_df[epoch_index])
+        data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    eda_df = pd.DataFrame.from_dict(eda_df, orient="index")  # Convert to a dataframe
+    df = _eventrelated_sanitizeoutput(data)
 
-    # Move columns to front
-    colnames = eda_df.columns.values
-    if len([i for i in colnames if "Condition" in i]) == 1:
-        eda_df = eda_df[['Condition'] + [col for col in eda_df.columns if col != 'Condition']]
-    if len([i for i in colnames if "Label" in i]) == 1:
-        eda_df = eda_df[['Label'] + [col for col in eda_df.columns if col != 'Label']]
-
-    return eda_df
+    return df
 
 
 # =============================================================================

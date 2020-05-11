@@ -2,11 +2,11 @@
 import pandas as pd
 import numpy as np
 
-from ..ecg import ecg_analyze
-from ..rsp import rsp_analyze
-from ..eda import eda_analyze
-from ..emg import emg_analyze
-from ..ecg import ecg_rsa
+from ..ecg.ecg_analyze import ecg_analyze
+from ..rsp.rsp_analyze import rsp_analyze
+from ..eda.eda_analyze import eda_analyze
+from ..emg.emg_analyze import emg_analyze
+from ..ecg.ecg_rsa import ecg_rsa
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto"):
