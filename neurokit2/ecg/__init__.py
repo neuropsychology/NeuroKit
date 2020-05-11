@@ -9,7 +9,6 @@ from .ecg_process import ecg_process
 from .ecg_plot import ecg_plot
 from .ecg_delineate import ecg_delineate
 from .ecg_rsp import ecg_rsp
-from .ecg_hrv import ecg_hrv
 from .ecg_phase import ecg_phase
 from .ecg_rsa import ecg_rsa
 from .ecg_quality import ecg_quality

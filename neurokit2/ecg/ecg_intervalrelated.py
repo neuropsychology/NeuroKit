@@ -2,8 +2,7 @@
 import pandas as pd
 import numpy as np
 
-
-from .ecg_hrv import ecg_hrv
+from .hrv import hrv_summary
 
 
 def ecg_intervalrelated(data, sampling_rate=1000):
@@ -28,7 +27,7 @@ def ecg_intervalrelated(data, sampling_rate=1000):
         features consist of the following:
         - *"ECG_Rate_Mean"*: the mean heart rate.
         - *"ECG_HRV"*: the different heart rate variability metrices.
-        See `ecg_hrv()` docstrings for details.
+        See `hrv_summary()` docstrings for details.
 
     See Also
     --------
@@ -107,7 +106,7 @@ def _ecg_intervalrelated_formatinput(data, output={}):
 
 def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
 
-    hrv = ecg_hrv(data, sampling_rate=sampling_rate)
+    hrv = hrv_summary(data, sampling_rate=sampling_rate)
     for column in hrv.columns:
         output[column] = float(hrv[column])
 

@@ -1,34 +1,34 @@
+# -*- coding: utf-8 -*-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches
-import scipy
 
+from . import hrv_time, hrv_frequency, hrv_nonlinear
 from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from ..signal import signal_power
-from ..stats import mad
-from ..complexity import entropy_sample
 
 
-def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
+def hrv_summary(heart_period, peaks=None, sampling_rate=1000, show=False):
     """ Computes indices of Heart Rate Variability (HRV).
 
-    Different metrics of HRV exist. Note that a minimum recording is recommended for some
-    indices to be meaninful. For instance, 1, 2 and 5 minutes of good signal are the
+    Note that a minimum recording is recommended for somenindices to be
+    meaninful. For instance, 1, 2 and 5 minutes of good signal are the
     recomended minimums for HF, LF and LF/HF, respectively.
 
     Parameters
     ----------
-    ecg_rate : array
-        Array containing the heart rate, produced by `ecg_rate()`.
-    rpeaks : dict
-        The samples at which the R-peaks occur. Dict returned by
-        `ecg_peaks()`. Defaults to None.
+    heart_period : array
+        Array containing the heart period as returned by `signal_period()`.
+    peaks : dict
+        The samples at which the peaks occur. Returned by `ecg_peaks()` or
+        `ppg_peaks`. Defaults to None.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool
-        If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the next successive one. The ellipse centers around the average RR interval. Defaults to False.
+        If True, will return a Poincaré plot, a scattergram, which plots each
+        RR interval against the next successive one. The ellipse centers around
+        the average RR interval. Defaults to False.
 
     Returns
     -------
@@ -93,155 +93,65 @@ def ecg_hrv(ecg_rate, rpeaks=None, sampling_rate=1000, show=False):
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms. Frontiers in public health, 5, 258.
     """
     # Sanitize input
-    ecg_rate, rpeaks = _ecg_hrv_formatinput(ecg_rate, rpeaks, sampling_rate)
-
-    # Get raw and interpolated R-R intervals
-    rri = np.diff(rpeaks) / sampling_rate * 1000  # milliseconds
-    ecg_period = 60 * 1000/ecg_rate  # Express in milliseconds
+    heart_period = heart_period[peaks] * 1000  # milliseconds
+    heart_period_intp = 60 / heart_period * 1000  # milliseconds
 
     # Get indices
     hrv = {}  # Initialize empty dict
-    hrv.update(_ecg_hrv_time(rri))
-    hrv.update(_ecg_hrv_frequency(ecg_period, sampling_rate, show=show))
-    hrv.update(_ecg_hrv_nonlinear(rri, ecg_period))
+    hrv.update(hrv_time(heart_period))
+    hrv.update(hrv_frequency(heart_period_intp, sampling_rate, show=show))
+    hrv.update(hrv_nonlinear(heart_period, heart_period_intp))
 
     hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
 
     if show:
-        _ecg_hrv_plot(rri, ecg_period)
+        _hrv_plot(heart_period, heart_period_intp)
 
     return hrv
 
 
-# =============================================================================
-# Methods (Domains)
-# =============================================================================
+def _hrv_formatinput(heart_rate, peaks=None, sampling_rate=1000):
 
+    if isinstance(heart_rate, tuple):
+        heart_rate = heart_rate[0]
+        peaks = None
 
-
-def _ecg_hrv_time(rri):
-    diff_rri = np.diff(rri)
-    out = {}  # Initialize empty dict
-
-    # Mean based
-    out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
-    out["MeanNN"] = np.mean(rri)
-    out["SDNN"] = np.std(rri, ddof=1)
-    out["SDSD"] = np.std(diff_rri, ddof=1)
-    out["CVNN"] = out["SDNN"] / out["MeanNN"]
-    out["CVSD"] = out["RMSSD"] / out["MeanNN"]
-
-    # Robust
-    out["MedianNN"] = np.median(np.abs(rri))
-    out["MadNN"] = mad(rri)
-    out["MCVNN"] = out["MadNN"] / out["MedianNN"]
-
-    # Extreme-based
-    nn50 = np.sum(np.abs(diff_rri) > 50)
-    nn20 = np.sum(np.abs(diff_rri) > 20)
-    out["pNN50"] = nn50 / len(rri) * 100
-    out["pNN20"] = nn20 / len(rri) * 100
-
-    # Geometrical domain
-    bar_y, bar_x = np.histogram(rri, bins=range(300, 2000, 8))
-    bar_y, bar_x = np.histogram(rri, bins="auto")
-    out["TINN"] = np.max(bar_x) - np.min(bar_x)  # Triangular Interpolation of the NN Interval Histogram
-    out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
-
-    return out
-
-
-
-
-
-def _ecg_hrv_frequency(ecg_period, sampling_rate=1000, ulf=(0, 0.0033), vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), vhf=(0.4, 0.5), method="welch", show=False):
-    power = signal_power(ecg_period, frequency_band=[ulf, vlf, lf, hf, vhf], sampling_rate=sampling_rate, method=method, max_frequency=0.5, show=show)
-    power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
-    out = power.to_dict(orient="index")[0]
-
-    # Normalized
-    total_power = np.sum(power.values)
-    out["LFHF"] = out["LF"] / out["HF"]
-    out["LFn"] = out["LF"] / total_power
-    out["HFn"] = out["HF"] / total_power
-
-    # Log
-    out["LnHF"] = np.log(out["HF"])
-    return out
-
-
-
-
-
-def _ecg_hrv_nonlinear(rri, ecg_period):
-    diff_rri = np.diff(rri)
-    out = {}
-
-    # Poincaré plot
-    out["SD1"] = np.sqrt(np.std(diff_rri, ddof=1) ** 2 * 0.5)
-    out["SD2"] = np.sqrt(2 * np.std(rri, ddof=1) ** 2 - 0.5 * np.std(diff_rri, ddof=1) ** 2)
-    out["SD2SD1"] = out["SD2"] / out["SD1"]
-
-    # CSI / CVI
-    T = 4 * out["SD1"]
-    L = 4 * out["SD2"]
-    out["CSI"] = L / T
-    out["CVI"] = np.log10(L * T)
-    out["CSI_Modified"] = L ** 2 / T
-
-    # Entropy
-    out["SampEn"] = entropy_sample(rri, dimension=2, r=0.2*np.std(rri, ddof=1))
-    return out
-
-
-# =============================================================================
-# Internals
-# =============================================================================
-
-def _ecg_hrv_formatinput(ecg_rate, rpeaks=None, sampling_rate=1000):
-
-    if isinstance(ecg_rate, tuple):
-        ecg_rate = ecg_rate[0]
-        rpeaks = None
-
-    if isinstance(ecg_rate, pd.DataFrame):
-        df = ecg_rate.copy()
-        cols = [col for col in df.columns if 'ECG_Rate' in col]
+    if isinstance(heart_rate, pd.DataFrame):
+        df = heart_rate.copy()
+        cols = [col for col in df.columns if 'heart_rate' in col]
         if len(cols) == 0:
             cols = [col for col in df.columns if 'ECG_R_Peaks' in col]
             if len(cols) == 0:
-                raise ValueError("NeuroKit error: _ecg_hrv_formatinput(): Wrong input, ",
-                                 "we couldn't extract ecg_rate and rpeaks indices.")
+                raise ValueError("NeuroKit error: _hrv_formatinput(): Wrong input, ",
+                                 "we couldn't extract heart_rate and peaks indices.")
             else:
-                ecg_rate = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(df))
+                heart_rate = signal_rate(peaks, sampling_rate=sampling_rate,
+                                       desired_length=len(df))
         else:
-            ecg_rate = df[cols[0]].values
+            heart_rate = df[cols[0]].values
 
-
-
-    if rpeaks is None:
+    if peaks is None:
         try:
-            rpeaks, _ = _signal_formatpeaks_sanitize(df, desired_length=None)
+            peaks, _ = _signal_formatpeaks_sanitize(df, desired_length=None)
         except NameError:
-            raise ValueError("NeuroKit error: _ecg_hrv_formatinput(): Wrong input, ",
-                             "we couldn't extract rpeaks indices.")
+            raise ValueError("NeuroKit error: _hrv_formatinput(): Wrong input, ",
+                             "we couldn't extract peaks indices.")
     else:
-        rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
+        peaks, _ = _signal_formatpeaks_sanitize(peaks, desired_length=None)
 
-    return ecg_rate, rpeaks
+    return heart_rate, peaks
 
 
-
-def _ecg_hrv_plot(rri, ecg_period):
+def _hrv_plot(heart_period, heart_period_intp):
     # Axes
-    ax1 = rri[:-1]
-    ax2 = rri[1:]
+    ax1 = heart_period[:-1]
+    ax2 = heart_period[1:]
 
     # Compute features
-    poincare_features = _ecg_hrv_nonlinear(rri, ecg_period)
+    poincare_features = hrv_nonlinear(heart_period, heart_period_intp)
     sd1 = poincare_features["SD1"]
     sd2 = poincare_features["SD2"]
-    mean_rri = np.mean(rri)
+    mean_heart_period = np.mean(heart_period)
 
     # Plot
     fig = plt.figure(figsize=(12, 12))
@@ -249,25 +159,30 @@ def _ecg_hrv_plot(rri, ecg_period):
     plt.title("Poincaré Plot", fontsize=20)
     plt.xlabel('RR_n (s)', fontsize=15)
     plt.ylabel('RR_n+1 (s)', fontsize=15)
-    plt.xlim(min(rri) - 10, max(rri) + 10)
-    plt.ylim(min(rri) - 10, max(rri) + 10)
+    plt.xlim(min(heart_period) - 10, max(heart_period) + 10)
+    plt.ylim(min(heart_period) - 10, max(heart_period) + 10)
     ax.scatter(ax1, ax2, c='b', s=4)
 
     # Ellipse plot feature
-    ellipse = matplotlib.patches.Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2 + 1,
-                                         height=2 * sd1 + 1, angle=45, linewidth=2,
-                                         fill=False)
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
+                                             mean_heart_period),
+                                         width=2 * sd2 + 1, height=2 * sd1 + 1,
+                                         angle=45, linewidth=2, fill=False)
     ax.add_patch(ellipse)
-    ellipse = matplotlib.patches.Ellipse(xy=(mean_rri, mean_rri), width=2 * sd2,
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
+                                             mean_heart_period), width=2 * sd2,
                                          height=2 * sd1, angle=45)
     ellipse.set_alpha(0.02)
     ellipse.set_facecolor("blue")
     ax.add_patch(ellipse)
 
     # Arrow plot feature
-    sd1_arrow = ax.arrow(mean_rri, mean_rri, -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
+    sd1_arrow = ax.arrow(mean_heart_period, mean_heart_period,
+                         -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
                          linewidth=3, ec='r', fc="r", label="SD1")
-    sd2_arrow = ax.arrow(mean_rri, mean_rri, sd2 * np.sqrt(2) / 2, sd2 * np.sqrt(2) / 2,
+    sd2_arrow = ax.arrow(mean_heart_period,
+                         mean_heart_period, sd2 * np.sqrt(2) / 2,
+                         sd2 * np.sqrt(2) / 2,
                          linewidth=3, ec='y', fc="y", label="SD2")
 
     plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")

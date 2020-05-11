@@ -51,6 +51,7 @@ from .signal import *
 from .events import *
 from .epochs import *
 from .data import *
+from .hrv import *
 
 from .ecg import *
 from .rsp import *
