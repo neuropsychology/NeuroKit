@@ -74,20 +74,17 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
         E1 = E[1:] / E[:-1]
         E2 = Es[1:] / Es[:-1]
 
-    gradient = np.gradient(E1)
     if show is True:
         plt.title(r'AFN')
         plt.xlabel(r'Embedding dimension $d$')
         plt.ylabel(r'$E_1(d)$ and $E_2(d)$')
         plt.plot(dimension_seq[:-1], E1, 'bo-', label=r'$E_1(d)$')
         plt.plot(dimension_seq[:-1], E2, 'go-', label=r'$E_2(d)$')
-        plt.plot(dimension_seq[:-1], gradient, label=r'$gradient$')
         plt.legend()
 
     # To find where E1 saturates, set a threshold of difference
-    threshold = 0.1 * (np.max(E1) - np.min(E1))
-    diff = E1[1:] - E1[:-1] < threshold
-    min_dimension = [i for i, x in enumerate(diff) if x][0] + 1
+#    threshold = 0.1 * (np.max(E1) - np.min(E1))
+    min_dimension = [i for i, x in enumerate(E1 >= 0.8 * np.max(E1)) if x][0] + 1
 
     return min_dimension
 
