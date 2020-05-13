@@ -104,7 +104,7 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwarg
     return E, Es
 
 
-def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric='chebyshev', window=10, maxnum=None):
+def _embedding_dimension_afn_d(signal, dimension, delay=1, metric='chebyshev', window=10, maxnum=None):
     """Return E(d) and E^*(d) for a single d.
     Returns E(d) and E^*(d) for the AFN method for a single d.
     """
@@ -126,6 +126,27 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
     # Calculate E^*(d)
     Es = np.mean(np.abs(y2[:, -1] - y2[index, -1]))
     return E, Es
+
+def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric='euclidean', window=10, maxnum=None):
+    """Return fraction of false nearest neighbors for a single d.
+    """
+    # We need to reduce the number of points in dimension d by tau
+    # so that after reconstruction, there'll be equal number of points
+    # at both dimension d as well as dimension d + 1.
+    y1 = embedding(signal[:-delay], delay=delay, dimension=dimension)
+    y2 = embedding(signal, delay=delay, dimension=dimension + 1)
+
+    # Find near neighbors in dimension d.
+    index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
+    # Compute the near-neighbor distances in d + 1 dimension
+    d = np.asarray([scipy.spatial.distance.chebyshev(i, j) for i, j in zip(y2, y2[index])])
+
+    # Find all potential false neighbors using Kennel et al.'s tests.
+    f1 = np.mean(np.abs(y2[:, -1] - y2[index, -1]) / dist > R)
+    f2 = np.mean(d / np.std(signal) > A)
+    f3 = np.mean(f1 | f2)
+
+    return f1, f2, f3
 
 
 
