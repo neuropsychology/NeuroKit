@@ -353,7 +353,7 @@ Signal Processing
 Complexity (Entropy, Fractal Dimensions, ...)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- **Optimize time-delay embedding parameters**
+- **Optimize complexity parameters** (delay *tau*, dimension *m*, tolerance *r*)
 
 .. code-block:: python
 

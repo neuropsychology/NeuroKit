@@ -77,7 +77,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
         trends = _fractal_dfa_trends(segments, window, order=1)
 
         # Get local fluctuation
-        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, window, multifractal, q, **kwargs)
+        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, multifractal, q)
 
     # Filter zeros
     nonzero = np.nonzero(fluctuations)[0]
@@ -150,7 +150,8 @@ def _fractal_dfa_trends(segments, window, order=1):
 
 
 
-def _fractal_dfa_fluctuation(segments, trends, window, multifractal=False, q=2, rms=True):
+def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2, rms=True):
+
     detrended = segments - trends
 
     if multifractal is True:
@@ -159,13 +160,9 @@ def _fractal_dfa_fluctuation(segments, trends, window, multifractal=False, q=2, 
         fluctuation = np.mean(fluctuation)  # Average over qs (not sure of that!)
 
     else:
-        if rms is True:
-            # Method from https://github.com/dokato/dfa/blob/master/dfa.py by Dominik Krzeminski
-            rms = np.sqrt(np.mean(detrended**2))
-            fluctuation = np.sqrt(np.mean(rms**2))
-        else:
-            fluctuation = np.sqrt(np.sum(detrended**2, axis=1) / window)
-            fluctuation = np.sum(fluctuation) / len(fluctuation)
+        # Compute Root Mean Square (RMS)
+        fluctuation = np.sum(detrended**2, axis=1) / detrended.shape[1]
+        fluctuation = np.sqrt(np.sum(fluctuation) / len(fluctuation))
 
     return fluctuation
 
@@ -176,8 +173,8 @@ def _fractal_dfa_plot(windows, fluctuations, dfa):
     plt.loglog(windows, fluctuations, 'bo')
     plt.loglog(windows, fluctfit, 'r', label=r'$\alpha$ = %0.3f' % dfa[0])
     plt.title('DFA')
-    plt.xlabel(r'$\log_{10}$(window)')
-    plt.ylabel(r'$\log_{10}$(Fluctuation)')
+    plt.xlabel(r'$\log_{2}$(Window)')
+    plt.ylabel(r'$\log_{2}$(Fluctuation)')
     plt.legend()
     plt.show()
 
