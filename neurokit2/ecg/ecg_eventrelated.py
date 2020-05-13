@@ -157,7 +157,7 @@ def _ecg_eventrelated_phase(epoch, output={}):
 
     # Sanitize input
     colnames = epoch.columns.values
-    if len([i for i in colnames if "ECG_Phase_Artrial" in i]) == 0:
+    if len([i for i in colnames if "ECG_Phase_Atrial" in i]) == 0:
         print("NeuroKit warning: ecg_eventrelated(): input does not"
               "have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
               "Will not indicate whether event onset concurs with cardiac"
