@@ -4,8 +4,8 @@ import numpy as np
 import neurokit2 as nk
 import matplotlib.pyplot as plt
 
-from .complexity_delay import embedding_delay
-from .complexity_dimension import embedding_dimension
+from .complexity_delay import complexity_delay
+from .complexity_dimension import complexity_dimension
 from .entropy_approximate import entropy_approximate
 
 
@@ -33,8 +33,8 @@ def complexity_r(signal, delay=None, dimension=None, default=False):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay = nk.embedding_delay(signal, delay_max=100, method="fraser1986")
-    >>> dimension = nk.embedding_dimension(signal, delay=delay, dimension_max=20)
+    >>> delay = nk.complexity_delay(signal, delay_max=100, method="fraser1986")
+    >>> dimension = nk.complexity_dimension(signal, delay=delay, dimension_max=20)
     >>> nk.complexity_r(signal, delay, dimension)
     0.010609254363011076
 
@@ -46,9 +46,9 @@ olerance (similarity threshold). It corresponds to the filtering level - max abs
     """
 
     if not delay:
-        delay = embedding_delay(signal, delay_max=100, method="fraser1986")
+        delay = complexity_delay(signal, delay_max=100, method="fraser1986")
     if not dimension:
-        dimension = embedding_dimension(signal, delay=delay, dimension_max=20, show=True)
+        dimension = complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
 
     modulator = np.arange(0.02, 0.5, 0.01)
     r_range = modulator * np.std(signal, ddof=1)

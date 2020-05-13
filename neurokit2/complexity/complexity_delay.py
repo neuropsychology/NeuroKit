@@ -90,7 +90,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
         metric = "Displacement"
         algorithm = "closest to 40% of the slope"
     else:
-        raise ValueError("NeuroKit error: embedding_delay(): 'method' "
+        raise ValueError("NeuroKit error: complexity_delay(): 'method' "
                          "not recognized.")
 
     # Get metric
