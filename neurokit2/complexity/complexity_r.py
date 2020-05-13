@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
-import neurokit2 as nk
 import matplotlib.pyplot as plt
 
-from .complexity_delay import complexity_delay
-from .complexity_dimension import complexity_dimension
+from .embedding_delay import embedding_delay
+from .embedding_dimension import embedding_dimension
 from .entropy_approximate import entropy_approximate
 
 
-def complexity_r(signal, delay=None, dimension=None, default=False):
+def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=False):
     """Estimate optimal tolerance (similarity threshold)
     Parameters
     ----------
@@ -19,8 +17,10 @@ def complexity_r(signal, delay=None, dimension=None, default=False):
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    default : bool
-        If 'default', r will be set to 0.2 times the standard deviation of the signal.
+    method : str
+        If 'maxApEn', rmax where ApEn is max will be returned.
+        If 'traditional', r = 0.2 * standard deviation of the signal will be
+        returned.
 
     Returns
     ----------
@@ -33,9 +33,9 @@ def complexity_r(signal, delay=None, dimension=None, default=False):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay = nk.complexity_delay(signal, delay_max=100, method="fraser1986")
-    >>> dimension = nk.complexity_dimension(signal, delay=delay, dimension_max=20)
-    >>> nk.complexity_r(signal, delay, dimension)
+    >>> delay = nk.embedding_delay(signal, delay_max=100, method="fraser1986")
+    >>> dimension = nk.embedding_dimension(signal, delay=delay, dimension_max=20)
+    >>> nk.optimize_r(signal, delay, dimension)
     0.010609254363011076
 
 olerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments.
@@ -44,13 +44,26 @@ olerance (similarity threshold). It corresponds to the filtering level - max abs
     -----------
     - `Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of the threshold value $ r $ for approximate entropy. IEEE Transactions on Biomedical Engineering, 55(8), 1966-1972.
     """
+    # Method
+    method = method.lower()
+    if method in ["traditional"]:
+        r = 0.2 * np.std(signal, ddof=1)
+    elif method in ["maxApEn"]:
+        r = _optimize_r(signal, delay=delay, dimension=dimension, show=show)
+    return r
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _optimize_r(signal, delay=None, dimension=None, show=False):
 
     if not delay:
-        delay = complexity_delay(signal, delay_max=100, method="fraser1986")
+        delay = embedding_delay(signal, delay_max=100, method="fraser1986")
     if not dimension:
-        dimension = complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
+        dimension = embedding_dimension(signal, delay=delay, dimension_max=20, show=True)
 
-    modulator = np.arange(0.02, 0.5, 0.01)
+    modulator = np.arange(0.02, 0.8, 0.02)
     r_range = modulator * np.std(signal, ddof=1)
 
     ApEn = np.zeros_like(r_range)
@@ -59,5 +72,12 @@ olerance (similarity threshold). It corresponds to the filtering level - max abs
         ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])
 
     r = r_range[np.argmax(ApEn)]
+
+    if show is True:
+            plt.title(r'ApEn')
+            plt.xlabel(r'r')
+            plt.ylabel(r'Approximate Entropy $ApEn$')
+            plt.plot(r_range, ApEn, 'bo-', label=r'$ApEn$')
+            plt.legend()
 
     return r
