@@ -8,7 +8,7 @@ from .ecg_delineate import ecg_delineate
 
 
 
-def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak',  sampling_rate=None):
+def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', sampling_rate=None):
     """Compute cardiac phase (for both atrial and ventricular).
 
     Finds the cardiac phase, labelled as 1 for systole and 0 for diastole.
@@ -28,14 +28,14 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak',  sam
         A DataFrame of same length as `ecg_signal` containing the following
         columns:
 
-        - *"ECG_Phase_Artrial"*: cardiac phase, marked by "1" for systole
+        - *"ECG_Phase_Atrial"*: cardiac phase, marked by "1" for systole
           and "0" for diastole.
-        - *"ECG_Phase_Ventricular"*: cardiac phase, marked by "1" for systole
-          and "0" for diastole.
-          *"ECG_Phase_Atrial_Completion"*: cardiac phase (atrial) completion,
+        - *"ECG_Phase_Atrial_Completion"*: cardiac phase (atrial) completion,
           expressed in percentage (from 0 to 1), representing the stage of the
           current cardiac phase.
-          *"ECG_Phase_Ventricular_Completion"*: cardiac phase (ventricular)
+        - *"ECG_Phase_Ventricular"*: cardiac phase, marked by "1" for systole
+          and "0" for diastole.
+        - *"ECG_Phase_Ventricular_Completion"*: cardiac phase (ventricular)
           completion, expressed in percentage (from 0 to 1), representing the
           stage of the current cardiac phase.
 
@@ -114,8 +114,8 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak',  sam
 
 
     out = pd.DataFrame({"ECG_Phase_Atrial": atrial,
-                        "ECG_Phase_Ventricular": ventricular,
                         "ECG_Phase_Atrial_Completion": atrial_completion,
+                        "ECG_Phase_Ventricular": ventricular,
                         "ECG_Phase_Ventricular_Completion": ventricular_comletion})
 
     return out
