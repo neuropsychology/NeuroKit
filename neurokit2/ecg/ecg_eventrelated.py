@@ -157,24 +157,24 @@ def _ecg_eventrelated_phase(epoch, output={}):
 
     # Sanitize input
     colnames = epoch.columns.values
-    if len([i for i in colnames if "ECG_Atrial_Phase" in i]) == 0:
+    if len([i for i in colnames if "ECG_Phase_Artrial" in i]) == 0:
         print("NeuroKit warning: ecg_eventrelated(): input does not"
-              "have an `ECG_Atrial_Phase` or `ECG_Ventricular_Phase` column."
+              "have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
               "Will not indicate whether event onset concurs with cardiac"
               "phase.")
         return output
 
     # Indication of atrial systole
-    systole = epoch["ECG_Atrial_Phase"][epoch.index > 0].iloc[0]
-    output["ECG_Atrial_Phase"] = systole
-    percentage = epoch["ECG_Atrial_PhaseCompletion"][epoch.index > 0].iloc[0]
-    output["ECG_Atrial_PhaseCompletion"] = percentage
+    systole = epoch["ECG_Phase_Artrial"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Artrial"] = systole
+    percentage = epoch["ECG_Phase_Artrial_Completion"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Artrial_Completion"] = percentage
 
     # Indication of ventricular systole
-    systole = epoch["ECG_Ventricular_Phase"][epoch.index > 0].iloc[0]
-    output["ECG_Ventricular_Phase"] = systole
-    percentage = epoch["ECG_Ventricular_PhaseCompletion"][epoch.index > 0].iloc[0]
-    output["ECG_Ventricular_PhaseCompletion"] = percentage
+    systole = epoch["ECG_Phase_Ventricular"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Ventricular"] = systole
+    percentage = epoch["ECG_Phase_Ventricular_Completion"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Ventricular_Completion"] = percentage
 
     return output
 

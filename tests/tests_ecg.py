@@ -125,8 +125,8 @@ def test_ecg_process():
                         "ECG_Q_Peaks", "ECG_S_Peaks",
                         "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
                         "ECG_Phase_Atrial", "ECG_Phase_Ventricular",
-                        "ECG_PhaseCompletion_Atrial",
-                        "ECG_PhaseCompletion_Ventricular"]
+                        "ECG_Phase_Atrial_Completion",
+                        "ECG_Phase_Ventricular_Completion"]
                for elem in np.array(signals.columns.values, dtype=str))
 
 
@@ -251,9 +251,9 @@ def test_ecg_eventrelated():
                         "ECG_Rate_Trend_Quadratic",
                         "ECG_Rate_Trend_Linear", "ECG_Rate_Trend_R2",
                         "ECG_Phase_Atrial",
-                        "ECG_PhaseCompletion_Atrial",
+                        "ECG_Phase_Atrial_Completion",
                         "ECG_Phase_Ventricular",
-                        "ECG_PhaseCompletion_Ventricular",
+                        "ECG_Phase_Ventricular_Completion",
                         'ECG_Quality_Mean', "Event_Onset", "Label"]
                for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
 
