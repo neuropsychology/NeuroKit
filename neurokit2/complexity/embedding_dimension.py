@@ -8,16 +8,7 @@ from .embedding import embedding
 
 
 def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
-    """Estimate optimal Dimension (m) for time-delay embedding
-    El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater
-    than some value d0 if the time series comes from an attractor. Then d0 + 1
-    is the minimum embedding dimension we look for.
-    E2(d) = E*(d + 1)/E*(d). E2(d) is a useful quantity to distinguish
-    deterministic signals from stochastic signals. For random data, since the
-    future values are independent of the past values, E2(d) will be equal to 1
-    for any d. For deterministic data, E2(d) is certainly related to d, it
-    cannot be a constant for all d; there must exist somed's such that E2(d)
-    is not 1.
+    """Estimate optimal Dimension (m) for time-delay embedding.
 
     Parameters
     ----------
@@ -27,8 +18,14 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension_max : int
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order') to test.
+    method : str
+        Method can either be afnn (average false nearest neighbour) or fnn (false nearest neighbour).
     show : bool
         Visualize the result.
+    R : float
+        Relative tolerance (for fnn method).
+    A : float
+        Absolute tolerance (for fnn method)
 
     Returns
     -------
@@ -110,6 +107,15 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwargs):
     """Return E(d) and E^*(d) for a all d in dimension_seq.
     E(d) and E^*(d) will be used to calculate E1(d) and E2(d)
+    El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater
+    than some value d0 if the time series comes from an attractor. Then d0 + 1
+    is the minimum embedding dimension we look for.
+    E2(d) = E*(d + 1)/E*(d). E2(d) is a useful quantity to distinguish
+    deterministic signals from stochastic signals. For random data, since the
+    future values are independent of the past values, E2(d) will be equal to 1
+    for any d. For deterministic data, E2(d) is certainly related to d, it
+    cannot be a constant for all d; there must exist somed's such that E2(d)
+    is not 1.
     """
     values = np.asarray([_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]).T
     E, Es = values[0, :], values[1, :]
