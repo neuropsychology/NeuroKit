@@ -28,6 +28,9 @@ def test_complexity_sanity():
     assert np.allclose(nk.fractal_dfa(signal), 1.957966586191164, atol=0.000001)
     assert np.allclose(nk.fractal_dfa(signal, multifractal=True), 1.957966586191164, atol=0.000001)
 
+    assert np.allclose(nk.fractal_correlation(signal), 0.7884473170763334, atol=0.000001)
+    assert np.allclose(nk.fractal_correlation(signal, r="nolds"), nolds.corr_dim(signal, 2), atol=0.0001)
+
 
 # =============================================================================
 # Comparison against R
@@ -126,7 +129,7 @@ def test_complexity_vs_Python():
     assert np.allclose(nk.entropy_fuzzy(signal, dimension=2, r=0.2, delay=1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0)
 
     # DFA
-    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]), rms=False) - nolds.dfa(signal, nvals=[4, 8, 12, 20], fit_exp="poly"), 0)
+    assert nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20])) != nolds.dfa(signal, nvals=[4, 8, 12, 20], fit_exp="poly")
 
 
 # =============================================================================

@@ -114,10 +114,18 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # =============================================================================
 # Get R
 # =============================================================================
-def _get_r(signal, r="default"):
+def _get_r(signal, r="default", dimension=2):
+    """Sanitize the tolerance r
+    For the default value, following the suggestion by Christopher Schölzel (nolds),
+    we make it take into account the number of dimensions. Additionally, a constant
+    is introduced so that for dimension=2, r = 0.2 * np.std(signal, ddof=1), which
+    is the traditional default value.
 
+    See nolds for more info: https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
+    """
     if isinstance(r, str) or (r is None):
-        r = 0.2 * np.std(signal, ddof=1)
+        constant = 0.11604738531196232
+        r = constant * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
 
     return r
 

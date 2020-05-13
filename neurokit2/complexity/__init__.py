@@ -13,14 +13,20 @@ from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 
 from .fractal_dfa import fractal_dfa
+from .fractal_correlation import fractal_correlation
 from .fractal_mandelbrot import fractal_mandelbrot
 
 from .complexity_simulate import complexity_simulate
 
+from .optimize_r import optimize_r
+
 
 # Aliases
 complexity_se = entropy_shannon
+
 complexity_apen = entropy_approximate
+complexity_capen = functools.partial(entropy_approximate, corrected=True)
+
 complexity_sampen = entropy_sample
 complexity_fuzzyen = entropy_fuzzy
 
@@ -31,4 +37,9 @@ complexity_fuzzycmse = functools.partial(entropy_multiscale, composite=True, fuz
 complexity_rcmse = functools.partial(entropy_multiscale, refined=True)
 complexity_fuzzyrcmse = functools.partial(entropy_multiscale, refined=True, fuzzy=True)
 
+
 complexity_dfa = fractal_dfa
+fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
+complexity_mfdfa = fractal_mfdfa
+
+complexity_d2 = fractal_correlation

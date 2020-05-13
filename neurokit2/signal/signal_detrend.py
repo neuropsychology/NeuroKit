@@ -16,7 +16,7 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     method : str
         Can be one of 'polynomial' (default; traditional detrending of a given order) or 'tarvainen2002' to use the smoothness priors approach described by Tarvainen (2002) (mostly used in HRV analyses as a lowpass filter to remove complex trends), or 'loess' for LOESS smoothing trend removal.
     order : int

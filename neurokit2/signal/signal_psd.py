@@ -10,7 +10,7 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool

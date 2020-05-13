@@ -15,7 +15,7 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     method : str
         The algorithm used to discriminate between the two states. Can be one of 'mixture'
         (default) or 'threshold'. If 'mixture', will use a Gaussian Mixture Model to categorize
@@ -49,6 +49,7 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
         binary = _signal_binarize(np.array(signal), method=method, threshold=threshold)
         signal = list(binary)
     elif isinstance(signal, pd.Series):
+        signal = signal.copy()  # Avoid annoying pandas warning
         binary = _signal_binarize(signal.values, method=method, threshold=threshold)
         signal[:] = binary
     else:

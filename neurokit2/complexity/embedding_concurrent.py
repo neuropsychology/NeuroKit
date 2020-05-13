@@ -14,7 +14,7 @@ def embedding_concurrent(signal, delay_max=100, dimension_max=20, surrogate_iter
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     delay_max : int
         The maximum time delay (Tau) to test.
     dimension_max : int
@@ -107,7 +107,7 @@ def iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     max_iter : int
         Maximum iterations to be performed while checking for
         convergence. Convergence can be achieved before maximum interation.

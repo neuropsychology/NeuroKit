@@ -8,15 +8,15 @@ from ..misc import expspace
 def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1, multifractal=False, q=2, show=False, **kwargs):
     """(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)
 
-    Computes Detrended Fluctuation Analysis (DFA) or Multifractal DFA on the time series data. Detrended fluctuation analysis, much like the Hurst exponent, is used to
+    Python implementation of Detrended Fluctuation Analysis (DFA) or Multifractal DFA of a signal. Detrended fluctuation analysis, much like the Hurst exponent, is used to
     find long-term statistical dependencies in time series.
 
-    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``.
+    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its multifractal variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``
 
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     windows : list
         A list containing the lengths of the windows (number of data points in each subseries). Also referred to as 'lag' or 'scale'. If 'default', will set it to a logarithmic scale (so that each window scale hase the same weight) with a minimum of 4 and maximum of a tenth of the length (to have more than 10 windows to calculate the average fluctuation).
     overlap : bool
@@ -44,7 +44,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     >>>
     >>> signal = nk.signal_simulate(duration=3, noise=0.05)
     >>> nk.fractal_dfa(signal, show=True)
-    >>> nk.fractal_dfa(signal, multifractal=True, q=np.arange(-3, 4), show=True)
+    >>> nk.fractal_mfdfa(signal, q=np.arange(-3, 4), show=True)
 
 
     References
@@ -77,7 +77,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
         trends = _fractal_dfa_trends(segments, window, order=1)
 
         # Get local fluctuation
-        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, window, multifractal, q, **kwargs)
+        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, multifractal, q)
 
     # Filter zeros
     nonzero = np.nonzero(fluctuations)[0]
@@ -150,7 +150,8 @@ def _fractal_dfa_trends(segments, window, order=1):
 
 
 
-def _fractal_dfa_fluctuation(segments, trends, window, multifractal=False, q=2, rms=True):
+def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2, rms=True):
+
     detrended = segments - trends
 
     if multifractal is True:
@@ -159,13 +160,9 @@ def _fractal_dfa_fluctuation(segments, trends, window, multifractal=False, q=2, 
         fluctuation = np.mean(fluctuation)  # Average over qs (not sure of that!)
 
     else:
-        if rms is True:
-            # Method from https://github.com/dokato/dfa/blob/master/dfa.py by Dominik Krzeminski
-            rms = np.sqrt(np.mean(detrended**2))
-            fluctuation = np.sqrt(np.mean(rms**2))
-        else:
-            fluctuation = np.sqrt(np.sum(detrended**2, axis=1) / window)
-            fluctuation = np.sum(fluctuation) / len(fluctuation)
+        # Compute Root Mean Square (RMS)
+        fluctuation = np.sum(detrended**2, axis=1) / detrended.shape[1]
+        fluctuation = np.sqrt(np.sum(fluctuation) / len(fluctuation))
 
     return fluctuation
 
@@ -176,8 +173,8 @@ def _fractal_dfa_plot(windows, fluctuations, dfa):
     plt.loglog(windows, fluctuations, 'bo')
     plt.loglog(windows, fluctfit, 'r', label=r'$\alpha$ = %0.3f' % dfa[0])
     plt.title('DFA')
-    plt.xlabel(r'$\log_{10}$(window)')
-    plt.ylabel(r'$\log_{10}$<Fluctuation>')
+    plt.xlabel(r'$\log_{2}$(Window)')
+    plt.ylabel(r'$\log_{2}$(Fluctuation)')
     plt.legend()
     plt.show()
 

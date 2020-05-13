@@ -2,11 +2,12 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs.epochs_to_df import _df_to_epochs
-from ..ecg.ecg_eventrelated import _eventrelated_addinfo
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
+from ..epochs.eventrelated_utils import _eventrelated_addinfo
 
 
-def emg_eventrelated(epochs):
+def emg_eventrelated(epochs, silent=False):
     """Performs event-related EMG analysis on epochs.
 
     Parameters
@@ -15,6 +16,8 @@ def emg_eventrelated(epochs):
         A dict containing one DataFrame per event/trial,
         usually obtained via `epochs_create()`, or a DataFrame
         containing all epochs, usually obtained via `epochs_to_df()`.
+    silent : bool
+        If True, silence possible warnings.
 
     Returns
     -------
@@ -50,56 +53,35 @@ def emg_eventrelated(epochs):
     >>> nk.emg_eventrelated(epochs)
     """
     # Sanity checks
-    if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
-
-    if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: emg_eventrelated(): Please specify an input"
-                         "that is of the correct form i.e., either a dictionary"
-                         "or dataframe.")
-
-    # Warning for long epochs
-    for i in epochs:
-        if (np.max(epochs[i].index.values) > 10):
-            print("Neurokit warning: emg_eventrelated():"
-                  "Epoch length is too long. You might want to use"
-                  "emg_intervalrelated().")
+    epochs = _eventrelated_sanitizeinput(epochs, what="emg", silent=silent)
 
     # Extract features and build dataframe
-    emg_df = {}  # Initialize an empty dict
-    for epoch_index in epochs:
-        emg_df[epoch_index] = {}  # Initialize an empty dict for the current epoch
-        epoch = epochs[epoch_index]
+    data = {}  # Initialize an empty dict
+    for i in epochs.keys():
+
+        data[i] = {}  # Initialize an empty dict for the current epoch
 
         # Activation following event
-        if any(epoch["EMG_Onsets"][epoch.index > 0] != 0):
-            emg_df[epoch_index]["EMG_Activation"] = 1
+        if np.any(epochs[i]["EMG_Onsets"][epochs[i].index > 0] != 0):
+            data[i]["EMG_Activation"] = 1
         else:
-            emg_df[epoch_index]["EMG_Activation"] = 0
+            data[i]["EMG_Activation"] = 0
 
         # Analyze features based on activation
-        if (emg_df[epoch_index]["EMG_Activation"] == 1):
-            emg_df[epoch_index] = _emg_eventrelated_features(epochs[epoch_index],
-                                                             emg_df[epoch_index])
+        if (data[i]["EMG_Activation"] == 1):
+            data[i] = _emg_eventrelated_features(epochs[i], data[i])
         else:
-            emg_df[epoch_index]["EMG_Amplitude_Mean"] = np.nan
-            emg_df[epoch_index]["EMG_Amplitude_Max"] = np.nan
-            emg_df[epoch_index]["EMG_Amplitude_Max_Time"] = np.nan
-            emg_df[epoch_index]["EMG_Bursts"] = np.nan
+            data[i]["EMG_Amplitude_Mean"] = np.nan
+            data[i]["EMG_Amplitude_Max"] = np.nan
+            data[i]["EMG_Amplitude_Max_Time"] = np.nan
+            data[i]["EMG_Bursts"] = np.nan
 
         # Fill with more info
-        emg_df[epoch_index] = _eventrelated_addinfo(epoch, emg_df[epoch_index])
+        data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    emg_df = pd.DataFrame.from_dict(emg_df, orient="index")  # Convert to a dataframe
+    df = _eventrelated_sanitizeoutput(data)
 
-    # Move columns to front
-    colnames = emg_df.columns.values
-    if len([i for i in colnames if "Condition" in i]) == 1:
-        emg_df = emg_df[['Condition'] + [col for col in emg_df.columns if col != 'Condition']]
-    if len([i for i in colnames if "Label" in i]) == 1:
-        emg_df = emg_df[['Label'] + [col for col in emg_df.columns if col != 'Label']]
-
-    return emg_df
+    return df
 
 
 # =============================================================================
