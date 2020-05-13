@@ -2,8 +2,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .embedding_delay import embedding_delay
-from .embedding_dimension import embedding_dimension
+from .complexity_delay import complexity_delay
+from .complexity_dimension import complexity_dimension
 from .entropy_approximate import entropy_approximate
 
 
