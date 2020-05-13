@@ -59,9 +59,9 @@ olerance (similarity threshold). It corresponds to the filtering level - max abs
 def _optimize_r(signal, delay=None, dimension=None, show=False):
 
     if not delay:
-        delay = embedding_delay(signal, delay_max=100, method="fraser1986")
+        delay = complexity_delay(signal, delay_max=100, method="fraser1986")
     if not dimension:
-        dimension = embedding_dimension(signal, delay=delay, dimension_max=20, show=True)
+        dimension = complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
 
     modulator = np.arange(0.02, 0.8, 0.02)
     r_range = modulator * np.std(signal, ddof=1)
