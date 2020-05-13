@@ -361,7 +361,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
     signal = nk.signal_simulate(duration=20, sampling_rate=200, noise=0.01)
 
     # Find optimal Tau for time-delay embedding
-    optimal_delay = nk.embedding_delay(signal, show=True)
+    optimal_delay = nk.complexity_delay(signal, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_embedding.png
 

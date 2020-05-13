@@ -16,7 +16,7 @@ from ..signal import signal_autocor
 from .complexity_embedding import complexity_embedding
 
 
-def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
+def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     """Estimate optimal Time Delay (tau) for time-delay embedding
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
@@ -41,7 +41,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     See Also
     ---------
-    embedding_dimension, complexity_embedding
+    complexity_dimension, complexity_embedding
 
     Examples
     ----------
@@ -51,17 +51,17 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> nk.signal_plot(signal)
     >>>
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="fraser1986")
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="theiler1990")
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="casdagli1991")
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="fraser1986")
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150), sampling_rate=150)
     >>> nk.signal_plot(signal)
     >>>
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True)
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True)
 
     References
     ------------

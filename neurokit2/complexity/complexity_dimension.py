@@ -7,7 +7,7 @@ from .complexity_embedding import complexity_embedding
 
 
 
-def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
+def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
     """Estimate optimal Dimension (m) for time-delay embedding.
 
     Parameters
@@ -34,7 +34,7 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
 
     See Also
     ------------
-    embedding_delay, embedding
+    complexity_delay, complexity_embedding
 
     Examples
     ---------
@@ -42,17 +42,17 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
     >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> delay = nk.embedding_delay(signal, delay_max=500)
+    >>> delay = nk.complexity_delay(signal, delay_max=500)
     >>>
-    >>> values = nk.embedding_dimension(signal, delay=delay, dimension_max=20, show=True)
+    >>> values = nk.ecomplexity_dimension(signal, delay=delay, dimension_max=20, show=True)
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150)[0], sampling_rate=150)
-    >>> delay = nk.embedding_delay(signal, delay_max=300)
+    >>> delay = nk.complexity_delay(signal, delay_max=300)
     >>>
     >>> # This doesn't work for some reasons
-    >>> # values = nk.embedding_dimension(signal, delay=delay, dimension_max=20, show=True)
+    >>> # values = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
 
     References
     -----------

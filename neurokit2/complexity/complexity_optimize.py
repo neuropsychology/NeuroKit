@@ -6,7 +6,7 @@ import scipy.spatial
 from .complexity_embedding import complexity_embedding
 
 
-def embedding_concurrent(signal, delay_max=100, dimension_max=20, surrogate_iter=5):
+def complexity_optimize(signal, delay_max=100, dimension_max=20, surrogate_iter=5):
     """
     Estimate optimal Dimension (m) and optimal Time Delay (tau) using
     Differential Entropy b method.
@@ -39,12 +39,12 @@ def embedding_concurrent(signal, delay_max=100, dimension_max=20, surrogate_iter
     >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> optimal_dimension, optimal_delay = nk.embedding_concurrent(signal, delay_max=100, dimension_max=20, surrogate_iter=5)
+    >>> optimal_dimension, optimal_delay = nk.complexity_optimize(signal, delay_max=100, dimension_max=20, surrogate_iter=5)
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150)[0], sampling_rate=150)
-    >>> optimal_dimension, optimal_delay = nk.embedding_concurrent(signal, delay_max=500, dimension_max=10, surrogate_iter=5)
+    >>> optimal_dimension, optimal_delay = nk.complexity_optimize(signal, delay_max=500, dimension_max=10, surrogate_iter=5)
 
     References
     -----------

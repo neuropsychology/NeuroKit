@@ -3,11 +3,11 @@ import functools
 
 # Utils
 from .complexity_embedding import complexity_embedding
-from .complexity_delay import embedding_delay
-from .complexity_dimension import embedding_dimension
-from .complexity_optimize import embedding_concurrent
+from .complexity_delay import complexity_delay
+from .complexity_dimension import complexity_dimension
+from .complexity_optimize import complexity_optimize
 from .complexity_simulate import complexity_simulate
-from .complexity_r import optimize_r
+from .complexity_r import complexity_r
 
 # Entropy
 from .entropy_shannon import entropy_shannon

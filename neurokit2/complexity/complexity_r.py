@@ -9,7 +9,7 @@ from .complexity_dimension import embedding_dimension
 from .entropy_approximate import entropy_approximate
 
 
-def optimize_r(signal, delay=None, dimension=None, default=False):
+def complexity_r(signal, delay=None, dimension=None, default=False):
     """Estimate optimal tolerance (similarity threshold)
     Parameters
     ----------
@@ -35,7 +35,7 @@ def optimize_r(signal, delay=None, dimension=None, default=False):
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> delay = nk.embedding_delay(signal, delay_max=100, method="fraser1986")
     >>> dimension = nk.embedding_dimension(signal, delay=delay, dimension_max=20)
-    >>> nk.optimize_r(signal, delay, dimension)
+    >>> nk.complexity_r(signal, delay, dimension)
     0.010609254363011076
 
 olerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments.
