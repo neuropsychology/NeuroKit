@@ -7,7 +7,7 @@ from .embedding import embedding
 
 
 
-def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, **kwargs):
+def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
     """Estimate optimal Dimension (m) for time-delay embedding
     El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater
     than some value d0 if the time series comes from an attractor. Then d0 + 1
@@ -74,18 +74,31 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
         E1 = E[1:] / E[:-1]
         E2 = Es[1:] / Es[:-1]
 
-    if show is True:
-        plt.title(r'AFN')
-        plt.xlabel(r'Embedding dimension $d$')
-        plt.ylabel(r'$E_1(d)$ and $E_2(d)$')
-        plt.plot(dimension_seq[:-1], E1, 'bo-', label=r'$E_1(d)$')
-        plt.plot(dimension_seq[:-1], E2, 'go-', label=r'$E_2(d)$')
-        plt.legend()
+        if show is True:
+            plt.title(r'AFN')
+            plt.xlabel(r'Embedding dimension $d$')
+            plt.ylabel(r'$E_1(d)$ and $E_2(d)$')
+            plt.plot(dimension_seq[:-1], E1, 'bo-', label=r'$E_1(d)$')
+            plt.plot(dimension_seq[:-1], E2, 'go-', label=r'$E_2(d)$')
+            plt.legend()
 
-    # To find where E1 saturates, set a threshold of difference
-#    threshold = 0.1 * (np.max(E1) - np.min(E1))
-    min_dimension = [i for i, x in enumerate(E1 >= 0.8 * np.max(E1)) if x][0] + 1
+        # To find where E1 saturates, set a threshold of difference
+        # threshold = 0.1 * (np.max(E1) - np.min(E1))
+        min_dimension = [i for i, x in enumerate(E1 >= 0.8 * np.max(E1)) if x][0] + 1
 
+    if method in ["fnn"]:
+        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, show=show, **kwargs)
+
+        if show is True:
+            plt.title(r'FNN')
+            plt.xlabel(r'Embedding dimension $d$')
+            plt.ylabel(r'FNN (%)')
+            plt.plot(dimension_seq, 100 * f1, 'bo--', label=r'Test I')
+            plt.plot(dimension_seq, 100 * f2, 'g^--', label=r'Test II')
+            plt.plot(dimension_seq, 100 * f3, 'rs-', label=r'Test I + II')
+            plt.legend()
+
+        min_dimension = [i for i, x in enumerate(f3 == 0) if x][0] + 1
     return min_dimension
 
 
@@ -127,7 +140,27 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, metric='chebyshev', w
     Es = np.mean(np.abs(y2[:, -1] - y2[index, -1]))
     return E, Es
 
-def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric='euclidean', window=10, maxnum=None):
+
+def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, show=False, **kwargs):
+    """Compute the fraction of false nearest neighbors.
+    The false nearest neighbors (FNN) method described by
+    Kennel et al. (1992) to calculate the minimum embedding dimension
+    required to embed a scalar time series.
+
+    f1 : array
+        Fraction of neighbors classified as false by Test I.
+    f2 : array
+        Fraction of neighbors classified as false by Test II.
+    f3 : array
+        Fraction of neighbors classified as false by either Test I
+        or Test II.
+    """
+    values = np.asarray([_embedding_dimension_ffn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]).T
+    f1, f2, f3 = values[0, :], values[1, :], values[2, :]
+
+    return f1, f2, f3
+
+def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric='euclidean', window=10, maxnum=None):
     """Return fraction of false nearest neighbors for a single d.
     """
     # We need to reduce the number of points in dimension d by tau
@@ -142,15 +175,11 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
     d = np.asarray([scipy.spatial.distance.chebyshev(i, j) for i, j in zip(y2, y2[index])])
 
     # Find all potential false neighbors using Kennel et al.'s tests.
-    f1 = np.mean(np.abs(y2[:, -1] - y2[index, -1]) / dist > R)
-    f2 = np.mean(d / np.std(signal) > A)
-    f3 = np.mean(f1 | f2)
+    f1 = np.abs(y2[:, -1] - y2[index, -1]) / dist > R
+    f2 = d / np.std(signal) > A
+    f3 = f1 | f2
 
-    return f1, f2, f3
-
-
-
-
+    return np.mean(f1), np.mean(f2), np.mean(f3)
 
 
 def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='chebyshev', window=0, maxnum=None, show=False):
