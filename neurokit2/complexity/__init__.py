@@ -18,6 +18,8 @@ from .fractal_mandelbrot import fractal_mandelbrot
 
 from .complexity_simulate import complexity_simulate
 
+from .optimize_r import optimize_r
+
 
 # Aliases
 complexity_se = entropy_shannon
