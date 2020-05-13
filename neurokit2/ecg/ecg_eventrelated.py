@@ -165,10 +165,10 @@ def _ecg_eventrelated_phase(epoch, output={}):
         return output
 
     # Indication of atrial systole
-    systole = epoch["ECG_Phase_Artrial"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Artrial"] = systole
-    percentage = epoch["ECG_Phase_Artrial_Completion"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Artrial_Completion"] = percentage
+    systole = epoch["ECG_Phase_Atrial"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Atrial"] = systole
+    percentage = epoch["ECG_Phase_Atrial_Completion"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Atrial_Completion"] = percentage
 
     # Indication of ventricular systole
     systole = epoch["ECG_Phase_Ventricular"][epoch.index > 0].iloc[0]
