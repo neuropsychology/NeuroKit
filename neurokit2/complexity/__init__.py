@@ -1,24 +1,29 @@
 """Submodule for NeuroKit."""
 import functools
 
-from .embedding import embedding
-from .embedding_delay import embedding_delay
-from .embedding_dimension import embedding_dimension
-from .embedding_concurrent import embedding_concurrent
+# Utils
+from .complexity_embedding import complexity_embedding
+from .complexity_delay import embedding_delay
+from .complexity_dimension import embedding_dimension
+from .complexity_optimize import embedding_concurrent
+from .complexity_simulate import complexity_simulate
+from .complexity_r import optimize_r
 
+# Entropy
 from .entropy_shannon import entropy_shannon
 from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 
+# Fractal
 from .fractal_dfa import fractal_dfa
 from .fractal_correlation import fractal_correlation
 from .fractal_mandelbrot import fractal_mandelbrot
 
-from .complexity_simulate import complexity_simulate
 
-from .optimize_r import optimize_r
+
+
 
 
 # Aliases

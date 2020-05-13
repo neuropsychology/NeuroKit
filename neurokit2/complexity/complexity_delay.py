@@ -13,7 +13,7 @@ from ..misc import findclosest
 from ..signal import signal_findpeaks
 from ..signal import signal_zerocrossings
 from ..signal import signal_autocor
-from .embedding import embedding
+from .complexity_embedding import complexity_embedding
 
 
 def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
@@ -41,7 +41,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     See Also
     ---------
-    embedding_dimension, embedding
+    embedding_dimension, complexity_embedding
 
     Examples
     ----------
@@ -143,7 +143,7 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 
         # Loop through taus and compute all scores values
         for i, current_tau in enumerate(tau_sequence):
-            embedded = embedding(signal, delay=current_tau, dimension=2)
+            embedded = complexity_embedding(signal, delay=current_tau, dimension=2)
             if metric == "Mutual Information":
                 values[i] = mutual_information(embedded[:, 0],
                                                embedded[:, 1],
@@ -178,7 +178,7 @@ def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mu
     ax0.legend(loc='upper right')
 
     # Attractor
-    embedded = embedding(signal, delay=tau, dimension=3)
+    embedded = complexity_embedding(signal, delay=tau, dimension=3)
     x = embedded[:, 0]
     y = embedded[:, 1]
     z = embedded[:, 2]

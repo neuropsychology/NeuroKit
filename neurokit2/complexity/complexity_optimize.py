@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import scipy.spatial
 
-from .embedding import embedding
+from .complexity_embedding import complexity_embedding
 
 
 def embedding_concurrent(signal, delay_max=100, dimension_max=20, surrogate_iter=5):
@@ -70,13 +70,13 @@ def embedding_concurrent(signal, delay_max=100, dimension_max=20, surrogate_iter
         optimal[dimension] = []
         # Calculate differential entropy for each embedded
         for tau in tau_sequence:
-            signal_embedded = embedding(signal, delay=tau, dimension=dimension)
+            signal_embedded = complexity_embedding(signal, delay=tau, dimension=dimension)
             signal_entropy = _differential_entropy(signal_embedded, k=1)
 
             # calculate average of surrogates entropy
             for inter in range(surrogate_iter):
                 surrogate, i, rmsd = iaaft(signal)
-                surrogate_embedded = embedding(surrogate, delay=tau, dimension=dimension)
+                surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _differential_entropy(surrogate_embedded, k=1)
                 surrogate_list.append(surrogate_entropy)
                 surrogate_entropy_average = sum(surrogate_list) / len(surrogate_list)

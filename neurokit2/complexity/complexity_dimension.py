@@ -3,7 +3,7 @@ import numpy as np
 import scipy.spatial
 import matplotlib.pyplot as plt
 
-from .embedding import embedding
+from .complexity_embedding import complexity_embedding
 
 
 
@@ -130,8 +130,8 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, metric='chebyshev', w
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
     # at both dimension d as well as dimension d + 1.
-    y1 = embedding(signal[:-delay], delay=delay, dimension=dimension)
-    y2 = embedding(signal, delay=delay, dimension=dimension + 1)
+    y1 = complexity_embedding(signal[:-delay], delay=delay, dimension=dimension)
+    y2 = complexity_embedding(signal, delay=delay, dimension=dimension + 1)
 
     # Find near neighbors in dimension d.
     index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
@@ -172,8 +172,8 @@ def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
     # at both dimension d as well as dimension d + 1.
-    y1 = embedding(signal[:-delay], delay=delay, dimension=dimension)
-    y2 = embedding(signal, delay=delay, dimension=dimension + 1)
+    y1 = complexity_embedding(signal[:-delay], delay=delay, dimension=dimension)
+    y2 = complexity_embedding(signal, delay=delay, dimension=dimension + 1)
 
     # Find near neighbors in dimension d.
     index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
@@ -233,7 +233,7 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
 
     # Sanity checks
     if len(signal.shape) == 1:
-        y = embedding(signal, delay=delay, dimension=dimension_max)
+        y = complexity_embedding(signal, delay=delay, dimension=dimension_max)
     else:
         y = signal
 
