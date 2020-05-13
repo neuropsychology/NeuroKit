@@ -47,9 +47,9 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
                             (only when method in `ecg_delineate` is wavelet).
         - *"ECG_R_Offsets"*: the R-offsets marked as "1" in a list of zeros
                             (only when method in `ecg_delineate` is wavelet).
-        - *"Atrial_Phase"*: cardiac phase, marked by "1" for systole
+        - *"ECG_Phase_Atrial"*: cardiac phase, marked by "1" for systole
           and "0" for diastole.
-        - *"Ventricular_Phase"*: cardiac phase, marked by "1" for systole
+        - *"ECG_Phase_Ventricular"*: cardiac phase, marked by "1" for systole
           and "0" for diastole.
           *"ECG_Atrial_PhaseCompletion"*: cardiac phase (atrial) completion,
           expressed in percentage (from 0 to 1), representing the stage of the
