@@ -7,8 +7,17 @@ from .embedding import embedding
 
 
 
-def embedding_dimension(signal, delay=1, dimension_max=20, method="neighbors", show=False, **kwargs):
+def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, **kwargs):
     """Estimate optimal Dimension (m) for time-delay embedding
+    El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater
+    than some value d0 if the time series comes from an attractor. Then d0 + 1
+    is the minimum embedding dimension we look for.
+    E2(d) = E*(d + 1)/E*(d). E2(d) is a useful quantity to distinguish
+    deterministic signals from stochastic signals. For random data, since the
+    future values are independent of the past values, E2(d) will be equal to 1
+    for any d. For deterministic data, E2(d) is certainly related to d, it
+    cannot be a constant for all d; there must exist somed's such that E2(d)
+    is not 1.
 
     Parameters
     ----------
@@ -60,12 +69,25 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="neighbors", s
 
     # Method
     method = method.lower()
-    if method in ["neighbors"]:
-        indices, values = _embedding_dimension_neighbors(signal, dimension_max=np.max(dimension_seq), delay=delay)
-    else:
-        E1, E2 = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=show, **kwargs)
-        values = E2
-    return values
+    if method in ["afnn"]:
+        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=show, **kwargs)
+        E1 = E[1:] / E[:-1]
+        E2 = Es[1:] / Es[:-1]
+
+    if show is True:
+        plt.title(r'AFN')
+        plt.xlabel(r'Embedding dimension $d$')
+        plt.ylabel(r'$E_1(d)$ and $E_2(d)$')
+        plt.plot(dimension_seq[:-1], E1, 'bo-', label=r'$E_1(d)$')
+        plt.plot(dimension_seq[:-1], E2, 'go-', label=r'$E_2(d)$')
+        plt.legend()
+
+    # To find where E1 saturates, set a threshold of difference
+    threshold = 0.1 * (np.max(E1) - np.min(E1))
+    diff = E1[1:] - E1[:-1] < threshold
+    min_dimension = [i for i, x in enumerate(diff) if x][0] + 1
+
+    return min_dimension
 
 
 
@@ -74,18 +96,13 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="neighbors", s
 # Methods
 # =============================================================================
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwargs):
-    """
+    """Return E(d) and E^*(d) for a all d in dimension_seq.
+    E(d) and E^*(d) will be used to calculate E1(d) and E2(d)
     """
     values = np.asarray([_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]).T
-    E1, E2 = values[0, :], values[1, :]
+    E, Es = values[0, :], values[1, :]
 
-    if show is True:
-        fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1)
-
-        ax1.plot(dimension_seq, E1)
-        ax2.plot(dimension_seq, E2)
-
-    return E1, E2
+    return E, Es
 
 
 def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric='chebyshev', window=10, maxnum=None):
@@ -101,11 +118,13 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
     # Find near neighbors in dimension d.
     index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
 
-    # Compute the magnification and the increase in the near-neighbor
-    # distances and return the averages.
+    # Compute the near-neighbor distances in d + 1 dimension
     d = np.asarray([scipy.spatial.distance.chebyshev(i, j) for i, j in zip(y2, y2[index])])
+    # Compute the ratio of near-neighbor distances in d + 1 over d dimension
+    # Its average is E(d)
     E = np.mean(d / dist)
 
+    # Calculate E^*(d)
     Es = np.mean(np.abs(y2[:, -1] - y2[index, -1]))
     return E, Es
 
@@ -121,8 +140,20 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
 
     Parameters
     ----------
-    y : ndarray
-        N-dimensional array containing time-delayed vectors.
+    signal : ndarray, array, list or Series
+        embedded signal: N-dimensional array containing time-delayed vectors,
+        or
+        signal: 1-D array (e.g.time series) of signal in the form of a vector
+        of values. If signal is input, embedded signal will be created using
+        the input dimension and delay.
+    delay : int
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In
+        practice, it is common to have a fixed time lag (corresponding for
+        instance to the sampling rate; Gautama, 2003), or to find a suitable
+        value using some algorithmic heuristics (see ``delay_optimal()``).
+    dimension_max : int
+        The maximum embedding dimension (often denoted 'm' or 'd', sometimes
+        referred to as 'order') to test.
     metric : string, optional (default = 'chebyshev')
         Metric to use for distance computation.  Must be one of
         "cityblock" (aka the Manhattan metric), "chebyshev" (aka the
@@ -144,10 +175,13 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
     dist : array
         Array containing near neighbor distances.
     """
-    y = embedding(signal, delay=delay, dimension=dimension_max)
-
 
     # Sanity checks
+    if len(signal.shape) == 1:
+        y = embedding(signal, delay=delay, dimension=dimension_max)
+    else:
+        y = signal
+
     if metric == 'cityblock':
         p = 1
     elif metric == 'euclidean':
@@ -157,7 +191,6 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
     else:
         raise ValueError('Unknown metric.  Should be one of "cityblock", '
                          '"euclidean", or "chebyshev".')
-
 
     tree = scipy.spatial.cKDTree(y)
     n = len(y)
@@ -175,7 +208,10 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
 
     for i, x in enumerate(y):
         for k in range(2, maxnum + 2):
+            # querry for k number of nearest neighbours
             dist, index = tree.query(x, k=k, p=p)
+            # remove points that are closer than min temporal separation
+            # remove self reference (d > 0)
             valid = (np.abs(index - i) > window) & (dist > 0)
 
             if np.count_nonzero(valid):
