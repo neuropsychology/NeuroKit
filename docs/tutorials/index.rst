@@ -12,4 +12,5 @@ Contents:
    understanding
    contributing
    first_contribution
+   complexity
    resources
