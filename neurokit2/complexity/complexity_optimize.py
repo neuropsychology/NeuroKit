@@ -4,12 +4,74 @@ import pandas as pd
 import scipy.spatial
 
 from .complexity_embedding import complexity_embedding
+from .complexity_delay import complexity_delay
 
 
-def complexity_optimize(signal, delay_max=100, dimension_max=20, surrogate_iter=5):
+def complexity_optimize(signal, what=["delay", "dimension", "r"], delay_max=100, delay_method="fraser1986"):
     """
     Estimate optimal Dimension (m) and optimal Time Delay (tau) using
     Differential Entropy b method.
+
+    Parameters
+    ----------
+    signal : list, array or Series
+        The signal (i.e., a time series) in the form of a vector of values.
+    what : list
+        A list of parameters to optimize. Can contain one of 'delay', 'dimension' or 'r'.
+    delay_max : int
+        See :func:`~neurokit2.complexity_delay`.
+    delay_method : str
+        See :func:`~neurokit2.complexity_delay`.
+
+    Returns
+    -------
+    optimal_dimension : int
+        Optimal dimension.
+    optimal_delay : int
+        Optimal time delay.
+
+    See Also
+    ------------
+    complexity_dimension, complexity_delay, complexity_r
+
+    Examples
+    ---------
+    >>> import neurokit2 as nk
+    >>>
+    >>> # Artifical example
+    >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
+    >>> parameters = nk.complexity_optimize(signal)
+
+    References
+    -----------
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    """
+
+    out = {}
+
+    # Optimize delay
+    if np.any([elem in what for elem in ["delay", "tau"]]):
+        out["delay"] = complexity_delay(signal, delay_max=delay_max, method=delay_method)
+
+    # Optimize dimension
+
+    # Optimize r
+
+
+
+    return out
+
+
+
+
+# =============================================================================
+# Methods
+# =============================================================================
+
+
+def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, surrogate_iter=5):
+    """
+    Estimate optimal Dimension (m) and optimal Time Delay (tau) using Differential Entropy b method.
 
     Parameters
     ----------
@@ -29,22 +91,6 @@ def complexity_optimize(signal, delay_max=100, dimension_max=20, surrogate_iter=
     optimal_delay : int
         Optimal time delay.
 
-    See Also
-    ------------
-    embedding_dimension, embedding_delay
-
-    Examples
-    ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Artifical example
-    >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> optimal_dimension, optimal_delay = nk.complexity_optimize(signal, delay_max=100, dimension_max=20, surrogate_iter=5)
-    >>>
-    >>> # Realistic example
-    >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150)[0], sampling_rate=150)
-    >>> optimal_dimension, optimal_delay = nk.complexity_optimize(signal, delay_max=500, dimension_max=10, surrogate_iter=5)
 
     References
     -----------
@@ -71,13 +117,13 @@ def complexity_optimize(signal, delay_max=100, dimension_max=20, surrogate_iter=
         # Calculate differential entropy for each embedded
         for tau in tau_sequence:
             signal_embedded = complexity_embedding(signal, delay=tau, dimension=dimension)
-            signal_entropy = _differential_entropy(signal_embedded, k=1)
+            signal_entropy = _complexity_optimize_get_differential(signal_embedded, k=1)
 
             # calculate average of surrogates entropy
             for inter in range(surrogate_iter):
-                surrogate, i, rmsd = iaaft(signal)
+                surrogate, i, rmsd = _complexity_optimize_iaaft(signal)
                 surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
-                surrogate_entropy = _differential_entropy(surrogate_embedded, k=1)
+                surrogate_entropy = _complexity_optimize_get_differential(surrogate_embedded, k=1)
                 surrogate_list.append(surrogate_entropy)
                 surrogate_entropy_average = sum(surrogate_list) / len(surrogate_list)
 
@@ -93,11 +139,12 @@ def complexity_optimize(signal, delay_max=100, dimension_max=20, surrogate_iter=
 
     return optimal_dimension, optimal_delay
 
+
 # =============================================================================
 # Internals
 # =============================================================================
 
-def iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
+def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
     """
     Return iterative amplitude adjusted Fourier transform surrogates.
     Returns phase randomized, amplitude adjusted (IAAFT) surrogates with
@@ -166,7 +213,9 @@ def iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
     return surrogate, i, rmsd
 
 
-def _differential_entropy(x, k=1, norm='max', min_dist=0.):
+
+
+def _complexity_optimize_get_differential(x, k=1, norm='max', min_dist=0.):
     """
     Estimates the entropy H of a random variable x based on
     the kth-nearest neighbour distances between point samples.
