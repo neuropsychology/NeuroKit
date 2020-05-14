@@ -80,7 +80,7 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
 
     # Sanitize input
     colnames = epoch.columns.values
-    if len([i for i in colnames if "ECG_Rate" in i]) == 0:
+    if len([i for i in colnames if var in i]) == 0:
         print("NeuroKit warning: *_eventrelated(): input does not"
               "have an `" + var + "` column. Will skip all rate-related features.")
         return output
