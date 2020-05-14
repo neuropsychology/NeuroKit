@@ -302,24 +302,20 @@ Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tuto
 Physiological Data Analysis
 ----------------------------
 
-
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/features.png
 
 Event-related
 ^^^^^^^^^^^^^^
 
 This type of analysis refers to physiological changes immediately occurring in response to an event.
-For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus).
-In this situation the analysis is epoch-based. An epoch is a short chunk of the physiological signal
-(usually < 10 seconds), that is locked to a specific stimulus. In this case, using `bio_analyze()` will
-compute the following features:
+For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus) indicated by
+the dotted lines in the figure above. In this situation the analysis is epoch-based.
+An epoch is a short chunk of the physiological signal (usually < 10 seconds), that is locked to a specific stimulus and hence
+the physiological signals of interest are time-segmented accordingly. This is represented by the orange boxes in the figure above.
+In this case, using `bio_analyze()` will compute features like rate changes, peak characteristics and phase characteristics.
 
-- **Features:**
-
-  - **Rate changes** *(ECG, PPG, RSP)*: mean, minimum, maximum, minimum-time and maximum-time
-  - **Peak characteristics** *(EDA)*: peak presence, amplitude, rise time, peak-time
-  - **Phase characteristics** *(ECG, RSP)*: phase type (inspiration/expiration, systole/diastole), phase completion
-  
 - `Event-related example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
 
 Interval-related
@@ -332,13 +328,15 @@ is at rest, or during different conditions in which there is no specific time-lo
 (e.g., watching movies, listening to music, engaging in physical activity, etc.). For instance,
 this type of analysis is used when people want to compare the physiological activity under different
 intensities of physical exercise, different types of movies, or different intensities of
-stress. In this case, using `bio_analyze()` will compute the following features:
+stress. To compare event-related and interval-related analysis, we can refer to the example figure above.
+For example, a participant might be watching a 20s-long short film where particular stimuli of
+interest in the movie appears at certain time points (marked by the dotted lines). While
+event-related analysis pertains to the segments of signals within the orange boxes (to understand the physiological
+changes pertaining to the appearance of stimuli), interval-related analysis can be
+applied on the entire 20s duration to investigate how physiology fluctuates in general.
+In this case, using `bio_analyze()` will compute features such as rate characteristics (in particular,
+variability metrices) and peak characteristics.
 
-- **Features:**
-
-  - **Rate characteristics** *(ECG, PPG, RSP)*: mean, amplitude, variability (HRV, RRV)
-  - **Peak characteristics** *(EDA)*: number of peaks, mean amplitude
-  
 - `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
 
