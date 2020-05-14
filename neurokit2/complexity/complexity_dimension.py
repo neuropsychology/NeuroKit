@@ -15,7 +15,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``complexity_delay()``).
     dimension_max : int
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order') to test.
     method : str
@@ -44,7 +44,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> delay = nk.complexity_delay(signal, delay_max=500)
     >>>
-    >>> values = nk.ecomplexity_dimension(signal, delay=delay, dimension_max=20, show=True)
+    >>> values = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)

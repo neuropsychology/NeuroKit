@@ -18,9 +18,9 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     method : str
-        If 'maxApEn', rmax where ApEn is max will be returned.
-        If 'traditional', r = 0.2 * standard deviation of the signal will be
-        returned.
+        If 'maxApEn', rmax where ApEn is max will be returned. If 'traditional', r = 0.2 * standard deviation of the signal will be returned.
+    show : bool
+        If true and method is 'maxApEn', will plot the ApEn values for each value of r.
 
     Returns
     ----------
@@ -33,22 +33,23 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay = nk.embedding_delay(signal, delay_max=100, method="fraser1986")
-    >>> dimension = nk.embedding_dimension(signal, delay=delay, dimension_max=20)
-    >>> nk.optimize_r(signal, delay, dimension)
+    >>> delay = nk.complexity_delay(signal)
+    >>> dimension = nk.complexity_dimension(signal, delay=delay)
+    >>> r = nk.complexity_r(signal, delay, dimension)
+    >>> r
     0.010609254363011076
 
 olerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments.
 
     References
     -----------
-    - `Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of the threshold value $ r $ for approximate entropy. IEEE Transactions on Biomedical Engineering, 55(8), 1966-1972.
+    - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering, 55(8), 1966-1972.
     """
     # Method
     method = method.lower()
     if method in ["traditional"]:
         r = 0.2 * np.std(signal, ddof=1)
-    elif method in ["maxApEn"]:
+    elif method in ["maxapen", 'optimize']:
         r = _optimize_r(signal, delay=delay, dimension=dimension, show=show)
     return r
 
@@ -74,10 +75,10 @@ def _optimize_r(signal, delay=None, dimension=None, show=False):
     r = r_range[np.argmax(ApEn)]
 
     if show is True:
-            plt.title(r'ApEn')
-            plt.xlabel(r'r')
-            plt.ylabel(r'Approximate Entropy $ApEn$')
-            plt.plot(r_range, ApEn, 'bo-', label=r'$ApEn$')
-            plt.legend()
+        plt.title(r'ApEn')
+        plt.xlabel(r'r')
+        plt.ylabel(r'Approximate Entropy $ApEn$')
+        plt.plot(r_range, ApEn, 'bo-', label=r'$ApEn$')
+        plt.legend()
 
     return r

@@ -5,23 +5,25 @@ import scipy.spatial
 
 from .complexity_embedding import complexity_embedding
 from .complexity_delay import complexity_delay
+from .complexity_dimension import complexity_dimension
+from .complexity_r import complexity_r
 
 
-def complexity_optimize(signal, what=["delay", "dimension", "r"], delay_max=100, delay_method="fraser1986"):
-    """
-    Estimate optimal Dimension (m) and optimal Time Delay (tau) using
-    Differential Entropy b method.
+def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimension_max=20, dimension_method="afnn", r_method="maxApEn"):
+    """Find optimal complexity parameters
+
+    Estimate optimal complexity parameters Dimension (m), Time Delay (tau) and tolerance 'r'.
 
     Parameters
     ----------
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
-    what : list
-        A list of parameters to optimize. Can contain one of 'delay', 'dimension' or 'r'.
-    delay_max : int
+    delay_max, delay_method : int, str
         See :func:`~neurokit2.complexity_delay`.
-    delay_method : str
-        See :func:`~neurokit2.complexity_delay`.
+    dimension_max, dimension_method : int, str
+        See :func:`~neurokit2.complexity_dimension`.
+    r_method : str
+        See :func:`~neurokit2.complexity_r`.
 
     Returns
     -------
@@ -41,22 +43,27 @@ def complexity_optimize(signal, what=["delay", "dimension", "r"], delay_max=100,
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> parameters = nk.complexity_optimize(signal)
+    >>> parameters
 
     References
     -----------
     - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
+    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
+    - Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
+    - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering, 55(8), 1966-1972.
     """
 
     out = {}
 
     # Optimize delay
-    if np.any([elem in what for elem in ["delay", "tau"]]):
-        out["delay"] = complexity_delay(signal, delay_max=delay_max, method=delay_method)
+    out["delay"] = complexity_delay(signal, delay_max=delay_max, method=delay_method)
 
     # Optimize dimension
+    out["dimension"] = complexity_dimension(signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method)
 
     # Optimize r
-
+    out["r"] = complexity_r(signal, delay=out["delay"], dimension=out["dimension"], method=r_method)
 
 
     return out
