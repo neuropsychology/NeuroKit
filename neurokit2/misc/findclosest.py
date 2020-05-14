@@ -1,16 +1,16 @@
 import numpy as np
 
 
-def findclosest(number, list_of_numbers, direction="both", strictly=False, return_index=False):
+def findclosest(list_of_numbers, target_number, direction="both", strictly=False, return_index=False):
     """
     Find the closest number in the array from a given number x.
 
     Parameters
     ----------
-    number : float
-        The number.
     list_of_numbers : list
         The list to look in.
+    target_number : float
+        The target number.
     direction : str
         "both" for smaller or greater, "greater" for only greater numbers and "smaller" for the closest smaller.
     strictly : bool
@@ -26,11 +26,11 @@ def findclosest(number, list_of_numbers, direction="both", strictly=False, retur
     Example
     ----------
     >>> import neurokit2 as nk
-    >>> nk.findclosest(1.8, [3, 5, 6, 1, 2])
-    >>> nk.findclosest(1.8, [3, 5, 6, 1, 2], return_index=True)
+    >>> nk.findclosest([3, 5, 6, 1, 2], 1.8)
+    >>> nk.findclosest([3, 5, 6, 1, 2], 1.8, return_index=True)
     """
     try:
-        closest = _findclosest(number, list_of_numbers, direction, strictly)
+        closest = _findclosest(list_of_numbers, target_number, direction, strictly)
     except ValueError:
         closest = np.nan
 
@@ -43,18 +43,18 @@ def findclosest(number, list_of_numbers, direction="both", strictly=False, retur
 
 
 
-def _findclosest(number, list_of_numbers, direction="both", strictly=False):
+def _findclosest(list_of_numbers, target_number, direction="both", strictly=False):
     if direction == "both":
-        closest = min(list_of_numbers, key=lambda x: np.abs(x-number))
+        closest = min(list_of_numbers, key=lambda x: np.abs(x-target_number))
     if direction == "smaller":
         if strictly is True:
-            closest = max(x for x in list_of_numbers if x < number)
+            closest = max(x for x in list_of_numbers if x < target_number)
         else:
-            closest = max(x for x in list_of_numbers if x <= number)
+            closest = max(x for x in list_of_numbers if x <= target_number)
     if direction == "greater":
         if strictly is True:
-            closest = min(filter(lambda x: x > number, list_of_numbers))
+            closest = min(filter(lambda x: x > target_number, list_of_numbers))
         else:
-            closest = min(filter(lambda x: x >= number, list_of_numbers))
+            closest = min(filter(lambda x: x >= target_number, list_of_numbers))
 
     return closest

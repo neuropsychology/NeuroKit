@@ -127,7 +127,7 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
     elif algorithm == "closest to 40% of the slope":
         slope = np.diff(metric_values) * len(metric_values)
         slope_in_deg = np.rad2deg(np.arctan(slope))
-        optimal = np.where(slope_in_deg == findclosest(40, slope_in_deg))[0][0]
+        optimal = np.where(slope_in_deg == findclosest(slope_in_deg, 40))[0][0]
     return optimal
 
 

@@ -60,8 +60,8 @@ def _hdi_plot(vals, hdi_low, hdi_high, ci=0.95, **kwargs):
     x, y = density(vals, show=False, **kwargs)
 
     where = np.full(len(x), False)
-    where[0:findclosest(hdi_low, x, return_index=True)] = True
-    where[findclosest(hdi_high, x, return_index=True)::] = True
+    where[0:findclosest(x, hdi_low, return_index=True)] = True
+    where[findclosest(x, hdi_high, return_index=True)::] = True
 
     plt.plot(x, y, color="white")
     plt.fill_between(x, y, where=where, color='#E91E63', label="CI {:.0%} [{:.2f}, {:.2f}]".format(ci, hdi_low, hdi_high))
