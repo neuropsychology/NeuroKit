@@ -244,18 +244,6 @@ def test_ecg_eventrelated():
                       np.array(ecg_eventrelated["ECG_Rate_Max"]))
 
     assert len(ecg_eventrelated["Label"]) == 3
-    assert len(ecg_eventrelated.columns) == 15
-
-    assert all(elem in ["ECG_Rate_Max", "ECG_Rate_Min", "ECG_Rate_Mean",
-                        "ECG_Rate_Max_Time", "ECG_Rate_Min_Time",
-                        "ECG_Rate_Trend_Quadratic",
-                        "ECG_Rate_Trend_Linear", "ECG_Rate_Trend_R2",
-                        "ECG_Phase_Atrial",
-                        "ECG_Phase_Atrial_Completion",
-                        "ECG_Phase_Ventricular",
-                        "ECG_Phase_Ventricular_Completion",
-                        'ECG_Quality_Mean', "Event_Onset", "Label"]
-               for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
 
 
 def test_ecg_delineate():

@@ -183,15 +183,6 @@ def test_rsp_eventrelated():
                       np.array(rsp_eventrelated["RSP_Amplitude_Max"]))
 
     assert len(rsp_eventrelated["Label"]) == 3
-    assert len(rsp_eventrelated.columns) == 12
-
-    assert all(elem in ["RSP_Rate_Max", "RSP_Rate_Min", "RSP_Rate_Mean",
-                        "RSP_Rate_Max_Time", "RSP_Rate_Min_Time",
-                        "RSP_Amplitude_Max", "RSP_Amplitude_Min",
-                        "RSP_Amplitude_Mean", "RSP_Phase",
-                        "RSP_PhaseCompletion", "Label", "Event_Onset"]
-               for elem in np.array(rsp_eventrelated.columns.values, dtype=str))
-
 
 def test_rsp_rrv():
 
