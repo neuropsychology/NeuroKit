@@ -54,12 +54,12 @@ Two basic parameters are needed to be determined for time-delayed embedding:
 
 - embedding dimension **m**
 - tolerance threshold **r**
-- and time delay **tau (τ)** (also known as embedding lag).
+- time delay **tau (τ)** (also known as embedding lag).
 
 Vectors in a new space in this phase space reconstruction are formed from time delayed values of the scalar measurements. The parameter **m** determines the length of the vectors (i.e., number of elements)
 to be compared where these vectors consist of time delayed values of **tau**, and **r** is the tolerance for accepting similar patterns between two vectors.
 
-There are different methods to guide the choice of parameters. In **NeuroKit**, you can use `nk.complexity_optimize()` to estimate the optimal parameters.
+There are different methods to guide the choice of parameters. In **NeuroKit**, you can use :code:`nk.complexity_optimize()` to estimate the optimal parameters.
 
 .. code-block:: python
 
@@ -71,7 +71,7 @@ There are different methods to guide the choice of parameters. In **NeuroKit**, 
     parameters
     >>> {'delay': 20, 'dimension': 5, 'r': 0.014156214774197567}
     
-You can then visualize the reconstructed attractor by entering the parameters into (:code:`nk.complexity_embeddding()`.)
+You can then visualize the reconstructed attractor by entering the parameters into :code:`nk.complexity_embeddding()`.
 
 .. code-block:: python
 
@@ -105,18 +105,18 @@ Approximate Entropy (ApEn)
 - Quantifies the amount of regularity and the unpredictability of fluctuations over time-series data.
 - Advantages of ApEn: lower computational demand (can be designed to work for small data samples i.e. less than 50 data points and can be applied in real time) and less sensitive to noise.
 - Smaller values indicate that the data is more regular and predictable, and larger values corresponding to more complexity or irregularity in the data.
-- call (:code:`nk.entropy_approximate()`)
+- call :code:`nk.entropy_approximate()`
 
-*Examples of use*
+**Examples of use**
 
 +----------------------------+--------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------+
 | Reference                  | Signal                                                       | Parameters                                              | Findings                                                                                                            |
 +============================+==============================================================+=========================================================+=====================================================================================================================+
-| `Caldirola et al. (2004)   | 17min breath-by-breath recordings of respiration parameters  | *m*=1, *r*=0.2                                          | Panic disorder patients showed higher ApEn indexes in baseline RSP patterns (all parameters) than healthy subjects  |
+| Caldirola et al. (2004)    | 17min breath-by-breath recordings of respiration parameters  | *m*=1, *r*=0.2                                          | Panic disorder patients showed higher ApEn indexes in baseline RSP patterns (all parameters) than healthy subjects  |
 +----------------------------+--------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------+
-| `Burioka et al. (2003)     | 30 mins of Respiration, 20s recordings of EEG                | *m*=2, *r*=0.2, *τ*=1.1s for respiration, 0.09s for EEG | Lower ApEn of respiratory movement and EEG in stage IV sleep than other stages of consciousness                     |
+| Burioka et al. (2003)      | 30 mins of Respiration, 20s recordings of EEG                | *m*=2, *r*=0.2, *τ*=1.1s for respiration, 0.09s for EEG | Lower ApEn of respiratory movement and EEG in stage IV sleep than other stages of consciousness                     |
 +----------------------------+--------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------+
-| `Boettger et al. (2009)    |64s recordings of QT and RR intervals                         | *m*=2, *r*=0.2                                          | Higher ratio of ApEn(QT) to ApEn(RR) for higher intensities of exercise, reflecting sympathetic activity            |
+| Boettger et al. (2009)     |64s recordings of QT and RR intervals                         | *m*=2, *r*=0.2                                          | Higher ratio of ApEn(QT) to ApEn(RR) for higher intensities of exercise, reflecting sympathetic activity            |
 +----------------------------+--------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------+
 
 
@@ -126,10 +126,9 @@ Sample Entropy (SampEn)
 - A modification of approximate entropy
 - Advantages over ApEn: data length independence and a relatively trouble-free implementation.
 - Large values indicate high complexity whereas smaller values characterize more self-similar and regular signals.
-- call (:code:`nk.entropy_sample()`)
+- call :code:`nk.entropy_sample()`
 
-*Examples of use*=
-
+**Examples of use**
 
 +----------------------------+--------------------------------------------------------------+---------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Reference                  | Signal                                                       | Parameters                                              | Findings                                                                                                                                                                      |
@@ -150,11 +149,15 @@ Sample Entropy (SampEn)
 Fuzzy Entropy (FuzzyEn)
 """"""""""""""""""""""""
 - Similar to ApEn and SampEn
-- call (:code:`nk.entropy_fuzzy()`)
+- call :code:`nk.entropy_fuzzy()`
 
 
 Multiscale Entropy (MSE)
 """"""""""""""""""""""""
 - Expresses different levels of either ApEn or SampEn by means of multiple factors for generating multiple time series
 - Captures more useful information than using a scalar value produced by ApEn and SampEn
-- call (:code:`nk.entropy_multiscale()`)
+- call :code:`nk.entropy_multiscale()`
+
+
+Detrended Fluctuation Analysis (DFA)
+------------------------------------
