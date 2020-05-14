@@ -5,6 +5,7 @@ import numpy as np
 from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
 from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
 from ..epochs.eventrelated_utils import _eventrelated_addinfo
+from ..epochs.eventrelated_utils import _eventrelated_rate
 
 
 def rsp_eventrelated(epochs, silent=False):
@@ -85,7 +86,7 @@ def rsp_eventrelated(epochs, silent=False):
         data[i] = {}  # Initialize empty container
 
         # Rate
-        data[i] = _rsp_eventrelated_rate(epochs[i], data[i])
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="RSP_Rate")
 
         # Amplitude
         data[i] = _rsp_eventrelated_amplitude(epochs[i], data[i])
@@ -104,36 +105,6 @@ def rsp_eventrelated(epochs, silent=False):
 # =============================================================================
 # Internals
 # =============================================================================
-def _rsp_eventrelated_rate(epoch, output={}):
-
-    # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "RSP_Rate" in i]) == 0:
-        print("NeuroKit warning: rsp_eventrelated(): input does not"
-              "have an `RSP_Rate` column. Will skip all rate-related features.")
-        return output
-
-    # Get baseline
-    if np.min(epoch.index.values) <= 0:
-        baseline = epoch["RSP_Rate"][epoch.index <= 0].values
-        signal = epoch["RSP_Rate"][epoch.index > 0].values
-        index = epoch.index[epoch.index > 0].values
-    else:
-        baseline = epoch["RSP_Rate"][np.min(epoch.index.values):np.min(epoch.index.values)].values
-        signal = epoch["RSP_Rate"][epoch.index > np.min(epoch.index)].values
-        index = epoch.index[epoch.index > 0].values
-
-    # Max / Min / Mean
-    output["RSP_Rate_Max"] = np.max(signal) - np.mean(baseline)
-    output["RSP_Rate_Min"] = np.min(signal) - np.mean(baseline)
-    output["RSP_Rate_Mean"] = np.mean(signal) - np.mean(baseline)
-
-    # Time of Max / Min
-    output["RSP_Rate_Max_Time"] = index[np.argmax(signal)]
-    output["RSP_Rate_Min_Time"] = index[np.argmin(signal)]
-
-    return output
-
 
 def _rsp_eventrelated_amplitude(epoch, output={}):
 

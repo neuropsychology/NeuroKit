@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 from .epochs_to_df import _df_to_epochs
-
+from ..stats import fit_r2
 
 
 
@@ -73,3 +73,47 @@ def _eventrelated_sanitizeoutput(data):
         df = df[['Label'] + [col for col in df.columns if col != 'Label']]
 
     return df
+
+
+
+def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "ECG_Rate" in i]) == 0:
+        print("NeuroKit warning: *_eventrelated(): input does not"
+              "have an `" + var + "` column. Will skip all rate-related features.")
+        return output
+
+    # Get baseline
+    if np.min(epoch.index.values) <= 0:
+        baseline = epoch[var][epoch.index <= 0].values
+        signal = epoch[var][epoch.index > 0].values
+        index = epoch.index[epoch.index > 0].values
+    else:
+        baseline = epoch[var][np.min(epoch.index.values):np.min(epoch.index.values)].values
+        signal = epoch[var][epoch.index > np.min(epoch.index)].values
+        index = epoch.index[epoch.index > 0].values
+
+    # Max / Min / Mean
+    output[var + "_Max"] = np.max(signal) - np.mean(baseline)
+    output[var + "_Min"] = np.min(signal) - np.mean(baseline)
+    output[var + "_Mean"] = np.mean(signal) - np.mean(baseline)
+
+    # Time of Max / Min
+    output[var + "_Max_Time"] = index[np.argmax(signal)]
+    output[var + "_Min_Time"] = index[np.argmin(signal)]
+
+    # Modelling
+    # These are experimental indices corresponding to parameters of a quadratic model
+    # Instead of raw values (such as min, max etc.)
+    coefs = np.polyfit(index, signal - np.mean(baseline), 2)
+    output[var + "_Trend_Quadratic"] = coefs[0]
+    output[var + "_Trend_Linear"] = coefs[1]
+    output[var + "_Trend_R2"] = fit_r2(
+            y=signal - np.mean(baseline),
+            y_predicted=np.polyval(coefs, index),
+            adjusted=False,
+            n_parameters=3)
+
+    return output
