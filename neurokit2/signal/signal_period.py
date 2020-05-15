@@ -59,7 +59,7 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None,
               " to compute the rate. Returning empty vector.")
         return np.full(desired_length, np.nan)
 
-    # Calculate period in msec, based on peak to peak difference and make sure
+    # Calculate period in sec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for
     # interpolation later) by prepending the mean of all periods.
     period = np.ediff1d(peaks, to_begin=0) / sampling_rate
