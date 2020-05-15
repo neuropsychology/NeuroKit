@@ -155,7 +155,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
         segment = segment[0:np.argmin(segment)]
 
         # Find recovery time
-        recovery_value = findclosest(recovery_values[i], segment, direction="smaller", strictly=False)
+        recovery_value = findclosest(segment, recovery_values[i], direction="smaller", strictly=False)
 
         # Detect recovery points only if there are datapoints below recovery value
         if (np.min(segment) < recovery_value):

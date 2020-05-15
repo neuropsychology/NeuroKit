@@ -177,9 +177,11 @@ plot <- df_p %>%
 #                             theme = ttheme("mOrange"))
 # intervalrelated <- ggtexttable(py$interval_table, rows = NULL)
 
-intervalrelated <- c("ECG Rate Mean", "HRV metrices", "RRV metrices", "RSA metrices", "Number of SCR Peaks", "Mean of SCR Peaks Amplitude")
+intervalrelated <- c("ECG Rate Characteristics: Mean, Amplitude", "Heart Rate Variability (HRV) metrices", "Respiratory Rate Variability (RRV) metrices", "Respiratory Sinus Arrhythmia (RSA) metrices", "Number of SCR Peaks", "Mean of SCR Peaks Amplitude")
 
-eventrelated <- c("ECG Rate Measures (Min, Mean, Max, Time of occurrences) and Trend (Linear, Quadratic, R2)", "RSP Rate Measures (Min, Mean, Max, Time of occurrences)", "RSP Amplitude Measures (Min, Mean, Max)", "ECG and RSP Phase Measures", "EDA Phasic Max Peak Amplitude", "Number of SCRs and first SCR Measures (Peak Amplitude, Risetime, Recovery time)")
+
+
+eventrelated <- c("ECG Rate Changes: Min, Mean, Max, Time of Min and  Max, Trend (Linear, Quadratic, R2)", "RSP Rate Changes: Min, Mean, Max, Time of Min and Max", "RSP Amplitude Measures: Min, Mean, Max", "ECG and RSP Phase Measures: Type (Inspiration/Expiration, Systole/Diastole), Completion", "EDA Phasic Max Peak Amplitude", "Number of SCRs and first SCR characteristics (Peak Amplitude, Risetime, Recovery time)")
 
 table <- data.frame(cbind(eventrelated, intervalrelated))
 colnames(table) <- c("Event-related Features", "Interval-related Features")

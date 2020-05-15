@@ -163,7 +163,7 @@ def _signal_findpeaks_findbase(peaks, signal, what="onset"):
 
     bases = np.zeros(len(peaks))
     for i, peak in enumerate(peaks):
-        bases[i] = findclosest(peak, troughs, direction=direction, strictly=True)
+        bases[i] = findclosest(troughs, peak, direction=direction, strictly=True)
 
     return bases
 
