@@ -81,9 +81,11 @@ Documentation
         
 .. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
         :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
+        :alt: PDF
         
 .. image:: https://mybinder.org/badge_logo.svg
         :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
+        :alt: Binder
         
 .. image:: https://img.shields.io/gitter/room/neuropsychology/NeuroKit.js.svg
         :target: https://gitter.im/NeuroKit/community
@@ -92,7 +94,7 @@ Documentation
 
 Click on the links above and check out our tutorials:
 
-Tutorials
+Guides
 ^^^^^^^^^^
 
 -  `Recording good quality signals <https://neurokit2.readthedocs.io/en/latest/tutorials/recording.html>`_
@@ -117,7 +119,7 @@ Examples
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
-
+-  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
