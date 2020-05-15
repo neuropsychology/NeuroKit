@@ -45,24 +45,43 @@ One standard method for state-space reconstruction is *time-delay embedding* (or
 It aims to identify the state of a system at a particular point in time by searching the past history of observations
 for similar states, and by studying how these similar states evolve, in turn predict the future course of the time series.
 
+**In conclusion**, the purpose of time-delay embeddings is to reconstruct the state and dynamics of an
+unknown dynamical system from measurements or observations of that system taken over time.
+
+In this gif here, you can see how three time series (each time series is the embedded version i.e., displaced by certain duration of the previous)
+can be reconstructed into a manifold. Each point in the 3D reconstruction can be thought of as a time segment,
+with different points capturing different segments of history of variable X. Credits go to this short `illustration <https://www.youtube.com/watch?v=QQwtrWBwxQg>`_.
+  
+.. image:: https://raw.github.com/neuropsychology/Neurokit/dev/docs/img/timedelay.gif
+
 
 
 Embedding Parameters
 """"""""""""""""""""
-
-Two basic parameters are needed to be determined for time-delayed embedding: 
-
-- embedding dimension **m**
-- tolerance threshold **r**
-- time delay **tau (τ)** (also known as embedding lag).
-
-Vectors in a new space in this phase space reconstruction are formed from time delayed values of the scalar measurements. The parameter **m** determines the length of the vectors (i.e., number of elements)
-to be compared where these vectors consist of time delayed values of **tau**, and **r** is the tolerance for accepting similar patterns between two vectors.
-
-.. image:: https://raw.github.com/neuropsychology/Neurokit/dev/docs/img/timedelay.gif
+For the reconstructed dynamics to be identical to the fulll dynamics of the system,
+some basic parameters need to be optimally determined for time-delayed embedding: 
 
 
-There are different methods to guide the choice of parameters. In **NeuroKit**, you can use :code:`nk.complexity_optimize()` to estimate the optimal parameters.
+- Time delay **tau (τ)** (also known as embedding lag)
+
+  - A measure of time which generates the respective axes of the reconstruction: *x(t)*, *x(t-tau)*, *x(t-2tau)*...
+  - E.g., if tau=1, the state *x(t)* would be plotted against its prior self *x(t-1)*
+  - A large tau will show connections between states very far in the past and to those far in the future, which might make the reconstruction extremely complex
+
+
+- Embedding dimension **m**
+
+  - Number of vectors to be compared (where these vectors consist of time delayed values of tau)
+  - Dictates how many axes will be shown in the reconstruction space i.e. how much of the system's history is shown
+  - Dimensionality must be sufficiently high to generate relevant information and create a rich history of states over time, but also low enough to be easily understandable
+
+- Tolerance threshold **r**
+
+  - Tolerance for accepting similar patterns
+
+
+There are different methods to guide the choice of parameters.
+In **NeuroKit**, you can use :code:`nk.complexity_optimize()` to estimate the optimal parameters.
 
 .. code-block:: python
 
@@ -98,10 +117,7 @@ Entropy can be defined as the measure of *disorder* in a signal.
 
 Shannon Entropy (ShEn)
 """"""""""""""""""""""
-- call (:code:`nk.entropy_shannon()`)
-
-*Examples of use*
-
+- call :code:`nk.entropy_shannon()`
 
 Approximate Entropy (ApEn)
 """"""""""""""""""""""""""
