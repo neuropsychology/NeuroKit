@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-from .hrv import hrv_summary
+from ..hrv import hrv_summary
 
 
 def ecg_intervalrelated(data, sampling_rate=1000):
