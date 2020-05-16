@@ -48,8 +48,9 @@ for similar states, and by studying how these similar states evolve, in turn pre
 **In conclusion**, the purpose of time-delay embeddings is to reconstruct the state and dynamics of an
 unknown dynamical system from measurements or observations of that system taken over time.
 
-In this gif here, you can see how three time series (each time series is the embedded version i.e., displaced by certain duration of the previous)
-can be reconstructed into a manifold. Each point in the 3D reconstruction can be thought of as a time segment,
+In this gif here, you can see how the phase space is constructed by plotting delayed signals against the original signal 
+(where each time series is an embedded version i.e., delayed version of the original).
+Each point in the 3D reconstruction can be thought of as a time segment,
 with different points capturing different segments of history of variable X. Credits go to this short `illustration <https://www.youtube.com/watch?v=QQwtrWBwxQg>`_.
   
 .. image:: https://raw.github.com/neuropsychology/Neurokit/dev/docs/img/timedelay.gif
@@ -58,30 +59,42 @@ with different points capturing different segments of history of variable X. Cre
 
 Embedding Parameters
 """"""""""""""""""""
-For the reconstructed dynamics to be identical to the fulll dynamics of the system,
+For the reconstructed dynamics to be identical to the full dynamics of the system,
 some basic parameters need to be optimally determined for time-delayed embedding: 
 
 
-- Time delay **tau (τ)** (also known as embedding lag)
+- **Time delay: tau**, *τ*
 
-  - A measure of time which generates the respective axes of the reconstruction: *x(t)*, *x(t-tau)*, *x(t-2tau)*...
+  - A measure of time that sets basic delay 
+  - Generates the respective axes of the reconstruction: *x(t)*, *x(t-tau)*, *x(t-2tau)*...
   - E.g., if tau=1, the state *x(t)* would be plotted against its prior self *x(t-1)*
-  - A large tau will show connections between states very far in the past and to those far in the future, which might make the reconstruction extremely complex
+  - If *τ* is too small, constructed signals are too much alike and if too large, the reconstructed trajectory
+will show connections between states very far in the past and to those far in the future (no relationship), which might make the reconstruction extremely complex
 
 
-- Embedding dimension **m**
+- **Embedding dimension**, *m*
 
-  - Number of vectors to be compared (where these vectors consist of time delayed values of tau)
+  - Number of vectors to be compared (i.e. no. of additional signals of time delayed values of tau)
   - Dictates how many axes will be shown in the reconstruction space i.e. how much of the system's history is shown
   - Dimensionality must be sufficiently high to generate relevant information and create a rich history of states over time, but also low enough to be easily understandable
 
-- Tolerance threshold **r**
+
+- **Tolerance threshold**, *r*
 
   - Tolerance for accepting similar patterns
 
 
+**Visualize Embedding**
+
+This is how a typical sinusoidal signal looks like, when embedded in 2D and 3D respectively.
+
+.. image:: https://raw.github.com/neuropsychology/Neurokit/dev/docs/img/dimensions.png
+
+
+**Using NeuroKit**
+
 There are different methods to guide the choice of parameters.
-In **NeuroKit**, you can use :code:`nk.complexity_optimize()` to estimate the optimal parameters.
+In NeuroKit, you can use :code:`nk.complexity_optimize()` to estimate the optimal parameters.
 
 .. code-block:: python
 
@@ -135,7 +148,9 @@ Approximate Entropy (ApEn)
 +----------------------------+--------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------+
 | Burioka et al. (2003)      | 30 mins of Respiration, 20s recordings of EEG                | m=2, r=0.2, τ=1.1s for respiration, 0.09s for EEG       | Lower ApEn of respiratory movement and EEG in stage IV sleep than other stages of consciousness                     |
 +----------------------------+--------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------+
-| Boettger et al. (2009)     |64s recordings of QT and RR intervals                         | m=2, r=0.2                                              | Higher ratio of ApEn(QT) to ApEn(RR) for higher intensities of exercise, reflecting sympathetic activity            |
+| Boettger et al. (2009)     | 64s recordings of QT and RR intervals                        | m=2, r=0.2                                              | Higher ratio of ApEn(QT) to ApEn(RR) for higher intensities of exercise, reflecting sympathetic activity            |
++----------------------------+--------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------+
+| Taghavi et al. (2011)      | 2mis recordings of EEG                                       | m=2, r=0.1                                              | Higher ApEn of normal subjects than schizophrenic patients particularly in limbic areas of the brain                |
 +----------------------------+--------------------------------------------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------+
 
 

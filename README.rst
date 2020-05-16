@@ -106,6 +106,7 @@ Guides
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 -  `Additional Resources <https://neurokit2.readthedocs.io/en/latest/tutorials/resources.html>`_
+-  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
 
 
 Examples
@@ -119,7 +120,6 @@ Examples
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
--  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
