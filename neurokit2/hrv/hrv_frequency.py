@@ -42,14 +42,14 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     -------
     DataFrame
         Contains frequency domain HRV metrics:
-        - "*HRV_ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz by default.
-        - "*HRV_VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz by default.
-        - "*HRV_LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
-        - "*HRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
-        - "*HRV_VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
-        - "*HRV_LFHF*": the ratio of low frequency power to high frequency power.
-        - "*HRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
-        - "*HRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
+        - "*ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz by default.
+        - "*VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz by default.
+        - "*LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
+        - "*HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
+        - "*VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
+        - "*LFHF*": the ratio of low frequency power to high frequency power.
+        - "*LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
+        - "*HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
     """
     # Compute heart period in milliseconds.
     heart_period = np.diff(peaks) / sampling_rate * 1000
@@ -62,14 +62,14 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     else:
         n_samples = peaks[-1]
 
-    heart_period_intp = signal_interpolate(peaks, heart_period,
+    heart_period_intp = signal_interpolate(peaks[1:], heart_period,    # skip first peak since it has no corresponding element in heart_period
                                            desired_length=n_samples,
                                            method=interpolation_order)
 
     power = signal_power(heart_period_intp,
                          frequency_band=[ulf, vlf, lf, hf, vhf],
-                         sampling_rate=sampling_rate, method=method,
-                         max_frequency=0.5, show=show)
+                         sampling_rate=sampling_rate_interpolation,
+                         method=method, max_frequency=0.5, show=show)
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
     
     out = power.to_dict(orient="index")[0]
