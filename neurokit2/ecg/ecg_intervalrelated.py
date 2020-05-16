@@ -106,7 +106,17 @@ def _ecg_intervalrelated_formatinput(data, output={}):
 
 def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
 
-    hrv = hrv_summary(data, sampling_rate=sampling_rate)
+    # Sanitize input
+    colnames = data.columns.values
+    if len([i for i in colnames if "ECG_R_Peaks" in i]) == 0:
+        raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
+                         "we couldn't extract R-peaks. Please make sure"
+                         "your DataFrame contains an `ECG_R_Peaks` column.")
+        return output
+
+    rpeaks = np.where(data["ECG_R_Peaks"].values)[0]
+
+    hrv = hrv_summary(rpeaks, sampling_rate=sampling_rate)
     for column in hrv.columns:
         output[column] = float(hrv[column])
 
