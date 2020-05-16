@@ -132,6 +132,7 @@ def test_signal_interpolate():
     interpolated = nk.signal_interpolate(x_axis, signal, desired_length=1000)
     assert len(interpolated) == 1000
     assert interpolated[0] == signal[0]
+    assert interpolated[-1] == signal[-1]
 
 
 def test_signal_findpeaks():
@@ -154,7 +155,8 @@ def test_signal_merge():
     assert len(signal) == 150
     assert signal[0] == signal2[0] + signal2[0]
 
-def test_signal_rate():
+
+def test_signal_rate():    # since singal_rate wraps signal_period, the latter is tested as well
 
     # Test with array.
     signal = nk.signal_simulate(duration=10, sampling_rate=1000,
