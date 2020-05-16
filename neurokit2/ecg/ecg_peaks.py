@@ -68,10 +68,12 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
         _, rpeaks = signal_fixpeaks(rpeaks,
                                     sampling_rate=sampling_rate,
                                     iterative=True, method="Kubios")
+        
+        rpeaks = {"ECG_R_Peaks": rpeaks}
 
     instant_peaks = signal_formatpeaks(rpeaks,
                                        desired_length=len(ecg_cleaned),
-                                       peak_indices=rpeaks["ECG_R_Peaks"])
+                                       peak_indices=rpeaks)
     signals = instant_peaks
     info = rpeaks
 
