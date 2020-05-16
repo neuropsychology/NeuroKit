@@ -78,7 +78,7 @@ def _optimize_r(signal, delay=None, dimension=None, show=False):
         fig, ax = plt.subplots()
         ax.set_xlabel('Tolerence threshold $r$')
         ax.set_ylabel('Approximate Entropy $ApEn$')
-        ax.plot(r_range, ApEn, 'bo-', label=r'$ApEn$')
+        ax.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#2196F3')
         ax.axvline(x=r, color='#E91E63', label='Optimal r: ' + str(r))
         ax.legend(loc='upper right')
 
