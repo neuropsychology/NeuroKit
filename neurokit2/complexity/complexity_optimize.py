@@ -128,7 +128,7 @@ def _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension
     ax1.axvline(x=out["dimension"], color='#E91E63', label='Optimal dimension: ' + str(out["dimension"]))
     ax1.legend(loc='upper right')
 
-     # Plot r optimization
+    # Plot r optimization
     ax2.set_title("Optimization of Tolerence Threshold (r)")
     ax2.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#00BCD4')
     ax2.axvline(x=out["r"], color='#E91E63', label='Optimal r: ' + str(np.round(out["r"], 3)))
@@ -139,8 +139,8 @@ def _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension
     embedded = complexity_embedding(signal, delay=out["delay"], dimension=out["dimension"])
     if embedded.size / len(embedded) < attractor_dimension:
             raise ValueError("NeuroKit error: complexity_optimize():"
-                         "attractor_dimension is larger than the number"
-                         "of dimension")
+                             "attractor_dimension is larger than the number"
+                             "of dimension.")
 
     # Chunk the data into colorbars
     if attractor_dimension == 3:
@@ -153,7 +153,7 @@ def _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension
         lc = matplotlib.collections.LineCollection(segments, cmap='plasma', norm=norm)
         lc.set_array(z)
         line = ax3.add_collection(lc)
-        #   Customize
+        # Customize
         ax3.set_xlim(x.min(), x.max())
         ax3.set_ylim(x.min(), x.max())
     if attractor_dimension == 2:

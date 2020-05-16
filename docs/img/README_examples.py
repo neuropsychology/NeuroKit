@@ -151,7 +151,7 @@ parameters = nk.complexity_optimize(signal, show=True)
 parameters
 # Save plot
 fig = plt.gcf()
-fig.set_size_inches(10, 6)
+plot.set_size_inches(10, 6, forward=True)
 fig.savefig("README_complexity_optimize.png", dpi=300, h_pad=3)
 
 
