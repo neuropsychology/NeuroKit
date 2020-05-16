@@ -66,7 +66,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
     # Method
     method = method.lower()
     if method in ["afnn"]:
-        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=show, **kwargs)
+        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
         E1 = E[1:] / E[:-1]
         E2 = Es[1:] / Es[:-1]
 
@@ -78,8 +78,8 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             fig, ax = plt.subplots()
             ax.set_xlabel('Embedding dimension $d$')
             ax.set_ylabel('$E_1(d)$ and $E_2(d)$')
-            ax.plot(dimension_seq[:-1], E1, 'bo-', label='$E_1(d)$')
-            ax.plot(dimension_seq[:-1], E2, 'go-', label='$E_2(d)$')
+            ax.plot(dimension_seq[:-1], E1, 'bo-', label='$E_1(d)$', color='#2196F3')
+            ax.plot(dimension_seq[:-1], E2, 'go-', label='$E_2(d)$', color='#009688')
             ax.axvline(x=min_dimension, color='#E91E63', label='Optimal dimension: ' + str(min_dimension))
             ax.legend(loc='upper right')
 
@@ -91,11 +91,14 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             fig, ax = plt.subplots()
             ax.set_xlabel('Embedding dimension $d$')
             ax.set_ylabel('$FNN(%)$')
-            ax.plot(dimension_seq, 100 * f1, 'bo--', label='Test I')
-            ax.plot(dimension_seq, 100 * f2, 'g^--', label='Test II')
-            ax.plot(dimension_seq, 100 * f3, 'rs-', label='Test I + II')
+            ax.plot(dimension_seq, 100 * f1, 'bo--', label='Test I', color='#2196F3')
+            ax.plot(dimension_seq, 100 * f2, 'g^--', label='Test II', color='#009688')
+            ax.plot(dimension_seq, 100 * f3, 'rs-', label='Test I + II', color='#f44336')
             ax.axvline(x=min_dimension, color='#E91E63', label='Optimal dimension: ' + str(min_dimension))
             ax.legend(loc='upper right')
+    else:
+        raise ValueError("NeuroKit error: complexity_dimension(): 'method' "
+                         "not recognized.")
     return min_dimension
 
 
