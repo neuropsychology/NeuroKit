@@ -24,13 +24,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     -------
     DataFrame
         Contains non-linear HRV metrics:
-        - "*HRV_SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term RR interval fluctuations i.e., beat-to-beat variability.
-        - "*HRV_SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line of identity. It is an index of long-term RR interval fluctuations.
-        - "*HRV_SD2SD1*": the ratio between short and long term fluctuations of the RR intervals (SD2 divided by SD1).
-        - "*HRV_CSI*": the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability of the Poincaré plot by its transverse variability.
-        - "*HRV_CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and transverse variability.
-        - "*HRV_CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal variability by its transverse variability. Usually used in seizure research.
-        - "*HRV_SampEn*": the sample entropy measure of HRV, calculated by `entropy_sample()`.
+        - "*SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term RR interval fluctuations i.e., beat-to-beat variability.
+        - "*SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line of identity. It is an index of long-term RR interval fluctuations.
+        - "*SD2SD1*": the ratio between short and long term fluctuations of the RR intervals (SD2 divided by SD1).
+        - "*CSI*": the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability of the Poincaré plot by its transverse variability.
+        - "*CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and transverse variability.
+        - "*CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal variability by its transverse variability. Usually used in seizure research.
+        - "*SampEn*": the sample entropy measure of HRV, calculated by `entropy_sample()`.
     """
 
     # Compute heart period in milliseconds.
@@ -65,9 +65,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
 def _show(heart_period, out):
     
-        mean_heart_period = out[""]
-        sd1 = out[""]
-        sd2 = out[""]
+        mean_heart_period = np.mean(heart_period)
+        sd1 = out["SD1"]
+        sd2 = out["SD2"]
         
         # Axes
         ax1 = heart_period[:-1]
