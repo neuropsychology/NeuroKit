@@ -94,27 +94,22 @@ This is how a typical sinusoidal signal looks like, when embedded in 2D and 3D r
 **Using NeuroKit**
 
 There are different methods to guide the choice of parameters.
-In NeuroKit, you can use :code:`nk.complexity_optimize()` to estimate the optimal parameters.
+In NeuroKit, you can use :code:`nk.complexity_optimize()` to estimate the optimal parameters, including time delay, embedding dimension and tolerance threshold.
 
 .. code-block:: python
 
     import neurokit2 as nk
 
     signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    parameters = nk.complexity_optimize(signal)
+    parameters = nk.complexity_optimize(signal, show=True)
     
     parameters
-    >>> {'delay': 20, 'dimension': 5, 'r': 0.014156214774197567}
+    >>> {'delay': 22, 'dimension': 5, 'r': 0.014}
     
-You can then visualize the reconstructed attractor by entering the parameters into :code:`nk.complexity_embeddding()`.
+.. image:: https://raw.github.com/neuropsychology/Neurokit/dev/docs/img/complexity_optimize.png
 
-.. code-block:: python
-
-    embedded = nk.complexity_embedding(signal, delay=20, dimension=5, show=True)
-
-.. image:: https://raw.github.com/neuropsychology/Neurokit/dev/docs/img/attractor.png
-
-
+In the above example, the optimal time delay is estimated using the *Mutual Information* method (Fraser & Swinney, 1986), the optimal embedding dimension is estimated using the *Average False Nearest Neighbour* (Cao, 1997) and the optimal r is obtained using the *Maximum Approximate Entropy* (Lu et al., 2008).
+These are the default methods in :code:`nk.complexity_optimize()`. Nevertheless, you can specify your preferred method via the method arguments.
 
 More of these methods can be read about in this `chapter <https://personal.egr.uri.edu/chelidz/documents/mce567_Chapter_7.pdf>`_ here.
     
