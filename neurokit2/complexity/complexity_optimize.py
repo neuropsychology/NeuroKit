@@ -2,14 +2,18 @@ import neurokit2 as nk
 import numpy as np
 import pandas as pd
 import scipy.spatial
+import matplotlib
+import matplotlib.collections
+import matplotlib.pyplot as plt
 
 from .complexity_embedding import complexity_embedding
-from .complexity_delay import complexity_delay
-from .complexity_dimension import complexity_dimension
-from .complexity_r import complexity_r
+from .complexity_delay import _embedding_delay_metric, _embedding_delay_select
+from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn
+from .complexity_r import _optimize_r
+from .entropy_approximate import entropy_approximate
 
 
-def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimension_max=20, dimension_method="afnn", r_method="maxApEn"):
+def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimension_max=20, dimension_method="afnn", r_method="maxApEn", show=False, attractor_dimension=3):
     """Find optimal complexity parameters
 
     Estimate optimal complexity parameters Dimension (m), Time Delay (tau) and tolerance 'r'.
@@ -42,7 +46,7 @@ def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimens
     >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> parameters = nk.complexity_optimize(signal)
+    >>> parameters = nk.complexity_optimize(signal, show=True)
     >>> parameters
 
     References
@@ -57,19 +61,180 @@ def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimens
     out = {}
 
     # Optimize delay
-    out["delay"] = complexity_delay(signal, delay_max=delay_max, method=delay_method)
+    tau_sequence, metric, metric_values, out["delay"] = _complexity_delay(signal, delay_max=delay_max, method=delay_method)
+
 
     # Optimize dimension
-    out["dimension"] = complexity_dimension(signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method)
+    dimension_seq, optimize_indices, out["dimension"] = _complexity_dimension(signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method)
 
     # Optimize r
-    out["r"] = complexity_r(signal, delay=out["delay"], dimension=out["dimension"], method=r_method)
+    r_method = r_method.lower()
+    if r_method in ["traditional"]:
+        out["r"] = 0.2 * np.std(signal, ddof=1)
+    if r_method in ["maxapen", 'optimize']:
+        r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"], method=r_method)
 
+    if show is True:
+        if r_method in ["traditional"]:
+            raise ValueError("NeuroKit error: complexity_optimize():"
+                         "show is not available for current r_method")
+        if r_method in ["maxapen", 'optimize']:
+            _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension_seq, optimize_indices, r_range, ApEn, dimension_method=dimension_method, attractor_dimension=attractor_dimension)
 
     return out
 
 
+# =============================================================================
+# Plot
+# =============================================================================
 
+def _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension_seq, optimize_indices, r_range, ApEn, dimension_method="afnn", attractor_dimension=3):
+
+
+    fig = plt.figure(constrained_layout=False)
+    spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=3, height_ratios=[1, 1, 1], width_ratios=[1-1/np.pi, 1/np.pi])
+
+    ax0 = fig.add_subplot(spec[0, :-1])
+    ax1 = fig.add_subplot(spec[1, :-1])
+    ax2 = fig.add_subplot(spec[2, :-1])
+    ax3 = fig.add_subplot(spec[:, -1])
+    ax0.set_xlabel("Time Delay (tau)")
+    ax1.set_xlabel("Embedding dimension $d$")
+    ax2.set_xlabel("Approximate Entropy $ApEn$")
+    ax3.set_xlabel("Signal [i]")
+    ax0.set_ylabel(metric)
+    ax1.set_ylabel("$E_1(d)$ and $E_2(d)$")
+    ax2.set_ylabel("$FNN(%)$")
+    ax3.set_ylabel("Signal [i-" + str(out["delay"]) + "]")
+
+    fig.suptitle("Complexity Optimization", fontweight="bold")
+    plt.subplots_adjust(hspace=0.3, wspace=0.1)
+
+    # Plot tau optimization
+    ax0.set_title("Optimization of Time Delay (tau)")
+    ax0.plot(tau_sequence, metric_values, color='#3F51B5', label=metric)
+    ax0.axvline(x=out["delay"], color='#E91E63', label='Optimal delay: ' + str(out["delay"]))
+    ax0.legend(loc='upper right')
+
+    # Plot dimension optimization
+    ax1.set_title("Optimization of Dimension (d)")
+    if dimension_method.lower() in ["afnn"]:
+        ax1.plot(dimension_seq[:-1], optimize_indices[0], 'bo-', label='$E_1(d)$', color='#9C27B0')
+        ax1.plot(dimension_seq[:-1], optimize_indices[1], 'go-', label='$E_2(d)$', color='#009688')
+    if dimension_method.lower() in ["fnn"]:
+        ax1.plot(dimension_seq, 100 * optimize_indices[0], 'bo--', label='Test I', color='#9C27B0')
+        ax1.plot(dimension_seq, 100 * optimize_indices[1], 'g^--', label='Test II', color='#009688')
+        ax1.plot(dimension_seq, 100 * optimize_indices[2], 'rs-', label='Test I + II', color='#f44336')
+    ax1.axvline(x=out["dimension"], color='#E91E63', label='Optimal dimension: ' + str(out["dimension"]))
+    ax1.legend(loc='upper right')
+
+     # Plot r optimization
+    ax2.set_title("Optimization of Tolerence Threshold (r)")
+    ax2.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#00BCD4')
+    ax2.axvline(x=out["r"], color='#E91E63', label='Optimal r: ' + str(np.round(out["r"], 3)))
+    ax2.legend(loc='upper right')
+
+    # Attractor
+    ax3.set_title("Attractor")
+    embedded = complexity_embedding(signal, delay=out["delay"], dimension=out["dimension"])
+    if embedded.size / len(embedded) < attractor_dimension:
+            raise ValueError("NeuroKit error: complexity_optimize():"
+                         "attractor_dimension is larger than the number"
+                         "of dimension")
+
+    # Chunk the data into colorbars
+    if attractor_dimension == 3:
+        x = embedded[:, 0]
+        y = embedded[:, 1]
+        z = embedded[:, 2]
+        points = np.array([x, y]).T.reshape(-1, 1, 2)
+        segments = np.concatenate([points[:-1], points[1:]], axis=1)
+        norm = plt.Normalize(z.min(), z.max())
+        lc = matplotlib.collections.LineCollection(segments, cmap='plasma', norm=norm)
+        lc.set_array(z)
+        line = ax3.add_collection(lc)
+        #   Customize
+        ax3.set_xlim(x.min(), x.max())
+        ax3.set_ylim(x.min(), x.max())
+    if attractor_dimension == 2:
+        ax3.plot(embedded[:, 0], embedded[:, 1], color='#3F51B5')
+
+    return fig
+
+
+# =============================================================================
+# Internals
+# =============================================================================
+def _complexity_delay(signal, delay_max=100, method="fraser1986"):
+
+    # Initalize vectors
+    if isinstance(delay_max, int):
+        tau_sequence = np.arange(1, delay_max)
+    else:
+        tau_sequence = np.array(delay_max)
+
+    # Get metric
+    # Method
+    method = method.lower()
+    if method in ["fraser", "fraser1986", "tdmi"]:
+        metric = "Mutual Information"
+        algorithm = "first local minimum"
+    elif method in ["theiler", "theiler1990"]:
+        metric = "Autocorrelation"
+        algorithm = "first 1/e crossing"
+    elif method in ["casdagli", "casdagli1991"]:
+        metric = "Autocorrelation"
+        algorithm = "first zero crossing"
+    elif method in ["rosenstein", "rosenstein1993", 'adfd']:
+        metric = "Displacement"
+        algorithm = "closest to 40% of the slope"
+    else:
+        raise ValueError("NeuroKit error: complexity_delay(): 'method' "
+                         "not recognized.")
+    metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
+    # Get optimal tau
+    optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
+    tau = tau_sequence[optimal]
+
+    return tau_sequence, metric, metric_values, tau
+
+def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10.0, A=2.0):
+
+    # Initalize vectors
+    if isinstance(dimension_max, int):
+        dimension_seq = np.arange(1, dimension_max + 1)
+    else:
+        dimension_seq = np.array(dimension_max)
+
+    # Method
+    method = method.lower()
+    if method in ["afnn"]:
+        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=False)
+        E1 = E[1:] / E[:-1]
+        E2 = Es[1:] / Es[:-1]
+        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
+        optimize_indices = [E1, E2]
+        return dimension_seq, optimize_indices, min_dimension
+
+    if method in ["fnn"]:
+        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A)
+        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
+        optimize_indices = [f1, f2, f3]
+        return dimension_seq, optimize_indices, min_dimension
+    else:
+        raise ValueError("NeuroKit error: complexity_dimension(): 'method' "
+                         "not recognized.")
+
+def _complexity_r(signal, delay=None, dimension=None, method='maxapen'):
+
+    modulator = np.arange(0.02, 0.8, 0.02)
+    r_range = modulator * np.std(signal, ddof=1)
+    ApEn = np.zeros_like(r_range)
+    for i, r in enumerate(r_range):
+        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])
+    r = r_range[np.argmax(ApEn)]
+
+    return r_range, ApEn, r
 
 # =============================================================================
 # Methods
