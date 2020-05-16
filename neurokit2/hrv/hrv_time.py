@@ -20,19 +20,19 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     -------
     DataFrame
         Contains time domain HRV metrics:
-        - "*HRV_RMSSD*": the square root of the mean of the sum of successive differences between adjacent RR intervals.
-        - "*HRV_MeanNN*": the mean of the RR intervals.
-        - "*HRV_SDNN*": the standard deviation of the RR intervals.
-        - "*HRV_SDSD*": the standard deviation of the successive differences between RR intervals.
-        - "*HRV_CVNN*": the standard deviation of the RR intervals (SDNN) divided by the mean of the RR intervals (MeanNN).
-        - "*HRV_CVSD*": the root mean square of the sum of successive differences (RMSSD) divided by the mean of the RR intervals (MeanNN).
-        - "*HRV_MedianNN*": the median of the absolute values of the successive differences between RR intervals.
-        - "*HRV_MadNN*": the median absolute deviation of the RR intervals.
+        - "*RMSSD*": the square root of the mean of the sum of successive differences between adjacent RR intervals.
+        - "*MeanNN*": the mean of the RR intervals.
+        - "*SDNN*": the standard deviation of the RR intervals.
+        - "*SDSD*": the standard deviation of the successive differences between RR intervals.
+        - "*CVNN*": the standard deviation of the RR intervals (SDNN) divided by the mean of the RR intervals (MeanNN).
+        - "*CVSD*": the root mean square of the sum of successive differences (RMSSD) divided by the mean of the RR intervals (MeanNN).
+        - "*MedianNN*": the median of the absolute values of the successive differences between RR intervals.
+        - "*MadNN*": the median absolute deviation of the RR intervals.
         - "*HCVNN*": the median absolute deviation of the RR intervals (MadNN) divided by the median of the absolute differences of their successive differences (MedianNN).
         - "*pNN50*": the proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
         - "*pNN20*": the proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
-        - "*HRV_TINN*": a geometrical parameter of the HRV, or more specifically, the baseline width of the RR intervals distribution obtained by triangular interpolation, where the error of least squares determines the triangle. It is an approximation of the RR interval distribution.
-        - "*HRV_HTI*": the HRV triangular index, measuring the total number of RR intervals divded by the height of the RR intervals histogram.
+        - "*TINN*": a geometrical parameter of the HRV, or more specifically, the baseline width of the RR intervals distribution obtained by triangular interpolation, where the error of least squares determines the triangle. It is an approximation of the RR interval distribution.
+        - "*HTI*": the HRV triangular index, measuring the total number of RR intervals divded by the height of the RR intervals histogram.
     """
 
     # Compute heart period in milliseconds.
@@ -62,7 +62,6 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     out["pNN20"] = nn20 / len(heart_period) * 100
 
     # Geometrical domain
-    bar_y, bar_x = np.histogram(heart_period, bins=range(300, 2000, 8))
     bar_y, bar_x = np.histogram(heart_period, bins="auto")
     out["TINN"] = np.max(bar_x) - np.min(bar_x)  # Triangular Interpolation of the NN Interval Histogram
     out["HTI"] = len(heart_period) / np.max(bar_y)  # HRV Triangular Index
