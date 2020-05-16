@@ -57,13 +57,13 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     # Compute length of interpolated heart period signal at requested sampling
     # rate.
     if sampling_rate > sampling_rate_interpolation:
-        desired_length = peaks[-1] / sampling_rate * sampling_rate_interpolation
+        n_samples = int(np.rint(peaks[-1] / sampling_rate
+                                * sampling_rate_interpolation))
     else:
-        desired_length = peaks[-1]
+        n_samples = peaks[-1]
 
-    heart_period_intp = signal_interpolate(np.range(heart_period.size),
-                                           heart_period,
-                                           desired_length=desired_length,
+    heart_period_intp = signal_interpolate(peaks, heart_period,
+                                           desired_length=n_samples,
                                            method=interpolation_order)
 
     power = signal_power(heart_period_intp,
