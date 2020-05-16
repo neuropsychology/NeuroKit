@@ -6,23 +6,24 @@ from . import hrv_time, hrv_frequency, hrv_nonlinear
 def hrv_summary(peaks, sampling_rate=1000, show=False):
     """ Computes indices of Heart Rate Variability (HRV).
 
-    Note that a minimum recording is recommended for somenindices to be
-    meaninful. For instance, 1, 2 and 5 minutes of good signal are the
-    recomended minimums for HF, LF and LF/HF, respectively.
+    Computes HRV indices in the time-, frequency-, and nonlinear domain. Note
+    that a minimum duration of the signal containing the peaks is recommended
+    for some HRV indices to be meaninful. For instance, 1, 2 and 5 minutes of
+    high quality signal are the recomended minima for HF, LF and LF/HF,
+    respectively. See references for details.
 
     Parameters
     ----------
-    heart_period : array
-        Array containing the heart period as returned by `signal_period()`.
     peaks : dict
-        The samples at which the peaks occur. Returned by `ecg_peaks()` or
-        `ppg_peaks`. Defaults to None.
+        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
+        Dictionary returned by ecg_findpeaks, ecg_peaks, ppg_findpeaks, or
+        ppg_peaks.
     sampling_rate : int, optional
-        The sampling frequency of the signal (in Hz, i.e., samples/second).
+        Sampling rate (Hz) of the continuous cardiac signal in which the peaks
+        occur. Should be at least twice as high as the highest frequency in vhf.
+        By default 1000.
     show : bool, optional
-        If True, will return a Poincaré plot, a scattergram, which plots each
-        RR interval against the next successive one. The ellipse centers around
-        the average RR interval. Defaults to False.
+        If True, returns the plots that are generates for each of the domains.
 
     Returns
     -------
@@ -53,12 +54,13 @@ def hrv_summary(peaks, sampling_rate=1000, show=False):
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
       Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
-    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms. Frontiers in public health, 5, 258.
+    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
+    variability metrics and norms. Frontiers in public health, 5, 258.
     """
     # Get indices
     hrv = {}    # initialize empty dict
-    hrv.update(hrv_time(peaks, sampling_rate=sampling_rate, show=show))
-    hrv.update(hrv_frequency(peaks, sampling_rate=sampling_rate, show=show))
+    hrv.update(hrv_time(peaks, sampling_rate=sampling_rate))
+    hrv.update(hrv_frequency(peaks, sampling_rate=sampling_rate))
     hrv.update(hrv_nonlinear(peaks, sampling_rate=sampling_rate, show=show))
 
     hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
