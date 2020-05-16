@@ -144,15 +144,15 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 # =============================================================================
 
 # Generate signal
-signal = nk.signal_simulate(duration=20, sampling_rate=200, noise=0.01)
+signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
 
-# Find optimal Tau for time-delay embedding
-optimal_delay = nk.embedding_delay(signal, show=True)
-
+# Find optimal time delay, embedding dimension and r
+parameters = nk.complexity_optimize(signal, show=True)
+parameters
 # Save plot
 fig = plt.gcf()
 fig.set_size_inches(10, 6)
-fig.savefig("README_embedding.png", dpi=300, h_pad=3)
+fig.savefig("README_complexity_optimize.png", dpi=300, h_pad=3)
 
 
 nk.entropy_sample(signal)
