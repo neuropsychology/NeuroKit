@@ -75,10 +75,11 @@ def _optimize_r(signal, delay=None, dimension=None, show=False):
     r = r_range[np.argmax(ApEn)]
 
     if show is True:
-        plt.title(r'ApEn')
-        plt.xlabel(r'r')
-        plt.ylabel(r'Approximate Entropy $ApEn$')
-        plt.plot(r_range, ApEn, 'bo-', label=r'$ApEn$')
-        plt.legend()
+        fig, ax = plt.subplots()
+        ax.set_xlabel('Tolerence threshold $r$')
+        ax.set_ylabel('Approximate Entropy $ApEn$')
+        ax.plot(r_range, ApEn, 'bo-', label=r'$ApEn$')
+        ax.axvline(x=r, color='#E91E63', label='Optimal r: ' + str(r))
+        ax.legend(loc='upper right')
 
     return r
