@@ -1,6 +1,6 @@
 import numpy as np
 
-from .sanitize_input import _sanitize_input_vector
+from .sanitize_input import sanitize_input
 
 
 def find_closest(closest_of, list_to_search_in, direction="both", strictly=False, return_index=False):
@@ -38,8 +38,8 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
     """
 
     # Transform to arrays
-    closest_of = _sanitize_input_vector(closest_of)
-    list_to_search_in = _sanitize_input_vector(list_to_search_in)
+    closest_of = sanitize_input(closest_of, "vector")
+    list_to_search_in = sanitize_input(list_to_search_in, "vector")
 
     out = [_find_closest(list_to_search_in, i, direction, strictly, return_index) for i in closest_of]
 
