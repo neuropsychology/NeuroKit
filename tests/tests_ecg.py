@@ -118,16 +118,7 @@ def test_ecg_process():
     ecg = nk.ecg_simulate(sampling_rate=sampling_rate, noise=noise)
     signals, info = nk.ecg_process(ecg, sampling_rate=sampling_rate,
                                    method="neurokit")
-    # Only check array dimensions and column names since functions called by
-    # ecg_process have already been unit tested
-    assert all(elem in ["ECG_Raw", "ECG_Clean", "ECG_R_Peaks", "ECG_Rate",
-                        'ECG_Quality', "ECG_P_Peaks",
-                        "ECG_Q_Peaks", "ECG_S_Peaks",
-                        "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
-                        "ECG_Phase_Atrial", "ECG_Phase_Ventricular",
-                        "ECG_Phase_Atrial_Completion",
-                        "ECG_Phase_Ventricular_Completion"]
-               for elem in np.array(signals.columns.values, dtype=str))
+
 
 
 def test_ecg_plot():
@@ -244,18 +235,6 @@ def test_ecg_eventrelated():
                       np.array(ecg_eventrelated["ECG_Rate_Max"]))
 
     assert len(ecg_eventrelated["Label"]) == 3
-    assert len(ecg_eventrelated.columns) == 15
-
-    assert all(elem in ["ECG_Rate_Max", "ECG_Rate_Min", "ECG_Rate_Mean",
-                        "ECG_Rate_Max_Time", "ECG_Rate_Min_Time",
-                        "ECG_Rate_Trend_Quadratic",
-                        "ECG_Rate_Trend_Linear", "ECG_Rate_Trend_R2",
-                        "ECG_Phase_Atrial",
-                        "ECG_Phase_Atrial_Completion",
-                        "ECG_Phase_Ventricular",
-                        "ECG_Phase_Ventricular_Completion",
-                        'ECG_Quality_Mean', "Event_Onset", "Label"]
-               for elem in np.array(ecg_eventrelated.columns.values, dtype=str))
 
 
 def test_ecg_delineate():

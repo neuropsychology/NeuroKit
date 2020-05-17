@@ -13,10 +13,10 @@ from ..misc import findclosest
 from ..signal import signal_findpeaks
 from ..signal import signal_zerocrossings
 from ..signal import signal_autocor
-from .embedding import embedding
+from .complexity_embedding import complexity_embedding
 
 
-def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
+def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     """Estimate optimal Time Delay (tau) for time-delay embedding
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
@@ -41,7 +41,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     See Also
     ---------
-    embedding_dimension, embedding
+    complexity_dimension, complexity_embedding
 
     Examples
     ----------
@@ -51,17 +51,17 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> nk.signal_plot(signal)
     >>>
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="fraser1986")
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="theiler1990")
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="casdagli1991")
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="fraser1986")
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150), sampling_rate=150)
     >>> nk.signal_plot(signal)
     >>>
-    >>> delay = nk.embedding_delay(signal, delay_max=1000, show=True)
+    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True)
 
     References
     ------------
@@ -90,7 +90,7 @@ def embedding_delay(signal, delay_max=100, method="fraser1986", show=False):
         metric = "Displacement"
         algorithm = "closest to 40% of the slope"
     else:
-        raise ValueError("NeuroKit error: embedding_delay(): 'method' "
+        raise ValueError("NeuroKit error: complexity_delay(): 'method' "
                          "not recognized.")
 
     # Get metric
@@ -127,7 +127,7 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
     elif algorithm == "closest to 40% of the slope":
         slope = np.diff(metric_values) * len(metric_values)
         slope_in_deg = np.rad2deg(np.arctan(slope))
-        optimal = np.where(slope_in_deg == findclosest(40, slope_in_deg))[0][0]
+        optimal = np.where(slope_in_deg == findclosest(slope_in_deg, 40))[0][0]
     return optimal
 
 
@@ -143,7 +143,7 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 
         # Loop through taus and compute all scores values
         for i, current_tau in enumerate(tau_sequence):
-            embedded = embedding(signal, delay=current_tau, dimension=2)
+            embedded = complexity_embedding(signal, delay=current_tau, dimension=2)
             if metric == "Mutual Information":
                 values[i] = mutual_information(embedded[:, 0],
                                                embedded[:, 1],
@@ -178,7 +178,7 @@ def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mu
     ax0.legend(loc='upper right')
 
     # Attractor
-    embedded = embedding(signal, delay=tau, dimension=3)
+    embedded = complexity_embedding(signal, delay=tau, dimension=3)
     x = embedded[:, 0]
     y = embedded[:, 1]
     z = embedded[:, 2]

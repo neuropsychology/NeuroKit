@@ -2,7 +2,7 @@
 import numpy as np
 import sklearn.neighbors
 
-from .embedding import embedding
+from .complexity_embedding import complexity_embedding
 
 
 
@@ -72,7 +72,7 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", distance='chebyshev
         raise ValueError("NeuroKit error: _get_embedded(): The given metric (%s) is not valid. The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics))
 
     # Get embedded
-    embedded = embedding(signal, delay=delay, dimension=dimension)
+    embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     if approximate is False:
         embedded = embedded[:-1]  # Removes the last line
 

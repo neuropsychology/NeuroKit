@@ -92,13 +92,6 @@ def test_emg_eventrelated():
                                     emg_eventrelated["EMG_Amplitude_Max"])))
 
     assert len(emg_eventrelated["Label"]) == 3
-    assert len(emg_eventrelated.columns) == 7
-
-    assert all(elem in ["EMG_Activation", "EMG_Amplitude_Mean",
-                        "EMG_Amplitude_Max", "EMG_Amplitude_Max_Time",
-                        "EMG_Bursts", "Label", "Event_Onset"]
-               for elem in np.array(emg_eventrelated.columns.values, dtype=str))
-
 
 def test_emg_intervalrelated():
 

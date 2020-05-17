@@ -266,7 +266,7 @@ If you understand what happened here, in this combination of lists, functions, l
 Packages
 -------------
 
-Interestingly, Python alone does not include a lot of functions. **And that its strength**, because it allows to easily use functions developped by other people, that are stored in **packages** (or *modules*). A package is a collection of functions that can be downloaded and used in your code.
+Interestingly, Python alone does not include a lot of functions. **And that's also its strength**, because it allows to easily use functions developped by other people, that are stored in **packages** (or *modules*). A package is a collection of functions that can be downloaded and used in your code.
 
 One of the most popular package is **numpy** (for *NUM*rical *PY*thon), including a lot of functions for maths and scientific programming. It is likely that this package is already **installed** on your Python distribution. However, installing a package doesn't mean you can use it. In order to use a package, you have to **import it** (*load it*) in your script, before using it. This usually happens at the top of a Python file, like this:
 

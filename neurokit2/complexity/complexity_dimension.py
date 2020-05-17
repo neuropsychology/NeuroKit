@@ -3,11 +3,11 @@ import numpy as np
 import scipy.spatial
 import matplotlib.pyplot as plt
 
-from .embedding import embedding
+from .complexity_embedding import complexity_embedding
 
 
 
-def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
+def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
     """Estimate optimal Dimension (m) for time-delay embedding.
 
     Parameters
@@ -15,7 +15,7 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``complexity_delay()``).
     dimension_max : int
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order') to test.
     method : str
@@ -34,7 +34,7 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
 
     See Also
     ------------
-    embedding_delay, embedding
+    complexity_delay, complexity_embedding
 
     Examples
     ---------
@@ -42,17 +42,16 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
     >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> delay = nk.embedding_delay(signal, delay_max=500)
+    >>> delay = nk.complexity_delay(signal, delay_max=500)
     >>>
-    >>> values = nk.embedding_dimension(signal, delay=delay, dimension_max=20, show=True)
+    >>> values = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150)[0], sampling_rate=150)
-    >>> delay = nk.embedding_delay(signal, delay_max=300)
+    >>> delay = nk.complexity_delay(signal, delay_max=300)
     >>>
-    >>> # This doesn't work for some reasons
-    >>> # values = nk.embedding_dimension(signal, delay=delay, dimension_max=20, show=True)
+    >>> # values = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
 
     References
     -----------
@@ -67,35 +66,39 @@ def embedding_dimension(signal, delay=1, dimension_max=20, method="afnn", show=F
     # Method
     method = method.lower()
     if method in ["afnn"]:
-        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=show, **kwargs)
+        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
         E1 = E[1:] / E[:-1]
         E2 = Es[1:] / Es[:-1]
 
-        if show is True:
-            plt.title(r'AFN')
-            plt.xlabel(r'Embedding dimension $d$')
-            plt.ylabel(r'$E_1(d)$ and $E_2(d)$')
-            plt.plot(dimension_seq[:-1], E1, 'bo-', label=r'$E_1(d)$')
-            plt.plot(dimension_seq[:-1], E2, 'go-', label=r'$E_2(d)$')
-            plt.legend()
-
         # To find where E1 saturates, set a threshold of difference
         # threshold = 0.1 * (np.max(E1) - np.min(E1))
-        min_dimension = [i for i, x in enumerate(E1 >= 0.8 * np.max(E1)) if x][0] + 1
+        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
+
+        if show is True:
+            fig, ax = plt.subplots()
+            ax.set_xlabel('Embedding dimension $d$')
+            ax.set_ylabel('$E_1(d)$ and $E_2(d)$')
+            ax.plot(dimension_seq[:-1], E1, 'bo-', label='$E_1(d)$', color='#2196F3')
+            ax.plot(dimension_seq[:-1], E2, 'go-', label='$E_2(d)$', color='#009688')
+            ax.axvline(x=min_dimension, color='#E91E63', label='Optimal dimension: ' + str(min_dimension))
+            ax.legend(loc='upper right')
 
     if method in ["fnn"]:
         f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, show=show, **kwargs)
 
+        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
         if show is True:
-            plt.title(r'FNN')
-            plt.xlabel(r'Embedding dimension $d$')
-            plt.ylabel(r'FNN (%)')
-            plt.plot(dimension_seq, 100 * f1, 'bo--', label=r'Test I')
-            plt.plot(dimension_seq, 100 * f2, 'g^--', label=r'Test II')
-            plt.plot(dimension_seq, 100 * f3, 'rs-', label=r'Test I + II')
-            plt.legend()
-
-        min_dimension = [i for i, x in enumerate(f3 == 0) if x][0] + 1
+            fig, ax = plt.subplots()
+            ax.set_xlabel('Embedding dimension $d$')
+            ax.set_ylabel('$FNN(%)$')
+            ax.plot(dimension_seq, 100 * f1, 'bo--', label='Test I', color='#2196F3')
+            ax.plot(dimension_seq, 100 * f2, 'g^--', label='Test II', color='#009688')
+            ax.plot(dimension_seq, 100 * f3, 'rs-', label='Test I + II', color='#f44336')
+            ax.axvline(x=min_dimension, color='#E91E63', label='Optimal dimension: ' + str(min_dimension))
+            ax.legend(loc='upper right')
+    else:
+        raise ValueError("NeuroKit error: complexity_dimension(): 'method' "
+                         "not recognized.")
     return min_dimension
 
 
@@ -130,8 +133,8 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, metric='chebyshev', w
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
     # at both dimension d as well as dimension d + 1.
-    y1 = embedding(signal[:-delay], delay=delay, dimension=dimension)
-    y2 = embedding(signal, delay=delay, dimension=dimension + 1)
+    y1 = complexity_embedding(signal[:-delay], delay=delay, dimension=dimension)
+    y2 = complexity_embedding(signal, delay=delay, dimension=dimension + 1)
 
     # Find near neighbors in dimension d.
     index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
@@ -172,8 +175,8 @@ def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
     # at both dimension d as well as dimension d + 1.
-    y1 = embedding(signal[:-delay], delay=delay, dimension=dimension)
-    y2 = embedding(signal, delay=delay, dimension=dimension + 1)
+    y1 = complexity_embedding(signal[:-delay], delay=delay, dimension=dimension)
+    y2 = complexity_embedding(signal, delay=delay, dimension=dimension + 1)
 
     # Find near neighbors in dimension d.
     index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
@@ -233,7 +236,7 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
 
     # Sanity checks
     if len(signal.shape) == 1:
-        y = embedding(signal, delay=delay, dimension=dimension_max)
+        y = complexity_embedding(signal, delay=delay, dimension=dimension_max)
     else:
         y = signal
 

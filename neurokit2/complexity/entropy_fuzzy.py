@@ -2,7 +2,6 @@
 import pandas as pd
 import numpy as np
 
-from .embedding import embedding
 from .utils import _get_r, _phi_divide, _phi
 
 

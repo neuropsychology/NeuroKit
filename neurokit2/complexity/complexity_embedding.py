@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d
 
 
-def embedding(signal, delay=1, dimension=3, show=False):
+def complexity_embedding(signal, delay=1, dimension=3, show=False):
     """Time-delay embedding of a time series (a signal)
 
     A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide a complete description of the system at some point in time. The set of all possible states is called the 'state space'.
@@ -44,17 +44,17 @@ def embedding(signal, delay=1, dimension=3, show=False):
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
     >>>
-    >>> embedded = nk.embedding(signal, delay=50, dimension=2, show=True)
-    >>> embedded = nk.embedding(signal, delay=50, dimension=3, show=True)
-    >>> embedded = nk.embedding(signal, delay=50, dimension=4, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=2, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=3, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=4, show=True)
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*4, sampling_rate=200)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200)
     >>>
-    >>> embedded = nk.embedding(signal, delay=250, dimension=2, show=True)
-    >>> embedded = nk.embedding(signal, delay=250, dimension=3, show=True)
-    >>> embedded = nk.embedding(signal, delay=250, dimension=4, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=2, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=3, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=4, show=True)
 
     References
     -----------
@@ -64,9 +64,9 @@ def embedding(signal, delay=1, dimension=3, show=False):
 
     # Sanity checks
     if dimension * delay > N:
-        raise ValueError("NeuroKit error: embedding(): dimension * delay should be lower than length of signal.")
+        raise ValueError("NeuroKit error: complexity_embedding(): dimension * delay should be lower than length of signal.")
     if delay < 1:
-        raise ValueError("NeuroKit error: embedding(): 'delay' has to be at least 1.")
+        raise ValueError("NeuroKit error: complexity_embedding(): 'delay' has to be at least 1.")
 
     Y = np.zeros((dimension, N - (dimension - 1) * delay))
     for i in range(dimension):
@@ -87,7 +87,7 @@ def embedding(signal, delay=1, dimension=3, show=False):
 def _embedding_plot(embedded):
     """Plot reconstructed attractor.
 
-    The input for this function must be obtained via `nk.embedding()`
+    The input for this function must be obtained via `nk.complexity_embedding()`
     """
     if embedded.shape[1] == 2:
         figure = _embedding_plot_2D(embedded)

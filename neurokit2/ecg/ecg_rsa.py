@@ -284,9 +284,9 @@ def _ecg_rsa_cycles(signals):
     """
     Extract respiratory cycles.
     """
-    inspiration_onsets = np.intersect1d(np.where(signals["RSP_Phase"] == 1)[0], np.where(signals["RSP_PhaseCompletion"] == 0)[0], assume_unique=True)
+    inspiration_onsets = np.intersect1d(np.where(signals["RSP_Phase"] == 1)[0], np.where(signals["RSP_Phase_Completion"] == 0)[0], assume_unique=True)
 
-    expiration_onsets = np.intersect1d(np.where(signals["RSP_Phase"] == 0)[0], np.where(signals["RSP_PhaseCompletion"] == 0)[0], assume_unique=True)
+    expiration_onsets = np.intersect1d(np.where(signals["RSP_Phase"] == 0)[0], np.where(signals["RSP_Phase_Completion"] == 0)[0], assume_unique=True)
 
     cycles_length = np.diff(inspiration_onsets)
 

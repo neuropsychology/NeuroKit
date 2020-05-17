@@ -5,7 +5,7 @@ import numpy as np
 from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
 from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
 from ..epochs.eventrelated_utils import _eventrelated_addinfo
-from ..stats import fit_r2
+from ..epochs.eventrelated_utils import _eventrelated_rate
 
 
 def ecg_eventrelated(epochs, silent=False):
@@ -89,7 +89,7 @@ def ecg_eventrelated(epochs, silent=False):
         data[i] = {}  # Initialize empty container
 
         # Rate
-        data[i] = _ecg_eventrelated_rate(epochs[i], data[i])
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="ECG_Rate")
 
         # Cardiac Phase
         data[i] = _ecg_eventrelated_phase(epochs[i], data[i])
@@ -110,49 +110,6 @@ def ecg_eventrelated(epochs, silent=False):
 # =============================================================================
 
 
-def _ecg_eventrelated_rate(epoch, output={}):
-
-    # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "ECG_Rate" in i]) == 0:
-        print("NeuroKit warning: ecg_eventrelated(): input does not"
-              "have an `ECG_Rate` column. Will skip all rate-related features.")
-        return output
-
-    # Get baseline
-    if np.min(epoch.index.values) <= 0:
-        baseline = epoch["ECG_Rate"][epoch.index <= 0].values
-        signal = epoch["ECG_Rate"][epoch.index > 0].values
-        index = epoch.index[epoch.index > 0].values
-    else:
-        baseline = epoch["ECG_Rate"][np.min(epoch.index.values):np.min(epoch.index.values)].values
-        signal = epoch["ECG_Rate"][epoch.index > np.min(epoch.index)].values
-        index = epoch.index[epoch.index > 0].values
-
-    # Max / Min / Mean
-    output["ECG_Rate_Max"] = np.max(signal) - np.mean(baseline)
-    output["ECG_Rate_Min"] = np.min(signal) - np.mean(baseline)
-    output["ECG_Rate_Mean"] = np.mean(signal) - np.mean(baseline)
-
-    # Time of Max / Min
-    output["ECG_Rate_Max_Time"] = index[np.argmax(signal)]
-    output["ECG_Rate_Min_Time"] = index[np.argmin(signal)]
-
-    # Modelling
-    # These are experimental indices corresponding to parameters of a quadratic model
-    # Instead of raw values (such as min, max etc.)
-    coefs = np.polyfit(index, signal - np.mean(baseline), 2)
-    output["ECG_Rate_Trend_Quadratic"] = coefs[0]
-    output["ECG_Rate_Trend_Linear"] = coefs[1]
-    output["ECG_Rate_Trend_R2"] = fit_r2(
-            y=signal - np.mean(baseline),
-            y_predicted=np.polyval(coefs, index),
-            adjusted=False,
-            n_parameters=3)
-
-    return output
-
-
 def _ecg_eventrelated_phase(epoch, output={}):
 
     # Sanitize input
@@ -165,16 +122,12 @@ def _ecg_eventrelated_phase(epoch, output={}):
         return output
 
     # Indication of atrial systole
-    systole = epoch["ECG_Phase_Atrial"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Atrial"] = systole
-    percentage = epoch["ECG_Phase_Atrial_Completion"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Atrial_Completion"] = percentage
+    output["ECG_Phase_Atrial"] = epoch["ECG_Phase_Atrial"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Completion_Atrial"] = epoch["ECG_Phase_Completion_Atrial"][epoch.index > 0].iloc[0]
 
     # Indication of ventricular systole
-    systole = epoch["ECG_Phase_Ventricular"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Ventricular"] = systole
-    percentage = epoch["ECG_Phase_Ventricular_Completion"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Ventricular_Completion"] = percentage
+    output["ECG_Phase_Ventricular"] = epoch["ECG_Phase_Ventricular"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Completion_Ventricular"] = epoch["ECG_Phase_Completion_Ventricular"][epoch.index > 0].iloc[0]
 
     return output
 

@@ -3,7 +3,7 @@ import numpy as np
 import sklearn.metrics.pairwise
 import matplotlib.pyplot as plt
 
-from .embedding import embedding
+from .complexity_embedding import complexity_embedding
 from ..misc import expspace
 
 
@@ -52,7 +52,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     - `nolds <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>`_
     - `Corr_Dim <https://github.com/jcvasquezc/Corr_Dim>`_
     """
-    embedded = embedding(signal, delay=delay, dimension=dimension)
+    embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
 
     r_vals = _fractal_correlation_get_r(r, signal, dist)

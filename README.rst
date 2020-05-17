@@ -81,9 +81,11 @@ Documentation
         
 .. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
         :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
+        :alt: PDF
         
 .. image:: https://mybinder.org/badge_logo.svg
         :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
+        :alt: Binder
         
 .. image:: https://img.shields.io/gitter/room/neuropsychology/NeuroKit.js.svg
         :target: https://gitter.im/NeuroKit/community
@@ -92,7 +94,7 @@ Documentation
 
 Click on the links above and check out our tutorials:
 
-Tutorials
+Guides
 ^^^^^^^^^^
 
 -  `Recording good quality signals <https://neurokit2.readthedocs.io/en/latest/tutorials/recording.html>`_
@@ -104,6 +106,7 @@ Tutorials
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 -  `Additional Resources <https://neurokit2.readthedocs.io/en/latest/tutorials/resources.html>`_
+-  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
 
 
 Examples
@@ -117,7 +120,6 @@ Examples
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
-
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
@@ -302,24 +304,20 @@ Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tuto
 Physiological Data Analysis
 ----------------------------
 
-
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/features.png
 
 Event-related
 ^^^^^^^^^^^^^^
 
 This type of analysis refers to physiological changes immediately occurring in response to an event.
-For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus).
-In this situation the analysis is epoch-based. An epoch is a short chunk of the physiological signal
-(usually < 10 seconds), that is locked to a specific stimulus. In this case, using `bio_analyze()` will
-compute the following features:
+For instance, physiological changes following the presentation of a stimulus (e.g., an emotional stimulus) indicated by
+the dotted lines in the figure above. In this situation the analysis is epoch-based.
+An epoch is a short chunk of the physiological signal (usually < 10 seconds), that is locked to a specific stimulus and hence
+the physiological signals of interest are time-segmented accordingly. This is represented by the orange boxes in the figure above.
+In this case, using `bio_analyze()` will compute features like rate changes, peak characteristics and phase characteristics.
 
-- **Features:**
-
-  - **Rate changes** *(ECG, PPG, RSP)*: mean, minimum, maximum, minimum-time and maximum-time
-  - **Peak characteristics** *(EDA)*: peak presence, amplitude, rise time, peak-time
-  - **Phase characteristics** *(ECG, RSP)*: phase type (inspiration/expiration, systole/diastole), phase completion
-  
 - `Event-related example <https://neurokit2.readthedocs.io/en/latest/examples/eventrelated.html>`_
 
 Interval-related
@@ -332,13 +330,15 @@ is at rest, or during different conditions in which there is no specific time-lo
 (e.g., watching movies, listening to music, engaging in physical activity, etc.). For instance,
 this type of analysis is used when people want to compare the physiological activity under different
 intensities of physical exercise, different types of movies, or different intensities of
-stress. In this case, using `bio_analyze()` will compute the following features:
+stress. To compare event-related and interval-related analysis, we can refer to the example figure above.
+For example, a participant might be watching a 20s-long short film where particular stimuli of
+interest in the movie appears at certain time points (marked by the dotted lines). While
+event-related analysis pertains to the segments of signals within the orange boxes (to understand the physiological
+changes pertaining to the appearance of stimuli), interval-related analysis can be
+applied on the entire 20s duration to investigate how physiology fluctuates in general.
+In this case, using `bio_analyze()` will compute features such as rate characteristics (in particular,
+variability metrices) and peak characteristics.
 
-- **Features:**
-
-  - **Rate characteristics** *(ECG, PPG, RSP)*: mean, amplitude, variability (HRV, RRV)
-  - **Peak characteristics** *(EDA)*: number of peaks, mean amplitude
-  
 - `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
 
@@ -358,12 +358,12 @@ Complexity (Entropy, Fractal Dimensions, ...)
 .. code-block:: python
 
     # Generate signal
-    signal = nk.signal_simulate(duration=20, sampling_rate=200, noise=0.01)
+    signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
 
-    # Find optimal Tau for time-delay embedding
-    optimal_delay = nk.embedding_delay(signal, show=True)
+    # Find optimal time delay, embedding dimension and r
+	parameters = nk.complexity_optimize(signal, show=True)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_embedding.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_complexity_optimize.png
 
 - **Compute complexity features**
 

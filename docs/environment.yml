@@ -8,6 +8,6 @@ dependencies:
   - nbconvert
   - ipykernel
   - pip:
-    - nbsphinx
+    - git+git://github.com/mgeier/nbsphinx.git@pygments-background
     - sphinx-nbexamples
     - sphinx-gallery

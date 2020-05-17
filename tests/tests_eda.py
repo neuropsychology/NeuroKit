@@ -159,13 +159,6 @@ def test_eda_eventrelated():
                             [no_activation]).isna().sum()) == 4
 
     assert len(eda_eventrelated["Label"]) == 3
-    assert len(eda_eventrelated.columns) == 8
-
-    assert all(elem in ['Label', 'EDA_Peak_Amplitude', 'EDA_SCR',
-                        'SCR_Peak_Amplitude', 'SCR_Peak_Amplitude_Time',
-                        'SCR_RiseTime', 'SCR_RecoveryTime', "Event_Onset"]
-               for elem in np.array(eda_eventrelated.columns.values, dtype=str))
-
 
 def test_eda_intervalrelated():
 
