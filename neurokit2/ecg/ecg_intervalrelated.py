@@ -114,7 +114,9 @@ def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
                          "your DataFrame contains an `ECG_R_Peaks` column.")
         return output
 
+    # Transform rpeaks from "signal" format to "info" format.
     rpeaks = np.where(data["ECG_R_Peaks"].values)[0]
+    rpeaks = {"ECG_R_Peaks": rpeaks}
 
     hrv = hrv_summary(rpeaks, sampling_rate=sampling_rate)
     for column in hrv.columns:
