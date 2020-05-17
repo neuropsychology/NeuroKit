@@ -7,7 +7,7 @@ from ..events import events_plot
 from ..stats import standardize as nk_standardize
 
 
-def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False):
+def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, **kwargs):
     """Plot signal with events as vertical lines.
 
     Parameters
@@ -30,7 +30,7 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
-    >>> nk.signal_plot(signal, sampling_rate=1000)
+    >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
     >>>
     >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
                              "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
@@ -100,9 +100,9 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False):
             plot.gca().set_xlabel('Samples')
     else:
         if standardize is True:
-            plot = nk_standardize(signal[continuous_columns]).plot(subplots=subplots, sharex=True)
+            plot = nk_standardize(signal[continuous_columns]).plot(subplots=subplots, sharex=True, **kwargs)
         else:
-            plot = signal[continuous_columns].plot(subplots=subplots, sharex=True)
+            plot = signal[continuous_columns].plot(subplots=subplots, sharex=True, **kwargs)
 
     # Tidy legend locations
     [plot.legend(loc=1) for plot in plt.gcf().axes]

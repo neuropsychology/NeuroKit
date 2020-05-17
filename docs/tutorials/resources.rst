@@ -17,6 +17,7 @@ ECG
 ----
 
 - `Improving Data Quality: ECG <https://support.mindwaretech.com/2017/12/improving-data-quality-ecg/>`_
+- `Understanding ECG waves <https://ecgwaves.com/topic/ecg-normal-p-wave-qrs-complex-st-segment-t-wave-j-point/>`_
 - `Analysing a Noisy ECG Signal <https://github.com/paulvangentcom/heartrate_analysis_python/blob/master/examples/5_noisy_ECG/Analysing_Noisy_ECG.ipynb>`_
 - `All About HRV Part 4: Respiratory Sinus Arrhythmia <https://support.mindwaretech.com/2017/09/all-about-hrv-part-4-respiratory-sinus-arrhythmia/>`_
 
