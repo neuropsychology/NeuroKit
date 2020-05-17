@@ -77,7 +77,7 @@ def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimens
     if show is True:
         if r_method in ["traditional"]:
             raise ValueError("NeuroKit error: complexity_optimize():"
-                         "show is not available for current r_method")
+                             "show is not available for current r_method")
         if r_method in ["maxapen", 'optimize']:
             _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension_seq, optimize_indices, r_range, ApEn, dimension_method=dimension_method, attractor_dimension=attractor_dimension)
 
