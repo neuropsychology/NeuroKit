@@ -4,7 +4,7 @@ import numpy as np
 
 from .epochs_to_df import _df_to_epochs
 from ..stats import fit_r2
-from ..misc import findclosest
+from ..misc import find_closest
 
 
 
@@ -85,7 +85,7 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
         return output
 
     # Get baseline
-    zero = findclosest(epoch.index.values, 0, return_index=True)  # Find closest to 0
+    zero = find_closest(0, epoch.index.values, return_index=True)  # Find closest to 0
     baseline = epoch[var].iloc[zero]
 
     signal = epoch[var].values[zero+1::]

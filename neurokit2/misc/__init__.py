@@ -1,6 +1,5 @@
 """Submodule for NeuroKit."""
 
 from .listify import listify
-from .findclosest import findclosest
-from .sanitize_input import sanitize_input
+from .find_closest import find_closest
 from .expspace import expspace
