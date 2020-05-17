@@ -64,6 +64,7 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
     >>> # Chunk into n blocks of 1 second
     >>> epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
     """
+
     # Santize data input
     if isinstance(data, tuple):  # If a tuple of data and info is passed
         data = data[0]
@@ -89,17 +90,19 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
     # Create epochs
     parameters = listify(onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end)
 
-    # Find the maximum numbers in an epoch
-    # Then extend data by the max samples in epochs * NaN
+    # Find the maximum numbers of samples in an epoch
     parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
     epoch_max_duration = int(max((i * sampling_rate
                                   for i in parameters["duration"])))
-    buffer = pd.DataFrame(index=range(epoch_max_duration), columns=data.columns)
+
+    # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
+    length_buffer = epoch_max_duration
+    buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns)
     data = data.append(buffer, ignore_index=True, sort=False)
     data = buffer.append(data, ignore_index=True, sort=False)
 
-    # Adjust the Onset of the events
-    parameters["onset"] = [i + epoch_max_duration for i in parameters["onset"]]
+    # Adjust the Onset of the events for the buffer
+    parameters["onset"] = [i + length_buffer for i in parameters["onset"]]
 
     epochs = {}
     for i, label in enumerate(parameters["label"]):
@@ -112,7 +115,7 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
         epoch = data.iloc[int(start):int(end)].copy()
 
         # Correct index
-        epoch["Index"] = epoch.index.values
+        epoch["Index"] = epoch.index.values - length_buffer
         epoch.index = np.linspace(start=parameters["start"][i], stop=parameters["end"][i], num=len(epoch), endpoint=True)
 
         if baseline_correction is True:
