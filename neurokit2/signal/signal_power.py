@@ -77,7 +77,16 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
 # =============================================================================
 
 def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, **kwargs):
-    psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, **kwargs)
+    for i in range(len(frequency_band)):
+        min_frequency = frequency_band[i][0]
+        if min_frequency == 0:
+            min_frequency = 0.001  # sanitize lowest frequency
+        # Check if signal length is sufficient to capture
+        # at least 2 cycles of min_frequency
+        window_length = int((2 / min_frequency) * sampling_rate)
+        if window_length <= len(signal) / 2:
+            break
+    psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, **kwargs)
 
     out = {}
     if isinstance(frequency_band[0], list) or isinstance(frequency_band[0], tuple):
