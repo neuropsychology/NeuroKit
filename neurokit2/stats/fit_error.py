@@ -58,9 +58,14 @@ def fit_error(y, y_predicted, n_parameters=2):
     # Adjusted r-squared
     # For optimization use 1 - adjR2 since we want to minimize the function
     SST = np.std(y) * n
-    R2 = SSE / SST
 
+    # Get R2
+    if SST == 0:
+        R2 = 1
+    else:
+        R2 = SSE / SST
 
+    # R2 adjusted
     R2_adjusted = 1 - (1 - (1 - R2)) * (n - 1) / df
 
 
