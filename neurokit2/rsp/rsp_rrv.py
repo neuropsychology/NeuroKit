@@ -135,6 +135,10 @@ def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4
     power.columns = ["VLF", "LF", "HF"]
     out = power.to_dict(orient="index")[0]
 
+    for frequency in out.keys():
+        if out[frequency] == 0.0:
+            print("Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
+
     # Normalized
     total_power = np.sum(power.values)
     out["LFHF"] = out["LF"] / out["HF"]

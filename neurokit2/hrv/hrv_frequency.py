@@ -10,7 +10,7 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
                   vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4),
                   vhf=(0.4, 0.5), psd_method="welch"):
     """ Computes frequency-domain indices of Heart Rate Variability (HRV).
-    
+
     Note that a minimum duration of the signal containing the peaks is recommended
     for some HRV indices to be meaninful. For instance, 1, 2 and 5 minutes of
     high quality signal are the recomended minima for HF, LF and LF/HF,
@@ -60,14 +60,14 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
         - "*LFHF*": the ratio of low frequency power to high frequency power.
         - "*LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
         - "*HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
-    
+
     See Also
     --------
     ecg_peaks, ppg_peaks, hrv_summary, hrv_time, hrv_nonlinear
 
     Examples
     --------
-    
+
     References
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
@@ -83,9 +83,9 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
         raise error
     if [*peaks.keys()][0] not in ["ECG_R_Peaks", "PPG_Peaks"]:
         raise error
-    
+
     peaks = [*peaks.values()][0]
-    
+
     # Compute heart period in milliseconds.
     heart_period = np.diff(peaks) / sampling_rate * 1000
 
@@ -106,8 +106,12 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
                          sampling_rate=sampling_rate_interpolation,
                          method=psd_method, max_frequency=0.5)
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
-    
+
     out = power.to_dict(orient="index")[0]
+
+    for frequency in out.keys():
+        if out[frequency] == 0.0:
+            print("Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
 
     # Normalized
     total_power = np.sum(power.values)
@@ -120,7 +124,7 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
 
     # if show:
     #     _show(heart_period, out)
-    
+
     return out
 
 

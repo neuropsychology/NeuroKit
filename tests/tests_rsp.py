@@ -142,7 +142,7 @@ def test_rsp_plot():
 
 def test_rsp_eventrelated():
 
-    rsp, info = nk.rsp_process(nk.rsp_simulate(duration=20))
+    rsp, info = nk.rsp_process(nk.rsp_simulate(duration=30, random_state=42))
     epochs = nk.epochs_create(rsp,
                               events=[5000, 10000, 15000],
                               epochs_start=-0.1,
