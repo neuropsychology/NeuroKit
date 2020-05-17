@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-import sklearn.metrics
 
 from ..signal import signal_filter
 from ..signal import signal_resample
 from ..signal import signal_interpolate
-from ..signal import signal_synchrony
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from ..stats import standardize
 from ..rsp import rsp_process
-from .ecg_rate import ecg_rate as nk_ecg_rate
+from ..signal import signal_rate
 from .ecg_rsp import ecg_rsp
 
 
@@ -312,7 +309,7 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                                  "Wrong input, we couldn't extract"
                                  "heart rate signal.")
             else:
-                ecg_period = nk_ecg_rate(rpeaks,
+                ecg_period = signal_rate(rpeaks,
                                          sampling_rate=sampling_rate,
                                          desired_length=len(ecg_signals))
         else:

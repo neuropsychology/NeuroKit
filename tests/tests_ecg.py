@@ -44,13 +44,13 @@ def test_ecg_clean():
 
     # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69)
     ecg_biosppy = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
-                               method="biosppy")
+                                method="biosppy")
     original, _, _ = biosppy.tools.filter_signal(signal=ecg,
-                                                 ftype='FIR',
-                                                 band='bandpass',
-                                                 order=int(0.3 * sampling_rate),
-                                                 frequency=[3, 45],
-                                                 sampling_rate=sampling_rate)
+                                                  ftype='FIR',
+                                                  band='bandpass',
+                                                  order=int(0.3 * sampling_rate),
+                                                  frequency=[3, 45],
+                                                  sampling_rate=sampling_rate)
     assert np.allclose((ecg_biosppy - original).mean(), 0, atol=1e-6)
 
 
@@ -80,34 +80,6 @@ def test_ecg_peaks():
     assert signals.shape == (120000, 1)
     assert np.allclose(signals["ECG_R_Peaks"].values.sum(dtype=np.int64), 139,
                        atol=1)
-
-
-def test_ecg_rate():
-
-    sampling_rate = 1000
-    noise = 0.15
-
-    ecg = nk.ecg_simulate(duration=120, sampling_rate=sampling_rate,
-                          noise=noise, random_state=42)
-    ecg_cleaned_nk = nk.ecg_clean(ecg, sampling_rate=sampling_rate,
-                                  method="neurokit")
-
-    signals, info = nk.ecg_peaks(ecg_cleaned_nk,
-                                 method="neurokit")
-
-    # Test without desired length.
-    rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate)
-
-    assert rate.shape == (info["ECG_R_Peaks"].size, )
-    assert np.allclose(rate.mean(), 70, atol=2)
-
-    # Test with desired length.
-    test_length = 1200
-    rate = nk.ecg_rate(rpeaks=info, sampling_rate=sampling_rate,
-                       desired_length=test_length)
-
-    assert rate.shape == (test_length, )
-    assert np.allclose(rate.mean(), 70, atol=2)
 
 
 def test_ecg_process():
@@ -265,50 +237,6 @@ def test_ecg_delineate():
     assert np.allclose(len(waves_cwt['ECG_P_Offsets']), 22, atol=1)
     assert np.allclose(len(waves_cwt['ECG_T_Onsets']), 22, atol=1)
     assert np.allclose(len(waves_cwt['ECG_T_Offsets']), 22, atol=1)
-
-
-def test_ecg_hrv():
-    ecg_slow = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=70, random_state=42)
-    ecg_fast = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
-
-    ecg_slow, _ = nk.ecg_process(ecg_slow, sampling_rate=1000)
-    ecg_fast, _ = nk.ecg_process(ecg_fast, sampling_rate=1000)
-
-    ecg_slow_hrv = nk.ecg_hrv(ecg_slow, sampling_rate=1000)
-    ecg_fast_hrv = nk.ecg_hrv(ecg_fast, sampling_rate=1000)
-
-    assert ecg_fast_hrv["HRV_RMSSD"][0] < ecg_slow_hrv["HRV_RMSSD"][0]
-    assert ecg_fast_hrv["HRV_MeanNN"][0] < ecg_slow_hrv["HRV_MeanNN"][0]
-    assert ecg_fast_hrv["HRV_SDNN"][0] < ecg_slow_hrv["HRV_SDNN"][0]
-    assert ecg_fast_hrv["HRV_CVNN"][0] < ecg_slow_hrv["HRV_CVNN"][0]
-    assert ecg_fast_hrv["HRV_CVSD"][0] < ecg_slow_hrv["HRV_CVSD"][0]
-    assert ecg_fast_hrv["HRV_MedianNN"][0] < ecg_slow_hrv["HRV_MedianNN"][0]
-    assert ecg_fast_hrv["HRV_MadNN"][0] < ecg_slow_hrv["HRV_MadNN"][0]
-    assert ecg_fast_hrv["HRV_MCVNN"][0] < ecg_slow_hrv["HRV_MCVNN"][0]
-    assert ecg_fast_hrv["HRV_pNN50"][0] == ecg_slow_hrv["HRV_pNN50"][0]
-    assert ecg_fast_hrv["HRV_pNN20"][0] < ecg_slow_hrv["HRV_pNN20"][0]
-    assert ecg_fast_hrv["HRV_TINN"][0] < ecg_slow_hrv["HRV_TINN"][0]
-    assert ecg_fast_hrv["HRV_HTI"][0] > ecg_slow_hrv["HRV_HTI"][0]
-    assert ecg_fast_hrv["HRV_ULF"][0] == ecg_slow_hrv["HRV_ULF"][0] == 0
-
-
-    assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
-                        'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
-                        'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI', 'HRV_ULF',
-                        'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF',
-                        'HRV_LFn', 'HRV_HFn', 'HRV_LnHF',
-                        'HRV_SD1', 'HRV_SD2', 'HRV_SD2SD1', 'HRV_CSI', 'HRV_CVI',
-                        'HRV_CSI_Modified', 'HRV_SampEn']
-               for elem in np.array(ecg_fast_hrv.columns.values, dtype=str))
-
-    # Test frequency domain
-    ecg1 = nk.ecg_simulate(duration=60, sampling_rate=2000, heart_rate=70, random_state=42)
-    hrv1 = nk.ecg_hrv(nk.ecg_process(ecg1, sampling_rate=2000)[0], sampling_rate=2000)
-
-    ecg2 = nk.signal_resample(ecg1, sampling_rate=2000, desired_sampling_rate=500)
-    hrv2 = nk.ecg_hrv(nk.ecg_process(ecg2, sampling_rate=500)[0], sampling_rate=500)
-
-    assert np.allclose(np.mean(hrv1[["HRV_HF", "HRV_LF", "HRV_VLF"]].iloc[0] - hrv2[["HRV_HF", "HRV_LF", "HRV_VLF"]].iloc[0]), 0, atol=1)
 
 
 def test_ecg_intervalrelated():

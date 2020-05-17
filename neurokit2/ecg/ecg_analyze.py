@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-
 from .ecg_eventrelated import ecg_eventrelated
 from .ecg_intervalrelated import ecg_intervalrelated
 

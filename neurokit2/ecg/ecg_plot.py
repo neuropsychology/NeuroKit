@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.gridspec
 
-from ..ecg import ecg_fixpeaks
+from ..signal import signal_fixpeaks
 from ..ecg import ecg_peaks
 from .ecg_segment import ecg_segment
 from ..epochs import epochs_to_df
@@ -141,7 +141,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
             _, rpeaks = ecg_peaks(ecg_signals["ECG_Clean"],
                                   sampling_rate=sampling_rate)
 
-        fig = ecg_fixpeaks(rpeaks, sampling_rate=sampling_rate,
-                           iterative=True, show=True)
+        fig = signal_fixpeaks(rpeaks, sampling_rate=sampling_rate,
+                              iterative=True, show=True, method="Kubios")
 
     return fig

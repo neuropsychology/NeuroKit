@@ -29,7 +29,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     See Also
     --------
-    ecg_findpeaks, ecg_rate, ecg_process, ecg_plot
+    ecg_findpeaks, signal_rate, ecg_process, ecg_plot
 
     Examples
     --------

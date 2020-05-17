@@ -132,6 +132,7 @@ def test_signal_interpolate():
     interpolated = nk.signal_interpolate(x_axis, signal, desired_length=1000)
     assert len(interpolated) == 1000
     assert interpolated[0] == signal[0]
+    assert interpolated[-1] == signal[-1]
 
 
 def test_signal_findpeaks():
@@ -154,14 +155,15 @@ def test_signal_merge():
     assert len(signal) == 150
     assert signal[0] == signal2[0] + signal2[0]
 
-def test_signal_rate():
+
+def test_signal_rate():    # since singal_rate wraps signal_period, the latter is tested as well
 
     # Test with array.
     signal = nk.signal_simulate(duration=10, sampling_rate=1000,
-                             frequency=1)
+                                frequency=1)
     info = nk.signal_findpeaks(signal)
     rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000,
-                       desired_length=None)
+                          desired_length=None)
     assert rate.shape[0] == len(info["Peaks"])
 
     # Test with dictionary.produced from signal_findpeaks.
@@ -169,7 +171,7 @@ def test_signal_rate():
 
     # Test with DataFrame.
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                       respiratory_rate=15, method="sinuosoidal", noise=0)
+                          respiratory_rate=15, method="sinuosoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_peaks(rsp_cleaned)
     rate = nk.signal_rate(signals, sampling_rate=1000)
@@ -178,7 +180,7 @@ def test_signal_rate():
     # Test with dictionary.produced from rsp_findpeaks.
     test_length = 30
     rate = nk.signal_rate(info, sampling_rate=1000,
-                       desired_length=test_length)
+                          desired_length=test_length)
     assert rate.shape == (test_length, )
 
 

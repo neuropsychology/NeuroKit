@@ -4,9 +4,8 @@ import pandas as pd
 from .rsp_clean import rsp_clean
 from .rsp_phase import rsp_phase
 from .rsp_peaks import rsp_peaks
-from .rsp_rate import rsp_rate
 from .rsp_amplitude import rsp_amplitude
-
+from ..signal import signal_rate
 
 
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
@@ -57,7 +56,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, rsp_rate, rsp_amplitude, rsp_plot
+    rsp_clean, rsp_findpeaks, signal_rate, rsp_amplitude, rsp_plot
 
     Examples
     --------
@@ -80,7 +79,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     # Get additional parameters
     phase = rsp_phase(peak_signal)
     amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
-    rate = rsp_rate(peak_signal, sampling_rate=sampling_rate, method=method)
+    rate = signal_rate(peak_signal, sampling_rate=sampling_rate)
 
     # Prepare output
     signals = pd.DataFrame({"RSP_Raw": rsp_signal,

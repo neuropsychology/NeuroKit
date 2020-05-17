@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches
 
-from .rsp_rate import rsp_rate as nk_rsp_rate
+from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_power
 from ..complexity import entropy_sample
@@ -18,7 +18,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     Parameters
     ----------
     rsp_rate : array
-        Array containing the respiratory rate, produced by `rsp_rate()`.
+        Array containing the respiratory rate, produced by `signal_rate()`.
     peaks : dict
         The samples at which the inhalation peaks occur.
         Dict returned by `rsp_peaks()`. Defaults to None.
@@ -53,7 +53,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
 
     See Also
     --------
-    rsp_rate, rsp_peaks, signal_power, entropy_sample, entropy_approximate
+    signal_rate, rsp_peaks, signal_power, entropy_sample, entropy_approximate
 
     Examples
     --------
@@ -194,7 +194,7 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
                 raise ValueError("NeuroKit error: _rsp_rrv_formatinput(): Wrong input,"
                                  "we couldn't extract rsp_rate and peaks indices.")
             else:
-                rsp_rate = nk_rsp_rate(peaks, sampling_rate=sampling_rate, desired_length=len(df))
+                rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(df))
         else:
             rsp_rate = df[cols[0]].values
 

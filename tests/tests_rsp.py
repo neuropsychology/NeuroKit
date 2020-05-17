@@ -56,7 +56,8 @@ def test_rsp_clean():
     assert np.sum(fft_raw[freqs < .1]) > np.sum(fft_biosppy[freqs < .1])
 
     # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py#L62)
-    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
+    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate,
+                               method="biosppy")
     original, _, _ = biosppy.tools.filter_signal(signal=rsp,
                                                  ftype='butter',
                                                  band='bandpass',
@@ -83,26 +84,6 @@ def test_rsp_peaks():
     # Assert that extrema start with a trough and end with a peak.
     assert info["RSP_Peaks"][0] > info["RSP_Troughs"][0]
     assert info["RSP_Peaks"][-1] > info["RSP_Troughs"][-1]
-
-
-def test_rsp_rate():
-
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                          respiratory_rate=15, method="sinusoidal", noise=0)
-    rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    signals, info = nk.rsp_peaks(rsp_cleaned)
-
-    # Test with dictionary.
-    test_length = 30
-    rate = nk.rsp_rate(peaks=info, sampling_rate=1000,
-                       desired_length=test_length)
-    assert rate.shape == (test_length, )
-    assert np.abs(rate.mean() - 15) < 0.2
-
-    # Test with DataFrame.
-    rate = nk.rsp_rate(signals, sampling_rate=1000)
-    assert rate.shape == (signals.shape[0], )
-    assert np.abs(rate.mean() - 15) < 0.2
 
 
 def test_rsp_amplitude():
@@ -191,11 +172,11 @@ def test_rsp_rrv():
 
     cleaned90 = nk.rsp_clean(rsp90, sampling_rate=1000)
     _, peaks90 = nk.rsp_peaks(cleaned90)
-    rsp_rate90 = nk.rsp_rate(peaks90, desired_length=len(rsp90))
+    rsp_rate90 = nk.signal_rate(peaks90, desired_length=len(rsp90))
 
     cleaned110 = nk.rsp_clean(rsp110, sampling_rate=1000)
     _, peaks110 = nk.rsp_peaks(cleaned110)
-    rsp_rate110 = nk.rsp_rate(peaks110, desired_length=len(rsp110))
+    rsp_rate110 = nk.signal_rate(peaks110, desired_length=len(rsp110))
 
     rsp90_rrv = nk.rsp_rrv(rsp_rate90, peaks90)
     rsp110_rrv = nk.rsp_rrv(rsp_rate110, peaks110)

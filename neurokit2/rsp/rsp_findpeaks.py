@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 
-
-def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
+def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018",
+                  amplitude_min=0.3):
     """Extract extrema in a respiration (RSP) signal.
 
     Low-level function used by `rsp_peaks()` to identify inhalation peaks and exhalation troughs in a preprocessed
@@ -37,7 +37,8 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
 
     See Also
     --------
-    rsp_clean, rsp_fixpeaks, rsp_peaks, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
+    rsp_clean, rsp_fixpeaks, rsp_peaks, signal_rate, rsp_amplitude,
+    rsp_process, rsp_plot
 
     Examples
     --------
@@ -73,16 +74,27 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
     return info
 
 
-
-
-
-
 # =============================================================================
 # Methods
 # =============================================================================
-def _rsp_findpeaks_biosppy(rsp_cleaned):
-    return _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0)
+def _rsp_findpeaks_biosppy(rsp_cleaned, sampling_rate):
 
+    extrema = _rsp_findpeaks_extrema(rsp_cleaned)
+    extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema,
+                                                  amplitude_min=0)
+
+    peaks, troughs = _rsp_findpeaks_sanitize(extrema, amplitudes)
+
+    # Apply minimum period outlier-criterion (exclude inter-breath-intervals
+    # that produce breathing rate larger than 35 breaths per minute.
+    outlier_idcs = np.where((np.diff(peaks) / sampling_rate) < 1.7)[0]
+
+    peaks = np.delete(peaks, outlier_idcs)
+    troughs = np.delete(troughs, outlier_idcs)
+
+    info = {"RSP_Peaks": peaks,
+            "RSP_Troughs": troughs}
+    return info
 
 
 def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
@@ -95,13 +107,6 @@ def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
     info = {"RSP_Peaks": peaks,
             "RSP_Troughs": troughs}
     return info
-
-
-
-
-
-
-
 
 
 # =============================================================================

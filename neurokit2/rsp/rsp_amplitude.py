@@ -33,7 +33,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
 
     See Also
     --------
-    rsp_clean, rsp_peaks, rsp_rate, rsp_process, rsp_plot
+    rsp_clean, rsp_peaks, signal_rate, rsp_process, rsp_plot
 
     Examples
     --------
