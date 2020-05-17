@@ -38,18 +38,7 @@ def hrv_summary(peaks, sampling_rate=1000, show=False):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=240, sampling_rate=1000)
-    >>> ecg, info = nk.ecg_process(ecg, sampling_rate=1000)
-    >>> hrv = nk.ecg_hrv(ecg, sampling_rate=1000, show=True)
-    >>> hrv
-    >>> hrv[["HRV_HF"]]
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=240, sampling_rate=200)
-    >>> ecg, info = nk.ecg_process(ecg, sampling_rate=200)
-    >>> hrv = nk.ecg_hrv(ecg, sampling_rate=200)
-
+    
     References
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
