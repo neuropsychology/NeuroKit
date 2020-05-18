@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from .sanitize_input import sanitize_input
 
@@ -40,6 +41,7 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
     # Transform to arrays
     closest_of = sanitize_input(closest_of, "vector")
     list_to_search_in = sanitize_input(list_to_search_in, "vector")
+#    list_to_search_in = pd.Series(sanitize_input(list_to_search_in, "vector"))
 
     out = [_find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_of]
 
@@ -82,19 +84,19 @@ def _find_closest(closest_of, list_to_search_in, direction="both", strictly=Fals
 # Methods
 # =============================================================================
 
-def _findclosest_base(target_number, vals, direction="both", strictly=False):
+def _findclosest_base(x, vals, direction="both", strictly=False):
     if direction == "both":
-        closest = min(vals, key=lambda x: np.abs(x-target_number))
+        closest = min(vals, key=lambda y: np.abs(y-x))
     if direction == "smaller":
         if strictly is True:
-            closest = max(x for x in vals if x < target_number)
+            closest = max(y for y in vals if y < x)
         else:
-            closest = max(x for x in vals if x <= target_number)
+            closest = max(y for y in vals if y <= x)
     if direction == "greater":
         if strictly is True:
-            closest = min(filter(lambda x: x > target_number, vals))
+            closest = min(filter(lambda y: y > x, vals))
         else:
-            closest = min(filter(lambda x: x >= target_number, vals))
+            closest = min(filter(lambda y: y >= x, vals))
 
     return closest
 
@@ -102,27 +104,23 @@ def _findclosest_base(target_number, vals, direction="both", strictly=False):
 
 
 
-def _find_closest_single_numpy(x, vals, direction="both", strictly=False):
-
+def _find_closest_single_pandas(x, vals, direction="both", strictly=False):
 
     if direction == "both":
-        index = (np.abs(vals - x)).argmin()
-        closest = vals[index]
+        index = (np.abs(vals - x)).idxmin()
 
     if direction == "smaller":
         if strictly is True:
-            index = (np.abs(vals[vals < x] - x)).argmin()
-            closest = vals[vals < x][index]
+            index = (np.abs(vals[vals < x] - x)).idxmin()
         else:
-            index = (np.abs(vals[vals <= x] - x)).argmin()
-            closest = vals[vals <= x][index]
+            index = (np.abs(vals[vals <= x] - x)).idxmin()
 
     if direction == "greater":
         if strictly is True:
-            index = (vals[vals > x] - x).argmin()
-            closest = vals[vals > x][index]
+            index = (vals[vals > x] - x).idxmin()
         else:
-            index = (vals[vals >= x] - x).argmin()
-            closest = vals[vals >= x][index]
+            index = (vals[vals >= x] - x).idxmin()
+
+    closest = vals[index]
 
     return index, closest

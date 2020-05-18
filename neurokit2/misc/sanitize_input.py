@@ -32,7 +32,7 @@ def sanitize_input(x, what="vector", message="NeuroKit error: please provide a c
 def sanitize_input_vector(x, message="NeuroKit error: we expect the user to provide a vector, i.e., a one-dimensional array (such as a list of values)."):
     if isinstance(x, (pd.Series, pd.DataFrame)):
         out = x.values
-    elif isinstance(x, (str, float, int, np.int, np.int8, np.int16, np.int64)):
+    elif isinstance(x, (str, float, int, np.int, np.int8, np.int16, np.int32, np.int64)):
         out = np.array([x])
     else:
         out = np.array(x)
