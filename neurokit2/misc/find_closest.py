@@ -4,13 +4,13 @@ import pandas as pd
 from .type_converters import as_vector
 
 
-def find_closest(closest_of, list_to_search_in, direction="both", strictly=False, return_index=False):
+def find_closest(closest_to, list_to_search_in, direction="both", strictly=False, return_index=False):
     """
     Find the closest number in the array from a given number x.
 
     Parameters
     ----------
-    closest_of : float
+    closest_to : float
         The target number(s) to find the closest of.
     list_to_search_in : list
         The list of values to look in.
@@ -39,10 +39,10 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
     """
 
     # Transform to arrays
-    closest_of = as_vector(closest_of)
+    closest_to = as_vector(closest_to)
     list_to_search_in = pd.Series(as_vector(list_to_search_in))
 
-    out = [_find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_of]
+    out = [_find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_to]
 
     if len(out) == 1:
         return out[0]
@@ -54,10 +54,10 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
 # =============================================================================
 # Internal
 # =============================================================================
-def _find_closest(closest_of, list_to_search_in, direction="both", strictly=False, return_index=False):
+def _find_closest(closest_to, list_to_search_in, direction="both", strictly=False, return_index=False):
 
     try:
-        index, closest = _find_closest_single_pandas(closest_of, list_to_search_in, direction, strictly)
+        index, closest = _find_closest_single_pandas(closest_to, list_to_search_in, direction, strictly)
     except ValueError:
         index, closest = np.nan, np.nan
 
