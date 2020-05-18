@@ -91,11 +91,11 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
     peaks = _hrv_sanitize_input(peaks)
 
     # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 1000 Hz by default)
-    rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs)
+    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs)
 
     power = signal_power(rri,
                          frequency_band=[ulf, vlf, lf, hf, vhf],
-                         sampling_rate=1000,
+                         sampling_rate=sampling_rate,
                          method=psd_method,
                          max_frequency=0.5,
                          **kwargs)
