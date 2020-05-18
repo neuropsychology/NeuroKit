@@ -43,6 +43,10 @@ def hrv_time(peaks, sampling_rate=1000):
 
     Examples
     --------
+    >>> import neurokit2 as nk
+    >>>
+    >>> # Download data
+    >>> data = nk.data("bio_resting_5min_100hz")
 
     References
     ----------
@@ -99,5 +103,5 @@ def hrv_time(peaks, sampling_rate=1000):
     return out
 
 
-def _show(heart_period, out):
+def _hrv_time_show(heart_period, out):
     pass

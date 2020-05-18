@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+
 from ..signal.signal_power import signal_power
 from ..signal.signal_period import signal_period
 from ..signal.signal_interpolate import signal_interpolate
@@ -67,6 +68,10 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
 
     Examples
     --------
+    >>> import neurokit2 as nk
+    >>>
+    >>> # Download data
+    >>> data = nk.data("bio_resting_5min_100hz")
 
     References
     ----------
@@ -128,5 +133,5 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     return out
 
 
-def _show(heart_period, out):
+def _hrv_frequency_show(heart_period, out):
     pass
