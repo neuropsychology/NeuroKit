@@ -24,7 +24,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017' or 'martinez2003'.
+        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017', 'martinez2003' or 'rodrigues2020'.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the
         algorithm. Useful for debugging.
@@ -113,8 +113,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         rpeaks = _ecg_findpeaks_kalidas(ecg_cleaned, sampling_rate)
     elif method in ["martinez2003", "martinez"]:
         rpeaks = _ecg_findpeaks_WT(ecg_cleaned, sampling_rate)
-    elif method in ["asi_segmenter", "asi"]:
-        rpeaks = _ecg_findpeaks_asi(ecg_cleaned, sampling_rate)
+    elif method in ["rodrigues2020", "rodrigues", "asi"]:
+        rpeaks = _ecg_findpeaks_rodrigues(ecg_cleaned, sampling_rate)
     else:
         raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be "
                          "one of 'neurokit' or 'pamtompkins'.")
@@ -820,10 +820,9 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
 # ASI (FSM based 2020)
 # =============================================================================
 
-def _ecg_findpeaks_asi(signal, sampling_rate=1000.):
-    """ECG R-peak segmentation algorithm.
-
-    Modification by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).
+def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
+    """
+    Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).
 
     References
     ----------
