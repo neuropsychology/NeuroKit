@@ -13,3 +13,6 @@ from .rsp_eventrelated import rsp_eventrelated
 from .rsp_rrv import rsp_rrv
 from .rsp_intervalrelated import rsp_intervalrelated
 from .rsp_analyze import rsp_analyze
+
+# Aliases
+from ..signal import signal_rate as rsp_rate

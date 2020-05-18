@@ -6,6 +6,9 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None,
                 interpolation_order="cubic"):
     """Calculate signal rate from a series of peaks.
 
+    This function can also be called either via ``ecg_rate()``, ```ppg_rate()`` or
+    ``rsp_rate()`` (aliases provided for consistency).
+
     Parameters
     ----------
     peaks : list, array, DataFrame, Series or dict

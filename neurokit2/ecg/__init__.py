@@ -15,3 +15,6 @@ from .ecg_quality import ecg_quality
 from .ecg_eventrelated import ecg_eventrelated
 from .ecg_intervalrelated import ecg_intervalrelated
 from .ecg_analyze import ecg_analyze
+
+# Aliases
+from ..signal import signal_rate as ecg_rate
