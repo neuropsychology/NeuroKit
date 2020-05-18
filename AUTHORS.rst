@@ -22,6 +22,7 @@ Contributors
 * `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
 * `@purpl3F0x (Stavros Avramidis) <https://github.com/purpl3F0x>`_
+* `Tiago Rodrigues <https://github.com/TiagoTostas>`_ *(IST, Lisbon)*
 
 
 
