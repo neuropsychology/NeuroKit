@@ -198,6 +198,8 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
     for epoch in epochs:
         variance.append(np.log(epoch.var(axis=0) / 1000))  # convert ms
 
+    variance = [row for row in variance if not np.isnan(row).any()]
+
     rsa = {}
     rsa["RSA_PorgesBohrer"] = pd.concat(variance).mean()
 
