@@ -43,6 +43,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     Examples
     --------
+    >>> import neurokit2 as nk
+    >>>
+    >>> # Download data
+    >>> data = nk.data("bio_resting_5min_100hz")
 
     References
     ----------
@@ -87,12 +91,12 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
                                    r=0.2 * np.std(heart_period, ddof=1))
 
     if show:
-        _show(heart_period, out)
+        _hrv_nonlinear_show(heart_period, out)
 
     return out
 
 
-def _show(heart_period, out):
+def _hrv_nonlinear_show(heart_period, out):
 
         mean_heart_period = np.mean(heart_period)
         sd1 = out["SD1"]

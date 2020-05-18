@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 
-from ..hrv import hrv_summary
+from ..hrv import hrv
 
 
 def ecg_intervalrelated(data, sampling_rate=1000):
@@ -118,8 +118,8 @@ def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
     rpeaks = np.where(data["ECG_R_Peaks"].values)[0]
     rpeaks = {"ECG_R_Peaks": rpeaks}
 
-    hrv = hrv_summary(rpeaks, sampling_rate=sampling_rate)
-    for column in hrv.columns:
-        output[column] = float(hrv[column])
+    results = hrv(rpeaks, sampling_rate=sampling_rate)
+    for column in results.columns:
+        output[column] = float(results[column])
 
     return output

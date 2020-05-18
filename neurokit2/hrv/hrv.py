@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-from . import hrv_time, hrv_frequency, hrv_nonlinear
+
+from .hrv_time import hrv_time
+from .hrv_frequency import hrv_frequency
+from .hrv_nonlinear import hrv_nonlinear
 
 
-def hrv_summary(peaks, sampling_rate=1000, show=False):
+def hrv(peaks, sampling_rate=1000, show=False):
     """ Computes indices of Heart Rate Variability (HRV).
 
     Computes HRV indices in the time-, frequency-, and nonlinear domain. Note
@@ -34,10 +37,14 @@ def hrv_summary(peaks, sampling_rate=1000, show=False):
         - non-linear (for details see hrv_nonlinear)
     See Also
     --------
-    ecg_peaks, ppg_peaks, hrv_frequency, hrv_time, hrv_nonlinear
+    ecg_peaks, ppg_peaks, hrv_time, hrv_frequency, hrv_nonlinear
 
     Examples
     --------
+    >>> import neurokit2 as nk
+    >>>
+    >>> # Download data
+    >>> data = nk.data("bio_resting_5min_100hz")
 
     References
     ----------
@@ -48,6 +55,8 @@ def hrv_summary(peaks, sampling_rate=1000, show=False):
     """
     # Get indices
     hrv = {}  # initialize empty dict
+
+    # Gather indices
     hrv.update(hrv_time(peaks, sampling_rate=sampling_rate))
     hrv.update(hrv_frequency(peaks, sampling_rate=sampling_rate))
     hrv.update(hrv_nonlinear(peaks, sampling_rate=sampling_rate, show=show))
