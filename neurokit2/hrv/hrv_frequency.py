@@ -158,8 +158,10 @@ def _hrv_frequency_show(rri, ulf=(0, 0.0033), vlf=(0.0033, 0.04),
     plt.xlabel("Frequency (Hz)", fontsize=10)
     plt.ylabel("Power", fontsize=10)
 
-    cmap = get_cmap("Set1")  # type: matplotlib.colors.ListedColormap
-    colors = cmap.colors  # type: list
+    # Get cmap
+    cmap = get_cmap("Set1")
+    colors = cmap.colors
+    colors = colors[3], colors[1], colors[2], colors[4], colors[0]  # manually rearrange colors
 
     for band_index, label, i in zip(frequency_band_index, label_list, colors):
         plt.fill_between(freq[band_index], 0, power[band_index],
