@@ -371,14 +371,10 @@ def _correct_misaligned(misaligned_idcs, peaks):
     # the total number of peaks. prev_peaks and next_peaks must have the
     # same number of elements.
     valid_idcs = np.logical_and(misaligned_idcs > 1,
-                                misaligned_idcs < len(corrected_peaks))
+                                misaligned_idcs < len(corrected_peaks) - 1)
     misaligned_idcs = misaligned_idcs[valid_idcs]
-    prev_peaks = corrected_peaks[[i - 1 for i in misaligned_idcs if i - 1 > 0]]
-    next_peaks = corrected_peaks[[i + 1 for i in misaligned_idcs if i + 1 < len(corrected_peaks)]]  # make sure i + 1 does not exceed total peaks number
-
-    if len(next_peaks) < len(prev_peaks):
-        # Drop last index of prev_peaks if unequal number of prev and next peaks
-        prev_peaks = prev_peaks[0:len(next_peaks)]
+    prev_peaks = corrected_peaks[[i - 1 for i in misaligned_idcs]]
+    next_peaks = corrected_peaks[[i + 1 for i in misaligned_idcs]]
 
     half_ibi = (next_peaks - prev_peaks) / 2
     peaks_interp = prev_peaks + half_ibi
