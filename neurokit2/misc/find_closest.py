@@ -41,12 +41,12 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
     closest_of = sanitize_input(closest_of, "vector")
     list_to_search_in = sanitize_input(list_to_search_in, "vector")
 
-    out = [_find_closest(list_to_search_in, i, direction, strictly, return_index) for i in closest_of]
+    out = [_find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_of]
 
     if len(out) == 1:
         return out[0]
     else:
-        return out
+        return np.array(out)
 
 
 
@@ -55,20 +55,52 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
 # =============================================================================
 def _find_closest(closest_of, list_to_search_in, direction="both", strictly=False, return_index=False):
 
+#    try:
+#        index, closest = _find_closest_single_numpy(closest_of, list_to_search_in, direction, strictly)
+#    except ValueError:
+#        index, closest = np.nan, np.nan
+
+
+#    if return_index is True:
+#        return index
+#    else:
+#        return closest
+
     try:
-        index, closest = _find_closest_single_numpy(list_to_search_in, closest_of, direction, strictly)
+        closest = _findclosest_base(closest_of, list_to_search_in, direction, strictly)
     except ValueError:
-        index, closest = np.nan, np.nan
+        return np.nan
 
     if return_index is True:
-        return index
-    else:
-        return closest
+        closest = np.where(np.asarray(list_to_search_in) == closest)[0]
+        if len(closest) == 1:
+            closest = closest[0]
+    return closest
 
 
 # =============================================================================
 # Methods
 # =============================================================================
+
+def _findclosest_base(target_number, vals, direction="both", strictly=False):
+    if direction == "both":
+        closest = min(vals, key=lambda x: np.abs(x-target_number))
+    if direction == "smaller":
+        if strictly is True:
+            closest = max(x for x in vals if x < target_number)
+        else:
+            closest = max(x for x in vals if x <= target_number)
+    if direction == "greater":
+        if strictly is True:
+            closest = min(filter(lambda x: x > target_number, vals))
+        else:
+            closest = min(filter(lambda x: x >= target_number, vals))
+
+    return closest
+
+
+
+
 
 def _find_closest_single_numpy(x, vals, direction="both", strictly=False):
 
@@ -87,10 +119,10 @@ def _find_closest_single_numpy(x, vals, direction="both", strictly=False):
 
     if direction == "greater":
         if strictly is True:
-            index = (np.abs(vals[vals > x] - x)).argmin()
+            index = (vals[vals > x] - x).argmin()
             closest = vals[vals > x][index]
         else:
-            index = (np.abs(vals[vals >= x] - x)).argmin()
+            index = (vals[vals >= x] - x).argmin()
             closest = vals[vals >= x][index]
 
     return index, closest

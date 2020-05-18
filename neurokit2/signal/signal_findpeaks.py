@@ -161,9 +161,7 @@ def _signal_findpeaks_findbase(peaks, signal, what="onset"):
 
     troughs, _ = scipy.signal.find_peaks(-1*signal)
 
-    bases = np.zeros(len(peaks))
-    for i, peak in enumerate(peaks):
-        bases[i] = find_closest(peak, troughs, direction=direction, strictly=True)
+    bases = find_closest(peaks, troughs, direction=direction, strictly=True)
 
     return bases
 

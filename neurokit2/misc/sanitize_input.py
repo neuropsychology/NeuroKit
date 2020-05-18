@@ -10,12 +10,12 @@ def sanitize_input(x, what="vector", message="NeuroKit error: please provide a c
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> _sanitize_input(x=range(3))
-    >>> _sanitize_input(x=[0, 1, 2])
-    >>> _sanitize_input(x=np.array([0, 1, 2]))
-    >>> _sanitize_input(x=0)
-    >>> _sanitize_input(x=pd.Series([0, 1, 2]))
-    >>> _sanitize_input(x=pd.DataFrame([0, 1, 2]))
+    >>> nk.sanitize_input(x=range(3))
+    >>> nk.sanitize_input(x=[0, 1, 2])
+    >>> nk.sanitize_input(x=np.array([0, 1, 2]))
+    >>> nk.sanitize_input(x=0)
+    >>> nk.sanitize_input(x=pd.Series([0, 1, 2]))
+    >>> nk.sanitize_input(x=pd.DataFrame([0, 1, 2]))
     """
     if what == "vector":
         out = sanitize_input_vector(x, message)
@@ -32,7 +32,7 @@ def sanitize_input(x, what="vector", message="NeuroKit error: please provide a c
 def sanitize_input_vector(x, message="NeuroKit error: we expect the user to provide a vector, i.e., a one-dimensional array (such as a list of values)."):
     if isinstance(x, (pd.Series, pd.DataFrame)):
         out = x.values
-    elif isinstance(x, (str, float, int)):
+    elif isinstance(x, (str, float, int, np.int, np.int8, np.int16, np.int64)):
         out = np.array([x])
     else:
         out = np.array(x)
