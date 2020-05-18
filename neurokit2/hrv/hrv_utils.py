@@ -38,7 +38,7 @@ def _hrv_sanitize_tuple(peaks):
                 except NameError:
                     peaks = _hrv_sanitize_peaks(peaks[1])
             else:
-                 peaks = _hrv_sanitize_peaks(peaks[0])
+                peaks = _hrv_sanitize_peaks(peaks[0])
     return peaks
 
 
