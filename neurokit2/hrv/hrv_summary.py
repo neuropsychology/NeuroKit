@@ -38,7 +38,7 @@ def hrv_summary(peaks, sampling_rate=1000, show=False):
 
     Examples
     --------
-    
+
     References
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
@@ -47,7 +47,7 @@ def hrv_summary(peaks, sampling_rate=1000, show=False):
     variability metrics and norms. Frontiers in public health, 5, 258.
     """
     # Get indices
-    hrv = {}    # initialize empty dict
+    hrv = {}  # initialize empty dict
     hrv.update(hrv_time(peaks, sampling_rate=sampling_rate))
     hrv.update(hrv_frequency(peaks, sampling_rate=sampling_rate))
     hrv.update(hrv_nonlinear(peaks, sampling_rate=sampling_rate, show=show))
