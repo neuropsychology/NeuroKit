@@ -830,7 +830,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
     - Sadhukhan, D., & Mitra, M. (2012). R-peak detection algorithm for ECG using double difference and RR interval processing. Procedia Technology, 4, 873-877.
     """
 
-    N  = np.round(3 * sampling_rate/128)
+    N  = int(np.round(3 * sampling_rate/128))
     Nd = N-1
     Pth = (0.7 * sampling_rate) / 128+2.7
     # Pth = 3, optimal for fs = 250 Hz
