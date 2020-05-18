@@ -40,8 +40,7 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
 
     # Transform to arrays
     closest_of = sanitize_input(closest_of, "vector")
-    list_to_search_in = sanitize_input(list_to_search_in, "vector")
-#    list_to_search_in = pd.Series(sanitize_input(list_to_search_in, "vector"))
+    list_to_search_in = pd.Series(sanitize_input(list_to_search_in, "vector"))
 
     out = [_find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_of]
 
@@ -57,27 +56,17 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
 # =============================================================================
 def _find_closest(closest_of, list_to_search_in, direction="both", strictly=False, return_index=False):
 
-#    try:
-#        index, closest = _find_closest_single_numpy(closest_of, list_to_search_in, direction, strictly)
-#    except ValueError:
-#        index, closest = np.nan, np.nan
-
-
-#    if return_index is True:
-#        return index
-#    else:
-#        return closest
-
     try:
-        closest = _findclosest_base(closest_of, list_to_search_in, direction, strictly)
+        index, closest = _find_closest_single_pandas(closest_of, list_to_search_in, direction, strictly)
     except ValueError:
-        return np.nan
+        index, closest = np.nan, np.nan
+
 
     if return_index is True:
-        closest = np.where(np.asarray(list_to_search_in) == closest)[0]
-        if len(closest) == 1:
-            closest = closest[0]
-    return closest
+        return index
+    else:
+        return closest
+
 
 
 # =============================================================================
