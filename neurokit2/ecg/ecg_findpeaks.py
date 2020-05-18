@@ -830,7 +830,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
     - Sadhukhan, D., & Mitra, M. (2012). R-peak detection algorithm for ECG using double difference and RR interval processing. Procedia Technology, 4, 873-877.
     """
 
-    N  = int(np.round(3 * sampling_rate/128))
+    N = int(np.round(3 * sampling_rate/128))
     Nd = N-1
     Pth = (0.7 * sampling_rate) / 128+2.7
     # Pth = 3, optimal for fs = 250 Hz
@@ -856,29 +856,29 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
     while i < tf - sampling_rate:  # ignore last second of recording
 
         # State 1: looking for maximum
-        tf1 = round (i + Rmin*sampling_rate)
+        tf1 = np.round(i + Rmin*sampling_rate)
         Rpeakamp = 0
         while i < tf1:
             # Rpeak amplitude and position
             if processed_ecg[i] > Rpeakamp:
                 Rpeakamp = processed_ecg[i]
                 rpeakpos = i + 1
-            i+=1
+            i += 1
 
         Ramptotal = (19 / 20) * Ramptotal + (1 / 20) * Rpeakamp
         rpeaks.append(rpeakpos)
 
         # State 2: waiting state
         d = tf1 - rpeakpos
-        tf2 = i + round(0.2*2 - d)
+        tf2 = i + np.round(0.2*2 - d)
         while i <= tf2:
-            i+=1
+            i += 1
 
         # State 3: decreasing threshold
         Thr = Ramptotal
         while processed_ecg[i] < Thr:
             Thr = Thr * np.exp(-Pth / sampling_rate)
-            i+=1
+            i += 1
 
     return rpeaks
 
