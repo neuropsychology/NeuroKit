@@ -18,7 +18,7 @@ def _sanitize_input(x, what="vector", message="NeuroKit error: please provide a 
     >>> nk.sanitize_input(x=pd.DataFrame([0, 1, 2]))
     """
     if what == "vector":
-        out = sanitize_input_vector(x, message)
+        out = _sanitize_input_vector(x, message)
     else:
         raise ValueError("NeuroKit error: sanitize_input(): 'what' should be "
                          "one of 'vector'.")
