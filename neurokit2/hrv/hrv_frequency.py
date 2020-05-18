@@ -5,12 +5,12 @@ from ..signal.signal_power import signal_power
 from ..signal.signal_period import signal_period
 from ..signal.signal_interpolate import signal_interpolate
 from .hrv_utils import _hrv_sanitize_input
+from .hrv_utils import _hrv_get_rri
 
 
-def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
-                  interpolation_order="cubic", ulf=(0, 0.0033),
+def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
                   vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4),
-                  vhf=(0.4, 0.5), psd_method="welch", silent=True):
+                  vhf=(0.4, 0.5), psd_method="welch", show=False, silent=True, **kwargs):
     """ Computes frequency-domain indices of Heart Rate Variability (HRV).
 
     Note that a minimum duration of the signal containing the peaks is recommended
@@ -28,11 +28,6 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks
         occur. Should be at least twice as high as the highest frequency in vhf.
         By default 1000.
-    sampling_rate_interpolation : int, optional
-        Sampling rate (Hz) at which to interpolate between peaks. By default 10.
-    interpolation_order : str, optional
-        Method used to interpolate heart period. For details see
-        signal.signal_interpolate. By default "cubic".
     ulf : tuple, optional
         Upper and lower limit of the ultra-low frequency band. By default
         (0, 0.0033).
@@ -46,11 +41,13 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     vhf : tuple, optional
         Upper and lower limit of the very-high frequency band. By default
         (0.4, 0.5).
-    psd_method : str, optional
+    psd_method : str
         Method used for spectral density estimation. For details see
         signal.signal_power. By default "welch".
     silent : bool
         If False, warnings will be printed. Default to True.
+    show : bool
+        If True, will plot the power in the different frequency bands.
 
     Returns
     -------
@@ -64,6 +61,7 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
         - "*LFHF*": the ratio of low frequency power to high frequency power.
         - "*LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
         - "*HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
+        - "*LnHF*": the log transformed HF.
 
     See Also
     --------
@@ -80,7 +78,7 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>>
     >>> # Compute HRV indices
-    >>> hrv = nk.hrv_frequency(peaks, sampling_rate=100)
+    >>> hrv = nk.hrv_frequency(peaks, sampling_rate=100, show=True)
 
     References
     ----------
@@ -92,25 +90,16 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
 
-    # Compute heart period in milliseconds.
-    heart_period = np.diff(peaks) / sampling_rate * 1000
+    # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 1000 Hz by default)
+    rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs)
 
-    # Compute length of interpolated heart period signal at requested sampling
-    # rate.
-    if sampling_rate > sampling_rate_interpolation:
-        n_samples = int(np.rint(peaks[-1] / sampling_rate
-                                * sampling_rate_interpolation))
-    else:
-        n_samples = peaks[-1]
-
-    heart_period_intp = signal_interpolate(peaks[1:], heart_period,    # skip first peak since it has no corresponding element in heart_period
-                                           desired_length=n_samples,
-                                           method=interpolation_order)
-
-    power = signal_power(heart_period_intp,
+    power = signal_power(rri,
                          frequency_band=[ulf, vlf, lf, hf, vhf],
-                         sampling_rate=sampling_rate_interpolation,
-                         method=psd_method, max_frequency=0.5)
+                         sampling_rate=1000,
+                         method=psd_method,
+                         max_frequency=0.5,
+                         **kwargs)
+
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
 
     out = power.to_dict(orient="index")[0]
