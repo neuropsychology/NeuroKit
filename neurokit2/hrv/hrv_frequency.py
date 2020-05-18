@@ -4,6 +4,7 @@ import numpy as np
 from ..signal.signal_power import signal_power
 from ..signal.signal_period import signal_period
 from ..signal.signal_interpolate import signal_interpolate
+from .hrv_utils import _hrv_sanitize_input
 
 
 def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
@@ -72,6 +73,12 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     >>>
     >>> # Download data
     >>> data = nk.data("bio_resting_5min_100hz")
+    >>>
+    >>> # Find peaks
+    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+    >>>
+    >>> # Compute HRV indices
+    >>> hrv = nk.hrv_frequency(peaks, sampling_rate=100)
 
     References
     ----------
@@ -80,16 +87,8 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
     variability metrics and norms. Frontiers in public health, 5, 258.
     """
-    error = ValueError("NeuroKit error: Please pass in a valid dictionary"
-                       " as the peaks argument (see docstring).")
-    if not isinstance(peaks, dict):
-        raise error
-    if len(peaks.keys()) != 1:
-        raise error
-    if [*peaks.keys()][0] not in ["ECG_R_Peaks", "PPG_Peaks"]:
-        raise error
-
-    peaks = [*peaks.values()][0]
+    # Sanitize input
+    peaks = _hrv_sanitize_input(peaks)
 
     # Compute heart period in milliseconds.
     heart_period = np.diff(peaks) / sampling_rate * 1000
