@@ -25,7 +25,7 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, desired_leng
             # Compute length of interpolated heart period signal at requested sampling rate.
             desired_length = int(np.rint(peaks[-1] / sampling_rate * 1000))
 
-        rri  = signal_interpolate(peaks[1::],  # Skip first peak since it has no corresponding element in heart_period
+        rri = signal_interpolate(peaks[1:],  # Skip first peak since it has no corresponding element in heart_period
                                   rri,
                                   desired_length=desired_length,
                                   **kwargs)
