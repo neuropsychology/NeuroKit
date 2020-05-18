@@ -3,8 +3,12 @@ import numpy as np
 import pandas as pd
 
 
-def _sanitize_input(x, what="vector", message="NeuroKit error: please provide a correct input."):
-    """Make sure that the input is of the right shape.
+
+
+
+
+def as_vector(x):
+    """Convert to vector.
 
     Examples
     --------
@@ -17,19 +21,6 @@ def _sanitize_input(x, what="vector", message="NeuroKit error: please provide a 
     >>> nk.sanitize_input(x=pd.Series([0, 1, 2]))
     >>> nk.sanitize_input(x=pd.DataFrame([0, 1, 2]))
     """
-    if what == "vector":
-        out = _sanitize_input_vector(x, message)
-    else:
-        raise ValueError("NeuroKit error: sanitize_input(): 'what' should be "
-                         "one of 'vector'.")
-
-    return out
-
-
-
-
-
-def _sanitize_input_vector(x, message="NeuroKit error: we expect the user to provide a vector, i.e., a one-dimensional array (such as a list of values)."):
     if isinstance(x, (pd.Series, pd.DataFrame)):
         out = x.values
     elif isinstance(x, (str, float, int, np.int, np.int8, np.int16, np.int32, np.int64)):
@@ -45,6 +36,8 @@ def _sanitize_input_vector(x, message="NeuroKit error: we expect the user to pro
         elif len(shape) != 1 and len(shape) == 2 and shape[1] == 1:
             out = out[:, 0]
         else:
-            raise ValueError(message + " Current input of shape: " + str(shape))
+            raise ValueError("NeuroKit error: we expect the user to provide a "
+                             "vector, i.e., a one-dimensional array (such as a "
+                             "list of values). Current input of shape: " + str(shape))
 
     return out

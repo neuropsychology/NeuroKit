@@ -4,7 +4,7 @@ import scipy.signal
 
 from ..signal import signal_detrend
 from ..signal import signal_filter
-from ..misc import sanitize_input
+from ..misc import as_vector
 
 
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
@@ -53,10 +53,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     - `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
 
     """
-    rsp_signal = sanitize_input(rsp_signal,
-                                message="NeuroKit error: rsp_clean(): we "
-                                "expect the user to provide a vector, i.e., "
-                                "a one-dimensional array (such as a list of values).")
+    rsp_signal = as_vector(rsp_signal)
 
     method = method.lower()  # remove capitalised letters
     if method in ["khodadad", "khodadad2018"]:

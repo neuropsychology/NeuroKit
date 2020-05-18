@@ -7,7 +7,7 @@ from ..rsp import rsp_process
 from ..eda import eda_process
 from ..emg import emg_process
 from ..ecg import ecg_rsa
-from ..misc import sanitize_input
+from ..misc import as_vector
 
 
 def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
@@ -119,33 +119,30 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
         elif isinstance(ecg, np.ndarray):
             ecg = ecg
 
-    # Set warning message for sanitize input
-    message = "NeuroKit error: bio_process(): we expect the user to provide a vector, i.e., a one-dimensional array (such as a list of values)."
-
     # ECG
     if ecg is not None:
-        ecg = sanitize_input(ecg, message=message)
+        ecg = as_vector(ecg)
         ecg_signals, ecg_info = ecg_process(ecg, sampling_rate=sampling_rate)
         bio_info.update(ecg_info)
         bio_df = pd.concat([bio_df, ecg_signals], axis=1)
 
     # RSP
     if rsp is not None:
-        rsp = sanitize_input(rsp, message=message)
+        rsp = as_vector(rsp)
         rsp_signals, rsp_info = rsp_process(rsp, sampling_rate=sampling_rate)
         bio_info.update(rsp_info)
         bio_df = pd.concat([bio_df, rsp_signals], axis=1)
 
     # EDA
     if eda is not None:
-        eda = sanitize_input(eda, message=message)
+        eda = as_vector(eda)
         eda_signals, eda_info = eda_process(eda, sampling_rate=sampling_rate)
         bio_info.update(eda_info)
         bio_df = pd.concat([bio_df, eda_signals], axis=1)
 
     # EMG
     if emg is not None:
-        emg = sanitize_input(emg, message=message)
+        emg = as_vector(emg)
         emg_signals, emg_info = emg_process(emg, sampling_rate=sampling_rate)
         bio_info.update(emg_info)
         bio_df = pd.concat([bio_df, emg_signals], axis=1)

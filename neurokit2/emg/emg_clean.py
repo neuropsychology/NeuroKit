@@ -3,7 +3,7 @@ import numpy as np
 import scipy.signal
 
 from ..signal import signal_detrend
-from ..misc import sanitize_input
+from ..misc import as_vector
 
 
 def emg_clean(emg_signal, sampling_rate=1000):
@@ -45,10 +45,7 @@ def emg_clean(emg_signal, sampling_rate=1000):
             "EMG_Cleaned":nk.emg_clean(emg, sampling_rate=1000)})
     >>> signals.plot()
     """
-    emg_signal = sanitize_input(emg_signal,
-                                message="NeuroKit error: emg_clean(): we "
-                                "expect the user to provide a vector, i.e., "
-                                "a one-dimensional array (such as a list of values).")
+    emg_signal = as_vector(emg_signal)
 
     # Parameters
     order = 4

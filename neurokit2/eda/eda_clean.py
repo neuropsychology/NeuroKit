@@ -4,7 +4,7 @@ import scipy.signal
 
 from ..signal import signal_smooth
 from ..signal import signal_filter
-from ..misc import sanitize_input
+from ..misc import as_vector
 
 
 def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
@@ -41,11 +41,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
             "EDA_NeuroKit": nk.eda_clean(eda, sampling_rate=100, method='neurokit')})
     >>> signals.plot()
     """
-    eda_signal = sanitize_input(eda_signal,
-                                message="NeuroKit error: eda_clean(): we "
-                                "expect the user to provide a vector, i.e., "
-                                "a one-dimensional array (such as a list of values).")
-
+    eda_signal = as_vector(eda_signal)
 
     method = method.lower()  # remove capitalised letters
     if method == "biosppy":
