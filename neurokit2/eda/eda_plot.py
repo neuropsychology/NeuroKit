@@ -120,7 +120,7 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
     peak_list = []
     for i, index in enumerate(half_recovery):
         value = find_closest(recovery_x_values[i], peak_x_values,
-                            direction="smaller", strictly=False)
+                             direction="smaller", strictly=False)
         peak_list.append(value)
 
     peak_index = []

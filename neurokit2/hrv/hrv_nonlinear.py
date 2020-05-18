@@ -7,7 +7,7 @@ from ..complexity.entropy_sample import entropy_sample
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     """ Computes nonlinear indices of Heart Rate Variability (HRV).
-    
+
      See references for details.
 
     Parameters
@@ -24,7 +24,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
         If True, will return a Poincaré plot, a scattergram, which plots each
         RR interval against the next successive one. The ellipse centers around
         the average RR interval. By default False.
-    
+
     Returns
     -------
     DataFrame
@@ -36,14 +36,14 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
         - "*CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and transverse variability.
         - "*CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal variability by its transverse variability. Usually used in seizure research.
         - "*SampEn*": the sample entropy measure of HRV, calculated by `entropy_sample()`.
-        
+
     See Also
     --------
     ecg_peaks, ppg_peaks, hrv_frequency, hrv_time, hrv_summary
 
     Examples
     --------
-    
+
     References
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
@@ -59,14 +59,14 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
         raise error
     if [*peaks.keys()][0] not in ["ECG_R_Peaks", "PPG_Peaks"]:
         raise error
-    
+
     peaks = [*peaks.values()][0]
 
     # Compute heart period in milliseconds.
     heart_period = np.diff(peaks) / sampling_rate * 1000
-    
+
     diff_heart_period = np.diff(heart_period)
-    
+
     out = {}
 
     # Poincaré
@@ -88,16 +88,16 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     if show:
         _show(heart_period, out)
-    
+
     return out
 
 
 def _show(heart_period, out):
-    
+
         mean_heart_period = np.mean(heart_period)
         sd1 = out["SD1"]
         sd2 = out["SD2"]
-        
+
         # Axes
         ax1 = heart_period[:-1]
         ax2 = heart_period[1:]
@@ -114,27 +114,26 @@ def _show(heart_period, out):
 
         # Ellipse plot feature
         ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
-                                                mean_heart_period),
-                                            width=2 * sd2 + 1, height=2 * sd1 + 1,
-                                            angle=45, linewidth=2, fill=False)
+                                                 mean_heart_period),
+                                             width=2 * sd2 + 1, height=2 * sd1 + 1,
+                                             angle=45, linewidth=2, fill=False)
         ax.add_patch(ellipse)
         ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
-                                                mean_heart_period), width=2 * sd2,
-                                            height=2 * sd1, angle=45)
+                                                 mean_heart_period), width=2 * sd2,
+                                             height=2 * sd1, angle=45)
         ellipse.set_alpha(0.02)
         ellipse.set_facecolor("blue")
         ax.add_patch(ellipse)
 
         # Arrow plot feature
         sd1_arrow = ax.arrow(mean_heart_period, mean_heart_period,
-                            -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
-                            linewidth=3, ec='r', fc="r", label="SD1")
+                             -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
+                             linewidth=3, ec='r', fc="r", label="SD1")
         sd2_arrow = ax.arrow(mean_heart_period,
-                            mean_heart_period, sd2 * np.sqrt(2) / 2,
-                            sd2 * np.sqrt(2) / 2,
-                            linewidth=3, ec='y', fc="y", label="SD2")
+                             mean_heart_period, sd2 * np.sqrt(2) / 2,
+                             sd2 * np.sqrt(2) / 2,
+                             linewidth=3, ec='y', fc="y", label="SD2")
 
         plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
 
         return fig
-    

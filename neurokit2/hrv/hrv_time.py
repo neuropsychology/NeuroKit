@@ -5,7 +5,7 @@ from ..stats.mad import mad
 
 def hrv_time(peaks, sampling_rate=1000):
     """ Computes time-domain indices of Heart Rate Variability (HRV).
-    
+
      See references for details.
 
     Parameters
@@ -18,7 +18,7 @@ def hrv_time(peaks, sampling_rate=1000):
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks
         occur. Should be at least twice as high as the highest frequency in vhf.
         By default 1000.
-        
+
     Returns
     -------
     DataFrame
@@ -36,14 +36,14 @@ def hrv_time(peaks, sampling_rate=1000):
         - "*pNN20*": the proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
         - "*TINN*": a geometrical parameter of the HRV, or more specifically, the baseline width of the RR intervals distribution obtained by triangular interpolation, where the error of least squares determines the triangle. It is an approximation of the RR interval distribution.
         - "*HTI*": the HRV triangular index, measuring the total number of RR intervals divded by the height of the RR intervals histogram.
-        
+
     See Also
     --------
     ecg_peaks, ppg_peaks, hrv_frequency, hrv_summary, hrv_nonlinear
 
     Examples
     --------
-    
+
     References
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
@@ -59,14 +59,14 @@ def hrv_time(peaks, sampling_rate=1000):
         raise error
     if [*peaks.keys()][0] not in ["ECG_R_Peaks", "PPG_Peaks"]:
         raise error
-    
+
     peaks = [*peaks.values()][0]
 
     # Compute heart period in milliseconds.
     heart_period = np.diff(peaks) / sampling_rate * 1000
-    
+
     diff_period = np.diff(heart_period)
-    
+
     out = {}  # Initialize empty dict
 
     # Mean based
@@ -95,7 +95,7 @@ def hrv_time(peaks, sampling_rate=1000):
 
     # if show:
     #     _show(heart_period, out)
-    
+
     return out
 
 
