@@ -23,6 +23,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks
         occur. Should be at least twice as high as the highest frequency in vhf.
         By default 1000.
+    show : bool
+        If True, will plot the distribution of R-R intervals.
 
     Returns
     -------
@@ -100,7 +102,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
 
     if show:
-         _hrv_time_show(rri)
+        _hrv_time_show(rri)
 
     return out
 

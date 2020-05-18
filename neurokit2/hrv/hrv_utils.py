@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 
+from ..signal import signal_interpolate
 
 
 
@@ -15,11 +16,19 @@ import pandas as pd
 
 
 
-def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False):
+def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, desired_length=None, **kwargs):
 
-    if interpolate is False:
-        rri = np.diff(peaks) / sampling_rate * 1000
+    rri = np.diff(peaks) / sampling_rate * 1000
 
+    if interpolate is True:
+        if desired_length is None:
+            # Compute length of interpolated heart period signal at requested sampling rate.
+            desired_length = int(np.rint(peaks[-1] / sampling_rate * 1000))
+
+        rri  = signal_interpolate(peaks[1:],  # Skip first peak since it has no corresponding element in heart_period
+                                  rri,
+                                  desired_length=desired_length,
+                                  **kwargs)
     return rri
 
 
