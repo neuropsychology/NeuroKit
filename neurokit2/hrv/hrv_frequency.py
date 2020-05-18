@@ -10,7 +10,7 @@ from .hrv_utils import _hrv_sanitize_input
 def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
                   interpolation_order="cubic", ulf=(0, 0.0033),
                   vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4),
-                  vhf=(0.4, 0.5), psd_method="welch"):
+                  vhf=(0.4, 0.5), psd_method="welch", silent=True):
     """ Computes frequency-domain indices of Heart Rate Variability (HRV).
 
     Note that a minimum duration of the signal containing the peaks is recommended
@@ -49,6 +49,8 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
     psd_method : str, optional
         Method used for spectral density estimation. For details see
         signal.signal_power. By default "welch".
+    silent : bool
+        If False, warnings will be printed. Default to True.
 
     Returns
     -------
@@ -113,9 +115,10 @@ def hrv_frequency(peaks, sampling_rate=1000, sampling_rate_interpolation=10,
 
     out = power.to_dict(orient="index")[0]
 
-    for frequency in out.keys():
-        if out[frequency] == 0.0:
-            print("Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
+    if silent is False:
+        for frequency in out.keys():
+            if out[frequency] == 0.0:
+                print("Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
 
     # Normalized
     total_power = np.sum(power.values)

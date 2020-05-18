@@ -12,7 +12,7 @@ from ..complexity import entropy_approximate
 from ..complexity import fractal_dfa
 
 
-def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
+def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     """Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
 
     Parameters
@@ -27,6 +27,8 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
         (in Hz, i.e., samples/second).
     show : bool
         If True, will return a Poincaré plot, a scattergram, which plots each breath-to-breath interval against the next successive one. The ellipse centers around the average breath-to-breath interval. Defaults to False.
+    silent : bool
+        If False, warnings will be printed. Default to True.
 
     Returns
     -------
@@ -135,9 +137,10 @@ def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4
     power.columns = ["VLF", "LF", "HF"]
     out = power.to_dict(orient="index")[0]
 
-    for frequency in out.keys():
-        if out[frequency] == 0.0:
-            print("Neurokit warning: rsp_rrv(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
+    if silent is False:
+        for frequency in out.keys():
+            if out[frequency] == 0.0:
+                print("Neurokit warning: rsp_rrv(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
 
     # Normalized
     total_power = np.sum(power.values)
