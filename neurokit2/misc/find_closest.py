@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .sanitize_input import sanitize_input
+from .sanitize_input import _sanitize_input
 
 
 def find_closest(closest_of, list_to_search_in, direction="both", strictly=False, return_index=False):
@@ -39,8 +39,8 @@ def find_closest(closest_of, list_to_search_in, direction="both", strictly=False
     """
 
     # Transform to arrays
-    closest_of = sanitize_input(closest_of, "vector")
-    list_to_search_in = pd.Series(sanitize_input(list_to_search_in, "vector"))
+    closest_of = _sanitize_input(closest_of, "vector")
+    list_to_search_in = pd.Series(_sanitize_input(list_to_search_in, "vector"))
 
     out = [_find_closest(i, list_to_search_in, direction, strictly, return_index) for i in closest_of]
 

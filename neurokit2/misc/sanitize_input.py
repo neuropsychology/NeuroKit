@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-def sanitize_input(x, what="vector", message="NeuroKit error: please provide a correct input."):
+def _sanitize_input(x, what="vector", message="NeuroKit error: please provide a correct input."):
     """Make sure that the input is of the right shape.
 
     Examples
@@ -29,7 +29,7 @@ def sanitize_input(x, what="vector", message="NeuroKit error: please provide a c
 
 
 
-def sanitize_input_vector(x, message="NeuroKit error: we expect the user to provide a vector, i.e., a one-dimensional array (such as a list of values)."):
+def _sanitize_input_vector(x, message="NeuroKit error: we expect the user to provide a vector, i.e., a one-dimensional array (such as a list of values)."):
     if isinstance(x, (pd.Series, pd.DataFrame)):
         out = x.values
     elif isinstance(x, (str, float, int, np.int, np.int8, np.int16, np.int32, np.int64)):
