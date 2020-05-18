@@ -187,8 +187,10 @@ def test_rsp_rrv():
     # assert np.array(rsp90_rrv["RRV_pNN50"]) == np.array(rsp110_rrv["RRV_pNN50"]) == np.array(rsp110_rrv["RRV_pNN20"]) == np.array(rsp90_rrv["RRV_pNN20"]) == 0
     # assert np.array(rsp90_rrv["RRV_TINN"]) < np.array(rsp110_rrv["RRV_TINN"])
     # assert np.array(rsp90_rrv["RRV_HTI"]) > np.array(rsp110_rrv["RRV_HTI"])
-    assert np.array(rsp90_rrv["RRV_HF"]) < np.array(rsp110_rrv["RRV_HF"])
-    assert np.array(rsp90_rrv["RRV_LF"]) < np.array(rsp110_rrv["RRV_LF"])
+    if np.array(rsp90_rrv["RRV_HF"]) and np.array(rsp110_rrv["RRV_HF"]) != 0:
+        assert np.array(rsp90_rrv["RRV_HF"]) < np.array(rsp110_rrv["RRV_HF"])
+    if np.array(rsp90_rrv["RRV_LF"]) and np.array(rsp110_rrv["RRV_LF"]) != 0:
+        assert np.array(rsp90_rrv["RRV_LF"]) < np.array(rsp110_rrv["RRV_LF"])
 
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
 #                        'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF',
