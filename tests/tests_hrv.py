@@ -41,13 +41,13 @@ def test_hrv_frequency():
     assert np.allclose(hrv1["VLF"] - hrv2["VLF"], 0, atol=1)
 
 
-def test_hrv_summary():
+def test_hrv():
     
     ecg = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
 
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
 
-    ecg_hrv = nk.hrv_summary(peaks, sampling_rate=1000)
+    ecg_hrv = nk.hrv(peaks, sampling_rate=1000)
 
     assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
                         'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
