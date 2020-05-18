@@ -5,6 +5,7 @@ import matplotlib.patches
 
 from ..complexity.entropy_sample import entropy_sample
 from .hrv_utils import _hrv_sanitize_input
+from .hrv_utils import _hrv_get_rri
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     """ Computes nonlinear indices of Heart Rate Variability (HRV).
@@ -53,7 +54,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>>
     >>> # Compute HRV indices
-    >>> hrv = nk.hrv_nonlinear(peaks, sampling_rate=100)
+    >>> hrv = nk.hrv_nonlinear(peaks, sampling_rate=100, show=True)
 
     References
     ----------
@@ -65,15 +66,14 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
 
-    # Compute heart period in milliseconds.
-    heart_period = np.diff(peaks) / sampling_rate * 1000
+    # Compute R-R intervals (also referred to as NN) in milliseconds
+    rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    diff_rri = np.diff(rri)
 
-    diff_heart_period = np.diff(heart_period)
-
-    out = {}
+    out = {}  # Initialize empty container for results
 
     # Poincaré
-    sd_heart_period = np.std(diff_heart_period, ddof=1) ** 2
+    sd_heart_period = np.std(diff_rri, ddof=1) ** 2
     out["SD1"] = np.sqrt(sd_heart_period * 0.5)
     out["SD2"] = np.sqrt(2 * sd_heart_period - 0.5 * sd_heart_period)
     out["SD2SD1"] = out["SD2"] / out["SD1"]
@@ -86,34 +86,37 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out["CSI_Modified"] = L ** 2 / T
 
     # Entropy
-    out["SampEn"] = entropy_sample(heart_period, dimension=2,
-                                   r=0.2 * np.std(heart_period, ddof=1))
+    out["SampEn"] = entropy_sample(rri, dimension=2,
+                                   r=0.2 * np.std(rri, ddof=1))
 
     if show:
-        _hrv_nonlinear_show(heart_period, out)
+        _hrv_nonlinear_show(rri, out)
 
     return out
 
 
-def _hrv_nonlinear_show(heart_period, out):
 
-        mean_heart_period = np.mean(heart_period)
+
+
+def _hrv_nonlinear_show(rri, out):
+
+        mean_heart_period = np.mean(rri)
         sd1 = out["SD1"]
         sd2 = out["SD2"]
 
         # Axes
-        ax1 = heart_period[:-1]
-        ax2 = heart_period[1:]
+        ax1 = rri[:-1]
+        ax2 = rri[1:]
 
         # Plot
         fig = plt.figure(figsize=(12, 12))
         ax = fig.add_subplot(111)
         plt.title("Poincaré Plot", fontsize=20)
-        plt.xlabel('RR_n (s)', fontsize=15)
-        plt.ylabel('RR_n+1 (s)', fontsize=15)
-        plt.xlim(min(heart_period) - 10, max(heart_period) + 10)
-        plt.ylim(min(heart_period) - 10, max(heart_period) + 10)
-        ax.scatter(ax1, ax2, c='b', s=4)
+        plt.xlabel(r'$RR_{n} (ms)$', fontsize=15)
+        plt.ylabel(r'$RR_{n+1} (ms)$', fontsize=15)
+        plt.xlim(min(rri) - 10, max(rri) + 10)
+        plt.ylim(min(rri) - 10, max(rri) + 10)
+        ax.scatter(ax1, ax2, c='#2196F3', s=4)
 
         # Ellipse plot feature
         ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
@@ -125,17 +128,17 @@ def _hrv_nonlinear_show(heart_period, out):
                                                  mean_heart_period), width=2 * sd2,
                                              height=2 * sd1, angle=45)
         ellipse.set_alpha(0.02)
-        ellipse.set_facecolor("blue")
+        ellipse.set_facecolor("#2196F3")
         ax.add_patch(ellipse)
 
         # Arrow plot feature
         sd1_arrow = ax.arrow(mean_heart_period, mean_heart_period,
                              -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
-                             linewidth=3, ec='r', fc="r", label="SD1")
+                             linewidth=3, ec='#E91E63', fc="#E91E63", label="SD1")
         sd2_arrow = ax.arrow(mean_heart_period,
                              mean_heart_period, sd2 * np.sqrt(2) / 2,
                              sd2 * np.sqrt(2) / 2,
-                             linewidth=3, ec='y', fc="y", label="SD2")
+                             linewidth=3, ec='#FF9800', fc="#FF9800", label="SD2")
 
         plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
 

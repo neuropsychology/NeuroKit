@@ -4,6 +4,32 @@ import pandas as pd
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False):
+
+    if interpolate is False:
+        rri = np.diff(peaks) / sampling_rate * 1000
+
+    return rri
+
+
+
+
+
+
+
+
+
 def _hrv_sanitize_input(peaks=None, sampling_rate=None, ecg_rate=None):
 
     if isinstance(peaks, tuple):

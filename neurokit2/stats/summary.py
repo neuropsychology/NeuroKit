@@ -21,6 +21,8 @@ def summary_plot(x, **kwargs):
     >>> x = np.random.normal(size=100)
     >>> nk.summary_plot(x)
     """
+    fig = plt.figure()
+
     # Histogram
     counts, bins = np.histogram(x, **kwargs)
     plt.hist(bins[:-1], bins, weights=counts, color="#2196F3", edgecolor='white', zorder=1, **kwargs)
@@ -46,3 +48,5 @@ def summary_plot(x, **kwargs):
                 capprops=dict(linewidth=1.5),
                 zorder=4,
                 **kwargs)
+
+    return fig

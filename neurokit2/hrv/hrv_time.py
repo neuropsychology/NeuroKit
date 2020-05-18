@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import matplotlib.pyplot as plt
 
-from ..stats.mad import mad
+from ..stats import mad
+from ..stats import summary_plot
 from .hrv_utils import _hrv_sanitize_input
+from .hrv_utils import _hrv_get_rri
 
-def hrv_time(peaks, sampling_rate=1000):
+
+def hrv_time(peaks, sampling_rate=1000, show=False):
     """ Computes time-domain indices of Heart Rate Variability (HRV).
 
      See references for details.
@@ -53,7 +57,7 @@ def hrv_time(peaks, sampling_rate=1000):
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>>
     >>> # Compute HRV indices
-    >>> hrv = nk.hrv_time(peaks, sampling_rate=100)
+    >>> hrv = nk.hrv_time(peaks, sampling_rate=100, show=True)
 
     References
     ----------
@@ -65,42 +69,44 @@ def hrv_time(peaks, sampling_rate=1000):
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
 
-    # Compute heart period in milliseconds.
-    heart_period = np.diff(peaks) / sampling_rate * 1000
+    # Compute R-R intervals (also referred to as NN) in milliseconds
+    rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    diff_rri = np.diff(rri)
 
-    diff_period = np.diff(heart_period)
-
-    out = {}  # Initialize empty dict
+    out = {}  # Initialize empty container for results
 
     # Mean based
-    out["RMSSD"] = np.sqrt(np.mean(diff_period ** 2))
-    out["MeanNN"] = np.mean(heart_period)
-    out["SDNN"] = np.std(heart_period, ddof=1)
-    out["SDSD"] = np.std(diff_period, ddof=1)
+    out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
+    out["MeanNN"] = np.mean(rri)
+    out["SDNN"] = np.std(rri, ddof=1)
+    out["SDSD"] = np.std(diff_rri, ddof=1)
     out["CVNN"] = out["SDNN"] / out["MeanNN"]
     out["CVSD"] = out["RMSSD"] / out["MeanNN"]
 
     # Robust
-    out["MedianNN"] = np.median(np.abs(heart_period))
-    out["MadNN"] = mad(heart_period)
+    out["MedianNN"] = np.median(np.abs(rri))
+    out["MadNN"] = mad(rri)
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]
 
     # Extreme-based
-    nn50 = np.sum(np.abs(diff_period) > 50)
-    nn20 = np.sum(np.abs(diff_period) > 20)
-    out["pNN50"] = nn50 / len(heart_period) * 100
-    out["pNN20"] = nn20 / len(heart_period) * 100
+    nn50 = np.sum(np.abs(diff_rri) > 50)
+    nn20 = np.sum(np.abs(diff_rri) > 20)
+    out["pNN50"] = nn50 / len(rri) * 100
+    out["pNN20"] = nn20 / len(rri) * 100
 
     # Geometrical domain
-    bar_y, bar_x = np.histogram(heart_period, bins="auto")
+    bar_y, bar_x = np.histogram(rri, bins="auto")
     out["TINN"] = np.max(bar_x) - np.min(bar_x)  # Triangular Interpolation of the NN Interval Histogram
-    out["HTI"] = len(heart_period) / np.max(bar_y)  # HRV Triangular Index
+    out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
 
-    # if show:
-    #     _show(heart_period, out)
+    if show:
+         _hrv_time_show(rri)
 
     return out
 
 
-def _hrv_time_show(heart_period, out):
-    pass
+def _hrv_time_show(rri):
+    fig = summary_plot(rri)
+    plt.xlabel('R-R intervals (ms)')
+    fig.suptitle("Distribution of R-R intervals")
+    return fig

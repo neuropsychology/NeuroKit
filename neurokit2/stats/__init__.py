@@ -16,3 +16,4 @@ from .fit_error import fit_mse
 from .fit_error import fit_rmse
 from .fit_error import fit_r2
 from .mutual_information import mutual_information
+from .summary import summary_plot
