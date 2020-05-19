@@ -225,8 +225,8 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91,
         if np.abs(drrs[i]) <= 1:    # Figure 1
             i += 1
             continue
-        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))    # Figure 2a
-        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))    # Figure 2a
+        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] + c2))    # Figure 2a
+        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] - c2))    # Figure 2a
 
         if np.any([eq1, eq2]):
             # If any of the two equations is true.
