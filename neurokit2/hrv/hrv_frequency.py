@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from matplotlib.cm import get_cmap
 
 from ..signal.signal_power import signal_power
+from ..signal.signal_power import _signal_power_instant_plot
 from ..signal.signal_psd import signal_psd
 from .hrv_utils import _hrv_sanitize_input
 from .hrv_utils import _hrv_get_rri
@@ -88,8 +87,6 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
       Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
     variability metrics and norms. Frontiers in public health, 5, 258.
-    - `HRV analysis` <https://github.com/Aura-healthcare/hrvanalysis#plot-functions>`_
-
     """
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
@@ -126,7 +123,7 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
 
     # Show plot
     if show:
-        _hrv_frequency_show(rri, sampling_rate=sampling_rate)
+        _hrv_frequency_show(rri, out, sampling_rate=sampling_rate)
 
     out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
     return out
@@ -135,41 +132,16 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
 
 
 
-def _hrv_frequency_show(rri, ulf=(0, 0.0033), vlf=(0.0033, 0.04),
+def _hrv_frequency_show(rri, out, ulf=(0, 0.0033), vlf=(0.0033, 0.04),
                         lf=(0.04, 0.15), hf=(0.15, 0.4),
                         vhf=(0.4, 0.5), sampling_rate=1000):
 
     # Get freq psd from rr intervals
     psd = signal_psd(rri, method="welch",
                      sampling_rate=sampling_rate, show=False)
-    freq = np.array(psd['Frequency'])
-    power = np.array(psd['Power'])
-
-    # Indices between desired frequency bands
-    ulf_indexes = np.logical_and(freq >= ulf[0], freq < ulf[1])
-    vlf_indexes = np.logical_and(freq >= vlf[0], freq < vlf[1])
-    lf_indexes = np.logical_and(freq >= lf[0], freq < lf[1])
-    hf_indexes = np.logical_and(freq >= hf[0], freq < hf[1])
-    vhf_indexes = np.logical_and(freq >= vhf[0], freq < vhf[1])
-
-    frequency_band_index = [ulf_indexes, vlf_indexes,
-                            lf_indexes, hf_indexes, vhf_indexes]
-    label_list = ["ULF component", "VLF component",
-                  "LF component", "HF component", "VHF component"]
 
     # Plot
-    plt.title("Power Spectral Density (PSD) for Frequency Domains",
-              fontsize=10, fontweight="bold")
-    plt.xlabel("Frequency (Hz)", fontsize=10)
-    plt.ylabel("Power", fontsize=10)
-
-    # Get cmap
-    cmap = get_cmap("Set1")
-    colors = cmap.colors
-    colors = colors[3], colors[1], colors[2], colors[4], colors[0]  # manually rearrange colors
-
-    for band_index, label, i in zip(frequency_band_index, label_list, colors):
-        plt.fill_between(freq[band_index], 0, power[band_index],
-                         label=label, color=i)
-        plt.legend(prop={"size": 10}, loc="best")
-        plt.xlim(0, vhf[1])
+    frequency_band = [ulf, vlf, lf, hf, vhf]
+    _signal_power_instant_plot(psd, out, frequency_band,
+                               labels='HRV Components',
+                               sampling_rate=sampling_rate)

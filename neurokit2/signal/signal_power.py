@@ -112,7 +112,7 @@ def _signal_power_instant_get(psd, frequency_band):
 
 
 
-def _signal_power_instant_plot(psd, frequency_band, labels='default', sampling_rate=1000):
+def _signal_power_instant_plot(psd, out, frequency_band, labels='default', sampling_rate=1000):
 
     # Sanitize signal
     if isinstance(frequency_band[0], int):
@@ -132,7 +132,7 @@ def _signal_power_instant_plot(psd, frequency_band, labels='default', sampling_r
 
     if labels == 'default':
         label_list = list(out.keys())
-    else:
+    elif labels == 'HRV Components':
         label_list = ["ULF component", "VLF component",
                       "LF component", "HF component", "VHF component"]  # for HRV
 
@@ -148,7 +148,7 @@ def _signal_power_instant_plot(psd, frequency_band, labels='default', sampling_r
     plt.xlabel("Frequency (Hz)", fontsize=10)
     plt.ylabel("Spectrum (ms2/Hz)", fontsize=10)
 
-    x_limit = frequency_band[len(frequency_band_index) - 1][1]
+#    x_limit = frequency_band[len(frequency_band_index) - 1][1]
     plt.fill_between(freq, 0, power, color='lightgrey', label='Signal')
 
     for band_index, label, i in zip(frequency_band_index, label_list, colors):
