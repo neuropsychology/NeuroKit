@@ -173,7 +173,7 @@ def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mu
         ax0 = fig.add_subplot(spec[0])
         ax1 = fig.add_subplot(spec[1])
     else:
-        fig=None
+        fig = None
 
     # Upper plot (metric evolution)
     ax0.set_title("Optimization of Delay (tau)")

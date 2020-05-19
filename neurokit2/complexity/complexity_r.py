@@ -83,7 +83,7 @@ def _optimize_r_plot(r, r_range, ApEn, ax=None):
     if ax is None:
         fig, ax = plt.subplots()
     else:
-        fig=None
+        fig = None
     ax.set_title("Optimization of Tolerence Threshold (r)")
     ax.set_xlabel('Tolerence threshold $r$')
     ax.set_ylabel('Approximate Entropy $ApEn$')

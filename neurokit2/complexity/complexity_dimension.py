@@ -189,7 +189,7 @@ def _embedding_dimension_plot(method, dimension_seq, min_dimension, E1=None, E2=
     if ax is None:
         fig, ax = plt.subplots()
     else:
-        fig=None
+        fig = None
     ax.set_title("Optimization of Dimension (d)")
     ax.set_xlabel("Embedding dimension $d$")
     ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
