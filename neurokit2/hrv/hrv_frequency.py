@@ -105,7 +105,8 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
 
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
 
-    out = power.to_dict(orient="index")[0]
+    out_bands = power.to_dict(orient="index")[0]
+    out = out_bands.copy()
 
     if silent is False:
         for frequency in out.keys():
@@ -123,7 +124,7 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
 
     # Show plot
     if show:
-        _hrv_frequency_show(rri, out, sampling_rate=sampling_rate)
+        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate)
 
     out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
     return out
@@ -132,16 +133,14 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
 
 
 
-def _hrv_frequency_show(rri, out, ulf=(0, 0.0033), vlf=(0.0033, 0.04),
+def _hrv_frequency_show(rri, out_bands, ulf=(0, 0.0033), vlf=(0.0033, 0.04),
                         lf=(0.04, 0.15), hf=(0.15, 0.4),
-                        vhf=(0.4, 0.5), sampling_rate=1000):
+                        vhf=(0.4, 0.5), sampling_rate=1000, labels="HRV Components"):
 
     # Get freq psd from rr intervals
-    psd = signal_psd(rri, method="welch",
+    psd = nk.signal_psd(rri, method="welch",
                      sampling_rate=sampling_rate, show=False)
 
     # Plot
     frequency_band = [ulf, vlf, lf, hf, vhf]
-    _signal_power_instant_plot(psd, out, frequency_band,
-                               labels='HRV Components',
-                               sampling_rate=sampling_rate)
+    _signal_power_instant_plot(psd, out_bands, frequency_band, sampling_rate=sampling_rate)

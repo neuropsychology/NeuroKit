@@ -97,7 +97,7 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
         out.update(_signal_power_instant_get(psd, frequency_band))
 
     if show:
-        _signal_power_instant_plot(psd, out, frequency_band, labels='default', sampling_rate=sampling_rate)
+        _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=sampling_rate)
     return out
 
 
@@ -148,7 +148,6 @@ def _signal_power_instant_plot(psd, out, frequency_band, labels='default', sampl
     plt.xlabel("Frequency (Hz)", fontsize=10)
     plt.ylabel("Spectrum (ms2/Hz)", fontsize=10)
 
-#    x_limit = frequency_band[len(frequency_band_index) - 1][1]
     plt.fill_between(freq, 0, power, color='lightgrey', label='Signal')
 
     for band_index, label, i in zip(frequency_band_index, label_list, colors):
@@ -156,7 +155,6 @@ def _signal_power_instant_plot(psd, out, frequency_band, labels='default', sampl
                          power[band_index],
                          label=label, color=i)
         plt.legend(prop={"size": 10}, loc="best")
-
 
 # =============================================================================
 # Continuous
