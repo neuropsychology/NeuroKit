@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 import matplotlib.pyplot as plt
+from matplotlib.cm import get_cmap
 
 
 from .signal_psd import signal_psd
@@ -43,7 +44,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     >>>
     >>> # Instant power
     >>> signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20)
-    >>> nk.signal_power(signal, frequency_band=[(18, 22), (10, 14)], method="multitapers")
+    >>> nk.signal_power(signal, frequency_band=[(18, 22), (10, 14)], method="multitapers", show=True)
     >>>
     >>> # Continuous (simulated signal)
     >>> signal = np.concatenate((nk.ecg_simulate(duration=30, heart_rate=75),
@@ -96,7 +97,7 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
         out.update(_signal_power_instant_get(psd, frequency_band))
 
     if show:
-        _signal_power_instant_plot(psd, out, frequency_band)
+        _signal_power_instant_plot(psd, frequency_band, labels='default', sampling_rate=sampling_rate)
     return out
 
 
@@ -111,32 +112,51 @@ def _signal_power_instant_get(psd, frequency_band):
 
 
 
-def _signal_power_instant_plot(psd, out, frequency_band):
+def _signal_power_instant_plot(psd, frequency_band, labels='default', sampling_rate=1000):
 
-    # sanitize signal:
+    # Sanitize signal
     if isinstance(frequency_band[0], int):
         if len(frequency_band) > 2:
             print("NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples or a tuple of 2 integers")
         else:
             frequency_band = [tuple(i for i in frequency_band)]
 
+    freq = np.array(psd['Frequency'])
+    power = np.array(psd['Power'])
+
     # Get indexes for different frequency band
     frequency_band_index = []
     for band in frequency_band:
         indexes = np.logical_and(psd["Frequency"] >= band[0], psd["Frequency"] < band[1])
         frequency_band_index.append(np.array(indexes))
-    label_list = list(out.keys())
+
+    if labels == 'default':
+        label_list = list(out.keys())
+    else:
+        label_list = ["ULF component", "VLF component",
+                      "LF component", "HF component", "VHF component"]  # for HRV
+
+    # Get cmap
+    cmap = get_cmap("Set1")
+    colors = cmap.colors
+    colors = colors[3], colors[1], colors[2], colors[4], colors[0], colors[5], colors[6], colors[7], colors[8]  # manually rearrange colors
+    colors = colors[0:len(frequency_band_index)]
 
     # Plot
-    ax = psd.plot(x="Frequency", y="Power", logy=False, title='Power Spectral Density (PSD)', color='lightgrey', linewidth=0.6)
-    ax.fill_between(psd["Frequency"], 0, psd["Power"], color='lightgrey', label='Signal')
+    plt.title("Power Spectral Density (PSD) for Frequency Domains",
+              fontsize=10, fontweight="bold")
+    plt.xlabel("Frequency (Hz)", fontsize=10)
+    plt.ylabel("Spectrum (ms2/Hz)", fontsize=10)
 
-    for band_index, label in zip(frequency_band_index, label_list):
-        ax.fill_between(psd["Frequency"][band_index], 0, psd["Power"][band_index], label=label)
-    ax.legend()
+    x_limit = frequency_band[len(frequency_band_index) - 1][1]
+    plt.fill_between(freq, 0, power, color='lightgrey', label='Signal')
 
-    ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum (ms2/Hz)")
-    return ax
+    for band_index, label, i in zip(frequency_band_index, label_list, colors):
+        plt.fill_between(freq[band_index], 0,
+                         power[band_index],
+                         label=label, color=i)
+        plt.legend(prop={"size": 10}, loc="best")
+
 
 # =============================================================================
 # Continuous
