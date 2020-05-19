@@ -163,14 +163,20 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 # =============================================================================
 # Internals
 # =============================================================================
-def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mutual Information"):
+def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mutual Information", ax0=None, ax1=None):
     """
     """
-    fig = plt.figure(constrained_layout=False)
-    spec = matplotlib.gridspec.GridSpec(ncols=1, nrows=2, height_ratios=[1, 3], width_ratios=[2])
+    if ax0 is None and ax1 is None:
+        fig = plt.figure(constrained_layout=False)
+        spec = matplotlib.gridspec.GridSpec(ncols=1, nrows=2, height_ratios=[1, 3], width_ratios=[2])
+
+        ax0 = fig.add_subplot(spec[0])
+        ax1 = fig.add_subplot(spec[1])
+    else:
+        fig=None
 
     # Upper plot (metric evolution)
-    ax0 = fig.add_subplot(spec[0])
+    ax0.set_title("Optimization of Delay (tau)")
     ax0.set_xlabel("Time Delay (tau)")
     ax0.set_ylabel(metric)
     ax0.plot(tau_sequence, metric_values, color='#2196F3')
@@ -183,8 +189,6 @@ def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mu
     y = embedded[:, 1]
     z = embedded[:, 2]
 
-    ax1 = fig.add_subplot(spec[1])
-
     #   Chunk the data into colorbars
     points = np.array([x, y]).T.reshape(-1, 1, 2)
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
@@ -194,6 +198,7 @@ def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mu
     line = ax1.add_collection(lc)
 
     #   Customize
+    ax1.set_title("Attractor")
     ax1.set_xlim(x.min(), x.max())
     ax1.set_ylim(x.min(), x.max())
     ax1.set_xlabel("Signal [i]")
