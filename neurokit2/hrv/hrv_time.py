@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 from ..stats import mad
@@ -104,6 +105,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     if show:
         _hrv_time_show(rri)
 
+    out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
     return out
 
 

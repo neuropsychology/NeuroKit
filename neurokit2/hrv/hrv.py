@@ -45,6 +45,12 @@ def hrv(peaks, sampling_rate=1000, show=False):
     >>>
     >>> # Download data
     >>> data = nk.data("bio_resting_5min_100hz")
+    >>>
+    >>> # Find peaks
+    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+    >>>
+    >>> # Compute HRV indices
+    >>> nk.hrv(peaks, sampling_rate=100)
 
     References
     ----------
@@ -54,13 +60,13 @@ def hrv(peaks, sampling_rate=1000, show=False):
     variability metrics and norms. Frontiers in public health, 5, 258.
     """
     # Get indices
-    hrv = {}  # initialize empty dict
+    out = []  # initialize empty container
 
     # Gather indices
-    hrv.update(hrv_time(peaks, sampling_rate=sampling_rate))
-    hrv.update(hrv_frequency(peaks, sampling_rate=sampling_rate))
-    hrv.update(hrv_nonlinear(peaks, sampling_rate=sampling_rate, show=show))
+    out.append(hrv_time(peaks, sampling_rate=sampling_rate))
+    out.append(hrv_frequency(peaks, sampling_rate=sampling_rate))
+    out.append(hrv_nonlinear(peaks, sampling_rate=sampling_rate))
 
-    hrv = pd.DataFrame.from_dict(hrv, orient='index').T.add_prefix("HRV_")
+    out = pd.concat(out, axis=1)
 
-    return hrv
+    return out

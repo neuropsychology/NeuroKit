@@ -11,19 +11,19 @@ def test_hrv_time():
 
     hrv_slow = nk.hrv_time(peaks_slow, sampling_rate=1000)
     hrv_fast = nk.hrv_time(peaks_fast, sampling_rate=1000)
-    
-    assert hrv_fast["RMSSD"] < hrv_slow["RMSSD"]
-    assert hrv_fast["MeanNN"] < hrv_slow["MeanNN"]
-    assert hrv_fast["SDNN"] < hrv_slow["SDNN"]
-    assert hrv_fast["CVNN"] < hrv_slow["CVNN"]
-    assert hrv_fast["CVSD"] < hrv_slow["CVSD"]
-    assert hrv_fast["MedianNN"] < hrv_slow["MedianNN"]
-    assert hrv_fast["MadNN"] < hrv_slow["MadNN"]
-    assert hrv_fast["MCVNN"] < hrv_slow["MCVNN"]
-    assert hrv_fast["pNN50"] == hrv_slow["pNN50"]
-    assert hrv_fast["pNN20"] < hrv_slow["pNN20"]
-    assert hrv_fast["TINN"] < hrv_slow["TINN"]
-    assert hrv_fast["HTI"] > hrv_slow["HTI"]
+
+    assert np.all(hrv_fast["HRV_RMSSD"] < hrv_slow["HRV_RMSSD"])
+    assert np.all(hrv_fast["HRV_MeanNN"] < hrv_slow["HRV_MeanNN"])
+    assert np.all(hrv_fast["HRV_SDNN"] < hrv_slow["HRV_SDNN"])
+    assert np.all(hrv_fast["HRV_CVNN"] < hrv_slow["HRV_CVNN"])
+    assert np.all(hrv_fast["HRV_CVSD"] < hrv_slow["HRV_CVSD"])
+    assert np.all(hrv_fast["HRV_MedianNN"] < hrv_slow["HRV_MedianNN"])
+    assert np.all(hrv_fast["HRV_MadNN"] < hrv_slow["HRV_MadNN"])
+    assert np.all(hrv_fast["HRV_MCVNN"] < hrv_slow["HRV_MCVNN"])
+    assert np.all(hrv_fast["HRV_pNN50"] == hrv_slow["HRV_pNN50"])
+    assert np.all(hrv_fast["HRV_pNN20"] < hrv_slow["HRV_pNN20"])
+    assert np.all(hrv_fast["HRV_TINN"] < hrv_slow["HRV_TINN"])
+    assert np.all(hrv_fast["HRV_HTI"] > hrv_slow["HRV_HTI"])
 
 
 def test_hrv_frequency():
@@ -36,13 +36,13 @@ def test_hrv_frequency():
     _, peaks2 = nk.ecg_process(ecg2, sampling_rate=500)
     hrv2 = nk.hrv_frequency(peaks2, sampling_rate=500)
 
-    assert np.allclose(hrv1["HF"] - hrv2["HF"], 0, atol=1.5)
-    assert np.allclose(hrv1["LF"] - hrv2["LF"], 0, atol=1)
-    assert np.allclose(hrv1["VLF"] - hrv2["VLF"], 0, atol=1)
+    assert np.allclose(hrv1["HRV_HF"] - hrv2["HRV_HF"], 0, atol=1.5)
+    assert np.allclose(hrv1["HRV_LF"] - hrv2["HRV_LF"], 0, atol=1)
+    assert np.allclose(hrv1["HRV_VLF"] - hrv2["HRV_VLF"], 0, atol=1)
 
 
 def test_hrv():
-    
+
     ecg = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
 
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)

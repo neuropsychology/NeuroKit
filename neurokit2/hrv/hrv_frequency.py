@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib.cm import get_cmap
 
@@ -127,7 +128,11 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
     if show:
         _hrv_frequency_show(rri, sampling_rate=sampling_rate)
 
+    out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
     return out
+
+
+
 
 
 def _hrv_frequency_show(rri, ulf=(0, 0.0033), vlf=(0.0033, 0.04),

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.patches
 
@@ -92,6 +93,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     if show:
         _hrv_nonlinear_show(rri, out)
 
+    out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
     return out
 
 
