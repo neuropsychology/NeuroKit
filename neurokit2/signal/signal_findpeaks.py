@@ -7,6 +7,7 @@ import scipy.misc
 from ..stats import standardize
 from .signal_zerocrossings import signal_zerocrossings
 from ..misc import find_closest
+from ..misc import as_vector
 
 
 def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_min=None, relative_height_max=None, relative_mean=True, relative_median=False, relative_max=False):
@@ -162,6 +163,7 @@ def _signal_findpeaks_findbase(peaks, signal, what="onset"):
     troughs, _ = scipy.signal.find_peaks(-1*signal)
 
     bases = find_closest(peaks, troughs, direction=direction, strictly=True)
+    bases = as_vector(bases)
 
     return bases
 
