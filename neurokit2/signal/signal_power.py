@@ -112,7 +112,7 @@ def _signal_power_instant_get(psd, frequency_band):
 
 
 
-def _signal_power_instant_plot(psd, out, frequency_band, labels='default', sampling_rate=1000):
+def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000):
 
     # Sanitize signal
     if isinstance(frequency_band[0], int):
@@ -130,11 +130,7 @@ def _signal_power_instant_plot(psd, out, frequency_band, labels='default', sampl
         indexes = np.logical_and(psd["Frequency"] >= band[0], psd["Frequency"] < band[1])
         frequency_band_index.append(np.array(indexes))
 
-    if labels == 'default':
-        label_list = list(out.keys())
-    elif labels == 'HRV Components':
-        label_list = ["ULF component", "VLF component",
-                      "LF component", "HF component", "VHF component"]  # for HRV
+    label_list = list(out.keys())
 
     # Get cmap
     cmap = get_cmap("Set1")

@@ -135,10 +135,10 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
 
 def _hrv_frequency_show(rri, out_bands, ulf=(0, 0.0033), vlf=(0.0033, 0.04),
                         lf=(0.04, 0.15), hf=(0.15, 0.4),
-                        vhf=(0.4, 0.5), sampling_rate=1000, labels="HRV Components"):
+                        vhf=(0.4, 0.5), sampling_rate=1000, method="welch"):
 
     # Get freq psd from rr intervals
-    psd = nk.signal_psd(rri, method="welch",
+    psd = signal_psd(rri, method=method,
                      sampling_rate=sampling_rate, show=False)
 
     # Plot
