@@ -179,7 +179,7 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91,
     drrs /= th1
 
     # ignore division by 0 warning
-    np.seterr(divide='ignore',invalid='ignore')
+    np.seterr(divide='ignore', invalid='ignore')
 
     # Cast dRRs to subspace s12.
     # Pad drrs with one element.
@@ -426,7 +426,7 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     # Set grids
     gs = matplotlib.gridspec.GridSpec(ncols=4, nrows=3,
                                       width_ratios=[1, 2, 2, 2])
-    fig = plt.figure(constrained_layout=False,figsize=(15,10))
+    fig = plt.figure(constrained_layout=False, figsize=(15, 10))
     ax0 = fig.add_subplot(gs[0, :-2])
     ax1 = fig.add_subplot(gs[1, :-2])
     ax2 = fig.add_subplot(gs[2, :-2])
@@ -450,27 +450,27 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax1.plot(np.abs(drrs), label="normalized difference consecutive heart periods")
     ax1.axhline(1, c='r', label="artifact threshold")
     ax1.legend(loc="upper right")
-    ax1.set_ylim(0,5)
+    ax1.set_ylim(0, 5)
 
     # Visualize second threshold.
     ax2.set_title("Difference-from-median criterion", fontweight="bold")
     ax2.plot(np.abs(mrrs), label="difference from median over 11 periods")
     ax2.axhline(3, c="r", label="artifact threshold")
     ax2.legend(loc="upper right")
-    ax2.set_ylim(0,5)
+    ax2.set_ylim(0, 5)
 
     # Visualize subspaces.
     ax4.set_title("Subspace 1", fontweight="bold")
     ax4.set_xlabel("S11")
     ax4.set_ylabel("S12")
     ax4.scatter(drrs, s12, marker="x", label="heart periods")
-    ax4.set_ylim(-5,5)
-    ax4.set_xlim(-10,10)
+    ax4.set_ylim(-5, 5)
+    ax4.set_xlim(-10, 10)
     verts0 = [(-10, 5),
               (-10, -c1 * -10 + c2),
               (-1, -c1 * -1 + c2),
               (-1, 5)]
-    
+
     poly0 = matplotlib.patches.Polygon(verts0, alpha=0.3, facecolor="r",
                                        edgecolor=None, label="ectopic periods")
     ax4.add_patch(poly0)
@@ -487,8 +487,8 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax3.set_xlabel("S21")
     ax3.set_ylabel("S22")
     ax3.scatter(drrs, s22, marker="x", label="heart periods")
-    ax3.set_xlim(-10,10)
-    ax3.set_ylim(-10,10)
+    ax3.set_xlim(-10, 10)
+    ax3.set_ylim(-10, 10)
     verts2 = [(-10, 10),
               (-10, 1),
               (-1, 1),
