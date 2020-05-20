@@ -97,7 +97,7 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
         out.update(_signal_power_instant_get(psd, frequency_band))
 
     if show:
-        _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=sampling_rate, **kwargs)
+        _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=sampling_rate)
     return out
 
 
