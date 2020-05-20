@@ -181,7 +181,7 @@ def _embedding_delay_plot(signal, metric_values, tau_sequence, tau=1, metric="Mu
     ax0.set_title("Optimization of Delay (tau)")
     ax0.set_xlabel("Time Delay (tau)")
     ax0.set_ylabel(metric)
-    ax0.plot(tau_sequence, metric_values, color='#2196F3')
+    ax0.plot(tau_sequence, metric_values, color='#FFC107')
     ax0.axvline(x=tau, color='#E91E63', label='Optimal delay: ' + str(tau))
     ax0.legend(loc='upper right')
     ax1.set_title("Attractor")

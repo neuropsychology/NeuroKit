@@ -105,7 +105,7 @@ def _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension
         plot_type = '2D'
         ax_attractor = fig.add_subplot(spec[:, -1])
 
-    fig.suptitle("Complexity Optimization", fontweight="bold")
+    fig.suptitle("Otimization of Complexity Parameters", fontweight="bold")
     plt.subplots_adjust(hspace=0.4, wspace=0.05)
 
     # Plot tau optimization
