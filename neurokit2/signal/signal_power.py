@@ -149,7 +149,7 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
     ax.set_xlabel("Frequency (Hz)")
     ax.set_ylabel("Spectrum (ms2/Hz)")
 
-    ax.fill_between(freq, 0, power, color='lightgrey', label='Signal')
+    ax.fill_between(freq, 0, power, color='lightgrey')
 
     for band_index, label, i in zip(frequency_band_index, label_list, colors):
         ax.fill_between(freq[band_index], 0,
