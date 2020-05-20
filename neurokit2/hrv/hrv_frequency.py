@@ -3,8 +3,6 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_power import signal_power
-from ..signal.signal_power import _signal_power_instant_plot
-from ..signal.signal_psd import signal_psd
 from .hrv_utils import _hrv_sanitize_input
 from .hrv_utils import _hrv_get_rri
 
@@ -100,7 +98,7 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
                          frequency_band=[ulf, vlf, lf, hf, vhf],
                          sampling_rate=sampling_rate,
                          method=psd_method,
-                         max_frequency=0.5,
+                         max_frequency=0.5, show=show,
                          **kwargs)
 
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
@@ -114,7 +112,7 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
                 print("Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
 
     # Normalized
-    total_power = np.sum(power.values)
+    total_power = np.nansum(power.values)
     out["LFHF"] = out["LF"] / out["HF"]
     out["LFn"] = out["LF"] / total_power
     out["HFn"] = out["HF"] / total_power
@@ -123,24 +121,8 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
     out["LnHF"] = np.log(out["HF"])
 
     # Show plot
-    if show:
-        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate)
+#    if show:
+#        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate)
 
     out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
     return out
-
-
-
-
-
-def _hrv_frequency_show(rri, out_bands, ulf=(0, 0.0033), vlf=(0.0033, 0.04),
-                        lf=(0.04, 0.15), hf=(0.15, 0.4),
-                        vhf=(0.4, 0.5), sampling_rate=1000, method="welch"):
-
-    # Get freq psd from rr intervals
-    psd = signal_psd(rri, method=method,
-                     sampling_rate=sampling_rate, show=False)
-
-    # Plot
-    frequency_band = [ulf, vlf, lf, hf, vhf]
-    _signal_power_instant_plot(psd, out_bands, frequency_band, sampling_rate=sampling_rate)
