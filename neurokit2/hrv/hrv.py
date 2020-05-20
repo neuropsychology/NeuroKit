@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
 
 from .hrv_time import hrv_time
 from .hrv_frequency import hrv_frequency
 from .hrv_nonlinear import hrv_nonlinear
+from .hrv_nonlinear import _hrv_nonlinear_show
+from .hrv_utils import _hrv_get_rri
+from .hrv_utils import _hrv_sanitize_input
+from ..stats import summary_plot
 
 
 def hrv(peaks, sampling_rate=1000, show=False):
@@ -69,4 +75,30 @@ def hrv(peaks, sampling_rate=1000, show=False):
 
     out = pd.concat(out, axis=1)
 
-    return out
+    # Plot
+    if show:
+        fig = plt.figure(constrained_layout=False)
+        spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=2,
+                                            height_ratios=[1, 1], width_ratios=[1, 1])
+
+        # Arrange grids
+        ax_distrib = fig.add_subplot(spec[0, :-1])
+        ax_distrib.set_xlabel('R-R intervals (ms)')
+        ax_distrib.set_title("Distribution of R-R intervals")
+
+        ax_psd = fig.add_subplot(spec[1, :-1])
+        ax_poincare = fig.add_subplot(spec[:, -1])
+
+        # Distribution of RR intervals
+        peaks = _hrv_sanitize_input(peaks)
+        rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+        ax_distrib = summary_plot(rri, ax=ax_distrib)
+
+        # PSD plot
+        ax_psd = hrv_frequency(peaks, sampling_rate=sampling_rate,
+                               show=True, ax=ax_psd)
+
+        # Poincare plot
+        out_poincare = out.copy()
+        out_poincare.columns = [col.replace('HRV_', '') for col in out_poincare.columns]
+        ax_poincare = _hrv_nonlinear_show(rri, out_poincare, ax=ax_poincare)

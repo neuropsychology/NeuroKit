@@ -113,14 +113,12 @@ def _signal_power_instant_get(psd, frequency_band):
 
 
 
-def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, **kwargs):
+def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=None):
 
-    if 'ax' in kwargs:
-        fig = None
-        ax = kwargs.get("ax")
-        kwargs.pop("ax")
-    else:
+    if ax is None:
         fig, ax = plt.subplots()
+    else:
+        fig = None
 
     # Sanitize signal
     if isinstance(frequency_band[0], int):
@@ -159,6 +157,8 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, **k
                          power[band_index],
                          label=label, color=i)
         ax.legend(prop={"size": 10}, loc="best")
+
+    return fig
 
 # =============================================================================
 # Continuous
