@@ -90,21 +90,27 @@ def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimens
 
 def _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension_seq, optimize_indices, r_range, ApEn, dimension_method="afnn"):
 
-
+    # Prepare figure
     fig = plt.figure(constrained_layout=False)
-    spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=3, height_ratios=[1, 1, 1], width_ratios=[1-1/np.pi, 1/np.pi])
+    spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=3, height_ratios=[1, 1, 1], width_ratios=[1-1.2/np.pi, 1.2/np.pi])
 
     ax_tau = fig.add_subplot(spec[0, :-1])
     ax_dim = fig.add_subplot(spec[1, :-1])
     ax_r = fig.add_subplot(spec[2, :-1])
-    ax_attractor = fig.add_subplot(spec[:, -1])
+
+    if out['dimension'] > 2:
+        plot_type = '3D'
+        ax_attractor = fig.add_subplot(spec[:, -1], projection='3d')
+    else:
+        plot_type = '2D'
+        ax_attractor = fig.add_subplot(spec[:, -1])
 
     fig.suptitle("Complexity Optimization", fontweight="bold")
-    plt.subplots_adjust(hspace=0.3, wspace=0.1)
+    plt.subplots_adjust(hspace=0.4, wspace=0.05)
 
     # Plot tau optimization
     # Plot Attractor
-    _embedding_delay_plot(signal, metric_values=metric_values, tau_sequence=tau_sequence, tau=out["delay"], metric=metric, ax0=ax_tau, ax1=ax_attractor)
+    _embedding_delay_plot(signal, metric_values=metric_values, tau_sequence=tau_sequence, tau=out["delay"], metric=metric, ax0=ax_tau, ax1=ax_attractor, plot=plot_type)
 
     # Plot dimension optimization
     if dimension_method.lower() in ["afnn"]:

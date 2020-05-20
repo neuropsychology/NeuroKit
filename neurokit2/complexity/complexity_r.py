@@ -87,8 +87,8 @@ def _optimize_r_plot(r, r_range, ApEn, ax=None):
     ax.set_title("Optimization of Tolerence Threshold (r)")
     ax.set_xlabel('Tolerence threshold $r$')
     ax.set_ylabel('Approximate Entropy $ApEn$')
-    ax.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#2196F3')
-    ax.axvline(x=r, color='#E91E63', label='Optimal r: ' + str(np.round(r, 3)))
+    ax.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#80059c')
+    ax.axvline(x=r, color='#eb9ffc', label='Optimal r: ' + str(np.round(r, 3)))
     ax.legend(loc='upper right')
 
     return fig

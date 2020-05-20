@@ -194,13 +194,13 @@ def _embedding_dimension_plot(method, dimension_seq, min_dimension, E1=None, E2=
     ax.set_xlabel("Embedding dimension $d$")
     ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
     if method in ["afnn"]:
-        ax.plot(dimension_seq[:-1], E1, 'bo-', label='$E_1(d)$', color='#9C27B0')
-        ax.plot(dimension_seq[:-1], E2, 'go-', label='$E_2(d)$', color='#009688')
+        ax.plot(dimension_seq[:-1], E1, 'bo-', label='$E_1(d)$', color='#FC9100')
+        ax.plot(dimension_seq[:-1], E2, 'go-', label='$E_2(d)$', color='#FED003')
 
     if method in ["fnn"]:
-        ax.plot(dimension_seq, 100 * f1, 'bo--', label='Test I', color='#9C27B0')
-        ax.plot(dimension_seq, 100 * f2, 'g^--', label='Test II', color='#009688')
-        ax.plot(dimension_seq, 100 * f3, 'rs-', label='Test I + II', color='#f44336')
+        ax.plot(dimension_seq, 100 * f1, 'bo--', label='Test I', color='#FC9100')
+        ax.plot(dimension_seq, 100 * f2, 'g^--', label='Test II', color='#FED003')
+        ax.plot(dimension_seq, 100 * f3, 'rs-', label='Test I + II', color='#852b01')
 
     ax.axvline(x=min_dimension, color='#E91E63', label='Optimal dimension: ' + str(min_dimension))
     ax.legend(loc='upper right')
