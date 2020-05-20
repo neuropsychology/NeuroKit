@@ -37,8 +37,10 @@ def test_hrv_frequency():
     hrv2 = nk.hrv_frequency(peaks2, sampling_rate=500)
 
     assert np.allclose(hrv1["HRV_HF"] - hrv2["HRV_HF"], 0, atol=1.5)
-    assert np.allclose(hrv1["HRV_LF"] - hrv2["HRV_LF"], 0, atol=1)
-    assert np.allclose(hrv1["HRV_VLF"] - hrv2["HRV_VLF"], 0, atol=1)
+    assert np.isnan(hrv1["HRV_LF"][0])
+    assert np.isnan(hrv2["HRV_LF"][0])
+    assert np.isnan(hrv1["HRV_VLF"][0])
+    assert np.isnan(hrv2["HRV_LF"][0])
 
 
 def test_hrv():

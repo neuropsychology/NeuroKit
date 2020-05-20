@@ -120,9 +120,5 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
     # Log
     out["LnHF"] = np.log(out["HF"])
 
-    # Show plot
-#    if show:
-#        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate)
-
     out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
     return out
