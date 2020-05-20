@@ -113,12 +113,7 @@ def _signal_power_instant_get(psd, frequency_band):
 
 
 
-def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=None):
-
-    if ax is None:
-        fig, ax = plt.subplots()
-    else:
-        fig = None
+def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000):
 
     # Sanitize signal
     if isinstance(frequency_band[0], int):
@@ -145,18 +140,18 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
     colors = colors[0:len(frequency_band_index)]
 
     # Plot
-    ax.set_title("Power Spectral Density (PSD) for Frequency Domains",
-              fontsize=10, fontweight="bold")
-    ax.set_xlabel("Frequency (Hz)", fontsize=10)
-    ax.set_ylabel("Spectrum (ms2/Hz)", fontsize=10)
+    plt.set_title("Power Spectral Density (PSD) for Frequency Domains",
+                 fontsize=10, fontweight="bold")
+    plt.xlabel("Frequency (Hz)", fontsize=10)
+    plt.ylabel("Spectrum (ms2/Hz)", fontsize=10)
 
-    ax.fill_between(freq, 0, power, color='lightgrey', label='Signal')
+    plt.fill_between(freq, 0, power, color='lightgrey', label='Signal')
 
     for band_index, label, i in zip(frequency_band_index, label_list, colors):
-        ax.fill_between(freq[band_index], 0,
+        plt.fill_between(freq[band_index], 0,
                          power[band_index],
                          label=label, color=i)
-        ax.legend(prop={"size": 10}, loc="best")
+        plt.legend(prop={"size": 10}, loc="best")
 
     return fig
 

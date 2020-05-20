@@ -94,11 +94,12 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
                                       sampling_rate=sampling_rate,
                                       interpolate=True, **kwargs)
 
+    frequency_band = [ulf, vlf, lf, hf, vhf]
     power = signal_power(rri,
-                         frequency_band=[ulf, vlf, lf, hf, vhf],
+                         frequency_band=frequency_band,
                          sampling_rate=sampling_rate,
                          method=psd_method,
-                         max_frequency=0.5, show=show,
+                         max_frequency=0.5, show=False,
                          **kwargs)
 
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
@@ -121,4 +122,22 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
     out["LnHF"] = np.log(out["HF"])
 
     out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
+
+#    # Plot
+#    if show:
+#        _hrv_frequency_show(rri, sampling_rate=sampling_rate,
+#                            frequency_band=frequency_band,
+#                            psd_method=psd_method, ax=None)
+
     return out
+
+#
+#def _hrv_frequency_show(rri, sampling_rate=1000,
+#                        frequency_band=[ulf, vlf, lf, hf, vhf],
+#                        psd_method="welch", ax=None):
+#
+#    nk.signal_power(rri, frequency_band=[ulf, vlf, lf, hf, vhf],
+#                    sampling_rate=sampling_rate,
+#                    method=psd_method,
+#                    max_frequency=0.5, show=True,
+#                    ax=None)
