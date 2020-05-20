@@ -116,9 +116,9 @@ def _hrv_nonlinear_show(rri, out, ax=None):
     else:
         fig = None
 
-    plt.title("Poincaré Plot", fontsize=20)
-    plt.xlabel(r'$RR_{n} (ms)$', fontsize=15)
-    plt.ylabel(r'$RR_{n+1} (ms)$', fontsize=15)
+    plt.title("Poincaré Plot")
+    plt.xlabel(r'$RR_{n} (ms)$')
+    plt.ylabel(r'$RR_{n+1} (ms)$')
     plt.xlim(min(rri) - 10, max(rri) + 10)
     plt.ylim(min(rri) - 10, max(rri) + 10)
     ax.scatter(ax1, ax2, c='#2196F3', s=4)

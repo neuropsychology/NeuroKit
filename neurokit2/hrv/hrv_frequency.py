@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_power import signal_power
+from ..signal.signal_power import _signal_power_instant_plot
+from ..signal.signal_psd import signal_psd
 from .hrv_utils import _hrv_sanitize_input
 from .hrv_utils import _hrv_get_rri
 
@@ -104,8 +106,8 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
 
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
 
-    out_bands = power.to_dict(orient="index")[0]
-    out = out_bands.copy()
+    out = power.to_dict(orient="index")[0]
+    out_bands = out.copy()  # Components to be entered into plot
 
     if silent is False:
         for frequency in out.keys():
@@ -123,21 +125,37 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
 
     out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
 
-#    # Plot
-#    if show:
-#        _hrv_frequency_show(rri, sampling_rate=sampling_rate,
-#                            frequency_band=frequency_band,
-#                            psd_method=psd_method, ax=None)
-
+    # Plot
+    if show:
+        _hrv_frequency_show(rri, out_bands,
+                            sampling_rate=sampling_rate)
     return out
 
-#
-#def _hrv_frequency_show(rri, sampling_rate=1000,
-#                        frequency_band=[ulf, vlf, lf, hf, vhf],
-#                        psd_method="welch", ax=None):
-#
-#    nk.signal_power(rri, frequency_band=[ulf, vlf, lf, hf, vhf],
-#                    sampling_rate=sampling_rate,
-#                    method=psd_method,
-#                    max_frequency=0.5, show=True,
-#                    ax=None)
+
+def _hrv_frequency_show(rri, out_bands, ulf=(0, 0.0033),
+                  vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4),
+                  vhf=(0.4, 0.5), sampling_rate=1000, **kwargs):
+
+    if 'ax' in kwargs:
+        fig = None
+        ax = kwargs.get("ax")
+        kwargs.pop("ax")
+    else:
+        fig, ax = plt.subplots()
+
+    frequency_band = [ulf, vlf, lf, hf, vhf]
+    for i in range(len(frequency_band)):
+        min_frequency = frequency_band[i][0]
+        if min_frequency == 0:
+            min_frequency = 0.001  # sanitize lowest frequency
+
+        window_length = int((2 / min_frequency) * sampling_rate)
+        if window_length <= len(rri) / 2:
+            break
+
+    psd = signal_psd(rri, sampling_rate=sampling_rate,
+                     show=False, min_frequency=min_frequency,
+                     max_frequency=0.5)
+
+    _signal_power_instant_plot(psd, out_bands,
+                               frequency_band, sampling_rate=sampling_rate, ax=ax)

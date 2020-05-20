@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 from .hrv_time import hrv_time
 from .hrv_frequency import hrv_frequency
+from .hrv_frequency import _hrv_frequency_show
 from .hrv_nonlinear import hrv_nonlinear
 from .hrv_nonlinear import _hrv_nonlinear_show
 from .hrv_utils import _hrv_get_rri
@@ -94,11 +95,13 @@ def hrv(peaks, sampling_rate=1000, show=False):
         rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
         ax_distrib = summary_plot(rri, ax=ax_distrib)
 
-        # PSD plot
-        ax_psd = hrv_frequency(peaks, sampling_rate=sampling_rate,
-                               show=True, ax=ax_psd)
-
         # Poincare plot
         out_poincare = out.copy()
         out_poincare.columns = [col.replace('HRV_', '') for col in out_poincare.columns]
         ax_poincare = _hrv_nonlinear_show(rri, out_poincare, ax=ax_poincare)
+
+        # PSD plot
+        rri, sampling_rate = _hrv_get_rri(peaks,
+                                          sampling_rate=sampling_rate, interpolate=True)
+        _hrv_frequency_show(rri, out_poincare,
+                            sampling_rate=sampling_rate, ax=ax_psd)
