@@ -100,48 +100,54 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
 
 
-def _hrv_nonlinear_show(rri, out):
+def _hrv_nonlinear_show(rri, out, ax=None):
 
-        mean_heart_period = np.mean(rri)
-        sd1 = out["SD1"]
-        sd2 = out["SD2"]
+    mean_heart_period = np.mean(rri)
+    sd1 = out["SD1"]
+    sd2 = out["SD2"]
 
-        # Axes
-        ax1 = rri[:-1]
-        ax2 = rri[1:]
+    # Axes
+    ax1 = rri[:-1]
+    ax2 = rri[1:]
 
-        # Plot
-        fig = plt.figure(figsize=(12, 12))
-        ax = fig.add_subplot(111)
-        plt.title("Poincaré Plot", fontsize=20)
-        plt.xlabel(r'$RR_{n} (ms)$', fontsize=15)
-        plt.ylabel(r'$RR_{n+1} (ms)$', fontsize=15)
-        plt.xlim(min(rri) - 10, max(rri) + 10)
-        plt.ylim(min(rri) - 10, max(rri) + 10)
-        ax.scatter(ax1, ax2, c='#2196F3', s=4)
+    # Plot
+    if ax is None:
+        fig, ax = plt.subplots()
+    else:
+        fig = None
 
-        # Ellipse plot feature
-        ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
-                                                 mean_heart_period),
-                                             width=2 * sd2 + 1, height=2 * sd1 + 1,
-                                             angle=45, linewidth=2, fill=False)
-        ax.add_patch(ellipse)
-        ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
-                                                 mean_heart_period), width=2 * sd2,
-                                             height=2 * sd1, angle=45)
-        ellipse.set_alpha(0.02)
-        ellipse.set_facecolor("#2196F3")
-        ax.add_patch(ellipse)
+    plt.title("Poincaré Plot", fontsize=20)
+    plt.xlabel(r'$RR_{n} (ms)$', fontsize=15)
+    plt.ylabel(r'$RR_{n+1} (ms)$', fontsize=15)
+    plt.xlim(min(rri) - 10, max(rri) + 10)
+    plt.ylim(min(rri) - 10, max(rri) + 10)
+    ax.scatter(ax1, ax2, c='#2196F3', s=4)
 
-        # Arrow plot feature
-        sd1_arrow = ax.arrow(mean_heart_period, mean_heart_period,
-                             -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
-                             linewidth=3, ec='#E91E63', fc="#E91E63", label="SD1")
-        sd2_arrow = ax.arrow(mean_heart_period,
-                             mean_heart_period, sd2 * np.sqrt(2) / 2,
-                             sd2 * np.sqrt(2) / 2,
-                             linewidth=3, ec='#FF9800', fc="#FF9800", label="SD2")
+    # Ellipse plot feature
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
+                                             mean_heart_period),
+                                         width=2 * sd2 + 1, height=2 * sd1 + 1,
+                                         angle=45, linewidth=2, fill=False)
+    ax.add_patch(ellipse)
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
+                                             mean_heart_period), width=2 * sd2,
+                                         height=2 * sd1, angle=45)
+    ellipse.set_alpha(0.02)
+    ellipse.set_facecolor("#2196F3")
+    ax.add_patch(ellipse)
 
-        plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
+    # Arrow plot feature
+    sd1_arrow = ax.arrow(mean_heart_period,
+                         mean_heart_period,
+                         float(-sd1 * np.sqrt(2) / 2),
+                         float(sd1 * np.sqrt(2) / 2),
+                         linewidth=3, ec='#E91E63', fc="#E91E63", label="SD1")
+    sd2_arrow = ax.arrow(mean_heart_period,
+                         mean_heart_period,
+                         float(sd2 * np.sqrt(2) / 2),
+                         float(sd2 * np.sqrt(2) / 2),
+                         linewidth=3, ec='#FF9800', fc="#FF9800", label="SD2")
 
-        return fig
+    plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
+
+    return fig

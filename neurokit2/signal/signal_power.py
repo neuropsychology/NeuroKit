@@ -97,7 +97,7 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
         out.update(_signal_power_instant_get(psd, frequency_band))
 
     if show:
-        _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=sampling_rate)
+        _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=sampling_rate, **kwargs)
     return out
 
 
@@ -113,7 +113,14 @@ def _signal_power_instant_get(psd, frequency_band):
 
 
 
-def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000):
+def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, **kwargs):
+
+    if 'ax' in kwargs:
+        fig = None
+        ax = kwargs.get("ax")
+        kwargs.pop("ax")
+    else:
+        fig, ax = plt.subplots()
 
     # Sanitize signal
     if isinstance(frequency_band[0], int):
@@ -140,18 +147,18 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000):
     colors = colors[0:len(frequency_band_index)]
 
     # Plot
-    plt.title("Power Spectral Density (PSD) for Frequency Domains",
+    ax.set_title("Power Spectral Density (PSD) for Frequency Domains",
               fontsize=10, fontweight="bold")
-    plt.xlabel("Frequency (Hz)", fontsize=10)
-    plt.ylabel("Spectrum (ms2/Hz)", fontsize=10)
+    ax.set_xlabel("Frequency (Hz)", fontsize=10)
+    ax.set_ylabel("Spectrum (ms2/Hz)", fontsize=10)
 
-    plt.fill_between(freq, 0, power, color='lightgrey', label='Signal')
+    ax.fill_between(freq, 0, power, color='lightgrey', label='Signal')
 
     for band_index, label, i in zip(frequency_band_index, label_list, colors):
-        plt.fill_between(freq[band_index], 0,
+        ax.fill_between(freq[band_index], 0,
                          power[band_index],
                          label=label, color=i)
-        plt.legend(prop={"size": 10}, loc="best")
+        ax.legend(prop={"size": 10}, loc="best")
 
 # =============================================================================
 # Continuous

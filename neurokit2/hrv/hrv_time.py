@@ -109,8 +109,10 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     return out
 
 
-def _hrv_time_show(rri):
-    fig = summary_plot(rri)
+def _hrv_time_show(rri, **kwargs):
+
+    fig = summary_plot(rri, **kwargs)
     plt.xlabel('R-R intervals (ms)')
     fig.suptitle("Distribution of R-R intervals")
+
     return fig
