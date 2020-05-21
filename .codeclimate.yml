@@ -37,3 +37,4 @@ exclude_patterns:
 - "scripts/"
 - "data/"
 - "docs/img/"
+- "docs/readme/"
