@@ -348,11 +348,6 @@ variability metrices) and peak characteristics.
 Miscellaneous
 ----------------------------
 
-Signal Processing
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- TODO
-
 
 Heart Rate Variability (HRV)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -360,8 +355,8 @@ Heart Rate Variability (HRV)
 - **Compute HRV indices**
 
   - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.
-  - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF)
-  - **Nonlinear domain**: Spread of RR intervals (SD1, SD2, ratio between SD2 to SD1), Cardiac Sympathetic Index (CSI), Cardial Vagal Index (CVI), Modified CSI, Sample Entropy (SampEn)
+  - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF).
+  - **Nonlinear domain**: Spread of RR intervals (SD1, SD2, ratio between SD2 to SD1), Cardiac Sympathetic Index (CSI), Cardial Vagal Index (CVI), Modified CSI, Sample Entropy (SampEn).
   
 
 .. code-block:: python
@@ -383,6 +378,39 @@ Heart Rate Variability (HRV)
 
 
 
+Signal Processing
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Signal processing functionalities**
+
+  - **Filtering**: Using different methods.
+  - **Detrending**: Remove the baseline drift or trend.
+  - **Distorting**: Add noise and artifacts.
+
+.. code-block:: python
+
+    # Generate original signal
+    original = nk.signal_simulate(duration=6, frequency=1)
+
+    # Distort the signal (add noise, linear trend, artifacts etc.)
+    distorted = nk.signal_distort(original,
+                                  noise_amplitude=0.1,
+                                  noise_frequency=[5, 10, 20],
+                                  powerline_amplitude=0.05,
+                                  artifacts_amplitude=0.3,
+                                  artifacts_number=3,
+                                  linear_drift=0.5)
+
+    # Clean (filter and detrend)
+    cleaned = nk.signal_detrend(distorted)
+    cleaned = nk.signal_filter(cleaned, lowcut=0.5, highcut=1.5)
+
+    # Compare the 3 signals
+    plot = nk.signal_plot([original, distorted, cleaned])
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_signalprocessing.png
+
 Complexity (Entropy, Fractal Dimensions, ...)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -391,14 +419,14 @@ Complexity (Entropy, Fractal Dimensions, ...)
 .. code-block:: python
 
     # Generate signal
-    signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
+    signal = nk.signal_simulate(frequency=[1, 3], noise=0.01, sampling_rate=100)
 
     # Find optimal time delay, embedding dimension and r
     parameters = nk.complexity_optimize(signal, show=True)
 
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png\
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html
 
 

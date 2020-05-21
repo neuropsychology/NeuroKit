@@ -136,26 +136,51 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 
 
 
+# =============================================================================
+# Signal Processing
+# =============================================================================
 
+# Generate original signal
+original = nk.signal_simulate(duration=6, frequency=1)
 
+# Distort the signal (add noise, linear trend, artifacts etc.)
+distorted = nk.signal_distort(original,
+                              noise_amplitude=0.1,
+                              noise_frequency=[5, 10, 20],
+                              powerline_amplitude=0.05,
+                              artifacts_amplitude=0.3,
+                              artifacts_number=3,
+                              linear_drift=0.5)
+
+# Clean (filter and detrend)
+cleaned = nk.signal_detrend(distorted)
+cleaned = nk.signal_filter(cleaned, lowcut=0.5, highcut=1.5)
+
+# Compare the 3 signals
+plot = nk.signal_plot([original, distorted, cleaned])
+
+# Save plot
+fig = plt.gcf()
+fig.set_size_inches(10, 6)
+fig.savefig("README_signalprocessing.png", dpi=300, h_pad=3)
 
 # =============================================================================
 # Complexity
 # =============================================================================
 
 # Generate signal
-signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
+signal = nk.signal_simulate(frequency=[1, 3], noise=0.01, sampling_rate=100)
 
 # Find optimal time delay, embedding dimension and r
 parameters = nk.complexity_optimize(signal, show=True)
 parameters
+
+
 # Save plot
 fig = plt.gcf()
-plot.set_size_inches(10, 6, forward=True)
+fig.set_size_inches(10*1.5, 6*1.5, forward=True)
 fig.savefig("README_complexity_optimize.png", dpi=300, h_pad=3)
 
-
-nk.entropy_sample(signal)
 
 # =============================================================================
 # Statistics
