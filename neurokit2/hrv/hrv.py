@@ -78,30 +78,38 @@ def hrv(peaks, sampling_rate=1000, show=False):
 
     # Plot
     if show:
-        fig = plt.figure(constrained_layout=False)
-        spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=2,
-                                            height_ratios=[1, 1], width_ratios=[1, 1])
+        _hrv_plot(peaks, sampling_rate)
 
-        # Arrange grids
-        ax_distrib = fig.add_subplot(spec[0, :-1])
-        ax_distrib.set_xlabel('R-R intervals (ms)')
-        ax_distrib.set_title("Distribution of R-R intervals")
+    return out
 
-        ax_psd = fig.add_subplot(spec[1, :-1])
-        ax_poincare = fig.add_subplot(spec[:, -1])
 
-        # Distribution of RR intervals
-        peaks = _hrv_sanitize_input(peaks)
-        rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
-        ax_distrib = summary_plot(rri, ax=ax_distrib)
 
-        # Poincare plot
-        out_poincare = out.copy()
-        out_poincare.columns = [col.replace('HRV_', '') for col in out_poincare.columns]
-        ax_poincare = _hrv_nonlinear_show(rri, out_poincare, ax=ax_poincare)
 
-        # PSD plot
-        rri, sampling_rate = _hrv_get_rri(peaks,
-                                          sampling_rate=sampling_rate, interpolate=True)
-        _hrv_frequency_show(rri, out_poincare,
-                            sampling_rate=sampling_rate, ax=ax_psd)
+def _hrv_plot(peaks, sampling_rate=1000):
+    fig = plt.figure(constrained_layout=False)
+    spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=2,
+                                        height_ratios=[1, 1], width_ratios=[1, 1])
+
+    # Arrange grids
+    ax_distrib = fig.add_subplot(spec[0, :-1])
+    ax_distrib.set_xlabel('R-R intervals (ms)')
+    ax_distrib.set_title("Distribution of R-R intervals")
+
+    ax_psd = fig.add_subplot(spec[1, :-1])
+    ax_poincare = fig.add_subplot(spec[:, -1])
+
+    # Distribution of RR intervals
+    peaks = _hrv_sanitize_input(peaks)
+    rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    ax_distrib = summary_plot(rri, ax=ax_distrib)
+
+    # Poincare plot
+    out_poincare = out.copy()
+    out_poincare.columns = [col.replace('HRV_', '') for col in out_poincare.columns]
+    ax_poincare = _hrv_nonlinear_show(rri, out_poincare, ax=ax_poincare)
+
+    # PSD plot
+    rri, sampling_rate = _hrv_get_rri(peaks,
+                                      sampling_rate=sampling_rate, interpolate=True)
+    _hrv_frequency_show(rri, out_poincare,
+                        sampling_rate=sampling_rate, ax=ax_psd)

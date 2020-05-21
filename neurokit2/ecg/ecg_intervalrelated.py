@@ -44,7 +44,7 @@ def ecg_intervalrelated(data, sampling_rate=1000):
     >>> df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
     >>>
     >>> # Single dataframe is passed
-    >>> nk.ecg_intervalrelated(df)
+    >>> nk.ecg_intervalrelated(df, sampling_rate=100)
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
     >>> nk.ecg_intervalrelated(epochs)
