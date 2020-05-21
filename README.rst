@@ -126,7 +126,7 @@ Examples
 **Don't know which tutorial is suited for your case?** Follow this flowchart:
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/workflow.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/workflow.png
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
         
 Citation
@@ -202,7 +202,7 @@ Simulate physiological signals
     nk.signal_plot(data, subplots=True)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_simulation.png
         :target: https://neurokit2.readthedocs.io/en/latest/examples/simulation.html
 
 
@@ -220,7 +220,7 @@ Electrodermal Activity (EDA/GSR)
     # Visualise the processing
     nk.eda_plot(signals, sampling_rate=250)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eda.png
         :target: https://neurokit2.readthedocs.io/en/latest/examples/eda.html
 
 
@@ -239,7 +239,7 @@ Cardiac activity (ECG)
     nk.ecg_plot(signals, sampling_rate=250)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ecg.png
         :target: https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html
 
 
@@ -258,7 +258,7 @@ Respiration (RSP)
     nk.rsp_plot(signals, sampling_rate=250)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_rsp.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_rsp.png
         :target: https://neurokit2.readthedocs.io/en/latest/examples/rrv.html
 
 
@@ -277,7 +277,7 @@ Electromyography (EMG)
     nk.emg_plot(signals, sampling_rate=250)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png
 
 
 Photoplethysmography (PPG/BVP)
@@ -306,7 +306,7 @@ Physiological Data Analysis
 
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/features.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/readme/features.png
 
 Event-related
 ^^^^^^^^^^^^^^
@@ -375,7 +375,7 @@ Heart Rate Variability (HRV)
     >>> 0  69.697983  696.395349  62.135891  ...  4.829101        592.095372    1.259931
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/README_hrv.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/readme/README_hrv.png
 
 
 Complexity (Entropy, Fractal Dimensions, ...)
@@ -391,7 +391,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
     # Find optimal time delay, embedding dimension and r
     parameters = nk.complexity_optimize(signal, show=True)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_complexity_optimize.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png
 
 - **Compute complexity features**
 
@@ -416,7 +416,7 @@ Statistics
 
     ci_min, ci_max = nk.hdi(x, ci=0.95, show=True)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_hdi.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hdi.png
 
 Popularity
 ---------------------
@@ -431,7 +431,7 @@ Popularity
         :target: https://github.com/neuropsychology/NeuroKit/network
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
 
 
