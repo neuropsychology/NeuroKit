@@ -132,9 +132,15 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
     return out
 
 
-def _hrv_frequency_show(rri, out_bands, ulf=(0, 0.0033),
-                          vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4),
-                          vhf=(0.4, 0.5), sampling_rate=1000, **kwargs):
+def _hrv_frequency_show(rri,
+                          out_bands,
+                          ulf=(0, 0.0033),
+                          vlf=(0.0033, 0.04),
+                          lf=(0.04, 0.15),
+                          hf=(0.15, 0.4),
+                          vhf=(0.4, 0.5),
+                          sampling_rate=1000,
+                          **kwargs):
 
     if 'ax' in kwargs:
         fig = None
