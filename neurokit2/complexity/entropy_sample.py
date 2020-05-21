@@ -41,7 +41,8 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> nk.entropy_sample(signal)
+    >>> entropy = nk.entropy_sample(signal)
+    >>> entropy #doctest: +SKIP
     """
     r = _get_r(signal, r=r, dimension=dimension)
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, **kwargs)

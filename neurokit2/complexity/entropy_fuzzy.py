@@ -42,8 +42,8 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, composite=Fals
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> nk.entropy_fuzzy(signal)
-    0.08481168552031555
+    >>> entropy = nk.entropy_fuzzy(signal)
+    >>> entropy #doctest: +SKIP
     """
     r = _get_r(signal, r=r, dimension=dimension)
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, fuzzy=True, **kwargs)

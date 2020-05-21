@@ -32,8 +32,8 @@ def entropy_shannon(signal):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> nk.entropy_shannon(signal)
-    10.965784284661922
+    >>> entropy = nk.entropy_shannon(signal)
+    >>> entropy #doctest: +SKIP
 
 
     References
