@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from ..signal.signal_power import signal_power
 from ..signal.signal_power import _signal_power_instant_plot

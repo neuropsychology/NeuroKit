@@ -78,14 +78,14 @@ def hrv(peaks, sampling_rate=1000, show=False):
 
     # Plot
     if show:
-        _hrv_plot(peaks, sampling_rate)
+        _hrv_plot(peaks, out, sampling_rate)
 
     return out
 
 
 
 
-def _hrv_plot(peaks, sampling_rate=1000):
+def _hrv_plot(peaks, hrv, sampling_rate=1000):
     fig = plt.figure(constrained_layout=False)
     spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=2,
                                         height_ratios=[1, 1], width_ratios=[1, 1])
@@ -104,7 +104,7 @@ def _hrv_plot(peaks, sampling_rate=1000):
     ax_distrib = summary_plot(rri, ax=ax_distrib)
 
     # Poincare plot
-    out_poincare = out.copy()
+    out_poincare = hrv.copy()
     out_poincare.columns = [col.replace('HRV_', '') for col in out_poincare.columns]
     ax_poincare = _hrv_nonlinear_show(rri, out_poincare, ax=ax_poincare)
 
