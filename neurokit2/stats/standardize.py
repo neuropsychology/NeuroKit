@@ -38,7 +38,8 @@ def standardize(data, robust=False):
     >>>
     >>> x = nk.standardize([3, 1, 2, 4, 6, np.nan])
     >>> y = nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)
-    >>> nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan], "B": [3, 1, 2, 4, 6, 5]})) #doctest: +SKIP
+    >>> z = nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan], "B": [3, 1, 2, 4, 6, 5]}))
+    >>> z #doctest: +SKIP
     """
     # Return appropriate type
     if isinstance(data, list):

@@ -37,7 +37,8 @@ def fit_error(y, y_predicted, n_parameters=2):
     >>> y_predicted = np.array([0.0, 0, 0, 0, 0])
     >>>
     >>> # Master function
-    >>> nk.fit_error(y, y_predicted) #doctest: +SKIP
+    >>> x = nk.fit_error(y, y_predicted)
+    >>> x #doctest: +SKIP
     >>>
     >>> # Direct access
     >>> nk.fit_mse(y, y_predicted) #doctest: +ELLIPSIS

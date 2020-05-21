@@ -35,7 +35,8 @@ def fit_mixture(X=None, n_clusters=2):
     >>>
     >>> x = nk.signal_simulate()
     >>> probs = nk.fit_mixture(x, n_clusters=2)
-    >>> nk.signal_plot([x, probs["Cluster_0"], probs["Cluster_1"]], standardize=True) #doctest: +SKIP
+    >>> fig = nk.signal_plot([x, probs["Cluster_0"], probs["Cluster_1"]], standardize=True)
+    >>> fig #doctest: +SKIP
     """
     if X.ndim == 1:
         X = X.reshape(-1, 1)

@@ -52,7 +52,8 @@ def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
     >>> info = nk.eda_findpeaks(eda_phasic)
     >>> info = nk.eda_fixpeaks(info)
     >>>
-    >>> nk.events_plot(info["SCR_Peaks"], eda_phasic) #doctest: +SKIP
+    >>> fig = nk.events_plot(info["SCR_Peaks"], eda_phasic)
+    >>> fig #doctest: +SKIP
     """
     # Format input.
     peaks, onsets, height, desired_length = _eda_fixpeaks_retrieve(peaks, onsets, height, desired_length=None)

@@ -7,7 +7,6 @@ import scipy.spatial
 from .standardize import standardize
 
 
-
 def distance(X=None, method="mahalanobis"):
     """Distance
 
@@ -34,7 +33,8 @@ def distance(X=None, method="mahalanobis"):
     >>> import neurokit2 as nk
     >>>
     >>> X = datasets.load_iris().data
-    >>> nk.distance(X) #doctest: +SKIP
+    >>> vector = distance(X)
+    >>> vector #doctest: +SKIP
     """
     if isinstance(X, pd.DataFrame) is False:
         X = pd.DataFrame(X)
@@ -42,7 +42,7 @@ def distance(X=None, method="mahalanobis"):
     method = method.lower()  # remove capitalised letters
     if method in ["mahalanobis"]:
         dist = _distance_mahalanobis(X)
-    if method in ["mean", "center", "average"]:
+    elif method in ["mean", "center", "average"]:
         dist = _distance_mean(X)
     else:
         raise ValueError("NeuroKit error: distance(): 'method' should be "
