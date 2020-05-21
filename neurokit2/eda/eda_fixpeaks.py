@@ -43,7 +43,7 @@ def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
     >>> import neurokit2 as nk
     >>>
     >>> # Get phasic component
-    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
+    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
     >>> eda_cleaned = nk.eda_clean(eda_signal)
     >>> eda = nk.eda_phasic(eda_cleaned)
     >>> eda_phasic = eda["EDA_Phasic"].values
@@ -52,7 +52,7 @@ def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
     >>> info = nk.eda_findpeaks(eda_phasic)
     >>> info = nk.eda_fixpeaks(info)
     >>>
-    >>> nk.events_plot(info["SCR_Peaks"], eda_phasic)
+    >>> nk.events_plot(info["SCR_Peaks"], eda_phasic) #doctest: +SKIP
     """
     # Format input.
     peaks, onsets, height, desired_length = _eda_fixpeaks_retrieve(peaks, onsets, height, desired_length=None)

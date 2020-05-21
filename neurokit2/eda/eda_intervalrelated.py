@@ -41,10 +41,10 @@ def eda_intervalrelated(data):
     >>> df, info = nk.eda_process(data["EDA"], sampling_rate=100)
     >>>
     >>> # Single dataframe is passed
-    >>> nk.eda_intervalrelated(df)
+    >>> nk.eda_intervalrelated(df) #doctest: +SKIP
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 25300], sampling_rate=100, epochs_end=20)
-    >>> nk.eda_intervalrelated(epochs)
+    >>> nk.eda_intervalrelated(epochs) #doctest: +SKIP
 
     """
 

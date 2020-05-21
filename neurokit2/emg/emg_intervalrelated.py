@@ -38,10 +38,10 @@ def emg_intervalrelated(data):
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     >>>
     >>> # Single dataframe is passed
-    >>> nk.emg_intervalrelated(emg_signals)
+    >>> nk.emg_intervalrelated(emg_signals) #doctest: +SKIP
     >>>
     >>> epochs = nk.epochs_create(emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20)
-    >>> nk.emg_intervalrelated(epochs)
+    >>> nk.emg_intervalrelated(epochs) #doctest: +SKIP
     """
     intervals = {}
 

@@ -50,16 +50,11 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Process the data for event-related analysis
     >>> df, info = nk.bio_process(eda=data["EDA"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"],
-                                threshold_keep='below',
-                                event_conditions=["Negative",
-                                                  "Neutral",
-                                                  "Neutral",
-                                                  "Negative"])
-    >>> epochs = nk.epochs_create(df, events,
-                                  sampling_rate=100,
-                                  epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.eda_analyze(epochs, sampling_rate=100)
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
+    >>>
+    >>> # Analyze
+    >>> nk.eda_analyze(epochs, sampling_rate=100) #doctest: +SKIP
     >>>
     >>> # Example 2: Download the resting-state data
     >>> data = nk.data("bio_resting_8min_100hz")
@@ -68,7 +63,7 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
     >>> df, info = nk.eda_process(data["EDA"], sampling_rate=100)
     >>>
     >>> # Analyze
-    >>> nk.eda_analyze(df, sampling_rate=100)
+    >>> nk.eda_analyze(df, sampling_rate=100) #doctest: +SKIP
     """
     method = method.lower()
 
