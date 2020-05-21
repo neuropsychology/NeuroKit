@@ -306,7 +306,7 @@ Physiological Data Analysis
 
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/features.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/features.png
 
 Event-related
 ^^^^^^^^^^^^^^
@@ -375,7 +375,7 @@ Heart Rate Variability (HRV)
     >>> 0  69.697983  696.395349  62.135891  ...  4.829101        592.095372    1.259931
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/README_hrv.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_hrv.png
 
 
 Complexity (Entropy, Fractal Dimensions, ...)
@@ -391,7 +391,8 @@ Complexity (Entropy, Fractal Dimensions, ...)
     # Find optimal time delay, embedding dimension and r
     parameters = nk.complexity_optimize(signal, show=True)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_complexity_optimize.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_complexity_optimize.png\
+        :target: https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html
 
 - **Compute complexity features**
 
