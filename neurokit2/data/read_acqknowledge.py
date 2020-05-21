@@ -37,7 +37,7 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> data, sampling_rate = nk.read_acqknowledge('file.acq')
+    >>> data, sampling_rate = nk.read_acqknowledge('file.acq') #doctest: +SKIP
     """
     # Try loading bioread
     try:
