@@ -57,8 +57,8 @@ def hrv(peaks, sampling_rate=1000, show=False):
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>>
     >>> # Compute HRV indices
-    >>> nk.hrv(peaks, sampling_rate=100, show=True) #doctest: +SKIP
-
+    >>> hrv_indices = nk.hrv(peaks, sampling_rate=100, show=True)
+    >>> hrv_indices #doctest: +SKIP
     References
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
