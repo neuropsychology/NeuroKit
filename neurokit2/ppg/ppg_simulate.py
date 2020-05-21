@@ -161,7 +161,7 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
         ppg = signal_distort(ppg, sampling_rate=sampling_rate,
                              artifacts_amplitude=burst_amplitude,
                              artifacts_frequency=100,
-                             n_artifacts=burst_number,
+                             artifacts_number=burst_number,
                              random_state=random_state,
                              silent=True)
     # Add powerline noise.
