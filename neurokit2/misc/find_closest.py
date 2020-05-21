@@ -31,11 +31,11 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
     >>> import neurokit2 as nk
     >>>
     >>> # Single number
-    >>> nk.find_closest(1.8, [3, 5, 6, 1, 2])
-    >>> nk.find_closest(1.8, [3, 5, 6, 1, 2], return_index=True)
+    >>> x = nk.find_closest(1.8, [3, 5, 6, 1, 2])
+    >>> y = nk.find_closest(1.8, [3, 5, 6, 1, 2], return_index=True)
     >>>
     >>> # Vectorized version
-    >>> nk.find_closest([1.8, 3.6], [3, 5, 6, 1, 2])
+    >>> x = nk.find_closest([1.8, 3.6], [3, 5, 6, 1, 2])
     """
 
     # Transform to arrays

@@ -29,6 +29,8 @@ def density(x, desired_length=100, bandwith=1, show=False):
 
     Examples
     --------
+    >>> import neurokit2 as nk
+    >>>
     >>> signal = nk.ecg_simulate(duration=20)
     >>> x, y = nk.density(signal, bandwith=0.5, show=True)
     >>>
@@ -36,10 +38,7 @@ def density(x, desired_length=100, bandwith=1, show=False):
     >>> x, y1 = nk.density(signal, bandwith=0.5)
     >>> x, y2 = nk.density(signal, bandwith=1)
     >>> x, y3 = nk.density(signal, bandwith=2)
-    >>> pd.DataFrame({"x": x,
-                      "y1": y1,
-                      "y2": y2,
-                      "y3": y3}).plot(x="x")
+    >>> pd.DataFrame({"x": x, "y1": y1, "y2": y2, "y3": y3}).plot(x="x") #doctest: +SKIP
     """
     density_function = scipy.stats.gaussian_kde(x, bw_method="scott")
     density_function.set_bandwidth(bw_method=density_function.factor / bandwith)
