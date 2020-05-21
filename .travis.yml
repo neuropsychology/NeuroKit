@@ -43,6 +43,20 @@ install:
 script:
     - python setup.py install
     - tox
+    - pytest --doctest-glob='*.py' neurokit2/data -v
+    - pytest --doctest-glob='*.py' neurokit2/ecg -v
+    - pytest --doctest-glob='*.py' neurokit2/eda -v
+    - pytest --doctest-glob='*.py' neurokit2/eeg -v
+    - pytest --doctest-glob='*.py' neurokit2/emg -v
+    - pytest --doctest-glob='*.py' neurokit2/epochs -v
+    - pytest --doctest-glob='*.py' neurokit2/events -v
+    - pytest --doctest-glob='*.py' neurokit2/hrv -v
+    - pytest --doctest-glob='*.py' neurokit2/misc -v
+    - pytest --doctest-glob='*.py' neurokit2/ppg -v
+    - pytest --doctest-glob='*.py' neurokit2/rsp -v
+    - pytest --doctest-glob='*.py' neurokit2/signal -v
+    - pytest --doctest-glob='*.py' neurokit2/stats -v
+
 
 after_success:
     - codecov
