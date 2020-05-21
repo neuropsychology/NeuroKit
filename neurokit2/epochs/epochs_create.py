@@ -51,15 +51,18 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
     >>>
     >>> # Find events
     >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> nk.events_plot(events, data)
+    >>> fig1 = nk.events_plot(events, data)
+    >>> fig1 #doctest: +SKIP
     >>>
     >>> # Create epochs
     >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3)
-    >>> nk.epochs_plot(epochs)
+    >>> fig2 = nk.epochs_plot(epochs)
+    >>> fig2 #doctest: +SKIP
     >>>
     >>> # Baseline correction
     >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_end=3, baseline_correction=True)
-    >>> nk.epochs_plot(epochs)
+    >>> fig3 = nk.epochs_plot(epochs)
+    >>> fig3 #doctest: +SKIP
     >>>
     >>> # Chunk into n blocks of 1 second
     >>> epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)

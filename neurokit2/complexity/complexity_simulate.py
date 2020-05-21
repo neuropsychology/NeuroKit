@@ -110,13 +110,6 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, si
         Drift.
     sigma : float
         Diffusion.
-
-    Examples
-    ----------
-    >>> signal1 = _complexity_simulate_hurst(hurst_exponent=0.3)
-    >>> signal2 = _complexity_simulate_hurst(hurst_exponent=0.7)
-    >>> signal3 = _complexity_simulate_hurst(hurst_exponent=0.7)
-    >>> nk.signal_plot([signal1, signal2, signal3])
     """
     # Time array
     length = duration * sampling_rate
