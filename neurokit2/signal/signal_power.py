@@ -153,8 +153,8 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
 
     for band_index, label, i in zip(frequency_band_index, label_list, colors):
         ax.fill_between(freq[band_index], 0,
-                         power[band_index],
-                         label=label, color=i)
+                        power[band_index],
+                        label=label, color=i)
         ax.legend(prop={"size": 10}, loc="best")
 
     return fig
