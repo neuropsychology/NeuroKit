@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.collections
 
-from ..misc import findclosest
+from ..misc import find_closest
 
 
 def eda_plot(eda_signals, sampling_rate=None):
@@ -119,8 +119,8 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
 
     peak_list = []
     for i, index in enumerate(half_recovery):
-        value = findclosest(peak_x_values, recovery_x_values[i],
-                            direction="smaller", strictly=False)
+        value = find_closest(recovery_x_values[i], peak_x_values,
+                             direction="smaller", strictly=False)
         peak_list.append(value)
 
     peak_index = []

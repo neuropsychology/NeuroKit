@@ -48,3 +48,5 @@ fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
 complexity_mfdfa = fractal_mfdfa
 
 complexity_d2 = fractal_correlation
+
+complexity_plot = functools.partial(complexity_optimize, show=True)

@@ -7,16 +7,13 @@ import scipy.signal
 
 from ..signal import (signal_zerocrossings,
                       signal_resample,
-                      signal_detrend,
                       signal_smooth,
-                      signal_filter,
                       signal_findpeaks,
                       signal_formatpeaks)
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
 from ..epochs import epochs_create
 from ..epochs import epochs_to_df
-from ..events import events_plot
 from ..stats import standardize
 
 
@@ -65,7 +62,7 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
 
     See Also
     --------
-    ecg_clean, ecg_fixpeaks, ecg_peaks, ecg_rate, ecg_process, ecg_plot
+    ecg_clean, signal_fixpeaks, ecg_peaks, signal_rate, ecg_process, ecg_plot
 
     Examples
     --------

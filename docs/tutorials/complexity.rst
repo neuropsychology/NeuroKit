@@ -104,9 +104,9 @@ In NeuroKit, you can use :code:`nk.complexity_optimize()` to estimate the optima
     parameters = nk.complexity_optimize(signal, show=True)
     
     parameters
-    >>> {'delay': 22, 'dimension': 5, 'r': 0.014}
+    >>> {'delay': 13, 'dimension': 6, 'r': 0.014}
     
-.. image:: https://raw.github.com/neuropsychology/Neurokit/dev/docs/img/complexity_optimize.png
+.. image:: https://raw.github.com/neuropsychology/Neurokit/dev/docs/img/README_complexity_optimize.png
 
 In the above example, the optimal time delay is estimated using the *Mutual Information* method (Fraser & Swinney, 1986), the optimal embedding dimension is estimated using the *Average False Nearest Neighbour* (Cao, 1997) and the optimal r is obtained using the *Maximum Approximate Entropy* (Lu et al., 2008).
 These are the default methods in :code:`nk.complexity_optimize()`. Nevertheless, you can specify your preferred method via the method arguments.

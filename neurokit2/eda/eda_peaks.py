@@ -6,7 +6,7 @@ import pandas as pd
 from .eda_findpeaks import eda_findpeaks
 from .eda_fixpeaks import eda_fixpeaks
 from ..signal import signal_formatpeaks
-from ..misc import findclosest
+from ..misc import find_closest
 
 
 def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
@@ -155,7 +155,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
         segment = segment[0:np.argmin(segment)]
 
         # Find recovery time
-        recovery_value = findclosest(segment, recovery_values[i], direction="smaller", strictly=False)
+        recovery_value = find_closest(recovery_values[i], segment, direction="smaller", strictly=False)
 
         # Detect recovery points only if there are datapoints below recovery value
         if (np.min(segment) < recovery_value):

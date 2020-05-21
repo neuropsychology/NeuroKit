@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from ..signal import signal_filter
-from ..misc import sanitize_input
+from ..misc import as_vector
 
 
 def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
@@ -41,10 +41,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
     >>> plt.plot(ppg_clean, label="clean PPG")
     >>> plt.legend()
     """
-    ppg_signal = sanitize_input(ppg_signal,
-                                message="NeuroKit error: ppg_clean(): Please"
-                                " provide the signal in vector form, i.e., a"
-                                " one-dimensional array (e.g., a list).")
+    ppg_signal = as_vector(ppg_signal)
 
     method = method.lower()
     if method in ["elgendi"]:

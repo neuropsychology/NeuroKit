@@ -43,7 +43,6 @@ install:
 script:
     - python setup.py install
     - tox
-    - pytest
 
 after_success:
     - codecov

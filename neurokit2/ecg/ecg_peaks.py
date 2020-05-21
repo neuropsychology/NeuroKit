@@ -1,8 +1,7 @@
 # - * - coding: utf-8 - * -
 
 from .ecg_findpeaks import ecg_findpeaks
-from .ecg_fixpeaks import ecg_fixpeaks
-from ..signal import signal_formatpeaks
+from ..signal import signal_formatpeaks, signal_fixpeaks
 
 
 def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
@@ -41,7 +40,8 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
 
     See Also
     --------
-    ecg_clean, ecg_findpeaks, ecg_fixpeaks, ecg_rate, ecg_process, ecg_plot
+    ecg_clean, ecg_findpeaks, ecg_process, ecg_plot, signal_rate,
+    signal_fixpeaks
 
     Examples
     --------
@@ -65,13 +65,15 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
                            method=method)
 
     if correct_artifacts:
-        _, rpeaks = ecg_fixpeaks(rpeaks,
-                                 sampling_rate=sampling_rate,
-                                 iterative=True)
+        _, rpeaks = signal_fixpeaks(rpeaks,
+                                    sampling_rate=sampling_rate,
+                                    iterative=True, method="Kubios")
+
+        rpeaks = {"ECG_R_Peaks": rpeaks}
 
     instant_peaks = signal_formatpeaks(rpeaks,
                                        desired_length=len(ecg_cleaned),
-                                       peak_indices=rpeaks["ECG_R_Peaks"])
+                                       peak_indices=rpeaks)
     signals = instant_peaks
     info = rpeaks
 

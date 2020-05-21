@@ -58,7 +58,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
+    rsp_clean, rsp_findpeaks, signal_rate, rsp_process, rsp_plot
 """
     # Seed the random generator for reproducible results
     np.random.seed(random_state)

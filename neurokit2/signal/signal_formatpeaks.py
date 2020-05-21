@@ -78,7 +78,13 @@ def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
 
 
 
+
     # Retrieve length.
+    try:  # Detect if single peak
+        len(peaks)
+    except TypeError:
+        peaks = np.array([peaks])
+
     if desired_length is None:
         desired_length = len(peaks)
 

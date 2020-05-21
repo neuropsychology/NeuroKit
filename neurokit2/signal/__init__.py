@@ -15,6 +15,7 @@ from .signal_fixpeaks import signal_fixpeaks
 from .signal_formatpeaks import signal_formatpeaks
 from .signal_rate import signal_rate
 from .signal_merge import signal_merge
+from .signal_period import signal_period
 from .signal_plot import signal_plot
 from .signal_phase import signal_phase
 from .signal_power import signal_power

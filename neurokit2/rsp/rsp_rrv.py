@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches
 
-from .rsp_rate import rsp_rate as nk_rsp_rate
+from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..signal import signal_power
 from ..complexity import entropy_sample
@@ -12,13 +12,13 @@ from ..complexity import entropy_approximate
 from ..complexity import fractal_dfa
 
 
-def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
+def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     """Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
 
     Parameters
     ----------
     rsp_rate : array
-        Array containing the respiratory rate, produced by `rsp_rate()`.
+        Array containing the respiratory rate, produced by `signal_rate()`.
     peaks : dict
         The samples at which the inhalation peaks occur.
         Dict returned by `rsp_peaks()`. Defaults to None.
@@ -27,6 +27,8 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
         (in Hz, i.e., samples/second).
     show : bool
         If True, will return a Poincaré plot, a scattergram, which plots each breath-to-breath interval against the next successive one. The ellipse centers around the average breath-to-breath interval. Defaults to False.
+    silent : bool
+        If False, warnings will be printed. Default to True.
 
     Returns
     -------
@@ -53,7 +55,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
 
     See Also
     --------
-    rsp_rate, rsp_peaks, signal_power, entropy_sample, entropy_approximate
+    signal_rate, rsp_peaks, signal_power, entropy_sample, entropy_approximate
 
     Examples
     --------
@@ -79,7 +81,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False):
     # Get indices
     rrv = {}  # Initialize empty dict
     rrv.update(_rsp_rrv_time(bbi))
-    rrv.update(_rsp_rrv_frequency(rsp_period, show=show))
+    rrv.update(_rsp_rrv_frequency(rsp_period, show=show, silent=silent))
     rrv.update(_rsp_rrv_nonlinear(bbi, rsp_period))
 
     rrv = pd.DataFrame.from_dict(rrv, orient='index').T.add_prefix("RRV_")
@@ -130,10 +132,15 @@ def _rsp_rrv_time(bbi):
 
 
 
-def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), method="welch", show=False):
+def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), method="welch", show=False, silent=True):
     power = signal_power(rsp_period, frequency_band=[vlf, lf, hf], sampling_rate=1000, method=method, max_frequency=0.5, show=show)
     power.columns = ["VLF", "LF", "HF"]
     out = power.to_dict(orient="index")[0]
+
+    if silent is False:
+        for frequency in out.keys():
+            if out[frequency] == 0.0:
+                print("Neurokit warning: rsp_rrv(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
 
     # Normalized
     total_power = np.sum(power.values)
@@ -194,7 +201,7 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
                 raise ValueError("NeuroKit error: _rsp_rrv_formatinput(): Wrong input,"
                                  "we couldn't extract rsp_rate and peaks indices.")
             else:
-                rsp_rate = nk_rsp_rate(peaks, sampling_rate=sampling_rate, desired_length=len(df))
+                rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(df))
         else:
             rsp_rate = df[cols[0]].values
 

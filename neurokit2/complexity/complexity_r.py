@@ -68,18 +68,27 @@ def _optimize_r(signal, delay=None, dimension=None, show=False):
     r_range = modulator * np.std(signal, ddof=1)
 
     ApEn = np.zeros_like(r_range)
-
     for i, r in enumerate(r_range):
         ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])
 
     r = r_range[np.argmax(ApEn)]
 
     if show is True:
-        fig, ax = plt.subplots()
-        ax.set_xlabel('Tolerence threshold $r$')
-        ax.set_ylabel('Approximate Entropy $ApEn$')
-        ax.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#2196F3')
-        ax.axvline(x=r, color='#E91E63', label='Optimal r: ' + str(r))
-        ax.legend(loc='upper right')
+        _optimize_r_plot(r, r_range, ApEn, ax=None)
 
     return r
+
+def _optimize_r_plot(r, r_range, ApEn, ax=None):
+
+    if ax is None:
+        fig, ax = plt.subplots()
+    else:
+        fig = None
+    ax.set_title("Optimization of Tolerence Threshold (r)")
+    ax.set_xlabel('Tolerence threshold $r$')
+    ax.set_ylabel('Approximate Entropy $ApEn$')
+    ax.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#80059c')
+    ax.axvline(x=r, color='#E91E63', label='Optimal r: ' + str(np.round(r, 3)))
+    ax.legend(loc='upper right')
+
+    return fig

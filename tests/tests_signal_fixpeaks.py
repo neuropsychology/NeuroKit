@@ -4,8 +4,9 @@ import pytest
 import numpy as np
 import numpy.random
 
-from neurokit2.ecg.ecg_fixpeaks import (_find_artifacts, _correct_artifacts,
-                                        ecg_fixpeaks)
+from neurokit2.signal.signal_fixpeaks import (_find_artifacts,
+                                              _correct_artifacts,
+                                              signal_fixpeaks)
 
 
 def compute_rmssd(peaks):
@@ -166,9 +167,8 @@ def idfn(val):
 def test_misaligned_correction_wrapper(peaks_correct, peaks_misaligned,
                                        iterative, rmssd_diff):
 
-    _, peaks_corrected = ecg_fixpeaks({"ECG_R_Peaks": peaks_misaligned},
-                                      sampling_rate=1, iterative=iterative)
-    peaks_corrected = peaks_corrected["ECG_R_Peaks"]
+    _, peaks_corrected = signal_fixpeaks(peaks_misaligned, sampling_rate=1,
+                                         iterative=iterative)
 
     rmssd_correct = compute_rmssd(peaks_correct)
     rmssd_corrected = compute_rmssd(peaks_corrected)
@@ -192,9 +192,8 @@ def test_misaligned_correction_wrapper(peaks_correct, peaks_misaligned,
 def test_extra_correction_wrapper(peaks_correct, peaks_extra, iterative,
                                   rmssd_diff):
 
-    _, peaks_corrected = ecg_fixpeaks({"ECG_R_Peaks": peaks_extra},
-                                      sampling_rate=1, iterative=iterative)
-    peaks_corrected = peaks_corrected["ECG_R_Peaks"]
+    _, peaks_corrected = signal_fixpeaks(peaks_extra, sampling_rate=1,
+                                         iterative=iterative)
 
     rmssd_correct = compute_rmssd(peaks_correct)
     rmssd_corrected = compute_rmssd(peaks_corrected)
@@ -219,9 +218,8 @@ def test_extra_correction_wrapper(peaks_correct, peaks_extra, iterative,
 def test_missed_correction_wrapper(peaks_correct, peaks_missed, iterative,
                                    rmssd_diff):
 
-    _, peaks_corrected = ecg_fixpeaks({"ECG_R_Peaks": peaks_missed},
-                                      sampling_rate=1, iterative=iterative)
-    peaks_corrected = peaks_corrected["ECG_R_Peaks"]
+    _, peaks_corrected = signal_fixpeaks(peaks_missed, sampling_rate=1,
+                                         iterative=iterative)
 
     rmssd_correct = compute_rmssd(peaks_correct)
     rmssd_corrected = compute_rmssd(peaks_corrected)

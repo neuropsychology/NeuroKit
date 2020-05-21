@@ -7,9 +7,9 @@ import matplotlib.collections
 import matplotlib.pyplot as plt
 
 from .complexity_embedding import complexity_embedding
-from .complexity_delay import _embedding_delay_metric, _embedding_delay_select
-from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn
-from .complexity_r import _optimize_r
+from .complexity_delay import _embedding_delay_metric, _embedding_delay_select, _embedding_delay_plot
+from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn, _embedding_dimension_plot
+from .complexity_r import _optimize_r, _optimize_r_plot
 from .entropy_approximate import entropy_approximate
 
 
@@ -79,7 +79,7 @@ def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimens
             raise ValueError("NeuroKit error: complexity_optimize():"
                              "show is not available for current r_method")
         if r_method in ["maxapen", 'optimize']:
-            _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension_seq, optimize_indices, r_range, ApEn, dimension_method=dimension_method, attractor_dimension=attractor_dimension)
+            _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension_seq, optimize_indices, r_range, ApEn, dimension_method=dimension_method)
 
     return out
 
@@ -88,76 +88,38 @@ def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimens
 # Plot
 # =============================================================================
 
-def _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension_seq, optimize_indices, r_range, ApEn, dimension_method="afnn", attractor_dimension=3):
+def _complexity_plot(signal, out, tau_sequence, metric, metric_values, dimension_seq, optimize_indices, r_range, ApEn, dimension_method="afnn"):
 
-
+    # Prepare figure
     fig = plt.figure(constrained_layout=False)
-    spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=3, height_ratios=[1, 1, 1], width_ratios=[1-1/np.pi, 1/np.pi])
+    spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=3, height_ratios=[1, 1, 1], width_ratios=[1-1.2/np.pi, 1.2/np.pi])
 
-    ax0 = fig.add_subplot(spec[0, :-1])
-    ax1 = fig.add_subplot(spec[1, :-1])
-    ax2 = fig.add_subplot(spec[2, :-1])
-    ax3 = fig.add_subplot(spec[:, -1])
-    ax0.set_xlabel("Time Delay (tau)")
-    ax1.set_xlabel("Embedding dimension $d$")
-    ax2.set_xlabel("Approximate Entropy $ApEn$")
-    ax3.set_xlabel("Signal [i]")
-    ax0.set_ylabel(metric)
-    ax1.set_ylabel("$E_1(d)$ and $E_2(d)$")
-    ax2.set_ylabel("$FNN(%)$")
-    ax3.set_ylabel("Signal [i-" + str(out["delay"]) + "]")
+    ax_tau = fig.add_subplot(spec[0, :-1])
+    ax_dim = fig.add_subplot(spec[1, :-1])
+    ax_r = fig.add_subplot(spec[2, :-1])
 
-    fig.suptitle("Complexity Optimization", fontweight="bold")
-    plt.subplots_adjust(hspace=0.3, wspace=0.1)
+    if out['dimension'] > 2:
+        plot_type = '3D'
+        ax_attractor = fig.add_subplot(spec[:, -1], projection='3d')
+    else:
+        plot_type = '2D'
+        ax_attractor = fig.add_subplot(spec[:, -1])
+
+    fig.suptitle("Otimization of Complexity Parameters", fontweight="bold", fontsize=16)
+    plt.subplots_adjust(hspace=0.4, wspace=0.05)
 
     # Plot tau optimization
-    ax0.set_title("Optimization of Time Delay (tau)")
-    ax0.plot(tau_sequence, metric_values, color='#3F51B5', label=metric)
-    ax0.axvline(x=out["delay"], color='#E91E63', label='Optimal delay: ' + str(out["delay"]))
-    ax0.legend(loc='upper right')
+    # Plot Attractor
+    _embedding_delay_plot(signal, metric_values=metric_values, tau_sequence=tau_sequence, tau=out["delay"], metric=metric, ax0=ax_tau, ax1=ax_attractor, plot=plot_type)
 
     # Plot dimension optimization
-    ax1.set_title("Optimization of Dimension (d)")
     if dimension_method.lower() in ["afnn"]:
-        ax1.plot(dimension_seq[:-1], optimize_indices[0], 'bo-', label='$E_1(d)$', color='#9C27B0')
-        ax1.plot(dimension_seq[:-1], optimize_indices[1], 'go-', label='$E_2(d)$', color='#009688')
+        _embedding_dimension_plot(method=dimension_method, dimension_seq=dimension_seq, min_dimension=out["dimension"], E1=optimize_indices[0], E2=optimize_indices[1], ax=ax_dim)
     if dimension_method.lower() in ["fnn"]:
-        ax1.plot(dimension_seq, 100 * optimize_indices[0], 'bo--', label='Test I', color='#9C27B0')
-        ax1.plot(dimension_seq, 100 * optimize_indices[1], 'g^--', label='Test II', color='#009688')
-        ax1.plot(dimension_seq, 100 * optimize_indices[2], 'rs-', label='Test I + II', color='#f44336')
-    ax1.axvline(x=out["dimension"], color='#E91E63', label='Optimal dimension: ' + str(out["dimension"]))
-    ax1.legend(loc='upper right')
+        _embedding_dimension_plot(method=dimension_method, dimension_seq=dimension_seq, min_dimension=out["dimension"], f1=optimize_indices[0], f2=optimize_indices[1], f3=optimize_indices[2], ax=ax_dim)
 
     # Plot r optimization
-    ax2.set_title("Optimization of Tolerence Threshold (r)")
-    ax2.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#00BCD4')
-    ax2.axvline(x=out["r"], color='#E91E63', label='Optimal r: ' + str(np.round(out["r"], 3)))
-    ax2.legend(loc='upper right')
-
-    # Attractor
-    ax3.set_title("Attractor")
-    embedded = complexity_embedding(signal, delay=out["delay"], dimension=out["dimension"])
-    if embedded.size / len(embedded) < attractor_dimension:
-            raise ValueError("NeuroKit error: complexity_optimize():"
-                             "attractor_dimension is larger than the number"
-                             "of dimension.")
-
-    # Chunk the data into colorbars
-    if attractor_dimension == 3:
-        x = embedded[:, 0]
-        y = embedded[:, 1]
-        z = embedded[:, 2]
-        points = np.array([x, y]).T.reshape(-1, 1, 2)
-        segments = np.concatenate([points[:-1], points[1:]], axis=1)
-        norm = plt.Normalize(z.min(), z.max())
-        lc = matplotlib.collections.LineCollection(segments, cmap='plasma', norm=norm)
-        lc.set_array(z)
-        line = ax3.add_collection(lc)
-        # Customize
-        ax3.set_xlim(x.min(), x.max())
-        ax3.set_ylim(x.min(), x.max())
-    if attractor_dimension == 2:
-        ax3.plot(embedded[:, 0], embedded[:, 1], color='#3F51B5')
+    _optimize_r_plot(out["r"], r_range, ApEn, ax=ax_r)
 
     return fig
 

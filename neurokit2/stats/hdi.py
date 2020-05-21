@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from .density import density
-from ..misc import findclosest
+from ..misc import find_closest
 
 
 def hdi(x, ci=0.95, show=False, **kwargs):
@@ -60,8 +60,8 @@ def _hdi_plot(vals, hdi_low, hdi_high, ci=0.95, **kwargs):
     x, y = density(vals, show=False, **kwargs)
 
     where = np.full(len(x), False)
-    where[0:findclosest(x, hdi_low, return_index=True)] = True
-    where[findclosest(x, hdi_high, return_index=True)::] = True
+    where[0:find_closest(hdi_low, x, return_index=True)] = True
+    where[find_closest(hdi_high, x, return_index=True)::] = True
 
     fig, ax = plt.subplots()
     ax.plot(x, y, color="white")

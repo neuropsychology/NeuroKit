@@ -76,7 +76,7 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
                                                         bounds_error=False,
                                                         fill_value=([y_values[0]], [y_values[-1]]))
 
-    new_x = np.arange(desired_length)
+    new_x = np.linspace(x_values[0], x_values[-1], desired_length)
 
     interpolated = interpolation_function(new_x)
 

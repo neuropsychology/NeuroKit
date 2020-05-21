@@ -2,8 +2,7 @@
 import pandas as pd
 import numpy as np
 
-
-from .ecg_hrv import ecg_hrv
+from ..hrv import hrv
 
 
 def ecg_intervalrelated(data, sampling_rate=1000):
@@ -28,7 +27,7 @@ def ecg_intervalrelated(data, sampling_rate=1000):
         features consist of the following:
         - *"ECG_Rate_Mean"*: the mean heart rate.
         - *"ECG_HRV"*: the different heart rate variability metrices.
-        See `ecg_hrv()` docstrings for details.
+        See `hrv_summary()` docstrings for details.
 
     See Also
     --------
@@ -45,7 +44,7 @@ def ecg_intervalrelated(data, sampling_rate=1000):
     >>> df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
     >>>
     >>> # Single dataframe is passed
-    >>> nk.ecg_intervalrelated(df)
+    >>> nk.ecg_intervalrelated(df, sampling_rate=100)
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
     >>> nk.ecg_intervalrelated(epochs)
@@ -107,8 +106,20 @@ def _ecg_intervalrelated_formatinput(data, output={}):
 
 def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
 
-    hrv = ecg_hrv(data, sampling_rate=sampling_rate)
-    for column in hrv.columns:
-        output[column] = float(hrv[column])
+    # Sanitize input
+    colnames = data.columns.values
+    if len([i for i in colnames if "ECG_R_Peaks" in i]) == 0:
+        raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
+                         "we couldn't extract R-peaks. Please make sure"
+                         "your DataFrame contains an `ECG_R_Peaks` column.")
+        return output
+
+    # Transform rpeaks from "signal" format to "info" format.
+    rpeaks = np.where(data["ECG_R_Peaks"].values)[0]
+    rpeaks = {"ECG_R_Peaks": rpeaks}
+
+    results = hrv(rpeaks, sampling_rate=sampling_rate)
+    for column in results.columns:
+        output[column] = float(results[column])
 
     return output
