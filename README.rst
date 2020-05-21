@@ -307,6 +307,7 @@ Physiological Data Analysis
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
 
 
+
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/features.png
 
 
@@ -396,8 +397,10 @@ Complexity (Entropy, Fractal Dimensions, ...)
     parameters = nk.complexity_optimize(signal, show=True)
 
 
+
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png\
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html
+
 
 
 - **Compute complexity features**
