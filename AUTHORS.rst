@@ -26,17 +26,7 @@ Contributors
 
 
 
-NeuroKit1 Contributors
--------------------------
-
-* `Gansheng Tan <https://github.com/GanshengT>`_ *(CentraleSupélec, France)*
-* `Chuan-Peng Hu <https://github.com/hcp4715>`_ *(Universitatsmedizin Mainz, Germany)*
-* `@ucohen <https://github.com/ucohen>`_
-* `Anthony Gatti <https://github.com/gattia>`_ *(McMaster University, Canada)*
-* `Julien Lamour <https://github.com/lamourj>`_ *(Smood, Switzerland)*
-* `@renatosc <https://github.com/renatosc>`_
-* `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ *(Université Laval, Canada)*
-* `@rubinovitz <https://github.com/rubinovitz>`_
+Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_,`Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
 
 
 More details `here <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.

@@ -136,7 +136,7 @@ Citation
    :target: https://zenodo.org/badge/latestdoi/218212111
 
 .. image:: https://img.shields.io/badge/details-authors-purple.svg?colorB=9C27B0
-   :target: https://neurokit2.readthedocs.io/en/latest/credits.html
+   :target: https://neurokit2.readthedocs.io/en/latest/authors.html
    
 
 .. code-block:: python
