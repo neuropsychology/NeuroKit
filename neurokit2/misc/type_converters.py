@@ -6,7 +6,6 @@ import pandas as pd
 
 
 
-
 def as_vector(x):
     """Convert to vector.
 
@@ -14,12 +13,18 @@ def as_vector(x):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> nk.sanitize_input(x=range(3))
-    >>> nk.sanitize_input(x=[0, 1, 2])
-    >>> nk.sanitize_input(x=np.array([0, 1, 2]))
-    >>> nk.sanitize_input(x=0)
-    >>> nk.sanitize_input(x=pd.Series([0, 1, 2]))
-    >>> nk.sanitize_input(x=pd.DataFrame([0, 1, 2]))
+    >>> nk.as_vector(x=range(3)) #doctest: +SKIP
+    >>> nk.as_vector(x=[0, 1, 2]) #doctest: +SKIP
+    >>> nk.as_vector(x=np.array([0, 1, 2])) #doctest: +ELLIPSIS
+    array([0, 1, 2])
+    >>>
+    >>> nk.as_vector(x=0) #doctest: +ELLIPSIS
+    array([0])
+    >>>
+    >>> nk.as_vector(x=pd.Series([0, 1, 2])) #doctest: +SKIP
+    >>> nk.as_vector(x=pd.DataFrame([0, 1, 2])) #doctest: +ELLIPSIS
+    array([0, 1, 2], dtype=int64)
+    >>>
     """
     if isinstance(x, (pd.Series, pd.DataFrame)):
         out = x.values

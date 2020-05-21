@@ -65,18 +65,12 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
     >>> signal = nk.signal_simulate(duration=10, frequency=0.5)
     >>>
     >>> # Noise
-    >>> pd.DataFrame({
-            "Freq100": nk.signal_distort(signal, noise_frequency=200),
-            "Freq50": nk.signal_distort(signal, noise_frequency=50),
-            "Freq10": nk.signal_distort(signal, noise_frequency=10),
-            "Freq5": nk.signal_distort(signal, noise_frequency=5),
-            "Raw": signal}).plot()
+    >>> noise = pd.DataFrame({"Freq100": nk.signal_distort(signal, noise_frequency=200), "Freq50": nk.signal_distort(signal, noise_frequency=50), "Freq10": nk.signal_distort(signal, noise_frequency=10), "Freq5": nk.signal_distort(signal, noise_frequency=5),"Raw": signal}).plot()
+    >>> noise #doctest: +SKIP
     >>>
     >>> # Artifacts
-    >>> pd.DataFrame({
-            "1Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=1, artifacts_amplitude=0.5),
-            "5Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2),
-            "Raw": signal}).plot()
+    >>> artifacts = pd.DataFrame({"1Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=1, artifacts_amplitude=0.5), "5Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2), "Raw": signal}).plot()
+    >>> artifacts #doctest: +SKIP
     """
     # Seed the random generator for reproducible results.
     np.random.seed(random_state)

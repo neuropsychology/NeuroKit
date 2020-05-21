@@ -47,7 +47,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> Example 1: Event-related analysis
+    >>> # Example 1: Event-related analysis
     >>> # Download data
     >>> data = nk.data("bio_eventrelated_100hz")
     >>>
@@ -55,19 +55,13 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], keep=data["Photosensor"], sampling_rate=100)
     >>>
     >>> # Build epochs
-    >>> events = nk.events_find(data["Photosensor"],
-                                threshold_keep='below',
-                                event_conditions=["Negative",
-                                                  "Neutral",
-                                                  "Neutral",
-                                                  "Negative"])
-    >>> epochs = nk.epochs_create(df, events,
-                                  sampling_rate=100,
-                                  epochs_start=-0.1, epochs_end=1.9)
-    >>> # Analyze
-    >>> nk.bio_analyze(epochs)
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
     >>>
-    >>> Example 2: Interval-related analysis
+    >>> # Analyze
+    >>> nk.bio_analyze(epochs) #doctest: +SKIP
+    >>>
+    >>> # Example 2: Interval-related analysis
     >>> # Download data
     >>> data = nk.data("bio_resting_5min_100hz")
     >>>
@@ -75,7 +69,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], sampling_rate=100)
     >>>
     >>> # Analyze
-    >>> nk.bio_analyze(df)
+    >>> nk.bio_analyze(df) #doctest: +SKIP
     """
     features = pd.DataFrame()
     method = method.lower()

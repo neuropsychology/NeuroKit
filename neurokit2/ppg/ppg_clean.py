@@ -37,9 +37,9 @@ def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
     >>> ppg = nk.ppg_simulate(heart_rate=75, duration=30)
     >>> ppg_clean = nk.ppg_clean(ppg)
     >>>
-    >>> plt.plot(ppg, label="raw PPG")
-    >>> plt.plot(ppg_clean, label="clean PPG")
-    >>> plt.legend()
+    >>> plt.plot(ppg, label="raw PPG") #doctest: +SKIP
+    >>> plt.plot(ppg_clean, label="clean PPG") #doctest: +SKIP
+    >>> plt.legend() #doctest: +SKIP
     """
     ppg_signal = as_vector(ppg_signal)
 

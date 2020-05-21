@@ -36,9 +36,8 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1,
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> pd.DataFrame({"1Hz": nk.signal_simulate(duration=5, frequency=1),
-                      "2Hz": nk.signal_simulate(duration=5, frequency=2),
-                      "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
+    >>> fig = pd.DataFrame({"1Hz": nk.signal_simulate(duration=5, frequency=1), "2Hz": nk.signal_simulate(duration=5, frequency=2), "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
+    >>> fig #doctest: +SKIP
 
     """
     n_samples = int(np.rint(duration * sampling_rate))

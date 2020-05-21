@@ -64,7 +64,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> nk.rsp_plot(signals)
+    >>> nk.rsp_plot(signals) #doctest: +SKIP
     """
     # Clean signal
     rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate,

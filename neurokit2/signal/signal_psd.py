@@ -40,13 +40,17 @@ def signal_psd(signal, sampling_rate=1000, method="welch", show=True, min_freque
     >>>
     >>> signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20)
     >>>
-    >>> nk.signal_psd(signal, method="multitapers")
-    >>> nk.signal_psd(signal, method="welch")
+    >>> fig1 = nk.signal_psd(signal, method="multitapers")
+    >>> fig1 #doctest: +SKIP
+    >>> fig2 = nk.signal_psd(signal, method="welch", min_frequency=1)
+    >>> fig2 #doctest: +SKIP
     >>>
     >>> data = nk.signal_psd(signal, method="multitapers", max_frequency=30, show=False)
-    >>> data.plot(x="Frequency", y="Power")
-    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False)
-    >>> data.plot(x="Frequency", y="Power")
+    >>> fig3 = data.plot(x="Frequency", y="Power")
+    >>> fig3 #doctest: +SKIP
+    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False, min_frequency=1)
+    >>> fig4 = data.plot(x="Frequency", y="Power")
+    >>> fig4 #doctest: +SKIP
     """
     # Constant Detrend
     signal = signal - np.mean(signal)

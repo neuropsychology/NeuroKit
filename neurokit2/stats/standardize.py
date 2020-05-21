@@ -36,10 +36,9 @@ def standardize(data, robust=False):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> nk.standardize([3, 1, 2, 4, 6, np.nan])
-    >>> nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)
-    >>> nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan],
-                                     "B": [3, 1, 2, 4, 6, 5]}))
+    >>> x = nk.standardize([3, 1, 2, 4, 6, np.nan])
+    >>> y = nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)
+    >>> nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan], "B": [3, 1, 2, 4, 6, 5]})) #doctest: +SKIP
     """
     # Return appropriate type
     if isinstance(data, list):

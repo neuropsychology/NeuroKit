@@ -19,7 +19,7 @@ def summary_plot(x, **kwargs):
     >>> import numpy as np
     >>>
     >>> x = np.random.normal(size=100)
-    >>> nk.summary_plot(x)
+    >>> nk.summary_plot(x) #doctest: +SKIP
     """
 
     if 'ax' in kwargs:

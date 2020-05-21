@@ -24,7 +24,8 @@ def signal_zerocrossings(signal):
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=15, num=1000))
     >>> zeros = nk.signal_zerocrossings(signal)
-    >>> nk.events_plot(zeros, signal)
+    >>> fig = nk.events_plot(zeros, signal)
+    >>> fig #doctest: +SKIP
     """
     df = np.diff(np.sign(signal))
     zeros = np.nonzero(np.abs(df) > 0)[0]

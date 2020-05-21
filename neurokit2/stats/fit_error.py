@@ -37,13 +37,20 @@ def fit_error(y, y_predicted, n_parameters=2):
     >>> y_predicted = np.array([0.0, 0, 0, 0, 0])
     >>>
     >>> # Master function
-    >>> fit_error(y, y_predicted)
+    >>> nk.fit_error(y, y_predicted) #doctest: +SKIP
     >>>
     >>> # Direct access
-    >>> fit_mse(y, y_predicted)
-    >>> fit_rmse(y, y_predicted)
-    >>> fit_r2(y, y_predicted, adjusted=False)
-    >>> fit_r2(y, y_predicted, adjusted=True, n_parameters=2)
+    >>> nk.fit_mse(y, y_predicted) #doctest: +ELLIPSIS
+    0.5
+    >>>
+    >>> nk.fit_rmse(y, y_predicted) #doctest: +ELLIPSIS
+    0.7071067811865476
+    >>>
+    >>> nk.fit_r2(y, y_predicted, adjusted=False) #doctest: +ELLIPSIS
+    0.7071067811865475
+    >>>
+    >>> nk.fit_r2(y, y_predicted, adjusted=True, n_parameters=2) #doctest: +ELLIPSIS
+    0.057190958417936755
     """
 
     # Get information

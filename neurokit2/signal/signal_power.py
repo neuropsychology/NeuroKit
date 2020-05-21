@@ -44,15 +44,15 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     >>>
     >>> # Instant power
     >>> signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20)
-    >>> nk.signal_power(signal, frequency_band=[(18, 22), (10, 14)], method="multitapers", show=True)
+    >>> power_plot = nk.signal_power(signal, frequency_band=[(18, 22), (10, 14)], method="welch", show=True)
+    >>> power_plot #doctest: +SKIP
     >>>
     >>> # Continuous (simulated signal)
-    >>> signal = np.concatenate((nk.ecg_simulate(duration=30, heart_rate=75),
-                                 nk.ecg_simulate(duration=30, heart_rate=85)))
+    >>> signal = np.concatenate((nk.ecg_simulate(duration=30, heart_rate=75),  nk.ecg_simulate(duration=30, heart_rate=85)))
     >>> power = nk.signal_power(signal, frequency_band=[(72/60, 78/60), (82/60, 88/60)], continuous=True)
     >>> processed, _ = nk.ecg_process(signal)
     >>> power["ECG_Rate"] = processed["ECG_Rate"]
-    >>> nk.signal_plot(power, standardize=True)
+    >>> nk.signal_plot(power, standardize=True) #doctest: +SKIP
     >>>
     >>> # Continuous (real signal)
     >>> signal = nk.data("bio_eventrelated_100hz")["ECG"]

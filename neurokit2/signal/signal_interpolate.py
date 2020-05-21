@@ -35,30 +35,16 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=20, num=10))
-    >>> zero = nk.signal_interpolate(signal, desired_length=1000, method="zero")
-    >>> linear = nk.signal_interpolate(signal, desired_length=1000, method="linear")
-    >>> quadratic = nk.signal_interpolate(signal, desired_length=1000, method="quadratic")
-    >>> cubic = nk.signal_interpolate(signal, desired_length=1000, method="cubic")
-    >>> nearest = nk.signal_interpolate(signal, desired_length=1000, method="nearest")
+    >>> samples = np.linspace(start=0, stop=20, num=10)
+    >>> signal = np.cos(samples)
+    >>> zero = nk.signal_interpolate(samples, signal, desired_length=1000, method="zero")
+    >>> linear = nk.signal_interpolate(samples, signal, desired_length=1000, method="linear")
+    >>> quadratic = nk.signal_interpolate(samples, signal, desired_length=1000, method="quadratic")
+    >>> cubic = nk.signal_interpolate(samples, signal, desired_length=1000, method="cubic")
+    >>> nearest = nk.signal_interpolate(samples, signal, desired_length=1000, method="nearest")
     >>>
-    >>> plt.plot(np.linspace(0, 1, num=len(zero)), zero, 'y',
-                 np.linspace(0, 1, num=len(linear)), linear, 'r',
-                 np.linspace(0, 1, num=len(quadratic)), quadratic, 'b',
-                 np.linspace(0, 1, num=len(cubic)), cubic, 'g',
-                 np.linspace(0, 1, num=len(nearest)), nearest, 'm',
-                 np.linspace(0, 1, num=len(signal)), signal, 'ko')
-    >>>
-    >>> # Use x-axis end new x-axis
-    >>> x_axis = np.linspace(start=10, stop=30, num=10)
-    >>> signal = np.cos(x_axis)
-    >>> new_x = np.linspace(start=0, stop=40, num=1000)
-    >>> interpolated = nk.signal_interpolate(signal,
-                                    desired_length=1000,
-                                    x_axis=x_axis,
-                                    new_x=new_x)
-    >>> plt.plot(new_x, interpolated, '-',
-                 x, signal, 'o')
+    >>> fig = plt.plot(np.linspace(0, 1, num=len(zero)), zero, 'y', np.linspace(0, 1, num=len(linear)), linear, 'r', np.linspace(0, 1, num=len(quadratic)), quadratic, 'b', np.linspace(0, 1, num=len(cubic)), cubic, 'g', np.linspace(0, 1, num=len(nearest)), nearest, 'm', np.linspace(0, 1, num=len(signal)), signal, 'ko')
+    >>> fig #doctest: +SKIP
     """
     # Sanity checks
     if len(x_values) != len(y_values):

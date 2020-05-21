@@ -47,17 +47,15 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
     >>> import pandas as pd
 
     >>> # Example with simulated data
-    >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, n_bursts=3)
+    >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000],
-                                  sampling_rate=1000,
-                                  epochs_start=-0.1, epochs_end=1.9)
+    >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000,  epochs_start=-0.1, epochs_end=1.9)
     >>>
     >>> # Event-related analysis
-    >>> nk.emg_analyze(epochs, method="event-related")
+    >>> nk.emg_analyze(epochs, method="event-related") #doctest: +SKIP
     >>>
     >>> # Interval-related analysis
-    >>> nk.emg_analyze(emg_signals, method="interval-related")
+    >>> nk.emg_analyze(emg_signals, method="interval-related") #doctest: +SKIP
     """
     method = method.lower()
 

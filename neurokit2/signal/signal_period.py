@@ -44,8 +44,7 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None,
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000,
-    >>>                             frequency=1)
+    >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
     >>> info = nk.signal_findpeaks(signal)
     >>>
     >>> rate = nk.signal_rate(peaks=info["Peaks"])

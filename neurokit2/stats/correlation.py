@@ -32,7 +32,8 @@ def cor(x, y, method="pearson", show=False):
     >>>
     >>> x = [1, 2, 3, 4, 5]
     >>> y = [3, 1, 5, 6, 6]
-    >>> nk.cor(x, y, method="pearson", show=True)
+    >>> nk.cor(x, y, method="pearson", show=True) #doctest: +ELLIPSIS
+    0.80225745323842
     """
     r, p = _cor_methods(x, y, method)
 

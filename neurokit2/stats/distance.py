@@ -34,7 +34,7 @@ def distance(X=None, method="mahalanobis"):
     >>> import neurokit2 as nk
     >>>
     >>> X = datasets.load_iris().data
-    >>> nk.distance(X)
+    >>> nk.distance(X) #doctest: +SKIP
     """
     if isinstance(X, pd.DataFrame) is False:
         X = pd.DataFrame(X)

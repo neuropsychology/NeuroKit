@@ -71,7 +71,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>>
     >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
-    >>> nk.ecg_plot(signals)
+    >>> nk.ecg_plot(signals) #doctest: +SKIP
     """
     ecg_cleaned = ecg_clean(ecg_signal,
                             sampling_rate=sampling_rate,
