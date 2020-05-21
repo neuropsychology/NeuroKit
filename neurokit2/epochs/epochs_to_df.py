@@ -35,7 +35,8 @@ def epochs_to_df(epochs):
     >>>
     >>> # Find events
     >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> nk.events_plot(events, data)
+    >>> fig = nk.events_plot(events, data)
+    >>> fig #doctest: +SKIP
     >>>
     >>> # Create epochs
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=3)
