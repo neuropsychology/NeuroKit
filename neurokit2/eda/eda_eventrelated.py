@@ -51,28 +51,25 @@ def eda_eventrelated(epochs, silent=False):
     >>> import neurokit2 as nk
     >>>
     >>> # Example with simulated data
-    >>> eda = nk.eda_simulate(duration=15, n_scr=3)
+    >>> eda = nk.eda_simulate(duration=15, scr_number=3)
+    >>>
+    >>> # Process data
     >>> eda_signals, info = nk.eda_process(eda, sampling_rate=1000)
-    >>> epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000],
-                                  sampling_rate=1000,
-                                  epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.eda_eventrelated(epochs)
+    >>> epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000], sampling_rate=1000, epochs_start=-0.1, epochs_end=1.9)
+    >>>
+    >>> # Analyze
+    >>> nk.eda_eventrelated(epochs) #doctest: +SKIP
     >>>
     >>> # Example with real data
     >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(eda=data["EDA"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"],
-                                threshold_keep='below',
-                                event_conditions=["Negative",
-                                                  "Neutral",
-                                                  "Neutral",
-                                                  "Negative"])
-    >>> epochs = nk.epochs_create(df, events,
-                                  sampling_rate=100,
-                                  epochs_start=-0.1, epochs_end=6.9)
-    >>> nk.eda_eventrelated(epochs)
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=6.9)
+    >>>
+    >>> # Analyze
+    >>> nk.eda_eventrelated(epochs) #doctest: +SKIP
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="eda", silent=silent)

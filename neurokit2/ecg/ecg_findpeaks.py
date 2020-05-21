@@ -46,7 +46,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> info = nk.ecg_findpeaks(cleaned)
-    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned)
+    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +SKIP
     >>>
     >>> # Different methods
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
@@ -60,15 +60,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
     >>>
     >>> # Visualize
-    >>> nk.events_plot([neurokit["ECG_R_Peaks"],
-                        pantompkins1985["ECG_R_Peaks"],
-                        hamilton2002["ECG_R_Peaks"],
-                        christov2004["ECG_R_Peaks"],
-                        gamboa2008["ECG_R_Peaks"],
-                        elgendi2010["ECG_R_Peaks"],
-                        engzeemod2012["ECG_R_Peaks"],
-                        kalidas2017["ECG_R_Peaks"]],
-                        martinez2003["ECG_R_Peaks"]], cleaned)
+    >>> nk.events_plot([neurokit["ECG_R_Peaks"], pantompkins1985["ECG_R_Peaks"], hamilton2002["ECG_R_Peaks"], christov2004["ECG_R_Peaks"], gamboa2008["ECG_R_Peaks"], elgendi2010["ECG_R_Peaks"], engzeemod2012["ECG_R_Peaks"], kalidas2017["ECG_R_Peaks"]], martinez2003["ECG_R_Peaks"]], cleaned) #doctest: +SKIP
 
     References
     --------------

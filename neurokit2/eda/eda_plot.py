@@ -21,7 +21,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     >>>
     >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)
     >>> eda_signals, info = nk.eda_process(eda_signal, sampling_rate=250)
-    >>> nk.eda_plot(eda_signals)
+    >>> nk.eda_plot(eda_signals) #doctest: +SKIP
 
     See Also
     --------
