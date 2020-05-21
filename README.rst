@@ -350,6 +350,34 @@ Signal Processing
 
 - TODO
 
+
+Heart Rate Variability (HRV)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Compute HRV indices**
+
+  - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.
+  - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF)
+  - **Nonlinear domain**: Spread of RR intervals (SD1, SD2, ratio between SD2 to SD1), Cardiac Sympathetic Index (CSI), Cardial Vagal Index (CVI), Modified CSI, Sample Entropy (SampEn)
+  
+
+.. code-block:: python
+    
+    # Download data
+    data = nk.data("bio_resting_5min_100hz")
+    
+    # Find peaks
+    peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+    
+    # Compute HRV indices
+    nk.hrv(peaks, sampling_rate=100, show=True)
+    >>>    HRV_RMSSD  HRV_MeanNN   HRV_SDNN  ...   HRV_CVI  HRV_CSI_Modified  HRV_SampEn
+    >>> 0  69.697983  696.395349  62.135891  ...  4.829101        592.095372    1.259931
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/README_hrv.png
+
+
 Complexity (Entropy, Fractal Dimensions, ...)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -361,18 +389,20 @@ Complexity (Entropy, Fractal Dimensions, ...)
     signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
 
     # Find optimal time delay, embedding dimension and r
-	parameters = nk.complexity_optimize(signal, show=True)
+    parameters = nk.complexity_optimize(signal, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_complexity_optimize.png
 
 - **Compute complexity features**
 
-  - **Entropy**: Sample Entropy (SampEn), ...
-  - **Fractal dimensions**: ...
+  - **Entropy**: Sample Entropy (SampEn), Approximate Entropy (ApEn), Fuzzy Entropy (FuzzEn), Multiscale Entropy (MSE), Shannon Entropy (ShEn)
+  - **Fractal dimensions**: Correlation Dimension D2, ...
+  - **Detrended Fluctuation Analysis**
   
 .. code-block:: python
 
     nk.entropy_sample(signal)
+    nk.entropy_approximate(signal)
 
 
 Statistics
