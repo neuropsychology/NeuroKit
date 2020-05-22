@@ -50,12 +50,12 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> nk.entropy_multiscale(signal, show=True)
-    0.22802651903377408
-    >>> nk.entropy_multiscale(signal, show=True, composite=True)
-    0.24786806662361438
-    >>> nk.entropy_multiscale(signal, show=True, refined=True)
-    0.2639796019815732
+    >>> entropy1 = nk.entropy_multiscale(signal, show=True)
+    >>> entropy1 #doctest: +SKIP
+    >>> entropy2 = nk.entropy_multiscale(signal, show=True, composite=True)
+    >>> entropy2 #doctest: +SKIP
+    >>> entropy3 = nk.entropy_multiscale(signal, show=True, refined=True)
+    >>> entropy3 #doctest: +SKIP
 
 
     References

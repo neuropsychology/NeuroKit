@@ -32,35 +32,31 @@ def fractal_mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), t
     >>> import neurokit2 as nk
     >>>
     >>> # Mandelbrot fractal
-    >>> nk.fractal_mandelbrot(show=True)
-    >>>
+    >>> fractal = nk.fractal_mandelbrot(show=True)
+    >>> fractal #doctest: +SKIP
     >>> # Zoom at seahorse valley
-    >>> nk.fractal_mandelbrot(real_range=(-0.76, -0.74),
-                              imaginary_range=(0.09, 0.11),
-                              iterations=100, show=True)
+    >>> nk.fractal_mandelbrot(real_range=(-0.76, -0.74), imaginary_range=(0.09, 0.11), iterations=100, show=True) #doctest: +SKIP
     >>>
     >>> # Draw manually
     >>> m = nk.fractal_mandelbrot(real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25))
-    >>> plt.imshow(m.T, cmap="viridis")
-    >>> plt.axis("off")
-    >>> plt.show()
+    >>> plt.imshow(m.T, cmap="viridis") #doctest: +SKIP
+    >>> plt.axis("off") #doctest: +SKIP
+    >>> plt.show() #doctest: +SKIP
     >>>
     >>> # Buddhabrot
-    >>> b = nk.fractal_mandelbrot(size=1500,
-                               real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25),
-                               buddha=True, iterations=200)
-    >>> plt.imshow(b.T, cmap="gray")
-    >>> plt.axis("off")
-    >>> plt.show()
+    >>> b = nk.fractal_mandelbrot(size=1500, real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25), buddha=True, iterations=200)
+    >>> plt.imshow(b.T, cmap="gray") #doctest: +SKIP
+    >>> plt.axis("off") #doctest: +SKIP
+    >>> plt.show() #doctest: +SKIP
     >>>
     >>> # Mixed
     >>> m = nk.fractal_mandelbrot()
     >>> b = nk.fractal_mandelbrot(buddha=True, iterations=200)
     >>>
     >>> mixed = m - b
-    >>> plt.imshow(mixed.T, cmap="gray")
-    >>> plt.axis("off")
-    >>> plt.show()
+    >>> plt.imshow(mixed.T, cmap="gray") #doctest: +SKIP
+    >>> plt.axis("off") #doctest: +SKIP
+    >>> plt.show() #doctest: +SKIP
     """
     if buddha is False:
         img = _mandelbrot(size=size,

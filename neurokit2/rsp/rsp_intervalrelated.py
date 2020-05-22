@@ -45,10 +45,10 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     >>> df, info = nk.rsp_process(data["RSP"], sampling_rate=100)
 
     >>> # Single dataframe is passed
-    >>> nk.rsp_intervalrelated(df)
+    >>> nk.rsp_intervalrelated(df) #doctest: +SKIP
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
-    >>> nk.rsp_intervalrelated(epochs)
+    >>> nk.rsp_intervalrelated(epochs) #doctest: +SKIP
     """
     intervals = {}
 

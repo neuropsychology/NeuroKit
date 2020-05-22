@@ -72,8 +72,8 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> _, rpeaks = nk.ecg_peaks(cleaned)
     >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000, method="peak")
-    >>> nk.events_plot(waves["ECG_P_Peaks"], cleaned)
-    >>> nk.events_plot(waves["ECG_T_Peaks"], cleaned)
+    >>> nk.events_plot(waves["ECG_P_Peaks"], cleaned) #doctest: +SKIP
+    >>> nk.events_plot(waves["ECG_T_Peaks"], cleaned) #doctest: +SKIP
 
     References
     --------------
@@ -112,13 +112,13 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
                                      rpeaks=rpeaks,
                                      sampling_rate=sampling_rate)
     elif method in ["cwt", "continuous wavelet transform"]:
-        waves = _ecg_delinator_cwt(ecg_cleaned,
-                                   rpeaks=rpeaks,
-                                   sampling_rate=sampling_rate)
+        waves = _ecg_delineator_cwt(ecg_cleaned,
+                                    rpeaks=rpeaks,
+                                    sampling_rate=sampling_rate)
     elif method in ["dwt", "discrete wavelet transform"]:
-        waves = _dwt_ecg_delinator(ecg_cleaned,
-                                   rpeaks,
-                                   sampling_rate=sampling_rate)
+        waves = _dwt_ecg_delineator(ecg_cleaned,
+                                    rpeaks,
+                                    sampling_rate=sampling_rate)
 
     else:
         raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be "
@@ -154,7 +154,7 @@ def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     return peaks_resample
 
 
-def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
+def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
     """Delinate ecg signal using discrete wavelet transforms.
 
     Args:
@@ -178,13 +178,13 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
     # plt.show()
     rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
 
-    tpeaks, ppeaks = _dwt_delinate_tp_peaks(
+    tpeaks, ppeaks = _dwt_delineate_tp_peaks(
         ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
-    qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(
+    qrs_onsets, qrs_offsets = _dwt_delineate_qrs_bounds(
         ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate, debug=False)
-    ponsets, poffsets = _dwt_delinate_tp_onsets_offsets(
+    ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(
         ecg, ppeaks, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
-    tonsets, toffsets = _dwt_delinate_tp_onsets_offsets(
+    tonsets, toffsets = _dwt_delineate_tp_onsets_offsets(
         ecg, tpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False,
         onset_weight=0.6, duration=0.6
     )
@@ -205,15 +205,15 @@ def _dwt_compensate_degree(sampling_rate):
     return int(np.log2(sampling_rate / 250))
 
 
-def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
-                           dwt_delay=0.0,
-                           qrs_width=0.13,
-                           p2r_duration=0.2,
-                           rt_duration=0.25,
-                           degree_tpeak=3,
-                           degree_ppeak=2,
-                           epsilon_T_weight=0.25,
-                           epsilon_P_weight=0.02):
+def _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
+                            dwt_delay=0.0,
+                            qrs_width=0.13,
+                            p2r_duration=0.2,
+                            rt_duration=0.25,
+                            degree_tpeak=3,
+                            degree_ppeak=2,
+                            epsilon_T_weight=0.25,
+                            epsilon_P_weight=0.02):
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
     degree_add = _dwt_compensate_degree(sampling_rate)
 
@@ -303,13 +303,13 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
     return tpeaks, ppeaks
 
 
-def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False,
-                                    duration=0.3,
-                                    duration_offset=0.3,
-                                    onset_weight=0.4,
-                                    offset_weight=0.4,
-                                    degree_onset=2,
-                                    degree_offset=2):
+def _dwt_delineate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False,
+                                     duration=0.3,
+                                     duration_offset=0.3,
+                                     onset_weight=0.4,
+                                     offset_weight=0.4,
+                                     degree_onset=2,
+                                     degree_offset=2):
     degree = _dwt_compensate_degree(sampling_rate)
     onsets = []
     offsets = []
@@ -362,7 +362,7 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
     return onsets, offsets
 
 
-def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
+def _dwt_delineate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
     degree = int(np.log2(sampling_rate / 250))
     onsets = []
     for i in range(len(rpeaks)):
@@ -461,7 +461,7 @@ def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
 # =============================================================================
 # WAVELET METHOD (CWT)
 # =============================================================================
-def _ecg_delinator_cwt(ecg, rpeaks=None, sampling_rate=1000):
+def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
 
     # P-Peaks and T-Peaks
     tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks,
@@ -838,41 +838,35 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
 def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_type='all', sampling_rate=1000):
 
     """
-    Examples
-    --------
-    >>> import neurokit2 as nk
-    >>> import numpy as np
-    >>> import pandas as pd
-    >>> import matplotlib.pyplot as plt
-
-    >>> ecg_signal = np.array(pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/ecg_1000hz.csv"))[:, 1]
-
-    >>> # Extract R-peaks locations
-    >>> _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)
-
-    >>> # Delineate the ECG signal with ecg_delineate()
-    >>> signals, waves = nk.ecg_delineate(ecg_signal, rpeaks,
-                                          sampling_rate=1000)
-
-    >>> # Plot the ECG signal with markings on ECG peaks
-    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-                            signal_features_type='peaks', sampling_rate=1000)
-
-    >>> # Plot the ECG signal with markings on boundaries of R peaks
-    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-                            signal_features_type='bound_R', sampling_rate=1000)
-
-    >>> # Plot the ECG signal with markings on boundaries of P peaks
-    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-                            signal_features_type='bound_P', sampling_rate=1000)
-
-    >>> # Plot the ECG signal with markings on boundaries of T peaks
-    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-                            signal_features_type='bound_T', sampling_rate=1000)
-
-    >>> # Plot the ECG signal with markings on all peaks and boundaries
-    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-                            signal_features_type='all', sampling_rate=1000)
+#    Examples
+#    --------
+#    >>> import neurokit2 as nk
+#    >>> import numpy as np
+#    >>> import pandas as pd
+#    >>> import matplotlib.pyplot as plt
+#
+#    >>> ecg_signal = np.array(pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/ecg_1000hz.csv"))[:, 1]
+#
+#    >>> # Extract R-peaks locations
+#    >>> _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)
+#
+#    >>> # Delineate the ECG signal with ecg_delineate()
+#    >>> signals, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=1000)
+#
+#    >>> # Plot the ECG signal with markings on ECG peaks
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='peaks', sampling_rate=1000)
+#
+#    >>> # Plot the ECG signal with markings on boundaries of R peaks
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='bound_R', sampling_rate=1000)
+#
+#    >>> # Plot the ECG signal with markings on boundaries of P peaks
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='bound_P', sampling_rate=1000)
+#
+#    >>> # Plot the ECG signal with markings on boundaries of T peaks
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='bound_T', sampling_rate=1000)
+#
+#    >>> # Plot the ECG signal with markings on all peaks and boundaries
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='all', sampling_rate=1000)
 
     """
 

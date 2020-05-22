@@ -10,7 +10,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                    noise_amplitude=0, noise_frequency=100,
                    powerline_amplitude=0, powerline_frequency=50,
                    artifacts_amplitude=0, artifacts_frequency=100,
-                   n_artifacts=5, linear_drift=False, random_state=None,
+                   artifacts_number=5, linear_drift=False, random_state=None,
                    silent=False):
     """Signal distortion.
 
@@ -40,7 +40,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
         the signal).
     artifacts_frequency : int
         The frequency of the artifacts (in Hz, i.e., samples/second).
-    n_artifacts : int
+    artifacts_number : int
         The number of artifact bursts. The bursts have a random duration
         between 1 and 10% of the signal duration.
     linear_drift : bool
@@ -65,18 +65,12 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
     >>> signal = nk.signal_simulate(duration=10, frequency=0.5)
     >>>
     >>> # Noise
-    >>> pd.DataFrame({
-            "Freq100": nk.signal_distort(signal, noise_frequency=200),
-            "Freq50": nk.signal_distort(signal, noise_frequency=50),
-            "Freq10": nk.signal_distort(signal, noise_frequency=10),
-            "Freq5": nk.signal_distort(signal, noise_frequency=5),
-            "Raw": signal}).plot()
+    >>> noise = pd.DataFrame({"Freq100": nk.signal_distort(signal, noise_frequency=200), "Freq50": nk.signal_distort(signal, noise_frequency=50), "Freq10": nk.signal_distort(signal, noise_frequency=10), "Freq5": nk.signal_distort(signal, noise_frequency=5),"Raw": signal}).plot()
+    >>> noise #doctest: +SKIP
     >>>
     >>> # Artifacts
-    >>> pd.DataFrame({
-            "1Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=1, artifacts_amplitude=0.5),
-            "5Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2),
-            "Raw": signal}).plot()
+    >>> artifacts = pd.DataFrame({"1Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=1, artifacts_amplitude=0.5), "5Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2), "Raw": signal}).plot()
+    >>> artifacts #doctest: +SKIP
     """
     # Seed the random generator for reproducible results.
     np.random.seed(random_state)
@@ -116,7 +110,7 @@ def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",
                                            sampling_rate=sampling_rate,
                                            artifacts_frequency=artifacts_frequency,
                                            artifacts_amplitude=artifacts_amplitude,
-                                           n_artifacts=n_artifacts,
+                                           artifacts_number=artifacts_number,
                                            silent=silent)
 
     if linear_drift:
@@ -137,7 +131,7 @@ def _signal_linear_drift(signal):
 
 def _signal_distort_artifacts(signal, signal_sd=None, sampling_rate=1000,
                               artifacts_frequency=0, artifacts_amplitude=.1,
-                              n_artifacts=5, artifacts_shape="laplace",
+                              artifacts_number=5, artifacts_shape="laplace",
                               silent=False):
 
     # Generate artifact burst with random onset and random duration.
@@ -152,14 +146,14 @@ def _signal_distort_artifacts(signal, signal_sd=None, sampling_rate=1000,
     min_duration = int(np.rint(len(artifacts) * .001))
     max_duration = int(np.rint(len(artifacts) * .01))
     artifact_durations = np.random.randint(min_duration, max_duration,
-                                           n_artifacts)
+                                           artifacts_number)
 
     artifact_onsets = np.random.randint(0, len(artifacts) - max_duration,
-                                        n_artifacts)
+                                        artifacts_number)
     artifact_offsets = artifact_onsets + artifact_durations
 
     artifact_idcs = np.array([False] * len(artifacts))
-    for i in range(n_artifacts):
+    for i in range(artifacts_number):
         artifact_idcs[artifact_onsets[i]:artifact_offsets[i]] = True
 
     artifacts[~artifact_idcs] = 0

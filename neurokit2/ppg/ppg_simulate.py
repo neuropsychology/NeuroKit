@@ -75,8 +75,7 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> ppg = ppg = nk.ppg_simulate(duration=40, sampling_rate=500,
-    >>>                             heart_rate=75, random_state=42, show=True)
+    >>> ppg = nk.ppg_simulate(duration=40, sampling_rate=500, heart_rate=75, random_state=42)
     """
     # At the requested sampling rate, how long is a period at the requested
     # heart-rate and how often does that period fit into the requested
@@ -161,7 +160,7 @@ def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
         ppg = signal_distort(ppg, sampling_rate=sampling_rate,
                              artifacts_amplitude=burst_amplitude,
                              artifacts_frequency=100,
-                             n_artifacts=burst_number,
+                             artifacts_number=burst_number,
                              random_state=random_state,
                              silent=True)
     # Add powerline noise.

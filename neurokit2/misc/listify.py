@@ -8,7 +8,8 @@ def listify(**kwargs):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> nk.listify(a=3, b=[3, 5], c=[3])
+    >>> nk.listify(a=3, b=[3, 5], c=[3]) #doctest: +ELLIPSIS
+    {'a': [3, 3], 'b': [3, 5], 'c': [3, 3]}
     """
     args = kwargs
     maxi = 1

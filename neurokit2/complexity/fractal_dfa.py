@@ -43,8 +43,10 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, noise=0.05)
-    >>> nk.fractal_dfa(signal, show=True)
-    >>> nk.fractal_mfdfa(signal, q=np.arange(-3, 4), show=True)
+    >>> dfa1 = nk.fractal_dfa(signal, show=True)
+    >>> dfa1 #doctest: +SKIP
+    >>> dfa2 = nk.fractal_mfdfa(signal, q=np.arange(-3, 4), show=True)
+    >>> dfa2 #doctest: +SKIP
 
 
     References

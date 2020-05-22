@@ -37,15 +37,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> import neurokit2 as nk
     >>>
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-    >>> signals = pd.DataFrame({
-            "ECG_Raw": ecg,
-            "ECG_NeuroKit": nk.ecg_clean(ecg, sampling_rate=1000, method="neurokit"),
-            "ECG_BioSPPy":nk.ecg_clean(ecg, sampling_rate=1000, method="biosppy"),
-            "ECG_PanTompkins":nk.ecg_clean(ecg, sampling_rate=1000, method="pantompkins1985"),
-            "ECG_Hamilton":nk.ecg_clean(ecg, sampling_rate=1000, method="hamilton2002"),
-            "ECG_Elgendi":nk.ecg_clean(ecg, sampling_rate=1000, method="elgendi2010"),
-            "ECG_EngZeeMod":nk.ecg_clean(ecg, sampling_rate=1000, method="engzeemod2012")})
-    >>> signals.plot()
+    >>> signals = pd.DataFrame({"ECG_Raw" : ecg, "ECG_NeuroKit" : nk.ecg_clean(ecg, sampling_rate=1000, method="neurokit"), "ECG_BioSPPy" : nk.ecg_clean(ecg, sampling_rate=1000, method="biosppy"), "ECG_PanTompkins" : nk.ecg_clean(ecg, sampling_rate=1000, method="pantompkins1985"), "ECG_Hamilton" : nk.ecg_clean(ecg, sampling_rate=1000, method="hamilton2002"), "ECG_Elgendi" : nk.ecg_clean(ecg, sampling_rate=1000, method="elgendi2010"), "ECG_EngZeeMod" : nk.ecg_clean(ecg, sampling_rate=1000, method="engzeemod2012")})
+    >>> signals.plot() #doctest: +SKIP
 
     References
     --------------

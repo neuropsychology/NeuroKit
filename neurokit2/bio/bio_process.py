@@ -76,14 +76,11 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
     >>> eda = nk.eda_simulate(duration=30, sampling_rate=250, scr_number=3)
     >>> emg = nk.emg_simulate(duration=30, sampling_rate=250, burst_number=3)
     >>>
-    >>> bio_df, bio_info = nk.bio_process(ecg=ecg,
-                                          rsp=rsp,
-                                          eda=eda,
-                                          emg=emg,
-                                          sampling_rate=250)
+    >>> bio_df, bio_info = nk.bio_process(ecg=ecg, rsp=rsp, eda=eda, emg=emg, sampling_rate=250)
     >>>
     >>> # Visualize all signals
-    >>> nk.standardize(bio_df).plot(subplots=True)
+    >>> fig = nk.standardize(bio_df).plot(subplots=True)
+    >>> fig #doctest: +SKIP
     """
     bio_info = {}
     bio_df = pd.DataFrame({})

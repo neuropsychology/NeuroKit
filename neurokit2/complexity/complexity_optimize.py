@@ -47,7 +47,7 @@ def complexity_optimize(signal, delay_max=100, delay_method="fraser1986", dimens
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> parameters = nk.complexity_optimize(signal, show=True)
-    >>> parameters
+    >>> parameters #doctest: +SKIP
 
     References
     -----------

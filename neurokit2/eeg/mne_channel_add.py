@@ -32,12 +32,16 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     Example
     ----------
     >>> import neurokit2 as nk
+    >>> import mne
     >>>
     >>> # Let's say that the 42nd sample point in the EEG correspond to the 333rd point in the ECG
     >>> event_index_in_eeg = 42
     >>> event_index_in_ecg = 333
     >>>
-    >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg")
+    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif', preload=True) # doctest: +SKIP
+    >>> ecg = nk.ecg_simulate(length=170000)
+    >>>
+    >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg") # doctest: +SKIP
     """
     # Try loading mne
     try:

@@ -77,7 +77,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             _embedding_dimension_plot(method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, E1=E1, E2=E2)
 
 
-    if method in ["fnn"]:
+    elif method in ["fnn"]:
         f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, show=show, **kwargs)
 
         min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]

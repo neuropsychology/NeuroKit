@@ -34,27 +34,32 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> nk.events_plot([1, 3, 5])
+    >>> fig = nk.events_plot([1, 3, 5])
+    >>> fig #doctest: +SKIP
     >>>
     >>> # With signal
     >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
-    >>> nk.events_plot(events, signal)
+    >>> fig1 = nk.events_plot(events, signal)
+    >>> fig1 #doctest: +SKIP
     >>>
     >>> # Different events
     >>> events1 = events["onset"]
     >>> events2 = np.linspace(0, len(signal), 8)
-    >>> nk.events_plot([events1, events2], signal)
+    >>> fig2 = nk.events_plot([events1, events2], signal)
+    >>> fig2 #doctest: +SKIP
     >>>
     >>> # Conditions
     >>> events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
-    >>> nk.events_plot(events, signal)
+    >>> fig3 = nk.events_plot(events, signal)
+    >>> fig3 #doctest: +SKIP
     >>>
     >>> # Different colors for all events
     >>> signal = nk.signal_simulate(duration=20)
     >>> events = nk.events_find(signal)
     >>> events = [[i] for i in events['onset']]
-    >>> nk.events_plot(events, signal)
+    >>> fig4 = nk.events_plot(events, signal)
+    >>> fig4 #doctest: +SKIP
     """
 
     if isinstance(events, dict):

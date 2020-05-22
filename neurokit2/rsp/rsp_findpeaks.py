@@ -47,7 +47,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018",
     >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     >>> info = nk.rsp_findpeaks(cleaned)
-    >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+    >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned) #doctest: +SKIP
     """
     # Try retrieving correct column
     if isinstance(rsp_cleaned, pd.DataFrame):

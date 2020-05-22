@@ -68,13 +68,11 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     >>>
     >>> # Get RSA features
     >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False)
-    >>> rsa
+    >>> rsa #doctest: +SKIP
     >>>
     >>> # Get RSA as a continuous signal
     >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
-    >>> nk.signal_plot([ecg_signals["ECG_Rate"],
-                        rsp_signals["RSP_Rate"],
-                        rsa], standardize=True)
+    >>> nk.signal_plot([ecg_signals["ECG_Rate"], rsp_signals["RSP_Rate"], rsa], standardize=True) #doctest: +SKIP
 
     References
     ------------

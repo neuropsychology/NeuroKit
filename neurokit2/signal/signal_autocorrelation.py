@@ -22,7 +22,8 @@ def signal_autocor(x, normalize=True):
     >>> import neurokit2 as nk
     >>>
     >>> x = [1, 2, 3, 4, 5]
-    >>> nk.signal_autocor(x)
+    >>> autocor = nk.signal_autocor(x)
+    >>> autocor #doctest: +SKIP
     """
     r = np.correlate(x, x, mode='full')
 

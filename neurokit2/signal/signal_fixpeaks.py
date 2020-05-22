@@ -67,22 +67,16 @@ def signal_fixpeaks(peaks, sampling_rate=1000, iterative=True, show=False,
     >>> import matplotlib.pyplot as plt
     >>>
     >>> # Kubios
-    >>> ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70,
-    >>>                       random_state=42)
+    >>> ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)
     >>> rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
-    >>> artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected,
-    >>>                                                  iterative=True,
-    >>>                                                  show=True,
-    >>>                                                  method="Kubios")
-    >>> rate_corrected = nk.signal_rate(rpeaks_corrected,
-    >>>                                 desired_length=len(ecg))
-    >>> rate_uncorrected = nk.signal_rate(rpeaks_uncorrected,
-    >>>                                   desired_length=len(ecg))
+    >>> artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected, iterative=True, show=True, method="Kubios")
+    >>> rate_corrected = nk.signal_rate(rpeaks_corrected, desired_length=len(ecg))
+    >>> rate_uncorrected = nk.signal_rate(rpeaks_uncorrected, desired_length=len(ecg))
     >>>
     >>> fig, ax = plt.subplots()
-    >>> ax.plot(rate_uncorrected, label="heart rate without artifact correction")
-    >>> ax.plot(rate_corrected, label="heart rate with artifact correction")
-    >>> ax.legend(loc="upper right")
+    >>> ax.plot(rate_uncorrected, label="heart rate without artifact correction") #doctest: +SKIP
+    >>> ax.plot(rate_corrected, label="heart rate with artifact correction") #doctest: +SKIP
+    >>> ax.legend(loc="upper right") #doctest: +SKIP
     >>>
     >>> # Neurokit
     >>> signal = nk.signal_simulate(duration=4, sampling_rate=1000, frequency=1)
@@ -94,12 +88,10 @@ def signal_fixpeaks(peaks, sampling_rate=1000, iterative=True, show=False,
     >>> peaks = np.delete(peaks_true, [5, 15])  # create gaps
     >>> peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
     >>>
-    >>> peaks_corrected = nk.signal_fixpeaks(peaks=peaks,
-    >>>                                      interval_min=0.5,
-    >>>                                      interval_max=1.5,
-    >>>                                      method="Neurokit")
+    >>> peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5, method="Neurokit")
     >>> # Plot and shift original peaks to the rightto see the difference.
-    >>> nk.events_plot([peaks + 50, peaks_corrected], signal)
+    >>> fig = nk.events_plot([peaks + 50, peaks_corrected], signal)
+    >>> fig #doctest: +SKIP
 
     References
     ----------

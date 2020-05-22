@@ -126,7 +126,7 @@ Examples
 **Don't know which tutorial is suited for your case?** Follow this flowchart:
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/workflow.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/workflow.png
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
         
 Citation
@@ -136,7 +136,7 @@ Citation
    :target: https://zenodo.org/badge/latestdoi/218212111
 
 .. image:: https://img.shields.io/badge/details-authors-purple.svg?colorB=9C27B0
-   :target: https://neurokit2.readthedocs.io/en/latest/credits.html
+   :target: https://neurokit2.readthedocs.io/en/latest/authors.html
    
 
 .. code-block:: python
@@ -202,7 +202,7 @@ Simulate physiological signals
     nk.signal_plot(data, subplots=True)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_simulation.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_simulation.png
         :target: https://neurokit2.readthedocs.io/en/latest/examples/simulation.html
 
 
@@ -220,7 +220,7 @@ Electrodermal Activity (EDA/GSR)
     # Visualise the processing
     nk.eda_plot(signals, sampling_rate=250)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_eda.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eda.png
         :target: https://neurokit2.readthedocs.io/en/latest/examples/eda.html
 
 
@@ -239,7 +239,7 @@ Cardiac activity (ECG)
     nk.ecg_plot(signals, sampling_rate=250)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_ecg.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ecg.png
         :target: https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html
 
 
@@ -258,7 +258,7 @@ Respiration (RSP)
     nk.rsp_plot(signals, sampling_rate=250)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_rsp.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_rsp.png
         :target: https://neurokit2.readthedocs.io/en/latest/examples/rrv.html
 
 
@@ -277,7 +277,7 @@ Electromyography (EMG)
     nk.emg_plot(signals, sampling_rate=250)
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_emg.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png
 
 
 Photoplethysmography (PPG/BVP)
@@ -306,7 +306,10 @@ Physiological Data Analysis
 
 The analysis of physiological data usually comes in two types, **event-related** or **interval-related**.
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/features.png
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/features.png
+
 
 Event-related
 ^^^^^^^^^^^^^^
@@ -345,10 +348,68 @@ variability metrices) and peak characteristics.
 Miscellaneous
 ----------------------------
 
+
+Heart Rate Variability (HRV)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- **Compute HRV indices**
+
+  - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.
+  - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF).
+  - **Nonlinear domain**: Spread of RR intervals (SD1, SD2, ratio between SD2 to SD1), Cardiac Sympathetic Index (CSI), Cardial Vagal Index (CVI), Modified CSI, Sample Entropy (SampEn).
+  
+
+.. code-block:: python
+    
+    # Download data
+    data = nk.data("bio_resting_5min_100hz")
+    
+    # Find peaks
+    peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+    
+    # Compute HRV indices
+    nk.hrv(peaks, sampling_rate=100, show=True)
+    >>>    HRV_RMSSD  HRV_MeanNN   HRV_SDNN  ...   HRV_CVI  HRV_CSI_Modified  HRV_SampEn
+    >>> 0  69.697983  696.395349  62.135891  ...  4.829101        592.095372    1.259931
+
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hrv.png
+
+
+
 Signal Processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- TODO
+- **Signal processing functionalities**
+
+  - **Filtering**: Using different methods.
+  - **Detrending**: Remove the baseline drift or trend.
+  - **Distorting**: Add noise and artifacts.
+
+.. code-block:: python
+
+    # Generate original signal
+    original = nk.signal_simulate(duration=6, frequency=1)
+
+    # Distort the signal (add noise, linear trend, artifacts etc.)
+    distorted = nk.signal_distort(original,
+                                  noise_amplitude=0.1,
+                                  noise_frequency=[5, 10, 20],
+                                  powerline_amplitude=0.05,
+                                  artifacts_amplitude=0.3,
+                                  artifacts_number=3,
+                                  linear_drift=0.5)
+
+    # Clean (filter and detrend)
+    cleaned = nk.signal_detrend(distorted)
+    cleaned = nk.signal_filter(cleaned, lowcut=0.5, highcut=1.5)
+
+    # Compare the 3 signals
+    plot = nk.signal_plot([original, distorted, cleaned])
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_signalprocessing.png
 
 Complexity (Entropy, Fractal Dimensions, ...)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -358,21 +419,28 @@ Complexity (Entropy, Fractal Dimensions, ...)
 .. code-block:: python
 
     # Generate signal
-    signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
+    signal = nk.signal_simulate(frequency=[1, 3], noise=0.01, sampling_rate=100)
 
     # Find optimal time delay, embedding dimension and r
-	parameters = nk.complexity_optimize(signal, show=True)
+    parameters = nk.complexity_optimize(signal, show=True)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_complexity_optimize.png
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_complexity_optimize.png
+        :target: https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html
+
+
 
 - **Compute complexity features**
 
-  - **Entropy**: Sample Entropy (SampEn), ...
-  - **Fractal dimensions**: ...
+  - **Entropy**: Sample Entropy (SampEn), Approximate Entropy (ApEn), Fuzzy Entropy (FuzzEn), Multiscale Entropy (MSE), Shannon Entropy (ShEn)
+  - **Fractal dimensions**: Correlation Dimension D2, ...
+  - **Detrended Fluctuation Analysis**
   
 .. code-block:: python
 
     nk.entropy_sample(signal)
+    nk.entropy_approximate(signal)
 
 
 Statistics
@@ -386,7 +454,7 @@ Statistics
 
     ci_min, ci_max = nk.hdi(x, ci=0.95, show=True)
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_hdi.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hdi.png
 
 Popularity
 ---------------------
@@ -401,7 +469,7 @@ Popularity
         :target: https://github.com/neuropsychology/NeuroKit/network
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/img/README_popularity.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
 
 

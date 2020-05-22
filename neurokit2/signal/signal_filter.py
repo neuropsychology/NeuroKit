@@ -47,39 +47,20 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
     >>> signal += nk.signal_simulate(duration=10, frequency=5) # High freq
     >>>
     >>> # Lowpass
-    >>> pd.DataFrame({"Raw": signal,
-                      "Butter_2": nk.signal_filter(signal, highcut=3, method='butterworth', order=2),
-                      "Butter_2_BA": nk.signal_filter(signal, highcut=3, method='butterworth_ba', order=2),
-                      "Butter_5": nk.signal_filter(signal, highcut=3, method='butterworth', order=5),
-                      "Butter_5_BA": nk.signal_filter(signal, highcut=3, method='butterworth_ba', order=5),
-                      "Bessel_2": nk.signal_filter(signal, highcut=3, method='bessel', order=2),
-                      "Bessel_5": nk.signal_filter(signal, highcut=3, method='bessel', order=5),
-                      "FIR": nk.signal_filter(signal, highcut=3, method='fir')}).plot(subplots=True)
+    >>> fig1 = pd.DataFrame({"Raw": signal, "Butter_2": nk.signal_filter(signal, highcut=3, method='butterworth', order=2), "Butter_2_BA": nk.signal_filter(signal, highcut=3, method='butterworth_ba', order=2), "Butter_5": nk.signal_filter(signal, highcut=3, method='butterworth', order=5), "Butter_5_BA": nk.signal_filter(signal, highcut=3, method='butterworth_ba', order=5), "Bessel_2": nk.signal_filter(signal, highcut=3, method='bessel', order=2), "Bessel_5": nk.signal_filter(signal, highcut=3, method='bessel', order=5), "FIR": nk.signal_filter(signal, highcut=3, method='fir')}).plot(subplots=True)
+    >>> fig1 #doctest: +SKIP
 
     >>> # Highpass
-    >>> pd.DataFrame({"Raw": signal,
-                      "Butter_2": nk.signal_filter(signal, lowcut=2, method='butterworth', order=2),
-                      "Butter_2_ba": nk.signal_filter(signal, lowcut=2, method='butterworth_ba', order=2),
-                      "Butter_5": nk.signal_filter(signal, lowcut=2, method='butterworth', order=5),
-                      "Butter_5_BA": nk.signal_filter(signal, lowcut=2, method='butterworth_ba', order=5),
-                      "Bessel_2": nk.signal_filter(signal, lowcut=2, method='bessel', order=2),
-                      "Bessel_5": nk.signal_filter(signal, lowcut=2, method='bessel', order=5),
-                      "FIR": nk.signal_filter(signal, lowcut=2, method='fir')}).plot(subplots=True)
+    >>> fig2 = pd.DataFrame({"Raw": signal, "Butter_2": nk.signal_filter(signal, lowcut=2, method='butterworth', order=2), "Butter_2_ba": nk.signal_filter(signal, lowcut=2, method='butterworth_ba', order=2), "Butter_5": nk.signal_filter(signal, lowcut=2, method='butterworth', order=5), "Butter_5_BA": nk.signal_filter(signal, lowcut=2, method='butterworth_ba', order=5), "Bessel_2": nk.signal_filter(signal, lowcut=2, method='bessel', order=2), "Bessel_5": nk.signal_filter(signal, lowcut=2, method='bessel', order=5), "FIR": nk.signal_filter(signal, lowcut=2, method='fir')}).plot(subplots=True)
+    >>> fig2 #doctest: +SKIP
 
     >>> # Bandpass in real-life scenarios
     >>> original = nk.rsp_simulate(duration=30, method="breathmetrics", noise=0)
-    >>> signal = nk.signal_distord(original, noise_frequency=[0.1, 2, 10, 1000], noise_amplitude=1, powerline_amplitude=1)
+    >>> signal = nk.signal_distort(original, noise_frequency=[0.1, 2, 10, 100], noise_amplitude=1, powerline_amplitude=1)
     >>>
     >>> # Bandpass between 10 and 30 breaths per minute (respiratory rate range)
-    >>> pd.DataFrame({"Raw": signal,
-                      "Butter_2": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth', order=2),
-                      "Butter_2_BA": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth_ba', order=2),
-                      "Butter_5": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth', order=5),
-                      "Butter_5_BA": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth_ba', order=5),
-                      "Bessel_2": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='bessel', order=2),
-                      "Bessel_5": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='bessel', order=5),
-                      "FIR": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='fir'),
-                      "Savgol": nk.signal_filter(signal, method='savgol')}).plot(subplots=True)
+    >>> fig3 = pd.DataFrame({"Raw": signal, "Butter_2": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth', order=2), "Butter_2_BA": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth_ba', order=2), "Butter_5": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth', order=5), "Butter_5_BA": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth_ba', order=5), "Bessel_2": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='bessel', order=2), "Bessel_5": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='bessel', order=5), "FIR": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='fir'), "Savgol": nk.signal_filter(signal, method='savgol')}).plot(subplots=True)
+    >>> fig3 #doctest: +SKIP
     """
     method = method.lower()
 

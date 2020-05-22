@@ -20,9 +20,9 @@ def emg_plot(emg_signals, sampling_rate=None):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
+    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
     >>> emg_signals, _ = nk.emg_process(emg, sampling_rate=1000)
-    >>> nk.emg_plot(emg_signals)
+    >>> nk.emg_plot(emg_signals) #doctest: +SKIP
 
     See Also
     --------

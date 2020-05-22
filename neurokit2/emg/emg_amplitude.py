@@ -30,11 +30,11 @@ def emg_amplitude(emg_cleaned):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
+    >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
     >>> cleaned = nk.emg_clean(emg, sampling_rate=1000)
     >>>
     >>> amplitude = nk.emg_amplitude(cleaned)
-    >>> pd.DataFrame({"EMG": emg, "Amplitude": amplitude}).plot(subplots=True)
+    >>> pd.DataFrame({"EMG": emg, "Amplitude": amplitude}).plot(subplots=True) #doctest: +SKIP
     """
     tkeo = _emg_amplitude_tkeo(emg_cleaned)
     amplitude = _emg_amplitude_envelope(tkeo)

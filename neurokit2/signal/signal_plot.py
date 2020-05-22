@@ -32,9 +32,7 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
     >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
     >>>
-    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
-                             "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
-                             "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)), "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)), "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
     >>> nk.signal_plot(data, subplots=True)
     >>> nk.signal_plot([signal, data], standardize=True)
     """

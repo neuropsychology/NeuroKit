@@ -42,10 +42,10 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> nk.entropy_approximate(signal)
-    0.08837414074679684
-    >>> nk.entropy_approximate(signal, corrected=True)
-    0.08837414074679684
+    >>> entropy1 = nk.entropy_approximate(signal)
+    >>> entropy1 #doctest: +SKIP
+    >>> entropy2 = nk.entropy_approximate(signal, corrected=True)
+    >>> entropy2 #doctest: +SKIP
 
 
     References

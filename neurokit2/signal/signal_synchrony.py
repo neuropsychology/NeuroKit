@@ -43,10 +43,10 @@ The phase refers to the angle of the signal, calculated through the hilbert tran
     >>> signal2 = nk.signal_simulate(duration=10, frequency=1.5)
     >>>
     >>> coupling_h = nk.signal_synchrony(signal1, signal2, method="hilbert")
-    >>> coupling_c = nk.signal_synchrony(signal1, signal2,
-                                         method="correlation", window_size=1000/2)
+    >>> coupling_c = nk.signal_synchrony(signal1, signal2, method="correlation", window_size=1000/2)
     >>>
-    >>> nk.signal_plot([signal1, signal2, coupling_h, coupling_c])
+    >>> fig = nk.signal_plot([signal1, signal2, coupling_h, coupling_c])
+    >>> fig #doctest: +SKIP
 
     References
     ----------

@@ -41,7 +41,8 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=20, num=1000))
     >>> binary = nk.signal_binarize(signal)
-    >>> pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
+    >>> fig = pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
+    >>> fig #doctest: +SKIP
     """
 
     # Return appropriate type

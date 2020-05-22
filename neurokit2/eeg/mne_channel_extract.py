@@ -26,7 +26,11 @@ def mne_channel_extract(raw, name):
     Example
     ----------
     >>> import neurokit2 as nk
-    >>> raw = nk.mne_channel_extract(raw, "TP7")
+    >>> import mne
+    >>>
+    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif', preload=True) #doctest: +SKIP
+    >>>
+    >>> raw_channel = nk.mne_channel_extract(raw, "EEG 055") # doctest: +SKIP
     """
     if isinstance(name, list) is False:
         name = [name]

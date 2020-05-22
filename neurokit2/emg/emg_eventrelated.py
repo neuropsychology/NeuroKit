@@ -45,12 +45,10 @@ def emg_eventrelated(epochs, silent=False):
     >>> import neurokit2 as nk
     >>>
     >>> # Example with simulated data
-    >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, n_bursts=3)
+    >>> emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000],
-                                  sampling_rate=1000,
-                                  epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.emg_eventrelated(epochs)
+    >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000, epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.emg_eventrelated(epochs) #doctest: +SKIP
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="emg", silent=silent)

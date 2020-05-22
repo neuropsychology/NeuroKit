@@ -58,14 +58,9 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", distance='chebyshev
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay = nk.embedding_delay(signal)
+    >>> delay = nk.complexity_delay(signal)
     >>>
-    >>> embbeded, count = _get_embedded(signal,
-                                        delay,
-                                        r=0.2 * np.std(signal, ddof=1),
-                                        dimension=2,
-                                        metric='chebyshev',
-                                        approximate=False)
+    >>> embbeded, count = _get_embedded(signal, delay, r=0.2 * np.std(signal, ddof=1), dimension=2, distance='chebyshev', approximate=False)
     """
     # Sanity checks
     if distance not in sklearn.neighbors.KDTree.valid_metrics:

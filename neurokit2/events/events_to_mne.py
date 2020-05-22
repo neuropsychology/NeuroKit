@@ -35,18 +35,18 @@ def events_to_mne(events, event_conditions=None):
     >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
     >>> events, event_id = nk.events_to_mne(events)
-    >>> events
+    >>> events #doctest: +ELLIPSIS
     array([[   1,    0,    0],
-           [1000,    0,    0],
-           [2000,    0,    0],
-           [3000,    0,    0]])
-    >>> event_id
+           [1001,    0,    0],
+           [2001,    0,    0],
+           [3001,    0,    0]])
+    >>> event_id #doctest: +ELLIPSIS
     {'event': 0}
     >>>
     >>> # Conditions
     >>> events = nk.events_find(signal, event_conditions=["A", "B", "A", "B"])
     >>> events, event_id = nk.events_to_mne(events)
-    >>> event_id
+    >>> event_id #doctest: +SKIP
     {'B': 0, 'A': 1}
     """
 

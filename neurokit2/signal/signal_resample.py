@@ -51,19 +51,15 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     >>> upsampled_pandas = nk.signal_resample(downsampled_pandas, method="pandas", sampling_rate=500, desired_sampling_rate=1000)
     >>>
     >>> # Compare with original
-    >>> pd.DataFrame({"Original": signal,
-                      "Interpolation": upsampled_interpolation,
-                      "FFT": upsampled_fft,
-                      "Poly": upsampled_poly,
-                      "Numpy": upsampled_numpy,
-                      "Pandas": upsampled_pandas}).plot(style='.-')
+    >>> fig = pd.DataFrame({"Original": signal, "Interpolation": upsampled_interpolation, "FFT": upsampled_fft, "Poly": upsampled_poly, "Numpy": upsampled_numpy, "Pandas": upsampled_pandas}).plot(style='.-')
+    >>> fig #doctest: +SKIP
     >>>
     >>> # Timing benchmarks
-    >>> %timeit nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500)
-    >>> %timeit nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
-    >>> %timeit nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500)
-    >>> %timeit nk.signal_resample(signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500)
-    >>> %timeit nk.signal_resample(signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500)
+    >>> %timeit nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
 
     See Also
     --------

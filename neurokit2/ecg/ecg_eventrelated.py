@@ -56,27 +56,19 @@ def ecg_eventrelated(epochs, silent=False):
     >>>
     >>> # Example with simulated data
     >>> ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
-    >>> epochs = nk.epochs_create(ecg,
-                                  events=[5000, 10000, 15000],
-                                  epochs_start=-0.1,
-                                  epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs)
+    >>>
+    >>> # Process the data
+    >>> epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
     >>>
     >>> # Example with real data
     >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"],
-                                threshold_keep='below',
-                                event_conditions=["Negative",
-                                                  "Neutral",
-                                                  "Neutral",
-                                                  "Negative"])
-    >>> epochs = nk.epochs_create(df, events,
-                                  sampling_rate=100,
-                                  epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs)
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="ecg", silent=silent)

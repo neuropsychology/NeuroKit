@@ -46,17 +46,11 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     >>> signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq
     >>> signal += 3  # Add baseline
     >>>
-    >>> axes = pd.DataFrame({"Raw": signal,
-                      "Baseline": nk.signal_detrend(signal, order=0),
-                      "Linear": nk.signal_detrend(signal, order=1),
-                      "Quadratic": nk.signal_detrend(signal, order=2),
-                      "Cubic": nk.signal_detrend(signal, order=3),
-                      "10th": nk.signal_detrend(signal, order=10),
-                      "Tarvainen": nk.signal_detrend(signal, method='tarvainen2002'),
-                      "LOESS": nk.signal_detrend(signal, method='loess')}).plot(subplots=True)
+    >>> axes = pd.DataFrame({"Raw": signal, "Baseline": nk.signal_detrend(signal, order=0), "Linear": nk.signal_detrend(signal, order=1), "Quadratic": nk.signal_detrend(signal, order=2), "Cubic": nk.signal_detrend(signal, order=3), "10th": nk.signal_detrend(signal, order=10), "Tarvainen": nk.signal_detrend(signal, method='tarvainen2002'), "LOESS": nk.signal_detrend(signal, method='loess')}).plot(subplots=True)
+    >>>
     >>> # Plot horizontal lines to better visualize the detrending
-    >>> for subplot in axes:
-    >>>     subplot.axhline(y=0, color='k', linestyle='--')
+    >>> for subplot in axes: #doctest: +SKIP
+    >>>     subplot.axhline(y=0, color='k', linestyle='--') #doctest: +SKIP
 
     References
     ----------

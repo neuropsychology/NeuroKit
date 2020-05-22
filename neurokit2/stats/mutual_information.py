@@ -43,8 +43,11 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
     >>> x = [3, 3, 5, 1, 6, 3]
     >>> y = [5, 3, 1, 3, 4, 5]
     >>>
-    >>> nk.mutual_information(x, y, method="varoquaux")
-    >>> nk.mutual_information(x, y, method="nolitsa")
+    >>> nk.mutual_information(x, y, method="varoquaux") #doctest: +ELLIPSIS
+    0.23600751227291816
+    >>>
+    >>> nk.mutual_information(x, y, method="nolitsa") #doctest: +ELLIPSIS
+    1.4591479170272448
 
     References
     ----------

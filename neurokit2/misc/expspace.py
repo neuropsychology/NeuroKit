@@ -18,7 +18,8 @@ def expspace(start, stop, num=50, base=1):
     Examples
     ---------
     >>> import neurokit2 as nk
-    >>> nk.expspace(start=4, stop=100, num=10)
+    >>> nk.expspace(start=4, stop=100, num=10) #doctest: +ELLIPSIS
+    array([  4,   6,   8,  12,  17,  24,  34,  49,  70, 100])
     """
     if base == 1:
         seq = np.exp(np.linspace(np.log(start), np.log(stop), num, endpoint=True))

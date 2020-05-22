@@ -54,27 +54,24 @@ def rsp_eventrelated(epochs, silent=False):
     >>> import neurokit2 as nk
     >>>
     >>> # Example with simulated data
-    >>> rsp, info = nk.rsp_process(nk.rsp_simulate(duration=20))
-    >>> epochs = nk.epochs_create(rsp,
-                                  events=[5000, 10000, 15000],
-                                  epochs_start=-0.1,
-                                  epochs_end=1.9)
-    >>> nk.rsp_eventrelated(epochs)
+    >>> rsp, info = nk.rsp_process(nk.rsp_simulate(duration=120))
+    >>> epochs = nk.epochs_create(rsp, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    >>>
+    >>> # Analyze
+    >>> rsp1 = nk.rsp_eventrelated(epochs)
+    >>> rsp1 #doctest: +SKIP
     >>>
     >>> # Example with real data
     >>> data = nk.data("bio_eventrelated_100hz")
+    >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(rsp=data["RSP"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"],
-                                threshold_keep='below',
-                                event_conditions=["Negative",
-                                                  "Neutral",
-                                                  "Neutral",
-                                                  "Negative"])
-    >>> epochs = nk.epochs_create(df, events,
-                                  sampling_rate=100,
-                                  epochs_start=-0.1, epochs_end=2.9)
-    >>> nk.rsp_eventrelated(epochs)
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=2.9)
+    >>>
+    >>> # Analyze
+    >>> rsp2 = nk.rsp_eventrelated(epochs)
+    >>> rsp2 #doctest: +SKIP
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="rsp", silent=silent)

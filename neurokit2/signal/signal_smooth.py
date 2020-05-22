@@ -47,20 +47,13 @@ def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=
     >>> import neurokit2 as nk
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000))
-    >>> distorted = nk.signal_distord(signal, noise_amplitude=[0.3, 0.2, 0.1, 0.05], noise_frequency=[5, 10, 50, 500])
+    >>> distorted = nk.signal_distort(signal, noise_amplitude=[0.3, 0.2, 0.1, 0.05], noise_frequency=[5, 10, 50, 100])
     >>>
     >>> size = len(signal)/100
-    >>> signals = pd.DataFrame({
-            "Raw": distorted,
-            "Median": nk.signal_smooth(distorted, kernel='median', size=size-1),
-            "BoxZen": nk.signal_smooth(distorted, kernel='boxzen', size=size),
-            "Triang": nk.signal_smooth(distorted, kernel='triang', size=size),
-            "Blackman": nk.signal_smooth(distorted, kernel='blackman', size=size),
-            "Loess_01": nk.signal_smooth(distorted, method='loess', alpha=0.1),
-            "Loess_02": nk.signal_smooth(distorted, method='loess', alpha=0.2),
-            "Loess_05": nk.signal_smooth(distorted, method='loess', alpha=0.5)})
-    >>> signals.plot()
-    >>> signals[50:150].plot()  # Magnify
+    >>> signals = pd.DataFrame({"Raw": distorted, "Median": nk.signal_smooth(distorted, kernel='median', size=size-1), "BoxZen": nk.signal_smooth(distorted, kernel='boxzen', size=size), "Triang": nk.signal_smooth(distorted, kernel='triang', size=size), "Blackman": nk.signal_smooth(distorted, kernel='blackman', size=size), "Loess_01": nk.signal_smooth(distorted, method='loess', alpha=0.1), "Loess_02": nk.signal_smooth(distorted, method='loess', alpha=0.2), "Loess_05": nk.signal_smooth(distorted, method='loess', alpha=0.5)})
+    >>> fig = signals.plot()
+    >>> fig_magnify = signals[50:150].plot()  # Magnify
+    >>> fig_magnify #doctest: +SKIP
 
     References
     ----------

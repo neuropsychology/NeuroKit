@@ -43,12 +43,12 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None,
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000,
-    >>>                             frequency=1)
+    >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
     >>> info = nk.signal_findpeaks(signal)
     >>>
     >>> rate = nk.signal_rate(peaks=info["Peaks"])
-    >>> nk.signal_plot(rate)
+    >>> fig = nk.signal_plot(rate)
+    >>> fig #doctest: +SKIP
     """
     period = signal_period(peaks, sampling_rate, desired_length,
                            interpolation_order)

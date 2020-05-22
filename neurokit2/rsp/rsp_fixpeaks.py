@@ -35,13 +35,13 @@ def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000):
 
     Examples
     --------
-    >>>> import neurokit2 as nk
+    >>> import neurokit2 as nk
     >>>
     >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     >>> info = nk.rsp_findpeaks(cleaned)
     >>> info = nk.rsp_fixpeaks(info)
-    >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+    >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned) #doctest: +SKIP
     """
     # Format input.
     peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, desired_length=None)

@@ -48,10 +48,10 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi",
     >>> info = nk.ppg_findpeaks(ppg_clean)
     >>> peaks = info["PPG_Peaks"]
     >>>
-    >>> plt.plot(ppg, label="raw PPG")
-    >>> plt.plot(ppg_clean, label="clean PPG")
-    >>> plt.scatter(peaks, ppg[peaks], c="r", label="systolic peaks")
-    >>> plt.legend()
+    >>> plt.plot(ppg, label="raw PPG") #doctest: +SKIP
+    >>> plt.plot(ppg_clean, label="clean PPG") #doctest: +SKIP
+    >>> plt.scatter(peaks, ppg[peaks], c="r", label="systolic peaks") #doctest: +SKIP
+    >>> plt.legend() #doctest: +SKIP
 
     References
     ----------

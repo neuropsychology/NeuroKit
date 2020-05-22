@@ -50,10 +50,11 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     >>>
     >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
-    >>> events
-    {'onset': array([   1, 1000, 2000, 3000]),'duration': array([499, 500, 500, 500])}
+    >>> events #doctest: +SKIP
+    {'onset': array([   1, 1001, 2001, 3001]), 'duration': array([500, 500, 500, 500]), 'label': array(['1', '2', '3', '4'], dtype='<U11')}
     >>>
-    >>> nk.events_plot(events, signal)
+    >>> fig = nk.events_plot(events, signal)
+    >>> fig #doctest: +SKIP
     """
     events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
 

@@ -36,8 +36,7 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     >>> delay = nk.complexity_delay(signal)
     >>> dimension = nk.complexity_dimension(signal, delay=delay)
     >>> r = nk.complexity_r(signal, delay, dimension)
-    >>> r
-    0.010609254363011076
+    >>> r #doctest: +SKIP
 
 olerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments.
 

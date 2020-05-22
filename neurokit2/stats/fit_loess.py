@@ -42,12 +42,9 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
     >>> import neurokit2 as nk
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000))
-    >>> distorted = nk.signal_distord(signal, noise_amplitude=[0.3, 0.2, 0.1], noise_frequency=[5, 10, 50])
+    >>> distorted = nk.signal_distort(signal, noise_amplitude=[0.3, 0.2, 0.1], noise_frequency=[5, 10, 50])
     >>>
-    >>> pd.DataFrame({
-            "Raw": distorted,
-            "Loess_1": nk.fit_loess(distorted, order=1),
-            "Loess_2": nk.fit_loess(distorted, order=2)}).plot()
+    >>> pd.DataFrame({ "Raw": distorted, "Loess_1": nk.fit_loess(distorted, order=1), "Loess_2": nk.fit_loess(distorted, order=2)}).plot() #doctest: +SKIP
 
     References
     ----------
