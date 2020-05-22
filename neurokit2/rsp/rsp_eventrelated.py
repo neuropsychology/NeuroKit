@@ -54,11 +54,12 @@ def rsp_eventrelated(epochs, silent=False):
     >>> import neurokit2 as nk
     >>>
     >>> # Example with simulated data
-    >>> rsp, info = nk.rsp_process(nk.rsp_simulate(duration=20))
+    >>> rsp, info = nk.rsp_process(nk.rsp_simulate(duration=120))
     >>> epochs = nk.epochs_create(rsp, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
     >>>
     >>> # Analyze
-    >>> nk.rsp_eventrelated(epochs) #doctest: +SKIP
+    >>> rsp1 = nk.rsp_eventrelated(epochs)
+    >>> rsp1 #doctest: +SKIP
     >>>
     >>> # Example with real data
     >>> data = nk.data("bio_eventrelated_100hz")
@@ -69,7 +70,8 @@ def rsp_eventrelated(epochs, silent=False):
     >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=2.9)
     >>>
     >>> # Analyze
-    >>> nk.rsp_eventrelated(epochs) #doctest: +SKIP
+    >>> rsp2 = nk.rsp_eventrelated(epochs)
+    >>> rsp2 #doctest: +SKIP
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="rsp", silent=silent)
