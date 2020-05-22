@@ -112,11 +112,11 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
                                      rpeaks=rpeaks,
                                      sampling_rate=sampling_rate)
     elif method in ["cwt", "continuous wavelet transform"]:
-        waves = _ecg_delinator_cwt(ecg_cleaned,
+        waves = _ecg_delineator_cwt(ecg_cleaned,
                                    rpeaks=rpeaks,
                                    sampling_rate=sampling_rate)
     elif method in ["dwt", "discrete wavelet transform"]:
-        waves = _dwt_ecg_delinator(ecg_cleaned,
+        waves = _dwt_ecg_delineator(ecg_cleaned,
                                    rpeaks,
                                    sampling_rate=sampling_rate)
 
@@ -154,7 +154,7 @@ def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     return peaks_resample
 
 
-def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
+def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
     """Delinate ecg signal using discrete wavelet transforms.
 
     Args:
@@ -178,13 +178,13 @@ def _dwt_ecg_delinator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
     # plt.show()
     rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
 
-    tpeaks, ppeaks = _dwt_delinate_tp_peaks(
+    tpeaks, ppeaks = _dwt_delineate_tp_peaks(
         ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
-    qrs_onsets, qrs_offsets = _dwt_delinate_qrs_bounds(
+    qrs_onsets, qrs_offsets = _dwt_delineate_qrs_bounds(
         ecg, rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate, debug=False)
-    ponsets, poffsets = _dwt_delinate_tp_onsets_offsets(
+    ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(
         ecg, ppeaks, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False)
-    tonsets, toffsets = _dwt_delinate_tp_onsets_offsets(
+    tonsets, toffsets = _dwt_delineate_tp_onsets_offsets(
         ecg, tpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, debug=False,
         onset_weight=0.6, duration=0.6
     )
@@ -205,7 +205,7 @@ def _dwt_compensate_degree(sampling_rate):
     return int(np.log2(sampling_rate / 250))
 
 
-def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
+def _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
                            dwt_delay=0.0,
                            qrs_width=0.13,
                            p2r_duration=0.2,
@@ -303,7 +303,7 @@ def _dwt_delinate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
     return tpeaks, ppeaks
 
 
-def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False,
+def _dwt_delineate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False,
                                     duration=0.3,
                                     duration_offset=0.3,
                                     onset_weight=0.4,
@@ -362,7 +362,7 @@ def _dwt_delinate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debu
     return onsets, offsets
 
 
-def _dwt_delinate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
+def _dwt_delineate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250, debug=False):
     degree = int(np.log2(sampling_rate / 250))
     onsets = []
     for i in range(len(rpeaks)):
@@ -461,7 +461,7 @@ def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
 # =============================================================================
 # WAVELET METHOD (CWT)
 # =============================================================================
-def _ecg_delinator_cwt(ecg, rpeaks=None, sampling_rate=1000):
+def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
 
     # P-Peaks and T-Peaks
     tpeaks, ppeaks = _peaks_delineator(ecg, rpeaks,
