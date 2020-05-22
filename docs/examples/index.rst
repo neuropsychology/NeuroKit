@@ -12,6 +12,7 @@ Contents:
    intervalrelated
    eda
    rrv
+   edr
    heartbeats
    ecg_delineate
    epochs_create
