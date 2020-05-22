@@ -113,12 +113,12 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
                                      sampling_rate=sampling_rate)
     elif method in ["cwt", "continuous wavelet transform"]:
         waves = _ecg_delineator_cwt(ecg_cleaned,
-                                   rpeaks=rpeaks,
-                                   sampling_rate=sampling_rate)
+                                    rpeaks=rpeaks,
+                                    sampling_rate=sampling_rate)
     elif method in ["dwt", "discrete wavelet transform"]:
         waves = _dwt_ecg_delineator(ecg_cleaned,
-                                   rpeaks,
-                                   sampling_rate=sampling_rate)
+                                    rpeaks,
+                                    sampling_rate=sampling_rate)
 
     else:
         raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be "
@@ -206,14 +206,14 @@ def _dwt_compensate_degree(sampling_rate):
 
 
 def _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False,
-                           dwt_delay=0.0,
-                           qrs_width=0.13,
-                           p2r_duration=0.2,
-                           rt_duration=0.25,
-                           degree_tpeak=3,
-                           degree_ppeak=2,
-                           epsilon_T_weight=0.25,
-                           epsilon_P_weight=0.02):
+                            dwt_delay=0.0,
+                            qrs_width=0.13,
+                            p2r_duration=0.2,
+                            rt_duration=0.25,
+                            degree_tpeak=3,
+                            degree_ppeak=2,
+                            epsilon_T_weight=0.25,
+                            epsilon_P_weight=0.02):
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
     degree_add = _dwt_compensate_degree(sampling_rate)
 
@@ -304,12 +304,12 @@ def _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False
 
 
 def _dwt_delineate_tp_onsets_offsets(ecg, peaks, dwtmatr, sampling_rate=250, debug=False,
-                                    duration=0.3,
-                                    duration_offset=0.3,
-                                    onset_weight=0.4,
-                                    offset_weight=0.4,
-                                    degree_onset=2,
-                                    degree_offset=2):
+                                     duration=0.3,
+                                     duration_offset=0.3,
+                                     onset_weight=0.4,
+                                     offset_weight=0.4,
+                                     degree_onset=2,
+                                     degree_offset=2):
     degree = _dwt_compensate_degree(sampling_rate)
     onsets = []
     offsets = []
