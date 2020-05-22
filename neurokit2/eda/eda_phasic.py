@@ -41,11 +41,10 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     >>> smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method='smoothmedian')
     >>> highpass = nk.eda_phasic(nk.standardize(eda_signal), method='highpass')
     >>>
-    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'),
-                          smoothMedian.add_suffix('_SmoothMedian'),
-                          highpass.add_suffix('_Highpass')], axis=1)
+    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'), smoothMedian.add_suffix('_SmoothMedian'), highpass.add_suffix('_Highpass')], axis=1)
     >>> data["EDA_Raw"] = eda_signal
-    >>> data.plot()
+    >>> fig = data.plot()
+    >>> fig #doctest: +SKIP
     >>>
     >>> eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
     >>> data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=100)

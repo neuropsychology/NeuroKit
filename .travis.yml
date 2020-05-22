@@ -43,6 +43,8 @@ install:
 script:
     - python setup.py install
     - tox
+    - pytest --doctest-glob='*.py' neurokit2/bio -v
+    - pytest --doctest-glob='*.py' neurokit2/complexity -v
     - pytest --doctest-glob='*.py' neurokit2/data -v
     - pytest --doctest-glob='*.py' neurokit2/ecg -v
     - pytest --doctest-glob='*.py' neurokit2/eda -v
