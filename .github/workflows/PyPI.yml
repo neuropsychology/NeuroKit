@@ -1,5 +1,5 @@
 name: Publish Python 🐍 distributions 📦 to PyPI and TestPyPI
-
+# https://packaging.python.org/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
 on:
   push:
     branches:
@@ -21,20 +21,24 @@ jobs:
         pip install
         pep517
         --user
-    - name: Build a binary wheel and a source tarball
-      run: >-
-        python -m
-        pep517.build
-        --source
-        --binary
-        --out-dir dist/
+    - name: Install dependencies
+      run: pip install wheel
+    - name: Build package
+      run: python setup.py sdist bdist_wheel
+    #- name: Build a binary wheel and a source tarball
+    #  run: >-
+    #    python -m
+    #    pep517.build
+    #    --source
+    #    --binary
+    #    --out-dir dist/
     - name: Publish distribution 📦 to Test PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.test_pypi_password }}
         repository_url: https://test.pypi.org/legacy/
     - name: Publish distribution 📦 to PyPI
-      if: startsWith(github.event.ref, 'refs/tags')
+      #if: startsWith(github.event.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master
       with:
         password: ${{ secrets.pypi_password }}
