@@ -35,7 +35,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     Examples
     ----------
-    >>> import neurokit as nk
+    >>> import neurokit2 as nk
     >>> import pandas as pd
     >>>
     >>> emg = nk.emg_simulate(duration=10, burst_number=3)

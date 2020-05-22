@@ -50,7 +50,7 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     >>>
     >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
-    >>> events #doctest: +ELLIPSIS
+    >>> events #doctest: +SKIP
     {'onset': array([   1, 1001, 2001, 3001]), 'duration': array([500, 500, 500, 500]), 'label': array(['1', '2', '3', '4'], dtype='<U11')}
     >>>
     >>> fig = nk.events_plot(events, signal)

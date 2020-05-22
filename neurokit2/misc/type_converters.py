@@ -19,7 +19,7 @@ def as_vector(x):
     >>> z #doctest: +SKIP
     >>>
     >>> x = nk.as_vector(x=0)
-    >>> x
+    >>> x #doctest: +SKIP
     >>>
     >>> x = nk.as_vector(x=pd.Series([0, 1, 2]))
     >>> y = nk.as_vector(x=pd.DataFrame([0, 1, 2]))
