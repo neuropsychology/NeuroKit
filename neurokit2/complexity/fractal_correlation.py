@@ -4,7 +4,6 @@ import sklearn.metrics.pairwise
 import matplotlib.pyplot as plt
 
 from .complexity_embedding import complexity_embedding
-from ..misc import expspace
 
 
 def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
