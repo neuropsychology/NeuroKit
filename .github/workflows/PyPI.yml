@@ -21,6 +21,10 @@ jobs:
         pip install
         pep517
         --user
+    - name: Install dependencies
+      run: pip install wheel
+    - name: Build package
+      run: python setup.py sdist bdist_wheel
     - name: Build a binary wheel and a source tarball
       run: >-
         python -m
