@@ -2,11 +2,13 @@
 import pandas as pd
 import numpy as np
 
-from ..epochs.epochs_to_df import _df_to_epochs
-from ..ecg.ecg_eventrelated import _eventrelated_addinfo
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
+from ..epochs.eventrelated_utils import _eventrelated_addinfo
+from ..epochs.eventrelated_utils import _eventrelated_rate
 
 
-def rsp_eventrelated(epochs):
+def rsp_eventrelated(epochs, silent=False):
     """Performs event-related RSP analysis on epochs.
 
     Parameters
@@ -15,6 +17,8 @@ def rsp_eventrelated(epochs):
         A dict containing one DataFrame per event/trial,
         usually obtained via `epochs_create()`, or a DataFrame
         containing all epochs, usually obtained via `epochs_to_df()`.
+    silent : bool
+        If True, silence possible warnings.
 
     Returns
     -------
@@ -38,6 +42,8 @@ def rsp_eventrelated(epochs):
         after stimulus onset.
         - *"RSP_Phase"*: indication of whether the onset of the event
         concurs with respiratory inspiration (1) or expiration (0).
+        - *"RSP_PhaseCompletion"*: indication of the stage of the current
+        respiration phase (0 to 1) at the onset of the event.
 
     See Also
     --------
@@ -46,109 +52,56 @@ def rsp_eventrelated(epochs):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Example with simulated data
-    >>> rsp, info = nk.rsp_process(nk.rsp_simulate(duration=20))
-    >>> epochs = nk.epochs_create(rsp,
-                                  events=[5000, 10000, 15000],
-                                  epochs_start=-0.1,
-                                  epochs_end=1.9)
-    >>> nk.rsp_eventrelated(epochs)
+    >>> rsp, info = nk.rsp_process(nk.rsp_simulate(duration=120))
+    >>> epochs = nk.epochs_create(rsp, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    >>>
+    >>> # Analyze
+    >>> rsp1 = nk.rsp_eventrelated(epochs)
+    >>> rsp1 #doctest: +SKIP
     >>>
     >>> # Example with real data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(rsp=data["RSP"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"],
-                                threshold_keep='below',
-                                event_conditions=["Negative",
-                                                  "Neutral",
-                                                  "Neutral",
-                                                  "Negative"])
-    >>> epochs = nk.epochs_create(df, events,
-                                  sampling_rate=100,
-                                  epochs_start=-0.1, epochs_end=2.9)
-    >>> nk.rsp_eventrelated(epochs)
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=2.9)
+    >>>
+    >>> # Analyze
+    >>> rsp2 = nk.rsp_eventrelated(epochs)
+    >>> rsp2 #doctest: +SKIP
     """
     # Sanity checks
-    if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
-
-    if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: rsp_eventrelated():"
-                         "Please specify an input"
-                         "that is of the correct form i.e., either a dictionary"
-                         "or dataframe.")
-
-    # Warning for long epochs
-    for i in epochs:
-        if (np.max(epochs[i].index.values) > 10):
-            print("Neurokit warning: rsp_eventrelated():"
-                  "Epoch length is too long. You might want to use"
-                  "rsp_periodrelated().")
+    epochs = _eventrelated_sanitizeinput(epochs, what="rsp", silent=silent)
 
     # Extract features and build dataframe
-    rsp_df = {}  # Initialize an empty dict
-    for epoch_index in epochs:
+    data = {}  # Initialize an empty dict
+    for i in epochs.keys():
 
-        rsp_df[epoch_index] = {}  # Initialize empty container
+        data[i] = {}  # Initialize empty container
 
         # Rate
-        rsp_df[epoch_index] = _rsp_eventrelated_rate(epochs[epoch_index],
-                                                     rsp_df[epoch_index])
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="RSP_Rate")
 
         # Amplitude
-        rsp_df[epoch_index] = _rsp_eventrelated_amplitude(epochs[epoch_index],
-                                                          rsp_df[epoch_index])
+        data[i] = _rsp_eventrelated_amplitude(epochs[i], data[i])
 
         # Inspiration
-        rsp_df[epoch_index] = _rsp_eventrelated_inspiration(epochs[epoch_index],
-                                                            rsp_df[epoch_index])
+        data[i] = _rsp_eventrelated_inspiration(epochs[i], data[i])
 
         # Fill with more info
-        rsp_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index], rsp_df[epoch_index])
+        data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    rsp_df = pd.DataFrame.from_dict(rsp_df, orient="index")  # Convert to a dataframe
+    df = _eventrelated_sanitizeoutput(data)
 
-    return rsp_df
-
+    return df
 
 
 # =============================================================================
 # Internals
 # =============================================================================
-def _rsp_eventrelated_rate(epoch, output={}):
-
-    # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "RSP_Rate" in i]) == 0:
-        print("NeuroKit warning: rsp_eventrelated(): input does not"
-              "have an `RSP_Rate` column. Will skip all rate-related features.")
-        return output
-
-    # Get baseline
-    if np.min(epoch.index.values) <= 0:
-        baseline = epoch["RSP_Rate"][epoch.index <= 0].values
-        signal = epoch["RSP_Rate"][epoch.index > 0].values
-        index = epoch.index[epoch.index > 0].values
-    else:
-        baseline = epoch["RSP_Rate"][np.min(epoch.index.values):np.min(epoch.index.values)].values
-        signal = epoch["RSP_Rate"][epoch.index > np.min(epoch.index)].values
-        index = epoch.index[epoch.index > 0].values
-
-    # Max / Min / Mean
-    output["RSP_Rate_Max"] = np.max(signal) - np.mean(baseline)
-    output["RSP_Rate_Min"] = np.min(signal) - np.mean(baseline)
-    output["RSP_Rate_Mean"] = np.mean(signal) - np.mean(baseline)
-
-    # Time of Max / Min
-    output["RSP_Rate_Max_Time"] = index[np.argmax(signal)]
-    output["RSP_Rate_Min_Time"] = index[np.argmin(signal)]
-
-    return output
-
 
 def _rsp_eventrelated_amplitude(epoch, output={}):
 
@@ -186,9 +139,7 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
         return output
 
     # Indication of inspiration
-    inspiration = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
-    output["RSP_Phase"] = inspiration
-    percentage = epoch["RSP_PhaseCompletion"][epoch.index > 0].iloc[0]
-    output["RSP_PhaseCompletion"] = percentage
+    output["RSP_Phase"] = epoch["RSP_Phase"][epoch.index > 0].iloc[0]
+    output["RSP_Phase_Completion"] = epoch["RSP_Phase_Completion"][epoch.index > 0].iloc[0]
 
     return output

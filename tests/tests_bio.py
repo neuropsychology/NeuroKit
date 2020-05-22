@@ -8,8 +8,8 @@ def test_bio_process():
     # Create data
     ecg = nk.ecg_simulate(duration=30, sampling_rate=sampling_rate)
     rsp = nk.rsp_simulate(duration=30, sampling_rate=sampling_rate)
-    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate, n_scr=3)
-    emg = nk.emg_simulate(duration=30, sampling_rate=sampling_rate, n_bursts=3)
+    eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate, scr_number=3)
+    emg = nk.emg_simulate(duration=30, sampling_rate=sampling_rate, burst_number=3)
 
     bio_df, bio_info = nk.bio_process(ecg=ecg,
                                       rsp=rsp,
@@ -31,18 +31,35 @@ def test_bio_process():
     assert all(bio_info["EMG_Offsets"] > bio_info["EMG_Onsets"])
     assert len(bio_info["EMG_Offsets"] == len(bio_info["EMG_Onsets"]))
 
-    assert all(elem in ['ECG_Raw', 'ECG_Clean', 'ECG_Rate', 'ECG_R_Peaks',
-                        "ECG_P_Peaks", "ECG_Q_Peaks", "ECG_S_Peaks",
-                        "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets",
-                        "ECG_Atrial_Phase", "ECG_Ventricular_Phase",
-                        "ECG_Atrial_PhaseCompletion",
-                        "ECG_Ventricular_PhaseCompletion",
-                        'RSP_Raw', 'RSP_Clean', 'RSP_Amplitude', 'RSP_Rate',
-                        'RSP_Phase', 'RSP_PhaseCompletion',
-                        'RSP_Peaks', 'RSP_Troughs',
-                        'EDA_Raw', 'EDA_Clean', 'EDA_Tonic', 'EDA_Phasic',
-                        'SCR_Onsets', 'SCR_Peaks', 'SCR_Height', 'SCR_Amplitude',
-                        'SCR_RiseTime', 'SCR_Recovery', 'SCR_RecoveryTime',
-                        'EMG_Raw', 'EMG_Clean', 'EMG_Amplitude', 'EMG_Activity',
-                        'EMG_Onsets', 'EMG_Offsets']
-               for elem in np.array(bio_df.columns.values, dtype=str))
+
+
+def test_bio_analyze():
+
+    # Example with event-related analysis
+    data = nk.data("bio_eventrelated_100hz")
+    df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"],
+                              eda=data["EDA"], keep=data["Photosensor"],
+                              sampling_rate=100)
+    events = nk.events_find(data["Photosensor"],
+                            threshold_keep='below',
+                            event_conditions=["Negative",
+                                              "Neutral",
+                                              "Neutral",
+                                              "Negative"])
+    epochs = nk.epochs_create(df, events,
+                              sampling_rate=100,
+                              epochs_start=-0.1, epochs_end=1.9)
+    event_related = nk.bio_analyze(epochs)
+
+    assert len(event_related) == len(epochs)
+    labels = [int(i) for i in event_related['Label']]
+    assert labels == list(np.arange(1, len(epochs)+1))
+
+
+    # Example with interval-related analysis
+    data = nk.data("bio_resting_8min_100hz")
+    df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"],
+                              eda=data["EDA"], sampling_rate=100)
+    interval_related = nk.bio_analyze(df)
+
+    assert len(interval_related) == 1

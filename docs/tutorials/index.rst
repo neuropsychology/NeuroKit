@@ -6,8 +6,11 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
-   understanding
    recording
-   github_contribute
-
-
+   software
+   learnpython
+   understanding
+   contributing
+   first_contribution
+   complexity
+   resources

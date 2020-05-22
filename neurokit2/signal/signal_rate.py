@@ -1,32 +1,34 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import pandas as pd
-
-from .signal_interpolate import signal_interpolate
-from .signal_formatpeaks import _signal_formatpeaks_sanitize
+from .signal_period import signal_period
 
 
-
-def signal_rate(peaks, sampling_rate=1000, desired_length=None):
+def signal_rate(peaks, sampling_rate=1000, desired_length=None,
+                interpolation_order="cubic"):
     """Calculate signal rate from a series of peaks.
+
+    This function can also be called either via ``ecg_rate()``, ```ppg_rate()`` or
+    ``rsp_rate()`` (aliases provided for consistency).
 
     Parameters
     ----------
     peaks : list, array, DataFrame, Series or dict
-        The samples at which thepeaks occur. If an array is
-        passed, it is assumed that these containers were obtained with
-        `signal_findpeaks()`. If a DataFrame is passed, it is assumed it is of the same length as
-        the input signal in which occurrences of R-peaks are marked as "1", with such containers
-        obtained with e.g., ecg_findpeaks() or rsp_findpeaks().
+        The samples at which the peaks occur. If an array is passed in, it is
+        assumed that it was obtained with `signal_findpeaks()`. If a DataFrame
+        is passed in, it is assumed it is of the same length as the input
+        signal in which occurrences of R-peaks are marked as "1", with such
+        containers obtained with e.g., ecg_findpeaks() or rsp_findpeaks().
     sampling_rate : int
-        The sampling frequency of the signal that contains the R-peaks (in Hz,
-        i.e., samples/second). Defaults to 1000.
+        The sampling frequency of the signal that contains peaks (in Hz, i.e.,
+        samples/second). Defaults to 1000.
     desired_length : int
         By default, the returned signal rate has the same number of elements as
         the raw signal. If set to an integer, the returned signal rate will be
-        interpolated between R-peaks over `desired_length` samples. Has no
-        effect if a DataFrame is passed in as the `signal` argument. Defaults to
-        None.
+        interpolated between peaks over `desired_length` samples. Has no
+        effect if a DataFrame is passed in as the `signal` argument. Defaults
+        to None.
+    interpolation_order : str
+        Order used to interpolate the rate between peaks. See
+        `signal_interpolate()`.
 
     Returns
     -------
@@ -35,7 +37,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
 
     See Also
     --------
-    signal_findpeaks, signal_fixpeaks, signal_plot, rsp_rate, ecg_rate
+    signal_findpeaks, signal_fixpeaks, signal_plot
 
     Examples
     --------
@@ -45,41 +47,11 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None):
     >>> info = nk.signal_findpeaks(signal)
     >>>
     >>> rate = nk.signal_rate(peaks=info["Peaks"])
-    >>> nk.signal_plot(rate)
+    >>> fig = nk.signal_plot(rate)
+    >>> fig #doctest: +SKIP
     """
-
-    period = _signal_period(peaks, sampling_rate, desired_length)
+    period = signal_period(peaks, sampling_rate, desired_length,
+                           interpolation_order)
     rate = 60 / period
 
     return rate
-
-
-
-
-
-
-
-def _signal_period(peaks, sampling_rate=1000, desired_length=None):
-    """
-    Return the peak interval in seconds.
-    """
-    # Format input.
-    peaks, desired_length = _signal_formatpeaks_sanitize(peaks, desired_length)
-
-    # Sanity checks.
-    if len(peaks) <= 3:
-        print("NeuroKit warning: _signal_formatpeaks(): too few peaks detected to "
-              "compute the rate. Returning empty vector.")
-        return np.full(desired_length, np.nan)
-
-    # Calculate period in msec, based on peak to peak difference and make sure
-    # that rate has the same number of elements as peaks (important for
-    # interpolation later) by prepending the mean of all periods.
-    period = np.ediff1d(peaks, to_begin=0) / sampling_rate
-    period[0] = np.mean(period[1:])
-
-    # Interpolate all statistics to desired length.
-    if desired_length != np.size(peaks):
-        period = signal_interpolate(peaks, period, desired_length=desired_length)
-
-    return period

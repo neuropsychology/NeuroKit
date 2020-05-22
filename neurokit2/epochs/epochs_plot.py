@@ -33,19 +33,20 @@ def epochs_plot(epochs, legend=True, show=True):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Example with data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
-    >>> nk.epochs_plot(epochs)
+    >>> fig1 = nk.epochs_plot(epochs)
+    >>> fig1 #doctest: +SKIP
     >>>
     >>> # Example with ECG Peaks
     >>> signal = nk.ecg_simulate(duration=10)
     >>> events = nk.ecg_findpeaks(signal)
     >>> epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_start=-0.5, epochs_end=0.5)
-    >>> nk.epochs_plot(epochs)
+    >>> fig2 = nk.epochs_plot(epochs)
+    >>> fig2 #doctest: +SKIP
     """
     data = epochs_to_df(epochs)
 

@@ -26,6 +26,7 @@ before_install:
   
 install: 
   - pip install -U tox-travis
+  - pip install numpy==1.18
   - pip install coverage
   - pip install flake8
   - pip install ".[test]"
@@ -37,11 +38,27 @@ install:
   - pip install biosppy
   - pip install cvxopt
   - pip install PyWavelets
+  - pip install EMD-signal
 
 script:
     - python setup.py install
     - tox
-    - pytest
+    - pytest --doctest-glob='*.py' neurokit2/bio -v
+    - pytest --doctest-glob='*.py' neurokit2/complexity -v
+    - pytest --doctest-glob='*.py' neurokit2/data -v
+    - pytest --doctest-glob='*.py' neurokit2/ecg -v
+    - pytest --doctest-glob='*.py' neurokit2/eda -v
+    - pytest --doctest-glob='*.py' neurokit2/eeg -v
+    - pytest --doctest-glob='*.py' neurokit2/emg -v
+    - pytest --doctest-glob='*.py' neurokit2/epochs -v
+    - pytest --doctest-glob='*.py' neurokit2/events -v
+    - pytest --doctest-glob='*.py' neurokit2/hrv -v
+    - pytest --doctest-glob='*.py' neurokit2/misc -v
+    - pytest --doctest-glob='*.py' neurokit2/ppg -v
+    - pytest --doctest-glob='*.py' neurokit2/rsp -v
+    - pytest --doctest-glob='*.py' neurokit2/signal -v
+    - pytest --doctest-glob='*.py' neurokit2/stats -v
+
 
 after_success:
     - codecov

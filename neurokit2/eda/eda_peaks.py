@@ -2,13 +2,11 @@
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import scipy.signal
 
 from .eda_findpeaks import eda_findpeaks
 from .eda_fixpeaks import eda_fixpeaks
 from ..signal import signal_formatpeaks
-from ..misc import findclosest
+from ..misc import find_closest
 
 
 def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
@@ -57,18 +55,16 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     >>> import neurokit2 as nk
     >>>
     >>> # Get phasic component
-    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
-    >>> eda_cleaned = nk.eda_clean(eda_signal)
-    >>> eda = nk.eda_phasic(eda_cleaned)
+    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=100)
+    >>> eda_cleaned = nk.eda_clean(eda_signal, sampling_rate=100)
+    >>> eda = nk.eda_phasic(eda_cleaned, sampling_rate=100)
     >>> eda_phasic = eda["EDA_Phasic"].values
     >>>
     >>> # Find peaks
     >>> _, gamboa2008 = nk.eda_peaks(eda_phasic, method="gamboa2008")
     >>> _, kim2004 = nk.eda_peaks(eda_phasic, method="kim2004")
     >>> _, neurokit = nk.eda_peaks(eda_phasic, method="neurokit")
-    >>> nk.events_plot([gamboa2008["SCR_Peaks"],
-                        kim2004["SCR_Peaks"],
-                        neurokit["SCR_Peaks"]], eda_phasic)
+    >>> nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], neurokit["SCR_Peaks"]], eda_phasic) #doctest: +SKIP
 
     References
     ----------
@@ -157,10 +153,10 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
         segment = segment[0:np.argmin(segment)]
 
         # Find recovery time
-        recovery_value = findclosest(recovery_values[i], segment, direction="smaller", strictly=False)
+        recovery_value = find_closest(recovery_values[i], segment, direction="smaller", strictly=False)
 
-        # Keep value if indeed close the theorethical halfrecovery value (with 1% of error)
-        if np.abs(recovery_values[i]-recovery_value) < recovery_values[i] / 100:
+        # Detect recovery points only if there are datapoints below recovery value
+        if (np.min(segment) < recovery_value):
             segment_index = np.where(segment == recovery_value)[0][0]
             recovery[np.where(valid_peaks)[0][i]] = peak_index + segment_index
             recovery_time[np.where(valid_peaks)[0][i]] = segment_index / sampling_rate

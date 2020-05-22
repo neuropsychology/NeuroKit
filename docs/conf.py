@@ -26,7 +26,11 @@ import sys
 sys.path.insert(0, os.path.abspath('../'))
 
 
-MOCK_MODULES = ['pandas', 'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'sklearn', 'sklearn.neighbors', 'mne', 'bioread', 'cvxopt', 'pywt']
+MOCK_MODULES = ['numpy', 'pandas',
+                'matplotlib', 'matplotlib.pyplot', 'matplotlib.patches', 'matplotlib.cm', 'matplotlib.collections', 'matplotlib.gridspec', 'matplotlib.animation', 'mpl_toolkits', 'mpl_toolkits.mplot3d',
+                'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'scipy.spatial', 'scipy.special', 'scipy.integrate',
+                'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets', 'sklearn.metrics',
+                'mne', 'bioread', 'cvxopt', 'pywt']
 
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
@@ -64,10 +68,12 @@ on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 process_examples = not os.path.exists(os.path.join(os.path.dirname(__file__), 'examples'))
 not_document_data = 'sphinx_nbexamples.gallery_config'
 
-
+# Style autodoc
 napoleon_google_docstring = False
+napoleon_numpy_docstring = True
 napoleon_use_param = False
-napoleon_use_ivar = True
+napoleon_use_ivar = False
+napoleon_use_rtype = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -82,9 +88,15 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
+def find_author():
+    result = re.search(r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__author__"), open('../neurokit2/__init__.py').read())
+    return str(result.group(1))
+
+
 project = u'NeuroKit'
-copyright = u"2019, Dominique Makowski"
-author = u"Dominique Makowski"
+copyright = u"2020, Dominique Makowski"
+author = find_author()
+
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -110,10 +122,11 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', '**.ipynb_checkpoints']
 
 # The name of the Pygments (syntax highlighting) style to use.
-pygments_style = 'sphinx'
+pygments_style = 'monokai'  # 'default', 'monokai'
+# nbsphinx_codecell_lexer = 'default'  # Doesn't do anything :/
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
@@ -170,6 +183,9 @@ htmlhelp_basename = 'neurokit2doc'
 
 
 # -- Options for LaTeX output ------------------------------------------
+pdf_title = u'NeuroKit2'
+author_field = u'Official Documentation'
+
 
 latex_elements = {
     # The paper size ('letterpaper' or 'a4paper').
@@ -193,9 +209,11 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass
 # [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'neurokit2.tex',
-     u'NeuroKit Documentation',
-     u'Dominique Makowski', 'manual'),
+        (master_doc,
+         'neurokit2.tex',
+         pdf_title,
+         author_field,
+         'manual'),
 ]
 
 
@@ -204,9 +222,11 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'neurokit2',
-     u'NeuroKit Documentation',
-     [author], 1)
+        (master_doc,
+         'neurokit2',
+         pdf_title,
+         [author_field],
+         1)
 ]
 
 
@@ -216,11 +236,12 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'neurokit2',
-     u'NeuroKit Documentation',
-     author,
+    (master_doc,
      'neurokit2',
-     'One line description of project.',
+     pdf_title,
+     author_field,
+     'neurokit2',
+     'The Python Toolbox for Neurophysiological Signal Processing.',
      'Miscellaneous'),
 ]
 

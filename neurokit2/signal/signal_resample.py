@@ -15,13 +15,13 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     Parameters
     ----------
     signal :  list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     desired_length : int
         The desired length of the signal.
     sampling_rate, desired_sampling_rate : int
         The original and desired (output) sampling frequency (in Hz, i.e., samples/second).
     method : str
-        Can be 'numpy' (default) for numpy's interpolation (see `numpy.interp()`), 'pandas' for Pandas' time series resampling, 'interpolation' (see `scipy.ndimage.zoom()`), 'poly' (see `scipy.signal.resample_poly()`) or 'FFT' (see `scipy.signal.resample()`) for the Fourier method. FFT is the most accurate (if the signal is periodic), but becomes exponentially slower as the signal length increases. In contrast, 'numpy' is the fastest, followed by 'poly', 'pandas' and 'interpolation'.
+        Can be 'interpolation' (see `scipy.ndimage.zoom()`), 'numpy' for numpy's interpolation (see `numpy.interp()`), 'pandas' for Pandas' time series resampling, 'poly' (see `scipy.signal.resample_poly()`) or 'FFT' (see `scipy.signal.resample()`) for the Fourier method. FFT is the most accurate (if the signal is periodic), but becomes exponentially slower as the signal length increases. In contrast, 'interpolation' is the fastest, followed by 'numpy', 'poly' and 'pandas'.
 
     Returns
     -------
@@ -37,7 +37,6 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     >>> signal = np.cos(np.linspace(start=0, stop=20, num=100))
     >>>
     >>> # Downsample
-    >>>
     >>> downsampled_interpolation = nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500)
     >>> downsampled_fft = nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
     >>> downsampled_poly = nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500)
@@ -52,19 +51,15 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     >>> upsampled_pandas = nk.signal_resample(downsampled_pandas, method="pandas", sampling_rate=500, desired_sampling_rate=1000)
     >>>
     >>> # Compare with original
-    >>> pd.DataFrame({"Original": signal,
-                      "Interpolation": upsampled_interpolation,
-                      "FFT": upsampled_fft,
-                      "Poly": upsampled_poly,
-                      "Numpy": upsampled_numpy,
-                      "Pandas": upsampled_pandas}).plot(style='.-')
+    >>> fig = pd.DataFrame({"Original": signal, "Interpolation": upsampled_interpolation, "FFT": upsampled_fft, "Poly": upsampled_poly, "Numpy": upsampled_numpy, "Pandas": upsampled_pandas}).plot(style='.-')
+    >>> fig #doctest: +SKIP
     >>>
     >>> # Timing benchmarks
-    >>> %timeit nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500)
-    >>> %timeit nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
-    >>> %timeit nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500)
-    >>> %timeit nk.signal_resample(signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500)
-    >>> %timeit nk.signal_resample(signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500)
+    >>> %timeit nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
 
     See Also
     --------

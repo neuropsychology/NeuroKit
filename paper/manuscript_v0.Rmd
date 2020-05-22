@@ -1,6 +1,7 @@
 ---
 title: '**NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing**'
-author: 
+shorttitle        : "NeuroKit2"
+author:
   - name          : "Dominique Makowski"
     affiliation   : " 1,*"
     corresponding : no    # Define only one corresponding author
@@ -16,7 +17,7 @@ author:
     affiliation   : " 3"
   - name          : "Francois Lespinasse"
     affiliation   : " 4"
-  - name          : "Christopher Sch\"{o}lzel"
+  - name          : "Christopher Sch\\\"{o}lzel"
     affiliation   : " 5"
   - name          : "S.H. Annabel Chen"
     affiliation   : " 1, 6, 7"
@@ -28,9 +29,9 @@ affiliation:
   - id            : "3"
     institution   : "???"
   - id            : "4"
-    institution   : "Département de psychologie, Université de Montréal, Montréal"
+    institution   : "Departement de psychologie, Universite de Montreal, Montreal, Canada"
   - id            : "5"
-    institution   : "???"
+    institution   : "Life Science Informatics, THM University of Applied Sciences, Gisslen, Germany"
   - id            : "6"
     institution   : "Centre for Research and Development in Learning, Nanyang Technological University, Singapore"
   - id            : "7"
@@ -38,8 +39,8 @@ affiliation:
 authornote: |
   * Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
 abstract: |
-   The NeuroKit2 toolbox is an open-source Python package aimed at providing users with comprehensive and flexible functionality in neurophysiological signal processing. It developed from a collaborative project aimed at offering programming ease for both novice and advanced users to perform elaborate analyses of electrocardiogram (ECG), respiratory (RSP), electrodermal activity (EDA), and electromyography (EMG) data. It comprises of a consistent set of user-friendly, high-level functions that implements an all-in-one cleaning, preprocessing, and processing pipeline with sensible defaults. At the same time, greater flexibility and parametric control can be achieved by using Neurokit2's mid-level functions to build a custom analysis pipeline. (talk about novelty?)
-keywords          : "neurophysiology, ECG, EDA, EMG, RSP"
+   NeuroKit2 is an open-source, user-friendly Python package dedicated to neurophysiological signal processing. It developed from a collaborative project aimed at offering programming ease both for novice and advanced users to perform elaborate analyses of electrocardiogram (ECG), respiratory (RSP), electrodermal activity (EDA), and electromyography (EMG) data. It comprises of a consistent set of user-friendly, high-level functions that implement an all-in-one cleaning, preprocessing, and processing pipeline with sensible defaults. At the same time, greater flexibility and parametric control can be achieved by using Neurokit2's mid-level functions to build a custom analysis pipeline. With the current lack of open-source tools needed for comprehensive signal processing, Neurokit2 presents new opportunities for researchers to move away from unreadable black-box algorithms and towards greater control over their results, improving reproducibility in research. (talk about novelty? or cutting-edge measure extraction? or reproducibility?)
+keywords          : "Neurophysiology, Biosignals, Python, ECG, EDA, EMG, RSP"
 wordcount         : ""
 bibliography      : ["bibliography.bib"]
 floatsintext      : yes
@@ -52,151 +53,251 @@ mask              : no
 draft             : no
 documentclass     : "apa6"
 classoption       : "man"
-output: 
+output:
   papaja::apa6_pdf:
     keep_tex: FALSE
+    latex_engine: xelatex
   papaja::apa6_word:
     keep_tex: FALSE
 header-includes:
    - \usepackage[labelfont=bf, font={color=gray,small}]{caption}
    - \usepackage{float}
    - \usepackage[document]{ragged2e}
+editor_options:
+  chunk_output_type: console
 ---
 
 \justify
 
-```{r setup, include = FALSE, warning=FALSE, message=FALSE}
+```{r r_setup, include = FALSE, warning=FALSE, message=FALSE}
 library("papaja")
 library("kableExtra")
+options(knitr.kable.NA = 'None')
+
+library(tidyverse)
+library(easystats)
+
+# Setup python - you need to change the path to your python distribution
+library(reticulate)
+reticulate::use_python("D:/Downloads/WPy64-3810/python-3.8.1.amd64/")
+matplotlib <- import("matplotlib")
+matplotlib$use("Agg", force = TRUE)
 ```
-
-
-
 
 
 
 <!-- Research gap -->
-The field of cognitive neuroscience and psychology is increasingly relying on neurophysiological methods. One of the reasons is that such approaches often offer low monetary cost (especially compared with other imaging techniques, such as MRI) and high user convenience (e.g., portability). At the same time, the fields of signal processing and computational data science are growing strongly, tackling issues and limitations, and pushing the horizon of possibilities and opportunities. However, as these methods are often not easily accessible and user-friendly, neurophysiological data processing remains a challenge for many researchers without a formal programming training.
+Cognitive neuroscience and psychology are increasingly relying on neurophysiological methods to assess brain and bodily activity. These approaches include electroencephalography (EEG), electrocardiography (ECG), electromyography (EMG) and electrodermal activity (EDA) signals. This trend was driven not only by theoretical motivations [e.g., the growth of embodied or affective neuroscience; @Kiverstein2015], but also by practical reasons including low monetary cost (especially compared with other imaging techniques, such as MRI or MEG), high user convenience (e.g., portability, setup speed), and the increasing availability of recording devices [e.g., in smart watches; @yuehong2016internet]. Together with the developpment of recording tools, advancements in the fields of signal processing and computational data science bolstered the emergence of new processing algorithms [@clifton2012machine; @roy2019deep], in turn offering a myriad of novel methods for users to process and analyze neurophysiological signals. 
+
+Unfortunately, because most of the algorithms are implemented as code, neurophysiological data processing remains a challenge for many researchers without a formal training or experience in programming. Moreover, many existing implementations are also limited to one type of signals (for instance, focused on ECG or EDA), which makes it inconvenient for researchers who might have to learn and concurrently rely on different software to process multimodal data.
+
+
 
 <!-- Response to gap -->
-*NeuroKit2* aims at addressing this gap by offering a free and user-friendly solution for neurophysiological data processing. It is an open-source Python package, developed in a collaborative environment that continues to welcome contributors from different countries and fields. Historically, *NeuroKit2* is the re-forged successor *NeuroKit* (*https://github.com/neuropsychology/NeuroKit.py*), a PhD side project that ended up attracting a lot of users and success (236 GitHub stars as of 13-03-2020). The new version takes on its best features and design choices, and re-implements them in a professional and well-thaught way. It aims at being 1) accessible, 2) well-documented, 2) reliable, 4) cutting-edge and 5) powerful.
+*NeuroKit2* aims at addressing these challenges by offering a free, user-friendly, and <!--complete--> comprehensive solution for neurophysiological data processing. It is an open-source Python package, developed in a collaborative environment that continues to welcome contributors from different countries and fields. Historically, *NeuroKit2* is the re-forged successor *NeuroKit.py* (*https://github.com/neuropsychology/NeuroKit.py*), a PhD side project that ended up attracting a lot of users (248 GitHub stars as of 09-04-2020). The new version takes on its best features and design choices, and re-implements them in a professional and well-thought way. It aims at being 1) accessible and well-documented, 2) reliable and cutting-edge, and most importantly, 3) flexible and powerful. <!--hmmmm powerful sounds abit too fluffy, robust seems like a more concrete description-->.<!--robust can be interpreted in different ways--> 
 
 <!-- Accessibility and documentation -->
-The package is available for Python [@python3] and thus benefits of its important base of users, existing tutorials and large online community. It is also relatively lightweight, enabling its use as a dependency in other software. The package source code is available under a permissive license on GitHub (*https://github.com/neuropsychology/NeuroKit*); along with its documentation, it is automatically built and hosted at *https://neurokit2.readthedocs.io/*. Apart from instructions on installation and contribution, and a decription of the package's functions, it also includes several "hands-on" examples and tutorials providing a walk-through on how to address specific issues (for instance, how to extract and visualize individual heartbeats). New examples can be easily added by users simply by uploading a Python notebook file to the repository. This notebook file will be automatically transformed into a webpage and displayed on the website, ensuring a state of the art and evolutive documentation. The accessibility for newcomers is reinforced by the issue tracker of GitHub, where users can create public issues to inquire for help. 
+As the package is available for Python 3 [@python3], one of the most popular programming language, users benefit from an important amount of existing tutorials and a large online community. *NeuroKit2* is also relatively lightweight, using mainly standard dependencies [@scipy] such as *NumPy*, *pandas*, *SciPy*, *scikit-learn* and *MatplotLib* (with an additional system of optional dependencies), enabling its use as a dependency in other software. The package source code is available under a permissive license on GitHub (*https://github.com/neuropsychology/NeuroKit*). Its documentation, automatically built and rendered from the code [@sphinx-tobe-added], is hosted at *https://neurokit2.readthedocs.io/*. Apart from guides for installation and contribution, and a decription of the package's functions, the documentation also includes several "hands-on" examples and tutorials providing a walk-through on how to address specific issues (e.g., how to extract and visualize individual heartbeats, how to analyze event-related data). New examples can be easily added by users simply by uploading a Python notebook file [@kluyver2016jupyter] to the repository. This file will be automatically transformed into a webpage and displayed on the website, ensuring a transparent and evolutive documentation. Moreover, these examples can be used interactively via a cloud-based *Binder* environment [@Jupyter2018], allowing users to try out the features directly in their browser. Finally, the accessibility for newcomers is reinforced by the issue tracker of GitHub, where users can create public issues to inquire for help.
 
 <!-- Reliability and Evolution -->
-The packages is made to be reliable, and its functions are tested against existing implementations of established reference software such as *BioSPPy* [@biosppy], *hrv* [*under review*](https://github.com/openjournals/joss-reviews/issues/1867), *PySiology* [@PySiology], *HeartPy* [@HeartPy], *systole* [@Systole] or *nolds* [@nolds]. The code itself includes a comprehensive test suite to ensure stability and prevent error. Moreover, the issue tracker allows users to easily report any bugs and track their fixation. Thanks to its collaborative and open developpment, as well as its modular organization, *NeuroKit2* is being developped with a longterm perspective in mind, aiming at remaining cutting-edge through its ability to evolve, adapt, and integrate new methods as they are being developped.
+The package aims at being reliable and trustworthy, including peer-reviewed processing pipelines and functions tested against existing implementations of established reference software such as *BioSPPy* [@biosppy], *hrv* [*under review*](https://github.com/openjournals/joss-reviews/issues/1867), *PySiology* [@PySiology], *HeartPy* [@HeartPy], *systole* [@Systole] or *nolds* [@nolds]. The code itself includes a comprehensive test suite using continuous integration tools [e.g., @travis-tobe-added] to ensure stability and prevent errors. Moreover, users are able to easily report any bugs and be notified of their fixes via the issue tracker. <!--the issue tracker allows users to easily report any bugs and track their fixation. monitor related updates.--> <!--Thanks LOL--> *NeuroKit2* will remain abreast of the latest developments in the field as it builds upon a modular organization within an open, collaborative environment, where contributers can easily implement new processing alogrithms and integrate them into its existing processing pipeline. In other words, its ability to evolve, adapt, and integrate new methods as they are emerging will allow it to remain cutting-edge in the long term.
 
-<!-- - Powerful and flexible: API -->
-Finally, we believe that the design philosophy contributes to a powerful (allowing to achieve a lot with very few functions) yet flexible (enabling fine control and precision over what is done) user interface (API), which is described below.
+<!--Thanks to its collaborative and open development, as well as its modular organization, *NeuroKit2* is being developed with a longterm perspective in mind, aiming at remaining cutting-edge through its ability to evolve, adapt, and integrate new methods as they are emerging.-->
+
+<!-- Powerful and flexible: API -->
+Finally, we believe that the design philosophy of *NeuroKit2* contributes to a powerful (i.e., allowing to achieve a lot with few functions) <!--another word for powerlful?--> yet flexible (i.e., enabling fine control and precision over what is done) user interface (API) <!--the parenthesis are okay IMO, as they specify what we mean by each adjective-->. This is described and illustrated with two examples of common use-cases, namely event-related and resting state paradigms. We <!--will--> conclude by discussing how *NeuroKit2* contributes to neurophysiological research by <!--heightening--> raising the standards for validity, reproducibility and accessibility.
+<!--powerful yet flexible -- might want to reconsider this term--> 
+
 
 # Design Philosophy
 
+*NeuroKit2* aims at being accessible to beginners and, at the same time, offering a maximal level of control to experienced users. This is achieved by allowing beginning users to implement complex processing and analyses pipelines with very few functions, while still enabling fine-tuned control and precision to more experienced users. <!--this portion might be better in the previous paragraph as it directly describes what you mean by powerful and flexible--> In concrete terms, this trade-off is allowed by the implementation of 3 abstract levels of functions.
 
-*NeuroKit2* aims at being accessible to beginners and, at the same time, offering a maximal level of control of experienced users. This is achieved via the implementation of 3 levels of functions. 
 
-## Low-level: Signal Processing Base Utilities
+## Low-level: Base Utilities for Signal Processing
+
+The basic building blocks are functions to facilitate general signal processing, i.e., to do filtering, resampling, interpolating, peak detection, etc. These functions are signal-agnostic, and include a lot of tweakable parameters. For instance, one can change the filtering method, frequencies, order etc. Most of these functions are based on validated algorithms present in *scipy* [@scipy]. Examples of such functions include `signal_filter()`, `signal_interpolate()`, `signal_resample()`, `signal_detrend()`, and `signal_findpeaks()`.
+
 
 ## Mid-level: Neurophysiological Processing Steps
 
+The signal processing utilities are then used by functions specific to the different types of physiological signals (i.e., ECG, RSP, EDA, EMG, PPG). These functions aim at taking care of specific steps of physiological data processing, such as cleaning, peak detection, phase classification or rate computation. Critically, for each type of signals, the same function names are called (in the form `signaltype_functiongoal()`) to achieve equivalent goals, e.g., `*_clean()`, `*_findpeaks()`, `*_process()`, `*_plot()`, making it intuitive and consistent accross different modalities.
+
+For example, the `rsp_clean()` function uses `signal_filter()` and `signal_detrend()`, with different possible sets of default parameters that can be switched via a "method" argument (corresponding to different published or validated pipelines). For instance, setting `method="khodadad2018"` will use the cleaning workflow described in @khodadad2018optimized. However, if a user wants to build its own custom cleaning pipeline, she or he can use the cleaning function as a template, and directly tweak the parameters in the low-level signal processing operations.
+
+
 ## High-level Wrappers for Processing and Analysis
 
+These steps are then assembled in "master" functions, that are usually the entry point for new users. For instance, the `ecg_process()` function uses `ecg_clean()`, `ecg_findpeaks()`, `ecg_rate()`. A general processing pipeline can be selected via the `method` argument, that is then propagated throughout its lower-level functions. Easily switching between processing pipelines allows for the comparison of different methods, and streamlines critical but time-consuming steps in reproducible research, such as the validation of data preparation and quality control [@Quintana2016]. Finally, the package includes convenience meta-functions (e.g., `bio_process`) that enable the combined processing of multiple types of signals at once (e.g., `bio_process(ecg=ecg_signal, eda=eda_signal)`).
 
+Performing a set of operations with sensible default parameters can be rewarding, especially for beginners, allowing them to perform cutting-edge processing or replication of research steps without requiring a programming expertise. Moreover, it contributes to the demystification of the usage of "pure" programming tools (as opposed to GUI-based software such as *SPSS*, *Kubios*, or *Acqknowledge*), providing a welcoming framework to further understand the frontend, backend and the in-betweens of physiological data processing. Importantly, more advanced users can again very easily build their own custom analysis pipeline by using the mid-level functions, allowing for a finer control over the processing parameters.
 
-Consistency: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form signaltype_functiongoal()) to achieve equivalent goals, such as *_clean(), *_findpeaks(), *_process(), *_plot() (replace the star with the signal type, e.g., ecg_clean()).
-
-
-Accessibility: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as *_process(), that performs cleaning, preprocessing and processing with sensible defaults.
-Flexibility: However, advanced users can very easily build their own custom analysis pipeline by using the mid-level functions (such as *_clean(), *_rate()), offering more control and flexibility over their parameters.
-
-
-
-<!-- Neurokit2 was developed using Python drawing on well-established existing libraries such as **Numpy**, **Pandas**, **SciPy**, **MatplotLib** etc. As stated above, one of primary goal of the package is to provide easy-to-use functions, catering to programming novices, but at the same time allowing maximal flexibility for advanced users. -->
-
-
-<!--  and it is well-documented with tutorials and examples. More importantly, the toolbox was designed to provide a consistent yet powerful and flexible API. It offers clear code organization across different signals (e.g., electrocardiogram (ECG), respiration (RSP), electrodermal activity (EDA), electromyography (EMG)) for different processing purposes. On one hand, it comprises of high-level functions that streamlines and incorporates all stages of signal processing, and on the other hand, mid-level functions (e.g., for cleaning data, extracting signal rate etc.) can be modified easily for user preference. Advanced users will find this useful for implementing their own algorithms and building their own custom analysis pipeline, giving them more parametric control. Hence, Neurokit2 is made accessible and reliable for users of various programming levels. -->
-
-<!-- In this paper, we will provide an overview of the Neurokit2 package, its code organization and its various features. -->
-
-
-
-<!-- One of the strengths of this package is its consistency. For each type of signals (ECG, RSP, EDA, EMG...), the same function names, in the form **signaltype_functiongoal()**, can be called to achieve equivalent goal. Therefore, in each signal-specific module, users can expect to find functions with similar names such as **signaltype_clean()**, **signaltype_findpeaks()**, **signaltype_plot()** or **signaltype_process()**. Following, we will elaborate on the functions that are signal-specific but designed to perform the same processing task in the pipeline. -->
-
-## Processing and analysis
-
-
-
-This design withholds the promise of being able to do a full processing and features extraction of your data with only 2 functions.
-
-
-
-
-
-<!-- The package comprises of multiple modules: ecg, rsp, eda, emg, ppg, signal, eeg, epochs, events, complexity, bio, misc and stats. -->
-
-<!-- The ecg, rsp, eda, and emg modules are tailored to the processing and analysis of the respective signals. They encompass mid-level functions and each performs a specific part of the processing pipeline such as *cleaning* to increase the signal-to-noise ratio, *extraction of information* to better quantify the signal, *plotting* to visualize the extracted features on the signal, and *extraction of features* for event-related analysis on epochs of signal or period-related analysis for signal with longer duration. Generally, users can start writing their processing scripts by calling the mid-level functions one-by-one, according to the order of steps that they have in their processing pipelines. And if users do not have a specific pipeline in mind, NeuroKit2 provides a single high-level function in each module called **_process** to perform every step in one command line, following the Neurokit2 default pipeline. -->
-
-<!-- Besides the signal-specific modules, there are modules with functions that also perform specific steps in the processing pipeline but are non-specific to any type of signal. Such as *events* to support incorporation and visualization of event markers in the signal or *epochs* to chunk signals into event-related segments. -->
-
-<!-- Usually not as user-friendly as the aforementioned modules, there are modules with low-level functions, such as signal, complexity, misc and stats, that support the implementation of core functionality in other modules. Unless the users wish to, they do not need to call these low-level functions into the processing scripts. -->
-
-<!-- Last but not least, there is a high-level function in the bio module that allows processing of all types of signals at once. As powerful as it might sound, this function basically combines the high-level function of each signal type into one script, allowing users who do not wish to stray from Neurokit2 default processing pipeline to perform all steps in one command line. -->
-
-<!-- ```{r table, echo=FALSE} -->
-<!-- ecg = c("ecg_clean()", "ecg_delineate()", "ecg_eventrelated()", "ecg_findpeaks()", "ecg_findpeaks()", "ecg_fixpeaks()", "ecg_peaks()", "ecg_plot()", "ecg_process()", "ecg_rate()", "ecg_rate()", "ecg_rsp()", "ecg_simulate()") -->
-<!-- events = c("events_find()", "events_plot()", "events_to_mne()") -->
-<!-- # write.csv(table, "figures/table.csv", row.names = FALSE) -->
-<!-- ``` -->
-
+Overall, we believe that this code structure offers a calibrated trade-off between flexibility and user-friendliness. We hope that it may further encourage researchers to become part of a supportive open-science community construed of many expertises - rather than relying on closed and proprietary softwares - to achieve their goals.
 
 
 # Example
 
-
-Despite not having a Graphical User Interface (GUI), NeuroKit2 is accessible to people with very little knowledge of python or programming in general. 
+In this section, we present two examples that illustrate the most common use-cases. The first example is an event-related paradigm, in which the interest lies in the momentarily short-term physiological changes related to specific stimuli, whereas the second shows how to extract the characteristics (features) of physiological activity during a longer period of time (not necessarily tied to a specific and suddent event). The example datasets are made available with the package and can be downloaded using the `data()` function.
 
 
 ## Event-related Paradigm
 
-```{python, eval=FALSE, echo = TRUE}
-# Imports
+This example dataset contains ECG, RSP and EDA signals of one participant to whom were presented four emotional images [from the NAPS database; @marchewka2014nencki], in a typical (albeit highly shortened) experimental psychology paradigm.
+
+Signals are 2.5 minutes long and are recorded at a frequency of 100Hz [note that the sampling rate is low for storage purposes and should be higher in actual recordings, see @Quintana2016]. It has 4 channels including three physiological signals, and one corresponding to the marking of events via a photosensor (which signal decreased when a stimulus was displayed on the screen).
+
+
+```{python eventrelated_data, include=TRUE, eval=TRUE, echo = TRUE}
+# Load the package
 import neurokit2 as nk
 
 # Download example dataset
-data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/example_bio_100hz.csv")
+data = nk.data("bio_eventrelated_100hz")
 
-# Process the data
-df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], emg=None, sampling_rate=100)
-
-# Find events
-events = nk.events_find(event_channel=data["Photosensor"], threshold_keep='below',
-event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-
-# Visualize events in the signal
-plot = nk.events_plot(events=events, signal=data)
-
-# Epoch the data
-epochs = nk.epochs_create(data=df, events=events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
-
-# Extract event related fetures
-ecg_event = nk.ecg_eventrelated(epochs)
-rsp_event = nk.rsp_eventrelated(epochs)
-eda_event = nk.eda_eventrelated(epochs)
+# Visualize 10 seconds of data (on the same scale)
+nk.signal_plot(data[900:1900], standardize=True)
 ```
 
-**ADD HERE THE EXAMPLE ABOUT EVENT RELATED FEATURES using the example dataset**
+```{r include=TRUE, eval=TRUE, echo = FALSE, fig.width=10, fig.height=6, fig.cap="Subset of the dataset showing one event (in orange) and the other physiological signals."}
+py$data %>%
+  standardize() %>%
+  mutate(Time = 1:n() / 100) %>%
+  slice(900:1900) %>%
+  pivot_longer(1:4) %>%
+  mutate(name = fct_relevel(name, c("ECG", "RSP", "EDA", "Photosensor"))) %>%
+  ggplot(aes(x=Time, y=value, color=name, size=name)) +
+  geom_line() +
+  theme_modern() +
+  scale_color_manual(values=c("ECG"="red", "EDA"="#9C27B0", "RSP"="#2196F3", "Photosensor"="#FF9800")) +
+  scale_size_manual(values=c("ECG"=0.66, "EDA"=2, "RSP"=2, "Photosensor"=2)) +
+  theme(axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        legend.title = element_blank(),
+        legend.position = "top") +
+  ylab("Time (s)") +
+  guides(size = guide_legend(override.aes = list(size = 2)))
+```
+
+```{python epochs_creation, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
+# Step 1: Process the data
+df, info = nk.bio_process(ecg=data["ECG"],
+                          rsp=data["RSP"],
+                          eda=data["EDA"],
+                          sampling_rate=100)
+
+# Step 2: Find events
+conditions = ["Negative", "Neutral", "Neutral", "Negative"]
+events = nk.events_find(event_channel=data["Photosensor"],
+                        threshold_keep='below',
+                        event_conditions=conditions)
+
+# Step 3: Epoch the data
+epochs = nk.epochs_create(data=df,
+                          events=events,
+                          sampling_rate=100,
+                          epochs_start=-0.1,
+                          epochs_end=4)
+```
+<!-- why don't we plot epochs here instead of plotting an arbitrary slice ?-->
+```{python eventrelated_analysis, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
+# Step 4: Extract event related features
+results = nk.bio_analyze(epochs)
+
+# Show subset of results
+results[["Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude"]]
+```
+
+```{r table1word, eval=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
+# For word
+knitr::kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude")], format="markdown", digits = 3, caption = "Subset of the ouput related to event-related analysis characterizing the pattern of physiological changes related to specific stimuli.", row.names = FALSE)
+```
+```{r table1pdf, eval=TRUE, message=FALSE, warning=FALSE, echo=FALSE, out.width = "\\textwidth", fig.pos = "!ht", results = "asis"}
+# For PDFs
+kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude")], format="latex", digits = 2, booktabs = TRUE, caption = "Subset of the ouput related to event-related analysis characterizing the pattern of physiological changes related to specific stimuli.", linesep="") %>%
+  kableExtra::kable_styling(latex_options = c("hold_position"))
+```
+<!--consider whether we want to show all the columns in the epoch features? e.g. SCR_N and ECG Phase etc.-->
+
+In this example, after loading the package and the example dataset, each physiological signal is processed using `bio_process()`. Data from the photosensor is processed separetely with `events_find()`, that locates the <!--changes in the signal corresponding to stimuli onsets.--> stimuli onsets.
+
+Event-related features can be extracted with three steps.
+
+<!--Though event-related paradigms are often employed, standardized and reproducible pipelines for biosignal analyses are still not common practice. As a symbol of this lack of consensus, the chapter dedicated to biosignal processing in the go-to *Handbook of psychophysiology* does not even mention this issue [@Gratton2017]--><!-- Tone feels abit harsh, maybe rephrase and say why it is important. Also perhaps this paragraph if needed should be after the example is explained->. <!--We are suggesting-->  In step 1, the package is imported and the data is loaded. In step 2, conditions can be easily intialized by giving a list representing the order of presentation of stimuli to the `event_conditions` argument. In step 3, the timeseries can then be segmented from the data into epochs with `epochs_create()`. This function will take the processed data in `df` and <!--keep-->generate a dictionary containing only segments of the dataframe corresponding to the time window around `events`. In step 4, relevant features are computed by giving our `epochs` dictionary of dataframes to `bio_analyze()`. More details about parameters can be found in the package Documentation (github.com/neurokit2.readthedocs.io).
+<!-- Should these comments be shortened/summarized and then commented together with the python code instead, for ease of readability? Or we can refer them to the NK documentation--> The features include the changes in rates of ECG and RSP signals (e.g. maximum, minimum and mean rate after stimulus onset, and the time at which they occur), and the peak characteristics of EDA signal (e.g., occurrence of skin conductance response (SCR), and if SCR is present, its corresponding peak amplitude, time of peak, rise and recovery time). In addition, respiration and cardiac cycle phases are also extracted (i.e.,  the respiration phase - inspiration/expiration - and cardiac phase - systole/diastole - occuring at the onset of event).
+
+This example shows the straightforward process of extracting short-term features of physiological responses/activity. This pipeline can also scale up with little-or-no effort to group-level analysis by aggregating the mean of features accross subjects. We believe these steps are easy for beginners to memorize and implement, <!-- as well as intuitive--> as much as they are sufficiently flexible for the more advanced to tweak parameters to suit their desired goal. <!-- One might say that it could speed up the process between data collection and analysis-->.
+
+<!--Description is clear, now we need to say how this pipeline facilitates valid interpretations and how it reveals crucial physiological processes that are linked to cognition and affectivity-->
+
+In addition to streamlining data analyses, *NeuroKit2* aims to provide researchers an exhaustive <!--exhaustive or extensive??-->suite of signal features, to allow for meaningful <!--more valid-->interpretations of physiological activity. In this example (Table 1), exposure to negative stimuli is related to stronger cardiac deceleration, higher skin conductance response, and accelerated breathing rate, as compared to neutral stimuli.
+
+<!--*NeuroKit2's* signal processing pipeline is thus able 
+to delineate such physiological processes that are crucial in generating conclusions about spontaneous or stimulated cognition and affectivity alongside behavioural data.--> <!--We believe that using *NeuroKit2* to analyze public databases of event-related experiments is a logical next step to ensure that its usability is replicable.-->
 
 
-## Resting-state Features 
-
-
-**ADD here an example on resting feature dataset (to select from our data, downsample, transform to csv and add to the datasets)**
 
 
 
+## Resting-state Features
+
+The `interval related dataset` represents physiological activity of a human at rest (eyes-closed in a sitted position). It contains three channels (ECG, PPG and RSP) sampled at a frequency of 100Hz during five minutes. In this example, one would be interested in computing features of rate variability and longer-term activation patterns.
+
+<!--Step 1. -->
+```{python intervalrelated, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
+# Load the package
+import neurokit2 as nk
+
+# Step 1: Download example dataset
+data = nk.data("bio_resting_5min_100hz")
+
+# Step 2: Process the data
+df, info = nk.bio_process(ecg=data["ECG"],
+                          rsp=data["RSP"],
+                          sampling_rate=100)
+```
+<!--Step 2 NOTE: I would add ecg_hrv(), because if I remember correctly, HRV is not computed by bio_process() -->
+```{python intervalrelated, include=TRUE, results="hide", eval=TRUE, echo = TRUE}
+#<!-- HRV included in step 3 of bio_analyze -->
+# hrv = nk.ecg_hrv(ecg_rate=df["ECG_Rate"], sampling_rate=100, show=True)
+
+# Step 3: Extract features
+results = nk.bio_analyze(df)
+
+# DAppend results and HRV  <!-- don't need to do this anymore --> 
+#results = results.append(hrv)
+
+# Show subset of results
+results[["ECG_Rate_Mean", "ECG_HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean"]]
+```
+
+```{r table2word, eval=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
+# For word
+knitr::kable(py$results[c("ECG_Rate_Mean", "ECG_HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean")], format="markdown", digits = 3, caption = "Subset of properties characterizing the physiological activity over a period of 5 minutes of resting-state", row.names = FALSE)
+```
+```{r table2pdf, eval=TRUE, message=FALSE, warning=FALSE, echo=FALSE, out.width = "\\textwidth", fig.pos = "!ht", results = "asis"}
+# For PDFs
+kable(py$results[c("ECG_Rate_Mean", "ECG_HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean")], format="latex", digits = 2, booktabs = TRUE, caption = "Subset of properties characterizing the physiological activity over a period of 5 minutes of resting-state.", linesep="") %>%
+  kableExtra::kable_styling(latex_options = c("hold_position"))
+```
+
+In step 1, the dataset is loaded along with the package then processed with the same function previously used. In step 2, the processing function outputs dataframe `df` including continuous respiratory and heart rate signals in addition to raw and cleaned signals. It also outputs `info` which represents a dictionary of detected peaks and troughs of RSP and ECG signals. <!--In Step 2, HRV is computed over the 5 minutes of processed heart rate signal. It is computed separetely --> Finally in step 3, `df` is directly passed to the `bio_analyze` function, which computes the mean of heart and breathing rate, as well as several metrices of heart rate variability and respiratory sinus arrythmia. <!--Results from `ecg_hrv()` and `bio_analyze()` can be appended to the same dataframe, and a subset of them can be chosen for outputting a table.-->
+
+As resting-state paradigms are widely used in human neuroscience, our analysis pipeline would be a convenient and effective tool to extract relevant features of physiological activity for these experiments. As meta-analytic research highlight the importance of controlling the quality of physiological data to assess brain-heart interactions [@Yoo2018, @Jennings2016], a stable and reproducible pipeline may lead to more convergent and valid results. <!--this sentence doesn't seem coherent/understandable enough: why is it relevant that there are relations between high frequency HRV and brain structure and connectivity?--> Otherwise, the increased accesibility of recording instruments combined together with this easy to run pipeline can be interesting to amateurs who wish to analyze their own physiological activty. Perhaps, practitioners who use biofeedback systems could also benefit from an open-access and stable pipeline for their data processing. Moreover, one could envision that these tools will facilitate the establishment of psychotherapy and meditation sessions assisted by these sytems. <!-- paragraph's tone also needs revision - I revisited some aspects i wanted to mention other possible use-cases for this pipeline-->
 
 
+#  Future Directions
 
+Despite not having a Graphical User Interface (GUI), *NeuroKit2* is accessible to people with very little knowledge of python or programming in general, thanks to its design choices focusing on user-experience. Naturally, our design philosophy extends to our collaborative community in developing this package. *Neurokit2* is a pragmatic solution to a problem beyond specific research questions: it addresses the need for transparent and accessible methods in neurophysiology. We believe this will not only help researchers answer important scientific questions, but it will also allow for less experienced users to build experimentations and applications that they sought to conceptualize, but had difficulty materializing it <!--just never thought they could-->.
+
+Future evolution will mostly be driven by the community and the advances in related fields. Possible directions include extending the support for other types of bodily signals (e.g., electrogastrography - EGG, electrooculography - EOG) and strenghtening the efficiency of the code to obtain performance gains for large datasets.  As previously mentionned, testing *Neurokit2* against existing pipelines using public databases from diverse fields of study would be a logical next step. In addition, to further commit to reproducibility principles in science, any standardized data structure outputs (e.g. Bids, phys2bids) could be integrated to accelerate data import
+
+*Neurokit2* seeks to promote areas such as <!--these are only examplesbiofeedback, -assisted psychotherapy, affective computing -->. It seeks to promote the autonomy of users vis-à-vis neurophysiological methods. We believe their increased accesibility can help forge new ground for therapy-related applications. More than four decades ago, @Lazarus1975 mentionned the importance of biofeedback in clinical contexts to support self-regulation, i.e. because it offers "informational aid" about bodily processes and helps recognizing that they can be "volitionally regulated". We believe this approach can speak to many practitioners who are interested by these tools, but did not get proper training in programming.
+
+# Conclusion
+
+Thanks to its well-documented API and reliable community, begginners can use our tools in an informed manner, while being supported by people of diverse backgrounds. Taken together, we have to acknowledge the importance of investigating bodily processes to provide novel insights to human psychological research. In fact, biosignals and related complexity measurements have significant potential to inform models of brain activity, being essential in decribing activity from autonomic nervous system [@Valenza2020]. Perhaps the full integration of these methods will help reveal inner-workings of the intricacies between cognitive, affective and behavioral processes.
+
+All in all, we think *Neurokit2* provides essential tools for novice as well as senior researchers, amateurs, and even simply tech-enthousiasts who investigate either human health or (neuro)psychological processes at different scales. Whether the data is produced by "smart health devices" or academic research-grade equipment, *Neurokit2* wants users to access reproducible data processing and analysis methods. After all, *Neurokit2* is a community dedicated to educating one another about neurophysiological methods and relted topics.
 
 # Conflict of Interest
 
@@ -204,7 +305,7 @@ The authors declare that the research was conducted in the absence of any commer
 
 # Acknowledgements
 
-All the contributors (https://neurokit2.readthedocs.io/credits.html) that reported bugs, and the users.
+We would like to thank all the contributors (https://neurokit2.readthedocs.io/en/latest/authors.html), and the users for their support.
 
 
 

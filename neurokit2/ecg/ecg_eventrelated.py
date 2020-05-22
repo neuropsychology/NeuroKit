@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
 
-from ..epochs.epochs_to_df import _df_to_epochs
-from ..stats import fit_r2
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
+from ..epochs.eventrelated_utils import _eventrelated_addinfo
+from ..epochs.eventrelated_utils import _eventrelated_rate
 
-def ecg_eventrelated(epochs):
+
+def ecg_eventrelated(epochs, silent=False):
     """Performs event-related ECG analysis on epochs.
 
     Parameters
@@ -14,6 +16,8 @@ def ecg_eventrelated(epochs):
         A dict containing one DataFrame per event/trial,
         usually obtained via `epochs_create()`, or a DataFrame
         containing all epochs, usually obtained via `epochs_to_df()`.
+    silent : bool
+        If True, silence possible warnings.
 
     Returns
     -------
@@ -27,6 +31,14 @@ def ecg_eventrelated(epochs):
         - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
         - *"ECG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
         - *"ECG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
+        - *"ECG_Phase_Atrial"*: indication of whether the onset of the event
+        concurs with respiratory systole (1) or diastole (0).
+        - *"ECG_Phase_Ventricular"*: indication of whether the onset of the
+        event concurs with respiratory systole (1) or diastole (0).
+        - *"ECG_Phase_Atrial_Completion"*: indication of the stage of the
+        current cardiac (atrial) phase (0 to 1) at the onset of the event.
+         *"ECG_Phase_Ventricular_Completion"*: indication of the stage of the
+        current cardiac (ventricular) phase (0 to 1) at the onset of the event.
         We also include the following *experimental* features related to the
         parameters of a quadratic model.
         - *"ECG_Rate_Trend_Linear"*: The parameter corresponding to the linear trend.
@@ -41,70 +53,47 @@ def ecg_eventrelated(epochs):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Example with simulated data
     >>> ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
-    >>> epochs = nk.epochs_create(ecg,
-                                  events=[5000, 10000, 15000],
-                                  epochs_start=-0.1,
-                                  epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs)
+    >>>
+    >>> # Process the data
+    >>> epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
     >>>
     >>> # Example with real data
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"],
-                                threshold_keep='below',
-                                event_conditions=["Negative",
-                                                  "Neutral",
-                                                  "Neutral",
-                                                  "Negative"])
-    >>> epochs = nk.epochs_create(df, events,
-                                  sampling_rate=100,
-                                  epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs)
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
     """
     # Sanity checks
-    if isinstance(epochs, pd.DataFrame):
-        epochs = _df_to_epochs(epochs)  # Convert df to dict
-
-    if not isinstance(epochs, dict):
-        raise ValueError("NeuroKit error: ecg_eventrelated():"
-                         "Please specify an input"
-                         "that is of the correct form i.e., either a dictionary"
-                         "or dataframe as returned by `epochs_create()`.")
-
-    # Warning for long epochs
-    for i in epochs:
-        if (np.max(epochs[i].index.values) > 5):
-            print("Neurokit warning: ecg_eventrelated():"
-                  "Epoch length is too long. You might want to use"
-                  "ecg_periodrelated().")
+    epochs = _eventrelated_sanitizeinput(epochs, what="ecg", silent=silent)
 
     # Extract features and build dataframe
-    ecg_df = {}  # Initialize an empty dict
-    for epoch_index in epochs:
+    data = {}  # Initialize an empty dict
+    for i in epochs.keys():
 
-        ecg_df[epoch_index] = {}  # Initialize empty container
+        data[i] = {}  # Initialize empty container
 
         # Rate
-        ecg_df[epoch_index] = _ecg_eventrelated_rate(epochs[epoch_index],
-                                                     ecg_df[epoch_index])
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="ECG_Rate")
 
         # Cardiac Phase
-        ecg_df[epoch_index] = _ecg_eventrelated_phase(epochs[epoch_index],
-                                                      ecg_df[epoch_index])
+        data[i] = _ecg_eventrelated_phase(epochs[i], data[i])
+
+        # Quality
+        data[i] = _ecg_eventrelated_quality(epochs[i], data[i])
 
         # Fill with more info
-        ecg_df[epoch_index] = _eventrelated_addinfo(epochs[epoch_index],
-                                                    ecg_df[epoch_index])
+        data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    ecg_df = pd.DataFrame.from_dict(ecg_df, orient="index")  # Convert to a dataframe
+    df = _eventrelated_sanitizeoutput(data)
 
-    return ecg_df
+    return df
 
 
 # =============================================================================
@@ -112,94 +101,39 @@ def ecg_eventrelated(epochs):
 # =============================================================================
 
 
-
-def _eventrelated_addinfo(epoch, output={}):
-
-    # Add label
-    if "Label" in epoch.columns:
-        if len(set(epoch["Label"])) == 1:
-            output["Label"] = epoch["Label"].values[0]
-
-    # Add condition
-    if "Condition" in epoch.columns:
-        if len(set(epoch["Condition"])) == 1:
-            output["Condition"] = epoch["Condition"].values[0]
-
-    # Add participant_id
-    if "Participant" in epoch.columns:
-        if len(set(epoch["Participant"])) == 1:
-            output["Participant"] = epoch["Participant"].values[0]
-    return output
-
-
-
-
-
-
-def _ecg_eventrelated_rate(epoch, output={}):
-
-    # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "ECG_Rate" in i]) == 0:
-        print("NeuroKit warning: ecg_eventrelated(): input does not"
-              "have an `ECG_Rate` column. Will skip all rate-related features.")
-        return output
-
-    # Get baseline
-    if np.min(epoch.index.values) <= 0:
-        baseline = epoch["ECG_Rate"][epoch.index <= 0].values
-        signal = epoch["ECG_Rate"][epoch.index > 0].values
-        index = epoch.index[epoch.index > 0].values
-    else:
-        baseline = epoch["ECG_Rate"][np.min(epoch.index.values):np.min(epoch.index.values)].values
-        signal = epoch["ECG_Rate"][epoch.index > np.min(epoch.index)].values
-        index = epoch.index[epoch.index > 0].values
-
-    # Max / Min / Mean
-    output["ECG_Rate_Max"] = np.max(signal) - np.mean(baseline)
-    output["ECG_Rate_Min"] = np.min(signal) - np.mean(baseline)
-    output["ECG_Rate_Mean"] = np.mean(signal) - np.mean(baseline)
-
-    # Time of Max / Min
-    output["ECG_Rate_Max_Time"] = index[np.argmax(signal)]
-    output["ECG_Rate_Min_Time"] = index[np.argmin(signal)]
-
-    # Modelling
-    # These are experimental indices corresponding to parameters of a quadratic model
-    # Instead of raw values (such as min, max etc.)
-    coefs = np.polyfit(index, signal - np.mean(baseline), 2)
-    output["ECG_Rate_Trend_Quadratic"] = coefs[0]
-    output["ECG_Rate_Trend_Linear"] = coefs[1]
-    output["ECG_Rate_Trend_R2"] = fit_r2(
-            y=signal - np.mean(baseline),
-            y_predicted=np.polyval(coefs, index),
-            adjusted=False,
-            n_parameters=3)
-
-    return output
-
-
 def _ecg_eventrelated_phase(epoch, output={}):
 
     # Sanitize input
     colnames = epoch.columns.values
-    if len([i for i in colnames if "ECG_Atrial_Phase" in i]) == 0:
+    if len([i for i in colnames if "ECG_Phase_Atrial" in i]) == 0:
         print("NeuroKit warning: ecg_eventrelated(): input does not"
-              "have an `ECG_Atrial_Phase` or `ECG_Ventricular_Phase` column."
+              "have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
               "Will not indicate whether event onset concurs with cardiac"
               "phase.")
         return output
 
     # Indication of atrial systole
-    systole = epoch["ECG_Atrial_Phase"][epoch.index > 0].iloc[0]
-    output["ECG_Atrial_Phase"] = systole
-    percentage = epoch["ECG_Atrial_PhaseCompletion"][epoch.index > 0].iloc[0]
-    output["ECG_Atrial_PhaseCompletion"] = percentage
+    output["ECG_Phase_Atrial"] = epoch["ECG_Phase_Atrial"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Completion_Atrial"] = epoch["ECG_Phase_Completion_Atrial"][epoch.index > 0].iloc[0]
 
     # Indication of ventricular systole
-    systole = epoch["ECG_Ventricular_Phase"][epoch.index > 0].iloc[0]
-    output["ECG_Ventricular_Phase"] = systole
-    percentage = epoch["ECG_Ventricular_PhaseCompletion"][epoch.index > 0].iloc[0]
-    output["ECG_Ventricular_PhaseCompletion"] = percentage
+    output["ECG_Phase_Ventricular"] = epoch["ECG_Phase_Ventricular"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Completion_Ventricular"] = epoch["ECG_Phase_Completion_Ventricular"][epoch.index > 0].iloc[0]
+
+    return output
+
+
+def _ecg_eventrelated_quality(epoch, output={}):
+
+    # Sanitize input
+    colnames = epoch.columns.values
+    if len([i for i in colnames if "ECG_Quality" in i]) == 0:
+        print("NeuroKit warning: ecg_eventrelated(): input does not"
+              "have an `ECG_Quality` column. Quality of the signal"
+              "is not computed.")
+        return output
+
+    # Average signal quality over epochs
+    output["ECG_Quality_Mean"] = epoch["ECG_Quality"].mean()
 
     return output

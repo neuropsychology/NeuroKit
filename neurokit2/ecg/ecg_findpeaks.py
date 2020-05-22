@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import scipy.signal
 
 from ..signal import signal_smooth
-from ..signal import signal_formatpeaks
 from ..signal import signal_zerocrossings
 
 
@@ -25,7 +24,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017' or 'martinez2003'.
+        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017', 'martinez2003' or 'rodrigues2020'.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the
         algorithm. Useful for debugging.
@@ -38,7 +37,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     See Also
     --------
-    ecg_clean, ecg_fixpeaks, ecg_peaks, ecg_rate, ecg_process, ecg_plot
+    ecg_clean, signal_fixpeaks, ecg_peaks, ecg_rate, ecg_process, ecg_plot
 
     Examples
     --------
@@ -47,7 +46,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> info = nk.ecg_findpeaks(cleaned)
-    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned)
+    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +SKIP
     >>>
     >>> # Different methods
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
@@ -61,15 +60,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
     >>>
     >>> # Visualize
-    >>> nk.events_plot([neurokit["ECG_R_Peaks"],
-                        pantompkins1985["ECG_R_Peaks"],
-                        hamilton2002["ECG_R_Peaks"],
-                        christov2004["ECG_R_Peaks"],
-                        gamboa2008["ECG_R_Peaks"],
-                        elgendi2010["ECG_R_Peaks"],
-                        engzeemod2012["ECG_R_Peaks"],
-                        kalidas2017["ECG_R_Peaks"]],
-                        martinez2003["ECG_R_Peaks"]], cleaned)
+    >>> nk.events_plot([neurokit["ECG_R_Peaks"], pantompkins1985["ECG_R_Peaks"], hamilton2002["ECG_R_Peaks"], christov2004["ECG_R_Peaks"], gamboa2008["ECG_R_Peaks"], elgendi2010["ECG_R_Peaks"], engzeemod2012["ECG_R_Peaks"], kalidas2017["ECG_R_Peaks"]], martinez2003["ECG_R_Peaks"]], cleaned) #doctest: +SKIP
 
     References
     --------------
@@ -114,6 +105,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         rpeaks = _ecg_findpeaks_kalidas(ecg_cleaned, sampling_rate)
     elif method in ["martinez2003", "martinez"]:
         rpeaks = _ecg_findpeaks_WT(ecg_cleaned, sampling_rate)
+    elif method in ["rodrigues2020", "rodrigues", "asi"]:
+        rpeaks = _ecg_findpeaks_rodrigues(ecg_cleaned, sampling_rate)
     else:
         raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be "
                          "one of 'neurokit' or 'pamtompkins'.")
@@ -816,6 +809,74 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     return rpeaks
 
 # =============================================================================
+# ASI (FSM based 2020)
+# =============================================================================
+
+def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
+    """
+    Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).
+
+    References
+    ----------
+    - Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., & Hernández, A. (2015). Novel real-time low-complexity QRS complex detector based on adaptive thresholding. IEEE Sensors Journal, 15(10), 6036-6043.
+    - Sadhukhan, D., & Mitra, M. (2012). R-peak detection algorithm for ECG using double difference and RR interval processing. Procedia Technology, 4, 873-877.
+    """
+
+    N = int(np.round(3 * sampling_rate/128))
+    Nd = N-1
+    Pth = (0.7 * sampling_rate) / 128+2.7
+    # Pth = 3, optimal for fs = 250 Hz
+    Rmin = 0.26
+
+    rpeaks = []
+    i = 1
+    tf = len(signal)
+    Ramptotal = 0
+
+    # Double derivative squared
+    diff_ecg = [signal[i] - signal[i - Nd] for i in range(Nd, len(signal))]
+    ddiff_ecg = [diff_ecg[i] - diff_ecg[i - 1] for i in range(1, len(diff_ecg))]
+    squar = np.square(ddiff_ecg)
+
+    # Integrate moving window
+    b = np.array(np.ones(N))
+    a = [1]
+    processed_ecg = scipy.signal.lfilter(b, a, squar)
+
+
+    # R-peak finder FSM
+    while i < tf - sampling_rate:  # ignore last second of recording
+
+        # State 1: looking for maximum
+        tf1 = np.round(i + Rmin*sampling_rate)
+        Rpeakamp = 0
+        while i < tf1:
+            # Rpeak amplitude and position
+            if processed_ecg[i] > Rpeakamp:
+                Rpeakamp = processed_ecg[i]
+                rpeakpos = i + 1
+            i += 1
+
+        Ramptotal = (19 / 20) * Ramptotal + (1 / 20) * Rpeakamp
+        rpeaks.append(rpeakpos)
+
+        # State 2: waiting state
+        d = tf1 - rpeakpos
+        tf2 = i + np.round(0.2*2 - d)
+        while i <= tf2:
+            i += 1
+
+        # State 3: decreasing threshold
+        Thr = Ramptotal
+        while processed_ecg[i] < Thr:
+            Thr = Thr * np.exp(-Pth / sampling_rate)
+            i += 1
+
+    return rpeaks
+
+
+
+# =============================================================================
 # Utilities
 # =============================================================================
 
@@ -823,12 +884,22 @@ def _ecg_findpeaks_MWA(signal, window_size):
     """
     From https://github.com/berndporr/py-ecg-detectors/
     """
+
     mwa = np.zeros(len(signal))
+    sums = np.cumsum(signal)
+
+    def get_mean(begin, end):
+        if begin == 0:
+            return sums[end - 1] / end
+
+        dif = sums[end - 1] - sums[begin - 1]
+        return dif / (end - begin)
+
     for i in range(len(signal)):
         if i < window_size:
             section = signal[0:i]
         else:
-            section = signal[i-window_size:i]
+            section = get_mean(i - window_size, i)
 
         if i != 0:
             mwa[i] = np.mean(section)
@@ -836,7 +907,6 @@ def _ecg_findpeaks_MWA(signal, window_size):
             mwa[i] = signal[i]
 
     return mwa
-
 
 
 

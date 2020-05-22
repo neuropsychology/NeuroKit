@@ -49,9 +49,10 @@ def eda_process(eda_signal, sampling_rate=1000):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
+    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
     >>> signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
-    >>> nk.eda_plot(signals)
+    >>> fig = nk.eda_plot(signals)
+    >>> fig #doctest: +SKIP
     """
     # Preprocess
     eda_cleaned = eda_clean(eda_signal, sampling_rate=sampling_rate, method="neurokit")

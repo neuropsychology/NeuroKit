@@ -2,7 +2,7 @@
 import numpy as np
 
 from ..signal import signal_simulate
-from ..signal import signal_distord
+from ..signal import signal_distort
 from ..signal import signal_smooth
 
 
@@ -46,8 +46,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>>
     >>> rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
     >>> rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
-    >>> pd.DataFrame({"RSP_Simple": rsp1,
-                      "RSP_Complex": rsp2}).plot(subplots=True)
+    >>> pd.DataFrame({"RSP_Simple": rsp1, "RSP_Complex": rsp2}).plot(subplots=True) #doctest: +SKIP
 
     References
     ----------
@@ -58,7 +57,7 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     See Also
     --------
-    rsp_clean, rsp_findpeaks, rsp_rate, rsp_process, rsp_plot
+    rsp_clean, rsp_findpeaks, signal_rate, rsp_process, rsp_plot
 """
     # Seed the random generator for reproducible results
     np.random.seed(random_state)
@@ -81,11 +80,13 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     # Add random noise
     if noise > 0:
-        rsp = signal_distord(rsp,
+        rsp = signal_distort(rsp,
                              sampling_rate=sampling_rate,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
-                             noise_shape="laplace")
+                             noise_shape="laplace",
+                             random_state=random_state,
+                             silent=True)
 
     # Reset random seed (so it doesn't affect global)
     np.random.seed(None)
@@ -109,7 +110,6 @@ def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, respi
     """
     # Generate values along the length of the duration
     rsp = signal_simulate(duration=duration,
-                          length=length,
                           sampling_rate=sampling_rate,
                           frequency=respiratory_rate/60,
                           amplitude=0.5)

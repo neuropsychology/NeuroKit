@@ -4,13 +4,13 @@ import pandas as pd
 import scipy.signal
 
 
-def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_frequency=0, max_frequency=np.inf, precision=2**12):
+def signal_psd(signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None):
     """Compute the Power Spectral Density (PSD).
 
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool
@@ -19,8 +19,10 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
         Either 'multitapers' (default; requires the 'mne' package), or 'welch' (requires the 'scipy' package).
     min_frequency, max_frequency : float
         The minimum and maximum frequencies.
-    precision : int
-        The precision, used for the Welch method only (should be the power of 2).
+    window : int
+        Length of each window in seconds (for Welch method).
+    resolution : int
+        Resolution is used to adjust the window length in Welch method. It is also balance between frequency resolution and temporal resolution since the short the window length, the higher the temporal resolution and the lower the frequency resolution, vice versa.
 
     See Also
     --------
@@ -38,13 +40,17 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
     >>>
     >>> signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20)
     >>>
-    >>> nk.signal_psd(signal, method="multitapers")
-    >>> nk.signal_psd(signal, method="welch")
+    >>> fig1 = nk.signal_psd(signal, method="multitapers")
+    >>> fig1 #doctest: +SKIP
+    >>> fig2 = nk.signal_psd(signal, method="welch", min_frequency=1)
+    >>> fig2 #doctest: +SKIP
     >>>
     >>> data = nk.signal_psd(signal, method="multitapers", max_frequency=30, show=False)
-    >>> data.plot(x="Frequency", y="Power")
-    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False)
-    >>> data.plot(x="Frequency", y="Power")
+    >>> fig3 = data.plot(x="Frequency", y="Power")
+    >>> fig3 #doctest: +SKIP
+    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False, min_frequency=1)
+    >>> fig4 = data.plot(x="Frequency", y="Power")
+    >>> fig4 #doctest: +SKIP
     """
     # Constant Detrend
     signal = signal - np.mean(signal)
@@ -57,37 +63,42 @@ def signal_psd(signal, sampling_rate=1000, method="multitapers", show=True, min_
                                                                        sfreq=sampling_rate,
                                                                        fmin=min_frequency,
                                                                        fmax=max_frequency,
-                                                                       adaptive=False,
+                                                                       adaptive=True,
                                                                        normalization='full',
                                                                        verbose=False)
         except ImportError:
-            print("NeuroKit warning: signal_psd(): the 'mne'",
-                  "module is required for the 'mne' method to run.",
-                  "Please install it first (`pip install mne`). For now,",
-                  "'method' has been set to 'welch'.")
-            method = "welch"
+            raise ImportError("NeuroKit warning: signal_psd(): the 'mne'",
+                              "module is required for the 'mne' method to run.",
+                              "Please install it first (`pip install mne`).")
 
-    # Scipy
-    if method.lower() not in ["multitapers", "mne", "burg", "pburg", "spectrum"]:
+    # BURG
+    elif method.lower() in ["burg", "pburg", "spectrum"]:
+        raise ValueError("NeuroKit warning: signal_psd(): the 'BURG'",
+                         "method has not been yet implemented.")
 
-        if max_frequency == np.inf:
-            max_frequency = int(sampling_rate / 2)
+    # Welch (Scipy)
+    else:
+        # Define window length
+        if min_frequency == 0:
+            min_frequency = 0.001  # sanitize lowest frequency
+        if window is not None:
+            nperseg = int(window * sampling_rate)
+        else:
+            # to capture at least 2 cycles of min_frequency
+            nperseg = int((2 / min_frequency) * sampling_rate)
 
-        if (max_frequency - min_frequency) != (sampling_rate / 2):
-            ratio = (sampling_rate / 2) / (max_frequency - min_frequency)
-            precision = int(precision * ratio)
-
-        if precision > len(signal) / 2:
-            precision = int(len(signal) / 2)
-
+        # in case duration of recording is not sufficient
+        if nperseg > len(signal) / 2:
+            print("Neurokit warning: signal_psd(): The duration of recording is too short to support a sufficiently long window for high frequency resolution. Consider using a longer recording or increasing the `min_frequency`")
+            nperseg = int(len(signal / 2))
 
         frequency, power = scipy.signal.welch(signal,
                                               fs=sampling_rate,
                                               scaling='density',
                                               detrend=False,
-                                              average='median',
-                                              window=scipy.signal.windows.hann(precision*2, False),
-                                              nfft=precision*2)
+                                              nfft=int(nperseg*2),
+                                              average='mean',
+                                              nperseg=nperseg)
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency,

@@ -1,6 +1,9 @@
 Understanding NeuroKit
 ======================
 
+.. hint::
+   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
+   
 **Let's start by reviewing some basic coding principles that might help you get familiar with NeuroKit**
 
 If you are reading this, it could be because you don't feel comfortable enough with Python and NeuroKit *(yet)*, and you impatiently want to get to know it in order to start looking at your data.

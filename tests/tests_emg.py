@@ -13,13 +13,13 @@ import biosppy
 
 def test_emg_simulate():
 
-    emg1 = nk.emg_simulate(duration=20, length=5000, n_bursts=1)
+    emg1 = nk.emg_simulate(duration=20, length=5000, burst_number=1)
     assert len(emg1) == 5000
 
-    emg2 = nk.emg_simulate(duration=20, length=5000, n_bursts=15)
+    emg2 = nk.emg_simulate(duration=20, length=5000, burst_number=15)
     assert scipy.stats.median_absolute_deviation(emg1) < scipy.stats.median_absolute_deviation(emg2)
 
-    emg3 = nk.emg_simulate(duration=20, length=5000, n_bursts=1, duration_bursts=2.0)
+    emg3 = nk.emg_simulate(duration=20, length=5000, burst_number=1, burst_duration=2.0)
 #    pd.DataFrame({"EMG1":emg1, "EMG3": emg3}).plot()
     assert len(nk.signal_findpeaks(emg3, height_min=1.0)["Peaks"]) > len(nk.signal_findpeaks(emg1, height_min=1.0)["Peaks"])
 
@@ -48,7 +48,7 @@ def test_emg_plot():
 
     sampling_rate=1000
 
-    emg = nk.emg_simulate(duration=10, sampling_rate=1000, n_bursts=3)
+    emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
     emg_summary, _ = nk.emg_process(emg, sampling_rate=sampling_rate)
 
     # Plot data over samples.
@@ -74,7 +74,7 @@ def test_emg_plot():
 
 def test_emg_eventrelated():
 
-    emg = nk.emg_simulate(duration=20, sampling_rate=1000, n_bursts=3)
+    emg = nk.emg_simulate(duration=20, sampling_rate=1000, burst_number=3)
     emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000],
                               sampling_rate=1000,
@@ -92,9 +92,25 @@ def test_emg_eventrelated():
                                     emg_eventrelated["EMG_Amplitude_Max"])))
 
     assert len(emg_eventrelated["Label"]) == 3
-    assert len(emg_eventrelated.columns) == 6
 
-    assert all(elem in ["EMG_Activation", "EMG_Amplitude_Mean",
-                        "EMG_Amplitude_Max", "EMG_Amplitude_Max_Time",
-                        "EMG_Bursts", "Label"]
-               for elem in np.array(emg_eventrelated.columns.values, dtype=str))
+def test_emg_intervalrelated():
+
+    emg = nk.emg_simulate(duration=40, sampling_rate=1000, burst_number=3)
+    emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
+    columns = ['EMG_Activation_N', 'EMG_Amplitude_Mean']
+
+    # Test with signal dataframe
+    features_df = nk.emg_intervalrelated(emg_signals)
+
+    assert all(elem in columns for elem
+               in np.array(features_df.columns.values, dtype=str))
+    assert features_df.shape[0] == 1  # Number of rows
+
+    # Test with dict
+    epochs = nk.epochs_create(emg_signals, events=[0, 20000],
+                              sampling_rate=1000, epochs_end=20)
+    features_dict = nk.emg_intervalrelated(epochs)
+
+    assert all(elem in columns for elem
+               in np.array(features_dict.columns.values, dtype=str))
+    assert features_dict.shape[0] == 2  # Number of rows

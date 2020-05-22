@@ -18,7 +18,7 @@ def signal_phase(signal, method="radians"):
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     method : str
         The values in which the phase is expressed. Can be 'radians' (default), 'degrees'
         (for values between 0 and 360) or 'percents' (for values between 0 and 1).

@@ -6,7 +6,8 @@ import scipy.misc
 
 from ..stats import standardize
 from .signal_zerocrossings import signal_zerocrossings
-from ..misc import findclosest
+from ..misc import find_closest
+from ..misc import as_vector
 
 
 def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_min=None, relative_height_max=None, relative_mean=True, relative_median=False, relative_max=False):
@@ -17,7 +18,7 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
     height_min, distance_max : float
         The minimum or maximum height (i.e., amplitude in terms of absolute values). For example, `height_min=20` will remove all peaks which height is smaller or equal to 20 (in the provided signal's values).
     relative_height_min, relative_height_max : float
@@ -45,18 +46,21 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
     >>>
     >>> signal = nk.signal_simulate(duration=5)
     >>> info = nk.signal_findpeaks(signal)
-    >>> nk.events_plot([info["Onsets"], info["Peaks"]], signal)
+    >>> fig1 = nk.events_plot([info["Onsets"], info["Peaks"]], signal)
+    >>> fig1 #doctest: +SKIP
     >>>
-    >>> signal = nk.signal_distord(signal)
-    >>> info = nk.signal_findpeaks(signal, height_min=1, width_min=2)
-    >>> nk.events_plot(info["Peaks"], signal)
+    >>> signal = nk.signal_distort(signal)
+    >>> info = nk.signal_findpeaks(signal, height_min=1)
+    >>> fig2 = nk.events_plot(info["Peaks"], signal)
+    >>> fig2 #doctest: +SKIP
     >>>
     >>> # Filter peaks
     >>> ecg = scipy.misc.electrocardiogram()
     >>> signal = ecg[0:1000]
     >>> info1 = nk.signal_findpeaks(signal, relative_height_min=0)
     >>> info2 = nk.signal_findpeaks(signal, relative_height_min=1)
-    >>> nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
+    >>> fig3 = nk.events_plot([info1["Peaks"], info2["Peaks"]], signal)
+    >>> fig3 #doctest: +SKIP
 
     See Also
     --------
@@ -161,9 +165,8 @@ def _signal_findpeaks_findbase(peaks, signal, what="onset"):
 
     troughs, _ = scipy.signal.find_peaks(-1*signal)
 
-    bases = np.zeros(len(peaks))
-    for i, peak in enumerate(peaks):
-        bases[i] = findclosest(peak, troughs, direction=direction, strictly=True)
+    bases = find_closest(peaks, troughs, direction=direction, strictly=True)
+    bases = as_vector(bases)
 
     return bases
 

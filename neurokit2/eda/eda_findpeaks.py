@@ -10,8 +10,6 @@ from ..signal import signal_zerocrossings
 from ..signal import signal_findpeaks
 from ..signal import signal_formatpeaks
 
-from ..misc import findclosest
-
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
     """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
@@ -50,7 +48,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     >>> import neurokit2 as nk
     >>>
     >>> # Get phasic component
-    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1, noise=0)
+    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0)
     >>> eda_cleaned = nk.eda_clean(eda_signal)
     >>> eda = nk.eda_phasic(eda_cleaned)
     >>> eda_phasic = eda["EDA_Phasic"].values
@@ -59,9 +57,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     >>> gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
     >>> kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
     >>> neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
-    >>> nk.events_plot([gamboa2008["SCR_Peaks"],
-                        kim2004["SCR_Peaks"],
-                        neurokit["SCR_Peaks"]], eda_phasic)
+    >>> nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], neurokit["SCR_Peaks"]], eda_phasic) #doctest: +SKIP
 
     References
     ----------
@@ -105,6 +101,10 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
             "SCR_Height": eda_phasic[peaks['Peaks']]}
 
     return info
+
+
+
+
 
 
 

@@ -3,7 +3,7 @@ import numpy as np
 import scipy.signal
 
 from ..signal import signal_filter
-from ..misc import sanitize_input
+from ..misc import as_vector
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
@@ -29,7 +29,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     See Also
     --------
-    ecg_findpeaks, ecg_rate, ecg_process, ecg_plot
+    ecg_findpeaks, signal_rate, ecg_process, ecg_plot
 
     Examples
     --------
@@ -37,15 +37,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> import neurokit2 as nk
     >>>
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-    >>> signals = pd.DataFrame({
-            "ECG_Raw": ecg,
-            "ECG_NeuroKit": nk.ecg_clean(ecg, sampling_rate=1000, method="neurokit"),
-            "ECG_BioSPPy":nk.ecg_clean(ecg, sampling_rate=1000, method="biosppy"),
-            "ECG_PanTompkins":nk.ecg_clean(ecg, sampling_rate=1000, method="pantompkins1985"),
-            "ECG_Hamilton":nk.ecg_clean(ecg, sampling_rate=1000, method="hamilton2002"),
-            "ECG_Elgendi":nk.ecg_clean(ecg, sampling_rate=1000, method="elgendi2010"),
-            "ECG_EngZeeMod":nk.ecg_clean(ecg, sampling_rate=1000, method="engzeemod2012")})
-    >>> signals.plot()
+    >>> signals = pd.DataFrame({"ECG_Raw" : ecg, "ECG_NeuroKit" : nk.ecg_clean(ecg, sampling_rate=1000, method="neurokit"), "ECG_BioSPPy" : nk.ecg_clean(ecg, sampling_rate=1000, method="biosppy"), "ECG_PanTompkins" : nk.ecg_clean(ecg, sampling_rate=1000, method="pantompkins1985"), "ECG_Hamilton" : nk.ecg_clean(ecg, sampling_rate=1000, method="hamilton2002"), "ECG_Elgendi" : nk.ecg_clean(ecg, sampling_rate=1000, method="elgendi2010"), "ECG_EngZeeMod" : nk.ecg_clean(ecg, sampling_rate=1000, method="engzeemod2012")})
+    >>> signals.plot() #doctest: +SKIP
 
     References
     --------------
@@ -54,11 +47,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
 
     """
-    ecg_signal = sanitize_input(ecg_signal,
-                                message="NeuroKit error: ecg_clean(): we "
-                                "expect the user to provide a vector, i.e., "
-                                "a one-dimensional array (such as a list of values).")
-
+    ecg_signal = as_vector(ecg_signal)
 
     method = method.lower()  # remove capitalised letters
     if method in ["nk", "nk2", "neurokit", "neurokit2"]:
@@ -79,7 +68,8 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         clean = ecg_signal
     else:
         raise ValueError("NeuroKit error: ecg_clean(): 'method' should be "
-                         "one of 'neurokit' or 'biosppy'.")
+                         "one of 'neurokit', 'biosppy', 'pamtompkins1985',"
+                         " 'hamilton2002', 'elgendi2010', 'engzeemod2012'.")
     return clean
 
 
@@ -99,7 +89,8 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
                           order=5)
     clean = signal_filter(signal=clean,
                           sampling_rate=sampling_rate,
-                          method="powerline")
+                          method="powerline",
+                          powerline=50)
     return clean
 
 

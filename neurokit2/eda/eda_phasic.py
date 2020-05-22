@@ -36,22 +36,20 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     >>> import neurokit2 as nk
     >>>
     >>> # Decompose using different algorithms
-    >>> eda_signal = nk.eda_simulate(duration=30, n_scr=5, drift=0.1)
+    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1)
     >>> cvxEDA = nk.eda_phasic(nk.standardize(eda_signal), method='cvxeda')
     >>> smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method='smoothmedian')
     >>> highpass = nk.eda_phasic(nk.standardize(eda_signal), method='highpass')
     >>>
-    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'),
-                          smoothMedian.add_suffix('_SmoothMedian'),
-                          highpass.add_suffix('_Highpass')], axis=1)
+    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'), smoothMedian.add_suffix('_SmoothMedian'), highpass.add_suffix('_Highpass')], axis=1)
     >>> data["EDA_Raw"] = eda_signal
-    >>> data.plot()
+    >>> fig = data.plot()
+    >>> fig #doctest: +SKIP
     >>>
-    >>> eda_signal = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")["EDA"]
-    >>> data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=200)
+    >>> eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
+    >>> data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=100)
     >>> data["EDA_Raw"] = eda_signal
-    >>> out = nk1.bio
-    >>> data.plot()
+    >>> nk.signal_plot(data, standardize=True)
 
     References
     -----------
@@ -231,3 +229,46 @@ def _eda_phasic_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, delta_
                         "EDA_Phasic": np.array(phasic)[:, 0]})
 
     return out
+
+
+
+
+# =============================================================================
+# pyphysio
+# =============================================================================
+#def _eda_phasic_pyphysio(eda_signal, sampling_rate=1000):
+#    """
+#    Try to implement this: https://github.com/MPBA/pyphysio/blob/master/pyphysio/estimators/Estimators.py#L190
+#
+#    Examples
+#    ---------
+#    >>> import neurokit2 as nk
+#    >>>
+#    >>> eda_signal = nk.data("bio_eventrelated_100hz")["EDA"].values
+#    >>> sampling_rate = 100
+#    """
+#    bateman = _eda_simulate_bateman(sampling_rate=sampling_rate)
+#    bateman_peak = np.argmax(bateman)
+#
+#    # Prepare the input signal to avoid starting/ending peaks in the driver
+#    bateman_first_half = bateman[0:bateman_peak + 1]
+#    bateman_first_half = eda_signal[0] * (bateman_first_half - np.min(bateman_first_half)) / (
+#        np.max(bateman_first_half) - np.min(bateman_first_half))
+#
+#    bateman_second_half = bateman[bateman_peak:]
+#    bateman_second_half = eda_signal[-1] * (bateman_second_half - np.min(bateman_second_half)) / (
+#        np.max(bateman_second_half) - np.min(bateman_second_half))
+#
+#    signal = np.r_[bateman_first_half, eda_signal, bateman_second_half]
+#
+#    def deconvolve(signal, irf):
+#        # normalize:
+#        irf = irf / np.sum(irf)
+#        # FFT method
+#        fft_signal = np.fft.fft(signal, n=len(signal))
+#        fft_irf = np.fft.fft(irf, n=len(signal))
+#        out = np.fft.ifft(fft_signal / fft_irf)
+#        return out
+#
+#    out = deconvolve(signal, bateman)
+#    nk.signal_plot(out)

@@ -32,7 +32,7 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
 
         - *"RSP_Inspiration"*: breathing phase, marked by "1" for inspiration
           and "0" for expiration.
-        - *"RSP_PhaseCompletion"*: breathing phase completion, expressed in
+        - *"RSP_Phase_Completion"*: breathing phase completion, expressed in
           percentage (from 0 to 1), representing the stage of the current
           respiratory phase.
 
@@ -66,6 +66,6 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     completion = signal_phase(inspiration, method="percent")
 
     out = pd.DataFrame({"RSP_Phase": inspiration,
-                        "RSP_PhaseCompletion": completion})
+                        "RSP_Phase_Completion": completion})
 
     return out

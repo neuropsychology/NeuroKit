@@ -10,7 +10,7 @@ def signal_zerocrossings(signal):
     Parameters
     ----------
     signal : list, array or Series
-        The signal channel in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values.
 
     Returns
     -------
@@ -24,7 +24,8 @@ def signal_zerocrossings(signal):
     >>>
     >>> signal = np.cos(np.linspace(start=0, stop=15, num=1000))
     >>> zeros = nk.signal_zerocrossings(signal)
-    >>> nk.events_plot(zeros, signal)
+    >>> fig = nk.events_plot(zeros, signal)
+    >>> fig #doctest: +SKIP
     """
     df = np.diff(np.sign(signal))
     zeros = np.nonzero(np.abs(df) > 0)[0]

@@ -1,6 +1,3 @@
-import pandas as pd
-import numpy as np
-
 from ..signal import signal_filter
 
 
@@ -29,26 +26,19 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     Examples
     --------
     >>> import neurokit2 as nk
-    >>> import pandas as pd
     >>>
     >>> # Get heart rate
-    >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
+    >>> data = nk.data("bio_eventrelated_100hz")
     >>> rpeaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
-    >>> ecg_rate = nk.ecg_rate(rpeaks, sampling_rate=100)
+    >>> ecg_rate = nk.signal_rate(rpeaks, sampling_rate=100)
     >>>
     >>>
     >>> # Get ECG Derived Respiration (EDR)
     >>> edr = nk.ecg_rsp(ecg_rate, sampling_rate=100)
-    >>> nk.standardize(pd.DataFrame({"EDR": edr,
-                                     "RSP": data["RSP"]})).plot()
+    >>> nk.standardize(pd.DataFrame({"EDR": edr, "RSP": data["RSP"]})).plot() #doctest: +SKIP
     >>>
     >>> # Method comparison (the closer to 0 the better)
-    >>> nk.standardize(pd.DataFrame(
-            {"True RSP": data["RSP"],
-             "vangent2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="vangent2019"),
-             "sarkar2015": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015"),
-             "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016"),
-             "soni2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="soni2019")})).plot()
+    >>> nk.standardize(pd.DataFrame({"True RSP": data["RSP"], "vangent2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="vangent2019"), "sarkar2015": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015"), "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016"), "soni2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="soni2019")})).plot() #doctest: +SKIP
 
     References
     ----------

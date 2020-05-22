@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
 import scipy
 import math
 
 from ..signal import signal_resample
-from ..signal import signal_distord
+from ..signal import signal_distort
 
 
 def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
@@ -47,8 +46,7 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>>
     >>> ecg1 = nk.ecg_simulate(duration=10, method="simple")
     >>> ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")
-    >>> pd.DataFrame({"ECG_Simple": ecg1,
-                      "ECG_Complex": ecg2}).plot(subplots=True)
+    >>> pd.DataFrame({"ECG_Simple": ecg1, "ECG_Complex": ecg2}).plot(subplots=True) #doctest: +SKIP
 
     See Also
     --------
@@ -92,11 +90,13 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     # Add random noise
     if noise > 0:
-        ecg = signal_distord(ecg,
+        ecg = signal_distort(ecg,
                              sampling_rate=sampling_rate,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
-                             noise_shape="laplace")
+                             noise_shape="laplace",
+                             random_state=random_state,
+                             silent=True)
 
     # Reset random seed (so it doesn't affect global)
     np.random.seed(None)
@@ -168,17 +168,18 @@ def _ecg_simulate_ecgsyn(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfrat
     % ai = z-position of extrema
     % bi = Gaussian width of peaks
 
-    Examples
-    --------
-    >>> import matplotlib.pyplot as plt
-    >>>
-    >>> s = _ecg_simulate_ecgsynth()
-    >>> x = np.linspace(0, len(s)-1, len(s))
-    >>> num_points = 4000
-    >>>
-    >>> num_points = min(num_points, len(s))
-    >>> plt.plot(x[:num_points], s[:num_points])
-    >>> plt.show()
+#    Examples
+#    --------
+#    >>> import matplotlib.pyplot as plt
+#    >>> import neurokit2 as nk
+#    >>>
+#    >>> s = _ecg_simulate_ecgsynth()
+#    >>> x = np.linspace(0, len(s)-1, len(s))
+#    >>> num_points = 4000
+#    >>>
+#    >>> num_points = min(num_points, len(s))
+#    >>> plt.plot(x[:num_points], s[:num_points]) #doctest: +SKIP
+#    >>> plt.show() #doctest: +SKIP
     """
 
     if not isinstance(ti, np.ndarray):

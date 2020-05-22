@@ -4,7 +4,7 @@ import scipy.signal
 
 from ..signal import signal_detrend
 from ..signal import signal_filter
-from ..misc import sanitize_input
+from ..misc import as_vector
 
 
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
@@ -34,7 +34,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     See Also
     --------
-    rsp_findpeaks, rsp_rate, rsp_amplitude, rsp_process, rsp_plot
+    rsp_findpeaks, signal_rate, rsp_amplitude, rsp_process, rsp_plot
 
     Examples
     --------
@@ -42,21 +42,15 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     >>> import neurokit2 as nk
     >>>
     >>> rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.01)
-    >>> signals = pd.DataFrame({
-            "RSP_Raw": rsp,
-            "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
-            "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
-    >>> signals.plot()
+    >>> signals = pd.DataFrame({ "RSP_Raw": rsp, "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"), "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
+    >>> signals.plot() #doctest: +SKIP
 
     References
     ----------
     - `Khodadad et al. (2018) <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
 
     """
-    rsp_signal = sanitize_input(rsp_signal,
-                                message="NeuroKit error: rsp_clean(): we "
-                                "expect the user to provide a vector, i.e., "
-                                "a one-dimensional array (such as a list of values).")
+    rsp_signal = as_vector(rsp_signal)
 
     method = method.lower()  # remove capitalised letters
     if method in ["khodadad", "khodadad2018"]:
@@ -79,12 +73,16 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
     by `Khodadad et al. (2018)
     <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_.
     """
-    # Detrend and lowpass-filter the signal to be able to reliably detect
-    # zero crossings in raw signal.
-    clean = signal_detrend(rsp_signal, order=1)
-    clean = signal_filter(clean, sampling_rate=sampling_rate,
-                          lowcut=None, highcut=2,
-                          method="butterworth_ba", order=5)
+    # Slow baseline drifts / fluctuations must be removed from the raw
+    # breathing signal (i.e., the signal must be centered around zero) in order
+    # to be able to reliable detect zero-crossings.
+
+    # Remove baseline by applying a lowcut at .05Hz (preserves breathing rates
+    # higher than 3 breath per minute) and high frequency noise by applying a
+    # highcut at 3 Hz (preserves breathing rates slower than 180 breath per
+    # minute).
+    clean = signal_filter(rsp_signal, sampling_rate=sampling_rate, lowcut=.05,
+                          highcut=3, order=2, method="butterworth_ba")
 
     return clean
 

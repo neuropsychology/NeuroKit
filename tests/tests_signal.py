@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import neurokit2 as nk
 import scipy.signal
 
@@ -131,6 +132,7 @@ def test_signal_interpolate():
     interpolated = nk.signal_interpolate(x_axis, signal, desired_length=1000)
     assert len(interpolated) == 1000
     assert interpolated[0] == signal[0]
+    assert interpolated[-1] == signal[-1]
 
 
 def test_signal_findpeaks():
@@ -153,14 +155,15 @@ def test_signal_merge():
     assert len(signal) == 150
     assert signal[0] == signal2[0] + signal2[0]
 
-def test_signal_rate():
+
+def test_signal_rate():    # since singal_rate wraps signal_period, the latter is tested as well
 
     # Test with array.
     signal = nk.signal_simulate(duration=10, sampling_rate=1000,
-                             frequency=1)
+                                frequency=1)
     info = nk.signal_findpeaks(signal)
     rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000,
-                       desired_length=None)
+                          desired_length=None)
     assert rate.shape[0] == len(info["Peaks"])
 
     # Test with dictionary.produced from signal_findpeaks.
@@ -168,7 +171,7 @@ def test_signal_rate():
 
     # Test with DataFrame.
     rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                       respiratory_rate=15, method="sinuosoidal", noise=0)
+                          respiratory_rate=15, method="sinuosoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_peaks(rsp_cleaned)
     rate = nk.signal_rate(signals, sampling_rate=1000)
@@ -177,5 +180,57 @@ def test_signal_rate():
     # Test with dictionary.produced from rsp_findpeaks.
     test_length = 30
     rate = nk.signal_rate(info, sampling_rate=1000,
-                       desired_length=test_length)
+                          desired_length=test_length)
     assert rate.shape == (test_length, )
+
+
+def test_signal_plot():
+
+    # Test with array
+    signal = nk.signal_simulate(duration=10, sampling_rate=1000)
+    nk.signal_plot(signal, sampling_rate=1000)
+    fig = plt.gcf()
+    for ax in fig.get_axes():
+        handles, labels = ax.get_legend_handles_labels()
+    assert labels == ['Signal']
+    assert len(labels) == len(handles) == len([signal])
+    assert ax.get_xlabel() == 'Time (s)'
+    plt.close(fig)
+
+    # Test with dataframe
+    data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0,
+                                                       stop=20, num=1000)),
+                         "Signal3": np.sin(np.linspace(start=0,
+                                                       stop=20, num=1000)),
+                         "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+    nk.signal_plot(data, sampling_rate=None)
+    fig = plt.gcf()
+    for ax in fig.get_axes():
+        handles, labels = ax.get_legend_handles_labels()
+    assert labels == list(data.columns.values)
+    assert len(labels) == len(handles) == len(data.columns)
+    assert ax.get_xlabel() == 'Samples'
+    plt.close(fig)
+
+    # Test with list
+    signal = nk.signal_binarize(nk.signal_simulate(duration=10))
+    phase = nk.signal_phase(signal, method="percents")
+    nk.signal_plot([signal, phase])
+    fig = plt.gcf()
+    for ax in fig.get_axes():
+        handles, labels = ax.get_legend_handles_labels()
+    assert labels == ['Signal1', 'Signal2']
+    assert len(labels) == len(handles) == len([signal, phase])
+    assert ax.get_xlabel() == 'Samples'
+    plt.close(fig)
+
+
+def test_signal_power():
+
+    signal1 = nk.signal_simulate(duration=20, frequency=1, sampling_rate=500)
+    pwr1 = nk.signal_power(signal1, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=500)
+
+    signal2 = nk.signal_simulate(duration=20, frequency=1, sampling_rate=100)
+    pwr2 = nk.signal_power(signal2, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=100)
+
+    assert np.allclose(np.mean(pwr1.iloc[0] - pwr2.iloc[0]), 0, atol=0.01)

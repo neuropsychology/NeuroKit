@@ -2,11 +2,11 @@
 import numpy as np
 
 from ..signal import signal_merge
-from ..signal import signal_distord
+from ..signal import signal_distort
 
 
 def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 n_scr=1, drift=-0.01, random_state=None):
+                 scr_number=1, drift=-0.01, random_state=None):
     """Simulate Electrodermal Activity (EDA) signal.
 
     Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.
@@ -20,7 +20,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         length of the signal (in samples).
     noise : float
         Noise level (amplitude of the laplace noise).
-    n_scr : int
+    scr_number : int
         Desired number of skin conductance responses (SCRs), i.e., peaks.
     drift : float or list
         The slope of a linear drift of the signal.
@@ -34,10 +34,10 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     Examples
     ----------
-    >>> import neurokit as nk
+    >>> import neurokit2 as nk
     >>> import pandas as pd
     >>>
-    >>> eda = nk.eda_simulate(duration=10, n_scr=3)
+    >>> eda = nk.eda_simulate(duration=10, scr_number=3)
     >>> nk.signal_plot(eda)
 
     See Also
@@ -60,7 +60,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     eda += (drift * np.linspace(0, duration, length))
     time = [0, duration]
 
-    start_peaks = np.linspace(0, duration, n_scr, endpoint=False)
+    start_peaks = np.linspace(0, duration, scr_number, endpoint=False)
 
     for start_peak in start_peaks:
         relative_time_peak = np.abs(np.random.normal(0, 5, size=1)) + 3.0745
@@ -78,11 +78,12 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     # Add random noise
     if noise > 0:
-        eda = signal_distord(eda,
+        eda = signal_distort(eda,
                              sampling_rate=sampling_rate,
                              noise_amplitude=noise,
                              noise_frequency=[5, 10, 100],
-                             noise_shape="laplace")
+                             noise_shape="laplace",
+                             silent=True)
     # Reset random seed (so it doesn't affect global)
     np.random.seed(None)
     return eda
@@ -112,9 +113,9 @@ def _eda_simulate_scr(sampling_rate=1000,
 
     Examples
     --------
-    >>> scr1 = _eda_simulate_canonical(time_peak=3.0745)
-    >>> scr2 = _eda_simulate_canonical(time_peak=10)
-    >>> pd.DataFrame({"SCR1": scr1, "SCR2": scr2}).plot()
+    >>> # scr1 = _eda_simulate_scr(time_peak=3.0745)
+    >>> # scr2 = _eda_simulate_scr(time_peak=10)
+    >>> # pd.DataFrame({"SCR1": scr1, "SCR2": scr2}).plot()
     """
     if length is None:
         length = 9*sampling_rate
@@ -127,3 +128,40 @@ def _eda_simulate_scr(sampling_rate=1000,
     ft = ft[0:len(t)]
     ft = ft/np.max(ft)
     return ft
+
+
+
+
+
+def _eda_simulate_bateman(sampling_rate=1000, t1=.75, t2=2):
+    """
+    Generates the bateman function:
+    :math:`b = e^{-t/T1} - e^{-t/T2}`
+
+    Parameters
+    ----------
+    fsamp : float
+        Sampling frequency
+    par_bat: list (T1, T2)
+
+        Parameters of the bateman function
+    Returns
+    -------
+    bateman : array
+        The bateman function
+
+    Examples
+    ----------
+    >>> # bateman = _eda_simulate_bateman()
+    >>> # nk.signal_plot(bateman)
+    """
+
+    idx_T1 = t1 * sampling_rate
+    idx_T2 = t2 * sampling_rate
+    len_bat = idx_T2 * 10
+    idx_bat = np.arange(len_bat)
+    bateman = np.exp(-idx_bat / idx_T2) - np.exp(-idx_bat / idx_T1)
+
+    # normalize
+    bateman = sampling_rate * bateman / np.sum(bateman)
+    return bateman
