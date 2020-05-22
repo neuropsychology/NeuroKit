@@ -34,7 +34,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
 
     Examples
     ----------
-    >>> import neurokit as nk
+    >>> import neurokit2 as nk
     >>> import pandas as pd
     >>>
     >>> eda = nk.eda_simulate(duration=10, scr_number=3)
@@ -113,9 +113,9 @@ def _eda_simulate_scr(sampling_rate=1000,
 
     Examples
     --------
-    >>> scr1 = _eda_simulate_canonical(time_peak=3.0745)
-    >>> scr2 = _eda_simulate_canonical(time_peak=10)
-    >>> pd.DataFrame({"SCR1": scr1, "SCR2": scr2}).plot()
+    >>> # scr1 = _eda_simulate_scr(time_peak=3.0745)
+    >>> # scr2 = _eda_simulate_scr(time_peak=10)
+    >>> # pd.DataFrame({"SCR1": scr1, "SCR2": scr2}).plot()
     """
     if length is None:
         length = 9*sampling_rate
@@ -152,8 +152,8 @@ def _eda_simulate_bateman(sampling_rate=1000, t1=.75, t2=2):
 
     Examples
     ----------
-    >>> bateman = _eda_simulate_bateman()
-    >>> nk.signal_plot(bateman)
+    >>> # bateman = _eda_simulate_bateman()
+    >>> # nk.signal_plot(bateman)
     """
 
     idx_T1 = t1 * sampling_rate
