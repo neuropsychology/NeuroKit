@@ -186,7 +186,8 @@ htmlhelp_basename = 'neurokit2doc'
 pdf_title = u'NeuroKit2'
 author_field = u'Official Documentation'
 
-latex_engine = 'xelatex'
+# latex_engine = 'xelatex'  # Not working
+
 latex_elements = {
     'sphinxsetup': r"""
         VerbatimColor={rgb}{0.15, 0.20, 0.22},
