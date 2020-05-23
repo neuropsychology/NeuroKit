@@ -190,7 +190,7 @@ author_field = u'Official Documentation'
 latex_elements = {
     # Background color of chunks
     'VerbatimColor': '{rgb}{38,50,56}'
-    
+
     # The paper size ('letterpaper' or 'a4paper').
     #
     # 'papersize': 'letterpaper',

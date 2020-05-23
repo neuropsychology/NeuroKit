@@ -180,7 +180,7 @@ def _ecg_findpeaks_promac_convolve(signal, peaks, sampling_rate=1000):
 
     # Because a typical QRS is roughly defined within about 100ms
     sd = sampling_rate / 10
-    shape =  scipy.stats.norm.pdf(np.linspace(-sd*4, sd*4, num=sd*8), loc=0, scale=sd)
+    shape = scipy.stats.norm.pdf(np.linspace(-sd*4, sd*4, num=sd*8), loc=0, scale=sd)
 
     convolved = np.convolve(x, shape, 'same')
     return convolved
