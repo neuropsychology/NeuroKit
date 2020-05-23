@@ -186,10 +186,11 @@ htmlhelp_basename = 'neurokit2doc'
 pdf_title = u'NeuroKit2'
 author_field = u'Official Documentation'
 
-
+latex_engine = 'xelatex'
 latex_elements = {
     'sphinxsetup': r"""
-        VerbatimColor={rgb}{0.15, 0.20, 0.22}
+        VerbatimColor={rgb}{0.15, 0.20, 0.22},
+        verbatimwithframe=false,
         """
     # Background color of chunks
     # '
