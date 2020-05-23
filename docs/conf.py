@@ -189,10 +189,7 @@ author_field = u'Official Documentation'
 
 latex_elements = {
     'sphinxsetup': r"""
-        VerbatimColor={rgb}{38,50,56}
-        """,
-    'preamble': r"""
-        \definecolor{VerbatimColor}{rgb}{38,50,56}
+        VerbatimColor={rgb}{0.15, 0.20, 0.22}
         """
     # Background color of chunks
     # '
