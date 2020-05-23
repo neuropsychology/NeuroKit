@@ -38,7 +38,8 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>> import pandas as pd
     >>>
     >>> eda = nk.eda_simulate(duration=10, scr_number=3)
-    >>> nk.signal_plot(eda)
+    >>> fig = nk.signal_plot(eda)
+    >>> fig #doctest: +SKIP
 
     See Also
     --------

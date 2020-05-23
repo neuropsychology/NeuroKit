@@ -34,7 +34,8 @@ def emg_amplitude(emg_cleaned):
     >>> cleaned = nk.emg_clean(emg, sampling_rate=1000)
     >>>
     >>> amplitude = nk.emg_amplitude(cleaned)
-    >>> pd.DataFrame({"EMG": emg, "Amplitude": amplitude}).plot(subplots=True) #doctest: +SKIP
+    >>> fig = pd.DataFrame({"EMG": emg, "Amplitude": amplitude}).plot(subplots=True)
+    >>> fig #doctest: +SKIP
     """
     tkeo = _emg_amplitude_tkeo(emg_cleaned)
     amplitude = _emg_amplitude_envelope(tkeo)

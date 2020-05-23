@@ -51,7 +51,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     >>> eda_signal = nk.data("bio_eventrelated_100hz")["EDA"]
     >>> data = nk.eda_phasic(nk.standardize(eda_signal), sampling_rate=100)
     >>> data["EDA_Raw"] = eda_signal
-    >>> nk.signal_plot(data, standardize=True)
+    >>> fig = nk.signal_plot(data, standardize=True)
+    >>> fig #doctest: +SKIP
 
     References
     -----------

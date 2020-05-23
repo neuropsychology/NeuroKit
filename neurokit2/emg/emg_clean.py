@@ -41,7 +41,8 @@ def emg_clean(emg_signal, sampling_rate=1000):
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000)
     >>> signals = pd.DataFrame({"EMG_Raw": emg, "EMG_Cleaned":nk.emg_clean(emg, sampling_rate=1000)})
-    >>> signals.plot() #doctest: +SKIP
+    >>> fig = signals.plot()
+    >>> fig #doctest: +SKIP
     """
     emg_signal = as_vector(emg_signal)
 

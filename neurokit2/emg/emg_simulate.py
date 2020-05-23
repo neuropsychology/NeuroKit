@@ -39,7 +39,8 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>> import pandas as pd
     >>>
     >>> emg = nk.emg_simulate(duration=10, burst_number=3)
-    >>> nk.signal_plot(emg)
+    >>> fig = nk.signal_plot(emg)
+    >>> fig #doctest: +SKIP
 
     See Also
     --------

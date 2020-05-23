@@ -64,7 +64,8 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     >>> _, gamboa2008 = nk.eda_peaks(eda_phasic, method="gamboa2008")
     >>> _, kim2004 = nk.eda_peaks(eda_phasic, method="kim2004")
     >>> _, neurokit = nk.eda_peaks(eda_phasic, method="neurokit")
-    >>> nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], neurokit["SCR_Peaks"]], eda_phasic) #doctest: +SKIP
+    >>> fig = nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], neurokit["SCR_Peaks"]], eda_phasic)
+    >>> fig
 
     References
     ----------

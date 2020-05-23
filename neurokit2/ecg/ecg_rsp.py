@@ -35,10 +35,12 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     >>>
     >>> # Get ECG Derived Respiration (EDR)
     >>> edr = nk.ecg_rsp(ecg_rate, sampling_rate=100)
-    >>> nk.standardize(pd.DataFrame({"EDR": edr, "RSP": data["RSP"]})).plot() #doctest: +SKIP
+    >>> fig = nk.standardize(pd.DataFrame({"EDR": edr, "RSP": data["RSP"]})).plot()
+    >>> fig #doctest: +SKIP
     >>>
     >>> # Method comparison (the closer to 0 the better)
-    >>> nk.standardize(pd.DataFrame({"True RSP": data["RSP"], "vangent2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="vangent2019"), "sarkar2015": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015"), "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016"), "soni2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="soni2019")})).plot() #doctest: +SKIP
+    >>> fig = nk.standardize(pd.DataFrame({"True RSP": data["RSP"], "vangent2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="vangent2019"), "sarkar2015": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="sarkar2015"), "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016"), "soni2019": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="soni2019")})).plot()
+    >>> fig #doctest: +SKIP
 
     References
     ----------

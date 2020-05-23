@@ -53,7 +53,8 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', samp
     >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000)
     >>>
     >>> cardiac_phase = nk.ecg_phase(ecg_cleaned=cleaned, rpeaks=rpeaks, delineate_info=waves, sampling_rate=1000)
-    >>> nk.signal_plot([cleaned, cardiac_phase], standardize=True) #doctest: +SKIP
+    >>> fig = nk.signal_plot([cleaned, cardiac_phase], standardize=True)
+    >>> fig #doctest: +SKIP
     """
     # Sanitize inputs
     if rpeaks is None:

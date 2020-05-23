@@ -18,7 +18,8 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> nk.rsp_plot(rsp_signals) #doctest: +SKIP
+    >>> fig = nk.rsp_plot(rsp_signals)
+    >>> fig #doctest: +SKIP
 
     See Also
     --------

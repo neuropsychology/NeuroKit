@@ -50,7 +50,8 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> signals, info = nk.ecg_peaks(cleaned, correct_artifacts=True)
-    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +SKIP
+    >>> fig = nk.events_plot(info["ECG_R_Peaks"], cleaned)
+    >>> fig #doctest: +SKIP
 
     References
     ----------

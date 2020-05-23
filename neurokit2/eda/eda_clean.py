@@ -36,7 +36,8 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     >>>
     >>> eda = nk.eda_simulate(duration=30, sampling_rate=100, scr_number=10, noise=0.01, drift=0.02)
     >>> signals = pd.DataFrame({ "EDA_Raw": eda, "EDA_BioSPPy": nk.eda_clean(eda, sampling_rate=100, method='biosppy'), "EDA_NeuroKit": nk.eda_clean(eda, sampling_rate=100, method='neurokit')})
-    >>> signals.plot() #doctest: +SKIP
+    >>> fig = signals.plot()
+    >>> fig #doctest: +SKIP
     """
     eda_signal = as_vector(eda_signal)
 
