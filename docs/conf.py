@@ -190,7 +190,7 @@ author_field = u'Official Documentation'
 
 latex_elements = {
     'sphinxsetup': r"""
-        VerbatimColor={RGB}{0.15, 0.20, 0.22},
+        VerbatimColor={RGB}{0.0, 0.28, 0.67},
         verbatimwithframe=false,
         """
     # Background color of chunks
