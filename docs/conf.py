@@ -187,11 +187,11 @@ pdf_title = u'NeuroKit2'
 author_field = u'Official Documentation'
 
 # latex_engine = 'xelatex'  # Not working
-# VerbatimColor={RGB}{0.0, 0.28, 0.67},
+# VerbatimColor={RGB}{0.0, 0.28, 0.67}, rgb(38,50,56)
 
 latex_elements = {
     'sphinxsetup': r"""
-        VerbatimColor={RGB}{0.5, 0.5, 0.5},
+        VerbatimColor={RGB}{38, 50, 56},
         verbatimwithframe=true,
         """
     # Background color of chunks
