@@ -1,12 +1,13 @@
 import numpy as np
 
-def signal_autocor(x, normalize=True):
+
+def signal_autocor(signal, normalize=True):
     """
     Auto-correlation of a 1-dimensional sequences.
 
     Parameters
     -----------
-    x : list, array or Series
+    signal : list, array or Series
         Vector of values.
     normalize : bool
         Normalize the autocorrelation output.
@@ -14,8 +15,8 @@ def signal_autocor(x, normalize=True):
     Returns
     -------
     r
-        The cross-correlation of x with itself at different time lags.
-        Minimum time lag is 0, maximum time lag is the length of x.
+        The cross-correlation of the signal with itself at different time lags.
+        Minimum time lag is 0, maximum time lag is the length of the signal.
 
     Examples
     --------
@@ -25,7 +26,7 @@ def signal_autocor(x, normalize=True):
     >>> autocor = nk.signal_autocor(x)
     >>> autocor #doctest: +SKIP
     """
-    r = np.correlate(x, x, mode='full')
+    r = np.correlate(signal, signal, mode='full')
 
     r = r[r.size // 2:]  # min time lag is 0
 
