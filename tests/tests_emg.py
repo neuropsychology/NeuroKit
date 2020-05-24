@@ -24,6 +24,19 @@ def test_emg_simulate():
     assert len(nk.signal_findpeaks(emg3, height_min=1.0)["Peaks"]) > len(nk.signal_findpeaks(emg1, height_min=1.0)["Peaks"])
 
 
+def test_emg_activation():
+
+    emg = nk.emg_simulate(duration=10, burst_number=3)
+    cleaned = nk.emg_clean(emg)
+    emg_amplitude = nk.emg_amplitude(cleaned)
+
+    activity_signal, info = nk.emg_activation(emg_amplitude)
+
+    assert set(activity_signal.columns.to_list()) == set(list(info.keys()))
+    assert len(info['EMG_Onsets']) == len(info['EMG_Offsets'])
+    for i, j in zip(info['EMG_Onsets'], info['EMG_Offsets']):
+        assert i < j
+
 def test_emg_clean():
 
     sampling_rate=1000
