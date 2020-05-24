@@ -14,7 +14,7 @@ author:
   - name          : "Jan C. Brammer"
     affiliation   : " 2"
   - name          : "Francois Lespinasse"
-    affiliation   : " 3"
+    affiliation   : " 3, 8"
   - name          : "Hung Pham"
     affiliation   : " 4"
   - name          : "Christopher Sch\\\"{o}lzel"
@@ -36,6 +36,8 @@ affiliation:
     institution   : "Centre for Research and Development in Learning, Nanyang Technological University, Singapore"
   - id            : "7"
     institution   : "Lee Kong Chian School of Medicine, Nanyang Technological University, Singapore"
+  - id            : "8"
+    institution   : "Centre de Recherche de l'Institut Universitaire Geriatrique de Montreal"
 authornote: |
   * Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
 abstract: |
@@ -87,25 +89,25 @@ matplotlib$use("Agg", force = TRUE)
 
 
 <!-- Research gap 1 -->
-Neurophysiological measurements increasingly gain popularity in the study of cognition and behavior. 
+Neurophysiological measurements increasingly gain popularity in the study of cognition and behavior.
 These measurements include electroencephalography (EEG), electrocardiography (ECG), electromyography (EMG) and electrodermal activity (EDA).
-Their popularity is driven by theoretical motivations [e.g., the growth of embodied or affective neuroscience; @Kiverstein2015] as well as practical reasons. 
-The latter include low costs (especially compared with other imaging techniques, such as MRI or MEG), ease of use (e.g., portability, setup speed), and the increasing availability of recording devices [e.g., wearables; @yuehong2016internet]. 
+Their popularity is driven by theoretical motivations [e.g., the growth of embodied or affective neuroscience; @Kiverstein2015] as well as practical reasons.
+The latter include low costs (especially compared with other imaging techniques, such as MRI or MEG), ease of use (e.g., portability, setup speed), and the increasing availability of recording devices [e.g., wearables; @yuehong2016internet].
 Moreover, the extraction of meaningful information from neurophysiological signals is facilitated by current advances in signal processing algorithms [@clifton2012machine; @roy2019deep].
-Unfortunately, these algorithms are mostly inaccessible to researchers without experience in programming and signal processing. 
-Moreover, many software tools for neurophysiological analyses are limited to one type of signal (for instance, focused on ECG). 
+Unfortunately, these algorithms are mostly inaccessible to researchers without experience in programming and signal processing.
+Moreover, many software tools for neurophysiological analyses are limited to one type of signal (for instance, focused on ECG).
 This makes it inconvenient for researchers who might have to learn and concurrently rely on different software to process multimodal data.
 
 <!-- Research gap 2 -->
 Another important issue existing in psychology and neuroscience has been coined as the "reproducibility crisis" [@topalidou2015long; @open2015estimating; @milkowski2018replicability; @maizey2019barriers], and has lead to a profound questioning and reassessment from different actors involved (researchers, publishers, fund agencies, ...).
-One of the main identified contributing factor is the actual opacity of data processing, where analysis pipelines are not described in enough details to ensure a full and exact reproduction. 
+One of the main identified contributing factor is the actual opacity of data processing, where analysis pipelines are not described in enough details to ensure a full and exact reproduction.
 One of the suggested response to that issue has been to provide, alongside the study, the analysis script, which in turns opens new challenges.
 Indeed, these scripts must be shareable (not always feasible with closed-source and proprietary software or programming languages), accessible (enticing documented and well-organized scripts) and reproducible (which is inherently difficult for many software relying on a graphical user interface - GUI - in which the manual point-and-click sequence is hard to automate).
 
 <!-- Response to gap -->
 *NeuroKit2* addresses these challenges by offering a free, user-friendly, and comprehensive solution for neurophysiological data processing.
-It is an open-source Python package, developed by a multi-disciplinary team that actively invites new collaborators. 
-It aims at being accessible, well-documented, well-tested, cutting-edge, flexible and efficient, allowing users to select from a wide range of validated analysis pipelines as well as creating their own. 
+It is an open-source Python package, developed by a multi-disciplinary team that actively invites new collaborators.
+It aims at being accessible, well-documented, well-tested, cutting-edge, flexible and efficient, allowing users to select from a wide range of validated analysis pipelines as well as creating their own.
 Historically, *NeuroKit2* is the re-forged successor *NeuroKit1* [@neurokit1], taking on its most successful features and design choices, and re-implementing them in a professional and well-thought way.
 
 <!-- Accessibility and documentation -->
@@ -143,7 +145,7 @@ For example, the `rsp_clean()` function uses `signal_filter()` and `signal_detre
 
 The mid-level functions are assembled in high-level "master" functions, that are convenient entry points for new users. For instance, the `ecg_process()` function internally chains the mid-level functions `ecg_clean()`, `ecg_findpeaks()`, `ecg_rate()`. A specific processing pipeline can be selected with the `method` argument, that is then propagated throughout the internal functions. Easily switching between processing pipelines allows for the comparison of different methods, and streamlines critical but time-consuming steps in reproducible research, such as the validation of data preparation and quality control [@Quintana2016]. Finally, the package includes convenience meta-functions (e.g., `bio_process`) that enable the combined processing of multiple types of signals at once (e.g., `bio_process(ecg=ecg_signal, eda=eda_signal)`).
 
-Performing an entire set of operations with sensible default parameters in one function can be rewarding, especially for beginners, allowing them to perform cutting-edge processing or replication of research steps without requiring much programming expertise. Moreover, it contributes to the demystification of the usage of "pure" programming tools (as opposed to GUI-based software such as *SPSS*, *Kubios*, or *Acqknowledge*), providing a welcoming framework to further explore the complexities of physiological data processing. Importantly, more advanced users can easily build custom analysis pipelines by using the mid-level functions, allowing for a finer control over the processing parameters. We believe that this implementation is a well-calibrated trade-off between flexibility and user-friendliness. 
+Performing an entire set of operations with sensible default parameters in one function can be rewarding, especially for beginners, allowing them to perform cutting-edge processing or replication of research steps without requiring much programming expertise. Moreover, it contributes to the demystification of the usage of "pure" programming tools (as opposed to GUI-based software such as *SPSS*, *Kubios*, or *Acqknowledge*), providing a welcoming framework to further explore the complexities of physiological data processing. Importantly, more advanced users can easily build custom analysis pipelines by using the mid-level functions, allowing for a finer control over the processing parameters. We believe that this implementation is a well-calibrated trade-off between flexibility and user-friendliness.
 
 
 
@@ -281,7 +283,7 @@ This example illustrates a second type of physiological analysis, that we refer 
 
 We expect the package's future evolution to be driven by the communities' needs and the advances in related fields. Possible directions include extending the support for other types of bodily signals (e.g., electrogastrography - EGG, electrooculography - EOG) and achieving performance gains for large datasets by using efficient algorithms. Further validation of the available processing pipelines could be made through the (re)analysis of public databases. In line with this objective, the support of standardized data structure formats (e.g. WFDB, BIDS, ...) could be extended.
 
-In conclusion, we believe that *NeuroKit2* provides useful tools for anyone who is interested in analyzing physiological data from research-grade hardware as well as wearable "smart health devices". By increasing the autonomy of researchers and practitioners, and by shortening the delay between data collection and results acquisition, *NeuroKit2* could be useful beyond academic research in neuroscience and psychology, including applications such as biofeedback, personal physiological monitoring and exercise science. Finally, we hope that *NeuroKit2* encourages users to become part of a supportive open-science community with diverse areas of expertise rather than relying on closed-source and proprietary software, thus shaping the future of neurophysiology and its related fields. 
+In conclusion, we believe that *NeuroKit2* provides useful tools for anyone who is interested in analyzing physiological data from research-grade hardware as well as wearable "smart health devices". By increasing the autonomy of researchers and practitioners, and by shortening the delay between data collection and results acquisition, *NeuroKit2* could be useful beyond academic research in neuroscience and psychology, including applications such as biofeedback, personal physiological monitoring and exercise science. Finally, we hope that *NeuroKit2* encourages users to become part of a supportive open-science community with diverse areas of expertise rather than relying on closed-source and proprietary software, thus shaping the future of neurophysiology and its related fields.
 
 # Conflict of Interest
 
@@ -289,7 +291,7 @@ The authors declare that the research was conducted in the absence of commercial
 
 # Acknowledgements
 
-We would like to thank Prof. C. F. Xavier for inspiration, all the contributors (https://neurokit2.readthedocs.io/en/latest/authors.html), and the users for their support.
+We would like to thank Prof. C. F. Xavier for inspiration, all the contributors (https://neurokit2.readthedocs.io/en/latest/authors.html), and the users for their support. Francois Lespinasse would like to thank the Courtois Foundation for its support through the Courtois-NeuroMod project (https://cneuromod.ca)
 
 
 
