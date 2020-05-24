@@ -6,6 +6,7 @@ from ..events import events_find
 from ..signal import signal_formatpeaks
 from ..signal import signal_binarize
 
+
 def emg_activation(emg_amplitude, sampling_rate=1000, method="threshold", threshold='default', duration_min="default"):
     """Detects onset in EMG signal based on the amplitude threshold.
 
@@ -72,11 +73,13 @@ def emg_activation(emg_amplitude, sampling_rate=1000, method="threshold", thresh
     method = method.lower()  # remove capitalised letters
     if method == "threshold":
         activity = _emg_activation_threshold(emg_amplitude, threshold=threshold)
+    elif method == "pelt":
+        activity = _emg_activation_pelt(emg_amplitude, threshold=threshold)
     elif method == "mixture":
         activity = _emg_activation_mixture(emg_amplitude, threshold=threshold)
     else:
         raise ValueError("NeuroKit error: emg_activation(): 'method' should be "
-                         "one of 'mixture' or 'threshold'.")
+                         "one of 'mixture', 'threshold', or 'pelt'.")
 
     # Sanitize activity.
     info = _emg_activation_activations(activity, sampling_rate=sampling_rate, duration_min=duration_min)
@@ -130,13 +133,21 @@ def _emg_activation_threshold(emg_amplitude, threshold='default'):
     return activity
 
 
-
 def _emg_activation_mixture(emg_amplitude, threshold="default"):
 
     if threshold == 'default':
         threshold = 0.33
 
     activity = signal_binarize(emg_amplitude, method="mixture", threshold=threshold)
+    return activity
+
+
+def _emg_activation_pelt(emg_amplitude, threshold="default"):
+
+    if threshold == "default":
+        threshold = "auto"
+
+    activity = signal_binarize(emg_amplitude, method="pelt", threshold=threshold)
     return activity
 
 
