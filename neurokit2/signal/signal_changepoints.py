@@ -23,7 +23,8 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.emg_simulate(burst_number=3)
-    >>> nk.signal_changepoints(signal, change="var", show=True)
+    >>> fig = nk.signal_changepoints(signal, change="var", show=True)
+    >>> fig #doctest: +SKIP
 
     References
     ----------

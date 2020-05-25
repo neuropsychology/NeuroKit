@@ -22,3 +22,4 @@ from .signal_power import signal_power
 from .signal_synchrony import signal_synchrony
 from .signal_autocor import signal_autocor
 from .signal_changepoints import signal_changepoints
+from .signal_decompose import signal_decompose

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import itertools
 
-from ..signal import signal_binarize as signal_binarize
+from ..signal import signal_binarize
 
 
 
