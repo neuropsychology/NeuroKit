@@ -164,6 +164,27 @@ fig = plt.gcf()
 fig.set_size_inches(10, 6)
 fig.savefig("README_signalprocessing.png", dpi=300, h_pad=3)
 
+
+# =============================================================================
+# Heart Rate Variability
+# =============================================================================
+
+# Download data
+data = nk.data("bio_resting_8min_100hz")
+
+# Find peaks
+peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+
+# Compute HRV indices
+hrv = nk.hrv(peaks, sampling_rate=100, show=True)
+hrv
+
+# Save plot
+fig = plt.gcf()
+fig.set_size_inches(10*1.5, 6*1.5, forward=True)
+fig.savefig("README_hrv.png", dpi=300, h_pad=3)
+
+
 # =============================================================================
 # Complexity
 # =============================================================================

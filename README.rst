@@ -362,7 +362,7 @@ Heart Rate Variability (HRV)
 .. code-block:: python
 
     # Download data
-    data = nk.data("bio_resting_5min_100hz")
+    data = nk.data("bio_resting_8min_100hz")
 
     # Find peaks
     peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
