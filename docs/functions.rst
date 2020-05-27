@@ -52,8 +52,6 @@ EDA
 
 .. autofunction:: neurokit2.eda_clean
 
-.. autofunction:: neurokit2.eda_decompose
-
 .. autofunction:: neurokit2.eda_findpeaks
 
 

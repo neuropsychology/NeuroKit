@@ -27,7 +27,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
 
     See Also
     --------
-    eda_simulate, eda_decompose, eda_findpeaks, eda_process, eda_plot
+    eda_simulate, eda_findpeaks, eda_process, eda_plot
 
     Examples
     --------
