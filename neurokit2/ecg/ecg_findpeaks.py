@@ -63,7 +63,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> rodrigues2020 = nk.ecg_findpeaks(cleaned, method="rodrigues2020")
     >>>
     >>> # Visualize
-    >>> fig = nk.events_plot([neurokit["ECG_R_Peaks"], pantompkins1985["ECG_R_Peaks"], hamilton2002["ECG_R_Peaks"], christov2004["ECG_R_Peaks"], gamboa2008["ECG_R_Peaks"], elgendi2010["ECG_R_Peaks"], engzeemod2012["ECG_R_Peaks"], kalidas2017["ECG_R_Peaks"], martinez2003["ECG_R_Peaks"], martinez2003["rodrigues2020"]], cleaned)
+    >>> fig = nk.events_plot([neurokit["ECG_R_Peaks"], pantompkins1985["ECG_R_Peaks"], hamilton2002["ECG_R_Peaks"], christov2004["ECG_R_Peaks"], gamboa2008["ECG_R_Peaks"], elgendi2010["ECG_R_Peaks"], engzeemod2012["ECG_R_Peaks"], kalidas2017["ECG_R_Peaks"], martinez2003["ECG_R_Peaks"], rodrigues2020["ECG_R_Peaks"]], cleaned)
     >>> fig #doctest: +SKIP
     >>>
     >>> # Method-agreement
