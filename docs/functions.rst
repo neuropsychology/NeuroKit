@@ -64,7 +64,9 @@ EMG
 EEG
 -------
 
-.. autofunction:: neurokit2.eeg_add_channel
+.. autofunction:: neurokit2.mne_channel_add
+
+.. autofunction:: neurokit2.mne_channel_extract
 
 PPG
 -------
@@ -79,7 +81,7 @@ General Signal Processing
 Signal cleaning
 """"""""""""""""
 
-.. autofunction:: neurokit2.signal_distord
+.. autofunction:: neurokit2.signal_distort
 
 .. autofunction:: neurokit2.signal_binarize
 
