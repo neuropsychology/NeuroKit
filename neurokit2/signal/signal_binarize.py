@@ -3,9 +3,6 @@ import pandas as pd
 import numpy as np
 import sklearn.mixture
 
-from .signal_changepoints import signal_changepoints
-
-
 
 def signal_binarize(signal, method="threshold", threshold="auto"):
     """Binarize a continuous signal.
@@ -66,8 +63,6 @@ def _signal_binarize(signal, method="threshold", threshold="auto"):
         binary = _signal_binarize_threshold(signal, threshold=threshold)
     elif method == "mixture":
         binary = _signal_binarize_mixture(signal, threshold=threshold)
-    elif method == "pelt":
-        binary = _signal_binarize_pelt(signal, threshold=threshold)
     else:
         raise ValueError("NeuroKit error: signal_binarize(): 'method' should be "
                          "one of 'threshold' or 'mixture'.")
@@ -102,18 +97,4 @@ def _signal_binarize_mixture(signal, threshold="auto"):
 
     binary = np.zeros(len(signal))
     binary[probability >= threshold] = 1
-    return binary
-
-
-def _signal_binarize_pelt(signal, threshold="auto"):
-    changepoints = signal_changepoints(signal, change="var", show=False)
-    if changepoints[0] == 0:
-        changepoints = changepoints[1:]
-
-    if threshold == "auto":
-        threshold = np.min(signal[changepoints])
-
-    binary = np.zeros(len(signal))
-    binary[signal > threshold] = 1
-
     return binary
