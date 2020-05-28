@@ -12,3 +12,6 @@ from .eda_eventrelated import eda_eventrelated
 from .eda_intervalrelated import eda_intervalrelated
 from .eda_analyze import eda_analyze
 from .eda_autocor import eda_autocor
+
+__all__=["eda_simulate", "eda_clean", "eda_phasic", "eda_findpeaks", "eda_fixpeaks", "eda_peaks",
+         "eda_process", "eda_plot", "eda_eventrelated", "eda_intervalrelated", "eda_analyze", "eda_autocor"]

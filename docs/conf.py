@@ -26,8 +26,7 @@ import sys
 sys.path.insert(0, os.path.abspath('../'))
 
 
-MOCK_MODULES = ['numpy', 'pandas',
-                'matplotlib', 'matplotlib.pyplot', 'matplotlib.patches', 'matplotlib.cm', 'matplotlib.collections', 'matplotlib.gridspec', 'matplotlib.animation', 'mpl_toolkits', 'mpl_toolkits.mplot3d',
+MOCK_MODULES = [
                 'scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg', 'scipy.spatial', 'scipy.special', 'scipy.integrate',
                 'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets', 'sklearn.metrics', 'sklearn.metrics.pairwise',
                 'mne', 'bioread', 'cvxopt', 'pywt']
@@ -58,8 +57,16 @@ extensions = [
     'sphinx_rtd_theme',
     'nbsphinx',
     'sphinx_nbexamples',
+    'matplotlib.sphinxext.plot_directive'
 ]
 
+# matplotlib plot directive
+plot_include_source = True
+plot_formats = [("png", 90)]
+plot_html_show_formats = False
+plot_html_show_source_link = False
+plot_pre_code = """import numpy as np
+import pandas as pd"""
 
 # on_rtd is whether we are on readthedocs.org
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'

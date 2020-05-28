@@ -16,3 +16,6 @@ from .rsp_analyze import rsp_analyze
 
 # Aliases
 from ..signal import signal_rate as rsp_rate
+
+__all__=["rsp_simulate", "rsp_clean", "rsp_findpeaks", "rsp_fixpeaks", "rsp_peaks", "rsp_phase",
+         "rsp_amplitude", "rsp_process", "rsp_plot", "rsp_eventrelated", "rsp_rrv", "rsp_intervalrelated", "rsp_analyze"]

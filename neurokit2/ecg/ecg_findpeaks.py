@@ -42,13 +42,17 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-    >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> info = nk.ecg_findpeaks(cleaned)
-    >>> fig = nk.events_plot(info["ECG_R_Peaks"], cleaned)
-    >>> fig #doctest: +SKIP
+    .. plot::
+       :context: close-figs
+
+       >>> import neurokit2 as nk
+       >>>
+       >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
+       >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
+       >>> info = nk.ecg_findpeaks(cleaned)
+       >>> nk.events_plot(info["ECG_R_Peaks"], cleaned)  #doctest: +ELLIPSIS
+       <Figure ...>
+
     >>>
     >>> # Different methods
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
