@@ -63,7 +63,7 @@ extensions = [
 # matplotlib plot directive
 plot_include_source = True
 plot_formats = [("png", 90)]
-plot_html_show_formats = False
+plot_html_show_formats = True
 plot_html_show_source_link = False
 plot_pre_code = """import numpy as np
 import pandas as pd"""

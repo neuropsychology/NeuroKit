@@ -72,10 +72,10 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> _, rpeaks = nk.ecg_peaks(cleaned)
     >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000, method="peak")
-    >>> fig = nk.events_plot(waves["ECG_P_Peaks"], cleaned)
-    >>> fig #doctest: +SKIP
-    >>> fig = nk.events_plot(waves["ECG_T_Peaks"], cleaned)
-    >>> fig #doctest: +SKIP
+    >>> nk.events_plot(waves["ECG_P_Peaks"], cleaned) #doctest: +ELLIPSIS
+    <Figure ...>
+    >>> nk.events_plot(waves["ECG_T_Peaks"], cleaned) #doctest: +ELLIPSIS
+    <Figure ...>
 
     References
     --------------

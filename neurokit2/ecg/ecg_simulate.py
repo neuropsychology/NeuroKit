@@ -48,7 +48,9 @@ def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>> ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")
     >>> pd.DataFrame({"ECG_Simple": ecg1,
     ...               "ECG_Complex": ecg2}).plot(subplots=True) #doctest: +ELLIPSIS
-    array([<matplotlib.axes._subplots.AxesSubplot object at ...>, <matplotlib.axes._subplots.AxesSubplot object at ...>], dtype=object)
+    array([<matplotlib.axes._subplots.AxesSubplot object at ...>,
+       <matplotlib.axes._subplots.AxesSubplot object at ...>],
+      dtype=object)
 
     See Also
     --------

@@ -50,7 +50,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
        >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
        >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
        >>> info = nk.ecg_findpeaks(cleaned)
-       >>> nk.events_plot(info["ECG_R_Peaks"], cleaned)  #doctest: +ELLIPSIS
+       >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +ELLIPSIS
        <Figure ...>
 
     >>>
@@ -67,8 +67,17 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> rodrigues2020 = nk.ecg_findpeaks(cleaned, method="rodrigues2020")
     >>>
     >>> # Visualize
-    >>> fig = nk.events_plot([neurokit["ECG_R_Peaks"], pantompkins1985["ECG_R_Peaks"], hamilton2002["ECG_R_Peaks"], christov2004["ECG_R_Peaks"], gamboa2008["ECG_R_Peaks"], elgendi2010["ECG_R_Peaks"], engzeemod2012["ECG_R_Peaks"], kalidas2017["ECG_R_Peaks"], martinez2003["ECG_R_Peaks"], rodrigues2020["ECG_R_Peaks"]], cleaned)
-    >>> fig #doctest: +SKIP
+    >>> nk.events_plot([neurokit["ECG_R_Peaks"],
+    ...                       pantompkins1985["ECG_R_Peaks"],
+    ...                       hamilton2002["ECG_R_Peaks"],
+    ...                       christov2004["ECG_R_Peaks"],
+    ...                       gamboa2008["ECG_R_Peaks"],
+    ...                       elgendi2010["ECG_R_Peaks"],
+    ...                       engzeemod2012["ECG_R_Peaks"],
+    ...                       kalidas2017["ECG_R_Peaks"],
+    ...                       martinez2003["ECG_R_Peaks"],
+    ...                       rodrigues2020["ECG_R_Peaks"]], cleaned) #doctest: +ELLIPSIS
+    <Figure ...>
     >>>
     >>> # Method-agreement
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=500)
@@ -76,8 +85,9 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     ...                         sampling_rate=500,
     ...                         noise_amplitude=0.2, noise_frequency=[25, 50],
     ...                         artifacts_amplitude=0.2, artifacts_frequency=50)
-    >>> fig = nk.ecg_findpeaks(ecg, sampling_rate=1000, method="promac", show=True)
-    >>> fig #doctest: +SKIP
+    >>> nk.ecg_findpeaks(ecg, sampling_rate=1000, method="promac", show=True) #doctest: +ELLIPSIS
+    {'ECG_R_Peaks': array([...],
+       dtype=int64)}
 
     References
     --------------

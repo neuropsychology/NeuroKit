@@ -37,8 +37,8 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
     >>>
     >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
-    >>> fig = nk.ecg_plot(signals, sampling_rate=1000, show_type='default')
-    >>> fig #doctest: +SKIP
+    >>> nk.ecg_plot(signals, sampling_rate=1000, show_type='default') #doctest: +ELLIPSIS
+    <Figure ...>
 
     See Also
     --------
