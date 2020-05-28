@@ -2,7 +2,7 @@
 import pandas as pd
 
 
-def eda_autocor(eda_signal, sampling_rate=1000, lag=4):
+def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
     """Computes autocorrelation measure of raw EDA signal i.e., the
     correlation between the time series data and a specified time-lagged
     version of itself.
@@ -10,12 +10,12 @@ def eda_autocor(eda_signal, sampling_rate=1000, lag=4):
     Parameters
     ----------
     eda_signal : list, array or Series
-        The raw EDA signal.
+        The cleaned EDA signal.
     sampling_rate : int
         The sampling frequency of raw EDA signal (in Hz, i.e., samples/second).
     lag : int
-        Time lag in seconds. Defaults to 4 seconds to avoid autoregressive correlations
-        approaching 1, as recommended by Halem et al. (2020)
+        Time lag in seconds. Defaults to 4 seconds to avoid autoregressive
+        correlations approaching 1, as recommended by Halem et al. (2020).
 
     Returns
     -------
@@ -24,7 +24,7 @@ def eda_autocor(eda_signal, sampling_rate=1000, lag=4):
 
     See Also
     --------
-    eda_simulate
+    eda_simulate, eda_clean
 
 
     Examples
@@ -33,7 +33,8 @@ def eda_autocor(eda_signal, sampling_rate=1000, lag=4):
     >>>
     >>> # Simulate EDA signal
     >>> eda_signal = nk.eda_simulate(duration=5, scr_number=5, drift=0.1)
-    >>> cor = nk.eda_autocor(eda_signal)
+    >>> eda_cleaned = nk.eda_clean(eda_signal)
+    >>> cor = nk.eda_autocor(eda_cleaned)
     >>> cor #doctest: +SKIP
 
     References
@@ -41,16 +42,25 @@ def eda_autocor(eda_signal, sampling_rate=1000, lag=4):
     - Halem, S., van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
     """
     # Sanity checks
-    if not isinstance(eda_signal, pd.Series):
-        eda_signal = pd.Series(eda_signal)
+    if not isinstance(eda_cleaned, pd.Series):
+        if isinstance(eda_cleaned, pd.DataFrame):
+            colnames = eda_cleaned.columns.values
+            if len([i for i in colnames if 'EDA_Clean' in i]) == 0:
+                raise ValueError("NeuroKit warning: eda_autocor(): "
+                                 "Your input does not contain the cleaned "
+                                 "EDA signal.")
+            else:
+                eda_cleaned = eda_cleaned['EDA_Clean']
+    else:
+        eda_cleaned = pd.Series(eda_cleaned)
 
     lag_samples = lag*sampling_rate
 
-    if lag_samples > len(eda_signal):
+    if lag_samples > len(eda_cleaned):
         raise ValueError("NeuroKit error: eda_autocor(): The time lag "
                          "exceeds the duration of the EDA signal. "
                          "Consider using a longer duration of the EDA signal.")
 
-    cor = eda_signal.autocorr(lag=lag_samples)
+    cor = eda_cleaned.autocorr(lag=lag_samples)
 
     return cor
