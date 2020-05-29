@@ -21,4 +21,4 @@ from ..signal import signal_rate as ecg_rate
 
 __all__=["ecg_simulate", "ecg_clean", "ecg_findpeaks", "ecg_peaks", "ecg_segment", "ecg_process",
          "ecg_plot", "ecg_delineate", "ecg_rsp", "ecg_phase", "ecg_rsa", "ecg_quality", "ecg_eventrelated", 
-         "ecg_intervalrelated", "ecg_analyze"]
+         "ecg_intervalrelated", "ecg_analyze", "ecg_rate"]
