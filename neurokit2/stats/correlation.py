@@ -49,17 +49,10 @@ def _cor_methods(x, y, method="pearson"):
     method = method.lower()
     if method in ["pearson", "pears", "p", "r"]:
         r, p = scipy.stats.pearsonr(x, y)
-    elif method in [
-        'spearman',
-        'spear',
-        's',
-        'rho',
-        'kendall',
-        'kend',
-        'k',
-        'tau',
-    ]:
-        r, p = scipy.stats.spearmanr(x, y)
+    elif method in ["spearman", "spear", "s", "rho"]:
+        r, p = scipy.stats.spearmanr(x, y, nan_policy="omit")
+    elif method in ["kendall", "kend", "k", "tau"]:
+        r, p = scipy.stats.kendalltau(x, y, nan_policy="omit")
     else:
         raise ValueError("NeuroKit error: cor(): 'method' not recognized.")
 
