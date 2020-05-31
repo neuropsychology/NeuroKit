@@ -479,14 +479,15 @@ def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
                                                    peak_type="tpeaks",
                                                    sampling_rate=sampling_rate)
 
+    # Return info dictionary
     return {"ECG_P_Peaks": ppeaks,
-                "ECG_T_Peaks": tpeaks,
-                "ECG_R_Onsets": qrs_onsets,
-                "ECG_R_Offsets": qrs_offsets,
-                "ECG_P_Onsets": p_onsets,
-                "ECG_P_Offsets": p_offsets,
-                "ECG_T_Onsets": t_onsets,
-                "ECG_T_Offsets": t_offsets}
+            "ECG_T_Peaks": tpeaks,
+            "ECG_R_Onsets": qrs_onsets,
+            "ECG_R_Offsets": qrs_offsets,
+            "ECG_P_Onsets": p_onsets,
+            "ECG_P_Offsets": p_offsets,
+            "ECG_T_Onsets": t_onsets,
+            "ECG_T_Offsets": t_offsets}
 
 # Internals
 # ---------------------
@@ -708,12 +709,13 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
         T_offsets.append(_ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T))
 
 
+    # Return info dictionary
     return {"ECG_P_Peaks": P_list,
-               "ECG_Q_Peaks": Q_list,
-               "ECG_S_Peaks": S_list,
-               "ECG_T_Peaks": T_list,
-               "ECG_P_Onsets": P_onsets,
-               "ECG_T_Offsets": T_offsets}
+            "ECG_Q_Peaks": Q_list,
+            "ECG_S_Peaks": S_list,
+            "ECG_T_Peaks": T_list,
+            "ECG_P_Onsets": P_onsets,
+            "ECG_T_Offsets": T_offsets}
 
 
 # Internal

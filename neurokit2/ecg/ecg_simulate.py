@@ -270,7 +270,7 @@ def _ecg_simulate_ecgsyn(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfrat
 
     # include additive uniformly distributed measurement noise
     eta = 2*np.random.uniform(len(z))-1
-    return z + Anoise*eta
+    return z + Anoise*eta  # Return signal
 
 
 def _ecg_simulate_derivsecgsyn(t, x, rr, ti, sfint, ai, bi):
@@ -328,4 +328,4 @@ def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfrat
 
     xstd = np.std(x)
     ratio = rrstd/xstd
-    return rrmean + x*ratio
+    return rrmean + x*ratio  # Return RR
