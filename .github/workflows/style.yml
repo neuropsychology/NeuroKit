@@ -36,7 +36,11 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
         
-        
+    - name: Run Pylint
+      uses: fylein/python-pylint-github-action@v1
+      with:
+        args: pylint --rcfile=.pylintrc neurokit2
+    
     - name: Build package and test with twine
       run: |
         python setup.py sdist bdist_wheel
