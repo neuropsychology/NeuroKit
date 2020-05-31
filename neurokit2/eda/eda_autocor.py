@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import numpy as np
+
+from ..signal import signal_autocor
 
 
 def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
@@ -42,18 +45,18 @@ def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
     - Halem, S., van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
     """
     # Sanity checks
-    if not isinstance(eda_cleaned, pd.Series):
-        if isinstance(eda_cleaned, pd.DataFrame):
-            colnames = eda_cleaned.columns.values
-            if len([i for i in colnames if 'EDA_Clean' in i]) == 0:
-                raise ValueError("NeuroKit warning: eda_autocor(): "
-                                 "Your input does not contain the cleaned "
-                                 "EDA signal.")
-            else:
-                eda_cleaned = eda_cleaned['EDA_Clean']
-    else:
-        eda_cleaned = pd.Series(eda_cleaned)
+    if isinstance(eda_cleaned, pd.DataFrame):
+        colnames = eda_cleaned.columns.values
+        if len([i for i in colnames if 'EDA_Clean' in i]) == 0:
+            raise ValueError("NeuroKit warning: eda_autocor(): "
+                             "Your input does not contain the cleaned "
+                             "EDA signal.")
+        else:
+            eda_cleaned = eda_cleaned['EDA_Clean']
+    if isinstance(eda_cleaned, pd.Series):
+        eda_cleaned = eda_cleaned.values
 
+    # Autocorrelation
     lag_samples = lag*sampling_rate
 
     if lag_samples > len(eda_cleaned):
@@ -61,6 +64,6 @@ def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
                          "exceeds the duration of the EDA signal. "
                          "Consider using a longer duration of the EDA signal.")
 
-    cor = eda_cleaned.autocorr(lag=lag_samples)
+    cor = signal_autocor(eda_cleaned, lag=lag_samples)
 
     return cor

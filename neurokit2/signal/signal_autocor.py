@@ -39,6 +39,10 @@ def signal_autocor(signal, lag=None, normalize=True):
         r = r / r[0]
 
     if lag is not None:
-        r = r[lag]
+        if lag > len(signal):
+            raise ValueError("NeuroKit error: signal_autocor(): The time lag "
+                             "exceeds the duration of the signal. ")
+        else:
+            r = r[lag]
 
     return r
