@@ -1,7 +1,7 @@
 # - * - coding: utf-8 - * -
 
+from ..signal import signal_fixpeaks, signal_formatpeaks
 from .ecg_findpeaks import ecg_findpeaks
-from ..signal import signal_formatpeaks, signal_fixpeaks
 
 
 def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",

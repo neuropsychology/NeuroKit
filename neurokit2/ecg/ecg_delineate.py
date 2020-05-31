@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-from scipy.signal import find_peaks
 import scipy.signal
+from scipy.signal import find_peaks
 
-from ..signal import (signal_zerocrossings,
-                      signal_resample,
-                      signal_smooth,
-                      signal_findpeaks,
-                      signal_formatpeaks)
+from ..epochs import epochs_create, epochs_to_df
+from ..signal import signal_findpeaks, signal_formatpeaks, signal_resample, signal_smooth, signal_zerocrossings
+from ..stats import standardize
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
-from ..epochs import epochs_create
-from ..epochs import epochs_to_df
-from ..stats import standardize
 
 
 def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type='peaks', check=False):

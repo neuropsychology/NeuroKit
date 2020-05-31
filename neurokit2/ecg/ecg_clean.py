@@ -2,8 +2,8 @@
 import numpy as np
 import scipy.signal
 
-from ..signal import signal_filter
 from ..misc import as_vector
+from ..signal import signal_filter
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):

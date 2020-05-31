@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
+import matplotlib.gridspec
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.gridspec
 
-from ..signal import signal_fixpeaks
 from ..ecg import ecg_peaks
-from .ecg_segment import ecg_segment
 from ..epochs import epochs_to_df
+from ..signal import signal_fixpeaks
 from ..stats import rescale
+from .ecg_segment import ecg_segment
 
 
 def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):

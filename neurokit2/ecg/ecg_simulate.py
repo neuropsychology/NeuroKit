@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import scipy
 import math
 
-from ..signal import signal_resample
-from ..signal import signal_distort
+import numpy as np
+import scipy
+
+from ..signal import signal_distort, signal_resample
 
 
 def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,

@@ -2,12 +2,9 @@
 import numpy as np
 import pandas as pd
 
-from ..signal import signal_filter
-from ..signal import signal_resample
-from ..signal import signal_interpolate
-from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..rsp import rsp_process
-from ..signal import signal_rate
+from ..signal import signal_filter, signal_interpolate, signal_rate, signal_resample
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .ecg_rsp import ecg_rsp
 
 

@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
-from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
-from ..epochs.eventrelated_utils import _eventrelated_addinfo
-from ..epochs.eventrelated_utils import _eventrelated_rate
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo, _eventrelated_rate, _eventrelated_sanitizeinput,
+                                         _eventrelated_sanitizeoutput)
 
 
 def ecg_eventrelated(epochs, silent=False):

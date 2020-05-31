@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
+from ..signal import signal_rate
 from .ecg_clean import ecg_clean
-from .ecg_peaks import ecg_peaks
 from .ecg_delineate import ecg_delineate
+from .ecg_peaks import ecg_peaks
 from .ecg_phase import ecg_phase
 from .ecg_quality import ecg_quality
-from ..signal import signal_rate
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):

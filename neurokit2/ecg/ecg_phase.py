@@ -3,9 +3,8 @@ import numpy as np
 import pandas as pd
 
 from ..signal import signal_phase
-from .ecg_peaks import ecg_peaks
 from .ecg_delineate import ecg_delineate
-
+from .ecg_peaks import ecg_peaks
 
 
 def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', sampling_rate=None):
