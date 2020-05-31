@@ -1,9 +1,6 @@
 name: Sort imports with isort
 
-on:
-  pull_request:
-    branches: [master]
-    types: [closed]
+on: pull_request
 
 jobs:
   format:
