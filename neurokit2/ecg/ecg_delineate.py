@@ -80,21 +80,21 @@ def ecg_delineate(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", s
     # Sanitize input for ecg_cleaned
     if isinstance(ecg_cleaned, pd.DataFrame):
         cols = [col for col in ecg_cleaned.columns if 'ECG_Clean' in col]
-        if len(cols) == 0:
+        if cols:
+            ecg_cleaned = ecg_cleaned[cols[0]].values
+        else:
             raise ValueError("NeuroKit error: ecg_delineate(): Wrong input,"
                              "we couldn't extract cleaned signal.")
-        else:
-            ecg_cleaned = ecg_cleaned[cols[0]].values
     elif isinstance(ecg_cleaned, dict):
         for i in ecg_cleaned:
             cols = [col for col in ecg_cleaned[i].columns if 'ECG_Clean' in col]
-            if len(cols) == 0:
-                raise ValueError("NeuroKit error: ecg_delineate(): Wrong input,"
-                                 "we couldn't extract cleaned signal.")
-            else:
+            if cols:
                 signals = epochs_to_df(ecg_cleaned)
                 ecg_cleaned = signals[cols[0]].values
 
+            else:
+                raise ValueError("NeuroKit error: ecg_delineate(): Wrong input,"
+                                 "we couldn't extract cleaned signal.")
     # Sanitize input for rpeaks
     if rpeaks is None:
         _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
@@ -215,13 +215,13 @@ def _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False
     degree_add = _dwt_compensate_degree(sampling_rate)
 
     tpeaks = []
-    for i in range(len(rpeaks)):
-        if np.isnan(rpeaks[i]):
+    for rpeak_ in rpeaks:
+        if np.isnan(rpeak_):
             tpeaks.append(np.nan)
             continue
         # search for T peaks from R peaks
-        srch_idx_start = rpeaks[i] + srch_bndry
-        srch_idx_end = rpeaks[i] + 2 * int(rt_duration * sampling_rate)
+        srch_idx_start = rpeak_ + srch_bndry
+        srch_idx_end = rpeak_ + 2 * int(rt_duration * sampling_rate)
         dwt_local = dwtmatr[degree_tpeak + degree_add, srch_idx_start:srch_idx_end]
         height = epsilon_T_weight * np.sqrt(np.mean(np.square(dwt_local)))
 
@@ -249,21 +249,21 @@ def _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False
                 candidate_peaks.append(idx_zero)
                 candidate_peaks_scores.append(score)
 
-        if len(candidate_peaks) == 0:
+        if not candidate_peaks:
             tpeaks.append(np.nan)
             continue
 
         tpeaks.append(candidate_peaks[np.argmax(candidate_peaks_scores)] + srch_idx_start)
 
     ppeaks = []
-    for i in range(len(rpeaks)):
-        if np.isnan(rpeaks[i]):
+    for rpeak in rpeaks:
+        if np.isnan(rpeak):
             ppeaks.append(np.nan)
             continue
 
         # search for P peaks from Rpeaks
-        srch_idx_start = rpeaks[i] - 2 * int(p2r_duration * sampling_rate)
-        srch_idx_end = rpeaks[i] - srch_bndry
+        srch_idx_start = rpeak - 2 * int(p2r_duration * sampling_rate)
+        srch_idx_end = rpeak - srch_bndry
         dwt_local = dwtmatr[degree_ppeak + degree_add, srch_idx_start:srch_idx_end]
         height = epsilon_P_weight * np.sqrt(np.mean(np.square(dwt_local)))
 
@@ -291,7 +291,7 @@ def _dwt_delineate_tp_peaks(ecg, rpeaks, dwtmatr, sampling_rate=250, debug=False
                 candidate_peaks.append(idx_zero)
                 candidate_peaks_scores.append(score)
 
-        if len(candidate_peaks) == 0:
+        if not candidate_peaks:
             ppeaks.append(np.nan)
             continue
 
@@ -479,7 +479,8 @@ def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
                                                    peak_type="tpeaks",
                                                    sampling_rate=sampling_rate)
 
-    info = {"ECG_P_Peaks": ppeaks,
+    # Return info dictionary
+    return {"ECG_P_Peaks": ppeaks,
             "ECG_T_Peaks": tpeaks,
             "ECG_R_Onsets": qrs_onsets,
             "ECG_R_Offsets": qrs_offsets,
@@ -487,7 +488,6 @@ def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
             "ECG_P_Offsets": p_offsets,
             "ECG_T_Onsets": t_onsets,
             "ECG_T_Offsets": t_offsets}
-    return info
 
 # Internals
 # ---------------------
@@ -516,7 +516,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
                                                  prominence=prominence)
 
-        elif peak_type == "tpeaks" or peak_type == "ppeaks":
+        elif peak_type in ["tpeaks", "ppeaks"]:
             search_window = - cwtmatr[4, index_peak - half_wave_width: index_peak]
 
             prominence = 0.10*max(search_window)
@@ -532,8 +532,6 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         if peak_type == "rpeaks":
             if wt_peaks_data['peak_heights'][-1] > 0:
                 epsilon_onset = 0.05 * wt_peaks_data['peak_heights'][-1]
-            elif wt_peaks_data['peak_heights'][-1] > 0:
-                epsilon_onset = 0.07 * wt_peaks_data['peak_heights'][-1]
         elif peak_type == "ppeaks":
             epsilon_onset = 0.50 * wt_peaks_data['peak_heights'][-1]
         elif peak_type == "tpeaks":
@@ -542,7 +540,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         if peak_type == "rpeaks":
             candidate_onsets = np.where(cwtmatr[2, nfirst-100: nfirst] <
                                         epsilon_onset)[0] + nfirst - 100
-        elif peak_type == "tpeaks" or peak_type == "ppeaks":
+        elif peak_type in ["tpeaks", "ppeaks"]:
             candidate_onsets = np.where(-cwtmatr[4, nfirst-100: nfirst] <
                                         epsilon_onset)[0] + nfirst - 100
 
@@ -559,7 +557,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height,
                                                               prominence=prominence)
 
-        elif peak_type == "tpeaks" or peak_type == "ppeaks":
+        elif peak_type in ["tpeaks", "ppeaks"]:
             search_window = cwtmatr[4, index_peak: index_peak + half_wave_width]
             prominence = 0.10*max(search_window)
             wt_peaks, wt_peaks_data = find_peaks(search_window, height=height,
@@ -572,8 +570,6 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         if peak_type == "rpeaks":
             if wt_peaks_data['peak_heights'][0] > 0:
                 epsilon_offset = 0.125 * wt_peaks_data['peak_heights'][0]
-            elif wt_peaks_data['peak_heights'][0] > 0:
-                epsilon_offset = 0.71 * wt_peaks_data['peak_heights'][0]
         elif peak_type == "ppeaks":
             epsilon_offset = 0.9 * wt_peaks_data['peak_heights'][0]
         elif peak_type == "tpeaks":
@@ -582,7 +578,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         if peak_type == "rpeaks":
             candidate_offsets = np.where((-cwtmatr[2, nlast: nlast + 100]) <
                                          epsilon_offset)[0] + nlast
-        elif peak_type == "tpeaks" or peak_type == "ppeaks":
+        elif peak_type in ["tpeaks", "ppeaks"]:
             candidate_offsets = np.where((cwtmatr[4, nlast: nlast + 100]) <
                                          epsilon_offset)[0] + nlast
 
@@ -713,14 +709,13 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
         T_offsets.append(_ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T))
 
 
-    out = {"ECG_P_Peaks": P_list,
-           "ECG_Q_Peaks": Q_list,
-           "ECG_S_Peaks": S_list,
-           "ECG_T_Peaks": T_list,
-           "ECG_P_Onsets": P_onsets,
-           "ECG_T_Offsets": T_offsets}
-
-    return out
+    # Return info dictionary
+    return {"ECG_P_Peaks": P_list,
+            "ECG_Q_Peaks": Q_list,
+            "ECG_S_Peaks": S_list,
+            "ECG_T_Peaks": T_list,
+            "ECG_P_Onsets": P_onsets,
+            "ECG_T_Offsets": T_offsets}
 
 
 # Internal
