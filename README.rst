@@ -61,7 +61,7 @@ If you're not sure how/what to do, be sure to read our `installation guide <http
 Contribution
 -------------
 
-.. image:: https://github.com/neuropsychology/neurokit/workflows/GitHub-CI/badge.svg
+.. image:: https://github.com/neuropsychology/neurokit/workflows/Tests/badge.svg
         :target: https://github.com/neuropsychology/NeuroKit/actions
         :alt: GitHub CI
         
