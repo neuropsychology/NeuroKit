@@ -60,14 +60,14 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     >>>
     >>> # Visualize different methods
     >>> axes = pd.DataFrame({"Original signal": signal,
-                             "Baseline": baseline,
-                             "Linear": linear,
-                             "Quadratic": quadratic,
-                             "Cubic": cubic,
-                             "Polynomial (10th)": poly10,
-                             "Tarvainen": tarvainen,
-                             "LOESS": loess,
-                             "Local Regression": locreg}).plot(subplots=True)
+    ...                      "Baseline": baseline,
+    ...                      "Linear": linear,
+    ...                      "Quadratic": quadratic,
+    ...                      "Cubic": cubic,
+    ...                      "Polynomial (10th)": poly10,
+    ...                      "Tarvainen": tarvainen,
+    ...                      "LOESS": loess,
+    ...                      "Local Regression": locreg}).plot(subplots=True)
     >>> # Plot horizontal lines to better visualize the detrending
     >>> for subplot in axes: #doctest: +SKIP
     ...     subplot.axhline(y=0, color='k', linestyle='--') #doctest: +SKIP
