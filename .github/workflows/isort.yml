@@ -5,7 +5,8 @@ on: pull_request
 jobs:
   format:
 
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
+    name: Sort imports with isort
     runs-on: ubuntu-latest
 
     steps:
