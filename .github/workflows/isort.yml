@@ -3,7 +3,8 @@ name: Sort imports with isort
 on: pull_request
 
 jobs:
-  format:
+  build:
+  #format:
 
     # if: github.event.pull_request.merged == true
     name: Sort imports with isort
