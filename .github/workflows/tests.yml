@@ -5,6 +5,7 @@ on: pull_request
 
 jobs:
   build:
+    name: Tests
     runs-on: ${{ matrix.platform }}
     strategy:
       max-parallel: 4

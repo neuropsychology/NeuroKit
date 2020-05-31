@@ -458,7 +458,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
 Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- **Highest Density Interval**
+- **Highest Density Interval (HDI)**
 
 .. code-block:: python
 
