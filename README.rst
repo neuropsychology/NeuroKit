@@ -61,7 +61,6 @@ If you're not sure how/what to do, be sure to read our `installation guide <http
 Contribution
 -------------
 
-[![License: MIT]()](https://opensource.org/licenses/MIT)
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
         :target: https://github.com/neuropsychology/NeuroKit/blob/master/LICENSE
         :alt: License
