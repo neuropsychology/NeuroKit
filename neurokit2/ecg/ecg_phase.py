@@ -110,9 +110,11 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', samp
     ventricular_comletion = signal_phase(ventricular, method="percent")
 
 
-    out = pd.DataFrame({"ECG_Phase_Atrial": atrial,
-                        "ECG_Phase_Completion_Atrial": atrial_completion,
-                        "ECG_Phase_Ventricular": ventricular,
-                        "ECG_Phase_Completion_Ventricular": ventricular_comletion})
-
-    return out
+    return pd.DataFrame(
+        {
+            "ECG_Phase_Atrial": atrial,
+            "ECG_Phase_Completion_Atrial": atrial_completion,
+            "ECG_Phase_Ventricular": ventricular,
+            "ECG_Phase_Completion_Ventricular": ventricular_comletion,
+        }
+    )

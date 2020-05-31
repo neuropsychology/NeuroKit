@@ -196,8 +196,7 @@ def _ecg_findpeaks_promac_convolve(signal, peaks, sampling_rate=1000):
     sd = sampling_rate / 10
     shape = scipy.stats.norm.pdf(np.linspace(-sd*4, sd*4, num=int(sd*8)), loc=0, scale=sd)
 
-    convolved = np.convolve(x, shape, 'same')
-    return convolved
+    return np.convolve(x, shape, 'same')
 
 
 # =============================================================================
@@ -335,43 +334,45 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
 
     for i in range(len(ma)):
 
-        if i > 0 and i < len(ma) - 1:
-            if ma[i-1] < ma[i] and ma[i + 1] < ma[i]:
-                peak = i
-                peaks.append(i)
+        if (
+            i > 0
+            and i < len(ma) - 1
+            and ma[i - 1] < ma[i]
+            and ma[i + 1] < ma[i]
+        ):
+            peak = i
+            peaks.append(peak)
+            if ma[peak] > th and (peak-QRS[-1]) > 0.3 * sampling_rate:
+                QRS.append(peak)
+                idx.append(peak)
+                s_pks.append(ma[peak])
+                if len(n_pks) > 8:
+                    s_pks.pop(0)
+                s_pks_ave = np.mean(s_pks)
 
-                if ma[peak] > th and (peak-QRS[-1]) > 0.3 * sampling_rate:
-                    QRS.append(peak)
-                    idx.append(i)
-                    s_pks.append(ma[peak])
-                    if len(n_pks) > 8:
-                        s_pks.pop(0)
-                    s_pks_ave = np.mean(s_pks)
+                if RR_ave != 0.0 and QRS[-1] - QRS[-2] > 1.5 * RR_ave:
+                    missed_peaks = peaks[idx[-2] + 1:idx[-1]]
+                    for missed_peak in missed_peaks:
+                        if missed_peak - peaks[idx[-2]] > int(0.360 * sampling_rate) and ma[missed_peak] > 0.5 * th:
+                            QRS.append(missed_peak)
+                            QRS.sort()
+                            break
 
-                    if RR_ave != 0.0:
-                        if QRS[-1]-QRS[-2] > 1.5 * RR_ave:
-                            missed_peaks = peaks[idx[-2] + 1:idx[-1]]
-                            for missed_peak in missed_peaks:
-                                if missed_peak - peaks[idx[-2]] > int(0.360 * sampling_rate) and ma[missed_peak] > 0.5 * th:
-                                    QRS.append(missed_peak)
-                                    QRS.sort()
-                                    break
+                if len(QRS) > 2:
+                    RR.append(QRS[-1]-QRS[-2])
+                    if len(RR) > 8:
+                        RR.pop(0)
+                    RR_ave = int(np.mean(RR))
 
-                    if len(QRS) > 2:
-                        RR.append(QRS[-1]-QRS[-2])
-                        if len(RR) > 8:
-                            RR.pop(0)
-                        RR_ave = int(np.mean(RR))
+            else:
+                n_pks.append(ma[peak])
+                if len(n_pks) > 8:
+                    n_pks.pop(0)
+                n_pks_ave = np.mean(n_pks)
 
-                else:
-                    n_pks.append(ma[peak])
-                    if len(n_pks) > 8:
-                        n_pks.pop(0)
-                    n_pks_ave = np.mean(n_pks)
+            th = n_pks_ave + 0.45 * (s_pks_ave-n_pks_ave)
 
-                th = n_pks_ave + 0.45 * (s_pks_ave-n_pks_ave)
-
-                i += 1
+            i += 1
 
     QRS.pop(0)
 
@@ -526,7 +527,7 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000):
             F_section = MA3[i-ms350:i]
             max_latest = np.max(F_section[-ms50:])
             max_earliest = np.max(F_section[:ms50])
-            F = F + ((max_latest-max_earliest)/150.0)
+            F += (max_latest-max_earliest)/150.0
 
         # R
         if QRS and i < QRS[-1] + int((2.0/3.0 * Rm)):
@@ -571,9 +572,6 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
     """
 
-    # convert to samples
-    v_100ms = int(0.1 * sampling_rate)
-    v_300ms = int(0.3 * sampling_rate)
     hist, edges = np.histogram(signal, 100, density=True)
 
     TH = 0.01
@@ -590,12 +588,13 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
     b = np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2
     b = np.intersect1d(b, np.nonzero(-d2 > tol)[0])
 
-    if len(b) < 3:
-        rpeaks = []
-    else:
+    rpeaks = []
+    if len(b) >= 3:
         b = b.astype('float')
-        rpeaks = []
         previous = b[0]
+        # convert to samples
+        v_100ms = int(0.1 * sampling_rate)
+        v_300ms = int(0.3 * sampling_rate)
         for i in b[1:]:
             if i - previous > v_300ms:
                 previous = i
@@ -797,11 +796,7 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
     block_height = np.max(signal)
 
     for i in range(len(mwa_qrs)):
-        if mwa_qrs[i] > mwa_beat[i]:
-            blocks[i] = block_height
-        else:
-            blocks[i] = 0
-
+        blocks[i] = block_height if mwa_qrs[i] > mwa_beat[i] else 0
     QRS = []
 
     for i in range(1, len(blocks)):
@@ -948,7 +943,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
         # State 3: decreasing threshold
         Thr = Ramptotal
         while processed_ecg[i] < Thr:
-            Thr = Thr * np.exp(-Pth / sampling_rate)
+            Thr *= np.exp(-Pth / sampling_rate)
             i += 1
 
     return rpeaks
@@ -1015,43 +1010,48 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
 
     for i in range(len(detection)):
 
-        if i > 0 and i < len(detection) - 1:
-            if detection[i-1] < detection[i] and detection[i + 1] < detection[i]:
-                peak = i
-                peaks.append(i)
+        if (
+            i > 0
+            and i < len(detection) - 1
+            and detection[i - 1] < detection[i]
+            and detection[i + 1] < detection[i]
+        ):
+            peak = i
+            peaks.append(peak)
+            if detection[peak] > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
 
-                if detection[peak] > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
+                signal_peaks.append(peak)
+                indexes.append(index)
+                SPKI = 0.125 * detection[signal_peaks[-1]] + 0.875 * SPKI
+                if (
+                    RR_missed != 0
+                    and signal_peaks[-1] - signal_peaks[-2] > RR_missed
+                ):
+                    missed_section_peaks = peaks[indexes[-2] + 1:indexes[-1]]
+                    missed_section_peaks2 = []
+                    for missed_peak in missed_section_peaks:
+                        if missed_peak - signal_peaks[-2] > min_distance and signal_peaks[-1] - missed_peak > min_distance and detection[missed_peak] > threshold_I2:
+                            missed_section_peaks2.append(missed_peak)
 
-                    signal_peaks.append(peak)
-                    indexes.append(index)
-                    SPKI = 0.125 * detection[signal_peaks[-1]] + 0.875 * SPKI
-                    if RR_missed != 0:
-                        if signal_peaks[-1] - signal_peaks[-2] > RR_missed:
-                            missed_section_peaks = peaks[indexes[-2] + 1:indexes[-1]]
-                            missed_section_peaks2 = []
-                            for missed_peak in missed_section_peaks:
-                                if missed_peak - signal_peaks[-2] > min_distance and signal_peaks[-1] - missed_peak > min_distance and detection[missed_peak] > threshold_I2:
-                                    missed_section_peaks2.append(missed_peak)
+                    if missed_section_peaks2:
+                        missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
+                        missed_peaks.append(missed_peak)
+                        signal_peaks.append(signal_peaks[-1])
+                        signal_peaks[-2] = missed_peak
 
-                            if len(missed_section_peaks2) > 0:
-                                missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
-                                missed_peaks.append(missed_peak)
-                                signal_peaks.append(signal_peaks[-1])
-                                signal_peaks[-2] = missed_peak
+            else:
+                noise_peaks.append(peak)
+                NPKI = 0.125 * detection[noise_peaks[-1]] + 0.875 * NPKI
 
-                else:
-                    noise_peaks.append(peak)
-                    NPKI = 0.125 * detection[noise_peaks[-1]] + 0.875 * NPKI
+            threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
+            threshold_I2 = 0.5 * threshold_I1
 
-                threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
-                threshold_I2 = 0.5 * threshold_I1
+            if len(signal_peaks) > 8:
+                RR = np.diff(signal_peaks[-9:])
+                RR_ave = int(np.mean(RR))
+                RR_missed = int(1.66 * RR_ave)
 
-                if len(signal_peaks) > 8:
-                    RR = np.diff(signal_peaks[-9:])
-                    RR_ave = int(np.mean(RR))
-                    RR_missed = int(1.66 * RR_ave)
-
-                index = index + 1
+            index += 1
 
     signal_peaks.pop(0)
 

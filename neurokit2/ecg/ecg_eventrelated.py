@@ -107,9 +107,7 @@ def ecg_eventrelated(epochs, silent=False):
         # Fill with more info
         data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    df = _eventrelated_sanitizeoutput(data)
-
-    return df
+    return _eventrelated_sanitizeoutput(data)
 
 
 # =============================================================================
