@@ -105,8 +105,6 @@ def _ecg_intervalrelated_formatinput(data, output={}):
         raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
                          "we couldn't extract heart rate. Please make sure"
                          "your DataFrame contains an `ECG_Rate` column.")
-        return output
-
     signal = data["ECG_Rate"].values
     output["ECG_Rate_Mean"] = np.mean(signal)
 
