@@ -40,6 +40,9 @@ jobs:
       uses: fylein/python-pylint-github-action@v1
       #with:
       #  args: pylint --rcfile=.pylintrc neurokit2
+      
+    - name: Run pycodestyle
+      uses: andymckay/pycodestyle-action@0.1.3
     
     - name: Build package and test with twine
       run: |
