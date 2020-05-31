@@ -16,7 +16,7 @@ jobs:
           #- macos-latest  # macOS-10.14
           #- windows-2016
           #- windows-latest  # windows-2019
-        python-version: [3.6, 3.7, 3.8]
+        python-version: [3.7, 3.8]
         exclude:
           - platform: windows-latest
             python-version: 3.8
