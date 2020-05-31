@@ -145,7 +145,7 @@ def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000,
                           desired_length=length,
                           desired_sampling_rate=sampling_rate)
 
-    return(ecg)
+    return ecg
 
 
 
