@@ -39,8 +39,7 @@ jobs:
     - name: Lint with isort
       run: |
         pip install isort
-        isort .
-        ...
+        isort --recursive --diff
         
     - name: Build package and test with twine
       run: |
