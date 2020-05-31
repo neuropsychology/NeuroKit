@@ -44,5 +44,4 @@ def rescale(data, to=[0, 1]):
 
 
 def _rescale(data, to=[0, 1]):
-    y = (to[1] - to[0]) / (np.nanmax(data) - np.nanmin(data)) * (data - np.nanmin(data)) + to[0]
-    return y
+    return (to[1] - to[0]) / (np.nanmax(data) - np.nanmin(data)) * (data - np.nanmin(data)) + to[0]
