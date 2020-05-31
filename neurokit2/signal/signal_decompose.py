@@ -17,21 +17,26 @@ def signal_decompose(signal):
     >>>
     >>> nk.signal_plot(signal)
     >>>
-    >>> c = signal_decompose(signal)
+    >>> c = nk.signal_decompose(signal)
     >>>
     >>> # Visualize components and reconstructed signal
-    >>> nk.signal_plot(c)
-    >>> nk.signal_plot([signal, np.sum(c, axis=0)])
+    >>> fig = nk.signal_plot(c)
+    >>> fig #doctest: +SKIP
+    >>> fig2 = nk.signal_plot([signal, np.sum(c, axis=0)])
+    >>> fig2 #doctest: +SKIP
     >>>
     >>> # Real example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150), sampling_rate=150)
     >>>
-    >>> c = signal_decompose(signal)
+    >>> c = nk.signal_decompose(signal)
     >>>
     >>> # Visualize components and reconstructed signal
-    >>> nk.signal_plot(c)
-    >>> nk.signal_plot([signal, np.sum(c, axis=0)])
+    >>> fig = nk.signal_plot(c)
+    >>> fig #doctest: +SKIP
+    >>>
+    >>> fig2 = nk.signal_plot([signal, np.sum(c, axis=0)])
+    >>> fig2 #doctest: +SKIP
     """
     components = _signal_decompose_emd(signal, ensemble=False)
     return components

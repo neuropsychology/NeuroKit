@@ -58,17 +58,35 @@ def ecg_eventrelated(epochs, silent=False):
     >>> ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
     >>>
     >>> # Process the data
-    >>> epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
+    >>> epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000],
+    ...                           epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS
+      Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
+    1     1          ...  ...                               ...               ...
+    2     2          ...  ...                               ...               ...
+    3     3          ...  ...                               ...               ...
+
+    [3 rows x 16 columns]
     >>>
     >>> # Example with real data
     >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
+    >>> events = nk.events_find(data["Photosensor"],
+    ...                         threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral",
+    ...                                           "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100,
+    ...                           epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS
+      Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
+    1     1  Negative  ...                               ...               ...
+    2     2   Neutral  ...                               ...               ...
+    3     3   Neutral  ...                               ...               ...
+    4     4  Negative  ...                               ...               ...
+
+    [4 rows x 17 columns]
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="ecg", silent=silent)

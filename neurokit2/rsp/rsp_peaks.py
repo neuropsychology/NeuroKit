@@ -62,7 +62,8 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
     >>> peak_signal, info = nk.rsp_peaks(cleaned, sampling_rate=1000)
     >>>
     >>> data = pd.concat([pd.DataFrame({"RSP": rsp}), peak_signal], axis=1)
-    >>> nk.signal_plot(data)
+    >>> fig = nk.signal_plot(data)
+    >>> fig #doctest: +SKIP
     """
     info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
     info = rsp_fixpeaks(info, sampling_rate=sampling_rate)

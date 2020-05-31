@@ -49,7 +49,8 @@ def emg_process(emg_signal, sampling_rate=1000):
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
     >>> signals, info = nk.emg_process(emg, sampling_rate=1000)
-    >>> nk.emg_plot(signals) #doctest: +SKIP
+    >>> fig = nk.emg_plot(signals)
+    >>> fig #doctest: +SKIP
     """
     # Clean signal
     emg_cleaned = emg_clean(emg_signal, sampling_rate=sampling_rate)

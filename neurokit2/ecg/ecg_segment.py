@@ -39,7 +39,13 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
     >>>
     >>> ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80)
     >>> ecg_cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> nk.ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=True) #doctest: +SKIP
+    >>> nk.ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=True) #doctest: +ELLIPSIS
+    {'1':              Signal  Index Label
+     ...
+     '2':              Signal  Index Label
+     ...
+     '19':              Signal  Index Label
+     ...}
     """
     # Sanitize inputs
     if rpeaks is None:

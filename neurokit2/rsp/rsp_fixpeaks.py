@@ -41,7 +41,8 @@ def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000):
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     >>> info = nk.rsp_findpeaks(cleaned)
     >>> info = nk.rsp_fixpeaks(info)
-    >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned) #doctest: +SKIP
+    >>> fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+    >>> fig #doctest: +SKIP
     """
     # Format input.
     peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, desired_length=None)

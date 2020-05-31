@@ -46,7 +46,8 @@ def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>>
     >>> rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
     >>> rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
-    >>> pd.DataFrame({"RSP_Simple": rsp1, "RSP_Complex": rsp2}).plot(subplots=True) #doctest: +SKIP
+    >>> fig = pd.DataFrame({"RSP_Simple": rsp1, "RSP_Complex": rsp2}).plot(subplots=True)
+    >>> fig #doctest: +SKIP
 
     References
     ----------

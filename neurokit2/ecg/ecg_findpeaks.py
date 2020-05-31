@@ -4,11 +4,12 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.signal
+import scipy.stats
 
 from ..signal import signal_smooth
 from ..signal import signal_zerocrossings
-
-
+from ..signal import signal_plot
+from ..signal import signal_findpeaks
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
     """Find R-peaks in an ECG signal.
@@ -24,7 +25,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017', 'martinez2003' or 'rodrigues2020'.
+        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017', 'martinez2003', 'rodrigues2020' or 'promac'.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the
         algorithm. Useful for debugging.
@@ -41,12 +42,17 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-    >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> info = nk.ecg_findpeaks(cleaned)
-    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +SKIP
+    .. plot::
+       :context: close-figs
+
+       >>> import neurokit2 as nk
+       >>>
+       >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
+       >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
+       >>> info = nk.ecg_findpeaks(cleaned)
+       >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +ELLIPSIS
+       <Figure ...>
+
     >>>
     >>> # Different methods
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
@@ -58,18 +64,38 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
     >>> kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
     >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
+    >>> rodrigues2020 = nk.ecg_findpeaks(cleaned, method="rodrigues2020")
     >>>
     >>> # Visualize
-    >>> nk.events_plot([neurokit["ECG_R_Peaks"], pantompkins1985["ECG_R_Peaks"], hamilton2002["ECG_R_Peaks"], christov2004["ECG_R_Peaks"], gamboa2008["ECG_R_Peaks"], elgendi2010["ECG_R_Peaks"], engzeemod2012["ECG_R_Peaks"], kalidas2017["ECG_R_Peaks"]], martinez2003["ECG_R_Peaks"]], cleaned) #doctest: +SKIP
+    >>> nk.events_plot([neurokit["ECG_R_Peaks"],
+    ...                       pantompkins1985["ECG_R_Peaks"],
+    ...                       hamilton2002["ECG_R_Peaks"],
+    ...                       christov2004["ECG_R_Peaks"],
+    ...                       gamboa2008["ECG_R_Peaks"],
+    ...                       elgendi2010["ECG_R_Peaks"],
+    ...                       engzeemod2012["ECG_R_Peaks"],
+    ...                       kalidas2017["ECG_R_Peaks"],
+    ...                       martinez2003["ECG_R_Peaks"],
+    ...                       rodrigues2020["ECG_R_Peaks"]], cleaned) #doctest: +ELLIPSIS
+    <Figure ...>
+    >>>
+    >>> # Method-agreement
+    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=500)
+    >>> ecg = nk.signal_distort(ecg,
+    ...                         sampling_rate=500,
+    ...                         noise_amplitude=0.2, noise_frequency=[25, 50],
+    ...                         artifacts_amplitude=0.2, artifacts_frequency=50)
+    >>> nk.ecg_findpeaks(ecg, sampling_rate=1000, method="promac", show=True) #doctest: +ELLIPSIS
+    {'ECG_R_Peaks': array(...)}
 
     References
     --------------
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
-    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.
+    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003, September). An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
-    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm. In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
-    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
-    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+    - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on biomedical engineering, (3), 230-236.
+    - Engelse, W. A. H., & Zeelenberg, C. (1979). A single scan algorithm for QRS detection and feature extraction IEEE Comput Cardiol. Long Beach: IEEE Computer Society.
+    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
     """
     # Try retrieving right column
     if isinstance(ecg_cleaned, pd.DataFrame):
@@ -107,6 +133,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         rpeaks = _ecg_findpeaks_WT(ecg_cleaned, sampling_rate)
     elif method in ["rodrigues2020", "rodrigues", "asi"]:
         rpeaks = _ecg_findpeaks_rodrigues(ecg_cleaned, sampling_rate)
+    elif method in ["promac", "all"]:
+        rpeaks = _ecg_findpeaks_promac(ecg_cleaned, sampling_rate=sampling_rate, threshold=0.33, show=show)
     else:
         raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be "
                          "one of 'neurokit' or 'pamtompkins'.")
@@ -119,6 +147,59 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
 
 
+
+# =============================================================================
+# Probabilistic Methods-Agreement via Convolution (ProMAC)
+# =============================================================================
+def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False, **kwargs):
+
+    x = np.zeros(len(signal))
+
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_neurokit, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_pantompkins, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_gamboa, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_ssf, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_christov, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_engzee, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_elgendi, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_kalidas, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_WT, **kwargs)
+    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_rodrigues, **kwargs)
+
+    # Rescale
+    x = x / np.max(x)
+    convoluted = x.copy()
+
+    # Remove below threshold
+    x[x < threshold] = 0
+    # Find peaks
+    peaks = signal_findpeaks(x, height_min=threshold)["Peaks"]
+
+    if show is True:
+        signal_plot([signal, convoluted], standardize=True)
+        [plt.axvline(x=peak, color='red', linestyle='--') for peak in peaks]
+
+    return peaks
+
+
+
+def _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, fun, **kwargs):
+    peaks = fun(signal, sampling_rate=sampling_rate, **kwargs)
+    x += _ecg_findpeaks_promac_convolve(signal, peaks, sampling_rate=sampling_rate)
+    return x
+
+
+
+def _ecg_findpeaks_promac_convolve(signal, peaks, sampling_rate=1000):
+    x = np.zeros(len(signal))
+    x[peaks] = 1
+
+    # Because a typical QRS is roughly defined within about 100ms
+    sd = sampling_rate / 10
+    shape = scipy.stats.norm.pdf(np.linspace(-sd*4, sd*4, num=int(sd*8)), loc=0, scale=sd)
+
+    convolved = np.convolve(x, shape, 'same')
+    return convolved
 
 
 # =============================================================================

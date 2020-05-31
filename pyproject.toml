@@ -1,3 +1,30 @@
 [build-system]
 requires = ["setuptools >= 40.6.0", "wheel"]
 build-backend = "setuptools.build_meta"
+
+
+[tool.poetry]
+name = "neurokit2"
+# version = "0.1.0"  # Needs to find a way to automatically get latest version
+description = "The Python Toolbox for Neurophysiological Signal Processing."
+authors = [
+    "Dominique Makowski <@DominiqueMakowski>",
+    "Tam Pham <@Tam-Pham>",
+    "Zen Juen Lau <@Zen-Juen>",
+    "Jan C. Brammer <@JanCBrammer>",
+    "François Lespinasse <@sangfrois>"
+]
+
+readme = 'README.rst'  # Markdown files are supported
+
+repository = "https://github.com/neuropsychology/NeuroKit"
+homepage = "https://github.com/neuropsychology/NeuroKit"
+
+keywords = ['python', 'neurokit', 'neurokit2', 'physiological', 'signal']
+
+
+[tool.poetry.dependencies]
+python = "*"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.4"

@@ -14,30 +14,31 @@ author:
   - name          : "Jan C. Brammer"
     affiliation   : " 2"
   - name          : "Francois Lespinasse"
-    affiliation   : " 3, 8"
+    affiliation   : " 3, 4"
   - name          : "Hung Pham"
-    affiliation   : " 4"
-  - name          : "Christopher Sch\\\"{o}lzel"
     affiliation   : " 5"
+  - name          : "Christopher Sch\\\"{o}lzel"
+    affiliation   : " 6"
   - name          : "S.H. Annabel Chen"
-    affiliation   : " 1, 6, 7"
+    affiliation   : " 1, 7, 8"
 affiliation:
   - id            : "1"
     institution   : "School of Social Sciences, Nanyang Technological University, Singapore"
   - id            : "2"
     institution   : "Behavioural Science Institute, Radboud University, Netherlands"
   - id            : "3"
-    institution   : "Departement de psychologie, Universite de Montreal, Canada"
+    institution   : "Departement de psychologie, Universite de Montréal, Canada"
   - id            : "4"
-    institution   : "Eureka Robotics, Singapore"
+    institution   : "Centre de Recherche de l'Institut Universitaire Geriatrique de Montréal"
   - id            : "5"
-    institution   : "Life Science Informatics, THM University of Applied Sciences, Germany"
+    institution   : "Eureka Robotics, Singapore"
   - id            : "6"
-    institution   : "Centre for Research and Development in Learning, Nanyang Technological University, Singapore"
+    institution   : "Life Science Informatics, THM University of Applied Sciences, Germany"
   - id            : "7"
-    institution   : "Lee Kong Chian School of Medicine, Nanyang Technological University, Singapore"
+    institution   : "Centre for Research and Development in Learning, Nanyang Technological University, Singapore"
   - id            : "8"
-    institution   : "Centre de Recherche de l'Institut Universitaire Geriatrique de Montreal"
+    institution   : "Lee Kong Chian School of Medicine, Nanyang Technological University, Singapore"
+
 authornote: |
   * Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
 abstract: |
@@ -169,9 +170,6 @@ import neurokit2 as nk
 # Download the example dataset
 data = nk.data("bio_eventrelated_100hz")
 
-# Figure 1. Visualize 10 seconds of data (on the same scale)
-nk.signal_plot(data[900:1900], standardize=True)
-
 # Process the data
 df, info = nk.bio_process(ecg=data["ECG"],
                           rsp=data["RSP"],
@@ -198,7 +196,7 @@ results = nk.bio_analyze(epochs)
 results[["Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude"]]
 ```
 
-```{r include=TRUE, eval=TRUE, echo = FALSE, fig.width=10, fig.height=6, fig.cap="Subset of the dataset showing one event (in orange) and the other physiological signals."}
+```{r include=TRUE, eval=FALSE, echo = FALSE, fig.width=10, fig.height=6, fig.cap="Subset of the dataset showing one event (in orange) and the other physiological signals."}
 py$data %>%
   standardize() %>%
   mutate(Time = 1:n() / 100) %>%
@@ -225,6 +223,9 @@ knitr::kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Pe
 # For PDFs
 kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude")], format="latex", digits = 2, booktabs = TRUE, caption = "Subset of the ouput related to event-related analysis characterizing the pattern of physiological changes related to specific stimuli.", linesep="") %>%
   kableExtra::kable_styling(latex_options = c("hold_position"))
+```
+```{r include=TRUE, eval=TRUE, echo = FALSE, out.width="100%", fig.cap="Illustration of the difference between event-related analysis, focusing on activity changes in short windows (the orange rectangles), and interval-related analysis, pertaining to features of the whole signal (the grey rectangle)."}
+knitr::include_graphics("figures/features.png")
 ```
 
 
@@ -277,11 +278,12 @@ In this example, the steps of the analysis are identical to the previous example
 This example illustrates a second type of physiological analysis, that we refer to as interval-related (as opposed to event-related). Interval-related analyses compute features of signal variability and activation patterns over a longer-term period of time (typically minutes). *NeuroKit2* allows for the fast creation of a standardized and reproducible pipeline to describe this kind of physiological activity, which can be beneficial for a wide variety of applications.
 
 
+
 # Discussion
 
 *NeuroKit2* is a neurophysiological signal processing software accessible to people with all levels of programming experience and background. Its development is focused on creating an intuitive user-experience, as well as building a collaborative community. It is also a pragmatic answer to the broader need for transparent and reproducible methods in neurophysiology. Its modular structure and organization not only facilitates the use of existing and validated processing pipelines, but also creates a fertile ground for experimentation and innovation.
 
-We expect the package's future evolution to be driven by the communities' needs and the advances in related fields. Possible directions include extending the support for other types of bodily signals (e.g., electrogastrography - EGG, electrooculography - EOG) and achieving performance gains for large datasets by using efficient algorithms. Further validation of the available processing pipelines could be made through the (re)analysis of public databases. In line with this objective, the support of standardized data structure formats (e.g. WFDB, BIDS, ...) could be extended.
+We expect the package's future evolution to be driven by the communities' needs and the advances in related fields. For instance, although *NeuroKit2* already implements a lot of useful functions for EEG processing (such as entropy and fractal dimensions quantification), its support could be further improved (for example with high-level functions built on top of utilities provided by the leading EEG Python software, namely *MNE*; @gramfort2013meg). Possible other future directions include extending the support for other types of bodily signals (e.g., electrogastrography - EGG, electrooculography - EOG) and achieving performance gains for large datasets by using efficient algorithms. Further validation of the available processing pipelines could be made through the (re)analysis of public databases. In line with this objective, the support of standardized data structure formats (e.g. WFDB, BIDS, ...) could be extended.
 
 In conclusion, we believe that *NeuroKit2* provides useful tools for anyone who is interested in analyzing physiological data from research-grade hardware as well as wearable "smart health devices". By increasing the autonomy of researchers and practitioners, and by shortening the delay between data collection and results acquisition, *NeuroKit2* could be useful beyond academic research in neuroscience and psychology, including applications such as biofeedback, personal physiological monitoring and exercise science. Finally, we hope that *NeuroKit2* encourages users to become part of a supportive open-science community with diverse areas of expertise rather than relying on closed-source and proprietary software, thus shaping the future of neurophysiology and its related fields.
 
@@ -291,7 +293,7 @@ The authors declare that the research was conducted in the absence of commercial
 
 # Acknowledgements
 
-We would like to thank Prof. C. F. Xavier for inspiration, all the contributors (https://neurokit2.readthedocs.io/en/latest/authors.html), and the users for their support. Francois Lespinasse would like to thank the Courtois Foundation for its support through the Courtois-NeuroMod project (https://cneuromod.ca)
+We would like to thank Prof. C. F. Xavier for inspiration, all the contributors (https://neurokit2.readthedocs.io/en/latest/authors.html), and the users for their support. Additionally, Francois Lespinasse would like to thank the Courtois Foundation for its support through the Courtois-NeuroMod project (https://cneuromod.ca)
 
 
 

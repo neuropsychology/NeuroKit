@@ -15,7 +15,9 @@ You can navigate to the different sections using the left panel. We would recomm
    examples/index
    datasets
    functions
+   
 
+	
 
 .. only:: comment
     Indices and tables

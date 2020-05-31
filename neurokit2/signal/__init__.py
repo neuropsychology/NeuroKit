@@ -20,4 +20,8 @@ from .signal_plot import signal_plot
 from .signal_phase import signal_phase
 from .signal_power import signal_power
 from .signal_synchrony import signal_synchrony
-from .signal_autocorrelation import signal_autocor
+from .signal_autocor import signal_autocor
+from .signal_changepoints import signal_changepoints
+from .signal_decompose import signal_decompose
+
+__all__ = ["signal_simulate", "signal_binarize", "signal_resample", "signal_zerocrossings", "signal_smooth", "signal_filter", "signal_psd", "signal_distort", "signal_interpolate", "signal_detrend", "signal_findpeaks", "signal_fixpeaks", "signal_formatpeaks", "signal_rate", "signal_merge", "signal_period", "signal_plot", "signal_phase", "signal_power", "signal_synchrony", "signal_autocor",  "signal_changepoints", "signal_decompose"]

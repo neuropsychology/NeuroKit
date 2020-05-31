@@ -44,7 +44,8 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     >>> info, signals = nk.rsp_peaks(cleaned)
     >>>
     >>> amplitude = nk.rsp_amplitude(cleaned, signals)
-    >>> nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
+    >>> fig = nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
+    >>> fig #doctest: +SKIP
     """
     # Format input.
     peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs,

@@ -4,9 +4,6 @@ import numpy as np
 import sklearn.mixture
 
 
-
-
-
 def signal_binarize(signal, method="threshold", threshold="auto"):
     """Binarize a continuous signal.
 

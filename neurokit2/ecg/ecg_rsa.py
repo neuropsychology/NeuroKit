@@ -67,12 +67,24 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     >>> rsp_signals, _ = nk.rsp_process(data["RSP"], sampling_rate=100)
     >>>
     >>> # Get RSA features
-    >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False)
-    >>> rsa #doctest: +SKIP
+    >>> nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False) #doctest: +ELLIPSIS
+    {'RSA_P2T_Mean': ...,
+     'RSA_P2T_Mean_log': ...,
+     'RSA_P2T_SD': ...,
+     'RSA_P2T_NoRSA': ...,
+     'RSA_PorgesBohrer': ...}
     >>>
     >>> # Get RSA as a continuous signal
     >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
-    >>> nk.signal_plot([ecg_signals["ECG_Rate"], rsp_signals["RSP_Rate"], rsa], standardize=True) #doctest: +SKIP
+    >>> rsa #doctest: +ELLIPSIS
+            RSA_P2T
+    0      0.090000
+    1      0.089994
+    2      0.089988
+    ...    ...
+
+    [15000 rows x 1 columns]
+    >>> nk.signal_plot([ecg_signals["ECG_Rate"], rsp_signals["RSP_Rate"], rsa], standardize=True)
 
     References
     ------------

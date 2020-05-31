@@ -63,7 +63,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> rsp, info = nk.rsp_process(rsp)
-    >>> rrv = nk.rsp_rrv(rsp, show=True)
+    >>> rrv = nk.rsp_rrv(rsp, show=True) #doctest: +SKIP
 
     References
     ----------
