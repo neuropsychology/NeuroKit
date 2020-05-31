@@ -70,6 +70,10 @@ Contribution
         :target: https://github.com/neuropsychology/NeuroKit/actions
         :alt: GitHub CI
         
+.. image:: https://github.com/neuropsychology/neurokit/workflows/Style/badge.svg
+        :target: https://github.com/neuropsychology/NeuroKit/actions
+        :alt: Style
+        
 NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_ guide. Once this is done, you can also read our ideas for `first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 
 
