@@ -2,7 +2,7 @@
 import datetime
 
 # Info
-__version__ = '0.0.331'
+__version__ = '0.0.332'
 
 
 # Maintainer info
