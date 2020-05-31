@@ -162,14 +162,14 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
         y_line[(j * stepsize):(j * stepsize + window)] = y_line[(j * stepsize):(j * stepsize + window)] + np.reshape(
             np.multiply(yfit[j, :], wt), (window, 1)
         )
-        norm[j * stepsize : j * stepsize + window] = norm[(j * stepsize):(j * stepsize + window)] + np.reshape(wt, (window, 1))
+        norm[(j * stepsize):(j * stepsize + window)] = norm[(j * stepsize):(j * stepsize + window)] + np.reshape(wt, (window, 1))
 
     above_norm = np.where(norm[:, 0] > 0)
     y_line[above_norm] = y_line[above_norm] / norm[above_norm]
 
     indx = (nwin - 1) * stepsize + window - 1
     npts = length - indx + 1
-    y_line[indx - 1 :] = np.reshape(
+    y_line[indx - 1:] = np.reshape(
         (np.multiply(np.arange(window + 1, window + npts + 1), a) + b), (npts, 1)
     )
 
