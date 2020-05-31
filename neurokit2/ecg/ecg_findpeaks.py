@@ -86,8 +86,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     ...                         noise_amplitude=0.2, noise_frequency=[25, 50],
     ...                         artifacts_amplitude=0.2, artifacts_frequency=50)
     >>> nk.ecg_findpeaks(ecg, sampling_rate=1000, method="promac", show=True) #doctest: +ELLIPSIS
-    {'ECG_R_Peaks': array([...],
-       dtype=int64)}
+    {'ECG_R_Peaks': array([ ... ])}
 
     References
     --------------
