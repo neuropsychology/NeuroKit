@@ -119,6 +119,7 @@ def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
         raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
                          "we couldn't extract R-peaks. Please make sure"
                          "your DataFrame contains an `ECG_R_Peaks` column.")
+
     # Transform rpeaks from "signal" format to "info" format.
     rpeaks = np.where(data["ECG_R_Peaks"].values)[0]
     rpeaks = {"ECG_R_Peaks": rpeaks}
