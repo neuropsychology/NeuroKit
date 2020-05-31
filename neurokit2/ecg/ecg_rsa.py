@@ -290,8 +290,8 @@ def _ecg_rsa_cycles(signals):
     cycles_length = np.diff(inspiration_onsets)
 
     return {"RSP_Inspiration_Onsets": inspiration_onsets,
-                      "RSP_Expiration_Onsets": expiration_onsets,
-                      "RSP_Cycles_Length": cycles_length}
+            "RSP_Expiration_Onsets": expiration_onsets,
+            "RSP_Cycles_Length": cycles_length}
 
 
 def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=1000):
