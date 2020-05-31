@@ -46,8 +46,7 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     >>>
     >>> # Simulate signal with low and high frequency
     >>> signal = nk.signal_simulate(frequency=[0.1, 2], amplitude=[2, 0.5], sampling_rate=100)
-    >>> # Add baseline and linear trend
-    >>> signal += (3 + np.linspace(0, 6, num=len(signal)))
+    >>> signal = signal + (3 + np.linspace(0, 6, num=len(signal)))  # Add baseline and linear trend
     >>>
     >>> # Apply detrending algorithms
     >>> baseline = nk.signal_detrend(signal, order=0)  # Constant detrend (removes the mean)
@@ -60,11 +59,18 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     >>> locreg = nk.signal_detrend(signal, method='locreg', window=1.5*100, stepsize=0.02*100)  # Local regression (100Hz)
     >>>
     >>> # Visualize different methods
-    >>> axes = pd.DataFrame({"Original signal": signal, "Baseline": baseline, "Linear": linear, "Quadratic": quadratic, "Cubic": cubic, "Polynomial (10th)": poly10, "Tarvainen": tarvainen, "LOESS": loess, "Local Regression": locreg}).plot(subplots=True)
-    >>>
+    >>> axes = pd.DataFrame({"Original signal": signal,
+                             "Baseline": baseline,
+                             "Linear": linear,
+                             "Quadratic": quadratic,
+                             "Cubic": cubic,
+                             "Polynomial (10th)": poly10,
+                             "Tarvainen": tarvainen,
+                             "LOESS": loess,
+                             "Local Regression": locreg}).plot(subplots=True)
     >>> # Plot horizontal lines to better visualize the detrending
     >>> for subplot in axes: #doctest: +SKIP
-    >>>     subplot.axhline(y=0, color='k', linestyle='--') #doctest: +SKIP
+    ...     subplot.axhline(y=0, color='k', linestyle='--') #doctest: +SKIP
 
     References
     ----------
