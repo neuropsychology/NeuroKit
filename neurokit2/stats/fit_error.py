@@ -67,15 +67,15 @@ def fit_error(y, y_predicted, n_parameters=2):
 
     # Get R2
     R2 = 1 if SST == 0 else SSE / SST
+    
     # R2 adjusted
     R2_adjusted = 1 - (1 - (1 - R2)) * (n - 1) / df
 
-
     return {"SSE": SSE,
-               "MSE": MSE,
-               "RMSE": RMSE,
-               "R2": R2,
-               "R2_adjusted": R2_adjusted}
+            "MSE": MSE,
+            "RMSE": RMSE,
+            "R2": R2,
+            "R2_adjusted": R2_adjusted}
 
 # =============================================================================
 # Direct accessors
