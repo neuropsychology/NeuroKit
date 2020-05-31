@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats
-import matplotlib.pyplot as plt
 
 from .density import density
 from .rescale import rescale

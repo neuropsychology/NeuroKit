@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-
 import scipy.linalg
-
-
-
-
 
 
 def fit_loess(y, X=None, alpha=0.75, order=2):

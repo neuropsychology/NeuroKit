@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats
-
-import matplotlib.pyplot as plt
 
 
 def cor(x, y, method="pearson", show=False):

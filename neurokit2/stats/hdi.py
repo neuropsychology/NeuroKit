@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
-from .density import density
 from ..misc import find_closest
+from .density import density
 
 
 def hdi(x, ci=0.95, show=False, **kwargs):
