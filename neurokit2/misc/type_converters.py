@@ -30,7 +30,6 @@ def as_vector(x):
     else:
         out = np.array(x)
 
-
     if isinstance(out, np.ndarray):
         shape = out.shape
         if len(shape) == 1:
@@ -38,8 +37,10 @@ def as_vector(x):
         elif len(shape) != 1 and len(shape) == 2 and shape[1] == 1:
             out = out[:, 0]
         else:
-            raise ValueError("NeuroKit error: we expect the user to provide a "
-                             "vector, i.e., a one-dimensional array (such as a "
-                             "list of values). Current input of shape: " + str(shape))
+            raise ValueError(
+                "NeuroKit error: we expect the user to provide a "
+                "vector, i.e., a one-dimensional array (such as a "
+                "list of values). Current input of shape: " + str(shape)
+            )
 
     return out

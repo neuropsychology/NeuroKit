@@ -45,7 +45,7 @@ def distance(X=None, method="mahalanobis"):
     elif method in ["mean", "center", "average"]:
         dist = _distance_mean(X)
     else:
-        raise ValueError("NeuroKit error: distance(): 'method' should be " "one of 'mahalanobis'.")
+        raise ValueError("NeuroKit error: distance(): 'method' should be one of 'mahalanobis'.")
 
     return dist
 

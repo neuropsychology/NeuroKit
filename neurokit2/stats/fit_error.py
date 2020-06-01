@@ -105,7 +105,7 @@ def _fit_error_prepare(y, y_predicted, n_parameters=2):
 
     # Sanitize
     if n != len(y_predicted):
-        raise TypeError("NeuroKit error: fit_error(): 'y' and 'y_predicted' " "are not of the same length.")
+        raise TypeError("NeuroKit error: fit_error(): 'y' and 'y_predicted' are not of the same length.")
 
     # Residual, i.e. the difference between data and model
     residual = y - y_predicted

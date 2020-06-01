@@ -33,9 +33,6 @@ def listify(**kwargs):
     return args
 
 
-
-
-
 def _multiply_list(lst, length):
     q, r = divmod(length, len(lst))
     return q * lst + lst[:r]

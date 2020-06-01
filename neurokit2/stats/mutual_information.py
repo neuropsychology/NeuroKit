@@ -58,7 +58,7 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
     elif method in ["shannon", "nolitsa"]:
         mi = _mutual_information_nolitsa(x, y, bins=bins)
     else:
-        raise ValueError("NeuroKit error: mutual_information(): 'method' " "not recognized.")
+        raise ValueError("NeuroKit error: mutual_information(): 'method' not recognized.")
 
     return mi
 
