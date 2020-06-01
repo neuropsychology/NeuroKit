@@ -2,8 +2,7 @@
 from .signal_period import signal_period
 
 
-def signal_rate(peaks, sampling_rate=1000, desired_length=None,
-                interpolation_order="cubic"):
+def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_order="cubic"):
     """Calculate signal rate from a series of peaks.
 
     This function can also be called either via ``ecg_rate()``, ```ppg_rate()`` or
@@ -50,8 +49,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None,
     >>> fig = nk.signal_plot(rate)
     >>> fig #doctest: +SKIP
     """
-    period = signal_period(peaks, sampling_rate, desired_length,
-                           interpolation_order)
+    period = signal_period(peaks, sampling_rate, desired_length, interpolation_order)
     rate = 60 / period
 
     return rate

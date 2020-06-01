@@ -6,7 +6,7 @@ import scipy.signal
 from ..stats import fit_loess
 
 
-def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=0.1):
+def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=0.1):
     """Signal smoothing.
 
     Signal smoothing can be achieved using either the convolution of a filter kernel with the input
@@ -66,13 +66,11 @@ def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=
     length = len(signal)
 
     if isinstance(kernel, str) is False:
-        raise TypeError("NeuroKit error: signal_smooth(): 'kernel' "
-                        "should be a string.")
+        raise TypeError("NeuroKit error: signal_smooth(): 'kernel' should be a string.")
 
     # Check length.
     if size > length or size < 1:
-        raise TypeError("NeuroKit error: signal_smooth(): 'size' "
-                        "should be between 1 and length of the signal.")
+        raise TypeError("NeuroKit error: signal_smooth(): 'size' should be between 1 and length of the signal.")
 
     method = method.lower()
 
@@ -82,15 +80,15 @@ def signal_smooth(signal, method='convolution', kernel='boxzen', size=10, alpha=
 
     # Convolution
     else:
-        if kernel == 'boxzen':
+        if kernel == "boxzen":
             # hybrid method
             # 1st pass - boxcar kernel
-            x = _signal_smoothing(signal, kernel='boxcar', size=size)
+            x = _signal_smoothing(signal, kernel="boxcar", size=size)
 
             # 2nd pass - parzen kernel
-            smoothed = _signal_smoothing(x, kernel='parzen', size=size)
+            smoothed = _signal_smoothing(x, kernel="parzen", size=size)
 
-        elif kernel == 'median':
+        elif kernel == "median":
             smoothed = _signal_smoothing_median(signal, size)
 
         else:
@@ -120,10 +118,9 @@ def _signal_smoothing(signal, kernel="boxcar", size=5):
     w = window / window.sum()
 
     # Extend signal edges to avoid boundary effects.
-    x = np.concatenate((signal[0] * np.ones(size), signal,
-                        signal[-1] * np.ones(size)))
+    x = np.concatenate((signal[0] * np.ones(size), signal, signal[-1] * np.ones(size)))
 
     # Compute moving average.
-    smoothed = np.convolve(w, x, mode='same')
+    smoothed = np.convolve(w, x, mode="same")
     smoothed = smoothed[size:-size]
     return smoothed

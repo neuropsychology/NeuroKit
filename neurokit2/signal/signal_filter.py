@@ -3,7 +3,16 @@ import numpy as np
 import scipy.signal
 
 
-def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method="butterworth", order=2, window_size="default", powerline=50):
+def signal_filter(
+    signal,
+    sampling_rate=1000,
+    lowcut=None,
+    highcut=None,
+    method="butterworth",
+    order=2,
+    window_size="default",
+    powerline=50,
+):
     """Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
 
     Apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided) or bandpass (if both are provided) filter to the signal.
@@ -83,15 +92,18 @@ def signal_filter(signal, sampling_rate=1000, lowcut=None, highcut=None, method=
         elif method in ["powerline"]:
             filtered = _signal_filter_powerline(signal, sampling_rate, powerline)
         else:
-            raise ValueError("NeuroKit error: signal_filter(): 'method' should be "
-                             "one of 'butterworth', 'butterworth_ba', 'bessel',"
-                             " 'savgol' or 'fir'.")
+            raise ValueError(
+                "NeuroKit error: signal_filter(): 'method' should be "
+                "one of 'butterworth', 'butterworth_ba', 'bessel',"
+                " 'savgol' or 'fir'."
+            )
     return filtered
 
 
 # =============================================================================
 # Savitzky-Golay (savgol)
 # =============================================================================
+
 
 def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="default"):
     """Filter a signal using the Savitzky-Golay method.
@@ -103,6 +115,7 @@ def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="defa
     filtered = scipy.signal.savgol_filter(signal, window_length=window_size, polyorder=order)
     return filtered
 
+
 # =============================================================================
 # FIR
 # =============================================================================
@@ -112,27 +125,29 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
     try:
         import mne
     except ImportError:
-        raise ImportError("NeuroKit error: signal_filter(): the 'mne' "
-                          "module is required for this method to run. ",
-                          "Please install it first (`pip install mne`).")
+        raise ImportError(
+            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. ",
+            "Please install it first (`pip install mne`).",
+        )
 
     if isinstance(window_size, str):
         window_size = "auto"
 
     filtered = mne.filter.filter_data(
-            signal,
-            sfreq=sampling_rate,
-            l_freq=lowcut,
-            h_freq=highcut,
-            method='fir',
-            fir_window='hamming',
-            filter_length=window_size,
-            l_trans_bandwidth='auto',
-            h_trans_bandwidth='auto',
-            phase='zero-double',
-            fir_design='firwin',
-            pad='reflect_limited',
-            verbose=False)
+        signal,
+        sfreq=sampling_rate,
+        l_freq=lowcut,
+        h_freq=highcut,
+        method="fir",
+        fir_window="hamming",
+        filter_length=window_size,
+        l_trans_bandwidth="auto",
+        h_trans_bandwidth="auto",
+        phase="zero-double",
+        fir_design="firwin",
+        pad="reflect_limited",
+        verbose=False,
+    )
     return filtered
 
 
@@ -140,12 +155,13 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
 # Butterworth
 # =============================================================================
 
+
 def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
     """Filter a signal using IIR Butterworth SOS method.
     """
     freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
-    sos = scipy.signal.butter(order, freqs, btype=filter_type, output='sos', fs=sampling_rate)
+    sos = scipy.signal.butter(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
     filtered = scipy.signal.sosfiltfilt(sos, signal)
     return filtered
 
@@ -156,7 +172,7 @@ def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highc
     # Get coefficients
     freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
-    b, a = scipy.signal.butter(order, freqs, btype=filter_type, output='ba', fs=sampling_rate)
+    b, a = scipy.signal.butter(order, freqs, btype=filter_type, output="ba", fs=sampling_rate)
     try:
         filtered = scipy.signal.filtfilt(b, a, signal, method="gust")
     except ValueError:
@@ -169,16 +185,19 @@ def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highc
 # Bessel
 # =============================================================================
 
+
 def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
     freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
-    sos = scipy.signal.bessel(order, freqs, btype=filter_type, output='sos', fs=sampling_rate)
+    sos = scipy.signal.bessel(order, freqs, btype=filter_type, output="sos", fs=sampling_rate)
     filtered = scipy.signal.sosfiltfilt(sos, signal)
     return filtered
+
 
 # =============================================================================
 # Powerline
 # =============================================================================
+
 
 def _signal_filter_powerline(signal, sampling_rate, powerline=50):
     """Filter out 50 Hz powerline noise by smoothing the signal with a moving
@@ -202,10 +221,13 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
     # Sanity checks
     if isinstance(highcut, int):
         if sampling_rate <= 2 * highcut:
-            print("NeuroKit warning: the sampling rate is too low. Sampling rate"
-                  " must exceed the Nyquist rate to avoid aliasing problem. "
-                  "In this analysis, the sampling rate has to be higher than",
-                  2 * highcut, "Hz.")
+            print(
+                "NeuroKit warning: the sampling rate is too low. Sampling rate"
+                " must exceed the Nyquist rate to avoid aliasing problem. "
+                "In this analysis, the sampling rate has to be higher than",
+                2 * highcut,
+                "Hz.",
+            )
 
     # Replace 0 by none
     if lowcut is not None and lowcut == 0:
@@ -237,7 +259,7 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
 
 def _signal_filter_windowsize(window_size="default", sampling_rate=1000):
     if isinstance(window_size, str):
-        window_size = int(np.round(sampling_rate/3))
+        window_size = int(np.round(sampling_rate / 3))
         if (window_size % 2) == 0:
             window_size + 1
     return window_size

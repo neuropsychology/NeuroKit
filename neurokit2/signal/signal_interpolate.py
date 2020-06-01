@@ -49,19 +49,15 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     """
     # Sanity checks
     if len(x_values) != len(y_values):
-        raise ValueError("NeuroKit error: signal_interpolate(): x_values and y_values "
-                         "must be of the same length.")
+        raise ValueError("NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length.")
 
     if desired_length is None or len(x_values) == desired_length:
         return y_values
 
-
     # Create interpolation function
-    interpolation_function = scipy.interpolate.interp1d(x_values,
-                                                        y_values,
-                                                        kind=method,
-                                                        bounds_error=False,
-                                                        fill_value=([y_values[0]], [y_values[-1]]))
+    interpolation_function = scipy.interpolate.interp1d(
+        x_values, y_values, kind=method, bounds_error=False, fill_value=([y_values[0]], [y_values[-1]])
+    )
 
     new_x = np.linspace(x_values[0], x_values[-1], desired_length)
 

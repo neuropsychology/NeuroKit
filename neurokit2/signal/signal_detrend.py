@@ -84,12 +84,11 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     elif method in ["locdetrend", "runline", "locreg", "locregression"]:
         detrended = _signal_detrend_locreg(signal, window=window, stepsize=stepsize)
     else:
-        raise ValueError("NeuroKit error: signal_detrend(): 'method' should be "
-                         "one of 'polynomial', 'loess' or 'tarvainen2002'.")
+        raise ValueError(
+            "NeuroKit error: signal_detrend(): 'method' should be one of 'polynomial', 'loess' or 'tarvainen2002'."
+        )
 
     return detrended
-
-
 
 
 # =============================================================================
@@ -98,9 +97,6 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
 def _signal_detrend_loess(signal, alpha=0.75):
     detrended = np.array(signal) - fit_loess(signal, alpha=alpha)
     return detrended
-
-
-
 
 
 def _signal_detrend_polynomial(signal, order=1):
@@ -112,16 +108,14 @@ def _signal_detrend_polynomial(signal, order=1):
     return detrended
 
 
-
-
 def _signal_detrend_tarvainen2002(signal, regularization=500):
     """`Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175. <https://ieeexplore.ieee.org/document/979357>`_
     """
     N = len(signal)
     identity = np.eye(N)
-    B = np.dot(np.ones((N-2, 1)), np.array([[1, -2, 1]]))
-    D_2 = scipy.sparse.dia_matrix((B.T, [0, 1, 2]), shape=(N-2, N))
-    inv = np.linalg.inv(identity + regularization**2 * D_2.T @ D_2)
+    B = np.dot(np.ones((N - 2, 1)), np.array([[1, -2, 1]]))
+    D_2 = scipy.sparse.dia_matrix((B.T, [0, 1, 2]), shape=(N - 2, N))
+    inv = np.linalg.inv(identity + regularization ** 2 * D_2.T @ D_2)
     z_stat = ((identity - inv)) @ signal
 
     trend = np.squeeze(np.asarray(signal - z_stat))
@@ -144,11 +138,12 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
     window = int(window)
     stepsize = int(stepsize)
     if window > length:
-        raise ValueError("NeuroKit error: signal_detrend(): 'window' should be "
-                         "less than the number of samples. Try using 1.5 * sampling rate.")
+        raise ValueError(
+            "NeuroKit error: signal_detrend(): 'window' should be "
+            "less than the number of samples. Try using 1.5 * sampling rate."
+        )
     if stepsize <= 1:
-        raise ValueError("NeuroKit error: signal_detrend(): 'stepsize' should be "
-                         "more than 1. Increase its value.")
+        raise ValueError("NeuroKit error: signal_detrend(): 'stepsize' should be more than 1. Increase its value.")
 
     y_line = np.zeros((length, 1))
     norm = np.zeros((length, 1))
@@ -157,25 +152,25 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
     xwt = (np.arange(1, window + 1) - window / 2) / (window / 2)
     wt = np.power(1 - np.power(np.absolute(xwt), 3), 3)
     for j in range(0, nwin):
-        tseg = signal[(stepsize * j):(stepsize * j + window)]
+        tseg = signal[(stepsize * j) : (stepsize * j + window)]
         y1 = np.mean(tseg)
         y2 = np.mean(np.multiply(np.arange(1, window + 1), tseg)) * (2 / (window + 1))
         a = np.multiply(np.subtract(y2, y1), 6 / (window - 1))
         b = np.subtract(y1, a * (window + 1) / 2)
         yfit[j, :] = np.multiply(np.arange(1, window + 1), a) + b
-        y_line[(j * stepsize):(j * stepsize + window)] = y_line[(j * stepsize):(j * stepsize + window)] + np.reshape(
-            np.multiply(yfit[j, :], wt), (window, 1)
+        y_line[(j * stepsize) : (j * stepsize + window)] = y_line[
+            (j * stepsize) : (j * stepsize + window)
+        ] + np.reshape(np.multiply(yfit[j, :], wt), (window, 1))
+        norm[(j * stepsize) : (j * stepsize + window)] = norm[(j * stepsize) : (j * stepsize + window)] + np.reshape(
+            wt, (window, 1)
         )
-        norm[(j * stepsize):(j * stepsize + window)] = norm[(j * stepsize):(j * stepsize + window)] + np.reshape(wt, (window, 1))
 
     above_norm = np.where(norm[:, 0] > 0)
     y_line[above_norm] = y_line[above_norm] / norm[above_norm]
 
     indx = (nwin - 1) * stepsize + window - 1
     npts = length - indx + 1
-    y_line[indx - 1:] = np.reshape(
-        (np.multiply(np.arange(window + 1, window + npts + 1), a) + b), (npts, 1)
-    )
+    y_line[indx - 1 :] = np.reshape((np.multiply(np.arange(window + 1, window + npts + 1), a) + b), (npts, 1))
 
     detrended = signal - y_line[:, 0]
     return detrended

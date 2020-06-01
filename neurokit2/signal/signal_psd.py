@@ -4,7 +4,9 @@ import pandas as pd
 import scipy.signal
 
 
-def signal_psd(signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None):
+def signal_psd(
+    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None
+):
     """Compute the Power Spectral Density (PSD).
 
     Parameters
@@ -59,22 +61,26 @@ def signal_psd(signal, sampling_rate=1000, method="welch", show=True, min_freque
     if method.lower() in ["multitapers", "mne"]:
         try:
             import mne
-            power, frequency = mne.time_frequency.psd_array_multitaper(signal,
-                                                                       sfreq=sampling_rate,
-                                                                       fmin=min_frequency,
-                                                                       fmax=max_frequency,
-                                                                       adaptive=True,
-                                                                       normalization='full',
-                                                                       verbose=False)
+
+            power, frequency = mne.time_frequency.psd_array_multitaper(
+                signal,
+                sfreq=sampling_rate,
+                fmin=min_frequency,
+                fmax=max_frequency,
+                adaptive=True,
+                normalization="full",
+                verbose=False,
+            )
         except ImportError:
-            raise ImportError("NeuroKit warning: signal_psd(): the 'mne'",
-                              "module is required for the 'mne' method to run.",
-                              "Please install it first (`pip install mne`).")
+            raise ImportError(
+                "NeuroKit warning: signal_psd(): the 'mne'",
+                "module is required for the 'mne' method to run.",
+                "Please install it first (`pip install mne`).",
+            )
 
     # BURG
     elif method.lower() in ["burg", "pburg", "spectrum"]:
-        raise ValueError("NeuroKit warning: signal_psd(): the 'BURG'",
-                         "method has not been yet implemented.")
+        raise ValueError("NeuroKit warning: signal_psd(): the 'BURG' method has not been yet implemented.")
 
     # Welch (Scipy)
     else:
@@ -89,26 +95,29 @@ def signal_psd(signal, sampling_rate=1000, method="welch", show=True, min_freque
 
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
-            print("Neurokit warning: signal_psd(): The duration of recording is too short to support a sufficiently long window for high frequency resolution. Consider using a longer recording or increasing the `min_frequency`")
+            print(
+                "Neurokit warning: signal_psd(): The duration of recording is too short to support a sufficiently long window for high frequency resolution. Consider using a longer recording or increasing the `min_frequency`"
+            )
             nperseg = int(len(signal / 2))
 
-        frequency, power = scipy.signal.welch(signal,
-                                              fs=sampling_rate,
-                                              scaling='density',
-                                              detrend=False,
-                                              nfft=int(nperseg*2),
-                                              average='mean',
-                                              nperseg=nperseg)
+        frequency, power = scipy.signal.welch(
+            signal,
+            fs=sampling_rate,
+            scaling="density",
+            detrend=False,
+            nfft=int(nperseg * 2),
+            average="mean",
+            nperseg=nperseg,
+        )
 
     # Store results
-    data = pd.DataFrame({"Frequency": frequency,
-                         "Power": power})
+    data = pd.DataFrame({"Frequency": frequency, "Power": power})
 
     # Filter
     data = data.loc[np.logical_and(data["Frequency"] >= min_frequency, data["Frequency"] <= max_frequency)]
 
     if show is True:
-        ax = data.plot(x="Frequency", y="Power", logy=True, title='Power Spectral Density (PSD)')
+        ax = data.plot(x="Frequency", y="Power", logy=True, title="Power Spectral Density (PSD)")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
         return ax
     else:

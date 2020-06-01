@@ -31,17 +31,16 @@ def signal_autocor(signal, lag=None, normalize=True):
     >>> autocor = nk.signal_autocor(x)
     >>> autocor #doctest: +SKIP
     """
-    r = np.correlate(signal, signal, mode='full')
+    r = np.correlate(signal, signal, mode="full")
 
-    r = r[r.size // 2:]  # min time lag is 0
+    r = r[r.size // 2 :]  # min time lag is 0
 
     if normalize is True:
         r = r / r[0]
 
     if lag is not None:
         if lag > len(signal):
-            raise ValueError("NeuroKit error: signal_autocor(): The time lag "
-                             "exceeds the duration of the signal. ")
+            raise ValueError("NeuroKit error: signal_autocor(): The time lag exceeds the duration of the signal. ")
         else:
             r = r[lag]
 

@@ -5,8 +5,7 @@ from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_interpolate import signal_interpolate
 
 
-def signal_period(peaks, sampling_rate=1000, desired_length=None,
-                  interpolation_order="cubic"):
+def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_order="cubic"):
     """Calculate signal period from a series of peaks.
 
     Parameters
@@ -54,8 +53,10 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None,
 
     # Sanity checks.
     if len(peaks) <= 3:
-        print("NeuroKit warning: _signal_formatpeaks(): too few peaks detected"
-              " to compute the rate. Returning empty vector.")
+        print(
+            "NeuroKit warning: _signal_formatpeaks(): too few peaks detected"
+            " to compute the rate. Returning empty vector."
+        )
         return np.full(desired_length, np.nan)
 
     # Calculate period in sec, based on peak to peak difference and make sure
@@ -66,8 +67,6 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None,
 
     # Interpolate all statistics to desired length.
     if desired_length != np.size(peaks):
-        period = signal_interpolate(peaks, period,
-                                    desired_length=desired_length,
-                                    method=interpolation_order)
+        period = signal_interpolate(peaks, period, desired_length=desired_length, method=interpolation_order)
 
     return period

@@ -44,7 +44,6 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
         except TypeError:
             signal = np.array(signal)
 
-
     if isinstance(signal, pd.DataFrame) is False:
 
         # If list is passed
@@ -74,16 +73,15 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
 
     # Adjust for sampling rate
     if sampling_rate is not None:
-        x_axis = np.linspace(0, signal.shape[0] / sampling_rate,
-                             signal.shape[0])
-        x_axis = pd.DataFrame(x_axis, columns=['Time (s)'])
+        x_axis = np.linspace(0, signal.shape[0] / sampling_rate, signal.shape[0])
+        x_axis = pd.DataFrame(x_axis, columns=["Time (s)"])
         signal = pd.concat([signal, x_axis], axis=1)
-        signal = signal.set_index('Time (s)')
+        signal = signal.set_index("Time (s)")
     elif sampling_rate is None:
         x_axis = np.arange(0, signal.shape[0])
-        x_axis = pd.DataFrame(x_axis, columns=['Samples'])
+        x_axis = pd.DataFrame(x_axis, columns=["Samples"])
         signal = pd.concat([signal, x_axis], axis=1)
-        signal = signal.set_index('Samples')
+        signal = signal.set_index("Samples")
 
     # Plot accordingly
     if len(events_columns) > 0:
@@ -93,9 +91,9 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
             events.append(np.where(vector == np.max(vector.unique()))[0])
         plot = events_plot(events, signal=signal[continuous_columns])
         if sampling_rate is not None:
-            plot.gca().set_xlabel('Time (seconds)')
+            plot.gca().set_xlabel("Time (seconds)")
         elif sampling_rate is None:
-            plot.gca().set_xlabel('Samples')
+            plot.gca().set_xlabel("Samples")
     else:
         if standardize is True:
             plot = nk_standardize(signal[continuous_columns]).plot(subplots=subplots, sharex=True, **kwargs)
