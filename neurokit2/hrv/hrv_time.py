@@ -103,14 +103,14 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     if show:
         _hrv_time_show(rri)
 
-    out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
+    out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
 
 def _hrv_time_show(rri, **kwargs):
 
     fig = summary_plot(rri, **kwargs)
-    plt.xlabel('R-R intervals (ms)')
+    plt.xlabel("R-R intervals (ms)")
     fig.suptitle("Distribution of R-R intervals")
 
     return fig

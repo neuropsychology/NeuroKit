@@ -7,8 +7,7 @@ import scipy.signal
 from ..signal import signal_formatpeaks, signal_smooth
 
 
-def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi",
-                  show=False):
+def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False):
     """Find systolic peaks in a photoplethysmogram (PPG) signal.
 
 
@@ -63,8 +62,7 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi",
     if method in ["elgendi"]:
         peaks = _ppg_findpeaks_elgendi(ppg_cleaned, sampling_rate, show=show)
     else:
-        raise ValueError("Neurokit error: Please use one of the following"
-                         " methods: 'elgendi'.")
+        raise ValueError("Neurokit error: Please use one of the following" " methods: 'elgendi'.")
 
     # Prepare output.
     info = {"PPG_Peaks": peaks}
@@ -72,9 +70,9 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi",
     return info
 
 
-def _ppg_findpeaks_elgendi(signal, sampling_rate=1000, peakwindow=.111,
-                           beatwindow=.667, beatoffset=.02, mindelay=.3,
-                           show=False):
+def _ppg_findpeaks_elgendi(
+    signal, sampling_rate=1000, peakwindow=0.111, beatwindow=0.667, beatoffset=0.02, mindelay=0.3, show=False
+):
     """
     Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D
     (2013) Systolic Peak Detection in Acceleration Photoplethysmograms Measured
@@ -88,11 +86,10 @@ def _ppg_findpeaks_elgendi(signal, sampling_rate=1000, peakwindow=.111,
         fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
         ax0.plot(signal, label="filtered")
 
-
     # Ignore the samples with negative amplitudes and square the samples with
     # values larger than zero.
     signal[signal < 0] = 0
-    sqrd = signal**2
+    sqrd = signal ** 2
 
     # Compute the thresholds for peak detection. Call with show=True in order
     # to visualize thresholds.
@@ -102,7 +99,7 @@ def _ppg_findpeaks_elgendi(signal, sampling_rate=1000, peakwindow=.111,
     ma_beat_kernel = int(np.rint(beatwindow * sampling_rate))
     ma_beat = signal_smooth(sqrd, kernel="boxcar", size=ma_beat_kernel)
 
-    thr1 = ma_beat + beatoffset * np.mean(sqrd)    # threshold 1
+    thr1 = ma_beat + beatoffset * np.mean(sqrd)  # threshold 1
 
     if show:
         ax1.plot(sqrd, label="squared")
@@ -111,16 +108,14 @@ def _ppg_findpeaks_elgendi(signal, sampling_rate=1000, peakwindow=.111,
 
     # Identify start and end of PPG waves.
     waves = ma_peak > thr1
-    beg_waves = np.where(np.logical_and(np.logical_not(waves[0:-1]),
-                                        waves[1:]))[0]
-    end_waves = np.where(np.logical_and(waves[0:-1],
-                                        np.logical_not(waves[1:])))[0]
+    beg_waves = np.where(np.logical_and(np.logical_not(waves[0:-1]), waves[1:]))[0]
+    end_waves = np.where(np.logical_and(waves[0:-1], np.logical_not(waves[1:])))[0]
     # Throw out wave-ends that precede first wave-start.
     end_waves = end_waves[end_waves > beg_waves[0]]
 
     # Identify systolic peaks within waves (ignore waves that are too short).
     num_waves = min(beg_waves.size, end_waves.size)
-    min_len = int(np.rint(peakwindow * sampling_rate))    # this is threshold 2 in the paper
+    min_len = int(np.rint(peakwindow * sampling_rate))  # this is threshold 2 in the paper
     min_delay = int(np.rint(mindelay * sampling_rate))
     peaks = [0]
 

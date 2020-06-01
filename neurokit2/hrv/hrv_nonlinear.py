@@ -87,17 +87,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out["CSI_Modified"] = L ** 2 / T
 
     # Entropy
-    out["SampEn"] = entropy_sample(rri, dimension=2,
-                                   r=0.2 * np.std(rri, ddof=1))
+    out["SampEn"] = entropy_sample(rri, dimension=2, r=0.2 * np.std(rri, ddof=1))
 
     if show:
         _hrv_nonlinear_show(rri, out)
 
-    out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
+    out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
-
-
-
 
 
 def _hrv_nonlinear_show(rri, out, ax=None):
@@ -117,36 +113,50 @@ def _hrv_nonlinear_show(rri, out, ax=None):
         fig = None
 
     plt.title("Poincaré Plot")
-    plt.xlabel(r'$RR_{n} (ms)$')
-    plt.ylabel(r'$RR_{n+1} (ms)$')
+    plt.xlabel(r"$RR_{n} (ms)$")
+    plt.ylabel(r"$RR_{n+1} (ms)$")
     plt.xlim(min(rri) - 10, max(rri) + 10)
     plt.ylim(min(rri) - 10, max(rri) + 10)
-    ax.scatter(ax1, ax2, c='#2196F3', s=4)
+    ax.scatter(ax1, ax2, c="#2196F3", s=4)
 
     # Ellipse plot feature
-    ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
-                                             mean_heart_period),
-                                         width=2 * sd2 + 1, height=2 * sd1 + 1,
-                                         angle=45, linewidth=2, fill=False)
+    ellipse = matplotlib.patches.Ellipse(
+        xy=(mean_heart_period, mean_heart_period),
+        width=2 * sd2 + 1,
+        height=2 * sd1 + 1,
+        angle=45,
+        linewidth=2,
+        fill=False,
+    )
     ax.add_patch(ellipse)
-    ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
-                                             mean_heart_period), width=2 * sd2,
-                                         height=2 * sd1, angle=45)
+    ellipse = matplotlib.patches.Ellipse(
+        xy=(mean_heart_period, mean_heart_period), width=2 * sd2, height=2 * sd1, angle=45
+    )
     ellipse.set_alpha(0.02)
     ellipse.set_facecolor("#2196F3")
     ax.add_patch(ellipse)
 
     # Arrow plot feature
-    sd1_arrow = ax.arrow(mean_heart_period,
-                         mean_heart_period,
-                         float(-sd1 * np.sqrt(2) / 2),
-                         float(sd1 * np.sqrt(2) / 2),
-                         linewidth=3, ec='#E91E63', fc="#E91E63", label="SD1")
-    sd2_arrow = ax.arrow(mean_heart_period,
-                         mean_heart_period,
-                         float(sd2 * np.sqrt(2) / 2),
-                         float(sd2 * np.sqrt(2) / 2),
-                         linewidth=3, ec='#FF9800', fc="#FF9800", label="SD2")
+    sd1_arrow = ax.arrow(
+        mean_heart_period,
+        mean_heart_period,
+        float(-sd1 * np.sqrt(2) / 2),
+        float(sd1 * np.sqrt(2) / 2),
+        linewidth=3,
+        ec="#E91E63",
+        fc="#E91E63",
+        label="SD1",
+    )
+    sd2_arrow = ax.arrow(
+        mean_heart_period,
+        mean_heart_period,
+        float(sd2 * np.sqrt(2) / 2),
+        float(sd2 * np.sqrt(2) / 2),
+        linewidth=3,
+        ec="#FF9800",
+        fc="#FF9800",
+        label="SD2",
+    )
 
     plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
 

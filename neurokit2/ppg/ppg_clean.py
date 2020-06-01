@@ -47,14 +47,14 @@ def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
     if method in ["elgendi"]:
         clean = _ppg_clean_elgendi(ppg_signal, sampling_rate)
     else:
-        raise ValueError("Neurokit error: Please use one of the following"
-                         " methods: 'elgendi'.")
+        raise ValueError("Neurokit error: Please use one of the following methods: 'elgendi'.")
 
     return clean
 
 
 def _ppg_clean_elgendi(ppg_signal, sampling_rate):
 
-    filtered = signal_filter(ppg_signal, sampling_rate=sampling_rate,
-                             lowcut=.5, highcut=8, order=3, method="butter_ba")
+    filtered = signal_filter(
+        ppg_signal, sampling_rate=sampling_rate, lowcut=0.5, highcut=8, order=3, method="butter_ba"
+    )
     return filtered
