@@ -77,16 +77,16 @@ Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of
 
 .. code-block::
 
-    isort myfile.py --recursive -l 120  --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma
+    isort myfile.py -l 120  --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma
     black myfile.py --line-length 120
-    docformatter myfile.py --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line --in-place
+    docformatter myfile.py --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line --in-place
     
     flake8 myfile.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203
     pylint myfile.py --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 
 
 The first three commands will make some modifications to your code so that it is nicely formatted, while the two last will run some checks to detect any additional issues. Please try to fix them!
 
-*PS: If you want to check the whole package, just replace 'mufile;py' by 'neurokit2'.*
+*PS: If you want to check the whole package, just replace 'mufile;py' by 'neurokit2' and add ``--recursive`` to ``isort`` and ``docformatter``.
 
 Useful reads
 ------------
