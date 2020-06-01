@@ -72,11 +72,7 @@ Contribution
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
         :target: https://github.com/psf/black
         :alt: Black code
-        
-.. image:: https://github.com/neuropsychology/neurokit/workflows/Style/badge.svg
-        :target: https://github.com/neuropsychology/NeuroKit/actions
-        :alt: Style
-        
+
 NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
 
 - `Contribution guide <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
@@ -114,7 +110,7 @@ Documentation
 
 Click on the links above and check out our tutorials:
 
-Guides
+General
 ^^^^^^^^^^
 
 -  `Recording good quality signals <https://neurokit2.readthedocs.io/en/latest/tutorials/recording.html>`_
