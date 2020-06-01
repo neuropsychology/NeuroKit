@@ -66,14 +66,12 @@ def _emg_amplitude_tkeo(emg_cleaned):
     tkeo = emg_cleaned.copy()
 
     # Teager–Kaiser Energy operator
-    tkeo[1:-1] = emg_cleaned[1:-1]*emg_cleaned[1:-1] - emg_cleaned[:-2]*emg_cleaned[2:]
+    tkeo[1:-1] = emg_cleaned[1:-1] * emg_cleaned[1:-1] - emg_cleaned[:-2] * emg_cleaned[2:]
 
     # Correct the data in the extremities
     tkeo[0], tkeo[-1] = tkeo[1], tkeo[-2]
 
     return tkeo
-
-
 
 
 # =============================================================================
@@ -104,22 +102,13 @@ def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=
     ----------
     - BMCLab: https://github.com/demotu/BMC/blob/master/notebooks/Electromyography.ipynb
     """
-    filtered = signal_filter(emg_cleaned,
-                             sampling_rate=sampling_rate,
-                             lowcut=lowcut,
-                             highcut=highcut,
-                             method="butterworth",
-                             order=2)
+    filtered = signal_filter(
+        emg_cleaned, sampling_rate=sampling_rate, lowcut=lowcut, highcut=highcut, method="butterworth", order=2
+    )
 
     envelope = np.abs(filtered)
-    envelope = signal_filter(envelope,
-                             sampling_rate=sampling_rate,
-                             lowcut=None,
-                             highcut=envelope_filter,
-                             method="butterworth",
-                             order=2)
-
-
-
+    envelope = signal_filter(
+        envelope, sampling_rate=sampling_rate, lowcut=None, highcut=envelope_filter, method="butterworth", order=2
+    )
 
     return envelope

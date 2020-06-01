@@ -59,14 +59,10 @@ def emg_process(emg_signal, sampling_rate=1000):
     amplitude = emg_amplitude(emg_cleaned)
 
     # Get onsets, offsets, and periods of activity
-    activity_signal, info = emg_activation(amplitude,
-                                           sampling_rate=sampling_rate,
-                                           threshold='default')
+    activity_signal, info = emg_activation(amplitude, sampling_rate=sampling_rate, threshold="default")
 
     # Prepare output
-    signals = pd.DataFrame({"EMG_Raw": emg_signal,
-                            "EMG_Clean": emg_cleaned,
-                            "EMG_Amplitude": amplitude})
+    signals = pd.DataFrame({"EMG_Raw": emg_signal, "EMG_Clean": emg_cleaned, "EMG_Amplitude": amplitude})
 
     signals = pd.concat([signals, activity_signal], axis=1)
 

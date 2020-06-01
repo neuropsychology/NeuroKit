@@ -49,10 +49,10 @@ def emg_clean(emg_signal, sampling_rate=1000):
     # Parameters
     order = 4
     frequency = 100
-    frequency = 2 * np.array(frequency)/sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     # Filtering
-    b, a = scipy.signal.butter(N=order, Wn=frequency, btype='highpass', analog=False)
+    b, a = scipy.signal.butter(N=order, Wn=frequency, btype="highpass", analog=False)
     filtered = scipy.signal.filtfilt(b, a, emg_signal)
 
     # Baseline detrending

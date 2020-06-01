@@ -44,9 +44,10 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     try:
         import mne
     except ImportError:
-        raise ImportError("NeuroKit error: eeg_add_channel(): the 'mne' "
-                          "module is required for this function to run. ",
-                          "Please install it first (`pip install mne`).")
+        raise ImportError(
+            "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
+            "Please install it first (`pip install mne`).",
+        )
 
     if channel_name is None:
         if isinstance(channel, pd.Series):
@@ -60,17 +61,17 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     # Compute the distance between the two signals
     diff = sync_index_channel - sync_index_raw
     if diff > 0:
-        channel = list(channel)[diff:len(channel)]
-        channel = channel + [np.nan]*diff
+        channel = list(channel)[diff : len(channel)]
+        channel = channel + [np.nan] * diff
     if diff < 0:
-        channel = [np.nan]*abs(diff) + list(channel)
+        channel = [np.nan] * abs(diff) + list(channel)
 
     # Adjust to raw size
     if len(channel) < len(raw):
-        channel = list(channel) + [np.nan]*(len(raw)-len(channel))
+        channel = list(channel) + [np.nan] * (len(raw) - len(channel))
     else:
         # Crop to fit the raw data
-        channel = list(channel)[0:len(raw)]
+        channel = list(channel)[0 : len(raw)]
 
     info = mne.create_info([channel_name], raw.info["sfreq"], ch_types=channel_type)
     channel = mne.io.RawArray([channel], info)

@@ -64,7 +64,7 @@ def emg_eventrelated(epochs, silent=False):
             data[i]["EMG_Activation"] = 0
 
         # Analyze features based on activation
-        if (data[i]["EMG_Activation"] == 1):
+        if data[i]["EMG_Activation"] == 1:
             data[i] = _emg_eventrelated_features(epochs[i], data[i])
         else:
             data[i]["EMG_Amplitude_Mean"] = np.nan
@@ -88,14 +88,18 @@ def _emg_eventrelated_features(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "EMG_Onsets" in i]) == 0:
-        print("NeuroKit warning: emg_eventrelated(): input does not"
-              "have an `EMG_Onsets` column. Unable to process EMG features.")
+        print(
+            "NeuroKit warning: emg_eventrelated(): input does not"
+            "have an `EMG_Onsets` column. Unable to process EMG features."
+        )
         return output
 
     if len([i for i in colnames if "EMG_Activity" or "EMG_Amplitude" in i]) == 0:
-        print("NeuroKit warning: emg_eventrelated(): input does not"
-              "have an `EMG_Activity` column or `EMG_Amplitude` column."
-              "Will skip computation of EMG amplitudes.")
+        print(
+            "NeuroKit warning: emg_eventrelated(): input does not"
+            "have an `EMG_Activity` column or `EMG_Amplitude` column."
+            "Will skip computation of EMG amplitudes."
+        )
         return output
 
     # Peak amplitude and Time of peak

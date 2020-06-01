@@ -68,9 +68,9 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
             colnames = data.columns.values
 
         if len([i for i in colnames if "Label" in i]) == 0:
-            raise ValueError("NeuroKit error: emg_analyze(): Wrong input"
-                             "or method, we couldn't extract"
-                             "extract epochs features.")
+            raise ValueError(
+                "NeuroKit error: emg_analyze(): Wrong input or method, we couldn't extract extract epochs features."
+            )
         else:
             features = emg_eventrelated(data)
 
@@ -90,8 +90,8 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
                 features = emg_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
-            if 'Label' in data.columns:
-                epoch_len = data['Label'].value_counts()[0]
+            if "Label" in data.columns:
+                epoch_len = data["Label"].value_counts()[0]
                 duration = epoch_len / sampling_rate
             else:
                 duration = len(data) / sampling_rate

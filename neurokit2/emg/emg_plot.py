@@ -35,13 +35,11 @@ def emg_plot(emg_signals, sampling_rate=None):
 
     # Sanity-check input.
     if not isinstance(emg_signals, pd.DataFrame):
-        print("NeuroKit error: The `emg_signals` argument must be the "
-              "DataFrame returned by `emg_process()`.")
+        print("NeuroKit error: The `emg_signals` argument must be the DataFrame returned by `emg_process()`.")
 
     # Determine what to display on the x-axis, mark activity.
     if sampling_rate is not None:
-        x_axis = np.linspace(0, emg_signals.shape[0] / sampling_rate,
-                             emg_signals.shape[0])
+        x_axis = np.linspace(0, emg_signals.shape[0] / sampling_rate, emg_signals.shape[0])
     else:
         x_axis = np.arange(0, emg_signals.shape[0])
 
@@ -57,28 +55,29 @@ def emg_plot(emg_signals, sampling_rate=None):
 
     # Plot cleaned and raw EMG.
     ax0.set_title("Raw and Cleaned Signal")
-    ax0.plot(x_axis, emg_signals["EMG_Raw"], color='#B0BEC5', label='Raw',
-             zorder=1)
-    ax0.plot(x_axis, emg_signals["EMG_Clean"], color='#FFC107',
-             label="Cleaned", zorder=1, linewidth=1.5)
+    ax0.plot(x_axis, emg_signals["EMG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
+    ax0.plot(x_axis, emg_signals["EMG_Clean"], color="#FFC107", label="Cleaned", zorder=1, linewidth=1.5)
     ax0.legend(loc="upper right")
 
     # Plot Amplitude.
     ax1.set_title("Muscle Activation")
-    ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#FF9800",
-             label="Amplitude", linewidth=1.5)
+    ax1.plot(x_axis, emg_signals["EMG_Amplitude"], color="#FF9800", label="Amplitude", linewidth=1.5)
 
     # Shade activity regions.
     activity_signal = _emg_plot_activity(emg_signals, onsets, offsets)
-    ax1.fill_between(x_axis, emg_signals["EMG_Amplitude"], activity_signal,
-                     where=emg_signals["EMG_Amplitude"] > activity_signal,
-                     color='#f7c568', alpha=0.5, label=None)
+    ax1.fill_between(
+        x_axis,
+        emg_signals["EMG_Amplitude"],
+        activity_signal,
+        where=emg_signals["EMG_Amplitude"] > activity_signal,
+        color="#f7c568",
+        alpha=0.5,
+        label=None,
+    )
 
     # Mark onsets and offsets.
-    ax1.scatter(x_axis[onsets], emg_signals["EMG_Amplitude"][onsets],
-                color='#f03e65', label=None, zorder=3)
-    ax1.scatter(x_axis[offsets], emg_signals["EMG_Amplitude"][offsets],
-                color='#f03e65', label=None, zorder=3)
+    ax1.scatter(x_axis[onsets], emg_signals["EMG_Amplitude"][onsets], color="#f03e65", label=None, zorder=3)
+    ax1.scatter(x_axis[offsets], emg_signals["EMG_Amplitude"][offsets], color="#f03e65", label=None, zorder=3)
 
     if sampling_rate is not None:
         onsets = onsets / sampling_rate
@@ -88,8 +87,8 @@ def emg_plot(emg_signals, sampling_rate=None):
         offsets = offsets
 
     for i, j in zip(list(onsets), list(offsets)):
-        ax1.axvline(i, color='#4a4a4a', linestyle='--', label=None, zorder=2)
-        ax1.axvline(j, color='#4a4a4a', linestyle='--', label=None, zorder=2)
+        ax1.axvline(i, color="#4a4a4a", linestyle="--", label=None, zorder=2)
+        ax1.axvline(j, color="#4a4a4a", linestyle="--", label=None, zorder=2)
     ax1.legend(loc="upper right")
 
     plt.show()

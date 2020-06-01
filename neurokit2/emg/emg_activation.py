@@ -7,7 +7,15 @@ from ..misc import as_vector
 from ..signal import signal_binarize, signal_changepoints, signal_formatpeaks
 
 
-def emg_activation(emg_amplitude=None, emg_cleaned=None, sampling_rate=1000, method="threshold", threshold='default', duration_min="default", **kwargs):
+def emg_activation(
+    emg_amplitude=None,
+    emg_cleaned=None,
+    sampling_rate=1000,
+    method="threshold",
+    threshold="default",
+    duration_min="default",
+    **kwargs
+):
     """Detects onset in EMG signal based on the amplitude threshold.
 
     Parameters
@@ -82,39 +90,44 @@ def emg_activation(emg_amplitude=None, emg_cleaned=None, sampling_rate=1000, met
     if duration_min == "default":
         duration_min = int(0.05 * sampling_rate)
 
-
     # Find offsets and onsets.
     method = method.lower()  # remove capitalised letters
     if method == "threshold":
         if emg_amplitude is None:
-            raise ValueError("NeuroKit error: emg_activation(): 'threshold' method needs 'emg_amplitude' signal to be passed.")
+            raise ValueError(
+                "NeuroKit error: emg_activation(): 'threshold' method needs 'emg_amplitude' signal to be passed."
+            )
         activity = _emg_activation_threshold(emg_amplitude, threshold=threshold)
     elif method == "mixture":
         if emg_amplitude is None:
-            raise ValueError("NeuroKit error: emg_activation(): 'mixture' method needs 'emg_amplitude' signal to be passed.")
+            raise ValueError(
+                "NeuroKit error: emg_activation(): 'mixture' method needs 'emg_amplitude' signal to be passed."
+            )
         activity = _emg_activation_mixture(emg_amplitude, threshold=threshold)
     elif method == "pelt":
         if emg_cleaned is None:
-            raise ValueError("NeuroKit error: emg_activation(): 'pelt' method needs 'emg_cleaned' (cleaned or raw EMG) signal to be passed.")
+            raise ValueError(
+                "NeuroKit error: emg_activation(): 'pelt' method needs 'emg_cleaned' (cleaned or raw EMG) signal to be passed."
+            )
         activity = _emg_activation_pelt(emg_cleaned, duration_min=duration_min, **kwargs)
     else:
-        raise ValueError("NeuroKit error: emg_activation(): 'method' should be "
-                         "one of 'mixture', 'threshold', or 'pelt'.")
+        raise ValueError(
+            "NeuroKit error: emg_activation(): 'method' should be one of 'mixture', 'threshold', or 'pelt'."
+        )
 
     # Sanitize activity.
     info = _emg_activation_activations(activity, sampling_rate=sampling_rate, duration_min=duration_min)
 
-
     # Prepare Output.
-    df_activity = signal_formatpeaks({"EMG_Activity": info["EMG_Activity"]},
-                                     desired_length=len(emg_amplitude),
-                                     peak_indices=info["EMG_Activity"])
-    df_onsets = signal_formatpeaks({"EMG_Onsets": info["EMG_Onsets"]},
-                                   desired_length=len(emg_amplitude),
-                                   peak_indices=info["EMG_Onsets"])
-    df_offsets = signal_formatpeaks({"EMG_Offsets": info["EMG_Offsets"]},
-                                    desired_length=len(emg_amplitude),
-                                    peak_indices=info["EMG_Offsets"])
+    df_activity = signal_formatpeaks(
+        {"EMG_Activity": info["EMG_Activity"]}, desired_length=len(emg_amplitude), peak_indices=info["EMG_Activity"]
+    )
+    df_onsets = signal_formatpeaks(
+        {"EMG_Onsets": info["EMG_Onsets"]}, desired_length=len(emg_amplitude), peak_indices=info["EMG_Onsets"]
+    )
+    df_offsets = signal_formatpeaks(
+        {"EMG_Offsets": info["EMG_Offsets"]}, desired_length=len(emg_amplitude), peak_indices=info["EMG_Offsets"]
+    )
 
     # Modify output produced by signal_formatpeaks.
     for x in range(len(emg_amplitude)):
@@ -134,20 +147,20 @@ def emg_activation(emg_amplitude=None, emg_cleaned=None, sampling_rate=1000, met
     return activity_signal, info
 
 
-
 # =============================================================================
 # Methods
 # =============================================================================
 
-def _emg_activation_threshold(emg_amplitude, threshold='default'):
 
-    if threshold == 'default':
-        threshold = (1/10)*np.std(emg_amplitude)
+def _emg_activation_threshold(emg_amplitude, threshold="default"):
+
+    if threshold == "default":
+        threshold = (1 / 10) * np.std(emg_amplitude)
 
     if threshold > np.max(emg_amplitude):
-        raise ValueError("NeuroKit error: emg_activation(): threshold"
-                         "specified exceeds the maximum of the signal"
-                         "amplitude.")
+        raise ValueError(
+            "NeuroKit error: emg_activation(): the threshold specified exceeds the maximum of the signal" "amplitude."
+        )
 
     activity = signal_binarize(emg_amplitude, method="threshold", threshold=threshold)
     return activity
@@ -155,7 +168,7 @@ def _emg_activation_threshold(emg_amplitude, threshold='default'):
 
 def _emg_activation_mixture(emg_amplitude, threshold="default"):
 
-    if threshold == 'default':
+    if threshold == "default":
         threshold = 0.33
 
     activity = signal_binarize(emg_amplitude, method="mixture", threshold=threshold)
@@ -186,10 +199,10 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
     binary[changepoints[0::2]] = 0
     binary[changepoints[1::2]] = 1
 
-    activity = pd.Series(binary).fillna(method='ffill').values
+    activity = pd.Series(binary).fillna(method="ffill").values
 
     # Label as 1 to parts that have the larger SD (likely to be activations)
-    if (emg_cleaned[activity == 1].std() > emg_cleaned[activity == 0].std()):
+    if emg_cleaned[activity == 1].std() > emg_cleaned[activity == 0].std():
         activity = np.abs(activity - 1)
 
     activity[0] = 0
@@ -203,10 +216,10 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
 # =============================================================================
 def _emg_activation_activations(activity, sampling_rate=1000, duration_min=0.05):
 
-    activations = events_find(activity, threshold=0.5, threshold_keep='above', duration_min=duration_min)
+    activations = events_find(activity, threshold=0.5, threshold_keep="above", duration_min=duration_min)
     activations["offset"] = activations["onset"] + activations["duration"]
 
-    baseline = events_find(activity == 0, threshold=0.5, threshold_keep='above', duration_min=duration_min)
+    baseline = events_find(activity == 0, threshold=0.5, threshold_keep="above", duration_min=duration_min)
     baseline["offset"] = baseline["onset"] + baseline["duration"]
 
     # Cross-comparison
@@ -220,8 +233,6 @@ def _emg_activation_activations(activity, sampling_rate=1000, duration_min=0.05)
         new_activity = np.append(new_activity, activated)
 
     # Prepare Output.
-    info = {"EMG_Onsets": onsets,
-            "EMG_Offsets": offsets,
-            "EMG_Activity": new_activity}
+    info = {"EMG_Onsets": onsets, "EMG_Offsets": offsets, "EMG_Activity": new_activity}
 
     return info
