@@ -66,11 +66,7 @@ def fit_error(y, y_predicted, n_parameters=2):
     SST = np.std(y) * n
 
     # Get R2
-    if SST == 0:
-        R2 = 1
-    else:
-        R2 = SSE / SST
-
+    R2 = 1 if SST == 0 else SSE / SST
     # R2 adjusted
     R2_adjusted = 1 - (1 - (1 - R2)) * (n - 1) / df
 

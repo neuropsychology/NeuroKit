@@ -255,7 +255,7 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
             signal_entropy = _complexity_optimize_get_differential(signal_embedded, k=1)
 
             # calculate average of surrogates entropy
-            for inter in range(surrogate_iter):
+            for _ in range(surrogate_iter):
                 surrogate, i, rmsd = _complexity_optimize_iaaft(signal)
                 surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _complexity_optimize_get_differential(surrogate_embedded, k=1)
@@ -327,7 +327,7 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
     # Start with a random permutation
     t = np.fft.rfft(np.random.permutation(signal))
 
-    for i in range(max_iter):
+    for _ in range(max_iter):
         # Match power spectrum
         s = np.real(np.fft.irfft(amplitudes * t / np.abs(t), n=len(signal)))
 

@@ -70,8 +70,17 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
         Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients. Shock, 30(1), 17-22.
     - Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012). Adaptive computation of multiscale entropy and its application in EEG signals for monitoring depth of anesthesia during surgery. Entropy, 14(6), 978-992.
     """
-    mse = _entropy_multiscale(signal, scale=scale, dimension=dimension, r=r, composite=composite, fuzzy=fuzzy, refined=refined, show=show, **kwargs)
-    return mse
+    return _entropy_multiscale(
+        signal,
+        scale=scale,
+        dimension=dimension,
+        r=r,
+        composite=composite,
+        fuzzy=fuzzy,
+        refined=refined,
+        show=show,
+        **kwargs
+    )
 
 
 
@@ -119,9 +128,9 @@ def _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs):
     y = _get_coarsegrained(signal, tau)
     if len(y) < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
         return np.nan
-    mse = entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
-
-    return mse
+    return entropy_sample(
+        y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs
+    )
 
 
 def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
@@ -132,9 +141,7 @@ def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
     mse_y = np.full(len(y), np.nan)
     for i in np.arange(len(y)):
         mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
-    mse = np.mean(mse_y)
-
-    return mse
+    return np.mean(mse_y)
 
 def _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs):
     y = _get_coarsegrained_rolling(signal, tau)

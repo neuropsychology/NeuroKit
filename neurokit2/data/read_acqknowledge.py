@@ -72,9 +72,8 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
         signal = np.array(file.named_channels[channel].data)
 
         # Fill signal interruptions
-        if impute_missing is True:
-            if np.isnan(np.sum(signal)):
-                signal = pd.Series(signal).fillna(method="pad").values
+        if impute_missing is True and np.isnan(np.sum(signal)):
+            signal = pd.Series(signal).fillna(method="pad").values
 
         # Resample if necessary
         if file.named_channels[channel].samples_per_second != sampling_rate:
@@ -86,14 +85,14 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
 
     # Sanitize lengths
     lengths = []
-    for channel in data:
-        lengths += [len(data[channel])]
+    for channel, value_ in data.items():
+        lengths += [len(value_)]
     if len(set(lengths)) > 1:  # If different lengths
         length = pd.Series(lengths).mode()[0]  # Find most common (target length)
-        for channel in data:
+        for channel, value in data.items():
             if len(data[channel]) > length:
                 data[channel] = data[channel][0:length]
-            if len(data[channel]) < length:
+            if len(value) < length:
                 data[channel] = np.concatenate([data[channel],
                                                np.full((length-len(data[channel])), data[channel][-1])])
 

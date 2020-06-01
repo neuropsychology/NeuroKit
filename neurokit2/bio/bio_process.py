@@ -88,18 +88,9 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
     if ecg is not None:
         if isinstance(ecg, pd.DataFrame):
             data = ecg.copy()
-            if "RSP" in data.keys():
-                rsp = data["RSP"]
-            else:
-                rsp = None
-            if "EDA" in data.keys():
-                eda = data["EDA"]
-            else:
-                eda = None
-            if "EMG" in data.keys():
-                emg = data["EMG"]
-            else:
-                emg = None
+            rsp = data['RSP'] if 'RSP' in data.keys() else None
+            eda = data['EDA'] if 'EDA' in data.keys() else None
+            emg = data['EMG'] if 'EMG' in data.keys() else None
             if "ECG" in data.keys():
                 ecg = data["ECG"]
             elif "EKG" in data.keys():
@@ -108,10 +99,7 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
                 ecg = None
             cols = ["ECG", "EKG", "RSP", "EDA", "EMG"]
             keep_keys = [key for key in data.keys() if key not in cols]
-            if len(keep_keys) != 0:
-                keep = data[keep_keys]
-            else:
-                keep = None
+            keep = data[keep_keys] if len(keep_keys) != 0 else None
         elif isinstance(ecg, np.ndarray):
             ecg = ecg
 

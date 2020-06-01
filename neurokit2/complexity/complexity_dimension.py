@@ -256,12 +256,12 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
     else:
         y = signal
 
-    if metric == 'cityblock':
+    if metric == 'chebyshev':
+        p = np.inf
+    elif metric == 'cityblock':
         p = 1
     elif metric == 'euclidean':
         p = 2
-    elif metric == 'chebyshev':
-        p = np.inf
     else:
         raise ValueError('Unknown metric.  Should be one of "cityblock", '
                          '"euclidean", or "chebyshev".')
@@ -269,11 +269,7 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
     tree = scipy.spatial.cKDTree(y)
     n = len(y)
 
-    if not maxnum:
-        maxnum = (window + 1) + 1 + (window + 1)
-    else:
-        maxnum = max(1, maxnum)
-
+    maxnum = window + 1 + 1 + (window + 1) if not maxnum else max(1, maxnum)
     if maxnum >= n:
         raise ValueError('maxnum is bigger than array length.')
 

@@ -87,7 +87,7 @@ def _mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), iteratio
     optim = _mandelbrot_optimize(c)
 
     z = np.copy(c)
-    for i in range(1, iterations+1):
+    for _ in range(1, iterations+1):
         # Continue only where smaller than threshold
         mask = (z*z.conjugate()).real < threshold
         mask = np.logical_and(mask, optim)
@@ -182,7 +182,7 @@ def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imagin
 
     z = np.copy(c)
 
-    for i in range(iterations):
+    for _ in range(iterations):
         # apply mandelbrot dynamic
         z = z ** 2 + c
 

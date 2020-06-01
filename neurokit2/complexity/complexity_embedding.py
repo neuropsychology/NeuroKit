@@ -104,25 +104,22 @@ def _embedding_plot(embedded):
 # =============================================================================
 
 def _embedding_plot_2D(embedded):
-    figure = plt.plot(embedded[:, 0], embedded[:, 1], color='#3F51B5')
-    return figure
+    return plt.plot(embedded[:, 0], embedded[:, 1], color='#3F51B5')
 
 
 def _embedding_plot_3D(embedded):
-    figure = _plot_3D_colored(x=embedded[:, 0],
-                              y=embedded[:, 1],
-                              z=embedded[:, 2],
-                              color=embedded[:, 2],
-                              rotate=False)
-    return figure
+    return _plot_3D_colored(x=embedded[:, 0],
+                                  y=embedded[:, 1],
+                                  z=embedded[:, 2],
+                                  color=embedded[:, 2],
+                                  rotate=False)
 
 def _embedding_plot_4D(embedded):
-    figure = _plot_3D_colored(x=embedded[:, 0],
-                              y=embedded[:, 1],
-                              z=embedded[:, 2],
-                              color=embedded[:, 3],
-                              rotate=False)
-    return figure
+    return _plot_3D_colored(x=embedded[:, 0],
+                                  y=embedded[:, 1],
+                                  z=embedded[:, 2],
+                                  color=embedded[:, 3],
+                                  rotate=False)
 
 
 

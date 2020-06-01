@@ -86,20 +86,15 @@ def _get_count(embedded, r, distance="chebyshev"):
     """
     """
     kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
-    count = kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
-    return count
+    return kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
 
 
 def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
     dist = sklearn.neighbors.DistanceMetric.get_metric(distance)
     dist = dist.pairwise(embedded)
 
-    if n > 1:
-        sim = np.exp(-dist**n / r)
-    else:
-        sim = np.exp(-dist / r)
-    count = np.sum(sim, axis=0)
-    return count
+    sim = np.exp(-dist**n / r) if n > 1 else np.exp(-dist / r)
+    return np.sum(sim, axis=0)
 
 
 # =============================================================================
@@ -189,5 +184,4 @@ def _get_coarsegrained(signal, scale=2, force=False):
     else:
         j = n // scale
     x = np.reshape(signal[0:j*scale], (j, scale))
-    coarsed = np.mean(x, axis=1)
-    return coarsed
+    return np.mean(x, axis=1)

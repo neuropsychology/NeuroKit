@@ -60,9 +60,15 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
 
     if isinstance(events, dict):
         if 'condition' in events.keys():
-            events_list = []
-            for condition in set(events["condition"]):
-                events_list.append([x for x, y in zip(events["onset"], events["condition"]) if y == condition])
+            events_list = [
+                [
+                    x
+                    for x, y in zip(events["onset"], events["condition"])
+                    if y == condition
+                ]
+                for condition in set(events["condition"])
+            ]
+
             events = events_list
         else:
             events = events["onset"]
@@ -99,7 +105,7 @@ def _events_plot(events, color="red", linestyle="--"):
     except TypeError:
         is_listoflists = False
 
-    if is_listoflists is False:
+    if not is_listoflists:
         # Loop through sublists
         for event in events:
             plt.axvline(event, color=color, linestyle=linestyle)

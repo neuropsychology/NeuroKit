@@ -72,15 +72,12 @@ def _epochs_plot(data, ax, col, legend):
 
         # Colors
         color_list = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "magenta"]
-        colors = {}
-        for i, cond in enumerate(set(data["Condition"])):
-            colors[cond] = color_list[i]
-
+        colors = {cond: color_list[i] for i, cond in enumerate(set(data["Condition"]))}
         # Plot
         for key, group in grouped:
             df = group.pivot_table(index='Time', columns=["Condition", 'Label'], values=col)
             df.plot(ax=ax, label=col, title=col, style=colors[key], legend=legend)
 
-        # TODO: Custom legend
+            # TODO: Custom legend
     else:
         data.pivot(index='Time', columns='Label', values=col).plot(ax=ax, label=col, title=col, legend=legend)
