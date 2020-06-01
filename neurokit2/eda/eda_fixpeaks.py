@@ -8,6 +8,7 @@ import scipy.signal
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
+
 def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
     """Correct  Skin Conductance Responses (SCR) peaks.
 

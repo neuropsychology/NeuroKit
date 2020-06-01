@@ -8,6 +8,7 @@ from .rsp_peaks import rsp_peaks
 from .rsp_phase import rsp_phase
 
 
+
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """Process a respiration (RSP) signal.
 

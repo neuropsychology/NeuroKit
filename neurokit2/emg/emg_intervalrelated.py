@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 
+
 def emg_intervalrelated(data):
     """
     Performs EMG analysis on longer periods of data (typically > 10 seconds),

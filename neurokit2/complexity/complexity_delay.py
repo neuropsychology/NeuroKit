@@ -14,6 +14,7 @@ from ..stats import mutual_information
 from .complexity_embedding import complexity_embedding
 
 
+
 def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     """Estimate optimal Time Delay (tau) for time-delay embedding
 

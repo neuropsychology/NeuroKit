@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
+import matplotlib.cm
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.signal
-from matplotlib.cm import get_cmap
 
 from .signal_psd import signal_psd
+
 
 
 def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, **kwargs):
@@ -140,7 +141,7 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
     label_list = list(out.keys())
 
     # Get cmap
-    cmap = get_cmap("Set1")
+    cmap = matplotlib.cm.get_cmap("Set1")
     colors = cmap.colors
     colors = (
         colors[3],

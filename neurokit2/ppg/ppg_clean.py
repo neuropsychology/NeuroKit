@@ -4,6 +4,7 @@ from ..misc import as_vector
 from ..signal import signal_filter
 
 
+
 def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
     """Clean a photoplethysmogram (PPG) signal.
 

@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 
+
 def rsp_plot(rsp_signals, sampling_rate=None):
     """Visualize respiration (RSP) data.
 

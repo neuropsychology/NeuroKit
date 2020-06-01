@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 
+
 def emg_plot(emg_signals, sampling_rate=None):
     """Visualize electromyography (EMG) data.
 

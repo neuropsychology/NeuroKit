@@ -6,6 +6,7 @@ import scipy.special
 import sklearn.neighbors
 
 
+
 def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):
     """
     Computes the (normalized) mutual information (MI) between two vectors from a joint histogram. The mutual information

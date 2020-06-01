@@ -4,6 +4,7 @@ import pandas as pd
 import sklearn.mixture
 
 
+
 def fit_mixture(X=None, n_clusters=2):
     """
     Gaussian Mixture Model.

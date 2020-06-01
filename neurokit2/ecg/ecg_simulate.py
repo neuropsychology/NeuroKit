@@ -7,6 +7,7 @@ import scipy
 from ..signal import signal_distort, signal_resample
 
 
+
 def ecg_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=70, method="ecgsyn", random_state=None
 ):

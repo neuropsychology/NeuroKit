@@ -7,6 +7,7 @@ from .complexity_dimension import complexity_dimension
 from .entropy_approximate import entropy_approximate
 
 
+
 def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=False):
     """Estimate optimal tolerance (similarity threshold)
     Parameters

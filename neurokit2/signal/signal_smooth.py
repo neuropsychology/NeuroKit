@@ -6,6 +6,7 @@ import scipy.signal
 from ..stats import fit_loess
 
 
+
 def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=0.1):
     """Signal smoothing.
 

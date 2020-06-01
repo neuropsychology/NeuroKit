@@ -4,6 +4,7 @@ from ..signal import signal_fixpeaks, signal_formatpeaks
 from .ecg_findpeaks import ecg_findpeaks
 
 
+
 def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifacts=False):
     """
     Find R-peaks in an ECG signal.

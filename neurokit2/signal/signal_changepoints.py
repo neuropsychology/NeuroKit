@@ -4,6 +4,7 @@ from ..events import events_plot
 from ..misc import as_vector
 
 
+
 def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     """Change Point Detection
 

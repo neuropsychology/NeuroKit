@@ -6,6 +6,7 @@ import pandas as pd
 from .epochs_to_df import epochs_to_df
 
 
+
 def epochs_plot(epochs, legend=True, show=True):
     """
     Plot epochs.

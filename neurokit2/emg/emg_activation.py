@@ -7,6 +7,7 @@ from ..misc import as_vector
 from ..signal import signal_binarize, signal_changepoints, signal_formatpeaks
 
 
+
 def emg_activation(
     emg_amplitude=None,
     emg_cleaned=None,

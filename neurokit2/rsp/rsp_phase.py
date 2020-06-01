@@ -6,6 +6,7 @@ from ..signal import signal_phase
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
+
 def rsp_phase(peaks, troughs=None, desired_length=None):
     """Compute respiratory phase (inspiration and expiration).
 

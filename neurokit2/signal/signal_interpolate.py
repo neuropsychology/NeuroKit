@@ -3,6 +3,7 @@ import numpy as np
 import scipy.interpolate
 
 
+
 def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     """Interpolate a signal.
 

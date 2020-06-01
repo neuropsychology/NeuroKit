@@ -6,6 +6,7 @@ import pandas as pd
 import scipy.signal
 
 
+
 def signal_phase(signal, method="radians"):
     """Compute the phase of the signal.
 

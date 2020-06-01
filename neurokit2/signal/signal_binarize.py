@@ -4,6 +4,7 @@ import pandas as pd
 import sklearn.mixture
 
 
+
 def signal_binarize(signal, method="threshold", threshold="auto"):
     """Binarize a continuous signal.
 

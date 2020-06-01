@@ -6,8 +6,9 @@ from ..epochs.eventrelated_utils import (
     _eventrelated_addinfo,
     _eventrelated_rate,
     _eventrelated_sanitizeinput,
-    _eventrelated_sanitizeoutput,
+    _eventrelated_sanitizeoutput
 )
+
 
 
 def rsp_eventrelated(epochs, silent=False):

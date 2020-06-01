@@ -6,6 +6,7 @@ from ..misc import as_vector
 from ..signal import signal_filter, signal_smooth
 
 
+
 def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     """Preprocess Electrodermal Activity (EDA) signal.
 

@@ -10,6 +10,8 @@ from .emg_plot import emg_plot
 from .emg_process import emg_process
 from .emg_simulate import emg_simulate
 
+
+
 __all__ = [
     "emg_simulate",
     "emg_clean",

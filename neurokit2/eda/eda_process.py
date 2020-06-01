@@ -6,6 +6,7 @@ from .eda_peaks import eda_peaks
 from .eda_phasic import eda_phasic
 
 
+
 def eda_process(eda_signal, sampling_rate=1000):
     """Process Electrodermal Activity (EDA).
 

@@ -5,6 +5,7 @@ from .rsp_eventrelated import rsp_eventrelated
 from .rsp_intervalrelated import rsp_intervalrelated
 
 
+
 def rsp_analyze(data, sampling_rate=1000, method="auto"):
     """Performs RSP analysis on either epochs (event-related
     analysis) or on longer periods of data such as resting-state data.

@@ -5,6 +5,7 @@ from .eda_eventrelated import eda_eventrelated
 from .eda_intervalrelated import eda_intervalrelated
 
 
+
 def eda_analyze(data, sampling_rate=1000, method="auto"):
     """Performs EDA analysis on either epochs (event-related
     analysis) or on longer periods of data such as resting-state data.

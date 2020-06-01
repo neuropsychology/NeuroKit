@@ -6,6 +6,7 @@ import scipy.sparse
 from ..stats import fit_loess, fit_polynomial
 
 
+
 def signal_detrend(signal, method="polynomial", order=1, regularization=500, alpha=0.75, window=1.5, stepsize=0.02):
     """Polynomial detrending of signal.
 

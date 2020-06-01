@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.signal
-from scipy.signal import find_peaks
 
 from ..epochs import epochs_create, epochs_to_df
 from ..signal import signal_findpeaks, signal_formatpeaks, signal_resample, signal_smooth, signal_zerocrossings
 from ..stats import standardize
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
+
 
 
 def ecg_delineate(
@@ -508,14 +508,14 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
             search_window = cwtmatr[2, index_peak - half_wave_width : index_peak]
             prominence = 0.20 * max(search_window)
             height = 0.0
-            wt_peaks, wt_peaks_data = find_peaks(search_window, height=height, prominence=prominence)
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height, prominence=prominence)
 
         elif peak_type in ["tpeaks", "ppeaks"]:
             search_window = -cwtmatr[4, index_peak - half_wave_width : index_peak]
 
             prominence = 0.10 * max(search_window)
             height = 0.0
-            wt_peaks, wt_peaks_data = find_peaks(search_window, height=height, prominence=prominence)
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height, prominence=prominence)
 
         if len(wt_peaks) == 0:
             # print("Fail to find onset at index: %d", index_peak)
@@ -550,7 +550,7 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
         elif peak_type in ["tpeaks", "ppeaks"]:
             search_window = cwtmatr[4, index_peak : index_peak + half_wave_width]
             prominence = 0.10 * max(search_window)
-            wt_peaks, wt_peaks_data = find_peaks(search_window, height=height, prominence=prominence)
+            wt_peaks, wt_peaks_data = scipy.signal.find_peaks(search_window, height=height, prominence=prominence)
 
         if len(wt_peaks) == 0:
             # print("Fail to find offsets at index: %d", index_peak)

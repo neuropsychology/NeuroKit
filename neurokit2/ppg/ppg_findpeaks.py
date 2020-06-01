@@ -7,6 +7,7 @@ import scipy.signal
 from ..signal import signal_formatpeaks, signal_smooth
 
 
+
 def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False):
     """Find systolic peaks in a photoplethysmogram (PPG) signal.
 

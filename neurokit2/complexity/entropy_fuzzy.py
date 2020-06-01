@@ -5,6 +5,7 @@ import pandas as pd
 from .utils import _get_r, _phi, _phi_divide
 
 
+
 def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, composite=False, **kwargs):
     """Fuzzy entropy (FuzzyEn)
 

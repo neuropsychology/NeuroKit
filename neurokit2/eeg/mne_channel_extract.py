@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 
+
 def mne_channel_extract(raw, name):
     """Channel array extraction from MNE
 

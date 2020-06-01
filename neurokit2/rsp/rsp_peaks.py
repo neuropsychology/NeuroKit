@@ -7,6 +7,7 @@ from .rsp_findpeaks import rsp_findpeaks
 from .rsp_fixpeaks import rsp_fixpeaks
 
 
+
 def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
     """Identify extrema in a respiration (RSP) signal.
 

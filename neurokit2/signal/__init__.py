@@ -24,6 +24,8 @@ from .signal_smooth import signal_smooth
 from .signal_synchrony import signal_synchrony
 from .signal_zerocrossings import signal_zerocrossings
 
+
+
 __all__ = [
     "signal_simulate",
     "signal_binarize",

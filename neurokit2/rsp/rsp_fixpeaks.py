@@ -5,6 +5,7 @@ import pandas as pd
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
+
 def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000):
     """Correct RSP peaks.
 

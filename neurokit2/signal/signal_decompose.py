@@ -3,6 +3,7 @@ import numpy as np
 from .signal_zerocrossings import signal_zerocrossings
 
 
+
 def signal_decompose(signal):
     """
     >>> import neurokit2 as nk

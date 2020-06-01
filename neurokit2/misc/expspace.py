@@ -1,6 +1,7 @@
 import numpy as np
 
 
+
 def expspace(start, stop, num=50, base=1):
     """Exponential range
 

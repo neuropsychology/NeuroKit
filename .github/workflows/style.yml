@@ -25,7 +25,7 @@ jobs:
     - name: Check isort (check import calls)
       run: |
         python -m pip install isort
-        isort neurokit2 --recursive -l 120 --balanced --check
+        isort neurokit2 --recursive -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 3 --check --diff
         
     - name: Detect style errors that can be fixed by running black
       run: |

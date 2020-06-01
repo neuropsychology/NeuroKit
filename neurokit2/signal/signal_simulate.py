@@ -4,6 +4,7 @@ import numpy as np
 from ..misc import listify
 
 
+
 def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False):
     """Simulate a continuous signal.
 

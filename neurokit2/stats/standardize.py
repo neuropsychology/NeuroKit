@@ -5,6 +5,7 @@ import pandas as pd
 from .mad import mad
 
 
+
 def standardize(data, robust=False):
     """
     Standardization of data.
