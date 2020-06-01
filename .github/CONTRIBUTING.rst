@@ -71,7 +71,7 @@ Once you're satisfied by the code you've written, you will need to run some chec
 
 .. code-block::
 
-    pip install isort black flake8 pylint docformatter
+    pip install isort black docformatter flake8 pylint 
 
 Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of\my\fime``. Once you there, you can run the following commands:
 
