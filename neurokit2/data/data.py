@@ -39,7 +39,7 @@ def data(dataset="bio_eventrelated_100hz"):
 
     # General case
     file, ext = os.path.splitext(dataset)
-    if ext == '':
+    if ext == "":
         data = pd.read_csv(path + dataset + ".csv")
     else:
         data = pd.read_csv(path + dataset)
