@@ -72,18 +72,27 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         clean = _ecg_clean_elgendi(ecg_signal, sampling_rate)
     elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
         clean = _ecg_clean_engzee(ecg_signal, sampling_rate)
-    elif method in ["christov", "christov2004", "ssf", "slopesumfunction", "zong",
-                    "zong2003", "kalidas2017", "swt", "kalidas", "kalidastamil",
-                    "kalidastamil2017"]:
+    elif method in [
+        "christov",
+        "christov2004",
+        "ssf",
+        "slopesumfunction",
+        "zong",
+        "zong2003",
+        "kalidas2017",
+        "swt",
+        "kalidas",
+        "kalidastamil",
+        "kalidastamil2017",
+    ]:
         clean = ecg_signal
     else:
-        raise ValueError("NeuroKit error: ecg_clean(): 'method' should be "
-                         "one of 'neurokit', 'biosppy', 'pamtompkins1985',"
-                         " 'hamilton2002', 'elgendi2010', 'engzeemod2012'.")
+        raise ValueError(
+            "NeuroKit error: ecg_clean(): 'method' should be "
+            "one of 'neurokit', 'biosppy', 'pamtompkins1985',"
+            " 'hamilton2002', 'elgendi2010', 'engzeemod2012'."
+        )
     return clean
-
-
-
 
 
 # =============================================================================
@@ -92,17 +101,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
 def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
 
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(signal=ecg_signal,
-                          sampling_rate=sampling_rate,
-                          lowcut=0.5,
-                          method="butterworth",
-                          order=5)
-    clean = signal_filter(signal=clean,
-                          sampling_rate=sampling_rate,
-                          method="powerline",
-                          powerline=50)
+    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
+    clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", powerline=50)
     return clean
-
 
 
 # =============================================================================
@@ -142,15 +143,13 @@ def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
     adapted from https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69
     """
 
-    f1 = 5/sampling_rate
-    f2 = 15/sampling_rate
+    f1 = 5 / sampling_rate
+    f2 = 15 / sampling_rate
     order = 1
 
-    b, a = scipy.signal.butter(order, [f1*2, f2*2], btype='bandpass')
+    b, a = scipy.signal.butter(order, [f1 * 2, f2 * 2], btype="bandpass")
 
     return scipy.signal.lfilter(b, a, ecg_signal)  # Return filtered
-
-
 
 
 # =============================================================================
@@ -163,14 +162,12 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
     - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010). 428-431.
     """
 
-    f1 = 8/sampling_rate
-    f2 = 20/sampling_rate
+    f1 = 8 / sampling_rate
+    f2 = 20 / sampling_rate
 
-    b, a = scipy.signal.butter(2, [f1*2, f2*2], btype='bandpass')
+    b, a = scipy.signal.butter(2, [f1 * 2, f2 * 2], btype="bandpass")
 
     return scipy.signal.lfilter(b, a, ecg_signal)  # Return filtered
-
-
 
 
 # =============================================================================
@@ -181,13 +178,12 @@ def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
     adapted from https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69
     """
 
-    f1 = 8/sampling_rate
-    f2 = 16/sampling_rate
+    f1 = 8 / sampling_rate
+    f2 = 16 / sampling_rate
 
-    b, a = scipy.signal.butter(1, [f1*2, f2*2], btype='bandpass')
+    b, a = scipy.signal.butter(1, [f1 * 2, f2 * 2], btype="bandpass")
 
     return scipy.signal.lfilter(b, a, ecg_signal)  # Return filtered
-
 
 
 # =============================================================================
@@ -201,7 +197,7 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
     - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
     """
 
-    f1 = 48/sampling_rate
-    f2 = 52/sampling_rate
-    b, a = scipy.signal.butter(4, [f1*2, f2*2], btype='bandstop')
+    f1 = 48 / sampling_rate
+    f2 = 52 / sampling_rate
+    b, a = scipy.signal.butter(4, [f1 * 2, f2 * 2], btype="bandstop")
     return scipy.signal.lfilter(b, a, ecg_signal)  # Return filtered
