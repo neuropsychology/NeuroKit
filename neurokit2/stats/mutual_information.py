@@ -58,15 +58,9 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
     elif method in ["shannon", "nolitsa"]:
         mi = _mutual_information_nolitsa(x, y, bins=bins)
     else:
-        raise ValueError("NeuroKit error: mutual_information(): 'method' "
-                         "not recognized.")
+        raise ValueError("NeuroKit error: mutual_information(): 'method' " "not recognized.")
 
     return mi
-
-
-
-
-
 
 
 # =============================================================================
@@ -78,10 +72,7 @@ def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
     jh = np.histogram2d(x, y, bins=bins)[0]
 
     # smooth the jh with a gaussian filter of given sigma
-    scipy.ndimage.gaussian_filter(jh,
-                                  sigma=sigma,
-                                  mode='constant',
-                                  output=jh)
+    scipy.ndimage.gaussian_filter(jh, sigma=sigma, mode="constant", output=jh)
 
     # compute marginal histograms
     jh = jh + np.finfo(float).eps
@@ -93,10 +84,9 @@ def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
     if normalized:
         mi = ((np.sum(s1 * np.log(s1)) + np.sum(s2 * np.log(s2))) / np.sum(jh * np.log(jh))) - 1
     else:
-        mi = (np.sum(jh * np.log(jh)) - np.sum(s1 * np.log(s1)) - np.sum(s2 * np.log(s2)))
+        mi = np.sum(jh * np.log(jh)) - np.sum(s1 * np.log(s1)) - np.sum(s2 * np.log(s2))
 
     return mi
-
 
 
 def _mutual_information_nolitsa(x, y, bins=256):
@@ -125,37 +115,25 @@ def _mutual_information_nolitsa(x, y, bins=256):
     return h_xy - h_x - h_y
 
 
-
-
-
-
-
-
-
-
-
-
-
 # =============================================================================
 # JUNK
 # =============================================================================
 def _nearest_distances(X, k=1):
-    '''
+    """
     From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
     X = array(N,M)
     N = number of points
     M = number of dimensions
     returns the distance to the kth nearest neighbor for every point in X
-    '''
+    """
     knn = sklearn.neighbors.NearestNeighbors(n_neighbors=k + 1)
     knn.fit(X)
     d, _ = knn.kneighbors(X)  # the first nearest neighbor is itself
     return d[:, -1]  # returns the distance to the kth nearest neighbor
 
 
-
 def _entropy(X, k=1):
-    ''' Returns the entropy of X.
+    """ Returns the entropy of X.
     From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
 
     Parameters
@@ -172,17 +150,21 @@ def _entropy(X, k=1):
     mutual information, Proc. R. Soc. A 464 (2093), 1203-1215.
     - Kraskov A, Stogbauer H, Grassberger P. (2004). Estimating mutual
     information. Phys Rev E 69(6 Pt 2):066138.
-    '''
+    """
 
     # Distance to kth nearest neighbor
     r = _nearest_distances(X, k)  # squared distances
     n, d = X.shape
-    volume_unit_ball = (np.pi**(.5*d)) / scipy.special.gamma(.5*d + 1)
-    '''
+    volume_unit_ball = (np.pi ** (0.5 * d)) / scipy.special.gamma(0.5 * d + 1)
+    """
     - F. Perez-Cruz, (2008). Estimation of Information Theoretic Measures
     for Continuous Random Variables. Advances in Neural Information
     Processing Systems 21 (NIPS). Vancouver (Canada), December.
     return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
-    '''
-    return (d*np.mean(np.log(r + np.finfo(X.dtype).eps))
-            + np.log(volume_unit_ball) + scipy.special.psi(n) - scipy.special.psi(k))
+    """
+    return (
+        d * np.mean(np.log(r + np.finfo(X.dtype).eps))
+        + np.log(volume_unit_ball)
+        + scipy.special.psi(n)
+        - scipy.special.psi(k)
+    )

@@ -59,12 +59,11 @@ def _cor_methods(x, y, method="pearson"):
     return r, p
 
 
-
 def _cor_plot(x, y):
 
     # Create scatter
-    plt.plot(x, y, 'o')
+    plt.plot(x, y, "o")
 
     # Add regresion line
     m, b = np.polyfit(x, y, 1)
-    plt.plot(np.array(x), m*np.array(x) + b)
+    plt.plot(np.array(x), m * np.array(x) + b)

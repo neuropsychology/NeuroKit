@@ -46,15 +46,12 @@ def standardize(data, robust=False):
     return data
 
 
-
-
-
 def _standardize(data, robust=False):
 
     # Compute standardized
     if robust is False:
-        z = (data - np.nanmean(data, axis=0))/np.nanstd(data, axis=0, ddof=1)
+        z = (data - np.nanmean(data, axis=0)) / np.nanstd(data, axis=0, ddof=1)
     else:
-        z = (data - np.nanmedian(data, axis=0))/mad(data)
+        z = (data - np.nanmedian(data, axis=0)) / mad(data)
 
     return z

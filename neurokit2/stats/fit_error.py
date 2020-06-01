@@ -74,11 +74,8 @@ def fit_error(y, y_predicted, n_parameters=2):
     # R2 adjusted
     R2_adjusted = 1 - (1 - (1 - R2)) * (n - 1) / df
 
-    return {"SSE": SSE,
-            "MSE": MSE,
-            "RMSE": RMSE,
-            "R2": R2,
-            "R2_adjusted": R2_adjusted}
+    return {"SSE": SSE, "MSE": MSE, "RMSE": RMSE, "R2": R2, "R2_adjusted": R2_adjusted}
+
 
 # =============================================================================
 # Direct accessors
@@ -97,6 +94,7 @@ def fit_r2(y, y_predicted, adjusted=True, n_parameters=2):
     else:
         return fit_error(y, y_predicted, n_parameters=n_parameters)["R2"]
 
+
 # =============================================================================
 # Internals
 # =============================================================================
@@ -107,16 +105,14 @@ def _fit_error_prepare(y, y_predicted, n_parameters=2):
 
     # Sanitize
     if n != len(y_predicted):
-        raise TypeError("NeuroKit error: fit_error(): 'y' and 'y_predicted' "
-                        "are not of the same length.")
+        raise TypeError("NeuroKit error: fit_error(): 'y' and 'y_predicted' " "are not of the same length.")
 
     # Residual, i.e. the difference between data and model
     residual = y - y_predicted
-
 
     # Degrees of freedom, i.e., number of observations (length of signal) minus number of parameters
     df = n - n_parameters
 
     # Calculate sum of squared errors
-    SSE = np.sum(residual**2)
+    SSE = np.sum(residual ** 2)
     return SSE, n, df

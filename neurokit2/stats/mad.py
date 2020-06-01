@@ -30,5 +30,5 @@ def mad(x, constant=1.4826):
     """
     median = np.nanmedian(np.ma.array(x).compressed())
     mad = np.nanmedian(np.abs(x - median))
-    mad = mad*constant
+    mad = mad * constant
     return mad

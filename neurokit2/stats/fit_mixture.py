@@ -47,6 +47,6 @@ def fit_mixture(X=None, n_clusters=2):
 
     # Get predicted probabilities
     predicted = clf.predict_proba(X)
-    probabilities = pd.DataFrame(predicted).add_prefix('Cluster_')
+    probabilities = pd.DataFrame(predicted).add_prefix("Cluster_")
 
     return probabilities

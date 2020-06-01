@@ -53,7 +53,6 @@ def fit_polynomial(y, X=None, order=2):
     return y_predicted
 
 
-
 # =============================================================================
 # Find order
 # =============================================================================
@@ -71,6 +70,7 @@ def fit_polynomial_findorder(y, X, max_order=6):
 # =============================================================================
 # Internals
 # =============================================================================
+
 
 def _fit_polynomial(y, X, order=2):
     # Generating weights and model for polynomial function with a given degree
