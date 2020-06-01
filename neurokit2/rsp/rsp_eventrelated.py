@@ -2,8 +2,8 @@
 import numpy as np
 import pandas as pd
 
-from ..epochs.eventrelated_utils import (_eventrelated_addinfo, _eventrelated_rate, _eventrelated_sanitizeinput,
-                                         _eventrelated_sanitizeoutput)
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo, _eventrelated_rate,
+                                         _eventrelated_sanitizeinput, _eventrelated_sanitizeoutput)
 
 
 def rsp_eventrelated(epochs, silent=False):

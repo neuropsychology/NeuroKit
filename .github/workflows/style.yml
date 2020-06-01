@@ -39,7 +39,7 @@ jobs:
     - name: Check isort
       run: |
         python -m pip install isort
-        isort --recursive --balanced --diff --check neurokit
+        isort --recursive -l 127 --balanced --diff --check neurokit2
      
         
     - name: Run Pylint
