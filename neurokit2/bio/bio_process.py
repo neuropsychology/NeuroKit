@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from ..ecg import ecg_process
-from ..rsp import rsp_process
+from ..ecg import ecg_process, ecg_rsa
 from ..eda import eda_process
 from ..emg import emg_process
-from ..ecg import ecg_rsa
 from ..misc import as_vector
+from ..rsp import rsp_process
 
 
 def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
-    """Automated processing of bio signals.
+    """
+    Automated processing of bio signals.
 
     Wrapper for other bio processing functions of
     electrocardiography signals (ECG), respiration signals (RSP),
@@ -81,6 +81,7 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
     >>> # Visualize all signals
     >>> fig = nk.standardize(bio_df).plot(subplots=True)
     >>> fig #doctest: +SKIP
+
     """
     bio_info = {}
     bio_df = pd.DataFrame({})

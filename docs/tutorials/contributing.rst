@@ -32,7 +32,7 @@ While you can explore Git to manage your Github developments, we recommend downl
 Step 2: Clone it
 -----------------
 
-Clonning allows you to make a *local* copy of any repositories on Github. 
+Cloning allows you to make a *local* copy of any repositories on Github. 
 
 Go to **File** menu, click **Clone Repository** and since you have forked Neurokit2, you should be able to find it easily under **Your repositories**. 
 

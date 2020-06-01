@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
+import matplotlib.gridspec
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.gridspec
 
-from ..signal import signal_fixpeaks
 from ..ecg import ecg_peaks
-from .ecg_segment import ecg_segment
 from ..epochs import epochs_to_df
+from ..signal import signal_fixpeaks
 from ..stats import rescale
+from .ecg_segment import ecg_segment
 
 
-def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
-    """Visualize ECG data.
+def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
+    """
+    Visualize ECG data.
 
     Parameters
     ----------
@@ -43,22 +44,23 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
     See Also
     --------
     ecg_process
+
     """
     # Sanity-check input.
     if not isinstance(ecg_signals, pd.DataFrame):
-        print("NeuroKit error: ecg_plot(): The `ecg_signals` argument must be the "
-              "DataFrame returned by `ecg_process()`.")
+        print(
+            "NeuroKit error: ecg_plot(): The `ecg_signals` argument must be the "
+            "DataFrame returned by `ecg_process()`."
+        )
 
     # Extract R-peaks.
     peaks = np.where(ecg_signals["ECG_R_Peaks"] == 1)[0]
 
     # Prepare figure and set axes.
-    if show_type == 'default' or show_type == 'full':
+    if show_type in ["default", "full"]:
         if sampling_rate is not None:
-            x_axis = np.linspace(0, ecg_signals.shape[0] / sampling_rate,
-                                 ecg_signals.shape[0])
-            gs = matplotlib.gridspec.GridSpec(2, 2,
-                                              width_ratios=[1-1/np.pi, 1/np.pi])
+            x_axis = np.linspace(0, ecg_signals.shape[0] / sampling_rate, ecg_signals.shape[0])
+            gs = matplotlib.gridspec.GridSpec(2, 2, width_ratios=[1 - 1 / np.pi, 1 / np.pi])
             fig = plt.figure(constrained_layout=False)
             ax0 = fig.add_subplot(gs[0, :-1])
             ax1 = fig.add_subplot(gs[1, :-1])
@@ -66,7 +68,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
             ax0.set_xlabel("Time (seconds)")
             ax1.set_xlabel("Time (seconds)")
             ax2.set_xlabel("Time (seconds)")
-        elif sampling_rate is None:
+        else:
             x_axis = np.arange(0, ecg_signals.shape[0])
             fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
             ax0.set_xlabel("Samples")
@@ -78,22 +80,20 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
         # Plot cleaned, raw ECG, R-peaks and signal quality.
         ax0.set_title("Raw and Cleaned Signal")
 
-        quality = rescale(ecg_signals["ECG_Quality"],
-                          to=[np.min(ecg_signals["ECG_Clean"]),
-                              np.max(ecg_signals["ECG_Clean"])])
+        quality = rescale(
+            ecg_signals["ECG_Quality"], to=[np.min(ecg_signals["ECG_Clean"]), np.max(ecg_signals["ECG_Clean"])]
+        )
         minimum_line = np.full(len(x_axis), quality.min())
 
         # Plot quality area first
-        ax0.fill_between(x_axis, minimum_line, quality, alpha=0.12, zorder=0,
-                         interpolate=True, facecolor="#4CAF50", label='Quality')
+        ax0.fill_between(
+            x_axis, minimum_line, quality, alpha=0.12, zorder=0, interpolate=True, facecolor="#4CAF50", label="Quality"
+        )
 
         # Plot signals
-        ax0.plot(x_axis, ecg_signals["ECG_Raw"], color='#B0BEC5', label='Raw',
-                 zorder=1)
-        ax0.plot(x_axis, ecg_signals["ECG_Clean"], color='#E91E63',
-                 label="Cleaned", zorder=1, linewidth=1.5)
-        ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks],
-                    color="#FFC107", label="R-peaks", zorder=2)
+        ax0.plot(x_axis, ecg_signals["ECG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
+        ax0.plot(x_axis, ecg_signals["ECG_Clean"], color="#E91E63", label="Cleaned", zorder=1, linewidth=1.5)
+        ax0.scatter(x_axis[peaks], ecg_signals["ECG_Clean"][peaks], color="#FFC107", label="R-peaks", zorder=2)
 
         # Optimize legend
         handles, labels = ax0.get_legend_handles_labels()
@@ -104,8 +104,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
         ax1.set_title("Heart Rate")
         ax1.set_ylabel("Beats per minute (bpm)")
 
-        ax1.plot(x_axis, ecg_signals["ECG_Rate"],
-                 color="#FF5722", label="Rate", linewidth=1.5)
+        ax1.plot(x_axis, ecg_signals["ECG_Rate"], color="#FF5722", label="Rate", linewidth=1.5)
         rate_mean = ecg_signals["ECG_Rate"].mean()
         ax1.axhline(y=rate_mean, label="Mean", linestyle="--", color="#FF9800")
 
@@ -115,34 +114,29 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
         if sampling_rate is not None:
             ax2.set_title("Individual Heart Beats")
 
-            heartbeats = ecg_segment(ecg_signals["ECG_Clean"], peaks,
-                                     sampling_rate)
+            heartbeats = ecg_segment(ecg_signals["ECG_Clean"], peaks, sampling_rate)
             heartbeats = epochs_to_df(heartbeats)
 
-            heartbeats_pivoted = heartbeats.pivot(index='Time',
-                                                  columns='Label',
-                                                  values='Signal')
+            heartbeats_pivoted = heartbeats.pivot(index="Time", columns="Label", values="Signal")
 
             ax2.plot(heartbeats_pivoted)
 
-            cmap = iter(plt.cm.YlOrRd(
-                    np.linspace(0, 1, num=int(heartbeats["Label"].nunique()))))  # Aesthetics of heart beats
+            cmap = iter(
+                plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats["Label"].nunique())))
+            )  # Aesthetics of heart beats
 
             lines = []
             for x, color in zip(heartbeats_pivoted, cmap):
-                line, = ax2.plot(heartbeats_pivoted[x], color=color)
+                (line,) = ax2.plot(heartbeats_pivoted[x], color=color)
                 lines.append(line)
 
     # Plot artifacts
-    if show_type == 'artifacts' or show_type == 'full':
+    if show_type in ["artifacts", "full"]:
         if sampling_rate is None:
-            raise ValueError("NeuroKit error: ecg_plot(): Sampling rate must"
-                             "be specified for artifacts to be plotted.")
+            raise ValueError("NeuroKit error: ecg_plot(): Sampling rate must be specified for artifacts to be plotted.")
         if rpeaks is None:
-            _, rpeaks = ecg_peaks(ecg_signals["ECG_Clean"],
-                                  sampling_rate=sampling_rate)
+            _, rpeaks = ecg_peaks(ecg_signals["ECG_Clean"], sampling_rate=sampling_rate)
 
-        fig = signal_fixpeaks(rpeaks, sampling_rate=sampling_rate,
-                              iterative=True, show=True, method="Kubios")
+        fig = signal_fixpeaks(rpeaks, sampling_rate=sampling_rate, iterative=True, show=True, method="Kubios")
 
     return fig

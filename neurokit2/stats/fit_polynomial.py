@@ -5,10 +5,9 @@ import pandas as pd
 from .fit_error import fit_rmse
 
 
-
-
 def fit_polynomial(y, X=None, order=2):
-    """Polynomial Regression
+    """
+    Polynomial Regression.
 
     Performs a polynomial regression of given order.
 
@@ -41,6 +40,7 @@ def fit_polynomial(y, X=None, order=2):
     >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
     >>>
     >>> pd.DataFrame({ "y": y, "Poly_0": nk.fit_polynomial(y, order=0), "Poly_1": nk.fit_polynomial(y, order=1), "Poly_2": nk.fit_polynomial(y, order=2), "Poly_3": nk.fit_polynomial(y, order=3), "Poly_5": nk.fit_polynomial(y, order=5), "Poly_auto": nk.fit_polynomial(y, order='auto')}).plot() #doctest: +SKIP
+
     """
     if X is None:
         X = np.linspace(0, 100, len(y))
@@ -53,7 +53,6 @@ def fit_polynomial(y, X=None, order=2):
     y_predicted = _fit_polynomial(y, X, order=order)
 
     return y_predicted
-
 
 
 # =============================================================================
@@ -73,6 +72,7 @@ def fit_polynomial_findorder(y, X, max_order=6):
 # =============================================================================
 # Internals
 # =============================================================================
+
 
 def _fit_polynomial(y, X, order=2):
     # Generating weights and model for polynomial function with a given degree

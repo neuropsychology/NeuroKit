@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ..hrv import hrv
 
 
 def ecg_intervalrelated(data, sampling_rate=1000):
     """
-    Performs ECG analysis on longer periods of data (typically > 10 seconds),
-    such as resting-state data.
+    Performs ECG analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
     ----------
@@ -57,40 +56,41 @@ def ecg_intervalrelated(data, sampling_rate=1000):
     1      ...
 
     [2 rows x 30 columns]
+
     """
     intervals = {}
 
     # Format input
     if isinstance(data, pd.DataFrame):
-        rate_cols = [col for col in data.columns if 'ECG_Rate' in col]
+        rate_cols = [col for col in data.columns if "ECG_Rate" in col]
         if len(rate_cols) == 1:
             intervals.update(_ecg_intervalrelated_formatinput(data))
             intervals.update(_ecg_intervalrelated_hrv(data, sampling_rate))
         else:
-            raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
-                             "we couldn't extract heart rate. Please make sure"
-                             "your DataFrame contains an `ECG_Rate` column.")
-        ecg_intervals = pd.DataFrame.from_dict(intervals,
-                                               orient="index").T
+            raise ValueError(
+                "NeuroKit error: ecg_intervalrelated(): Wrong input,"
+                "we couldn't extract heart rate. Please make sure"
+                "your DataFrame contains an `ECG_Rate` column."
+            )
+        ecg_intervals = pd.DataFrame.from_dict(intervals, orient="index").T
 
     elif isinstance(data, dict):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
             # Format dataframe
-            data[index] = data[index].set_index('Index').drop(['Label'], axis=1)
+            data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
 
             # Rate
-            intervals[index] = _ecg_intervalrelated_formatinput(data[index],
-                                                                intervals[index])
+            intervals[index] = _ecg_intervalrelated_formatinput(data[index], intervals[index])
 
             # HRV
-            intervals[index] = _ecg_intervalrelated_hrv(data[index], sampling_rate,
-                                                        intervals[index])
+            intervals[index] = _ecg_intervalrelated_hrv(data[index], sampling_rate, intervals[index])
 
         ecg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
     return ecg_intervals
+
 
 # =============================================================================
 # Internals
@@ -102,11 +102,11 @@ def _ecg_intervalrelated_formatinput(data, output={}):
     # Sanitize input
     colnames = data.columns.values
     if len([i for i in colnames if "ECG_Rate" in i]) == 0:
-        raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
-                         "we couldn't extract heart rate. Please make sure"
-                         "your DataFrame contains an `ECG_Rate` column.")
-        return output
-
+        raise ValueError(
+            "NeuroKit error: ecg_intervalrelated(): Wrong input,"
+            "we couldn't extract heart rate. Please make sure"
+            "your DataFrame contains an `ECG_Rate` column."
+        )
     signal = data["ECG_Rate"].values
     output["ECG_Rate_Mean"] = np.mean(signal)
 
@@ -118,10 +118,11 @@ def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
     # Sanitize input
     colnames = data.columns.values
     if len([i for i in colnames if "ECG_R_Peaks" in i]) == 0:
-        raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
-                         "we couldn't extract R-peaks. Please make sure"
-                         "your DataFrame contains an `ECG_R_Peaks` column.")
-        return output
+        raise ValueError(
+            "NeuroKit error: ecg_intervalrelated(): Wrong input,"
+            "we couldn't extract R-peaks. Please make sure"
+            "your DataFrame contains an `ECG_R_Peaks` column."
+        )
 
     # Transform rpeaks from "signal" format to "info" format.
     rpeaks = np.where(data["ECG_R_Peaks"].values)[0]

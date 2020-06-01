@@ -1,5 +1,7 @@
-import neurokit2 as nk
 import numpy as np
+
+import neurokit2 as nk
+
 
 def test_bio_process():
 

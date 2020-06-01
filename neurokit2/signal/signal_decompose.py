@@ -3,7 +3,6 @@ import numpy as np
 from .signal_zerocrossings import signal_zerocrossings
 
 
-
 def signal_decompose(signal):
     """
     >>> import neurokit2 as nk
@@ -42,7 +41,6 @@ def signal_decompose(signal):
     return components
 
 
-
 # =============================================================================
 # Methods
 # =============================================================================
@@ -70,9 +68,10 @@ def _signal_decompose_emd(signal, ensemble=False):
     try:
         import PyEMD
     except ImportError:
-        raise ImportError("NeuroKit error: _signal_decompose_emd(): the 'PyEMD' "
-                          "module is required for this function to run. ",
-                          "Please install it first (`pip install EMD-signal`).")
+        raise ImportError(
+            "NeuroKit error: _signal_decompose_emd(): the 'PyEMD' module is required for this function to run. ",
+            "Please install it first (`pip install EMD-signal`).",
+        )
 
     if ensemble is False:
         emd = PyEMD.EMD(extrema_detection="parabol")
@@ -88,6 +87,7 @@ def _signal_decompose_emd(signal, ensemble=False):
 # =============================================================================
 # Internals
 # =============================================================================
+
 
 def _signal_decompose_meanfreq(components, sampling_rate=1000):
     duration = components.shape[1] / sampling_rate

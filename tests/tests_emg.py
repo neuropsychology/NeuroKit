@@ -1,10 +1,10 @@
+import biosppy
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import neurokit2 as nk
-import matplotlib.pyplot as plt
-
 import scipy.stats
-import biosppy
+
+import neurokit2 as nk
 
 # =============================================================================
 # EMG

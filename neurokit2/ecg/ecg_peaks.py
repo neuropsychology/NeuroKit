@@ -1,12 +1,12 @@
 # - * - coding: utf-8 - * -
 
+from ..signal import signal_fixpeaks, signal_formatpeaks
 from .ecg_findpeaks import ecg_findpeaks
-from ..signal import signal_formatpeaks, signal_fixpeaks
 
 
-def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
-              correct_artifacts=False):
-    """Find R-peaks in an ECG signal.
+def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifacts=False):
+    """
+    Find R-peaks in an ECG signal.
 
     Find R-peaks in an ECG signal using the specified method.
 
@@ -61,20 +61,16 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit",
     - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm. In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
     - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
     - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+
     """
-    rpeaks = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate,
-                           method=method)
+    rpeaks = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate, method=method)
 
     if correct_artifacts:
-        _, rpeaks = signal_fixpeaks(rpeaks,
-                                    sampling_rate=sampling_rate,
-                                    iterative=True, method="Kubios")
+        _, rpeaks = signal_fixpeaks(rpeaks, sampling_rate=sampling_rate, iterative=True, method="Kubios")
 
         rpeaks = {"ECG_R_Peaks": rpeaks}
 
-    instant_peaks = signal_formatpeaks(rpeaks,
-                                       desired_length=len(ecg_cleaned),
-                                       peak_indices=rpeaks)
+    instant_peaks = signal_formatpeaks(rpeaks, desired_length=len(ecg_cleaned), peak_indices=rpeaks)
     signals = instant_peaks
     info = rpeaks
 

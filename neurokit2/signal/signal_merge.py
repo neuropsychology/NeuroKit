@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from .signal_resample import signal_resample
 
 
 def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
-    """Arbitrary addition of two signals with different time ranges.
+    """
+    Arbitrary addition of two signals with different time ranges.
 
     Parameters
     ----------
@@ -31,6 +32,7 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
     >>>
     >>> signal = nk.signal_merge(signal1, signal2, time1=[0, 10], time2=[-5, 5])
     >>> nk.signal_plot(signal)
+
     """
 
     # Resample signals if different
@@ -44,25 +46,25 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
 
     # Fill beginning
     if time1[0] < time2[0]:
-        beginning = np.full(int(np.round(sampling_rate*(time2[0] - time1[0]))), signal2[0])
+        beginning = np.full(int(np.round(sampling_rate * (time2[0] - time1[0]))), signal2[0])
         signal2 = np.concatenate((beginning, signal2))
     elif time2[0] < time1[0]:
-        beginning = np.full(int(np.round(sampling_rate*(time1[0] - time2[0]))), signal1[0])
+        beginning = np.full(int(np.round(sampling_rate * (time1[0] - time2[0]))), signal1[0])
         signal1 = np.concatenate((beginning, signal1))
 
     # Fill end
     if time1[1] > time2[1]:
-        end = np.full(int(np.round(sampling_rate*(time1[1] - time2[1]))), signal2[-1])
+        end = np.full(int(np.round(sampling_rate * (time1[1] - time2[1]))), signal2[-1])
         signal2 = np.concatenate((signal2, end))
     elif time2[1] > time1[1]:
-        end = np.full(int(np.round(sampling_rate*(time2[1] - time1[1]))), signal1[-1])
+        end = np.full(int(np.round(sampling_rate * (time2[1] - time1[1]))), signal1[-1])
         signal1 = np.concatenate((signal1, end))
 
     # Sanitize length of arrays
     if len(signal1) > len(signal2):
-        signal1 = signal1[0:len(signal2)]
+        signal1 = signal1[0 : len(signal2)]
     if len(signal2) > len(signal1):
-        signal2 = signal2[0:len(signal1)]
+        signal2 = signal2[0 : len(signal1)]
 
     merged = signal1 + signal2
-    return(merged)
+    return merged

@@ -69,11 +69,15 @@ Contribution
         :target: https://github.com/neuropsychology/NeuroKit/actions
         :alt: GitHub CI
         
-.. image:: https://github.com/neuropsychology/neurokit/workflows/Style/badge.svg
-        :target: https://github.com/neuropsychology/NeuroKit/actions
-        :alt: Style
-        
-NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_ guide. Once this is done, you can also read our ideas for `first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+        :target: https://github.com/psf/black
+        :alt: Black code
+
+NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
+
+- `Contribution guide <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
+- `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
+- `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 
 
 Documentation
@@ -106,19 +110,16 @@ Documentation
 
 Click on the links above and check out our tutorials:
 
-Guides
+General
 ^^^^^^^^^^
 
 -  `Recording good quality signals <https://neurokit2.readthedocs.io/en/latest/tutorials/recording.html>`_
 -  `What software for physiological signal processing <https://neurokit2.readthedocs.io/en/latest/tutorials/software.html>`_
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `Get familiar with Python in 10 minutes <https://neurokit2.readthedocs.io/en/latest/tutorials/learnpython.html>`_
--  `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
--  `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 -  `Additional Resources <https://neurokit2.readthedocs.io/en/latest/tutorials/resources.html>`_
--  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
 
 
 Examples
@@ -132,6 +133,7 @@ Examples
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
+-  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
@@ -458,7 +460,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
 Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- **Highest Density Interval**
+- **Highest Density Interval (HDI)**
 
 .. code-block:: python
 

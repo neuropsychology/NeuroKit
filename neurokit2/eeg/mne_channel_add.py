@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
-
-
-
+import pandas as pd
 
 
 def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_index_raw=0, sync_index_channel=0):
-    """Add channel as array to MNE
+    """
+    Add channel as array to MNE.
 
     Add a channel to a mne's Raw m/eeg file. It will basically synchronize the channel to the eeg data following a particular index and add it.
 
@@ -42,14 +40,16 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     >>> ecg = nk.ecg_simulate(length=170000)
     >>>
     >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg") # doctest: +SKIP
+
     """
     # Try loading mne
     try:
         import mne
     except ImportError:
-        raise ImportError("NeuroKit error: eeg_add_channel(): the 'mne' "
-                          "module is required for this function to run. ",
-                          "Please install it first (`pip install mne`).")
+        raise ImportError(
+            "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
+            "Please install it first (`pip install mne`).",
+        )
 
     if channel_name is None:
         if isinstance(channel, pd.Series):
@@ -63,17 +63,17 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     # Compute the distance between the two signals
     diff = sync_index_channel - sync_index_raw
     if diff > 0:
-        channel = list(channel)[diff:len(channel)]
-        channel = channel + [np.nan]*diff
+        channel = list(channel)[diff : len(channel)]
+        channel = channel + [np.nan] * diff
     if diff < 0:
-        channel = [np.nan]*abs(diff) + list(channel)
+        channel = [np.nan] * abs(diff) + list(channel)
 
     # Adjust to raw size
     if len(channel) < len(raw):
-        channel = list(channel) + [np.nan]*(len(raw)-len(channel))
+        channel = list(channel) + [np.nan] * (len(raw) - len(channel))
     else:
         # Crop to fit the raw data
-        channel = list(channel)[0:len(raw)]
+        channel = list(channel)[0 : len(raw)]
 
     info = mne.create_info([channel_name], raw.info["sfreq"], ch_types=channel_type)
     channel = mne.io.RawArray([channel], info)

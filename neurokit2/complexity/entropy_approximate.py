@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from .utils import _phi, _get_r, _get_embedded
-
+from .utils import _get_embedded, _get_r, _phi
 
 
 def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
-    """Approximate entropy (ApEn)
+    """
+    Approximate entropy (ApEn)
 
     Python implementations of the approximate entropy (ApEn) and its corrected version (cApEn). Approximate entropy is a technique used to quantify the amount of regularity and the unpredictability of fluctuations over time-series data. The advantages of ApEn include lower computational demand (ApEn can be designed to work for small data samples (< 50 data points) and can be applied in real tim) and less sensitive to noise. However, ApEn is heavily dependent on the record length and lacks relative consistency.
 
@@ -53,6 +53,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
     - Sabeti, M., Katebi, S., & Boostani, R. (2009). Entropy and complexity measures for EEG signal classification of schizophrenic and control participants. Artificial intelligence in medicine, 47(3), 263-274.
     - Shi, B., Zhang, Y., Yuan, C., Wang, S., & Li, P. (2017). Entropy analysis of short-term heartbeat interval time series during regular walking. Entropy, 19(10), 568.
+
     """
     r = _get_r(signal, r=r)
 
@@ -64,8 +65,12 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
     if corrected is True:
 
-        embedded1, count1 = _get_embedded(signal, delay=delay, dimension=dimension, r=r, distance='chebyshev', approximate=True, **kwargs)
-        embedded2, count2 = _get_embedded(signal, delay=delay, dimension=dimension + 1, r=r, distance='chebyshev', approximate=True, **kwargs)
+        embedded1, count1 = _get_embedded(
+            signal, delay=delay, dimension=dimension, r=r, distance="chebyshev", approximate=True, **kwargs
+        )
+        embedded2, count2 = _get_embedded(
+            signal, delay=delay, dimension=dimension + 1, r=r, distance="chebyshev", approximate=True, **kwargs
+        )
 
         # Limit the number of vectors to N - (dimension + 1) * delay
         upper_limit = len(signal) - (dimension + 1) * delay
@@ -82,6 +87,6 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
             else:
                 vector_similarity[i] = np.log(correction)
 
-        apen = - np.mean(vector_similarity)
+        apen = -np.mean(vector_similarity)
 
     return apen

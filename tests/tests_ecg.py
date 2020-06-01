@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import neurokit2 as nk
-import matplotlib.pyplot as plt
-
 import biosppy
+import matplotlib.pyplot as plt
+import numpy as np
+
+import neurokit2 as nk
 
 
 def test_ecg_simulate():

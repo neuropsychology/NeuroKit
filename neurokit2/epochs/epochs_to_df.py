@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
-
-
+import pandas as pd
 
 
 def epochs_to_df(epochs):
@@ -41,6 +39,7 @@ def epochs_to_df(epochs):
     >>> # Create epochs
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=3)
     >>> data = nk.epochs_to_df(epochs)
+
     """
     data = pd.concat(epochs)
     data["Time"] = data.index.get_level_values(1).values
@@ -49,12 +48,11 @@ def epochs_to_df(epochs):
     return data
 
 
-
 def _df_to_epochs(data):
     # Convert dataframe of epochs created by `epochs_to_df` back into a dictionary.
     labels = data.Label.unique()
     epochs_dict = {i: pd.DataFrame for i in labels}
-    for key in epochs_dict.keys():
+    for key in epochs_dict:
         epochs_dict[key] = data[:][data.Label == key]
         epochs_dict[key].index = np.array(epochs_dict[key]["Time"])
         epochs_dict[key] = epochs_dict[key].drop(["Time"], axis=1)

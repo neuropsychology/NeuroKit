@@ -1,10 +1,11 @@
-import pytest
-import neurokit2 as nk
 import pathlib
+
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+import pytest
 
+import neurokit2 as nk
 
 SHOW_DEBUG_PLOTS = False
 MAX_SIGNAL_DIFF = 0.03  # seconds

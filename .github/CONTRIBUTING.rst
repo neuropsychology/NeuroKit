@@ -18,9 +18,9 @@ You can still contribute to the `documentation <https://github.com/neuropsycholo
 
 You can look around the `issue section <https://github.com/neuropsychology/NeuroKit/issues>`_ to find some features / ideas / bugs to start working on. You can also open a new issue **just to say that you're there, interested in helping out**. We might have some ideas adapted to your skills.
 
-- *"I'm not sure if my suggestion or idea is worthwile"*
+- *"I'm not sure if my suggestion or idea is worthwhile"*
 
-Enough with the impostor syndrom! All suggestions and opinions are good, and even if it's just a thought or so, it's always good to receive feedback.
+Enough with the impostor syndrome! All suggestions and opinions are good, and even if it's just a thought or so, it's always good to receive feedback.
 
 - *"Why should I waste my time with this? Do I get any credit?"*
 
@@ -60,10 +60,33 @@ Structure and code
 - The API (the functions) should be consistent, with functions starting with a prefix (`plot_`, `ecg_`, `eda_`, etc.) so that the user can easily find them by typing the "intuitive" prefix.
 - Authors of code contribution are invited to follow the `PEP 8 <https://www.python.org/dev/peps/pep-0008/>`_ style sheet to write some nice (and readable) python.
 - That being said, *human readability* should always be favoured over anything else. Ideally, we would like the code in NeuroKit to be understandable even by non-programmers.
-- Contrary to Python recommandations, we prefer some nicely nested loops, rather than complex one-liners `["that" for s if h in i for t in range("don't") if "understand" is False]`.
+- Contrary to Python recommendations, we prefer some nicely nested loops, rather than complex one-liners `["that" for s if h in i for t in range("don't") if "understand" is False]`.
 - Please *document and comment* your code, so that the purpose of each step (or code line) is stated in a clear and understandable way.
 - Don't forget to add tests and documentation to your functions.
 
+Run code checks
+----------------------------------
+
+Once you're satisfied by the code you've written, you will need to run some checks to make sure it is "standardized". You will need to open the command line and install the following packages:
+
+.. code-block::
+
+    pip install isort black docformatter flake8 pylint 
+
+Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of\my\fime``. Once you there, you can run the following commands:
+
+.. code-block::
+
+    isort myfile.py -l 120  --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma
+    black myfile.py --line-length 120
+    docformatter myfile.py --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line --in-place
+    
+    flake8 myfile.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203
+    pylint myfile.py --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 
+
+The first three commands will make some modifications to your code so that it is nicely formatted, while the two last will run some checks to detect any additional issues. Please try to fix them!
+
+*PS: If you want to check the whole package, just replace 'mufile;py' by 'neurokit2' and add ``--recursive`` to ``isort`` and ``docformatter``.
 
 Useful reads
 ------------

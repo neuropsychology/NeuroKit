@@ -1,8 +1,8 @@
-import pandas as pd
+import mne
 import numpy as np
+import pandas as pd
 
 import neurokit2 as nk
-import mne
 
 # Read original file (too big to be uploaded on github)
 raw = mne.io.read_raw_fif("../data/eeg_restingstate_300hz.fif", preload=True)

@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
-from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
-from ..epochs.eventrelated_utils import _eventrelated_addinfo
-from ..epochs.eventrelated_utils import _eventrelated_rate
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_rate,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 
 
 def ecg_eventrelated(epochs, silent=False):
-    """Performs event-related ECG analysis on epochs.
+    """
+    Performs event-related ECG analysis on epochs.
 
     Parameters
     ----------
@@ -87,6 +90,7 @@ def ecg_eventrelated(epochs, silent=False):
     4     4  Negative  ...                               ...               ...
 
     [4 rows x 17 columns]
+
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="ecg", silent=silent)
@@ -109,9 +113,8 @@ def ecg_eventrelated(epochs, silent=False):
         # Fill with more info
         data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    df = _eventrelated_sanitizeoutput(data)
-
-    return df
+    # Return dataframe
+    return _eventrelated_sanitizeoutput(data)
 
 
 # =============================================================================
@@ -124,10 +127,12 @@ def _ecg_eventrelated_phase(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "ECG_Phase_Atrial" in i]) == 0:
-        print("NeuroKit warning: ecg_eventrelated(): input does not"
-              "have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
-              "Will not indicate whether event onset concurs with cardiac"
-              "phase.")
+        print(
+            "NeuroKit warning: ecg_eventrelated(): input does not"
+            "have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
+            "Will not indicate whether event onset concurs with cardiac"
+            "phase."
+        )
         return output
 
     # Indication of atrial systole
@@ -146,9 +151,11 @@ def _ecg_eventrelated_quality(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "ECG_Quality" in i]) == 0:
-        print("NeuroKit warning: ecg_eventrelated(): input does not"
-              "have an `ECG_Quality` column. Quality of the signal"
-              "is not computed.")
+        print(
+            "NeuroKit warning: ecg_eventrelated(): input does not"
+            "have an `ECG_Quality` column. Quality of the signal"
+            "is not computed."
+        )
         return output
 
     # Average signal quality over epochs

@@ -5,17 +5,6 @@ import pandas as pd
 from ..signal import signal_interpolate
 
 
-
-
-
-
-
-
-
-
-
-
-
 def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, **kwargs):
 
     rri = np.diff(peaks) / sampling_rate * 1000
@@ -32,18 +21,13 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, **kwargs):
         # Compute length of interpolated heart period signal at requested sampling rate.
         desired_length = int(np.rint(peaks[-1] / sampling_rate * sampling_rate))
 
-        rri = signal_interpolate(peaks[1:],  # Skip first peak since it has no corresponding element in heart_period
-                                 rri,
-                                 desired_length=desired_length,
-                                 **kwargs)
+        rri = signal_interpolate(
+            peaks[1:],  # Skip first peak since it has no corresponding element in heart_period
+            rri,
+            desired_length=desired_length,
+            **kwargs
+        )
         return rri, sampling_rate
-
-
-
-
-
-
-
 
 
 def _hrv_sanitize_input(peaks=None, sampling_rate=None, ecg_rate=None):
@@ -56,13 +40,6 @@ def _hrv_sanitize_input(peaks=None, sampling_rate=None, ecg_rate=None):
         peaks = _hrv_sanitize_peaks(peaks)
 
     return peaks
-
-
-
-
-
-
-
 
 
 # =============================================================================
@@ -98,14 +75,15 @@ def _hrv_sanitize_dict_or_df(peaks):
         cols = cols[[("ECG" in s) or ("PPG" in s) for s in cols]]
 
     if len(cols) == 0:
-        raise NameError("NeuroKit error: hrv(): Wrong input, ",
-                        "we couldn't extract R-peak indices. ",
-                        "You need to provide a list of R-peak indices.")
+        raise NameError(
+            "NeuroKit error: hrv(): Wrong input, ",
+            "we couldn't extract R-peak indices. ",
+            "You need to provide a list of R-peak indices.",
+        )
 
     peaks = _hrv_sanitize_peaks(peaks[cols[0]])
 
     return peaks
-
 
 
 def _hrv_sanitize_peaks(peaks):

@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-
-from .utils import _phi, _phi_divide, _get_r
-
-
-
+from .utils import _get_r, _phi, _phi_divide
 
 
 def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
-    """Sample Entropy (SampEn)
+    """
+    Sample Entropy (SampEn)
 
     Python implementation of the sample entropy (SampEn) of a signal.
 
@@ -43,6 +40,7 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> entropy = nk.entropy_sample(signal)
     >>> entropy #doctest: +SKIP
+
     """
     r = _get_r(signal, r=r, dimension=dimension)
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, **kwargs)

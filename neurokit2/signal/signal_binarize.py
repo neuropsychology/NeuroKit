@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 import sklearn.mixture
 
 
 def signal_binarize(signal, method="threshold", threshold="auto"):
-    """Binarize a continuous signal.
+    """
+    Binarize a continuous signal.
 
     Convert a continuous signal into zeros and ones depending on a given threshold.
 
@@ -40,6 +41,7 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
     >>> binary = nk.signal_binarize(signal)
     >>> fig = pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
     >>> fig #doctest: +SKIP
+
     """
 
     # Return appropriate type
@@ -56,7 +58,6 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
     return signal
 
 
-
 def _signal_binarize(signal, method="threshold", threshold="auto"):
     method = method.lower()  # remove capitalised letters
     if method == "threshold":
@@ -64,15 +65,14 @@ def _signal_binarize(signal, method="threshold", threshold="auto"):
     elif method == "mixture":
         binary = _signal_binarize_mixture(signal, threshold=threshold)
     else:
-        raise ValueError("NeuroKit error: signal_binarize(): 'method' should be "
-                         "one of 'threshold' or 'mixture'.")
+        raise ValueError("NeuroKit error: signal_binarize(): 'method' should be one of 'threshold' or 'mixture'.")
     return binary
-
 
 
 # =============================================================================
 # Methods
 # =============================================================================
+
 
 def _signal_binarize_threshold(signal, threshold="auto"):
     if threshold == "auto":
@@ -81,7 +81,6 @@ def _signal_binarize_threshold(signal, threshold="auto"):
     binary = np.zeros(len(signal))
     binary[signal > threshold] = 1
     return binary
-
 
 
 def _signal_binarize_mixture(signal, threshold="auto"):

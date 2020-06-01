@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
-
-
-
+import pandas as pd
 
 
 def mne_channel_extract(raw, name):
-    """Channel array extraction from MNE
+    """
+    Channel array extraction from MNE.
 
     Select one or several channels by name and returns them in a dataframe.
 
@@ -31,6 +29,7 @@ def mne_channel_extract(raw, name):
     >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif', preload=True) #doctest: +SKIP
     >>>
     >>> raw_channel = nk.mne_channel_extract(raw, "EEG 055") # doctest: +SKIP
+
     """
     if isinstance(name, list) is False:
         name = [name]

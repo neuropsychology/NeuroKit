@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ..signal import signal_resample
 
 
-def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 burst_number=1, burst_duration=1.0, random_state=42):
-    """Simulate an EMG signal
+def emg_simulate(
+    duration=10, length=None, sampling_rate=1000, noise=0.01, burst_number=1, burst_duration=1.0, random_state=42
+):
+    """
+    Simulate an EMG signal.
 
     Generate an artificial (synthetic) EMG signal of a given duration and sampling rate.
 
@@ -50,6 +52,7 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     References
     -----------
     This function is based on `this script <https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/>`_.
+
     """
     # Seed the random generator for reproducible results
     np.random.seed(random_state)
@@ -63,25 +66,27 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         burst_duration = np.repeat(burst_duration, burst_number)
 
     if len(burst_duration) > burst_number:
-        raise ValueError("NeuroKit error: emg_simulate(): 'burst_duration'"
-                         " cannot be longer than the value of 'burst_number'")
+        raise ValueError(
+            "NeuroKit error: emg_simulate(): 'burst_duration' cannot be longer than the value of 'burst_number'"
+        )
 
     total_duration_bursts = np.sum(burst_duration)
     if total_duration_bursts > duration:
-        raise ValueError("NeuroKit error: emg_simulate(): The total duration"
-                         " of bursts cannot exceed the total duration")
+        raise ValueError(
+            "NeuroKit error: emg_simulate(): The total duration of bursts cannot exceed the total duration"
+        )
 
     # Generate bursts
     bursts = []
     for burst in range(burst_number):
-        bursts += [list(np.random.uniform(-1, 1, size=int(1000*burst_duration[burst])) + 0.08)]
+        bursts += [list(np.random.uniform(-1, 1, size=int(1000 * burst_duration[burst])) + 0.08)]
 
     # Generate quiet
     n_quiet = burst_number + 1  # number of quiet periods (in between bursts)
     duration_quiet = (duration - total_duration_bursts) / n_quiet  # duration of each quiet period
     quiets = []
     for quiet in range(n_quiet):
-        quiets += [list(np.random.uniform(-0.05, 0.05, size=int(1000*duration_quiet)) + 0.08)]
+        quiets += [list(np.random.uniform(-0.05, 0.05, size=int(1000 * duration_quiet)) + 0.08)]
 
     # Merge the two
     emg = []
@@ -95,9 +100,6 @@ def emg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     emg += np.random.normal(0, noise, len(emg))
 
     # Resample
-    emg = signal_resample(emg,
-                          sampling_rate=1000,
-                          desired_length=length,
-                          desired_sampling_rate=sampling_rate)
+    emg = signal_resample(emg, sampling_rate=1000, desired_length=length, desired_sampling_rate=sampling_rate)
 
     return emg

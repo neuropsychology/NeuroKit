@@ -2,12 +2,13 @@
 import numpy as np
 import scipy.signal
 
-from ..signal import signal_detrend
 from ..misc import as_vector
+from ..signal import signal_detrend
 
 
 def emg_clean(emg_signal, sampling_rate=1000):
-    """Preprocess an electromyography (emg) signal.
+    """
+    Preprocess an electromyography (emg) signal.
 
     Clean an EMG signal using a set of parameters, such as:
     - `BioSPPy
@@ -43,16 +44,17 @@ def emg_clean(emg_signal, sampling_rate=1000):
     >>> signals = pd.DataFrame({"EMG_Raw": emg, "EMG_Cleaned":nk.emg_clean(emg, sampling_rate=1000)})
     >>> fig = signals.plot()
     >>> fig #doctest: +SKIP
+
     """
     emg_signal = as_vector(emg_signal)
 
     # Parameters
     order = 4
     frequency = 100
-    frequency = 2 * np.array(frequency)/sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     # Filtering
-    b, a = scipy.signal.butter(N=order, Wn=frequency, btype='highpass', analog=False)
+    b, a = scipy.signal.butter(N=order, Wn=frequency, btype="highpass", analog=False)
     filtered = scipy.signal.filtfilt(b, a, emg_signal)
 
     # Baseline detrending

@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import neurokit2 as nk
-import matplotlib.pyplot as plt
-
 import biosppy
+import matplotlib.pyplot as plt
+import numpy as np
+
+import neurokit2 as nk
+
 
 def test_rsp_simulate():
     rsp1 = nk.rsp_simulate(duration=20, length=3000, random_state=42)

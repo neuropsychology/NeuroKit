@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
+import matplotlib.cm
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.signal
-import matplotlib.pyplot as plt
-from matplotlib.cm import get_cmap
-
 
 from .signal_psd import signal_psd
 
 
 def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, **kwargs):
-    """Compute the power of a signal in a given frequency band.
+    """
+    Compute the power of a signal in a given frequency band.
 
     Parameters
     ----------
@@ -60,6 +60,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     >>> processed, _ = nk.ecg_process(signal, sampling_rate=100)
     >>> power["ECG_Rate"] = processed["ECG_Rate"]
     >>> nk.signal_plot(power, standardize=True)
+
     """
 
     if continuous is False:
@@ -72,10 +73,10 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     return out
 
 
-
 # =============================================================================
 # Instant
 # =============================================================================
+
 
 def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, **kwargs):
     for i in range(len(frequency_band)):
@@ -101,16 +102,16 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
     return out
 
 
-
 def _signal_power_instant_get(psd, frequency_band):
 
     indices = np.logical_and(psd["Frequency"] >= frequency_band[0], psd["Frequency"] < frequency_band[1]).values
 
     out = {}
-    out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = np.trapz(y=psd["Power"][indices], x=psd["Frequency"][indices])
+    out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = np.trapz(
+        y=psd["Power"][indices], x=psd["Frequency"][indices]
+    )
     out = {key: np.nan if value == 0.0 else value for key, value in out.items()}
     return out
-
 
 
 def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=None):
@@ -123,12 +124,14 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
     # Sanitize signal
     if isinstance(frequency_band[0], int):
         if len(frequency_band) > 2:
-            print("NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples or a tuple of 2 integers")
+            print(
+                "NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples or a tuple of 2 integers"
+            )
         else:
             frequency_band = [tuple(i for i in frequency_band)]
 
-    freq = np.array(psd['Frequency'])
-    power = np.array(psd['Power'])
+    freq = np.array(psd["Frequency"])
+    power = np.array(psd["Power"])
 
     # Get indexes for different frequency band
     frequency_band_index = []
@@ -139,29 +142,39 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
     label_list = list(out.keys())
 
     # Get cmap
-    cmap = get_cmap("Set1")
+    cmap = matplotlib.cm.get_cmap("Set1")
     colors = cmap.colors
-    colors = colors[3], colors[1], colors[2], colors[4], colors[0], colors[5], colors[6], colors[7], colors[8]  # manually rearrange colors
-    colors = colors[0:len(frequency_band_index)]
+    colors = (
+        colors[3],
+        colors[1],
+        colors[2],
+        colors[4],
+        colors[0],
+        colors[5],
+        colors[6],
+        colors[7],
+        colors[8],
+    )  # manually rearrange colors
+    colors = colors[0 : len(frequency_band_index)]
 
     # Plot
     ax.set_title("Power Spectral Density (PSD) for Frequency Domains")
     ax.set_xlabel("Frequency (Hz)")
     ax.set_ylabel("Spectrum (ms2/Hz)")
 
-    ax.fill_between(freq, 0, power, color='lightgrey')
+    ax.fill_between(freq, 0, power, color="lightgrey")
 
     for band_index, label, i in zip(frequency_band_index, label_list, colors):
-        ax.fill_between(freq[band_index], 0,
-                        power[band_index],
-                        label=label, color=i)
+        ax.fill_between(freq[band_index], 0, power[band_index], label=label, color=i)
         ax.legend(prop={"size": 10}, loc="best")
 
     return fig
 
+
 # =============================================================================
 # Continuous
 # =============================================================================
+
 
 def _signal_power_continuous(signal, frequency_band, sampling_rate=1000):
 
@@ -174,20 +187,23 @@ def _signal_power_continuous(signal, frequency_band, sampling_rate=1000):
     return out
 
 
-
 def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, precision=20):
 
     try:
         import mne
     except ImportError:
-        raise ImportError("NeuroKit warning: signal_power(): the 'mne'",
-                          "module is required. ",
-                          "Please install it first (`pip install mne`).")
+        raise ImportError(
+            "NeuroKit warning: signal_power(): the 'mne'",
+            "module is required. ",
+            "Please install it first (`pip install mne`).",
+        )
 
-    out = mne.time_frequency.tfr_array_morlet([[signal]],
-                                              sfreq=sampling_rate,
-                                              freqs=np.linspace(frequency_band[0], frequency_band[1], precision),
-                                              output='power')
+    out = mne.time_frequency.tfr_array_morlet(
+        [[signal]],
+        sfreq=sampling_rate,
+        freqs=np.linspace(frequency_band[0], frequency_band[1], precision),
+        output="power",
+    )
     power = np.mean(out[0][0], axis=0)
 
     out = {}
