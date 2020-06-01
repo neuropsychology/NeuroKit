@@ -58,8 +58,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     elif method == "biosppy":
         clean = _rsp_clean_biosppy(rsp_signal, sampling_rate)
     else:
-        raise ValueError("NeuroKit error: rsp_clean(): 'method' should be "
-                         "one of 'khodadad2018' or 'biosppy'.")
+        raise ValueError("NeuroKit error: rsp_clean(): 'method' should be one of 'khodadad2018' or 'biosppy'.")
 
     return clean
 
@@ -81,8 +80,9 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
     # higher than 3 breath per minute) and high frequency noise by applying a
     # highcut at 3 Hz (preserves breathing rates slower than 180 breath per
     # minute).
-    clean = signal_filter(rsp_signal, sampling_rate=sampling_rate, lowcut=.05,
-                          highcut=3, order=2, method="butterworth_ba")
+    clean = signal_filter(
+        rsp_signal, sampling_rate=sampling_rate, lowcut=0.05, highcut=3, order=2, method="butterworth_ba"
+    )
 
     return clean
 
@@ -100,7 +100,7 @@ def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
     frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     # Filtering
-    b, a = scipy.signal.butter(N=order, Wn=frequency, btype='bandpass', analog=False)
+    b, a = scipy.signal.butter(N=order, Wn=frequency, btype="bandpass", analog=False)
     filtered = scipy.signal.filtfilt(b, a, rsp_signal)
 
     # Baseline detrending

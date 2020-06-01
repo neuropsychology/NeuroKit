@@ -64,7 +64,6 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     # Phase Completion
     completion = signal_phase(inspiration, method="percent")
 
-    out = pd.DataFrame({"RSP_Phase": inspiration,
-                        "RSP_Phase_Completion": completion})
+    out = pd.DataFrame({"RSP_Phase": inspiration, "RSP_Phase_Completion": completion})
 
     return out

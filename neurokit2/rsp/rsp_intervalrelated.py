@@ -54,45 +54,47 @@ def rsp_intervalrelated(data, sampling_rate=1000):
 
     # Format input
     if isinstance(data, pd.DataFrame):
-        rate_cols = [col for col in data.columns if 'RSP_Rate' in col]
+        rate_cols = [col for col in data.columns if "RSP_Rate" in col]
         if len(rate_cols) == 1:
             intervals.update(_rsp_intervalrelated_formatinput(data))
             intervals.update(_rsp_intervalrelated_rrv(data, sampling_rate))
         else:
-            raise ValueError("NeuroKit error: rsp_intervalrelated(): Wrong"
-                             "input, we couldn't extract breathing rate."
-                             "Please make sure your DataFrame"
-                             "contains an `RSP_Rate` column.")
-        amp_cols = [col for col in data.columns if 'RSP_Amplitude' in col]
+            raise ValueError(
+                "NeuroKit error: rsp_intervalrelated(): Wrong"
+                "input, we couldn't extract breathing rate."
+                "Please make sure your DataFrame"
+                "contains an `RSP_Rate` column."
+            )
+        amp_cols = [col for col in data.columns if "RSP_Amplitude" in col]
         if len(amp_cols) == 1:
             intervals["RSP_Amplitude_Mean"] = data[amp_cols[0]].values.mean()
         else:
-            raise ValueError("NeuroKit error: rsp_intervalrelated(): Wrong"
-                             "input, we couldn't extract respiratory amplitude."
-                             "Please make sure your DataFrame"
-                             "contains an `RSP_Amplitude` column.")
+            raise ValueError(
+                "NeuroKit error: rsp_intervalrelated(): Wrong"
+                "input, we couldn't extract respiratory amplitude."
+                "Please make sure your DataFrame"
+                "contains an `RSP_Amplitude` column."
+            )
 
-        rsp_intervals = pd.DataFrame.from_dict(intervals,
-                                               orient="index").T
+        rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index").T
 
     elif isinstance(data, dict):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
             # Format dataframe
-            data[index] = data[index].set_index('Index').drop(['Label'], axis=1)
+            data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
 
             # Rate and Amplitude
-            intervals[index] = _rsp_intervalrelated_formatinput(data[index],
-                                                                intervals[index])
+            intervals[index] = _rsp_intervalrelated_formatinput(data[index], intervals[index])
 
             # RRV
-            intervals[index] = _rsp_intervalrelated_rrv(data[index], sampling_rate,
-                                                        intervals[index])
+            intervals[index] = _rsp_intervalrelated_rrv(data[index], sampling_rate, intervals[index])
 
         rsp_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
     return rsp_intervals
+
 
 # =============================================================================
 # Internals
@@ -103,17 +105,21 @@ def _rsp_intervalrelated_formatinput(data, output={}):
     # Sanitize input
     colnames = data.columns.values
     if len([i for i in colnames if "RSP_Rate" in i]) == 0:
-        raise ValueError("NeuroKit error: rsp_intervalrelated(): Wrong"
-                         "input, we couldn't extract breathing rate."
-                         "Please make sure your DataFrame"
-                         "contains an `RSP_Rate` column.")
+        raise ValueError(
+            "NeuroKit error: rsp_intervalrelated(): Wrong"
+            "input, we couldn't extract breathing rate."
+            "Please make sure your DataFrame"
+            "contains an `RSP_Rate` column."
+        )
         return output
     if len([i for i in colnames if "RSP_Amplitude" in i]) == 0:
-            raise ValueError("NeuroKit error: rsp_intervalrelated(): Wrong"
-                             "input we couldn't extract respiratory amplitude."
-                             "Please make sure your DataFrame"
-                             "contains an `RSP_Amplitude` column.")
-            return output
+        raise ValueError(
+            "NeuroKit error: rsp_intervalrelated(): Wrong"
+            "input we couldn't extract respiratory amplitude."
+            "Please make sure your DataFrame"
+            "contains an `RSP_Amplitude` column."
+        )
+        return output
 
     rate = data["RSP_Rate"].values
     amplitude = data["RSP_Amplitude"].values

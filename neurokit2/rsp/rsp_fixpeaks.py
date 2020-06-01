@@ -48,8 +48,7 @@ def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000):
     # Do whatever fixing is required (nothing for now)
 
     # Prepare output
-    info = {"RSP_Peaks": peaks,
-            "RSP_Troughs": troughs}
+    info = {"RSP_Peaks": peaks, "RSP_Troughs": troughs}
 
     return info
 

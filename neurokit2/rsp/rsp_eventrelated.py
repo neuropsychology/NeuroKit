@@ -2,8 +2,12 @@
 import numpy as np
 import pandas as pd
 
-from ..epochs.eventrelated_utils import (_eventrelated_addinfo, _eventrelated_rate,
-                                         _eventrelated_sanitizeinput, _eventrelated_sanitizeoutput)
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_rate,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 
 
 def rsp_eventrelated(epochs, silent=False):
@@ -101,13 +105,16 @@ def rsp_eventrelated(epochs, silent=False):
 # Internals
 # =============================================================================
 
+
 def _rsp_eventrelated_amplitude(epoch, output={}):
 
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "RSP_Amplitude" in i]) == 0:
-        print("NeuroKit warning: rsp_eventrelated(): input does not"
-              "have an `RSP_Amplitude` column. Will skip all amplitude-related features.")
+        print(
+            "NeuroKit warning: rsp_eventrelated(): input does not"
+            "have an `RSP_Amplitude` column. Will skip all amplitude-related features."
+        )
         return output
 
     # Get baseline
@@ -115,7 +122,7 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
         baseline = epoch["RSP_Amplitude"][epoch.index <= 0].values
         signal = epoch["RSP_Amplitude"][epoch.index > 0].values
     else:
-        baseline = epoch["RSP_Amplitude"][np.min(epoch.index.values):np.min(epoch.index.values)].values
+        baseline = epoch["RSP_Amplitude"][np.min(epoch.index.values) : np.min(epoch.index.values)].values
         signal = epoch["RSP_Amplitude"][epoch.index > np.min(epoch.index)].values
 
     # Max / Min / Mean
@@ -131,9 +138,11 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "RSP_Phase" in i]) == 0:
-        print("NeuroKit warning: rsp_eventrelated(): input does not"
-              "have an `RSP_Phase` column. Will not indicate whether"
-              "event onset concurs with inspiration.")
+        print(
+            "NeuroKit warning: rsp_eventrelated(): input does not"
+            "have an `RSP_Phase` column. Will not indicate whether"
+            "event onset concurs with inspiration."
+        )
         return output
 
     # Indication of inspiration
