@@ -69,7 +69,7 @@ def epochs_plot(epochs, legend=True, show=True):
 def _epochs_plot(data, ax, col, legend):
 
     if "Condition" in data.columns:
-        grouped = data.groupby('Condition')
+        grouped = data.groupby("Condition")
 
         # Colors
         color_list = ["red", "blue", "green", "yellow", "purple", "orange", "cyan", "magenta"]
@@ -79,9 +79,9 @@ def _epochs_plot(data, ax, col, legend):
 
         # Plot
         for key, group in grouped:
-            df = group.pivot_table(index='Time', columns=["Condition", 'Label'], values=col)
+            df = group.pivot_table(index="Time", columns=["Condition", "Label"], values=col)
             df.plot(ax=ax, label=col, title=col, style=colors[key], legend=legend)
 
         # TODO: Custom legend
     else:
-        data.pivot(index='Time', columns='Label', values=col).plot(ax=ax, label=col, title=col, legend=legend)
+        data.pivot(index="Time", columns="Label", values=col).plot(ax=ax, label=col, title=col, legend=legend)

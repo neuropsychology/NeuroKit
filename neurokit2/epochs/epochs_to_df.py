@@ -47,7 +47,6 @@ def epochs_to_df(epochs):
     return data
 
 
-
 def _df_to_epochs(data):
     # Convert dataframe of epochs created by `epochs_to_df` back into a dictionary.
     labels = data.Label.unique()

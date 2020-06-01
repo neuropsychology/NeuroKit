@@ -47,7 +47,7 @@ def events_to_mne(events, event_conditions=None):
     """
 
     if isinstance(events, dict):
-        if 'condition' in events.keys():
+        if "condition" in events.keys():
             event_conditions = events["condition"]
         events = events["onset"]
 
@@ -58,8 +58,9 @@ def events_to_mne(events, event_conditions=None):
 
     # Sanity check
     if len(event_conditions) != len(events):
-        raise ValueError("NeuroKit error: events_to_mne(): 'event_conditions' argument of different length than event onsets.")
-
+        raise ValueError(
+            "NeuroKit error: events_to_mne(): 'event_conditions' argument of different length than event onsets."
+        )
 
     event_names = list(set(event_conditions))
     event_index = list(range(len(event_names)))
@@ -67,5 +68,5 @@ def events_to_mne(events, event_conditions=None):
         event_conditions = [event_index[i[0]] if x == i[1] else x for x in event_conditions]
         event_id[i[1]] = event_index[i[0]]
 
-    events = np.array([events, [0]*len(events), event_conditions]).T
+    events = np.array([events, [0] * len(events), event_conditions]).T
     return events, event_id
