@@ -60,9 +60,7 @@ def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
     # Do whatever fixing is required (nothing for now)
 
     # Prepare output
-    info = {"SCR_Onsets": onsets,
-            "SCR_Peaks": peaks,
-            "SCR_Height": height}
+    info = {"SCR_Onsets": onsets, "SCR_Peaks": peaks, "SCR_Height": height}
     return info
 
 

@@ -69,42 +69,33 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         except KeyError:
             raise KeyError("NeuroKit error: eda_findpeaks(): Please provide an array as the input signal.")
 
-
     method = method.lower()  # remove capitalised letters
     if method in ["gamboa2008", "gamboa"]:
         info = _eda_findpeaks_gamboa2008(eda_phasic)
-    elif method in ["kim", "kbk", "kim2004", 'biosppy']:
+    elif method in ["kim", "kbk", "kim2004", "biosppy"]:
         info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
     elif method in ["nk", "nk2", "neurokit", "neurokit2"]:
         info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
     else:
-        raise ValueError("NeuroKit error: eda_findpeaks(): 'method' should be "
-                         "one of 'neurokit', 'gamboa2008' or 'kim2004'.")
+        raise ValueError(
+            "NeuroKit error: eda_findpeaks(): 'method' should be one of 'neurokit', 'gamboa2008' or 'kim2004'."
+        )
 
     return info
-
-
 
 
 # =============================================================================
 # Methods
 # =============================================================================
 
+
 def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 
     peaks = signal_findpeaks(eda_phasic, relative_height_min=amplitude_min, relative_max=True)
 
-    info = {"SCR_Onsets": peaks['Onsets'],
-            "SCR_Peaks": peaks['Peaks'],
-            "SCR_Height": eda_phasic[peaks['Peaks']]}
+    info = {"SCR_Onsets": peaks["Onsets"], "SCR_Peaks": peaks["Peaks"], "SCR_Height": eda_phasic[peaks["Peaks"]]}
 
     return info
-
-
-
-
-
-
 
 
 def _eda_findpeaks_gamboa2008(eda_phasic):
@@ -123,8 +114,7 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
     # sanity check
     if len(pi) == 0 or len(ni) == 0:
-        raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough",
-                         " SCR peaks. Try another method.")
+        raise ValueError("NeuroKit error: eda_findpeaks(): Could not find enough SCR peaks. Try another method.")
 
     # pair vectors
     if ni[0] < pi[0]:
@@ -139,22 +129,16 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
     onsets = ni[:li]
 
     # indices
-    i0 = peaks - (onsets - peaks) / 2.
+    i0 = peaks - (onsets - peaks) / 2.0
     if i0[0] < 0:
         i0[0] = 0
 
     # amplitude
-    amplitudes = np.array([np.max(eda_phasic[peaks[i]:onsets[i]]) for i in range(li)])
+    amplitudes = np.array([np.max(eda_phasic[peaks[i] : onsets[i]]) for i in range(li)])
 
     # output
-    info = {"SCR_Onsets": onsets,
-            "SCR_Peaks": peaks,
-            "SCR_Height": amplitudes}
+    info = {"SCR_Onsets": onsets, "SCR_Peaks": peaks, "SCR_Height": amplitudes}
     return info
-
-
-
-
 
 
 def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
@@ -188,13 +172,13 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     df = np.diff(eda_phasic)
 
     # smooth
-    df = signal_smooth(signal=df, kernel='bartlett', size=int(sampling_rate))
+    df = signal_smooth(signal=df, kernel="bartlett", size=int(sampling_rate))
 
     # zero crosses
     zeros = signal_zerocrossings(df)
-    if np.all(df[:zeros[0]] > 0):
+    if np.all(df[: zeros[0]] > 0):
         zeros = zeros[1:]
-    if np.all(df[zeros[-1]:] > 0):
+    if np.all(df[zeros[-1] :] > 0):
         zeros = zeros[:-1]
 
     # exclude SCRs with small amplitude
@@ -202,13 +186,13 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
     scrs, amps, ZC, pks = [], [], [], []
     for i in range(0, len(zeros) - 1, 2):
-        scrs += [df[zeros[i]:zeros[i + 1]]]
+        scrs += [df[zeros[i] : zeros[i + 1]]]
         aux = scrs[-1].max()
         if aux > thr:
             amps += [aux]
             ZC += [zeros[i]]
             ZC += [zeros[i + 1]]
-            pks += [zeros[i] + np.argmax(df[zeros[i]:zeros[i + 1]])]
+            pks += [zeros[i] + np.argmax(df[zeros[i] : zeros[i + 1]])]
 
     scrs = np.array(scrs)
     amps = np.array(amps)
@@ -217,8 +201,6 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     onsets = ZC[::2]
 
     # output
-    info = {"SCR_Onsets": onsets,
-            "SCR_Peaks": pks,
-            "SCR_Height": amps}
+    info = {"SCR_Onsets": onsets, "SCR_Peaks": pks, "SCR_Height": amps}
 
     return info

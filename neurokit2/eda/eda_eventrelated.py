@@ -82,13 +82,15 @@ def eda_eventrelated(epochs, silent=False):
         data[i] = _eda_eventrelated_eda(epochs[i], data[i])
 
         # Detect activity following the events
-        if np.any(epochs[i]["SCR_Peaks"][epochs[i].index > 0] == 1) and np.any(epochs[i]["SCR_Onsets"][epochs[i].index > 0] == 1):
+        if np.any(epochs[i]["SCR_Peaks"][epochs[i].index > 0] == 1) and np.any(
+            epochs[i]["SCR_Onsets"][epochs[i].index > 0] == 1
+        ):
             data[i]["EDA_SCR"] = 1
         else:
             data[i]["EDA_SCR"] = 0
 
         # Analyze based on if activations are present
-        if (data[i]["EDA_SCR"] != 0):
+        if data[i]["EDA_SCR"] != 0:
             data[i] = _eda_eventrelated_scr(epochs[i], data[i])
         else:
             data[i]["SCR_Peak_Amplitude"] = np.nan
@@ -112,9 +114,11 @@ def _eda_eventrelated_eda(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "EDA_Phasic" in i]) == 0:
-        print("NeuroKit warning: eda_eventrelated(): input does not"
-              "have an `EDA_Phasic` column. Will skip computation"
-              "of maximum amplitude of phasic EDA component.")
+        print(
+            "NeuroKit warning: eda_eventrelated(): input does not"
+            "have an `EDA_Phasic` column. Will skip computation"
+            "of maximum amplitude of phasic EDA component."
+        )
         return output
 
     output["EDA_Peak_Amplitude"] = epoch["EDA_Phasic"].max()
@@ -126,21 +130,27 @@ def _eda_eventrelated_scr(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "SCR_Amplitude" in i]) == 0:
-        print("NeuroKit warning: eda_eventrelated(): input does not"
-              "have an `SCR_Amplitude` column. Will skip computation"
-              "of SCR peak amplitude.")
+        print(
+            "NeuroKit warning: eda_eventrelated(): input does not"
+            "have an `SCR_Amplitude` column. Will skip computation"
+            "of SCR peak amplitude."
+        )
         return output
 
     if len([i for i in colnames if "SCR_RecoveryTime" in i]) == 0:
-        print("NeuroKit warning: eda_eventrelated(): input does not"
-              "have an `SCR_RecoveryTime` column. Will skip computation"
-              "of SCR half-recovery times.")
+        print(
+            "NeuroKit warning: eda_eventrelated(): input does not"
+            "have an `SCR_RecoveryTime` column. Will skip computation"
+            "of SCR half-recovery times."
+        )
         return output
 
     if len([i for i in colnames if "SCR_RiseTime" in i]) == 0:
-        print("NeuroKit warning: eda_eventrelated(): input does not"
-              "have an `SCR_RiseTime` column. Will skip computation"
-              "of SCR rise times.")
+        print(
+            "NeuroKit warning: eda_eventrelated(): input does not"
+            "have an `SCR_RiseTime` column. Will skip computation"
+            "of SCR rise times."
+        )
         return output
 
     # Peak amplitude and Time of peak

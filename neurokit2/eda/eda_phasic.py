@@ -67,12 +67,9 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     elif method in ["highpass", "biopac", "acqknowledge"]:
         data = _eda_phasic_highpass(eda_signal, sampling_rate)
     else:
-        raise ValueError("NeuroKit error: eda_clean(): 'method' should be "
-                         "one of 'biosppy'.")
+        raise ValueError("NeuroKit error: eda_clean(): 'method' should be one of 'biosppy'.")
 
     return data
-
-
 
 
 # =============================================================================
@@ -83,16 +80,12 @@ def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4)
     One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     size = smoothing_factor * sampling_rate
-    tonic = signal_smooth(eda_signal, kernel='median', size=size)
+    tonic = signal_smooth(eda_signal, kernel="median", size=size)
     phasic = eda_signal - tonic
 
-    out = pd.DataFrame({"EDA_Tonic": np.array(tonic),
-                        "EDA_Phasic": np.array(phasic)})
+    out = pd.DataFrame({"EDA_Tonic": np.array(tonic), "EDA_Phasic": np.array(phasic)})
 
     return out
-
-
-
 
 
 def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
@@ -102,19 +95,25 @@ def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
     phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=0.05, method="butter")
     tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=0.05, method="butter")
 
-    out = pd.DataFrame({"EDA_Tonic": np.array(tonic),
-                        "EDA_Phasic": np.array(phasic)})
+    out = pd.DataFrame({"EDA_Tonic": np.array(tonic), "EDA_Phasic": np.array(phasic)})
 
     return out
-
-
-
 
 
 # =============================================================================
 # cvxEDA
 # =============================================================================
-def _eda_phasic_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, delta_knot=10., alpha=8e-4, gamma=1e-2, solver=None, reltol=1e-9):
+def _eda_phasic_cvxeda(
+    eda_signal,
+    sampling_rate=1000,
+    tau0=2.0,
+    tau1=0.7,
+    delta_knot=10.0,
+    alpha=8e-4,
+    gamma=1e-2,
+    solver=None,
+    reltol=1e-9,
+):
     """
     A convex optimization approach to electrodermal activity processing (CVXEDA).
 
@@ -146,39 +145,44 @@ def _eda_phasic_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, delta_
     try:
         import cvxopt
     except ImportError:
-        raise ImportError("NeuroKit error: eda_decompose(): the 'cvxopt' "
-                          "module is required for this method to run. ",
-                          "Please install it first (`pip install cvxopt`).")
+        raise ImportError(
+            "NeuroKit error: eda_decompose(): the 'cvxopt' module is required for this method to run. ",
+            "Please install it first (`pip install cvxopt`).",
+        )
 
     # Internal functions
     def _cvx(m, n):
         return cvxopt.spmatrix([], [], [], (m, n))
 
-    frequency = 1/sampling_rate
+    frequency = 1 / sampling_rate
 
     n = len(eda_signal)
     eda = cvxopt.matrix(eda_signal)
 
     # bateman ARMA model
-    a1 = 1./min(tau1, tau0)  # a1 > a0
-    a0 = 1./max(tau1, tau0)
-    ar = np.array([(a1*frequency + 2.) * (a0*frequency + 2.),
-                   2.*a1*a0*frequency**2 - 8.,
-                   (a1*frequency - 2.) * (a0*frequency - 2.)]) / ((a1 - a0) * frequency**2)
-    ma = np.array([1., 2., 1.])
+    a1 = 1.0 / min(tau1, tau0)  # a1 > a0
+    a0 = 1.0 / max(tau1, tau0)
+    ar = np.array(
+        [
+            (a1 * frequency + 2.0) * (a0 * frequency + 2.0),
+            2.0 * a1 * a0 * frequency ** 2 - 8.0,
+            (a1 * frequency - 2.0) * (a0 * frequency - 2.0),
+        ]
+    ) / ((a1 - a0) * frequency ** 2)
+    ma = np.array([1.0, 2.0, 1.0])
 
     # matrices for ARMA model
     i = np.arange(2, n)
-    A = cvxopt.spmatrix(np.tile(ar, (n-2, 1)), np.c_[i, i, i], np.c_[i, i-1, i-2], (n, n))
-    M = cvxopt.spmatrix(np.tile(ma, (n-2, 1)), np.c_[i, i, i], np.c_[i, i-1, i-2], (n, n))
+    A = cvxopt.spmatrix(np.tile(ar, (n - 2, 1)), np.c_[i, i, i], np.c_[i, i - 1, i - 2], (n, n))
+    M = cvxopt.spmatrix(np.tile(ma, (n - 2, 1)), np.c_[i, i, i], np.c_[i, i - 1, i - 2], (n, n))
 
     # spline
     delta_knot_s = int(round(delta_knot / frequency))
-    spl = np.r_[np.arange(1., delta_knot_s), np.arange(delta_knot_s, 0., -1.)]  # order 1
-    spl = np.convolve(spl, spl, 'full')
+    spl = np.r_[np.arange(1.0, delta_knot_s), np.arange(delta_knot_s, 0.0, -1.0)]  # order 1
+    spl = np.convolve(spl, spl, "full")
     spl /= max(spl)
     # matrix of spline regressors
-    i = np.c_[np.arange(-(len(spl)//2), (len(spl)+1)//2)] + np.r_[np.arange(0, n, delta_knot_s)]
+    i = np.c_[np.arange(-(len(spl) // 2), (len(spl) + 1) // 2)] + np.r_[np.arange(0, n, delta_knot_s)]
     nB = i.shape[1]
     j = np.tile(np.arange(nB), (len(spl), 1))
     p = np.tile(spl, (nB, 1)).T
@@ -186,7 +190,7 @@ def _eda_phasic_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, delta_
     B = cvxopt.spmatrix(p[valid], i[valid], j[valid])
 
     # trend
-    C = cvxopt.matrix(np.c_[np.ones(n), np.arange(1., n+1.)/n])
+    C = cvxopt.matrix(np.c_[np.ones(n), np.arange(1.0, n + 1.0) / n])
     nC = C.size[1]
 
     # Solve the problem:
@@ -195,50 +199,57 @@ def _eda_phasic_cvxeda(eda_signal, sampling_rate=1000, tau0=2., tau1=0.7, delta_
 
     old_options = cvxopt.solvers.options.copy()
     cvxopt.solvers.options.clear()
-    cvxopt.solvers.options.update({'reltol': reltol,
-                                   'show_progress': False})
-    if solver == 'conelp':
+    cvxopt.solvers.options.update({"reltol": reltol, "show_progress": False})
+    if solver == "conelp":
         # Use conelp
-        G = cvxopt.sparse([[-A, _cvx(2, n), M, _cvx(nB+2, n)],
-                           [_cvx(n+2, nC), C, _cvx(nB+2, nC)],
-                           [_cvx(n, 1), -1, 1, _cvx(n+nB+2, 1)],
-                           [_cvx(2*n+2, 1), -1, 1, _cvx(nB, 1)],
-                           [_cvx(n+2, nB), B, _cvx(2, nB), cvxopt.spmatrix(1.0, range(nB), range(nB))]])
-        h = cvxopt.matrix([_cvx(n, 1), .5, .5, eda, .5, .5, _cvx(nB, 1)])
+        G = cvxopt.sparse(
+            [
+                [-A, _cvx(2, n), M, _cvx(nB + 2, n)],
+                [_cvx(n + 2, nC), C, _cvx(nB + 2, nC)],
+                [_cvx(n, 1), -1, 1, _cvx(n + nB + 2, 1)],
+                [_cvx(2 * n + 2, 1), -1, 1, _cvx(nB, 1)],
+                [_cvx(n + 2, nB), B, _cvx(2, nB), cvxopt.spmatrix(1.0, range(nB), range(nB))],
+            ]
+        )
+        h = cvxopt.matrix([_cvx(n, 1), 0.5, 0.5, eda, 0.5, 0.5, _cvx(nB, 1)])
         c = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T, _cvx(nC, 1), 1, gamma, _cvx(nB, 1)])
-        res = cvxopt.solvers.conelp(c, G, h, dims={'l': n, 'q': [n+2, nB+2], 's': []})
-        obj = res['primal objective']
+        res = cvxopt.solvers.conelp(c, G, h, dims={"l": n, "q": [n + 2, nB + 2], "s": []})
+        obj = res["primal objective"]
     else:
         # Use qp
         Mt, Ct, Bt = M.T, C.T, B.T
-        H = cvxopt.sparse([[Mt*M, Ct*M, Bt*M], [Mt*C, Ct*C, Bt*C],
-                           [Mt*B, Ct*B, Bt*B+gamma*cvxopt.spmatrix(1.0, range(nB), range(nB))]])
-        f = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T - Mt*eda, -(Ct*eda), -(Bt*eda)])
-        res = cvxopt.solvers.qp(H, f, cvxopt.spmatrix(-A.V, A.I, A.J, (n, len(f))), cvxopt.matrix(0., (n, 1)), solver=solver)
-        obj = res['primal objective'] + .5 * (eda.T * eda)
+        H = cvxopt.sparse(
+            [
+                [Mt * M, Ct * M, Bt * M],
+                [Mt * C, Ct * C, Bt * C],
+                [Mt * B, Ct * B, Bt * B + gamma * cvxopt.spmatrix(1.0, range(nB), range(nB))],
+            ]
+        )
+        f = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T - Mt * eda, -(Ct * eda), -(Bt * eda)])
+        res = cvxopt.solvers.qp(
+            H, f, cvxopt.spmatrix(-A.V, A.I, A.J, (n, len(f))), cvxopt.matrix(0.0, (n, 1)), solver=solver
+        )
+        obj = res["primal objective"] + 0.5 * (eda.T * eda)
     cvxopt.solvers.options.clear()
     cvxopt.solvers.options.update(old_options)
 
-    tonic_splines = res['x'][-nB:]
-    drift = res['x'][n:n+nC]
+    tonic_splines = res["x"][-nB:]
+    drift = res["x"][n : n + nC]
     tonic = B * tonic_splines + C * drift
-    q = res['x'][:n]
+    q = res["x"][:n]
     smna_driver = A * q
     phasic = M * q
     residuals = eda - phasic - tonic
 
-    out = pd.DataFrame({"EDA_Tonic": np.array(tonic)[:, 0],
-                        "EDA_Phasic": np.array(phasic)[:, 0]})
+    out = pd.DataFrame({"EDA_Tonic": np.array(tonic)[:, 0], "EDA_Phasic": np.array(phasic)[:, 0]})
 
     return out
-
-
 
 
 # =============================================================================
 # pyphysio
 # =============================================================================
-#def _eda_phasic_pyphysio(eda_signal, sampling_rate=1000):
+# def _eda_phasic_pyphysio(eda_signal, sampling_rate=1000):
 #    """
 #    Try to implement this: https://github.com/MPBA/pyphysio/blob/master/pyphysio/estimators/Estimators.py#L190
 #
