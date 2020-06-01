@@ -81,8 +81,8 @@ Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of
     black myfile.py --line-length 120
     docformatter myfile.py --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line --in-place
     
-    flake8 myfile.py --max-line-length=127 --max-complexity=10 --ignore E303 --show-source
-    pylint myfile.py --max-line-length=127 --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --variable-naming-style=any --argument-naming-style=any --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle
+    flake8 myfile.py --max-line-length=127 --max-complexity=10 --ignore E303 --ignore C901 --ignore E203
+    pylint myfile.py --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 
 
 The first three commands will make some modifications to your code so that it is nicely formatted, while the two last will run some checks to detect any additional issues. Please try to fix them!
 

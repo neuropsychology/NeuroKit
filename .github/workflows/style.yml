@@ -37,13 +37,13 @@ jobs:
       run: |
         pip install flake8
         # The GitHub editor is 127 chars wide. See https://flake8.pycqa.org/en/latest/user/configuration.html
-        flake8 neurokit2 --max-line-length=127 --max-complexity=10 --ignore E303 --show-source --statistics
+        flake8 neurokit2 --exclude neurokit2/__init__.py --max-line-length=127 --max-complexity=10 --ignore E303 --ignore C901 --ignore E203
         
     - name: Detect style errors with Pylint
       run: |
         pip install pylint
         # See http://pylint.pycqa.org/en/latest/index.html
-        pylint neurokit2 --max-line-length=127 --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --variable-naming-style=any --argument-naming-style=any --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle
+        pylint neurokit2 --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any  --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 
         
     - name: Check docstrings with docformatter
       run: |

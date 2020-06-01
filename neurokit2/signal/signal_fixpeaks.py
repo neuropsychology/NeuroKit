@@ -394,9 +394,7 @@ def _update_indices(source_idcs, update_idcs, update):
 
 
 def _plot_artifacts_lipponen2019(artifacts, info):
-    """
-    
-    """
+
     # Extract parameters
     longshort_idcs = artifacts["longshort"]
     ectopic_idcs = artifacts["ectopic"]
