@@ -6,7 +6,8 @@ import numpy as np
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False):
-    """Time-delay embedding of a time series (a signal)
+    """
+    Time-delay embedding of a time series (a signal)
 
     A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide a complete description of the system at some point in time. The set of all possible states is called the 'state space'.
 
@@ -59,6 +60,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     References
     -----------
     - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+
     """
     N = len(signal)
 
@@ -87,9 +89,11 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
 
 
 def _embedding_plot(embedded):
-    """Plot reconstructed attractor.
+    """
+    Plot reconstructed attractor.
 
     The input for this function must be obtained via `nk.complexity_embedding()`
+
     """
     if embedded.shape[1] == 2:
         figure = _embedding_plot_2D(embedded)

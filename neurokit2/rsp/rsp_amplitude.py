@@ -7,7 +7,8 @@ from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
 def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
-    """Compute respiratory amplitude.
+    """
+    Compute respiratory amplitude.
 
     Compute respiratory amplitude given the raw respiration signal and its
     extrema.
@@ -46,6 +47,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     >>> amplitude = nk.rsp_amplitude(cleaned, signals)
     >>> fig = nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
     >>> fig #doctest: +SKIP
+
     """
     # Format input.
     peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, len(rsp_cleaned))

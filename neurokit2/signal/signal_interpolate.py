@@ -4,7 +4,8 @@ import scipy.interpolate
 
 
 def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
-    """Interpolate a signal.
+    """
+    Interpolate a signal.
 
     Interpolate (fills the values between data points) a signal using different methods.
 
@@ -46,6 +47,7 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     >>>
     >>> fig = plt.plot(np.linspace(0, 1, num=len(zero)), zero, 'y', np.linspace(0, 1, num=len(linear)), linear, 'r', np.linspace(0, 1, num=len(quadratic)), quadratic, 'b', np.linspace(0, 1, num=len(cubic)), cubic, 'g', np.linspace(0, 1, num=len(nearest)), nearest, 'm', np.linspace(0, 1, num=len(signal)), signal, 'ko')
     >>> fig #doctest: +SKIP
+
     """
     # Sanity checks
     if len(x_values) != len(y_values):

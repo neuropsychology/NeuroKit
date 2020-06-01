@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 from .expspace import expspace
 from .find_closest import find_closest

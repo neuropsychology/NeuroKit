@@ -10,7 +10,8 @@ from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_
 def entropy_multiscale(
     signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs
 ):
-    """Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version
+    """
+    Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version.
 
     Python implementations of the multiscale entropy (MSE), the composite multiscale entropy (CMSE), the refined composite multiscale entropy (RCMSE) or their fuzzy version (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).
 
@@ -71,6 +72,7 @@ def entropy_multiscale(
     - Norris, P. R., Anderson, S. M., Jenkins, J. M., Williams, A. E., & Morris Jr, J. A. (2008).
         Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients. Shock, 30(1), 17-22.
     - Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012). Adaptive computation of multiscale entropy and its application in EEG signals for monitoring depth of anesthesia during surgery. Entropy, 14(6), 978-992.
+
     """
     return _entropy_multiscale(
         signal,

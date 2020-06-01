@@ -7,8 +7,8 @@ from ..signal import signal_filter, signal_smooth
 
 
 def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
-    """Preprocess Electrodermal Activity (EDA) signal.
-
+    """
+    Preprocess Electrodermal Activity (EDA) signal.
 
     Parameters
     ----------
@@ -37,6 +37,7 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     >>> signals = pd.DataFrame({ "EDA_Raw": eda, "EDA_BioSPPy": nk.eda_clean(eda, sampling_rate=100, method='biosppy'), "EDA_NeuroKit": nk.eda_clean(eda, sampling_rate=100, method='neurokit')})
     >>> fig = signals.plot()
     >>> fig #doctest: +SKIP
+
     """
     eda_signal = as_vector(eda_signal)
 
@@ -66,8 +67,11 @@ def _eda_clean_neurokit(eda_signal, sampling_rate=1000):
 # BioSPPy
 # =============================================================================
 def _eda_clean_biosppy(eda_signal, sampling_rate=1000):
-    """Uses the same defaults as `BioSPPy
+    """
+    Uses the same defaults as `BioSPPy.
+
     <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/eda.py>`_.
+
     """
     # Parameters
     order = 4

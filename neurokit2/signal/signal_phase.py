@@ -7,7 +7,8 @@ import scipy.signal
 
 
 def signal_phase(signal, method="radians"):
-    """Compute the phase of the signal.
+    """
+    Compute the phase of the signal.
 
     The real phase has the property to rotate uniformly, leading to a
     uniform distribution density. The prophase typically doesn't fulfill
@@ -49,6 +50,7 @@ def signal_phase(signal, method="radians"):
     >>> signal = nk.signal_binarize(nk.signal_simulate(duration=10))
     >>> phase = nk.signal_phase(signal, method="percents")
     >>> nk.signal_plot([signal, phase])
+
     """
     # If binary signal
     if len(set(np.array(signal)[~np.isnan(np.array(signal))])) == 2:

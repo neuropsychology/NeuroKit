@@ -1,4 +1,6 @@
-"""Top-level package for NeuroKit."""
+"""
+Top-level package for NeuroKit.
+"""
 import datetime
 
 from .bio import *

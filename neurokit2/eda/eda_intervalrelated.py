@@ -5,8 +5,7 @@ import pandas as pd
 
 def eda_intervalrelated(data):
     """
-    Performs EDA analysis on longer periods of data (typically > 10 seconds),
-    such as resting-state data.
+    Performs EDA analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
     ----------
@@ -91,7 +90,8 @@ def eda_intervalrelated(data):
 
 
 def _eda_intervalrelated_formatinput(interval, output={}):
-    """Format input for dictionary
+    """
+    Format input for dictionary.
     """
     # Sanitize input
     colnames = interval.columns.values

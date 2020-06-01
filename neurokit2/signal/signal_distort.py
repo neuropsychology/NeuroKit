@@ -21,7 +21,8 @@ def signal_distort(
     random_state=None,
     silent=False,
 ):
-    """Signal distortion.
+    """
+    Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
 
@@ -80,6 +81,7 @@ def signal_distort(
     >>> # Artifacts
     >>> artifacts = pd.DataFrame({"1Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=1, artifacts_amplitude=0.5), "5Hz": nk.signal_distort(signal, noise_amplitude=0, artifacts_frequency=5, artifacts_amplitude=0.2), "Raw": signal}).plot()
     >>> artifacts #doctest: +SKIP
+
     """
     # Seed the random generator for reproducible results.
     np.random.seed(random_state)

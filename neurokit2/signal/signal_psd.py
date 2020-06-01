@@ -7,7 +7,8 @@ import scipy.signal
 def signal_psd(
     signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None
 ):
-    """Compute the Power Spectral Density (PSD).
+    """
+    Compute the Power Spectral Density (PSD).
 
     Parameters
     ----------
@@ -53,6 +54,7 @@ def signal_psd(
     >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False, min_frequency=1)
     >>> fig4 = data.plot(x="Frequency", y="Power")
     >>> fig4 #doctest: +SKIP
+
     """
     # Constant Detrend
     signal = signal - np.mean(signal)

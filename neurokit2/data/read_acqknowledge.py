@@ -8,7 +8,8 @@ from ..signal import signal_resample
 
 
 def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolation", impute_missing=True):
-    """Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
+    """
+    Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
 
     The function outputs both the dataframe and the sampling rate (encoded within the AcqKnowledge) file.
 
@@ -37,6 +38,7 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
     >>> import neurokit2 as nk
     >>>
     >>> data, sampling_rate = nk.read_acqknowledge('file.acq') #doctest: +SKIP
+
     """
     # Try loading bioread
     try:

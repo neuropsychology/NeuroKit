@@ -11,9 +11,11 @@ from .complexity_embedding import complexity_embedding
 
 
 def _phi(signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False):
-    """Common internal for `entropy_approximate` and `entropy_sample`.
+    """
+    Common internal for `entropy_approximate` and `entropy_sample`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
+
     """
     # Initialize phi
     phi = np.zeros(2)
@@ -85,6 +87,7 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", distance="chebyshev
 # =============================================================================
 def _get_count(embedded, r, distance="chebyshev"):
     """
+    
     """
     kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
     # Return the count
@@ -107,13 +110,15 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # Get R
 # =============================================================================
 def _get_r(signal, r="default", dimension=2):
-    """Sanitize the tolerance r
-    For the default value, following the suggestion by Christopher Schölzel (nolds),
-    we make it take into account the number of dimensions. Additionally, a constant
+    """
+    Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make it
+    take into account the number of dimensions. Additionally, a constant.
+
     is introduced so that for dimension=2, r = 0.2 * np.std(signal, ddof=1), which
     is the traditional default value.
 
     See nolds for more info: https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
+
     """
     if isinstance(r, str) or (r is None):
         constant = 0.11604738531196232
@@ -143,7 +148,8 @@ def _get_scale(signal, scale="default", dimension=2):
 # Get Coarsegrained
 # =============================================================================
 def _get_coarsegrained_rolling(signal, scale=2):
-    """Used in composite multiscale entropy.
+    """
+    Used in composite multiscale entropy.
     """
     if scale in [0, 1]:
         return np.array([signal])
@@ -165,7 +171,8 @@ def _get_coarsegrained_rolling(signal, scale=2):
 
 
 def _get_coarsegrained(signal, scale=2, force=False):
-    """Extract coarse-grained time series.
+    """
+    Extract coarse-grained time series.
 
     The coarse-grained time series for a scale factor Tau are obtained by
     calculating the arithmetic mean of Tau neighboring values without overlapping.
@@ -181,6 +188,7 @@ def _get_coarsegrained(signal, scale=2, force=False):
     >>> import neurokit2 as nk
     >>> signal = [0, 2, 4, 6, 8, 10]
     >>> cs = _get_coarsegrained(signal, scale=2)
+
     """
     if scale in [0, 1]:
         return signal

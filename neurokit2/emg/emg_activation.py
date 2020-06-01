@@ -16,7 +16,8 @@ def emg_activation(
     duration_min="default",
     **kwargs
 ):
-    """Detects onset in EMG signal based on the amplitude threshold.
+    """
+    Detects onset in EMG signal based on the amplitude threshold.
 
     Parameters
     ----------
@@ -78,6 +79,7 @@ def emg_activation(
     References
     ----------
     - BioSPPy: https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/emg.py
+
     """
     # Sanity checks.
     if emg_amplitude is not None:

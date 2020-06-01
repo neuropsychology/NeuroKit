@@ -40,6 +40,7 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
     >>> # Vectorized version
     >>> x = nk.find_closest([1.8, 3.6], [3, 5, 6, 1, 2])
     >>> x  #doctest: +SKIP
+
     """
 
     # Transform to arrays

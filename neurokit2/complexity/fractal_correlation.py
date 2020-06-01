@@ -7,7 +7,8 @@ from .complexity_embedding import complexity_embedding
 
 
 def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
-    """Correlation Dimension
+    """
+    Correlation Dimension.
 
     Python implementation of the Correlation Dimension D2 of a signal.
 
@@ -54,6 +55,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     - Boon, M. Y., Henry, B. I., Suttle, C. M., & Dain, S. J. (2008). The correlation dimension: A useful objective measure of the transient visual evoked potential?. Journal of vision, 8(1), 6-6.
     - `nolds <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>`_
     - `Corr_Dim <https://github.com/jcvasquezc/Corr_Dim>`_
+
     """
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     dist = sklearn.metrics.pairwise.euclidean_distances(embedded)

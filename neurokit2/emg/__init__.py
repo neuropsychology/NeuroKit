@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 from .emg_activation import emg_activation
 from .emg_amplitude import emg_amplitude

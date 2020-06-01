@@ -4,7 +4,8 @@ import pandas as pd
 
 
 def entropy_shannon(signal):
-    """Shannon entropy (SE)
+    """
+    Shannon entropy (SE)
 
     Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state, or equivalently, of its average information content. Shannon entropy (SE) is one of the first and most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy quantifies the amount of information in a variable.
 
@@ -39,6 +40,7 @@ def entropy_shannon(signal):
     - `pyEntropy` <https://github.com/nikdon/pyEntropy>`_
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
     - `nolds` <https://github.com/CSchoel/nolds>`_
+
     """
     # Check if string
     if not isinstance(signal, str):

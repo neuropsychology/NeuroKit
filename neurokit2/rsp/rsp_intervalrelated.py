@@ -7,8 +7,7 @@ from .rsp_rrv import rsp_rrv
 
 def rsp_intervalrelated(data, sampling_rate=1000):
     """
-    Performs RSP analysis on longer periods of data (typically > 10 seconds),
-    such as resting-state data.
+    Performs RSP analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
     ----------
@@ -49,6 +48,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
     >>> nk.rsp_intervalrelated(epochs) #doctest: +SKIP
+
     """
     intervals = {}
 

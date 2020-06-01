@@ -7,7 +7,8 @@ from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
 def rsp_phase(peaks, troughs=None, desired_length=None):
-    """Compute respiratory phase (inspiration and expiration).
+    """
+    Compute respiratory phase (inspiration and expiration).
 
     Finds the respiratory phase, labelled as 1 for inspiration and 0 for expiration.
     Parameters
@@ -49,6 +50,7 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     >>> phase = nk.rsp_phase(peak_signal)
     >>> fig = nk.signal_plot([rsp, phase], standardize=True)
     >>> fig #doctest: +SKIP
+
     """
     # Format input.
     peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, desired_length)

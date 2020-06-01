@@ -18,7 +18,8 @@ def signal_findpeaks(
     relative_median=False,
     relative_max=False,
 ):
-    """Find peaks in a signal.
+    """
+    Find peaks in a signal.
 
     Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
 
@@ -72,6 +73,7 @@ def signal_findpeaks(
     See Also
     --------
     scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks, ecg_findpeaks, rsp_findpeaks, signal_fixpeaks
+
     """
     info = _signal_findpeaks_scipy(signal)
 

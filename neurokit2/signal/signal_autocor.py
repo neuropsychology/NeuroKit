@@ -30,6 +30,7 @@ def signal_autocor(signal, lag=None, normalize=True):
     >>> x = [1, 2, 3, 4, 5]
     >>> autocor = nk.signal_autocor(x)
     >>> autocor #doctest: +SKIP
+
     """
     r = np.correlate(signal, signal, mode="full")
 

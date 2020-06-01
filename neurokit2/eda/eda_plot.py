@@ -8,7 +8,8 @@ from ..misc import find_closest
 
 
 def eda_plot(eda_signals, sampling_rate=None):
-    """Visualize electrodermal activity (EDA) data.
+    """
+    Visualize electrodermal activity (EDA) data.
 
     Parameters
     ----------
@@ -27,6 +28,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     See Also
     --------
     eda_process
+
     """
     # Determine peaks, onsets, and half recovery.
     peaks = np.where(eda_signals["SCR_Peaks"] == 1)[0]

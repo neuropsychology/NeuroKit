@@ -164,6 +164,7 @@ def _ecg_simulate_ecgsyn(
 ):
     """
     This function is a python translation of the matlab script by `McSharry & Clifford (2013)
+
     <https://physionet.org/content/ecgsyn>`_.
 
     Parameters

@@ -10,7 +10,8 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
 def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
-    """Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
+    """
+    Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
 
     Parameters
     ----------
@@ -67,6 +68,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     - Soni, R., & Muniyandi, M. (2019). Breath rate variability:
     a novel measure to study the meditation effects. International Journal of Yoga,
     12(1), 45.
+
     """
     # Sanitize input
     rsp_rate, peaks = _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate)

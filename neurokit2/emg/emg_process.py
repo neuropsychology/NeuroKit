@@ -7,7 +7,8 @@ from .emg_clean import emg_clean
 
 
 def emg_process(emg_signal, sampling_rate=1000):
-    """Process a electromyography (EMG) signal.
+    """
+    Process a electromyography (EMG) signal.
 
     Convenience function that automatically processes
     an electromyography signal.
@@ -51,6 +52,7 @@ def emg_process(emg_signal, sampling_rate=1000):
     >>> signals, info = nk.emg_process(emg, sampling_rate=1000)
     >>> fig = nk.emg_plot(signals)
     >>> fig #doctest: +SKIP
+
     """
     # Clean signal
     emg_cleaned = emg_clean(emg_signal, sampling_rate=sampling_rate)

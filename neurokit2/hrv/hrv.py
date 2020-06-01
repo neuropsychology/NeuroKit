@@ -11,7 +11,8 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv(peaks, sampling_rate=1000, show=False):
-    """ Computes indices of Heart Rate Variability (HRV).
+    """
+    Computes indices of Heart Rate Variability (HRV).
 
     Computes HRV indices in the time-, frequency-, and nonlinear domain. Note
     that a minimum duration of the signal containing the peaks is recommended
@@ -62,6 +63,7 @@ def hrv(peaks, sampling_rate=1000, show=False):
       Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
     variability metrics and norms. Frontiers in public health, 5, 258.
+
     """
     # Get indices
     out = []  # initialize empty container

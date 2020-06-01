@@ -5,7 +5,8 @@ import pandas as pd
 
 
 def rsp_plot(rsp_signals, sampling_rate=None):
-    """Visualize respiration (RSP) data.
+    """
+    Visualize respiration (RSP) data.
 
     Parameters
     ----------
@@ -24,6 +25,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     See Also
     --------
     rsp_process
+
     """
     # Mark peaks, troughs and phases.
     peaks = np.where(rsp_signals["RSP_Peaks"] == 1)[0]

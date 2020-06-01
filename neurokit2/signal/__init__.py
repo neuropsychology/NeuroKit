@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 from .signal_autocor import signal_autocor
 from .signal_binarize import signal_binarize

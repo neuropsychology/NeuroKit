@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 # Aliases
 from ..signal import signal_rate as ppg_rate

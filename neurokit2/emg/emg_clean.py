@@ -7,7 +7,8 @@ from ..signal import signal_detrend
 
 
 def emg_clean(emg_signal, sampling_rate=1000):
-    """Preprocess an electromyography (emg) signal.
+    """
+    Preprocess an electromyography (emg) signal.
 
     Clean an EMG signal using a set of parameters, such as:
     - `BioSPPy
@@ -43,6 +44,7 @@ def emg_clean(emg_signal, sampling_rate=1000):
     >>> signals = pd.DataFrame({"EMG_Raw": emg, "EMG_Cleaned":nk.emg_clean(emg, sampling_rate=1000)})
     >>> fig = signals.plot()
     >>> fig #doctest: +SKIP
+
     """
     emg_signal = as_vector(emg_signal)
 

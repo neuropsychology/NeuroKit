@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 from .data import data
 from .read_acqknowledge import read_acqknowledge

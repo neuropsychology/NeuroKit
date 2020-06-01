@@ -6,8 +6,9 @@ from .emg_intervalrelated import emg_intervalrelated
 
 
 def emg_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs EMG analysis on either epochs (event-related
-    analysis) or on longer periods of data such as resting-state data.
+    """
+    Performs EMG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state
+    data.
 
     Parameters
     ----------
@@ -55,6 +56,7 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Interval-related analysis
     >>> nk.emg_analyze(emg_signals, method="interval-related") #doctest: +SKIP
+
     """
     method = method.lower()
 

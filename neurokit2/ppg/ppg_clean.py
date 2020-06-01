@@ -5,7 +5,8 @@ from ..signal import signal_filter
 
 
 def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
-    """Clean a photoplethysmogram (PPG) signal.
+    """
+    Clean a photoplethysmogram (PPG) signal.
 
     Prepare a raw PPG signal for systolic peak detection.
 
@@ -40,6 +41,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
     >>> plt.plot(ppg, label="raw PPG") #doctest: +SKIP
     >>> plt.plot(ppg_clean, label="clean PPG") #doctest: +SKIP
     >>> plt.legend() #doctest: +SKIP
+
     """
     ppg_signal = as_vector(ppg_signal)
 

@@ -6,8 +6,9 @@ from .rsp_intervalrelated import rsp_intervalrelated
 
 
 def rsp_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs RSP analysis on either epochs (event-related
-    analysis) or on longer periods of data such as resting-state data.
+    """
+    Performs RSP analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state
+    data.
 
     Parameters
     ----------
@@ -63,6 +64,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Analyze
     >>> nk.rsp_analyze(df, sampling_rate=100) #doctest: +SKIP
+
     """
     method = method.lower()
 

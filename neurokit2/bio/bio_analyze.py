@@ -10,7 +10,8 @@ from ..rsp.rsp_analyze import rsp_analyze
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto"):
-    """Automated analysis of bio signals.
+    """
+    Automated analysis of bio signals.
 
     Wrapper for other bio analyze functions of
     electrocardiography signals (ECG), respiration signals (RSP),
@@ -70,6 +71,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Analyze
     >>> nk.bio_analyze(df) #doctest: +SKIP
+
     """
     features = pd.DataFrame()
     method = method.lower()

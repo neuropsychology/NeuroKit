@@ -11,7 +11,8 @@ from ..epochs.eventrelated_utils import (
 
 
 def rsp_eventrelated(epochs, silent=False):
-    """Performs event-related RSP analysis on epochs.
+    """
+    Performs event-related RSP analysis on epochs.
 
     Parameters
     ----------
@@ -74,6 +75,7 @@ def rsp_eventrelated(epochs, silent=False):
     >>> # Analyze
     >>> rsp2 = nk.rsp_eventrelated(epochs)
     >>> rsp2 #doctest: +SKIP
+
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="rsp", silent=silent)

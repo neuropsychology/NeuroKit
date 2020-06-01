@@ -4,7 +4,8 @@ import pandas as pd
 
 
 def as_vector(x):
-    """Convert to vector.
+    """
+    Convert to vector.
 
     Examples
     --------
@@ -22,6 +23,7 @@ def as_vector(x):
     >>> y = nk.as_vector(x=pd.DataFrame([0, 1, 2]))
     >>> y #doctest: +SKIP
     >>>
+
     """
     if isinstance(x, (pd.Series, pd.DataFrame)):
         out = x.values

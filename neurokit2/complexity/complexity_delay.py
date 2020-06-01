@@ -15,7 +15,8 @@ from .complexity_embedding import complexity_embedding
 
 
 def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
-    """Estimate optimal Time Delay (tau) for time-delay embedding
+    """
+    Estimate optimal Time Delay (tau) for time-delay embedding.
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
 
@@ -66,6 +67,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
     - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
     - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
+
     """
     # Initalize vectors
     if isinstance(delay_max, int):
@@ -156,6 +158,7 @@ def _embedding_delay_plot(
     signal, metric_values, tau_sequence, tau=1, metric="Mutual Information", ax0=None, ax1=None, plot="2D"
 ):
     """
+    
     """
     # Prepare figure
     if ax0 is None and ax1 is None:

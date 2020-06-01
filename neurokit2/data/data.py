@@ -5,7 +5,8 @@ import pandas as pd
 
 
 def data(dataset="bio_eventrelated_100hz"):
-    """Example datasets
+    """
+    Example datasets.
 
     Download and load available `example datasets <https://github.com/neuropsychology/NeuroKit/tree/master/data#datasets>`_. Note that an internet connexion is necessary.
 
@@ -25,6 +26,7 @@ def data(dataset="bio_eventrelated_100hz"):
     >>> import neurokit2 as nk
     >>>
     >>> data = nk.data("bio_eventrelated_100hz")
+
     """
     # TODO: one could further improve this function with like
     # selectors 'ecg=True, eda=True, restingstate=True' that would

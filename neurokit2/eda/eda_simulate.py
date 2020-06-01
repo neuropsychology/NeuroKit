@@ -7,7 +7,8 @@ from ..signal import signal_distort, signal_merge
 def eda_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, scr_number=1, drift=-0.01, random_state=None
 ):
-    """Simulate Electrodermal Activity (EDA) signal.
+    """
+    Simulate Electrodermal Activity (EDA) signal.
 
     Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.
 
@@ -49,6 +50,7 @@ def eda_simulate(
     References
     -----------
     - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
+
     """
     # Seed the random generator for reproducible results
     np.random.seed(random_state)
@@ -92,7 +94,8 @@ def eda_simulate(
 
 
 def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.7013, decay=[3.1487, 14.1257]):
-    """Simulate a canonical skin conductance response (SCR)
+    """
+    Simulate a canonical skin conductance response (SCR)
 
     Based on `Bach (2010) <https://sourceforge.net/p/scralyze/code/HEAD/tree/branches/version_b2.1.8/scr_bf_crf.m#l24>`_
 
@@ -110,6 +113,7 @@ def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.
     >>> # scr1 = _eda_simulate_scr(time_peak=3.0745)
     >>> # scr2 = _eda_simulate_scr(time_peak=10)
     >>> # pd.DataFrame({"SCR1": scr1, "SCR2": scr2}).plot()
+
     """
     if length is None:
         length = 9 * sampling_rate
@@ -127,6 +131,7 @@ def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.
 def _eda_simulate_bateman(sampling_rate=1000, t1=0.75, t2=2):
     """
     Generates the bateman function:
+
     :math:`b = e^{-t/T1} - e^{-t/T2}`
 
     Parameters
@@ -145,6 +150,7 @@ def _eda_simulate_bateman(sampling_rate=1000, t1=0.75, t2=2):
     ----------
     >>> # bateman = _eda_simulate_bateman()
     >>> # nk.signal_plot(bateman)
+
     """
 
     idx_T1 = t1 * sampling_rate

@@ -6,7 +6,8 @@ from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_san
 
 
 def emg_eventrelated(epochs, silent=False):
-    """Performs event-related EMG analysis on epochs.
+    """
+    Performs event-related EMG analysis on epochs.
 
     Parameters
     ----------
@@ -47,6 +48,7 @@ def emg_eventrelated(epochs, silent=False):
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000, epochs_start=-0.1, epochs_end=1.9)
     >>> nk.emg_eventrelated(epochs) #doctest: +SKIP
+
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="emg", silent=silent)

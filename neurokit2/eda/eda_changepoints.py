@@ -6,9 +6,9 @@ from ..signal import signal_changepoints
 
 
 def eda_changepoints(eda_cleaned, **kwargs):
-    """Calculate the number of change points using of the skin conductance signal
-    in terms of mean and variance. Defaults to an algorithm penalty of 10000, as
-    recommended by Halem et al. (2020).
+    """
+    Calculate the number of change points using of the skin conductance signal in terms of mean and variance. Defaults
+    to an algorithm penalty of 10000, as recommended by Halem et al. (2020).
 
     Parameters
     ----------
@@ -38,6 +38,7 @@ def eda_changepoints(eda_cleaned, **kwargs):
     References
     -----------
     - Halem, S., van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020). Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
+
     """
     # Sanity checks
     if not isinstance(eda_cleaned, np.ndarray):

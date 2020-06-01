@@ -9,7 +9,8 @@ from ..signal import signal_findpeaks, signal_formatpeaks, signal_smooth, signal
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
-    """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
+    """
+    Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
     Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in the phasic component of
     Electrodermal Activity (EDA) with different possible methods. See `eda_peaks()` for details.
@@ -61,6 +62,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     ----------
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
     - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+
     """
     # Try to retrieve the right column if a dataframe is passed
     if isinstance(eda_phasic, pd.DataFrame):
@@ -99,12 +101,14 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 
 
 def _eda_findpeaks_gamboa2008(eda_phasic):
-    """Basic method to extract Skin Conductivity Responses (SCR) from an
-    EDA signal following the approach in the thesis by Gamboa (2008).
+    """
+    Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach in the thesis by
+    Gamboa (2008).
 
     References
     ----------
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
+
     """
     derivative = np.diff(np.sign(np.diff(eda_phasic)))
 
@@ -142,8 +146,9 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
 
 def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
-    """KBK method to extract Skin Conductivity Responses (SCR) from an
-    EDA signal following the approach by Kim et al. (2004).
+    """
+    KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et al.
+    (2004).
 
     Parameters
     ----------
@@ -166,6 +171,7 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     References
     ----------
     - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+
     """
 
     # differentiation

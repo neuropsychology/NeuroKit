@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 from .eda_analyze import eda_analyze
 from .eda_autocor import eda_autocor

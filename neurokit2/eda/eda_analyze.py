@@ -6,8 +6,9 @@ from .eda_intervalrelated import eda_intervalrelated
 
 
 def eda_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs EDA analysis on either epochs (event-related
-    analysis) or on longer periods of data such as resting-state data.
+    """
+    Performs EDA analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state
+    data.
 
     Parameters
     ----------
@@ -63,6 +64,7 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Analyze
     >>> nk.eda_analyze(df, sampling_rate=100) #doctest: +SKIP
+
     """
     method = method.lower()
 

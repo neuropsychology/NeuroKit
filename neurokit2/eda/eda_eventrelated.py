@@ -6,7 +6,8 @@ from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_san
 
 
 def eda_eventrelated(epochs, silent=False):
-    """Performs event-related EDA analysis on epochs.
+    """
+    Performs event-related EDA analysis on epochs.
 
     Parameters
     ----------
@@ -68,6 +69,7 @@ def eda_eventrelated(epochs, silent=False):
     >>>
     >>> # Analyze
     >>> nk.eda_eventrelated(epochs) #doctest: +SKIP
+
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="eda", silent=silent)

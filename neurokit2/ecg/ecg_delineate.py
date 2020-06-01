@@ -15,8 +15,8 @@ def ecg_delineate(
     ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type="peaks", check=False
 ):
     """
-    Delineate QRS complex. 
-    
+    Delineate QRS complex.
+
     Function to delineate the QRS complex.
 
     - **Cardiac Cycle**: A typical ECG heartbeat consists of a P wave, a QRS complex and a T wave.The P wave represents the wave of depolarization that spreads from the SA-node throughout the atria. The QRS complex reflects the rapid depolarization of the right and left ventricles. Since the ventricles are the largest part of the heart, in terms of mass, the QRS complex usually has a much larger amplitude than the P-wave. The T wave represents the ventricular repolarization of the ventricles. On rare occasions, a U wave can be seen following the T wave. The U wave is believed to be related to the last remnants of ventricular repolarization.

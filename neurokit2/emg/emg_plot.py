@@ -5,7 +5,8 @@ import pandas as pd
 
 
 def emg_plot(emg_signals, sampling_rate=None):
-    """Visualize electromyography (EMG) data.
+    """
+    Visualize electromyography (EMG) data.
 
     Parameters
     ----------
@@ -28,6 +29,7 @@ def emg_plot(emg_signals, sampling_rate=None):
     See Also
     --------
     ecg_process
+
     """
     # Mark onsets, offsets, activity
     onsets = np.where(emg_signals["EMG_Onsets"] == 1)[0]

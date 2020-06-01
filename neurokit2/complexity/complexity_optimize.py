@@ -22,7 +22,8 @@ def complexity_optimize(
     show=False,
     attractor_dimension=3,
 ):
-    """Find optimal complexity parameters
+    """
+    Find optimal complexity parameters.
 
     Estimate optimal complexity parameters Dimension (m), Time Delay (tau) and tolerance 'r'.
 
@@ -64,6 +65,7 @@ def complexity_optimize(
     - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
     - Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
     - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering, 55(8), 1966-1972.
+
     """
 
     out = {}
@@ -289,6 +291,7 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
     References
     -----------
     - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+
     """
 
     # Initalize vectors
@@ -341,10 +344,11 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
 
 def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
     """
-    Return iterative amplitude adjusted Fourier transform surrogates.
-    Returns phase randomized, amplitude adjusted (IAAFT) surrogates with
-    the same power spectrum (to a very high accuracy) and distribution
-    as the original data using an iterative scheme.
+    Iterative amplitude adjusted Fourier transform (IAAFT) surrogates.
+
+    Returns phase randomized, amplitude adjusted
+    (IAAFT) surrogates with the same power spectrum (to a very high accuracy) and distribution as the original data
+    using an iterative scheme.
 
     Parameters
     ----------
@@ -376,6 +380,7 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
     -----
     Schreiber, T., & Schmitz, A. (1996). Improved surrogate data for nonlinearity tests. Physical review letters, 77(4), 635.
     `entropy_estimators` <https://github.com/paulbrodersen/entropy_estimators>`_
+
     """
     # Calculate "true" Fourier amplitudes and sort the series
     amplitudes = np.abs(np.fft.rfft(signal))
@@ -410,8 +415,7 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
 
 def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
     """
-    Estimates the entropy H of a random variable x based on
-    the kth-nearest neighbour distances between point samples.
+    Estimates the entropy H of a random variable x based on the kth-nearest neighbour distances between point samples.
 
     Parameters:
     ----------
@@ -434,6 +438,7 @@ def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
     -----
     Kozachenko, L., & Leonenko, N. (1987). Sample estimate of the entropy of a random vector. Problemy Peredachi Informatsii, 23(2), 9–16.
     `NoLiTSA` <https://github.com/manu-mannattil/nolitsa>`_
+
     """
 
     n, d = x.shape

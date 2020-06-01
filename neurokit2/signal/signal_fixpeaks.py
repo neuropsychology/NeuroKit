@@ -21,7 +21,8 @@ def signal_fixpeaks(
     robust=False,
     method="Kubios",
 ):
-    """Correct erroneous peak placements.
+    """
+    Correct erroneous peak placements.
 
     Identify and correct erroneous peak placements based on outliers in
     peak-to-peak differences (period).
@@ -107,6 +108,7 @@ def signal_fixpeaks(
     rate variability time series artefact correction using novel beat
     classification. Journal of medical engineering & technology, 43(3),
     173-181. 10.1080/03091902.2019.1640306
+
     """
     # Format input
     peaks, _ = _signal_formatpeaks_sanitize(peaks)
@@ -379,8 +381,8 @@ def _correct_misaligned(misaligned_idcs, peaks):
 
 def _update_indices(source_idcs, update_idcs, update):
     """
-    For every element s in source_idcs, change every element u in update_idcs
-    according to update, if u is larger than s.
+    For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger than
+    s.
     """
     if not update_idcs:
         return update_idcs
@@ -393,6 +395,7 @@ def _update_indices(source_idcs, update_idcs, update):
 
 def _plot_artifacts_lipponen2019(artifacts, info):
     """
+    
     """
     # Extract parameters
     longshort_idcs = artifacts["longshort"]

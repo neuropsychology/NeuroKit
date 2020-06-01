@@ -4,7 +4,8 @@ import pandas as pd
 
 
 def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
-    """Extract extrema in a respiration (RSP) signal.
+    """
+    Extract extrema in a respiration (RSP) signal.
 
     Low-level function used by `rsp_peaks()` to identify inhalation peaks and exhalation troughs in a preprocessed
     respiration signal using different sets of parameters. See `rsp_peaks()` for details.
@@ -48,6 +49,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
     >>> info = nk.rsp_findpeaks(cleaned)
     >>> fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
     >>> fig #doctest: +SKIP
+
     """
     # Try retrieving correct column
     if isinstance(rsp_cleaned, pd.DataFrame):

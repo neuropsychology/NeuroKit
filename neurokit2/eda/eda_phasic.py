@@ -6,7 +6,8 @@ from ..signal import signal_filter, signal_smooth
 
 
 def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
-    """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
+    """
+    Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
 
     Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
 
@@ -58,6 +59,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     - cvxEDA: https://github.com/lciti/cvxEDA
     - Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43). Springer International Publishing.
     - Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering, 63(4), 797-804.
+
     """
     method = method.lower()  # remove capitalised letters
     if method == "cvxeda":
@@ -140,6 +142,7 @@ def _eda_phasic_cvxeda(
            Sparse QP solver to be used, see cvxopt.solvers.qp
        reltol : float
            Solver options, see http://cvxopt.org/userguide/coneprog.html#algorithm-parameters
+
     """
     # Try loading cvx
     try:

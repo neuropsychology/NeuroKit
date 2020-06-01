@@ -10,7 +10,8 @@ from .eda_fixpeaks import eda_fixpeaks
 
 
 def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
-    """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
+    """
+    Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
     Identify Skin Conductance Responses (SCR) peaks in the phasic component of
     Electrodermal Activity (EDA) with different possible methods, such as:
@@ -71,6 +72,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     ----------
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
     - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+
     """
     if isinstance(eda_phasic, pd.DataFrame) or isinstance(eda_phasic, pd.Series):
         try:

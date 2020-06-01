@@ -6,7 +6,8 @@ from .signal_interpolate import signal_interpolate
 
 
 def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_order="cubic"):
-    """Calculate signal period from a series of peaks.
+    """
+    Calculate signal period from a series of peaks.
 
     Parameters
     ----------
@@ -48,6 +49,7 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     >>>
     >>> rate = nk.signal_rate(peaks=info["Peaks"])
     >>> nk.signal_plot(rate)
+
     """
     peaks, desired_length = _signal_formatpeaks_sanitize(peaks, desired_length)
 

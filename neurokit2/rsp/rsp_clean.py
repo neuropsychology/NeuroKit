@@ -7,7 +7,8 @@ from ..signal import signal_detrend, signal_filter
 
 
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
-    """Preprocess a respiration (RSP) signal.
+    """
+    Preprocess a respiration (RSP) signal.
 
     Clean a respiration signal using different sets of parameters, such as
     'khodadad2018' (linear detrending followed by a fifth order 2Hz low-pass
@@ -67,10 +68,12 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 # Khodadad et al. (2018)
 # =============================================================================
 def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
-    """The algorithm is based on (but not an exact
-    implementation of) the "Zero-crossing algorithm with amplitude threshold"
-    by `Khodadad et al. (2018)
+    """
+    The algorithm is based on (but not an exact implementation of) the "Zero-crossing algorithm with amplitude
+    threshold" by `Khodadad et al. (2018)
+
     <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_.
+
     """
     # Slow baseline drifts / fluctuations must be removed from the raw
     # breathing signal (i.e., the signal must be centered around zero) in order
@@ -91,8 +94,11 @@ def _rsp_clean_khodadad2018(rsp_signal, sampling_rate=1000):
 # BioSPPy
 # =============================================================================
 def _rsp_clean_biosppy(rsp_signal, sampling_rate=1000):
-    """Uses the same defaults as `BioSPPy
+    """
+    Uses the same defaults as `BioSPPy.
+
     <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_.
+
     """
     # Parameters
     order = 2

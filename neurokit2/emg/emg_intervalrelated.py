@@ -5,8 +5,7 @@ import pandas as pd
 
 def emg_intervalrelated(data):
     """
-    Performs EMG analysis on longer periods of data (typically > 10 seconds),
-    such as resting-state data.
+    Performs EMG analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
     ----------
@@ -42,6 +41,7 @@ def emg_intervalrelated(data):
     >>>
     >>> epochs = nk.epochs_create(emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20)
     >>> nk.emg_intervalrelated(epochs) #doctest: +SKIP
+
     """
     intervals = {}
 
@@ -88,7 +88,8 @@ def emg_intervalrelated(data):
 
 
 def _emg_intervalrelated_formatinput(interval, output={}):
-    """Format input for dictionary
+    """
+    Format input for dictionary.
     """
     # Sanitize input
     colnames = interval.columns.values

@@ -8,7 +8,8 @@ from ..misc import expspace
 def fractal_dfa(
     signal, windows="default", overlap=True, integrate=True, order=1, multifractal=False, q=2, show=False, **kwargs
 ):
-    """(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)
+    """
+    (Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)
 
     Python implementation of Detrended Fluctuation Analysis (DFA) or Multifractal DFA of a signal. Detrended fluctuation analysis, much like the Hurst exponent, is used to
     find long-term statistical dependencies in time series.
@@ -57,6 +58,7 @@ def fractal_dfa(
     - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V., Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended fluctuation analysis: a scale-free view on neuronal oscillations. Frontiers in physiology, 3, 450.
     - `nolds <https://github.com/CSchoel/nolds/>`_
     - `Youtube introduction <https://www.youtube.com/watch?v=o0LndP2OlUI>`_
+
     """
     # Sanity checks
     n = len(signal)

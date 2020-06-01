@@ -2,7 +2,8 @@
 
 
 def listify(**kwargs):
-    """Transforms arguments into lists of the same length.
+    """
+    Transforms arguments into lists of the same length.
 
     Examples
     --------
@@ -10,6 +11,7 @@ def listify(**kwargs):
     >>>
     >>> nk.listify(a=3, b=[3, 5], c=[3]) #doctest: +ELLIPSIS
     {'a': [3, 3], 'b': [3, 5], 'c': [3, 3]}
+
     """
     args = kwargs
     maxi = 1

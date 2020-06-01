@@ -8,7 +8,8 @@ import scipy.signal
 def signal_resample(
     signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"
 ):
-    """Resample a continuous signal to a different length or sampling rate.
+    """
+    Resample a continuous signal to a different length or sampling rate.
 
     Up- or down-sample a signal. The user can specify either a desired length for the vector, or input the original sampling rate and the desired sampling rate. See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of the methods.
 
@@ -64,6 +65,7 @@ def signal_resample(
     See Also
     --------
     scipy.signal.resample_poly, scipy.signal.resample, scipy.ndimage.zoom
+
     """
     if desired_length is None:
         desired_length = int(np.round(len(signal) * desired_sampling_rate / sampling_rate))

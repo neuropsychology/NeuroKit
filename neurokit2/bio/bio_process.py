@@ -10,7 +10,8 @@ from ..rsp import rsp_process
 
 
 def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
-    """Automated processing of bio signals.
+    """
+    Automated processing of bio signals.
 
     Wrapper for other bio processing functions of
     electrocardiography signals (ECG), respiration signals (RSP),
@@ -80,6 +81,7 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
     >>> # Visualize all signals
     >>> fig = nk.standardize(bio_df).plot(subplots=True)
     >>> fig #doctest: +SKIP
+
     """
     bio_info = {}
     bio_df = pd.DataFrame({})
