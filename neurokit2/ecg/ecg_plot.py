@@ -131,9 +131,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
     # Plot artifacts
     if show_type in ["artifacts", "full"]:
         if sampling_rate is None:
-            raise ValueError(
-                "NeuroKit error: ecg_plot(): Sampling rate must be specified for artifacts to be plotted."
-            )
+            raise ValueError("NeuroKit error: ecg_plot(): Sampling rate must be specified for artifacts to be plotted.")
         if rpeaks is None:
             _, rpeaks = ecg_peaks(ecg_signals["ECG_Clean"], sampling_rate=sampling_rate)
 

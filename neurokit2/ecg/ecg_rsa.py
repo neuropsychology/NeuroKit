@@ -330,9 +330,7 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         try:
             rpeaks, _ = _signal_formatpeaks_sanitize(ecg_signals, desired_length=None)
         except NameError:
-            raise ValueError(
-                "NeuroKit error: _ecg_rsa_formatinput(): Wrong input, we couldn't extract rpeaks indices."
-            )
+            raise ValueError("NeuroKit error: _ecg_rsa_formatinput(): Wrong input, we couldn't extract rpeaks indices.")
     else:
         rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
 

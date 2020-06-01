@@ -48,9 +48,7 @@ def eda_autocor(eda_cleaned, sampling_rate=1000, lag=4):
     if isinstance(eda_cleaned, pd.DataFrame):
         colnames = eda_cleaned.columns.values
         if len([i for i in colnames if "EDA_Clean" in i]) == 0:
-            raise ValueError(
-                "NeuroKit warning: eda_autocor(): Your input does not contain the cleaned EDA signal."
-            )
+            raise ValueError("NeuroKit warning: eda_autocor(): Your input does not contain the cleaned EDA signal.")
         else:
             eda_cleaned = eda_cleaned["EDA_Clean"]
     if isinstance(eda_cleaned, pd.Series):
