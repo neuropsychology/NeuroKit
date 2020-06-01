@@ -75,6 +75,7 @@ def epochs_create(
     >>>
     >>> # Chunk into n blocks of 1 second
     >>> epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
+
     """
 
     # Santize data input

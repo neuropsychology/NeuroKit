@@ -39,6 +39,7 @@ def epochs_to_df(epochs):
     >>> # Create epochs
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=3)
     >>> data = nk.epochs_to_df(epochs)
+
     """
     data = pd.concat(epochs)
     data["Time"] = data.index.get_level_values(1).values

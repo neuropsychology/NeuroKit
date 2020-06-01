@@ -7,7 +7,8 @@ from ..signal import signal_filter
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
-    """Clean an ECG signal.
+    """
+    Clean an ECG signal.
 
     Prepare a raw ECG signal for R-peak detection with the specified method.
 
@@ -111,7 +112,8 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
 # =============================================================================
 def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
     """
-    adapted from https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69
+    adapted from https://github.com/PIA-
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
     """
 
     order = int(0.3 * sampling_rate)
@@ -140,7 +142,8 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 # =============================================================================
 def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
     """
-    adapted from https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69
+    adapted from https://github.com/PIA-
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
     """
 
     f1 = 5 / sampling_rate
@@ -160,6 +163,7 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
     From https://github.com/berndporr/py-ecg-detectors/
 
     - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010). 428-431.
+
     """
 
     f1 = 8 / sampling_rate
@@ -175,7 +179,8 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
 # =============================================================================
 def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
     """
-    adapted from https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69
+    adapted from https://github.com/PIA-
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
     """
 
     f1 = 8 / sampling_rate
@@ -195,6 +200,7 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
 
     - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
     - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+
     """
 
     f1 = 48 / sampling_rate

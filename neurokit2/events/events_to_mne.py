@@ -3,7 +3,8 @@ import numpy as np
 
 
 def events_to_mne(events, event_conditions=None):
-    """Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG..
+    """
+    Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG..
 
     Parameters
     ----------
@@ -44,6 +45,7 @@ def events_to_mne(events, event_conditions=None):
     >>> events, event_id = nk.events_to_mne(events)
     >>> event_id #doctest: +SKIP
     {'B': 0, 'A': 1}
+
     """
 
     if isinstance(events, dict):

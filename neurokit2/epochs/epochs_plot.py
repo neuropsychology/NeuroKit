@@ -46,6 +46,7 @@ def epochs_plot(epochs, legend=True, show=True):
     >>> epochs = nk.epochs_create(signal, events=events["ECG_R_Peaks"], epochs_start=-0.5, epochs_end=0.5)
     >>> fig2 = nk.epochs_plot(epochs)
     >>> fig2 #doctest: +SKIP
+
     """
     data = epochs_to_df(epochs)
 

@@ -10,7 +10,8 @@ from .ecg_quality import ecg_quality
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
-    """Process an ECG signal.
+    """
+    Process an ECG signal.
 
     Convenience function that automatically processes an ECG signal.
 
@@ -73,6 +74,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
     >>> nk.ecg_plot(signals) #doctest: +ELLIPSIS
     <Figure ...>
+
     """
     ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method)
     # R-peaks

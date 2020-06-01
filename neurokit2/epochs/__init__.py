@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 from .epochs_create import epochs_create
 from .epochs_plot import epochs_plot

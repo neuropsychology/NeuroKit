@@ -11,7 +11,8 @@ from .ecg_segment import ecg_segment
 
 
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000):
-    """Quality of ECG Signal
+    """
+    Quality of ECG Signal.
 
     Compute a continuous index of quality of the ECG signal, by interpolating the distance
     of each QRS segment from the average QRS segment present in the data. This index is
@@ -36,6 +37,7 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000):
     >>> quality = nk.ecg_quality(ecg_cleaned, sampling_rate=300)
     >>>
     >>> nk.signal_plot([ecg_cleaned, quality], standardize=True)
+
     """
     # Sanitize inputs
     if rpeaks is None:

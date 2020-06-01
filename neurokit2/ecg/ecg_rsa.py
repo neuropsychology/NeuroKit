@@ -9,7 +9,8 @@ from .ecg_rsp import ecg_rsp
 
 
 def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
-    """Respiratory Sinus Arrhythmia (RSA)
+    """
+    Respiratory Sinus Arrhythmia (RSA)
 
     Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence', is the naturally occurring variation in heart rate during the breathing cycle. Metrics to quantify it are often used as a measure of parasympathetic nervous system activity. Neurophysiology informs us that the functional output of the myelinated vagus originating from the nucleus ambiguus has a respiratory rhythm. Thus, there would a temporal relation between the respiratory rhythm being expressed in the firing of these efferent pathways and the functional effect on the heart rate rhythm manifested as RSA. Importantly, several methods exist to quantify RSA:
 
@@ -88,6 +89,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     - Servant, D., Logier, R., Mouster, Y., & Goudemand, M. (2009). La variabilité de la fréquence cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016
     - Lewis, G. F., Furman, S. A., McCool, M. F., & Porges, S. W. (2012). Statistical strategies to quantify respiratory sinus arrhythmia: Are commonly used metrics equivalent?. Biological psychology, 89(2), 349-364.
     - Zohar, A. H., Cloninger, C. R., & McCraty, R. (2013). Personality and heart rate variability: exploring pathways from personality to cardiac coherence and health. Open Journal of Social Sciences, 1(06), 32.
+
     """
     signals, ecg_period, rpeaks, rsp_signal = _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
 
@@ -125,7 +127,8 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
 # Methods (Domains)
 # =============================================================================
 def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period=None, rsp_peaks=None):
-    """Peak-to-trough algorithm (P2T)
+    """
+    Peak-to-trough algorithm (P2T)
     """
 
     # Find all RSP cycles and the Rpeaks within
@@ -159,7 +162,8 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
 
 
 def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
-    """Porges-Bohrer method
+    """
+    Porges-Bohrer method.
     """
     if continuous is True:
         return None

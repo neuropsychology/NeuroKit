@@ -10,7 +10,8 @@ from ..epochs.eventrelated_utils import (
 
 
 def ecg_eventrelated(epochs, silent=False):
-    """Performs event-related ECG analysis on epochs.
+    """
+    Performs event-related ECG analysis on epochs.
 
     Parameters
     ----------
@@ -89,6 +90,7 @@ def ecg_eventrelated(epochs, silent=False):
     4     4  Negative  ...                               ...               ...
 
     [4 rows x 17 columns]
+
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="ecg", silent=silent)

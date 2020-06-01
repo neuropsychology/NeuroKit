@@ -15,7 +15,9 @@ from .ecg_segment import ecg_segment
 def ecg_delineate(
     ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type="peaks", check=False
 ):
-    """Delineate QRS complex.
+    """
+    Delineate QRS complex. 
+    
     Function to delineate the QRS complex.
 
     - **Cardiac Cycle**: A typical ECG heartbeat consists of a P wave, a QRS complex and a T wave.The P wave represents the wave of depolarization that spreads from the SA-node throughout the atria. The QRS complex reflects the rapid depolarization of the right and left ventricles. Since the ventricles are the largest part of the heart, in terms of mass, the QRS complex usually has a much larger amplitude than the P-wave. The T wave represents the ventricular repolarization of the ventricles. On rare occasions, a U wave can be seen following the T wave. The U wave is believed to be related to the last remnants of ventricular repolarization.
@@ -137,14 +139,17 @@ def ecg_delineate(
 # WAVELET METHOD (DWT)
 # =============================================================================
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
-    """Resample given points to a different sampling rate."""
+    """
+    Resample given points to a different sampling rate.
+    """
     peaks_resample = np.array(peaks) * desired_sampling_rate / sampling_rate
     peaks_resample = [np.nan if np.isnan(x) else int(x) for x in peaks_resample.tolist()]
     return peaks_resample
 
 
 def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
-    """Delinate ecg signal using discrete wavelet transforms.
+    """
+    Delinate ecg signal using discrete wavelet transforms.
 
     Args:
      ecg: Signal.
@@ -414,7 +419,8 @@ def _dwt_delineate_qrs_bounds(ecg, rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rat
 
 
 def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
-    """Return multiscales wavelet transforms.
+    """
+    Return multiscales wavelet transforms.
     """
 
     def _apply_H_filter(signal_i, power=0):
@@ -798,7 +804,8 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
 def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_type="all", sampling_rate=1000):
 
     """
-#    Examples
+    #    Examples.
+
 #    --------
 #    >>> import neurokit2 as nk
 #    >>> import numpy as np
@@ -879,8 +886,7 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
 
 def _ecg_delineate_check(waves, rpeaks):
     """
-    This function replaces the delineated features with np.nan if its
-    standardized distance from R-peaks is more than 3
+    This function replaces the delineated features with np.nan if its standardized distance from R-peaks is more than 3.
     """
     df = pd.DataFrame.from_dict(waves)
     features_columns = df.columns
@@ -907,8 +913,8 @@ def _ecg_delineate_check(waves, rpeaks):
 
 def _calculate_abs_z(df, columns):
     """
-    This function helps to calculate the absolute standardized distance
-    between R-peaks and other delineated waves features by `ecg_delineate()`
+    This function helps to calculate the absolute standardized distance between R-peaks and other delineated waves
+    features by `ecg_delineate()`
     """
     for column in columns:
         df["Dist_R_" + column] = np.abs(standardize(df[column].sub(df["ECG_R_Peaks"], axis=0)))

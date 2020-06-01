@@ -56,6 +56,7 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     >>> events = [[i] for i in events['onset']]
     >>> fig4 = nk.events_plot(events, signal)
     >>> fig4 #doctest: +SKIP
+
     """
 
     if isinstance(events, dict):

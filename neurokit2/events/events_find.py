@@ -21,7 +21,8 @@ def events_find(
     event_labels=None,
     event_conditions=None,
 ):
-    """Find and select events in a continuous signal (e.g., from a photosensor).
+    """
+    Find and select events in a continuous signal (e.g., from a photosensor).
 
     Parameters
     ----------
@@ -66,6 +67,7 @@ def events_find(
     >>>
     >>> fig = nk.events_plot(events, signal)
     >>> fig #doctest: +SKIP
+
     """
     events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
 
@@ -163,7 +165,8 @@ def _events_find_label(events, event_labels=None, event_conditions=None, functio
 
 
 def _events_find(event_channel, threshold="auto", threshold_keep="above"):
-    """Internal function
+    """
+    Internal function.
     """
     binary = signal_binarize(event_channel, threshold=threshold)
 

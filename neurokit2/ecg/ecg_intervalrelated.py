@@ -7,8 +7,7 @@ from ..hrv import hrv
 
 def ecg_intervalrelated(data, sampling_rate=1000):
     """
-    Performs ECG analysis on longer periods of data (typically > 10 seconds),
-    such as resting-state data.
+    Performs ECG analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
     ----------
@@ -57,6 +56,7 @@ def ecg_intervalrelated(data, sampling_rate=1000):
     1      ...
 
     [2 rows x 30 columns]
+
     """
     intervals = {}
 
