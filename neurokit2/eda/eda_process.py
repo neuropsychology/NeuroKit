@@ -2,9 +2,8 @@
 import pandas as pd
 
 from .eda_clean import eda_clean
-from .eda_phasic import eda_phasic
 from .eda_peaks import eda_peaks
-
+from .eda_phasic import eda_phasic
 
 
 def eda_process(eda_signal, sampling_rate=1000):

@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.patches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-from ..signal import signal_rate
+from ..complexity import entropy_approximate, entropy_sample, fractal_dfa
+from ..signal import signal_power, signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from ..signal import signal_power
-from ..complexity import entropy_sample
-from ..complexity import entropy_approximate
-from ..complexity import fractal_dfa
 
 
 def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):

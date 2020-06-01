@@ -5,6 +5,7 @@ import scipy.signal
 
 from .signal_resample import signal_resample
 
+
 def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
     """Compute the synchrony (coupling) between two signals.
 

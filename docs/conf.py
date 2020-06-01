@@ -19,9 +19,10 @@
 # absolute, like shown here.
 #
 import os
-import mock
 import re
 import sys
+
+import mock
 
 sys.path.insert(0, os.path.abspath('../'))
 
@@ -262,4 +263,3 @@ texinfo_documents = [
 # Other
 add_module_names = False  # so functions aren’t prepended with the name of the package/module
 add_function_parentheses = True  # to ensure that parentheses are added to the end of all function names
-

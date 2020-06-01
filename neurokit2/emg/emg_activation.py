@@ -3,10 +3,8 @@ import numpy as np
 import pandas as pd
 
 from ..events import events_find
-from ..signal import signal_formatpeaks
-from ..signal import signal_binarize
-from ..signal import signal_changepoints
 from ..misc import as_vector
+from ..signal import signal_binarize, signal_changepoints, signal_formatpeaks
 
 
 def emg_activation(emg_amplitude=None, emg_cleaned=None, sampling_rate=1000, method="threshold", threshold='default', duration_min="default", **kwargs):

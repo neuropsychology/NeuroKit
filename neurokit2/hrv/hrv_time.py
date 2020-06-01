@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
-from ..stats import mad
-from ..stats import summary_plot
-from .hrv_utils import _hrv_sanitize_input
-from .hrv_utils import _hrv_get_rri
+from ..stats import mad, summary_plot
+from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_time(peaks, sampling_rate=1000, show=False):

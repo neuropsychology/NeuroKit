@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy.interpolate import Akima1DInterpolator
+
 from neurokit2.signal import signal_distort
 
 

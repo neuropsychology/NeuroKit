@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import itertools
+
 import numpy as np
 import pandas as pd
 import scipy.signal
-import itertools
 
 
 def signal_phase(signal, method="radians"):

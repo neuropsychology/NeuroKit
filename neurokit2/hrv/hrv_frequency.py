@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
-from ..signal.signal_power import signal_power
-from ..signal.signal_power import _signal_power_instant_plot
+from ..signal.signal_power import _signal_power_instant_plot, signal_power
 from ..signal.signal_psd import signal_psd
-from .hrv_utils import _hrv_sanitize_input
-from .hrv_utils import _hrv_get_rri
+from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),

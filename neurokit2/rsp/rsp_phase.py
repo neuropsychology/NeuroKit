@@ -2,10 +2,8 @@
 import numpy as np
 import pandas as pd
 
-
-from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 from ..signal import signal_phase
-
+from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
 def rsp_phase(peaks, troughs=None, desired_length=None):

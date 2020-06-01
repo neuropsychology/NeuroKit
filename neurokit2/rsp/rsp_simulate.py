@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..signal import signal_simulate
-from ..signal import signal_distort
-from ..signal import signal_smooth
+from ..signal import signal_distort, signal_simulate, signal_smooth
 
 
 def rsp_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,

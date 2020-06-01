@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+import pandas as pd
 
-from .hrv_time import hrv_time
-from .hrv_frequency import hrv_frequency
-from .hrv_frequency import _hrv_frequency_show
-from .hrv_nonlinear import hrv_nonlinear
-from .hrv_nonlinear import _hrv_nonlinear_show
-from .hrv_utils import _hrv_get_rri
-from .hrv_utils import _hrv_sanitize_input
 from ..stats import summary_plot
+from .hrv_frequency import _hrv_frequency_show, hrv_frequency
+from .hrv_nonlinear import _hrv_nonlinear_show, hrv_nonlinear
+from .hrv_time import hrv_time
+from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv(peaks, sampling_rate=1000, show=False):

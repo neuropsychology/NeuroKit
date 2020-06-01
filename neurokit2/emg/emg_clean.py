@@ -2,8 +2,8 @@
 import numpy as np
 import scipy.signal
 
-from ..signal import signal_detrend
 from ..misc import as_vector
+from ..signal import signal_detrend
 
 
 def emg_clean(emg_signal, sampling_rate=1000):

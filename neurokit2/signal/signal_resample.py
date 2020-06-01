@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
-
-import scipy.signal
+import pandas as pd
 import scipy.ndimage
-
+import scipy.signal
 
 
 def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"):

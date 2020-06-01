@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from .signal_simulate import signal_simulate
-from .signal_resample import signal_resample
 from ..misc import listify
+from .signal_resample import signal_resample
+from .signal_simulate import signal_simulate
 
 
 def signal_distort(signal, sampling_rate=1000, noise_shape="laplace",

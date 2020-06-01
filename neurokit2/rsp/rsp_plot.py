@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-import matplotlib.pyplot as plt
 
 def rsp_plot(rsp_signals, sampling_rate=None):
     """Visualize respiration (RSP) data.

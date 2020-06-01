@@ -3,16 +3,17 @@ Tasks for maintaining the project.
 
 Execute 'invoke --list' for guidance on using Invoke
 """
-import shutil
 import platform
+import shutil
+import webbrowser
 
 from invoke import task
+
 try:
     from pathlib import Path
     Path().expanduser()
 except (ImportError, AttributeError):
     from pathlib2 import Path
-import webbrowser
 
 
 ROOT_DIR = Path(__file__).parent

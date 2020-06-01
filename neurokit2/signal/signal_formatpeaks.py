@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 
 
-
 def signal_formatpeaks(info, desired_length, peak_indices=None):
     """Transforms an peak-info dict to a signal of given length.
     """
