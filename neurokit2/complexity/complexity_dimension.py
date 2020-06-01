@@ -256,12 +256,12 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
     else:
         y = signal
 
-    if metric == 'cityblock':
+    if metric == 'chebyshev':
+        p = np.inf
+    elif metric == 'cityblock':
         p = 1
     elif metric == 'euclidean':
         p = 2
-    elif metric == 'chebyshev':
-        p = np.inf
     else:
         raise ValueError('Unknown metric.  Should be one of "cityblock", '
                          '"euclidean", or "chebyshev".')

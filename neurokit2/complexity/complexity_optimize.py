@@ -255,8 +255,8 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
             signal_entropy = _complexity_optimize_get_differential(signal_embedded, k=1)
 
             # calculate average of surrogates entropy
-            for inter in range(surrogate_iter):
-                surrogate, i, rmsd = _complexity_optimize_iaaft(signal)
+            for i in range(surrogate_iter):
+                surrogate, iterations, rmsd = _complexity_optimize_iaaft(signal)
                 surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _complexity_optimize_get_differential(surrogate_embedded, k=1)
                 surrogate_list.append(surrogate_entropy)

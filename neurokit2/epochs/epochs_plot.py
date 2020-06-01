@@ -65,6 +65,7 @@ def epochs_plot(epochs, legend=True, show=True):
     else:
         return data
 
+
 def _epochs_plot(data, ax, col, legend):
 
     if "Condition" in data.columns:

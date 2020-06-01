@@ -36,19 +36,17 @@ def _eventrelated_addinfo(epoch, output={}):
         output["Event_Onset"] = epoch.loc[np.min(np.abs(epoch.index))]["Index"]
 
     # Add label
-    if "Label" in epoch.columns:
-        if len(set(epoch["Label"])) == 1:
-            output["Label"] = epoch["Label"].values[0]
+    if "Label" in epoch.columns and len(set(epoch["Label"])) == 1:
+        output["Label"] = epoch["Label"].values[0]
 
     # Add condition
-    if "Condition" in epoch.columns:
-        if len(set(epoch["Condition"])) == 1:
-            output["Condition"] = epoch["Condition"].values[0]
+    if "Condition" in epoch.columns and len(set(epoch["Condition"])) == 1:
+        output["Condition"] = epoch["Condition"].values[0]
 
     # Add participant_id
-    if "Participant" in epoch.columns:
-        if len(set(epoch["Participant"])) == 1:
-            output["Participant"] = epoch["Participant"].values[0]
+    if "Participant" in epoch.columns and len(set(epoch["Participant"])) == 1:
+        output["Participant"] = epoch["Participant"].values[0]
+
     return output
 
 
