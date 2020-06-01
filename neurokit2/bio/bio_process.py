@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from ..ecg import ecg_process
-from ..rsp import rsp_process
+from ..ecg import ecg_process, ecg_rsa
 from ..eda import eda_process
 from ..emg import emg_process
-from ..ecg import ecg_rsa
 from ..misc import as_vector
+from ..rsp import rsp_process
 
 
 def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
