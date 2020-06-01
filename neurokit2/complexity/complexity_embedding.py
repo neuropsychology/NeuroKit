@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import matplotlib.animation
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d
+import numpy as np
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False):

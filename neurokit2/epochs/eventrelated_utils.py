@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from .epochs_to_df import _df_to_epochs
-from ..stats import fit_r2
 from ..misc import find_closest
-
+from ..stats import fit_r2
+from .epochs_to_df import _df_to_epochs
 
 
 def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):

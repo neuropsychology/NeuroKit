@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
-import scipy.stats
-import scipy.signal
-import scipy.spatial
 import matplotlib
 import matplotlib.collections
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import scipy.signal
+import scipy.spatial
+import scipy.stats
 
-from ..stats import mutual_information
 from ..misc import find_closest
-from ..signal import signal_findpeaks
-from ..signal import signal_zerocrossings
-from ..signal import signal_autocor
+from ..signal import signal_autocor, signal_findpeaks, signal_zerocrossings
+from ..stats import mutual_information
 from .complexity_embedding import complexity_embedding
 
 

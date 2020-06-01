@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-from .utils import _get_r, _get_scale, _get_coarsegrained, _get_coarsegrained_rolling, _phi, _phi_divide
 from .entropy_sample import entropy_sample
-
+from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide
 
 
 def entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs):

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial
-import matplotlib.pyplot as plt
 
 from .complexity_embedding import complexity_embedding
-
 
 
 def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):

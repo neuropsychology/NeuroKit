@@ -1,14 +1,15 @@
-import neurokit2 as nk
-import numpy as np
-import pandas as pd
-import scipy.spatial
 import matplotlib
 import matplotlib.collections
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import scipy.spatial
 
-from .complexity_embedding import complexity_embedding
-from .complexity_delay import _embedding_delay_metric, _embedding_delay_select, _embedding_delay_plot
+import neurokit2 as nk
+
+from .complexity_delay import _embedding_delay_metric, _embedding_delay_plot, _embedding_delay_select
 from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn, _embedding_dimension_plot
+from .complexity_embedding import complexity_embedding
 from .complexity_r import _optimize_r, _optimize_r_plot
 from .entropy_approximate import entropy_approximate
 

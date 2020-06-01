@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import matplotlib.pyplot as plt
-
-
-
-
+import numpy as np
 
 
 def fractal_mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4, iterations=25, buddha=False, show=False):
