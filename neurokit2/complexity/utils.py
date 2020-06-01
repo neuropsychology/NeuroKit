@@ -9,7 +9,7 @@ from .complexity_embedding import complexity_embedding
 # =============================================================================
 
 
-def _phi(signal, delay=1, dimension=2, r="default", distance='chebyshev', approximate=True, fuzzy=False):
+def _phi(signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False):
     """Common internal for `entropy_approximate` and `entropy_sample`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
@@ -17,7 +17,9 @@ def _phi(signal, delay=1, dimension=2, r="default", distance='chebyshev', approx
     # Initialize phi
     phi = np.zeros(2)
 
-    embedded1, count1 = _get_embedded(signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy)
+    embedded1, count1 = _get_embedded(
+        signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy
+    )
     embedded2, count2 = _get_embedded(signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy)
 
     if approximate is True:
@@ -29,8 +31,6 @@ def _phi(signal, delay=1, dimension=2, r="default", distance='chebyshev', approx
     return phi
 
 
-
-
 def _phi_divide(phi):
     if phi[0] == 0:
         return -np.inf
@@ -40,14 +40,12 @@ def _phi_divide(phi):
     return -np.log(division)
 
 
-
-
 # =============================================================================
 # Get Embedded
 # =============================================================================
 
 
-def _get_embedded(signal, delay=1, dimension=2, r="default", distance='chebyshev', approximate=True, fuzzy=False):
+def _get_embedded(signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False):
     """
     Examples
     ----------
@@ -60,7 +58,10 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", distance='chebyshev
     """
     # Sanity checks
     if distance not in sklearn.neighbors.KDTree.valid_metrics:
-        raise ValueError("NeuroKit error: _get_embedded(): The given metric (%s) is not valid. The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics))
+        raise ValueError(
+            "NeuroKit error: _get_embedded(): The given metric (%s) is not valid. The valid metric names are: %s"
+            % (distance, sklearn.neighbors.KDTree.valid_metrics)
+        )
 
     # Get embedded
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
@@ -94,7 +95,7 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
     dist = dist.pairwise(embedded)
 
     if n > 1:
-        sim = np.exp(-dist**n / r)
+        sim = np.exp(-(dist ** n) / r)
     else:
         sim = np.exp(-dist / r)
     # Return the count
@@ -128,11 +129,14 @@ def _get_scale(signal, scale="default", dimension=2):
     if scale is None or scale == "max":
         scale = np.arange(1, len(signal) // 2)  # Set to max
     elif scale == "default":
-        scale = np.arange(1, int(len(signal) / (dimension + 10)))  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
+        scale = np.arange(
+            1, int(len(signal) / (dimension + 10))
+        )  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
     elif isinstance(scale, int):
         scale = np.arange(1, scale)
 
     return scale
+
 
 # =============================================================================
 # Get Coarsegrained
@@ -187,6 +191,6 @@ def _get_coarsegrained(signal, scale=2, force=False):
         signal = np.concatenate([signal, np.repeat(signal[-1], (j * scale) - len(signal))])
     else:
         j = n // scale
-    x = np.reshape(signal[0:j*scale], (j, scale))
+    x = np.reshape(signal[0 : j * scale], (j, scale))
     # Return the coarsed time series
     return np.mean(x, axis=1)

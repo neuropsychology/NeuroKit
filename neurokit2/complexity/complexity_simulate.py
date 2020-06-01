@@ -33,17 +33,20 @@ def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurs
     """
     method = method.lower()
     if method in ["fractal", "fractional", "husrt", "ornsteinuhlenbeck", "ornstein"]:
-        signal = _complexity_simulate_ornstein(duration=duration, sampling_rate=sampling_rate, hurst_exponent=hurst_exponent, **kwargs)
+        signal = _complexity_simulate_ornstein(
+            duration=duration, sampling_rate=sampling_rate, hurst_exponent=hurst_exponent, **kwargs
+        )
     else:
         signal = _complexity_simulate_mackeyglass(duration=duration, sampling_rate=sampling_rate, **kwargs)
     return signal
 
 
-
 # =============================================================================
 # Methods
 # =============================================================================
-def _complexity_simulate_mackeyglass(duration=10, sampling_rate=1000, x0=None, a=0.2, b=0.1, c=10.0, n=1000, discard=250):
+def _complexity_simulate_mackeyglass(
+    duration=10, sampling_rate=1000, x0=None, a=0.2, b=0.1, c=10.0, n=1000, discard=250
+):
     """Generate time series using the Mackey-Glass equation.
     Generates time series using the discrete approximation of the
     Mackey-Glass delay differential equation described by Grassberger &
@@ -94,10 +97,8 @@ def _complexity_simulate_mackeyglass(duration=10, sampling_rate=1000, x0=None, a
     B = a * tau / (2 * n + b * tau)
 
     for i in range(n - 1, grids - 1):
-        x[i + 1] = A * x[i] + B * (x[i - n] / (1 + x[i - n] ** c) +
-                                   x[i - n + 1] / (1 + x[i - n + 1] ** c))
-    return x[n * discard::sampling_rate]
-
+        x[i + 1] = A * x[i] + B * (x[i - n] / (1 + x[i - n] ** c) + x[i - n + 1] / (1 + x[i - n + 1] ** c))
+    return x[n * discard :: sampling_rate]
 
 
 def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, sigma=0.1, hurst_exponent=0.7):
@@ -122,9 +123,8 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, si
 
     # Integrate the process
     for i in range(1, length):
-        y[i] = y[i-1] - theta * y[i-1] * (1 / sampling_rate) + sigma * dB[i]
+        y[i] = y[i - 1] - theta * y[i - 1] * (1 / sampling_rate) + sigma * dB[i]
     return y
-
 
 
 def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
@@ -149,10 +149,14 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
     assert isinstance(hurst_exponent, float), "Hurst index must be a float in (0,1)"
 
     # Generate linspace
-    k = np.linspace(0, size-1, size)
+    k = np.linspace(0, size - 1, size)
 
     # Correlation function
-    cor = 0.5 * (np.abs(k - 1)**(2 * hurst_exponent) - 2 * np.abs(k)**(2 * hurst_exponent) + np.abs(k + 1)**(2 * hurst_exponent))
+    cor = 0.5 * (
+        np.abs(k - 1) ** (2 * hurst_exponent)
+        - 2 * np.abs(k) ** (2 * hurst_exponent)
+        + np.abs(k + 1) ** (2 * hurst_exponent)
+    )
 
     # Eigenvalues of the correlation function
     eigenvals = np.sqrt(np.fft.fft(np.concatenate([cor[:], 0, cor[1:][::-1]], axis=None).real))
@@ -162,14 +166,17 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
     gn2 = np.random.normal(0.0, 1.0, size)
 
     # This is the Davies–Harte method
-    w = np.concatenate([
+    w = np.concatenate(
+        [
             (eigenvals[0] / np.sqrt(2 * size)) * gn[0],
             (eigenvals[1:size] / np.sqrt(4 * size)) * (gn[1:] + 1j * gn2[1:]),
             (eigenvals[size] / np.sqrt(2 * size)) * gn2[0],
-            (eigenvals[size + 1:] / np.sqrt(4 * size)) * (gn[1:][::-1] - 1j * gn2[1:][::-1])
-            ], axis=None)
+            (eigenvals[size + 1 :] / np.sqrt(4 * size)) * (gn[1:][::-1] - 1j * gn2[1:][::-1]),
+        ],
+        axis=None,
+    )
 
     # Perform fft. Only first N entry are useful
-    f = np.fft.fft(w).real[:size] * ((1.0 / size)**hurst_exponent)
+    f = np.fft.fft(w).real[:size] * ((1.0 / size) ** hurst_exponent)
 
     return f

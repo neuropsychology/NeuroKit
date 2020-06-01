@@ -63,14 +63,13 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     r_vals, corr = _fractal_correlation(signal, r_vals, dist)
 
     # Corr_Dim method: https://github.com/jcvasquezc/Corr_Dim
-#    r_vals, corr = _fractal_correlation_Corr_Dim(embedded, r_vals, dist)
+    # r_vals, corr = _fractal_correlation_Corr_Dim(embedded, r_vals, dist)
 
     # Compute trend
     if len(corr) == 0:
         return np.nan
     else:
         d2 = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
-
 
     if show is True:
         _fractal_correlation_plot(r_vals, corr, d2)
@@ -101,7 +100,6 @@ def _fractal_correlation(signal, r_vals, dist):
     return r_vals, corr
 
 
-
 def _fractal_correlation_Corr_Dim(embedded, r_vals, dist):
     """
     References
@@ -110,7 +108,7 @@ def _fractal_correlation_Corr_Dim(embedded, r_vals, dist):
     """
     ED = dist[np.triu_indices_from(dist, k=1)]
 
-    Npairs = ((len(embedded[1, :])) * ((len(embedded[1, :]) - 1)))
+    Npairs = (len(embedded[1, :])) * ((len(embedded[1, :]) - 1))
     corr = np.zeros(len(r_vals))
 
     for i, r in enumerate(r_vals):
@@ -158,17 +156,12 @@ def _fractal_correlation_get_r(r, signal, dist, n=None):
     return r_vals
 
 
-
-
-
-
-
 def _fractal_correlation_plot(r_vals, corr, d2):
-    fit = 2**np.polyval(d2, np.log2(r_vals))
-    plt.loglog(r_vals, corr, 'bo')
-    plt.loglog(r_vals, fit, 'r', label=r'$D2$ = %0.3f' % d2[0])
-    plt.title('Correlation Dimension')
-    plt.xlabel(r'$\log_{2}$(r)')
-    plt.ylabel(r'$\log_{2}$(c)')
+    fit = 2 ** np.polyval(d2, np.log2(r_vals))
+    plt.loglog(r_vals, corr, "bo")
+    plt.loglog(r_vals, fit, "r", label=r"$D2$ = %0.3f" % d2[0])
+    plt.title("Correlation Dimension")
+    plt.xlabel(r"$\log_{2}$(r)")
+    plt.ylabel(r"$\log_{2}$(c)")
     plt.legend()
     plt.show()

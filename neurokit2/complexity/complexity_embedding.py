@@ -64,13 +64,15 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
 
     # Sanity checks
     if dimension * delay > N:
-        raise ValueError("NeuroKit error: complexity_embedding(): dimension * delay should be lower than length of signal.")
+        raise ValueError(
+            "NeuroKit error: complexity_embedding(): dimension * delay should be lower than length of signal."
+        )
     if delay < 1:
         raise ValueError("NeuroKit error: complexity_embedding(): 'delay' has to be at least 1.")
 
     Y = np.zeros((dimension, N - (dimension - 1) * delay))
     for i in range(dimension):
-        Y[i] = signal[i * delay:i * delay + Y.shape[1]]
+        Y[i] = signal[i * delay : i * delay + Y.shape[1]]
     embedded = Y.T
 
     if show is True:
@@ -103,25 +105,17 @@ def _embedding_plot(embedded):
 # Internal plots
 # =============================================================================
 
+
 def _embedding_plot_2D(embedded):
-    return plt.plot(embedded[:, 0], embedded[:, 1], color='#3F51B5')
+    return plt.plot(embedded[:, 0], embedded[:, 1], color="#3F51B5")
 
 
 def _embedding_plot_3D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0],
-                            y=embedded[:, 1],
-                            z=embedded[:, 2],
-                            color=embedded[:, 2],
-                            rotate=False)
+    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False)
 
 
 def _embedding_plot_4D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0],
-                            y=embedded[:, 1],
-                            z=embedded[:, 2],
-                            color=embedded[:, 3],
-                            rotate=False)
-
+    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False)
 
 
 # =============================================================================
@@ -137,17 +131,17 @@ def _plot_3D_colored(x, y, z, color=None, rotate=False):
 
     # Color
     norm = plt.Normalize(color.min(), color.max())
-    cmap = plt.get_cmap('plasma')
+    cmap = plt.get_cmap("plasma")
     colors = cmap(norm(color))
 
     # Plot
     fig = plt.figure()
-    ax = fig.gca(projection='3d')
+    ax = fig.gca(projection="3d")
 
     for i in range(len(x) - 1):
         seg = segments[i]
-        l, = ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i])
-        l.set_solid_capstyle('round')
+        (l,) = ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i])
+        l.set_solid_capstyle("round")
 
     if rotate is True:
         fig = _plot_3D_colored_rotate(fig, ax)
@@ -155,16 +149,12 @@ def _plot_3D_colored(x, y, z, color=None, rotate=False):
     return fig
 
 
-
 def _plot_3D_colored_rotate(fig, ax):
-
     def rotate(angle):
         ax.view_init(azim=angle)
 
-    fig = matplotlib.animation.FuncAnimation(fig,
-                                             rotate,
-                                             frames=np.arange(0, 361, 1),
-                                             interval=10,
-                                             cache_frame_data=False)
+    fig = matplotlib.animation.FuncAnimation(
+        fig, rotate, frames=np.arange(0, 361, 1), interval=10, cache_frame_data=False
+    )
 
     return fig

@@ -50,7 +50,7 @@ def entropy_shannon(signal):
     data_set = list(set(signal))
     freq_list = []
     for entry in data_set:
-        counter = 0.
+        counter = 0.0
         for i in signal:
             if i == entry:
                 counter += 1

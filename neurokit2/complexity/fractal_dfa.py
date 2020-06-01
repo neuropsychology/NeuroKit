@@ -5,7 +5,9 @@ import numpy as np
 from ..misc import expspace
 
 
-def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1, multifractal=False, q=2, show=False, **kwargs):
+def fractal_dfa(
+    signal, windows="default", overlap=True, integrate=True, order=1, multifractal=False, q=2, show=False, **kwargs
+):
     """(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)
 
     Python implementation of Detrended Fluctuation Analysis (DFA) or Multifractal DFA of a signal. Detrended fluctuation analysis, much like the Hurst exponent, is used to
@@ -102,7 +104,8 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
 # Utilities
 # =============================================================================
 
-def _fractal_dfa_findwindows(signal, n, windows='default'):
+
+def _fractal_dfa_findwindows(signal, n, windows="default"):
     # Convert to array
     if isinstance(windows, list):
         windows = np.asarray(windows)
@@ -113,7 +116,9 @@ def _fractal_dfa_findwindows(signal, n, windows='default'):
 
     # Default windows sequence
     if isinstance(windows, int):
-        windows = expspace(10, np.int(n / 10), windows, base=2)  # see https://github.com/neuropsychology/NeuroKit/issues/206
+        windows = expspace(
+            10, np.int(n / 10), windows, base=2
+        )  # see https://github.com/neuropsychology/NeuroKit/issues/206
         windows = np.unique(windows)  # keep only unique
 
     # Check windows
@@ -122,22 +127,19 @@ def _fractal_dfa_findwindows(signal, n, windows='default'):
     if np.min(windows) < 2:
         raise ValueError("NeuroKit error: fractal_dfa(): there must be at least 2 data points in each window")
     if np.max(windows) >= n:
-        raise ValueError("NeuroKit error: fractal_dfa(): the window cannot contain more data points than the time series.")
+        raise ValueError(
+            "NeuroKit error: fractal_dfa(): the window cannot contain more data points than the time series."
+        )
     return windows
-
-
 
 
 def _fractal_dfa_getwindow(signal, n, window, overlap=True):
     if overlap:
-        segments = np.array([signal[i:i + window] for i in np.arange(0, n - window, window // 2)])
+        segments = np.array([signal[i : i + window] for i in np.arange(0, n - window, window // 2)])
     else:
-        segments = signal[:n - (n % window)]
+        segments = signal[: n - (n % window)]
         segments = segments.reshape((signal.shape[0] // window, window))
     return segments
-
-
-
 
 
 def _fractal_dfa_trends(segments, window, order=1):
@@ -151,7 +153,6 @@ def _fractal_dfa_trends(segments, window, order=1):
     return trends
 
 
-
 def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2, rms=True):
 
     detrended = segments - trends
@@ -163,29 +164,27 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2, rms=True
 
     else:
         # Compute Root Mean Square (RMS)
-        fluctuation = np.sum(detrended**2, axis=1) / detrended.shape[1]
+        fluctuation = np.sum(detrended ** 2, axis=1) / detrended.shape[1]
         fluctuation = np.sqrt(np.sum(fluctuation) / len(fluctuation))
 
     return fluctuation
 
 
-
 def _fractal_dfa_plot(windows, fluctuations, dfa):
-    fluctfit = 2**np.polyval(dfa, np.log2(windows))
-    plt.loglog(windows, fluctuations, 'bo')
-    plt.loglog(windows, fluctfit, 'r', label=r'$\alpha$ = %0.3f' % dfa[0])
-    plt.title('DFA')
-    plt.xlabel(r'$\log_{2}$(Window)')
-    plt.ylabel(r'$\log_{2}$(Fluctuation)')
+    fluctfit = 2 ** np.polyval(dfa, np.log2(windows))
+    plt.loglog(windows, fluctuations, "bo")
+    plt.loglog(windows, fluctfit, "r", label=r"$\alpha$ = %0.3f" % dfa[0])
+    plt.title("DFA")
+    plt.xlabel(r"$\log_{2}$(Window)")
+    plt.ylabel(r"$\log_{2}$(Fluctuation)")
     plt.legend()
     plt.show()
-
-
 
 
 # =============================================================================
 #  Utils MDDFA
 # =============================================================================
+
 
 def _fractal_mfdfa_q(q=2):
     # TODO: Add log calculator for q ≈ 0
@@ -194,7 +193,7 @@ def _fractal_mfdfa_q(q=2):
     q = np.asarray_chkfinite(q, dtype=np.float)
 
     # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
-    q = q[(q < -.1) + (q > .1)]
+    q = q[(q < -0.1) + (q > 0.1)]
 
     # Reshape q to perform np.float_power
     q = q.reshape(-1, 1)

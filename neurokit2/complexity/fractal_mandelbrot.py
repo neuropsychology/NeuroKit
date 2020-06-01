@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def fractal_mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4, iterations=25, buddha=False, show=False):
+def fractal_mandelbrot(
+    size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4, iterations=25, buddha=False, show=False
+):
     """Generate a Mandelbrot (or a Buddhabrot) fractal
 
     Vectorized function to efficiently generate an array containing values corresponding to a Mandelbrot fractal.
@@ -55,16 +57,15 @@ def fractal_mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), t
     >>> plt.show() #doctest: +SKIP
     """
     if buddha is False:
-        img = _mandelbrot(size=size,
-                          real_range=real_range,
-                          imaginary_range=imaginary_range,
-                          threshold=threshold,
-                          iterations=iterations)
+        img = _mandelbrot(
+            size=size,
+            real_range=real_range,
+            imaginary_range=imaginary_range,
+            threshold=threshold,
+            iterations=iterations,
+        )
     else:
-        img = _buddhabrot(size=size,
-                          real_range=real_range,
-                          imaginary_range=imaginary_range,
-                          iterations=iterations)
+        img = _buddhabrot(size=size, real_range=real_range, imaginary_range=imaginary_range, iterations=iterations)
 
     if show is True:
         plt.imshow(img, cmap="rainbow")
@@ -74,11 +75,10 @@ def fractal_mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), t
     return img
 
 
-
-
 # =============================================================================
 # Internals
 # =============================================================================
+
 
 def _mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), iterations=25, threshold=4):
 
@@ -87,9 +87,9 @@ def _mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), iteratio
     optim = _mandelbrot_optimize(c)
 
     z = np.copy(c)
-    for i in range(1, iterations+1):
+    for i in range(1, iterations + 1):
         # Continue only where smaller than threshold
-        mask = (z*z.conjugate()).real < threshold
+        mask = (z * z.conjugate()).real < threshold
         mask = np.logical_and(mask, optim)
 
         if np.all(mask == False) is True:
@@ -99,12 +99,11 @@ def _mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), iteratio
         img[mask] += 1
 
         # Iterate based on Mandelbrot equation
-        z[mask] = z[mask]**2 + c[mask]
+        z[mask] = z[mask] ** 2 + c[mask]
 
     # Fill otpimized area
     img[~optim] = np.max(img)
     return img
-
 
 
 def _mandelbrot_initialize(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2)):
@@ -114,21 +113,17 @@ def _mandelbrot_initialize(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2
     img = np.full((height, width), 0)
 
     # Complex space
-    real = np.array([np.linspace(*real_range, width), ] * height)
-    imaginary = np.array([np.linspace(*imaginary_range, height), ] * width).T
-    c = 1j*imaginary
+    real = np.array([np.linspace(*real_range, width),] * height)
+    imaginary = np.array([np.linspace(*imaginary_range, height),] * width).T
+    c = 1j * imaginary
     c += real
 
     return img, c
 
 
-
-
-
 # =============================================================================
 # Buddhabrot
 # =============================================================================
-
 
 
 def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2)):
@@ -142,11 +137,13 @@ def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(
     size = np.int(size * (size / (x[1] - x[0])))
 
     img = np.zeros([size, size], int)
-    c = _buddhabrot_initialize(size=img.size, iterations=iterations, real_range=real_range, imaginary_range=imaginary_range)
+    c = _buddhabrot_initialize(
+        size=img.size, iterations=iterations, real_range=real_range, imaginary_range=imaginary_range
+    )
 
     # use these c-points as the initial 'z' points.
     z = np.copy(c)
-    while(len(z) > 0):
+    while len(z) > 0:
 
         # translate z points into image coordinates
         x = np.array((z.real + 2) / 4 * size, int)
@@ -166,7 +163,7 @@ def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(
     # Crop parts not asked for
     xrange = np.array((np.array(real_range) + 2) / 4 * size).astype(int)
     yrange = np.array((np.array(imaginary_range) + 2) / 4 * size).astype(int)
-    img = img[yrange[0]:yrange[0] + height, xrange[0]:xrange[0] + width]
+    img = img[yrange[0] : yrange[0] + height, xrange[0] : xrange[0] + width]
     return img
 
 
@@ -189,7 +186,7 @@ def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imagin
         # collect the c points that have escaped
         mask = np.abs(z) < 2
         new_sets = c[mask == False]
-        sets[sets_found:sets_found + len(new_sets)] = new_sets
+        sets[sets_found : sets_found + len(new_sets)] = new_sets
         sets_found += len(new_sets)
 
         # then shed those points from our test set before continuing.
@@ -199,9 +196,11 @@ def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imagin
     # return only the points that are not in the mset
     return sets[:sets_found]
 
+
 # =============================================================================
 # Utils
 # =============================================================================
+
 
 def _mandelbrot_optimize(c):
     # Optimizations: most of the mset points lie within the
@@ -211,11 +210,11 @@ def _mandelbrot_optimize(c):
     # see: http://en.wikipedia.org/wiki/Mandelbrot_set#Optimizations
 
     # First eliminate points within the cardioid
-    p = (((c.real - 0.25)**2) + (c.imag**2)) ** .5
-    mask1 = c.real > p - (2 * p**2) + 0.25
+    p = (((c.real - 0.25) ** 2) + (c.imag ** 2)) ** 0.5
+    mask1 = c.real > p - (2 * p ** 2) + 0.25
 
     # Next eliminate points within the period-2 bulb
-    mask2 = ((c.real + 1)**2) + (c.imag**2) > 0.0625
+    mask2 = ((c.real + 1) ** 2) + (c.imag ** 2) > 0.0625
 
     # Combine masks
     mask = np.logical_and(mask1, mask2)
