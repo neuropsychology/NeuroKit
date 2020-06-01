@@ -9,7 +9,8 @@ from .rescale import rescale
 
 
 def summary_plot(x, **kwargs):
-    """Descriptive plot
+    """
+    Descriptive plot.
 
     Visualize a distribution with density, histogram, boxplot and rugs plots all at once.
 
@@ -21,6 +22,7 @@ def summary_plot(x, **kwargs):
     >>> x = np.random.normal(size=100)
     >>> fig = nk.summary_plot(x)
     >>> fig #doctest: +SKIP
+
     """
 
     if "ax" in kwargs:

@@ -6,7 +6,7 @@ import scipy.stats
 
 def density(x, desired_length=100, bandwith=1, show=False):
     """
-    Density estimation
+    Density estimation.
 
     Computes kernel density estimates.
 
@@ -38,6 +38,7 @@ def density(x, desired_length=100, bandwith=1, show=False):
     >>> x, y2 = nk.density(signal, bandwith=1)
     >>> x, y3 = nk.density(signal, bandwith=2)
     >>> pd.DataFrame({"x": x, "y1": y1, "y2": y2, "y3": y3}).plot(x="x") #doctest: +SKIP
+
     """
     density_function = scipy.stats.gaussian_kde(x, bw_method="scott")
     density_function.set_bandwidth(bw_method=density_function.factor / bandwith)

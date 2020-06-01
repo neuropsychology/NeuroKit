@@ -5,7 +5,8 @@ import scipy.linalg
 
 
 def fit_loess(y, X=None, alpha=0.75, order=2):
-    """Local Polynomial Regression (LOESS)
+    """
+    Local Polynomial Regression (LOESS)
 
     Performs a LOWESS (LOcally WEighted Scatter-plot Smoother) regression.
 
@@ -44,6 +45,7 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
     References
     ----------
     - https://simplyor.netlify.com/loess-from-scratch-in-python-animation.en-us/
+
     """
     if X is None:
         X = np.linspace(0, 100, len(y))

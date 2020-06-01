@@ -6,7 +6,8 @@ from .mad import mad
 
 
 def standardize(data, robust=False):
-    """Standardization of data
+    """
+    Standardization of data.
 
     Performs a standardization of data (Z-scoring), i.e., centering and scaling,
     so that the data is expressed in terms of standard deviation
@@ -36,6 +37,7 @@ def standardize(data, robust=False):
     >>> y = nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)
     >>> z = nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan], "B": [3, 1, 2, 4, 6, 5]}))
     >>> z #doctest: +SKIP
+
     """
     # Return appropriate type
     if isinstance(data, list):

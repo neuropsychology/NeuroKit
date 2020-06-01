@@ -8,7 +8,8 @@ from .standardize import standardize
 
 
 def distance(X=None, method="mahalanobis"):
-    """Distance
+    """
+    Distance.
 
     Compute distance using different metrics.
 
@@ -35,6 +36,7 @@ def distance(X=None, method="mahalanobis"):
     >>> X = datasets.load_iris().data
     >>> vector = distance(X)
     >>> vector #doctest: +SKIP
+
     """
     if isinstance(X, pd.DataFrame) is False:
         X = pd.DataFrame(X)

@@ -86,6 +86,8 @@ Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of
 
 The first three commands will make some modifications to your code so that it is nicely formatted, while the two last will run some checks to detect any additional issues. Please try to fix them!
 
+*PS: If you want to check the whole package, just replace 'mufile;py' by 'neurokit2'.*
+
 Useful reads
 ------------
 

@@ -8,12 +8,9 @@ import sklearn.neighbors
 
 def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):
     """
-    Computes the (normalized) mutual information (MI) between two vectors from a
-    joint histogram. The mutual information of two variables is
-    a measure of the mutual dependence between them. More
-    specifically, it quantifies the "amount of information" obtained
-    about one variable by observing the other variable.
-
+    Computes the (normalized) mutual information (MI) between two vectors from a joint histogram. The mutual information
+    of two variables is a measure of the mutual dependence between them. More specifically, it quantifies the "amount of
+    information" obtained about one variable by observing the other variable.
 
     Parameters
     ----------
@@ -51,6 +48,7 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
     - Studholme, jhill & jhawkes (1998). "A normalized entropy measure
     of 3-D medical image alignment". in Proc. Medical Imaging 1998,
     vol. 3338, San Diego, CA, pp. 132-143.
+
     """
     method = method.lower()
     if method in ["varoquaux"]:
@@ -67,7 +65,8 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 # Methods
 # =============================================================================
 def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
-    """Based on Gael Varoquaux's implementation: https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
+    """
+    Based on Gael Varoquaux's implementation: https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
     """
     jh = np.histogram2d(x, y, bins=bins)[0]
 
@@ -92,10 +91,12 @@ def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
 def _mutual_information_nolitsa(x, y, bins=256):
     """
     Calculate the mutual information between two random variables.
+
     Calculates mutual information, I = S(x) + S(y) - S(x,y), between two
     random variables x and y, where S(x) is the Shannon entropy.
 
     Based on the nolitsa package: https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/delay.py#L72
+
     """
     p_x = np.histogram(x, bins)[0]
     p_y = np.histogram(y, bins)[0]
@@ -133,8 +134,8 @@ def _nearest_distances(X, k=1):
 
 
 def _entropy(X, k=1):
-    """ Returns the entropy of X.
-    From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
+    """
+    Returns the entropy of X. From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
 
     Parameters
     -----------
@@ -150,6 +151,7 @@ def _entropy(X, k=1):
     mutual information, Proc. R. Soc. A 464 (2093), 1203-1215.
     - Kraskov A, Stogbauer H, Grassberger P. (2004). Estimating mutual
     information. Phys Rev E 69(6 Pt 2):066138.
+
     """
 
     # Distance to kth nearest neighbor

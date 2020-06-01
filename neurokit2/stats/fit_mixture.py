@@ -5,7 +5,8 @@ import sklearn.mixture
 
 
 def fit_mixture(X=None, n_clusters=2):
-    """Gaussian Mixture Model
+    """
+    Gaussian Mixture Model.
 
     Performs a polynomial regression of given order.
 
@@ -37,6 +38,7 @@ def fit_mixture(X=None, n_clusters=2):
     >>> probs = nk.fit_mixture(x, n_clusters=2)
     >>> fig = nk.signal_plot([x, probs["Cluster_0"], probs["Cluster_1"]], standardize=True)
     >>> fig #doctest: +SKIP
+
     """
     if X.ndim == 1:
         X = X.reshape(-1, 1)

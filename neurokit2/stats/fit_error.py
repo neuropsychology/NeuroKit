@@ -3,7 +3,8 @@ import numpy as np
 
 
 def fit_error(y, y_predicted, n_parameters=2):
-    """Calculate the fit error for a model.
+    """
+    Calculate the fit error for a model.
 
     Also specific and direct access functions can be used, such as `fit_mse()`,
     `fit_rmse()` and `fit_r2()`.
@@ -50,6 +51,7 @@ def fit_error(y, y_predicted, n_parameters=2):
     >>>
     >>> nk.fit_r2(y, y_predicted, adjusted=True, n_parameters=2) #doctest: +ELLIPSIS
     0.057190958417936755
+
     """
 
     # Get information
