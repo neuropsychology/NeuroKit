@@ -1000,12 +1000,10 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
                     missed_section_peaks = peaks[indexes[-2] + 1 : indexes[-1]]
                     missed_section_peaks2 = []
                     for missed_peak in missed_section_peaks:
-                        if (
-                            missed_peak - signal_peaks[-2] > min_distance
-                            and signal_peaks[-1] - missed_peak > min_distance
-                            and detection[missed_peak] > threshold_I2
-                        ):
-                            missed_section_peaks2.append(missed_peak)
+                        if missed_peak - signal_peaks[-2] > min_distance:
+                            if signal_peaks[-1] - missed_peak > min_distance:
+                                if detection[missed_peak] > threshold_I2:
+                                    missed_section_peaks2.append(missed_peak)
 
                     if missed_section_peaks2:
                         missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]

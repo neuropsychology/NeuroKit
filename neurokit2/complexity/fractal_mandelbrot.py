@@ -113,8 +113,8 @@ def _mandelbrot_initialize(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2
     img = np.full((height, width), 0)
 
     # Complex space
-    real = np.array([np.linspace(*real_range, width),] * height)
-    imaginary = np.array([np.linspace(*imaginary_range, height),] * width).T
+    real = np.array([np.linspace(*real_range, width)] * height)
+    imaginary = np.array([np.linspace(*imaginary_range, height)] * width).T
     c = 1j * imaginary
     c += real
 
