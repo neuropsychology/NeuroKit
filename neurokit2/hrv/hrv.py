@@ -89,8 +89,7 @@ def hrv(peaks, sampling_rate=1000, show=False):
 def _hrv_plot(peaks, out, sampling_rate=1000):
 
     fig = plt.figure(constrained_layout=False)
-    spec = gs.GridSpec(ncols=2, nrows=2,
-                       height_ratios=[1, 1], width_ratios=[1, 1])
+    spec = gs.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
 
     # Arrange grids
     ax_distrib = fig.add_subplot(spec[0, :-1])
@@ -99,8 +98,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000):
 
     ax_psd = fig.add_subplot(spec[1, :-1])
 
-    spec_within = gs.GridSpecFromSubplotSpec(4, 4, subplot_spec=spec[:, -1],
-                                             wspace=0.025, hspace=0.05)
+    spec_within = gs.GridSpecFromSubplotSpec(4, 4, subplot_spec=spec[:, -1], wspace=0.025, hspace=0.05)
     ax_poincare = fig.add_subplot(spec_within[1:4, 0:3])
     ax_marg_x = fig.add_subplot(spec_within[0, 0:3])
     ax_marg_x.set_title("Poincaré Plot")
@@ -113,12 +111,9 @@ def _hrv_plot(peaks, out, sampling_rate=1000):
 
     # Poincare plot
     out.columns = [col.replace("HRV_", "") for col in out.columns]
-    _hrv_nonlinear_show(rri, out, ax=ax_poincare,
-                        ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
+    _hrv_nonlinear_show(rri, out, ax=ax_poincare, ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
 
     # PSD plot
-    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate,
-                                      interpolate=True)
+    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True)
     frequency_bands = out[["ULF", "VLF", "LF", "HF", "VHF"]]
-    _hrv_frequency_show(rri, frequency_bands,
-                        sampling_rate=sampling_rate, ax=ax_psd)
+    _hrv_frequency_show(rri, frequency_bands, sampling_rate=sampling_rate, ax=ax_psd)
