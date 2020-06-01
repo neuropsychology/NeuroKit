@@ -5,8 +5,6 @@ import numpy as np
 import pandas as pd
 import scipy.spatial
 
-import neurokit2 as nk
-
 from .complexity_delay import _embedding_delay_metric, _embedding_delay_plot, _embedding_delay_select
 from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn, _embedding_dimension_plot
 from .complexity_embedding import complexity_embedding

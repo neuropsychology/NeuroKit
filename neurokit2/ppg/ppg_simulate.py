@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.interpolate import Akima1DInterpolator
 
-from neurokit2.signal import signal_distort
+from ..signal import signal_distort
 
 
 def ppg_simulate(duration=120, sampling_rate=1000, heart_rate=70,
