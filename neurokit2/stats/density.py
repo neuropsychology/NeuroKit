@@ -4,7 +4,6 @@ import pandas as pd
 import scipy.stats
 
 
-
 def density(x, desired_length=100, bandwith=1, show=False):
     """
     Density estimation

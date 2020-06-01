@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.metrics.pairwise
-import matplotlib.pyplot as plt
 
 from .complexity_embedding import complexity_embedding
 

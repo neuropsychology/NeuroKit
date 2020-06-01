@@ -1,12 +1,12 @@
 # - * - coding: utf-8 - * -
+import matplotlib.patches
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.patches
 
+from ..stats import standardize
 from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_period import signal_period
-from ..stats import standardize
 
 
 def signal_fixpeaks(peaks, sampling_rate=1000, iterative=True, show=False,

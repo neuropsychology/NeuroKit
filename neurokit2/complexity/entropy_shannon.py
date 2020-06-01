@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
-
-
+import pandas as pd
 
 
 def entropy_shannon(signal):

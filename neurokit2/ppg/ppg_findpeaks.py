@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 import scipy.signal
 
-from ..signal import signal_smooth
-from ..signal import signal_formatpeaks
+from ..signal import signal_formatpeaks, signal_smooth
 
 
 def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi",

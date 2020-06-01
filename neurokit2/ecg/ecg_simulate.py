@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import scipy
 import math
 
-from ..signal import signal_resample
-from ..signal import signal_distort
+import numpy as np
+import scipy
+
+from ..signal import signal_distort, signal_resample
 
 
 def ecg_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
@@ -145,7 +145,7 @@ def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000,
                           desired_length=length,
                           desired_sampling_rate=sampling_rate)
 
-    return(ecg)
+    return ecg
 
 
 
@@ -233,7 +233,7 @@ def _ecg_simulate_ecgsyn(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfrat
     tecg = 0
     i = 0
     while i < len(rr):
-        tecg = tecg+rr[i]
+        tecg += rr[i]
         ip = int(np.round(tecg/dt))
         rrn[i:ip] = rr[i]
         i = ip
@@ -270,9 +270,7 @@ def _ecg_simulate_ecgsyn(sfecg=256, N=256, Anoise=0, hrmean=60, hrstd=1, lfhfrat
 
     # include additive uniformly distributed measurement noise
     eta = 2*np.random.uniform(len(z))-1
-    s = z + Anoise*eta
-
-    return s
+    return z + Anoise*eta  # Return signal
 
 
 def _ecg_simulate_derivsecgsyn(t, x, rr, ti, sfint, ai, bi):
@@ -330,5 +328,4 @@ def _ecg_simulate_rrprocess(flo=0.1, fhi=0.25, flostd=0.01, fhistd=0.01, lfhfrat
 
     xstd = np.std(x)
     ratio = rrstd/xstd
-    rr = rrmean + x*ratio
-    return rr
+    return rrmean + x*ratio  # Return RR

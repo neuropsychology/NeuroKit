@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
+import matplotlib.gridspec
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.gridspec
 
-from ..signal import signal_fixpeaks
 from ..ecg import ecg_peaks
-from .ecg_segment import ecg_segment
 from ..epochs import epochs_to_df
+from ..signal import signal_fixpeaks
 from ..stats import rescale
+from .ecg_segment import ecg_segment
 
 
 def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
@@ -53,7 +53,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
     peaks = np.where(ecg_signals["ECG_R_Peaks"] == 1)[0]
 
     # Prepare figure and set axes.
-    if show_type == 'default' or show_type == 'full':
+    if show_type in ['default', 'full']:
         if sampling_rate is not None:
             x_axis = np.linspace(0, ecg_signals.shape[0] / sampling_rate,
                                  ecg_signals.shape[0])
@@ -66,7 +66,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
             ax0.set_xlabel("Time (seconds)")
             ax1.set_xlabel("Time (seconds)")
             ax2.set_xlabel("Time (seconds)")
-        elif sampling_rate is None:
+        else:
             x_axis = np.arange(0, ecg_signals.shape[0])
             fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
             ax0.set_xlabel("Samples")
@@ -134,7 +134,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type='default'):
                 lines.append(line)
 
     # Plot artifacts
-    if show_type == 'artifacts' or show_type == 'full':
+    if show_type in ['artifacts', 'full']:
         if sampling_rate is None:
             raise ValueError("NeuroKit error: ecg_plot(): Sampling rate must"
                              "be specified for artifacts to be plotted.")

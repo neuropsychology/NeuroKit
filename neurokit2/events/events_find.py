@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
 import itertools
 
+import numpy as np
+import pandas as pd
+
 from ..signal import signal_binarize
-
-
-
 
 
 def events_find(event_channel, threshold="auto", threshold_keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0, discard_first=0, discard_last=0, event_labels=None, event_conditions=None):

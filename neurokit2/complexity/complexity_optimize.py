@@ -1,14 +1,13 @@
-import neurokit2 as nk
-import numpy as np
-import pandas as pd
-import scipy.spatial
 import matplotlib
 import matplotlib.collections
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import scipy.spatial
 
-from .complexity_embedding import complexity_embedding
-from .complexity_delay import _embedding_delay_metric, _embedding_delay_select, _embedding_delay_plot
+from .complexity_delay import _embedding_delay_metric, _embedding_delay_plot, _embedding_delay_select
 from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn, _embedding_dimension_plot
+from .complexity_embedding import complexity_embedding
 from .complexity_r import _optimize_r, _optimize_r_plot
 from .entropy_approximate import entropy_approximate
 
@@ -254,8 +253,8 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
             signal_entropy = _complexity_optimize_get_differential(signal_embedded, k=1)
 
             # calculate average of surrogates entropy
-            for inter in range(surrogate_iter):
-                surrogate, i, rmsd = _complexity_optimize_iaaft(signal)
+            for i in range(surrogate_iter):
+                surrogate, iterations, rmsd = _complexity_optimize_iaaft(signal)
                 surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _complexity_optimize_get_differential(surrogate_embedded, k=1)
                 surrogate_list.append(surrogate_entropy)

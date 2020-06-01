@@ -1,10 +1,10 @@
 # - * - coding: utf-8 - * -
-import numpy as np
 import matplotlib.pyplot as plt
-from .ecg_peaks import ecg_peaks
-from ..epochs import epochs_create
-from ..epochs import epochs_to_df
+import numpy as np
+
+from ..epochs import epochs_create, epochs_to_df
 from ..signal import signal_rate
+from .ecg_peaks import ecg_peaks
 
 
 def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):

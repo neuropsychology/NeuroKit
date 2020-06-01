@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 from .complexity_delay import complexity_delay
 from .complexity_dimension import complexity_dimension

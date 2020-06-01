@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial
-import matplotlib.pyplot as plt
 
 from .complexity_embedding import complexity_embedding
-
 
 
 def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
@@ -257,12 +256,12 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
     else:
         y = signal
 
-    if metric == 'cityblock':
+    if metric == 'chebyshev':
+        p = np.inf
+    elif metric == 'cityblock':
         p = 1
     elif metric == 'euclidean':
         p = 2
-    elif metric == 'chebyshev':
-        p = np.inf
     else:
         raise ValueError('Unknown metric.  Should be one of "cityblock", '
                          '"euclidean", or "chebyshev".')

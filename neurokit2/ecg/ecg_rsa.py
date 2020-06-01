@@ -2,12 +2,9 @@
 import numpy as np
 import pandas as pd
 
-from ..signal import signal_filter
-from ..signal import signal_resample
-from ..signal import signal_interpolate
-from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..rsp import rsp_process
-from ..signal import signal_rate
+from ..signal import signal_filter, signal_interpolate, signal_rate, signal_resample
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .ecg_rsp import ecg_rsp
 
 
@@ -159,8 +156,7 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
             rsa_values[i] = np.max(RRis) - np.min(RRis)
 
     if continuous is False:
-        rsa = {}
-        rsa["RSA_P2T_Mean"] = np.nanmean(rsa_values)
+        rsa = {'RSA_P2T_Mean': np.nanmean(rsa_values)}
         rsa["RSA_P2T_Mean_log"] = np.log(rsa["RSA_P2T_Mean"])
         rsa["RSA_P2T_SD"] = np.nanstd(rsa_values, ddof=1)
         rsa["RSA_P2T_NoRSA"] = len(pd.Series(rsa_values).index[pd.Series(rsa_values).isnull()])
@@ -200,20 +196,14 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
                          'Signal': zero_mean_filtered})
     time = time.set_index('Epoch Index')
 
-    epochs = []
-    for i in range(int(np.max(time.index.values))+1):
-        epochs.append(time.loc[i])
-
+    epochs = [time.loc[i] for i in range(int(np.max(time.index.values))+1)]
     variance = []
     for epoch in epochs:
         variance.append(np.log(epoch.var(axis=0) / 1000))  # convert ms
 
     variance = [row for row in variance if not np.isnan(row).any()]
 
-    rsa = {}
-    rsa["RSA_PorgesBohrer"] = pd.concat(variance).mean()
-
-    return rsa
+    return {'RSA_PorgesBohrer': pd.concat(variance).mean()}
 
 
 
@@ -299,11 +289,9 @@ def _ecg_rsa_cycles(signals):
 
     cycles_length = np.diff(inspiration_onsets)
 
-    rsp_cycles = {"RSP_Inspiration_Onsets": inspiration_onsets,
-                  "RSP_Expiration_Onsets": expiration_onsets,
-                  "RSP_Cycles_Length": cycles_length}
-
-    return(rsp_cycles)
+    return {"RSP_Inspiration_Onsets": inspiration_onsets,
+            "RSP_Expiration_Onsets": expiration_onsets,
+            "RSP_Cycles_Length": cycles_length}
 
 
 def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=1000):
@@ -314,19 +302,19 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
 
     if isinstance(ecg_signals, pd.DataFrame):
         ecg_cols = [col for col in ecg_signals.columns if 'ECG_Rate' in col]
-        if len(ecg_cols) == 0:
+        if ecg_cols:
+            ecg_period = ecg_signals[ecg_cols[0]].values
+
+        else:
             ecg_cols = [col for col in ecg_signals.columns if 'ECG_R_Peaks' in col]
-            if len(ecg_cols) == 0:
-                raise ValueError("NeuroKit error: _ecg_rsa_formatinput():"
-                                 "Wrong input, we couldn't extract"
-                                 "heart rate signal.")
-            else:
+            if ecg_cols:
                 ecg_period = signal_rate(rpeaks,
                                          sampling_rate=sampling_rate,
                                          desired_length=len(ecg_signals))
-        else:
-            ecg_period = ecg_signals[ecg_cols[0]].values
-
+            else:
+                raise ValueError("NeuroKit error: _ecg_rsa_formatinput():"
+                                 "Wrong input, we couldn't extract"
+                                 "heart rate signal.")
     if rsp_signals is None:
         rsp_cols = [col for col in ecg_signals.columns if 'RSP_Phase' in col]
         if len(rsp_cols) != 2:

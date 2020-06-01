@@ -2,8 +2,6 @@
 import numpy as np
 
 
-
-
 def fit_error(y, y_predicted, n_parameters=2):
     """Calculate the fit error for a model.
 
@@ -76,14 +74,11 @@ def fit_error(y, y_predicted, n_parameters=2):
     # R2 adjusted
     R2_adjusted = 1 - (1 - (1 - R2)) * (n - 1) / df
 
-
-    out = {"SSE": SSE,
-           "MSE": MSE,
-           "RMSE": RMSE,
-           "R2": R2,
-           "R2_adjusted": R2_adjusted}
-
-    return out
+    return {"SSE": SSE,
+            "MSE": MSE,
+            "RMSE": RMSE,
+            "R2": R2,
+            "R2_adjusted": R2_adjusted}
 
 # =============================================================================
 # Direct accessors

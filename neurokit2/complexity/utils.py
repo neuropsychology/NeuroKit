@@ -4,10 +4,6 @@ import sklearn.neighbors
 
 from .complexity_embedding import complexity_embedding
 
-
-
-
-
 # =============================================================================
 # Phi
 # =============================================================================
@@ -79,7 +75,6 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", distance='chebyshev
         embedded -= np.mean(embedded, axis=1, keepdims=True)
         count = _get_count_fuzzy(embedded, r=r, distance=distance, n=1)
 
-
     return embedded, count
 
 
@@ -90,8 +85,8 @@ def _get_count(embedded, r, distance="chebyshev"):
     """
     """
     kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
-    count = kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
-    return count
+    # Return the count
+    return kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
 
 
 def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
@@ -102,8 +97,8 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
         sim = np.exp(-dist**n / r)
     else:
         sim = np.exp(-dist / r)
-    count = np.sum(sim, axis=0)
-    return count
+    # Return the count
+    return np.sum(sim, axis=0)
 
 
 # =============================================================================
@@ -193,5 +188,5 @@ def _get_coarsegrained(signal, scale=2, force=False):
     else:
         j = n // scale
     x = np.reshape(signal[0:j*scale], (j, scale))
-    coarsed = np.mean(x, axis=1)
-    return coarsed
+    # Return the coarsed time series
+    return np.mean(x, axis=1)

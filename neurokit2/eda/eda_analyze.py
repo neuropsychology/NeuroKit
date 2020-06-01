@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-
 from .eda_eventrelated import eda_eventrelated
 from .eda_intervalrelated import eda_intervalrelated
 

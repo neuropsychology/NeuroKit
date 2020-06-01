@@ -2,8 +2,8 @@
 import numpy as np
 import scipy.signal
 
-from ..signal import signal_filter
 from ..misc import as_vector
+from ..signal import signal_filter
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
@@ -148,9 +148,7 @@ def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
 
     b, a = scipy.signal.butter(order, [f1*2, f2*2], btype='bandpass')
 
-    filtered = scipy.signal.lfilter(b, a, ecg_signal)
-
-    return filtered
+    return scipy.signal.lfilter(b, a, ecg_signal)  # Return filtered
 
 
 
@@ -170,9 +168,7 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
 
     b, a = scipy.signal.butter(2, [f1*2, f2*2], btype='bandpass')
 
-    filtered = scipy.signal.lfilter(b, a, ecg_signal)
-
-    return filtered
+    return scipy.signal.lfilter(b, a, ecg_signal)  # Return filtered
 
 
 
@@ -190,9 +186,7 @@ def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
 
     b, a = scipy.signal.butter(1, [f1*2, f2*2], btype='bandpass')
 
-    filtered = scipy.signal.lfilter(b, a, ecg_signal)
-
-    return filtered
+    return scipy.signal.lfilter(b, a, ecg_signal)  # Return filtered
 
 
 
@@ -210,6 +204,4 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
     f1 = 48/sampling_rate
     f2 = 52/sampling_rate
     b, a = scipy.signal.butter(4, [f1*2, f2*2], btype='bandstop')
-    filtered = scipy.signal.lfilter(b, a, ecg_signal)
-
-    return filtered
+    return scipy.signal.lfilter(b, a, ecg_signal)  # Return filtered

@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ..signal import signal_resample
-
 
 
 def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolation", impute_missing=True):
@@ -73,9 +72,8 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
         signal = np.array(file.named_channels[channel].data)
 
         # Fill signal interruptions
-        if impute_missing is True:
-            if np.isnan(np.sum(signal)):
-                signal = pd.Series(signal).fillna(method="pad").values
+        if impute_missing is True and np.isnan(np.sum(signal)):
+            signal = pd.Series(signal).fillna(method="pad").values
 
         # Resample if necessary
         if file.named_channels[channel].samples_per_second != sampling_rate:

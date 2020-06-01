@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-
 from .emg_eventrelated import emg_eventrelated
 from .emg_intervalrelated import emg_intervalrelated
 

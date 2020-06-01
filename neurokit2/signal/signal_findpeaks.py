@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
-import scipy.signal
 import scipy.misc
+import scipy.signal
 
+from ..misc import as_vector, find_closest
 from ..stats import standardize
 from .signal_zerocrossings import signal_zerocrossings
-from ..misc import find_closest
-from ..misc import as_vector
 
 
 def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_min=None, relative_height_max=None, relative_mean=True, relative_median=False, relative_max=False):

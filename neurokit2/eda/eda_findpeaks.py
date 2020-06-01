@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import scipy.signal
 
-from ..signal import signal_smooth
-from ..signal import signal_zerocrossings
-from ..signal import signal_findpeaks
-from ..signal import signal_formatpeaks
+from ..signal import signal_findpeaks, signal_formatpeaks, signal_smooth, signal_zerocrossings
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):

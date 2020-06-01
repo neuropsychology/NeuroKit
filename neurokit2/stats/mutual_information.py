@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
-import sklearn.neighbors
-import scipy.special
+import pandas as pd
 import scipy.ndimage
-
-
-
+import scipy.special
+import sklearn.neighbors
 
 
 def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):

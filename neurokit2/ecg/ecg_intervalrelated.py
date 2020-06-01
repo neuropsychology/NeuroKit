@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ..hrv import hrv
 
@@ -105,8 +105,6 @@ def _ecg_intervalrelated_formatinput(data, output={}):
         raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
                          "we couldn't extract heart rate. Please make sure"
                          "your DataFrame contains an `ECG_Rate` column.")
-        return output
-
     signal = data["ECG_Rate"].values
     output["ECG_Rate_Mean"] = np.mean(signal)
 
@@ -121,7 +119,6 @@ def _ecg_intervalrelated_hrv(data, sampling_rate, output={}):
         raise ValueError("NeuroKit error: ecg_intervalrelated(): Wrong input,"
                          "we couldn't extract R-peaks. Please make sure"
                          "your DataFrame contains an `ECG_R_Peaks` column.")
-        return output
 
     # Transform rpeaks from "signal" format to "info" format.
     rpeaks = np.where(data["ECG_R_Peaks"].values)[0]

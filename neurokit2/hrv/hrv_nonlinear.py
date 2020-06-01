@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
+import matplotlib.patches
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.patches
 
 from ..complexity.entropy_sample import entropy_sample
-from .hrv_utils import _hrv_sanitize_input
-from .hrv_utils import _hrv_get_rri
+from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     """ Computes nonlinear indices of Heart Rate Variability (HRV).

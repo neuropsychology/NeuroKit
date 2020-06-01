@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import pytest
 import numpy as np
 import numpy.random
+import pytest
 
-from neurokit2.signal.signal_fixpeaks import (_find_artifacts,
-                                              _correct_artifacts,
-                                              signal_fixpeaks)
+from neurokit2.signal.signal_fixpeaks import _correct_artifacts, _find_artifacts, signal_fixpeaks
 
 
 def compute_rmssd(peaks):

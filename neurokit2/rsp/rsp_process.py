@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from .rsp_clean import rsp_clean
-from .rsp_phase import rsp_phase
-from .rsp_peaks import rsp_peaks
-from .rsp_amplitude import rsp_amplitude
 from ..signal import signal_rate
+from .rsp_amplitude import rsp_amplitude
+from .rsp_clean import rsp_clean
+from .rsp_peaks import rsp_peaks
+from .rsp_phase import rsp_phase
 
 
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):

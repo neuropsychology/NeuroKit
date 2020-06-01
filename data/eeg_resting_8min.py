@@ -1,8 +1,9 @@
-import TruScanEEGpy
-import neurokit2 as nk
-import pandas as pd
-import numpy as np
 import mne
+import numpy as np
+import pandas as pd
+import TruScanEEGpy
+
+import neurokit2 as nk
 
 # Read original file (too big to be uploaded on github)
 raw = mne.io.read_raw_edf("eeg_restingstate_3000hz.edf", preload=True)

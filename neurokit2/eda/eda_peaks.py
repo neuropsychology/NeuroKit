@@ -3,10 +3,10 @@
 import numpy as np
 import pandas as pd
 
+from ..misc import find_closest
+from ..signal import signal_formatpeaks
 from .eda_findpeaks import eda_findpeaks
 from .eda_fixpeaks import eda_fixpeaks
-from ..signal import signal_formatpeaks
-from ..misc import find_closest
 
 
 def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):

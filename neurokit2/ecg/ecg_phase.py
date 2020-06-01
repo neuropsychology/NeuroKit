@@ -3,9 +3,8 @@ import numpy as np
 import pandas as pd
 
 from ..signal import signal_phase
-from .ecg_peaks import ecg_peaks
 from .ecg_delineate import ecg_delineate
-
+from .ecg_peaks import ecg_peaks
 
 
 def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', sampling_rate=None):
@@ -111,9 +110,11 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', samp
     ventricular_comletion = signal_phase(ventricular, method="percent")
 
 
-    out = pd.DataFrame({"ECG_Phase_Atrial": atrial,
-                        "ECG_Phase_Completion_Atrial": atrial_completion,
-                        "ECG_Phase_Ventricular": ventricular,
-                        "ECG_Phase_Completion_Ventricular": ventricular_comletion})
-
-    return out
+    return pd.DataFrame(
+        {
+            "ECG_Phase_Atrial": atrial,
+            "ECG_Phase_Completion_Atrial": atrial_completion,
+            "ECG_Phase_Ventricular": ventricular,
+            "ECG_Phase_Completion_Ventricular": ventricular_comletion,
+        }
+    )
