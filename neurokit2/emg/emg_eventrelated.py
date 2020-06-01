@@ -5,7 +5,6 @@ import pandas as pd
 from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_sanitizeinput, _eventrelated_sanitizeoutput
 
 
-
 def emg_eventrelated(epochs, silent=False):
     """Performs event-related EMG analysis on epochs.
 

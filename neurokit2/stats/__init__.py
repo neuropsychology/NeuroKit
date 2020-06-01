@@ -17,7 +17,6 @@ from .standardize import standardize
 from .summary import summary_plot
 
 
-
 __all__ = [
     "standardize",
     "hdi",

@@ -12,7 +12,6 @@ from .complexity_r import _optimize_r, _optimize_r_plot
 from .entropy_approximate import entropy_approximate
 
 
-
 def complexity_optimize(
     signal,
     delay_max=100,

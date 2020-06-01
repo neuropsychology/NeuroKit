@@ -18,7 +18,6 @@ from .signal import *
 from .stats import *
 
 
-
 # Info
 __version__ = "0.0.35"
 

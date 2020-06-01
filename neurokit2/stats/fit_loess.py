@@ -4,7 +4,6 @@ import pandas as pd
 import scipy.linalg
 
 
-
 def fit_loess(y, X=None, alpha=0.75, order=2):
     """
     Local Polynomial Regression (LOESS)

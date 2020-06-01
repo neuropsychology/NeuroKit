@@ -2,7 +2,6 @@
 import numpy as np
 
 
-
 def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurst_exponent=0.5, **kwargs):
     """Simulate chaotic time series.
 

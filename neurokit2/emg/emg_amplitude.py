@@ -6,7 +6,6 @@ import scipy.signal
 from ..signal import signal_filter
 
 
-
 def emg_amplitude(emg_cleaned):
     """Compute electromyography (EMG) amplitude.
 

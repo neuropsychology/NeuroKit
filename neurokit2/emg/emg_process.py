@@ -6,7 +6,6 @@ from .emg_amplitude import emg_amplitude
 from .emg_clean import emg_clean
 
 
-
 def emg_process(emg_signal, sampling_rate=1000):
     """Process a electromyography (EMG) signal.
 

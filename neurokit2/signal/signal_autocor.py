@@ -1,7 +1,6 @@
 import numpy as np
 
 
-
 def signal_autocor(signal, lag=None, normalize=True):
     """
     Auto-correlation of a 1-dimensional sequences.

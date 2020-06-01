@@ -2,7 +2,6 @@
 from .signal_period import signal_period
 
 
-
 def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_order="cubic"):
     """Calculate signal rate from a series of peaks.
 

@@ -5,7 +5,6 @@ import pandas as pd
 from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_sanitizeinput, _eventrelated_sanitizeoutput
 
 
-
 def eda_eventrelated(epochs, silent=False):
     """Performs event-related EDA analysis on epochs.
 

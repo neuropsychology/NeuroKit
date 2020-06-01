@@ -9,7 +9,6 @@ from ..misc import as_vector
 from ..rsp import rsp_process
 
 
-
 def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
     """Automated processing of bio signals.
 

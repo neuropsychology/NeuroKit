@@ -6,7 +6,6 @@ from ..signal import signal_interpolate
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
-
 def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     """Compute respiratory amplitude.
 

@@ -21,7 +21,6 @@ from .ecg_segment import ecg_segment
 from .ecg_simulate import ecg_simulate
 
 
-
 __all__ = [
     "ecg_simulate",
     "ecg_clean",

@@ -9,7 +9,6 @@ from ..emg.emg_analyze import emg_analyze
 from ..rsp.rsp_analyze import rsp_analyze
 
 
-
 def bio_analyze(data, sampling_rate=1000, method="auto"):
     """Automated analysis of bio signals.
 

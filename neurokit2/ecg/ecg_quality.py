@@ -10,7 +10,6 @@ from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
 
 
-
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000):
     """
     Quality of ECG Signal.

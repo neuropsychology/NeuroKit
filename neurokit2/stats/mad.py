@@ -2,7 +2,6 @@
 import numpy as np
 
 
-
 def mad(x, constant=1.4826):
     """
     Median Absolute Deviation: a "robust" version of standard deviation.

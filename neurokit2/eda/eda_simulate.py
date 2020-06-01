@@ -4,7 +4,6 @@ import numpy as np
 from ..signal import signal_distort, signal_merge
 
 
-
 def eda_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, scr_number=1, drift=-0.01, random_state=None
 ):

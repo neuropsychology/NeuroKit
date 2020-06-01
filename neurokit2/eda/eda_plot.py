@@ -7,7 +7,6 @@ import pandas as pd
 from ..misc import find_closest
 
 
-
 def eda_plot(eda_signals, sampling_rate=None):
     """Visualize electrodermal activity (EDA) data.
 

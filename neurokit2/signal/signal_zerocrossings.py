@@ -2,7 +2,6 @@
 import numpy as np
 
 
-
 def signal_zerocrossings(signal):
     """Locate the indices where the signal crosses zero.
 

@@ -8,7 +8,6 @@ from .density import density
 from .rescale import rescale
 
 
-
 def summary_plot(x, **kwargs):
     """
     Descriptive plot.

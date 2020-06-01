@@ -6,7 +6,6 @@ from ..events.events_find import _events_find_label
 from ..misc import listify
 
 
-
 def epochs_create(
     data,
     events=None,

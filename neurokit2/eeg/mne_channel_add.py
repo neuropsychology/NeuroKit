@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 
 
-
 def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_index_raw=0, sync_index_channel=0):
     """Add channel as array to MNE
 

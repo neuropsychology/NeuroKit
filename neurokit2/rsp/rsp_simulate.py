@@ -4,7 +4,6 @@ import numpy as np
 from ..signal import signal_distort, signal_simulate, signal_smooth
 
 
-
 def rsp_simulate(
     duration=10,
     length=None,

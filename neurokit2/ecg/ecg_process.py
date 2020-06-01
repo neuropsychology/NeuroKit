@@ -9,7 +9,6 @@ from .ecg_phase import ecg_phase
 from .ecg_quality import ecg_quality
 
 
-
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     """
     Process an ECG signal.

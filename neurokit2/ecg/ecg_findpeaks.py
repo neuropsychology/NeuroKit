@@ -9,7 +9,6 @@ import scipy.stats
 from ..signal import signal_findpeaks, signal_plot, signal_smooth, signal_zerocrossings
 
 
-
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
     """
     Find R-peaks in an ECG signal.

@@ -8,7 +8,6 @@ from ..stats import standardize
 from .signal_zerocrossings import signal_zerocrossings
 
 
-
 def signal_findpeaks(
     signal,
     height_min=None,

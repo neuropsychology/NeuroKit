@@ -5,7 +5,6 @@ import numpy as np
 import pandas as pd
 
 
-
 def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     """
     Plot events in signal.

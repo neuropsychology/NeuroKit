@@ -10,7 +10,6 @@ from .hrv_time import hrv_time
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-
 def hrv(peaks, sampling_rate=1000, show=False):
     """ Computes indices of Heart Rate Variability (HRV).
 

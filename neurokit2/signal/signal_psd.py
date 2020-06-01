@@ -4,7 +4,6 @@ import pandas as pd
 import scipy.signal
 
 
-
 def signal_psd(
     signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None
 ):

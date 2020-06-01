@@ -1,7 +1,6 @@
 from ..signal import signal_filter
 
 
-
 def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     """
     Extract ECG Derived Respiration (EDR)

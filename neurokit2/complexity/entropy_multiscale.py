@@ -7,7 +7,6 @@ from .entropy_sample import entropy_sample
 from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide
 
 
-
 def entropy_multiscale(
     signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs
 ):

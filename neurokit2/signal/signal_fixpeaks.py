@@ -9,7 +9,6 @@ from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_period import signal_period
 
 
-
 def signal_fixpeaks(
     peaks,
     sampling_rate=1000,

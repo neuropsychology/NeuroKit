@@ -2,7 +2,6 @@
 import numpy as np
 
 
-
 def fit_error(y, y_predicted, n_parameters=2):
     """
     Calculate the fit error for a model.

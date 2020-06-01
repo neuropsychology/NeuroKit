@@ -6,7 +6,6 @@ from ..misc import find_closest
 from .density import density
 
 
-
 def hdi(x, ci=0.95, show=False, **kwargs):
     """
     Highest Density Interval (HDI)

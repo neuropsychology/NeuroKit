@@ -5,7 +5,6 @@ import pandas as pd
 from ..signal import signal_filter, signal_smooth
 
 
-
 def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
 

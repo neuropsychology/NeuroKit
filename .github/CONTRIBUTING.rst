@@ -77,7 +77,7 @@ Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of
 
 .. code-block::
 
-    isort myfile.py --recursive -l 120 --multi-line 3 --lines-between-types 1 --lines-after-imports 3 --balanced
+    isort myfile.py --recursive -l 120 --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --balanced
     black myfile.py --line-length 120
     docformatter myfile.py --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line --in-place
     

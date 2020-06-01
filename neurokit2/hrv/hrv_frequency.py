@@ -8,7 +8,6 @@ from ..signal.signal_psd import signal_psd
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-
 def hrv_frequency(
     peaks,
     sampling_rate=1000,

@@ -11,7 +11,6 @@ from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
 
 
-
 def ecg_delineate(
     ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type="peaks", check=False
 ):

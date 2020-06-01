@@ -5,7 +5,6 @@ import mpl_toolkits.mplot3d
 import numpy as np
 
 
-
 def complexity_embedding(signal, delay=1, dimension=3, show=False):
     """Time-delay embedding of a time series (a signal)
 

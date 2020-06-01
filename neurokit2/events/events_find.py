@@ -7,7 +7,6 @@ import pandas as pd
 from ..signal import signal_binarize
 
 
-
 def events_find(
     event_channel,
     threshold="auto",

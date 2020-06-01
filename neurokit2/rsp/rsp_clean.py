@@ -6,7 +6,6 @@ from ..misc import as_vector
 from ..signal import signal_detrend, signal_filter
 
 
-
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """Preprocess a respiration (RSP) signal.
 

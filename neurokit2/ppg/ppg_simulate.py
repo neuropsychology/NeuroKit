@@ -7,7 +7,6 @@ import scipy.interpolate
 from ..signal import signal_distort
 
 
-
 def ppg_simulate(
     duration=120,
     sampling_rate=1000,

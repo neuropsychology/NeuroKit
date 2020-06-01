@@ -5,7 +5,6 @@ import pandas as pd
 from .utils import _get_embedded, _get_r, _phi
 
 
-
 def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
     """Approximate entropy (ApEn)
 

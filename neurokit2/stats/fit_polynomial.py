@@ -5,7 +5,6 @@ import pandas as pd
 from .fit_error import fit_rmse
 
 
-
 def fit_polynomial(y, X=None, order=2):
     """
     Polynomial Regression.

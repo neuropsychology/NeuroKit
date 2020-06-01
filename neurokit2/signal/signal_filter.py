@@ -3,7 +3,6 @@ import numpy as np
 import scipy.signal
 
 
-
 def signal_filter(
     signal,
     sampling_rate=1000,

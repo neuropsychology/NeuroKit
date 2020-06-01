@@ -7,7 +7,6 @@ import scipy.spatial
 from .standardize import standardize
 
 
-
 def distance(X=None, method="mahalanobis"):
     """
     Distance.

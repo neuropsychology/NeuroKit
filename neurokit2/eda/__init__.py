@@ -15,7 +15,6 @@ from .eda_process import eda_process
 from .eda_simulate import eda_simulate
 
 
-
 __all__ = [
     "eda_simulate",
     "eda_clean",

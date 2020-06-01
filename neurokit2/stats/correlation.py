@@ -5,7 +5,6 @@ import pandas as pd
 import scipy.stats
 
 
-
 def cor(x, y, method="pearson", show=False):
     """
     Density estimation.

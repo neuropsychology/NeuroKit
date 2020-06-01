@@ -5,7 +5,6 @@ import numpy as np
 from ..misc import expspace
 
 
-
 def fractal_dfa(
     signal, windows="default", overlap=True, integrate=True, order=1, multifractal=False, q=2, show=False, **kwargs
 ):

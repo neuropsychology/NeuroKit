@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 
 
-
 def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
     """Extract extrema in a respiration (RSP) signal.
 

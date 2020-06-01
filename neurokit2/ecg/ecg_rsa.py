@@ -8,7 +8,6 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .ecg_rsp import ecg_rsp
 
 
-
 def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
     """
     Respiratory Sinus Arrhythmia (RSA)

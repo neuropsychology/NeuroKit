@@ -9,7 +9,6 @@ from ..signal import signal_power, signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
-
 def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     """Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
 

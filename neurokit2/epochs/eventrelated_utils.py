@@ -7,7 +7,6 @@ from ..stats import fit_r2
 from .epochs_to_df import _df_to_epochs
 
 
-
 def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
     # Sanity checks
     if isinstance(epochs, pd.DataFrame):

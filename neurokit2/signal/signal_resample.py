@@ -5,7 +5,6 @@ import scipy.ndimage
 import scipy.signal
 
 
-
 def signal_resample(
     signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"
 ):
