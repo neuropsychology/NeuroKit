@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ..signal import signal_resample
-
 
 
 def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolation", impute_missing=True):
