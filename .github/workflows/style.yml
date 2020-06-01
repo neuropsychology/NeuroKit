@@ -44,6 +44,12 @@ jobs:
         pip install pylint
         # See http://pylint.pycqa.org/en/latest/index.html
         pylint neurokit2 --max-line-length=127 --ignore=E303, R0913, R0801, C0114 --variable-naming-style=any --argument-naming-style=any
+        
+    - name: Check docstrings with docformatter
+      run: |
+        pip install docformatter
+        # See https://github.com/myint/docformatter 
+        docformatter neurokit2 --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line
 
     - name: Build package and test with twine
       run: |
