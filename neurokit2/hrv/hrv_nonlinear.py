@@ -58,6 +58,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     >>>
     >>> # Compute HRV indices
     >>> hrv = nk.hrv_nonlinear(peaks, sampling_rate=100, show=True)
+    >>> hrv #doctest: +SKIP
 
     References
     ----------
@@ -99,11 +100,15 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     return out
 
 
-def _hrv_nonlinear_show(rri, out, ax=None):
+def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
 
     mean_heart_period = np.mean(rri)
     sd1 = out["SD1"]
     sd2 = out["SD2"]
+    if isinstance(sd1, pd.Series):
+        sd1 = float(sd1)
+    if isinstance(sd2, pd.Series):
+        sd2 = float(sd2)
     ax1 = rri[:-1]
     ax2 = rri[1:]
 
@@ -120,13 +125,14 @@ def _hrv_nonlinear_show(rri, out, ax=None):
     ax2_max = max(ax2) + ax2_lim
 
     # Prepare figure
-    if ax is None:
+    if ax is None and ax_marg_x is None and ax_marg_y is None:
         gs = matplotlib.gridspec.GridSpec(4, 4)
         fig = plt.figure(figsize=(8, 8))
         ax_marg_x = plt.subplot(gs[0, 0:3])
         ax_marg_y = plt.subplot(gs[1:4, 3])
         ax = plt.subplot(gs[1:4, 0:3])
         gs.update(wspace=0.025, hspace=0.05)  # Reduce spaces
+        plt.suptitle('Poincaré Plot')
     else:
         fig = None
 
@@ -147,21 +153,21 @@ def _hrv_nonlinear_show(rri, out, ax=None):
 
     # Marginal densities
     ax_marg_x.hist(ax1, bins=int(len(ax1)/10), density=True, alpha=1,
-                   color='#c2e2ff', edgecolor='none')
+                   color='#ccdff0', edgecolor='none')
     ax_marg_y.hist(ax2, bins=int(len(ax2)/10), density=True, alpha=1,
-                   color='#c2e2ff', edgecolor='none', orientation='horizontal',
+                   color='#ccdff0', edgecolor='none', orientation='horizontal',
                    zorder=1)
     kde1 = scipy.stats.gaussian_kde(ax1)
     x1_plot = np.linspace(ax1_min, ax1_max, len(ax1))
     x1_dens = kde1.evaluate(x1_plot)
 
-    ax_marg_x.fill(x1_plot, x1_dens, facecolor='none', edgecolor='#257ccc',
+    ax_marg_x.fill(x1_plot, x1_dens, facecolor='none', edgecolor='#1b6aaf',
                    alpha=0.8, linewidth=2)
     kde2 = scipy.stats.gaussian_kde(ax2)
     x2_plot = np.linspace(ax2_min, ax2_max, len(ax2))
     x2_dens = kde2.evaluate(x2_plot)
     ax_marg_y.fill_betweenx(x2_plot, x2_dens, facecolor="none",
-                            edgecolor="#257ccc",
+                            edgecolor="#1b6aaf",
                             linewidth=2, alpha=0.8, zorder=2)
 
     # Turn off marginal axes labels
@@ -207,7 +213,6 @@ def _hrv_nonlinear_show(rri, out, ax=None):
 
     ax.set_xlabel(r'$RR_{n} (ms)$')
     ax.set_ylabel(r'$RR_{n+1} (ms)$')
-    plt.suptitle('Poincaré Plot')
-    plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
+    ax.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
 
     return fig
