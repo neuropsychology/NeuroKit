@@ -346,9 +346,7 @@ def _rsp_simulate_breathmetrics_original(
 
 
 def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000, respiratory_rate=15):
-    """
-    
-    """
+
     n_cycles = int(respiratory_rate / 60 * duration)
 
     # Loop until it doesn't fail

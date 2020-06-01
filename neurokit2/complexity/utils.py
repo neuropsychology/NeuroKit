@@ -86,9 +86,6 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", distance="chebyshev
 # Get Count
 # =============================================================================
 def _get_count(embedded, r, distance="chebyshev"):
-    """
-    
-    """
     kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
     # Return the count
     return kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)

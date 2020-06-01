@@ -157,9 +157,7 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 def _embedding_delay_plot(
     signal, metric_values, tau_sequence, tau=1, metric="Mutual Information", ax0=None, ax1=None, plot="2D"
 ):
-    """
-    
-    """
+
     # Prepare figure
     if ax0 is None and ax1 is None:
         fig = plt.figure(constrained_layout=False)

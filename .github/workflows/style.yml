@@ -43,7 +43,7 @@ jobs:
       run: |
         pip install pylint
         # See http://pylint.pycqa.org/en/latest/index.html
-        pylint neurokit2 --max-line-length=127 --ignore=E303, R0913, R0801, C0114 --variable-naming-style=any --argument-naming-style=any
+        pylint neurokit2 --max-line-length=127 --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --variable-naming-style=any --argument-naming-style=any --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle
         
     - name: Check docstrings with docformatter
       run: |
