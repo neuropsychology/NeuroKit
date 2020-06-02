@@ -27,8 +27,9 @@ def mad(x, constant=1.4826):
     References
     -----------
     - https://en.wikipedia.org/wiki/Median_absolute_deviation
+
     """
     median = np.nanmedian(np.ma.array(x).compressed())
     mad = np.nanmedian(np.abs(x - median))
-    mad = mad*constant
+    mad = mad * constant
     return mad

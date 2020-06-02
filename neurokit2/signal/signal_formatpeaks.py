@@ -4,7 +4,8 @@ import pandas as pd
 
 
 def signal_formatpeaks(info, desired_length, peak_indices=None):
-    """Transforms an peak-info dict to a signal of given length.
+    """
+    Transforms an peak-info dict to a signal of given length.
     """
     if peak_indices is None:
         peak_indices = [key for key in info.keys() if "Peaks" in key]
@@ -25,8 +26,11 @@ def signal_formatpeaks(info, desired_length, peak_indices=None):
 
 
 def _signal_from_indices(indices, desired_length=None, value=1):
-    """Generates array of 0 and given values at given indices. Used in *_findpeaks to
-    transform vectors of peak indices to signal.
+    """
+    Generates array of 0 and given values at given indices.
+
+    Used in *_findpeaks to transform vectors of peak indices to signal.
+
     """
     signal = np.zeros(desired_length)
 
@@ -34,18 +38,16 @@ def _signal_from_indices(indices, desired_length=None, value=1):
     if isinstance(indices[0], np.float):
         indices = indices[~np.isnan(indices)].astype(np.int)
 
-
     if isinstance(value, int) or isinstance(value, float):
         signal[indices] = value
     else:
         if len(value) != len(indices):
-            raise ValueError("NeuroKit error: _signal_from_indices(): The number of values "
-                             "is different from the number of indices.")
+            raise ValueError(
+                "NeuroKit error: _signal_from_indices(): The number of values "
+                "is different from the number of indices."
+            )
         signal[indices] = value
     return signal
-
-
-
 
 
 def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
@@ -61,8 +63,10 @@ def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
     if isinstance(peaks, pd.DataFrame):
         col = [col for col in peaks.columns if key in col]
         if len(col) == 0:
-            raise TypeError("NeuroKit error: _signal_formatpeaks(): wrong type of input ",
-                            "provided. Please provide indices of peaks.")
+            raise TypeError(
+                "NeuroKit error: _signal_formatpeaks(): wrong type of input ",
+                "provided. Please provide indices of peaks.",
+            )
         peaks_signal = peaks[col[0]].values
         peaks = np.where(peaks_signal == 1)[0]
         if desired_length is None:
@@ -71,12 +75,11 @@ def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
     if isinstance(peaks, dict):
         col = [col for col in list(peaks.keys()) if key in col]
         if len(col) == 0:
-            raise TypeError("NeuroKit error: _signal_formatpeaks(): wrong type of input ",
-                            "provided. Please provide indices of peaks.")
+            raise TypeError(
+                "NeuroKit error: _signal_formatpeaks(): wrong type of input ",
+                "provided. Please provide indices of peaks.",
+            )
         peaks = peaks[col[0]]
-
-
-
 
     # Retrieve length.
     try:  # Detect if single peak
@@ -88,8 +91,9 @@ def _signal_formatpeaks_sanitize(peaks, desired_length=None, key="Peaks"):
         desired_length = len(peaks)
 
     if desired_length < len(peaks):
-        raise ValueError("NeuroKit error: _signal_formatpeaks(): 'desired_length' cannot",
-                         " be lower than the length of the signal. Please input a greater 'desired_length'.")
-
+        raise ValueError(
+            "NeuroKit error: _signal_formatpeaks(): 'desired_length' cannot",
+            " be lower than the length of the signal. Please input a greater 'desired_length'.",
+        )
 
     return peaks, desired_length

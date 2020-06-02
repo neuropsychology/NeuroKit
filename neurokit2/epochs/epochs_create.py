@@ -6,7 +6,16 @@ from ..events.events_find import _events_find_label
 from ..misc import listify
 
 
-def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_end=1, event_labels=None, event_conditions=None, baseline_correction=False):
+def epochs_create(
+    data,
+    events=None,
+    sampling_rate=1000,
+    epochs_start=0,
+    epochs_end=1,
+    event_labels=None,
+    event_conditions=None,
+    baseline_correction=False,
+):
     """
     Epoching a dataframe.
 
@@ -66,6 +75,7 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
     >>>
     >>> # Chunk into n blocks of 1 second
     >>> epochs = nk.epochs_create(data, sampling_rate=100, epochs_end=1)
+
     """
 
     # Santize data input
@@ -78,7 +88,7 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
     # Sanitize events input
     if events is None:
         max_duration = (np.max(epochs_end) - np.min(epochs_start)) * sampling_rate
-        events = np.arange(0, len(data)-max_duration, max_duration)
+        events = np.arange(0, len(data) - max_duration, max_duration)
     if isinstance(events, int):
         events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:
@@ -86,17 +96,17 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
 
     event_onsets = list(events["onset"])
     event_labels = list(events["label"])
-    if 'condition' in events.keys():
+    if "condition" in events.keys():
         event_conditions = list(events["condition"])
 
-
     # Create epochs
-    parameters = listify(onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end)
+    parameters = listify(
+        onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end
+    )
 
     # Find the maximum numbers of samples in an epoch
     parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
-    epoch_max_duration = int(max((i * sampling_rate
-                                  for i in parameters["duration"])))
+    epoch_max_duration = int(max((i * sampling_rate for i in parameters["duration"])))
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
@@ -115,11 +125,13 @@ def epochs_create(data, events=None, sampling_rate=1000, epochs_start=0, epochs_
         end = parameters["onset"][i] + (parameters["end"][i] * sampling_rate)
 
         # Slice dataframe
-        epoch = data.iloc[int(start):int(end)].copy()
+        epoch = data.iloc[int(start) : int(end)].copy()
 
         # Correct index
         epoch["Index"] = epoch.index.values - length_buffer
-        epoch.index = np.linspace(start=parameters["start"][i], stop=parameters["end"][i], num=len(epoch), endpoint=True)
+        epoch.index = np.linspace(
+            start=parameters["start"][i], stop=parameters["end"][i], num=len(epoch), endpoint=True
+        )
 
         if baseline_correction is True:
             baseline_end = 0 if epochs_start <= 0 else epochs_start

@@ -7,7 +7,7 @@ import scipy.stats
 
 def cor(x, y, method="pearson", show=False):
     """
-    Density estimation
+    Density estimation.
 
     Computes kernel density estimates.
 
@@ -33,6 +33,7 @@ def cor(x, y, method="pearson", show=False):
     >>> y = [3, 1, 5, 6, 6]
     >>> corr = nk.cor(x, y, method="pearson", show=True)
     >>> corr #doctest: +SKIP
+
     """
     r, p = _cor_methods(x, y, method)
 
@@ -59,12 +60,11 @@ def _cor_methods(x, y, method="pearson"):
     return r, p
 
 
-
 def _cor_plot(x, y):
 
     # Create scatter
-    plt.plot(x, y, 'o')
+    plt.plot(x, y, "o")
 
     # Add regresion line
     m, b = np.polyfit(x, y, 1)
-    plt.plot(np.array(x), m*np.array(x) + b)
+    plt.plot(np.array(x), m * np.array(x) + b)

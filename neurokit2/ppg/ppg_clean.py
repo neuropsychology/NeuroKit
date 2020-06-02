@@ -5,7 +5,8 @@ from ..signal import signal_filter
 
 
 def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
-    """Clean a photoplethysmogram (PPG) signal.
+    """
+    Clean a photoplethysmogram (PPG) signal.
 
     Prepare a raw PPG signal for systolic peak detection.
 
@@ -40,6 +41,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
     >>> plt.plot(ppg, label="raw PPG") #doctest: +SKIP
     >>> plt.plot(ppg_clean, label="clean PPG") #doctest: +SKIP
     >>> plt.legend() #doctest: +SKIP
+
     """
     ppg_signal = as_vector(ppg_signal)
 
@@ -47,14 +49,14 @@ def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
     if method in ["elgendi"]:
         clean = _ppg_clean_elgendi(ppg_signal, sampling_rate)
     else:
-        raise ValueError("Neurokit error: Please use one of the following"
-                         " methods: 'elgendi'.")
+        raise ValueError("Neurokit error: Please use one of the following methods: 'elgendi'.")
 
     return clean
 
 
 def _ppg_clean_elgendi(ppg_signal, sampling_rate):
 
-    filtered = signal_filter(ppg_signal, sampling_rate=sampling_rate,
-                             lowcut=.5, highcut=8, order=3, method="butter_ba")
+    filtered = signal_filter(
+        ppg_signal, sampling_rate=sampling_rate, lowcut=0.5, highcut=8, order=3, method="butter_ba"
+    )
     return filtered

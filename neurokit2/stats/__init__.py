@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 from .correlation import cor
 from .density import density
@@ -14,4 +16,23 @@ from .rescale import rescale
 from .standardize import standardize
 from .summary import summary_plot
 
-__all__ = ["standardize", "hdi", "mad", "cor", "density", "distance", "rescale", "fit_loess", "fit_polynomial", "fit_polynomial_findorder", "fit_mixture", "fit_error", "fit_mse", "fit_rmse", "fit_r2", "mutual_information", "summary_plot"]
+
+__all__ = [
+    "standardize",
+    "hdi",
+    "mad",
+    "cor",
+    "density",
+    "distance",
+    "rescale",
+    "fit_loess",
+    "fit_polynomial",
+    "fit_polynomial_findorder",
+    "fit_mixture",
+    "fit_error",
+    "fit_mse",
+    "fit_rmse",
+    "fit_r2",
+    "mutual_information",
+    "summary_plot",
+]

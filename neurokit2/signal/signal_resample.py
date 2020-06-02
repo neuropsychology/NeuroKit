@@ -5,8 +5,11 @@ import scipy.ndimage
 import scipy.signal
 
 
-def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"):
-    """Resample a continuous signal to a different length or sampling rate.
+def signal_resample(
+    signal, desired_length=None, sampling_rate=None, desired_sampling_rate=None, method="interpolation"
+):
+    """
+    Resample a continuous signal to a different length or sampling rate.
 
     Up- or down-sample a signal. The user can specify either a desired length for the vector, or input the original sampling rate and the desired sampling rate. See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of the methods.
 
@@ -62,13 +65,14 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     See Also
     --------
     scipy.signal.resample_poly, scipy.signal.resample, scipy.ndimage.zoom
+
     """
     if desired_length is None:
         desired_length = int(np.round(len(signal) * desired_sampling_rate / sampling_rate))
 
     # Sanity checks
     if len(signal) == desired_length:
-        return(signal)
+        return signal
 
     # Resample
     if method.lower() == "fft":
@@ -82,14 +86,13 @@ def signal_resample(signal, desired_length=None, sampling_rate=None, desired_sam
     else:
         resampled = _resample_interpolation(signal, desired_length)
 
-    return(resampled)
-
-
+    return resampled
 
 
 # =============================================================================
 # Methods
 # =============================================================================
+
 
 def _resample_numpy(signal, desired_length):
     resampled_signal = np.interp(
@@ -97,31 +100,31 @@ def _resample_numpy(signal, desired_length):
         np.linspace(0.0, 1.0, len(signal), endpoint=False),  # known positions
         signal,  # known data points
     )
-    return(resampled_signal)
+    return resampled_signal
 
 
 def _resample_interpolation(signal, desired_length):
-    resampled_signal = scipy.ndimage.zoom(signal, desired_length/len(signal))
-    return(resampled_signal)
+    resampled_signal = scipy.ndimage.zoom(signal, desired_length / len(signal))
+    return resampled_signal
 
 
 def _resample_fft(signal, desired_length):
     resampled_signal = scipy.signal.resample(signal, desired_length)
-    return(resampled_signal)
+    return resampled_signal
 
 
 def _resample_poly(signal, desired_length):
     resampled_signal = scipy.signal.resample_poly(signal, desired_length, len(signal))
-    return(resampled_signal)
+    return resampled_signal
 
 
 def _resample_pandas(signal, desired_length):
     # Convert to Time Series
-    index = pd.date_range('20131212', freq='L', periods=len(signal))
+    index = pd.date_range("20131212", freq="L", periods=len(signal))
     resampled_signal = pd.Series(signal, index=index)
 
     # Create resampling factor
-    resampling_factor = str(np.round(1/(desired_length / len(signal)), 6)) + "L"
+    resampling_factor = str(np.round(1 / (desired_length / len(signal)), 6)) + "L"
 
     # Resample
     resampled_signal = resampled_signal.resample(resampling_factor).bfill().values
@@ -129,12 +132,13 @@ def _resample_pandas(signal, desired_length):
     # Sanitize
     resampled_signal = _resample_sanitize(resampled_signal, desired_length)
 
-    return(resampled_signal)
+    return resampled_signal
 
 
 # =============================================================================
 # Internals
 # =============================================================================
+
 
 def _resample_sanitize(resampled_signal, desired_length):
     # Adjust extremities

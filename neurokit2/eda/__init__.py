@@ -1,4 +1,6 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 
 from .eda_analyze import eda_analyze
 from .eda_autocor import eda_autocor
@@ -14,4 +16,19 @@ from .eda_plot import eda_plot
 from .eda_process import eda_process
 from .eda_simulate import eda_simulate
 
-__all__ = ["eda_simulate", "eda_clean", "eda_phasic", "eda_findpeaks", "eda_fixpeaks", "eda_peaks", "eda_process", "eda_plot", "eda_eventrelated", "eda_intervalrelated", "eda_analyze", "eda_autocor", "eda_changepoints"]
+
+__all__ = [
+    "eda_simulate",
+    "eda_clean",
+    "eda_phasic",
+    "eda_findpeaks",
+    "eda_fixpeaks",
+    "eda_peaks",
+    "eda_process",
+    "eda_plot",
+    "eda_eventrelated",
+    "eda_intervalrelated",
+    "eda_analyze",
+    "eda_autocor",
+    "eda_changepoints",
+]

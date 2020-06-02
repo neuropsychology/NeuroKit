@@ -48,7 +48,7 @@ olerance (similarity threshold). It corresponds to the filtering level - max abs
     method = method.lower()
     if method in ["traditional"]:
         r = 0.2 * np.std(signal, ddof=1)
-    elif method in ["maxapen", 'optimize']:
+    elif method in ["maxapen", "optimize"]:
         r = _optimize_r(signal, delay=delay, dimension=dimension, show=show)
     return r
 
@@ -77,6 +77,7 @@ def _optimize_r(signal, delay=None, dimension=None, show=False):
 
     return r
 
+
 def _optimize_r_plot(r, r_range, ApEn, ax=None):
 
     if ax is None:
@@ -84,10 +85,10 @@ def _optimize_r_plot(r, r_range, ApEn, ax=None):
     else:
         fig = None
     ax.set_title("Optimization of Tolerence Threshold (r)")
-    ax.set_xlabel('Tolerence threshold $r$')
-    ax.set_ylabel('Approximate Entropy $ApEn$')
-    ax.plot(r_range, ApEn, 'bo-', label='$ApEn$', color='#80059c')
-    ax.axvline(x=r, color='#E91E63', label='Optimal r: ' + str(np.round(r, 3)))
-    ax.legend(loc='upper right')
+    ax.set_xlabel("Tolerence threshold $r$")
+    ax.set_ylabel("Approximate Entropy $ApEn$")
+    ax.plot(r_range, ApEn, "bo-", label="$ApEn$", color="#80059c")
+    ax.axvline(x=r, color="#E91E63", label="Optimal r: " + str(np.round(r, 3)))
+    ax.legend(loc="upper right")
 
     return fig

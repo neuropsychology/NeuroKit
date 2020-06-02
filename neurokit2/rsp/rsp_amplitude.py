@@ -7,7 +7,8 @@ from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
 def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
-    """Compute respiratory amplitude.
+    """
+    Compute respiratory amplitude.
 
     Compute respiratory amplitude given the raw respiration signal and its
     extrema.
@@ -46,25 +47,25 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     >>> amplitude = nk.rsp_amplitude(cleaned, signals)
     >>> fig = nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
     >>> fig #doctest: +SKIP
+
     """
     # Format input.
-    peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs,
-                                                            len(rsp_cleaned))
+    peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, len(rsp_cleaned))
 
     # To consistenty calculate amplitude, peaks and troughs must have the same
     # number of elements, and the first trough must precede the first peak.
     if (peaks.size != troughs.size) or (peaks[0] <= troughs[0]):
-        raise TypeError("NeuroKit error: Please provide one of the containers ",
-                        "returned by `rsp_findpeaks()` as `extrema` argument and do ",
-                        "not modify its content.")
-
+        raise TypeError(
+            "NeuroKit error: Please provide one of the containers ",
+            "returned by `rsp_findpeaks()` as `extrema` argument and do ",
+            "not modify its content.",
+        )
 
     # Calculate amplitude in units of the raw signal, based on vertical
     # difference of each peak to the preceding trough.
     amplitude = rsp_cleaned[peaks] - rsp_cleaned[troughs]
 
     # Interpolate amplitude to desired_length samples.
-    amplitude = signal_interpolate(peaks, amplitude,
-                                   desired_length=desired_length)
+    amplitude = signal_interpolate(peaks, amplitude, desired_length=desired_length)
 
     return amplitude

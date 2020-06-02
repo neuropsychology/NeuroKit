@@ -7,8 +7,11 @@ from .entropy_sample import entropy_sample
 from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide
 
 
-def entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs):
-    """Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version
+def entropy_multiscale(
+    signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs
+):
+    """
+    Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version.
 
     Python implementations of the multiscale entropy (MSE), the composite multiscale entropy (CMSE), the refined composite multiscale entropy (RCMSE) or their fuzzy version (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).
 
@@ -69,23 +72,27 @@ def entropy_multiscale(signal, scale="default", dimension=2, r="default", compos
     - Norris, P. R., Anderson, S. M., Jenkins, J. M., Williams, A. E., & Morris Jr, J. A. (2008).
         Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients. Shock, 30(1), 17-22.
     - Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012). Adaptive computation of multiscale entropy and its application in EEG signals for monitoring depth of anesthesia during surgery. Entropy, 14(6), 978-992.
-    """
-    return _entropy_multiscale(signal,
-                               scale=scale,
-                               dimension=dimension,
-                               r=r,
-                               composite=composite,
-                               fuzzy=fuzzy,
-                               refined=refined,
-                               show=show,
-                               **kwargs)
 
+    """
+    return _entropy_multiscale(
+        signal,
+        scale=scale,
+        dimension=dimension,
+        r=r,
+        composite=composite,
+        fuzzy=fuzzy,
+        refined=refined,
+        show=show,
+        **kwargs
+    )
 
 
 # =============================================================================
 # Internal
 # =============================================================================
-def _entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, refined=False, show=False, **kwargs):
+def _entropy_multiscale(
+    signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, refined=False, show=False, **kwargs
+):
 
     r = _get_r(signal, r=r, dimension=dimension)
     scale_factors = _get_scale(signal, scale=scale, dimension=dimension)
@@ -140,6 +147,7 @@ def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
         mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
 
     return np.mean(mse_y)
+
 
 def _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs):
     y = _get_coarsegrained_rolling(signal, tau)

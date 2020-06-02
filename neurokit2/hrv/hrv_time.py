@@ -8,7 +8,8 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_time(peaks, sampling_rate=1000, show=False):
-    """ Computes time-domain indices of Heart Rate Variability (HRV).
+    """
+    Computes time-domain indices of Heart Rate Variability (HRV).
 
      See references for details.
 
@@ -66,6 +67,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
       Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
     variability metrics and norms. Frontiers in public health, 5, 258.
+
     """
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
@@ -103,14 +105,14 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     if show:
         _hrv_time_show(rri)
 
-    out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
+    out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
 
 def _hrv_time_show(rri, **kwargs):
 
     fig = summary_plot(rri, **kwargs)
-    plt.xlabel('R-R intervals (ms)')
+    plt.xlabel("R-R intervals (ms)")
     fig.suptitle("Distribution of R-R intervals")
 
     return fig

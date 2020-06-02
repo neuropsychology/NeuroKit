@@ -8,7 +8,8 @@ from ..misc import find_closest
 
 
 def eda_plot(eda_signals, sampling_rate=None):
-    """Visualize electrodermal activity (EDA) data.
+    """
+    Visualize electrodermal activity (EDA) data.
 
     Parameters
     ----------
@@ -27,6 +28,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     See Also
     --------
     eda_process
+
     """
     # Determine peaks, onsets, and half recovery.
     peaks = np.where(eda_signals["SCR_Peaks"] == 1)[0]
@@ -39,8 +41,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     last_ax = fig.get_axes()[-1]
     if sampling_rate is not None:
         last_ax.set_xlabel("Seconds")
-        x_axis = np.linspace(0, len(eda_signals) / sampling_rate,
-                             len(eda_signals))
+        x_axis = np.linspace(0, len(eda_signals) / sampling_rate, len(eda_signals))
     else:
         last_ax.set_xlabel("Samples")
         x_axis = np.arange(0, len(eda_signals))
@@ -49,46 +50,39 @@ def eda_plot(eda_signals, sampling_rate=None):
 
     # Plot cleaned and raw respiration as well as peaks and troughs.
     ax0.set_title("Raw and Cleaned Signal")
-    fig.suptitle('Electrodermal Activity (EDA)', fontweight='bold')
+    fig.suptitle("Electrodermal Activity (EDA)", fontweight="bold")
 
-    ax0.plot(x_axis, eda_signals["EDA_Raw"], color='#B0BEC5', label='Raw',
-             zorder=1)
-    ax0.plot(x_axis, eda_signals["EDA_Clean"], color='#9C27B0',
-             label='Cleaned', linewidth=1.5, zorder=1)
-    ax0.legend(loc='upper right')
+    ax0.plot(x_axis, eda_signals["EDA_Raw"], color="#B0BEC5", label="Raw", zorder=1)
+    ax0.plot(x_axis, eda_signals["EDA_Clean"], color="#9C27B0", label="Cleaned", linewidth=1.5, zorder=1)
+    ax0.legend(loc="upper right")
 
     # Plot skin cnoductance response.
     ax1.set_title("Skin Conductance Response (SCR)")
 
     # Plot Phasic.
-    ax1.plot(x_axis, eda_signals["EDA_Phasic"], color='#E91E63', label='Phasic Component', linewidth=1.5, zorder=1)
+    ax1.plot(x_axis, eda_signals["EDA_Phasic"], color="#E91E63", label="Phasic Component", linewidth=1.5, zorder=1)
 
     # Mark segments.
-    risetime_coord, amplitude_coord, halfr_coord = _eda_plot_dashedsegments(eda_signals, ax1, x_axis, onsets, peaks, half_recovery)
+    risetime_coord, amplitude_coord, halfr_coord = _eda_plot_dashedsegments(
+        eda_signals, ax1, x_axis, onsets, peaks, half_recovery
+    )
 
-    risetime = matplotlib.collections.LineCollection(risetime_coord,
-                                                     colors='#FFA726',
-                                                     linewidths=1,
-                                                     linestyle='dashed')
+    risetime = matplotlib.collections.LineCollection(risetime_coord, colors="#FFA726", linewidths=1, linestyle="dashed")
     ax1.add_collection(risetime)
 
-    amplitude = matplotlib.collections.LineCollection(amplitude_coord,
-                                                      colors='#1976D2',
-                                                      linewidths=1,
-                                                      linestyle='solid')
+    amplitude = matplotlib.collections.LineCollection(
+        amplitude_coord, colors="#1976D2", linewidths=1, linestyle="solid"
+    )
     ax1.add_collection(amplitude)
 
-    halfr = matplotlib.collections.LineCollection(halfr_coord,
-                                                  colors='#FDD835',
-                                                  linewidths=1, linestyle='dashed')
+    halfr = matplotlib.collections.LineCollection(halfr_coord, colors="#FDD835", linewidths=1, linestyle="dashed")
     ax1.add_collection(halfr)
-    ax1.legend(loc='upper right')
+    ax1.legend(loc="upper right")
 
     # Plot Tonic.
     ax2.set_title("Skin Conductance Level (SCL)")
-    ax2.plot(x_axis, eda_signals["EDA_Tonic"], color='#673AB7',
-             label='Tonic Component', linewidth=1.5)
-    ax2.legend(loc='upper right')
+    ax2.plot(x_axis, eda_signals["EDA_Tonic"], color="#673AB7", label="Tonic Component", linewidth=1.5)
+    ax2.legend(loc="upper right")
     plt.show()
     return fig
 
@@ -98,9 +92,19 @@ def eda_plot(eda_signals, sampling_rate=None):
 # =============================================================================
 def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recovery):
     # Mark onsets, peaks, and half-recovery.
-    scat_onset = ax.scatter(x_axis[onsets], eda_signals["EDA_Phasic"][onsets], color='#FFA726', label="SCR - Onsets", zorder=2)
-    scat_peak = ax.scatter(x_axis[peaks], eda_signals["EDA_Phasic"][peaks], color='#1976D2', label="SCR - Peaks", zorder=2)
-    scat_halfr = ax.scatter(x_axis[half_recovery], eda_signals["EDA_Phasic"][half_recovery], color='#FDD835', label='SCR - Half recovery', zorder=2)
+    scat_onset = ax.scatter(
+        x_axis[onsets], eda_signals["EDA_Phasic"][onsets], color="#FFA726", label="SCR - Onsets", zorder=2
+    )
+    scat_peak = ax.scatter(
+        x_axis[peaks], eda_signals["EDA_Phasic"][peaks], color="#1976D2", label="SCR - Peaks", zorder=2
+    )
+    scat_halfr = ax.scatter(
+        x_axis[half_recovery],
+        eda_signals["EDA_Phasic"][half_recovery],
+        color="#FDD835",
+        label="SCR - Half recovery",
+        zorder=2,
+    )
     end_onset = pd.Series(eda_signals["EDA_Phasic"][onsets].values, eda_signals["EDA_Phasic"][peaks].index)
     scat_endonset = ax.scatter(x_axis[end_onset.index], end_onset.values, alpha=0)
 
@@ -120,8 +124,7 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
 
     peak_list = []
     for i, index in enumerate(half_recovery):
-        value = find_closest(recovery_x_values[i], peak_x_values,
-                             direction="smaller", strictly=False)
+        value = find_closest(recovery_x_values[i], peak_x_values, direction="smaller", strictly=False)
         peak_list.append(value)
 
     peak_index = []

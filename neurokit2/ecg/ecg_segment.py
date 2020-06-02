@@ -46,35 +46,28 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
      ...
      '19':              Signal  Index Label
      ...}
+
     """
     # Sanitize inputs
     if rpeaks is None:
-        _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate,
-                              correct_artifacts=True)
+        _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate, correct_artifacts=True)
         rpeaks = rpeaks["ECG_R_Peaks"]
 
-    epochs_start, epochs_end = _ecg_segment_window(rpeaks=rpeaks,
-                                                   sampling_rate=sampling_rate)
-    heartbeats = epochs_create(ecg_cleaned,
-                               rpeaks,
-                               sampling_rate=sampling_rate,
-                               epochs_start=epochs_start,
-                               epochs_end=epochs_end)
+    epochs_start, epochs_end = _ecg_segment_window(rpeaks=rpeaks, sampling_rate=sampling_rate)
+    heartbeats = epochs_create(
+        ecg_cleaned, rpeaks, sampling_rate=sampling_rate, epochs_start=epochs_start, epochs_end=epochs_end
+    )
 
     if show:
         heartbeats_plot = epochs_to_df(heartbeats)
-        heartbeats_pivoted = heartbeats_plot.pivot(index='Time',
-                                                   columns='Label',
-                                                   values='Signal')
+        heartbeats_pivoted = heartbeats_plot.pivot(index="Time", columns="Label", values="Signal")
         plt.plot(heartbeats_pivoted)
-        plt.xlabel('Time (s)')
+        plt.xlabel("Time (s)")
         plt.title("Individual Heart Beats")
-        cmap = iter(plt.cm.YlOrRd(
-                np.linspace(0, 1,
-                            num=int(heartbeats_plot["Label"].nunique()))))
+        cmap = iter(plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats_plot["Label"].nunique()))))
         lines = []
         for x, color in zip(heartbeats_pivoted, cmap):
-            line, = plt.plot(heartbeats_pivoted[x], color=color)
+            (line,) = plt.plot(heartbeats_pivoted[x], color=color)
             lines.append(line)
 
     return heartbeats
@@ -89,11 +82,11 @@ def _ecg_segment_window(heart_rate=None, rpeaks=None, sampling_rate=1000):
         heart_rate = np.mean(signal_rate(rpeaks, sampling_rate=sampling_rate))
 
     # Modulator
-    m = heart_rate/60
+    m = heart_rate / 60
 
     # Window
-    epochs_start = -0.35/m
-    epochs_end = 0.5/m
+    epochs_start = -0.35 / m
+    epochs_end = 0.5 / m
 
     # Adjust for high heart rates
     if heart_rate >= 80:

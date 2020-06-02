@@ -4,7 +4,8 @@ import pandas as pd
 
 
 def rescale(data, to=[0, 1]):
-    """Rescale data.
+    """
+    Rescale data.
 
     Rescale a numeric variable to a new range.
 
@@ -27,6 +28,7 @@ def rescale(data, to=[0, 1]):
     >>>
     >>> nk.rescale(data=[3, 1, 2, 4, 6], to=[0, 1]) #doctest: +ELLIPSIS
     [0.4, 0.0, 0.2, 0.6000000000000001, 1.0]
+
     """
 
     # Return appropriate type
@@ -38,10 +40,8 @@ def rescale(data, to=[0, 1]):
     return data
 
 
-
-
-
-
-
+# =============================================================================
+# Internals
+# =============================================================================
 def _rescale(data, to=[0, 1]):
     return (to[1] - to[0]) / (np.nanmax(data) - np.nanmin(data)) * (data - np.nanmin(data)) + to[0]

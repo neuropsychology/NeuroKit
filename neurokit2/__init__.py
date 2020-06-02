@@ -1,4 +1,6 @@
-"""Top-level package for NeuroKit."""
+"""
+Top-level package for NeuroKit.
+"""
 import datetime
 
 from .bio import *
@@ -17,25 +19,26 @@ from .rsp import *
 from .signal import *
 from .stats import *
 
-# Info
-__version__ = '0.0.35'
 
+# Info
+__version__ = "0.0.36"
 
 
 # Maintainer info
-__author__ = 'The NeuroKit development team'
-__email__ = 'dom.makowski@gmail.com'
-
-
+__author__ = "The NeuroKit development team"
+__email__ = "dom.makowski@gmail.com"
 
 
 # Citation
-__cite__ = """
+__cite__ = (
+    """
 You can cite NeuroKit2 as follows:
 
 - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lesspinasse, F., Pham, H.,
   Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological
-  Signal Processing. Retrieved """ + datetime.date.today().strftime("%B %d, %Y") + """, from https://github.com/neuropsychology/NeuroKit
+  Signal Processing. Retrieved """
+    + datetime.date.today().strftime("%B %d, %Y")
+    + """, from https://github.com/neuropsychology/NeuroKit
 
 
 Full bibtex reference:
@@ -50,8 +53,10 @@ Full bibtex reference:
   year = {2020},
 }
 """
+)
 __citation__ = __cite__
 __bibtex__ = __citation__
+
 
 def cite():
     print(__cite__)

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import matplotlib
+import matplotlib.gridspec as gs
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -11,7 +11,8 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv(peaks, sampling_rate=1000, show=False):
-    """ Computes indices of Heart Rate Variability (HRV).
+    """
+    Computes indices of Heart Rate Variability (HRV).
 
     Computes HRV indices in the time-, frequency-, and nonlinear domain. Note
     that a minimum duration of the signal containing the peaks is recommended
@@ -56,12 +57,14 @@ def hrv(peaks, sampling_rate=1000, show=False):
     >>> # Compute HRV indices
     >>> hrv_indices = nk.hrv(peaks, sampling_rate=100, show=True)
     >>> hrv_indices #doctest: +SKIP
+
     References
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world
       Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
     variability metrics and norms. Frontiers in public health, 5, 258.
+
     """
     # Get indices
     out = []  # initialize empty container
@@ -84,18 +87,22 @@ def hrv(peaks, sampling_rate=1000, show=False):
 
 
 def _hrv_plot(peaks, out, sampling_rate=1000):
+
     fig = plt.figure(constrained_layout=False)
-    spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=2,
-                                        height_ratios=[1, 1],
-                                        width_ratios=[1, 1])
+    spec = gs.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
 
     # Arrange grids
     ax_distrib = fig.add_subplot(spec[0, :-1])
-    ax_distrib.set_xlabel('R-R intervals (ms)')
+    ax_distrib.set_xlabel("R-R intervals (ms)")
     ax_distrib.set_title("Distribution of R-R intervals")
 
     ax_psd = fig.add_subplot(spec[1, :-1])
-    ax_poincare = fig.add_subplot(spec[:, -1])
+
+    spec_within = gs.GridSpecFromSubplotSpec(4, 4, subplot_spec=spec[:, -1], wspace=0.025, hspace=0.05)
+    ax_poincare = fig.add_subplot(spec_within[1:4, 0:3])
+    ax_marg_x = fig.add_subplot(spec_within[0, 0:3])
+    ax_marg_x.set_title("Poincaré Plot")
+    ax_marg_y = fig.add_subplot(spec_within[1:4, 3])
 
     # Distribution of RR intervals
     peaks = _hrv_sanitize_input(peaks)
@@ -103,13 +110,10 @@ def _hrv_plot(peaks, out, sampling_rate=1000):
     ax_distrib = summary_plot(rri, ax=ax_distrib)
 
     # Poincare plot
-    out.columns = [col.replace('HRV_', '') for col in out.columns]
-    ax_poincare = _hrv_nonlinear_show(rri, out, ax=ax_poincare)
+    out.columns = [col.replace("HRV_", "") for col in out.columns]
+    _hrv_nonlinear_show(rri, out, ax=ax_poincare, ax_marg_x=ax_marg_x, ax_marg_y=ax_marg_y)
 
     # PSD plot
-    rri, sampling_rate = _hrv_get_rri(peaks,
-                                      sampling_rate=sampling_rate,
-                                      interpolate=True)
-    frequency_bands = out[['ULF', 'VLF', 'LF', 'HF', 'VHF']]
-    _hrv_frequency_show(rri, frequency_bands,
-                        sampling_rate=sampling_rate, ax=ax_psd)
+    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True)
+    frequency_bands = out[["ULF", "VLF", "LF", "HF", "VHF"]]
+    _hrv_frequency_show(rri, frequency_bands, sampling_rate=sampling_rate, ax=ax_psd)

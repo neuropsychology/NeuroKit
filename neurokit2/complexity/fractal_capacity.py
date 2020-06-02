@@ -1,11 +1,11 @@
 ## -*- coding: utf-8 -*-
-#import numpy as np
-#import scipy.misc
-#import matplotlib.pyplot as plt
-#import scipy.interpolate
+# import numpy as np
+# import scipy.misc
+# import matplotlib.pyplot as plt
+# import scipy.interpolate
 #
 #
-#def fractal_capacity(signal, delay=1, rounding=3, show=False):
+# def fractal_capacity(signal, delay=1, rounding=3, show=False):
 #    """
 #    Examples
 #    ---------
@@ -77,7 +77,7 @@
 ## =============================================================================
 #
 #
-#def _fractal_capacity_boxcount(Z, k):
+# def _fractal_capacity_boxcount(Z, k):
 #    # From https://github.com/rougier/numpy-100 (#87)
 #    S = np.add.reduceat(
 #        np.add.reduceat(Z, np.arange(0, Z.shape[0], k), axis=0),
@@ -88,7 +88,7 @@
 #
 #
 #
-#def _signal_to_image(signal, rounding=3, show=False):
+# def _signal_to_image(signal, rounding=3, show=False):
 #    """
 #    Examples
 #    ---------
@@ -115,7 +115,7 @@
 #    return m
 #
 #
-#def _fractal_capacity_plot(sizes, counts, coeffs):
+# def _fractal_capacity_plot(sizes, counts, coeffs):
 #    fit = 2**np.polyval(coeffs, np.log2(sizes))
 #    plt.loglog(sizes, counts, 'bo')
 #    plt.loglog(sizes, fit, 'r', label=r'$D$ = %0.3f' % -coeffs[0])

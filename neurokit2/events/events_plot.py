@@ -56,10 +56,11 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     >>> events = [[i] for i in events['onset']]
     >>> fig4 = nk.events_plot(events, signal)
     >>> fig4 #doctest: +SKIP
+
     """
 
     if isinstance(events, dict):
-        if 'condition' in events.keys():
+        if "condition" in events.keys():
             events_list = []
             for condition in set(events["condition"]):
                 events_list.append([x for x, y in zip(events["onset"], events["condition"]) if y == condition])
@@ -67,9 +68,8 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
         else:
             events = events["onset"]
 
-
     if signal is None:
-        signal = np.full(events[-1]+1, 0)
+        signal = np.full(events[-1] + 1, 0)
     if isinstance(signal, pd.DataFrame) is False:
         signal = pd.DataFrame({"Signal": signal})
 
@@ -83,12 +83,6 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
         signal["Event_Onset"] = 0
         signal.iloc[events] = 1
         return signal
-
-
-
-
-
-
 
 
 def _events_plot(events, color="red", linestyle="--"):
@@ -107,7 +101,7 @@ def _events_plot(events, color="red", linestyle="--"):
     else:
         # Convert color and style to list
         if isinstance(color, str):
-            color_map = matplotlib.cm.get_cmap('rainbow')
+            color_map = matplotlib.cm.get_cmap("rainbow")
             color = color_map(np.linspace(0, 1, num=len(events)))
         if isinstance(linestyle, str):
             linestyle = np.full(len(events), linestyle)

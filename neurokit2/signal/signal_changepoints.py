@@ -5,7 +5,8 @@ from ..misc import as_vector
 
 
 def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
-    """Change Point Detection
+    """
+    Change Point Detection.
 
     Only the PELT method is implemented for now.
 
@@ -29,6 +30,7 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     References
     ----------
     - Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a linear computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
+
     """
     signal = as_vector(signal)
     changepoints = _signal_changepoints_pelt(signal, change=change, penalty=penalty)
@@ -39,17 +41,13 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     return changepoints
 
 
-
-
-
 def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
-    """ PELT algorithm to find change points in a signal
+    """
+    PELT algorithm to find change points in a signal.
 
-    Adapted from:
-    https://github.com/ruipgil/changepy
-    https://github.com/deepcharles/ruptures
-    https://github.com/STOR-i/Changepoints.jl
-    https://github.com/rkillick/changepoint/
+    Adapted from: https://github.com/ruipgil/changepy https://github.com/deepcharles/ruptures
+    https://github.com/STOR-i/Changepoints.jl https://github.com/rkillick/changepoint/
+
     """
     # Initialize
     length = len(signal)
@@ -98,7 +96,8 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
 # Cost functions
 # =============================================================================
 def _signal_changepoints_cost_mean(signal):
-    """ Cost function for a normally distributed signal with a changing mean
+    """
+    Cost function for a normally distributed signal with a changing mean.
     """
     i_variance_2 = 1 / (np.var(signal) ** 2)
     cmm = [0.0]
@@ -117,9 +116,9 @@ def _signal_changepoints_cost_mean(signal):
     return cost
 
 
-
 def _signal_changepoints_cost_var(signal):
-    """ Cost function for a normally distributed signal with a changing variance
+    """
+    Cost function for a normally distributed signal with a changing variance.
     """
     cumm = [0.0]
     cumm.extend(np.cumsum(np.power(np.abs(signal - np.mean(signal)), 2)))
@@ -132,20 +131,25 @@ def _signal_changepoints_cost_var(signal):
     return cost
 
 
-
 def _signal_changepoints_cost_meanvar(signal):
-    """ Cost function for a normally distributed signal with a changing mean and variance
+    """
+    Cost function for a normally distributed signal with a changing mean and variance.
     """
     signal = np.hstack(([0.0], np.array(signal)))
 
     cumm = np.cumsum(signal)
-    cumm_sq = np.cumsum([val**2 for val in signal])
+    cumm_sq = np.cumsum([val ** 2 for val in signal])
 
     def cost(s, t):
-        ts_i = 1.0 / (t-s)
+        ts_i = 1.0 / (t - s)
         mu = (cumm[t] - cumm[s]) * ts_i
-        sig = (cumm_sq[t] - cumm_sq[s]) * ts_i - mu**2
+        sig = (cumm_sq[t] - cumm_sq[s]) * ts_i - mu ** 2
         sig_i = 1.0 / sig
-        return (t-s) * np.log(sig) + (cumm_sq[t] - cumm_sq[s]) * sig_i - 2*(cumm[t] - cumm[s]) * mu * sig_i + ((t - s) * mu**2) * sig_i
+        return (
+            (t - s) * np.log(sig)
+            + (cumm_sq[t] - cumm_sq[s]) * sig_i
+            - 2 * (cumm[t] - cumm[s]) * mu * sig_i
+            + ((t - s) * mu ** 2) * sig_i
+        )
 
     return cost

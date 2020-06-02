@@ -7,7 +7,8 @@ from .eda_phasic import eda_phasic
 
 
 def eda_process(eda_signal, sampling_rate=1000):
-    """Process Electrodermal Activity (EDA).
+    """
+    Process Electrodermal Activity (EDA).
 
     Convenience function that automatically processes electrodermal activity (EDA) signal.
 
@@ -52,20 +53,19 @@ def eda_process(eda_signal, sampling_rate=1000):
     >>> signals, info = nk.eda_process(eda_signal, sampling_rate=1000)
     >>> fig = nk.eda_plot(signals)
     >>> fig #doctest: +SKIP
+
     """
     # Preprocess
     eda_cleaned = eda_clean(eda_signal, sampling_rate=sampling_rate, method="neurokit")
     eda_decomposed = eda_phasic(eda_cleaned, sampling_rate=sampling_rate)
 
     # Find peaks
-    peak_signal, info = eda_peaks(eda_decomposed["EDA_Phasic"].values,
-                                  sampling_rate=sampling_rate,
-                                  method="neurokit",
-                                  amplitude_min=0.1)
+    peak_signal, info = eda_peaks(
+        eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method="neurokit", amplitude_min=0.1
+    )
 
     # Store
-    signals = pd.DataFrame({"EDA_Raw": eda_signal,
-                            "EDA_Clean": eda_cleaned})
+    signals = pd.DataFrame({"EDA_Raw": eda_signal, "EDA_Clean": eda_cleaned})
 
     signals = pd.concat([signals, eda_decomposed, peak_signal], axis=1)
 

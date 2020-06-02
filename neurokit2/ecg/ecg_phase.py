@@ -7,8 +7,9 @@ from .ecg_delineate import ecg_delineate
 from .ecg_peaks import ecg_peaks
 
 
-def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', sampling_rate=None):
-    """Compute cardiac phase (for both atrial and ventricular).
+def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method="peak", sampling_rate=None):
+    """
+    Compute cardiac phase (for both atrial and ventricular).
 
     Finds the cardiac phase, labelled as 1 for systole and 0 for diastole.
     Parameters
@@ -61,9 +62,9 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', samp
         if sampling_rate is not None:
             _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
         else:
-            raise ValueError("rpeaks will be obtained using `nk.ecg_peaks`. "
-                             "Please provide the sampling_rate of "
-                             "ecg_signal.")
+            raise ValueError(
+                "R-peaks will be obtained using `nk.ecg_peaks`. Please provide the sampling_rate of ecg_signal."
+            )
     # Try retrieving right column
     if isinstance(rpeaks, dict):
         rpeaks = rpeaks["ECG_R_Peaks"]
@@ -73,16 +74,13 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', samp
 
     # Try retrieving right column
     if isinstance(delineate_info, dict):
-        toffsets = delineate_info['ECG_T_Offsets']
+        toffsets = delineate_info["ECG_T_Offsets"]
         toffsets = [int(x) for x in toffsets if ~np.isnan(x)]
         toffsets = np.array(toffsets)
 
-        ppeaks = delineate_info['ECG_P_Peaks']
+        ppeaks = delineate_info["ECG_P_Peaks"]
         ppeaks = [int(x) for x in ppeaks if ~np.isnan(x)]
         ppeaks = np.array(ppeaks)
-
-
-
 
     # Atrial Phase
     atrial = np.full(len(ecg_cleaned), np.nan)
@@ -95,9 +93,6 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', samp
     # Atrial Phase Completion
     atrial_completion = signal_phase(atrial, method="percent")
 
-
-
-
     # Ventricular Phase
     ventricular = np.full(len(ecg_cleaned), np.nan)
     ventricular[toffsets] = 0.0
@@ -108,7 +103,6 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method='peak', samp
 
     # Ventricular Phase Completion
     ventricular_comletion = signal_phase(ventricular, method="percent")
-
 
     return pd.DataFrame(
         {

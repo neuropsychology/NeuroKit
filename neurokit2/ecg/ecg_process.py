@@ -10,7 +10,8 @@ from .ecg_quality import ecg_quality
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
-    """Process an ECG signal.
+    """
+    Process an ECG signal.
 
     Convenience function that automatically processes an ECG signal.
 
@@ -73,39 +74,28 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     >>> signals, info = nk.ecg_process(ecg, sampling_rate=1000)
     >>> nk.ecg_plot(signals) #doctest: +ELLIPSIS
     <Figure ...>
+
     """
-    ecg_cleaned = ecg_clean(ecg_signal,
-                            sampling_rate=sampling_rate,
-                            method=method)
+    ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method)
     # R-peaks
-    instant_peaks, rpeaks, = ecg_peaks(ecg_cleaned=ecg_cleaned,
-                                       sampling_rate=sampling_rate,
-                                       method=method,
-                                       correct_artifacts=True)
+    instant_peaks, rpeaks, = ecg_peaks(
+        ecg_cleaned=ecg_cleaned, sampling_rate=sampling_rate, method=method, correct_artifacts=True
+    )
 
-    rate = signal_rate(rpeaks,
-                       sampling_rate=sampling_rate,
-                       desired_length=len(ecg_cleaned))
+    rate = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_cleaned))
 
-    quality = ecg_quality(ecg_cleaned, rpeaks=None,
-                          sampling_rate=sampling_rate)
+    quality = ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=sampling_rate)
 
-    signals = pd.DataFrame({"ECG_Raw": ecg_signal,
-                            "ECG_Clean": ecg_cleaned,
-                            "ECG_Rate": rate,
-                            "ECG_Quality": quality})
+    signals = pd.DataFrame({"ECG_Raw": ecg_signal, "ECG_Clean": ecg_cleaned, "ECG_Rate": rate, "ECG_Quality": quality})
 
     # Additional info of the ecg signal
-    delineate_signal, delineate_info = ecg_delineate(ecg_cleaned=ecg_cleaned,
-                                                     rpeaks=rpeaks,
-                                                     sampling_rate=sampling_rate)
+    delineate_signal, delineate_info = ecg_delineate(
+        ecg_cleaned=ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate
+    )
 
-    cardiac_phase = ecg_phase(ecg_cleaned=ecg_cleaned,
-                              rpeaks=rpeaks,
-                              delineate_info=delineate_info)
+    cardiac_phase = ecg_phase(ecg_cleaned=ecg_cleaned, rpeaks=rpeaks, delineate_info=delineate_info)
 
-    signals = pd.concat([signals, instant_peaks, delineate_signal,
-                         cardiac_phase], axis=1)
+    signals = pd.concat([signals, instant_peaks, delineate_signal, cardiac_phase], axis=1)
 
     info = rpeaks
     return signals, info

@@ -8,7 +8,8 @@ from .standardize import standardize
 
 
 def distance(X=None, method="mahalanobis"):
-    """Distance
+    """
+    Distance.
 
     Compute distance using different metrics.
 
@@ -35,6 +36,7 @@ def distance(X=None, method="mahalanobis"):
     >>> X = datasets.load_iris().data
     >>> vector = distance(X)
     >>> vector #doctest: +SKIP
+
     """
     if isinstance(X, pd.DataFrame) is False:
         X = pd.DataFrame(X)
@@ -45,8 +47,7 @@ def distance(X=None, method="mahalanobis"):
     elif method in ["mean", "center", "average"]:
         dist = _distance_mean(X)
     else:
-        raise ValueError("NeuroKit error: distance(): 'method' should be "
-                         "one of 'mahalanobis'.")
+        raise ValueError("NeuroKit error: distance(): 'method' should be one of 'mahalanobis'.")
 
     return dist
 
@@ -54,6 +55,7 @@ def distance(X=None, method="mahalanobis"):
 # =============================================================================
 # Methods
 # =============================================================================
+
 
 def _distance_mahalanobis(X=None):
     cov = X.cov().values
@@ -65,7 +67,6 @@ def _distance_mahalanobis(X=None):
     for i in range(len(X)):
         dist[i] = scipy.spatial.distance.mahalanobis(X.iloc[i, :].values, col_means, cov) ** 2
     return dist
-
 
 
 def _distance_mean(X=None):

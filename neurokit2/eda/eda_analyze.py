@@ -6,8 +6,9 @@ from .eda_intervalrelated import eda_intervalrelated
 
 
 def eda_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs EDA analysis on either epochs (event-related
-    analysis) or on longer periods of data such as resting-state data.
+    """
+    Performs EDA analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state
+    data.
 
     Parameters
     ----------
@@ -63,6 +64,7 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Analyze
     >>> nk.eda_analyze(df, sampling_rate=100) #doctest: +SKIP
+
     """
     method = method.lower()
 
@@ -76,9 +78,9 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
             colnames = data.columns.values
 
         if len([i for i in colnames if "Label" in i]) == 0:
-            raise ValueError("NeuroKit error: eda_analyze(): Wrong input"
-                             "or method, we couldn't extract"
-                             "extract epochs features.")
+            raise ValueError(
+                "NeuroKit error: eda_analyze(): Wrong input or method, we couldn't extract epochs features."
+            )
         else:
             features = eda_eventrelated(data)
 
@@ -98,8 +100,8 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
                 features = eda_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
-            if 'Label' in data.columns:
-                epoch_len = data['Label'].value_counts()[0]
+            if "Label" in data.columns:
+                epoch_len = data["Label"].value_counts()[0]
                 duration = epoch_len / sampling_rate
             else:
                 duration = len(data) / sampling_rate

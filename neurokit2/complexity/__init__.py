@@ -1,8 +1,11 @@
-"""Submodule for NeuroKit."""
+"""
+Submodule for NeuroKit.
+"""
 import functools
 
 from .complexity_delay import complexity_delay
 from .complexity_dimension import complexity_dimension
+
 # Utils
 from .complexity_embedding import complexity_embedding
 from .complexity_optimize import complexity_optimize
@@ -12,12 +15,15 @@ from .entropy_approximate import entropy_approximate
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_sample import entropy_sample
+
 # Entropy
 from .entropy_shannon import entropy_shannon
 from .fractal_correlation import fractal_correlation
+
 # Fractal
 from .fractal_dfa import fractal_dfa
 from .fractal_mandelbrot import fractal_mandelbrot
+
 
 # Aliases
 complexity_se = entropy_shannon
@@ -44,4 +50,35 @@ complexity_d2 = fractal_correlation
 
 complexity_plot = functools.partial(complexity_optimize, show=True)
 
-__all__ = ["complexity_embedding", "complexity_delay", "complexity_dimension", "complexity_optimize", "complexity_simulate", "complexity_r", "entropy_shannon", "entropy_approximate", "entropy_sample", "entropy_fuzzy", "entropy_multiscale", "fractal_dfa", "fractal_correlation", "fractal_mandelbrot", "complexity_se", "complexity_apen", "complexity_capen", "complexity_sampen", "complexity_fuzzyen", "complexity_mse", "complexity_fuzzymse", "complexity_cmse", "complexity_fuzzycmse", "complexity_rcmse", "complexity_fuzzyrcmse", "complexity_dfa", "fractal_mfdfa", "complexity_mfdfa", "complexity_d2", "complexity_plot"]
+__all__ = [
+    "complexity_embedding",
+    "complexity_delay",
+    "complexity_dimension",
+    "complexity_optimize",
+    "complexity_simulate",
+    "complexity_r",
+    "entropy_shannon",
+    "entropy_approximate",
+    "entropy_sample",
+    "entropy_fuzzy",
+    "entropy_multiscale",
+    "fractal_dfa",
+    "fractal_correlation",
+    "fractal_mandelbrot",
+    "complexity_se",
+    "complexity_apen",
+    "complexity_capen",
+    "complexity_sampen",
+    "complexity_fuzzyen",
+    "complexity_mse",
+    "complexity_fuzzymse",
+    "complexity_cmse",
+    "complexity_fuzzycmse",
+    "complexity_rcmse",
+    "complexity_fuzzyrcmse",
+    "complexity_dfa",
+    "fractal_mfdfa",
+    "complexity_mfdfa",
+    "complexity_d2",
+    "complexity_plot",
+]

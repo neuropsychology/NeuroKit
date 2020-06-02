@@ -1,0 +1,8 @@
+template: |
+  ## What’s New
+
+  $CHANGES
+  
+  ## Thanks to 
+  
+  $CONTRIBUTORS

@@ -6,8 +6,9 @@ from .ecg_intervalrelated import ecg_intervalrelated
 
 
 def ecg_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs ECG analysis on either epochs (event-related
-    analysis) or on longer periods of data such as resting-state data.
+    """
+    Performs ECG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state
+    data.
 
     Parameters
     ----------
@@ -76,6 +77,7 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     0 ...
 
     [1 rows x 30 columns]
+
     """
     method = method.lower()
 
@@ -89,9 +91,9 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
             colnames = data.columns.values
 
         if len([i for i in colnames if "Label" in i]) == 0:
-            raise ValueError("NeuroKit error: ecg_analyze(): Wrong input"
-                             "or method, we couldn't extract"
-                             "extract epochs features.")
+            raise ValueError(
+                "NeuroKit error: ecg_analyze(): Wrong input or method, we couldn't extract epochs features."
+            )
         else:
             features = ecg_eventrelated(data)
 
@@ -111,8 +113,8 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
                 features = ecg_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
-            if 'Label' in data.columns:
-                epoch_len = data['Label'].value_counts()[0]
+            if "Label" in data.columns:
+                epoch_len = data["Label"].value_counts()[0]
                 duration = epoch_len / sampling_rate
             else:
                 duration = len(data) / sampling_rate

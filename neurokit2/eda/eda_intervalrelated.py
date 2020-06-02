@@ -5,8 +5,7 @@ import pandas as pd
 
 def eda_intervalrelated(data):
     """
-    Performs EDA analysis on longer periods of data (typically > 10 seconds),
-    such as resting-state data.
+    Performs EDA analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
     ----------
@@ -52,35 +51,38 @@ def eda_intervalrelated(data):
 
     # Format input
     if isinstance(data, pd.DataFrame):
-        peaks_cols = [col for col in data.columns if 'SCR_Peaks' in col]
+        peaks_cols = [col for col in data.columns if "SCR_Peaks" in col]
         if len(peaks_cols) == 1:
             intervals["Peaks_N"] = data[peaks_cols[0]].values.sum()
         else:
-            raise ValueError("NeuroKit error: eda_intervalrelated(): Wrong"
-                             "input, we couldn't extract SCR peaks."
-                             "Please make sure your DataFrame"
-                             "contains an `SCR_Peaks` column.")
-        amp_cols = [col for col in data.columns if 'SCR_Amplitude' in col]
+            raise ValueError(
+                "NeuroKit error: eda_intervalrelated(): Wrong"
+                "input, we couldn't extract SCR peaks."
+                "Please make sure your DataFrame"
+                "contains an `SCR_Peaks` column."
+            )
+        amp_cols = [col for col in data.columns if "SCR_Amplitude" in col]
         if len(amp_cols) == 1:
             intervals["Peaks_Amplitude_Mean"] = np.nansum(data[amp_cols[0]].values) / data[peaks_cols[0]].values.sum()
         else:
-            raise ValueError("NeuroKit error: eda_intervalrelated(): Wrong"
-                             "input, we couldn't extract SCR peak amplitudes."
-                             "Please make sure your DataFrame"
-                             "contains an `SCR_Amplitude` column.")
+            raise ValueError(
+                "NeuroKit error: eda_intervalrelated(): Wrong"
+                "input, we couldn't extract SCR peak amplitudes."
+                "Please make sure your DataFrame"
+                "contains an `SCR_Amplitude` column."
+            )
 
-        eda_intervals = pd.DataFrame.from_dict(intervals,
-                                               orient="index").T.add_prefix("SCR_")
+        eda_intervals = pd.DataFrame.from_dict(intervals, orient="index").T.add_prefix("SCR_")
 
     elif isinstance(data, dict):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
-            intervals[index] = _eda_intervalrelated_formatinput(data[index],
-                                                                intervals[index])
+            intervals[index] = _eda_intervalrelated_formatinput(data[index], intervals[index])
         eda_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
     return eda_intervals
+
 
 # =============================================================================
 # Internals
@@ -88,22 +90,27 @@ def eda_intervalrelated(data):
 
 
 def _eda_intervalrelated_formatinput(interval, output={}):
-    """Format input for dictionary
+    """
+    Format input for dictionary.
     """
     # Sanitize input
     colnames = interval.columns.values
     if len([i for i in colnames if "SCR_Peaks" in i]) == 0:
-            raise ValueError("NeuroKit error: eda_intervalrelated(): Wrong"
-                             "input, we couldn't extract SCR peaks."
-                             "Please make sure your DataFrame"
-                             "contains an `SCR_Peaks` column.")
-            return output
+        raise ValueError(
+            "NeuroKit error: eda_intervalrelated(): Wrong"
+            "input, we couldn't extract SCR peaks."
+            "Please make sure your DataFrame"
+            "contains an `SCR_Peaks` column."
+        )
+        return output
     if len([i for i in colnames if "SCR_Amplitude" in i]) == 0:
-            raise ValueError("NeuroKit error: eda_intervalrelated(): Wrong"
-                             "input we couldn't extract SCR peak amplitudes."
-                             "Please make sure your DataFrame"
-                             "contains an `SCR_Amplitude` column.")
-            return output
+        raise ValueError(
+            "NeuroKit error: eda_intervalrelated(): Wrong"
+            "input we couldn't extract SCR peak amplitudes."
+            "Please make sure your DataFrame"
+            "contains an `SCR_Amplitude` column."
+        )
+        return output
 
     peaks = interval["SCR_Peaks"].values
     amplitude = interval["SCR_Amplitude"].values

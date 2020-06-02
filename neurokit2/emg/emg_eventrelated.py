@@ -6,7 +6,8 @@ from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_san
 
 
 def emg_eventrelated(epochs, silent=False):
-    """Performs event-related EMG analysis on epochs.
+    """
+    Performs event-related EMG analysis on epochs.
 
     Parameters
     ----------
@@ -47,6 +48,7 @@ def emg_eventrelated(epochs, silent=False):
     >>> emg_signals, info = nk.emg_process(emg, sampling_rate=1000)
     >>> epochs = nk.epochs_create(emg_signals, events=[3000, 6000, 9000], sampling_rate=1000, epochs_start=-0.1, epochs_end=1.9)
     >>> nk.emg_eventrelated(epochs) #doctest: +SKIP
+
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="emg", silent=silent)
@@ -64,7 +66,7 @@ def emg_eventrelated(epochs, silent=False):
             data[i]["EMG_Activation"] = 0
 
         # Analyze features based on activation
-        if (data[i]["EMG_Activation"] == 1):
+        if data[i]["EMG_Activation"] == 1:
             data[i] = _emg_eventrelated_features(epochs[i], data[i])
         else:
             data[i]["EMG_Amplitude_Mean"] = np.nan
@@ -88,14 +90,18 @@ def _emg_eventrelated_features(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "EMG_Onsets" in i]) == 0:
-        print("NeuroKit warning: emg_eventrelated(): input does not"
-              "have an `EMG_Onsets` column. Unable to process EMG features.")
+        print(
+            "NeuroKit warning: emg_eventrelated(): input does not"
+            "have an `EMG_Onsets` column. Unable to process EMG features."
+        )
         return output
 
     if len([i for i in colnames if "EMG_Activity" or "EMG_Amplitude" in i]) == 0:
-        print("NeuroKit warning: emg_eventrelated(): input does not"
-              "have an `EMG_Activity` column or `EMG_Amplitude` column."
-              "Will skip computation of EMG amplitudes.")
+        print(
+            "NeuroKit warning: emg_eventrelated(): input does not"
+            "have an `EMG_Activity` column or `EMG_Amplitude` column."
+            "Will skip computation of EMG amplitudes."
+        )
         return output
 
     # Peak amplitude and Time of peak

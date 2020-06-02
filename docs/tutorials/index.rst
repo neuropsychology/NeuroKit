@@ -10,7 +10,7 @@ Contents:
    software
    learnpython
    understanding
-   contributing
+   .../.github/CONTRIBUTING
    first_contribution
    complexity
    resources
