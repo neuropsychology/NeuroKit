@@ -30,6 +30,21 @@ __email__ = "dom.makowski@gmail.com"
 
 
 # Citation
+__bibtex__ = (
+    """
+@misc{neurokit2,
+  doi = {10.5281/ZENODO.3597887},
+  url = {https://github.com/neuropsychology/NeuroKit},
+  author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lesspinasse,
+            Fran\c{c}ois and Pham, Hung and Schölzel, Christopher and S H Chen, Annabel},
+  title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
+  publisher = {Zenodo},
+  month={Mar},
+  year = {2020},
+}
+"""
+)
+
 __cite__ = (
     """
 You can cite NeuroKit2 as follows:
@@ -42,20 +57,10 @@ You can cite NeuroKit2 as follows:
 
 
 Full bibtex reference:
-
-@misc{neurokit2,
-  doi = {10.5281/ZENODO.3597887},
-  url = {https://github.com/neuropsychology/NeuroKit},
-  author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lesspinasse, Fran\c{c}ois and Pham, Hung and Schölzel, Christopher and S H Chen, Annabel},
-  title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
-  publisher = {Zenodo},
-  month={Mar},
-  year = {2020},
-}
-"""
+""" + __bibtex__
 )
+# Aliases for citation
 __citation__ = __cite__
-__bibtex__ = __citation__
 
 
 def cite():
