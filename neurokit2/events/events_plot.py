@@ -12,7 +12,8 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
     Parameters
     ----------
     events : list, ndarray or dict
-        Events onset location. Can also be a list of lists, in which case it will mark them with different colors. If a dict is passed (e.g., from 'events_find()'), will select only the 'onset' list.
+        Events onset location. Can also be a list of lists, in which case it will mark them with
+        different colors. If a dict is passed (e.g., from 'events_find()'), will select only the 'onset' list.
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
     show : bool

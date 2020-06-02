@@ -33,11 +33,13 @@ def epochs_create(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     epochs_start, epochs_end : int
-        Epochs start and end relative to events_onsets (in seconds). The start can be negative to start epochs before a given event (to have a baseline for instance).
+        Epochs start and end relative to events_onsets (in seconds). The start can be negative to
+        start epochs before a given event (to have a baseline for instance).
     event_labels : list
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
-        An optional list containing, for each event, for example the trial category, group or experimental conditions.
+        An optional list containing, for each event, for example the trial category, group or
+        experimental conditions.
     baseline_correction : bool
 
 
@@ -59,7 +61,9 @@ def epochs_create(
     >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Find events
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> events = nk.events_find(data["Photosensor"],
+    ...                         threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
     >>> fig1 = nk.events_plot(events, data)
     >>> fig1 #doctest: +SKIP
     >>>

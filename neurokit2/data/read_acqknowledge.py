@@ -18,11 +18,18 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
     filename :  str
         Filename (with or without the extension) of a BIOPAC's AcqKnowledge file.
     sampling_rate : int
-        Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain signals recorded at different rates, harmonization is necessary in order to convert it to a DataFrame. Thus, if `sampling_rate` is set to 'max' (default), will keep the maximum recorded sampling rate and upsample the channels with lower rate if necessary (using the `signal_resample()` function). If the sampling rate is set to a given value, will resample the signals to the desired value. Note that the value of the sampling rate is outputted along with the data.
+        Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain
+        signals recorded at different rates, harmonization is necessary in order to convert it
+        to a DataFrame. Thus, if `sampling_rate` is set to 'max' (default), will keep the maximum
+        recorded sampling rate and upsample the channels with lower rate if necessary (using the
+        `signal_resample()` function). If the sampling rate is set to a given value, will resample
+        the signals to the desired value. Note that the value of the sampling rate is outputted
+        along with the data.
     resample_method : str
         Method of resampling (see `signal_resample()`).
     impute_missing : bool
-        Sometimes, due to connections issues, the signal has some holes (short periods without signal). If 'impute_missing' is True, will automatically fill the signal interruptions using padding.
+        Sometimes, due to connections issues, the signal has some holes (short periods without signal). If
+        'impute_missing' is True, will automatically fill the signal interruptions using padding.
 
     Returns
     ----------
@@ -45,7 +52,8 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
         import bioread
     except ImportError:
         raise ImportError(
-            "NeuroKit error: read_acqknowledge(): the 'bioread' module is required for this function to run. ",
+            "NeuroKit error: read_acqknowledge(): the 'bioread' module is required",
+            " for this function to run. ",
             "Please install it first (`pip install bioread`).",
         )
 
@@ -54,7 +62,8 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
         filename += ".acq"
 
     if os.path.exists(filename) is False:
-        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't find the following file: " + filename)
+        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't"
+                         " find the following file: " + filename)
 
     # Read file
     file = bioread.read(filename)

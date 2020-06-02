@@ -33,7 +33,9 @@ def epochs_plot(epochs, legend=True, show=True):
     >>>
     >>> # Example with data
     >>> data = nk.data("bio_eventrelated_100hz")
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> events = nk.events_find(data["Photosensor"],
+    ...                         threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
     >>> epochs = nk.epochs_create(data, events, sampling_rate=200, epochs_end=1)
     >>> fig1 = nk.epochs_plot(epochs)
     >>> fig1 #doctest: +SKIP
