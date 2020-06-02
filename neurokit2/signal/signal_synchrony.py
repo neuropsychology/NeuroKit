@@ -4,7 +4,6 @@ import pandas as pd
 import scipy.signal
 
 
-
 def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
     """
     Compute the synchrony (coupling) between two signals.
