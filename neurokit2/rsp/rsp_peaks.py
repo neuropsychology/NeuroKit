@@ -57,6 +57,7 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import pandas as pd
     >>>
     >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)

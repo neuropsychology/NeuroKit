@@ -39,6 +39,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import pandas as pd
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
