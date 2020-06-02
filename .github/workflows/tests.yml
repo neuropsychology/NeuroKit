@@ -37,6 +37,5 @@ jobs:
         
     - name: Test with tox
       run: |
-        cd $GITHUB_WORKSPACE && ls
-        python -m tox
+        cd $GITHUB_WORKSPACE && python -m tox
   
