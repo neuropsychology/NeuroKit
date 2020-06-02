@@ -217,11 +217,11 @@ def _ecg_simulate_ecgsyn(
     qd = sfint / sfecg
     if q != qd:
         raise ValueError(
-            "Internal sampling frequency (sfint) must be an integer multiple of the ECG sampling frequency (sfecg). Your current choices are: sfecg = " +
-            str(sfecg) +
-            " and sfint = " +
-            str(sfint) +
-            "."
+            "Internal sampling frequency (sfint) must be an integer multiple of the ECG sampling frequency (sfecg). Your current choices are: sfecg = "
+            + str(sfecg)
+            + " and sfint = "
+            + str(sfint)
+            + "."
         )
 
     # Define frequency parameters for rr process

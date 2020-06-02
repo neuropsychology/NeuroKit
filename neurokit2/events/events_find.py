@@ -127,22 +127,22 @@ def _events_find_label(events, event_labels=None, event_conditions=None, functio
 
     if len(list(set(event_labels))) != n:
         raise ValueError(
-            "NeuroKit error: " +
-            function_name +
-            "(): oops, it seems like the `event_labels` that you provided are not unique (all different). Please provide " +
-            str(n) +
-            " distinct labels."
+            "NeuroKit error: "
+            + function_name
+            + "(): oops, it seems like the `event_labels` that you provided are not unique (all different). Please provide "
+            + str(n)
+            + " distinct labels."
         )
 
     if len(event_labels) != n:
         raise ValueError(
-            "NeuroKit error: " +
-            function_name +
-            "(): oops, it seems like you provided " +
-            str(n) +
-            " `event_labels`, but " +
-            str(n) +
-            " events got detected :(. Check your event names or the event signal!"
+            "NeuroKit error: "
+            + function_name
+            + "(): oops, it seems like you provided "
+            + str(n)
+            + " `event_labels`, but "
+            + str(n)
+            + " events got detected :(. Check your event names or the event signal!"
         )
 
     events["label"] = event_labels
@@ -151,13 +151,13 @@ def _events_find_label(events, event_labels=None, event_conditions=None, functio
     if event_conditions is not None:
         if len(event_conditions) != n:
             raise ValueError(
-                "NeuroKit error: " +
-                function_name +
-                "(): oops, it seems like you provided " +
-                str(n) +
-                " `event_conditions`, but " +
-                str(n) +
-                " events got detected :(. Check your event conditions or the event signal!"
+                "NeuroKit error: "
+                + function_name
+                + "(): oops, it seems like you provided "
+                + str(n)
+                + " `event_conditions`, but "
+                + str(n)
+                + " events got detected :(. Check your event conditions or the event signal!"
             )
         events["condition"] = event_conditions
     return events

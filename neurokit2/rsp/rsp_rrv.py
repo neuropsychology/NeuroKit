@@ -141,9 +141,9 @@ def _rsp_rrv_frequency(
         for frequency in out.keys():
             if out[frequency] == 0.0:
                 print(
-                    "Neurokit warning: rsp_rrv(): The duration of recording is too short to allow reliable computation of signal power in frequency band " +
-                    frequency +
-                    ". Its power is returned as zero."
+                    "Neurokit warning: rsp_rrv(): The duration of recording is too short to allow reliable computation of signal power in frequency band "
+                    + frequency
+                    + ". Its power is returned as zero."
                 )
 
     # Normalized

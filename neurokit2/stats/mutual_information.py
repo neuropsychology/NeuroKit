@@ -164,8 +164,8 @@ def _entropy(X, k=1):
     return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
     """
     return (
-        d * np.mean(np.log(r + np.finfo(X.dtype).eps)) +
-        np.log(volume_unit_ball) +
-        scipy.special.psi(n) -
-        scipy.special.psi(k)
+        d * np.mean(np.log(r + np.finfo(X.dtype).eps))
+        + np.log(volume_unit_ball)
+        + scipy.special.psi(n)
+        - scipy.special.psi(k)
     )

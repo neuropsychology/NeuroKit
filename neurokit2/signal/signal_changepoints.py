@@ -146,10 +146,10 @@ def _signal_changepoints_cost_meanvar(signal):
         sig = (cumm_sq[t] - cumm_sq[s]) * ts_i - mu ** 2
         sig_i = 1.0 / sig
         return (
-            (t - s) * np.log(sig) +
-            (cumm_sq[t] - cumm_sq[s]) * sig_i -
-            2 * (cumm[t] - cumm[s]) * mu * sig_i +
-            ((t - s) * mu ** 2) * sig_i
+            (t - s) * np.log(sig)
+            + (cumm_sq[t] - cumm_sq[s]) * sig_i
+            - 2 * (cumm[t] - cumm[s]) * mu * sig_i
+            + ((t - s) * mu ** 2) * sig_i
         )
 
     return cost
