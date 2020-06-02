@@ -37,5 +37,5 @@ jobs:
         
     - name: Test with tox
       run: |
-        tox
+        python -m tox
   
