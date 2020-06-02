@@ -36,9 +36,9 @@ You can cite NeuroKit2 as follows:
 
 - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lesspinasse, F., Pham, H.,
   Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological
-  Signal Processing. Retrieved """
-    + datetime.date.today().strftime("%B %d, %Y")
-    + """, from https://github.com/neuropsychology/NeuroKit
+  Signal Processing. Retrieved """ +
+    datetime.date.today().strftime("%B %d, %Y") +
+    """, from https://github.com/neuropsychology/NeuroKit
 
 
 Full bibtex reference:

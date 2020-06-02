@@ -125,9 +125,9 @@ def hrv_frequency(
         for frequency in out.keys():
             if out[frequency] == 0.0:
                 print(
-                    "Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band "
-                    + frequency
-                    + ". Its power is returned as zero."
+                    "Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band " +
+                    frequency +
+                    ". Its power is returned as zero."
                 )
 
     # Normalized

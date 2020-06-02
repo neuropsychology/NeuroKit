@@ -158,9 +158,9 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
 
     # Correlation function
     cor = 0.5 * (
-        np.abs(k - 1) ** (2 * hurst_exponent)
-        - 2 * np.abs(k) ** (2 * hurst_exponent)
-        + np.abs(k + 1) ** (2 * hurst_exponent)
+        np.abs(k - 1) ** (2 * hurst_exponent) -
+        2 * np.abs(k) ** (2 * hurst_exponent) +
+        np.abs(k + 1) ** (2 * hurst_exponent)
     )
 
     # Eigenvalues of the correlation function
