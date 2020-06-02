@@ -232,7 +232,6 @@ def _eda_phasic_cvxeda(
         res = cvxopt.solvers.qp(
             H, f, cvxopt.spmatrix(-A.V, A.I, A.J, (n, len(f))), cvxopt.matrix(0.0, (n, 1)), solver=solver
         )
-        obj = res["primal objective"] + 0.5 * (eda.T * eda)
     cvxopt.solvers.options.clear()
     cvxopt.solvers.options.update(old_options)
 
@@ -240,9 +239,7 @@ def _eda_phasic_cvxeda(
     drift = res["x"][n : n + nC]
     tonic = B * tonic_splines + C * drift
     q = res["x"][:n]
-    smna_driver = A * q
     phasic = M * q
-    residuals = eda - phasic - tonic
 
     out = pd.DataFrame({"EDA_Tonic": np.array(tonic)[:, 0], "EDA_Phasic": np.array(phasic)[:, 0]})
 

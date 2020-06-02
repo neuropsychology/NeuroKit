@@ -27,6 +27,7 @@ def emg_amplitude(emg_cleaned):
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import pandas as pd
     >>>
     >>> emg = nk.emg_simulate(duration=10, sampling_rate=1000, burst_number=3)
     >>> cleaned = nk.emg_clean(emg, sampling_rate=1000)

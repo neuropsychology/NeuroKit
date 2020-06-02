@@ -596,8 +596,6 @@ def _peaks_delineator(ecg, rpeaks, cleaning=False, sampling_rate=1000):
 
     search_boundary = int(0.9 * qrs_duration * sampling_rate / 2)
     significant_peaks_groups = []
-    tppeaks_pairs = []
-    tppeaks = []
     for i in range(len(rpeaks) - 1):
         # search for T peaks and P peaks from R peaks
         start = rpeaks[i] + search_boundary
@@ -895,8 +893,6 @@ def _ecg_delineate_check(waves, rpeaks):
     # loop through all columns to calculate the z distance
     for column in features_columns:
         df = _calculate_abs_z(df, features_columns)
-
-    distance_columns = [col for col in df.columns if "Dist" in col]
 
     # Replace with nan if distance > 3
     for col in features_columns:

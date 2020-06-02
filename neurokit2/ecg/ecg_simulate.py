@@ -230,12 +230,10 @@ def _ecg_simulate_ecgsyn(
     fhi = 0.25
     flostd = 0.01
     fhistd = 0.01
-    fid = 1
 
     # Calculate time scales for rr and total output
     sfrr = 1
     trr = 1 / sfrr
-    tstep = 1 / sfecg
     rrmean = 60 / hrmean
     n = 2 ** (np.ceil(np.log2(N * rrmean / trr)))
 
@@ -270,7 +268,6 @@ def _ecg_simulate_ecgsyn(
     result = scipy.integrate.solve_ivp(
         lambda t, x: _ecg_simulate_derivsecgsyn(t, x, rrn, ti, sfint, ai, bi), Tspan, x0, t_eval=t_eval
     )
-    T = result.t
     X0 = result.y
 
     # downsample to required sfecg
@@ -289,8 +286,6 @@ def _ecg_simulate_ecgsyn(
 
 
 def _ecg_simulate_derivsecgsyn(t, x, rr, ti, sfint, ai, bi):
-    xi = np.cos(ti)
-    yi = np.sin(ti)
 
     ta = math.atan2(x[1], x[0])
     r0 = 1
