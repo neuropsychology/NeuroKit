@@ -34,30 +34,8 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install --upgrade setuptools pip wheel
         python -m pip install tox-gh-actions
-        tox
         
-    - name: Test with pytest
+    - name: Test with tox
       run: |
-        # Install test deps
-        pip install numpy
-        pip install pandas
-        pip install scipy
-        pip install sklearn
-        pip install matplotlib
-        pip install bioread
-        pip install mne
-        pip install pyentrp
-        pip install nolds
-        pip install biosppy
-        pip install PyWavelets
-        
-        # Install problematic packages
-        #pip install conda
-        #conda install -c conda-forge cvxopt
-        pip install cvxopt
-        
-        # Test
-        pip install pytest
-        python setup.py install
         tox
-        pytest
+  
