@@ -1,6 +1,5 @@
 import mne
 import numpy as np
-import pandas as pd
 import TruScanEEGpy
 
 import neurokit2 as nk

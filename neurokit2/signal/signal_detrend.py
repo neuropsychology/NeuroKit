@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 import scipy.sparse
 
 from ..stats import fit_loess, fit_polynomial

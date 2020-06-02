@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import matplotlib.animation
 import matplotlib.pyplot as plt
-import mpl_toolkits.mplot3d
 import numpy as np
 
 

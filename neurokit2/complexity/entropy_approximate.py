@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 
 from .utils import _get_embedded, _get_r, _phi
 

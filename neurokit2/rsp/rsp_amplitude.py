@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import pandas as pd
 
 from ..signal import signal_interpolate
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve

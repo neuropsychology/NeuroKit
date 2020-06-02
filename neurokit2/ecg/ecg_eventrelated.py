@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 
 from ..epochs.eventrelated_utils import (
     _eventrelated_addinfo,

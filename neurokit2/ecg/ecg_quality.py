@@ -1,9 +1,7 @@
 # - * - coding: utf-8 - * -
 import numpy as np
-import pandas as pd
-import scipy.spatial
 
-from ..epochs import epochs_create, epochs_to_df
+from ..epochs import epochs_to_df
 from ..signal import signal_interpolate
 from ..stats import distance, rescale
 from .ecg_peaks import ecg_peaks

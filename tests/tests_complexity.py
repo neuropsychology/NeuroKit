@@ -255,7 +255,6 @@ def pyeeg_samp_entropy(X, M, R):
 # =============================================================================
 
 
-from math import log, floor
 from sklearn.neighbors import KDTree
 
 def entropy_embed(x, order=3, delay=1):

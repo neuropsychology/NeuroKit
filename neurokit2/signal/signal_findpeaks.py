@@ -5,7 +5,6 @@ import scipy.signal
 
 from ..misc import as_vector, find_closest
 from ..stats import standardize
-from .signal_zerocrossings import signal_zerocrossings
 
 
 def signal_findpeaks(

@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 
-from .signal_resample import signal_resample
 
 
 def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):

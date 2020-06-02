@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 import scipy.ndimage
 import scipy.special
 import sklearn.neighbors

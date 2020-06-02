@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-import scipy.signal
 
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
