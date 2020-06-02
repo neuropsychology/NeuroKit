@@ -52,9 +52,9 @@ jobs:
         pip install biosppy
         pip install PyWavelets
         # Install problematic packages
-        #pip install conda
-        #conda install -c conda-forge cvxopt
-        pip install cvxopt
+        pip install conda
+        conda install -c conda-forge cvxopt
+        # pip install cvxopt
         # Test
         pip install pytest
         python setup.py install
