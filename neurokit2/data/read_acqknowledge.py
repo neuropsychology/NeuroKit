@@ -11,7 +11,8 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
     """
     Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
 
-    The function outputs both the dataframe and the sampling rate (encoded within the AcqKnowledge) file.
+    The function outputs both the dataframe and the sampling rate (encoded within the
+    AcqKnowledge) file.
 
     Parameters
     ----------
@@ -28,8 +29,9 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
     resample_method : str
         Method of resampling (see `signal_resample()`).
     impute_missing : bool
-        Sometimes, due to connections issues, the signal has some holes (short periods without signal). If
-        'impute_missing' is True, will automatically fill the signal interruptions using padding.
+        Sometimes, due to connections issues, the signal has some holes (short periods without
+        signal). If 'impute_missing' is True, will automatically fill the signal interruptions
+        using padding.
 
     Returns
     ----------
