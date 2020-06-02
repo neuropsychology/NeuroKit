@@ -58,7 +58,7 @@ To install NeuroKit2, run this command in your terminal:
 
 If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
-Contribution
+Contributing
 -------------
 
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
