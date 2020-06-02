@@ -31,6 +31,7 @@ def standardize(data, robust=False):
     Examples
     ----------
     >>> import neurokit2 as nk
+    >>> import pandas as pd
     >>>
     >>> x = nk.standardize([3, 1, 2, 4, 6, np.nan])
     >>> y = nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)
