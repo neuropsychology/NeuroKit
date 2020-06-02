@@ -198,7 +198,7 @@ def _embedding_delay_plot(
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
         lc = matplotlib.collections.LineCollection(segments, cmap="plasma", norm=norm)
         lc.set_array(z)
-        line = ax1.add_collection(lc)
+        ax1.add_collection(lc)
 
     elif plot == "3D":
         points = np.array([x, y, z]).T.reshape(-1, 1, 3)
