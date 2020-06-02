@@ -2,6 +2,7 @@ import biosppy
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import platform
 
 import neurokit2 as nk
 
@@ -61,9 +62,9 @@ def test_eda_phasic():
     eda = nk.eda_simulate(duration=30, sampling_rate=sampling_rate,
                           scr_number=6, noise=0.01, drift=0.01, random_state=42)
 
-
-    cvxEDA = nk.eda_phasic(nk.standardize(eda), method='cvxeda')
-    assert len(cvxEDA) == len(eda)
+    if platform.system() == "Linux":
+        cvxEDA = nk.eda_phasic(nk.standardize(eda), method='cvxeda')
+        assert len(cvxEDA) == len(eda)
 
 
     smoothMedian = nk.eda_phasic(nk.standardize(eda), method='smoothmedian')
