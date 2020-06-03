@@ -1,3 +1,5 @@
+# flake8: noqa
+
 ## -*- coding: utf-8 -*-
 # import numpy as np
 # import scipy.misc
