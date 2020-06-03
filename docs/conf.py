@@ -152,8 +152,8 @@ html_static_path = ['_static']  # Folder that contain custom static files (e.g.,
 
 # Theme options are theme-specific and customize the look and feel of a theme further.
 # For a list of options available for each theme, see https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html
- html_theme_options = {
-         'collapse_navigation': False  # Expandables entries
+html_theme_options = {
+    'collapse_navigation': False  # Expandables entries
 }
 
 
