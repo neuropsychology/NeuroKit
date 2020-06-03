@@ -301,7 +301,9 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
 
     References
     -----------
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method
+    for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference
+    on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
 
     """
 
@@ -357,40 +359,36 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
     """
     Iterative amplitude adjusted Fourier transform (IAAFT) surrogates.
 
-    Returns phase randomized, amplitude adjusted
-    (IAAFT) surrogates with the same power spectrum (to a very high accuracy) and distribution as the original data
-    using an iterative scheme.
+    Returns phase randomized, amplitude adjusted (IAAFT) surrogates with the same power spectrum
+    (to a very high accuracy) and distribution as the original data using an iterative scheme.
 
     Parameters
     ----------
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     max_iter : int
-        Maximum iterations to be performed while checking for
-        convergence. Convergence can be achieved before maximum interation.
+        Maximum iterations to be performed while checking for convergence. Convergence can be achieved
+        before maximum interation.
     atol : float
         Absolute tolerance for checking convergence.
     rtol : float
-        Relative tolerance for checking convergence. If both atol and rtol are
-        set to zero,  the iterations end only when the RMSD stops changing or
-        when maximum iteration is reached.
+        Relative tolerance for checking convergence. If both atol and rtol are set to zero, the iterations
+        end only when the RMSD stops changing or when maximum iteration is reached.
 
     Returns
     -------
     surrogate : array
-        Surrogate series with (almost) the same power spectrum and
-        distribution.
+        Surrogate series with (almost) the same power spectrum and distribution.
     i : int
         Number of iterations that have been performed.
     rmsd : float
-        Root-mean-square deviation (RMSD) between the absolute squares
-        of the Fourier amplitudes of the surrogate series and that of
-        the original series.
+        Root-mean-square deviation (RMSD) between the absolute squares of the Fourier amplitudes of
+        the surrogate series and that of the original series.
 
     References
     -----
-    Schreiber, T., & Schmitz, A. (1996). Improved surrogate data for nonlinearity tests. Physical review letters, 77(4), 635.
-    `entropy_estimators` <https://github.com/paulbrodersen/entropy_estimators>`_
+    - Schreiber, T., & Schmitz, A. (1996). Improved surrogate data for nonlinearity tests. Physical
+    review letters, 77(4), 635. `entropy_estimators` <https://github.com/paulbrodersen/entropy_estimators>`_
 
     """
     # Calculate "true" Fourier amplitudes and sort the series
@@ -426,29 +424,30 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
 
 def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
     """
-    Estimates the entropy H of a random variable x based on the kth-nearest neighbour distances between point samples.
+    Estimates the entropy H of a random variable x based on the kth-nearest neighbour distances between
+    point samples.
 
-    Parameters:
+    Parameters
     ----------
     x: (n, d) ndarray
         n samples from a d-dimensional multivariate distribution
     k: int (default 1)
-        kth nearest neighbour to use in density estimate;
-        imposes smoothness on the underlying probability distribution
+        kth nearest neighbour to use in density estimate; imposes smoothness on the underlying probability
+        distribution
     norm: 'euclidean' or 'max'
         p-norm used when computing k-nearest neighbour distances
     min_dist: float (default 0.)
-        minimum distance between data points;
-        smaller distances will be capped using this value
-    Returns:
+        minimum distance between data points; smaller distances will be capped using this value
+
+    Returns
     --------
     h: float
         entropy H(X)
 
     References
     -----
-    Kozachenko, L., & Leonenko, N. (1987). Sample estimate of the entropy of a random vector. Problemy Peredachi Informatsii, 23(2), 9–16.
-    `NoLiTSA` <https://github.com/manu-mannattil/nolitsa>`_
+    Kozachenko, L., & Leonenko, N. (1987). Sample estimate of the entropy of a random vector. Problemy
+    Peredachi Informatsii, 23(2), 9–16. `NoLiTSA` <https://github.com/manu-mannattil/nolitsa>`_
 
     """
 

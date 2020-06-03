@@ -226,7 +226,6 @@ def _eda_phasic_cvxeda(
         h = cvxopt.matrix([_cvx(n, 1), 0.5, 0.5, eda, 0.5, 0.5, _cvx(nB, 1)])
         c = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T, _cvx(nC, 1), 1, gamma, _cvx(nB, 1)])
         res = cvxopt.solvers.conelp(c, G, h, dims={"l": n, "q": [n + 2, nB + 2], "s": []})
-        obj = res["primal objective"]
     else:
         # Use qp
         Mt, Ct, Bt = M.T, C.T, B.T

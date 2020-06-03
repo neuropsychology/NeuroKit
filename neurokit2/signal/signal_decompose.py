@@ -50,7 +50,7 @@ def _signal_decompose_emd(signal, ensemble=False):
     ------------
     - http://perso.ens-lyon.fr/patrick.flandrin/CSDATrendfiltering.pdf
     - https://github.com/laszukdawid/PyEMD
-    - https://towardsdatascience.com/decomposing-signal-using-empirical-mode-decomposition-algorithm-explanation-for-dummy-93a93304c541
+    - https://towardsdatascience.com/decomposing-signal-using-empirical-mode-decomposition-algorithm-explanation-for-dummy-93a93304c541 # noqa: E501
 
     >>> # import PyEMD
     >>> # import numpy as np
