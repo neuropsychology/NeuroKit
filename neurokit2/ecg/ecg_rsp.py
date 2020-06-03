@@ -3,7 +3,7 @@ from ..signal import signal_filter
 
 def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     """
-    Extract ECG Derived Respiration (EDR)
+    Extract ECG Derived Respiration (EDR).
 
     This implementation is far from being complete, as the information in the related papers
     prevents me from getting a full understanding of the procedure. Help is required!
@@ -63,11 +63,12 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
 
     - Soni, R., & Muniyandi, M. (2019). Breath rate variability: a novel measure to study the meditation
       effects. International Journal of Yoga, 12(1), 45.
+
     """
     method = method.lower()
     if method in [
         "sarkar2015"
-    ]:  # https://www.researchgate.net/publication/304221962_Extraction_of_respiration_signal_from_ECG_for_respiratory_rate_estimation
+    ]:  # https://www.researchgate.net/publication/304221962_Extraction_of_respiration_signal_from_ECG_for_respiratory_rate_estimation # noqa: E501
         rsp = signal_filter(ecg_rate, sampling_rate, lowcut=0.1, highcut=0.7, order=6)
     elif method in ["charlton2016"]:  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5390977/#__ffn_sectitle
         rsp = signal_filter(ecg_rate, sampling_rate, lowcut=4 / 60, highcut=60 / 60, order=6)
@@ -75,7 +76,7 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
         rsp = signal_filter(ecg_rate, sampling_rate, highcut=0.5, order=6)
     elif method in [
         "vangent2019"
-    ]:  # https://github.com/paulvangentcom/heartrate_analysis_python/blob/1597e8c0b2602829428b22d8be88420cd335e939/heartpy/analysis.py#L541
+    ]:  # https://github.com/paulvangentcom/heartrate_analysis_python/blob/1597e8c0b2602829428b22d8be88420cd335e939/heartpy/analysis.py#L541 # noqa: E501
         rsp = signal_filter(ecg_rate, sampling_rate, lowcut=0.1, highcut=0.4, order=2)
     else:
         raise ValueError(

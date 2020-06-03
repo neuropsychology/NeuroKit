@@ -250,7 +250,8 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
 
 
 # def _ecg_rsa_servant(ecg_period, sampling_rate=1000, continuous=False):
-#    """Servant, D., Logier, R., Mouster, Y., & Goudemand, M. (2009). La variabilité de la fréquence cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016
+#    """Servant, D., Logier, R., Mouster, Y., & Goudemand, M. (2009). La variabilité de la fréquence
+#cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016
 #    """
 #
 #    rpeaks, _ = nk.ecg_peaks(nk.ecg_simulate(duration=90))
