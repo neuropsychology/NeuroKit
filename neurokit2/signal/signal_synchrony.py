@@ -5,8 +5,7 @@ import scipy.signal
 
 
 def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
-    """
-    Compute the synchrony (coupling) between two signals.
+    """Compute the synchrony (coupling) between two signals.
 
     Compute a continuous index of coupling between two signals either using the 'Hilbert' method to get
     the instantaneous phase synchrony, or using rolling window correlation.
@@ -85,8 +84,7 @@ def _signal_synchrony_hilbert(signal1, signal2):
 
 
 def _signal_synchrony_correlation(signal1, signal2, window_size, center=False):
-    """
-    Calculates pairwise rolling correlation at each time. Grabs the upper triangle, at each timepoints.
+    """Calculates pairwise rolling correlation at each time. Grabs the upper triangle, at each timepoints.
 
     - window: window size of rolling corr in samples
     - center: whether to center result (Default: False, so correlation values are listed on the right.)

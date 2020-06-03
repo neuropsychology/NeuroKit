@@ -13,8 +13,7 @@ def rsp_simulate(
     method="breathmetrics",
     random_state=None,
 ):
-    """
-    Simulate a respiratory signal.
+    """Simulate a respiratory signal.
 
     Generate an artificial (synthetic) respiratory signal of a given duration
     and rate.
@@ -104,8 +103,8 @@ def rsp_simulate(
 # =============================================================================
 def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, respiratory_rate=15):
     """
-    Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly
-    approximates a single respiratory cycle.
+    Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly approximates a single
+    respiratory cycle.
     """
     # Generate values along the length of the duration
     rsp = signal_simulate(
@@ -135,9 +134,8 @@ def _rsp_simulate_breathmetrics_original(
     pause_amplitude_variance=0.2,
     signal_noise=0.1,
 ):
-    """
-    Simulates a recording of human airflow data by appending individually constructed sin waves
-    and pauses in sequence. This is translated from the matlab code available `here.
+    """Simulates a recording of human airflow data by appending individually constructed sin waves and pauses in
+    sequence. This is translated from the matlab code available `here.
 
     <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_ by Noto, et al. (2018).
 

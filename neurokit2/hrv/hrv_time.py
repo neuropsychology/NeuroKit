@@ -8,8 +8,7 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_time(peaks, sampling_rate=1000, show=False):
-    """
-    Computes time-domain indices of Heart Rate Variability (HRV).
+    """Computes time-domain indices of Heart Rate Variability (HRV).
 
      See references for details.
 

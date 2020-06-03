@@ -4,8 +4,7 @@ import sklearn.mixture
 
 
 def fit_mixture(X=None, n_clusters=2):
-    """
-    Gaussian Mixture Model.
+    """Gaussian Mixture Model.
 
     Performs a polynomial regression of given order.
 

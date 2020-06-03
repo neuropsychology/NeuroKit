@@ -8,8 +8,7 @@ from ..stats import standardize as nk_standardize
 
 
 def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, **kwargs):
-    """
-    Plot signal with events as vertical lines.
+    """Plot signal with events as vertical lines.
 
     Parameters
     ----------

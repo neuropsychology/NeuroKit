@@ -10,8 +10,7 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
-    """
-    Computes nonlinear indices of Heart Rate Variability (HRV).
+    """Computes nonlinear indices of Heart Rate Variability (HRV).
 
      See references for details.
 

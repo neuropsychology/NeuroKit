@@ -3,8 +3,7 @@ import numpy as np
 
 
 def entropy_shannon(signal):
-    """
-    Shannon entropy (SE)
+    """Shannon entropy (SE)
 
     Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state,
     or equivalently, of its average information content. Shannon entropy (SE) is one of the first and

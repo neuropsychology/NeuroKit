@@ -9,8 +9,7 @@ from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_
 def entropy_multiscale(
     signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs
 ):
-    """
-    Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version.
+    """Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version.
 
     Python implementations of the multiscale entropy (MSE), the composite multiscale entropy (CMSE),
     the refined composite multiscale entropy (RCMSE) or their fuzzy version (FuzzyMSE, FuzzyCMSE or

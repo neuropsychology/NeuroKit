@@ -5,8 +5,7 @@ import scipy.stats
 
 
 def cor(x, y, method="pearson", show=False):
-    """
-    Density estimation.
+    """Density estimation.
 
     Computes kernel density estimates.
 

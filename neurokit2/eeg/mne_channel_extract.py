@@ -3,8 +3,7 @@ import pandas as pd
 
 
 def mne_channel_extract(raw, name):
-    """
-    Channel array extraction from MNE.
+    """Channel array extraction from MNE.
 
     Select one or several channels by name and returns them in a dataframe.
 

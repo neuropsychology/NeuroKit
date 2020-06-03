@@ -6,8 +6,7 @@ import scipy.signal
 
 
 def signal_phase(signal, method="radians"):
-    """
-    Compute the phase of the signal.
+    """Compute the phase of the signal.
 
     The real phase has the property to rotate uniformly, leading to a uniform distribution density.
     The prophase typically doesn't fulfill this property. The following functions applies a nonlinear

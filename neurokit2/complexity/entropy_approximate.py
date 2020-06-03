@@ -5,8 +5,7 @@ from .utils import _get_embedded, _get_r, _phi
 
 
 def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
-    """
-    Approximate entropy (ApEn)
+    """Approximate entropy (ApEn)
 
     Python implementations of the approximate entropy (ApEn) and its corrected version (cApEn).
     Approximate entropy is a technique used to quantify the amount of regularity and the unpredictability

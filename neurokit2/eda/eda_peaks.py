@@ -10,8 +10,7 @@ from .eda_fixpeaks import eda_fixpeaks
 
 
 def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
-    """
-    Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
+    """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
     Identify Skin Conductance Responses (SCR) peaks in the phasic component of
     Electrodermal Activity (EDA) with different possible methods, such as:

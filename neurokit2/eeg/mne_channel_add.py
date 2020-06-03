@@ -4,8 +4,7 @@ import pandas as pd
 
 
 def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_index_raw=0, sync_index_channel=0):
-    """
-    Add channel as array to MNE.
+    """Add channel as array to MNE.
 
     Add a channel to a mne's Raw m/eeg file. It will basically synchronize the channel to the eeg data
     following a particular index and add it.

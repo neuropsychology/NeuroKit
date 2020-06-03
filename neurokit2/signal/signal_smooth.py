@@ -7,8 +7,7 @@ from ..stats import fit_loess
 
 
 def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=0.1):
-    """
-    Signal smoothing.
+    """Signal smoothing.
 
     Signal smoothing can be achieved using either the convolution of a filter kernel with the input
     signal to compute the smoothed signal (Smith, 1997) or a LOESS regression.

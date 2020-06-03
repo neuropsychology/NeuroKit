@@ -20,8 +20,7 @@ def events_find(
     event_labels=None,
     event_conditions=None,
 ):
-    """
-    Find and select events in a continuous signal (e.g., from a photosensor).
+    """Find and select events in a continuous signal (e.g., from a photosensor).
 
     Parameters
     ----------

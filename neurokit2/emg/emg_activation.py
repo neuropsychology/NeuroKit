@@ -16,8 +16,7 @@ def emg_activation(
     duration_min="default",
     **kwargs
 ):
-    """
-    Detects onset in EMG signal based on the amplitude threshold.
+    """Detects onset in EMG signal based on the amplitude threshold.
 
     Parameters
     ----------

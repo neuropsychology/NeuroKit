@@ -5,8 +5,7 @@ from ..signal import signal_filter
 
 
 def emg_amplitude(emg_cleaned):
-    """
-    Compute electromyography (EMG) amplitude.
+    """Compute electromyography (EMG) amplitude.
 
     Compute electromyography amplitude given the cleaned respiration signal, done by calculating the
     linear envelope of the signal.
@@ -48,9 +47,8 @@ def emg_amplitude(emg_cleaned):
 # Taeger-Kaiser Energy Operator
 # =============================================================================
 def _emg_amplitude_tkeo(emg_cleaned):
-    """
-    Calculates the Teager–Kaiser Energy operator to improve onset detection, described by Marcos
-    Duarte at https://github.com/demotu/BMC/blob/master/notebooks/Electromyography.ipynb.
+    """Calculates the Teager–Kaiser Energy operator to improve onset detection, described by Marcos Duarte at
+    https://github.com/demotu/BMC/blob/master/notebooks/Electromyography.ipynb.
 
     Parameters
     ----------
@@ -85,8 +83,7 @@ def _emg_amplitude_tkeo(emg_cleaned):
 # Linear Envelope
 # =============================================================================
 def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=400, envelope_filter=8):
-    """
-    Calculate the linear envelope of a signal.
+    """Calculate the linear envelope of a signal.
 
     This function implements a 2nd-order Butterworth filter with zero lag, described by Marcos Duarte
     at <https://github.com/demotu/BMC/blob/master/notebooks/Electromyography.ipynb>.

@@ -21,8 +21,7 @@ def ppg_simulate(
     random_state=None,
     show=False,
 ):
-    """
-    Simulate a photoplethysmogram (PPG) signal.
+    """Simulate a photoplethysmogram (PPG) signal.
 
     Phenomenological approximation of PPG. The PPG wave is described with four landmarks: wave onset,
     location of the systolic peak, location of the dicrotic notch and location of the diastolic peaks.
@@ -192,8 +191,7 @@ def ppg_simulate(
 
 
 def _frequency_modulation(periods, seconds, modulation_frequency, modulation_strength):
-    """
-    modulator_frequency determines the frequency at which respiratory sinus arrhythmia occurs (in Hz).
+    """modulator_frequency determines the frequency at which respiratory sinus arrhythmia occurs (in Hz).
 
     modulator_strength must be between 0 and 1.
 

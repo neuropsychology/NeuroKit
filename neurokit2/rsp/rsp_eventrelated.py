@@ -10,8 +10,7 @@ from ..epochs.eventrelated_utils import (
 
 
 def rsp_eventrelated(epochs, silent=False):
-    """
-    Performs event-related RSP analysis on epochs.
+    """Performs event-related RSP analysis on epochs.
 
     Parameters
     ----------

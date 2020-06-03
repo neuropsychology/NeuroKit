@@ -5,8 +5,7 @@ from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_san
 
 
 def eda_eventrelated(epochs, silent=False):
-    """
-    Performs event-related EDA analysis on epochs.
+    """Performs event-related EDA analysis on epochs.
 
     Parameters
     ----------

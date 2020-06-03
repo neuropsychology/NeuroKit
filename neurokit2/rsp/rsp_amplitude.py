@@ -5,8 +5,7 @@ from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
 def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
-    """
-    Compute respiratory amplitude.
+    """Compute respiratory amplitude.
 
     Compute respiratory amplitude given the raw respiration signal and its extrema.
 

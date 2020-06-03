@@ -4,8 +4,7 @@ from .utils import _get_r, _phi, _phi_divide
 
 
 def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
-    """
-    Sample Entropy (SampEn)
+    """Sample Entropy (SampEn)
 
     Python implementation of the sample entropy (SampEn) of a signal.
 

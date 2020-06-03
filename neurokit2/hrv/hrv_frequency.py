@@ -21,8 +21,7 @@ def hrv_frequency(
     silent=True,
     **kwargs
 ):
-    """
-    Computes frequency-domain indices of Heart Rate Variability (HRV).
+    """Computes frequency-domain indices of Heart Rate Variability (HRV).
 
     Note that a minimum duration of the signal containing the peaks is recommended for some HRV indices
     to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the recomended

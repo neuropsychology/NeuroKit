@@ -16,8 +16,7 @@ def epochs_create(
     event_conditions=None,
     baseline_correction=False,
 ):
-    """
-    Epoching a dataframe.
+    """Epoching a dataframe.
 
     Parameters
     ----------

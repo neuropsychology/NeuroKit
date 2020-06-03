@@ -7,8 +7,7 @@ from .complexity_embedding import complexity_embedding
 
 
 def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
-    """
-    Estimate optimal Dimension (m) for time-delay embedding.
+    """Estimate optimal Dimension (m) for time-delay embedding.
 
     Parameters
     ----------
@@ -106,8 +105,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 # Methods
 # =============================================================================
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwargs):
-    """
-    Return E(d) and E^*(d) for a all d in dimension_seq.
+    """Return E(d) and E^*(d) for a all d in dimension_seq.
 
     E(d) and E^*(d) will be used to calculate E1(d) and E2(d)
 
@@ -129,8 +127,7 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwarg
 
 
 def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None):
-    """
-    Return E(d) and E^*(d) for a single d.
+    """Return E(d) and E^*(d) for a single d.
 
     Returns E(d) and E^*(d) for the AFN method for a single d.
 
@@ -156,8 +153,7 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", w
 
 
 def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, show=False, **kwargs):
-    """
-    Compute the fraction of false nearest neighbors.
+    """Compute the fraction of false nearest neighbors.
 
     The false nearest neighbors (FNN) method described by Kennel et al.
     (1992) to calculate the minimum embedding dimension required to embed a scalar time series.
@@ -234,8 +230,7 @@ def _embedding_dimension_plot(
 def _embedding_dimension_neighbors(
     signal, dimension_max=20, delay=1, metric="chebyshev", window=0, maxnum=None, show=False
 ):
-    """
-    Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given
+    """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given
     array using SciPy's KDTree search.
 
     Parameters

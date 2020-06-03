@@ -7,8 +7,7 @@ from ..signal import signal_filter, signal_smooth
 
 
 def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
-    """
-    Preprocess Electrodermal Activity (EDA) signal.
+    """Preprocess Electrodermal Activity (EDA) signal.
 
     Parameters
     ----------
@@ -69,8 +68,7 @@ def _eda_clean_neurokit(eda_signal, sampling_rate=1000):
 # BioSPPy
 # =============================================================================
 def _eda_clean_biosppy(eda_signal, sampling_rate=1000):
-    """
-    Uses the same defaults as `BioSPPy.
+    """Uses the same defaults as `BioSPPy.
 
     <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/eda.py>`_.
 

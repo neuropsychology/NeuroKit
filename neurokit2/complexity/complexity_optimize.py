@@ -22,8 +22,7 @@ def complexity_optimize(
     show=False,
     attractor_dimension=3,
 ):
-    """
-    Find optimal complexity parameters.
+    """Find optimal complexity parameters.
 
     Estimate optimal complexity parameters Dimension (m), Time Delay (tau) and tolerance 'r'.
 
@@ -277,8 +276,7 @@ def _complexity_r(signal, delay=None, dimension=None, method="maxapen"):
 
 
 def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, surrogate_iter=5):
-    """
-    Estimate optimal Dimension (m) and optimal Time Delay (tau) using Differential Entropy b method.
+    """Estimate optimal Dimension (m) and optimal Time Delay (tau) using Differential Entropy b method.
 
     Parameters
     ----------
@@ -356,8 +354,7 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
 
 
 def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
-    """
-    Iterative amplitude adjusted Fourier transform (IAAFT) surrogates.
+    """Iterative amplitude adjusted Fourier transform (IAAFT) surrogates.
 
     Returns phase randomized, amplitude adjusted (IAAFT) surrogates with the same power spectrum
     (to a very high accuracy) and distribution as the original data using an iterative scheme.
@@ -423,9 +420,8 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
 
 
 def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
-    """
-    Estimates the entropy H of a random variable x based on the kth-nearest neighbour distances between
-    point samples.
+    """Estimates the entropy H of a random variable x based on the kth-nearest neighbour distances between point
+    samples.
 
     Parameters
     ----------

@@ -10,8 +10,7 @@ from ..rsp import rsp_process
 
 
 def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
-    """
-    Automated processing of bio signals.
+    """Automated processing of bio signals.
 
     Wrapper for other bio processing functions of
     electrocardiography signals (ECG), respiration signals (RSP),

@@ -6,8 +6,7 @@ from ..stats import fit_loess, fit_polynomial
 
 
 def signal_detrend(signal, method="polynomial", order=1, regularization=500, alpha=0.75, window=1.5, stepsize=0.02):
-    """
-    Polynomial detrending of signal.
+    """Polynomial detrending of signal.
 
     Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal
     (i.e., removing a general trend). One can also use other methods, such as smoothness priors approach
@@ -124,8 +123,7 @@ def _signal_detrend_polynomial(signal, order=1):
 
 
 def _signal_detrend_tarvainen2002(signal, regularization=500):
-    """
-    Method by Tarvainen et al., 2002.
+    """Method by Tarvainen et al., 2002.
 
     - Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending method
     with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175.
@@ -146,8 +144,7 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
 
 
 def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
-    """
-    Local linear regression ('runline' algorithm from chronux). Based on https://github.com/sappelhoff/pyprep.
+    """Local linear regression ('runline' algorithm from chronux). Based on https://github.com/sappelhoff/pyprep.
 
     - http://chronux.org/chronuxFiles/Documentation/chronux/spectral_analysis/continuous/locdetrend.html
     - https://github.com/sappelhoff/pyprep/blob/master/pyprep/removeTrend.py

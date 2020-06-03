@@ -7,8 +7,7 @@ from .density import density
 
 
 def hdi(x, ci=0.95, show=False, **kwargs):
-    """
-    Highest Density Interval (HDI)
+    """Highest Density Interval (HDI)
 
     Compute the Highest Density Interval (HDI) of a distribution. All points within this interval
     have a higher probability density than points outside the interval. The HDI can be used in the

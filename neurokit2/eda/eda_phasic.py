@@ -6,8 +6,7 @@ from ..signal import signal_filter, signal_smooth
 
 
 def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
-    """
-    Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
+    """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
 
     Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different
     methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
@@ -86,8 +85,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 # =============================================================================
 def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4):
     """
-    One of the two methods available in biopac's acqknowledge
-    (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
+    One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     size = smoothing_factor * sampling_rate
     tonic = signal_smooth(eda_signal, kernel="median", size=size)
@@ -100,8 +98,7 @@ def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4)
 
 def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
     """
-    One of the two methods available in biopac's acqknowledge
-    (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
+    One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=0.05, method="butter")
     tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=0.05, method="butter")
@@ -125,8 +122,7 @@ def _eda_phasic_cvxeda(
     solver=None,
     reltol=1e-9,
 ):
-    """
-    A convex optimization approach to electrodermal activity processing (CVXEDA).
+    """A convex optimization approach to electrodermal activity processing (CVXEDA).
 
     This function implements the cvxEDA algorithm described in "cvxEDA: a
     Convex Optimization Approach to Electrodermal Activity Processing" (Greco et al., 2015).

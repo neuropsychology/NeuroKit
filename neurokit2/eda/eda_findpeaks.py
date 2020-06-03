@@ -7,8 +7,7 @@ from ..signal import signal_findpeaks, signal_smooth, signal_zerocrossings
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
-    """
-    Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
+    """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
     Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in the phasic component of
     Electrodermal Activity (EDA) with different possible methods. See `eda_peaks()` for details.
@@ -102,9 +101,8 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 
 
 def _eda_findpeaks_gamboa2008(eda_phasic):
-    """
-    Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach
-    in the thesis by Gamboa (2008).
+    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach in the thesis
+    by Gamboa (2008).
 
     References
     ----------
@@ -148,9 +146,8 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
 
 def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
-    """
-    KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach
-    by Kim et al.(2004).
+    """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et
+    al.(2004).
 
     Parameters
     ----------

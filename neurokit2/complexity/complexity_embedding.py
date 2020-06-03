@@ -5,8 +5,7 @@ import numpy as np
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False):
-    """
-    Time-delay embedding of a time series (a signal)
+    """Time-delay embedding of a time series (a signal)
 
     A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide
     a complete description of the system at some point in time. The set of all possible states is called
@@ -105,8 +104,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
 
 
 def _embedding_plot(embedded):
-    """
-    Plot reconstructed attractor.
+    """Plot reconstructed attractor.
 
     The input for this function must be obtained via `nk.complexity_embedding()`
 

@@ -4,8 +4,7 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
 def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000):
-    """
-    Correct RSP peaks.
+    """Correct RSP peaks.
 
     Low-level function used by `rsp_peaks()` to correct the peaks found by `rsp_findpeaks()`.
     Doesn't do anything for now for RSP. See `rsp_peaks()` for details.

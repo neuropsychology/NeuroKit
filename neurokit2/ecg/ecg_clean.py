@@ -7,8 +7,7 @@ from ..signal import signal_filter
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
-    """
-    Clean an ECG signal.
+    """Clean an ECG signal.
 
     Prepare a raw ECG signal for R-peak detection with the specified method.
 
@@ -161,8 +160,7 @@ def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
 # Elgendi et al. (2010)
 # =============================================================================
 def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
 
     - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS
       Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing
@@ -199,8 +197,7 @@ def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
 # Engzee Modified (2012)
 # =============================================================================
 def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
 
     - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.
       in Cardiology, vol. 6, pp. 37-42, 1979.

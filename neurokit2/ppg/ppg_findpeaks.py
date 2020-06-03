@@ -8,8 +8,7 @@ from ..signal import signal_smooth
 
 
 def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False):
-    """
-    Find systolic peaks in a photoplethysmogram (PPG) signal.
+    """Find systolic peaks in a photoplethysmogram (PPG) signal.
 
     Parameters
     ----------
@@ -70,13 +69,12 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
 def _ppg_findpeaks_elgendi(
     signal, sampling_rate=1000, peakwindow=0.111, beatwindow=0.667, beatoffset=0.02, mindelay=0.3, show=False
 ):
-    """
-    Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak
-    Detection in Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical
-    Conditions. PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.
+    """Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
+    Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions. PLoS ONE 8(10): e76585.
+    doi:10.1371/journal.pone.0076585.
 
-    All tune-able parameters are specified as keyword arguments. `signal` must be the bandpass-filtered
-    raw PPG with a lowcut of .5 Hz, a highcut of 8 Hz.
+    All tune-able parameters are specified as keyword arguments. `signal` must be the bandpass-filtered raw PPG
+    with a lowcut of .5 Hz, a highcut of 8 Hz.
 
     """
     if show:

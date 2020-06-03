@@ -9,8 +9,7 @@ from ..epochs.eventrelated_utils import (
 
 
 def ecg_eventrelated(epochs, silent=False):
-    """
-    Performs event-related ECG analysis on epochs.
+    """Performs event-related ECG analysis on epochs.
 
     Parameters
     ----------

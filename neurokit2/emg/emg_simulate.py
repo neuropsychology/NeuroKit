@@ -7,8 +7,7 @@ from ..signal import signal_resample
 def emg_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, burst_number=1, burst_duration=1.0, random_state=42
 ):
-    """
-    Simulate an EMG signal.
+    """Simulate an EMG signal.
 
     Generate an artificial (synthetic) EMG signal of a given duration and sampling rate.
 

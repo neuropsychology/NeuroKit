@@ -9,8 +9,7 @@ from .rsp_phase import rsp_phase
 
 
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
-    """
-    Process a respiration (RSP) signal.
+    """Process a respiration (RSP) signal.
 
     Convenience function that automatically processes a respiration signal with one of the following methods:
 

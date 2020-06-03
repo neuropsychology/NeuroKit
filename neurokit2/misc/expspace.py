@@ -2,8 +2,7 @@ import numpy as np
 
 
 def expspace(start, stop, num=50, base=1):
-    """
-    Exponential range.
+    """Exponential range.
 
     Creates a list of integer values of a given length from start to stop, spread by an exponential function.
 

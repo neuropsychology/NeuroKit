@@ -10,8 +10,7 @@ from ..signal import signal_distort, signal_resample
 def ecg_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=70, method="ecgsyn", random_state=None
 ):
-    """
-    Simulate an ECG/EKG signal.
+    """Simulate an ECG/EKG signal.
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either
     the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies wavelets
@@ -118,8 +117,7 @@ def ecg_simulate(
 # Daubechies
 # =============================================================================
 def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, heart_rate=70):
-    """
-    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.
+    """Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.
 
     It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
     This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
@@ -163,8 +161,7 @@ def _ecg_simulate_ecgsyn(
     ai=(1.2, -5, 30, -7.5, 0.75),
     bi=(0.25, 0.1, 0.1, 0.1, 0.4),
 ):
-    """
-    This function is a python translation of the matlab script by `McSharry & Clifford (2013)
+    """This function is a python translation of the matlab script by `McSharry & Clifford (2013)
 
     <https://physionet.org/content/ecgsyn>`_.
 

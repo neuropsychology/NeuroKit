@@ -5,8 +5,7 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
 def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
-    """
-    Correct  Skin Conductance Responses (SCR) peaks.
+    """Correct  Skin Conductance Responses (SCR) peaks.
 
     Low-level function used by `eda_peaks()` to correct the peaks found by `eda_findpeaks()`.
     Doesn't do anything for now for EDA. See `eda_peaks()` for details.

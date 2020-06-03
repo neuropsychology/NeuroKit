@@ -5,8 +5,7 @@ import pandas as pd
 
 
 def emg_plot(emg_signals, sampling_rate=None):
-    """
-    Visualize electromyography (EMG) data.
+    """Visualize electromyography (EMG) data.
 
     Parameters
     ----------

@@ -5,8 +5,7 @@ from ..misc import as_vector
 
 
 def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
-    """
-    Change Point Detection.
+    """Change Point Detection.
 
     Only the PELT method is implemented for now.
 
@@ -43,8 +42,7 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
 
 
 def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
-    """
-    PELT algorithm to find change points in a signal.
+    """PELT algorithm to find change points in a signal.
 
     Adapted from: https://github.com/ruipgil/changepy https://github.com/deepcharles/ruptures
     https://github.com/STOR-i/Changepoints.jl https://github.com/rkillick/changepoint/

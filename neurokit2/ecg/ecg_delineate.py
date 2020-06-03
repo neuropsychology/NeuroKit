@@ -14,8 +14,7 @@ from .ecg_segment import ecg_segment
 def ecg_delineate(
     ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type="peaks", check=False
 ):
-    """
-    Delineate QRS complex.
+    """Delineate QRS complex.
 
     Function to delineate the QRS complex.
 
@@ -156,8 +155,7 @@ def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
 
 
 def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000):
-    """
-    Delinate ecg signal using discrete wavelet transforms.
+    """Delinate ecg signal using discrete wavelet transforms.
 
     Parameters
     ----------
@@ -171,6 +169,7 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     Returns
     --------
     Dictionary of the points.
+
     """
     ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=analysis_sampling_rate)
     dwtmatr = _dwt_compute_multiscales(ecg, 9)
@@ -813,8 +812,7 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
 
 def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_type="all", sampling_rate=1000):
 
-    """
-    #    Examples.
+    """#    Examples.
 
 #    --------
 #    >>> import neurokit2 as nk
@@ -902,8 +900,7 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
 
 def _ecg_delineate_check(waves, rpeaks):
     """
-    This function replaces the delineated features with np.nan if its standardized distance
-    from R-peaks is more than 3.
+    This function replaces the delineated features with np.nan if its standardized distance from R-peaks is more than 3.
     """
     df = pd.DataFrame.from_dict(waves)
     features_columns = df.columns
@@ -928,8 +925,8 @@ def _ecg_delineate_check(waves, rpeaks):
 
 def _calculate_abs_z(df, columns):
     """
-    This function helps to calculate the absolute standardized distance between R-peaks and other
-    delineated waves features by `ecg_delineate()`
+    This function helps to calculate the absolute standardized distance between R-peaks and other delineated waves
+    features by `ecg_delineate()`
     """
     for column in columns:
         df["Dist_R_" + column] = np.abs(standardize(df[column].sub(df["ECG_R_Peaks"], axis=0)))

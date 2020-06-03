@@ -5,8 +5,7 @@ import pandas as pd
 
 
 def rsp_plot(rsp_signals, sampling_rate=None):
-    """
-    Visualize respiration (RSP) data.
+    """Visualize respiration (RSP) data.
 
     Parameters
     ----------

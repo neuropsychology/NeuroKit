@@ -9,8 +9,7 @@ from .ecg_rsp import ecg_rsp
 
 
 def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
-    """
-    Respiratory Sinus Arrhythmia (RSA)
+    """Respiratory Sinus Arrhythmia (RSA)
 
     Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence', is the naturally occurring
     variation in heart rate during the breathing cycle. Metrics to quantify it are often used as a measure
@@ -123,6 +122,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     - Zohar, A. H., Cloninger, C. R., & McCraty, R. (2013). Personality and heart rate variability:
       exploring pathways from personality to cardiac coherence and health. Open Journal of Social Sciences,
       1(06), 32.
+
     """
     signals, ecg_period, rpeaks, rsp_signal = _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
 

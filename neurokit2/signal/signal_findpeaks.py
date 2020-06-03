@@ -17,8 +17,7 @@ def signal_findpeaks(
     relative_median=False,
     relative_max=False,
 ):
-    """
-    Find peaks in a signal.
+    """Find peaks in a signal.
 
     Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence),
     width and distance with other peaks.

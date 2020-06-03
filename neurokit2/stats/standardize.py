@@ -5,8 +5,7 @@ from .mad import mad
 
 
 def standardize(data, robust=False):
-    """
-    Standardization of data.
+    """Standardization of data.
 
     Performs a standardization of data (Z-scoring), i.e., centering and scaling, so that the data is
     expressed in terms of standard deviation (i.e., mean = 0, SD = 1) or Median Absolute Deviance

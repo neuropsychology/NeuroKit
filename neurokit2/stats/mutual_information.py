@@ -6,11 +6,9 @@ import sklearn.neighbors
 
 
 def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):
-    """
-    Computes the (normalized) mutual information (MI) between two vectors from a joint histogram.
-    The mutual information of two variables is a measure of the mutual dependence between them.
-    More specifically, it quantifies the "amount of information" obtained about one variable by
-    observing the other variable.
+    """Computes the (normalized) mutual information (MI) between two vectors from a joint histogram. The mutual
+    information of two variables is a measure of the mutual dependence between them. More specifically, it quantifies
+    the "amount of information" obtained about one variable by observing the other variable.
 
     Parameters
     ----------
@@ -88,8 +86,7 @@ def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
 
 
 def _mutual_information_nolitsa(x, y, bins=256):
-    """
-    Calculate the mutual information between two random variables.
+    """Calculate the mutual information between two random variables.
 
     Calculates mutual information, I = S(x) + S(y) - S(x,y), between two random variables x and y, where
     S(x) is the Shannon entropy.
@@ -133,8 +130,7 @@ def _nearest_distances(X, k=1):
 
 
 def _entropy(X, k=1):
-    """
-    Returns the entropy of X. From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
+    """Returns the entropy of X. From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
 
     Parameters
     -----------

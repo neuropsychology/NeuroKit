@@ -21,8 +21,7 @@ def signal_distort(
     random_state=None,
     silent=False,
 ):
-    """
-    Signal distortion.
+    """Signal distortion.
 
     Add noise of a given frequency, amplitude and shape to a signal.
 

@@ -8,8 +8,7 @@ from .signal_psd import signal_psd
 
 
 def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, **kwargs):
-    """
-    Compute the power of a signal in a given frequency band.
+    """Compute the power of a signal in a given frequency band.
 
     Parameters
     ----------

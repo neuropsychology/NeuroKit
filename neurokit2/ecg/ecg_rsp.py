@@ -2,8 +2,7 @@ from ..signal import signal_filter
 
 
 def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
-    """
-    Extract ECG Derived Respiration (EDR).
+    """Extract ECG Derived Respiration (EDR).
 
     This implementation is far from being complete, as the information in the related papers
     prevents me from getting a full understanding of the procedure. Help is required!

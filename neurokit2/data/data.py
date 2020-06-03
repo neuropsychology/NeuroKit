@@ -5,8 +5,7 @@ import pandas as pd
 
 
 def data(dataset="bio_eventrelated_100hz"):
-    """
-    Example datasets.
+    """Example datasets.
 
     Download and load available `example datasets <https://github.com/neuropsychology/NeuroKit/tree/master/data#datasets>`_.
     Note that an internet connexion is necessary.

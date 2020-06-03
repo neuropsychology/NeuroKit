@@ -12,8 +12,7 @@ from .ecg_segment import ecg_segment
 
 
 def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
-    """
-    Visualize ECG data.
+    """Visualize ECG data.
 
     Parameters
     ----------

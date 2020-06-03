@@ -8,8 +8,7 @@ from .ecg_peaks import ecg_peaks
 
 
 def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method="peak", sampling_rate=None):
-    """
-    Compute cardiac phase (for both atrial and ventricular).
+    """Compute cardiac phase (for both atrial and ventricular).
 
     Finds the cardiac phase, labelled as 1 for systole and 0 for diastole.
     Parameters

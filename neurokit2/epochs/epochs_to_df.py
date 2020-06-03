@@ -4,8 +4,7 @@ import pandas as pd
 
 
 def epochs_to_df(epochs):
-    """
-    Convert epochs to a DataFrame.
+    """Convert epochs to a DataFrame.
 
     Parameters
     ----------

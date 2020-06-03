@@ -3,8 +3,7 @@ import numpy as np
 
 
 def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurst_exponent=0.5, **kwargs):
-    """
-    Simulate chaotic time series.
+    """Simulate chaotic time series.
 
     Generates time series using the discrete approximation of the
     Mackey-Glass delay differential equation described by Grassberger &
@@ -50,9 +49,8 @@ def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurs
 def _complexity_simulate_mackeyglass(
     duration=10, sampling_rate=1000, x0=None, a=0.2, b=0.1, c=10.0, n=1000, discard=250
 ):
-    """
-    Generate time series using the Mackey-Glass equation. Generates time series using the discrete
-    approximation of the Mackey-Glass delay differential equation described by Grassberger & Procaccia (1983).
+    """Generate time series using the Mackey-Glass equation. Generates time series using the discrete approximation of
+    the Mackey-Glass delay differential equation described by Grassberger & Procaccia (1983).
 
     Taken from nolitsa (https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/data.py#L223).
 
@@ -102,8 +100,7 @@ def _complexity_simulate_mackeyglass(
 
 
 def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, sigma=0.1, hurst_exponent=0.7):
-    """
-    This is based on https://github.com/LRydin/MFDFA.
+    """This is based on https://github.com/LRydin/MFDFA.
 
     Parameters
     ----------
@@ -129,10 +126,9 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, si
 
 
 def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
-    """
-    This is based on https://github.com/LRydin/MFDFA/blob/master/MFDFA/fgn.py and the work of Christopher
-    Flynn fbm in https://github.com/crflynn/fbm and Davies, Robert B., and D. S. Harte. 'Tests for Hurst
-    effect.' Biometrika 74, no.1 (1987): 95-101.
+    """This is based on https://github.com/LRydin/MFDFA/blob/master/MFDFA/fgn.py and the work of Christopher Flynn fbm
+    in https://github.com/crflynn/fbm and Davies, Robert B., and D. S. Harte. 'Tests for Hurst effect.' Biometrika 74,
+    no.1 (1987): 95-101.
 
     Generates fractional Gaussian noise with a Hurst index H in (0,1). If H = 1/2 this is simply Gaussian
     noise. The current method employed is the Davies–Harte method, which fails for H ≈ 0. A Cholesky

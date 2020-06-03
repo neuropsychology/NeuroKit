@@ -8,8 +8,7 @@ from .standardize import standardize
 
 
 def distance(X=None, method="mahalanobis"):
-    """
-    Distance.
+    """Distance.
 
     Compute distance using different metrics.
 

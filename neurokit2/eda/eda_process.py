@@ -7,8 +7,7 @@ from .eda_phasic import eda_phasic
 
 
 def eda_process(eda_signal, sampling_rate=1000):
-    """
-    Process Electrodermal Activity (EDA).
+    """Process Electrodermal Activity (EDA).
 
     Convenience function that automatically processes electrodermal activity (EDA) signal.
 

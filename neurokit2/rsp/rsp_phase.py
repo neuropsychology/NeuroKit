@@ -7,8 +7,7 @@ from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
 def rsp_phase(peaks, troughs=None, desired_length=None):
-    """
-    Compute respiratory phase (inspiration and expiration).
+    """Compute respiratory phase (inspiration and expiration).
 
     Finds the respiratory phase, labelled as 1 for inspiration and 0 for expiration.
 

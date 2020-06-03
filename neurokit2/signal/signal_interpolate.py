@@ -4,8 +4,7 @@ import scipy.interpolate
 
 
 def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
-    """
-    Interpolate a signal.
+    """Interpolate a signal.
 
     Interpolate (fills the values between data points) a signal using different methods.
 

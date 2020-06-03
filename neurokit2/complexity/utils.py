@@ -11,8 +11,7 @@ from .complexity_embedding import complexity_embedding
 
 
 def _phi(signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False):
-    """
-    Common internal for `entropy_approximate` and `entropy_sample`.
+    """Common internal for `entropy_approximate` and `entropy_sample`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
 
@@ -109,9 +108,9 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # Get R
 # =============================================================================
 def _get_r(signal, r="default", dimension=2):
-    """
-    Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel
-    (nolds), we make it take into account the number of dimensions. Additionally, a constant is introduced
+    """Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make
+    it take into account the number of dimensions. Additionally, a constant is introduced.
+
     so that for dimension=2, r = 0.2 * np.std(signal, ddof=1), which is the traditional default value.
 
     See nolds for more info:
@@ -169,8 +168,7 @@ def _get_coarsegrained_rolling(signal, scale=2):
 
 
 def _get_coarsegrained(signal, scale=2, force=False):
-    """
-    Extract coarse-grained time series.
+    """Extract coarse-grained time series.
 
     The coarse-grained time series for a scale factor Tau are obtained by calculating the arithmetic
     mean of Tau neighboring values without overlapping.

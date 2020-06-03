@@ -10,8 +10,7 @@ from .ecg_quality import ecg_quality
 
 
 def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
-    """
-    Process an ECG signal.
+    """Process an ECG signal.
 
     Convenience function that automatically processes an ECG signal.
 

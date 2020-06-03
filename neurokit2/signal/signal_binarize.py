@@ -5,8 +5,7 @@ import sklearn.mixture
 
 
 def signal_binarize(signal, method="threshold", threshold="auto"):
-    """
-    Binarize a continuous signal.
+    """Binarize a continuous signal.
 
     Convert a continuous signal into zeros and ones depending on a given threshold.
 

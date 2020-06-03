@@ -13,8 +13,7 @@ def signal_filter(
     window_size="default",
     powerline=50,
 ):
-    """
-    Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
+    """Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
 
     Apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided)
     or bandpass (if both are provided) filter to the signal.
@@ -144,8 +143,7 @@ def signal_filter(
 
 
 def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="default"):
-    """
-    Filter a signal using the Savitzky-Golay method.
+    """Filter a signal using the Savitzky-Golay method.
 
     Default window size is chosen based on `Sadeghi, M., & Behnia, F. (2018). Optimum window length of
     Savitzky-Golay filters with arbitrary order. arXiv preprint arXiv:1808.10489.

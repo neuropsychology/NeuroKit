@@ -6,8 +6,7 @@ from .signal_interpolate import signal_interpolate
 
 
 def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_order="cubic"):
-    """
-    Calculate signal period from a series of peaks.
+    """Calculate signal period from a series of peaks.
 
     Parameters
     ----------

@@ -7,8 +7,7 @@ from .emg_clean import emg_clean
 
 
 def emg_process(emg_signal, sampling_rate=1000):
-    """
-    Process a electromyography (EMG) signal.
+    """Process a electromyography (EMG) signal.
 
     Convenience function that automatically processes an electromyography signal.
 

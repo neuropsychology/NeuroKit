@@ -5,8 +5,7 @@ from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_san
 
 
 def emg_eventrelated(epochs, silent=False):
-    """
-    Performs event-related EMG analysis on epochs.
+    """Performs event-related EMG analysis on epochs.
 
     Parameters
     ----------
