@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
+import sys
 
 import neurokit2 as nk
 
@@ -64,6 +65,7 @@ def run_test_func(test_data):
     'ECG_R_Onsets',
     'ECG_R_Offsets'
 ])
+@pytest.mark.skipif(sys.platform.startswith("mac"), reason="skip testing on macos")
 def test_find_ecg_characteristics(attribute, test_data):
     ecg_characteristics = run_test_func(test_data)
     diff = ecg_characteristics[attribute] - test_data[attribute]

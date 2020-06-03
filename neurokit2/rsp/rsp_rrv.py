@@ -7,6 +7,7 @@ import pandas as pd
 from ..complexity import entropy_approximate, entropy_sample, fractal_dfa
 from ..signal import signal_power, signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
+from ..stats import mad
 
 
 def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
@@ -108,17 +109,19 @@ def _rsp_rrv_time(bbi):
     out = {}  # Initialize empty dict
 
     # Mean based
-    out["SDBB"] = np.std(bbi, ddof=1)
     out["RMSSD"] = np.sqrt(np.mean(diff_bbi ** 2))
-    out["SDSD"] = np.std(diff_bbi, ddof=1)
-    #    out["MeanNN"] = np.mean(rri)
-    #    out["CVNN"] = out["SDNN"] / out["MeanNN"]
-    #    out["CVSD"] = out["RMSSD"] / out["MeanNN"]
+
+    out["MeanBB"] = np.nanmean(bbi)
+    out["SDBB"] = np.nanstd(bbi, ddof=1)
+    out["SDSD"] = np.nanstd(diff_bbi, ddof=1)
+
+    out["CVBB"] = out["SDBB"] / out["MeanBB"]
+    out["CVSD"] = out["RMSSD"] / out["MeanBB"]
 
     # Robust
-    #    out["MedianNN"] = np.median(np.abs(rri))
-    #    out["MadNN"] = mad(rri)
-    #    out["MCVNN"] = out["MadNN"] / out["MedianNN"]
+    out["MedianBB"] = np.nanmedian(bbi)
+    out["MadBB"] = mad(bbi)
+    out["MCVBB"] = out["MadBB"] / out["MedianBB"]
 
     #    # Extreme-based
     #    nn50 = np.sum(np.abs(diff_rri) > 50)

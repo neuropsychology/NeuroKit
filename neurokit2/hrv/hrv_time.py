@@ -85,14 +85,16 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
 
     # Mean based
     out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
-    out["MeanNN"] = np.mean(rri)
-    out["SDNN"] = np.std(rri, ddof=1)
-    out["SDSD"] = np.std(diff_rri, ddof=1)
+
+    out["MeanNN"] = np.nanmean(rri)
+    out["SDNN"] = np.nanstd(rri, ddof=1)
+    out["SDSD"] = np.nanstd(diff_rri, ddof=1)
+
     out["CVNN"] = out["SDNN"] / out["MeanNN"]
     out["CVSD"] = out["RMSSD"] / out["MeanNN"]
 
     # Robust
-    out["MedianNN"] = np.median(np.abs(rri))
+    out["MedianNN"] = np.nanmedian(rri)
     out["MadNN"] = mad(rri)
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]
 
