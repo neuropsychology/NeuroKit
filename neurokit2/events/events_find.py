@@ -28,25 +28,27 @@ def events_find(
     event_channel : array or list
         The channel containing the events.
     threshold : str or float
-        The threshold value by which to select the events. If "auto", takes the value between the max and the min.
+        The threshold value by which to select the events. If "auto", takes the value between the max
+        and the min.
     threshold_keep : str
-        "above" or "below", define the events as above or under the threshold. For photosensors, a white screen
-        corresponds usually to higher values. Therefore, if your events are signaled by a black colour, events
-        values are the lower ones, and you should set the cut to "below".
+        "above" or "below", define the events as above or under the threshold. For photosensors, a
+        white screen corresponds usually to higher values. Therefore, if your events are signaled by
+        a black colour, events values are the lower ones, and you should set the cut to "below".
     start_at, end_at : int
         Keep events which onset is after, or before a particular time point.
     duration_min, duration_max : int
         The minimum or maximum duration of an event to be considered as such (in time points).
     inter_min : int
-        The minimum duration after an event for the subsequent event to be considered as such (in time points).
-        Useful when spurious consecutive events are created due to very high sampling rate.
+        The minimum duration after an event for the subsequent event to be considered as such (in time
+        points). Useful when spurious consecutive events are created due to very high sampling rate.
     discard_first, discard_last : int
         Discard first or last n events. Useful if the experiment stats or ends with some spurious events.
         If discard_first=0 and discard_last=0, no first event or last event is removed.
     event_labels : list
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
-        An optional list containing, for each event, for example the trial category, group or experimental conditions.
+        An optional list containing, for each event, for example the trial category, group or
+        experimental conditions.
 
     Returns
     ----------
@@ -67,7 +69,8 @@ def events_find(
     >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
     >>> events #doctest: +SKIP
-    {'onset': array([   1, 1001, 2001, 3001]), 'duration': array([500, 500, 500, 500]), 'label': array(['1', '2', '3', '4'], dtype='<U11')}
+    {'onset': array([   1, 1001, 2001, 3001]), 'duration': array([500, 500, 500, 500]),
+'label': array(['1', '2', '3', '4'], dtype='<U11')}
     >>>
     >>> fig = nk.events_plot(events, signal)
     >>> fig #doctest: +SKIP

@@ -29,7 +29,8 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
 
     References
     ----------
-    - Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a linear computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
+    - Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a linear
+    computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
 
     """
     signal = as_vector(signal)

@@ -18,12 +18,10 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     desired_length : int
         The amount of samples over which to interpolate the y_values.
     method : str
-        Method of interpolation. Can be 'linear', 'nearest', 'zero', 'slinear',
-        'quadratic', 'cubic', 'previous' or 'next'.  'zero', 'slinear',
-        'quadratic' and 'cubic' refer to a spline interpolation of zeroth,
-        first, second or third order; 'previous' and 'next' simply return the
-        previous or next value of the point) or as an integer specifying the
-        order of the spline interpolator to use.
+        Method of interpolation. Can be 'linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic',
+        'previous' or 'next'.  'zero', 'slinear', 'quadratic' and 'cubic' refer to a spline interpolation
+        of zeroth, first, second or third order; 'previous' and 'next' simply return the previous or next
+        value of the point) or as an integer specifying the order of the spline interpolator to use.
 
     Returns
     -------
@@ -45,7 +43,12 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     >>> cubic = nk.signal_interpolate(samples, signal, desired_length=1000, method="cubic")
     >>> nearest = nk.signal_interpolate(samples, signal, desired_length=1000, method="nearest")
     >>>
-    >>> fig = plt.plot(np.linspace(0, 1, num=len(zero)), zero, 'y', np.linspace(0, 1, num=len(linear)), linear, 'r', np.linspace(0, 1, num=len(quadratic)), quadratic, 'b', np.linspace(0, 1, num=len(cubic)), cubic, 'g', np.linspace(0, 1, num=len(nearest)), nearest, 'm', np.linspace(0, 1, num=len(signal)), signal, 'ko')
+    >>> fig = plt.plot(np.linspace(0, 1, num=len(zero)), zero, 'y',
+    ...                np.linspace(0, 1, num=len(linear)),linear, 'r',
+    ...                np.linspace(0, 1, num=len(quadratic)), quadratic, 'b',
+    ...                np.linspace(0, 1, num=len(cubic)), cubic, 'g',
+    ...                np.linspace(0, 1, num=len(nearest)), nearest, 'm',
+    ...                np.linspace(0, 1, num=len(signal)), signal, 'ko')
     >>> fig #doctest: +SKIP
 
     """

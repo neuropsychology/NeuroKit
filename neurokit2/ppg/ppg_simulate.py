@@ -24,10 +24,9 @@ def ppg_simulate(
     """
     Simulate a photoplethysmogram (PPG) signal.
 
-    Phenomenological approximation of PPG. The PPG wave is described with four
-    landmarks: wave onset, location of the systolic peak, location of the
-    dicrotic notch and location of the diastolic peaks. These landmarks are
-    defined as x and y coordinates (in a  time series). These coordinates are
+    Phenomenological approximation of PPG. The PPG wave is described with four landmarks: wave onset,
+    location of the systolic peak, location of the dicrotic notch and location of the diastolic peaks.
+    These landmarks are defined as x and y coordinates (in a  time series). These coordinates are
     then interpolated at the desired sampling rate to obtain the PPG signal.
 
     Parameters
@@ -35,43 +34,34 @@ def ppg_simulate(
     duration : int
         Desired recording length in seconds. The default is 120.
     sampling_rate : int
-        The desired sampling rate (in Hz, i.e., samples/second). The default is
-        1000.
+        The desired sampling rate (in Hz, i.e., samples/second). The default is 1000.
     heart_rate : int
         Desired simulated heart rate (in beats per minute). The default is 70.
     frequency_modulation : float
-        Float between 0 and 1. Determines how pronounced respiratory sinus
-        arrythmia (RSA) is (0 corresponds to absence of RSA). The default is
-        0.3.
+        Float between 0 and 1. Determines how pronounced respiratory sinus arrythmia (RSA) is
+        (0 corresponds to absence of RSA). The default is 0.3.
     ibi_randomness : float
-        Float between 0 and 1. Determines how much random noise there is in the
-        duration of each PPG wave (0 corresponds to absence of variation). The
-        default is 0.1.
+        Float between 0 and 1. Determines how much random noise there is in the duration of each
+        PPG wave (0 corresponds to absence of variation). The default is 0.1.
     drift : float
-        Float between 0 and 1. Determines how pronounced the baseline drift
-        (.05 Hz) is (0 corresponds to absence of baseline drift). The default
-        is 1.
+        Float between 0 and 1. Determines how pronounced the baseline drift (.05 Hz) is
+        (0 corresponds to absence of baseline drift). The default is 1.
     motion_amplitude : float
-        Float between 0 and 1. Determines how pronounced the motion artifact
-        (0.5 Hz) is (0 corresponds to absence of motion artifact). The default
-        is 0.1.
+        Float between 0 and 1. Determines how pronounced the motion artifact (0.5 Hz) is
+        (0 corresponds to absence of motion artifact). The default is 0.1.
     powerline_amplitude : float
-        Float between 0 and 1. Determines how pronounced the powerline artifact
-        (50 Hz) is (0 corresponds to absence of powerline artifact). Note that
-        powerline_amplitude > 0 is only possible if 'sampling_rate' is >= 500.
-        The default is 0.1.
+        Float between 0 and 1. Determines how pronounced the powerline artifact (50 Hz) is
+        (0 corresponds to absence of powerline artifact). Note that powerline_amplitude > 0 is only
+        possible if 'sampling_rate' is >= 500. The default is 0.1.
     burst_amplitude : float
-        Float between 0 and 1. Determines how pronounced high frequency burst
-        artifacts are (0 corresponds to absence of bursts). The default is 1.
+        Float between 0 and 1. Determines how pronounced high frequency burst artifacts are
+        (0 corresponds to absence of bursts). The default is 1.
     burst_number : int
-        Determines how many high frequency burst artifacts occur. The default
-        is 0.
+        Determines how many high frequency burst artifacts occur. The default is 0.
     show : bool
-        If true, returns a plot of the landmarks and interpolated PPG. Useful
-        for debugging.
+        If true, returns a plot of the landmarks and interpolated PPG. Useful for debugging.
     random_state : int
-        Seed for the random number generator. Keep it fixed for reproducible
-        results.
+        Seed for the random number generator. Keep it fixed for reproducible results.
 
     Returns
     -------

@@ -25,7 +25,9 @@ def signal_psd(
     window : int
         Length of each window in seconds (for Welch method).
     resolution : int
-        Resolution is used to adjust the window length in Welch method. It is also balance between frequency resolution and temporal resolution since the short the window length, the higher the temporal resolution and the lower the frequency resolution, vice versa.
+        Resolution is used to adjust the window length in Welch method. It is also balance between frequency
+        resolution and temporal resolution since the short the window length, the higher the temporal resolution
+        and the lower the frequency resolution, vice versa.
 
     See Also
     --------
@@ -98,7 +100,9 @@ def signal_psd(
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
             print(
-                "Neurokit warning: signal_psd(): The duration of recording is too short to support a sufficiently long window for high frequency resolution. Consider using a longer recording or increasing the `min_frequency`"
+                "Neurokit warning: signal_psd(): The duration of recording is too short to support a "
+                "sufficiently long window for high frequency resolution. Consider using a longer recording "
+                "or increasing the `min_frequency`"
             )
             nperseg = int(len(signal / 2))
 

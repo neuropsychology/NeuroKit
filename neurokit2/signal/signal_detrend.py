@@ -9,22 +9,33 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     """
     Polynomial detrending of signal.
 
-    Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal (i.e., removing a general trend). One can also use other methods, such as smoothness priors approach described by Tarvainen (2002) or LOESS regression, but these scale badly for long signals.
+    Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal
+    (i.e., removing a general trend). One can also use other methods, such as smoothness priors approach
+    described by Tarvainen (2002) or LOESS regression, but these scale badly for long signals.
 
     Parameters
     ----------
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        Can be one of 'polynomial' (default; traditional detrending of a given order) or 'tarvainen2002' to use the smoothness priors approach described by Tarvainen (2002) (mostly used in HRV analyses as a lowpass filter to remove complex trends), 'loess' for LOESS smoothing trend removal or 'locreg' for local linear regression (the 'runline' algorithm from chronux).
+        Can be one of 'polynomial' (default; traditional detrending of a given order) or 'tarvainen2002'
+        to use the smoothness priors approach described by Tarvainen (2002) (mostly used in HRV analyses
+        as a lowpass filter to remove complex trends), 'loess' for LOESS smoothing trend removal or 'locreg'
+        for local linear regression (the 'runline' algorithm from chronux).
     order : int
-        Only used if `method` is 'polynomial'. The order of the polynomial. 0, 1 or > 1 for a baseline ('constant detrend', i.e., remove only the mean), linear (remove the linear trend) or polynomial detrending, respectively. Can also be 'auto', it which case it will attempt to find the optimal order to minimize the RMSE.
+        Only used if `method` is 'polynomial'. The order of the polynomial. 0, 1 or > 1 for a baseline
+        ('constant detrend', i.e., remove only the mean), linear (remove the linear trend) or polynomial
+        detrending, respectively. Can also be 'auto', it which case it will attempt to find the optimal
+        order to minimize the RMSE.
     regularization : int
         Only used if `method='tarvainen2002'`. The regularization parameter (default to 500).
     alpha : float
         Only used if `method` is 'loess'. The parameter which controls the degree of smoothing.
     window, stepsize : float
-        Only used if `method` is 'locreg'. The detrending 'window' should correspond to the desired low frequency band to remove multiplied by the sampling rate (for instance, ``1.5*1000`` will remove frequencies below 1.5Hz for a signal sampled at 1000Hz). The 'stepsize' should also be multiplied by the sampling rate.
+        Only used if `method` is 'locreg'. The detrending 'window' should correspond to the desired low
+        frequency band to remove multiplied by the sampling rate (for instance, ``1.5*1000`` will remove
+        frequencies below 1.5Hz for a signal sampled at 1000Hz). The 'stepsize' should also be multiplied
+        by the sampling rate.
 
     Returns
     -------
@@ -54,7 +65,8 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     >>> poly10 = nk.signal_detrend(signal, order=10)  # Linear detrend (10th order)
     >>> tarvainen = nk.signal_detrend(signal, method='tarvainen2002')  # Tarvainen (2002) method
     >>> loess = nk.signal_detrend(signal, method='loess')  # LOESS detrend (smooth removal)
-    >>> locreg = nk.signal_detrend(signal, method='locreg', window=1.5*100, stepsize=0.02*100)  # Local regression (100Hz)
+    >>> locreg = nk.signal_detrend(signal, method='locreg',
+    ...                            window=1.5*100, stepsize=0.02*100)  # Local regression (100Hz)
     >>>
     >>> # Visualize different methods
     >>> axes = pd.DataFrame({"Original signal": signal,
@@ -72,7 +84,9 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
 
     References
     ----------
-    - `Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending method with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175. <https://ieeexplore.ieee.org/document/979357>`_
+    - `Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending method
+    with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175.
+    <https://ieeexplore.ieee.org/document/979357>`_
 
     """
     method = method.lower()
@@ -113,8 +127,8 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     """
     Method by Tarvainen et al., 2002.
 
-    - Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending method with application to HRV
-    analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175.
+    - Tarvainen, M. P., Ranta-Aho, P. O., & Karjalainen, P. A. (2002). An advanced detrending method
+    with application to HRV analysis. IEEE Transactions on Biomedical Engineering, 49(2), 172-175.
 
     """
     N = len(signal)

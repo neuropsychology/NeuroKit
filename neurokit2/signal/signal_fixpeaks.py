@@ -24,46 +24,39 @@ def signal_fixpeaks(
     """
     Correct erroneous peak placements.
 
-    Identify and correct erroneous peak placements based on outliers in
-    peak-to-peak differences (period).
+    Identify and correct erroneous peak placements based on outliers in peak-to-peak differences (period).
 
     Parameters
     ----------
     peaks : list, array, DataFrame, Series or dict
-        The samples at which the peaks occur. If an array is passed in, it is
-        assumed that it was obtained with `signal_findpeaks()`. If a DataFrame
-        is passed in, it is assumed to be obtained with `ecg_findpeaks()` or
-        `ppg_findpeaks()` and to be of the same length as the input signal.
+        The samples at which the peaks occur. If an array is passed in, it is assumed that it was obtained
+        with `signal_findpeaks()`. If a DataFrame is passed in, it is assumed to be obtained with `ecg_findpeaks()`
+        or `ppg_findpeaks()` and to be of the same length as the input signal.
     sampling_rate : int
-        The sampling frequency of the signal that contains the peaks (in Hz,
-        i.e., samples/second).
+        The sampling frequency of the signal that contains the peaks (in Hz, i.e., samples/second).
     iterative : bool
-        Whether or not to apply the artifact correction repeatedly (results
-        in superior artifact correction).
+        Whether or not to apply the artifact correction repeatedly (results in superior artifact correction).
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
     interval_min, interval_max : float
         The minimum or maximum interval between the peaks.
     relative_interval_min, relative_interval_max : float
-        The minimum or maximum interval between the peaks as relative to the
-        sample (expressed in standard deviation from the mean).
+        The minimum or maximum interval between the peaks as relative to the sample (expressed in
+        standard deviation from the mean).
     robust : bool
-        Use a robust method of standardization (see `standardize()`) for the
-        relative thresholds.
+        Use a robust method of standardization (see `standardize()`) for the relative thresholds.
     method : str
-        Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection
-        and correction described in Lipponen, J. A., & Tarvainen, M. P. (2019).
-        Note that "Kubios" is only meant for peaks in ECG or PPG. "Neurokit"
-        can be used with peaks in ECG, PPG, or respiratory data.
+        Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
+        in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
+        ECG or PPG. "Neurokit" can be used with peaks in ECG, PPG, or respiratory data.
 
     Returns
     -------
     peaks_clean : array
         The corrected peak locations.
     artifacts : dict
-        Only if method="Kubios". A dictionary containing the indices of
-        artifacts, accessible with the keys "ectopic", "missed", "extra", and
-        "longshort".
+        Only if method="Kubios". A dictionary containing the indices of artifacts, accessible with the
+        keys "ectopic", "missed", "extra", and "longshort".
 
     See Also
     --------
@@ -78,7 +71,8 @@ def signal_fixpeaks(
     >>> # Kubios
     >>> ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)
     >>> rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
-    >>> artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected, iterative=True, show=True, method="Kubios")
+    >>> artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected, iterative=True,
+    ...                                                  show=True, method="Kubios")
     >>> rate_corrected = nk.signal_rate(rpeaks_corrected, desired_length=len(ecg))
     >>> rate_uncorrected = nk.signal_rate(rpeaks_uncorrected, desired_length=len(ecg))
     >>>
@@ -104,10 +98,9 @@ def signal_fixpeaks(
 
     References
     ----------
-    - Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart
-    rate variability time series artefact correction using novel beat
-    classification. Journal of medical engineering & technology, 43(3),
-    173-181. 10.1080/03091902.2019.1640306
+    - Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart rate variability time
+    series artefact correction using novel beat classification. Journal of medical engineering & technology,
+    43(3), 173-181. 10.1080/03091902.2019.1640306
 
     """
     # Format input
@@ -381,8 +374,8 @@ def _correct_misaligned(misaligned_idcs, peaks):
 
 def _update_indices(source_idcs, update_idcs, update):
     """
-    For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger than
-    s.
+    For every element s in source_idcs, change every element u in update_idcs according to update,
+    if u is larger than s.
     """
     if not update_idcs:
         return update_idcs
