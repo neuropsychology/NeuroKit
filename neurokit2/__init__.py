@@ -1,5 +1,4 @@
-"""
-Top-level package for NeuroKit.
+"""Top-level package for NeuroKit.
 """
 import datetime
 
@@ -30,7 +29,7 @@ __email__ = "dom.makowski@gmail.com"
 
 
 # Citation
-__bibtex__ = """
+__bibtex__ = r"""
 @misc{neurokit2,
   doi = {10.5281/ZENODO.3597887},
   url = {https://github.com/neuropsychology/NeuroKit},
@@ -63,4 +62,8 @@ __citation__ = __cite__
 
 
 def cite():
+    """Cite NeuroKit2
+
+    This function will print the bibtex and the APA reference for your to copy and cite.
+    """
     print(__cite__)
