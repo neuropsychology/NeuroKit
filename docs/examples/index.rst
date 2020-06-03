@@ -16,6 +16,7 @@ Contents:
    heartbeats
    ecg_delineate
    epochs_create
+   complexity
 
 Cloud-based interactive examples
 =================================

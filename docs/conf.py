@@ -152,7 +152,9 @@ html_static_path = ['_static']  # Folder that contain custom static files (e.g.,
 
 # Theme options are theme-specific and customize the look and feel of a theme further.
 # For a list of options available for each theme, see https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html
-# html_theme_options = {}
+ html_theme_options = {
+         'collapse_navigation': False  # Expandables entries
+}
 
 
 
@@ -189,7 +191,7 @@ author_field = u'Official Documentation'
 
 latex_elements = {
     'sphinxsetup': r"""
-        VerbatimColor={RGB}{55,71,79},
+        VerbatimColor={RGB}{38,50,56},
         verbatimwithframe=false,
         """
     # Background color of chunks
