@@ -142,25 +142,18 @@ todo_include_todos = False
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
 
-# -- Options for HTML output -------------------------------------------
+# -- Options for HTML THEME: sphinx_rtd_theme -------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
+# The theme to use for HTML and HTML Help pages.  See the documentation for a list of builtin themes.
 html_theme = 'sphinx_rtd_theme'
 html_favicon = "img/icon.ico"
 html_logo = "img/neurokit.png"
+html_static_path = ['_static']  # Folder that contain custom static files (e.g., CSS files)
 
-# Theme options are theme-specific and customize the look and feel of a
-# theme further.  For a list of options available for each theme, see the
-# documentation.
-#
+# Theme options are theme-specific and customize the look and feel of a theme further.
+# For a list of options available for each theme, see https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html
 # html_theme_options = {}
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
 
 
 # -- Options for HTMLHelp output ---------------------------------------
