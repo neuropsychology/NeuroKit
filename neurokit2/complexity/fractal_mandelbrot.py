@@ -100,7 +100,7 @@ def _mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), iteratio
         mask = (z * z.conjugate()).real < threshold
         mask = np.logical_and(mask, optim)
 
-        if np.all(mask == False) is True:
+        if np.all(~mask) is True:
             break
 
         # Increase
@@ -193,7 +193,7 @@ def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imagin
 
         # collect the c points that have escaped
         mask = np.abs(z) < 2
-        new_sets = c[mask == False]
+        new_sets = c[~mask]
         sets[sets_found : sets_found + len(new_sets)] = new_sets
         sets_found += len(new_sets)
 
