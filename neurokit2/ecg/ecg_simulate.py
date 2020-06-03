@@ -13,7 +13,9 @@ def ecg_simulate(
     """
     Simulate an ECG/EKG signal.
 
-    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies wavelets to roughly approximate cardiac cycles.
+    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either
+    the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies wavelets
+    to roughly approximate cardiac cycles.
 
     Parameters
     ----------
@@ -26,11 +28,9 @@ def ecg_simulate(
     heart_rate : int
         Desired simulated heart rate (in beats per minute).
     method : str
-        The model used to generate the signal. Can be 'simple' for a
-        simulation based on Daubechies wavelets that roughly approximates
-        a single cardiac cycle. If 'ecgsyn' (default), will use an
-        advanced model desbribed `McSharry et al. (2003)
-        <https://physionet.org/content/ecgsyn/>`_.
+        The model used to generate the signal. Can be 'simple' for a simulation based on Daubechies
+        wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use an
+        advanced model desbribed `McSharry et al. (2003) <https://physionet.org/content/ecgsyn/>`_.
     random_state : int
         Seed for the random number generator.
 
@@ -61,7 +61,8 @@ def ecg_simulate(
 
     References
     -----------
-    - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50(3), 289-294.
+    - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for
+    generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50(3), 289-294.
     - https://github.com/diarmaidocualain/ecg_simulation
 
     """
@@ -217,11 +218,8 @@ def _ecg_simulate_ecgsyn(
     qd = sfint / sfecg
     if q != qd:
         raise ValueError(
-            "Internal sampling frequency (sfint) must be an integer multiple of the ECG sampling frequency (sfecg). Your current choices are: sfecg = "
-            + str(sfecg)
-            + " and sfint = "
-            + str(sfint)
-            + "."
+            "Internal sampling frequency (sfint) must be an integer multiple of the ECG sampling frequency"
+            " (sfecg). Your current choices are: sfecg = " + str(sfecg) + " and sfint = " + str(sfint) + "."
         )
 
     # Define frequency parameters for rr process

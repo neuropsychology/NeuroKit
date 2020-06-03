@@ -18,9 +18,8 @@ def fit_polynomial(y, X=None, order=2):
     X : list, array or Series
         Explanatory variable (the x axis). If 'None', will treat y as a continuous signal.
     order : int
-        The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial
-        fit, respectively. Can also be 'auto', it which case it will attempt to find
-        the optimal order to minimize the RMSE.
+        The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial fit, respectively.
+        Can also be 'auto', it which case it will attempt to find the optimal order to minimize the RMSE.
 
     Returns
     -------
@@ -38,7 +37,11 @@ def fit_polynomial(y, X=None, order=2):
     >>>
     >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
     >>>
-    >>> pd.DataFrame({ "y": y, "Poly_0": nk.fit_polynomial(y, order=0), "Poly_1": nk.fit_polynomial(y, order=1), "Poly_2": nk.fit_polynomial(y, order=2), "Poly_3": nk.fit_polynomial(y, order=3), "Poly_5": nk.fit_polynomial(y, order=5), "Poly_auto": nk.fit_polynomial(y, order='auto')}).plot() #doctest: +SKIP
+    >>> pd.DataFrame({ "y": y, "Poly_0": nk.fit_polynomial(y, order=0),
+    ...               "Poly_1": nk.fit_polynomial(y, order=1),
+    ...               "Poly_2": nk.fit_polynomial(y, order=2),
+    ...               "Poly_3": nk.fit_polynomial(y, order=3), "Poly_5": nk.fit_polynomial(y, order=5),
+    ...               "Poly_auto": nk.fit_polynomial(y, order='auto')}).plot() #doctest: +SKIP
 
     """
     if X is None:
