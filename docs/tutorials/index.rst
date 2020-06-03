@@ -8,6 +8,5 @@ Contents:
    
    recording
    software
-   learnpython
    complexity
    resources
