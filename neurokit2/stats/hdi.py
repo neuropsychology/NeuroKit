@@ -23,6 +23,14 @@ def hdi(x, ci=0.95, show=False, **kwargs):
     ci : float
         Value of probability of the (credible) interval - CI (between 0 and 1) to be estimated.
         Default to .95 (95%).
+    show : bool
+        If True, the function will produce a figure.
+    **kwargs
+        Other arguments to be passed to ``density()``.
+
+    See Also
+    --------
+    density
 
     Returns
     ----------
@@ -65,7 +73,7 @@ def _hdi_plot(vals, hdi_low, hdi_high, ci=0.95, **kwargs):
     where[0 : find_closest(hdi_low, x, return_index=True)] = True
     where[find_closest(hdi_high, x, return_index=True) : :] = True
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots()  # pylint: disable=unused-variable
     ax.plot(x, y, color="white")
     ax.fill_between(
         x, y, where=where, color="#E91E63", label="CI {:.0%} [{:.2f}, {:.2f}]".format(ci, hdi_low, hdi_high)
