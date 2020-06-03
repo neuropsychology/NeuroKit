@@ -73,8 +73,7 @@ def fractal_mandelbrot(
             iterations=iterations,
         )
     else:
-        img = _buddhabrot(size=size, real_range=real_range, imaginary_range=imaginary_range,
-                          iterations=iterations)
+        img = _buddhabrot(size=size, real_range=real_range, imaginary_range=imaginary_range, iterations=iterations)
 
     if show is True:
         plt.imshow(img, cmap="rainbow")
@@ -176,8 +175,7 @@ def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(
     return img
 
 
-def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2),
-                           threshold=4):
+def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4):
 
     # Allocate an array to store our non-mset points as we find them.
     sets = np.zeros(size, dtype=np.complex128)

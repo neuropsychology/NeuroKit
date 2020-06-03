@@ -30,8 +30,7 @@ __email__ = "dom.makowski@gmail.com"
 
 
 # Citation
-__bibtex__ = (
-    """
+__bibtex__ = """
 @misc{neurokit2,
   doi = {10.5281/ZENODO.3597887},
   url = {https://github.com/neuropsychology/NeuroKit},
@@ -43,7 +42,6 @@ __bibtex__ = (
   year = {2020},
 }
 """
-)
 
 __cite__ = (
     """
@@ -57,7 +55,8 @@ You can cite NeuroKit2 as follows:
 
 
 Full bibtex reference:
-""" + __bibtex__
+"""
+    + __bibtex__
 )
 # Aliases for citation
 __citation__ = __cite__

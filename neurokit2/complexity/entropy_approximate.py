@@ -81,10 +81,12 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
     if corrected is True:
 
-        embedded1, count1 = _get_embedded(signal, delay=delay, dimension=dimension, r=r,
-                                          distance="chebyshev", approximate=True, **kwargs)
-        embedded2, count2 = _get_embedded(signal, delay=delay, dimension=dimension + 1, r=r,
-                                          distance="chebyshev", approximate=True, **kwargs)
+        embedded1, count1 = _get_embedded(
+            signal, delay=delay, dimension=dimension, r=r, distance="chebyshev", approximate=True, **kwargs
+        )
+        embedded2, count2 = _get_embedded(
+            signal, delay=delay, dimension=dimension + 1, r=r, distance="chebyshev", approximate=True, **kwargs
+        )
 
         # Limit the number of vectors to N - (dimension + 1) * delay
         upper_limit = len(signal) - (dimension + 1) * delay

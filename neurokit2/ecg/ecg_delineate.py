@@ -93,8 +93,7 @@ def ecg_delineate(
         if cols:
             ecg_cleaned = ecg_cleaned[cols[0]].values
         else:
-            raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract"
-                             "cleaned signal.")
+            raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract" "cleaned signal.")
 
     elif isinstance(ecg_cleaned, dict):
         for i in ecg_cleaned:
@@ -104,8 +103,7 @@ def ecg_delineate(
                 ecg_cleaned = signals[cols[0]].values
 
             else:
-                raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract"
-                                 "cleaned signal.")
+                raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract" "cleaned signal.")
 
     # Sanitize input for rpeaks
     if rpeaks is None:
@@ -124,8 +122,7 @@ def ecg_delineate(
         waves = _dwt_ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=sampling_rate)
 
     else:
-        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be  one of 'peak',"
-                         "'cwt' or 'dwt'.")
+        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be  one of 'peak'," "'cwt' or 'dwt'.")
 
     # Remove NaN in Peaks, Onsets, and Offsets
     waves_noNA = waves.copy()
@@ -136,8 +133,9 @@ def ecg_delineate(
     signals = instant_peaks
 
     if show is True:
-        _ecg_delineate_plot(ecg_cleaned, rpeaks=rpeaks, signals=signals, signal_features_type=show_type,
-                            sampling_rate=sampling_rate)
+        _ecg_delineate_plot(
+            ecg_cleaned, rpeaks=rpeaks, signals=signals, signal_features_type=show_type, sampling_rate=sampling_rate
+        )
 
     if check is True:
         waves = _ecg_delineate_check(waves, rpeaks)

@@ -82,8 +82,9 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
 
     # Sanity checks
     if dimension * delay > N:
-        raise ValueError("NeuroKit error: complexity_embedding(): dimension * delay should be lower"
-                         "than length of signal.")
+        raise ValueError(
+            "NeuroKit error: complexity_embedding(): dimension * delay should be lower" "than length of signal."
+        )
     if delay < 1:
         raise ValueError("NeuroKit error: complexity_embedding(): 'delay' has to be at least 1.")
 
@@ -130,13 +131,11 @@ def _embedding_plot_2D(embedded):
 
 
 def _embedding_plot_3D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2],
-                            rotate=False)
+    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False)
 
 
 def _embedding_plot_4D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3],
-                            rotate=False)
+    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False)
 
 
 # =============================================================================

@@ -146,8 +146,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     elif method in ["promac", "all"]:
         rpeaks = _ecg_findpeaks_promac(ecg_cleaned, sampling_rate=sampling_rate, threshold=0.33, show=show)
     else:
-        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit'"
-                         "or 'pamtompkins'.")
+        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit'" "or 'pamtompkins'.")
 
     # Prepare output.
     info = {"ECG_R_Peaks": rpeaks}
@@ -751,8 +750,10 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
     try:
         import pywt
     except ImportError:
-        raise ImportError("NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for"
-                          " this method to run. Please install it first (`pip install PyWavelets`).")
+        raise ImportError(
+            "NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for"
+            " this method to run. Please install it first (`pip install PyWavelets`)."
+        )
 
     swt_level = 3
     padding = -1
@@ -838,8 +839,10 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     try:
         import pywt
     except ImportError:
-        raise ImportError("NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
-                          " this method to run. Please install it first (`pip install PyWavelets`).")
+        raise ImportError(
+            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
+            " this method to run. Please install it first (`pip install PyWavelets`)."
+        )
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, freqs = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)

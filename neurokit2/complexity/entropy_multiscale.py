@@ -112,8 +112,9 @@ def entropy_multiscale(
 # =============================================================================
 # Internal
 # =============================================================================
-def _entropy_multiscale(signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False,
-                        refined=False, show=False, **kwargs):
+def _entropy_multiscale(
+    signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, refined=False, show=False, **kwargs
+):
 
     r = _get_r(signal, r=r, dimension=dimension)
     scale_factors = _get_scale(signal, scale=scale, dimension=dimension)

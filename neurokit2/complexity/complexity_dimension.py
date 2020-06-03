@@ -93,8 +93,8 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 
         if show is True:
             _embedding_dimension_plot(
-                method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, f1=f1,
-                f2=f2, f3=f3)
+                method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, f1=f1, f2=f2, f3=f3
+            )
 
     else:
         raise ValueError("NeuroKit error: complexity_dimension(): 'method' " "not recognized.")
@@ -179,8 +179,7 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, show
     return f1, f2, f3
 
 
-def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10,
-                               maxnum=None):
+def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
     """
     Return fraction of false nearest neighbors for a single d.
     """
@@ -315,8 +314,9 @@ def _embedding_dimension_neighbors(
                 break
 
             if k == (maxnum + 1):
-                raise Exception("Could not find any near neighbor with a nonzero distance."
-                                "Try increasing the value of maxnum.")
+                raise Exception(
+                    "Could not find any near neighbor with a nonzero distance." "Try increasing the value of maxnum."
+                )
 
     indices, values = np.squeeze(indices), np.squeeze(dists)
 

@@ -146,12 +146,11 @@ def _fractal_dfa_findwindows(signal, n, windows="default"):
     if len(windows) < 2:
         raise ValueError("NeuroKit error: fractal_dfa(): more than one window is needed.")
     if np.min(windows) < 2:
-        raise ValueError("NeuroKit error: fractal_dfa(): there must be at least 2 data points"
-                         "in each window")
+        raise ValueError("NeuroKit error: fractal_dfa(): there must be at least 2 data points" "in each window")
     if np.max(windows) >= n:
         raise ValueError(
-            "NeuroKit error: fractal_dfa(): the window cannot contain more data points than the"
-            "time series.")
+            "NeuroKit error: fractal_dfa(): the window cannot contain more data points than the" "time series."
+        )
     return windows
 
 

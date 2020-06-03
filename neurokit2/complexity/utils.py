@@ -20,11 +20,11 @@ def _phi(signal, delay=1, dimension=2, r="default", distance="chebyshev", approx
     # Initialize phi
     phi = np.zeros(2)
 
-    embedded1, count1 = _get_embedded(signal, delay, dimension, r, distance=distance,
-                                      approximate=approximate, fuzzy=fuzzy)
+    embedded1, count1 = _get_embedded(
+        signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy
+    )
 
-    embedded2, count2 = _get_embedded(signal, delay, dimension + 1, r, distance=distance,
-                                      approximate=True, fuzzy=fuzzy)
+    embedded2, count2 = _get_embedded(signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy)
 
     if approximate is True:
         phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))
@@ -63,9 +63,10 @@ def _get_embedded(signal, delay=1, dimension=2, r="default", distance="chebyshev
     """
     # Sanity checks
     if distance not in sklearn.neighbors.KDTree.valid_metrics:
-        raise ValueError("NeuroKit error: _get_embedded(): The given metric (%s) is not valid."
-                         "The valid metric names are: %s"
-                         % (distance, sklearn.neighbors.KDTree.valid_metrics))
+        raise ValueError(
+            "NeuroKit error: _get_embedded(): The given metric (%s) is not valid."
+            "The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics)
+        )
 
     # Get embedded
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)

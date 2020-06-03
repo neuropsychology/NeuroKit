@@ -117,8 +117,7 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, si
     length = duration * sampling_rate
 
     # The fractional Gaussian noise
-    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(size=length,
-         hurst_exponent=hurst_exponent)
+    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(size=length, hurst_exponent=hurst_exponent)
 
     # Initialise the array y
     y = np.zeros([length])

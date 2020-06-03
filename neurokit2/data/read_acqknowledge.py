@@ -64,8 +64,7 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
         filename += ".acq"
 
     if os.path.exists(filename) is False:
-        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't"
-                         " find the following file: " + filename)
+        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't" " find the following file: " + filename)
 
     # Read file
     file = bioread.read(filename)
