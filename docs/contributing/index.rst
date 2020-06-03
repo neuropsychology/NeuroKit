@@ -7,6 +7,6 @@ Contents:
    :maxdepth: 1
    
    understanding
-   contributing
+   ../../.github/CONTRIBUTING
    first_contribution
    
