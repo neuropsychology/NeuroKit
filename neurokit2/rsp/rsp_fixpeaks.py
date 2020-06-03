@@ -7,24 +7,22 @@ def rsp_fixpeaks(peaks, troughs=None, sampling_rate=1000):
     """
     Correct RSP peaks.
 
-    Low-level function used by `rsp_peaks()` to correct the peaks found by `rsp_findpeaks()`. Doesn't do anything for now for RSP. See `rsp_peaks()` for details.
+    Low-level function used by `rsp_peaks()` to correct the peaks found by `rsp_findpeaks()`.
+    Doesn't do anything for now for RSP. See `rsp_peaks()` for details.
 
     Parameters
     ----------
     peaks, troughs : list, array, DataFrame, Series or dict
-        The samples at which the inhalation peaks occur. If a dict or a
-        DataFrame is passed, it is assumed that these containers were obtained
-        with `rsp_findpeaks()`.
+        The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
+        assumed that these containers were obtained with `rsp_findpeaks()`.
     sampling_rate : int
-        The sampling frequency of the signal that contains the peaks (in Hz,
-        i.e., samples/second).
+        The sampling frequency of the signal that contains the peaks (in Hz, i.e., samples/second).
 
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the
-        samples at which inhalation peaks and exhalation troughs occur,
-        accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
+        A dictionary containing additional information, in this case the samples at which inhalation
+        peaks and exhalation troughs occur, accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
 
     See Also
     --------

@@ -19,13 +19,13 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     rsp_rate : array
         Array containing the respiratory rate, produced by `signal_rate()`.
     peaks : dict
-        The samples at which the inhalation peaks occur.
-        Dict returned by `rsp_peaks()`. Defaults to None.
+        The samples at which the inhalation peaks occur. Dict returned by `rsp_peaks()`. Defaults to None.
     sampling_rate : int
-        The sampling frequency of the signal
-        (in Hz, i.e., samples/second).
+        The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool
-        If True, will return a Poincaré plot, a scattergram, which plots each breath-to-breath interval against the next successive one. The ellipse centers around the average breath-to-breath interval. Defaults to False.
+        If True, will return a Poincaré plot, a scattergram, which plots each breath-to-breath interval
+        against the next successive one. The ellipse centers around the average breath-to-breath interval.
+        Defaults to False.
     silent : bool
         If False, warnings will be printed. Default to True.
 
@@ -33,24 +33,32 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     -------
     DataFrame
         DataFrame consisting of the computed RRV metrics, which includes:
-            - "*RRV_SDBB*": the standard deviation of the breath-to-breath intervals.
-            - "*RRV_RMSSD*": the root mean square of successive differences of the breath-to-breath intervals.
-            - "*RRV_SDSD*": the standard deviation of the successive differences between adjacent breath-to-breath intervals.
-            - "*RRV_BBx*": the number of successive interval differences that are greater than x seconds.
-            - "*RRV-pBBx*": the proportion of breath-to-breath intervals that are greater than x seconds, out of the total number of intervals.
-            - "*RRV_VLF*": spectral power density pertaining to very low frequency band i.e., 0 to .04 Hz by default.
-            - "*RRV_LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
-            - "*RRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
-            - "*RRV_LFHF*": the ratio of low frequency power to high frequency power.
-            - "*RRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
-            - "*RRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by total power.
-            - "*RRV_SD1*": SD1 is a measure of the spread of breath-to-breath intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term variability.
-            - "*RRV_SD2*": SD2 is a measure of the spread of breath-to-breath intervals on the Poincaré plot along the line of identity. It is an index of long-term variability.
-            - "*RRV_SD2SD1*": the ratio between short and long term fluctuations of the breath-to-breath intervals (SD2 divided by SD1).
-            - "*RRV_ApEn*": the approximate entropy of RRV, calculated by `entropy_approximate()`.
-            - "*RRV_SampEn*": the sample entropy of RRV, calculated by `entropy_sample()`.
-            - "*RRV_DFA_1*": the "short-term" fluctuation value generated from Detrended Fluctuation Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath intervals. Will only be computed if mora than 160 breath cycles in the signal.
-            - "*RRV_DFA_2*": the long-term fluctuation value. Will only be computed if mora than 640 breath cycles in the signal.
+        - "*RRV_SDBB*": the standard deviation of the breath-to-breath intervals.
+        - "*RRV_RMSSD*": the root mean square of successive differences of the breath-to-breath intervals.
+        - "*RRV_SDSD*": the standard deviation of the successive differences between adjacent
+        breath-to-breath intervals.
+        - "*RRV_BBx*": the number of successive interval differences that are greater than x seconds.
+        - "*RRV-pBBx*": the proportion of breath-to-breath intervals that are greater than x seconds,
+        out of the total number of intervals.
+        - "*RRV_VLF*": spectral power density pertaining to very low frequency band i.e., 0 to .04 Hz by default.
+        - "*RRV_LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
+        - "*RRV_HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
+        - "*RRV_LFHF*": the ratio of low frequency power to high frequency power.
+        - "*RRV_LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
+        - "*RRV_HFn*": the normalized high frequency, obtained by dividing the low frequency power by total power.
+        - "*RRV_SD1*": SD1 is a measure of the spread of breath-to-breath intervals on the Poincaré
+        plot perpendicular to the line of identity. It is an index of short-term variability.
+        - "*RRV_SD2*": SD2 is a measure of the spread of breath-to-breath intervals on the Poincaré
+        plot along the line of identity. It is an index of long-term variability.
+        - "*RRV_SD2SD1*": the ratio between short and long term fluctuations of the breath-to-breath
+        intervals (SD2 divided by SD1).
+        - "*RRV_ApEn*": the approximate entropy of RRV, calculated by `entropy_approximate()`.
+        - "*RRV_SampEn*": the sample entropy of RRV, calculated by `entropy_sample()`.
+        - "*RRV_DFA_1*": the "short-term" fluctuation value generated from Detrended Fluctuation
+        Analysis i.e. the root mean square deviation from the fitted trend of the breath-to-breath
+        intervals. Will only be computed if mora than 160 breath cycles in the signal.
+        - "*RRV_DFA_2*": the long-term fluctuation value. Will only be computed if mora than 640 breath
+        cycles in the signal.
 
     See Also
     --------
@@ -66,9 +74,8 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
 
     References
     ----------
-    - Soni, R., & Muniyandi, M. (2019). Breath rate variability:
-    a novel measure to study the meditation effects. International Journal of Yoga,
-    12(1), 45.
+    - Soni, R., & Muniyandi, M. (2019). Breath rate variability: a novel measure to study the meditation
+    effects. International Journal of Yoga, 12(1), 45.
 
     """
     # Sanitize input
@@ -144,7 +151,8 @@ def _rsp_rrv_frequency(
         for frequency in out.keys():
             if out[frequency] == 0.0:
                 print(
-                    "Neurokit warning: rsp_rrv(): The duration of recording is too short to allow reliable computation of signal power in frequency band "
+                    "Neurokit warning: rsp_rrv(): The duration of recording is too short to allow "
+                    " reliable computation of signal power in frequency band "
                     + frequency
                     + ". Its power is returned as zero."
                 )

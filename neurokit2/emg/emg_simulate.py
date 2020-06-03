@@ -17,15 +17,15 @@ def emg_simulate(
     duration : int
         Desired recording length in seconds.
     sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired
-        length of the signal (in samples).
+        The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal
+        (in samples).
     noise : float
         Noise level (gaussian noise).
     burst_number : int
         Desired number of bursts of activity (active muscle periods).
     burst_duration : float or list
-        Duration of the bursts. Can be a float (each burst will have the same
-        duration) or a list of durations for each bursts.
+        Duration of the bursts. Can be a float (each burst will have the same duration) or a list of
+        durations for each bursts.
     random_state : int
         Seed for the random number generator.
 
@@ -50,7 +50,8 @@ def emg_simulate(
 
     References
     -----------
-    This function is based on `this script <https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/>`_.
+    This function is based on `this script
+    <https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/>`_.
 
     """
     # Seed the random generator for reproducible results

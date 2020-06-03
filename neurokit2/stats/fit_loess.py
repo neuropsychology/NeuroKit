@@ -17,8 +17,8 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
     X : list, array or Series
         Explanatory variable (the x axis). If 'None', will treat y as a continuous signal (useful for smoothing).
     alpha : float
-        The parameter which controls the degree of smoothing, which corresponds
-        to the proportion of the samples to include in local regression.
+        The parameter which controls the degree of smoothing, which corresponds to the proportion
+        of the samples to include in local regression.
     order : int
         Degree of the polynomial to fit. Can be 1 or 2 (default).
 
@@ -39,7 +39,8 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
     >>> signal = np.cos(np.linspace(start=0, stop=10, num=1000))
     >>> distorted = nk.signal_distort(signal, noise_amplitude=[0.3, 0.2, 0.1], noise_frequency=[5, 10, 50])
     >>>
-    >>> pd.DataFrame({ "Raw": distorted, "Loess_1": nk.fit_loess(distorted, order=1), "Loess_2": nk.fit_loess(distorted, order=2)}).plot() #doctest: +SKIP
+    >>> pd.DataFrame({ "Raw": distorted, "Loess_1": nk.fit_loess(distorted, order=1),
+    ...               "Loess_2": nk.fit_loess(distorted, order=2)}).plot() #doctest: +SKIP
 
     References
     ----------

@@ -7,9 +7,10 @@ import sklearn.neighbors
 
 def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):
     """
-    Computes the (normalized) mutual information (MI) between two vectors from a joint histogram. The mutual information
-    of two variables is a measure of the mutual dependence between them. More specifically, it quantifies the "amount of
-    information" obtained about one variable by observing the other variable.
+    Computes the (normalized) mutual information (MI) between two vectors from a joint histogram.
+    The mutual information of two variables is a measure of the mutual dependence between them.
+    More specifically, it quantifies the "amount of information" obtained about one variable by
+    observing the other variable.
 
     Parameters
     ----------
@@ -44,9 +45,8 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 
     References
     ----------
-    - Studholme, jhill & jhawkes (1998). "A normalized entropy measure
-    of 3-D medical image alignment". in Proc. Medical Imaging 1998,
-    vol. 3338, San Diego, CA, pp. 132-143.
+    - Studholme, jhill & jhawkes (1998). "A normalized entropy measure of 3-D medical image alignment".
+    in Proc. Medical Imaging 1998, vol. 3338, San Diego, CA, pp. 132-143.
 
     """
     method = method.lower()
@@ -91,8 +91,8 @@ def _mutual_information_nolitsa(x, y, bins=256):
     """
     Calculate the mutual information between two random variables.
 
-    Calculates mutual information, I = S(x) + S(y) - S(x,y), between two
-    random variables x and y, where S(x) is the Shannon entropy.
+    Calculates mutual information, I = S(x) + S(y) - S(x,y), between two random variables x and y, where
+    S(x) is the Shannon entropy.
 
     Based on the nolitsa package: https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/delay.py#L72
 
@@ -144,12 +144,11 @@ def _entropy(X, k=1):
         number of nearest neighbors for density estimation
     Notes
     ---------
-    - Kozachenko, L. F. & Leonenko, N. N. 1987 Sample estimate of entropy
-    of a random vector. Probl. Inf. Transm. 23, 95-101.
-    - Evans, D. 2008 A computationally efficient estimator for
-    mutual information, Proc. R. Soc. A 464 (2093), 1203-1215.
-    - Kraskov A, Stogbauer H, Grassberger P. (2004). Estimating mutual
-    information. Phys Rev E 69(6 Pt 2):066138.
+    - Kozachenko, L. F. & Leonenko, N. N. 1987 Sample estimate of entropy of a random vector. Probl. Inf. Transm.
+    23, 95-101.
+    - Evans, D. 2008 A computationally efficient estimator for mutual information, Proc. R. Soc. A 464 (2093),
+    1203-1215.
+    - Kraskov A, Stogbauer H, Grassberger P. (2004). Estimating mutual information. Phys Rev E 69(6 Pt 2):066138.
 
     """
 
@@ -158,9 +157,8 @@ def _entropy(X, k=1):
     n, d = X.shape
     volume_unit_ball = (np.pi ** (0.5 * d)) / scipy.special.gamma(0.5 * d + 1)
     """
-    - F. Perez-Cruz, (2008). Estimation of Information Theoretic Measures
-    for Continuous Random Variables. Advances in Neural Information
-    Processing Systems 21 (NIPS). Vancouver (Canada), December.
+    - F. Perez-Cruz, (2008). Estimation of Information Theoretic Measures for Continuous Random Variables.
+    Advances in Neural Information Processing Systems 21 (NIPS). Vancouver (Canada), December.
     return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
     """
     return (

@@ -11,7 +11,9 @@ def signal_resample(
     """
     Resample a continuous signal to a different length or sampling rate.
 
-    Up- or down-sample a signal. The user can specify either a desired length for the vector, or input the original sampling rate and the desired sampling rate. See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of the methods.
+    Up- or down-sample a signal. The user can specify either a desired length for the vector, or input
+    the original sampling rate and the desired sampling rate.
+    See https://github.com/neuropsychology/NeuroKit/scripts/resampling.ipynb for a comparison of the methods.
 
     Parameters
     ----------
@@ -22,7 +24,11 @@ def signal_resample(
     sampling_rate, desired_sampling_rate : int
         The original and desired (output) sampling frequency (in Hz, i.e., samples/second).
     method : str
-        Can be 'interpolation' (see `scipy.ndimage.zoom()`), 'numpy' for numpy's interpolation (see `numpy.interp()`), 'pandas' for Pandas' time series resampling, 'poly' (see `scipy.signal.resample_poly()`) or 'FFT' (see `scipy.signal.resample()`) for the Fourier method. FFT is the most accurate (if the signal is periodic), but becomes exponentially slower as the signal length increases. In contrast, 'interpolation' is the fastest, followed by 'numpy', 'poly' and 'pandas'.
+        Can be 'interpolation' (see `scipy.ndimage.zoom()`), 'numpy' for numpy's interpolation
+        (see `numpy.interp()`),'pandas' for Pandas' time series resampling, 'poly' (see `scipy.signal.resample_poly()`)
+        or 'FFT' (see `scipy.signal.resample()`) for the Fourier method. FFT is the most accurate
+        (if the signal is periodic), but becomes exponentially slower as the signal length increases.
+        In contrast, 'interpolation' is the fastest, followed by 'numpy', 'poly' and 'pandas'.
 
     Returns
     -------
@@ -38,29 +44,50 @@ def signal_resample(
     >>> signal = np.cos(np.linspace(start=0, stop=20, num=100))
     >>>
     >>> # Downsample
-    >>> downsampled_interpolation = nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_fft = nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_poly = nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_numpy = nk.signal_resample(signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500)
-    >>> downsampled_pandas = nk.signal_resample(signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500)
+    >>> downsampled_interpolation = nk.signal_resample(signal, method="interpolation",
+    ...                                                sampling_rate=1000, desired_sampling_rate=500)
+    >>> downsampled_fft = nk.signal_resample(signal, method="FFT",
+    ...                                      sampling_rate=1000, desired_sampling_rate=500)
+    >>> downsampled_poly = nk.signal_resample(signal, method="poly",
+    ...                                       sampling_rate=1000, desired_sampling_rate=500)
+    >>> downsampled_numpy = nk.signal_resample(signal, method="numpy",
+    ...                                        sampling_rate=1000, desired_sampling_rate=500)
+    >>> downsampled_pandas = nk.signal_resample(signal, method="pandas",
+    ...                                         sampling_rate=1000, desired_sampling_rate=500)
     >>>
     >>> # Upsample
-    >>> upsampled_interpolation = nk.signal_resample(downsampled_interpolation, method="interpolation", sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT", sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_poly = nk.signal_resample(downsampled_poly, method="poly", sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_numpy = nk.signal_resample(downsampled_numpy, method="numpy", sampling_rate=500, desired_sampling_rate=1000)
-    >>> upsampled_pandas = nk.signal_resample(downsampled_pandas, method="pandas", sampling_rate=500, desired_sampling_rate=1000)
+    >>> upsampled_interpolation = nk.signal_resample(downsampled_interpolation,
+    ...                                              method="interpolation",
+    ...                                              sampling_rate=500, desired_sampling_rate=1000)
+    >>> upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT",
+    ...                                    sampling_rate=500, desired_sampling_rate=1000)
+    >>> upsampled_poly = nk.signal_resample(downsampled_poly, method="poly",
+    ...                                     sampling_rate=500, desired_sampling_rate=1000)
+    >>> upsampled_numpy = nk.signal_resample(downsampled_numpy, method="numpy",
+    ...                                      sampling_rate=500, desired_sampling_rate=1000)
+    >>> upsampled_pandas = nk.signal_resample(downsampled_pandas, method="pandas",
+    ...                                       sampling_rate=500, desired_sampling_rate=1000)
     >>>
     >>> # Compare with original
-    >>> fig = pd.DataFrame({"Original": signal, "Interpolation": upsampled_interpolation, "FFT": upsampled_fft, "Poly": upsampled_poly, "Numpy": upsampled_numpy, "Pandas": upsampled_pandas}).plot(style='.-')
+    >>> fig = pd.DataFrame({"Original": signal,
+    ...                     "Interpolation": upsampled_interpolation,
+    ...                     "FFT": upsampled_fft,
+    ...                     "Poly": upsampled_poly,
+    ...                     "Numpy": upsampled_numpy,
+    ...                     "Pandas": upsampled_pandas}).plot(style='.-')
     >>> fig #doctest: +SKIP
     >>>
     >>> # Timing benchmarks
-    >>> %timeit nk.signal_resample(signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
-    >>> %timeit nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
-    >>> %timeit nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
-    >>> %timeit nk.signal_resample(signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
-    >>> %timeit nk.signal_resample(signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="interpolation",
+    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="FFT",
+    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="poly",
+    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="numpy",
+    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
+    >>> %timeit nk.signal_resample(signal, method="pandas",
+    ...                            sampling_rate=1000, desired_sampling_rate=500) #doctest: +SKIP
 
     See Also
     --------

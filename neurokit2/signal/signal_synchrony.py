@@ -8,12 +8,15 @@ def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
     """
     Compute the synchrony (coupling) between two signals.
 
-    Compute a continuous index of coupling between two signals either using the 'Hilbert' method to get the instantaneous phase synchrony, or using rolling window correlation.
+    Compute a continuous index of coupling between two signals either using the 'Hilbert' method to get
+    the instantaneous phase synchrony, or using rolling window correlation.
 
     The instantaneous phase synchrony measures the phase similarities between signals at each timepoint.
-The phase refers to the angle of the signal, calculated through the hilbert transform, when it is resonating between -pi to pi degrees. When two signals line up in phase their angular difference becomes zero.
+    The phase refers to the angle of the signal, calculated through the hilbert transform, when it is
+    resonating between -pi to pi degrees. When two signals line up in phase their angular difference becomes zero.
 
-    For less clean signals, windowed correlations are widely used because of their simplicity, and can be a good a robust approximation of synchrony between two signals. The limitation is the need to select a window.
+    For less clean signals, windowed correlations are widely used because of their simplicity, and can
+    be a good a robust approximation of synchrony between two signals. The limitation is the need to select a window.
 
 
 

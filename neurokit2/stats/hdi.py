@@ -10,20 +10,25 @@ def hdi(x, ci=0.95, show=False, **kwargs):
     """
     Highest Density Interval (HDI)
 
-    Compute the Highest Density Interval (HDI) of a distribution. All points within this interval have a higher probability density than points outside the interval. The HDI can be used in the context of uncertainty characterisation of posterior distributions (in the Bayesian farmework) as Credible Interval (CI). Unlike equal-tailed intervals that typically exclude 2.5% from each tail of the distribution and always include the median, the HDI is not equal-tailed and therefore always includes the mode(s) of posterior distributions.
+    Compute the Highest Density Interval (HDI) of a distribution. All points within this interval
+    have a higher probability density than points outside the interval. The HDI can be used in the
+    context of uncertainty characterisation of posterior distributions (in the Bayesian farmework) as
+    Credible Interval (CI). Unlike equal-tailed intervals that typically exclude 2.5% from each tail
+    of the distribution and always include the median, the HDI is not equal-tailed and therefore always
+    includes the mode(s) of posterior distributions.
 
     Parameters
     ----------
     x : list, array or Series
         A vector of values.
     ci : float
-        Value of probability of the (credible) interval - CI (between 0 and 1) to be estimated. Default to .95 (95%).
+        Value of probability of the (credible) interval - CI (between 0 and 1) to be estimated.
+        Default to .95 (95%).
 
     Returns
     ----------
     float, floats
         The HDI low and high limits.
-
 
     Examples
     ----------

@@ -16,9 +16,9 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
     sampling_rate : int
-        The sampling frequency of the signal (in Hz, i.e., samples/second). Needs
-        to be supplied if the data should be plotted over time in seconds.
-        Otherwise the data is plotted over samples. Defaults to None.
+        The sampling frequency of the signal (in Hz, i.e., samples/second). Needs to be supplied if
+        the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
+        Defaults to None.
     subsubplots : bool
         If True, each signal is plotted in a subplot.
     standardize : bool
@@ -33,7 +33,9 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
     >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
     >>>
-    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)), "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)), "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
+                             "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
+                             "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
     >>> nk.signal_plot(data, subplots=True)
     >>> nk.signal_plot([signal, data], standardize=True)
 
