@@ -7,7 +7,8 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     """
     Add channel as array to MNE.
 
-    Add a channel to a mne's Raw m/eeg file. It will basically synchronize the channel to the eeg data following a particular index and add it.
+    Add a channel to a mne's Raw m/eeg file. It will basically synchronize the channel to the eeg data
+    following a particular index and add it.
 
     Parameters
     ----------
@@ -16,11 +17,14 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     channel : list or array
         The signal to be added.
     channel_type : str
-        Channel type. Currently supported fields are 'ecg', 'bio', 'stim', 'eog', 'misc', 'seeg', 'ecog', 'mag', 'eeg', 'ref_meg', 'grad', 'emg', 'hbr' or 'hbo'.
+        Channel type. Currently supported fields are 'ecg', 'bio', 'stim', 'eog', 'misc', 'seeg',
+        'ecog', 'mag', 'eeg', 'ref_meg', 'grad', 'emg', 'hbr' or 'hbo'.
     channel_type : str
         Desired channel name.
     sync_index_raw, sync_index_channel : int or list
-        An index (e.g., the onset of the same event marked in the same signal), in the raw data and in the channel to add, by which to align the two inputs. This can be used in case the EEG data and the channel to add do not have the same onsets and must be aligned through some common event.
+        An index (e.g., the onset of the same event marked in the same signal), in the raw data and
+        in the channel to add, by which to align the two inputs. This can be used in case the EEG data
+        and the channel to add do not have the same onsets and must be aligned through some common event.
 
     Returns
     ----------
@@ -36,10 +40,12 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     >>> event_index_in_eeg = 42
     >>> event_index_in_ecg = 333
     >>>
-    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif', preload=True) # doctest: +SKIP
+    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif',
+    ...                           preload=True) # doctest: +SKIP
     >>> ecg = nk.ecg_simulate(length=170000)
     >>>
-    >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg, sync_index_channel=event_index_in_ecg, channel_type="ecg") # doctest: +SKIP
+    >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg,
+    ...                          sync_index_channel=event_index_in_ecg, channel_type="ecg") # doctest: +SKIP
 
     """
     # Try loading mne
