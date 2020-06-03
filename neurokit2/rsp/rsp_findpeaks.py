@@ -63,7 +63,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
     if method in ["khodadad", "khodadad2018"]:
         info = _rsp_findpeaks_khodadad(cleaned, amplitude_min)
     elif method == "biosppy":
-        info = _rsp_findpeaks_biosppy(cleaned)
+        info = _rsp_findpeaks_biosppy(cleaned, sampling_rate=sampling_rate)
     else:
         raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be one of 'khodadad2018' or 'biosppy'.")
 
