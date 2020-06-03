@@ -31,19 +31,18 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
         The processing pipeline to apply. Can be one of "neurokit" (default),
         "gamboa2008" or "kim2004" (the default in BioSPPy).
     amplitude_min : float
-        Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude SCRs (peaks) as relative to the largest amplitude in the signal.
+        Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude
+        SCRs (peaks) as relative to the largest amplitude in the signal.
 
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the
-        aplitude of the SCR, the samples at which the SCR onset and the
-        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onsets",
-        and "SCR_Peaks" respectively.
+        A dictionary containing additional information, in this case the aplitude of the SCR, the samples
+        at which the SCR onset and the SCR peaks occur. Accessible with the keys "SCR_Amplitude",
+        "SCR_Onsets", and "SCR_Peaks" respectively.
     signals : DataFrame
-        A DataFrame of same length as the input signal in which occurences of
-        SCR peaks are marked as "1" in lists of zeros with the same length as
-        `eda_cleaned`. Accessible with the keys "SCR_Peaks".
+        A DataFrame of same length as the input signal in which occurences of SCR peaks are marked as
+        "1" in lists of zeros with the same length as `eda_cleaned`. Accessible with the keys "SCR_Peaks".
 
     See Also
     --------
@@ -70,8 +69,10 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
 
     References
     ----------
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
-    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD ThesisUniversidade.
+    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring
+      of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
 
     """
     if isinstance(eda_phasic, pd.DataFrame) or isinstance(eda_phasic, pd.Series):

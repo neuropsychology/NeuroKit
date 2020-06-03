@@ -9,7 +9,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     """
     Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
 
-    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
+    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different
+    methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
 
     Parameters
     ----------
@@ -43,7 +44,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     >>> smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method='smoothmedian')
     >>> highpass = nk.eda_phasic(nk.standardize(eda_signal), method='highpass')
     >>>
-    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'), smoothMedian.add_suffix('_SmoothMedian'), highpass.add_suffix('_Highpass')], axis=1)
+    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'), smoothMedian.add_suffix('_SmoothMedian'),
+    ...                   highpass.add_suffix('_Highpass')], axis=1)
     >>> data["EDA_Raw"] = eda_signal
     >>> fig = data.plot()
     >>> fig #doctest: +SKIP
@@ -56,9 +58,14 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 
     References
     -----------
-    - cvxEDA: https://github.com/lciti/cvxEDA
-    - Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43). Springer International Publishing.
-    - Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering, 63(4), 797-804.
+    - cvxEDA: https://github.com/lciti/cvxEDA.
+
+    - Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In Advances
+      in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43). Springer International Publishing.
+
+    - Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex optimization
+      approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering,
+      63(4), 797-804.
 
     """
     method = method.lower()  # remove capitalised letters
@@ -79,7 +86,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 # =============================================================================
 def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4):
     """
-    One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
+    One of the two methods available in biopac's acqknowledge
+    (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     size = smoothing_factor * sampling_rate
     tonic = signal_smooth(eda_signal, kernel="median", size=size)
@@ -92,7 +100,8 @@ def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4)
 
 def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
     """
-    One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
+    One of the two methods available in biopac's acqknowledge
+    (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=0.05, method="butter")
     tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=0.05, method="butter")

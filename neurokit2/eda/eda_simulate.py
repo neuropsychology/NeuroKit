@@ -49,7 +49,8 @@ def eda_simulate(
 
     References
     -----------
-    - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
+    - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin
+      conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
 
     """
     # Seed the random generator for reproducible results
@@ -97,7 +98,8 @@ def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.
     """
     Simulate a canonical skin conductance response (SCR)
 
-    Based on `Bach (2010) <https://sourceforge.net/p/scralyze/code/HEAD/tree/branches/version_b2.1.8/scr_bf_crf.m#l24>`_
+    Based on `Bach (2010)
+    <https://sourceforge.net/p/scralyze/code/HEAD/tree/branches/version_b2.1.8/scr_bf_crf.m#l24>`_
 
     Parameters
     -------------

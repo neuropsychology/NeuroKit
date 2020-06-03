@@ -23,15 +23,15 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         The processing pipeline to apply. Can be one of "neurokit" (default),
         "gamboa2008" or "kim2004" (the default in BioSPPy).
     amplitude_min : float
-        Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude SCRs (peaks) as relative to the largest amplitude in the signal.
+        Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude
+        SCRs (peaks) as relative to the largest amplitude in the signal.
 
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the
-        aplitude of the SCR, the samples at which the SCR onset and the
-        SCR peaks occur. Accessible with the keys "SCR_Amplitude", "SCR_Onsets",
-        and "SCR_Peaks" respectively.
+        A dictionary containing additional information, in this case the aplitude of the SCR, the samples
+        at which the SCR onset and the SCR peaks occur. Accessible with the keys "SCR_Amplitude",
+        "SCR_Onsets", and "SCR_Peaks" respectively.
 
     See Also
     --------
@@ -58,8 +58,11 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
 
     References
     ----------
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
-    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD ThesisUniversidade.
+
+    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring
+      of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
 
     """
     # Try to retrieve the right column if a dataframe is passed
@@ -100,12 +103,13 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
 
 def _eda_findpeaks_gamboa2008(eda_phasic):
     """
-    Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach in the thesis by
-    Gamboa (2008).
+    Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach
+    in the thesis by Gamboa (2008).
 
     References
     ----------
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD ThesisUniversidade.
 
     """
     derivative = np.diff(np.sign(np.diff(eda_phasic)))
@@ -145,8 +149,8 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
 def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
     """
-    KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et al.
-    (2004).
+    KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach
+    by Kim et al.(2004).
 
     Parameters
     ----------
@@ -168,7 +172,8 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
     References
     ----------
-    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
+    - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring
+      of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
 
     """
 

@@ -20,25 +20,26 @@ def eda_eventrelated(epochs, silent=False):
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed EDA features
-        for each epoch, with each epoch indicated by the `Label` column
-        (if not present, by the `Index` column). The analyzed features consist
+        A dataframe containing the analyzed EDA features for each epoch, with each epoch indicated by
+        the `Label` column (if not present, by the `Index` column). The analyzed features consist
         the following:
-        - *"EDA_SCR"*: indication of whether Skin Conductance Response
-        (SCR) occurs following the event (1 if an SCR onset is present and 0
-        if absent) and if so, its corresponding peak amplitude,
-        time of peak, rise and recovery time. If there is no occurrence of
-        SCR, nans are displayed for the below features.
-        - "*EDA_Peak_Amplitude"*: the maximum amplitude of the phasic component
-        of the signal.
-        - *"SCR_Peak_Amplitude"*: the peak amplitude of
-        the first SCR in each epoch.
-        - *"SCR_Peak_Amplitude_Time"*: the timepoint of each first SCR
-        peak amplitude.
-        - *"SCR_RiseTime"*: the risetime of each first SCR
-        i.e., the time it takes for SCR to reach peak amplitude from onset.
-        - *"SCR_RecoveryTime"*: the half-recovery time of each first SCR i.e.,
-        the time it takes for SCR to decrease to half amplitude.
+
+        - *"EDA_SCR"*: indication of whether Skin Conductance Response (SCR) occurs following the event
+          (1 if an SCR onset is present and 0 if absent) and if so, its corresponding peak amplitude,
+          time of peak, rise and recovery time. If there is no occurrence of SCR, nans are displayed
+          for the below features.
+
+        - "*EDA_Peak_Amplitude"*: the maximum amplitude of the phasic component of the signal.
+
+        - *"SCR_Peak_Amplitude"*: the peak amplitude of the first SCR in each epoch.
+
+        - *"SCR_Peak_Amplitude_Time"*: the timepoint of each first SCR peak amplitude.
+
+        - *"SCR_RiseTime"*: the risetime of each first SCR i.e., the time it takes for SCR to reach
+          peak amplitude from onset.
+
+        - *"SCR_RecoveryTime"*: the half-recovery time of each first SCR i.e., the time it takes for
+          SCR to decrease to half amplitude.
 
     See Also
     --------
@@ -53,7 +54,8 @@ def eda_eventrelated(epochs, silent=False):
     >>>
     >>> # Process data
     >>> eda_signals, info = nk.eda_process(eda, sampling_rate=1000)
-    >>> epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000], sampling_rate=1000, epochs_start=-0.1, epochs_end=1.9)
+    >>> epochs = nk.epochs_create(eda_signals, events=[5000, 10000, 15000], sampling_rate=1000,
+    ...                           epochs_start=-0.1, epochs_end=1.9)
     >>>
     >>> # Analyze
     >>> nk.eda_eventrelated(epochs) #doctest: +SKIP
@@ -63,7 +65,8 @@ def eda_eventrelated(epochs, silent=False):
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(eda=data["EDA"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
     >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=6.9)
     >>>
     >>> # Analyze
