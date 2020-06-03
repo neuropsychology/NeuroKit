@@ -11,6 +11,7 @@ You can navigate to the different sections using the left panel. We would recomm
    introduction
    authors
    installation
+   contributing/index
    tutorials/index
    examples/index
    datasets

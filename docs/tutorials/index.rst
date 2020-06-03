@@ -9,8 +9,5 @@ Contents:
    recording
    software
    learnpython
-   understanding
-   .../.github/CONTRIBUTING
-   first_contribution
    complexity
    resources
