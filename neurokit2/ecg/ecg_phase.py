@@ -15,12 +15,11 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method="peak", samp
     Parameters
     ----------
     rpeaks : list, array, DataFrame, Series or dict
-        The samples at which the different ECG peaks occur. If a dict or a
-        DataFrame is passed, it is assumed that these containers were obtained
-        with `ecg_findpeaks()` or `ecg_peaks()`.
+        The samples at which the different ECG peaks occur. If a dict or a DataFrame is passed, it is
+        assumed that these containers were obtained with `ecg_findpeaks()` or `ecg_peaks()`.
     delineate_info : dict
-        A dictionary containing additional information of ecg delineation and
-        can be obtained with `ecg_delineate()`.
+        A dictionary containing additional information of ecg delineation and can be obtained with
+        `ecg_delineate()`.
 
     Returns
     -------
@@ -28,16 +27,15 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method="peak", samp
         A DataFrame of same length as `ecg_signal` containing the following
         columns:
 
-        - *"ECG_Phase_Atrial"*: cardiac phase, marked by "1" for systole
-          and "0" for diastole.
-        - *"ECG_Phase_Completion_Atrial"*: cardiac phase (atrial) completion,
-          expressed in percentage (from 0 to 1), representing the stage of the
-          current cardiac phase.
-        - *"ECG_Phase_Ventricular"*: cardiac phase, marked by "1" for systole
-          and "0" for diastole.
-        - *"ECG_Phase_Completion_Ventricular"*: cardiac phase (ventricular)
-          completion, expressed in percentage (from 0 to 1), representing the
-          stage of the current cardiac phase.
+        - *"ECG_Phase_Atrial"*: cardiac phase, marked by "1" for systole and "0" for diastole.
+
+        - *"ECG_Phase_Completion_Atrial"*: cardiac phase (atrial) completion, expressed in percentage
+          (from 0 to 1), representing the stage of the current cardiac phase.
+
+        - *"ECG_Phase_Ventricular"*: cardiac phase, marked by "1" for systole and "0" for diastole.
+
+        - *"ECG_Phase_Completion_Ventricular"*: cardiac phase (ventricular) completion, expressed in
+          percentage (from 0 to 1), representing the stage of the current cardiac phase.
 
     See Also
     --------

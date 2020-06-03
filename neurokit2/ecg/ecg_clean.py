@@ -53,8 +53,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     References
     --------------
-    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
-      In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
+    - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm. In: IEEE Transactions on
+      Biomedical Engineering BME-32.3 (1985), pp. 230–236.
+
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
 
     """
@@ -102,7 +103,9 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
 def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
 
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
+    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5,
+                          method="butterworth", order=5)
+
     clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", powerline=50)
     return clean
 
@@ -162,7 +165,9 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
     """
     From https://github.com/berndporr/py-ecg-detectors/
 
-    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010). 428-431.
+    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS
+      Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing
+      (BIOSIGNALS2010). 428-431.
 
     """
 
@@ -198,8 +203,11 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
     """
     From https://github.com/berndporr/py-ecg-detectors/
 
-    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
-    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.
+      in Cardiology, vol. 6, pp. 37-42, 1979.
+
+    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation
+      for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
 
     """
 

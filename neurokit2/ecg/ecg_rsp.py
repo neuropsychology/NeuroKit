@@ -49,11 +49,19 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
 
     References
     ----------
-    - van Gent, P., Farah, H., van Nes, N., & van Arem, B. (2019). HeartPy: A novel heart rate algorithm for the analysis of noisy signals. Transportation research part F: traffic psychology and behaviour, 66, 368-378.
-    - Sarkar, S., Bhattacherjee, S., & Pal, S. (2015). Extraction of respiration signal from ECG for respiratory rate estimation.
-    - Charlton, P. H., Bonnici, T., Tarassenko, L., Clifton, D. A., Beale, R., & Watkinson, P. J. (2016). An assessment of algorithms to estimate respiratory rate from the electrocardiogram and photoplethysmogram. Physiological measurement, 37(4), 610.
-    - Soni, R., & Muniyandi, M. (2019). Breath rate variability: a novel measure to study the meditation effects. International Journal of Yoga, 12(1), 45.
+    - van Gent, P., Farah, H., van Nes, N., & van Arem, B. (2019). HeartPy: A novel heart rate algorithm
+      for the analysis of noisy signals. Transportation research part F: traffic psychology and behaviour,
+      66, 368-378.
 
+    - Sarkar, S., Bhattacherjee, S., & Pal, S. (2015). Extraction of respiration signal from ECG for
+      respiratory rate estimation.
+
+    - Charlton, P. H., Bonnici, T., Tarassenko, L., Clifton, D. A., Beale, R., & Watkinson, P. J. (2016).
+      An assessment of algorithms to estimate respiratory rate from the electrocardiogram and photoplethysmogram.
+      Physiological measurement, 37(4), 610.
+
+    - Soni, R., & Muniyandi, M. (2019). Breath rate variability: a novel measure to study the meditation
+      effects. International Journal of Yoga, 12(1), 45.
     """
     method = method.lower()
     if method in [

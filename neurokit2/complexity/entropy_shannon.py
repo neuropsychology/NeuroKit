@@ -6,7 +6,10 @@ def entropy_shannon(signal):
     """
     Shannon entropy (SE)
 
-    Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state, or equivalently, of its average information content. Shannon entropy (SE) is one of the first and most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy quantifies the amount of information in a variable.
+    Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state,
+    or equivalently, of its average information content. Shannon entropy (SE) is one of the first and
+    most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy
+    quantifies the amount of information in a variable.
 
     This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 
@@ -37,7 +40,9 @@ def entropy_shannon(signal):
     References
     -----------
     - `pyEntropy` <https://github.com/nikdon/pyEntropy>`_
+
     - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
+
     - `nolds` <https://github.com/CSchoel/nolds>`_
 
     """

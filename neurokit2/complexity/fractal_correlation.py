@@ -19,11 +19,17 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
+        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
+        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
+        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : str, int or list
-        The sequence of radiuses to test. If an integer is passed, will get an exponential sequence ranging from 2.5% to 50% of the distance range. Methods implemented in other packages can be used via setting ``r='nolds'`` or ``r='Corr_Dim'``.
+        The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
+        ranging from 2.5% to 50% of the distance range. Methods implemented in other packages can be
+        used via setting ``r='nolds'`` or ``r='Corr_Dim'``.
 
     Returns
     ----------
@@ -51,9 +57,15 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
 
     References
     -----------
-    - Bolea, J., Laguna, P., Remartínez, J. M., Rovira, E., Navarro, A., & Bailón, R. (2014). Methodological framework for estimating the correlation dimension in HRV signals. Computational and mathematical methods in medicine, 2014.
-    - Boon, M. Y., Henry, B. I., Suttle, C. M., & Dain, S. J. (2008). The correlation dimension: A useful objective measure of the transient visual evoked potential?. Journal of vision, 8(1), 6-6.
+    - Bolea, J., Laguna, P., Remartínez, J. M., Rovira, E., Navarro, A., & Bailón, R. (2014).
+      Methodological framework for estimating the correlation dimension in HRV signals. Computational
+      and mathematical methods in medicine, 2014.
+
+    - Boon, M. Y., Henry, B. I., Suttle, C. M., & Dain, S. J. (2008). The correlation dimension:
+      A useful objective measure of the transient visual evoked potential?. Journal of vision, 8(1), 6-6.
+
     - `nolds <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>`_
+
     - `Corr_Dim <https://github.com/jcvasquezc/Corr_Dim>`_
 
     """

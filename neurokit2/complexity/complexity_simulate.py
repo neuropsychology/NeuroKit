@@ -17,7 +17,8 @@ def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurs
     sampling_rate, length : int
         The desired sampling rate (in Hz, i.e., samples/second) or the desired
     method : str
-        The method. can be 'hurst' for a (fractional) Ornstein–Uhlenbeck process or 'mackeyglass' to use the Mackey-Glass equation.
+        The method. can be 'hurst' for a (fractional) Ornstein–Uhlenbeck process or 'mackeyglass' to
+        use the Mackey-Glass equation.
 
     Examples
     ------------
@@ -50,8 +51,8 @@ def _complexity_simulate_mackeyglass(
     duration=10, sampling_rate=1000, x0=None, a=0.2, b=0.1, c=10.0, n=1000, discard=250
 ):
     """
-    Generate time series using the Mackey-Glass equation. Generates time series using the discrete approximation of the
-    Mackey-Glass delay differential equation described by Grassberger & Procaccia (1983).
+    Generate time series using the Mackey-Glass equation. Generates time series using the discrete
+    approximation of the Mackey-Glass delay differential equation described by Grassberger & Procaccia (1983).
 
     Taken from nolitsa (https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/data.py#L223).
 
@@ -60,9 +61,8 @@ def _complexity_simulate_mackeyglass(
     duration : int
         Duration of the time series to be generated.
     sampling_rate : float, optional (default = 0.46)
-        Sampling step of the time series.  It is useful to pick
-        something between tau/100 and tau/10, with tau/sampling_rate being
-        a factor of n.  This will make sure that there are only whole
+        Sampling step of the time series.  It is useful to pick something between tau/100 and tau/10,
+        with tau/sampling_rate being a factor of n.  This will make sure that there are only whole
         number indices.
     x0 : array, optional (default = random)
         Initial condition for the discrete map.  Should be of length n.
@@ -75,12 +75,11 @@ def _complexity_simulate_mackeyglass(
     tau : float, optional (default = 23.0)
         Time delay in the Mackey-Glass equation.
     n : int, optional (default = 1000)
-        The number of discrete steps into which the interval between
-        t and t + tau should be divided. This results in a time
-        step of tau/n and an n + 1 dimensional map.
+        The number of discrete steps into which the interval between t and t + tau should be divided.
+        This results in a time step of tau/n and an n + 1 dimensional map.
     discard : int, optional (default = 250)
-        Number of n-steps to discard in order to eliminate transients.
-        A total of n*discard steps will be discarded.
+        Number of n-steps to discard in order to eliminate transients. A total of n*discard steps will
+        be discarded.
 
     """
     length = duration * sampling_rate
@@ -118,7 +117,8 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, si
     length = duration * sampling_rate
 
     # The fractional Gaussian noise
-    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(size=length, hurst_exponent=hurst_exponent)
+    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(size=length,
+         hurst_exponent=hurst_exponent)
 
     # Initialise the array y
     y = np.zeros([length])
@@ -131,15 +131,13 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, si
 
 def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
     """
-    This is based on https://github.com/LRydin/MFDFA/blob/master/MFDFA/fgn.py and the work of Christopher Flynn fbm in
-    https://github.com/crflynn/fbm and Davies, Robert B., and D. S. Harte. 'Tests for Hurst effect.' Biometrika 74, no.
-    1 (1987): 95-101.
+    This is based on https://github.com/LRydin/MFDFA/blob/master/MFDFA/fgn.py and the work of Christopher
+    Flynn fbm in https://github.com/crflynn/fbm and Davies, Robert B., and D. S. Harte. 'Tests for Hurst
+    effect.' Biometrika 74, no.1 (1987): 95-101.
 
-    Generates fractional Gaussian noise with a Hurst index H in (0,1). If
-    H = 1/2 this is simply Gaussian noise.
-    The current method employed is the Davies–Harte method, which fails for
-    H ≈ 0. A Cholesky decomposition method and the Hosking’s method will be
-    implemented in later versions.
+    Generates fractional Gaussian noise with a Hurst index H in (0,1). If H = 1/2 this is simply Gaussian
+    noise. The current method employed is the Davies–Harte method, which fails for H ≈ 0. A Cholesky
+    decomposition method and the Hosking’s method will be implemented in later versions.
 
     Parameters
     ----------

@@ -8,23 +8,38 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     """
     Time-delay embedding of a time series (a signal)
 
-    A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide a complete description of the system at some point in time. The set of all possible states is called the 'state space'.
+    A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide
+    a complete description of the system at some point in time. The set of all possible states is called
+    the 'state space'.
 
-    Takens's (1981) embedding theorem suggests that a sequence of measurements of a dynamic system includes in itself all the information required to completely reconstruct the state space. Delay coordinate embedding attempts to identify the state s of the system at some time t by searching the past history of observations for similar states, and, by studying the evolution of similar states, infer information about the future of the system.
+    Takens's (1981) embedding theorem suggests that a sequence of measurements of a dynamic system includes
+    in itself all the information required to completely reconstruct the state space. Delay coordinate
+    embedding attempts to identify the state s of the system at some time t by searching the past history
+    of observations for similar states, and, by studying the evolution of similar states, infer information
+    about the future of the system.
 
-    How to visualize the dynamics of a system? A sequence of state values over time is called a trajectory. Depending on the system, different trajectories can evolve to a common subset of state space called an attractor. The presence and behavior of attractors gives intuition about the underlying dynamical system. We can visualize the system and its attractors by plotting the trajectory of many different initial state values and numerically integrating them to approximate their continuous time evolution on discrete computers.
+    How to visualize the dynamics of a system? A sequence of state values over time is called a trajectory.
+    Depending on the system, different trajectories can evolve to a common subset of state space called
+    an attractor. The presence and behavior of attractors gives intuition about the underlying dynamical
+    system. We can visualize the system and its attractors by plotting the trajectory of many different
+    initial state values and numerically integrating them to approximate their continuous time evolution
+    on discrete computers.
 
-    This function is adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_ and is equivalent to
-    the `delay_embedding()` function from 'nolds'.
+    This function is adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_ and is equivalent
+    to the `delay_embedding()` function from 'nolds'.
 
     Parameters
     ----------
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
+        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
+        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
+        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     show : bool
         Plot the reconstructed attractor.
 
@@ -58,16 +73,17 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
 
     References
     -----------
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method
+      for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference
+      on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
 
     """
     N = len(signal)
 
     # Sanity checks
     if dimension * delay > N:
-        raise ValueError(
-            "NeuroKit error: complexity_embedding(): dimension * delay should be lower than length of signal."
-        )
+        raise ValueError("NeuroKit error: complexity_embedding(): dimension * delay should be lower"
+                         "than length of signal.")
     if delay < 1:
         raise ValueError("NeuroKit error: complexity_embedding(): 'delay' has to be at least 1.")
 
@@ -114,11 +130,13 @@ def _embedding_plot_2D(embedded):
 
 
 def _embedding_plot_3D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False)
+    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2],
+                            rotate=False)
 
 
 def _embedding_plot_4D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False)
+    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3],
+                            rotate=False)
 
 
 # =============================================================================

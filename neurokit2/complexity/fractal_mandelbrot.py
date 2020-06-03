@@ -9,14 +9,16 @@ def fractal_mandelbrot(
     """
     Generate a Mandelbrot (or a Buddhabrot) fractal.
 
-    Vectorized function to efficiently generate an array containing values corresponding to a Mandelbrot fractal.
+    Vectorized function to efficiently generate an array containing values corresponding to a Mandelbrot
+    fractal.
 
     Parameters
     -----------
     size : int
         The size in pixels (corresponding to the width of the figure).
     real_range, imaginary_range : tuple
-        The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the figure.
+        The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and
+        the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the figure.
     iterations : int
         Number of iterations.
     threshold : int
@@ -31,10 +33,13 @@ def fractal_mandelbrot(
     >>> import neurokit2 as nk
     >>>
     >>> # Mandelbrot fractal
-    >>> fractal = nk.fractal_mandelbrot(show=True)
-    >>> fractal #doctest: +SKIP
+    >>> nk.fractal_mandelbrot(show=True) #doctest: +ELLIPSIS
+    array(...)
+
     >>> # Zoom at seahorse valley
-    >>> nk.fractal_mandelbrot(real_range=(-0.76, -0.74), imaginary_range=(0.09, 0.11), iterations=100, show=True) #doctest: +SKIP
+    >>> nk.fractal_mandelbrot(real_range=(-0.76, -0.74), imaginary_range=(0.09, 0.11),
+    ...                       iterations=100, show=True) #doctest: +ELLIPSIS
+    array(...)
     >>>
     >>> # Draw manually
     >>> m = nk.fractal_mandelbrot(real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25))
@@ -43,7 +48,8 @@ def fractal_mandelbrot(
     >>> plt.show() #doctest: +SKIP
     >>>
     >>> # Buddhabrot
-    >>> b = nk.fractal_mandelbrot(size=1500, real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25), buddha=True, iterations=200)
+    >>> b = nk.fractal_mandelbrot(size=1500, real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25),
+    ...                           buddha=True, iterations=200)
     >>> plt.imshow(b.T, cmap="gray") #doctest: +SKIP
     >>> plt.axis("off") #doctest: +SKIP
     >>> plt.show() #doctest: +SKIP
@@ -67,7 +73,8 @@ def fractal_mandelbrot(
             iterations=iterations,
         )
     else:
-        img = _buddhabrot(size=size, real_range=real_range, imaginary_range=imaginary_range, iterations=iterations)
+        img = _buddhabrot(size=size, real_range=real_range, imaginary_range=imaginary_range,
+                          iterations=iterations)
 
     if show is True:
         plt.imshow(img, cmap="rainbow")
@@ -169,7 +176,8 @@ def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(
     return img
 
 
-def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4):
+def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2),
+                           threshold=4):
 
     # Allocate an array to store our non-mset points as we find them.
     sets = np.zeros(size, dtype=np.complex128)

@@ -60,11 +60,22 @@ def complexity_optimize(
 
     References
     -----------
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
-    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
-    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
-    - Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
-    - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering, 55(8), 1966-1972.
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method
+      for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference
+      on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+
+    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series
+      forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
+
+    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a
+      geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
+
+    - Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar time
+      series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
+
+    - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of
+      the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering,
+      55(8), 1966-1972.
 
     """
 

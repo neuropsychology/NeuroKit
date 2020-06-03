@@ -19,19 +19,27 @@ def ecg_delineate(
 
     Function to delineate the QRS complex.
 
-    - **Cardiac Cycle**: A typical ECG heartbeat consists of a P wave, a QRS complex and a T wave.The P wave represents the wave of depolarization that spreads from the SA-node throughout the atria. The QRS complex reflects the rapid depolarization of the right and left ventricles. Since the ventricles are the largest part of the heart, in terms of mass, the QRS complex usually has a much larger amplitude than the P-wave. The T wave represents the ventricular repolarization of the ventricles. On rare occasions, a U wave can be seen following the T wave. The U wave is believed to be related to the last remnants of ventricular repolarization.
+    - **Cardiac Cycle**: A typical ECG heartbeat consists of a P wave, a QRS complex and a T wave.
+      The P wave represents the wave of depolarization that spreads from the SA-node throughout the atria.
+      The QRS complex reflects the rapid depolarization of the right and left ventricles. Since the
+      ventricles are the largest part of the heart, in terms of mass, the QRS complex usually has a much
+      larger amplitude than the P-wave. The T wave represents the ventricular repolarization of the
+      ventricles.On rare occasions, a U wave can be seen following the T wave. The U wave is believed
+      to be related to the last remnants of ventricular repolarization.
 
     Parameters
     ----------
     ecg_cleaned : list, array or Series
         The cleaned ECG channel as returned by `ecg_clean()`.
     rpeaks : list, array or Series
-        The samples at which R-peaks occur. Accessible with the key "ECG_R_Peaks" in the info dictionary returned by `ecg_findpeaks()`.
+        The samples at which R-peaks occur. Accessible with the key "ECG_R_Peaks" in the info dictionary
+        returned by `ecg_findpeaks()`.
     sampling_rate : int
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 500.
     method : str
-        Can be one of 'peak' (default) for a peak-based method, 'cwt' for continuous wavelet transform or 'dwt' for discrete wavelet transform.
+        Can be one of 'peak' (default) for a peak-based method, 'cwt' for continuous wavelet transform
+        or 'dwt' for discrete wavelet transform.
     show : bool
         If True, will return a plot to visualizing the delineated waves
         information.
@@ -42,17 +50,14 @@ def ecg_delineate(
     -------
     waves : dict
         A dictionary containing additional information.
-        For derivative method, the dictionary contains the
-        samples at which P-peaks, Q-peaks, S-peaks, T-peaks, P-onsets and T-
-        offsets occur, accessible with the key "ECG_P_Peaks", "ECG_Q_Peaks",
-        "ECG_S_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets"
-        respectively.
+        For derivative method, the dictionary contains the samples at which P-peaks, Q-peaks, S-peaks,
+        T-peaks, P-onsets and T-offsets occur, accessible with the key "ECG_P_Peaks", "ECG_Q_Peaks",
+        "ECG_S_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets" respectively.
 
-        For wavelet methods, the dictionary contains the samples at
-        which P-peaks, T-peaks, P-onsets, P-offsets, T-onsets, T-offsets, QRS-
-        onsets and QRS-offsets occur, accessible with the key "ECG_P_Peaks",
-        "ECG_T_Peaks", "ECG_P_Onsets", "ECG_P_Offsets", "ECG_T_Onsets",
-        "ECG_T_Offsets", "ECG_R_Onsets", "ECG_R_Offsets" respectively.
+        For wavelet methods, the dictionary contains the samples at which P-peaks, T-peaks, P-onsets,
+        P-offsets, T-onsets, T-offsets, QRS-onsets and QRS-offsets occur, accessible with the key
+        "ECG_P_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_P_Offsets", "ECG_T_Onsets", "ECG_T_Offsets",
+        "ECG_R_Onsets", "ECG_R_Offsets" respectively.
 
     signals : DataFrame
         A DataFrame of same length as the input signal in which occurences of
@@ -77,7 +82,9 @@ def ecg_delineate(
 
     References
     --------------
-    - Martínez, J. P., Almeida, R., Olmos, S., Rocha, A. P., & Laguna, P. (2004). A wavelet-based ECG delineator: evaluation on standard databases. IEEE Transactions on biomedical engineering, 51(4), 570-581.
+    - Martínez, J. P., Almeida, R., Olmos, S., Rocha, A. P., & Laguna, P. (2004). A wavelet-based ECG
+      delineator: evaluation on standard databases. IEEE Transactions on biomedical engineering,
+      51(4), 570-581.
 
     """
     # Sanitize input for ecg_cleaned
@@ -86,7 +93,9 @@ def ecg_delineate(
         if cols:
             ecg_cleaned = ecg_cleaned[cols[0]].values
         else:
-            raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract cleaned signal.")
+            raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract"
+                             "cleaned signal.")
+
     elif isinstance(ecg_cleaned, dict):
         for i in ecg_cleaned:
             cols = [col for col in ecg_cleaned[i].columns if "ECG_Clean" in col]
@@ -95,7 +104,9 @@ def ecg_delineate(
                 ecg_cleaned = signals[cols[0]].values
 
             else:
-                raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract cleaned signal.")
+                raise ValueError("NeuroKit error: ecg_delineate(): Wrong input, we couldn't extract"
+                                 "cleaned signal.")
+
     # Sanitize input for rpeaks
     if rpeaks is None:
         _, rpeaks = ecg_peaks(ecg_cleaned, sampling_rate=sampling_rate)
@@ -113,7 +124,8 @@ def ecg_delineate(
         waves = _dwt_ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=sampling_rate)
 
     else:
-        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be  one of 'peak', 'cwt' or 'dwt'.")
+        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be  one of 'peak',"
+                         "'cwt' or 'dwt'.")
 
     # Remove NaN in Peaks, Onsets, and Offsets
     waves_noNA = waves.copy()
@@ -124,9 +136,8 @@ def ecg_delineate(
     signals = instant_peaks
 
     if show is True:
-        _ecg_delineate_plot(
-            ecg_cleaned, rpeaks=rpeaks, signals=signals, signal_features_type=show_type, sampling_rate=sampling_rate
-        )
+        _ecg_delineate_plot(ecg_cleaned, rpeaks=rpeaks, signals=signals, signal_features_type=show_type,
+                            sampling_rate=sampling_rate)
 
     if check is True:
         waves = _ecg_delineate_check(waves, rpeaks)
@@ -150,14 +161,18 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     """
     Delinate ecg signal using discrete wavelet transforms.
 
-    Args:
-     ecg: Signal.
-     sampling_rate: Sampling rate of input signal.
-     analysis_sampling_rate: Sampling rate for analysis.
+    Parameters
+    ----------
+     ecg_cleaned : list, array or Series
+        The cleaned ECG channel as returned by `ecg_clean()`.
+     sampling_rate : int
+        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
+    analysis_sampling_rate : int
+        The sampling frequency for analysis (in Hz, i.e., samples/second).
 
-    Returns:
-     Dictionary of the points.
-
+    Returns
+    --------
+    Dictionary of the points.
     """
     ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=analysis_sampling_rate)
     dwtmatr = _dwt_compute_multiscales(ecg, 9)
@@ -809,7 +824,8 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
 #    >>> import pandas as pd
 #    >>> import matplotlib.pyplot as plt
 #
-#    >>> ecg_signal = np.array(pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/ecg_1000hz.csv"))[:, 1]
+#    >>> ecg_signal = np.array(pd.read_csv(
+#    "https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/ecg_1000hz.csv"))[:, 1]
 #
 #    >>> # Extract R-peaks locations
 #    >>> _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)
@@ -818,19 +834,24 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
 #    >>> signals, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=1000)
 #
 #    >>> # Plot the ECG signal with markings on ECG peaks
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='peaks', sampling_rate=1000)
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+#                            signal_features_type='peaks', sampling_rate=1000)
 #
 #    >>> # Plot the ECG signal with markings on boundaries of R peaks
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='bound_R', sampling_rate=1000)
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+#                            signal_features_type='bound_R', sampling_rate=1000)
 #
 #    >>> # Plot the ECG signal with markings on boundaries of P peaks
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='bound_P', sampling_rate=1000)
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+#                            signal_features_type='bound_P', sampling_rate=1000)
 #
 #    >>> # Plot the ECG signal with markings on boundaries of T peaks
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='bound_T', sampling_rate=1000)
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+#                            signal_features_type='bound_T', sampling_rate=1000)
 #
 #    >>> # Plot the ECG signal with markings on all peaks and boundaries
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals, signal_features_type='all', sampling_rate=1000)
+#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+#                            signal_features_type='all', sampling_rate=1000)
 
     """
 
@@ -883,7 +904,8 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
 
 def _ecg_delineate_check(waves, rpeaks):
     """
-    This function replaces the delineated features with np.nan if its standardized distance from R-peaks is more than 3.
+    This function replaces the delineated features with np.nan if its standardized distance
+    from R-peaks is more than 3.
     """
     df = pd.DataFrame.from_dict(waves)
     features_columns = df.columns
@@ -908,8 +930,8 @@ def _ecg_delineate_check(waves, rpeaks):
 
 def _calculate_abs_z(df, columns):
     """
-    This function helps to calculate the absolute standardized distance between R-peaks and other delineated waves
-    features by `ecg_delineate()`
+    This function helps to calculate the absolute standardized distance between R-peaks and other
+    delineated waves features by `ecg_delineate()`
     """
     for column in columns:
         df["Dist_R_" + column] = np.abs(standardize(df[column].sub(df["ECG_R_Peaks"], axis=0)))

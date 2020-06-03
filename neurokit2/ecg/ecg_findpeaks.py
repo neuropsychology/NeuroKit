@@ -13,7 +13,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     """
     Find R-peaks in an ECG signal.
 
-    Low-level function used by `ecg_peaks()` to identify R-peaks in an ECG signal using a different set of algorithms. See `ecg_peaks()` for details.
+    Low-level function used by `ecg_peaks()` to identify R-peaks in an ECG signal using a different
+    set of algorithms. See `ecg_peaks()` for details.
 
     Parameters
     ----------
@@ -24,10 +25,11 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017', 'martinez2003', 'rodrigues2020' or 'promac'.
+        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012',
+        'kalidas2017', 'martinez2003', 'rodrigues2020' or 'promac'.
     show : bool
-        If True, will return a plot to visualizing the thresholds used in the
-        algorithm. Useful for debugging.
+        If True, will return a plot to visualizing the thresholds used in the algorithm.
+        Useful for debugging.
 
     Returns
     -------
@@ -89,12 +91,22 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     References
     --------------
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
-    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003, September). An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD ThesisUniversidade.
+
+    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003, September). An open-source algorithm to
+      detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
+
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
-    - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on biomedical engineering, (3), 230-236.
-    - Engelse, W. A. H., & Zeelenberg, C. (1979). A single scan algorithm for QRS detection and feature extraction IEEE Comput Cardiol. Long Beach: IEEE Computer Society.
-    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
+
+    - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on
+      biomedical engineering, (3), 230-236.
+
+    - Engelse, W. A. H., & Zeelenberg, C. (1979). A single scan algorithm for QRS detection and feature
+      extraction IEEE Comput Cardiol. Long Beach: IEEE Computer Society.
+
+    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real Time
+      Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
 
     """
     # Try retrieving right column
@@ -134,7 +146,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     elif method in ["promac", "all"]:
         rpeaks = _ecg_findpeaks_promac(ecg_cleaned, sampling_rate=sampling_rate, threshold=0.33, show=show)
     else:
-        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit' or 'pamtompkins'.")
+        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit'"
+                         "or 'pamtompkins'.")
 
     # Prepare output.
     info = {"ECG_R_Peaks": rpeaks}
@@ -384,8 +397,8 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     """
     From https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.
 
-        - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in
-    Cardiology, 2003, pages 259–262, 2003.
+    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial
+      blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.
 
     """
     # TODO: Doesn't really seems to work
@@ -434,7 +447,8 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000):
     """
     From https://github.com/berndporr/py-ecg-detectors/
 
-    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.
+    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold,
+      BioMedical Engineering OnLine 2004, vol. 3:28, 2004.
 
     """
     total_taps = 0
@@ -566,7 +580,8 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
     """
     From https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834.
 
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD ThesisUniversidade.
 
     """
 
@@ -610,8 +625,10 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
     """
     From https://github.com/berndporr/py-ecg-detectors/
 
-    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
-    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.
+      in Cardiology, vol. 6, pp. 37-42, 1979
+    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation
+      for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
 
     """
     engzee_fake_delay = 0
@@ -725,17 +742,17 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
     """
     From https://github.com/berndporr/py-ecg-detectors/
 
-    - Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform for Automated ECG Analysis. In: 2017 IEEE 17th International Conference on Bioinformatics and Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.
+    - Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform
+      for Automated ECG Analysis. In: 2017 IEEE 17th International Conference on Bioinformatics and
+      Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.
 
     """
     # Try loading pywt
     try:
         import pywt
     except ImportError:
-        raise ImportError(
-            "NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for this method to run. ",
-            "Please install it first (`pip install PyWavelets`).",
-        )
+        raise ImportError("NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for"
+                          " this method to run. Please install it first (`pip install PyWavelets`).")
 
     swt_level = 3
     padding = -1
@@ -774,7 +791,9 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
     """
     From https://github.com/berndporr/py-ecg-detectors/
 
-    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010). 428-431.
+    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection.
+      The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010).
+      428-431.
 
     """
 
@@ -819,10 +838,8 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     try:
         import pywt
     except ImportError:
-        raise ImportError(
-            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for this method to run. ",
-            "Please install it first (`pip install PyWavelets`).",
-        )
+        raise ImportError("NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
+                          " this method to run. Please install it first (`pip install PyWavelets`).")
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, freqs = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
@@ -886,8 +903,12 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
     References
     ----------
-    - Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., & Hernández, A. (2015). Novel real-time low-complexity QRS complex detector based on adaptive thresholding. IEEE Sensors Journal, 15(10), 6036-6043.
-    - Sadhukhan, D., & Mitra, M. (2012). R-peak detection algorithm for ECG using double difference and RR interval processing. Procedia Technology, 4, 873-877.
+    - Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., & Hernández, A. (2015). Novel real-time
+      low-complexity QRS complex detector based on adaptive thresholding. IEEE Sensors Journal,
+      15(10), 6036-6043.
+
+    - Sadhukhan, D., & Mitra, M. (2012). R-peak detection algorithm for ECG using double difference
+      and RR interval processing. Procedia Technology, 4, 873-877.
 
     """
 

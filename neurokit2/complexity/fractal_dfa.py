@@ -11,28 +11,41 @@ def fractal_dfa(
     """
     (Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)
 
-    Python implementation of Detrended Fluctuation Analysis (DFA) or Multifractal DFA of a signal. Detrended fluctuation analysis, much like the Hurst exponent, is used to
-    find long-term statistical dependencies in time series.
+    Python implementation of Detrended Fluctuation Analysis (DFA) or Multifractal DFA of a signal.
+    Detrended fluctuation analysis, much like the Hurst exponent, is used to find long-term statistical
+    dependencies in time series.
 
-    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its multifractal variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``
+    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its multifractal
+    variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``
 
     Parameters
     ----------
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     windows : list
-        A list containing the lengths of the windows (number of data points in each subseries). Also referred to as 'lag' or 'scale'. If 'default', will set it to a logarithmic scale (so that each window scale hase the same weight) with a minimum of 4 and maximum of a tenth of the length (to have more than 10 windows to calculate the average fluctuation).
+        A list containing the lengths of the windows (number of data points in each subseries). Also
+        referred to as 'lag' or 'scale'. If 'default', will set it to a logarithmic scale (so that each
+        window scale hase the same weight) with a minimum of 4 and maximum of a tenth of the length
+        (to have more than 10 windows to calculate the average fluctuation).
     overlap : bool
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
     integrate : bool
-        It is common practice to convert the signal to a random walk (i.e., detrend and integrate, which corresponds to the signal 'profile'). Note that it leads to the flattening of the signal, which can lead to the loss of some details (see Ihlen, 2012 for an explanation). Note that for strongly anticorrelated signals, this transformation should be applied two times (i.e., provide ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
+        It is common practice to convert the signal to a random walk (i.e., detrend and integrate,
+        which corresponds to the signal 'profile'). Note that it leads to the flattening of the signal,
+        which can lead to the loss of some details (see Ihlen, 2012 for an explanation). Note that for
+        strongly anticorrelated signals, this transformation should be applied two times (i.e., provide
+        ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
     order : int
         The order of the polynoiam trend, 1 for the linear trend.
     multifractal : bool
-        If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the argument ```q`` is taken into account.
+        If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the argument
+        ```q`` is taken into account.
     q : list
-        The sequence of fractal exponents when ``multifractal=True``. Must be a sequence between -10 and 10 (nota that zero will be removed, since the code does not converge there). Setting q = 2 (default) gives a result close to a standard DFA. For instance, Ihlen (2012) usese ``q=[-5, -3, -1, 0, 1, 3, 5]``.
+        The sequence of fractal exponents when ``multifractal=True``. Must be a sequence between -10
+        and 10 (nota that zero will be removed, since the code does not converge there). Setting
+        q = 2 (default) gives a result close to a standard DFA. For instance, Ihlen (2012) usese ``
+        q=[-5, -3, -1, 0, 1, 3, 5]``.
     show : bool
         Visualise the trend between the window size and the fluctuations.
 
@@ -54,9 +67,15 @@ def fractal_dfa(
 
     References
     -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
-    - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V., Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended fluctuation analysis: a scale-free view on neuronal oscillations. Frontiers in physiology, 3, 450.
+    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended fluctuation analysis in Matlab.
+      Frontiers in physiology, 3, 141.
+
+    - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V., Mansvelder, H. D., &
+      Linkenkaer-Hansen, K. (2012). Detrended fluctuation analysis: a scale-free view on neuronal
+      oscillations. Frontiers in physiology, 3, 450.
+
     - `nolds <https://github.com/CSchoel/nolds/>`_
+
     - `Youtube introduction <https://www.youtube.com/watch?v=o0LndP2OlUI>`_
 
     """
@@ -127,11 +146,12 @@ def _fractal_dfa_findwindows(signal, n, windows="default"):
     if len(windows) < 2:
         raise ValueError("NeuroKit error: fractal_dfa(): more than one window is needed.")
     if np.min(windows) < 2:
-        raise ValueError("NeuroKit error: fractal_dfa(): there must be at least 2 data points in each window")
+        raise ValueError("NeuroKit error: fractal_dfa(): there must be at least 2 data points"
+                         "in each window")
     if np.max(windows) >= n:
         raise ValueError(
-            "NeuroKit error: fractal_dfa(): the window cannot contain more data points than the time series."
-        )
+            "NeuroKit error: fractal_dfa(): the window cannot contain more data points than the"
+            "time series.")
     return windows
 
 

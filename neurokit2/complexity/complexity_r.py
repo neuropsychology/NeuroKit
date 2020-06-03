@@ -14,19 +14,24 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     signal : list, array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to
+        have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to
+        find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
+        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     method : str
-        If 'maxApEn', rmax where ApEn is max will be returned. If 'traditional', r = 0.2 * standard deviation of the signal will be returned.
+        If 'maxApEn', rmax where ApEn is max will be returned. If 'traditional', r = 0.2 * standard
+        deviation of the signal will be returned.
     show : bool
         If true and method is 'maxApEn', will plot the ApEn values for each value of r.
 
     Returns
     ----------
     float
-        The optimal r as float value.
-
+        The optimal r as a similarity threshold. It corresponds to the filtering level - max absolute
+        difference between segments.
 
     Examples
     ----------
@@ -38,11 +43,12 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     >>> r = nk.complexity_r(signal, delay, dimension)
     >>> r #doctest: +SKIP
 
-olerance (similarity threshold). It corresponds to the filtering level - max absolute difference between segments.
 
     References
     -----------
-    - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering, 55(8), 1966-1972.
+    - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of
+      the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering,
+      55(8), 1966-1972.
     """
     # Method
     method = method.lower()
