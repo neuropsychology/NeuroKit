@@ -14,7 +14,7 @@ def mad(x, constant=1.4826):
 
     Returns
     ----------
-    mad : float
+    float
         The MAD.
 
     Examples
@@ -29,6 +29,6 @@ def mad(x, constant=1.4826):
 
     """
     median = np.nanmedian(np.ma.array(x).compressed())
-    mad = np.nanmedian(np.abs(x - median))
-    mad = mad * constant
-    return mad
+    mad_value = np.nanmedian(np.abs(x - median))
+    mad_value = mad_value * constant
+    return mad_value
