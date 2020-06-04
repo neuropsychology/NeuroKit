@@ -25,7 +25,7 @@ def hdi(x, ci=0.95, show=False, **kwargs):
         Default to .95 (95%).
     show : bool
         If True, the function will produce a figure.
-    kwargs
+    **kwargs
         Other arguments to be passed to ``density()``.
 
     See Also

@@ -11,7 +11,9 @@ def cor(x, y, method="pearson", show=False):
 
     Parameters
     -----------
-    x, y : list, array or Series
+    x : list, array or Series
+        Vectors of values.
+    y : list, array or Series
         Vectors of values.
     method : str
         Correlation method. Can be one of 'pearson', 'spearman', 'kendall'.
