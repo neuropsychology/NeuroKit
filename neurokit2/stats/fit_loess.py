@@ -50,7 +50,7 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
         X = np.linspace(0, 100, len(y))
 
     assert order in [1, 2], "Deg has to be 1 or 2"
-    assert (alpha > 0) and (alpha <= 1), "Alpha has to be between 0 and 1"
+    assert 0 < alpha <= 1, "Alpha has to be between 0 and 1"
     assert len(X) == len(y), "Length of X and y are different"
 
     X_domain = X
