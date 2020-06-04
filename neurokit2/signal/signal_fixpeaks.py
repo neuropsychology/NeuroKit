@@ -361,8 +361,9 @@ def _correct_misaligned(misaligned_idcs, peaks):
     # Make sure to not generate negative indices, or indices that exceed
     # the total number of peaks. prev_peaks and next_peaks must have the
     # same number of elements.
-    valid_idcs = np.logical_and(misaligned_idcs > 1,  # pylint: disable=E1111
-                                misaligned_idcs < len(corrected_peaks) - 1)
+    valid_idcs = np.logical_and(
+        misaligned_idcs > 1, misaligned_idcs < len(corrected_peaks) - 1  # pylint: disable=E1111
+    )
     misaligned_idcs = misaligned_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in misaligned_idcs]]
     next_peaks = corrected_peaks[[i + 1 for i in misaligned_idcs]]
