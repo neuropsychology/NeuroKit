@@ -12,7 +12,7 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
 
     Parameters
     ----------
-    ppg_cleaned : list, array or Series
+    ppg_cleaned : list or array or Series
         The cleaned PPG channel as returned by `ppg_clean()`.
     sampling_rate : int
         The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.
@@ -78,7 +78,7 @@ def _ppg_findpeaks_elgendi(
 
     """
     if show:
-        fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
+        __, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
         ax0.plot(signal, label="filtered")
 
     # Ignore the samples with negative amplitudes and square the samples with
