@@ -3,9 +3,9 @@
 
 """The setup script."""
 
-from setuptools import setup, find_packages
 import re
 
+from setuptools import find_packages, setup
 
 # Utilities
 with open('README.rst') as readme_file:
@@ -35,7 +35,6 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',

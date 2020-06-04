@@ -1,17 +1,25 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
-import scipy.signal
 import scipy.misc
+import scipy.signal
 
+from ..misc import as_vector, find_closest
 from ..stats import standardize
 from .signal_zerocrossings import signal_zerocrossings
-from ..misc import find_closest
-from ..misc import as_vector
 
 
-def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_min=None, relative_height_max=None, relative_mean=True, relative_median=False, relative_max=False):
-    """Find peaks in a signal.
+def signal_findpeaks(
+    signal,
+    height_min=None,
+    height_max=None,
+    relative_height_min=None,
+    relative_height_max=None,
+    relative_mean=True,
+    relative_median=False,
+    relative_max=False,
+):
+    """
+    Find peaks in a signal.
 
     Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
 
@@ -65,24 +73,31 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
     See Also
     --------
     scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks, ecg_findpeaks, rsp_findpeaks, signal_fixpeaks
+
     """
     info = _signal_findpeaks_scipy(signal)
 
     # Absolute
-    info = _signal_findpeaks_keep(info, what="Height",
-                                  below=height_max,
-                                  above=height_min,
-                                  relative_mean=False,
-                                  relative_median=False,
-                                  relative_max=False)
+    info = _signal_findpeaks_keep(
+        info,
+        what="Height",
+        below=height_max,
+        above=height_min,
+        relative_mean=False,
+        relative_median=False,
+        relative_max=False,
+    )
 
     # Relative
-    info = _signal_findpeaks_keep(info, what="Height",
-                                  below=relative_height_max,
-                                  above=relative_height_min,
-                                  relative_mean=relative_mean,
-                                  relative_median=relative_median,
-                                  relative_max=relative_max)
+    info = _signal_findpeaks_keep(
+        info,
+        what="Height",
+        below=relative_height_max,
+        above=relative_height_min,
+        relative_mean=relative_mean,
+        relative_median=relative_median,
+        relative_max=relative_max,
+    )
 
     # Filter
     info["Distance"] = _signal_findpeaks_distances(info["Peaks"])
@@ -92,14 +107,14 @@ def signal_findpeaks(signal, height_min=None, height_max=None, relative_height_m
     return info
 
 
-
-
-
 # =============================================================================
 # Filtering peaks
 # =============================================================================
 
-def _signal_findpeaks_keep(info, what="Height", below=None, above=None, relative_mean=False, relative_median=False, relative_max=False):
+
+def _signal_findpeaks_keep(
+    info, what="Height", below=None, above=None, relative_mean=False, relative_median=False, relative_max=False
+):
 
     if below is None and above is None:
         return info
@@ -115,7 +130,6 @@ def _signal_findpeaks_keep(info, what="Height", below=None, above=None, relative
     else:
         what = info[what]
 
-
     if below is not None:
         keep[what > below] = False
     if above is not None:
@@ -125,11 +139,6 @@ def _signal_findpeaks_keep(info, what="Height", below=None, above=None, relative
     return info
 
 
-
-
-
-
-
 def _signal_findpeaks_filter(info, keep):
     for key in info.keys():
         info[key] = info[key][keep]
@@ -137,11 +146,9 @@ def _signal_findpeaks_filter(info, keep):
     return info
 
 
-
 # =============================================================================
 # Helpers
 # =============================================================================
-
 
 
 def _signal_findpeaks_distances(peaks):
@@ -156,20 +163,18 @@ def _signal_findpeaks_distances(peaks):
     return distances
 
 
-
 def _signal_findpeaks_findbase(peaks, signal, what="onset"):
     if what == "onset":
         direction = "smaller"
     else:
         direction = "greater"
 
-    troughs, _ = scipy.signal.find_peaks(-1*signal)
+    troughs, _ = scipy.signal.find_peaks(-1 * signal)
 
     bases = find_closest(peaks, troughs, direction=direction, strictly=True)
     bases = as_vector(bases)
 
     return bases
-
 
 
 def _signal_findpeaks_scipy(signal):
@@ -181,9 +186,6 @@ def _signal_findpeaks_scipy(signal):
     widths, width_heights, left_ips, right_ips = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
 
     # Prepare output
-    info = {"Peaks": peaks,
-            "Distance": distances,
-            "Height": heights,
-            "Width": widths}
+    info = {"Peaks": peaks, "Distance": distances, "Height": heights, "Width": widths}
 
     return info

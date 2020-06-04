@@ -6,8 +6,9 @@ from .ecg_intervalrelated import ecg_intervalrelated
 
 
 def ecg_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs ECG analysis on either epochs (event-related
-    analysis) or on longer periods of data such as resting-state data.
+    """
+    Performs ECG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state
+    data.
 
     Parameters
     ----------
@@ -49,11 +50,20 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Process the data for event-related analysis
     >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral",
+    ...                                           "Neutral", "Negative"])
     >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
     >>>
     >>> # Analyze
-    >>> nk.ecg_analyze(epochs, sampling_rate=100) #doctest: +SKIP
+    >>> nk.ecg_analyze(epochs, sampling_rate=100) #doctest: +ELLIPSIS
+      Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
+    1     1  Negative  ...                               ...              ...
+    2     2   Neutral  ...                               ...              ...
+    3     3   Neutral  ...                               ...              ...
+    4     4  Negative  ...                               ...              ...
+
+    [4 rows x 17 columns]
     >>>
     >>> # Example 2: Download the resting-state data
     >>> data = nk.data("bio_resting_5min_100hz")
@@ -62,7 +72,12 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     >>> df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
     >>>
     >>> # Analyze
-    >>> nk.ecg_analyze(df, sampling_rate=100) #doctest: +SKIP
+    >>> nk.ecg_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
+      ECG_Rate_Mean  HRV_RMSSD  ...  HRV_CVI  HRV_CSI_Modified  HRV_SampEn
+    0 ...
+
+    [1 rows x 30 columns]
+
     """
     method = method.lower()
 
@@ -76,9 +91,9 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
             colnames = data.columns.values
 
         if len([i for i in colnames if "Label" in i]) == 0:
-            raise ValueError("NeuroKit error: ecg_analyze(): Wrong input"
-                             "or method, we couldn't extract"
-                             "extract epochs features.")
+            raise ValueError(
+                "NeuroKit error: ecg_analyze(): Wrong input or method, we couldn't extract epochs features."
+            )
         else:
             features = ecg_eventrelated(data)
 
@@ -98,8 +113,8 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
                 features = ecg_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
-            if 'Label' in data.columns:
-                epoch_len = data['Label'].value_counts()[0]
+            if "Label" in data.columns:
+                epoch_len = data["Label"].value_counts()[0]
                 duration = epoch_len / sampling_rate
             else:
                 duration = len(data) / sampling_rate

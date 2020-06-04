@@ -40,6 +40,7 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
     >>> # Vectorized version
     >>> x = nk.find_closest([1.8, 3.6], [3, 5, 6, 1, 2])
     >>> x  #doctest: +SKIP
+
     """
 
     # Transform to arrays
@@ -54,7 +55,6 @@ def find_closest(closest_to, list_to_search_in, direction="both", strictly=False
         return np.array(out)
 
 
-
 # =============================================================================
 # Internal
 # =============================================================================
@@ -65,21 +65,20 @@ def _find_closest(closest_to, list_to_search_in, direction="both", strictly=Fals
     except ValueError:
         index, closest = np.nan, np.nan
 
-
     if return_index is True:
         return index
     else:
         return closest
 
 
-
 # =============================================================================
 # Methods
 # =============================================================================
 
+
 def _findclosest_base(x, vals, direction="both", strictly=False):
     if direction == "both":
-        closest = min(vals, key=lambda y: np.abs(y-x))
+        closest = min(vals, key=lambda y: np.abs(y - x))
     if direction == "smaller":
         if strictly is True:
             closest = max(y for y in vals if y < x)
@@ -92,9 +91,6 @@ def _findclosest_base(x, vals, direction="both", strictly=False):
             closest = min(filter(lambda y: y >= x, vals))
 
     return closest
-
-
-
 
 
 def _find_closest_single_pandas(x, vals, direction="both", strictly=False):

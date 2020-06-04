@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
+import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.patches
+import scipy.stats
 
 from ..complexity.entropy_sample import entropy_sample
-from .hrv_utils import _hrv_sanitize_input
-from .hrv_utils import _hrv_get_rri
+from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
-    """ Computes nonlinear indices of Heart Rate Variability (HRV).
+    """
+    Computes nonlinear indices of Heart Rate Variability (HRV).
 
      See references for details.
 
@@ -56,6 +58,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     >>>
     >>> # Compute HRV indices
     >>> hrv = nk.hrv_nonlinear(peaks, sampling_rate=100, show=True)
+    >>> hrv #doctest: +SKIP
 
     References
     ----------
@@ -63,6 +66,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
       Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
     variability metrics and norms. Frontiers in public health, 5, 258.
+
     """
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
@@ -87,67 +91,136 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out["CSI_Modified"] = L ** 2 / T
 
     # Entropy
-    out["SampEn"] = entropy_sample(rri, dimension=2,
-                                   r=0.2 * np.std(rri, ddof=1))
+    out["SampEn"] = entropy_sample(rri, dimension=2, r=0.2 * np.std(rri, ddof=1))
 
     if show:
         _hrv_nonlinear_show(rri, out)
 
-    out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
+    out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
 
-
-
-
-def _hrv_nonlinear_show(rri, out, ax=None):
+def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
 
     mean_heart_period = np.mean(rri)
     sd1 = out["SD1"]
     sd2 = out["SD2"]
-
-    # Axes
+    if isinstance(sd1, pd.Series):
+        sd1 = float(sd1)
+    if isinstance(sd2, pd.Series):
+        sd2 = float(sd2)
     ax1 = rri[:-1]
     ax2 = rri[1:]
 
-    # Plot
-    if ax is None:
-        fig, ax = plt.subplots()
+    # Poincare values
+    ax1 = rri[:-1]
+    ax2 = rri[1:]
+
+    # Set grid boundaries
+    ax1_lim = (max(ax1) - min(ax1)) / 10
+    ax2_lim = (max(ax2) - min(ax2)) / 10
+    ax1_min = min(ax1) - ax1_lim
+    ax1_max = max(ax1) + ax1_lim
+    ax2_min = min(ax2) - ax2_lim
+    ax2_max = max(ax2) + ax2_lim
+
+    # Prepare figure
+    if ax is None and ax_marg_x is None and ax_marg_y is None:
+        gs = matplotlib.gridspec.GridSpec(4, 4)
+        fig = plt.figure(figsize=(8, 8))
+        ax_marg_x = plt.subplot(gs[0, 0:3])
+        ax_marg_y = plt.subplot(gs[1:4, 3])
+        ax = plt.subplot(gs[1:4, 0:3])
+        gs.update(wspace=0.025, hspace=0.05)  # Reduce spaces
+        plt.suptitle("Poincaré Plot")
     else:
         fig = None
 
-    plt.title("Poincaré Plot")
-    plt.xlabel(r'$RR_{n} (ms)$')
-    plt.ylabel(r'$RR_{n+1} (ms)$')
-    plt.xlim(min(rri) - 10, max(rri) + 10)
-    plt.ylim(min(rri) - 10, max(rri) + 10)
-    ax.scatter(ax1, ax2, c='#2196F3', s=4)
+    # Create meshgrid
+    xx, yy = np.mgrid[ax1_min:ax1_max:100j, ax2_min:ax2_max:100j]
 
-    # Ellipse plot feature
-    ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
-                                             mean_heart_period),
-                                         width=2 * sd2 + 1, height=2 * sd1 + 1,
-                                         angle=45, linewidth=2, fill=False)
-    ax.add_patch(ellipse)
-    ellipse = matplotlib.patches.Ellipse(xy=(mean_heart_period,
-                                             mean_heart_period), width=2 * sd2,
-                                         height=2 * sd1, angle=45)
-    ellipse.set_alpha(0.02)
+    # Fit Gaussian Kernel
+    positions = np.vstack([xx.ravel(), yy.ravel()])
+    values = np.vstack([ax1, ax2])
+    kernel = scipy.stats.gaussian_kde(values)
+    f = np.reshape(kernel(positions).T, xx.shape)
+
+    cmap = matplotlib.cm.get_cmap("Blues", 10)
+    ax.contourf(xx, yy, f, cmap=cmap)
+    ax.imshow(np.rot90(f), extent=[ax1_min, ax1_max, ax2_min, ax2_max], aspect="auto")
+
+    # Marginal densities
+    ax_marg_x.hist(ax1, bins=int(len(ax1) / 10), density=True, alpha=1, color="#ccdff0", edgecolor="none")
+    ax_marg_y.hist(
+        ax2,
+        bins=int(len(ax2) / 10),
+        density=True,
+        alpha=1,
+        color="#ccdff0",
+        edgecolor="none",
+        orientation="horizontal",
+        zorder=1,
+    )
+    kde1 = scipy.stats.gaussian_kde(ax1)
+    x1_plot = np.linspace(ax1_min, ax1_max, len(ax1))
+    x1_dens = kde1.evaluate(x1_plot)
+
+    ax_marg_x.fill(x1_plot, x1_dens, facecolor="none", edgecolor="#1b6aaf", alpha=0.8, linewidth=2)
+    kde2 = scipy.stats.gaussian_kde(ax2)
+    x2_plot = np.linspace(ax2_min, ax2_max, len(ax2))
+    x2_dens = kde2.evaluate(x2_plot)
+    ax_marg_y.fill_betweenx(x2_plot, x2_dens, facecolor="none", edgecolor="#1b6aaf", linewidth=2, alpha=0.8, zorder=2)
+
+    # Turn off marginal axes labels
+    ax_marg_x.axis("off")
+    ax_marg_y.axis("off")
+
+    # Plot ellipse
+    angle = 45
+    width = 2 * sd2 + 1
+    height = 2 * sd1 + 1
+    xy = (mean_heart_period, mean_heart_period)
+    ellipse = matplotlib.patches.Ellipse(xy=xy, width=width, height=height, angle=angle, linewidth=2, fill=False)
+    ellipse.set_alpha(0.5)
     ellipse.set_facecolor("#2196F3")
     ax.add_patch(ellipse)
 
-    # Arrow plot feature
-    sd1_arrow = ax.arrow(mean_heart_period,
-                         mean_heart_period,
-                         float(-sd1 * np.sqrt(2) / 2),
-                         float(sd1 * np.sqrt(2) / 2),
-                         linewidth=3, ec='#E91E63', fc="#E91E63", label="SD1")
-    sd2_arrow = ax.arrow(mean_heart_period,
-                         mean_heart_period,
-                         float(sd2 * np.sqrt(2) / 2),
-                         float(sd2 * np.sqrt(2) / 2),
-                         linewidth=3, ec='#FF9800', fc="#FF9800", label="SD2")
+    # Plot points only outside ellipse
+    cos_angle = np.cos(np.radians(180.0 - angle))
+    sin_angle = np.sin(np.radians(180.0 - angle))
+    xc = ax1 - xy[0]
+    yc = ax2 - xy[1]
+    xct = xc * cos_angle - yc * sin_angle
+    yct = xc * sin_angle + yc * cos_angle
+    rad_cc = (xct ** 2 / (width / 2.0) ** 2) + (yct ** 2 / (height / 2.0) ** 2)
 
-    plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
+    points = np.where(rad_cc > 1)[0]
+    ax.plot(ax1[points], ax2[points], "ro", color="k", alpha=0.5, markersize=4)
+
+    # SD1 and SD2 arrow
+    sd1_arrow = ax.arrow(
+        mean_heart_period,
+        mean_heart_period,
+        float(-sd1 * np.sqrt(2) / 2),
+        float(sd1 * np.sqrt(2) / 2),
+        linewidth=3,
+        ec="#E91E63",
+        fc="#E91E63",
+        label="SD1",
+    )
+    sd2_arrow = ax.arrow(
+        mean_heart_period,
+        mean_heart_period,
+        float(sd2 * np.sqrt(2) / 2),
+        float(sd2 * np.sqrt(2) / 2),
+        linewidth=3,
+        ec="#FF9800",
+        fc="#FF9800",
+        label="SD2",
+    )
+
+    ax.set_xlabel(r"$RR_{n} (ms)$")
+    ax.set_ylabel(r"$RR_{n+1} (ms)$")
+    ax.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
 
     return fig

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import matplotlib.animation
 import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d
+import numpy as np
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False):
-    """Time-delay embedding of a time series (a signal)
+    """
+    Time-delay embedding of a time series (a signal)
 
     A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide a complete description of the system at some point in time. The set of all possible states is called the 'state space'.
 
@@ -59,18 +60,21 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     References
     -----------
     - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+
     """
     N = len(signal)
 
     # Sanity checks
     if dimension * delay > N:
-        raise ValueError("NeuroKit error: complexity_embedding(): dimension * delay should be lower than length of signal.")
+        raise ValueError(
+            "NeuroKit error: complexity_embedding(): dimension * delay should be lower than length of signal."
+        )
     if delay < 1:
         raise ValueError("NeuroKit error: complexity_embedding(): 'delay' has to be at least 1.")
 
     Y = np.zeros((dimension, N - (dimension - 1) * delay))
     for i in range(dimension):
-        Y[i] = signal[i * delay:i * delay + Y.shape[1]]
+        Y[i] = signal[i * delay : i * delay + Y.shape[1]]
     embedded = Y.T
 
     if show is True:
@@ -85,9 +89,11 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
 
 
 def _embedding_plot(embedded):
-    """Plot reconstructed attractor.
+    """
+    Plot reconstructed attractor.
 
     The input for this function must be obtained via `nk.complexity_embedding()`
+
     """
     if embedded.shape[1] == 2:
         figure = _embedding_plot_2D(embedded)
@@ -103,27 +109,17 @@ def _embedding_plot(embedded):
 # Internal plots
 # =============================================================================
 
+
 def _embedding_plot_2D(embedded):
-    figure = plt.plot(embedded[:, 0], embedded[:, 1], color='#3F51B5')
-    return figure
+    return plt.plot(embedded[:, 0], embedded[:, 1], color="#3F51B5")
 
 
 def _embedding_plot_3D(embedded):
-    figure = _plot_3D_colored(x=embedded[:, 0],
-                              y=embedded[:, 1],
-                              z=embedded[:, 2],
-                              color=embedded[:, 2],
-                              rotate=False)
-    return figure
+    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False)
+
 
 def _embedding_plot_4D(embedded):
-    figure = _plot_3D_colored(x=embedded[:, 0],
-                              y=embedded[:, 1],
-                              z=embedded[:, 2],
-                              color=embedded[:, 3],
-                              rotate=False)
-    return figure
-
+    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False)
 
 
 # =============================================================================
@@ -139,17 +135,17 @@ def _plot_3D_colored(x, y, z, color=None, rotate=False):
 
     # Color
     norm = plt.Normalize(color.min(), color.max())
-    cmap = plt.get_cmap('plasma')
+    cmap = plt.get_cmap("plasma")
     colors = cmap(norm(color))
 
     # Plot
     fig = plt.figure()
-    ax = fig.gca(projection='3d')
+    ax = fig.gca(projection="3d")
 
     for i in range(len(x) - 1):
         seg = segments[i]
-        l, = ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i])
-        l.set_solid_capstyle('round')
+        (l,) = ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i])
+        l.set_solid_capstyle("round")
 
     if rotate is True:
         fig = _plot_3D_colored_rotate(fig, ax)
@@ -157,16 +153,12 @@ def _plot_3D_colored(x, y, z, color=None, rotate=False):
     return fig
 
 
-
 def _plot_3D_colored_rotate(fig, ax):
-
     def rotate(angle):
         ax.view_init(azim=angle)
 
-    fig = matplotlib.animation.FuncAnimation(fig,
-                                             rotate,
-                                             frames=np.arange(0, 361, 1),
-                                             interval=10,
-                                             cache_frame_data=False)
+    fig = matplotlib.animation.FuncAnimation(
+        fig, rotate, frames=np.arange(0, 361, 1), interval=10, cache_frame_data=False
+    )
 
     return fig

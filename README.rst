@@ -3,7 +3,7 @@
 
 .. image:: https://img.shields.io/pypi/pyversions/neurokit2.svg?logo=python&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
-        
+
 .. image:: https://img.shields.io/pypi/dm/neurokit2
         :target: https://pypi.python.org/pypi/neurokit2
 
@@ -34,16 +34,16 @@ Quick Example
 
 .. code-block:: python
 
-    import neurokit2 as nk  
-    
+    import neurokit2 as nk
+
     # Download example data
     data = nk.data("bio_eventrelated_100hz")
-    
+
     # Preprocess the data (filter, find peaks, etc.)
     processed_data, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
-    
+
     # Compute relevant features
-    results = nk.bio_analyze(processed_data, sampling_rate=100)  
+    results = nk.bio_analyze(processed_data, sampling_rate=100)
 
 And **boom** 💥 your analysis is done 😎
 
@@ -55,13 +55,29 @@ To install NeuroKit2, run this command in your terminal:
 .. code-block::
 
     pip install https://github.com/neuropsychology/neurokit/zipball/master
-    
+
 If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
 Contribution
 -------------
 
-NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the `CONTRIBUTION <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_ guide. Once this is done, you can also read our ideas for `first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
+.. image:: https://img.shields.io/badge/License-MIT-blue.svg
+        :target: https://github.com/neuropsychology/NeuroKit/blob/master/LICENSE
+        :alt: License
+        
+.. image:: https://github.com/neuropsychology/neurokit/workflows/Tests/badge.svg
+        :target: https://github.com/neuropsychology/NeuroKit/actions
+        :alt: GitHub CI
+        
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+        :target: https://github.com/psf/black
+        :alt: Black code
+
+NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
+
+- `Contribution guide <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
+- `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
+- `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 
 
 Documentation
@@ -74,39 +90,36 @@ Documentation
 .. image:: https://img.shields.io/badge/functions-API-orange.svg?colorB=2196F3
         :target: https://neurokit2.readthedocs.io/en/latest/functions.html
         :alt: API
-        
+
 .. image:: https://img.shields.io/badge/tutorials-help-orange.svg?colorB=E91E63
         :target: https://neurokit2.readthedocs.io/en/latest/tutorials/index.html
         :alt: Tutorials
-        
+
 .. image:: https://img.shields.io/badge/documentation-pdf-purple.svg?colorB=FF9800
         :target: https://neurokit2.readthedocs.io/_/downloads/en/latest/pdf/
         :alt: PDF
-        
+
 .. image:: https://mybinder.org/badge_logo.svg
-        :target: https://mybinder.org/v2/gh/sangfrois/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
+        :target: https://mybinder.org/v2/gh/neuropsychology/NeuroKit/dev?urlpath=lab%2Ftree%2Fdocs%2Fexamples
         :alt: Binder
-        
+
 .. image:: https://img.shields.io/gitter/room/neuropsychology/NeuroKit.js.svg
         :target: https://gitter.im/NeuroKit/community
         :alt: Chat on Gitter
-        
+
 
 Click on the links above and check out our tutorials:
 
-Guides
+General
 ^^^^^^^^^^
 
 -  `Recording good quality signals <https://neurokit2.readthedocs.io/en/latest/tutorials/recording.html>`_
 -  `What software for physiological signal processing <https://neurokit2.readthedocs.io/en/latest/tutorials/software.html>`_
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
 -  `Get familiar with Python in 10 minutes <https://neurokit2.readthedocs.io/en/latest/tutorials/learnpython.html>`_
--  `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
--  `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
 -  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 -  `Additional Resources <https://neurokit2.readthedocs.io/en/latest/tutorials/resources.html>`_
--  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
 
 
 Examples
@@ -120,6 +133,7 @@ Examples
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
+-  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
@@ -128,7 +142,7 @@ Examples
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/workflow.png
         :target: https://neurokit2.readthedocs.io/en/latest/?badge=latest
-        
+
 Citation
 ---------
 
@@ -137,7 +151,7 @@ Citation
 
 .. image:: https://img.shields.io/badge/details-authors-purple.svg?colorB=9C27B0
    :target: https://neurokit2.readthedocs.io/en/latest/authors.html
-   
+
 
 .. code-block:: python
 
@@ -149,7 +163,7 @@ Citation
     You can cite NeuroKit2 as follows:
 
     - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lesspinasse, F., Pham, H.,
-      Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological 
+      Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological
       Signal Processing. Retrieved March 28, 2020, from https://github.com/neuropsychology/NeuroKit
 
     Full bibtex reference:
@@ -167,7 +181,7 @@ Citation
     Design
     --------
 
-    *NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API. 
+    *NeuroKit2* is designed to provide a **consistent**, **accessible** yet **powerful** and **flexible** API.
 
     - **Consistency**: For each type of signals (ECG, RSP, EDA, EMG...), the same function names are called (in the form :code:`signaltype_functiongoal()`) to achieve equivalent goals, such as :code:`*_clean()`, :code:`*_findpeaks()`, :code:`*_process()`, :code:`*_plot()` (replace the star with the signal type, e.g., :code:`ecg_clean()`).
     - **Accessibility**: Using NeuroKit2 is made very easy for beginners through the existence of powerful high-level "master" functions, such as :code:`*_process()`, that performs cleaning, preprocessing and processing with sensible defaults.
@@ -357,16 +371,16 @@ Heart Rate Variability (HRV)
   - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.
   - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF).
   - **Nonlinear domain**: Spread of RR intervals (SD1, SD2, ratio between SD2 to SD1), Cardiac Sympathetic Index (CSI), Cardial Vagal Index (CVI), Modified CSI, Sample Entropy (SampEn).
-  
+
 
 .. code-block:: python
-    
+
     # Download data
-    data = nk.data("bio_resting_5min_100hz")
-    
+    data = nk.data("bio_resting_8min_100hz")
+
     # Find peaks
     peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
-    
+
     # Compute HRV indices
     nk.hrv(peaks, sampling_rate=100, show=True)
     >>>    HRV_RMSSD  HRV_MeanNN   HRV_SDNN  ...   HRV_CVI  HRV_CSI_Modified  HRV_SampEn
@@ -436,7 +450,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
   - **Entropy**: Sample Entropy (SampEn), Approximate Entropy (ApEn), Fuzzy Entropy (FuzzEn), Multiscale Entropy (MSE), Shannon Entropy (ShEn)
   - **Fractal dimensions**: Correlation Dimension D2, ...
   - **Detrended Fluctuation Analysis**
-  
+
 .. code-block:: python
 
     nk.entropy_sample(signal)
@@ -446,7 +460,7 @@ Complexity (Entropy, Fractal Dimensions, ...)
 Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- **Highest Density Interval**
+- **Highest Density Interval (HDI)**
 
 .. code-block:: python
 
@@ -461,11 +475,11 @@ Popularity
 
 .. image:: https://img.shields.io/pypi/dd/neurokit2
         :target: https://pypi.python.org/pypi/neurokit2
-        
-.. image:: https://img.shields.io/github/stars/neuropsychology/NeuroKit   
+
+.. image:: https://img.shields.io/github/stars/neuropsychology/NeuroKit
         :target: https://github.com/neuropsychology/NeuroKit/stargazers
-        
-.. image:: https://img.shields.io/github/forks/neuropsychology/NeuroKit   
+
+.. image:: https://img.shields.io/github/forks/neuropsychology/NeuroKit
         :target: https://github.com/neuropsychology/NeuroKit/network
 
 
@@ -473,7 +487,7 @@ Popularity
         :target: https://pypi.python.org/pypi/neurokit2
 
 
-  
+
 Notes
 -------
 

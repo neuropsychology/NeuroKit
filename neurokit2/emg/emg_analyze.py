@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-
 from .emg_eventrelated import emg_eventrelated
 from .emg_intervalrelated import emg_intervalrelated
 
 
 def emg_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs EMG analysis on either epochs (event-related
-    analysis) or on longer periods of data such as resting-state data.
+    """
+    Performs EMG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-state
+    data.
 
     Parameters
     ----------
@@ -56,6 +56,7 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Interval-related analysis
     >>> nk.emg_analyze(emg_signals, method="interval-related") #doctest: +SKIP
+
     """
     method = method.lower()
 
@@ -69,9 +70,9 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
             colnames = data.columns.values
 
         if len([i for i in colnames if "Label" in i]) == 0:
-            raise ValueError("NeuroKit error: emg_analyze(): Wrong input"
-                             "or method, we couldn't extract"
-                             "extract epochs features.")
+            raise ValueError(
+                "NeuroKit error: emg_analyze(): Wrong input or method, we couldn't extract extract epochs features."
+            )
         else:
             features = emg_eventrelated(data)
 
@@ -91,8 +92,8 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
                 features = emg_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
-            if 'Label' in data.columns:
-                epoch_len = data['Label'].value_counts()[0]
+            if "Label" in data.columns:
+                epoch_len = data["Label"].value_counts()[0]
                 duration = epoch_len / sampling_rate
             else:
                 duration = len(data) / sampling_rate

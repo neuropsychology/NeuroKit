@@ -2,14 +2,13 @@
 import numpy as np
 import pandas as pd
 
-
-from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 from ..signal import signal_phase
-
+from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
 def rsp_phase(peaks, troughs=None, desired_length=None):
-    """Compute respiratory phase (inspiration and expiration).
+    """
+    Compute respiratory phase (inspiration and expiration).
 
     Finds the respiratory phase, labelled as 1 for inspiration and 0 for expiration.
     Parameters
@@ -49,7 +48,9 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     >>> peak_signal, info = nk.rsp_peaks(cleaned)
     >>>
     >>> phase = nk.rsp_phase(peak_signal)
-    >>> nk.signal_plot([rsp, phase], standardize=True)
+    >>> fig = nk.signal_plot([rsp, phase], standardize=True)
+    >>> fig #doctest: +SKIP
+
     """
     # Format input.
     peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, desired_length)
@@ -65,7 +66,6 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     # Phase Completion
     completion = signal_phase(inspiration, method="percent")
 
-    out = pd.DataFrame({"RSP_Phase": inspiration,
-                        "RSP_Phase_Completion": completion})
+    out = pd.DataFrame({"RSP_Phase": inspiration, "RSP_Phase_Completion": completion})
 
     return out

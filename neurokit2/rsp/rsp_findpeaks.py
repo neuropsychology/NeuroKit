@@ -3,9 +3,9 @@ import numpy as np
 import pandas as pd
 
 
-def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018",
-                  amplitude_min=0.3):
-    """Extract extrema in a respiration (RSP) signal.
+def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
+    """
+    Extract extrema in a respiration (RSP) signal.
 
     Low-level function used by `rsp_peaks()` to identify inhalation peaks and exhalation troughs in a preprocessed
     respiration signal using different sets of parameters. See `rsp_peaks()` for details.
@@ -47,7 +47,9 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018",
     >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     >>> info = nk.rsp_findpeaks(cleaned)
-    >>> nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned) #doctest: +SKIP
+    >>> fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+    >>> fig #doctest: +SKIP
+
     """
     # Try retrieving correct column
     if isinstance(rsp_cleaned, pd.DataFrame):
@@ -68,8 +70,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018",
     elif method == "biosppy":
         info = _rsp_findpeaks_biosppy(cleaned)
     else:
-        raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be "
-                         "one of 'khodadad2018' or 'biosppy'.")
+        raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be one of 'khodadad2018' or 'biosppy'.")
 
     return info
 
@@ -80,8 +81,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018",
 def _rsp_findpeaks_biosppy(rsp_cleaned, sampling_rate):
 
     extrema = _rsp_findpeaks_extrema(rsp_cleaned)
-    extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema,
-                                                  amplitude_min=0)
+    extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=0)
 
     peaks, troughs = _rsp_findpeaks_sanitize(extrema, amplitudes)
 
@@ -92,20 +92,17 @@ def _rsp_findpeaks_biosppy(rsp_cleaned, sampling_rate):
     peaks = np.delete(peaks, outlier_idcs)
     troughs = np.delete(troughs, outlier_idcs)
 
-    info = {"RSP_Peaks": peaks,
-            "RSP_Troughs": troughs}
+    info = {"RSP_Peaks": peaks, "RSP_Troughs": troughs}
     return info
 
 
 def _rsp_findpeaks_khodadad(rsp_cleaned, amplitude_min=0.3):
 
     extrema = _rsp_findpeaks_extrema(rsp_cleaned)
-    extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema,
-                                                  amplitude_min=amplitude_min)
+    extrema, amplitudes = _rsp_findpeaks_outliers(rsp_cleaned, extrema, amplitude_min=amplitude_min)
     peaks, troughs = _rsp_findpeaks_sanitize(extrema, amplitudes)
 
-    info = {"RSP_Peaks": peaks,
-            "RSP_Troughs": troughs}
+    info = {"RSP_Peaks": peaks, "RSP_Troughs": troughs}
     return info
 
 

@@ -3,7 +3,8 @@ import numpy as np
 
 
 def signal_zerocrossings(signal):
-    """Locate the indices where the signal crosses zero.
+    """
+    Locate the indices where the signal crosses zero.
 
     Note that when the signal crosses zero between two points, the first index is returned.
 
@@ -26,6 +27,7 @@ def signal_zerocrossings(signal):
     >>> zeros = nk.signal_zerocrossings(signal)
     >>> fig = nk.events_plot(zeros, signal)
     >>> fig #doctest: +SKIP
+
     """
     df = np.diff(np.sign(signal))
     zeros = np.nonzero(np.abs(df) > 0)[0]

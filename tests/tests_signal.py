@@ -1,9 +1,9 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import neurokit2 as nk
 import scipy.signal
 
+import neurokit2 as nk
 
 # =============================================================================
 # Signal

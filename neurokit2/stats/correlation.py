@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats
 
-import matplotlib.pyplot as plt
-
 
 def cor(x, y, method="pearson", show=False):
     """
-    Density estimation
+    Density estimation.
 
     Computes kernel density estimates.
 
@@ -34,6 +33,7 @@ def cor(x, y, method="pearson", show=False):
     >>> y = [3, 1, 5, 6, 6]
     >>> corr = nk.cor(x, y, method="pearson", show=True)
     >>> corr #doctest: +SKIP
+
     """
     r, p = _cor_methods(x, y, method)
 
@@ -51,21 +51,20 @@ def _cor_methods(x, y, method="pearson"):
     if method in ["pearson", "pears", "p", "r"]:
         r, p = scipy.stats.pearsonr(x, y)
     elif method in ["spearman", "spear", "s", "rho"]:
-        r, p = scipy.stats.spearmanr(x, y)
+        r, p = scipy.stats.spearmanr(x, y, nan_policy="omit")
     elif method in ["kendall", "kend", "k", "tau"]:
-        r, p = scipy.stats.spearmanr(x, y)
+        r, p = scipy.stats.kendalltau(x, y, nan_policy="omit")
     else:
         raise ValueError("NeuroKit error: cor(): 'method' not recognized.")
 
     return r, p
 
 
-
 def _cor_plot(x, y):
 
     # Create scatter
-    plt.plot(x, y, 'o')
+    plt.plot(x, y, "o")
 
     # Add regresion line
     m, b = np.polyfit(x, y, 1)
-    plt.plot(np.array(x), m*np.array(x) + b)
+    plt.plot(np.array(x), m * np.array(x) + b)

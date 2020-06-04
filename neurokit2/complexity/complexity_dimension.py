@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial
-import matplotlib.pyplot as plt
 
 from .complexity_embedding import complexity_embedding
 
 
-
 def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
-    """Estimate optimal Dimension (m) for time-delay embedding.
+    """
+    Estimate optimal Dimension (m) for time-delay embedding.
 
     Parameters
     ----------
@@ -56,6 +56,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
     References
     -----------
     - Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
+
     """
     # Initalize vectors
     if isinstance(dimension_max, int):
@@ -74,31 +75,35 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
         # threshold = 0.1 * (np.max(E1) - np.min(E1))
         min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
         if show is True:
-            _embedding_dimension_plot(method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, E1=E1, E2=E2)
-
+            _embedding_dimension_plot(
+                method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, E1=E1, E2=E2
+            )
 
     elif method in ["fnn"]:
-        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, show=show, **kwargs)
+        f1, f2, f3 = _embedding_dimension_ffn(
+            signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, show=show, **kwargs
+        )
 
         min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
 
         if show is True:
-            _embedding_dimension_plot(method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, f1=f1, f2=f2, f3=f3)
+            _embedding_dimension_plot(
+                method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, f1=f1, f2=f2, f3=f3
+            )
 
     else:
-        raise ValueError("NeuroKit error: complexity_dimension(): 'method' "
-                         "not recognized.")
+        raise ValueError("NeuroKit error: complexity_dimension(): 'method' " "not recognized.")
 
     return min_dimension
-
-
 
 
 # =============================================================================
 # Methods
 # =============================================================================
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwargs):
-    """Return E(d) and E^*(d) for a all d in dimension_seq.
+    """
+    Return E(d) and E^*(d) for a all d in dimension_seq.
+
     E(d) and E^*(d) will be used to calculate E1(d) and E2(d)
     El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater
     than some value d0 if the time series comes from an attractor. Then d0 + 1
@@ -109,16 +114,22 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwarg
     for any d. For deterministic data, E2(d) is certainly related to d, it
     cannot be a constant for all d; there must exist somed's such that E2(d)
     is not 1.
+
     """
-    values = np.asarray([_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]).T
+    values = np.asarray(
+        [_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]
+    ).T
     E, Es = values[0, :], values[1, :]
 
     return E, Es
 
 
-def _embedding_dimension_afn_d(signal, dimension, delay=1, metric='chebyshev', window=10, maxnum=None):
-    """Return E(d) and E^*(d) for a single d.
+def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None):
+    """
+    Return E(d) and E^*(d) for a single d.
+
     Returns E(d) and E^*(d) for the AFN method for a single d.
+
     """
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
@@ -141,10 +152,11 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, metric='chebyshev', w
 
 
 def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, show=False, **kwargs):
-    """Compute the fraction of false nearest neighbors.
-    The false nearest neighbors (FNN) method described by
-    Kennel et al. (1992) to calculate the minimum embedding dimension
-    required to embed a scalar time series.
+    """
+    Compute the fraction of false nearest neighbors.
+
+    The false nearest neighbors (FNN) method described by Kennel et al.
+    (1992) to calculate the minimum embedding dimension required to embed a scalar time series.
 
     f1 : array
         Fraction of neighbors classified as false by Test I.
@@ -153,14 +165,19 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, show
     f3 : array
         Fraction of neighbors classified as false by either Test I
         or Test II.
+
     """
-    values = np.asarray([_embedding_dimension_ffn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]).T
+    values = np.asarray(
+        [_embedding_dimension_ffn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]
+    ).T
     f1, f2, f3 = values[0, :], values[1, :], values[2, :]
 
     return f1, f2, f3
 
-def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric='euclidean', window=10, maxnum=None):
-    """Return fraction of false nearest neighbors for a single d.
+
+def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
+    """
+    Return fraction of false nearest neighbors for a single d.
     """
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
@@ -184,7 +201,9 @@ def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric
 # =============================================================================
 # Internals
 # =============================================================================
-def _embedding_dimension_plot(method, dimension_seq, min_dimension, E1=None, E2=None, f1=None, f2=None, f3=None, ax=None):
+def _embedding_dimension_plot(
+    method, dimension_seq, min_dimension, E1=None, E2=None, f1=None, f2=None, f3=None, ax=None
+):
 
     if ax is None:
         fig, ax = plt.subplots()
@@ -194,24 +213,26 @@ def _embedding_dimension_plot(method, dimension_seq, min_dimension, E1=None, E2=
     ax.set_xlabel("Embedding dimension $d$")
     ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
     if method in ["afnn"]:
-        ax.plot(dimension_seq[:-1], E1, 'bo-', label='$E_1(d)$', color='#FF5722')
-        ax.plot(dimension_seq[:-1], E2, 'go-', label='$E_2(d)$', color='#f44336')
+        ax.plot(dimension_seq[:-1], E1, "bo-", label="$E_1(d)$", color="#FF5722")
+        ax.plot(dimension_seq[:-1], E2, "go-", label="$E_2(d)$", color="#f44336")
 
     if method in ["fnn"]:
-        ax.plot(dimension_seq, 100 * f1, 'bo--', label='Test I', color='#FF5722')
-        ax.plot(dimension_seq, 100 * f2, 'g^--', label='Test II', color='#f44336')
-        ax.plot(dimension_seq, 100 * f3, 'rs-', label='Test I + II', color='#852b01')
+        ax.plot(dimension_seq, 100 * f1, "bo--", label="Test I", color="#FF5722")
+        ax.plot(dimension_seq, 100 * f2, "g^--", label="Test II", color="#f44336")
+        ax.plot(dimension_seq, 100 * f3, "rs-", label="Test I + II", color="#852b01")
 
-    ax.axvline(x=min_dimension, color='#E91E63', label='Optimal dimension: ' + str(min_dimension))
-    ax.legend(loc='upper right')
+    ax.axvline(x=min_dimension, color="#E91E63", label="Optimal dimension: " + str(min_dimension))
+    ax.legend(loc="upper right")
 
     return fig
 
 
-def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='chebyshev', window=0, maxnum=None, show=False):
-    """Find nearest neighbors of all points in the given array.
-    Finds the nearest neighbors of all points in the given array using
-    SciPy's KDTree search.
+def _embedding_dimension_neighbors(
+    signal, dimension_max=20, delay=1, metric="chebyshev", window=0, maxnum=None, show=False
+):
+    """
+    Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given
+    array using SciPy's KDTree search.
 
     Parameters
     ----------
@@ -249,6 +270,7 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
         Array containing indices of near neighbors.
     dist : array
         Array containing near neighbor distances.
+
     """
 
     # Sanity checks
@@ -257,15 +279,14 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
     else:
         y = signal
 
-    if metric == 'cityblock':
-        p = 1
-    elif metric == 'euclidean':
-        p = 2
-    elif metric == 'chebyshev':
+    if metric == "chebyshev":
         p = np.inf
+    elif metric == "cityblock":
+        p = 1
+    elif metric == "euclidean":
+        p = 2
     else:
-        raise ValueError('Unknown metric.  Should be one of "cityblock", '
-                         '"euclidean", or "chebyshev".')
+        raise ValueError('Unknown metric.  Should be one of "cityblock", ' '"euclidean", or "chebyshev".')
 
     tree = scipy.spatial.cKDTree(y)
     n = len(y)
@@ -276,7 +297,7 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
         maxnum = max(1, maxnum)
 
     if maxnum >= n:
-        raise ValueError('maxnum is bigger than array length.')
+        raise ValueError("maxnum is bigger than array length.")
 
     dists = np.empty(n)
     indices = np.empty(n, dtype=int)
@@ -295,9 +316,11 @@ def _embedding_dimension_neighbors(signal, dimension_max=20, delay=1, metric='ch
                 break
 
             if k == (maxnum + 1):
-                raise Exception('Could not find any near neighbor with a '
-                                'nonzero distance.  Try increasing the '
-                                'value of maxnum.')
+                raise Exception(
+                    "Could not find any near neighbor with a "
+                    "nonzero distance.  Try increasing the "
+                    "value of maxnum."
+                )
 
     indices, values = np.squeeze(indices), np.squeeze(dists)
 

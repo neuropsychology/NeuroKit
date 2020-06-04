@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-
 import scipy.linalg
 
 
-
-
-
-
 def fit_loess(y, X=None, alpha=0.75, order=2):
-    """Local Polynomial Regression (LOESS)
+    """
+    Local Polynomial Regression (LOESS)
 
     Performs a LOWESS (LOcally WEighted Scatter-plot Smoother) regression.
 
@@ -49,15 +45,14 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
     References
     ----------
     - https://simplyor.netlify.com/loess-from-scratch-in-python-animation.en-us/
+
     """
     if X is None:
         X = np.linspace(0, 100, len(y))
 
-
-    assert (order == 1) or (order == 2), "Deg has to be 1 or 2"
+    assert order in [1, 2], "Deg has to be 1 or 2"
     assert (alpha > 0) and (alpha <= 1), "Alpha has to be between 0 and 1"
     assert len(X) == len(y), "Length of X and y are different"
-
 
     X_domain = X
 
@@ -75,13 +70,13 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
         Nx = X[ind[:span]]
         Ny = y[ind[:span]]
 
-        delx0 = sorted_dist[span-1]
+        delx0 = sorted_dist[span - 1]
 
         u = distance[ind[:span]] / delx0
-        w = (1 - u**3)**3
+        w = (1 - u ** 3) ** 3
 
         W = np.diag(w)
-        A = np.vander(Nx, N=1+order)
+        A = np.vander(Nx, N=1 + order)
 
         V = np.matmul(np.matmul(A.T, W), A)
         Y = np.matmul(np.matmul(A.T, W), Ny)

@@ -1,19 +1,28 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 
-from ..signal.signal_power import signal_power
-from ..signal.signal_power import _signal_power_instant_plot
+from ..signal.signal_power import _signal_power_instant_plot, signal_power
 from ..signal.signal_psd import signal_psd
-from .hrv_utils import _hrv_sanitize_input
-from .hrv_utils import _hrv_get_rri
+from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
-                  vlf=(0.0033, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4),
-                  vhf=(0.4, 0.5), psd_method="welch", show=False, silent=True, **kwargs):
-    """ Computes frequency-domain indices of Heart Rate Variability (HRV).
+def hrv_frequency(
+    peaks,
+    sampling_rate=1000,
+    ulf=(0, 0.0033),
+    vlf=(0.0033, 0.04),
+    lf=(0.04, 0.15),
+    hf=(0.15, 0.4),
+    vhf=(0.4, 0.5),
+    psd_method="welch",
+    show=False,
+    silent=True,
+    **kwargs
+):
+    """
+    Computes frequency-domain indices of Heart Rate Variability (HRV).
 
     Note that a minimum duration of the signal containing the peaks is recommended
     for some HRV indices to be meaningful. For instance, 1, 2 and 5 minutes of
@@ -88,22 +97,24 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
       Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
     variability metrics and norms. Frontiers in public health, 5, 258.
+
     """
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
 
     # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 1000 Hz by default)
-    rri, sampling_rate = _hrv_get_rri(peaks,
-                                      sampling_rate=sampling_rate,
-                                      interpolate=True, **kwargs)
+    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs)
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
-    power = signal_power(rri,
-                         frequency_band=frequency_band,
-                         sampling_rate=sampling_rate,
-                         method=psd_method,
-                         max_frequency=0.5, show=False,
-                         **kwargs)
+    power = signal_power(
+        rri,
+        frequency_band=frequency_band,
+        sampling_rate=sampling_rate,
+        method=psd_method,
+        max_frequency=0.5,
+        show=False,
+        **kwargs
+    )
 
     power.columns = ["ULF", "VLF", "LF", "HF", "VHF"]
 
@@ -113,7 +124,11 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
     if silent is False:
         for frequency in out.keys():
             if out[frequency] == 0.0:
-                print("Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
+                print(
+                    "Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band "
+                    + frequency
+                    + ". Its power is returned as zero."
+                )
 
     # Normalized
     total_power = np.nansum(power.values)
@@ -124,26 +139,27 @@ def hrv_frequency(peaks, sampling_rate=1000, ulf=(0, 0.0033),
     # Log
     out["LnHF"] = np.log(out["HF"])
 
-    out = pd.DataFrame.from_dict(out, orient='index').T.add_prefix("HRV_")
+    out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
 
     # Plot
     if show:
-        _hrv_frequency_show(rri, out_bands,
-                            sampling_rate=sampling_rate)
+        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate)
     return out
 
 
-def _hrv_frequency_show(rri,
-                          out_bands,
-                          ulf=(0, 0.0033),
-                          vlf=(0.0033, 0.04),
-                          lf=(0.04, 0.15),
-                          hf=(0.15, 0.4),
-                          vhf=(0.4, 0.5),
-                          sampling_rate=1000,
-                          **kwargs):
+def _hrv_frequency_show(
+    rri,
+    out_bands,
+    ulf=(0, 0.0033),
+    vlf=(0.0033, 0.04),
+    lf=(0.04, 0.15),
+    hf=(0.15, 0.4),
+    vhf=(0.4, 0.5),
+    sampling_rate=1000,
+    **kwargs
+):
 
-    if 'ax' in kwargs:
+    if "ax" in kwargs:
         fig = None
         ax = kwargs.get("ax")
         kwargs.pop("ax")
@@ -160,9 +176,6 @@ def _hrv_frequency_show(rri,
         if window_length <= len(rri) / 2:
             break
 
-    psd = signal_psd(rri, sampling_rate=sampling_rate,
-                     show=False, min_frequency=min_frequency,
-                     max_frequency=0.5)
+    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, max_frequency=0.5)
 
-    _signal_power_instant_plot(psd, out_bands,
-                               frequency_band, sampling_rate=sampling_rate, ax=ax)
+    _signal_power_instant_plot(psd, out_bands, frequency_band, sampling_rate=sampling_rate, ax=ax)

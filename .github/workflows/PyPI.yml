@@ -1,5 +1,5 @@
 name: Publish Python 🐍 distributions 📦 to PyPI and TestPyPI
-
+# https://packaging.python.org/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
 on:
   push:
     branches:
@@ -8,37 +8,39 @@ on:
 jobs:
   build-n-publish:
     name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
+    
     steps:
     - uses: actions/checkout@master
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
       with:
-        python-version: 3.7
+        python-version: '3.x'
+        
     - name: Install pep517
       run: >-
         python -m
         pip install
         pep517
         --user
+        
     - name: Install dependencies
-      run: pip install wheel
+      run: |
+        python -m pip install --upgrade pip
+        pip install setuptools wheel twine
+        
     - name: Build package
       run: python setup.py sdist bdist_wheel
-    #- name: Build a binary wheel and a source tarball
-    #  run: >-
-    #    python -m
-    #    pep517.build
-    #    --source
-    #    --binary
-    #    --out-dir dist/
+      
     - name: Publish distribution 📦 to Test PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
-        password: ${{ secrets.test_pypi_password }}
+        password: ${{ secrets.TEST_PYPI_PASSWORD }}
         repository_url: https://test.pypi.org/legacy/
+    
     - name: Publish distribution 📦 to PyPI
       #if: startsWith(github.event.ref, 'refs/tags')
       uses: pypa/gh-action-pypi-publish@master
       with:
-        password: ${{ secrets.pypi_password }}
+        password: ${{ secrets.PYPI_PASSWORD }}

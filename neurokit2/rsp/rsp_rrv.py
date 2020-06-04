@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.patches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-from ..signal import signal_rate
+from ..complexity import entropy_approximate, entropy_sample, fractal_dfa
+from ..signal import signal_power, signal_rate
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from ..signal import signal_power
-from ..complexity import entropy_sample
-from ..complexity import entropy_approximate
-from ..complexity import fractal_dfa
 
 
 def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
-    """Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
+    """
+    Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
 
     Parameters
     ----------
@@ -63,13 +61,14 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> rsp, info = nk.rsp_process(rsp)
-    >>> rrv = nk.rsp_rrv(rsp, show=True)
+    >>> rrv = nk.rsp_rrv(rsp, show=True) #doctest: +SKIP
 
     References
     ----------
     - Soni, R., & Muniyandi, M. (2019). Breath rate variability:
     a novel measure to study the meditation effects. International Journal of Yoga,
     12(1), 45.
+
     """
     # Sanitize input
     rsp_rate, peaks = _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate)
@@ -84,7 +83,7 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     rrv.update(_rsp_rrv_frequency(rsp_period, show=show, silent=silent))
     rrv.update(_rsp_rrv_nonlinear(bbi, rsp_period))
 
-    rrv = pd.DataFrame.from_dict(rrv, orient='index').T.add_prefix("RRV_")
+    rrv = pd.DataFrame.from_dict(rrv, orient="index").T.add_prefix("RRV_")
 
     if show:
         _rsp_rrv_plot(bbi, rsp_period)
@@ -105,42 +104,47 @@ def _rsp_rrv_time(bbi):
     out["SDBB"] = np.std(bbi, ddof=1)
     out["RMSSD"] = np.sqrt(np.mean(diff_bbi ** 2))
     out["SDSD"] = np.std(diff_bbi, ddof=1)
-#    out["MeanNN"] = np.mean(rri)
-#    out["CVNN"] = out["SDNN"] / out["MeanNN"]
-#    out["CVSD"] = out["RMSSD"] / out["MeanNN"]
+    #    out["MeanNN"] = np.mean(rri)
+    #    out["CVNN"] = out["SDNN"] / out["MeanNN"]
+    #    out["CVSD"] = out["RMSSD"] / out["MeanNN"]
 
     # Robust
-#    out["MedianNN"] = np.median(np.abs(rri))
-#    out["MadNN"] = mad(rri)
-#    out["MCVNN"] = out["MadNN"] / out["MedianNN"]
+    #    out["MedianNN"] = np.median(np.abs(rri))
+    #    out["MadNN"] = mad(rri)
+    #    out["MCVNN"] = out["MadNN"] / out["MedianNN"]
 
-#    # Extreme-based
-#    nn50 = np.sum(np.abs(diff_rri) > 50)
-#    nn20 = np.sum(np.abs(diff_rri) > 20)
-#    out["pNN50"] = nn50 / len(rri) * 100
-#    out["pNN20"] = nn20 / len(rri) * 100
-#
-#    # Geometrical domain
-#    bar_y, bar_x = np.histogram(rri, bins=range(300, 2000, 8))
-#    bar_y, bar_x = np.histogram(rri, bins="auto")
-#    out["TINN"] = np.max(bar_x) - np.min(bar_x)  # Triangular Interpolation of the NN Interval Histogram
-#    out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
+    #    # Extreme-based
+    #    nn50 = np.sum(np.abs(diff_rri) > 50)
+    #    nn20 = np.sum(np.abs(diff_rri) > 20)
+    #    out["pNN50"] = nn50 / len(rri) * 100
+    #    out["pNN20"] = nn20 / len(rri) * 100
+    #
+    #    # Geometrical domain
+    #    bar_y, bar_x = np.histogram(rri, bins=range(300, 2000, 8))
+    #    bar_y, bar_x = np.histogram(rri, bins="auto")
+    #    out["TINN"] = np.max(bar_x) - np.min(bar_x)  # Triangular Interpolation of the NN Interval Histogram
+    #    out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
 
     return out
 
 
-
-
-
-def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), method="welch", show=False, silent=True):
-    power = signal_power(rsp_period, frequency_band=[vlf, lf, hf], sampling_rate=1000, method=method, max_frequency=0.5, show=show)
+def _rsp_rrv_frequency(
+    rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), method="welch", show=False, silent=True
+):
+    power = signal_power(
+        rsp_period, frequency_band=[vlf, lf, hf], sampling_rate=1000, method=method, max_frequency=0.5, show=show
+    )
     power.columns = ["VLF", "LF", "HF"]
     out = power.to_dict(orient="index")[0]
 
     if silent is False:
         for frequency in out.keys():
             if out[frequency] == 0.0:
-                print("Neurokit warning: rsp_rrv(): The duration of recording is too short to allow reliable computation of signal power in frequency band " + frequency + ". Its power is returned as zero.")
+                print(
+                    "Neurokit warning: rsp_rrv(): The duration of recording is too short to allow reliable computation of signal power in frequency band "
+                    + frequency
+                    + ". Its power is returned as zero."
+                )
 
     # Normalized
     total_power = np.sum(power.values)
@@ -149,8 +153,6 @@ def _rsp_rrv_frequency(rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4
     out["HFn"] = out["HF"] / total_power
 
     return out
-
-
 
 
 def _rsp_rrv_nonlinear(bbi, rsp_period):
@@ -163,15 +165,15 @@ def _rsp_rrv_nonlinear(bbi, rsp_period):
     out["SD2SD1"] = out["SD2"] / out["SD1"]
 
     # CSI / CVI
-#    T = 4 * out["SD1"]
-#    L = 4 * out["SD2"]
-#    out["CSI"] = L / T
-#    out["CVI"] = np.log10(L * T)
-#    out["CSI_Modified"] = L ** 2 / T
+    #    T = 4 * out["SD1"]
+    #    L = 4 * out["SD2"]
+    #    out["CSI"] = L / T
+    #    out["CVI"] = np.log10(L * T)
+    #    out["CSI_Modified"] = L ** 2 / T
 
     # Entropy
     out["ApEn"] = entropy_approximate(bbi, dimension=2)
-    out["SampEn"] = entropy_sample(bbi, dimension=2, r=0.2*np.std(bbi, ddof=1))
+    out["SampEn"] = entropy_sample(bbi, dimension=2, r=0.2 * np.std(bbi, ddof=1))
 
     # DFA
     if len(bbi) / 10 > 16:
@@ -186,6 +188,7 @@ def _rsp_rrv_nonlinear(bbi, rsp_period):
 # Internals
 # =============================================================================
 
+
 def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
 
     if isinstance(rsp_rate, tuple):
@@ -194,12 +197,14 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
 
     if isinstance(rsp_rate, pd.DataFrame):
         df = rsp_rate.copy()
-        cols = [col for col in df.columns if 'RSP_Rate' in col]
+        cols = [col for col in df.columns if "RSP_Rate" in col]
         if len(cols) == 0:
-            cols = [col for col in df.columns if 'RSP_Peaks' in col]
+            cols = [col for col in df.columns if "RSP_Peaks" in col]
             if len(cols) == 0:
-                raise ValueError("NeuroKit error: _rsp_rrv_formatinput(): Wrong input,"
-                                 "we couldn't extract rsp_rate and peaks indices.")
+                raise ValueError(
+                    "NeuroKit error: _rsp_rrv_formatinput(): Wrong input,"
+                    "we couldn't extract rsp_rate and peaks indices."
+                )
             else:
                 rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(df))
         else:
@@ -209,14 +214,15 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
         try:
             peaks, _ = _signal_formatpeaks_sanitize(df, desired_length=None, key="RSP_Peaks")
         except NameError:
-            raise ValueError("NeuroKit error: _rsp_rrv_formatinput():"
-                             "Wrong input, we couldn't extract"
-                             "respiratory peaks indices.")
+            raise ValueError(
+                "NeuroKit error: _rsp_rrv_formatinput():"
+                "Wrong input, we couldn't extract"
+                "respiratory peaks indices."
+            )
     else:
         peaks, _ = _signal_formatpeaks_sanitize(peaks, desired_length=None, key="RSP_Peaks")
 
     return rsp_rate, peaks
-
 
 
 def _rsp_rrv_plot(bbi, rsp_period):
@@ -234,28 +240,29 @@ def _rsp_rrv_plot(bbi, rsp_period):
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(111)
     plt.title("Poincaré Plot", fontsize=20)
-    plt.xlabel('BB_n (s)', fontsize=15)
-    plt.ylabel('BB_n+1 (s)', fontsize=15)
+    plt.xlabel("BB_n (s)", fontsize=15)
+    plt.ylabel("BB_n+1 (s)", fontsize=15)
     plt.xlim(min(bbi) - 10, max(bbi) + 10)
     plt.ylim(min(bbi) - 10, max(bbi) + 10)
-    ax.scatter(ax1, ax2, c='b', s=4)
+    ax.scatter(ax1, ax2, c="b", s=4)
 
     # Ellipse plot feature
-    ellipse = matplotlib.patches.Ellipse(xy=(mean_bbi, mean_bbi), width=2 * sd2 + 1,
-                                         height=2 * sd1 + 1, angle=45, linewidth=2,
-                                         fill=False)
+    ellipse = matplotlib.patches.Ellipse(
+        xy=(mean_bbi, mean_bbi), width=2 * sd2 + 1, height=2 * sd1 + 1, angle=45, linewidth=2, fill=False
+    )
     ax.add_patch(ellipse)
-    ellipse = matplotlib.patches.Ellipse(xy=(mean_bbi, mean_bbi), width=2 * sd2,
-                                         height=2 * sd1, angle=45)
+    ellipse = matplotlib.patches.Ellipse(xy=(mean_bbi, mean_bbi), width=2 * sd2, height=2 * sd1, angle=45)
     ellipse.set_alpha(0.02)
     ellipse.set_facecolor("blue")
     ax.add_patch(ellipse)
 
     # Arrow plot feature
-    sd1_arrow = ax.arrow(mean_bbi, mean_bbi, -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2,
-                         linewidth=3, ec='r', fc="r", label="SD1")
-    sd2_arrow = ax.arrow(mean_bbi, mean_bbi, sd2 * np.sqrt(2) / 2, sd2 * np.sqrt(2) / 2,
-                         linewidth=3, ec='y', fc="y", label="SD2")
+    sd1_arrow = ax.arrow(
+        mean_bbi, mean_bbi, -sd1 * np.sqrt(2) / 2, sd1 * np.sqrt(2) / 2, linewidth=3, ec="r", fc="r", label="SD1"
+    )
+    sd2_arrow = ax.arrow(
+        mean_bbi, mean_bbi, sd2 * np.sqrt(2) / 2, sd2 * np.sqrt(2) / 2, linewidth=3, ec="y", fc="y", label="SD2"
+    )
 
     plt.legend(handles=[sd1_arrow, sd2_arrow], fontsize=12, loc="best")
 

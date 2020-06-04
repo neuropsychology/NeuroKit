@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from .rsp_clean import rsp_clean
-from .rsp_phase import rsp_phase
-from .rsp_peaks import rsp_peaks
-from .rsp_amplitude import rsp_amplitude
 from ..signal import signal_rate
+from .rsp_amplitude import rsp_amplitude
+from .rsp_clean import rsp_clean
+from .rsp_peaks import rsp_peaks
+from .rsp_phase import rsp_phase
 
 
 def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
-    """Process a respiration (RSP) signal.
+    """
+    Process a respiration (RSP) signal.
 
     Convenience function that automatically processes a respiration signal with
     one of the following methods:
@@ -64,17 +65,15 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> nk.rsp_plot(signals) #doctest: +SKIP
+    >>> fig = nk.rsp_plot(signals)
+    >>> fig #doctest: +SKIP
+
     """
     # Clean signal
-    rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate,
-                            method=method)
+    rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate, method=method)
 
     # Extract, fix and format peaks
-    peak_signal, info = rsp_peaks(rsp_cleaned,
-                                  sampling_rate=sampling_rate,
-                                  method=method,
-                                  amplitude_min=0.3)
+    peak_signal, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
 
     # Get additional parameters
     phase = rsp_phase(peak_signal)
@@ -82,10 +81,9 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     rate = signal_rate(peak_signal, sampling_rate=sampling_rate)
 
     # Prepare output
-    signals = pd.DataFrame({"RSP_Raw": rsp_signal,
-                            "RSP_Clean": rsp_cleaned,
-                            "RSP_Amplitude": amplitude,
-                            "RSP_Rate": rate})
+    signals = pd.DataFrame(
+        {"RSP_Raw": rsp_signal, "RSP_Clean": rsp_cleaned, "RSP_Amplitude": amplitude, "RSP_Rate": rate}
+    )
     signals = pd.concat([signals, phase, peak_signal], axis=1)
 
     return signals, info

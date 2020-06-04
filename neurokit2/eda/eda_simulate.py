@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..signal import signal_merge
-from ..signal import signal_distort
+from ..signal import signal_distort, signal_merge
 
 
-def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
-                 scr_number=1, drift=-0.01, random_state=None):
-    """Simulate Electrodermal Activity (EDA) signal.
+def eda_simulate(
+    duration=10, length=None, sampling_rate=1000, noise=0.01, scr_number=1, drift=-0.01, random_state=None
+):
+    """
+    Simulate Electrodermal Activity (EDA) signal.
 
     Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.
 
@@ -38,7 +39,8 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     >>> import pandas as pd
     >>>
     >>> eda = nk.eda_simulate(duration=10, scr_number=3)
-    >>> nk.signal_plot(eda)
+    >>> fig = nk.signal_plot(eda)
+    >>> fig #doctest: +SKIP
 
     See Also
     --------
@@ -48,6 +50,7 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
     References
     -----------
     - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
+
     """
     # Seed the random generator for reproducible results
     np.random.seed(random_state)
@@ -57,48 +60,42 @@ def eda_simulate(duration=10, length=None, sampling_rate=1000, noise=0.01,
         length = duration * sampling_rate
 
     eda = np.full(length, 1.0)
-    eda += (drift * np.linspace(0, duration, length))
+    eda += drift * np.linspace(0, duration, length)
     time = [0, duration]
 
     start_peaks = np.linspace(0, duration, scr_number, endpoint=False)
 
     for start_peak in start_peaks:
         relative_time_peak = np.abs(np.random.normal(0, 5, size=1)) + 3.0745
-        scr = _eda_simulate_scr(sampling_rate=sampling_rate,
-                                time_peak=relative_time_peak)
-        time_scr = [start_peak, start_peak+9]
+        scr = _eda_simulate_scr(sampling_rate=sampling_rate, time_peak=relative_time_peak)
+        time_scr = [start_peak, start_peak + 9]
         if time_scr[0] < 0:
-            scr = scr[int(np.round(np.abs(time_scr[0])*sampling_rate))::]
+            scr = scr[int(np.round(np.abs(time_scr[0]) * sampling_rate)) : :]
             time_scr[0] = 0
         if time_scr[1] > duration:
-            scr = scr[0:int(np.round((duration - time_scr[0])*sampling_rate))]
+            scr = scr[0 : int(np.round((duration - time_scr[0]) * sampling_rate))]
             time_scr[1] = duration
 
         eda = signal_merge(signal1=eda, signal2=scr, time1=time, time2=time_scr)
 
     # Add random noise
     if noise > 0:
-        eda = signal_distort(eda,
-                             sampling_rate=sampling_rate,
-                             noise_amplitude=noise,
-                             noise_frequency=[5, 10, 100],
-                             noise_shape="laplace",
-                             silent=True)
+        eda = signal_distort(
+            eda,
+            sampling_rate=sampling_rate,
+            noise_amplitude=noise,
+            noise_frequency=[5, 10, 100],
+            noise_shape="laplace",
+            silent=True,
+        )
     # Reset random seed (so it doesn't affect global)
     np.random.seed(None)
     return eda
 
 
-
-
-
-
-def _eda_simulate_scr(sampling_rate=1000,
-                      length=None,
-                      time_peak=3.0745,
-                      rise=0.7013,
-                      decay=[3.1487, 14.1257]):
-    """Simulate a canonical skin conductance response (SCR)
+def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.7013, decay=[3.1487, 14.1257]):
+    """
+    Simulate a canonical skin conductance response (SCR)
 
     Based on `Bach (2010) <https://sourceforge.net/p/scralyze/code/HEAD/tree/branches/version_b2.1.8/scr_bf_crf.m#l24>`_
 
@@ -116,26 +113,25 @@ def _eda_simulate_scr(sampling_rate=1000,
     >>> # scr1 = _eda_simulate_scr(time_peak=3.0745)
     >>> # scr2 = _eda_simulate_scr(time_peak=10)
     >>> # pd.DataFrame({"SCR1": scr1, "SCR2": scr2}).plot()
+
     """
     if length is None:
-        length = 9*sampling_rate
-    t = np.linspace(sampling_rate/10000, 90, length)
+        length = 9 * sampling_rate
+    t = np.linspace(sampling_rate / 10000, 90, length)
 
-    gt = np.exp(-((t - time_peak)**2)/(2*rise**2))
-    ht = np.exp(-t/decay[0]) + np.exp(-t/decay[1])
+    gt = np.exp(-((t - time_peak) ** 2) / (2 * rise ** 2))
+    ht = np.exp(-t / decay[0]) + np.exp(-t / decay[1])
 
     ft = np.convolve(gt, ht)
-    ft = ft[0:len(t)]
-    ft = ft/np.max(ft)
+    ft = ft[0 : len(t)]
+    ft = ft / np.max(ft)
     return ft
 
 
-
-
-
-def _eda_simulate_bateman(sampling_rate=1000, t1=.75, t2=2):
+def _eda_simulate_bateman(sampling_rate=1000, t1=0.75, t2=2):
     """
     Generates the bateman function:
+
     :math:`b = e^{-t/T1} - e^{-t/T2}`
 
     Parameters
@@ -154,6 +150,7 @@ def _eda_simulate_bateman(sampling_rate=1000, t1=.75, t2=2):
     ----------
     >>> # bateman = _eda_simulate_bateman()
     >>> # nk.signal_plot(bateman)
+
     """
 
     idx_T1 = t1 * sampling_rate

@@ -2,7 +2,8 @@ import numpy as np
 
 
 def expspace(start, stop, num=50, base=1):
-    """Exponential range
+    """
+    Exponential range.
 
     Creates a list of integer values of a given length from start to stop, spread by an exponential function.
 
@@ -20,6 +21,7 @@ def expspace(start, stop, num=50, base=1):
     >>> import neurokit2 as nk
     >>> nk.expspace(start=4, stop=100, num=10) #doctest: +ELLIPSIS
     array([  4,   6,   8,  12,  17,  24,  34,  49,  70, 100])
+
     """
     if base == 1:
         seq = np.exp(np.linspace(np.log(start), np.log(stop), num, endpoint=True))

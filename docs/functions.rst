@@ -6,153 +6,89 @@ Functions
 ECG
 -------
 
-.. autofunction:: neurokit2.ecg_simulate
+.. automodule:: neurokit2.ecg
+   :members: 
 
-.. autofunction:: neurokit2.ecg_clean
+Heart Rate Variability
+------------------------
 
-.. autofunction:: neurokit2.ecg_findpeaks
-
-.. autofunction:: neurokit2.ecg_rate
-
-.. autofunction:: neurokit2.ecg_process
-
-.. autofunction:: neurokit2.ecg_plot
-
-.. autofunction:: neurokit2.ecg_delineate
-
-.. autofunction:: neurokit2.ecg_eventrelated
-
-.. autofunction:: neurokit2.ecg_phase
-
-
+.. automodule:: neurokit2.hrv
+   :members:   
+   
 RSP
 -------
 
-.. autofunction:: neurokit2.rsp_simulate
-
-.. autofunction:: neurokit2.rsp_clean
-
-.. autofunction:: neurokit2.rsp_findpeaks
-
-.. autofunction:: neurokit2.rsp_amplitude
-
-.. autofunction:: neurokit2.rsp_rate
-
-.. autofunction:: neurokit2.rsp_process
-
-.. autofunction:: neurokit2.rsp_plot
-
-.. autofunction:: neurokit2.rsp_eventrelated
-
+.. automodule:: neurokit2.rsp
+   :members: 
 
 EDA
 -------
 
-.. autofunction:: neurokit2.eda_simulate
-
-.. autofunction:: neurokit2.eda_clean
-
-.. autofunction:: neurokit2.eda_decompose
-
-.. autofunction:: neurokit2.eda_findpeaks
-
-
+.. automodule:: neurokit2.eda
+   :members: 
 
 EMG
 -------
 
-.. autofunction:: neurokit2.emg_simulate
+.. automodule:: neurokit2.emg
+   :members: 
 
+Automated Processing and Analysis
+-----------------------------------
+
+.. automodule:: neurokit2.bio
+   :members:  
+ 
 EEG
 -------
 
-.. autofunction:: neurokit2.eeg_add_channel
+.. automodule:: neurokit2.eeg
+   :members: 
 
 PPG
 -------
 
-.. autofunction:: neurokit2.ppg_simulate
-
+.. automodule:: neurokit2.ppg
+   :members: 
 
 General Signal Processing
 --------------------------
 
-
-Signal cleaning
-""""""""""""""""
-
-.. autofunction:: neurokit2.signal_distord
-
-.. autofunction:: neurokit2.signal_binarize
-
-.. autofunction:: neurokit2.signal_filter
-
-.. autofunction:: neurokit2.signal_detrend
-
-.. autofunction:: neurokit2.signal_smooth
-
-.. autofunction:: neurokit2.signal_psd
-
-
-Signal preprocessing
-""""""""""""""""""""
-
-.. autofunction:: neurokit2.signal_resample
-
-.. autofunction:: neurokit2.signal_interpolate
-
-.. autofunction:: neurokit2.signal_merge
-
-
-Signal processing
-""""""""""""""""""
-
-.. autofunction:: neurokit2.signal_zerocrossings
-
-.. autofunction:: neurokit2.signal_findpeaks
-
-.. autofunction:: neurokit2.signal_rate
-
-.. autofunction:: neurokit2.signal_plot
-
-
+.. automodule:: neurokit2.signal
+   :members: 
 
 Events
 -------
 
-.. autofunction:: neurokit2.events_find
-
-.. autofunction:: neurokit2.events_plot
-
-.. autofunction:: neurokit2.events_to_mne
-
-
+.. automodule:: neurokit2.events
+   :members: 
 
 Read data
 ----------
 
-.. autofunction:: neurokit2.read_acqknowledge
-
+.. automodule:: neurokit2.data
+   :members: 
 
 Epoch data
 -----------
 
-.. autofunction:: neurokit2.epochs_create
-
-.. autofunction:: neurokit2.epochs_plot
-
-.. autofunction:: neurokit2.epochs_to_df
-
+.. automodule:: neurokit2.epochs
+   :members: 
 
 Statistics
 -----------
 
-.. autofunction:: neurokit2.fit_error
+.. automodule:: neurokit2.stats
+   :members: 
+   
+Complexity
+-----------
 
-.. autofunction:: neurokit2.fit_loess
+.. automodule:: neurokit2.complexity
+   :members: 
 
-.. autofunction:: neurokit2.fit_polynomial
+Miscellaneous
+--------------
 
-.. autofunction:: neurokit2.hdi
-
-.. autofunction:: neurokit2.standardize
+.. automodule:: neurokit2.misc
+   :members: 

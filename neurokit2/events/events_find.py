@@ -1,16 +1,28 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
 import itertools
+
+import numpy as np
+import pandas as pd
 
 from ..signal import signal_binarize
 
 
-
-
-
-def events_find(event_channel, threshold="auto", threshold_keep="above", start_at=0, end_at=None, duration_min=1, duration_max=None, inter_min=0, discard_first=0, discard_last=0, event_labels=None, event_conditions=None):
-    """Find and select events in a continuous signal (e.g., from a photosensor).
+def events_find(
+    event_channel,
+    threshold="auto",
+    threshold_keep="above",
+    start_at=0,
+    end_at=None,
+    duration_min=1,
+    duration_max=None,
+    inter_min=0,
+    discard_first=0,
+    discard_last=0,
+    event_labels=None,
+    event_conditions=None,
+):
+    """
+    Find and select events in a continuous signal (e.g., from a photosensor).
 
     Parameters
     ----------
@@ -55,12 +67,15 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
     >>>
     >>> fig = nk.events_plot(events, signal)
     >>> fig #doctest: +SKIP
+
     """
     events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
 
     # Warning when no events detected
     if len(events["onset"]) == 0:
-        print("NeuroKit warning: events_find(): No events found. Check your event_channel or adjust 'threhsold' or 'keep' arguments.")
+        print(
+            "NeuroKit warning: events_find(): No events found. Check your event_channel or adjust 'threhsold' or 'keep' arguments."
+        )
         return events
 
     # Remove based on duration
@@ -90,20 +105,18 @@ def events_find(event_channel, threshold="auto", threshold_keep="above", start_a
         events["onset"] = events["onset"][discard_first:]
         events["duration"] = events["duration"][discard_first:]
     if discard_last > 0:
-        events["onset"] = events["onset"][0:-1*discard_last]
-        events["duration"] = events["duration"][0:-1*discard_last]
+        events["onset"] = events["onset"][0 : -1 * discard_last]
+        events["duration"] = events["duration"][0 : -1 * discard_last]
 
     events = _events_find_label(events, event_labels=event_labels, event_conditions=event_conditions)
 
     return events
 
 
-
-
-
 # =============================================================================
 # Internals
 # =============================================================================
+
 
 def _events_find_label(events, event_labels=None, event_conditions=None, function_name="events_find"):
     # Get n events
@@ -111,41 +124,60 @@ def _events_find_label(events, event_labels=None, event_conditions=None, functio
 
     # Labels
     if event_labels is None:
-        event_labels = (np.arange(n)+1).astype(np.str)
+        event_labels = (np.arange(n) + 1).astype(np.str)
 
     if len(list(set(event_labels))) != n:
-        raise ValueError("NeuroKit error: " + function_name + "(): oops, it seems like the `event_labels` that you provided are not unique (all different). Please provide " + str(n) + " distinct labels.")
+        raise ValueError(
+            "NeuroKit error: "
+            + function_name
+            + "(): oops, it seems like the `event_labels` that you provided are not unique (all different). Please provide "
+            + str(n)
+            + " distinct labels."
+        )
 
     if len(event_labels) != n:
-        raise ValueError("NeuroKit error: " + function_name + "(): oops, it seems like you provided " + str(n) + " `event_labels`, but " + str(n) + " events got detected :(. Check your event names or the event signal!")
+        raise ValueError(
+            "NeuroKit error: "
+            + function_name
+            + "(): oops, it seems like you provided "
+            + str(n)
+            + " `event_labels`, but "
+            + str(n)
+            + " events got detected :(. Check your event names or the event signal!"
+        )
 
     events["label"] = event_labels
 
     # Condition
     if event_conditions is not None:
         if len(event_conditions) != n:
-            raise ValueError("NeuroKit error: " + function_name + "(): oops, it seems like you provided " + str(n) + " `event_conditions`, but " + str(n) + " events got detected :(. Check your event conditions or the event signal!")
+            raise ValueError(
+                "NeuroKit error: "
+                + function_name
+                + "(): oops, it seems like you provided "
+                + str(n)
+                + " `event_conditions`, but "
+                + str(n)
+                + " events got detected :(. Check your event conditions or the event signal!"
+            )
         events["condition"] = event_conditions
     return events
 
 
-
-
-
-
 def _events_find(event_channel, threshold="auto", threshold_keep="above"):
-    """Internal function
+    """
+    Internal function.
     """
     binary = signal_binarize(event_channel, threshold=threshold)
 
-    if threshold_keep.lower() != 'above':
+    if threshold_keep.lower() != "above":
         binary = np.abs(binary - 1)  # Reverse if events are below
 
     # Initialize data
     events = {"onset": [], "duration": []}
 
     index = 0
-    for event, group in (itertools.groupby(binary)):
+    for event, group in itertools.groupby(binary):
         duration = len(list(group))
         if event == 1:
             events["onset"].append(index)

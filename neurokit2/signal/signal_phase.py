@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
+import itertools
+
 import numpy as np
 import pandas as pd
 import scipy.signal
-import itertools
 
 
 def signal_phase(signal, method="radians"):
-    """Compute the phase of the signal.
+    """
+    Compute the phase of the signal.
 
     The real phase has the property to rotate uniformly, leading to a
     uniform distribution density. The prophase typically doesn't fulfill
@@ -48,6 +50,7 @@ def signal_phase(signal, method="radians"):
     >>> signal = nk.signal_binarize(nk.signal_simulate(duration=10))
     >>> phase = nk.signal_phase(signal, method="percents")
     >>> nk.signal_plot([signal, phase])
+
     """
     # If binary signal
     if len(set(np.array(signal)[~np.isnan(np.array(signal))])) == 2:
@@ -62,15 +65,12 @@ def signal_phase(signal, method="radians"):
     return phase
 
 
-
 # =============================================================================
 # Method
 # =============================================================================
 def _signal_phase_binary(signal):
 
-    phase = itertools.chain.from_iterable(
-            np.linspace(0, 1, sum([1 for i in v]))
-            for _, v in itertools.groupby(signal))
+    phase = itertools.chain.from_iterable(np.linspace(0, 1, sum([1 for i in v])) for _, v in itertools.groupby(signal))
     phase = np.array(list(phase))
 
     # Convert to radiant
@@ -78,9 +78,8 @@ def _signal_phase_binary(signal):
     return phase
 
 
-
 def _signal_phase_prophase(signal):
-    pi2 = 2.0*np.pi
+    pi2 = 2.0 * np.pi
 
     # Get pro-phase
     prophase = np.mod(np.angle(scipy.signal.hilbert(signal)), pi2)
@@ -88,7 +87,7 @@ def _signal_phase_prophase(signal):
     # Transform a pro-phase to a real phase
     sort_idx = np.argsort(prophase)  # Get a sorting index
     reverse_idx = np.argsort(sort_idx)  # Get index reversing sorting
-    tht = pi2 * np.arange(prophase.size)/(prophase.size)  # Set up sorted real phase
+    tht = pi2 * np.arange(prophase.size) / (prophase.size)  # Set up sorted real phase
     phase = tht[reverse_idx]  # Reverse the sorting of it
 
     return phase

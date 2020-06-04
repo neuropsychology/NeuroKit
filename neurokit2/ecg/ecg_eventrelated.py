@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
-from ..epochs.eventrelated_utils import _eventrelated_sanitizeoutput
-from ..epochs.eventrelated_utils import _eventrelated_addinfo
-from ..epochs.eventrelated_utils import _eventrelated_rate
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_rate,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 
 
 def ecg_eventrelated(epochs, silent=False):
-    """Performs event-related ECG analysis on epochs.
+    """
+    Performs event-related ECG analysis on epochs.
 
     Parameters
     ----------
@@ -58,17 +61,36 @@ def ecg_eventrelated(epochs, silent=False):
     >>> ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
     >>>
     >>> # Process the data
-    >>> epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
+    >>> epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000],
+    ...                           epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS
+      Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
+    1     1          ...  ...                               ...               ...
+    2     2          ...  ...                               ...               ...
+    3     3          ...  ...                               ...               ...
+
+    [3 rows x 16 columns]
     >>>
     >>> # Example with real data
     >>> data = nk.data("bio_eventrelated_100hz")
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
+    >>> events = nk.events_find(data["Photosensor"],
+    ...                         threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral",
+    ...                                           "Neutral", "Negative"])
+    >>> epochs = nk.epochs_create(df, events, sampling_rate=100,
+    ...                           epochs_start=-0.1, epochs_end=1.9)
+    >>> nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS
+      Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
+    1     1  Negative  ...                               ...               ...
+    2     2   Neutral  ...                               ...               ...
+    3     3   Neutral  ...                               ...               ...
+    4     4  Negative  ...                               ...               ...
+
+    [4 rows x 17 columns]
+
     """
     # Sanity checks
     epochs = _eventrelated_sanitizeinput(epochs, what="ecg", silent=silent)
@@ -91,9 +113,8 @@ def ecg_eventrelated(epochs, silent=False):
         # Fill with more info
         data[i] = _eventrelated_addinfo(epochs[i], data[i])
 
-    df = _eventrelated_sanitizeoutput(data)
-
-    return df
+    # Return dataframe
+    return _eventrelated_sanitizeoutput(data)
 
 
 # =============================================================================
@@ -106,10 +127,12 @@ def _ecg_eventrelated_phase(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "ECG_Phase_Atrial" in i]) == 0:
-        print("NeuroKit warning: ecg_eventrelated(): input does not"
-              "have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
-              "Will not indicate whether event onset concurs with cardiac"
-              "phase.")
+        print(
+            "NeuroKit warning: ecg_eventrelated(): input does not"
+            "have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
+            "Will not indicate whether event onset concurs with cardiac"
+            "phase."
+        )
         return output
 
     # Indication of atrial systole
@@ -128,9 +151,11 @@ def _ecg_eventrelated_quality(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "ECG_Quality" in i]) == 0:
-        print("NeuroKit warning: ecg_eventrelated(): input does not"
-              "have an `ECG_Quality` column. Quality of the signal"
-              "is not computed.")
+        print(
+            "NeuroKit warning: ecg_eventrelated(): input does not"
+            "have an `ECG_Quality` column. Quality of the signal"
+            "is not computed."
+        )
         return output
 
     # Average signal quality over epochs
