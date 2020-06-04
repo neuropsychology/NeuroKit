@@ -2,7 +2,7 @@ Get familiar with Python in 10 minutes
 =========================================
 
 .. hint::
-   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
+   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see these guides <https://neurokit2.readthedocs.io/en/latest/contributing/index.html>`_).
 
 
 You have no experience in computer science? You are afraid of code? You feel betrayed because you didn't expect to do programming in psychology studies? **Relax!** We got you covered.

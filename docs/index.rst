@@ -12,11 +12,11 @@ You can navigate to the different sections using the left panel. We would recomm
    authors
    installation
    start/index
-   contributing/index
-   guides/index
    examples/index
-   datasets
+   resources/index
+   contributing/index
    functions
+   datasets
    
 
 	

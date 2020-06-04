@@ -1,4 +1,4 @@
-Cloud-based interactive examples
+Try the examples in your browser
 ==================================
 
 .. hint::
