@@ -12,7 +12,7 @@ def emg_amplitude(emg_cleaned):
 
     Parameters
     ----------
-    emg_cleaned : list, array or Series
+    emg_cleaned : list or array or Series
         The cleaned electromyography channel as returned by `emg_clean()`.
 
     Returns
@@ -90,14 +90,16 @@ def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=
 
     Parameters
     ----------
-    emg_cleaned : list, array or Series
+    emg_cleaned : list or array or Series
         The cleaned electromyography channel as returned by `emg_clean()`.
     sampling_rate : int
         The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
-    freqs : list
-        Cutoff frequencies for the band-pass filter (in Hz). Defaults to [10, 400].
-    lfreq : float
-        Cutoff frequency for the low-pass filter (in Hz). Defaults to 8Hz.
+    lowcut : float
+        Low-cut frequency for the band-pass filter (in Hz). Defaults to 10Hz.
+    highcut : float
+        High-cut frequency for the band-pass filter (in Hz). Defaults to 400Hz.
+    envelope_filter : float
+        Cuttoff frequency for the high-pass filter (in Hz). Defauts to 8Hz.
 
     Returns
     -------

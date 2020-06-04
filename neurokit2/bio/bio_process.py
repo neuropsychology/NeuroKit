@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import pandas as pd
 
 from ..ecg import ecg_process, ecg_rsa
@@ -113,8 +112,6 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
                 keep = data[keep_keys]
             else:
                 keep = None
-        elif isinstance(ecg, np.ndarray):
-            ecg = ecg
 
     # ECG
     if ecg is not None:

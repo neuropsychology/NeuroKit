@@ -51,6 +51,8 @@ def hrv_frequency(
         If False, warnings will be printed. Default to True.
     show : bool
         If True, will plot the power in the different frequency bands.
+    **kwargs : optional
+        Other arguments.
 
     Returns
     -------
@@ -134,7 +136,7 @@ def hrv_frequency(
     out["HFn"] = out["HF"] / total_power
 
     # Log
-    out["LnHF"] = np.log(out["HF"])
+    out["LnHF"] = np.log(out["HF"])  # pylint: disable=E1111
 
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
 
@@ -157,14 +159,13 @@ def _hrv_frequency_show(
 ):
 
     if "ax" in kwargs:
-        fig = None
         ax = kwargs.get("ax")
         kwargs.pop("ax")
     else:
-        fig, ax = plt.subplots()
+        __, ax = plt.subplots()
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
-    for i in range(len(frequency_band)):
+    for i in range(len(frequency_band)):  # pylint: disable=C0200
         min_frequency = frequency_band[i][0]
         if min_frequency == 0:
             min_frequency = 0.001  # sanitize lowest frequency

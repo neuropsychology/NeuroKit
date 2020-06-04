@@ -5,6 +5,21 @@ from .signal_zerocrossings import signal_zerocrossings
 
 def signal_decompose(signal):
     """
+    Decompose a signal.
+
+    Parameters
+    -----------
+    signal : list or array or Series
+        Vector of values.
+
+    Returns
+    -------
+    Array
+        Values of the decomposed signal.
+
+    Examples
+    --------
+
     >>> import neurokit2 as nk
     >>>
     >>> # Artificial example -----------

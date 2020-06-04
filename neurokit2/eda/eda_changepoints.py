@@ -5,13 +5,13 @@ import pandas as pd
 from ..signal import signal_changepoints
 
 
-def eda_changepoints(eda_cleaned, **kwargs):
+def eda_changepoints(eda_cleaned):
     """Calculate the number of change points using of the skin conductance signal in terms of mean and variance.
     Defaults to an algorithm penalty of 10000, as recommended by Halem et al. (2020).
 
     Parameters
     ----------
-    eda_signal : list, array or Series
+    eda_cleaned : list or array or Series
         The cleaned EDA signal.
 
     Returns

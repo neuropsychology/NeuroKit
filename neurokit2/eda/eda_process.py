@@ -6,20 +6,19 @@ from .eda_peaks import eda_peaks
 from .eda_phasic import eda_phasic
 
 
-def eda_process(eda_signal, sampling_rate=1000):
+def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
     """Process Electrodermal Activity (EDA).
 
     Convenience function that automatically processes electrodermal activity (EDA) signal.
 
     Parameters
     ----------
-    eda_signal : list, array or Series
+    eda_signal : list or array or Series
         The raw EDA signal.
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "khodadad2018"
-        (default) or "biosppy".
+        The processing pipeline to apply. Can be one of "biosppy" or "neurokit" (default).
 
     Returns
     -------
@@ -66,12 +65,12 @@ def eda_process(eda_signal, sampling_rate=1000):
 
     """
     # Preprocess
-    eda_cleaned = eda_clean(eda_signal, sampling_rate=sampling_rate, method="neurokit")
+    eda_cleaned = eda_clean(eda_signal, sampling_rate=sampling_rate, method=method)
     eda_decomposed = eda_phasic(eda_cleaned, sampling_rate=sampling_rate)
 
     # Find peaks
     peak_signal, info = eda_peaks(
-        eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method="neurokit", amplitude_min=0.1
+        eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method=method, amplitude_min=0.1
     )
 
     # Store

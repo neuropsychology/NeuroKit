@@ -30,7 +30,7 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, **kwargs):
         return rri, sampling_rate
 
 
-def _hrv_sanitize_input(peaks=None, sampling_rate=None, ecg_rate=None):
+def _hrv_sanitize_input(peaks=None):
 
     if isinstance(peaks, tuple):
         peaks = _hrv_sanitize_tuple(peaks)
