@@ -180,7 +180,7 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
 
     if continuous is False:
         rsa = {"RSA_P2T_Mean": np.nanmean(rsa_values)}
-        rsa["RSA_P2T_Mean_log"] = np.log(rsa["RSA_P2T_Mean"]) # pylint: disable=E1111
+        rsa["RSA_P2T_Mean_log"] = np.log(rsa["RSA_P2T_Mean"])  # pylint: disable=E1111
         rsa["RSA_P2T_SD"] = np.nanstd(rsa_values, ddof=1)
         rsa["RSA_P2T_NoRSA"] = len(pd.Series(rsa_values).index[pd.Series(rsa_values).isnull()])
     else:
