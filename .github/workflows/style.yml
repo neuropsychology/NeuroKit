@@ -4,7 +4,6 @@ on: pull_request
 
 jobs:
   build:
-    name: Style
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +31,12 @@ jobs:
         # The GitHub editor is 127 chars wide. See https://black.readthedocs.io/en/stable/installation_and_usage.html
         black neurokit2 --line-length 120 --check
 
+    - name: Check docstrings with docformatter
+      run: |
+        pip install docformatter
+        # See https://github.com/myint/docformatter
+        docformatter neurokit2 --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line
+
     - name: Detect style errors with flake8
       run: |
         pip install flake8
@@ -43,14 +48,3 @@ jobs:
         pip install pylint
         # See http://pylint.pycqa.org/en/latest/index.html
         pylint neurokit2 --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --reports=n --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 --disable=E0401 --disable=W9006 --disable=C0330 --disable=R0914 --disable=R0912 --disable=R0915 --disable=W0102 --disable=W0511 --disable=C1801 --disable=C0111 --disable=R1705 --disable=R1720 --disable=C0301
-
-    - name: Check docstrings with docformatter
-      run: |
-        pip install docformatter
-        # See https://github.com/myint/docformatter
-        docformatter neurokit2 --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line
-
-    - name: Build package and test with twine
-      run: |
-        python setup.py sdist bdist_wheel
-        python -m twine check dist/*

@@ -1,11 +1,10 @@
-name: Check README
+name: Release Checks
 
 # on: [push, pull_request]
 on: pull_request
 
 jobs:
   build:
-    name: Check README
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -27,3 +26,7 @@ jobs:
         cd $GITHUB_WORKSPACE/docs/readme
         python README_examples.py
         
+    - name: Build package and test with twine
+      run: |
+        python setup.py sdist bdist_wheel
+        python -m twine check dist/*
