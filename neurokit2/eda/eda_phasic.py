@@ -13,13 +13,13 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 
     Parameters
     ----------
-    eda_signal : list, array or Series
+    eda_signal : list or array or Series
         The raw EDA signal.
     sampling_rate : int
-        The sampling frequency of raw EDA signal (in Hz, i.e., samples/second).
+        The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.
     method : str
-        The processing pipeline to apply. Can be one of "cvxEDA"
-        (default) or "biosppy".
+        The processing pipeline to apply. Can be one of "cvxEDA", "median", "smoothmedian", "highpass",
+        "biopac", or "acqknowledge".
 
     Returns
     -------
@@ -84,8 +84,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 # Acqknowledge
 # =============================================================================
 def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4):
-    """
-    One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
+    """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     size = smoothing_factor * sampling_rate
     tonic = signal_smooth(eda_signal, kernel="median", size=size)
@@ -97,8 +96,7 @@ def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4)
 
 
 def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
-    """
-    One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
+    """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=0.05, method="butter")
     tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=0.05, method="butter")
@@ -127,9 +125,10 @@ def _eda_phasic_cvxeda(
     This function implements the cvxEDA algorithm described in "cvxEDA: a
     Convex Optimization Approach to Electrodermal Activity Processing" (Greco et al., 2015).
 
+
     Parameters
     ----------
-       eda : list or array
+       eda_signal : list or array
            raw EDA signal array.
        sampling_rate : int
            Sampling rate (samples/second).
@@ -147,6 +146,11 @@ def _eda_phasic_cvxeda(
            Sparse QP solver to be used, see cvxopt.solvers.qp
        reltol : float
            Solver options, see http://cvxopt.org/userguide/coneprog.html#algorithm-parameters
+
+    Returns
+    -------
+    Dataframe
+        Contains EDA tonic and phasic signals.
 
     """
     # Try loading cvx

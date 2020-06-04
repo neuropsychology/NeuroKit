@@ -27,7 +27,7 @@ def signal_fixpeaks(
 
     Parameters
     ----------
-    peaks : list, array, DataFrame, Series or dict
+    peaks : list or array or DataFrame or Series or dict
         The samples at which the peaks occur. If an array is passed in, it is assumed that it was obtained
         with `signal_findpeaks()`. If a DataFrame is passed in, it is assumed to be obtained with `ecg_findpeaks()`
         or `ppg_findpeaks()` and to be of the same length as the input signal.
@@ -37,10 +37,15 @@ def signal_fixpeaks(
         Whether or not to apply the artifact correction repeatedly (results in superior artifact correction).
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
-    interval_min, interval_max : float
-        The minimum or maximum interval between the peaks.
-    relative_interval_min, relative_interval_max : float
-        The minimum or maximum interval between the peaks as relative to the sample (expressed in
+    interval_min : float
+        The minimum interval between the peaks.
+    interval_max : float
+        The maximum interval between the peaks.
+    relative_interval_min : float
+        The minimum interval between the peaks as relative to the sample (expressed in
+        standard deviation from the mean).
+    relative_interval_max : float
+        The maximum interval between the peaks as relative to the sample (expressed in
         standard deviation from the mean).
     robust : bool
         Use a robust method of standardization (see `standardize()`) for the relative thresholds.
@@ -216,8 +221,8 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
         if np.abs(drrs[i]) <= 1:  # Figure 1
             i += 1
             continue
-        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))  # Figure 2a
-        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))  # Figure 2a
+        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))  # pylint: disable=E1111
+        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))  # pylint: disable=E1111
 
         if np.any([eq1, eq2]):
             # If any of the two equations is true.
@@ -235,11 +240,11 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
 
         for j in longshort_candidates:
             # Long beat.
-            eq3 = np.logical_and(drrs[j] > 1, s22[j] < -1)  # Figure 2b
+            eq3 = np.logical_and(drrs[j] > 1, s22[j] < -1)  # pylint: disable=E1111
             # Long or short.
             eq4 = np.abs(mrrs[j]) > 3  # Figure 1
             # Short beat.
-            eq5 = np.logical_and(drrs[j] < -1, s22[j] > 1)  # Figure 2b
+            eq5 = np.logical_and(drrs[j] < -1, s22[j] > 1)  # pylint: disable=E1111
 
             if ~np.any([eq3, eq4, eq5]):
                 # If none of the three equations is true: normal beat.
@@ -338,7 +343,7 @@ def _correct_missed(missed_idcs, peaks):
     # Calculate the position(s) of new beat(s). Make sure to not generate
     # negative indices. prev_peaks and next_peaks must have the same
     # number of elements.
-    valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(corrected_peaks))
+    valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(corrected_peaks))  # pylint: disable=E1111
     missed_idcs = missed_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in missed_idcs]]
     next_peaks = corrected_peaks[missed_idcs]
@@ -356,7 +361,8 @@ def _correct_misaligned(misaligned_idcs, peaks):
     # Make sure to not generate negative indices, or indices that exceed
     # the total number of peaks. prev_peaks and next_peaks must have the
     # same number of elements.
-    valid_idcs = np.logical_and(misaligned_idcs > 1, misaligned_idcs < len(corrected_peaks) - 1)
+    valid_idcs = np.logical_and(misaligned_idcs > 1,  # pylint: disable=E1111
+                                misaligned_idcs < len(corrected_peaks) - 1)
     misaligned_idcs = misaligned_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in misaligned_idcs]]
     next_peaks = corrected_peaks[[i + 1 for i in misaligned_idcs]]
@@ -372,8 +378,7 @@ def _correct_misaligned(misaligned_idcs, peaks):
 
 
 def _update_indices(source_idcs, update_idcs, update):
-    """
-    For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger than
+    """For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger than
     s.
     """
     if not update_idcs:

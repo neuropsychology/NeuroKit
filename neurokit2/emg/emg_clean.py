@@ -15,13 +15,11 @@ def emg_clean(emg_signal, sampling_rate=1000):
 
     Parameters
     ----------
-    emg_signal : list, array or Series
+    emg_signal : list or array or Series
         The raw EMG channel.
     sampling_rate : int
         The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
-    method : str
-        The processing pipeline to apply. Can be one of 'biosppy' (default).
 
     Returns
     -------

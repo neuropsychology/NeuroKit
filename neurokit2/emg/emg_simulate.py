@@ -15,9 +15,10 @@ def emg_simulate(
     ----------
     duration : int
         Desired recording length in seconds.
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal
-        (in samples).
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
+    length : int
+        The desired length of the signal (in samples).
     noise : float
         Noise level (gaussian noise).
     burst_number : int
@@ -61,7 +62,7 @@ def emg_simulate(
         length = duration * sampling_rate
 
     # Sanity checks
-    if isinstance(burst_duration, int) or isinstance(burst_duration, float):
+    if isinstance(burst_duration, (int, float)):
         burst_duration = np.repeat(burst_duration, burst_number)
 
     if len(burst_duration) > burst_number:
@@ -84,12 +85,12 @@ def emg_simulate(
     n_quiet = burst_number + 1  # number of quiet periods (in between bursts)
     duration_quiet = (duration - total_duration_bursts) / n_quiet  # duration of each quiet period
     quiets = []
-    for quiet in range(n_quiet):
+    for quiet in range(n_quiet):  # pylint: disable=W0612
         quiets += [list(np.random.uniform(-0.05, 0.05, size=int(1000 * duration_quiet)) + 0.08)]
 
     # Merge the two
     emg = []
-    for i in range(len(quiets)):
+    for i in range(len(quiets)):  # pylint: disable=C0200
         emg += quiets[i]
         if i < len(bursts):
             emg += bursts[i]

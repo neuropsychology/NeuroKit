@@ -18,10 +18,12 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
         The sampling frequency of the signal (in Hz, i.e., samples/second). Needs to be supplied if
         the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
         Defaults to None.
-    subsubplots : bool
+    subplots : bool
         If True, each signal is plotted in a subplot.
     standardize : bool
         If True, all signals will have the same scale (useful for visualisation).
+    **kwargs : optional
+        Arguments passed to matplotlib plotting.
 
     Examples
     ----------
@@ -53,7 +55,7 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
         if isinstance(signal, list) or len(np.array(signal).shape) > 1:
             out = pd.DataFrame()
             for i, content in enumerate(signal):
-                if isinstance(content, pd.DataFrame) or isinstance(content, pd.Series):
+                if isinstance(content, (pd.DataFrame, pd.Series)):
                     out = pd.concat([out, content], axis=1, sort=True)
                 else:
                     out = pd.concat([out, pd.DataFrame({"Signal" + str(i + 1): content})], axis=1, sort=True)
@@ -104,4 +106,4 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
             plot = signal[continuous_columns].plot(subplots=subplots, sharex=True, **kwargs)
 
     # Tidy legend locations
-    [plot.legend(loc=1) for plot in plt.gcf().axes]
+    [plot.legend(loc=1) for plot in plt.gcf().axes]  # pylint: disable=W0106

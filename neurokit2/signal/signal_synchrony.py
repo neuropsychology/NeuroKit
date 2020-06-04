@@ -21,8 +21,10 @@ def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
 
     Parameters
     ----------
-    signal1,signal2 : list, array or Series
-        Two time series in the form of a vector of values.
+    signal1 : list or array or Series
+        Time series in the form of a vector of values.
+    signal2 : list or array or Series
+        Time series in the form of a vector of values.
     method : str
         The method to use. Can be one of 'hilbert' or 'correlation'.
     window_size : int

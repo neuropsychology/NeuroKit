@@ -22,7 +22,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
 
     Parameters
     ----------
-    eda_phasic : list, array or Series
+    eda_phasic : list or array or Series
         The phasic component of the EDA signal (from `eda_phasic()`).
     sampling_rate : int
         The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
@@ -74,15 +74,15 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
       of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
 
     """
-    if isinstance(eda_phasic, pd.DataFrame) or isinstance(eda_phasic, pd.Series):
+    if isinstance(eda_phasic, (pd.DataFrame, pd.Series)):
         try:
             eda_phasic = eda_phasic["EDA_Phasic"]
         except KeyError:
             eda_phasic = eda_phasic.values
 
     # Get basic
-    info = eda_findpeaks(eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=0.1)
-    info = eda_fixpeaks(info, sampling_rate=sampling_rate)
+    info = eda_findpeaks(eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min)
+    info = eda_fixpeaks(info)
 
     # Get additional features (rise time, half recovery time, etc.)
     info = _eda_peaks_getfeatures(info, eda_phasic, sampling_rate, recovery_percentage=0.5)
@@ -103,7 +103,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
     # Sanity checks -----------------------------------------------------------
 
     # Peaks (remove peaks with no onset)
-    valid_peaks = np.logical_and(info["SCR_Peaks"] > np.nanmin(info["SCR_Onsets"]), ~np.isnan(info["SCR_Onsets"]))
+    valid_peaks = np.logical_and(info["SCR_Peaks"] > np.nanmin(info["SCR_Onsets"]), ~np.isnan(info["SCR_Onsets"]))  # pylint: disable=E1111
     peaks = info["SCR_Peaks"][valid_peaks]
 
     # Onsets (remove onsets with no peaks)

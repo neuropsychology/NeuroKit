@@ -14,7 +14,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
 
     Parameters
     ----------
-    eda_phasic : list, array or Series
+    eda_phasic : list or array or Series
         The phasic component of the EDA signal (from `eda_phasic()`).
     sampling_rate : int
         The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
@@ -151,12 +151,12 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
     Parameters
     ----------
-    signal : array
+    eda_phasic : array
         Input filterd EDA signal.
-    sampling_rate : int, float, optional
-        Sampling frequency (Hz).
-    amplitude_min : float, optional
-        Minimum treshold by which to exclude SCRs.
+    sampling_rate : int
+        Sampling frequency (Hz). Defaults to 1000Hz.
+    amplitude_min : float
+        Minimum treshold by which to exclude SCRs. Defaults to 0.1.
 
     Returns
     -------

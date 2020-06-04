@@ -16,6 +16,11 @@ def emg_plot(emg_signals, sampling_rate=None):
         data should be plotted over time in seconds. Otherwise the data is plotted over samples.
         Defaults to None.
 
+    Returns
+    -------
+    fig
+        Figure representing a plot of the processed emg signals.
+
     Examples
     --------
     >>> import neurokit2 as nk

@@ -4,7 +4,7 @@
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
-def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
+def eda_fixpeaks(peaks, onsets=None, height=None):
     """Correct  Skin Conductance Responses (SCR) peaks.
 
     Low-level function used by `eda_peaks()` to correct the peaks found by `eda_findpeaks()`.
@@ -12,12 +12,15 @@ def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
 
     Parameters
     ----------
-    peaks, onsets, height : list, array, DataFrame, Series or dict
-        The samples at which the SCR peaks or its onset occur (or the amplitude of the peak).
-        If a dict or a DataFrame is passed, it is assumed that these containers were obtained
-        with `eda_findpeaks()`.
-    sampling_rate : int
-        The sampling frequency of the signal that contains the peaks (in Hz, i.e., samples/second).
+    peaks : list or array or DataFrame or Series or dict
+        The samples at which the SCR peaks occur. If a dict or a DataFrame is passed,
+        it is assumed that these containers were obtained with `eda_findpeaks()`.
+    onsets : list or array or DataFrame or Series or dict
+        The samples at which the SCR onsets occur. If a dict or a DataFrame is passed,
+        it is assumed that these containers were obtained with `eda_findpeaks()`. Defaults to None.
+    height : list or array or DataFrame or Series or dict
+        The samples at which the amplitude of the SCR peaks occur. If a dict or a DataFrame is
+        passed, it is assumed that these containers were obtained with `eda_findpeaks()`. Defaults to None.
 
     Returns
     -------
@@ -51,7 +54,7 @@ def eda_fixpeaks(peaks, onsets=None, height=None, sampling_rate=1000):
 
     """
     # Format input.
-    peaks, onsets, height, desired_length = _eda_fixpeaks_retrieve(peaks, onsets, height, desired_length=None)
+    peaks, onsets, height, __ = _eda_fixpeaks_retrieve(peaks, onsets, height, desired_length=None)
 
     # Do whatever fixing is required (nothing for now)
 

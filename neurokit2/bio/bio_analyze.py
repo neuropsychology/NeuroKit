@@ -139,7 +139,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
             if duration >= 10:
                 rsa = _bio_analyze_rsa_interval(data, sampling_rate=sampling_rate)
             else:
-                rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
+                rsa = _bio_analyze_rsa_event(data)
 
         features = pd.concat([features, rsa], axis=1, sort=False)
 

@@ -20,13 +20,17 @@ def emg_activation(
 
     Parameters
     ----------
-    emg_amplitude, emg_cleaned : array
+    emg_amplitude : array
+        At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
+        ``emg_amplitude()`` for methods like 'threshold' or 'mixture'), and / or the cleaned EMG signal
+        (for methods like 'pelt').
+    emg_cleaned : array
         At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
         ``emg_amplitude()`` for methods like 'threshold' or 'mixture'), and / or the cleaned EMG signal
         (for methods like 'pelt').
     sampling_rate : int
         The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).
-     method : str
+    method : str
         The algorithm used to discriminate between activity and baseline. Can be one of 'mixture'
         (default) or 'threshold'. If 'mixture', will use a Gaussian Mixture Model to categorize
         between the two states. If 'threshold', will consider as activated all points which
@@ -38,6 +42,8 @@ def emg_activation(
     duration_min : float
         The minimum duration of a period of activity or non-activity in seconds.
         If 'default', will be set to 0.05 (50 ms).
+    kwargs : optional
+        Other arguments.
 
     Returns
     -------
@@ -116,7 +122,7 @@ def emg_activation(
         )
 
     # Sanitize activity.
-    info = _emg_activation_activations(activity, sampling_rate=sampling_rate, duration_min=duration_min)
+    info = _emg_activation_activations(activity, duration_min=duration_min)
 
     # Prepare Output.
     df_activity = signal_formatpeaks(
@@ -214,7 +220,7 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
 # =============================================================================
 # Internals
 # =============================================================================
-def _emg_activation_activations(activity, sampling_rate=1000, duration_min=0.05):
+def _emg_activation_activations(activity, duration_min=0.05):
 
     activations = events_find(activity, threshold=0.5, threshold_keep="above", duration_min=duration_min)
     activations["offset"] = activations["onset"] + activations["duration"]
