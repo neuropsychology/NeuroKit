@@ -63,7 +63,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     ...                           epochs_end=1.9)
     >>>
     >>> # Analyze
-    >>> nk.bio_analyze(epochs) #doctest: +SKIP
+    >>> nk.bio_analyze(epochs, sampling_rate=100) #doctest: +SKIP
     >>>
     >>> # Example 2: Interval-related analysis
     >>> # Download data
@@ -73,7 +73,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], sampling_rate=100)
     >>>
     >>> # Analyze
-    >>> nk.bio_analyze(df) #doctest: +SKIP
+    >>> nk.bio_analyze(df, sampling_rate=100) #doctest: +SKIP
 
     """
     features = pd.DataFrame()
@@ -134,25 +134,12 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
             rsa = _bio_analyze_rsa_interval(data, sampling_rate=sampling_rate)
 
         # Auto
-        elif method in ["auto"]:
-            if isinstance(data, dict):
-                for i in data:
-                    duration = len(data[i]) / sampling_rate
-                if duration >= 10:
-                    rsa = _bio_analyze_rsa_interval(data, sampling_rate=sampling_rate)
-                else:
-                    rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
-
-            if isinstance(data, pd.DataFrame):
-                if "Label" in data.columns:
-                    epoch_len = data["Label"].value_counts()[0]
-                    duration = epoch_len / sampling_rate
-                else:
-                    duration = len(data) / sampling_rate
-                if duration >= 10:
-                    rsa = _bio_analyze_rsa_interval(data, sampling_rate=sampling_rate)
-                else:
-                    rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
+        else:
+            duration = _bio_analyze_findduration(data, sampling_rate=sampling_rate)
+            if duration >= 10:
+                rsa = _bio_analyze_rsa_interval(data, sampling_rate=sampling_rate)
+            else:
+                rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
 
         features = pd.concat([features, rsa], axis=1, sort=False)
 
@@ -166,6 +153,21 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
 # =============================================================================
 # Internals
 # =============================================================================
+def _bio_analyze_findduration(data, sampling_rate=1000):
+    # If DataFrame
+    if isinstance(data, pd.DataFrame):
+        if "Label" in data.columns:
+            labels = data["Label"].unique()
+            durations = [len(data[data["Label"] == label]) / sampling_rate for label in labels]
+        else:
+            durations = [len(data) / sampling_rate]
+
+    # If dictionary
+    if isinstance(data, dict):
+        durations = [len(data[i]) / sampling_rate for i in data]
+
+    return np.nanmean(durations)
+
 
 
 def _bio_analyze_rsa_interval(data, sampling_rate=1000):

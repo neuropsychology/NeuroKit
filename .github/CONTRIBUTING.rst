@@ -168,6 +168,8 @@ Useful reads
 
 - `Understanding the GitHub flow <https://guides.github.com/introduction/flow/>`_
 - `How to create a Pull Request <https://www.earthdatascience.org/courses/intro-to-earth-data-science/git-github/github-collaboration/how-to-submit-pull-requests-on-github/>`_
+- `Why and How Contribute <https://github.com/jonschlinkert/idiomatic-contributing/>`_
+
 
 What's next?
 ------------
