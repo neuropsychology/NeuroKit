@@ -54,7 +54,7 @@ To install NeuroKit2, run this command in your terminal:
 
 .. code-block::
 
-    pip install https://github.com/neuropsychology/neurokit/zipball/master
+    pip install neurokit2
 
 If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
@@ -75,9 +75,9 @@ Contributing
 
 NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
 
-- `Contribution guide <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
-- `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
-- `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
+- `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/contributing/understanding.html>`_
+- `Contributing guide <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html>`_
+- `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/contributing/first_contribution.html>`_
 
 
 Documentation

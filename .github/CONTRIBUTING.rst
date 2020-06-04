@@ -1,5 +1,5 @@
-Contributing
-============
+Contributing guide
+===================
 
 **NeuroKit2 welcomes everyone to contribute to code, documentation, testing and suggestions.**
 

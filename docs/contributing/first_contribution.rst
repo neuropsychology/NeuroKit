@@ -1,4 +1,4 @@
-Ideas for first contribution
+Ideas for first contributions
 ================================
 
 .. hint::
