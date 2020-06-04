@@ -1,0 +1,27 @@
+name: Check README
+
+# on: [push, pull_request]
+on: pull_request
+
+jobs:
+  build:
+    name: Check README
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+ 
+    - name: Install dependencies
+      run: |
+        cd $GITHUB_WORKSPACE
+        python setup.py install 
+   
+    - name: Run README_examples.py
+      run: |
+        cd $GITHUB_WORKSPACE/docs/readme
+        python README_examples.py
+        
