@@ -11,7 +11,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, method="elgendi"):
 
     Parameters
     ----------
-    ppg_signal : list, array or Series
+    ppg_signal : list or array or Series
         The raw PPG channel.
     sampling_rate : int
         The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.

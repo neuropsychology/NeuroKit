@@ -25,9 +25,14 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         The sampling frequency of the ECG (in Hz, i.e., samples/second). Needs to be supplied if the
         data should be plotted over time in seconds. Otherwise the data is plotted over samples.
         Defaults to None. Must be specified to plot artifacts.
-    artifacts : str
+    show_type : str
         Visualize the ECG data with 'default' or visualize artifacts thresholds with 'artifacts' produced by
         `ecg_fixpeaks()`, or 'full' to visualize both.
+
+    Returns
+    -------
+    fig
+        Figure representing a plot of the processed ecg signals (and peak artifacts).
 
     Examples
     --------
@@ -119,7 +124,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
             ax2.plot(heartbeats_pivoted)
 
             cmap = iter(
-                plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats["Label"].nunique())))
+                plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats["Label"].nunique())))  # pylint: disable=E1101
             )  # Aesthetics of heart beats
 
             lines = []

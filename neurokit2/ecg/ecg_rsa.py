@@ -124,7 +124,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
       1(06), 32.
 
     """
-    signals, ecg_period, rpeaks, rsp_signal = _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
+    signals, ecg_period, rpeaks, __ = _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
 
     # Extract cycles
     rsp_cycles = _ecg_rsa_cycles(signals)
@@ -160,8 +160,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
 # Methods (Domains)
 # =============================================================================
 def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period=None, rsp_peaks=None):
-    """
-    Peak-to-trough algorithm (P2T)
+    """Peak-to-trough algorithm (P2T)
     """
 
     # Find all RSP cycles and the Rpeaks within
@@ -181,7 +180,7 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
 
     if continuous is False:
         rsa = {"RSA_P2T_Mean": np.nanmean(rsa_values)}
-        rsa["RSA_P2T_Mean_log"] = np.log(rsa["RSA_P2T_Mean"])
+        rsa["RSA_P2T_Mean_log"] = np.log(rsa["RSA_P2T_Mean"])  # pylint: disable=E1111
         rsa["RSA_P2T_SD"] = np.nanstd(rsa_values, ddof=1)
         rsa["RSA_P2T_NoRSA"] = len(pd.Series(rsa_values).index[pd.Series(rsa_values).isnull()])
     else:
@@ -195,8 +194,7 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
 
 
 def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
-    """
-    Porges-Bohrer method.
+    """Porges-Bohrer method.
     """
     if continuous is True:
         return None
@@ -300,8 +298,7 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
 # Internals
 # =============================================================================
 def _ecg_rsa_cycles(signals):
-    """
-    Extract respiratory cycles.
+    """Extract respiratory cycles.
     """
     inspiration_onsets = np.intersect1d(
         np.where(signals["RSP_Phase"] == 1)[0], np.where(signals["RSP_Phase_Completion"] == 0)[0], assume_unique=True

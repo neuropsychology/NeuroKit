@@ -13,8 +13,11 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
 
     Parameters
     ----------
-    peaks, troughs : list, array, DataFrame, Series or dict
+    peaks : list or array or DataFrame or Series or dict
         The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
+        assumed that these containers were obtained with `rsp_findpeaks()`.
+    troughs : list or array or DataFrame or Series or dict
+        The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
         assumed that these containers were obtained with `rsp_findpeaks()`.
     desired_length : int
         By default, the returned respiration rate has the same number of elements as `peaks`. If set

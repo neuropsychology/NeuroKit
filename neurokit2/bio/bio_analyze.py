@@ -127,7 +127,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
 
         # Event-related
         if method in ["event-related", "event", "epoch"]:
-            rsa = _bio_analyze_rsa_event(data, sampling_rate=sampling_rate)
+            rsa = _bio_analyze_rsa_event(data)
 
         # Interval-related
         elif method in ["interval-related", "interval", "resting-state"]:
@@ -188,7 +188,7 @@ def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     return rsa
 
 
-def _bio_analyze_rsa_event(data, sampling_rate=1000, rsa={}):
+def _bio_analyze_rsa_event(data, rsa={}):
     # RSA features for event-related analysis
 
     if isinstance(data, dict):

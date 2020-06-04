@@ -19,7 +19,7 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
 
     Parameters
     ----------
-    rsp_cleaned : list, array or Series
+    rsp_cleaned : list or array or Series
         The cleaned respiration channel as returned by `rsp_clean()`.
     sampling_rate : int
         The sampling frequency of 'rsp_cleaned' (in Hz, i.e., samples/second).
@@ -61,8 +61,8 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
     >>> fig #doctest: +SKIP
 
     """
-    info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
-    info = rsp_fixpeaks(info, sampling_rate=sampling_rate)
+    info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min)
+    info = rsp_fixpeaks(info)
     peak_signal = signal_formatpeaks(info, desired_length=len(rsp_cleaned), peak_indices=info["RSP_Peaks"])
 
     return peak_signal, info

@@ -88,12 +88,12 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
     rrv = {}  # Initialize empty dict
     rrv.update(_rsp_rrv_time(bbi))
     rrv.update(_rsp_rrv_frequency(rsp_period, show=show, silent=silent))
-    rrv.update(_rsp_rrv_nonlinear(bbi, rsp_period))
+    rrv.update(_rsp_rrv_nonlinear(bbi))
 
     rrv = pd.DataFrame.from_dict(rrv, orient="index").T.add_prefix("RRV_")
 
     if show:
-        _rsp_rrv_plot(bbi, rsp_period)
+        _rsp_rrv_plot(bbi)
 
     return rrv
 
@@ -165,7 +165,7 @@ def _rsp_rrv_frequency(
     return out
 
 
-def _rsp_rrv_nonlinear(bbi, rsp_period):
+def _rsp_rrv_nonlinear(bbi):
     diff_bbi = np.diff(bbi)
     out = {}
 
@@ -235,13 +235,13 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
     return rsp_rate, peaks
 
 
-def _rsp_rrv_plot(bbi, rsp_period):
+def _rsp_rrv_plot(bbi):
     # Axes
     ax1 = bbi[:-1]
     ax2 = bbi[1:]
 
     # Compute features
-    poincare_features = _rsp_rrv_nonlinear(bbi, rsp_period)
+    poincare_features = _rsp_rrv_nonlinear(bbi)
     sd1 = poincare_features["SD1"]
     sd2 = poincare_features["SD2"]
     mean_bbi = np.mean(bbi)
