@@ -1,8 +1,8 @@
-Ideas for first contributions
-==================================================
+Ideas for first contribution
+================================
 
 .. hint::
-   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
+   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see our guides <https://neurokit2.readthedocs.io/en/latest/contributing/index.html>`_).
    
    
 Now that you're familiar with `how to use GitHub <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_, you're ready to get your hands dirty and contribute to open-science? But you're not sure **where to start or what to do**? We got you covered!
