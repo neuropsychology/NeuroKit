@@ -81,18 +81,20 @@ def fit_error(y, y_predicted, n_parameters=2):
 # Direct accessors
 # =============================================================================
 def fit_mse(y, y_predicted):
+    """Compute Mean Square Error (MSE)."""
     return fit_error(y, y_predicted)["MSE"]
 
 
 def fit_rmse(y, y_predicted):
+    """Compute Root Mean Square Error (RMSE)."""
     return fit_error(y, y_predicted)["RMSE"]
 
 
 def fit_r2(y, y_predicted, adjusted=True, n_parameters=2):
+    """Compute R2."""
     if adjusted is True:
         return fit_error(y, y_predicted, n_parameters=n_parameters)["R2_adjusted"]
-    else:
-        return fit_error(y, y_predicted, n_parameters=n_parameters)["R2"]
+    return fit_error(y, y_predicted, n_parameters=n_parameters)["R2"]
 
 
 # =============================================================================
