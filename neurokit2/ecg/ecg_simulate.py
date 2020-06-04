@@ -20,8 +20,10 @@ def ecg_simulate(
     ----------
     duration : int
         Desired recording length in seconds.
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal (in samples).
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
+    length : int
+        The desired length of the signal (in samples).
     noise : float
         Noise level (amplitude of the laplace noise).
     heart_rate : int
@@ -33,10 +35,8 @@ def ecg_simulate(
     random_state : int
         Seed for the random number generator.
 
-
-
     Returns
-    ----------
+    -------
     array
         Vector containing the ECG signal.
 
@@ -179,6 +179,11 @@ def _ecg_simulate_ecgsyn(
     % ti = angles of extrema (in degrees)
     % ai = z-position of extrema
     % bi = Gaussian width of peaks
+
+    Returns
+    -------
+    array
+        Vector containing simulated ecg signal.
 
 #    Examples
 #    --------
