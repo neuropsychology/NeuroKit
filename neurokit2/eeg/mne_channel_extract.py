@@ -11,7 +11,7 @@ def mne_channel_extract(raw, name):
     ----------
     raw : mne.io.Raw
         Raw EEG data.
-    channel_names : str or list
+    name : str or list
         Channel's name(s).
 
     Returns
@@ -33,7 +33,7 @@ def mne_channel_extract(raw, name):
     if isinstance(name, list) is False:
         name = [name]
 
-    channels, time_index = raw.copy().pick_channels(name)[:]
+    channels, __ = raw.copy().pick_channels(name)[:]
     if len(name) > 1:
         channels = pd.DataFrame(channels.T, columns=name)
     else:

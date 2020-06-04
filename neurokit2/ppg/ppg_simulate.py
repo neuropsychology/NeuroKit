@@ -124,7 +124,7 @@ def ppg_simulate(
     y_all[3::4] = y_dia
 
     if show:
-        fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
+        __, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
         ax0.scatter(x_all, y_all, c="r")
 
     # Interpolate a continuous signal between the landmarks (i.e., Cartesian
@@ -213,7 +213,6 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
     nyquist = (1 / periods[0]) * 0.1
     if modulation_frequency > nyquist:
         print(f"Please choose a modulation frequency lower than {nyquist}.")
-        return
 
     # Generate a sine with mean 1.1 and amplitude modulation_strength, that is,
     # ranging from 1.1 - modulation_strength to 1.1 + modulation_strength. Note

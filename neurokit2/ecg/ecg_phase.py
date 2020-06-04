@@ -7,18 +7,23 @@ from .ecg_delineate import ecg_delineate
 from .ecg_peaks import ecg_peaks
 
 
-def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method="peak", sampling_rate=None):
+def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None):
     """Compute cardiac phase (for both atrial and ventricular).
 
     Finds the cardiac phase, labelled as 1 for systole and 0 for diastole.
+
     Parameters
     ----------
-    rpeaks : list, array, DataFrame, Series or dict
+    ecg_cleaned : list or array or Series
+        The cleaned ECG channel as returned by `ecg_clean()`.
+    rpeaks : list or array or DataFrame or Series or dict
         The samples at which the different ECG peaks occur. If a dict or a DataFrame is passed, it is
         assumed that these containers were obtained with `ecg_findpeaks()` or `ecg_peaks()`.
     delineate_info : dict
         A dictionary containing additional information of ecg delineation and can be obtained with
         `ecg_delineate()`.
+    sampling_rate : int
+        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to None.
 
     Returns
     -------
@@ -67,7 +72,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, method="peak", samp
         rpeaks = rpeaks["ECG_R_Peaks"]
 
     if delineate_info is None:
-        signals, delineate_info = ecg_delineate(ecg_cleaned, sampling_rate=sampling_rate, method=method)
+        __, delineate_info = ecg_delineate(ecg_cleaned, sampling_rate=sampling_rate)
 
     # Try retrieving right column
     if isinstance(delineate_info, dict):

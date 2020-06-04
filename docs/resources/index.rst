@@ -1,4 +1,4 @@
-Tutorials
+Resources
 #########
 
 Contents:
@@ -8,5 +8,4 @@ Contents:
    
    recording
    software
-   complexity
    resources

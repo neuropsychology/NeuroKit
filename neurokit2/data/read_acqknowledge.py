@@ -34,8 +34,10 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
 
     Returns
     ----------
-    df, sampling rate: DataFrame, int
-        The AcqKnowledge file converted to a dataframe and its sampling rate.
+    df : DataFrame
+        The AcqKnowledge file converted to a dataframe.
+    sampling rate: int
+        The AcqKnowledge file converted to its sampling rate.
 
     See Also
     --------
