@@ -22,9 +22,10 @@ def rsp_simulate(
     ----------
     duration : int
         Desired length of duration (s).
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal
-        (in samples).
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
+    length : int
+        The desired length of the signal (in samples).
     noise : float
         Noise level (amplitude of the laplace noise).
     respiratory_rate : float
@@ -73,11 +74,11 @@ def rsp_simulate(
 
     if method.lower() in ["sinusoidal", "sinus", "simple"]:
         rsp = _rsp_simulate_sinusoidal(
-            duration=duration, length=length, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
+            duration=duration, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
         )
     else:
         rsp = _rsp_simulate_breathmetrics(
-            duration=duration, length=length, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
+            duration=duration, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
         )
         rsp = rsp[0:length]
 
@@ -101,7 +102,7 @@ def rsp_simulate(
 # =============================================================================
 # Simple Sinusoidal Model
 # =============================================================================
-def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, respiratory_rate=15):
+def _rsp_simulate_sinusoidal(duration=10, sampling_rate=1000, respiratory_rate=15):
     """
     Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly approximates a single
     respiratory cycle.
@@ -143,36 +144,39 @@ def _rsp_simulate_breathmetrics_original(
     ----------
     nCycles : int or float
         number of breathing cycles to simulate.
-    sampling_rate :
+    sampling_rate : int
         sampling rate.
-    breathing_rate :
+    breathing_rate : float
         average breathing rate.
-    average_amplitude :
+    average_amplitude : float
         average amplitude of inhales and exhales.
-    amplitude_variance:
+    amplitude_variance: float
         variance in respiratory amplitudes.
-    phase_variance:
+    phase_variance: float
         variance in duration of individual breaths.
-    inhale_pause_percent :
+    inhale_pause_percent : float
         percent of inhales followed by a pause.
-    inhale_pause_avgLength :
+    inhale_pause_avgLength : float
         average length of inhale pauses.
-    inhale_pauseLength_variance :
+    inhale_pauseLength_variance : float
         variance in inhale pause length.
-    exhale_pause_percent :
+    exhale_pause_percent : float
         percent of exhales followed by a pause.
-    exhale_pause_avgLength :
+    exhale_pause_avgLength : float
         average length of exhale pauses.
-    exhale_pauseLength_variance :
+    exhale_pauseLength_variance : float
         variance in exhale pause length.
-    pause_amplitude :
+    pause_amplitude : float
         noise amplitude of pauses.
-    pause_amplitude_variance :
+    pause_amplitude_variance : float
         variance in pause noise.
-    signal_noise :
+    signal_noise : float
         percent of noise saturation in the simulated signal.
+
     Returns
     ----------
+    signal
+        vector containing breathmetrics simulated rsp signal.
 
     """
     # Define additional parameters
@@ -341,7 +345,7 @@ def _rsp_simulate_breathmetrics_original(
     return simulated_respiration, raw_features, feature_stats
 
 
-def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000, respiratory_rate=15):
+def _rsp_simulate_breathmetrics(duration=10, sampling_rate=1000, respiratory_rate=15):
 
     n_cycles = int(respiratory_rate / 60 * duration)
 
@@ -349,7 +353,7 @@ def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000, re
     rsp = False
     while rsp is False:
         # Generate a longer than necessary signal so it won't be shorter
-        rsp, raw_features, feature_stats = _rsp_simulate_breathmetrics_original(
+        rsp, __, __ = _rsp_simulate_breathmetrics_original(
             nCycles=int(n_cycles * 1.5),
             sampling_rate=sampling_rate,
             breathing_rate=respiratory_rate / 60,

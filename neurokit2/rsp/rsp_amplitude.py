@@ -11,15 +11,14 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
 
     Parameters
     ----------
-    rsp_cleaned : list, array or Series
+    rsp_cleaned : list or array or Series
         The cleaned respiration channel as returned by `rsp_clean()`.
-    peaks, troughs : list, array, DataFrame, Series or dict
+    peaks : list or array or DataFrame or Series or dict
         The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
         assumed that these containers were obtained with `rsp_findpeaks()`.
-    desired_length : int
-        By default, the returned respiration rate has the same number of elements as `peaks`. If set
-        to an integer, the returned rate will be interpolated between `peaks` over `desired_length`
-        samples. Has no effect if a DataFrame is passed in as the `peaks` argument.
+    troughs : list or array or DataFrame or Series or dict
+        The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
+        assumed that these containers were obtained with `rsp_findpeaks()`.
 
     Returns
     -------

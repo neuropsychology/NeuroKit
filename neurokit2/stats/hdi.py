@@ -18,14 +18,14 @@ def hdi(x, ci=0.95, show=False, **kwargs):
 
     Parameters
     ----------
-    x : list, array or Series
+    x : list or array or Series
         A vector of values.
     ci : float
         Value of probability of the (credible) interval - CI (between 0 and 1) to be estimated.
         Default to .95 (95%).
     show : bool
         If True, the function will produce a figure.
-    **kwargs
+    **kwargs : Line2D properties
         Other arguments to be passed to ``density()``.
 
     See Also
@@ -34,8 +34,10 @@ def hdi(x, ci=0.95, show=False, **kwargs):
 
     Returns
     ----------
-    float, floats
+    float(s)
         The HDI low and high limits.
+    fig
+        Distribution plot.
 
     Examples
     ----------

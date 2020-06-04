@@ -12,7 +12,9 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 
     Parameters
     ----------
-    x, y : list, array or Series
+    x : list or array or Series
+        A vector of values.
+    y : list or array or Series
         A vector of values.
     method : str
         Method to use. Can either be 'varoquaux' or 'nolitsa'.
@@ -116,8 +118,7 @@ def _mutual_information_nolitsa(x, y, bins=256):
 # JUNK
 # =============================================================================
 def _nearest_distances(X, k=1):
-    """
-    From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
+    """From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
     X = array(N,M)
     N = number of points
     M = number of dimensions
@@ -134,10 +135,16 @@ def _entropy(X, k=1):
 
     Parameters
     -----------
-    X : array-like, shape (n_samples, n_features)
+    X : array-like or shape (n_samples, n_features)
         The data the entropy of which is computed
-    k : int, optional
+    k : int (optional)
         number of nearest neighbors for density estimation
+
+    Returns
+    -------
+    float
+        entropy of X.
+
     Notes
     ---------
     - Kozachenko, L. F. & Leonenko, N. N. 1987 Sample estimate of entropy of a random vector. Probl. Inf. Transm.
@@ -156,7 +163,7 @@ def _entropy(X, k=1):
     - F. Perez-Cruz, (2008). Estimation of Information Theoretic Measures for Continuous Random Variables.
     Advances in Neural Information Processing Systems 21 (NIPS). Vancouver (Canada), December.
     return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
-    """
+    """ # pylint: disable=W0105
     return (
         d * np.mean(np.log(r + np.finfo(X.dtype).eps))
         + np.log(volume_unit_ball)
