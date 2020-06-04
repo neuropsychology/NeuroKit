@@ -169,7 +169,6 @@ def _bio_analyze_findduration(data, sampling_rate=1000):
     return np.nanmean(durations)
 
 
-
 def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     # RSA features for interval-related analysis
 
