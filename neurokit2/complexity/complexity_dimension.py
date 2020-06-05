@@ -11,7 +11,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag').
@@ -29,6 +29,8 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
         Relative tolerance (for fnn method).
     A : float
         Absolute tolerance (for fnn method)
+    **kwargs : optional
+        Other arguments.
 
     Returns
     -------
@@ -84,9 +86,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             )
 
     elif method in ["fnn"]:
-        f1, f2, f3 = _embedding_dimension_ffn(
-            signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, show=show, **kwargs
-        )
+        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs)
 
         min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
 
@@ -104,7 +104,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 # =============================================================================
 # Methods
 # =============================================================================
-def _embedding_dimension_afn(signal, dimension_seq, delay=1, show=False, **kwargs):
+def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
     """Return E(d) and E^*(d) for a all d in dimension_seq.
 
     E(d) and E^*(d) will be used to calculate E1(d) and E2(d)
@@ -152,12 +152,25 @@ def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", w
     return E, Es
 
 
-def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, show=False, **kwargs):
+def _embedding_dimension_ffn(signal, dimension_seq, delay=1, **kwargs):
     """Compute the fraction of false nearest neighbors.
 
     The false nearest neighbors (FNN) method described by Kennel et al.
     (1992) to calculate the minimum embedding dimension required to embed a scalar time series.
 
+    Parameters
+    ----------
+    signal : list or array or Series
+        The signal (i.e., a time series) in the form of a vector of values.
+    dimension_seq : int
+        The embedding dimension.
+    delay : int
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag').
+    **kwargs : optional
+        Other arguments.
+
+    Returns
+    -------
     f1 : array
         Fraction of neighbors classified as false by Test I.
     f2 : array
@@ -176,8 +189,7 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, show
 
 
 def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
-    """
-    Return fraction of false nearest neighbors for a single d.
+    """Return fraction of false nearest neighbors for a single d.
     """
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
@@ -235,7 +247,7 @@ def _embedding_dimension_neighbors(
 
     Parameters
     ----------
-    signal : ndarray, array, list or Series
+    signal : ndarray or array or list or Series
         embedded signal: N-dimensional array containing time-delayed vectors, or
         signal: 1-D array (e.g.time series) of signal in the form of a vector of values.
         If signal is input, embedded signal will be created using the input dimension and delay.
@@ -246,16 +258,18 @@ def _embedding_dimension_neighbors(
     dimension_max : int
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order')
         to test.
-    metric : string, optional (default = 'chebyshev')
+    metric : str
         Metric to use for distance computation.  Must be one of "cityblock" (aka the Manhattan metric),
-        "chebyshev" (aka the maximum norm metric), or "euclidean".
-    window : int, optional (default = 0)
+        "chebyshev" (aka the maximum norm metric), or "euclidean". Defaults to 'chebyshev'.
+    window : int
         Minimum temporal separation (Theiler window) that should exist between near neighbors.
-        This is crucial while computing Lyapunov exponents and the correlation dimension.
-    maxnum : int, optional (default = None (optimum))
+        This is crucial while computing Lyapunov exponents and the correlation dimension. Defaults to 0.
+    maxnum : int
         Maximum number of near neighbors that should be found for each point.
         In rare cases, when there are no neighbors that are at a nonzero distance, this will have to
-        be increased (i.e., beyond 2 * window + 3).
+        be increased (i.e., beyond 2 * window + 3). Defaults to None (optimum).
+    show : bool
+        Defaults to False.
 
     Returns
     -------
@@ -281,7 +295,7 @@ def _embedding_dimension_neighbors(
     else:
         raise ValueError('Unknown metric. Should be one of "cityblock", ' '"euclidean", or "chebyshev".')
 
-    tree = scipy.spatial.cKDTree(y)
+    tree = scipy.spatial.cKDTree(y)  # pylint: disable=E1102
     n = len(y)
 
     if not maxnum:

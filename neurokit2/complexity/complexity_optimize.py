@@ -333,7 +333,7 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
             signal_entropy = _complexity_optimize_get_differential(signal_embedded, k=1)
 
             # calculate average of surrogates entropy
-            for i in range(surrogate_iter):  # pylint: disable=W0631
+            for i in range(surrogate_iter):  # pylint: disable=W0612
                 surrogate, __, __ = _complexity_optimize_iaaft(signal)
                 surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _complexity_optimize_get_differential(surrogate_embedded, k=1)
@@ -430,19 +430,19 @@ def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
 
     Parameters
     ----------
-    x: ndarray
+    x : ndarray
         n samples from a d-dimensional multivariate distribution (n, d).
-    k: int
+    k : int
         kth nearest neighbour to use in density estimate; imposes smoothness on the underlying
         probability distribution. Defaults to 1
-    norm: str
+    norm : str
         p-norm used when computing k-nearest neighbour distances. Can be 'euclidean' or 'max'.
-    min_dist: float
+    min_dist : float
         minimum distance between data points; smaller distances will be capped using this value. Defaults to 0.
 
     Returns
-    --------
-    h: float
+    ------
+    h : float
         entropy H(X)
 
     References

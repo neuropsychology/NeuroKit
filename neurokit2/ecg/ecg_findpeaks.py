@@ -1,5 +1,4 @@
 # - * - coding: utf-8 - * -
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -17,7 +16,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     Parameters
     ----------
-    ecg_cleaned : list, array or Series
+    ecg_cleaned : list or array or Series
         The cleaned ECG channel as returned by `ecg_clean()`.
     sampling_rate : int
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
@@ -182,7 +181,7 @@ def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False
 
     if show is True:
         signal_plot([signal, convoluted], standardize=True)
-        [plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks]
+        [plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks]  # pylint: disable=W0106
 
     return peaks
 
@@ -223,7 +222,7 @@ def _ecg_findpeaks_neurokit(
 
     """
     if show is True:
-        fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
+        __, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
 
     # Compute the ECG's gradient as well as the gradient threshold. Run with
     # show=True in order to get an idea of the threshold.
@@ -342,9 +341,9 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
     idx = []
     peaks = []
 
-    for i in range(len(ma)):
+    for i in range(len(ma)):  # pylint: disable=C0200,R1702
 
-        if i > 0 and i < len(ma) - 1 and ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:
+        if i > 0 and i < len(ma) - 1 and ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:  # pylint: disable=R1716
             peak = i
             peaks.append(peak)
             if ma[peak] > th and (peak - QRS[-1]) > 0.3 * sampling_rate:
@@ -499,7 +498,7 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000):
 
     QRS = []
 
-    for i in range(len(MA3)):
+    for i in range(len(MA3)):  # pylint: disable=C0200
 
         # M
         if i < 5 * sampling_rate:
@@ -592,8 +591,8 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
 
     d2 = np.diff(norm_signal, 2)
 
-    b = np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2
-    b = np.intersect1d(b, np.nonzero(-d2 > tol)[0])
+    b = np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2  # pylint: disable=E1130
+    b = np.intersect1d(b, np.nonzero(-d2 > tol)[0])  # pylint: disable=E1130
 
     rpeaks = []
     if len(b) >= 3:
@@ -656,7 +655,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
     thf_list = []
     thf = False
 
-    for i in range(len(low_pass)):
+    for i in range(len(low_pass)):  # pylint: disable=C0200
 
         # M
         if i < 5 * sampling_rate:
@@ -799,7 +798,7 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
     blocks = np.zeros(len(signal))
     block_height = np.max(signal)
 
-    for i in range(len(mwa_qrs)):
+    for i in range(len(mwa_qrs)):  # pylint: disable=C0200
         blocks[i] = block_height if mwa_qrs[i] > mwa_beat[i] else 0
     QRS = []
 
@@ -837,7 +836,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
         )
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
-    cwtmatr, freqs = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
+    cwtmatr, __ = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
 
     # For wt of scale 2^4
     signal_4 = cwtmatr[4, :]
@@ -850,7 +849,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     peaks_3, _ = scipy.signal.find_peaks(np.abs(signal_3), height=epsilon_3)
     # Keep only peaks_3 that are nearest to peaks_4
     peaks_3_keep = np.zeros_like(peaks_4)
-    for i in range(len(peaks_4)):
+    for i in range(len(peaks_4)):  # pylint: disable=C0200
         peaks_distance = abs(peaks_4[i] - peaks_3)
         peaks_3_keep[i] = peaks_3[np.argmin(peaks_distance)]
 
@@ -878,7 +877,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     max_R_peak_dist = int(0.1 * sampling_rate)
     rpeaks = []
     for index_cur, index_next in zip(peaks_1_keep[:-1], peaks_1_keep[1:]):
-        correct_sign = signal_1[index_cur] < 0 and signal_1[index_next] > 0  # limit 1
+        correct_sign = signal_1[index_cur] < 0 and signal_1[index_next] > 0  # pylint: disable=R1716
         near = (index_next - index_cur) < max_R_peak_dist  # limit 2
         if near and correct_sign:
             rpeaks.append(signal_zerocrossings(signal_1[index_cur:index_next])[0] + index_cur)
@@ -964,8 +963,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
 
 def _ecg_findpeaks_MWA(signal, window_size):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
     """
 
     mwa = np.zeros(len(signal))
@@ -978,7 +976,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
         dif = sums[end - 1] - sums[begin - 1]
         return dif / (end - begin)
 
-    for i in range(len(signal)):
+    for i in range(len(signal)):  # pylint: disable=C0200
         if i < window_size:
             section = signal[0:i]
         else:
@@ -993,8 +991,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
 
 
 def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
     """
     min_distance = int(0.25 * sampling_rate)
 
@@ -1014,11 +1011,12 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     missed_peaks = []
     peaks = []
 
-    for i in range(len(detection)):
+    for i in range(len(detection)):  # pylint: disable=R1702,C0200
 
+        # pylint: disable=R1716
         if i > 0 and i < len(detection) - 1 and detection[i - 1] < detection[i] and detection[i + 1] < detection[i]:
             peak = i
-            peaks.append(peak)
+            peaks.append(peak)  # pylint: disable=R1716
             if detection[peak] > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
 
                 signal_peaks.append(peak)

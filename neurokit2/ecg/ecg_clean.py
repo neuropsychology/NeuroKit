@@ -112,8 +112,7 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
 # Biosppy
 # =============================================================================
 def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
-    """
-    adapted from https://github.com/PIA-
+    """Adapted from https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
     """
 
@@ -142,8 +141,7 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 # Pan & Tompkins (1985)
 # =============================================================================
 def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
-    """
-    adapted from https://github.com/PIA-
+    """Adapted from https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
     """
 
@@ -180,8 +178,7 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
 # Hamilton (2002)
 # =============================================================================
 def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
-    """
-    adapted from https://github.com/PIA-
+    """Adapted from https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
     """
 
