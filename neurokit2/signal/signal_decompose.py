@@ -93,7 +93,7 @@ def _signal_decompose_emd(signal, ensemble=False):
         emd = PyEMD.EEMD(extrema_detection="parabol")
         imfs = emd.eemd(signal)
 
-#    _, residue = emd.get_imfs_and_residue()
+    #    _, residue = emd.get_imfs_and_residue()
     return imfs
 
 
