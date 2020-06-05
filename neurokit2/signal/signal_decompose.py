@@ -4,8 +4,7 @@ from .signal_zerocrossings import signal_zerocrossings
 
 
 def signal_decompose(signal):
-    """
-    Decompose a signal.
+    """Decompose a signal.
 
     Parameters
     -----------
@@ -60,8 +59,7 @@ def signal_decompose(signal):
 # Methods
 # =============================================================================
 def _signal_decompose_emd(signal, ensemble=False):
-    """
-    References
+    """References
     ------------
     - http://perso.ens-lyon.fr/patrick.flandrin/CSDATrendfiltering.pdf
     - https://github.com/laszukdawid/PyEMD
@@ -95,7 +93,7 @@ def _signal_decompose_emd(signal, ensemble=False):
         emd = PyEMD.EEMD(extrema_detection="parabol")
         imfs = emd.eemd(signal)
 
-    _, residue = emd.get_imfs_and_residue()
+#    _, residue = emd.get_imfs_and_residue()
     return imfs
 
 

@@ -21,9 +21,9 @@ def entropy_multiscale(
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
-    scale : str, int or list
+    scale : str or int or list
         A list of scale factors used for coarse graining the time series. If 'default', will use
         ``range(len(signal) / (dimension + 10))`` (see discussion
         `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_).
@@ -44,7 +44,8 @@ def entropy_multiscale(
         Returns the fuzzy (composite) multiscale entropy (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).
     show : bool
         Show the entropy values for each scale factor.
-
+    **kwargs
+        Optional arguments.
 
 
     Returns

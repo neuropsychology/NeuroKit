@@ -15,7 +15,10 @@ def fractal_mandelbrot(
     -----------
     size : int
         The size in pixels (corresponding to the width of the figure).
-    real_range, imaginary_range : tuple
+    real_range : tuple
+        The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and
+        the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the figure.
+    imaginary_range : tuple
         The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and
         the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the figure.
     iterations : int
@@ -26,6 +29,11 @@ def fractal_mandelbrot(
         Whether to return a buddhabrot.
     show : bool
         Visualize the fratal.
+
+    Returns
+    -------
+    fig
+        Plot of fractal.
 
     Examples
     ---------
@@ -94,7 +102,7 @@ def _mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), iteratio
     optim = _mandelbrot_optimize(c)
 
     z = np.copy(c)
-    for i in range(1, iterations + 1):
+    for i in range(1, iterations + 1):  # pylint: disable=W0612
         # Continue only where smaller than threshold
         mask = (z * z.conjugate()).real < threshold
         mask = np.logical_and(mask, optim)
@@ -174,7 +182,7 @@ def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(
     return img
 
 
-def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4):
+def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2)):
 
     # Allocate an array to store our non-mset points as we find them.
     sets = np.zeros(size, dtype=np.complex128)
@@ -186,7 +194,7 @@ def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imagin
 
     z = np.copy(c)
 
-    for i in range(iterations):
+    for i in range(iterations):  # pylint: disable=W0612
         # apply mandelbrot dynamic
         z = z ** 2 + c
 

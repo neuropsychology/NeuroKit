@@ -13,11 +13,22 @@ def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurs
     ----------
     duration : int
         Desired length of duration (s).
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
+    duration : int
+        The desired length in samples.
     method : str
         The method. can be 'hurst' for a (fractional) Ornstein–Uhlenbeck process or 'mackeyglass' to
         use the Mackey-Glass equation.
+    hurst_exponent : float
+        Defaults to 0.5.
+    **kwargs : optional
+        Other arguments.
+
+    Returns
+    -------
+    array
+        Simulated complexity time series.
 
     Examples
     ------------
@@ -58,26 +69,29 @@ def _complexity_simulate_mackeyglass(
     ----------
     duration : int
         Duration of the time series to be generated.
-    sampling_rate : float, optional (default = 0.46)
+    sampling_rate : float
         Sampling step of the time series.  It is useful to pick something between tau/100 and tau/10,
         with tau/sampling_rate being a factor of n.  This will make sure that there are only whole
-        number indices.
-    x0 : array, optional (default = random)
-        Initial condition for the discrete map.  Should be of length n.
-    a : float, optional (default = 0.2)
-        Constant a in the Mackey-Glass equation.
-    b : float, optional (default = 0.1)
-        Constant b in the Mackey-Glass equation.
-    c : float, optional (default = 10.0)
-        Constant c in the Mackey-Glass equation.
-    tau : float, optional (default = 23.0)
-        Time delay in the Mackey-Glass equation.
-    n : int, optional (default = 1000)
+        number indices. Defaults to 1000.
+    x0 : array
+        Initial condition for the discrete map. Should be of length n. Defaults to None.
+    a : float
+        Constant a in the Mackey-Glass equation. Defaults to 0.2.
+    b : float
+        Constant b in the Mackey-Glass equation. Defaults to 0.1.
+    c : float
+        Constant c in the Mackey-Glass equation. Defaults to 10.0
+    n : int
         The number of discrete steps into which the interval between t and t + tau should be divided.
-        This results in a time step of tau/n and an n + 1 dimensional map.
-    discard : int, optional (default = 250)
+        This results in a time step of tau/n and an n + 1 dimensional map. Defaults to 1000.
+    discard : int
         Number of n-steps to discard in order to eliminate transients. A total of n*discard steps will
-        be discarded.
+        be discarded. Defaults to 250.
+
+    Returns
+    -------
+    array
+        Simulated complexity time series.
 
     """
     length = duration * sampling_rate
@@ -104,10 +118,21 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, si
 
     Parameters
     ----------
+    duration : int
+        The desired length in samples.
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second). Defaults to 1000Hz.
     theta : float
-        Drift.
+        Drift. Defaults to 0.3.
     sigma : float
-        Diffusion.
+        Diffusion. Defaults to 0.1.
+    hurst_exponent : float
+        Defaults to 0.7.
+
+    Returns
+    -------
+    array
+        Simulated complexity time series.
 
     """
     # Time array
@@ -140,6 +165,11 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
         Length of fractional Gaussian noise to generate.
     hurst_exponent : float
         Hurst exponent H in (0,1).
+
+    Returns
+    -------
+    array
+        Simulated complexity time series.
 
     """
     # Sanity checks

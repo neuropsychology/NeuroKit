@@ -19,7 +19,7 @@ def fractal_dfa(
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     windows : list
         A list containing the lengths of the windows (number of data points in each subseries). Also
@@ -47,6 +47,8 @@ def fractal_dfa(
         q=[-5, -3, -1, 0, 1, 3, 5]``.
     show : bool
         Visualise the trend between the window size and the fluctuations.
+    **kwargs
+        Other arguments.
 
     Returns
     ----------
@@ -80,7 +82,7 @@ def fractal_dfa(
     """
     # Sanity checks
     n = len(signal)
-    windows = _fractal_dfa_findwindows(signal, n, windows)
+    windows = _fractal_dfa_findwindows(n, windows)
 
     # Preprocessing
     if integrate is True:
@@ -125,7 +127,7 @@ def fractal_dfa(
 # =============================================================================
 
 
-def _fractal_dfa_findwindows(signal, n, windows="default"):
+def _fractal_dfa_findwindows(n, windows="default"):
     # Convert to array
     if isinstance(windows, list):
         windows = np.asarray(windows)
@@ -173,7 +175,7 @@ def _fractal_dfa_trends(segments, window, order=1):
     return trends
 
 
-def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2, rms=True):
+def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
 
     detrended = segments - trends
 

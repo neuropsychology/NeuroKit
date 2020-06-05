@@ -189,8 +189,8 @@ def _signal_findpeaks_scipy(signal):
 
     # Get info
     distances = _signal_findpeaks_distances(peaks)
-    heights, left_base, right_base = scipy.signal.peak_prominences(signal, peaks)
-    widths, width_heights, left_ips, right_ips = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
+    heights, __, __ = scipy.signal.peak_prominences(signal, peaks)
+    widths, __, __, __ = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
 
     # Prepare output
     info = {"Peaks": peaks, "Distance": distances, "Height": heights, "Width": widths}

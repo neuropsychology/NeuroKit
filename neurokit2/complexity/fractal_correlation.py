@@ -15,7 +15,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
@@ -25,10 +25,12 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : str, int or list
+    r : str or int or list
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         ranging from 2.5% to 50% of the distance range. Methods implemented in other packages can be
         used via setting ``r='nolds'`` or ``r='Corr_Dim'``.
+    show : bool
+        Plot of correlation dimension if True. Defaults to False.
 
     Returns
     ----------
@@ -94,8 +96,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
 # Methods
 # =============================================================================
 def _fractal_correlation(signal, r_vals, dist):
-    """
-    References
+    """References
     -----------
     - `nolds <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>`_
     """
@@ -114,8 +115,7 @@ def _fractal_correlation(signal, r_vals, dist):
 
 
 def _fractal_correlation_Corr_Dim(embedded, r_vals, dist):
-    """
-    References
+    """References
     -----------
     - `Corr_Dim <https://github.com/jcvasquezc/Corr_Dim>`_
     """
@@ -140,7 +140,7 @@ def _fractal_correlation_Corr_Dim(embedded, r_vals, dist):
 # =============================================================================
 # Utilities
 # =============================================================================
-def _fractal_correlation_get_r(r, signal, dist, n=None):
+def _fractal_correlation_get_r(r, signal, dist):
     if isinstance(r, str):
         if r == "nolds":
             sd = np.std(signal, ddof=1)
