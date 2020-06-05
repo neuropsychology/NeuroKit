@@ -4,6 +4,7 @@ on: pull_request
 
 jobs:
   build:
+    name: ''
     runs-on: ubuntu-latest
 
     steps:
