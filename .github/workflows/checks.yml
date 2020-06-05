@@ -1,4 +1,4 @@
-name: Release Checks
+name: 🌼 Release checks
 
 # on: [push, pull_request]
 on: pull_request
