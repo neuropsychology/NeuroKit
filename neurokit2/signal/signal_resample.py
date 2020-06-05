@@ -16,12 +16,14 @@ def signal_resample(
 
     Parameters
     ----------
-    signal :  list, array or Series
+    signal :  list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     desired_length : int
         The desired length of the signal.
-    sampling_rate, desired_sampling_rate : int
-        The original and desired (output) sampling frequency (in Hz, i.e., samples/second).
+    sampling_rate : int
+        The original sampling frequency (in Hz, i.e., samples/second).
+    desired_sampling_rate : int
+        The desired (output) sampling frequency (in Hz, i.e., samples/second).
     method : str
         Can be 'interpolation' (see `scipy.ndimage.zoom()`), 'numpy' for numpy's interpolation
         (see `numpy.interp()`),'pandas' for Pandas' time series resampling, 'poly' (see `scipy.signal.resample_poly()`)

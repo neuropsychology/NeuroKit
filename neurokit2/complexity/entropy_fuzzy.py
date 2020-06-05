@@ -3,7 +3,7 @@
 from .utils import _get_r, _phi, _phi_divide
 
 
-def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, composite=False, **kwargs):
+def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     """Fuzzy entropy (FuzzyEn)
 
     Python implementations of the fuzzy entropy (FuzzyEn) of a signal.
@@ -12,7 +12,7 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, composite=Fals
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
@@ -25,9 +25,8 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", n=1, composite=Fals
     r : float
         Tolerance (i.e., filtering level - max absolute difference between segments). If 'default',
         will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
-    n : float
-        Step width of fuzzy exponential function. Larger `n` makes the function more rectangular.
-        Usually in the range 1-5 (default is 1).
+    **kwargs
+        Other arguments.
 
     Returns
     ----------

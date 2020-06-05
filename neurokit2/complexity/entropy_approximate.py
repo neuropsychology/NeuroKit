@@ -20,7 +20,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
@@ -36,6 +36,8 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
         (for dimension = 2).
     corrected : bool
         If true, will compute corrected ApEn (cApEn), see Porta (2007).
+    **kwargs
+        Other arguments.
 
     See Also
     --------
@@ -80,10 +82,10 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
     if corrected is True:
 
-        embedded1, count1 = _get_embedded(
+        __, count1 = _get_embedded(
             signal, delay=delay, dimension=dimension, r=r, distance="chebyshev", approximate=True, **kwargs
         )
-        embedded2, count2 = _get_embedded(
+        __, count2 = _get_embedded(
             signal, delay=delay, dimension=dimension + 1, r=r, distance="chebyshev", approximate=True, **kwargs
         )
 
