@@ -20,7 +20,6 @@ def complexity_optimize(
     dimension_method="afnn",
     r_method="maxApEn",
     show=False,
-    attractor_dimension=3,
 ):
     """Find optimal complexity parameters.
 
@@ -28,14 +27,20 @@ def complexity_optimize(
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
-    delay_max, delay_method : int, str
+    delay_max : int
         See :func:`~neurokit2.complexity_delay`.
-    dimension_max, dimension_method : int, str
+    delay_method : str
+        See :func:`~neurokit2.complexity_delay`.
+    dimension_max : int
+        See :func:`~neurokit2.complexity_dimension`.
+    dimension_method : str
         See :func:`~neurokit2.complexity_dimension`.
     r_method : str
         See :func:`~neurokit2.complexity_r`.
+    show : bool
+        Defaults to False.
 
     Returns
     -------
@@ -95,7 +100,7 @@ def complexity_optimize(
     if r_method in ["traditional"]:
         out["r"] = 0.2 * np.std(signal, ddof=1)
     if r_method in ["maxapen", "optimize"]:
-        r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"], method=r_method)
+        r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"])
 
     if show is True:
         if r_method in ["traditional"]:
@@ -258,7 +263,7 @@ def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10
         raise ValueError("NeuroKit error: complexity_dimension(): 'method' not recognized.")
 
 
-def _complexity_r(signal, delay=None, dimension=None, method="maxapen"):
+def _complexity_r(signal, delay=None, dimension=None):
 
     modulator = np.arange(0.02, 0.8, 0.02)
     r_range = modulator * np.std(signal, ddof=1)
@@ -280,7 +285,7 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay_max : int
         The maximum time delay (Tau) to test.
@@ -328,8 +333,8 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
             signal_entropy = _complexity_optimize_get_differential(signal_embedded, k=1)
 
             # calculate average of surrogates entropy
-            for i in range(surrogate_iter):
-                surrogate, iterations, rmsd = _complexity_optimize_iaaft(signal)
+            for i in range(surrogate_iter):  # pylint: disable=W0631
+                surrogate, __, __ = _complexity_optimize_iaaft(signal)
                 surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _complexity_optimize_get_differential(surrogate_embedded, k=1)
                 surrogate_list.append(surrogate_entropy)
@@ -361,7 +366,7 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     max_iter : int
         Maximum iterations to be performed while checking for convergence. Convergence can be achieved
@@ -416,7 +421,7 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
 
     # Normalize error w.r.t. mean of the "true" power spectrum.
     rmsd = current_error / np.mean(amplitudes ** 2)
-    return surrogate, i, rmsd
+    return surrogate, i, rmsd  # pylint: disable=W0631
 
 
 def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
@@ -425,15 +430,15 @@ def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
 
     Parameters
     ----------
-    x: (n, d) ndarray
-        n samples from a d-dimensional multivariate distribution
-    k: int (default 1)
-        kth nearest neighbour to use in density estimate; imposes smoothness on the underlying probability
-        distribution
-    norm: 'euclidean' or 'max'
-        p-norm used when computing k-nearest neighbour distances
-    min_dist: float (default 0.)
-        minimum distance between data points; smaller distances will be capped using this value
+    x: ndarray
+        n samples from a d-dimensional multivariate distribution (n, d).
+    k: int
+        kth nearest neighbour to use in density estimate; imposes smoothness on the underlying
+        probability distribution. Defaults to 1
+    norm: str
+        p-norm used when computing k-nearest neighbour distances. Can be 'euclidean' or 'max'.
+    min_dist: float
+        minimum distance between data points; smaller distances will be capped using this value. Defaults to 0.
 
     Returns
     --------
@@ -458,7 +463,7 @@ def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
     else:
         raise ValueError("NeuroKit error: differential_entropy(): 'method' not recognized.")
 
-    kdtree = scipy.spatial.cKDTree(x)
+    kdtree = scipy.spatial.cKDTree(x)  # pylint: disable=E1102
 
     # Query all points -- k+1 as query point also in initial set
     distances, _ = kdtree.query(x, k + 1, eps=0, p=p)
