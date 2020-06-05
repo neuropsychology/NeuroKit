@@ -77,7 +77,7 @@ def signal_distort(
     >>> noise = pd.DataFrame({"Freq100": nk.signal_distort(signal, noise_frequency=200),
     ...                       "Freq50": nk.signal_distort(signal, noise_frequency=50),
     ...                       "Freq10": nk.signal_distort(signal, noise_frequency=10),
-    ...                       "Freq5": nk.signal_distort(signal, noise_frequency=5)
+    ...                       "Freq5": nk.signal_distort(signal, noise_frequency=5),
     ...                       "Raw": signal}).plot()
     >>> noise #doctest: +SKIP
     >>>
