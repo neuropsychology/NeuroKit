@@ -416,8 +416,7 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
         # Check convergence
         if abs(current_error - previous_error) <= atol + rtol * abs(previous_error):
             break
-        else:
-            previous_error = current_error
+        previous_error = current_error
 
     # Normalize error w.r.t. mean of the "true" power spectrum.
     rmsd = current_error / np.mean(amplitudes ** 2)

@@ -125,15 +125,15 @@ def _entropy_multiscale(
 
         # Regular MSE
         if refined is False and composite is False:
-            mse[i] = _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy)
+            mse[i] = _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs)
 
         # Composite MSE
         elif refined is False and composite is True:
-            mse[i] = _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy)
+            mse[i] = _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs)
 
         # Refined Composite MSE
         else:
-            mse[i] = _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy)
+            mse[i] = _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs)
 
     if show is True:
         plt.plot(scale_factors, mse)

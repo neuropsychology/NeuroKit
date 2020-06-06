@@ -137,7 +137,7 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
         index = np.where(i == peak_x_values)[0][0]
         peak_index.append(index)
 
-    halfr_index = [x for x in range(0, len(half_recovery))]
+    halfr_index = list(range(0, len(half_recovery)))
     halfr_end = scat_halfr.get_offsets()
     halfr_start = [(peak_top[i, 0], halfr_end[x, 1]) for i, x in zip(peak_index, halfr_index)]
     halfr_coord = [(halfr_start[i], halfr_end[i]) for i in halfr_index]

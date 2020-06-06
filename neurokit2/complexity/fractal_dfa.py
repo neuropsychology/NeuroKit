@@ -6,8 +6,7 @@ from ..misc import expspace
 
 
 def fractal_dfa(
-    signal, windows="default", overlap=True, integrate=True, order=1, multifractal=False, q=2, show=False, **kwargs
-):
+    signal, windows="default", overlap=True, integrate=True, order=1, multifractal=False, q=2, show=False):
     """(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)
 
     Python implementation of Detrended Fluctuation Analysis (DFA) or Multifractal DFA of a signal.
@@ -47,8 +46,6 @@ def fractal_dfa(
         q=[-5, -3, -1, 0, 1, 3, 5]``.
     show : bool
         Visualise the trend between the window size and the fluctuations.
-    **kwargs
-        Other arguments.
 
     Returns
     ----------
