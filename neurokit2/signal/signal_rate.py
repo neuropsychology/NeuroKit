@@ -47,5 +47,6 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_or
     """
     period = signal_period(peaks, sampling_rate, desired_length, interpolation_order)
     rate = 60 / period
+    # TODO: extending beyond range, interpolation might cause period = 0
 
     return rate

@@ -41,8 +41,8 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
     >>> info = nk.signal_findpeaks(signal)
     >>>
-    >>> rate = nk.signal_rate(peaks=info["Peaks"])
-    >>> nk.signal_plot(rate)
+    >>> period = nk.signal_period(peaks=info["Peaks"])
+    >>> nk.signal_plot(period)
 
     """
     peaks, desired_length = _signal_formatpeaks_sanitize(peaks, desired_length)
@@ -64,5 +64,6 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     # Interpolate all statistics to desired length.
     if desired_length != np.size(peaks):
         period = signal_interpolate(peaks, period, desired_length=desired_length, method=interpolation_order)
+    # TODO: extending beyond range, interpolation might cause period = 0
 
     return period
