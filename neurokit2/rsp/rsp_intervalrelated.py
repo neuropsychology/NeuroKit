@@ -109,7 +109,6 @@ def _rsp_intervalrelated_formatinput(data, output={}):
             "Please make sure your DataFrame"
             "contains an `RSP_Rate` column."
         )
-        return output
     if len([i for i in colnames if "RSP_Amplitude" in i]) == 0:
         raise ValueError(
             "NeuroKit error: rsp_intervalrelated(): Wrong"
@@ -117,7 +116,6 @@ def _rsp_intervalrelated_formatinput(data, output={}):
             "Please make sure your DataFrame"
             "contains an `RSP_Amplitude` column."
         )
-        return output
 
     rate = data["RSP_Rate"].values
     amplitude = data["RSP_Amplitude"].values

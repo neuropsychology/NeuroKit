@@ -115,14 +115,13 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
     scat_endonset = ax.scatter(x_axis[end_onset.index], end_onset.values, alpha=0)
 
     # Rise time.
-    position = [i for i in range(0, len(onsets))]
     risetime_start = scat_onset.get_offsets()
     risetime_end = scat_endonset.get_offsets()
-    risetime_coord = [(risetime_start[i], risetime_end[i]) for i in position]
+    risetime_coord = [(risetime_start[i], risetime_end[i]) for i in range(0, len(onsets))]
 
     # SCR Amplitude.
     peak_top = scat_peak.get_offsets()
-    amplitude_coord = [(peak_top[i], risetime_end[i]) for i in position]
+    amplitude_coord = [(peak_top[i], risetime_end[i]) for i in range(0, len(onsets))]
 
     # Half recovery.
     peak_x_values = peak_top.data[:, 0]

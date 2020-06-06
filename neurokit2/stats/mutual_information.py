@@ -158,11 +158,11 @@ def _entropy(X, k=1):
     r = _nearest_distances(X, k)  # squared distances
     n, d = X.shape
     volume_unit_ball = (np.pi ** (0.5 * d)) / scipy.special.gamma(0.5 * d + 1)
-    """
-    - F. Perez-Cruz, (2008). Estimation of Information Theoretic Measures for Continuous Random Variables.
-    Advances in Neural Information Processing Systems 21 (NIPS). Vancouver (Canada), December.
-    return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
-    """  # pylint: disable=W0105
+
+    # Perez-Cruz et al. (2008). Estimation of Information Theoretic Measures for
+    # Continuous Random Variables, suggets returning:
+    # return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
+
     return (
         d * np.mean(np.log(r + np.finfo(X.dtype).eps))
         + np.log(volume_unit_ball)

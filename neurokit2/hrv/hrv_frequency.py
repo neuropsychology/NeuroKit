@@ -176,4 +176,4 @@ def _hrv_frequency_show(
 
     psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, max_frequency=0.5)
 
-    _signal_power_instant_plot(psd, out_bands, frequency_band, sampling_rate=sampling_rate, ax=ax)
+    _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)

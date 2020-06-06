@@ -88,9 +88,6 @@ def emg_plot(emg_signals, sampling_rate=None):
     if sampling_rate is not None:
         onsets = onsets / sampling_rate
         offsets = offsets / sampling_rate
-    else:
-        onsets = onsets
-        offsets = offsets
 
     for i, j in zip(list(onsets), list(offsets)):
         ax1.axvline(i, color="#4a4a4a", linestyle="--", label=None, zorder=2)

@@ -37,14 +37,14 @@ def data(dataset="bio_eventrelated_100hz"):
 
     # Specific case
     if dataset.lower() in ["eeg", "eeg.txt"]:
-        data = pd.read_csv(path + "eeg.txt")
-        return data.values[:, 0]
+        df = pd.read_csv(path + "eeg.txt")
+        return df.values[:, 0]
 
     # General case
     file, ext = os.path.splitext(dataset)
     if ext == "":
-        data = pd.read_csv(path + dataset + ".csv")
+        df = pd.read_csv(path + dataset + ".csv")
     else:
-        data = pd.read_csv(path + dataset)
+        df = pd.read_csv(path + dataset)
 
-    return data
+    return df

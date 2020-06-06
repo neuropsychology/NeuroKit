@@ -228,8 +228,7 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
 
 
 def _random_x_offset(x, x_diff, offset_weight):
-    """
-    From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is
+    """From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is
     the wave onset preceding xi. offset_weight must be between 0 and 1.
     """
     # Enforce minimum inter-beat-interval of 300 milliseconds.

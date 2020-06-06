@@ -95,7 +95,6 @@ def _emg_intervalrelated_formatinput(interval, output={}):
             "Please make sure your DataFrame"
             "contains an `EMG_Onsets` column."
         )
-        return output
 
     activity_cols = ["EMG_Amplitude", "EMG_Activity"]
     if len([i in colnames for i in activity_cols]) != 2:
@@ -105,7 +104,6 @@ def _emg_intervalrelated_formatinput(interval, output={}):
             "Please make sure your DataFrame contains both"
             "`EMG_Amplitude` and `EMG_Activity` columns."
         )
-        return output
 
     bursts = interval["EMG_Onsets"].values
     data_bursts = interval.loc[interval["EMG_Activity"] == 1]

@@ -110,44 +110,78 @@ def signal_fixpeaks(
     # Format input
     peaks, _ = _signal_formatpeaks_sanitize(peaks)
 
+    # If method Kubios
     if method.lower() == "kubios":
 
-        # Get corrected peaks and normal-to-normal intervals.
-        artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate)
-        peaks_clean = _correct_artifacts(artifacts, peaks)
+        return _signal_fixpeaks_kubios(peaks,
+                                       sampling_rate=sampling_rate,
+                                       iterative=iterative,
+                                       show=show)
 
-        if iterative:
 
-            # Iteratively apply the artifact correction until the number of artifact
-            # reaches an equilibrium (i.e., the number of artifacts does not change
-            # anymore from one iteration to the next).
-            n_artifacts_previous = np.inf
+    # Else method is NeuroKit
+    return _signal_fixpeaks_neurokit(peaks,
+                                     sampling_rate=sampling_rate,
+                                     interval_min=interval_min,
+                                     interval_max=interval_max,
+                                     relative_interval_min=relative_interval_min,
+                                     relative_interval_max=relative_interval_max,
+                                     robust=robust)
+
+
+# =============================================================================
+# Methods
+# =============================================================================
+def _signal_fixpeaks_neurokit(
+    peaks,
+    sampling_rate=1000,
+    interval_min=None,
+    interval_max=None,
+    relative_interval_min=None,
+    relative_interval_max=None,
+    robust=False,
+):
+    """Neurokit method
+    """
+
+    peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
+    peaks_clean = _interpolate_big(peaks, sampling_rate, interval_max, relative_interval_max, robust)
+
+    return peaks_clean
+
+
+def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False):
+    """kubios method
+    """
+
+    # Get corrected peaks and normal-to-normal intervals.
+    artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate)
+    peaks_clean = _correct_artifacts(artifacts, peaks)
+
+    if iterative:
+
+        # Iteratively apply the artifact correction until the number of artifact
+        # reaches an equilibrium (i.e., the number of artifacts does not change
+        # anymore from one iteration to the next).
+        n_artifacts_previous = np.inf
+        n_artifacts_current = sum([len(i) for i in artifacts.values()])
+
+        previous_diff = 0
+
+        while n_artifacts_current - n_artifacts_previous != previous_diff:
+
+            previous_diff = n_artifacts_previous - n_artifacts_current
+
+            artifacts, subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate)
+            peaks_clean = _correct_artifacts(artifacts, peaks_clean)
+
+            n_artifacts_previous = n_artifacts_current
             n_artifacts_current = sum([len(i) for i in artifacts.values()])
 
-            previous_diff = 0
+    if show:
+        _plot_artifacts_lipponen2019(artifacts, subspaces)
 
-            while n_artifacts_current - n_artifacts_previous != previous_diff:
-
-                previous_diff = n_artifacts_previous - n_artifacts_current
-
-                artifacts, subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate)
-                peaks_clean = _correct_artifacts(artifacts, peaks_clean)
-
-                n_artifacts_previous = n_artifacts_current
-                n_artifacts_current = sum([len(i) for i in artifacts.values()])
-
-        if show:
-            _plot_artifacts_lipponen2019(artifacts, subspaces)
-
-        return artifacts, peaks_clean
-
-    elif method.lower() == "neurokit":
-
-        peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
-
-        peaks_clean = _interpolate_big(peaks, sampling_rate, interval_max, relative_interval_max, robust)
-
-        return peaks_clean
+    return artifacts, peaks_clean
 
 
 # =============================================================================
