@@ -150,7 +150,7 @@ And now, all that is left is for the maintainers of the package to review your w
 Step 5: Let's do it
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Let's do it for real! If you have a particular feature in mind that you would want to add, we would recommend first opening an `issue <https://github.com/neuropsychology/NeuroKit/issues>`_ to let us know, so we can eventually guide you and give you some advice. And if you don't know where to start or what to do, then read our `ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_. Good luck 💪
+Let's do it for real! If you have a particular feature in mind that you would want to add, we would recommend first opening an `issue <https://github.com/neuropsychology/NeuroKit/issues>`_ to let us know, so we can eventually guide you and give you some advice. And if you don't know where to start or what to do, then read our `ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/contributing/first_contribution.html>`_. Good luck 💪
 
 
 
@@ -168,7 +168,7 @@ Useful reads
 
 - `Understanding the GitHub flow <https://guides.github.com/introduction/flow/>`_
 - `How to create a Pull Request <https://www.earthdatascience.org/courses/intro-to-earth-data-science/git-github/github-collaboration/how-to-submit-pull-requests-on-github/>`_
-- `Why and How Contribute <https://github.com/jonschlinkert/idiomatic-contributing/>`_
+- `Why and How to Contribute <https://github.com/jonschlinkert/idiomatic-contributing/>`_
 
 
 What's next?

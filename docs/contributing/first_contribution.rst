@@ -5,7 +5,7 @@ Ideas for first contributions
    Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see our guides <https://neurokit2.readthedocs.io/en/latest/contributing/index.html>`_).
    
    
-Now that you're familiar with `how to use GitHub <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_, you're ready to get your hands dirty and contribute to open-science? But you're not sure **where to start or what to do**? We got you covered!
+Now that you're familiar with `how to use GitHub <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html#how-to-use-github-to-contribute>`_, you're ready to get your hands dirty and contribute to open-science? But you're not sure **where to start or what to do**? We got you covered!
 
 In this guide, we will discuss the two best types of contributions for beginners, as they are easy to make, super useful and safe (you cannot break the package 😏).
 
@@ -17,7 +17,7 @@ Improving documentation
 
 One of the easiest thing is to improve, complete or fix the documentation for functions. For instance the `ecg_simulate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_simulate>`_ function has a documentation with a general description, a description of the arguments, some example etc. As you've surely noticed, sometimes more details would be needed, some typos are present, or some references could be added.
 
-The documentation for functions is located alongside the function *definition* (the code of the function). If you've read `understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html/>`_, you know that the code of the `ecg_simulate()` function is `here <https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_simulate.py>`_. And as you can see, just below the function name, there is a big *string* (starting and ending with `"""`) containing the documentation. 
+The documentation for functions is located alongside the function *definition* (the code of the function). If you've read `understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/contributing/understanding.html>`_, you know that the code of the `ecg_simulate()` function is `here <https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_simulate.py>`_. And as you can see, just below the function name, there is a big *string* (starting and ending with `"""`) containing the documentation. 
 
 This thing is called the *docstring*. 
 
@@ -90,7 +90,7 @@ Adding examples and tutorials
 How to write
 ^^^^^^^^^^^^^^
 
-The documentation that is on the `website <https://neurokit2.readthedocs.io/en/latest/>`_ is automatically built by the hosting website, readthedocs, from `reStructured Text (RST) files](https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html) (a syntax similar to markdown) or from [jupyter notebooks (.ipynb)](https://jupyter.org/). Notebooks are preferred if your example contains code and images.
+The documentation that is on the `website <https://neurokit2.readthedocs.io/en/latest/>`_ is automatically built by the hosting website, readthedocs, from `reStructured Text (RST) files <https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html>`_ (a syntax similar to markdown) or from `jupyter notebooks (.ipynb) <https://jupyter.org/>`_ Notebooks are preferred if your example contains code and images.
 
 
 Where to add the files
