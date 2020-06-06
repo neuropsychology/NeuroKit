@@ -3,21 +3,21 @@ import numpy as np
 
 
 def events_to_mne(events, event_conditions=None):
-    """
-    Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG..
+    """Create `MNE <https://mne.tools/stable/index.html>`_ compatible events for integration with M/EEG.
 
     Parameters
     ----------
-    events : list, ndarray or dict
+    events : list or ndarray or dict
         Events onset location. Can also be a dict obtained through 'events_find()'.
     event_conditions : list
-        An optional list containing, for each event, for example the trial category, group or experimental conditions.
-
+        An optional list containing, for each event, for example the trial category, group or
+        experimental conditions. Defaults to None.
 
     Returns
-    ----------
-    (events, event_id) : tuple
-        MNE-formatted events, that can be added via 'raw.add_events(events), and a dictionary with event's names.
+    -------
+    tuple
+        MNE-formatted events and the event id, that can be added via 'raw.add_events(events),
+        and a dictionary with event's names.
 
     See Also
     --------
@@ -71,4 +71,5 @@ def events_to_mne(events, event_conditions=None):
         event_id[i[1]] = event_index[i[0]]
 
     events = np.array([events, [0] * len(events), event_conditions]).T
+
     return events, event_id

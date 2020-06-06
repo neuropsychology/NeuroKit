@@ -8,8 +8,7 @@ from .ecg_peaks import ecg_peaks
 
 
 def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
-    """
-    Segment an ECG signal into single heartbeats.
+    """Segment an ECG signal into single heartbeats.
 
     Parameters
     ----------

@@ -5,7 +5,6 @@ import scipy.signal
 
 from ..misc import as_vector, find_closest
 from ..stats import standardize
-from .signal_zerocrossings import signal_zerocrossings
 
 
 def signal_findpeaks(
@@ -18,32 +17,48 @@ def signal_findpeaks(
     relative_median=False,
     relative_max=False,
 ):
-    """
-    Find peaks in a signal.
+    """Find peaks in a signal.
 
-    Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence), width and distance with other peaks.
+    Locate peaks (local maxima) in a signal and their related characteristics, such as height (prominence),
+    width and distance with other peaks.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
-    height_min, distance_max : float
-        The minimum or maximum height (i.e., amplitude in terms of absolute values). For example, `height_min=20` will remove all peaks which height is smaller or equal to 20 (in the provided signal's values).
-    relative_height_min, relative_height_max : float
-        The minimum or maximum height (i.e., amplitude) relative to the sample (see below).
-    relative_mean, relative_median, relative_max : bool
-        If a relative threshold is specified, how should it be computed (i.e., relative to what?). `relative_mean=True` will use Z-scores. For example, `relative_height_min=-2.96` will remove all peaks which height lies below 2.96 standard deviations from the mean of the heights. Relative to median uses a more robust form of standardization (see `standardize`), and relative to max will consider the maximum height as the reference.
+    height_min : float
+        The minimum height (i.e., amplitude in terms of absolute values). For example,`height_min=20`
+        will remove all peaks which height is smaller or equal to 20 (in the provided signal's values).
+    height_max : float
+        The maximum height (i.e., amplitude in terms of absolute values).
+    relative_height_min : float
+        The minimum height (i.e., amplitude) relative to the sample (see below). For example,
+        `relative_height_min=-2.96` will remove all peaks which height lies below 2.96 standard deviations
+        from the mean of the heights.
+    relative_height_max : float
+        The maximum height (i.e., amplitude) relative to the sample (see below).
+    relative_mean : bool
+        If a relative threshold is specified, how should it be computed (i.e., relative to what?).
+        `relative_mean=True` will use Z-scores.
+    relative_median : bool
+        If a relative threshold is specified, how should it be computed (i.e., relative to what?).
+        Relative to median uses a more robust form of standardization (see `standardize`).
+    relative_max : bool
+        If a relative threshold is specified, how should it be computed (i.e., relative to what?).
+        Reelative to max will consider the maximum height as the reference.
 
     Returns
     ----------
     dict
         Returns a dict itself containing 5 arrays:
-            - 'Peaks' contains the peaks indices (as relative to the given signal). For instance, the value 3 means that the third data point of the signal is a peak.
-            - 'Distance' contains, for each peak, the closest distance with another peak. Note that these values will be recomputed after filtering to match the selected peaks.
-            - 'Height' contains the prominence of each peak. See `scipy.signal.peak_prominences()`.
-            - 'Width' contains the width of each peak. See `scipy.signal.peak_widths()`.
-            - 'Onset' contains the onset, start (or left trough), of each peak.
-            - 'Offset' contains the offset, end (or right trough), of each peak.
+        - 'Peaks' contains the peaks indices (as relative to the given signal). For instance, the
+        value 3 means that the third data point of the signal is a peak.
+        - 'Distance' contains, for each peak, the closest distance with another peak. Note that these
+        values will be recomputed after filtering to match the selected peaks.
+        - 'Height' contains the prominence of each peak. See `scipy.signal.peak_prominences()`.
+        - 'Width' contains the width of each peak. See `scipy.signal.peak_widths()`.
+        - 'Onset' contains the onset, start (or left trough), of each peak.
+        - 'Offset' contains the offset, end (or right trough), of each peak.
 
     Examples
     ---------
@@ -72,7 +87,8 @@ def signal_findpeaks(
 
     See Also
     --------
-    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks, ecg_findpeaks, rsp_findpeaks, signal_fixpeaks
+    scipy.signal.find_peaks, scipy.signal.peak_widths, peak_prominences.signal.peak_widths, eda_findpeaks,
+    ecg_findpeaks, rsp_findpeaks, signal_fixpeaks
 
     """
     info = _signal_findpeaks_scipy(signal)
@@ -182,8 +198,8 @@ def _signal_findpeaks_scipy(signal):
 
     # Get info
     distances = _signal_findpeaks_distances(peaks)
-    heights, left_base, right_base = scipy.signal.peak_prominences(signal, peaks)
-    widths, width_heights, left_ips, right_ips = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
+    heights, __, __ = scipy.signal.peak_prominences(signal, peaks)
+    widths, __, __, __ = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
 
     # Prepare output
     info = {"Peaks": peaks, "Distance": distances, "Height": heights, "Width": widths}

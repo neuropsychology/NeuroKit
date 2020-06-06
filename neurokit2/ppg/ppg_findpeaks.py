@@ -4,33 +4,29 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.signal
 
-from ..signal import signal_formatpeaks, signal_smooth
+from ..signal import signal_smooth
 
 
 def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False):
-    """
-    Find systolic peaks in a photoplethysmogram (PPG) signal.
+    """Find systolic peaks in a photoplethysmogram (PPG) signal.
 
     Parameters
     ----------
-    ppg_cleaned : list, array or Series
+    ppg_cleaned : list or array or Series
         The cleaned PPG channel as returned by `ppg_clean()`.
     sampling_rate : int
-        The sampling frequency of the PPG (in Hz, i.e., samples/second). The
-        default is 1000.
+        The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.
     method : str
-        The processing pipeline to apply. Can be one of "elgendi". The default
-        is "elgendi".
+        The processing pipeline to apply. Can be one of "elgendi". The default is "elgendi".
     show : bool
-        If True, returns a plot of the thresholds used during peak detection.
-        Useful for debugging. The default is False.
+        If True, returns a plot of the thresholds used during peak detection. Useful for debugging.
+        The default is False.
 
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the
-        samples at which systolic peaks occur, accessible with the key
-        "PPG_Peaks".
+        A dictionary containing additional information, in this case the samples at which systolic
+        peaks occur, accessible with the key "PPG_Peaks".
 
     See Also
     --------
@@ -53,10 +49,9 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
 
     References
     ----------
-    - Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic
-    Peak Detection in Acceleration Photoplethysmograms Measured from Emergency
-    Responders in Tropical Conditions. PLoS ONE 8(10): e76585.
-    doi:10.1371/journal.pone.0076585.
+    - Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
+    Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions.
+    PLoS ONE 8(10): e76585. doi:10.1371/journal.pone.0076585.
 
     """
     method = method.lower()
@@ -74,8 +69,7 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
 def _ppg_findpeaks_elgendi(
     signal, sampling_rate=1000, peakwindow=0.111, beatwindow=0.667, beatoffset=0.02, mindelay=0.3, show=False
 ):
-    """
-    Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
+    """Implementation of Elgendi M, Norton I, Brearley M, Abbott D, Schuurmans D (2013) Systolic Peak Detection in
     Acceleration Photoplethysmograms Measured from Emergency Responders in Tropical Conditions. PLoS ONE 8(10): e76585.
     doi:10.1371/journal.pone.0076585.
 
@@ -84,7 +78,7 @@ def _ppg_findpeaks_elgendi(
 
     """
     if show:
-        fig, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
+        __, (ax0, ax1) = plt.subplots(nrows=2, ncols=1, sharex=True)
         ax0.plot(signal, label="filtered")
 
     # Ignore the samples with negative amplitudes and square the samples with

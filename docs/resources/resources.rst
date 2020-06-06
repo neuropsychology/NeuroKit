@@ -37,4 +37,5 @@ EDA
 EEG
 ----
 
+- `Electroencephalogram (EEG) Recording Protocol (Farrens et al., 2019) <https://protocolexchange.researchsquare.com/article/pex-779/v2>`_
 - `Compute the average bandpower of an EEG signal <https://raphaelvallat.com/bandpower.html>`_

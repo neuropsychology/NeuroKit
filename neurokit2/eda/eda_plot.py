@@ -8,13 +8,19 @@ from ..misc import find_closest
 
 
 def eda_plot(eda_signals, sampling_rate=None):
-    """
-    Visualize electrodermal activity (EDA) data.
+    """Visualize electrodermal activity (EDA) data.
 
     Parameters
     ----------
     eda_signals : DataFrame
         DataFrame obtained from `eda_process()`.
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second). Defaults to None.
+
+    Returns
+    -------
+    fig
+        Figure representing a plot of the processed EDA signals.
 
     Examples
     --------
@@ -109,14 +115,13 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
     scat_endonset = ax.scatter(x_axis[end_onset.index], end_onset.values, alpha=0)
 
     # Rise time.
-    position = [i for i in range(0, len(onsets))]
     risetime_start = scat_onset.get_offsets()
     risetime_end = scat_endonset.get_offsets()
-    risetime_coord = [(risetime_start[i], risetime_end[i]) for i in position]
+    risetime_coord = [(risetime_start[i], risetime_end[i]) for i in range(0, len(onsets))]
 
     # SCR Amplitude.
     peak_top = scat_peak.get_offsets()
-    amplitude_coord = [(peak_top[i], risetime_end[i]) for i in position]
+    amplitude_coord = [(peak_top[i], risetime_end[i]) for i in range(0, len(onsets))]
 
     # Half recovery.
     peak_x_values = peak_top.data[:, 0]
@@ -132,7 +137,7 @@ def _eda_plot_dashedsegments(eda_signals, ax, x_axis, onsets, peaks, half_recove
         index = np.where(i == peak_x_values)[0][0]
         peak_index.append(index)
 
-    halfr_index = [x for x in range(0, len(half_recovery))]
+    halfr_index = list(range(0, len(half_recovery)))
     halfr_end = scat_halfr.get_offsets()
     halfr_start = [(peak_top[i, 0], halfr_end[x, 1]) for i, x in zip(peak_index, halfr_index)]
     halfr_coord = [(halfr_start[i], halfr_end[i]) for i in halfr_index]

@@ -2,7 +2,6 @@
 import itertools
 
 import numpy as np
-import pandas as pd
 
 from ..signal import signal_binarize
 
@@ -21,34 +20,47 @@ def events_find(
     event_labels=None,
     event_conditions=None,
 ):
-    """
-    Find and select events in a continuous signal (e.g., from a photosensor).
+    """Find and select events in a continuous signal (e.g., from a photosensor).
 
     Parameters
     ----------
     event_channel : array or list
         The channel containing the events.
     threshold : str or float
-        The threshold value by which to select the events. If "auto", takes the value between the max and the min.
+        The threshold value by which to select the events. If "auto", takes the value between the max
+        and the min.
     threshold_keep : str
-        "above" or "below", define the events as above or under the threshold. For photosensors, a white screen corresponds usually to higher values. Therefore, if your events are signaled by a black colour, events values are the lower ones, and you should set the cut to "below".
-    start_at, end_at : int
-        Keep events which onset is after, or before a particular time point.
-    duration_min, duration_max : int
-        The minimum or maximum duration of an event to be considered as such (in time points).
+        "above" or "below", define the events as above or under the threshold. For photosensors, a
+        white screen corresponds usually to higher values. Therefore, if your events are signaled by
+        a black colour, events values are the lower ones, and you should set the cut to "below".
+    start_at : int
+        Keep events which onset is after a particular time point.
+    end_at : int
+        Keep events which onset is before a particular time point.
+    duration_min : int
+        The minimum duration of an event to be considered as such (in time points).
+    duration_max : int
+        The maximum duration of an event to be considered as such (in time points).
     inter_min : int
-        The minimum duration after an event for the subsequent event to be considered as such (in time points). Useful when spurious consecutive events are created due to very high sampling rate.
-    discard_first, discard_last : int
-        Discard first or last n events. Useful if the experiment stats or ends with some spurious events. If discard_first=0 and discard_last=0, no first event or last event is removed.
+        The minimum duration after an event for the subsequent event to be considered as such (in time
+        points). Useful when spurious consecutive events are created due to very high sampling rate.
+    discard_first : int
+        Discard first or last n events. Useful if the experiment starts with some spurious events.
+        If discard_first=0, no first event is removed.
+    discard_last : int
+        Discard first or last n events. Useful if the experiment ends with some spurious events.
+        If discard_last=0, no last event is removed.
     event_labels : list
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
-        An optional list containing, for each event, for example the trial category, group or experimental conditions.
+        An optional list containing, for each event, for example the trial category, group or
+        experimental conditions.
 
     Returns
     ----------
     dict
-        Dict containing 3 or 4 arrays, 'onset' for event onsets, 'duration' for event durations, 'label' for the event identifiers and the optional 'conditions' passed to `event_conditions`.
+        Dict containing 3 or 4 arrays, 'onset' for event onsets, 'duration' for event durations, 'label'
+        for the event identifiers and the optional 'conditions' passed to `event_conditions`.
 
     See Also
     --------
@@ -62,11 +74,13 @@ def events_find(
     >>>
     >>> signal = nk.signal_simulate(duration=4)
     >>> events = nk.events_find(signal)
-    >>> events #doctest: +SKIP
-    {'onset': array([   1, 1001, 2001, 3001]), 'duration': array([500, 500, 500, 500]), 'label': array(['1', '2', '3', '4'], dtype='<U11')}
+    >>> events #doctest: +ELLIPSIS
+    {'onset': array(...),
+     'duration': array(...),
+     'label': array(...)}
     >>>
-    >>> fig = nk.events_plot(events, signal)
-    >>> fig #doctest: +SKIP
+    >>> nk.events_plot(events, signal) #doctest: +ELLIPSIS
+    <Figure ...>
 
     """
     events = _events_find(event_channel, threshold=threshold, threshold_keep=threshold_keep)
@@ -74,7 +88,8 @@ def events_find(
     # Warning when no events detected
     if len(events["onset"]) == 0:
         print(
-            "NeuroKit warning: events_find(): No events found. Check your event_channel or adjust 'threhsold' or 'keep' arguments."
+            "NeuroKit warning: events_find(): No events found. Check your "
+            "event_channel or adjust 'threhsold' or 'keep' arguments."
         )
         return events
 
@@ -130,7 +145,8 @@ def _events_find_label(events, event_labels=None, event_conditions=None, functio
         raise ValueError(
             "NeuroKit error: "
             + function_name
-            + "(): oops, it seems like the `event_labels` that you provided are not unique (all different). Please provide "
+            + "(): oops, it seems like the `event_labels` that you provided "
+            + "are not unique (all different). Please provide "
             + str(n)
             + " distinct labels."
         )
@@ -165,9 +181,6 @@ def _events_find_label(events, event_labels=None, event_conditions=None, functio
 
 
 def _events_find(event_channel, threshold="auto", threshold_keep="above"):
-    """
-    Internal function.
-    """
     binary = signal_binarize(event_channel, threshold=threshold)
 
     if threshold_keep.lower() != "above":

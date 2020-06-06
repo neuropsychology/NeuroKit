@@ -6,30 +6,24 @@ from .signal_interpolate import signal_interpolate
 
 
 def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_order="cubic"):
-    """
-    Calculate signal period from a series of peaks.
+    """Calculate signal period from a series of peaks.
 
     Parameters
     ----------
     peaks : list, array, DataFrame, Series or dict
-        The samples at which the peaks occur. If an array is passed in, it is
-        assumed that it was obtained with `signal_findpeaks()`. If a DataFrame
-        is passed in, it is assumed it is of the same length as the input
-        signal in which occurrences of R-peaks are marked as "1", with such
-        containers obtained with e.g., ecg_findpeaks() or rsp_findpeaks().
+        The samples at which the peaks occur. If an array is passed in, it is assumed that it was obtained
+        with `signal_findpeaks()`. If a DataFrame is passed in, it is assumed it is of the same length as
+        the input signal in which occurrences of R-peaks are marked as "1", with such containers obtained
+        with e.g., ecg_findpeaks() or rsp_findpeaks().
     sampling_rate : int
-        The sampling frequency of the signal that contains peaks (in Hz, i.e.,
-        samples/second). Defaults to 1000.
+        The sampling frequency of the signal that contains peaks (in Hz, i.e., samples/second).
+        Defaults to 1000.
     desired_length : int
-        By default, the returned signal rate has the same number of elements as
-        the raw signal. If set to an integer, the returned signal rate will be
-        interpolated between peaks over `desired_length` samples. Has no
-        effect if a DataFrame is passed in as the `signal` argument. Defaults
-        to None.
+        By default, the returned signal rate has the same number of elements as the raw signal. If set
+        to an integer, the returned signal rate will be interpolated between peaks over `desired_length`
+        samples. Has no effect if a DataFrame is passed in as the `signal` argument. Defaults to None.
     interpolation_order : str
-        Order used to interpolate the rate between peaks. See
-        `signal_interpolate()`.
-
+        Order used to interpolate the rate between peaks. See `signal_interpolate()`.
 
     Returns
     -------
@@ -47,8 +41,8 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
     >>> info = nk.signal_findpeaks(signal)
     >>>
-    >>> rate = nk.signal_rate(peaks=info["Peaks"])
-    >>> nk.signal_plot(rate)
+    >>> period = nk.signal_period(peaks=info["Peaks"])
+    >>> nk.signal_plot(period)
 
     """
     peaks, desired_length = _signal_formatpeaks_sanitize(peaks, desired_length)
@@ -70,5 +64,6 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     # Interpolate all statistics to desired length.
     if desired_length != np.size(peaks):
         period = signal_interpolate(peaks, period, desired_length=desired_length, method=interpolation_order)
+    # TODO: extending beyond range, interpolation might cause period = 0
 
     return period

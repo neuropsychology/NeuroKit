@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 
 from .fit_error import fit_rmse
 
 
 def fit_polynomial(y, X=None, order=2):
-    """
-    Polynomial Regression.
+    """Polynomial Regression.
 
     Performs a polynomial regression of given order.
 
@@ -19,9 +17,8 @@ def fit_polynomial(y, X=None, order=2):
     X : list, array or Series
         Explanatory variable (the x axis). If 'None', will treat y as a continuous signal.
     order : int
-        The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial
-        fit, respectively. Can also be 'auto', it which case it will attempt to find
-        the optimal order to minimize the RMSE.
+        The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial fit, respectively.
+        Can also be 'auto', it which case it will attempt to find the optimal order to minimize the RMSE.
 
     Returns
     -------
@@ -30,7 +27,7 @@ def fit_polynomial(y, X=None, order=2):
 
     See Also
     ----------
-    signal_detrend, fit_error
+    signal_detrend, fit_error, fit_polynomial_findorder
 
     Examples
     ---------
@@ -39,7 +36,11 @@ def fit_polynomial(y, X=None, order=2):
     >>>
     >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
     >>>
-    >>> pd.DataFrame({ "y": y, "Poly_0": nk.fit_polynomial(y, order=0), "Poly_1": nk.fit_polynomial(y, order=1), "Poly_2": nk.fit_polynomial(y, order=2), "Poly_3": nk.fit_polynomial(y, order=3), "Poly_5": nk.fit_polynomial(y, order=5), "Poly_auto": nk.fit_polynomial(y, order='auto')}).plot() #doctest: +SKIP
+    >>> pd.DataFrame({"y": y, "Poly_0": nk.fit_polynomial(y, order=0),
+    ...               "Poly_1": nk.fit_polynomial(y, order=1),
+    ...               "Poly_2": nk.fit_polynomial(y, order=2),
+    ...               "Poly_3": nk.fit_polynomial(y, order=3), "Poly_5": nk.fit_polynomial(y, order=5),
+    ...               "Poly_auto": nk.fit_polynomial(y, order='auto')}).plot() #doctest: +SKIP
 
     """
     if X is None:
@@ -58,8 +59,44 @@ def fit_polynomial(y, X=None, order=2):
 # =============================================================================
 # Find order
 # =============================================================================
-def fit_polynomial_findorder(y, X, max_order=6):
+def fit_polynomial_findorder(y, X=None, max_order=6):
+    """Polynomial Regression.
+
+    Find the optimal order for polynomial fitting. Currently, the only method implemented is
+    RMSE minimization.
+
+    Parameters
+    ----------
+    y : list, array or Series
+        The response variable (the y axis).
+    X : list, array or Series
+        Explanatory variable (the x axis). If 'None', will treat y as a continuous signal.
+    max_order : int
+        The maximum order to test.
+
+    Returns
+    -------
+    int
+        Optimal order.
+
+    See Also
+    ----------
+    fit_polynomial
+
+    Examples
+    ---------
+    >>> import neurokit2 as nk
+    >>>
+    >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
+    >>>
+    >>> nk.fit_polynomial_findorder(y, max_order=10)
+    9
+
+    """
     # TODO: add cross-validation or some kind of penalty to prevent over-fitting?
+    if X is None:
+        X = np.linspace(0, 100, len(y))
+
     best_rmse = 0
     for order in range(max_order):
         y_predicted = _fit_polynomial(y, X, order=order)

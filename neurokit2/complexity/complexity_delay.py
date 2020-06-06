@@ -3,7 +3,6 @@ import matplotlib
 import matplotlib.collections
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import scipy.signal
 import scipy.spatial
 import scipy.stats
@@ -15,16 +14,28 @@ from .complexity_embedding import complexity_embedding
 
 
 def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
-    """
-    Estimate optimal Time Delay (tau) for time-delay embedding.
+    """Estimate optimal Time Delay (tau) for time-delay embedding.
 
-    The time delay (Tau) is one of the two critical parameters involved in the construction of the time-delay embedding of a signal.
+    The time delay (Tau) is one of the two critical parameters involved in the construction of
+    the time-delay embedding of a signal.
 
-    Several authors suggested different methods to guide the choice of Tau. Fraser and Swinney (1986) suggest using the first local minimum of the mutual information between the delayed and non-delayed time series, effectively identifying a value of tau for which they share the least information. Theiler (1990) suggested to select Tau where the autocorrelation between the signal and its lagged version at Tau first crosses the value 1/e. Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation. Rosenstein (1993) suggests to the point close to 40% of the slope of the average displacement from the diagonal (ADFD).
+    Several authors suggested different methods to guide the choice of Tau:
+
+    - Fraser and Swinney (1986) suggest using the first local minimum of the mutual information
+      between the delayed and non-delayed time series, effectively identifying a value of tau for which
+      they share the least information.
+
+    - Theiler (1990) suggested to select Tau where the autocorrelation between the signal and its
+      lagged version at Tau first crosses the value 1/e.
+
+    - Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation.
+
+    - Rosenstein (1993) suggests to the point close to 40% of the slope of the average displacement
+      from the diagonal (ADFD).
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     delay_max : int
         The maximum time delay (Tau or lag) to test.
@@ -64,9 +75,15 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     References
     ------------
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
-    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
-    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method
+      for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference
+      on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+
+    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time
+      series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
+
+    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a
+      geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
 
     """
     # Initalize vectors
@@ -199,7 +216,7 @@ def _embedding_delay_plot(
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
         lc = matplotlib.collections.LineCollection(segments, cmap="plasma", norm=norm)
         lc.set_array(z)
-        line = ax1.add_collection(lc)
+        ax1.add_collection(lc)
 
     elif plot == "3D":
         points = np.array([x, y, z]).T.reshape(-1, 1, 3)

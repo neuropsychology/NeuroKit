@@ -3,8 +3,7 @@ import numpy as np
 
 
 def signal_zerocrossings(signal):
-    """
-    Locate the indices where the signal crosses zero.
+    """Locate the indices where the signal crosses zero.
 
     Note that when the signal crosses zero between two points, the first index is returned.
 

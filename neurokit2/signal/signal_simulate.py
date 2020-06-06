@@ -5,8 +5,7 @@ from ..misc import listify
 
 
 def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False):
-    """
-    Simulate a continuous signal.
+    """Simulate a continuous signal.
 
     Parameters
     ----------
@@ -15,15 +14,13 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5,
     sampling_rate : int
         The desired sampling rate (in Hz, i.e., samples/second).
     frequency : float or list
-        Oscillatory frequency of the signal (in Hz, i.e., oscillations per
-        second).
+        Oscillatory frequency of the signal (in Hz, i.e., oscillations per second).
     amplitude : float or list
         Amplitude of the oscillations.
     noise : float
         Noise level (amplitude of the laplace noise).
     silent : bool
-        If False (default), might print warnings if impossible frequencies
-        are queried.
+        If False (default), might print warnings if impossible frequencies are queried.
 
     Returns
     -------
@@ -36,7 +33,9 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5,
     >>> import pandas as pd
     >>> import neurokit2 as nk
     >>>
-    >>> fig = pd.DataFrame({"1Hz": nk.signal_simulate(duration=5, frequency=1), "2Hz": nk.signal_simulate(duration=5, frequency=2), "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
+    >>> fig = pd.DataFrame({"1Hz": nk.signal_simulate(duration=5, frequency=1),
+    ...                     "2Hz": nk.signal_simulate(duration=5, frequency=2),
+    ...                     "Multi": nk.signal_simulate(duration=5, frequency=[0.5, 3], amplitude=[0.5, 0.2])}).plot()
     >>> fig #doctest: +SKIP
 
     """

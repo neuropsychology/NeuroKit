@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import pandas as pd
 
 from ..ecg import ecg_process, ecg_rsa
@@ -10,8 +9,7 @@ from ..rsp import rsp_process
 
 
 def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate=1000):
-    """
-    Automated processing of bio signals.
+    """Automated processing of bio signals.
 
     Wrapper for other bio processing functions of
     electrocardiography signals (ECG), respiration signals (RSP),
@@ -19,19 +17,19 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
 
     Parameters
     ----------
-    data : DataFrame
+    data : DataFrame # pylint: disable=W0611
         The DataFrame containing all the respective signals
         (e.g., ecg, rsp, Photosensor etc.). If provided,
         there is no need to fill in the other arguments
         denoting the channel inputs. Defaults to None.
-    ecg : list, array or Series
+    ecg : list or array or Series
         The raw ECG channel.
-    rsp : list, array or Series
+    rsp : list or array or Series
         The raw RSP channel (as measured, for instance, by a
         respiration belt).
-    eda : list, array or Series
+    eda : list or array or Series
         The raw EDA channel.
-    emg : list, array or Series
+    emg : list or array or Series
         The raw EMG channel.
     keep : DataFrame
         Dataframe or channels to add by concatenation
@@ -114,8 +112,6 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
                 keep = data[keep_keys]
             else:
                 keep = None
-        elif isinstance(ecg, np.ndarray):
-            ecg = ecg
 
     # ECG
     if ecg is not None:

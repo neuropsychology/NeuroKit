@@ -5,8 +5,7 @@ from .type_converters import as_vector
 
 
 def find_closest(closest_to, list_to_search_in, direction="both", strictly=False, return_index=False):
-    """
-    Find the closest number in the array from a given number x.
+    """Find the closest number in the array from a given number x.
 
     Parameters
     ----------

@@ -4,7 +4,21 @@ from .signal_zerocrossings import signal_zerocrossings
 
 
 def signal_decompose(signal):
-    """
+    """Decompose a signal.
+
+    Parameters
+    -----------
+    signal : list or array or Series
+        Vector of values.
+
+    Returns
+    -------
+    Array
+        Values of the decomposed signal.
+
+    Examples
+    --------
+
     >>> import neurokit2 as nk
     >>>
     >>> # Artificial example -----------
@@ -45,12 +59,11 @@ def signal_decompose(signal):
 # Methods
 # =============================================================================
 def _signal_decompose_emd(signal, ensemble=False):
-    """
-    References
+    """References
     ------------
     - http://perso.ens-lyon.fr/patrick.flandrin/CSDATrendfiltering.pdf
     - https://github.com/laszukdawid/PyEMD
-    - https://towardsdatascience.com/decomposing-signal-using-empirical-mode-decomposition-algorithm-explanation-for-dummy-93a93304c541
+    - https://towardsdatascience.com/decomposing-signal-using-empirical-mode-decomposition-algorithm-explanation-for-dummy-93a93304c541 # noqa: E501
 
     >>> # import PyEMD
     >>> # import numpy as np
@@ -80,7 +93,7 @@ def _signal_decompose_emd(signal, ensemble=False):
         emd = PyEMD.EEMD(extrema_detection="parabol")
         imfs = emd.eemd(signal)
 
-    _, residue = emd.get_imfs_and_residue()
+    #    _, residue = emd.get_imfs_and_residue()
     return imfs
 
 

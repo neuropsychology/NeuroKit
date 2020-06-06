@@ -6,20 +6,20 @@ from ..signal import signal_filter, signal_smooth
 
 
 def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
-    """
-    Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
+    """Decompose Electrodermal Activity (EDA) into Phasic and Tonic components.
 
-    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
+    Decompose the Electrodermal Activity (EDA) into two components, namely Phasic and Tonic, using different
+    methods including cvxEDA (Greco, 2016) or Biopac's Acqknowledge algorithms.
 
     Parameters
     ----------
-    eda_signal : list, array or Series
+    eda_signal : list or array or Series
         The raw EDA signal.
     sampling_rate : int
-        The sampling frequency of raw EDA signal (in Hz, i.e., samples/second).
+        The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.
     method : str
-        The processing pipeline to apply. Can be one of "cvxEDA"
-        (default) or "biosppy".
+        The processing pipeline to apply. Can be one of "cvxEDA", "median", "smoothmedian", "highpass",
+        "biopac", or "acqknowledge".
 
     Returns
     -------
@@ -43,7 +43,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
     >>> smoothMedian = nk.eda_phasic(nk.standardize(eda_signal), method='smoothmedian')
     >>> highpass = nk.eda_phasic(nk.standardize(eda_signal), method='highpass')
     >>>
-    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'), smoothMedian.add_suffix('_SmoothMedian'), highpass.add_suffix('_Highpass')], axis=1)
+    >>> data = pd.concat([cvxEDA.add_suffix('_cvxEDA'), smoothMedian.add_suffix('_SmoothMedian'),
+    ...                   highpass.add_suffix('_Highpass')], axis=1)
     >>> data["EDA_Raw"] = eda_signal
     >>> fig = data.plot()
     >>> fig #doctest: +SKIP
@@ -56,9 +57,14 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 
     References
     -----------
-    - cvxEDA: https://github.com/lciti/cvxEDA
-    - Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In Advances in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43). Springer International Publishing.
-    - Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex optimization approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering, 63(4), 797-804.
+    - cvxEDA: https://github.com/lciti/cvxEDA.
+
+    - Greco, A., Valenza, G., & Scilingo, E. P. (2016). Evaluation of CDA and CvxEDA Models. In Advances
+      in Electrodermal Activity Processing with Applications for Mental Health (pp. 35-43). Springer International Publishing.
+
+    - Greco, A., Valenza, G., Lanata, A., Scilingo, E. P., & Citi, L. (2016). cvxEDA: A convex optimization
+      approach to electrodermal activity processing. IEEE Transactions on Biomedical Engineering,
+      63(4), 797-804.
 
     """
     method = method.lower()  # remove capitalised letters
@@ -78,8 +84,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 # Acqknowledge
 # =============================================================================
 def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4):
-    """
-    One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
+    """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     size = smoothing_factor * sampling_rate
     tonic = signal_smooth(eda_signal, kernel="median", size=size)
@@ -91,8 +96,7 @@ def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4)
 
 
 def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
-    """
-    One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
+    """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
     """
     phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=0.05, method="butter")
     tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=0.05, method="butter")
@@ -116,15 +120,15 @@ def _eda_phasic_cvxeda(
     solver=None,
     reltol=1e-9,
 ):
-    """
-    A convex optimization approach to electrodermal activity processing (CVXEDA).
+    """A convex optimization approach to electrodermal activity processing (CVXEDA).
 
     This function implements the cvxEDA algorithm described in "cvxEDA: a
     Convex Optimization Approach to Electrodermal Activity Processing" (Greco et al., 2015).
 
+
     Parameters
     ----------
-       eda : list or array
+       eda_signal : list or array
            raw EDA signal array.
        sampling_rate : int
            Sampling rate (samples/second).
@@ -142,6 +146,11 @@ def _eda_phasic_cvxeda(
            Sparse QP solver to be used, see cvxopt.solvers.qp
        reltol : float
            Solver options, see http://cvxopt.org/userguide/coneprog.html#algorithm-parameters
+
+    Returns
+    -------
+    Dataframe
+        Contains EDA tonic and phasic signals.
 
     """
     # Try loading cvx
@@ -217,7 +226,6 @@ def _eda_phasic_cvxeda(
         h = cvxopt.matrix([_cvx(n, 1), 0.5, 0.5, eda, 0.5, 0.5, _cvx(nB, 1)])
         c = cvxopt.matrix([(cvxopt.matrix(alpha, (1, n)) * A).T, _cvx(nC, 1), 1, gamma, _cvx(nB, 1)])
         res = cvxopt.solvers.conelp(c, G, h, dims={"l": n, "q": [n + 2, nB + 2], "s": []})
-        obj = res["primal objective"]
     else:
         # Use qp
         Mt, Ct, Bt = M.T, C.T, B.T
@@ -232,7 +240,6 @@ def _eda_phasic_cvxeda(
         res = cvxopt.solvers.qp(
             H, f, cvxopt.spmatrix(-A.V, A.I, A.J, (n, len(f))), cvxopt.matrix(0.0, (n, 1)), solver=solver
         )
-        obj = res["primal objective"] + 0.5 * (eda.T * eda)
     cvxopt.solvers.options.clear()
     cvxopt.solvers.options.update(old_options)
 
@@ -240,9 +247,7 @@ def _eda_phasic_cvxeda(
     drift = res["x"][n : n + nC]
     tonic = B * tonic_splines + C * drift
     q = res["x"][:n]
-    smna_driver = A * q
     phasic = M * q
-    residuals = eda - phasic - tonic
 
     out = pd.DataFrame({"EDA_Tonic": np.array(tonic)[:, 0], "EDA_Phasic": np.array(phasic)[:, 0]})
 

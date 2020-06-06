@@ -7,12 +7,11 @@ import scipy.signal
 def signal_psd(
     signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None
 ):
-    """
-    Compute the Power Spectral Density (PSD).
+    """Compute the Power Spectral Density (PSD).
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
@@ -20,12 +19,12 @@ def signal_psd(
         If True, will return a plot. If False, will return the density values that can be plotted externally.
     method : str
         Either 'multitapers' (default; requires the 'mne' package), or 'welch' (requires the 'scipy' package).
-    min_frequency, max_frequency : float
-        The minimum and maximum frequencies.
+    min_frequency : float
+        The minimum frequency.
+    max_frequency : float
+        The maximum frequency.
     window : int
         Length of each window in seconds (for Welch method).
-    resolution : int
-        Resolution is used to adjust the window length in Welch method. It is also balance between frequency resolution and temporal resolution since the short the window length, the higher the temporal resolution and the lower the frequency resolution, vice versa.
 
     See Also
     --------
@@ -98,7 +97,9 @@ def signal_psd(
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
             print(
-                "Neurokit warning: signal_psd(): The duration of recording is too short to support a sufficiently long window for high frequency resolution. Consider using a longer recording or increasing the `min_frequency`"
+                "Neurokit warning: signal_psd(): The duration of recording is too short to support a "
+                "sufficiently long window for high frequency resolution. Consider using a longer recording "
+                "or increasing the `min_frequency`"
             )
             nperseg = int(len(signal / 2))
 

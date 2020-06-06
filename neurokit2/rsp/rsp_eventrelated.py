@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 
 from ..epochs.eventrelated_utils import (
     _eventrelated_addinfo,
@@ -11,15 +10,13 @@ from ..epochs.eventrelated_utils import (
 
 
 def rsp_eventrelated(epochs, silent=False):
-    """
-    Performs event-related RSP analysis on epochs.
+    """Performs event-related RSP analysis on epochs.
 
     Parameters
     ----------
     epochs : dict, DataFrame
-        A dict containing one DataFrame per event/trial,
-        usually obtained via `epochs_create()`, or a DataFrame
-        containing all epochs, usually obtained via `epochs_to_df()`.
+        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`,
+        or a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
 
@@ -33,20 +30,15 @@ def rsp_eventrelated(epochs, silent=False):
         - *"RSP_Rate_Max"*: the maximum respiratory rate after stimulus onset.
         - *"RSP_Rate_Min"*: the minimum respiratory rate after stimulus onset.
         - *"RSP_Rate_Mean"*: the mean respiratory rate after stimulus onset.
-        - *"RSP_Rate_Max_Time"*: the time at which maximum
-        respiratory rate occurs.
-        - *"RSP_Rate_Min_Time"*: the time at which minimum
-        respiratory rate occurs.
-        - *"RSP_Amplitude_Max"*: the maximum respiratory
-        amplitude after stimulus onset.
-        - *"RSP_Amplitude_Min"*: the minimum respiratory amplitude
-        after stimulus onset.
-        - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude
-        after stimulus onset.
-        - *"RSP_Phase"*: indication of whether the onset of the event
-        concurs with respiratory inspiration (1) or expiration (0).
-        - *"RSP_PhaseCompletion"*: indication of the stage of the current
-        respiration phase (0 to 1) at the onset of the event.
+        - *"RSP_Rate_Max_Time"*: the time at which maximum respiratory rate occurs.
+        - *"RSP_Rate_Min_Time"*: the time at which minimum respiratory rate occurs.
+        - *"RSP_Amplitude_Max"*: the maximum respiratory amplitude after stimulus onset.
+        - *"RSP_Amplitude_Min"*: the minimum respiratory amplitude after stimulus onset.
+        - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude after stimulus onset.
+        - *"RSP_Phase"*: indication of whether the onset of the event concurs with respiratory
+        inspiration (1) or expiration (0).
+        - *"RSP_PhaseCompletion"*: indication of the stage of the current respiration phase (0 to 1)
+        at the onset of the event.
 
     See Also
     --------
@@ -69,7 +61,8 @@ def rsp_eventrelated(epochs, silent=False):
     >>>
     >>> # Process the data
     >>> df, info = nk.bio_process(rsp=data["RSP"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
     >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=2.9)
     >>>
     >>> # Analyze

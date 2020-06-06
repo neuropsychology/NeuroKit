@@ -1,27 +1,24 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 
 from .mad import mad
 
 
 def standardize(data, robust=False):
-    """
-    Standardization of data.
+    """Standardization of data.
 
-    Performs a standardization of data (Z-scoring), i.e., centering and scaling,
-    so that the data is expressed in terms of standard deviation
-    (i.e., mean = 0, SD = 1) or Median Absolute Deviance (median = 0, MAD = 1).
+    Performs a standardization of data (Z-scoring), i.e., centering and scaling, so that the data is
+    expressed in terms of standard deviation (i.e., mean = 0, SD = 1) or Median Absolute Deviance
+    (median = 0, MAD = 1).
 
     Parameters
     ----------
     data : list, array or Series
         Raw data.
     robust : bool
-        If True, centering is done by substracting the median from the
-        variables and dividing it by the median absolute deviation (MAD).
-        If False, variables are standardized by substracting the mean and
-        dividing it by the standard deviation (SD).
+        If True, centering is done by substracting the median from the variables and dividing it by
+        the median absolute deviation (MAD). If False, variables are standardized by substracting the
+        mean and dividing it by the standard deviation (SD).
 
     Returns
     ----------
@@ -32,6 +29,7 @@ def standardize(data, robust=False):
     Examples
     ----------
     >>> import neurokit2 as nk
+    >>> import pandas as pd
     >>>
     >>> x = nk.standardize([3, 1, 2, 4, 6, np.nan])
     >>> y = nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)

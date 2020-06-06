@@ -1,8 +1,8 @@
-Cloud-based interactive examples
+Try the examples in your browser
 ==================================
 
 .. hint::
-   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/contributing.html>`_).
+   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html>`_).
 
 The notebooks in this repo are meant to illustrate what you can do with NeuroKit. It is supposed to reveal how easy it has become to use cutting-edge methods, and still retain the liberty to change a myriad of parameters. These notebooks are organized in different sections that correspond to NeuroKit's modules.
 
