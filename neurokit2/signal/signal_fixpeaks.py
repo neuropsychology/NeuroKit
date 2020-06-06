@@ -113,20 +113,18 @@ def signal_fixpeaks(
     # If method Kubios
     if method.lower() == "kubios":
 
-        return _signal_fixpeaks_kubios(peaks,
-                                       sampling_rate=sampling_rate,
-                                       iterative=iterative,
-                                       show=show)
-
+        return _signal_fixpeaks_kubios(peaks, sampling_rate=sampling_rate, iterative=iterative, show=show)
 
     # Else method is NeuroKit
-    return _signal_fixpeaks_neurokit(peaks,
-                                     sampling_rate=sampling_rate,
-                                     interval_min=interval_min,
-                                     interval_max=interval_max,
-                                     relative_interval_min=relative_interval_min,
-                                     relative_interval_max=relative_interval_max,
-                                     robust=robust)
+    return _signal_fixpeaks_neurokit(
+        peaks,
+        sampling_rate=sampling_rate,
+        interval_min=interval_min,
+        interval_max=interval_max,
+        relative_interval_min=relative_interval_min,
+        relative_interval_max=relative_interval_max,
+        robust=robust,
+    )
 
 
 # =============================================================================

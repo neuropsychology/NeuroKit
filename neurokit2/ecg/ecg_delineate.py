@@ -188,14 +188,14 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     # plt.show()
     rpeaks_resampled = _dwt_resample_points(rpeaks, sampling_rate, analysis_sampling_rate)
 
-    tpeaks, ppeaks = _dwt_delineate_tp_peaks(
-        ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate)
+    tpeaks, ppeaks = _dwt_delineate_tp_peaks(ecg, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate)
     qrs_onsets, qrs_offsets = _dwt_delineate_qrs_bounds(
-        rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate)
-    ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(
-        ppeaks, dwtmatr, sampling_rate=analysis_sampling_rate)
+        rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate
+    )
+    ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(ppeaks, dwtmatr, sampling_rate=analysis_sampling_rate)
     tonsets, toffsets = _dwt_delineate_tp_onsets_offsets(
-        tpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, onset_weight=0.6, duration=0.6)
+        tpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, onset_weight=0.6, duration=0.6
+    )
 
     return dict(
         ECG_T_Peaks=_dwt_resample_points(tpeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
