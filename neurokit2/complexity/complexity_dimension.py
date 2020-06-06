@@ -50,13 +50,6 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
     >>> delay = nk.complexity_delay(signal, delay_max=500)
     >>>
     >>> values = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
-    >>>
-    >>> # Realistic example
-    >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150)[0], sampling_rate=150)
-    >>> delay = nk.complexity_delay(signal, delay_max=300)
-    >>>
-    >>> values = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
 
     References
     -----------
@@ -126,7 +119,7 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
     return E, Es
 
 
-def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None):
+def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs):
     """Return E(d) and E^*(d) for a single d.
 
     Returns E(d) and E^*(d) for the AFN method for a single d.
