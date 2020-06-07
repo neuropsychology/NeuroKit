@@ -80,7 +80,7 @@ def findpeaks_gamboa2008(ecg, sampling_rate):
 
 ### Run the Benchmark
 ```{python}
-nk.benchmark_ecg(findpeaks_neurokit, path_to_database='path_to_GUDB_database')
+nk.benchmark_ecg_preprocessing(findpeaks_neurokit, path_to_database='path_to_GUDB_database')
 ```
 
 # References
