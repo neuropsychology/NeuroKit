@@ -1,0 +1,82 @@
+---
+output: 
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, ecg_preprocessing]
+vignette: >
+  %\VignetteIndexEntry{README}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# options and parameters
+options(digits=3)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi=450,
+  fig.path = "figures/"
+)
+```
+
+
+
+
+# Benchmarking of ECG Preprocessing Methods
+
+## Databases
+
+### GUDB (Howell \& Porr, 2018)
+
+The GUDB Database (Howell \& Porr, 2018) contains ECGs from 25 subjects. Each subject was recorded performing 5 different tasks for two minutes (sitting, doing a maths test on a tablet, walking on a treadmill, running on a treadmill, using a hand bike). The sampling rate is 250Hz for all the conditions.
+
+The script to download and format the database using the [**ECG-GUDB**](https://github.com/berndporr/ECG-GUDB) Python package by Bernd Porr can be found [**here**]().
+
+### WFDB 
+
+**TODO.**
+
+### Concanate them together
+
+```{r, warning=FALSE, message=FALSE}
+# ECG
+ecgs_gudb <- read.csv("../../data/gudb/ECGs.csv")
+# ecgs_wfdb <- NA
+
+ecgs <- ecgs_gudb
+
+# True R-peaks location
+rpeaks_gudb <- read.csv("../../data/gudb/Rpeaks.csv")
+# rpeaks_wfdb <- NA
+rpeaks <- rpeaks_gudb
+```
+
+
+## Comparing Different R-Peaks Detection Algorithms
+
+### Setup Functions
+```{python}
+import neurokit2 as nk
+
+def findpeaks_neurokit(ecg, sampling_rate):
+    signal, info = nk.ecg_peaks(cleaned, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+
+def findpeaks_gamboa2008(ecg, sampling_rate):
+    signal, info = nk.ecg_peaks(cleaned, sampling_rate=sampling_rate, method="gamboa2008")
+    return info["ECG_R_Peaks"]
+```
+
+### Run the Benchmark
+```{python}
+benchmark_ecg(function, path_to_database='path_to_GUDB_database')
+```
+
+# References
+
+Howell, L., & Porr, B. (2018). High precision ECG Database with annotated R peaks, recorded and filmed under realistic conditions.
