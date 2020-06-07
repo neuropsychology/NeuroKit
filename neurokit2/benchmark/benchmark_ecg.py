@@ -139,10 +139,10 @@ def benchmark_ecg_compareRpeaks(true_rpeaks, found_rpeaks, sampling_rate=250):
     length = np.max(np.concatenate([true_rpeaks, found_rpeaks]))
 
     true_interpolated = signal_period(
-        true_rpeaks, sampling_rate=sampling_rate, desired_length=length, interpolation_order="linear"
+        true_rpeaks, sampling_rate=sampling_rate, desired_length=length, interpolation_method="linear"
     )
     found_interpolated = signal_period(
-        found_rpeaks, sampling_rate=sampling_rate, desired_length=length, interpolation_order="linear"
+        found_rpeaks, sampling_rate=sampling_rate, desired_length=length, interpolation_method="linear"
     )
 
     return np.mean(np.abs(found_interpolated - true_interpolated)), "None"
