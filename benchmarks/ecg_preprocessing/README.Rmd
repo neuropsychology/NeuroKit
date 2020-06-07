@@ -111,7 +111,7 @@ results = pd.concat(results).reset_index(drop=True)
 
 ## Results
 
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, results='hide'}
 library(tidyverse)
 library(easystats)
 

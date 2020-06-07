@@ -73,14 +73,6 @@ results = pd.concat(results).reset_index(drop=True)
 ``` r
 library(tidyverse)
 library(easystats)
-## # Attaching packages (red = needs update)
-## <U+2714> insight     0.8.4.1   <U+2714> bayestestR  0.6.0.1
-## <U+2714> performance 0.4.6.1   <U+2714> parameters  0.7.0.1
-## <U+26A0> see         0.4.1.1   <U+2714> effectsize  0.3.1.1
-## <U+2714> correlation 0.2.1     <U+2714> modelbased  0.2.1  
-## <U+2714> report      0.1.0     
-## Warnings or errors in CRAN checks for package(s) 'insight', 'parameters', 'modelbased'.
-## Restart the R-Session and update packages in red with 'easystats::easystats_update()'.
 
 data <- py$results %>% 
   mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database))
