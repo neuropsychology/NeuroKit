@@ -49,18 +49,25 @@ The script to download and format the database using the [**ECG-GUDB**](https://
 
 ### Concanate them together
 
-```{r, warning=FALSE, message=FALSE}
-# ECG
-ecgs_gudb <- read.csv("../../data/gudb/ECGs.csv")
-# ecgs_wfdb <- NA
+```{python}
+import pandas as pd
 
-ecgs <- ecgs_gudb
+# ECG
+ecgs_gudb = pd.read_csv("../../data/gudb/ECGs.csv")
+# ecgs_wfdb = NA
+
+ecgs = ecgs_gudb
 
 # True R-peaks location
-rpeaks_gudb <- read.csv("../../data/gudb/Rpeaks.csv")
-# rpeaks_wfdb <- NA
-rpeaks <- rpeaks_gudb
+rpeaks_gudb = pd.read_csv("../../data/gudb/Rpeaks.csv")
+# rpeaks_wfdb = NA
+rpeaks = rpeaks_gudb
 ```
+
+
+
+
+
 
 
 ## Comparing Different R-Peaks Detection Algorithms
@@ -69,19 +76,98 @@ rpeaks <- rpeaks_gudb
 ```{python}
 import neurokit2 as nk
 
-def findpeaks_neurokit(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(cleaned, sampling_rate=sampling_rate, method="neurokit")
+def neurokit(ecg, sampling_rate):
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
     return info["ECG_R_Peaks"]
 
-def findpeaks_gamboa2008(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(cleaned, sampling_rate=sampling_rate, method="gamboa2008")
+def gamboa2008(ecg, sampling_rate):
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="gamboa2008")
+    return info["ECG_R_Peaks"]
+
+def engzeemod2012(ecg, sampling_rate):
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="engzeemod2012")
     return info["ECG_R_Peaks"]
 ```
 
 ### Run the Benchmark
 ```{python}
-nk.benchmark_ecg_preprocessing(findpeaks_neurokit, path_to_database='path_to_GUDB_database')
+results = []
+for method in [neurokit, gamboa2008, engzeemod2012]:
+    result = nk.benchmark_ecg_preprocessing(method, r["ecgs"], r["rpeaks"])
+    result["Method"] = method.__name__
+    results.append(result)
+results = pd.concat(results).reset_index(drop=True)
 ```
+
+
+
+
+
+
+
+
+
+
+## Results
+
+```{r, warning=FALSE, message=FALSE}
+library(tidyverse)
+library(easystats)
+
+data <- py$results %>% 
+  mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database))
+colors <- c("neurokit"="#E91E63", "gamboa2008"="#2196F3", "engzeemod2012"="#FF9800")
+```
+
+### Errors
+
+```{r, warning=FALSE, message=FALSE}
+data %>% 
+  group_by(Database, Method) %>% 
+  mutate(n = n()) %>% 
+  group_by(Database, Method, Error) %>% 
+  summarise(Percentage = n() / unique(n)) %>% 
+  ungroup() %>% 
+  mutate(Error = fct_relevel(Error, "None"),
+         Method = fct_relevel(Method, "neurokit")) %>% 
+  ggplot(aes(x=Error, y=Percentage, fill=Method)) +
+    geom_bar(stat="identity", position = position_dodge2(preserve = "single")) +
+    facet_grid(~Database) +
+    theme_modern() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_fill_manual(values=colors)
+
+data <- filter(data, Error == "None")
+```
+
+### Time
+
+```{r, warning=FALSE, message=FALSE}
+data %>% 
+  ggplot(aes(x=Database, y=Duration)) +
+    geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=0.5) +
+    geom_jitter2(aes(color=Method, group=Method), size=3, alpha=0.8, position=position_jitterdodge()) +
+    theme_modern() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_color_manual(values=colors) +
+    scale_fill_manual(values=colors)
+```
+
+### Score
+
+```{r, warning=FALSE, message=FALSE}
+data %>% 
+  ggplot(aes(x=Database, y=Score)) +
+    geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=0.5) +
+    geom_jitter2(aes(color=Method, group=Method), size=3, alpha=0.8, position=position_jitterdodge()) +
+    theme_modern() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_color_manual(values=colors) +
+    scale_fill_manual(values=colors) +
+    scale_y_sqrt() +
+    ylab("Amount of Error")
+```
+
 
 # References
 

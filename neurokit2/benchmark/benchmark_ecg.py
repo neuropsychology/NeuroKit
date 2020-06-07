@@ -108,7 +108,7 @@ def _benchmark_ecg_preprocessing(function, ecg, rpeak, sampling_rate=1000):
     try:
         found_rpeaks = function(ecg, sampling_rate=sampling_rate)
         duration = (datetime.datetime.now() - t0).total_seconds()
-    except (IndexError, TypeError) as error:  # In case of failure
+    except Exception as error:  # In case of failure
         return pd.DataFrame({"Sampling_Rate": [sampling_rate],
                              "Duration": [np.nan],
                              "Score": [np.nan],
@@ -134,7 +134,7 @@ def _benchmark_ecg_preprocessing(function, ecg, rpeak, sampling_rate=1000):
 def benchmark_ecg_compareRpeaks(true_rpeaks, found_rpeaks, sampling_rate=250):
     # Failure to find sufficient R-peaks
     if len(found_rpeaks) <= 3:
-        return np.nan, "R-peaks detected: " + str(len(found_rpeaks))
+        return np.nan, "R-peaks detected <= 3"
 
     length = np.max(np.concatenate([true_rpeaks, found_rpeaks]))
 
