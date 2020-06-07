@@ -2,6 +2,7 @@
 """
 import datetime
 
+from .benchmark import *
 from .bio import *
 from .complexity import *
 from .data import *
