@@ -113,3 +113,6 @@ data/eeg_restingstate_3000hz.edf
 data/eeg_resting_8min_3000hz.edf
 data/gudb/ECGs.csv
 data/gudb/Rpeaks.csv
+data/mitdb/mit-bih-arrhythmia-database-1.0.0/*
+data/mitdb/ECGs.csv
+data/mitdb/Rpeaks.csv
