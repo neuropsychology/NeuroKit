@@ -1,55 +1,27 @@
----
-output: 
-  github_document:
-    toc: false
-    fig_width: 10.08
-    fig_height: 6
-tags: [r, ecg_preprocessing]
-vignette: >
-  %\VignetteIndexEntry{README}
-  \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
-  chunk_output_type: console
----
-
-```{r, echo = FALSE, warning=FALSE, message=FALSE}
-# options and parameters
-options(digits=3)
-
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  dpi=450,
-  fig.path = "figures/"
-)
-
-# Setup python - you need to change the path to your python distribution
-library(reticulate)
-reticulate::use_python("D:/Downloads/WPy64-3810/python-3.8.1.amd64/")
-matplotlib <- import("matplotlib")
-matplotlib$use("Agg", force = TRUE)
-```
-
-
-
 
 # Benchmarking of ECG Preprocessing Methods
 
 ## Databases
 
-### GUDB (Howell \& Porr, 2018)
+### GUDB (Howell & Porr, 2018)
 
-The GUDB Database (Howell \& Porr, 2018) contains ECGs from 25 subjects. Each subject was recorded performing 5 different tasks for two minutes (sitting, doing a maths test on a tablet, walking on a treadmill, running on a treadmill, using a hand bike). The sampling rate is 250Hz for all the conditions.
+The GUDB Database (Howell & Porr, 2018) contains ECGs from 25 subjects.
+Each subject was recorded performing 5 different tasks for two minutes
+(sitting, doing a maths test on a tablet, walking on a treadmill,
+running on a treadmill, using a hand bike). The sampling rate is 250Hz
+for all the conditions.
 
-The script to download and format the database using the [**ECG-GUDB**](https://github.com/berndporr/ECG-GUDB) Python package by Bernd Porr can be found [**here**]().
+The script to download and format the database using the
+[**ECG-GUDB**](https://github.com/berndporr/ECG-GUDB) Python package by
+Bernd Porr can be found [**here**]().
 
-### WFDB 
+### WFDB
 
 **TODO.**
 
 ### Concanate them together
 
-```{python}
+``` python
 import pandas as pd
 
 # Load ECGs
@@ -65,16 +37,11 @@ ecgs = ecgs_gudb
 rpeaks = rpeaks_gudb
 ```
 
-
-
-
-
-
-
 ## Comparing Different R-Peaks Detection Algorithms
 
 ### Setup Functions
-```{python}
+
+``` python
 import neurokit2 as nk
 
 def neurokit(ecg, sampling_rate):
@@ -91,7 +58,8 @@ def engzeemod2012(ecg, sampling_rate):
 ```
 
 ### Run the Benchmark
-```{python}
+
+``` python
 results = []
 for method in [neurokit, gamboa2008, engzeemod2012]:
     result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks)
@@ -100,20 +68,19 @@ for method in [neurokit, gamboa2008, engzeemod2012]:
 results = pd.concat(results).reset_index(drop=True)
 ```
 
-
-
-
-
-
-
-
-
-
 ## Results
 
-```{r, message=FALSE, warning=FALSE}
+``` r
 library(tidyverse)
 library(easystats)
+## # Attaching packages (red = needs update)
+## <U+2714> insight     0.8.4.1   <U+2714> bayestestR  0.6.0.1
+## <U+2714> performance 0.4.6.1   <U+2714> parameters  0.7.0.1
+## <U+26A0> see         0.4.1.1   <U+2714> effectsize  0.3.1.1
+## <U+2714> correlation 0.2.1     <U+2714> modelbased  0.2.1  
+## <U+2714> report      0.1.0     
+## Warnings or errors in CRAN checks for package(s) 'insight', 'parameters', 'modelbased'.
+## Restart the R-Session and update packages in red with 'easystats::easystats_update()'.
 
 data <- py$results %>% 
   mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database))
@@ -122,7 +89,7 @@ colors <- c("neurokit"="#E91E63", "gamboa2008"="#2196F3", "engzeemod2012"="#FF98
 
 ### Errors
 
-```{r, warning=FALSE, message=FALSE}
+``` r
 data %>% 
   group_by(Database, Method) %>% 
   mutate(n = n()) %>% 
@@ -137,13 +104,18 @@ data %>%
     theme_modern() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
     scale_fill_manual(values=colors)
+```
+
+![](figures/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
 
 data <- filter(data, Error == "None")
 ```
 
 ### Time
 
-```{r, warning=FALSE, message=FALSE}
+``` r
 data %>% 
   ggplot(aes(x=Database, y=Duration)) +
     geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=0.5) +
@@ -155,9 +127,11 @@ data %>%
     scale_y_sqrt()
 ```
 
+![](figures/unnamed-chunk-7-1.png)<!-- -->
+
 ### Score
 
-```{r, warning=FALSE, message=FALSE}
+``` r
 data %>% 
   ggplot(aes(x=Database, y=Score)) +
     geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=0.5) +
@@ -170,7 +144,9 @@ data %>%
     ylab("Amount of Error")
 ```
 
+![](figures/unnamed-chunk-8-1.png)<!-- -->
 
 # References
 
-Howell, L., & Porr, B. (2018). High precision ECG Database with annotated R peaks, recorded and filmed under realistic conditions.
+Howell, L., & Porr, B. (2018). High precision ECG Database with
+annotated R peaks, recorded and filmed under realistic conditions.

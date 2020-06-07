@@ -103,7 +103,7 @@ def _benchmark_ecg_preprocessing_databases(function, ecgs, rpeaks):
 
 
 def _benchmark_ecg_preprocessing(function, ecg, rpeak, sampling_rate=1000):
-     # Apply function
+    # Apply function
     t0 = datetime.datetime.now()
     try:
         found_rpeaks = function(ecg, sampling_rate=sampling_rate)
