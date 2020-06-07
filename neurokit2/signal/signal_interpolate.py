@@ -38,15 +38,14 @@ def signal_interpolate(x_values, y_values, desired_length, method="quadratic"):
     >>> samples = np.linspace(start=0, stop=20, num=10)
     >>> signal = np.cos(samples)
     >>> interpolation_methods = ["zero", "linear", "quadratic", "cubic", "nearest", "akima"]
-    >>> 
-    >>> fig, ax = plt.subplots()
-    >>> ax.scatter(samples, signal, label="original datapoints", zorder=3)
+    >>>
+    >>> fig, ax = plt.subplots() #doctest: +SKIP
+    >>> ax.scatter(samples, signal, label="original datapoints", zorder=3) #doctest: +SKIP
     >>> for im in interpolation_methods:
     >>>     signal_interpolated = nk.signal_interpolate(samples, signal, desired_length=1000, method=im)
-    >>>     ax.plot(np.linspace(0, 20, 1000), signal_interpolated, label=im)
-    >>> ax.legend(loc="upper left")
-    >>> fig #doctest: +SKIP
-    
+    >>>     ax.plot(np.linspace(0, 20, 1000), signal_interpolated, label=im) #doctest: +SKIP
+    >>> ax.legend(loc="upper left") #doctest: +SKIP
+
     """
     # Sanity checks
     if len(x_values) != len(y_values):
