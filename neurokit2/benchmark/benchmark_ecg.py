@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
 import datetime
+
+import numpy as np
+import pandas as pd
 
 from ..signal import signal_period
 
 
 def benchmark_ecg_preprocessing(function, ecgs, rpeaks):
-    """Benchmark ECG preprocessing pipelines
+    """Benchmark ECG preprocessing pipelines.
 
     Parameters
     ----------
@@ -37,6 +38,7 @@ def benchmark_ecg_preprocessing(function, ecgs, rpeaks):
     >>>     return info["ECG_R_Peaks"]
     >>>
     >>> nk.benchmark_ecg(function, path_to_database='path_to_GUDB_database')
+
     """
     if isinstance(ecgs, str):
         ecgs = pd.read_csv(ecgs + "ECGs.csv")
@@ -50,7 +52,9 @@ def benchmark_ecg_preprocessing(function, ecgs, rpeaks):
 
             # Extract the right slice of data
             ecg = ecgs[(ecgs["Participant"] == participant) & (ecgs["Database"] == database)]
-            true_rpeaks = rpeaks[(rpeaks["Participant"] == participant) & (rpeaks["Database"] == database)]["Rpeaks"].values
+            true_rpeaks = rpeaks[(rpeaks["Participant"] == participant) & (rpeaks["Database"] == database)][
+                "Rpeaks"
+            ].values
 
             sampling_rate = ecg["Sampling_Rate"].unique()[0]
 
@@ -60,21 +64,22 @@ def benchmark_ecg_preprocessing(function, ecgs, rpeaks):
             duration = (datetime.datetime.now() - t0).total_seconds()
 
             # Compare R peaks
-            score = benchmark_ecg_compareRpeaks(true_rpeaks,
-                                                found_rpeaks,
-                                                sampling_rate=sampling_rate)
+            score = benchmark_ecg_compareRpeaks(true_rpeaks, found_rpeaks, sampling_rate=sampling_rate)
 
-            results.append(pd.DataFrame({"Participant": [participant],
-                                         "Database": [database],
-                                         "Sampling_Rate": [sampling_rate],
-                                         "Duration": [duration],
-                                         "Score": [score],
-                                         "Recording_Length": [len(ecg) / sampling_rate / 60]}))
+            results.append(
+                pd.DataFrame(
+                    {
+                        "Participant": [participant],
+                        "Database": [database],
+                        "Sampling_Rate": [sampling_rate],
+                        "Duration": [duration],
+                        "Score": [score],
+                        "Recording_Length": [len(ecg) / sampling_rate / 60],
+                    }
+                )
+            )
 
     return pd.concat(results)
-
-
-
 
 
 # =============================================================================
@@ -83,13 +88,11 @@ def benchmark_ecg_preprocessing(function, ecgs, rpeaks):
 def benchmark_ecg_compareRpeaks(true_rpeaks, found_rpeaks, sampling_rate=250):
     length = np.max(np.concatenate([true_rpeaks, found_rpeaks]))
 
-    true_interpolated = signal_period(true_rpeaks,
-                                      sampling_rate=sampling_rate,
-                                      desired_length=length,
-                                      interpolation_order="linear")
-    found_interpolated = signal_period(found_rpeaks,
-                                       sampling_rate=sampling_rate,
-                                       desired_length=length,
-                                       interpolation_order="linear")
+    true_interpolated = signal_period(
+        true_rpeaks, sampling_rate=sampling_rate, desired_length=length, interpolation_order="linear"
+    )
+    found_interpolated = signal_period(
+        found_rpeaks, sampling_rate=sampling_rate, desired_length=length, interpolation_order="linear"
+    )
 
     return np.mean(found_interpolated - true_interpolated)
