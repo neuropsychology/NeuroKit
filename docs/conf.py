@@ -41,13 +41,6 @@ for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
 
-# -- Setup for recommonmark ---------------------------------------------
-def setup(app):
-    app.add_config_value('recommonmark_config', {
-            'url_resolver': lambda url: github_doc_root + url,
-            'auto_toc_tree_section': 'Contents',
-            }, True)
-    app.add_transform(AutoStructify)
 
 
 # -- General configuration ---------------------------------------------
@@ -272,3 +265,16 @@ texinfo_documents = [
 # Other
 add_module_names = False  # so functions aren’t prepended with the name of the package/module
 add_function_parentheses = True  # to ensure that parentheses are added to the end of all function names
+
+
+# -- Setup for recommonmark ---------------------------------------------
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+        #'url_resolver': lambda url: github_doc_root + url,
+        'auto_toc_tree_section': 'Contents',
+        'enable_math': False,
+        'enable_inline_math': False,
+        'enable_eval_rst': True,
+        'enable_auto_doc_ref': True,
+    }, True)
+    app.add_transform(AutoStructify)
