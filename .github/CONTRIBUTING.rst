@@ -48,7 +48,7 @@ Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of
 
 The first three commands will make some modifications to your code so that it is nicely formatted, while the two last will run some checks to detect any additional issues. Please try to fix them!
 
-*PS: If you want to check the whole package, just replace 'myfile.py' by 'neurokit2' and add ``--recursive`` to ``isort`` and ``docformatter``.
+*PS:* If you want to check the whole package, just replace 'myfile.py' by 'neurokit2' and add ``--recursive`` to ``isort`` and ``docformatter``.
 
 Development workflow
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -128,11 +128,11 @@ Step 4: Commit it and push it
 
 In your Github Desktop, you will now find the changes that you made highlighted in **red** (removed) or **green** (added). 
 
-The first thing that you have to do is to switch from the default - *Commit to Master* to *Commit to dev**. Always commit to your dev branch as it is the branch with the latest changes. Then give the changes you made a good and succinct title and hit the *Commit* button.
+The first thing that you have to do is to switch from the default - *Commit to Master* to *Commit to dev*. Always commit to your dev branch as it is the branch with the latest changes. Then give the changes you made a good and succinct title and hit the *Commit* button.
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/dev/docs/img/commit.png
 
-**Committing** allows your changes to be saved in your *local* copy of the repository and in order to have the changes saved in your **remote** copy, you have to **push* the commit that you just made.
+**Committing** allows your changes to be saved in your *local* copy of the repository and in order to have the changes saved in your **remote** copy, you have to **push** the commit that you just made.
 
 
 Step 4: Create pull request
