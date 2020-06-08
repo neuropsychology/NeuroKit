@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Script for formatting the MITDB database
+"""Script for formatting the MIT database
 
 Steps:
     1. Download the ZIP database from https://alpha.physionet.org/content/mitdb/1.0.0/
-    2. Open it with a zip-opener (WinZip, 7zip)
-    3. Extract the folder of the same name (named 'mit-bih-arrhythmia-database-1.0.0') in the same folder as this script.
-    4. Run this script
+    2. Open it with a zip-opener (WinZip, 7zip).
+    3. Extract the folder of the same name (named 'mit-bih-arrhythmia-database-1.0.0') to the same folder as this script.
+    4. Run this script.
 
 Credits:
     https://github.com/berndporr/py-ecg-detectors/blob/master/tester_MITDB.py by Bernd Porr
@@ -30,7 +30,7 @@ for participant, file in enumerate(data_files):
     data["Participant"] = participant
     data["Sample"] = range(len(data))
     data["Sampling_Rate"] = 360
-    data["Database"] = "MITDB"
+    data["Database"] = "MITDB-x" if "x_mitdb" in file else "MITDB"
 
     # getting annotations
     anno = wfdb.rdann(file[:-4], 'atr')
@@ -38,7 +38,7 @@ for participant, file in enumerate(data_files):
     anno = pd.DataFrame({"Rpeaks": anno})
     anno["Participant"] = participant
     anno["Sampling_Rate"] = 360
-    anno["Database"] = "MITDB"
+    anno["Database"] = "MITDB-x" if "x_mitdb" in file else "MITDB"
 
     # Store with the rest
     dfs_ecg.append(data)
