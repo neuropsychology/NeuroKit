@@ -58,7 +58,8 @@ extensions = [
     'sphinx_rtd_theme',
     'nbsphinx',
     'sphinx_nbexamples',
-    'matplotlib.sphinxext.plot_directive'
+    'matplotlib.sphinxext.plot_directive',
+    'm2r'
 ]
 
 # matplotlib plot directive
