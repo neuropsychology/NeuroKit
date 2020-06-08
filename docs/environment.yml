@@ -12,3 +12,4 @@ dependencies:
     - sphinx-nbexamples
     - sphinx-gallery
     - recommonmark
+    - sphinx-copybutton
