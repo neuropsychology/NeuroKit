@@ -89,13 +89,14 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     out["SDNN"] = np.nanstd(rri, ddof=1)
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
+    # Normalized
     out["CVNN"] = out["SDNN"] / out["MeanNN"]
     out["CVSD"] = out["RMSSD"] / out["MeanNN"]
 
     # Robust
     out["MedianNN"] = np.nanmedian(rri)
     out["MadNN"] = mad(rri)
-    out["MCVNN"] = out["MadNN"] / out["MedianNN"]
+    out["MCVNN"] = out["MadNN"] / out["MedianNN"]  # Normalized
 
     # Extreme-based
     nn50 = np.sum(np.abs(diff_rri) > 50)
