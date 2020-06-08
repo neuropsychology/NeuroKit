@@ -3,7 +3,7 @@
 import numpy as np
 import pandas as pd
 
-from ..signal import signal_findpeaks, signal_smooth, signal_zerocrossings
+from ..signal import signal_filter, signal_findpeaks, signal_smooth, signal_zerocrossings
 
 
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
@@ -52,7 +52,9 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     >>> gamboa2008 = nk.eda_findpeaks(eda_phasic, method="gamboa2008")
     >>> kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
     >>> neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
-    >>> fig = nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], neurokit["SCR_Peaks"]], eda_phasic)
+    >>> vanhalem2020 = nk.eda_findpeaks(eda_phasic, method="vanhalem2020")
+    >>> fig = nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], vanhalem2020["SCR_Peaks"],
+    ...                       neurokit["SCR_Peaks"]], eda_phasic)
     >>> fig #doctest: +SKIP
 
     References
@@ -78,6 +80,8 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         info = _eda_findpeaks_kim2004(eda_phasic, sampling_rate=sampling_rate, amplitude_min=amplitude_min)
     elif method in ["nk", "nk2", "neurokit", "neurokit2"]:
         info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
+    elif method in ["vanhalem2020", "vanhalem", "halem2020"]:
+        info = _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=sampling_rate)
     else:
         raise ValueError(
             "NeuroKit error: eda_findpeaks(): 'method' should be one of 'neurokit', 'gamboa2008' or 'kim2004'."
@@ -96,6 +100,45 @@ def _eda_findpeaks_neurokit(eda_phasic, amplitude_min=0.1):
     peaks = signal_findpeaks(eda_phasic, relative_height_min=amplitude_min, relative_max=True)
 
     info = {"SCR_Onsets": peaks["Onsets"], "SCR_Peaks": peaks["Peaks"], "SCR_Height": eda_phasic[peaks["Peaks"]]}
+
+    return info
+
+
+def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
+    """Follows approach of van Halem et al. (2020).
+
+    A peak is considered when there is a consistent increase of 0.5 seconds following a consistent decrease
+    of 0.5 seconds.
+
+    References
+    ----------
+    - van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
+    Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
+    Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
+
+    """
+    # smooth
+    eda_phasic = signal_filter(eda_phasic, sampling_rate=sampling_rate,
+                               lowcut=None, highcut=None, method='savgol', window_size=501)
+    info = signal_findpeaks(eda_phasic)
+    peaks = info['Peaks']
+
+    threshold = 0.5*sampling_rate
+
+    # Define each peak as a consistent increase of 0.5s
+    peaks = peaks[info['Width'] > threshold]
+    idx = np.where(peaks[:, None] == info['Peaks'][None, :])[1]
+
+    # Check if each peak is followed by consistent decrease of 0.5s
+    decrease = info['Offsets'][idx] - peaks
+    if any(np.isnan(decrease)):
+        decrease[np.isnan(decrease)] = False
+    if any(decrease < threshold):
+        keep = np.where(decrease > threshold)[0]
+        idx = idx[keep]  # Update index
+
+    info = {"SCR_Onsets": info['Onsets'][idx], "SCR_Peaks": info['Peaks'][idx],
+            "SCR_Height": info['Height'][idx]}
 
     return info
 
