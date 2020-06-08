@@ -1,1 +1,1 @@
-.. mdinclude:: ../../benchmarks/ecg_preprocessing/README.md
+.. include:: ../../benchmarks/ecg_preprocessing/README.md

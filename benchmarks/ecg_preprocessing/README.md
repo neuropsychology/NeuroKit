@@ -7,7 +7,7 @@ detectors.
 
 ## Databases
 
-  - **Glasgow University Database**
+### Glasgow University Database
 
 The GUDB Database (Howell & Porr, 2018) contains ECGs from 25 subjects.
 Each subject was recorded performing 5 different tasks for two minutes
@@ -20,7 +20,7 @@ The script to download and format the database using the
 Bernd Porr can be found
 [**here**](https://github.com/neuropsychology/NeuroKit/blob/dev/data/gudb/download_gudb.py).
 
-  - **MIT-BIH Arrhythmia Database**
+### MIT-BIH Arrhythmia Database
 
 The MIT-BIH Arrhythmia Database (MIT-Arrhythmia; Moody & Mark, 2001)
 contains 48 excerpts of 30-min of two-channel ambulatory ECG recordings
@@ -35,7 +35,7 @@ The script to download and format the database using the can be found
 
 <!-- The MIT-BIH Noise Stress Test Database [MIT-NST; @moody1984bih] features two 30-minute recordings distorted by adding different types and levels of synthesized noise typical of electrode motion artefacts. -->
 
-  - **MIT-BIH Normal Sinus Rhythm Database**
+### MIT-BIH Normal Sinus Rhythm Database
 
 This database includes 18 clean long-term ECG recordings of subjects.
 Due to memory limits, we only kept the second hour of recording of each

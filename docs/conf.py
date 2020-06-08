@@ -21,12 +21,16 @@
 import os
 import re
 import sys
-
 import mock
+import recommonmark
+
+from recommonmark.transform import AutoStructify
+
 
 sys.path.insert(0, os.path.abspath('../'))
 
 
+# -- Mock modules ---------------------------------------------
 MOCK_MODULES = ['scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg',
                 'scipy.spatial', 'scipy.special', 'scipy.integrate',
                 'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets', 'sklearn.metrics', 'sklearn.metrics.pairwise',
@@ -36,7 +40,15 @@ for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
 
 
-
+# -- Setup for recommonmark ---------------------------------------------
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+            'url_resolver': lambda url: github_doc_root + url,
+            'auto_toc_tree_section': 'Contents',
+            }, True)
+    app.add_transform(AutoStructify)
+    
+    
 # -- General configuration ---------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -59,7 +71,7 @@ extensions = [
     'nbsphinx',
     'sphinx_nbexamples',
     'matplotlib.sphinxext.plot_directive',
-    'm2r'
+    'recommonmark'
 ]
 
 # matplotlib plot directive
@@ -89,9 +101,11 @@ templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
+source_parsers = {
+    '.md': CommonMarkParser,
+}
+source_suffix = ['.rst', '.md']
 
 # The master toctree document.
 master_doc = 'index'

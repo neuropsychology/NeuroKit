@@ -11,4 +11,4 @@ dependencies:
     - git+git://github.com/mgeier/nbsphinx.git@pygments-background
     - sphinx-nbexamples
     - sphinx-gallery
-    - m2r
+    - recommonmark
