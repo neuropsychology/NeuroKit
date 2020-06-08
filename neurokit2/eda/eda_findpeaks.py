@@ -9,8 +9,8 @@ from ..signal import signal_filter, signal_findpeaks, signal_smooth, signal_zero
 def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0.1):
     """Identify Skin Conductance Responses (SCR) in Electrodermal Activity (EDA).
 
-    Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in the phasic component of
-    Electrodermal Activity (EDA) with different possible methods. See `eda_peaks()` for details.
+    Low-level function used by `eda_peaks()` to identify Skin Conductance Responses (SCR) peaks in the
+    phasic component of Electrodermal Activity (EDA) with different possible methods. See `eda_peaks()` for details.
 
     Parameters
     ----------
@@ -20,7 +20,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
     method : str
         The processing pipeline to apply. Can be one of "neurokit" (default),
-        "gamboa2008" or "kim2004" (the default in BioSPPy).
+        "gamboa2008", "kim2004" (the default in BioSPPy) or "vanhalem2020".
     amplitude_min : float
         Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude
         SCRs (peaks) as relative to the largest amplitude in the signal.
@@ -65,6 +65,10 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     - Kim, K. H., Bang, S. W., & Kim, S. R. (2004). Emotion recognition system using short-term monitoring
       of physiological signals. Medical and biological engineering and computing, 42(3), 419-427.
 
+    - van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
+      Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
+      Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
+
     """
     # Try to retrieve the right column if a dataframe is passed
     if isinstance(eda_phasic, pd.DataFrame):
@@ -84,7 +88,8 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         info = _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=sampling_rate)
     else:
         raise ValueError(
-            "NeuroKit error: eda_findpeaks(): 'method' should be one of 'neurokit', 'gamboa2008' or 'kim2004'."
+            "NeuroKit error: eda_findpeaks(): 'method' should be one of 'neurokit', 'gamboa2008', 'kim2004'"
+            " or 'vanhalem2020'."
         )
 
     return info
@@ -109,6 +114,22 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
 
     A peak is considered when there is a consistent increase of 0.5 seconds following a consistent decrease
     of 0.5 seconds.
+
+    Parameters
+    ----------
+    eda_phasic : array
+        Input filterd EDA signal.
+    sampling_rate : int
+        Sampling frequency (Hz). Defaults to 1000Hz.
+
+    Returns
+    -------
+    onsets : array
+        Indices of the SCR onsets.
+    peaks : array
+        Indices of the SRC peaks.
+    amplitudes : array
+        SCR pulse amplitudes.
 
     References
     ----------
@@ -146,6 +167,20 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
 def _eda_findpeaks_gamboa2008(eda_phasic):
     """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach in the thesis
     by Gamboa (2008).
+
+    Parameters
+    ----------
+    eda_phasic : array
+        Input filterd EDA signal.
+
+    Returns
+    -------
+    onsets : array
+        Indices of the SCR onsets.
+    peaks : array
+        Indices of the SRC peaks.
+    amplitudes : array
+        SCR pulse amplitudes.
 
     References
     ----------
