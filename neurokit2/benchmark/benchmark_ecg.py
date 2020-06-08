@@ -68,8 +68,6 @@ def benchmark_ecg_preprocessing(function, ecg, rpeaks=None, sampling_rate=1000):
     return results
 
 
-
-
 # =============================================================================
 # Utils
 # =============================================================================
@@ -109,23 +107,28 @@ def _benchmark_ecg_preprocessing(function, ecg, rpeak, sampling_rate=1000):
         found_rpeaks = function(ecg, sampling_rate=sampling_rate)
         duration = (datetime.datetime.now() - t0).total_seconds()
     except Exception as error:  # In case of failure
-        return pd.DataFrame({"Sampling_Rate": [sampling_rate],
-                             "Duration": [np.nan],
-                             "Score": [np.nan],
-                             "Recording_Length": [len(ecg) / sampling_rate / 60],
-                             "Error": str(error)})
+        return pd.DataFrame(
+            {
+                "Sampling_Rate": [sampling_rate],
+                "Duration": [np.nan],
+                "Score": [np.nan],
+                "Recording_Length": [len(ecg) / sampling_rate / 60],
+                "Error": str(error),
+            }
+        )
 
     # Compare R peaks
     score, error = benchmark_ecg_compareRpeaks(rpeak, found_rpeaks, sampling_rate=sampling_rate)
 
-    return pd.DataFrame({"Sampling_Rate": [sampling_rate],
-                         "Duration": [duration],
-                         "Score": [score],
-                         "Recording_Length": [len(ecg) / sampling_rate / 60],
-                         "Error": error})
-
-
-
+    return pd.DataFrame(
+        {
+            "Sampling_Rate": [sampling_rate],
+            "Duration": [duration],
+            "Score": [score],
+            "Recording_Length": [len(ecg) / sampling_rate / 60],
+            "Error": error,
+        }
+    )
 
 
 # =============================================================================

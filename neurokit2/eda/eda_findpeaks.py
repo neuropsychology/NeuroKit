@@ -118,27 +118,27 @@ def _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=1000):
 
     """
     # smooth
-    eda_phasic = signal_filter(eda_phasic, sampling_rate=sampling_rate,
-                               lowcut=None, highcut=None, method='savgol', window_size=501)
+    eda_phasic = signal_filter(
+        eda_phasic, sampling_rate=sampling_rate, lowcut=None, highcut=None, method="savgol", window_size=501
+    )
     info = signal_findpeaks(eda_phasic)
-    peaks = info['Peaks']
+    peaks = info["Peaks"]
 
-    threshold = 0.5*sampling_rate
+    threshold = 0.5 * sampling_rate
 
     # Define each peak as a consistent increase of 0.5s
-    peaks = peaks[info['Width'] > threshold]
-    idx = np.where(peaks[:, None] == info['Peaks'][None, :])[1]
+    peaks = peaks[info["Width"] > threshold]
+    idx = np.where(peaks[:, None] == info["Peaks"][None, :])[1]
 
     # Check if each peak is followed by consistent decrease of 0.5s
-    decrease = info['Offsets'][idx] - peaks
+    decrease = info["Offsets"][idx] - peaks
     if any(np.isnan(decrease)):
         decrease[np.isnan(decrease)] = False
     if any(decrease < threshold):
         keep = np.where(decrease > threshold)[0]
         idx = idx[keep]  # Update index
 
-    info = {"SCR_Onsets": info['Onsets'][idx], "SCR_Peaks": info['Peaks'][idx],
-            "SCR_Height": info['Height'][idx]}
+    info = {"SCR_Onsets": info["Onsets"][idx], "SCR_Peaks": info["Peaks"][idx], "SCR_Height": info["Height"][idx]}
 
     return info
 

@@ -1,5 +1,6 @@
-from wfdb.processing import compare_annotations
 from timeit import default_timer as timer
+
+from wfdb.processing import compare_annotations
 
 
 def benchmark_record(record, sampling_rate, annotation, tolerance, detector):
