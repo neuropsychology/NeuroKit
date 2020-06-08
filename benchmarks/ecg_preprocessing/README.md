@@ -7,7 +7,7 @@ detectors.
 
 ## Databases
 
-### Glasgow University Database
+  - **Glasgow University Database**
 
 The GUDB Database (Howell & Porr, 2018) contains ECGs from 25 subjects.
 Each subject was recorded performing 5 different tasks for two minutes
@@ -17,182 +17,330 @@ for all the conditions.
 
 The script to download and format the database using the
 [**ECG-GUDB**](https://github.com/berndporr/ECG-GUDB) Python package by
-Bernd Porr can be found [**here**]().
+Bernd Porr can be found
+[**here**](https://github.com/neuropsychology/NeuroKit/blob/dev/data/gudb/download_gudb.py).
 
-### MIT-BIH Arrhythmia Database
+  - **MIT-BIH Arrhythmia Database**
 
-The MIT-BIH Arrhythmia Database (Moody & Mark, 2001) contains 48 +0 min
-excerpts of two-channel ambulatory ECG recordings sampled at 360Hz.
+The MIT-BIH Arrhythmia Database (MIT-Arrhythmia; Moody & Mark, 2001)
+contains 48 excerpts of 30-min of two-channel ambulatory ECG recordings
+sampled at 360Hz and 25 additional recordings from the same participants
+including common but clinically significant arrhythmias (denoted as the
+`MIT-Arrhythmia-x` database).
+
+The script to download and format the database using the can be found
+[**here**](https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_arrhythmia/download_mit_arrhythmia.py).
 
 <!-- ### MIT-BIH Noise Stress Test Database -->
 
-<!-- The MIT-BIH Noise Stress Test Database (NSTDB) [Moody et al., 1984] features a 30-minute recording of noise typical of electrode motion artefacts and uses a script to add this on top of clean recordings from the MITDB.  -->
+<!-- The MIT-BIH Noise Stress Test Database [MIT-NST; @moody1984bih] features two 30-minute recordings distorted by adding different types and levels of synthesized noise typical of electrode motion artefacts. -->
 
-### Concanate them together
+  - **MIT-BIH Normal Sinus Rhythm Database**
 
-``` python
-import pandas as pd
+This database includes 18 clean long-term ECG recordings of subjects.
+Due to memory limits, we only kept the second hour of recording of each
+participant.
 
-# Load ECGs
-ecgs_gudb = pd.read_csv("../../data/gudb/ECGs.csv")
-ecgs_mitdb = pd.read_csv("../../data/mitdb/ECGs.csv")
+The script to download and format the database using the can be found
+[**here**](https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_normal/download_mit_normal.py).
 
-# Load True R-peaks location
-rpeaks_gudb = pd.read_csv("../../data/gudb/Rpeaks.csv")
-rpeaks_mitd = pd.read_csv("../../data/mitdb/Rpeaks.csv")
+<!-- ### Lobachevsky University Electrocardiography Database -->
 
-# Concatenate
-ecgs = pd.concat([ecgs_gudb, ecgs_mitdb], ignore_index=True)
-rpeaks = pd.concat([rpeaks_gudb, rpeaks_mitd], ignore_index=True)
-```
+<!-- The Lobachevsky University Electrocardiography Database [LUDB; @kalyakulina2018lu] consists of 200 10-second 12-lead ECG signal records representing different morphologies of the ECG signal. The ECGs were collected from healthy volunteers and patients. The patients had various cardiovascular diseases while some of them had pacemakers.  -->
 
-## Comparing Different R-Peaks Detection Algorithms
+<!-- ### Concanate them together -->
 
-### Setup Functions
+<!-- ```{python, eval=FALSE} -->
 
-``` python
-import neurokit2 as nk
+<!-- import pandas as pd -->
 
-def neurokit(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
-    return info["ECG_R_Peaks"]
+<!-- # Load ECGs -->
 
-def pantompkins1985(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="pantompkins1985")
-    return info["ECG_R_Peaks"]
-    
-def hamilton2002(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="hamilton2002")
-    return info["ECG_R_Peaks"]
-    
-def martinez2003(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="martinez2003")
-    return info["ECG_R_Peaks"]
-    
-def christov2004(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="christov2004")
-    return info["ECG_R_Peaks"]
-    
-def gamboa2008(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="gamboa2008")
-    return info["ECG_R_Peaks"]
+<!-- ecgs_gudb = pd.read_csv("../../data/gudb/ECGs.csv") -->
 
-def elgendi2010(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="elgendi2010")
-    return info["ECG_R_Peaks"]
-    
-def engzeemod2012(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="engzeemod2012")
-    return info["ECG_R_Peaks"]
-    
-def kalidas2017(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="kalidas2017")
-    return info["ECG_R_Peaks"]
-    
-def rodrigues2020(ecg, sampling_rate):
-    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="rodrigues2020")
-    return info["ECG_R_Peaks"]
-```
+<!-- ecgs_mit1 = pd.read_csv("../../data/mit_arrhythmia/ECGs.csv") -->
 
-### Run the Benchmark
+<!-- ecgs_mit2 = pd.read_csv("../../data/mit_normal/ECGs.csv") -->
 
-*Note: This takes a long time (several hours).*
+<!-- # Load True R-peaks location -->
 
-``` python
-results = []
-for method in [neurokit, pantompkins1985, hamilton2002, martinez2003, christov2004, 
-               gamboa2008, elgendi2010, engzeemod2012, kalidas2017, rodrigues2020]:
-    print(method.__name__)
-    result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks)
-    result["Method"] = method.__name__
-    results.append(result)
-results = pd.concat(results).reset_index(drop=True)
+<!-- rpeaks_gudb = pd.read_csv("../../data/gudb/Rpeaks.csv") -->
 
-results.to_csv("data.csv", index=False)
-```
+<!-- rpeaks_mit1 = pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv") -->
 
-## Results
+<!-- rpeaks_mit2 = pd.read_csv("../../data/mit_normal/Rpeaks.csv") -->
 
-``` r
-library(tidyverse)
-library(easystats)
-library(lme4)
+<!-- # Concatenate -->
 
-data <- read.csv("data.csv", stringsAsFactors = FALSE) %>% 
-  mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database),
-         Method = fct_relevel(Method, "neurokit", "pantompkins1985", "hamilton2002", "martinez2003", "christov2004", "gamboa2008", "elgendi2010", "engzeemod2012", "kalidas2017", "rodrigues2020"),
-         Participant = paste0(Database, Participant))
+<!-- ecgs = pd.concat([ecgs_gudb, ecgs_mit1, ecgs_mit2], ignore_index=True) -->
 
-colors <- c("neurokit"="#E91E63", "pantompkins1985"="#f44336", "hamilton2002"="#FF5722", "martinez2003"="#FF9800", "christov2004"="#FFC107", "gamboa2008"="#4CAF50", "elgendi2010"="#009688", "engzeemod2012"="#2196F3", "kalidas2017"="#3F51B5", "rodrigues2020"="#9C27B0") 
-```
+<!-- rpeaks = pd.concat([rpeaks_gudb, rpeaks_mit1, rpeaks_mit2], ignore_index=True) -->
 
-### Errors
+<!-- ``` -->
 
-``` r
-data %>% 
-  mutate(Error = case_when(
-    Error == "index -1 is out of bounds for axis 0 with size 0" ~ "index -1 out of bounds",
-    Error == "index 0 is out of bounds for axis 0 with size 0" ~ "index 0 out of bounds",
-    TRUE ~ Error)) %>% 
-  group_by(Database, Method) %>% 
-  mutate(n = n()) %>% 
-  group_by(Database, Method, Error) %>% 
-  summarise(Percentage = n() / unique(n)) %>% 
-  ungroup() %>% 
-  mutate(Error = fct_relevel(Error, "None")) %>% 
-  ggplot(aes(x=Error, y=Percentage, fill=Method)) +
-    geom_bar(stat="identity", position = position_dodge2(preserve = "single")) +
-    facet_grid(~Database) +
-    theme_modern() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    scale_fill_manual(values=colors)
-```
+<!-- ## Comparing Different R-Peaks Detection Algorithms -->
 
-![](figures/unnamed-chunk-6-1.png)<!-- -->
+<!-- ### Setup Functions -->
 
-``` r
+<!-- ```{python, eval=FALSE} -->
 
-data <- filter(data, Error == "None")
-data <- filter(data, !is.na(Score))
-```
+<!-- import neurokit2 as nk -->
 
-**Conclusion:** It seems that `gamboa2008` and `martinez2003` are
-particularly prone to errors, especially in the case of a noisy ECG
-signal. Aside from that, the other algorithms are quite resistant and
-bug-free.
+<!-- def neurokit(ecg, sampling_rate): -->
 
-### Time
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit") -->
 
-#### Descriptive Statistics
+<!--     return info["ECG_R_Peaks"] -->
 
-``` r
-data %>% 
-  mutate(Duration = Duration / Recording_Length) %>% 
-  ggplot(aes(x=Database, y=Duration)) +
-    geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=1) +
-    geom_jitter2(aes(color=Method, group=Method), size=3, alpha=0.2, position=position_jitterdodge()) +
-    geom_hline(yintercept=0, linetype="dotted") +
-    theme_modern() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    scale_color_manual(values=colors) +
-    scale_fill_manual(values=colors) +
-    scale_y_sqrt() +
-    ylab("Duration (seconds per minute of recording)")
-```
+<!-- def pantompkins1985(ecg, sampling_rate): -->
 
-![](figures/unnamed-chunk-7-1.png)<!-- -->
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="pantompkins1985") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- def hamilton2002(ecg, sampling_rate): -->
+
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="hamilton2002") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- def martinez2003(ecg, sampling_rate): -->
+
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="martinez2003") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- def christov2004(ecg, sampling_rate): -->
+
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="christov2004") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- def gamboa2008(ecg, sampling_rate): -->
+
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="gamboa2008") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- def elgendi2010(ecg, sampling_rate): -->
+
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="elgendi2010") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- def engzeemod2012(ecg, sampling_rate): -->
+
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="engzeemod2012") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- def kalidas2017(ecg, sampling_rate): -->
+
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="kalidas2017") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- def rodrigues2020(ecg, sampling_rate): -->
+
+<!--     signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="rodrigues2020") -->
+
+<!--     return info["ECG_R_Peaks"] -->
+
+<!-- ``` -->
+
+<!-- ### Run the Benchmark -->
+
+<!-- *Note: This takes a long time (several hours).* -->
+
+<!-- ```{python, eval=FALSE} -->
+
+<!-- results = [] -->
+
+<!-- for method in [neurokit, pantompkins1985, hamilton2002, martinez2003, christov2004,  -->
+
+<!--                gamboa2008, elgendi2010, engzeemod2012, kalidas2017, rodrigues2020]: -->
+
+<!--     result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks) -->
+
+<!--     result["Method"] = method.__name__ -->
+
+<!--     results.append(result) -->
+
+<!-- results = pd.concat(results).reset_index(drop=True) -->
+
+<!-- results.to_csv("data.csv", index=False) -->
+
+<!-- ``` -->
+
+<!-- ## Results -->
+
+<!-- ```{r, message=FALSE, warning=FALSE, results='hide'} -->
+
+<!-- library(tidyverse) -->
+
+<!-- library(easystats) -->
+
+<!-- library(lme4) -->
+
+<!-- data <- read.csv("data.csv", stringsAsFactors = FALSE) %>%  -->
+
+<!--   mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database), -->
+
+<!--          Method = fct_relevel(Method, "neurokit", "pantompkins1985", "hamilton2002", "martinez2003", "christov2004", "gamboa2008", "elgendi2010", "engzeemod2012", "kalidas2017", "rodrigues2020"), -->
+
+<!--          Participant = paste0(Database, Participant)) -->
+
+<!-- colors <- c("neurokit"="#E91E63", "pantompkins1985"="#f44336", "hamilton2002"="#FF5722", "martinez2003"="#FF9800", "christov2004"="#FFC107", "gamboa2008"="#4CAF50", "elgendi2010"="#009688", "engzeemod2012"="#2196F3", "kalidas2017"="#3F51B5", "rodrigues2020"="#9C27B0")  -->
+
+<!-- ``` -->
+
+<!-- ### Errors -->
 
 <!-- ```{r, warning=FALSE, message=FALSE} -->
 
-<!-- # Interaction time and recording length -->
+<!-- data %>%  -->
+
+<!--   mutate(Error = case_when( -->
+
+<!--     Error == "index -1 is out of bounds for axis 0 with size 0" ~ "index -1 out of bounds", -->
+
+<!--     Error == "index 0 is out of bounds for axis 0 with size 0" ~ "index 0 out of bounds", -->
+
+<!--     TRUE ~ Error)) %>%  -->
+
+<!--   group_by(Database, Method) %>%  -->
+
+<!--   mutate(n = n()) %>%  -->
+
+<!--   group_by(Database, Method, Error) %>%  -->
+
+<!--   summarise(Percentage = n() / unique(n)) %>%  -->
+
+<!--   ungroup() %>%  -->
+
+<!--   mutate(Error = fct_relevel(Error, "None")) %>%  -->
+
+<!--   ggplot(aes(x=Error, y=Percentage, fill=Method)) + -->
+
+<!--     geom_bar(stat="identity", position = position_dodge2(preserve = "single")) + -->
+
+<!--     facet_grid(~Database) + -->
+
+<!--     theme_modern() + -->
+
+<!--     theme(axis.text.x = element_text(angle = 45, hjust = 1)) + -->
+
+<!--     scale_fill_manual(values=colors) -->
+
+<!-- data <- filter(data, Error == "None") -->
+
+<!-- data <- filter(data, !is.na(Score)) -->
+
+<!-- ``` -->
+
+<!-- **Conclusion:** It seems that `gamboa2008` and `martinez2003` are particularly prone to errors, especially in the case of a noisy ECG signal. Aside from that, the other algorithms are quite resistant and bug-free. -->
+
+<!-- ### Time -->
+
+<!-- #### Descriptive Statistics -->
+
+<!-- ```{r, warning=FALSE, message=FALSE} -->
 
 <!-- data %>%  -->
 
-<!--   ggplot(aes(x=Recording_Length, y=Duration, color=Method)) + -->
+<!--   mutate(Duration = (Duration) / (Recording_Length * Sampling_Rate)) %>%  -->
 
-<!--     geom_jitter(aes(shape=Database), size=3, alpha=0.7) + -->
+<!--   ggplot(aes(x=Method, y=Duration, fill=Method)) + -->
 
-<!--     geom_smooth(method="lm", se = FALSE) + -->
+<!--     geom_boxplot(aes(alpha=Database), outlier.alpha = 0) + -->
+
+<!--     geom_jitter2(aes(color=Method, group=Database), size=3, alpha=0.2, position=position_jitterdodge()) + -->
+
+<!--     geom_hline(yintercept=0, linetype="dotted") + -->
+
+<!--     theme_modern() + -->
+
+<!--     theme(axis.text.x = element_text(angle = 45, hjust = 1)) + -->
+
+<!--     scale_alpha_manual(values=c(1, 0.75, 0.5, 0.25)) + -->
+
+<!--     scale_color_manual(values=colors) + -->
+
+<!--     scale_fill_manual(values=colors) + -->
+
+<!--     scale_y_sqrt() + -->
+
+<!--     ylab("Duration (seconds per minute of recording)") -->
+
+<!-- ``` -->
+
+<!-- <!-- ```{r, warning=FALSE, message=FALSE} -->
+
+–\> <!-- <!-- # Interaction time and recording length --> –\>
+<!-- <!-- data %>%  --> –\>
+<!-- <!--   ggplot(aes(x=Recording_Length, y=Duration, color=Method)) + -->
+–\>
+<!-- <!--     geom_jitter(aes(shape=Database), size=3, alpha=0.7) + -->
+–\> <!-- <!--     geom_smooth(method="lm", se = FALSE) + --> –\>
+<!-- <!--     theme_modern() + --> –\>
+<!-- <!--     theme(axis.text.x = element_text(angle = 45, hjust = 1)) + -->
+–\> <!-- <!--     scale_color_manual(values=colors) + --> –\>
+<!-- <!--     scale_fill_manual(values=colors) + --> –\>
+<!-- <!--     scale_y_sqrt() --> –\> <!-- <!-- ``` --> –\>
+
+<!-- #### Statistical Modelling -->
+
+<!-- ```{r, warning=FALSE, message=FALSE} -->
+
+<!-- model <- glm(Duration ~ Method, data=mutate(data, Duration = Duration / (Recording_Length * Sampling_Rate) + 1e-150), family=Gamma) -->
+
+<!-- means <- modelbased::estimate_means(model) -->
+
+<!-- arrange(means, Mean) -->
+
+<!-- means %>%  -->
+
+<!--   ggplot(aes(x=Method, y=Mean, color=Method)) + -->
+
+<!--   geom_line(aes(group=1), size=1) + -->
+
+<!--   geom_pointrange(aes(ymin=CI_low, ymax=CI_high), size=1) + -->
+
+<!--   theme_modern() + -->
+
+<!--   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + -->
+
+<!--   scale_color_manual(values=colors) -->
+
+<!-- ``` -->
+
+<!-- **Conclusion:** It seems that `gamboa2008` and `neurokit` are the fastest methods, followed by `martinez2003`, `kalidas2017`, `rodrigues2020` and `hamilton2002`. The other methods are then substantially slower. -->
+
+<!-- ### Score -->
+
+<!-- **Note:** The accuracy is computed as the absolute distance from the original "true" R-peaks location. As such, the closest to zero, the better the accuracy. -->
+
+<!-- #### Descriptive Statistics -->
+
+<!-- ```{r, warning=FALSE, message=FALSE} -->
+
+<!-- data <- data %>%  -->
+
+<!--   mutate(Outlier = performance::check_outliers(Score, threshold = list(zscore = stats::qnorm(p = 1 - 0.000001)))) %>%  -->
+
+<!--   filter(Outlier == 0) %>%  -->
+
+<!--   mutate(Score = Score + 1e-150)  # To be positive-defined. -->
+
+<!-- p <- data %>%  -->
+
+<!--   ggplot(aes(x=Database, y=Score)) + -->
+
+<!--     geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=1) + -->
+
+<!--     geom_jitter2(aes(color=Method, group=Method), size=3, alpha=0.2, position=position_jitterdodge()) + -->
+
+<!--     geom_hline(yintercept=0, linetype="dotted") + -->
 
 <!--     theme_modern() + -->
 
@@ -202,121 +350,51 @@ data %>%
 
 <!--     scale_fill_manual(values=colors) + -->
 
-<!--     scale_y_sqrt() -->
+<!--     scale_y_sqrt() + -->
+
+<!--     ylab("Amount of Error")  -->
+
+<!-- p -->
 
 <!-- ``` -->
 
-#### Statistical Modelling
+<!-- #### Statistical Modelling -->
 
-``` r
-model <- glm(Duration ~ Method, data=mutate(data, Duration = Duration / Recording_Length + 1e-150), family=Gamma)
+<!-- ```{r, warning=FALSE, message=FALSE} -->
 
-means <- modelbased::estimate_means(model)
+<!-- # model <- glmmTMB::glmmTMB(Score ~ Method + (1|Database) + (1|Participant), data=data, family=Gamma) -->
 
-arrange(means, Mean)
-##             Method    Mean       SE  CI_low CI_high
-## 1       gamboa2008 0.00290 8.68e-05 0.00274 0.00308
-## 2         neurokit 0.00584 1.24e-04 0.00560 0.00609
-## 3     martinez2003 0.01122 2.69e-04 0.01071 0.01177
-## 4      kalidas2017 0.02171 4.61e-04 0.02084 0.02265
-## 5    rodrigues2020 0.03451 7.33e-04 0.03313 0.03601
-## 6     hamilton2002 0.04308 9.15e-04 0.04135 0.04495
-## 7    engzeemod2012 0.16186 3.45e-03 0.15537 0.16892
-## 8  pantompkins1985 0.18502 3.93e-03 0.17762 0.19306
-## 9      elgendi2010 0.27328 5.81e-03 0.26235 0.28515
-## 10    christov2004 0.39891 8.48e-03 0.38296 0.41625
+<!-- model <- lmer(Score ~ Method + (1|Database) + (1|Participant), data=data) -->
 
-means %>% 
-  ggplot(aes(x=Method, y=Mean, color=Method)) +
-  geom_line(aes(group=1), size=1) +
-  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), size=1) +
-  theme_modern() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_manual(values=colors)
-```
+<!-- means <- modelbased::estimate_means(model) -->
 
-![](figures/unnamed-chunk-8-1.png)<!-- -->
+<!-- arrange(means, abs(Mean)) -->
 
-**Conclusion:** It seems that `gamboa2008` and `neurokit` are the
-fastest methods, followed by `martinez2003`, `kalidas2017`,
-`rodrigues2020` and `hamilton2002`. The other methods are then
-substantially slower.
+<!-- means %>%  -->
 
-### Score
+<!--   ggplot(aes(x=Method, y=Mean, color=Method)) + -->
 
-**Note:** The accuracy is computed as the absolute distance from the
-original “true” R-peaks location. As such, the closest to zero, the
-better the accuracy.
+<!--   geom_line(aes(group=1), size=1) + -->
 
-#### Descriptive Statistics
+<!--   geom_pointrange(aes(ymin=CI_low, ymax=CI_high), size=1) + -->
 
-``` r
-data <- data %>% 
-  mutate(Outlier = performance::check_outliers(Score, threshold = list(zscore = stats::qnorm(p = 1 - 0.000001)))) %>% 
-  filter(Outlier == 0) %>% 
-  mutate(Score = Score + 1e-150)  # To be positive-defined.
+<!--   geom_hline(yintercept=0, linetype="dotted") + -->
 
-p <- data %>% 
-  ggplot(aes(x=Database, y=Score)) +
-    geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=1) +
-    geom_jitter2(aes(color=Method, group=Method), size=3, alpha=0.2, position=position_jitterdodge()) +
-    geom_hline(yintercept=0, linetype="dotted") +
-    theme_modern() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-    scale_color_manual(values=colors) +
-    scale_fill_manual(values=colors) +
-    scale_y_sqrt() +
-    ylab("Amount of Error") 
-p
-```
+<!--   theme_modern() + -->
 
-![](figures/unnamed-chunk-9-1.png)<!-- -->
+<!--   theme(axis.text.x = element_text(angle = 45, hjust = 1)) + -->
 
-#### Statistical Modelling
+<!--   scale_color_manual(values=colors) -->
 
-``` r
-# model <- glmmTMB::glmmTMB(Score ~ Method + (1|Database) + (1|Participant), data=data, family=Gamma)
-model <- lmer(Score ~ Method + (1|Database) + (1|Participant), data=data)
+<!-- ``` -->
 
-means <- modelbased::estimate_means(model)
+<!-- **Conclusion:** It seems that `neurokit`, `kalidas2017` and `christov2004` the most accurate algorithms to detect R-peaks. This pattern of results differs a bit from @porr2019r that outlines `engzeemod2012`, `elgendi2010`, `kalidas2017` as the most accurate and `christov2004`, `hamilton2002` and `pantompkins1985` as the worse. -->
 
-arrange(means, abs(Mean))
-##             Method   Mean      SE  CI_low CI_high
-## 1         neurokit 0.0130 0.00466 0.00224  0.0238
-## 2     christov2004 0.0138 0.00474 0.00294  0.0246
-## 3      kalidas2017 0.0141 0.00466 0.00332  0.0249
-## 4    engzeemod2012 0.0275 0.00478 0.01666  0.0384
-## 5     martinez2003 0.0279 0.00517 0.01659  0.0392
-## 6    rodrigues2020 0.0294 0.00467 0.01860  0.0402
-## 7  pantompkins1985 0.0325 0.00467 0.02169  0.0433
-## 8     hamilton2002 0.0353 0.00468 0.02450  0.0461
-## 9      elgendi2010 0.0520 0.00478 0.04107  0.0628
-## 10      gamboa2008 0.0754 0.00848 0.05855  0.0923
+<!-- # Conclusion -->
 
-means %>% 
-  ggplot(aes(x=Method, y=Mean, color=Method)) +
-  geom_line(aes(group=1), size=1) +
-  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), size=1) +
-  geom_hline(yintercept=0, linetype="dotted") +
-  theme_modern() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_manual(values=colors)
-```
+<!-- Based on the accuracy / execution time criterion, it seems like `neurokit` is the best method, followed by `kalidas2017`. -->
 
-![](figures/unnamed-chunk-10-1.png)<!-- -->
-
-**Conclusion:** It seems that `neurokit`, `kalidas2017` and
-`christov2004` the most accurate algorithms to detect R-peaks. This
-pattern of results differs a bit from Porr & Howell (2019) that outlines
-`engzeemod2012`, `elgendi2010`, `kalidas2017` as the most accurate and
-`christov2004`, `hamilton2002` and `pantompkins1985` as the worse.
-
-# Conclusion
-
-Based on the accuracy / execution time criterion, it seems like
-`neurokit` is the best method, followed by `kalidas2017`.
-
-# References
+<!-- # References -->
 
 <div id="refs" class="references">
 
