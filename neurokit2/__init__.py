@@ -2,6 +2,7 @@
 """
 import datetime
 
+from .benchmark import *
 from .bio import *
 from .complexity import *
 from .data import *
@@ -20,7 +21,7 @@ from .stats import *
 
 
 # Info
-__version__ = "0.0.36"
+__version__ = "0.0.37"
 
 
 # Maintainer info
