@@ -8,7 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+ 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install mock
+        python -m pip install recommonmark
+
+    - name: Build Documentation
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs/"
-        build-command: "sphinx-build -b html . _build"
+        # build-command: "sphinx-build -b html . _build"
