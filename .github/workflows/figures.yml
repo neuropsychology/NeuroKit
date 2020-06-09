@@ -1,14 +1,13 @@
-name: Run README
+name: Update README figures
 
-# on:
-  # push:
-    # branches:
-      # - master
-on: pull_request
+on:
+  push:
+    branches:
+      - dev
+
 
 jobs:
   build:
-    name: Run README
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -46,7 +45,9 @@ jobs:
       uses: EndBug/add-and-commit@v4
       with:
         message: "Commit README figures"
+        ref: 'dev'
         add: "*.png"
+        
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
