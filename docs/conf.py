@@ -239,7 +239,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
         (master_doc,
-        'neurokit2',
+         'neurokit2',
          pdf_title,
          [author_field],
          1)
