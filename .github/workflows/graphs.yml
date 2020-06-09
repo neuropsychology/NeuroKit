@@ -1,9 +1,10 @@
 name: Run README
 
-on:
-  push:
-    branches:
-      - master
+# on:
+  # push:
+    # branches:
+      # - master
+on: pull_request
 
 jobs:
   build:
