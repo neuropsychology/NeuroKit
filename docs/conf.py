@@ -239,7 +239,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
         (master_doc,
-         'neurokit2',
+        'neurokit2',
          pdf_title,
          [author_field],
          1)
@@ -270,7 +270,7 @@ add_function_parentheses = True  # to ensure that parentheses are added to the e
 # -- Setup for recommonmark ---------------------------------------------
 def setup(app):
     app.add_config_value('recommonmark_config', {
-        #'url_resolver': lambda url: github_doc_root + url,
+        # 'url_resolver': lambda url: github_doc_root + url,
         'auto_toc_tree_section': 'Contents',
         'enable_math': False,
         'enable_inline_math': False,
