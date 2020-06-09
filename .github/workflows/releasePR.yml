@@ -1,4 +1,4 @@
-name: Publish Python 🐍 distributions 📦 to PyPI and TestPyPI
+name: 📦 Release PR
 # https://packaging.python.org/guides/publishing-package-distribution-releases-using-github-actions-ci-cd-workflows/
 on:
   push:
@@ -6,8 +6,43 @@ on:
       - master
 
 jobs:
+  readme:
+    name: Run README and save figures
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.7'
+ 
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install https://github.com/DominiqueMakowski/popularipy/zipball/master
+        cd $GITHUB_WORKSPACE
+        python setup.py install 
+   
+    - name: Run README_examples.py
+      run: |
+        cd $GITHUB_WORKSPACE/docs/readme
+        python README_examples.py
+        
+    - name: Commit figures
+      uses: EndBug/add-and-commit@v4
+      with:
+        message: "Update README figures"
+        ref: 'master'
+        add: "*.png"
+        
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+ 
+ 
   build-n-publish:
     name: Build and publish Python 🐍 distributions 📦 to PyPI and TestPyPI
+    needs: readme
     runs-on: ubuntu-latest
     
     steps:
