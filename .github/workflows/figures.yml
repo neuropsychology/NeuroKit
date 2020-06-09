@@ -3,7 +3,7 @@ name: Update README figures
 on:
   push:
     branches:
-      - dev
+      - master
 
 
 jobs:
@@ -28,24 +28,12 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/docs/readme
         python README_examples.py
-        # git add features.png
-        # git add README_complexity_optimize.png
-        # git add README_ecg.png
-        # git add README_eda.png
-        # git add README_embedding.png
-        # git add README_emg.png
-        # git add README_hdi.png
-        # git add README_popularity.png
-        # git add README_rsp.png
-        # git add README_signalprocessing.png
-        # git add README_simulation.png
-        # git add workflow.png
         
     - name: Commit figures
       uses: EndBug/add-and-commit@v4
       with:
-        message: "Commit README figures"
-        ref: 'dev'
+        message: "Update README figures"
+        ref: 'master'
         add: "*.png"
         
       env:
