@@ -8,7 +8,7 @@ dependencies:
   - nbconvert
   - ipykernel
   - pip:
-    - git+https://git@github.com/sphinx-doc/sphinx.git@5460ad6925199b57b27b7d059825d3560872edbb#egg=sphinx  # Do change that when this is merged (https://github.com/sphinx-doc/sphinx/pull/7739)
+    - git+https://git@github.com/sphinx-doc/sphinx.git@eric-wieser:include-any  # Do change that when this is merged (https://github.com/sphinx-doc/sphinx/pull/7739)
     - git+git://github.com/mgeier/nbsphinx.git@pygments-background  # Do change that when this is merged (https://github.com/spatialaudio/nbsphinx/pull/463)
     - sphinx-nbexamples
     - sphinx-gallery
