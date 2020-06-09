@@ -2,13 +2,14 @@
 #  - conda-forge
 dependencies:
   - python>=3.5
-  - sphinx>=1.4
+  #- sphinx>=1.4  # Get WIP version of sphinx with MD stuff
   - pip
   - pandoc
   - nbconvert
   - ipykernel
   - pip:
-    - git+git://github.com/mgeier/nbsphinx.git@pygments-background
+    - git+https://git@github.com/sphinx-doc/sphinx.git@5460ad6925199b57b27b7d059825d3560872edbb#egg=sphinx  # Do change that when this is merged (https://github.com/sphinx-doc/sphinx/pull/7739)
+    - git+git://github.com/mgeier/nbsphinx.git@pygments-background  # Do change that when this is merged (https://github.com/spatialaudio/nbsphinx/pull/463)
     - sphinx-nbexamples
     - sphinx-gallery
     - recommonmark
