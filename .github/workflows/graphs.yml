@@ -42,7 +42,7 @@ jobs:
         # git add README_simulation.png
         # git add workflow.png
         
-     name: Commit figures
+    - name: Commit figures
       uses: EndBug/add-and-commit@v4
       with:
         message: "Commit README figures"
