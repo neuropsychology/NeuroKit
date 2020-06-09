@@ -68,9 +68,11 @@ ecgs = pd.concat([ecgs_gudb, ecgs_mit1, ecgs_mit2], ignore_index=True)
 rpeaks = pd.concat([rpeaks_gudb, rpeaks_mit1, rpeaks_mit2], ignore_index=True)
 ```
 
-## Comparing Different R-Peaks Detection Algorithms
+## Study 1: Comparing Different R-Peaks Detection Algorithms
 
-### Setup Functions
+### Procedure
+
+#### Setup Functions
 
 ``` python
 import neurokit2 as nk
@@ -116,7 +118,7 @@ def rodrigues2020(ecg, sampling_rate):
     return info["ECG_R_Peaks"]
 ```
 
-### Run the Benchmark
+#### Run the Benchmarking
 
 *Note: This takes a long time (several hours).*
 
@@ -129,17 +131,17 @@ for method in [neurokit, pantompkins1985, hamilton2002, martinez2003, christov20
     results.append(result)
 results = pd.concat(results).reset_index(drop=True)
 
-results.to_csv("data.csv", index=False)
+results.to_csv("data_detectors.csv", index=False)
 ```
 
-## Results
+### Results
 
 ``` r
 library(tidyverse)
 library(easystats)
 library(lme4)
 
-data <- read.csv("data.csv", stringsAsFactors = FALSE) %>% 
+data <- read.csv("data_detectors.csv", stringsAsFactors = FALSE) %>% 
   mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database),
          Method = fct_relevel(Method, "neurokit", "pantompkins1985", "hamilton2002", "martinez2003", "christov2004", "gamboa2008", "elgendi2010", "engzeemod2012", "kalidas2017", "rodrigues2020"),
          Participant = paste0(Database, Participant))
@@ -147,7 +149,7 @@ data <- read.csv("data.csv", stringsAsFactors = FALSE) %>%
 colors <- c("neurokit"="#E91E63", "pantompkins1985"="#f44336", "hamilton2002"="#FF5722", "martinez2003"="#FF9800", "christov2004"="#FFC107", "gamboa2008"="#4CAF50", "elgendi2010"="#009688", "engzeemod2012"="#2196F3", "kalidas2017"="#3F51B5", "rodrigues2020"="#9C27B0") 
 ```
 
-### Errors
+#### Errors and bugs
 
 ``` r
 data %>% 
@@ -181,9 +183,9 @@ data <- filter(data, Error == "None")
 data <- filter(data, !is.na(Score))
 ```
 
-### Time
+#### Computation Time
 
-#### Descriptive Statistics
+##### Descriptive Statistics
 
 ``` r
 # Normalize duration
@@ -230,7 +232,7 @@ data %>%
 
 <!-- ``` -->
 
-#### Statistical Modelling
+##### Statistical Modelling
 
 ``` r
 model <- lmer(Duration ~ Method + (1|Database) + (1|Participant), data=data)
@@ -268,13 +270,13 @@ fastest methods, followed by `martinez2003`, `kalidas2017`,
 `rodrigues2020` and `hamilton2002`. The other methods are then
 substantially slower.
 
-### Score
+#### Accuracy
 
 **Note:** The accuracy is computed as the absolute distance from the
 original “true” R-peaks location. As such, the closest to zero, the
 better the accuracy.
 
-#### Descriptive Statistics
+##### Descriptive Statistics
 
 ``` r
 data <- data %>% 
@@ -296,7 +298,7 @@ data %>%
 
 ![](figures/unnamed-chunk-10-1.png)<!-- -->
 
-#### Statistical Modelling
+##### Statistical Modelling
 
 ``` r
 model <- lmer(Score ~ Method + (1|Database) + (1|Participant), data=data)
@@ -338,10 +340,127 @@ Discrepancies could be due to the differences in data and analysis, as
 here we used more databases and modelled them by respecting their
 hierarchical structure using mixed models.
 
-# Conclusion
+### Conclusion
 
 Based on the accuracy / execution time criterion, it seems like
-`neurokit` is the best method, followed by `kalidas2017`.
+`neurokit` is the best R-peak detection method, followed by
+`kalidas2017`.
+
+## Study 2: Normalization
+
+### Procedure
+
+#### Setup Functions
+
+``` python
+import neurokit2 as nk
+
+def none(ecg, sampling_rate):
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+
+def mean_detrend(ecg, sampling_rate):
+    ecg = nk.signal_detrend(ecg, order=0)
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+    
+def standardize(ecg, sampling_rate):
+    ecg = nk.standardize(ecg)
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+```
+
+#### Run the Benchmarking
+
+*Note: This takes a long time (several hours).*
+
+``` python
+results = []
+for method in [none, mean_detrend, standardize]:
+    result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks)
+    result["Method"] = method.__name__
+    results.append(result)
+results = pd.concat(results).reset_index(drop=True)
+
+results.to_csv("data_normalization.csv", index=False)
+```
+
+### Results
+
+``` r
+library(tidyverse)
+library(easystats)
+library(lme4)
+
+data <- read.csv("data_normalization.csv", stringsAsFactors = FALSE) %>% 
+  mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database),
+         Method = fct_relevel(Method, "none", "mean_removal", "standardization"),
+         Participant = paste0(Database, Participant)) %>% 
+  filter(Error == "None") %>% 
+  filter(!is.na(Score))
+
+colors <- c("none"="#607D8B", "mean_removal"="#673AB7", "standardization"="#00BCD4") 
+```
+
+#### Accuracy
+
+##### Descriptive Statistics
+
+``` r
+data <- data %>% 
+  mutate(Outlier = performance::check_outliers(Score, threshold = list(zscore = stats::qnorm(p = 1 - 0.000001)))) %>% 
+  filter(Outlier == 0)
+
+data %>% 
+  ggplot(aes(x=Database, y=Score)) +
+    geom_boxplot(aes(fill=Method), outlier.alpha = 0, alpha=1) +
+    geom_jitter2(aes(color=Method, group=Method), size=3, alpha=0.2, position=position_jitterdodge()) +
+    geom_hline(yintercept=0, linetype="dotted") +
+    theme_modern() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    scale_color_manual(values=colors) +
+    scale_fill_manual(values=colors) +
+    scale_y_sqrt() +
+    ylab("Amount of Error") 
+```
+
+![](figures/unnamed-chunk-15-1.png)<!-- -->
+
+##### Statistical Modelling
+
+``` r
+model <- lmer(Score ~ Method + (1|Database) + (1|Participant), data=data)
+
+modelbased::estimate_contrasts(model) 
+## Level1       |          Level2 | Difference |       SE |                95% CI |    t |     df |     p | Difference (std.)
+## --------------------------------------------------------------------------------------------------------------------------
+## mean_removal |            none |   1.59e-07 | 5.20e-07 | [-0.00e+00, 0.00e+00] | 0.31 | 370.00 | 0.759 |          1.64e-05
+## mean_removal | standardization |   7.75e-07 | 5.20e-07 | [-0.00e+00, 0.00e+00] | 1.49 | 370.00 | 0.410 |          7.99e-05
+## none         | standardization |   6.15e-07 | 5.20e-07 | [-0.00e+00, 0.00e+00] | 1.18 | 370.00 | 0.474 |          6.34e-05
+
+means <- modelbased::estimate_means(model)
+arrange(means, abs(Mean))
+##            Method    Mean      SE  CI_low CI_high
+## 1 standardization 0.00803 0.00136 0.00482  0.0112
+## 2            none 0.00803 0.00136 0.00482  0.0112
+## 3    mean_removal 0.00803 0.00136 0.00482  0.0112
+
+means %>% 
+  ggplot(aes(x=Method, y=Mean, color=Method)) +
+  geom_line(aes(group=1), size=1) +
+  geom_pointrange(aes(ymin=CI_low, ymax=CI_high), size=1) +
+  theme_modern() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_color_manual(values=colors) +
+    ylab("Amount of Error") 
+```
+
+![](figures/unnamed-chunk-16-1.png)<!-- -->
+
+### Conclusion
+
+No significant benefits added by normalization for the `neurokit`
+method.
 
 # References
 
