@@ -28,24 +28,24 @@ jobs:
       run: |
         cd $GITHUB_WORKSPACE/docs/readme
         python README_examples.py
-        git add features.png
-        git add README_complexity_optimize.png
-        git add README_ecg.png
-        git add README_eda.png
-        git add README_embedding.png
-        git add README_emg.png
-        git add README_hdi.png
-        git add README_popularity.png
-        git add README_rsp.png
-        git add README_signalprocessing.png
-        git add README_simulation.png
-        git add workflow.png
+        # git add features.png
+        # git add README_complexity_optimize.png
+        # git add README_ecg.png
+        # git add README_eda.png
+        # git add README_embedding.png
+        # git add README_emg.png
+        # git add README_hdi.png
+        # git add README_popularity.png
+        # git add README_rsp.png
+        # git add README_signalprocessing.png
+        # git add README_simulation.png
+        # git add workflow.png
         
-    - name: Create pull request
-        uses: peter-evans/create-pull-request@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Update README graphs
-          title: 'Update README graphs'
-          branch: update-graphs
+     name: Commit figures
+      uses: EndBug/add-and-commit@v4
+      with:
+        message: "Commit README figures"
+        add: "*.png"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
