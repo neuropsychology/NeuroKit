@@ -257,7 +257,8 @@ means %>%
   geom_hline(yintercept=0, linetype="dotted") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_manual(values=colors)
+  scale_color_manual(values=colors) +
+    ylab("Duration (seconds per data sample)")
 ```
 
 ![](figures/unnamed-chunk-9-1.png)<!-- -->
@@ -322,7 +323,8 @@ means %>%
   geom_hline(yintercept=0, linetype="dotted") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_manual(values=colors)
+  scale_color_manual(values=colors) +
+    ylab("Amount of Error") 
 ```
 
 ![](figures/unnamed-chunk-11-1.png)<!-- -->

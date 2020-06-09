@@ -275,7 +275,8 @@ means %>%
   geom_hline(yintercept=0, linetype="dotted") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_manual(values=colors)
+  scale_color_manual(values=colors) +
+    ylab("Duration (seconds per data sample)")
 ```
 
 
@@ -327,7 +328,8 @@ means %>%
   geom_hline(yintercept=0, linetype="dotted") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_color_manual(values=colors)
+  scale_color_manual(values=colors) +
+    ylab("Amount of Error") 
 ```
 
 **Conclusion:** It seems that `neurokit`, `kalidas2017` and `christov2004` the most accurate algorithms to detect R-peaks. This pattern of results differs a bit from @porr2019r that outlines `engzeemod2012`, `elgendi2010`, `kalidas2017` as the most accurate and `christov2004`, `hamilton2002` and `pantompkins1985` as the worse. Discrepancies could be due to the differences in data and analysis, as here we used more databases and modelled them by respecting their hierarchical structure using mixed models.
