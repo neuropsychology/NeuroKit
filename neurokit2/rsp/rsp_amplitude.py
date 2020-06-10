@@ -6,7 +6,7 @@ from ..signal import signal_interpolate
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
-def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
+def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monotone_cubic"):
     """Compute respiratory amplitude.
 
     Compute respiratory amplitude given the raw respiration signal and its extrema.
@@ -21,6 +21,12 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     troughs : list or array or DataFrame or Series or dict
         The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
         assumed that these containers were obtained with `rsp_findpeaks()`.
+    interpolation_method : str
+        Method used to interpolate the amplitude between peaks. See `signal_interpolate()`. 'monotone_cubic' is chosen
+        as the default interpolation method since it ensures monotone interpolation between data points
+        (i.e., it prevents physiologically implausible "overshoots" or "undershoots" in the y-direction).
+        In contrast, the widely used cubic spline interpolation does not ensure monotonicity.
+
 
     Returns
     -------
@@ -62,6 +68,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     amplitude = rsp_cleaned[peaks] - rsp_cleaned[troughs]
 
     # Interpolate amplitude to length of rsp_cleaned.
-    amplitude = signal_interpolate(peaks, amplitude, new_x=np.arange(len(rsp_cleaned)))
+    amplitude = signal_interpolate(peaks, amplitude, new_x=np.arange(len(rsp_cleaned)),
+                                   method=interpolation_method)
 
     return amplitude
