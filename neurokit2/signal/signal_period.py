@@ -47,7 +47,7 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     >>> nk.signal_plot(period)
 
     """
-    peaks, desired_length = _signal_formatpeaks_sanitize(peaks, desired_length)
+    peaks = _signal_formatpeaks_sanitize(peaks)
 
     # Sanity checks.
     if len(peaks) <= 3:

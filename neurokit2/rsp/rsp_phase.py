@@ -50,7 +50,7 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
 
     """
     # Format input.
-    peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, desired_length)
+    peaks, troughs = _rsp_fixpeaks_retrieve(peaks, troughs)
 
     # Phase
     inspiration = np.full(desired_length, np.nan)

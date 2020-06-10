@@ -41,7 +41,7 @@ def rsp_fixpeaks(peaks, troughs=None):
 
     """
     # Format input.
-    peaks, troughs, __ = _rsp_fixpeaks_retrieve(peaks, troughs, desired_length=None)
+    peaks, troughs = _rsp_fixpeaks_retrieve(peaks, troughs)
 
     # Do whatever fixing is required (nothing for now)
 
@@ -54,10 +54,10 @@ def rsp_fixpeaks(peaks, troughs=None):
 # =============================================================================
 # Internals
 # =============================================================================
-def _rsp_fixpeaks_retrieve(peaks, troughs=None, desired_length=None):
+def _rsp_fixpeaks_retrieve(peaks, troughs=None):
     # Format input.
     original_input = peaks
-    peaks, desired_length = _signal_formatpeaks_sanitize(original_input, desired_length, key="Peaks")
+    peaks = _signal_formatpeaks_sanitize(original_input, key="Peaks")
     if troughs is None:
-        troughs, _ = _signal_formatpeaks_sanitize(original_input, desired_length, key="Troughs")
-    return peaks, troughs, desired_length
+        troughs = _signal_formatpeaks_sanitize(original_input, key="Troughs")
+    return peaks, troughs
