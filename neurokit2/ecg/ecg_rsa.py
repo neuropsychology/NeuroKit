@@ -187,7 +187,7 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
         rsa = signal_interpolate(
             x_values=rsp_peaks[~np.isnan(rsa_values)],
             y_values=rsa_values[~np.isnan(rsa_values)],
-            desired_length=len(ecg_period),
+            new_x=np.arange(len(ecg_period)),
         )
 
     return rsa

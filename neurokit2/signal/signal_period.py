@@ -65,6 +65,6 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
 
     # Interpolate all statistics to desired length.
     if desired_length != np.size(peaks):
-        period = signal_interpolate(peaks, period, desired_length=desired_length, method=interpolation_method)
+        period = signal_interpolate(peaks, period, new_x=np.arange(desired_length), method=interpolation_method)
 
     return period

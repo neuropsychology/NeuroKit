@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import numpy as np
+
 from ..signal import signal_interpolate
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
@@ -44,7 +46,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
 
     """
     # Format input.
-    peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, len(rsp_cleaned))
+    peaks, troughs = _rsp_fixpeaks_retrieve(peaks, troughs)
 
     # To consistenty calculate amplitude, peaks and troughs must have the same
     # number of elements, and the first trough must precede the first peak.
@@ -59,7 +61,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     # difference of each peak to the preceding trough.
     amplitude = rsp_cleaned[peaks] - rsp_cleaned[troughs]
 
-    # Interpolate amplitude to desired_length samples.
-    amplitude = signal_interpolate(peaks, amplitude, desired_length=desired_length)
+    # Interpolate amplitude to length of rsp_cleaned.
+    amplitude = signal_interpolate(peaks, amplitude, new_x=np.arange(len(rsp_cleaned)))
 
     return amplitude
