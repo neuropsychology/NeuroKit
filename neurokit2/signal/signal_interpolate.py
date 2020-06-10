@@ -3,7 +3,7 @@ import numpy as np
 import scipy.interpolate
 
 
-def signal_interpolate(x_values, y_values, new_x=None, desired_length=None, method="quadratic"):
+def signal_interpolate(x_values, y_values, new_x=None, method="quadratic"):
     """Interpolate a signal.
 
     Interpolate a signal using different methods.
@@ -14,20 +14,18 @@ def signal_interpolate(x_values, y_values, new_x=None, desired_length=None, meth
         The samples corresponding to the values to be interpolated.
     y_values : list, array or Series
         The values to be interpolated.
-    new_x : list, array or Series
-        The samples at which to interpolate the y_values. Samples before the
-        first value in x_values or after the last value in x_values will be
-        extrapolated. If desired length is not None, the number of elements
-        in new_x must be equal to desired_length.
-    desired_length : int
-        The amount of samples over which to interpolate the y_values. If new_x
-        is not None, desired_length must be equal to the number of elements in
-        new_x.
+    new_x : list, array Series or int
+        The samples at which to interpolate the y_values. Samples before the first value in x_values
+        or after the last value in x_values will be extrapolated.
+        If an integer is passed, nex_x will be considered as the desired length of the interpolated
+        signal between the first and the last values of x_values. No extrapolation will be done for values
+        before or after the first and the last valus of x_values.
     method : str
         Method of interpolation. Can be 'linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic',
-        'previous', 'next' or 'monotone_cubic'.  'zero', 'slinear', 'quadratic' and 'cubic' refer to a spline interpolation
-        of zeroth, first, second or third order; 'previous' and 'next' simply return the previous or next
-        value of the point) or as an integer specifying the order of the spline interpolator to use.
+        'previous', 'next' or 'monotone_cubic'.  'zero', 'slinear', 'quadratic' and 'cubic' refer to
+        a spline interpolation of zeroth, first, second or third order; 'previous' and 'next' simply
+        return the previous or next value of the point) or as an integer specifying the order of the
+        spline interpolator to use.
         See https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html
         for details on the 'monotone_cubic' method.
 
@@ -58,23 +56,23 @@ def signal_interpolate(x_values, y_values, new_x=None, desired_length=None, meth
     if len(x_values) != len(y_values):
         raise ValueError("NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length.")
 
-    if desired_length is None or len(x_values) == desired_length:
-        return y_values
+    if isinstance(new_x, int):
+        if len(x_values) == new_x:
+            return y_values
+    else:
+        if len(x_values) == len(new_x):
+            return y_values
 
-    if (desired_length is not None) and (new_x is not None):
-        if len(new_x) != desired_length:
-            raise ValueError("NeuroKit error: signal_interpolate(): new_x must have desired_length elements.")
-
+    # Create interpolation function
     if method.lower() != "monotone_cubic":
-        # Create interpolation function
         interpolation_function = scipy.interpolate.interp1d(
             x_values, y_values, kind=method, bounds_error=False, fill_value=([y_values[0]], [y_values[-1]])
         )
     elif method.lower() == "monotone_cubic":
         interpolation_function = scipy.interpolate.PchipInterpolator(x_values, y_values, extrapolate=True)
 
-    if new_x is None:
-        new_x = np.linspace(x_values[0], x_values[-1], desired_length)
+    if isinstance(new_x, int):
+        new_x = np.linspace(x_values[0], x_values[-1], new_x)
 
     interpolated = interpolation_function(new_x)
 
