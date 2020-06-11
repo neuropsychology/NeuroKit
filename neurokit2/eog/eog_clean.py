@@ -35,6 +35,10 @@ def eog_clean(eog_signal, sampling_rate=1000):
     >>> eog = nk.eog_extract(raw, channels=["124", "125"], resampling_rate=None, raw_return=True)
     >>> sampling_rate = raw.info['sfreq']
     >>> eog_cleaned = nk.eog_clean(eog, sampling_rate=sampling_rate)
+    >>> fig = pd.DataFrame({"Raw": eog,
+    ...                     "Cleaned": filtered}).plot() #doctest: +ELLIPSIS
+    <matplotlib.axes._subplots.AxesSubplot at ...>
+
 
     References
     ----------
