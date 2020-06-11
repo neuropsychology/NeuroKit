@@ -4,7 +4,7 @@ import pandas as pd
 
 from ..signal import signal_period
 from ..signal.signal_formatpeaks import _signal_from_indices
-from .eog import eog_clean
+from .eog_clean import eog_clean
 
 
 def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
