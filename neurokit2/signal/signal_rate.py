@@ -43,7 +43,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_me
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
     >>> info = nk.signal_findpeaks(signal)
     >>>
-    >>> rate = nk.signal_rate(peaks=info["Peaks"])
+    >>> rate = nk.signal_rate(peaks=info["Peaks"], desired_length=len(signal))
     >>> fig = nk.signal_plot(rate)
     >>> fig #doctest: +SKIP
 

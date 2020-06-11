@@ -64,7 +64,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*4, sampling_rate=200)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200)
+    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200, desired_length=len(ecg))
     >>>
     >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=2, show=True)
     >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=3, show=True)

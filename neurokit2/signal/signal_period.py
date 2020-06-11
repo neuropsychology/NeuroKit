@@ -43,7 +43,7 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
     >>> info = nk.signal_findpeaks(signal)
     >>>
-    >>> period = nk.signal_period(peaks=info["Peaks"])
+    >>> period = nk.signal_period(peaks=info["Peaks"], desired_length=len(signal))
     >>> nk.signal_plot(period)
 
     """
