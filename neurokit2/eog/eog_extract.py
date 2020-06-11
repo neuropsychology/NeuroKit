@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import numpy as np
+import mne
 
-from ..eeg import mne_channel_add
-from ..eeg import mne_channel_extract
+from ..eeg import mne_channel_add, mne_channel_extract
 
 
 def eog_extract(raw, channels, resampling_rate=None, raw_return=False, show=False):
@@ -50,7 +49,7 @@ def eog_extract(raw, channels, resampling_rate=None, raw_return=False, show=Fals
 
     # Load eeg data
     if resampling_rate is not None:
-        raw = raw.resample(resampling_rate, npad='auto')
+        raw = raw.resample(resampling_rate, npad="auto")
 
     # Extract EOG channels
     if len(channels) != 2:

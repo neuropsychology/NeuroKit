@@ -10,6 +10,7 @@ from .ecg import *
 from .eda import *
 from .eeg import *
 from .emg import *
+from .eog import *
 from .epochs import *
 from .events import *
 from .hrv import *
