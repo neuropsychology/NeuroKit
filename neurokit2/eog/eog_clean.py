@@ -11,7 +11,7 @@ def eog_clean(eog_signal, sampling_rate=1000):
 
     Parameters
     ----------
-    eog_signal : list, array or Series
+    eog_signal : list or array or Series
         The raw EOG channel.
     sampling_rate : int
         The sampling frequency of `eog_signal` (in Hz, i.e., samples/second).
@@ -50,7 +50,8 @@ def eog_clean(eog_signal, sampling_rate=1000):
     eog_signal = as_vector(eog_signal)
 
     # Filter
-    clean = signal_filter(eog_signal, sampling_rate=sampling_rate, method="butterworth", order=4,
-                          lowcut=None, highcut=10)
+    clean = signal_filter(
+        eog_signal, sampling_rate=sampling_rate, method="butterworth", order=4, lowcut=None, highcut=10
+    )
 
     return clean
