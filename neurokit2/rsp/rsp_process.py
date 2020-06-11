@@ -67,9 +67,9 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     peak_signal, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
 
     # Get additional parameters
-    phase = rsp_phase(peak_signal)
+    phase = rsp_phase(peak_signal, desired_length=len(rsp_signal))
     amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
-    rate = signal_rate(peak_signal, sampling_rate=sampling_rate)
+    rate = signal_rate(peak_signal, sampling_rate=sampling_rate, desired_length=len(rsp_signal))
 
     # Prepare output
     signals = pd.DataFrame(

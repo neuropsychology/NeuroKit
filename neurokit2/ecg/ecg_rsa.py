@@ -187,7 +187,7 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
         rsa = signal_interpolate(
             x_values=rsp_peaks[~np.isnan(rsa_values)],
             y_values=rsa_values[~np.isnan(rsa_values)],
-            desired_length=len(ecg_period),
+            new_x=np.arange(len(ecg_period)),
         )
 
     return rsa
@@ -363,11 +363,11 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
 
     if rpeaks is None:
         try:
-            rpeaks, _ = _signal_formatpeaks_sanitize(ecg_signals, desired_length=None)
+            rpeaks = _signal_formatpeaks_sanitize(ecg_signals)
         except NameError:
             raise ValueError("NeuroKit error: _ecg_rsa_formatinput(): Wrong input, we couldn't extract rpeaks indices.")
     else:
-        rpeaks, _ = _signal_formatpeaks_sanitize(rpeaks, desired_length=None)
+        rpeaks = _signal_formatpeaks_sanitize(rpeaks)
 
     signals = pd.concat([ecg_signals, rsp_signals], axis=1)
 

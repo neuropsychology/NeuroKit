@@ -129,7 +129,7 @@ def test_signal_interpolate():
     x_axis = np.linspace(start=10, stop=30, num=10)
     signal = np.cos(x_axis)
 
-    interpolated = nk.signal_interpolate(x_axis, signal, desired_length=1000)
+    interpolated = nk.signal_interpolate(x_axis, signal, new_x=np.arange(1000))
     assert len(interpolated) == 1000
     assert interpolated[0] == signal[0]
     assert interpolated[-1] == signal[-1]
@@ -159,12 +159,13 @@ def test_signal_merge():
 def test_signal_rate():    # since singal_rate wraps signal_period, the latter is tested as well
 
     # Test with array.
-    signal = nk.signal_simulate(duration=10, sampling_rate=1000,
+    duration = 10
+    sampling_rate = 1000
+    signal = nk.signal_simulate(duration=duration, sampling_rate=sampling_rate,
                                 frequency=1)
     info = nk.signal_findpeaks(signal)
-    rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000,
-                          desired_length=None)
-    assert rate.shape[0] == len(info["Peaks"])
+    rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000, desired_length=len(signal))
+    assert rate.shape[0] == duration * sampling_rate
 
     # Test with dictionary.produced from signal_findpeaks.
     assert info[list(info.keys())[0]].shape == (info["Peaks"].shape[0], )
@@ -174,13 +175,12 @@ def test_signal_rate():    # since singal_rate wraps signal_period, the latter i
                           respiratory_rate=15, method="sinuosoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_peaks(rsp_cleaned)
-    rate = nk.signal_rate(signals, sampling_rate=1000)
+    rate = nk.signal_rate(signals, sampling_rate=1000, desired_length=len(rsp))
     assert rate.shape == (signals.shape[0], )
 
     # Test with dictionary.produced from rsp_findpeaks.
     test_length = 30
-    rate = nk.signal_rate(info, sampling_rate=1000,
-                          desired_length=test_length)
+    rate = nk.signal_rate(info, sampling_rate=1000, desired_length=test_length)
     assert rate.shape == (test_length, )
 
 

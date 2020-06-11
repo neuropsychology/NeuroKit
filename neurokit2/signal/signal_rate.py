@@ -2,7 +2,7 @@
 from .signal_period import signal_period
 
 
-def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_method="akima"):
+def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"):
     """Calculate signal rate from a series of peaks.
 
     This function can also be called either via ``ecg_rate()``, ```ppg_rate()`` or ``rsp_rate()``
@@ -22,7 +22,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_me
         set to an integer, the returned signal rate will be interpolated between peaks over `desired_length`
         samples. Has no effect if a DataFrame is passed in as the `signal` argument. Defaults to None.
     interpolation_method : str
-        Method used to interpolate the rate between peaks. See `signal_interpolate()`. 'akima' is chosen
+        Method used to interpolate the rate between peaks. See `signal_interpolate()`. 'monotone_cubic' is chosen
         as the default interpolation method since it ensures monotone interpolation between data points
         (i.e., it prevents physiologically implausible "overshoots" or "undershoots" in the y-direction).
         In contrast, the widely used cubic spline interpolation does not ensure monotonicity.

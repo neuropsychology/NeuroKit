@@ -47,7 +47,7 @@ def signal_interpolate(x_values, y_values, new_x=None, method="quadratic"):
     >>> fig, ax = plt.subplots() #doctest: +SKIP
     >>> ax.scatter(samples, signal, label="original datapoints", zorder=3) #doctest: +SKIP
     >>> for im in interpolation_methods:
-    ...     signal_interpolated = nk.signal_interpolate(samples, signal, desired_length=1000, method=im)
+    ...     signal_interpolated = nk.signal_interpolate(samples, signal, x_new=np.arange(1000), method=im)
     ...     ax.plot(np.linspace(0, 20, 1000), signal_interpolated, label=im) #doctest: +SKIP
     >>> ax.legend(loc="upper left") #doctest: +SKIP
 

@@ -222,7 +222,7 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
 
     if peaks is None:
         try:
-            peaks, _ = _signal_formatpeaks_sanitize(df, desired_length=None, key="RSP_Peaks")
+            peaks = _signal_formatpeaks_sanitize(df, key="RSP_Peaks")
         except NameError:
             raise ValueError(
                 "NeuroKit error: _rsp_rrv_formatinput():"
@@ -230,7 +230,7 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
                 "respiratory peaks indices."
             )
     else:
-        peaks, _ = _signal_formatpeaks_sanitize(peaks, desired_length=None, key="RSP_Peaks")
+        peaks = _signal_formatpeaks_sanitize(peaks, key="RSP_Peaks")
 
     return rsp_rate, peaks
 
