@@ -16,7 +16,7 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     Parameters
     ----------
     eog_signal : list or array or Series
-        The raw EOG channel.
+        The raw EOG channel, derived from `eog_extract()`.
     raw : mne.io.Raw
         Raw EEG data.
     sampling_rate : int
@@ -56,6 +56,16 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     and Computing (Allerton) (pp. 1113-1121). IEEE.
 
     """
+    # Make sure signal is one array
+    if isinstance(eog_signal, pd.DataFrame):
+        if len(eog_signal.columns) == 2:
+            eog_signal = eog_signal.iloc[:, 0] - eog_signal.iloc[:, 1]
+        elif len(eog_signal.columns) > 2:
+            raise ValueError(
+                "NeuroKit warning: eog_process(): Please make sure your EOG signal contains "
+                "at most 2 channels of signals."
+            )
+
     # Clean signal
     eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate)
 
