@@ -3,7 +3,7 @@ import mne
 import pandas as pd
 
 from ..signal import signal_period
-from ..signal_formatpeaks import _signal_from_indices
+from ..signal.signal_formatpeaks import _signal_from_indices
 from .eog import eog_clean
 
 
