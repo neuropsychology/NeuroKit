@@ -3,7 +3,7 @@ import numpy as np
 import scipy.interpolate
 
 
-def signal_interpolate(x_values, y_values, new_x=None, method="quadratic"):
+def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
     """Interpolate a signal.
 
     Interpolate a signal using different methods.
@@ -14,7 +14,7 @@ def signal_interpolate(x_values, y_values, new_x=None, method="quadratic"):
         The samples corresponding to the values to be interpolated.
     y_values : list, array or Series
         The values to be interpolated.
-    new_x : list, array Series or int
+    x_new : list, array Series or int
         The samples at which to interpolate the y_values. Samples before the first value in x_values
         or after the last value in x_values will be extrapolated.
         If an integer is passed, nex_x will be considered as the desired length of the interpolated
@@ -40,15 +40,20 @@ def signal_interpolate(x_values, y_values, new_x=None, method="quadratic"):
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
     >>>
-    >>> samples = np.linspace(start=0, stop=20, num=10)
-    >>> signal = np.cos(samples)
-    >>> interpolation_methods = ["zero", "linear", "quadratic", "cubic", "nearest", "monotone_cubic"]
+    >>> # Generate points
+    >>> signal = nk.signal_simulate(duration=1, sampling_rate=10)
     >>>
+    >>> # List all interpolation methods and interpolation parameters
+    >>> interpolation_methods = ["zero", "linear", "quadratic", "cubic", 5, "nearest", "monotone_cubic"]
+    >>> x_values = np.linspace(0, 1, num=10)
+    >>> x_new = np.linspace(0, 1, num=1000)
+    >>>
+    >>> # Visualize all interpolations
     >>> fig, ax = plt.subplots() #doctest: +SKIP
-    >>> ax.scatter(samples, signal, label="original datapoints", zorder=3) #doctest: +SKIP
+    >>> ax.scatter(x_values, signal, label="original datapoints", zorder=3) #doctest: +SKIP
     >>> for im in interpolation_methods:
-    ...     signal_interpolated = nk.signal_interpolate(samples, signal, new_x=np.arange(1000), method=im)
-    ...     ax.plot(np.linspace(0, 20, 1000), signal_interpolated, label=im) #doctest: +SKIP
+    ...     signal_interpolated = nk.signal_interpolate(x_values, signal, x_new=x_new, method=im)
+    ...     ax.plot(x_new, signal_interpolated, label=im) #doctest: +SKIP
     >>> ax.legend(loc="upper left") #doctest: +SKIP
 
     """
@@ -56,24 +61,24 @@ def signal_interpolate(x_values, y_values, new_x=None, method="quadratic"):
     if len(x_values) != len(y_values):
         raise ValueError("NeuroKit error: signal_interpolate(): x_values and y_values must be of the same length.")
 
-    if isinstance(new_x, int):
-        if len(x_values) == new_x:
+    if isinstance(x_new, int):
+        if len(x_values) == x_new:
             return y_values
     else:
-        if len(x_values) == len(new_x):
+        if len(x_values) == len(x_new):
             return y_values
 
     # Create interpolation function
-    if method.lower() != "monotone_cubic":
+    if isinstance(method, str) and method.lower() == "monotone_cubic":
+        interpolation_function = scipy.interpolate.PchipInterpolator(x_values, y_values, extrapolate=True)
+    else:
         interpolation_function = scipy.interpolate.interp1d(
             x_values, y_values, kind=method, bounds_error=False, fill_value=([y_values[0]], [y_values[-1]])
         )
-    elif method.lower() == "monotone_cubic":
-        interpolation_function = scipy.interpolate.PchipInterpolator(x_values, y_values, extrapolate=True)
 
-    if isinstance(new_x, int):
-        new_x = np.linspace(x_values[0], x_values[-1], new_x)
+    if isinstance(x_new, int):
+        x_new = np.linspace(x_values[0], x_values[-1], x_new)
 
-    interpolated = interpolation_function(new_x)
+    interpolated = interpolation_function(x_new)
 
     return interpolated
