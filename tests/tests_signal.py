@@ -171,17 +171,18 @@ def test_signal_rate():    # since singal_rate wraps signal_period, the latter i
     assert info[list(info.keys())[0]].shape == (info["Peaks"].shape[0], )
 
     # Test with DataFrame.
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
+    duration = 120
+    sampling_rate = 1000
+    rsp = nk.rsp_simulate(duration=duration, sampling_rate=sampling_rate,
                           respiratory_rate=15, method="sinuosoidal", noise=0)
-    rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+    rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=sampling_rate)
     signals, info = nk.rsp_peaks(rsp_cleaned)
-    rate = nk.signal_rate(signals, sampling_rate=1000, desired_length=len(rsp))
+    rate = nk.signal_rate(signals, sampling_rate=sampling_rate, desired_length=duration * sampling_rate)
     assert rate.shape == (signals.shape[0], )
 
     # Test with dictionary.produced from rsp_findpeaks.
-    test_length = 30
-    rate = nk.signal_rate(info, sampling_rate=1000, desired_length=test_length)
-    assert rate.shape == (test_length, )
+    rate = nk.signal_rate(info, sampling_rate=sampling_rate, desired_length=duration * sampling_rate)
+    assert rate.shape == (duration * sampling_rate, )
 
 
 def test_signal_plot():
