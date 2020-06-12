@@ -81,9 +81,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out = {}  # Initialize empty container for results
 
     # Poincaré
+    sd_rri = np.std(rri, ddof=1) ** 2
     sd_heart_period = np.std(diff_rri, ddof=1) ** 2
     out["SD1"] = np.sqrt(sd_heart_period * 0.5)
-    out["SD2"] = np.sqrt(2 * sd_heart_period - 0.5 * sd_heart_period)
+    out["SD2"] = np.sqrt(2 * sd_rri - 0.5 * sd_heart_period)
     out["SD2SD1"] = out["SD2"] / out["SD1"]
 
     # CSI / CVI

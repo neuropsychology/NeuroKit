@@ -24,6 +24,7 @@ Contributors
 * `Stavros Avramidis <https://github.com/purpl3F0x>`_
 * `Tiago Rodrigues <https://github.com/TiagoTostas>`_ *(IST, Lisbon)*
 * `Mitchell Bishop <https://github.com/Mitchellb16>`_ *(NINDS, USA)*
+* `Robert Richer <https://github.com/richrobe>`_ *(FAU Erlangen-Nürnberg, Germany)*
 
 
 Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
