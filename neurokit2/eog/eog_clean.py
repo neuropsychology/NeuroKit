@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pandas as pd
 
 from ..misc import as_vector
 from ..signal import signal_filter
@@ -32,10 +33,9 @@ def eog_clean(eog_signal, sampling_rate=1000):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> eog = nk.eog_extract(raw, channels=["124", "125"], resampling_rate=None, raw_return=True)
-    >>> sampling_rate = raw.info['sfreq']
-    >>> eog_cleaned = nk.eog_clean(eog, sampling_rate=sampling_rate)
-    >>> fig = pd.DataFrame({"Raw": eog,
+    >>> eog_signal = nk.data('eog_100hz')
+    >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=sampling_rate)
+    >>> fig = pd.DataFrame({"Raw": eog_signal,
     ...                     "Cleaned": eog_cleaned}).plot() #doctest: +ELLIPSIS
     <matplotlib.axes._subplots.AxesSubplot at ...>
 
@@ -47,7 +47,13 @@ def eog_clean(eog_signal, sampling_rate=1000):
     and Computing (Allerton) (pp. 1113-1121). IEEE.
 
     """
-    eog_signal = as_vector(eog_signal)
+    # Sanitize input
+    if isinstance(eog_signal, pd.DataFrame):
+        if len(eog_signal.columns) == 1:
+            eog_signal = as_vector(eog_signal)
+        elif len(eog_signal.columns) == 2:
+            eog_signal = eog_signal.iloc[:, 0] - eog_signal.iloc[:, 1]
+            eog_signal = as_vector(eog_signal)
 
     # Filter
     clean = signal_filter(
