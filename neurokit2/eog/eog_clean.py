@@ -35,7 +35,7 @@ def eog_clean(eog_signal, sampling_rate=1000):
     >>>
     >>> eog_signal = nk.data('eog_100hz')
     >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=sampling_rate)
-    >>> fig = pd.DataFrame({"Raw": eog_signal,
+    >>> fig = pd.DataFrame({"Raw": eog_signal['124'] - eog_signal['125'],
     ...                     "Cleaned": eog_cleaned}).plot() #doctest: +ELLIPSIS
     <matplotlib.axes._subplots.AxesSubplot at ...>
 
