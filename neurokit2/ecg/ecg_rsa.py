@@ -102,9 +102,9 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
     >>> rsa #doctest: +ELLIPSIS
             RSA_P2T
-    0      0.090000
-    1      0.089994
-    2      0.089988
+    0      0.09
+    1      0.09
+    2      0.09
     ...    ...
 
     [15000 rows x 1 columns]
