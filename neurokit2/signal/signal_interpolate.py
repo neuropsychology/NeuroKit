@@ -10,11 +10,11 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
 
     Parameters
     ----------
-    x_values : list, array or Series
+    x_values : list or array or Series
         The samples corresponding to the values to be interpolated.
-    y_values : list, array or Series
+    y_values : list or array or Series
         The values to be interpolated.
-    x_new : list, array Series or int
+    x_new : list or array or Series or int
         The samples at which to interpolate the y_values. Samples before the first value in x_values
         or after the last value in x_values will be extrapolated.
         If an integer is passed, nex_x will be considered as the desired length of the interpolated

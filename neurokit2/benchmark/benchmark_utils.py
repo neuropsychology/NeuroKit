@@ -8,11 +8,11 @@ def benchmark_record(record, sampling_rate, annotation, tolerance, detector):
 
     Parameters
     ----------
-    record : 1D array
+    record : array
         The raw physiological record.
     sampling_rate: int
         The sampling rate of the record in Hertz.
-    annotation : 1D array
+    annotation : array
         The manual extrema annotations.
     tolerance : int
         Maximum difference in millisecond that is permitted between the manual
@@ -46,7 +46,7 @@ def time_record(record, sampling_rate, detector, n_runs):
 
     Parameters
     ----------
-    record : 1D array
+    record : array
         The raw physiological record.
     sampling_rate : int
         The sampling rate of the record in Hertz-

@@ -41,7 +41,7 @@ def mne_channel_extract(raw, what, name=None):
     channels_all = raw.copy().info["ch_names"]
 
     # Select category of channels
-    if what == "EEG" or what == "EOG" or what == "MEG":
+    if what in ["EEG", "EOG", "MEG"]:
         what = [x for x in channels_all if what in x]
     # Select a single specified channel
     elif isinstance(what, str):
