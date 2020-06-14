@@ -39,16 +39,22 @@ def standardize(data, robust=False, window=None, **kwargs):
     >>> import pandas as pd
     >>>
     >>> # Simple example
-    >>> nk.standardize([3, 1, 2, 4, 6, np.nan])
-    >>> nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True)
-    >>> nk.standardize(np.array([[1, 2, 3, 4], [5, 6, 7, 8]]).T)
-    >>> nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan], "B": [3, 1, 2, 4, 6, 5]}))
+    >>> nk.standardize([3, 1, 2, 4, 6, np.nan]) #doctest: +ELLIPSIS
+    [...]
+    >>> nk.standardize([3, 1, 2, 4, 6, np.nan], robust=True) #doctest: +ELLIPSIS
+    [...]
+    >>> nk.standardize(np.array([[1, 2, 3, 4], [5, 6, 7, 8]]).T) #doctest: +ELLIPSIS
+     array(...)
+    >>> nk.standardize(pd.DataFrame({"A": [3, 1, 2, 4, 6, np.nan],
+    ...                              "B": [3, 1, 2, 4, 6, 5]})) #doctest: +ELLIPSIS
+              A         B
+    0       ...       ...
+    ...
     >>>
     >>> # Rolling standardization of a signal
     >>> signal = nk.signal_simulate(frequency=[0.1, 2], sampling_rate=200)
     >>> z = nk.standardize(signal, window=200)
     >>> nk.signal_plot([signal, z], standardize=True)
-    >>> #doctest: +SKIP
 
     """
     # Return appropriate type

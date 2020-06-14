@@ -40,7 +40,7 @@ def signal_decompose(signal):
     >>>
     >>> # Real example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150), sampling_rate=150)
+    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150), sampling_rate=150, desired_length=len(ecg))
     >>>
     >>> c = nk.signal_decompose(signal)
     >>>

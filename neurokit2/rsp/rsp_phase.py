@@ -44,7 +44,7 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     >>> peak_signal, info = nk.rsp_peaks(cleaned)
     >>>
-    >>> phase = nk.rsp_phase(peak_signal)
+    >>> phase = nk.rsp_phase(peak_signal, desired_length=len(cleaned))
     >>> fig = nk.signal_plot([rsp, phase], standardize=True)
     >>> fig #doctest: +SKIP
 
