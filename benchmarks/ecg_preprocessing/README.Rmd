@@ -451,4 +451,62 @@ means %>%
 No significant benefits added by normalization for the `neurokit` method.
 
 
+
+## Study 3: Low Frequency Trends Removal
+
+
+### Procedure
+
+#### Setup Functions
+```{python, eval=FALSE}
+import neurokit2 as nk
+
+def none(ecg, sampling_rate):
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+
+# Detrending-based
+def polylength(ecg, sampling_rate):
+    length = len(ecg) / sampling_rate
+    ecg = nk.signal_detrend(ecg, method="polynomial", order=int(length / 2))
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+    
+def tarvainen(ecg, sampling_rate):
+    ecg = nk.signal_detrend(ecg, method="tarvainen2002")
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+    
+def locreg(ecg, sampling_rate):
+    ecg = nk.signal_detrend(ecg, 
+                            method="locreg", 
+                            window=0.5*sampling_rate, 
+                            stepsize=0.02*sampling_rate)
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+    
+def rollingz(ecg, sampling_rate):
+    ecg = nk.standardize(ecg, window=sampling_rate*2)
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+    
+# Filtering-based
+```
+
+#### Run the Benchmarking
+
+*Note: This takes a very long time (several hours).*
+
+```{python, eval=FALSE}
+results = []
+for method in [none, polylength, tarvainen, locreg, rollingz]:
+    result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks)
+    result["Method"] = method.__name__
+    results.append(result)
+results = pd.concat(results).reset_index(drop=True)
+
+results.to_csv("data_lowfreq.csv", index=False)
+```
+
+
 # References

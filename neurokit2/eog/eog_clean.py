@@ -6,9 +6,9 @@ from ..signal import signal_filter
 
 
 def eog_clean(eog_signal, sampling_rate=1000):
-    """Clean an EOG signal. Only Agarwal & Sivakumar (2019)'s method is implemented for now.
+    """Clean an EOG signal.
 
-    Prepare a raw EOG signal for eye blinks detection.
+    Prepare a raw EOG signal for eye blinks detection. Only Agarwal & Sivakumar (2019)'s method is implemented for now.
 
     Parameters
     ----------
@@ -33,9 +33,9 @@ def eog_clean(eog_signal, sampling_rate=1000):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> eog_signal = nk.data('eog_100hz')
-    >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=sampling_rate)
-    >>> fig = pd.DataFrame({"Raw": eog_signal['124'] - eog_signal['125'],
+    >>> eog_signal = nk.data('eog_100hz')["vEOG"]
+    >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
+    >>> fig = pd.DataFrame({"Raw": eog_signal,
     ...                     "Cleaned": eog_cleaned}).plot() #doctest: +ELLIPSIS
     <matplotlib.axes._subplots.AxesSubplot at ...>
 
