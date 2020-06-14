@@ -9,8 +9,7 @@ from ..signal import signal_filter
 def eog_clean(eog_signal, sampling_rate=1000, method="agarwal2019"):
     """Clean an EOG signal.
 
-    Prepare a raw EOG signal for eye blinks detection. Only Agarwal & Sivakumar (2019)'s method
-    is implemented for now.
+    Prepare a raw EOG signal for eye blinks detection.
 
     Parameters
     ----------
@@ -19,6 +18,9 @@ def eog_clean(eog_signal, sampling_rate=1000, method="agarwal2019"):
     sampling_rate : int
         The sampling frequency of `eog_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
+    method : str
+        The processing pipeline to apply. Can be one of 'agarwal2019' (default) or
+        'mne' (requires the MNE package to be installed).
 
     Returns
     -------
@@ -27,7 +29,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="agarwal2019"):
 
     See Also
     --------
-    eog_extract, signal_filter
+    signal_filter, eog_peaks
 
     Examples
     --------
