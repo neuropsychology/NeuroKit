@@ -45,9 +45,9 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> eog_signal = nk.eog_extract(raw, channels=["124", "125"], resampling_rate=None, raw_return=True)
-    >>> sampling_rate = raw.info['sfreq']
-    >>> signals, info = nk.eog_process(eog_signal, raw, sampling_rate=sampling_rate)
+    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() +
+                                  '/MEG/sample/sample_audvis_raw.fif', preload=True)
+    >>> eog_channels = nk.mne_channel_extract(raw, what='EOG', name='EOG')
 
     References
     ----------
