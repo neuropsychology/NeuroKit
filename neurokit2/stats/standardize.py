@@ -81,9 +81,13 @@ def _standardize(data, robust=False, window=None, **kwargs):
         df = pd.DataFrame(data)  # Force dataframe
 
         if robust is False:
-            z = (df - df.rolling(window, min_periods=0, **kwargs).mean()) / df.rolling(window, min_periods=0, **kwargs).std(ddof=1)
+            z = (df - df.rolling(window, min_periods=0, **kwargs).mean()) / df.rolling(
+                window, min_periods=0, **kwargs
+            ).std(ddof=1)
         else:
-            z = (df - df.rolling(window, min_periods=0, **kwargs).median()) / df.rolling(window, min_periods=0, **kwargs).apply(mad)
+            z = (df - df.rolling(window, min_periods=0, **kwargs).median()) / df.rolling(
+                window, min_periods=0, **kwargs
+            ).apply(mad)
 
         # Fill the created nans
         z = z.fillna(method="bfill")

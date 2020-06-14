@@ -38,10 +38,10 @@ def mne_channel_extract(raw, what, name=None):
     >>> eog_channels = nk.mne_channel_extract(raw, what='EOG', name='EOG') # doctest: +SKIP
 
     """
-    channels_all = raw.copy().info['ch_names']
+    channels_all = raw.copy().info["ch_names"]
 
     # Select category of channels
-    if what == 'EEG' or what == 'EOG' or what == 'MEG':
+    if what == "EEG" or what == "EOG" or what == "MEG":
         what = [x for x in channels_all if what in x]
     # Select a single specified channel
     elif isinstance(what, str):
@@ -49,8 +49,10 @@ def mne_channel_extract(raw, what, name=None):
     # Select a few specified channels
     elif isinstance(what, list):
         if not all(x in channels_all for x in what):
-            raise ValueError("NeuroKit warning: mne_channel_extract(): List of channels not found. Please "
-                             "check channel names in raw.info['ch_names']. ")
+            raise ValueError(
+                "NeuroKit warning: mne_channel_extract(): List of channels not found. Please "
+                "check channel names in raw.info['ch_names']. "
+            )
 
     channels, __ = raw.copy().pick_channels(what)[:]
     if len(what) > 1:
