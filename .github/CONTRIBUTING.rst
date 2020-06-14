@@ -50,6 +50,45 @@ The first three commands will make some modifications to your code so that it is
 
 *PS:* If you want to check the whole package, just replace 'myfile.py' by 'neurokit2' and add ``--recursive`` to ``isort`` and ``docformatter``.
 
+Avoid Semantic Errors
+^^^^^^^^^^^^^^^^^^^^^^
+
+Most errors detected by our code checks can be easily automated with ``isort``, ``black``, and ``docformatter``. This leaves us with the semantic errors picked up by ``pylint``, the last style check, which often have to be fixed manually. Below is a list of the most common semantic errors that occur when writing code/documentation, so before you commit any changes, do make sure you have fixed these.
+
+**Documentation**
+
+- Missing function arguments in ``Parameters`` and ``Returns``. 
+- In internal functions, missing ``Returns`` section detected only if ``Parameters`` is documented but is not followed by returns documentation.
+- Failure to detect parameter/return type documentation when including commas:
+
+.. code-block::
+
+    y_values : list, array or Series
+
+will result in a ``pylint`` error like ``W9015: "y_values" missing in parameter documentation (missing-param-doc)`` so write it as such ``y_values : list or array or Series``.
+
+- Failure to detect documentation of arguments when they are done simultaneously in one line:
+
+.. code-block::
+
+     a, b, c, discard, n, sampling_rate, x0 : int
+
+will result in a ``pylint`` error like ``a, b, c, discard, n, sampling_rate, x0" missing in parameter documentation (missing-param-doc)`` so do document each argument separately.
+ 
+- Argument name different from documentation
+
+
+**Code**
+
+- Unused arguments
+- Unused variables
+- Merge ``if`` arguments, for example: ``if isinstance(ecg, (list, pd.Series))`` rather than ``if isinstance(ecg, list) or isinstance(ecg, pd.Series)``
+  
+
+
+
+
+
 Development workflow
 ^^^^^^^^^^^^^^^^^^^^^^
 
