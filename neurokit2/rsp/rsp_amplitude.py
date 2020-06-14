@@ -68,6 +68,6 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
     amplitude = rsp_cleaned[peaks] - rsp_cleaned[troughs]
 
     # Interpolate amplitude to length of rsp_cleaned.
-    amplitude = signal_interpolate(peaks, amplitude, new_x=np.arange(len(rsp_cleaned)), method=interpolation_method)
+    amplitude = signal_interpolate(peaks, amplitude, x_new=np.arange(len(rsp_cleaned)), method=interpolation_method)
 
     return amplitude

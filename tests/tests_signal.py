@@ -129,7 +129,7 @@ def test_signal_interpolate():
     x_axis = np.linspace(start=10, stop=30, num=10)
     signal = np.cos(x_axis)
 
-    interpolated = nk.signal_interpolate(x_axis, signal, new_x=np.arange(1000))
+    interpolated = nk.signal_interpolate(x_axis, signal, x_new=np.arange(1000))
     assert len(interpolated) == 1000
     assert interpolated[0] == signal[0]
     assert interpolated[-1] == signal[-1]

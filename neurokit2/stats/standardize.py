@@ -57,7 +57,7 @@ def standardize(data, robust=False, window=None, **kwargs):
     elif isinstance(data, pd.DataFrame):
         data = pd.DataFrame(_standardize(data, robust=robust, window=window, **kwargs))
     elif isinstance(data, pd.Series):
-        data = pd.Series(_standardize(data, robust=robust, window=windo, **kwargsw))
+        data = pd.Series(_standardize(data, robust=robust, window=window, **kwargs))
     else:
         data = _standardize(data, robust=robust, window=window, **kwargs)
 
