@@ -35,4 +35,7 @@ jobs:
     - name: Test with tox
       run: |
         cd $GITHUB_WORKSPACE && python -m tox -e py
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
   
