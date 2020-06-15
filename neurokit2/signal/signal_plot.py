@@ -65,6 +65,9 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
         else:
             signal = pd.DataFrame({"Signal": signal})
 
+    # Copy signal
+    signal = signal.copy()
+
     # Guess continuous and events columns
     continuous_columns = list(signal.columns.values)
     events_columns = []
@@ -78,15 +81,11 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
 
     # Adjust for sampling rate
     if sampling_rate is not None:
-        x_axis = np.linspace(0, signal.shape[0] / sampling_rate, signal.shape[0])
-        x_axis = pd.DataFrame(x_axis, columns=["Time (s)"])
-        signal = pd.concat([signal, x_axis], axis=1)
-        signal = signal.set_index("Time (s)")
-    elif sampling_rate is None:
-        x_axis = np.arange(0, signal.shape[0])
-        x_axis = pd.DataFrame(x_axis, columns=["Samples"])
-        signal = pd.concat([signal, x_axis], axis=1)
-        signal = signal.set_index("Samples")
+        signal.index = signal.index / sampling_rate
+    #        x_axis = np.linspace(0, signal.shape[0] / sampling_rate, signal.shape[0])
+    #        x_axis = pd.DataFrame(x_axis, columns=["Time (s)"])
+    #        signal = pd.concat([signal, x_axis], axis=1)
+    #        signal = signal.set_index("Time (s)")
 
     # Plot accordingly
     if len(events_columns) > 0:
@@ -95,15 +94,22 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
             vector = signal[col]
             events.append(np.where(vector == np.max(vector.unique()))[0])
         plot = events_plot(events, signal=signal[continuous_columns])
-        if sampling_rate is not None:
-            plot.gca().set_xlabel("Time (seconds)")
-        elif sampling_rate is None:
+
+        if sampling_rate is None:
             plot.gca().set_xlabel("Samples")
+        else:
+            plot.gca().set_xlabel("Time (seconds)")
+
     else:
         if standardize is True:
             plot = nk_standardize(signal[continuous_columns]).plot(subplots=subplots, sharex=True, **kwargs)
         else:
             plot = signal[continuous_columns].plot(subplots=subplots, sharex=True, **kwargs)
+
+        if sampling_rate is None:
+            plt.xlabel("Samples")
+        else:
+            plt.xlabel("Time (seconds)")
 
     # Tidy legend locations
     [plot.legend(loc=1) for plot in plt.gcf().axes]  # pylint: disable=W0106

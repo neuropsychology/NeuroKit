@@ -2,6 +2,7 @@
 """
 import datetime
 
+from .benchmark import *
 from .bio import *
 from .complexity import *
 from .data import *
@@ -9,6 +10,7 @@ from .ecg import *
 from .eda import *
 from .eeg import *
 from .emg import *
+from .eog import *
 from .epochs import *
 from .events import *
 from .hrv import *
@@ -20,7 +22,7 @@ from .stats import *
 
 
 # Info
-__version__ = "0.0.36"
+__version__ = "0.0.37"
 
 
 # Maintainer info

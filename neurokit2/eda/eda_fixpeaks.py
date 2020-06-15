@@ -54,7 +54,7 @@ def eda_fixpeaks(peaks, onsets=None, height=None):
 
     """
     # Format input.
-    peaks, onsets, height, __ = _eda_fixpeaks_retrieve(peaks, onsets, height, desired_length=None)
+    peaks, onsets, height = _eda_fixpeaks_retrieve(peaks, onsets, height)
 
     # Do whatever fixing is required (nothing for now)
 
@@ -66,12 +66,12 @@ def eda_fixpeaks(peaks, onsets=None, height=None):
 # =============================================================================
 # Internals
 # =============================================================================
-def _eda_fixpeaks_retrieve(peaks, onsets=None, height=None, desired_length=None):
+def _eda_fixpeaks_retrieve(peaks, onsets=None, height=None):
     # Format input.
     original_input = peaks
-    peaks, desired_length = _signal_formatpeaks_sanitize(original_input, desired_length, key="Peaks")
+    peaks = _signal_formatpeaks_sanitize(original_input, key="Peaks")
     if onsets is None:
-        onsets, _ = _signal_formatpeaks_sanitize(original_input, desired_length, key="Onsets")
+        onsets = _signal_formatpeaks_sanitize(original_input, key="Onsets")
     if height is None:
-        height, _ = _signal_formatpeaks_sanitize(original_input, desired_length, key="Height")
-    return peaks, onsets, height, desired_length
+        height = _signal_formatpeaks_sanitize(original_input, key="Height")
+    return peaks, onsets, height

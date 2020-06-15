@@ -57,12 +57,12 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
     >>> pantompkins1985 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
     >>> hamilton2002 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
+    >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
     >>> christov2004 = nk.ecg_findpeaks(cleaned, method="christov2004")
     >>> gamboa2008 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="gamboa2008"), method="gamboa2008")
     >>> elgendi2010 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
     >>> engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
     >>> kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
-    >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
     >>> rodrigues2020 = nk.ecg_findpeaks(cleaned, method="rodrigues2020")
     >>>
     >>> # Visualize
@@ -160,10 +160,8 @@ def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False
     x = np.zeros(len(signal))
 
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_neurokit, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_pantompkins, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_gamboa, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_ssf, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_christov, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_engzee, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_elgendi, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_kalidas, **kwargs)

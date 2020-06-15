@@ -14,7 +14,7 @@ This tutorial will provide you with all you need to know to dive into the wonder
 Setup
 ---------------
 
-The first thing you will need is to **install Python** on your computer (we have `tutorial for that <https://neurokit2.readthedocs.io/en/latest/installation.html>`_). In fact, this includes **two things**, installing Python (the *language*), and an *environment* to be able to use it. For this tutorial, we will assume you have something that looks like `Spyder <https://www.spyder-ide.org/>`_ (called an IDE). But you can use `jupyter notebooks <https://jupyter.org/>`_, or `anything else <https://www.guru99.com/python-ide-code-editor.html>`_, it doesn't really matter.
+The first thing you will need is to **install Python** on your computer (we have a `tutorial for that <https://neurokit2.readthedocs.io/en/latest/installation.html>`_). In fact, this includes **two things**, installing Python (the *language*), and an *environment* to be able to use it. For this tutorial, we will assume you have something that looks like `Spyder <https://www.spyder-ide.org/>`_ (called an IDE). But you can use `jupyter notebooks <https://jupyter.org/>`_, or `anything else <https://www.guru99.com/python-ide-code-editor.html>`_, it doesn't really matter.
 
 There is one important concept to understand here: the difference between the **CONSOLE** and the **EDITOR**. The editor is like a *cooking table* where you prepare your ingredients to make a dish, whereas the console is like the *oven*, you only open it to put the dish in it and get the result. 
 
@@ -46,7 +46,7 @@ Variables
 The most important concept of programming is **variables**, which is a fancy name for something that you already know. Do you remember, from your mathematics classes, the famous *x*, this placeholder for any value? Well, *x* was a variable, i.e., the name refering to some other thing.
 
 .. hint::
-   A variable in programming is not equivalent to a variable in statistics, in which it refers to some specific data (for instance, *age* is variable and contains multiple observations). In programming, a variable is the name that we give to some entity.
+   Despite to what I just said, a variable in programming is not equivalent to a variable in statistics, in which it refers to some specific data (for instance, *age* is variable and contains multiple observations). In programming, a variable is simply the name that we give to some entity, that could be anything.
 
 
 We can *assign* a value to a *variable* using the :code:`=` sign, for instance:
@@ -96,7 +96,7 @@ One can change the type of a variable with the following:
     float(1)  # transform the input to a float
     str(1)  # transform the input into text
     
-Also, here I used the hashtag symbol to **make comments**, i.e., writing stuff that won't be executed by Python. This is super useful to annotate each line of your code to remember what you do (and why you do it).
+Also, here I used the hashtag symbol to **make comments**, i.e., writing stuff that won't be executed by Python. This is super useful to annotate each line of your code to remember what you do - and why you do it.
 
 Types are often the source of many errors as they usually are **incompatible** between them. For instance, you cannot add a *number* (:code:`int` or :code:`float`) with a *character string*. For instance, try running :code:`3 + "a"`, it will throw a :code:`TypeError`.
 
@@ -104,9 +104,9 @@ Types are often the source of many errors as they usually are **incompatible** b
 Lists and dictionnaries
 ------------------------
 
-Two other important types are **lists** and **dictionnaries**. You can think of them as **containers**, as they contain multiple variables. The main difference between them is that in a **list**, you access the individual elements that it contains **by its order** (for instance, the third one), whereas in a **dictionnary**, you access an element by its name (also known as **key**), for example *"the element named A"*.
+Two other important types are **lists** and **dictionnaries**. You can think of them as **containers**, as they contain multiple variables. The main difference between them is that in a **list**, you access the individual elements that it contains **by its order** (for instance, *"give me the third one"*), whereas in a **dictionary**, you access an element by its name (also known as **key**), for example *"give me the element named A"*.
 
-A list is created using square brackets, and a dictionnary using curly brackets. Importantly, in a dictionnary, you must specify a name to each element. Here's what it looks like:
+A list is created using square brackets, and a dictionary using curly brackets. Importantly, in a dictionary, you must specify a name to each element. Here's what it looks like:
 
 
 .. code-block:: python
@@ -120,7 +120,7 @@ Keep in mind that there are more types of containers, such as *arrays* and *data
 Basic indexing
 --------------------
 
-There's no point in storing elements in containers if we cannot access them later on. As mentioned earlier, we can access elements from a **dictionnary** by its key within square brackets (note that here the square brackets don't mean *list*, just mean *within the previous container*).
+There's no point in storing elements in containers if we cannot access them later on. As mentioned earlier, we can access elements from a **dictionary** by its key within square brackets (note that here the square brackets don't mean *list*, just mean *within the previous container*).
 
 .. code-block:: python
 
@@ -128,7 +128,7 @@ There's no point in storing elements in containers if we cannot access them late
     x = mydict["B"]
     print(x)
 
-**Exercice time!** If you have followed this tutorial so far, you can guess what the following code will output:
+**Exercice time!** If you have followed this tutorial so far, you should be able to guess what the following code will output:
 
 .. code-block:: python
 
@@ -137,7 +137,7 @@ There's no point in storing elements in containers if we cannot access them late
     y = mydict[x]
     print(y)
 
-If you guessed **42**, you're right, congrats! If you guessed **7**, you have likely confused the **variable** named :code:`x` (which represents 1+1 converted to a character), with the character :code:`"x"`. 
+**Answer**: If you guessed **42**, you're right, congrats! If you guessed **7**, you have likely confused the **variable** named :code:`x` (which represents 1+1 converted to a character), with the character :code:`"x"`. And if you guessed **0**... what is wrong with you?
 
 
 
@@ -169,7 +169,7 @@ One important notion in programming is control flow. You want the code to do som
     if x < 3:
         print("lower than 3")
 
-One very important thing to notice is that the **if statement** corresponds to a "chunk" of code, as signified by the colon :code:`:`. The chunk has to be written below, and has to be **indented** (you can ident a line or a chunk of code by pressing the :code:`TAB` key). 
+One very important thing to notice is that the **if statement** corresponds to a "chunk" of code, as signified by the colon :code:`:`. The chunk is usually written below, and has to be **indented** (you can ident a line or a chunk of code by pressing the :code:`TAB` key). 
 
 *What is identation?*
 
@@ -214,7 +214,7 @@ The **for loops** create a *variable* that will successively take all the values
     for var in [1, 2, 3]:
         print(var)
 
-Here, the **for loop** creates a variable (that we named `var`), that will successively takes all the values of the provided list.
+Here, the **for loop** creates a variable (that we named `var`), that will successively take all the values of the provided list.
 
 
 Functions
@@ -222,7 +222,7 @@ Functions
 
 Now that you know what a **variable** is, as well as the purpose of little things like **if**, **else**, **for**, etc., the last most common thing that you will find in code are **function** calls. In fact, we have already used some of them! Indeed, things like :code:`print()`, :code:`str()` and :code:`int()` were functions. And in fact, you've probably encountered them in secondary school mathematics! Remember *f(x)*?
 
-One important about functions is that *most of the time* (not always though), it takes something **in**, and returns something **out**. It's like a **factory**, you give it some raw material and it outputs some transformed things.
+One important thing about functions is that *most of the time* (not always though), it takes something **in**, and returns something **out**. It's like a **factory**, you give it some raw material and it outputs some transformed stuff.
 
 For instance, let's say we want to transform a variable containing an :code:`integer` into a character :code:`string`:
 
@@ -252,7 +252,9 @@ We can re-write it using the :code:`range()` function, to create a sequence of *
 
 It's a bit more complicated than the previous version, it's true. But that's the beauty of programming, all things can be done in a near-infinite amount of ways, allowing for your creativity to be expressed.
 
-**Exercice time!** Can you try making a loop so that we add `:code:1` to each element of the list? The answer below:
+**Exercice time!** Can you try making a loop so that we add :code: `1` to each element of the list?
+
+**Answer**:
 
 .. code-block:: python
 

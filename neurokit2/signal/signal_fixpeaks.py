@@ -108,7 +108,7 @@ def signal_fixpeaks(
 
     """
     # Format input
-    peaks, _ = _signal_formatpeaks_sanitize(peaks)
+    peaks = _signal_formatpeaks_sanitize(peaks)
 
     # If method Kubios
     if method.lower() == "kubios":

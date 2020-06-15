@@ -14,9 +14,10 @@ You can navigate to the different sections using the left panel. We would recomm
    start/index
    examples/index
    resources/index
-   contributing/index
    functions
+   benchmarks/index
    datasets
+   contributing/index
    
 
 	
