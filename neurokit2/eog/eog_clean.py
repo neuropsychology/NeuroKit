@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
 import scipy.ndimage
 
@@ -77,8 +76,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="agarwal2019"):
         clean = _eog_clean_kong1998(eog_signal, sampling_rate=sampling_rate)
     else:
         raise ValueError(
-            "NeuroKit error: eog_clean(): 'method' should be "
-            "one of 'agarwal2019', 'brainstorm', 'mne', 'kong1998'."
+            "NeuroKit error: eog_clean(): 'method' should be " "one of 'agarwal2019', 'brainstorm', 'mne', 'kong1998'."
         )
 
     return clean
@@ -141,27 +139,28 @@ def _eog_clean_mne(eog_signal, sampling_rate=1000):
     return clean
 
 
-
 def _eog_clean_kong1998(eog_signal, sampling_rate=1000):
-    """Kong, X., & Wilson, G. F. (1998). A new EOG-based eyeblink detection algorithm.
-    Behavior Research Methods, Instruments, & Computers, 30(4), 713-719.
+    """Kong, X., & Wilson, G.
+
+    F. (1998). A new EOG-based eyeblink detection algorithm. Behavior Research Methods, Instruments, & Computers,
+    30(4), 713-719.
+
     """
     #  The order E should be less than half of the expected eyeblink duration. For example, if
     # the expected blink duration is 200 msec (10 samples with a sampling rate of 50 Hz), the
     # order E should be less than five samples.
-    eroded = scipy.ndimage.grey_erosion(eog_signal, size=int((0.2/2)*sampling_rate))[:, 0]
+    eroded = scipy.ndimage.grey_erosion(eog_signal, size=int((0.2 / 2) * sampling_rate))[:, 0]
 
     # a "low-noise" Lanczos differentiation filter introduced in Hamming (1989) is employed.
     # Frequently, a first order differentiation filter is sufficient and has the familiar
     # form of symmetric difference:
     # w[k] = 0.5 * (y[k + 1] - y[k - 1])
-    diff = eroded - np.concatenate([[0], 0.5*np.diff(eroded)])
+    diff = eroded - np.concatenate([[0], 0.5 * np.diff(eroded)])
 
     # To reduce the effects of noise, characterized by small fluctuations around zero, a
     # median filter is also used with the order of the median filter denoted as M.
     # The median filter acts like a mean filter except that it preserves the sharp edges ofthe
     # input. The order M should be less than a quarter ofthe expected eyeblink duration.
-    clean = scipy.ndimage.median_filter(diff, size=int((0.2/4)*sampling_rate))
-
+    clean = scipy.ndimage.median_filter(diff, size=int((0.2 / 4) * sampling_rate))
 
     return clean
