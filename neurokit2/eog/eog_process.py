@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import mne
 import pandas as pd
 
 from ..signal import signal_period
@@ -56,6 +55,15 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     and Computing (Allerton) (pp. 1113-1121). IEEE.
 
     """
+    # Make sure MNE is installed
+    try:
+        import mne
+    except ImportError:
+        raise ImportError(
+            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. ",
+            "Please install it first (`pip install mne`).",
+        )
+
     # Make sure signal is one array
     if isinstance(eog_signal, pd.DataFrame):
         if len(eog_signal.columns) == 2:

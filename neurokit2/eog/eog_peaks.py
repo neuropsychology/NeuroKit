@@ -4,6 +4,7 @@ import numpy as np
 
 from ..misc import as_vector
 from ..signal import signal_filter
+from ..signal import signal_findpeaks
 
 
 def eog_peaks(eog_cleaned, method="mne"):
@@ -36,11 +37,13 @@ def eog_peaks(eog_cleaned, method="mne"):
     >>> # Clean
     >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100, method='mne')
     >>>
-    >>> # Find peaks
-    >>> peaks = nk.eog_peaks(eog_cleaned)
+    >>> # MNE-method
+    >>> mne = nk.eog_peaks(eog_cleaned, method="mne")
+    >>> nk.events_plot(mne, eog_cleaned)
     >>>
-    >>> # Visualize
-    >>> nk.events_plot(peaks, eoc_cleaned)
+    >>> # brainstorm method
+    >>> brainstorm = nk.eog_peaks(eog_cleaned, method="brainstorm")
+    >>> nk.events_plot(brainstorm, eog_cleaned)
 
     References
     ----------
@@ -55,11 +58,13 @@ def eog_peaks(eog_cleaned, method="mne"):
     # Apply method
     method = method.lower()
     if method in ["mne"]:
-        peaks = _eog_peaks_mne(eog_cleaned, sampling_rate=sampling_rate)
+        peaks = _eog_peaks_mne(eog_cleaned)
+    elif method in ["brainstorm"]:
+        peaks = _eog_peaks_brainstorm(eog_cleaned)
     else:
         raise ValueError(
             "NeuroKit error: eog_peaks(): 'method' should be "
-            "one of 'mne'."
+            "one of 'mne', 'brainstorm'."
         )
 
 
@@ -69,8 +74,10 @@ def eog_peaks(eog_cleaned, method="mne"):
 # =============================================================================
 # Methods
 # =============================================================================
-def _eog_peaks_mne(eog_cleaned, sampling_rate=1000):
-    """https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+def _eog_peaks_mne(eog_cleaned):
+    """EOG blink detection based on MNE.
+
+    https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
     """
     # Make sure MNE is installed
     try:
@@ -85,8 +92,25 @@ def _eog_peaks_mne(eog_cleaned, sampling_rate=1000):
     temp = eog_cleaned - np.mean(eog_cleaned)
 
     if np.abs(np.max(temp)) > np.abs(np.min(temp)):
-        eog_events, _ = mne.preprocessing.peak_finder(eog_cleaned, extrema=1)
+        eog_events, _ = mne.preprocessing.peak_finder(eog_cleaned, extrema=1, verbose=False)
     else:
-        eog_events, _ = mne.preprocessing.peak_finder(eog_cleaned, extrema=-1)
+        eog_events, _ = mne.preprocessing.peak_finder(eog_cleaned, extrema=-1, verbose=False)
 
     return eog_events
+
+
+def _eog_peaks_brainstorm(eog_cleaned):
+    """EOG blink detection implemented in brainstorm.
+
+    https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+    """
+    # Find peaks
+    peaks = signal_findpeaks(eog_cleaned)["Peaks"]
+
+    # Brainstorm: "An event of interest is detected if the absolute value of the filtered
+    # signal value goes over a given number of times the standard deviation. For EOG: 2xStd."
+    # -> Remove all peaks that correppond to regions < 2 SD
+    mask = eog_cleaned > 2 * np.std(eog_cleaned, ddof=1)
+    peaks = peaks[mask[peaks]]
+
+    return peaks

@@ -89,8 +89,22 @@ def _eog_clean_agarwal2019(eog_signal, sampling_rate=1000):
         eog_signal, sampling_rate=sampling_rate, method="butterworth", order=4, lowcut=None, highcut=10
     )
 
+
+def _eog_clean_brainstorm(eog_signal, sampling_rate=1000):
+    """EOG cleaning implemented by default in Brainstorm.
+
+    https://neuroimage.usc.edu/brainstorm/Tutorials/TutRawSsp
+    """
+    return signal_filter(
+        eog_signal, sampling_rate=sampling_rate, method="butterworth", order=4, lowcut=1.5, highcut=15
+    )
+
+
+
 def _eog_clean_mne(eog_signal, sampling_rate=1000):
-    """https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+    """EOG cleaning implemented by default in MNE.
+
+    https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
     """
     # Make sure MNE is installed
     try:
