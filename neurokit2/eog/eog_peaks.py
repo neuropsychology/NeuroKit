@@ -55,7 +55,6 @@ def eog_peaks(eog_cleaned, method="mne"):
     # Sanitize input
     eog_cleaned = as_vector(eog_cleaned)
 
-
     # Apply method
     method = method.lower()
     if method in ["mne"]:
