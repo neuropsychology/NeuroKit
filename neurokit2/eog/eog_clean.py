@@ -165,6 +165,3 @@ def _eog_clean_kong1998(eog_signal, sampling_rate=1000):
 
 
     return clean
-
-
-
