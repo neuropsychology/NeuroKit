@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ..misc import as_vector
 from ..signal import signal_filter
