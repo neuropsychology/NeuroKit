@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import numpy as np
-
 from ..misc import as_vector
 from ..signal import signal_findpeaks
 
