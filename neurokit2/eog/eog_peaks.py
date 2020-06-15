@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
-import pandas as pd
 
 from ..misc import as_vector
-from ..signal import signal_filter, signal_findpeaks
+from ..signal import signal_findpeaks
 
 
 def eog_peaks(eog_cleaned, method="mne"):
@@ -14,18 +14,21 @@ def eog_peaks(eog_cleaned, method="mne"):
 
     Parameters
     ----------
-    eog_signal : list or array or Series
+    eog_cleaned : list or array or Series
         The raw EOG channel.
     method : str
         The peak detection algorithm. Can be one of 'mne' (default) (requires the MNE package
         to be installed).
 
+    Returns
+    -------
+    array
+        Vector containing the samples at which EOG-peaks occur,
+
     See Also
     --------
     eog_clean
 
-    Examples
-    --------
     Examples
     --------
     >>> import neurokit2 as nk
@@ -61,11 +64,7 @@ def eog_peaks(eog_cleaned, method="mne"):
     elif method in ["brainstorm"]:
         peaks = _eog_peaks_brainstorm(eog_cleaned)
     else:
-        raise ValueError(
-            "NeuroKit error: eog_peaks(): 'method' should be "
-            "one of 'mne', 'brainstorm'."
-        )
-
+        raise ValueError("NeuroKit error: eog_peaks(): 'method' should be " "one of 'mne', 'brainstorm'.")
 
     return peaks
 
@@ -77,6 +76,7 @@ def _eog_peaks_mne(eog_cleaned):
     """EOG blink detection based on MNE.
 
     https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+
     """
     # Make sure MNE is installed
     try:
@@ -102,6 +102,7 @@ def _eog_peaks_brainstorm(eog_cleaned):
     """EOG blink detection implemented in brainstorm.
 
     https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+
     """
     # Find peaks
     peaks = signal_findpeaks(eog_cleaned)["Peaks"]

@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import pandas as pd
 
 from ..misc import as_vector
 from ..signal import signal_filter
@@ -36,6 +34,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="agarwal2019"):
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import pandas as pd
     >>>
     >>> # Get data
     >>> eog_signal = nk.data('eog_100hz')["vEOG"]
@@ -68,11 +67,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="agarwal2019"):
     elif method in ["mne"]:
         clean = _eog_clean_mne(eog_signal, sampling_rate=sampling_rate)
     else:
-        raise ValueError(
-            "NeuroKit error: eog_clean(): 'method' should be "
-            "one of 'agarwal2019', 'mne'."
-        )
-
+        raise ValueError("NeuroKit error: eog_clean(): 'method' should be " "one of 'agarwal2019', 'mne'.")
 
     return clean
 
@@ -81,9 +76,11 @@ def eog_clean(eog_signal, sampling_rate=1000, method="agarwal2019"):
 # Methods
 # =============================================================================
 def _eog_clean_agarwal2019(eog_signal, sampling_rate=1000):
-    """garwal, M., & Sivakumar, R. (2019). Blink: A Fully Automated Unsupervised Algorithm for
-    Eye-Blink Detection in EEG Signals. In 2019 57th Annual Allerton Conference on Communication,
-    Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
+    """garwal, M., & Sivakumar, R.
+
+    (2019). Blink: A Fully Automated Unsupervised Algorithm for Eye-Blink Detection in EEG Signals. In 2019 57th
+    Annual Allerton Conference on Communication, Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
+
     """
     return signal_filter(
         eog_signal, sampling_rate=sampling_rate, method="butterworth", order=4, lowcut=None, highcut=10
@@ -94,17 +91,16 @@ def _eog_clean_brainstorm(eog_signal, sampling_rate=1000):
     """EOG cleaning implemented by default in Brainstorm.
 
     https://neuroimage.usc.edu/brainstorm/Tutorials/TutRawSsp
-    """
-    return signal_filter(
-        eog_signal, sampling_rate=sampling_rate, method="butterworth", order=4, lowcut=1.5, highcut=15
-    )
 
+    """
+    return signal_filter(eog_signal, sampling_rate=sampling_rate, method="butterworth", order=4, lowcut=1.5, highcut=15)
 
 
 def _eog_clean_mne(eog_signal, sampling_rate=1000):
     """EOG cleaning implemented by default in MNE.
 
     https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+
     """
     # Make sure MNE is installed
     try:
@@ -124,9 +120,10 @@ def _eog_clean_mne(eog_signal, sampling_rate=1000):
         filter_length="10s",
         l_trans_bandwidth=0.5,
         h_trans_bandwidth=0.5,
-        phase='zero-double',
-        fir_window='hann',
-        fir_design='firwin2',
-        verbose=False)
+        phase="zero-double",
+        fir_window="hann",
+        fir_design="firwin2",
+        verbose=False,
+    )
 
     return clean

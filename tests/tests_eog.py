@@ -11,7 +11,7 @@ import neurokit2 as nk
 def test_eog_clean():
 
     # test with exported csv
-    eog_signal = nk.data('eog_200hz')
+    eog_signal = nk.data('eog_200hz')["vEOG"]
     eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
     assert len(eog_cleaned) == len(eog_signal)
 

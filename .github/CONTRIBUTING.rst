@@ -44,8 +44,7 @@ Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of
     docformatter myfile.py --wrap-summaries 120 --wrap-descriptions 113 --blank  --make-summary-multi-line --in-place
     
     flake8 myfile.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203,W503
-    pylint myfile.py --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --suggestion-mode=y --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 --disable=E0401 --disable=W9006 --disable=C0330 --disable=R0914 --disable=R0912 --disable=R0915 --disable=W0102 --disable=W0511 --disable=C0302 --disable=R1716 --disable=W0632 --disable=E1136
-
+    pylint myfile.py --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --reports=n --suggestion-mode=y --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 --disable=E0401 --disable=W9006 --disable=C0330 --disable=R0914 --disable=R0912 --disable=R0915 --disable=W0102 --disable=W0511 --disable=C1801 --disable=C0111 --disable=R1705 --disable=R1720 --disable=C0301 --disable=C0415 --disable=C0103 --disable=C0302 --disable=R1716 --disable=W0632 --disable=E1136
 The first three commands will make some modifications to your code so that it is nicely formatted, while the two last will run some checks to detect any additional issues. Please try to fix them!
 
 *PS:* If you want to check the whole package, just replace 'myfile.py' by 'neurokit2' and add ``--recursive`` to ``isort`` and ``docformatter``.
