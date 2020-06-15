@@ -45,8 +45,8 @@ script:
     - tox
 
 
-after_success:
-    - codecov
+# after_success:
+    # - codecov
   
   
 # Assuming you have installed the travis-ci CLI tool, after you
