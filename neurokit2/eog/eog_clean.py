@@ -76,7 +76,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="agarwal2019"):
 # Methods
 # =============================================================================
 def _eog_clean_agarwal2019(eog_signal, sampling_rate=1000):
-    """garwal, M., & Sivakumar, R.
+    """Agarwal, M., & Sivakumar, R.
 
     (2019). Blink: A Fully Automated Unsupervised Algorithm for Eye-Blink Detection in EEG Signals. In 2019 57th
     Annual Allerton Conference on Communication, Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
