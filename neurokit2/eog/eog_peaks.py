@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
+
 import numpy as np
 
 from ..misc import as_vector
-from ..signal import signal_filter
 from ..signal import signal_findpeaks
 
 
@@ -14,19 +13,22 @@ def eog_peaks(eog_cleaned, method="mne"):
 
     Parameters
     ----------
-    eog_signal : list or array or Series
+    eog_cleaned : list or array or Series
         The cleaned EOG channel. Note that it must be positively oriented, i.e., blinks must
         appear as upward peaks.
     method : str
         The peak detection algorithm. Can be one of 'mne' (default) (requires the MNE package
         to be installed).
 
+    Returns
+    -------
+    array
+        Vector containing the samples at which EOG-peaks occur,
+
     See Also
     --------
     eog_clean
 
-    Examples
-    --------
     Examples
     --------
     >>> import neurokit2 as nk
@@ -61,11 +63,7 @@ def eog_peaks(eog_cleaned, method="mne"):
     elif method in ["brainstorm"]:
         peaks = _eog_peaks_brainstorm(eog_cleaned)
     else:
-        raise ValueError(
-            "NeuroKit error: eog_peaks(): 'method' should be "
-            "one of 'mne', 'brainstorm'."
-        )
-
+        raise ValueError("NeuroKit error: eog_peaks(): 'method' should be " "one of 'mne', 'brainstorm'.")
 
     return peaks
 
@@ -77,6 +75,7 @@ def _eog_peaks_mne(eog_cleaned):
     """EOG blink detection based on MNE.
 
     https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+
     """
     # Make sure MNE is installed
     try:
@@ -97,10 +96,11 @@ def _eog_peaks_brainstorm(eog_cleaned):
     """EOG blink detection implemented in brainstorm.
 
     https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+
     """
     # Brainstorm: "An event of interest is detected if the absolute value of the filtered
     # signal value goes over a given number of times the standard deviation. For EOG: 2xStd."
-    # -> Remove all peaks that correppond to regions < 2 SD
+    # -> Remove all peaks that correspond to regions < 2 SD
     peaks = signal_findpeaks(eog_cleaned, relative_height_min=2)["Peaks"]
 
     return peaks

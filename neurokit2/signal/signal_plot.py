@@ -82,11 +82,10 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
     # Adjust for sampling rate
     if sampling_rate is not None:
         signal.index = signal.index / sampling_rate
-#        x_axis = np.linspace(0, signal.shape[0] / sampling_rate, signal.shape[0])
-#        x_axis = pd.DataFrame(x_axis, columns=["Time (s)"])
-#        signal = pd.concat([signal, x_axis], axis=1)
-#        signal = signal.set_index("Time (s)")
-
+    #        x_axis = np.linspace(0, signal.shape[0] / sampling_rate, signal.shape[0])
+    #        x_axis = pd.DataFrame(x_axis, columns=["Time (s)"])
+    #        signal = pd.concat([signal, x_axis], axis=1)
+    #        signal = signal.set_index("Time (s)")
 
     # Plot accordingly
     if len(events_columns) > 0:
