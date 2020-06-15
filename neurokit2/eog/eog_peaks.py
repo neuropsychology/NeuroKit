@@ -10,13 +10,13 @@ from ..signal import signal_findpeaks
 def eog_peaks(eog_cleaned, method="mne"):
     """Locate EOG events (blinks, saccades, eye-movements, ...).
 
-    Prepare a raw EOG signal for eye blinks detection. Only Agarwal & Sivakumar (2019)'s method
-    is implemented for now.
+    Locate EOG events (blinks, saccades, eye-movements, ...).
 
     Parameters
     ----------
     eog_signal : list or array or Series
-        The raw EOG channel.
+        The cleaned EOG channel. Note that it must be positively oriented, i.e., blinks must
+        appear as upward peaks.
     method : str
         The peak detection algorithm. Can be one of 'mne' (default) (requires the MNE package
         to be installed).
@@ -33,9 +33,7 @@ def eog_peaks(eog_cleaned, method="mne"):
     >>>
     >>> # Get data
     >>> eog_signal = nk.data('eog_100hz')["vEOG"]
-    >>>
-    >>> # Clean
-    >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100, method='mne')
+    >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
     >>>
     >>> # MNE-method
     >>> mne = nk.eog_peaks(eog_cleaned, method="mne")
@@ -54,6 +52,7 @@ def eog_peaks(eog_cleaned, method="mne"):
     """
     # Sanitize input
     eog_cleaned = as_vector(eog_cleaned)
+
 
     # Apply method
     method = method.lower()
@@ -89,12 +88,7 @@ def _eog_peaks_mne(eog_cleaned):
         )
 
     # Find peaks
-    temp = eog_cleaned - np.mean(eog_cleaned)
-
-    if np.abs(np.max(temp)) > np.abs(np.min(temp)):
-        eog_events, _ = mne.preprocessing.peak_finder(eog_cleaned, extrema=1, verbose=False)
-    else:
-        eog_events, _ = mne.preprocessing.peak_finder(eog_cleaned, extrema=-1, verbose=False)
+    eog_events, _ = mne.preprocessing.peak_finder(eog_cleaned, extrema=1, verbose=False)
 
     return eog_events
 
@@ -104,13 +98,9 @@ def _eog_peaks_brainstorm(eog_cleaned):
 
     https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
     """
-    # Find peaks
-    peaks = signal_findpeaks(eog_cleaned)["Peaks"]
-
     # Brainstorm: "An event of interest is detected if the absolute value of the filtered
     # signal value goes over a given number of times the standard deviation. For EOG: 2xStd."
     # -> Remove all peaks that correppond to regions < 2 SD
-    mask = eog_cleaned > 2 * np.std(eog_cleaned, ddof=1)
-    peaks = peaks[mask[peaks]]
+    peaks = signal_findpeaks(eog_cleaned, relative_height_min=2)["Peaks"]
 
     return peaks
