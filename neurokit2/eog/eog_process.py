@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from .eog_clean import eog_clean
 from ..signal import signal_period
 from ..signal.signal_formatpeaks import _signal_from_indices
+from .eog_clean import eog_clean
 
 
 def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
@@ -60,8 +60,7 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
         import mne
     except ImportError:
         raise ImportError(
-            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. "
-            "Please install it first (`pip install mne`).",
+            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. Please install it first (`pip install mne`).",
         )
 
     # Make sure signal is one array
@@ -77,7 +76,9 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     # Clean signal
     eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate)
 
-    eog_events = mne.preprocessing.find_eog_events(raw, event_id=998, l_freq=lfreq, h_freq=hfreq, filter_length="10s", ch_name="EOG")
+    eog_events = mne.preprocessing.find_eog_events(
+        raw, event_id=998, l_freq=lfreq, h_freq=hfreq, filter_length="10s", ch_name="EOG"
+    )
 
     #    raw.add_events(eog_events, 'EOG')
 
