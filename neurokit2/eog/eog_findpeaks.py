@@ -52,7 +52,7 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
     >>> fig2
     >>>
     >>> # kleifges method
-    >>> blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
+    >>> _, blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
     >>> fig3 = nk.events_plot(blinker, eog_cleaned)  # doctest: +ELLIPSIS
     >>> fig3
 
@@ -132,12 +132,10 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
     threshold = 1.5 * np.std(eog_cleaned) + eog_cleaned.mean()
     min_blink = 0.05 * sampling_rate  # min blink frames
 
-    blink = np.full(len(eog_cleaned), False, dtype=bool)
     index = []
     for i in range(len(eog_cleaned)):
         if eog_cleaned[i] > threshold:
             index.append(i)
-            blink[i] = True
 
     candidates = np.array(index)[np.where(np.diff(index) > min_blink)[0]]
 
@@ -154,11 +152,11 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
 
         # Check if peak is at the end or start of epoch
         t = epochs[i].loc[epochs[i]["Signal"] == max_value].index
-        if 0.3 < t < 0.51:
+        if np.all(0.3 < t < 0.51):
             # Trim end of epoch
             epochs[i] = epochs[i][-0.5:0.3]
             max_value = epochs[i].Signal.max()
-        if -0.51 < t < -0.3:
+        if np.all(-0.51 < t < -0.3):
             # Trim start of epoch
             epochs[i] = epochs[i][-0.3:0.5]
             max_value = epochs[i].Signal.max()
@@ -177,16 +175,20 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
         crossings_idx = np.sort(np.append([np.array(crossings_idx)], [max_frame]))
         max_position = int(np.where(crossings_idx == max_frame)[0])
 
-        leftzero = crossings_idx[max_position - 1]
-        rightzero = crossings_idx[max_position + 1]
-
-        max_value_t = epochs[i].Signal.idxmax()
-        sliced_before = epochs[i].loc[slice(max_value_t), :]
-        sliced_after = epochs[i].tail(epochs[i].shape[0] - sliced_before.shape[0])
-
-        if len(crossings) == 0:
+        if (max_position-1) >= 0:  # crosses zero point
+            leftzero = crossings_idx[max_position - 1]
+        else:
+            max_value_t = epochs[i].Signal.idxmax()
+            sliced_before = epochs[i].loc[slice(max_value_t), :]
             leftzero = sliced_before["Index"].loc[sliced_before["Signal"] == sliced_before["Signal"].min()]
             leftzero = np.array(leftzero)
+
+        if (max_position+1) < len(crossings_idx):  # crosses zero point
+            rightzero = crossings_idx[max_position + 1]
+        else:
+            max_value_t = epochs[i].Signal.idxmax()
+            sliced_before = epochs[i].loc[slice(max_value_t), :]
+            sliced_after = epochs[i].tail(epochs[i].shape[0] - sliced_before.shape[0])
             rightzero = sliced_after["Index"].loc[sliced_after["Signal"] == sliced_after["Signal"].min()]
             rightzero = np.array(rightzero)
 
@@ -219,7 +221,7 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
             candidate_blinks.append(epochs[i])
             peaks.append(max_frame)
 
-        # Blink peak markers
-        peaks = np.array(peaks)
+    # Blink peak markers
+    peaks = np.array(peaks)
 
     return candidate_blinks, peaks
