@@ -35,7 +35,7 @@ jobs:
       run: |
         pip install docformatter
         # See https://github.com/myint/docformatter
-        docformatter neurokit2 --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line
+        docformatter neurokit2 --wrap-summaries 120 --wrap-descriptions 113 --blank --make-summary-multi-line --recursive
 
     - name: Detect remaining style errors with flake8
       run: |

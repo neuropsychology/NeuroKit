@@ -182,8 +182,7 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, **kwargs):
 
 
 def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
-    """Return fraction of false nearest neighbors for a single d.
-    """
+    """Return fraction of false nearest neighbors for a single d."""
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
     # at both dimension d as well as dimension d + 1.

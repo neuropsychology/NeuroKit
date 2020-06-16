@@ -18,6 +18,7 @@ from .signal_plot import signal_plot
 from .signal_power import signal_power
 from .signal_psd import signal_psd
 from .signal_rate import signal_rate
+from .signal_recompose import signal_recompose
 from .signal_resample import signal_resample
 from .signal_simulate import signal_simulate
 from .signal_smooth import signal_smooth
@@ -49,4 +50,5 @@ __all__ = [
     "signal_autocor",
     "signal_changepoints",
     "signal_decompose",
+    "signal_recompose",
 ]

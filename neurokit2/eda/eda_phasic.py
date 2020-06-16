@@ -84,8 +84,8 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 # Acqknowledge
 # =============================================================================
 def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4):
-    """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
-    """
+    """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-
+    issue/)"""
     size = smoothing_factor * sampling_rate
     tonic = signal_smooth(eda_signal, kernel="median", size=size)
     phasic = eda_signal - tonic
@@ -96,8 +96,8 @@ def _eda_phasic_mediansmooth(eda_signal, sampling_rate=1000, smoothing_factor=4)
 
 
 def _eda_phasic_highpass(eda_signal, sampling_rate=1000):
-    """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-issue/)
-    """
+    """One of the two methods available in biopac's acqknowledge (https://www.biopac.com/knowledge-base/phasic-eda-
+    issue/)"""
     phasic = signal_filter(eda_signal, sampling_rate=sampling_rate, lowcut=0.05, method="butter")
     tonic = signal_filter(eda_signal, sampling_rate=sampling_rate, highcut=0.05, method="butter")
 
