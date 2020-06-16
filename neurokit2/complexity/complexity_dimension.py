@@ -119,7 +119,7 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
     return E, Es
 
 
-def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None):
+def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs):
     """Return E(d) and E^*(d) for a single d.
 
     Returns E(d) and E^*(d) for the AFN method for a single d.
