@@ -20,22 +20,22 @@ jobs:
         python -m pip install tox-gh-actions
         tox
 
-    - name: Fix code style issues with isort (import calls)
-      run: |
-        python -m pip install isort
-        isort neurokit2 --recursive -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --diff
+      - name: Fix code style issues with isort (import calls)
+        run: |
+          python -m pip install isort
+          isort neurokit2 --recursive -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --diff
 
-    - name: Fix code style issues with black (line lengths)
-      run: |
-        pip install black
-        # The GitHub editor is 127 chars wide. See https://black.readthedocs.io/en/stable/installation_and_usage.html
-        black neurokit2 --line-length 120 .
+      - name: Fix code style issues with black (line lengths)
+        run: |
+          pip install black
+          # The GitHub editor is 127 chars wide. See https://black.readthedocs.io/en/stable/installation_and_usage.html
+          black neurokit2 --line-length 120 .
 
-    - name: Fix code style issues with docformatter (docstrings)
-      run: |
-        pip install docformatter
-        # See https://github.com/myint/docformatter
-        docformatter neurokit2 --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line
+      - name: Fix code style issues with docformatter (docstrings)
+        run: |
+          pip install docformatter
+          # See https://github.com/myint/docformatter
+          docformatter neurokit2 --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line
 
     - name: Detect remaining style errors with flake8
       run: |
