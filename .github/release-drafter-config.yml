@@ -1,8 +1,24 @@
+name-template: '$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+
+version-resolver:
+  major:
+    labels:
+      - 'major'
+  minor:
+    labels:
+      - 'minor'
+  patch:
+    labels:
+      - 'patch'
+  default: patch
+
 template: |
-  ## What’s New
+  ## 🚀 What’s New
 
   $CHANGES
   
-  ## Thanks to 
+  ## 👏 Thanks to 
   
   $CONTRIBUTORS
+  

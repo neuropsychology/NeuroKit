@@ -21,57 +21,55 @@ def hrv_frequency(
     silent=True,
     **kwargs
 ):
-    """
-    Computes frequency-domain indices of Heart Rate Variability (HRV).
+    """Computes frequency-domain indices of Heart Rate Variability (HRV).
 
-    Note that a minimum duration of the signal containing the peaks is recommended
-    for some HRV indices to be meaningful. For instance, 1, 2 and 5 minutes of
-    high quality signal are the recomended minima for HF, LF and LF/HF,
-    respectively. See references for details.
+    Note that a minimum duration of the signal containing the peaks is recommended for some HRV indices
+    to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the recomended
+    minima for HF, LF and LF/HF, respectively. See references for details.
 
     Parameters
     ----------
     peaks : dict
-        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-        Dictionary returned by ecg_findpeaks, ecg_peaks, ppg_findpeaks, or
-        ppg_peaks.
+        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur. Dictionary returned
+        by ecg_findpeaks, ecg_peaks, ppg_findpeaks, or ppg_peaks.
     sampling_rate : int, optional
-        Sampling rate (Hz) of the continuous cardiac signal in which the peaks
-        occur. Should be at least twice as high as the highest frequency in vhf.
-        By default 1000.
+        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
+        least twice as high as the highest frequency in vhf. By default 1000.
     ulf : tuple, optional
-        Upper and lower limit of the ultra-low frequency band. By default
-        (0, 0.0033).
+        Upper and lower limit of the ultra-low frequency band. By default (0, 0.0033).
     vlf : tuple, optional
-        Upper and lower limit of the very-low frequency band. By default
-        (0.0033, 0.04).
+        Upper and lower limit of the very-low frequency band. By default (0.0033, 0.04).
     lf : tuple, optional
         Upper and lower limit of the low frequency band. By default (0.04, 0.15).
     hf : tuple, optional
         Upper and lower limit of the high frequency band. By default (0.15, 0.4).
     vhf : tuple, optional
-        Upper and lower limit of the very-high frequency band. By default
-        (0.4, 0.5).
+        Upper and lower limit of the very-high frequency band. By default (0.4, 0.5).
     psd_method : str
-        Method used for spectral density estimation. For details see
-        signal.signal_power. By default "welch".
+        Method used for spectral density estimation. For details see signal.signal_power. By default "welch".
     silent : bool
         If False, warnings will be printed. Default to True.
     show : bool
         If True, will plot the power in the different frequency bands.
+    **kwargs : optional
+        Other arguments.
 
     Returns
     -------
     DataFrame
         Contains frequency domain HRV metrics:
-        - "*ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz by default.
-        - "*VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz by default.
+        - "*ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz
+        by default.
+        - "*VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz
+        by default.
         - "*LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
         - "*HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
         - "*VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
         - "*LFHF*": the ratio of low frequency power to high frequency power.
-        - "*LFn*": the normalized low frequency, obtained by dividing the low frequency power by the total power.
-        - "*HFn*": the normalized high frequency, obtained by dividing the low frequency power by the total power.
+        - "*LFn*": the normalized low frequency, obtained by dividing the low frequency power by
+        the total power.
+        - "*HFn*": the normalized high frequency, obtained by dividing the low frequency power by
+        the total power.
         - "*LnHF*": the log transformed HF.
 
     See Also
@@ -93,10 +91,10 @@ def hrv_frequency(
 
     References
     ----------
-    - Stein, P. K. (2002). Assessing heart rate variability from real-world
-      Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
-    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
-    variability metrics and norms. Frontiers in public health, 5, 258.
+    - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
+    electrophysiology review, 6(3), 239-244.
+    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
+    Frontiers in public health, 5, 258.
 
     """
     # Sanitize input
@@ -125,7 +123,8 @@ def hrv_frequency(
         for frequency in out.keys():
             if out[frequency] == 0.0:
                 print(
-                    "Neurokit warning: hrv_frequency(): The duration of recording is too short to allow reliable computation of signal power in frequency band "
+                    "Neurokit warning: hrv_frequency(): The duration of recording is too short to allow "
+                    " reliable computation of signal power in frequency band "
                     + frequency
                     + ". Its power is returned as zero."
                 )
@@ -137,7 +136,7 @@ def hrv_frequency(
     out["HFn"] = out["HF"] / total_power
 
     # Log
-    out["LnHF"] = np.log(out["HF"])
+    out["LnHF"] = np.log(out["HF"])  # pylint: disable=E1111
 
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
 
@@ -160,14 +159,13 @@ def _hrv_frequency_show(
 ):
 
     if "ax" in kwargs:
-        fig = None
         ax = kwargs.get("ax")
         kwargs.pop("ax")
     else:
-        fig, ax = plt.subplots()
+        __, ax = plt.subplots()
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
-    for i in range(len(frequency_band)):
+    for i in range(len(frequency_band)):  # pylint: disable=C0200
         min_frequency = frequency_band[i][0]
         if min_frequency == 0:
             min_frequency = 0.001  # sanitize lowest frequency
@@ -178,4 +176,4 @@ def _hrv_frequency_show(
 
     psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, max_frequency=0.5)
 
-    _signal_power_instant_plot(psd, out_bands, frequency_band, sampling_rate=sampling_rate, ax=ax)
+    _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)

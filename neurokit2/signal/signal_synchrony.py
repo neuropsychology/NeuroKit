@@ -3,26 +3,28 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 
-from .signal_resample import signal_resample
-
 
 def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
-    """
-    Compute the synchrony (coupling) between two signals.
+    """Compute the synchrony (coupling) between two signals.
 
-    Compute a continuous index of coupling between two signals either using the 'Hilbert' method to get the instantaneous phase synchrony, or using rolling window correlation.
+    Compute a continuous index of coupling between two signals either using the 'Hilbert' method to get
+    the instantaneous phase synchrony, or using rolling window correlation.
 
     The instantaneous phase synchrony measures the phase similarities between signals at each timepoint.
-The phase refers to the angle of the signal, calculated through the hilbert transform, when it is resonating between -pi to pi degrees. When two signals line up in phase their angular difference becomes zero.
+    The phase refers to the angle of the signal, calculated through the hilbert transform, when it is
+    resonating between -pi to pi degrees. When two signals line up in phase their angular difference becomes zero.
 
-    For less clean signals, windowed correlations are widely used because of their simplicity, and can be a good a robust approximation of synchrony between two signals. The limitation is the need to select a window.
+    For less clean signals, windowed correlations are widely used because of their simplicity, and can
+    be a good a robust approximation of synchrony between two signals. The limitation is the need to select a window.
 
 
 
     Parameters
     ----------
-    signal1,signal2 : list, array or Series
-        Two time series in the form of a vector of values.
+    signal1 : Union[list, np.array, pd.Series]
+        Time series in the form of a vector of values.
+    signal2 : Union[list, np.array, pd.Series]
+        Time series in the form of a vector of values.
     method : str
         The method to use. Can be one of 'hilbert' or 'correlation'.
     window_size : int
@@ -84,8 +86,7 @@ def _signal_synchrony_hilbert(signal1, signal2):
 
 
 def _signal_synchrony_correlation(signal1, signal2, window_size, center=False):
-    """
-    Calculates pairwise rolling correlation at each time. Grabs the upper triangle, at each timepoints.
+    """Calculates pairwise rolling correlation at each time. Grabs the upper triangle, at each timepoints.
 
     - window: window size of rolling corr in samples
     - center: whether to center result (Default: False, so correlation values are listed on the right.)

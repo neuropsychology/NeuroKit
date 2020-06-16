@@ -13,8 +13,7 @@ def rsp_simulate(
     method="breathmetrics",
     random_state=None,
 ):
-    """
-    Simulate a respiratory signal.
+    """Simulate a respiratory signal.
 
     Generate an artificial (synthetic) respiratory signal of a given duration
     and rate.
@@ -23,18 +22,18 @@ def rsp_simulate(
     ----------
     duration : int
         Desired length of duration (s).
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired
-        length of the signal (in samples).
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
+    length : int
+        The desired length of the signal (in samples).
     noise : float
         Noise level (amplitude of the laplace noise).
     respiratory_rate : float
         Desired number of breath cycles in one minute.
     method : str
-        The model used to generate the signal. Can be 'sinusoidal' for a
-        simulation based on a trigonometric sine wave that roughly approximates
-        a single respiratory cycle. If 'breathmetrics' (default), will use an
-        advanced model desbribed `Noto, et al. (2018)
+        The model used to generate the signal. Can be 'sinusoidal' for a simulation based on a
+        trigonometric sine wave that roughly approximates a single respiratory cycle. If
+        'breathmetrics' (default), will use an advanced model desbribed `Noto, et al. (2018)
         <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_.
     random_state : int
         Seed for the random number generator.
@@ -57,9 +56,8 @@ def rsp_simulate(
 
     References
     ----------
-    Noto, T., Zhou, G., Schuele, S., Templer, J., & Zelano, C. (2018).
-    Automated analysis of breathing waveforms using BreathMetrics: A
-    respiratory signal processing toolbox. Chemical Senses, 43(8), 583–597.
+    Noto, T., Zhou, G., Schuele, S., Templer, J., & Zelano, C. (2018). Automated analysis of breathing
+    waveforms using BreathMetrics: A respiratory signal processing toolbox. Chemical Senses, 43(8), 583–597.
     https://doi.org/10.1093/chemse/bjy045
 
     See Also
@@ -76,11 +74,11 @@ def rsp_simulate(
 
     if method.lower() in ["sinusoidal", "sinus", "simple"]:
         rsp = _rsp_simulate_sinusoidal(
-            duration=duration, length=length, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
+            duration=duration, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
         )
     else:
         rsp = _rsp_simulate_breathmetrics(
-            duration=duration, length=length, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
+            duration=duration, sampling_rate=sampling_rate, respiratory_rate=respiratory_rate
         )
         rsp = rsp[0:length]
 
@@ -104,11 +102,9 @@ def rsp_simulate(
 # =============================================================================
 # Simple Sinusoidal Model
 # =============================================================================
-def _rsp_simulate_sinusoidal(duration=10, length=None, sampling_rate=1000, respiratory_rate=15):
-    """
-    Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly approximates a single
-    respiratory cycle.
-    """
+def _rsp_simulate_sinusoidal(duration=10, sampling_rate=1000, respiratory_rate=15):
+    """Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly approximates a
+    single respiratory cycle."""
     # Generate values along the length of the duration
     rsp = signal_simulate(
         duration=duration, sampling_rate=sampling_rate, frequency=respiratory_rate / 60, amplitude=0.5
@@ -137,9 +133,8 @@ def _rsp_simulate_breathmetrics_original(
     pause_amplitude_variance=0.2,
     signal_noise=0.1,
 ):
-    """
-    Simulates a recording of human airflow data by appending individually constructed sin waves and pauses in sequence.
-    This is translated from the matlab code available `here.
+    """Simulates a recording of human airflow data by appending individually constructed sin waves and pauses in
+    sequence. This is translated from the matlab code available `here.
 
     <https://github.com/zelanolab/breathmetrics/blob/master/simulateRespiratoryData.m>`_ by Noto, et al. (2018).
 
@@ -147,36 +142,39 @@ def _rsp_simulate_breathmetrics_original(
     ----------
     nCycles : int or float
         number of breathing cycles to simulate.
-    sampling_rate :
+    sampling_rate : int
         sampling rate.
-    breathing_rate :
+    breathing_rate : float
         average breathing rate.
-    average_amplitude :
+    average_amplitude : float
         average amplitude of inhales and exhales.
-    amplitude_variance:
+    amplitude_variance: float
         variance in respiratory amplitudes.
-    phase_variance:
+    phase_variance: float
         variance in duration of individual breaths.
-    inhale_pause_percent :
+    inhale_pause_percent : float
         percent of inhales followed by a pause.
-    inhale_pause_avgLength :
+    inhale_pause_avgLength : float
         average length of inhale pauses.
-    inhale_pauseLength_variance :
+    inhale_pauseLength_variance : float
         variance in inhale pause length.
-    exhale_pause_percent :
+    exhale_pause_percent : float
         percent of exhales followed by a pause.
-    exhale_pause_avgLength :
+    exhale_pause_avgLength : float
         average length of exhale pauses.
-    exhale_pauseLength_variance :
+    exhale_pauseLength_variance : float
         variance in exhale pause length.
-    pause_amplitude :
+    pause_amplitude : float
         noise amplitude of pauses.
-    pause_amplitude_variance :
+    pause_amplitude_variance : float
         variance in pause noise.
-    signal_noise :
+    signal_noise : float
         percent of noise saturation in the simulated signal.
+
     Returns
     ----------
+    signal
+        vector containing breathmetrics simulated rsp signal.
 
     """
     # Define additional parameters
@@ -345,7 +343,7 @@ def _rsp_simulate_breathmetrics_original(
     return simulated_respiration, raw_features, feature_stats
 
 
-def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000, respiratory_rate=15):
+def _rsp_simulate_breathmetrics(duration=10, sampling_rate=1000, respiratory_rate=15):
 
     n_cycles = int(respiratory_rate / 60 * duration)
 
@@ -353,7 +351,7 @@ def _rsp_simulate_breathmetrics(duration=10, length=None, sampling_rate=1000, re
     rsp = False
     while rsp is False:
         # Generate a longer than necessary signal so it won't be shorter
-        rsp, raw_features, feature_stats = _rsp_simulate_breathmetrics_original(
+        rsp, _, __ = _rsp_simulate_breathmetrics_original(
             nCycles=int(n_cycles * 1.5),
             sampling_rate=sampling_rate,
             breathing_rate=respiratory_rate / 60,

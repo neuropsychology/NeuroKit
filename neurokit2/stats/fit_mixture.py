@@ -1,24 +1,20 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import pandas as pd
 import sklearn.mixture
 
 
 def fit_mixture(X=None, n_clusters=2):
-    """
-    Gaussian Mixture Model.
+    """Gaussian Mixture Model.
 
     Performs a polynomial regression of given order.
 
 
     Parameters
     ----------
-    X : list, array or Series
+    X : Union[list, np.array, pd.Series]
         The values to classify.
     n_clusters : int
         Number of components to look for.
-    threshold : float
-        Probability threshold to
 
     Returns
     -------

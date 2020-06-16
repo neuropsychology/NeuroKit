@@ -5,19 +5,27 @@ from ..misc import as_vector
 
 
 def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
-    """
-    Change Point Detection.
+    """Change Point Detection.
 
     Only the PELT method is implemented for now.
 
     Parameters
     -----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         Vector of values.
-    signal : list, array or Series
-        Vector of values.
+    change : str
+        Can be one of "meanvar" (default), "mean" or "var".
     penalty : float
         The algorithm penalty. Default to ``np.log(len(signal))``.
+    show : bool
+        Defaults to False.
+
+    Returns
+    -------
+    Array
+        Values indicating the samples at which the changepoints occur.
+    Fig
+        Figure of plot of signal with markers of changepoints.
 
     Examples
     --------
@@ -29,7 +37,8 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
 
     References
     ----------
-    - Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a linear computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
+    - Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a linear
+    computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
 
     """
     signal = as_vector(signal)
@@ -42,8 +51,7 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
 
 
 def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
-    """
-    PELT algorithm to find change points in a signal.
+    """PELT algorithm to find change points in a signal.
 
     Adapted from: https://github.com/ruipgil/changepy https://github.com/deepcharles/ruptures
     https://github.com/STOR-i/Changepoints.jl https://github.com/rkillick/changepoint/
@@ -52,7 +60,7 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
     # Initialize
     length = len(signal)
     if penalty is None:
-        penalty = np.log(length)
+        penalty = np.log(length)  # pylint: disable=E1111
     if change.lower() == "var":
         cost = _signal_changepoints_cost_var(signal)
     elif change.lower() == "mean":
@@ -65,12 +73,12 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
     R = np.array([0], dtype=np.int)
     candidates = np.zeros(length + 1, dtype=np.int)
 
-    F[0] = -penalty
+    F[0] = -penalty  # pylint: disable=E1130
 
     for tstar in range(2, length + 1):
         cpt_cands = R
         seg_costs = np.zeros(len(cpt_cands))
-        for i in range(0, len(cpt_cands)):
+        for i in range(0, len(cpt_cands)):  # pylint: disable=C0200
             seg_costs[i] = cost(cpt_cands[i], tstar)
 
         F_cost = F[cpt_cands] + seg_costs
@@ -96,9 +104,7 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
 # Cost functions
 # =============================================================================
 def _signal_changepoints_cost_mean(signal):
-    """
-    Cost function for a normally distributed signal with a changing mean.
-    """
+    """Cost function for a normally distributed signal with a changing mean."""
     i_variance_2 = 1 / (np.var(signal) ** 2)
     cmm = [0.0]
     cmm.extend(np.cumsum(signal))
@@ -117,9 +123,7 @@ def _signal_changepoints_cost_mean(signal):
 
 
 def _signal_changepoints_cost_var(signal):
-    """
-    Cost function for a normally distributed signal with a changing variance.
-    """
+    """Cost function for a normally distributed signal with a changing variance."""
     cumm = [0.0]
     cumm.extend(np.cumsum(np.power(np.abs(signal - np.mean(signal)), 2)))
 
@@ -132,9 +136,7 @@ def _signal_changepoints_cost_var(signal):
 
 
 def _signal_changepoints_cost_meanvar(signal):
-    """
-    Cost function for a normally distributed signal with a changing mean and variance.
-    """
+    """Cost function for a normally distributed signal with a changing mean and variance."""
     signal = np.hstack(([0.0], np.array(signal)))
 
     cumm = np.cumsum(signal)

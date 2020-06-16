@@ -54,18 +54,18 @@ To install NeuroKit2, run this command in your terminal:
 
 .. code-block::
 
-    pip install https://github.com/neuropsychology/neurokit/zipball/master
+    pip install neurokit2
 
 If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
-Contribution
+Contributing
 -------------
 
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
         :target: https://github.com/neuropsychology/NeuroKit/blob/master/LICENSE
         :alt: License
         
-.. image:: https://github.com/neuropsychology/neurokit/workflows/Tests/badge.svg
+.. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg?branch=master
         :target: https://github.com/neuropsychology/NeuroKit/actions
         :alt: GitHub CI
         
@@ -75,9 +75,9 @@ Contribution
 
 NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
 
-- `Contribution guide <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
-- `How to use GitHub to contribute <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_
-- `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/tutorials/first_contribution.html>`_
+- `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/contributing/understanding.html>`_
+- `Contributing guide <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html>`_
+- `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/contributing/first_contribution.html>`_
 
 
 Documentation
@@ -113,11 +113,10 @@ Click on the links above and check out our tutorials:
 General
 ^^^^^^^^^^
 
+-  `Get familiar with Python in 10 minutes <https://neurokit2.readthedocs.io/en/latest/tutorials/learnpython.html>`_
 -  `Recording good quality signals <https://neurokit2.readthedocs.io/en/latest/tutorials/recording.html>`_
 -  `What software for physiological signal processing <https://neurokit2.readthedocs.io/en/latest/tutorials/software.html>`_
 -  `Install Python and NeuroKit <https://neurokit2.readthedocs.io/en/latest/installation.html>`_
--  `Get familiar with Python in 10 minutes <https://neurokit2.readthedocs.io/en/latest/tutorials/learnpython.html>`_
--  `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/tutorials/understanding.html>`_
 -  `Included datasets <https://neurokit2.readthedocs.io/en/latest/datasets.html>`_
 -  `Additional Resources <https://neurokit2.readthedocs.io/en/latest/tutorials/resources.html>`_
 

@@ -1,24 +1,22 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 
 
 def rescale(data, to=[0, 1]):
-    """
-    Rescale data.
+    """Rescale data.
 
     Rescale a numeric variable to a new range.
 
     Parameters
     ----------
-    data : list, array or Series
+    data : Union[list, np.array, pd.Series]
         Raw data.
     to : list
         New range of values of the data after rescaling.
 
     Returns
     ----------
-    list, array or Series
+    list
         The rescaled values.
 
 

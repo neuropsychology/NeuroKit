@@ -6,17 +6,21 @@ import numpy as np
 def fractal_mandelbrot(
     size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4, iterations=25, buddha=False, show=False
 ):
-    """
-    Generate a Mandelbrot (or a Buddhabrot) fractal.
+    """Generate a Mandelbrot (or a Buddhabrot) fractal.
 
-    Vectorized function to efficiently generate an array containing values corresponding to a Mandelbrot fractal.
+    Vectorized function to efficiently generate an array containing values corresponding to a Mandelbrot
+    fractal.
 
     Parameters
     -----------
     size : int
         The size in pixels (corresponding to the width of the figure).
-    real_range, imaginary_range : tuple
-        The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the figure.
+    real_range : tuple
+        The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and
+        the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the figure.
+    imaginary_range : tuple
+        The mandelbrot set is defined within the -2, 2 complex space (the real being the x-axis and
+        the imaginary the y-axis). Adjusting these ranges can be used to pan, zoom and crop the figure.
     iterations : int
         Number of iterations.
     threshold : int
@@ -26,15 +30,23 @@ def fractal_mandelbrot(
     show : bool
         Visualize the fratal.
 
+    Returns
+    -------
+    fig
+        Plot of fractal.
+
     Examples
     ---------
     >>> import neurokit2 as nk
     >>>
     >>> # Mandelbrot fractal
-    >>> fractal = nk.fractal_mandelbrot(show=True)
-    >>> fractal #doctest: +SKIP
+    >>> nk.fractal_mandelbrot(show=True) #doctest: +ELLIPSIS
+    array(...)
+
     >>> # Zoom at seahorse valley
-    >>> nk.fractal_mandelbrot(real_range=(-0.76, -0.74), imaginary_range=(0.09, 0.11), iterations=100, show=True) #doctest: +SKIP
+    >>> nk.fractal_mandelbrot(real_range=(-0.76, -0.74), imaginary_range=(0.09, 0.11),
+    ...                       iterations=100, show=True) #doctest: +ELLIPSIS
+    array(...)
     >>>
     >>> # Draw manually
     >>> m = nk.fractal_mandelbrot(real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25))
@@ -43,7 +55,8 @@ def fractal_mandelbrot(
     >>> plt.show() #doctest: +SKIP
     >>>
     >>> # Buddhabrot
-    >>> b = nk.fractal_mandelbrot(size=1500, real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25), buddha=True, iterations=200)
+    >>> b = nk.fractal_mandelbrot(size=1500, real_range=(-2, 0.75), imaginary_range=(-1.25, 1.25),
+    ...                           buddha=True, iterations=200)
     >>> plt.imshow(b.T, cmap="gray") #doctest: +SKIP
     >>> plt.axis("off") #doctest: +SKIP
     >>> plt.show() #doctest: +SKIP
@@ -89,12 +102,12 @@ def _mandelbrot(size=1000, real_range=(-2, 2), imaginary_range=(-2, 2), iteratio
     optim = _mandelbrot_optimize(c)
 
     z = np.copy(c)
-    for i in range(1, iterations + 1):
+    for i in range(1, iterations + 1):  # pylint: disable=W0612
         # Continue only where smaller than threshold
         mask = (z * z.conjugate()).real < threshold
         mask = np.logical_and(mask, optim)
 
-        if np.all(mask == False) is True:
+        if np.all(~mask) is True:
             break
 
         # Increase
@@ -169,7 +182,7 @@ def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(
     return img
 
 
-def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2), threshold=4):
+def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(-2, 2)):
 
     # Allocate an array to store our non-mset points as we find them.
     sets = np.zeros(size, dtype=np.complex128)
@@ -181,13 +194,13 @@ def _buddhabrot_initialize(size=1000, iterations=100, real_range=(-2, 2), imagin
 
     z = np.copy(c)
 
-    for i in range(iterations):
+    for i in range(iterations):  # pylint: disable=W0612
         # apply mandelbrot dynamic
         z = z ** 2 + c
 
         # collect the c points that have escaped
         mask = np.abs(z) < 2
-        new_sets = c[mask == False]
+        new_sets = c[~mask]
         sets[sets_found : sets_found + len(new_sets)] = new_sets
         sets_found += len(new_sets)
 

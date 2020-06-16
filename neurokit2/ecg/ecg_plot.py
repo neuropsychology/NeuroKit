@@ -12,8 +12,7 @@ from .ecg_segment import ecg_segment
 
 
 def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
-    """
-    Visualize ECG data.
+    """Visualize ECG data.
 
     Parameters
     ----------
@@ -23,14 +22,17 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
         The samples at which the R-peak occur. Dict returned by
         `ecg_process()`. Defaults to None.
     sampling_rate : int
-        The sampling frequency of the ECG (in Hz, i.e., samples/second). Needs
-        to be supplied if the data should be plotted over time in seconds.
-        Otherwise the data is plotted over samples. Defaults to None.
-        Must be specified to plot artifacts.
-    artifacts : str
-        Visualize the ECG data with 'default' or visualize artifacts thresholds
-        with 'artifacts' produced by `ecg_fixpeaks()`,
-        or 'full' to visualize both.
+        The sampling frequency of the ECG (in Hz, i.e., samples/second). Needs to be supplied if the
+        data should be plotted over time in seconds. Otherwise the data is plotted over samples.
+        Defaults to None. Must be specified to plot artifacts.
+    show_type : str
+        Visualize the ECG data with 'default' or visualize artifacts thresholds with 'artifacts' produced by
+        `ecg_fixpeaks()`, or 'full' to visualize both.
+
+    Returns
+    -------
+    fig
+        Figure representing a plot of the processed ecg signals (and peak artifacts).
 
     Examples
     --------
@@ -122,7 +124,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
             ax2.plot(heartbeats_pivoted)
 
             cmap = iter(
-                plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats["Label"].nunique())))
+                plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats["Label"].nunique())))  # pylint: disable=E1101
             )  # Aesthetics of heart beats
 
             lines = []
@@ -133,7 +135,10 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
     # Plot artifacts
     if show_type in ["artifacts", "full"]:
         if sampling_rate is None:
-            raise ValueError("NeuroKit error: ecg_plot(): Sampling rate must be specified for artifacts to be plotted.")
+            raise ValueError(
+                "NeuroKit error: ecg_plot(): Sampling rate must be specified for artifacts" " to be plotted."
+            )
+
         if rpeaks is None:
             _, rpeaks = ecg_peaks(ecg_signals["ECG_Clean"], sampling_rate=sampling_rate)
 

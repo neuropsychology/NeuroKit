@@ -7,23 +7,37 @@ from .density import density
 
 
 def hdi(x, ci=0.95, show=False, **kwargs):
-    """
-    Highest Density Interval (HDI)
+    """Highest Density Interval (HDI)
 
-    Compute the Highest Density Interval (HDI) of a distribution. All points within this interval have a higher probability density than points outside the interval. The HDI can be used in the context of uncertainty characterisation of posterior distributions (in the Bayesian farmework) as Credible Interval (CI). Unlike equal-tailed intervals that typically exclude 2.5% from each tail of the distribution and always include the median, the HDI is not equal-tailed and therefore always includes the mode(s) of posterior distributions.
+    Compute the Highest Density Interval (HDI) of a distribution. All points within this interval
+    have a higher probability density than points outside the interval. The HDI can be used in the
+    context of uncertainty characterisation of posterior distributions (in the Bayesian farmework) as
+    Credible Interval (CI). Unlike equal-tailed intervals that typically exclude 2.5% from each tail
+    of the distribution and always include the median, the HDI is not equal-tailed and therefore always
+    includes the mode(s) of posterior distributions.
 
     Parameters
     ----------
-    x : list, array or Series
+    x : Union[list, np.array, pd.Series]
         A vector of values.
     ci : float
-        Value of probability of the (credible) interval - CI (between 0 and 1) to be estimated. Default to .95 (95%).
+        Value of probability of the (credible) interval - CI (between 0 and 1) to be estimated.
+        Default to .95 (95%).
+    show : bool
+        If True, the function will produce a figure.
+    **kwargs : Line2D properties
+        Other arguments to be passed to ``density()``.
+
+    See Also
+    --------
+    density
 
     Returns
     ----------
-    float, floats
+    float(s)
         The HDI low and high limits.
-
+    fig
+        Distribution plot.
 
     Examples
     ----------
@@ -61,7 +75,7 @@ def _hdi_plot(vals, hdi_low, hdi_high, ci=0.95, **kwargs):
     where[0 : find_closest(hdi_low, x, return_index=True)] = True
     where[find_closest(hdi_high, x, return_index=True) : :] = True
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots()  # pylint: disable=unused-variable
     ax.plot(x, y, color="white")
     ax.fill_between(
         x, y, where=where, color="#E91E63", label="CI {:.0%} [{:.2f}, {:.2f}]".format(ci, hdi_low, hdi_high)

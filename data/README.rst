@@ -56,20 +56,20 @@ Event-related *(4 events)*
 
 - Used in the following docstrings:
 
-  - `bio_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.bio_analyze>`_
-  - `ecg_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_analyze>`_
-  - `ecg_eventrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_eventrelated>`_
-  - `ecg_rsa() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_rsa>`_
-  - `ecg_rsp() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_rsp>`_
-  - `eda_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda_analyze>`_ 
-  - `eda_eventrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda_eventrelated>`_
-  - `eda_phasic() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda_phasic>`_
-  - `epochs_create() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_create>`_ 
-  - `epochs_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_plot>`_
-  - `epochs_to_df() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs_to_df>`_
-  - `rsp_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_analyze>`_
-  - `rsp_eventrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp_eventrelated>`_
-  - `signal_power() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal_power>`_
+  - `bio_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.bio.bio_analyze>`_
+  - `ecg_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg.ecg_analyze>`_
+  - `ecg_eventrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg.ecg_eventrelated>`_
+  - `ecg_rsa() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg.ecg_rsa>`_
+  - `ecg_rsp() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg.ecg_rsp>`_
+  - `eda_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda.eda_analyze>`_ 
+  - `eda_eventrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda.eda_eventrelated>`_
+  - `eda_phasic() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda.eda_phasic>`_
+  - `epochs_create() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs.epochs_create>`_ 
+  - `epochs_plot() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs.epochs_plot>`_
+  - `epochs_to_df() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.epochs.epochs_to_df>`_
+  - `rsp_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp.rsp_analyze>`_
+  - `rsp_eventrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.rsp.rsp_eventrelated>`_
+  - `signal_power() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.signal.signal_power>`_
 
 - Used in the following examples:
 

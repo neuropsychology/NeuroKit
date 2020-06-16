@@ -2,24 +2,21 @@
 import itertools
 
 import numpy as np
-import pandas as pd
 import scipy.signal
 
 
 def signal_phase(signal, method="radians"):
-    """
-    Compute the phase of the signal.
+    """Compute the phase of the signal.
 
-    The real phase has the property to rotate uniformly, leading to a
-    uniform distribution density. The prophase typically doesn't fulfill
-    this property. The following functions applies a nonlinear transformation to
-    the phase signal that makes its distribution exactly uniform. If a binary vector is
-    provided (containing 2 unique values), the function will compute the phase of completion
-    of each phase as denoted by each value.
+    The real phase has the property to rotate uniformly, leading to a uniform distribution density.
+    The prophase typically doesn't fulfill this property. The following functions applies a nonlinear
+    transformation to the phase signal that makes its distribution exactly uniform. If a binary vector
+    is provided (containing 2 unique values), the function will compute the phase of completion of each
+    phase as denoted by each value.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
         The values in which the phase is expressed. Can be 'radians' (default), 'degrees'

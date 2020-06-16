@@ -2,8 +2,7 @@
 
 
 def listify(**kwargs):
-    """
-    Transforms arguments into lists of the same length.
+    """Transforms arguments into lists of the same length.
 
     Examples
     --------

@@ -7,15 +7,13 @@ from .emg_clean import emg_clean
 
 
 def emg_process(emg_signal, sampling_rate=1000):
-    """
-    Process a electromyography (EMG) signal.
+    """Process a electromyography (EMG) signal.
 
-    Convenience function that automatically processes
-    an electromyography signal.
+    Convenience function that automatically processes an electromyography signal.
 
     Parameters
     ----------
-    emg_signal : list, array or Series
+    emg_signal : Union[list, np.array, pd.Series]
         The raw electromyography channel.
     sampling_rate : int
         The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).
@@ -23,22 +21,17 @@ def emg_process(emg_signal, sampling_rate=1000):
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as `emg_signal` containing the following
-        columns:
-
+        A DataFrame of same length as `emg_signal` containing the following columns:
         - *"EMG_Raw"*: the raw signal.
         - *"EMG_Clean"*: the cleaned signal.
-        - *"EMG_Amplitude"*: the signal amplitude,
-        or the activation level of the signal.
-        - *"EMG_Activity*": the activity of the signal for which amplitude
-        exceeds the threshold specified, marked as "1" in a list of zeros.
-        - *"EMG_Onsets"*: the onsets of the amplitude,
+        - *"EMG_Amplitude"*: the signal amplitude, or the activation level of the signal.
+        - *"EMG_Activity*": the activity of the signal for which amplitude exceeds the threshold specified,
         marked as "1" in a list of zeros.
-        - *"EMG_Offsets"*: the offsets of the amplitude,
-        marked as "1" in a list of zeros.
+        - *"EMG_Onsets"*: the onsets of the amplitude, marked as "1" in a list of zeros.
+        - *"EMG_Offsets"*: the offsets of the amplitude, marked as "1" in a list of zeros.
     info : dict
-        A dictionary containing the information of each
-        amplitude onset, offset, and peak activity (see `emg_activation()`).
+        A dictionary containing the information of each amplitude onset, offset, and peak activity
+        (see `emg_activation()`).
 
     See Also
     --------

@@ -4,8 +4,7 @@ import pandas as pd
 
 
 def epochs_to_df(epochs):
-    """
-    Convert epochs to a DataFrame.
+    """Convert epochs to a DataFrame.
 
     Parameters
     ----------
@@ -16,7 +15,8 @@ def epochs_to_df(epochs):
     Returns
     ----------
     DataFrame
-        A DataFrame containing all epochs identifiable by the 'Label' column, which time axis is stored in the 'Time' column.
+        A DataFrame containing all epochs identifiable by the 'Label' column, which time axis
+        is stored in the 'Time' column.
 
 
     See Also
@@ -32,7 +32,9 @@ def epochs_to_df(epochs):
     >>> data = pd.read_csv("https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/bio_eventrelated_100hz.csv")
     >>>
     >>> # Find events
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below', event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> events = nk.events_find(data["Photosensor"],
+    ...                         threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
     >>> fig = nk.events_plot(events, data)
     >>> fig #doctest: +SKIP
     >>>

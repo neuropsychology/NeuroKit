@@ -1,5 +1,4 @@
 # - * - coding: utf-8 - * -
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -10,24 +9,25 @@ from ..signal import signal_findpeaks, signal_plot, signal_smooth, signal_zerocr
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
-    """
-    Find R-peaks in an ECG signal.
+    """Find R-peaks in an ECG signal.
 
-    Low-level function used by `ecg_peaks()` to identify R-peaks in an ECG signal using a different set of algorithms. See `ecg_peaks()` for details.
+    Low-level function used by `ecg_peaks()` to identify R-peaks in an ECG signal using a different
+    set of algorithms. See `ecg_peaks()` for details.
 
     Parameters
     ----------
-    ecg_cleaned : list, array or Series
+    ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG channel as returned by `ecg_clean()`.
     sampling_rate : int
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012', 'kalidas2017', 'martinez2003', 'rodrigues2020' or 'promac'.
+        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012',
+        'kalidas2017', 'martinez2003', 'rodrigues2020' or 'promac'.
     show : bool
-        If True, will return a plot to visualizing the thresholds used in the
-        algorithm. Useful for debugging.
+        If True, will return a plot to visualizing the thresholds used in the algorithm.
+        Useful for debugging.
 
     Returns
     -------
@@ -57,12 +57,12 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
     >>> pantompkins1985 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
     >>> hamilton2002 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
+    >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
     >>> christov2004 = nk.ecg_findpeaks(cleaned, method="christov2004")
     >>> gamboa2008 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="gamboa2008"), method="gamboa2008")
     >>> elgendi2010 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
     >>> engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
     >>> kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
-    >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
     >>> rodrigues2020 = nk.ecg_findpeaks(cleaned, method="rodrigues2020")
     >>>
     >>> # Visualize
@@ -89,12 +89,22 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     References
     --------------
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
-    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003, September). An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD ThesisUniversidade.
+
+    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003, September). An open-source algorithm to
+      detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
+
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
-    - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on biomedical engineering, (3), 230-236.
-    - Engelse, W. A. H., & Zeelenberg, C. (1979). A single scan algorithm for QRS detection and feature extraction IEEE Comput Cardiol. Long Beach: IEEE Computer Society.
-    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
+
+    - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on
+      biomedical engineering, (3), 230-236.
+
+    - Engelse, W. A. H., & Zeelenberg, C. (1979). A single scan algorithm for QRS detection and feature
+      extraction IEEE Comput Cardiol. Long Beach: IEEE Computer Society.
+
+    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real Time
+      Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
 
     """
     # Try retrieving right column
@@ -134,7 +144,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     elif method in ["promac", "all"]:
         rpeaks = _ecg_findpeaks_promac(ecg_cleaned, sampling_rate=sampling_rate, threshold=0.33, show=show)
     else:
-        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit' or 'pamtompkins'.")
+        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit'" "or 'pamtompkins'.")
 
     # Prepare output.
     info = {"ECG_R_Peaks": rpeaks}
@@ -150,10 +160,8 @@ def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False
     x = np.zeros(len(signal))
 
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_neurokit, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_pantompkins, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_gamboa, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_ssf, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_christov, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_engzee, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_elgendi, **kwargs)
     x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_kalidas, **kwargs)
@@ -171,7 +179,7 @@ def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False
 
     if show is True:
         signal_plot([signal, convoluted], standardize=True)
-        [plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks]
+        [plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks]  # pylint: disable=W0106
 
     return peaks
 
@@ -206,14 +214,13 @@ def _ecg_findpeaks_neurokit(
     mindelay=0.3,
     show=False,
 ):
-    """
-    All tune-able parameters are specified as keyword arguments.
+    """All tune-able parameters are specified as keyword arguments.
 
     The `signal` must be the highpass-filtered raw ECG with a lowcut of .5 Hz.
 
     """
     if show is True:
-        fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
+        __, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, sharex=True)
 
     # Compute the ECG's gradient as well as the gradient threshold. Run with
     # show=True in order to get an idea of the threshold.
@@ -279,8 +286,7 @@ def _ecg_findpeaks_neurokit(
 # Pan & Tompkins (1985)
 # =============================================================================
 def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
 
     - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
     In: IEEE Transactions on Biomedical Engineering BME-32.3 (1985), pp. 230–236.
@@ -304,8 +310,7 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
 # Hamilton (2002)
 # =============================================================================
 def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
 
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
 
@@ -334,9 +339,9 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
     idx = []
     peaks = []
 
-    for i in range(len(ma)):
+    for i in range(len(ma)):  # pylint: disable=C0200,R1702
 
-        if i > 0 and i < len(ma) - 1 and ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:
+        if i > 0 and i < len(ma) - 1 and ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:  # pylint: disable=R1716
             peak = i
             peaks.append(peak)
             if ma[peak] > th and (peak - QRS[-1]) > 0.3 * sampling_rate:
@@ -381,11 +386,11 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
 # Slope Sum Function (SSF) - Zong et al. (2003)
 # =============================================================================
 def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, after=0.01):
-    """
-    From https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.
+    """From https://github.com/PIA-
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.
 
-        - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial blood pressure pulses. In Computers in
-    Cardiology, 2003, pages 259–262, 2003.
+    - W. Zong, T. Heldt, G.B. Moody, and R.G. Mark. An open-source algorithm to detect onset of arterial
+      blood pressure pulses. In Computers in Cardiology, 2003, pages 259–262, 2003.
 
     """
     # TODO: Doesn't really seems to work
@@ -431,10 +436,10 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
 # Christov (2004)
 # =============================================================================
 def _ecg_findpeaks_christov(signal, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
 
-    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.
+    - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold,
+      BioMedical Engineering OnLine 2004, vol. 3:28, 2004.
 
     """
     total_taps = 0
@@ -491,7 +496,7 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000):
 
     QRS = []
 
-    for i in range(len(MA3)):
+    for i in range(len(MA3)):  # pylint: disable=C0200
 
         # M
         if i < 5 * sampling_rate:
@@ -563,10 +568,11 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000):
 # Gamboa (2008)
 # =============================================================================
 def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
-    """
-    From https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834.
+    """From https://github.com/PIA-
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834.
 
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology. PhD ThesisUniversidade.
+    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
+      PhD ThesisUniversidade.
 
     """
 
@@ -583,8 +589,8 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
 
     d2 = np.diff(norm_signal, 2)
 
-    b = np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2
-    b = np.intersect1d(b, np.nonzero(-d2 > tol)[0])
+    b = np.nonzero((np.diff(np.sign(np.diff(-d2)))) == -2)[0] + 2  # pylint: disable=E1130
+    b = np.intersect1d(b, np.nonzero(-d2 > tol)[0])  # pylint: disable=E1130
 
     rpeaks = []
     if len(b) >= 3:
@@ -607,11 +613,12 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
 # Engzee Modified (2012)
 # =============================================================================
 def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
 
-    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp. in Cardiology, vol. 6, pp. 37-42, 1979
-    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+    - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.
+      in Cardiology, vol. 6, pp. 37-42, 1979
+    - A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram Segmentation
+      for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
 
     """
     engzee_fake_delay = 0
@@ -646,7 +653,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
     thf_list = []
     thf = False
 
-    for i in range(len(low_pass)):
+    for i in range(len(low_pass)):  # pylint: disable=C0200
 
         # M
         if i < 5 * sampling_rate:
@@ -722,10 +729,11 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
 # Stationary Wavelet Transform  (SWT) - Kalidas and Tamil (2017)
 # =============================================================================
 def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
 
-    - Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform for Automated ECG Analysis. In: 2017 IEEE 17th International Conference on Bioinformatics and Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.
+    - Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform
+      for Automated ECG Analysis. In: 2017 IEEE 17th International Conference on Bioinformatics and
+      Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.
 
     """
     # Try loading pywt
@@ -733,8 +741,8 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
         import pywt
     except ImportError:
         raise ImportError(
-            "NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for this method to run. ",
-            "Please install it first (`pip install PyWavelets`).",
+            "NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for"
+            " this method to run. Please install it first (`pip install PyWavelets`)."
         )
 
     swt_level = 3
@@ -771,10 +779,11 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
 # Elgendi et al. (2010)
 # =============================================================================
 def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
+    """From https://github.com/berndporr/py-ecg-detectors/
 
-    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010). 428-431.
+    - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection.
+      The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010).
+      428-431.
 
     """
 
@@ -787,7 +796,7 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
     blocks = np.zeros(len(signal))
     block_height = np.max(signal)
 
-    for i in range(len(mwa_qrs)):
+    for i in range(len(mwa_qrs)):  # pylint: disable=C0200
         blocks[i] = block_height if mwa_qrs[i] > mwa_beat[i] else 0
     QRS = []
 
@@ -820,12 +829,12 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
         import pywt
     except ImportError:
         raise ImportError(
-            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for this method to run. ",
-            "Please install it first (`pip install PyWavelets`).",
+            "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
+            " this method to run. Please install it first (`pip install PyWavelets`)."
         )
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
-    cwtmatr, freqs = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
+    cwtmatr, __ = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
 
     # For wt of scale 2^4
     signal_4 = cwtmatr[4, :]
@@ -838,7 +847,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     peaks_3, _ = scipy.signal.find_peaks(np.abs(signal_3), height=epsilon_3)
     # Keep only peaks_3 that are nearest to peaks_4
     peaks_3_keep = np.zeros_like(peaks_4)
-    for i in range(len(peaks_4)):
+    for i in range(len(peaks_4)):  # pylint: disable=C0200
         peaks_distance = abs(peaks_4[i] - peaks_3)
         peaks_3_keep[i] = peaks_3[np.argmin(peaks_distance)]
 
@@ -866,7 +875,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     max_R_peak_dist = int(0.1 * sampling_rate)
     rpeaks = []
     for index_cur, index_next in zip(peaks_1_keep[:-1], peaks_1_keep[1:]):
-        correct_sign = signal_1[index_cur] < 0 and signal_1[index_next] > 0  # limit 1
+        correct_sign = signal_1[index_cur] < 0 and signal_1[index_next] > 0  # pylint: disable=R1716
         near = (index_next - index_cur) < max_R_peak_dist  # limit 2
         if near and correct_sign:
             rpeaks.append(signal_zerocrossings(signal_1[index_cur:index_next])[0] + index_cur)
@@ -881,13 +890,16 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
 
 
 def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
-    """
-    Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).
+    """Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).
 
     References
     ----------
-    - Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., & Hernández, A. (2015). Novel real-time low-complexity QRS complex detector based on adaptive thresholding. IEEE Sensors Journal, 15(10), 6036-6043.
-    - Sadhukhan, D., & Mitra, M. (2012). R-peak detection algorithm for ECG using double difference and RR interval processing. Procedia Technology, 4, 873-877.
+    - Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., & Hernández, A. (2015). Novel real-time
+      low-complexity QRS complex detector based on adaptive thresholding. IEEE Sensors Journal,
+      15(10), 6036-6043.
+
+    - Sadhukhan, D., & Mitra, M. (2012). R-peak detection algorithm for ECG using double difference
+      and RR interval processing. Procedia Technology, 4, 873-877.
 
     """
 
@@ -949,9 +961,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
 
 def _ecg_findpeaks_MWA(signal, window_size):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
-    """
+    """From https://github.com/berndporr/py-ecg-detectors/"""
 
     mwa = np.zeros(len(signal))
     sums = np.cumsum(signal)
@@ -963,7 +973,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
         dif = sums[end - 1] - sums[begin - 1]
         return dif / (end - begin)
 
-    for i in range(len(signal)):
+    for i in range(len(signal)):  # pylint: disable=C0200
         if i < window_size:
             section = signal[0:i]
         else:
@@ -978,9 +988,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
 
 
 def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
-    """
-    From https://github.com/berndporr/py-ecg-detectors/
-    """
+    """From https://github.com/berndporr/py-ecg-detectors/"""
     min_distance = int(0.25 * sampling_rate)
 
     signal_peaks = [0]
@@ -999,11 +1007,12 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     missed_peaks = []
     peaks = []
 
-    for i in range(len(detection)):
+    for i in range(len(detection)):  # pylint: disable=R1702,C0200
 
+        # pylint: disable=R1716
         if i > 0 and i < len(detection) - 1 and detection[i - 1] < detection[i] and detection[i + 1] < detection[i]:
             peak = i
-            peaks.append(peak)
+            peaks.append(peak)  # pylint: disable=R1716
             if detection[peak] > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
 
                 signal_peaks.append(peak)

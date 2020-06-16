@@ -24,7 +24,7 @@ def find_version():
 # Dependencies
 requirements = ['numpy', 'pandas', 'scipy', 'sklearn', 'matplotlib']
 setup_requirements = ['pytest-runner', 'numpy']
-test_requirements = requirements + ['pytest', 'coverage', 'bioread', 'mne', 'pyentrp', 'nolds', 'biosppy', 'cvxopt', 'PyWavelets']
+test_requirements = requirements + ['pytest', 'coverage', 'bioread', 'mne', 'pyentrp', 'nolds', 'biosppy', 'cvxopt', 'PyWavelets', 'EMD-signal']
 
 # Setup
 setup(
@@ -41,6 +41,7 @@ setup(
     ],
     description="The Python Toolbox for Neurophysiological Signal Processing.",
     install_requires=requirements,
+    extras_require={"test": test_requirements},
     license="MIT license",
     long_description=readme + '\n\n' + history,
     long_description_content_type='text/x-rst',

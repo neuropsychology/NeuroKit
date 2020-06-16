@@ -3,18 +3,16 @@ import matplotlib.cm
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import scipy.signal
 
 from .signal_psd import signal_psd
 
 
 def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, **kwargs):
-    """
-    Compute the power of a signal in a given frequency band.
+    """Compute the power of a signal in a given frequency band.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     frequency_band :tuple or list
         Tuple or list of tuples indicating the range of frequencies to compute the power in.
@@ -79,7 +77,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
 
 
 def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, **kwargs):
-    for i in range(len(frequency_band)):
+    for i in range(len(frequency_band)):  # pylint: disable=C0200
         min_frequency = frequency_band[i][0]
         if min_frequency == 0:
             min_frequency = 0.001  # sanitize lowest frequency
@@ -91,20 +89,22 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
     psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, **kwargs)
 
     out = {}
-    if isinstance(frequency_band[0], list) or isinstance(frequency_band[0], tuple):
+    if isinstance(frequency_band[0], (list, tuple)):
         for band in frequency_band:
             out.update(_signal_power_instant_get(psd, band))
     else:
         out.update(_signal_power_instant_get(psd, frequency_band))
 
     if show:
-        _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=sampling_rate, ax=None)
+        _signal_power_instant_plot(psd, out, frequency_band, ax=None)
     return out
 
 
 def _signal_power_instant_get(psd, frequency_band):
 
-    indices = np.logical_and(psd["Frequency"] >= frequency_band[0], psd["Frequency"] < frequency_band[1]).values
+    indices = np.logical_and(
+        psd["Frequency"] >= frequency_band[0], psd["Frequency"] < frequency_band[1]
+    ).values  # pylint: disable=no-member
 
     out = {}
     out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = np.trapz(
@@ -114,7 +114,7 @@ def _signal_power_instant_get(psd, frequency_band):
     return out
 
 
-def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=None):
+def _signal_power_instant_plot(psd, out, frequency_band, ax=None):
 
     if ax is None:
         fig, ax = plt.subplots()
@@ -125,7 +125,8 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
     if isinstance(frequency_band[0], int):
         if len(frequency_band) > 2:
             print(
-                "NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples or a tuple of 2 integers"
+                "NeuroKit error: signal_power(): The `frequency_band` argument must be a list of tuples"
+                " or a tuple of 2 integers"
             )
         else:
             frequency_band = [tuple(i for i in frequency_band)]
@@ -136,7 +137,7 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
     # Get indexes for different frequency band
     frequency_band_index = []
     for band in frequency_band:
-        indexes = np.logical_and(psd["Frequency"] >= band[0], psd["Frequency"] < band[1])
+        indexes = np.logical_and(psd["Frequency"] >= band[0], psd["Frequency"] < band[1])  # pylint: disable=E1111
         frequency_band_index.append(np.array(indexes))
 
     label_list = list(out.keys())
@@ -179,7 +180,7 @@ def _signal_power_instant_plot(psd, out, frequency_band, sampling_rate=1000, ax=
 def _signal_power_continuous(signal, frequency_band, sampling_rate=1000):
 
     out = {}
-    if isinstance(frequency_band[0], list) or isinstance(frequency_band[0], tuple):
+    if isinstance(frequency_band[0], (list, tuple)):
         for band in frequency_band:
             out.update(_signal_power_continuous_get(signal, band, sampling_rate))
     else:

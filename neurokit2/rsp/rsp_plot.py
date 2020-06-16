@@ -5,13 +5,14 @@ import pandas as pd
 
 
 def rsp_plot(rsp_signals, sampling_rate=None):
-    """
-    Visualize respiration (RSP) data.
+    """Visualize respiration (RSP) data.
 
     Parameters
     ----------
     rsp_signals : DataFrame
         DataFrame obtained from `rsp_process()`.
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
 
     Examples
     --------
@@ -21,6 +22,11 @@ def rsp_plot(rsp_signals, sampling_rate=None):
     >>> rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
     >>> fig = nk.rsp_plot(rsp_signals)
     >>> fig #doctest: +SKIP
+
+    Returns
+    -------
+    fig
+        Figure representing a plot of the processed rsp signals.
 
     See Also
     --------

@@ -8,7 +8,7 @@ import scipy.spatial
 from .complexity_delay import _embedding_delay_metric, _embedding_delay_plot, _embedding_delay_select
 from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn, _embedding_dimension_plot
 from .complexity_embedding import complexity_embedding
-from .complexity_r import _optimize_r, _optimize_r_plot
+from .complexity_r import _optimize_r_plot
 from .entropy_approximate import entropy_approximate
 
 
@@ -20,23 +20,27 @@ def complexity_optimize(
     dimension_method="afnn",
     r_method="maxApEn",
     show=False,
-    attractor_dimension=3,
 ):
-    """
-    Find optimal complexity parameters.
+    """Find optimal complexity parameters.
 
     Estimate optimal complexity parameters Dimension (m), Time Delay (tau) and tolerance 'r'.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    delay_max, delay_method : int, str
+    delay_max : int
         See :func:`~neurokit2.complexity_delay`.
-    dimension_max, dimension_method : int, str
+    delay_method : str
+        See :func:`~neurokit2.complexity_delay`.
+    dimension_max : int
+        See :func:`~neurokit2.complexity_dimension`.
+    dimension_method : str
         See :func:`~neurokit2.complexity_dimension`.
     r_method : str
         See :func:`~neurokit2.complexity_r`.
+    show : bool
+        Defaults to False.
 
     Returns
     -------
@@ -60,11 +64,22 @@ def complexity_optimize(
 
     References
     -----------
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
-    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
-    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
-    - Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
-    - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering, 55(8), 1966-1972.
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method
+      for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference
+      on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+
+    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time series
+      forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
+
+    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a
+      geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
+
+    - Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar time
+      series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
+
+    - Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., & Chon, K. H. (2008). Automatic selection of
+      the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering,
+      55(8), 1966-1972.
 
     """
 
@@ -85,7 +100,7 @@ def complexity_optimize(
     if r_method in ["traditional"]:
         out["r"] = 0.2 * np.std(signal, ddof=1)
     if r_method in ["maxapen", "optimize"]:
-        r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"], method=r_method)
+        r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"])
 
     if show is True:
         if r_method in ["traditional"]:
@@ -248,7 +263,7 @@ def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10
         raise ValueError("NeuroKit error: complexity_dimension(): 'method' not recognized.")
 
 
-def _complexity_r(signal, delay=None, dimension=None, method="maxapen"):
+def _complexity_r(signal, delay=None, dimension=None):
 
     modulator = np.arange(0.02, 0.8, 0.02)
     r_range = modulator * np.std(signal, ddof=1)
@@ -266,12 +281,11 @@ def _complexity_r(signal, delay=None, dimension=None, method="maxapen"):
 
 
 def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, surrogate_iter=5):
-    """
-    Estimate optimal Dimension (m) and optimal Time Delay (tau) using Differential Entropy b method.
+    """Estimate optimal Dimension (m) and optimal Time Delay (tau) using Differential Entropy b method.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay_max : int
         The maximum time delay (Tau) to test.
@@ -290,7 +304,9 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
 
     References
     -----------
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method
+    for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference
+    on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
 
     """
 
@@ -317,8 +333,8 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
             signal_entropy = _complexity_optimize_get_differential(signal_embedded, k=1)
 
             # calculate average of surrogates entropy
-            for i in range(surrogate_iter):
-                surrogate, iterations, rmsd = _complexity_optimize_iaaft(signal)
+            for i in range(surrogate_iter):  # pylint: disable=W0612
+                surrogate, _, __ = _complexity_optimize_iaaft(signal)
                 surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _complexity_optimize_get_differential(surrogate_embedded, k=1)
                 surrogate_list.append(surrogate_entropy)
@@ -343,43 +359,38 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
 
 
 def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
-    """
-    Iterative amplitude adjusted Fourier transform (IAAFT) surrogates.
+    """Iterative amplitude adjusted Fourier transform (IAAFT) surrogates.
 
-    Returns phase randomized, amplitude adjusted
-    (IAAFT) surrogates with the same power spectrum (to a very high accuracy) and distribution as the original data
-    using an iterative scheme.
+    Returns phase randomized, amplitude adjusted (IAAFT) surrogates with the same power spectrum
+    (to a very high accuracy) and distribution as the original data using an iterative scheme.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     max_iter : int
-        Maximum iterations to be performed while checking for
-        convergence. Convergence can be achieved before maximum interation.
+        Maximum iterations to be performed while checking for convergence. Convergence can be achieved
+        before maximum interation.
     atol : float
         Absolute tolerance for checking convergence.
     rtol : float
-        Relative tolerance for checking convergence. If both atol and rtol are
-        set to zero,  the iterations end only when the RMSD stops changing or
-        when maximum iteration is reached.
+        Relative tolerance for checking convergence. If both atol and rtol are set to zero, the iterations
+        end only when the RMSD stops changing or when maximum iteration is reached.
 
     Returns
     -------
     surrogate : array
-        Surrogate series with (almost) the same power spectrum and
-        distribution.
+        Surrogate series with (almost) the same power spectrum and distribution.
     i : int
         Number of iterations that have been performed.
     rmsd : float
-        Root-mean-square deviation (RMSD) between the absolute squares
-        of the Fourier amplitudes of the surrogate series and that of
-        the original series.
+        Root-mean-square deviation (RMSD) between the absolute squares of the Fourier amplitudes of
+        the surrogate series and that of the original series.
 
     References
     -----
-    Schreiber, T., & Schmitz, A. (1996). Improved surrogate data for nonlinearity tests. Physical review letters, 77(4), 635.
-    `entropy_estimators` <https://github.com/paulbrodersen/entropy_estimators>`_
+    - Schreiber, T., & Schmitz, A. (1996). Improved surrogate data for nonlinearity tests. Physical
+    review letters, 77(4), 635. `entropy_estimators` <https://github.com/paulbrodersen/entropy_estimators>`_
 
     """
     # Calculate "true" Fourier amplitudes and sort the series
@@ -405,39 +416,38 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
         # Check convergence
         if abs(current_error - previous_error) <= atol + rtol * abs(previous_error):
             break
-        else:
-            previous_error = current_error
+        previous_error = current_error
 
     # Normalize error w.r.t. mean of the "true" power spectrum.
     rmsd = current_error / np.mean(amplitudes ** 2)
-    return surrogate, i, rmsd
+    return surrogate, i, rmsd  # pylint: disable=W0631
 
 
 def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
-    """
-    Estimates the entropy H of a random variable x based on the kth-nearest neighbour distances between point samples.
+    """Estimates the entropy H of a random variable x based on the kth-nearest neighbour distances between point
+    samples.
 
-    Parameters:
+    Parameters
     ----------
-    x: (n, d) ndarray
-        n samples from a d-dimensional multivariate distribution
-    k: int (default 1)
-        kth nearest neighbour to use in density estimate;
-        imposes smoothness on the underlying probability distribution
-    norm: 'euclidean' or 'max'
-        p-norm used when computing k-nearest neighbour distances
-    min_dist: float (default 0.)
-        minimum distance between data points;
-        smaller distances will be capped using this value
-    Returns:
-    --------
-    h: float
+    x : ndarray
+        n samples from a d-dimensional multivariate distribution (n, d).
+    k : int
+        kth nearest neighbour to use in density estimate; imposes smoothness on the underlying
+        probability distribution. Defaults to 1
+    norm : str
+        p-norm used when computing k-nearest neighbour distances. Can be 'euclidean' or 'max'.
+    min_dist : float
+        minimum distance between data points; smaller distances will be capped using this value. Defaults to 0.
+
+    Returns
+    ------
+    h : float
         entropy H(X)
 
     References
     -----
-    Kozachenko, L., & Leonenko, N. (1987). Sample estimate of the entropy of a random vector. Problemy Peredachi Informatsii, 23(2), 9–16.
-    `NoLiTSA` <https://github.com/manu-mannattil/nolitsa>`_
+    Kozachenko, L., & Leonenko, N. (1987). Sample estimate of the entropy of a random vector. Problemy
+    Peredachi Informatsii, 23(2), 9–16. `NoLiTSA` <https://github.com/manu-mannattil/nolitsa>`_
 
     """
 
@@ -452,7 +462,7 @@ def _complexity_optimize_get_differential(x, k=1, norm="max", min_dist=0.0):
     else:
         raise ValueError("NeuroKit error: differential_entropy(): 'method' not recognized.")
 
-    kdtree = scipy.spatial.cKDTree(x)
+    kdtree = scipy.spatial.cKDTree(x)  # pylint: disable=E1102
 
     # Query all points -- k+1 as query point also in initial set
     distances, _ = kdtree.query(x, k + 1, eps=0, p=p)

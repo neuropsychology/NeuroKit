@@ -5,26 +5,22 @@ import sklearn.mixture
 
 
 def signal_binarize(signal, method="threshold", threshold="auto"):
-    """
-    Binarize a continuous signal.
+    """Binarize a continuous signal.
 
     Convert a continuous signal into zeros and ones depending on a given threshold.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        The algorithm used to discriminate between the two states. Can be one of 'mixture'
-        (default) or 'threshold'. If 'mixture', will use a Gaussian Mixture Model to categorize
-        between the two states. If 'threshold', will consider as activated all points which
-        value is superior to the threshold.
+        The algorithm used to discriminate between the two states. Can be one of 'mixture' (default) or
+        'threshold'. If 'mixture', will use a Gaussian Mixture Model to categorize between the two states.
+        If 'threshold', will consider as activated all points which value is superior to the threshold.
     threshold : float
-        If `method` is 'mixture', then it corresponds to the minimum probability required
-        to be considered as activated (if 'auto', then 0.5). If `method` is 'threshold', then
-        it corresponds to the minimum amplitude to detect as onset. If "auto", takes the
-        value between the max and the min.
-
+        If `method` is 'mixture', then it corresponds to the minimum probability required to be considered
+        as activated (if 'auto', then 0.5). If `method` is 'threshold', then it corresponds to the minimum
+        amplitude to detect as onset. If "auto", takes the value between the max and the min.
 
     Returns
     -------

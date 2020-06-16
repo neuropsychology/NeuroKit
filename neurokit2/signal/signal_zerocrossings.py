@@ -3,14 +3,13 @@ import numpy as np
 
 
 def signal_zerocrossings(signal):
-    """
-    Locate the indices where the signal crosses zero.
+    """Locate the indices where the signal crosses zero.
 
     Note that when the signal crosses zero between two points, the first index is returned.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
 
     Returns

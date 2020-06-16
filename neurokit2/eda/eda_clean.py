@@ -7,12 +7,11 @@ from ..signal import signal_filter, signal_smooth
 
 
 def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
-    """
-    Preprocess Electrodermal Activity (EDA) signal.
+    """Preprocess Electrodermal Activity (EDA) signal.
 
     Parameters
     ----------
-    eda_signal : list, array or Series
+    eda_signal : Union[list, np.array, pd.Series]
         The raw EDA signal.
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).
@@ -34,7 +33,9 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     >>> import neurokit2 as nk
     >>>
     >>> eda = nk.eda_simulate(duration=30, sampling_rate=100, scr_number=10, noise=0.01, drift=0.02)
-    >>> signals = pd.DataFrame({ "EDA_Raw": eda, "EDA_BioSPPy": nk.eda_clean(eda, sampling_rate=100, method='biosppy'), "EDA_NeuroKit": nk.eda_clean(eda, sampling_rate=100, method='neurokit')})
+    >>> signals = pd.DataFrame({"EDA_Raw": eda,
+    ...                         "EDA_BioSPPy": nk.eda_clean(eda, sampling_rate=100,method='biosppy'),
+    ...                         "EDA_NeuroKit": nk.eda_clean(eda, sampling_rate=100, method='neurokit')})
     >>> fig = signals.plot()
     >>> fig #doctest: +SKIP
 
@@ -67,8 +68,7 @@ def _eda_clean_neurokit(eda_signal, sampling_rate=1000):
 # BioSPPy
 # =============================================================================
 def _eda_clean_biosppy(eda_signal, sampling_rate=1000):
-    """
-    Uses the same defaults as `BioSPPy.
+    """Uses the same defaults as `BioSPPy.
 
     <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/eda.py>`_.
 

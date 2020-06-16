@@ -1,22 +1,19 @@
-name: Tests
+name: 📊 Tests
 
 # on: [push, pull_request]
 on: pull_request
 
 jobs:
   build:
-    name: Tests
     runs-on: ${{ matrix.platform }}
     strategy:
       max-parallel: 4
       matrix:
         # https://help.github.com/articles/virtual-environments-for-github-actions
         platform:
-          - ubuntu-16.04
           - ubuntu-latest  # ubuntu-18.04
-          - macos-latest  # macOS-10.14
-          #- windows-2016
-          - windows-latest  # windows-2019
+        #  - macos-latest  # macOS-10.14
+        #  - windows-latest  # windows-2019
         python-version: [3.7, 3.8]
         #exclude:
         #  - platform: windows-latest
@@ -32,31 +29,13 @@ jobs:
         
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
         python -m pip install --upgrade setuptools pip wheel
-        python -m pip install tox-gh-actions
-        tox
+        python -m pip install tox
         
-    - name: Test with pytest
+    - name: Test with tox
       run: |
-        # Install test deps
-        pip install numpy
-        pip install pandas
-        pip install scipy
-        pip install sklearn
-        pip install matplotlib
-        pip install bioread
-        pip install mne
-        pip install pyentrp
-        pip install nolds
-        pip install biosppy
-        pip install PyWavelets
-        # Install problematic packages
-        #pip install conda
-        #conda install -c conda-forge cvxopt
-        pip install cvxopt
-        # Test
-        pip install pytest
-        python setup.py install
-        tox
-        pytest
+        cd $GITHUB_WORKSPACE && python -m tox -e py
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+  

@@ -11,8 +11,7 @@ from .complexity_embedding import complexity_embedding
 
 
 def _phi(signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False):
-    """
-    Common internal for `entropy_approximate` and `entropy_sample`.
+    """Common internal for `entropy_approximate` and `entropy_sample`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
 
@@ -23,6 +22,7 @@ def _phi(signal, delay=1, dimension=2, r="default", distance="chebyshev", approx
     embedded1, count1 = _get_embedded(
         signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy
     )
+
     embedded2, count2 = _get_embedded(signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy)
 
     if approximate is True:
@@ -49,21 +49,21 @@ def _phi_divide(phi):
 
 
 def _get_embedded(signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False):
-    """
-    Examples
+    """Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> delay = nk.complexity_delay(signal)
     >>>
-    >>> embbeded, count = _get_embedded(signal, delay, r=0.2 * np.std(signal, ddof=1), dimension=2, distance='chebyshev', approximate=False)
+    >>> embbeded, count = _get_embedded(signal, delay, r=0.2 * np.std(signal, ddof=1), dimension=2,
+    ...                                 distance='chebyshev', approximate=False)
     """
     # Sanity checks
     if distance not in sklearn.neighbors.KDTree.valid_metrics:
         raise ValueError(
-            "NeuroKit error: _get_embedded(): The given metric (%s) is not valid. The valid metric names are: %s"
-            % (distance, sklearn.neighbors.KDTree.valid_metrics)
+            "NeuroKit error: _get_embedded(): The given metric (%s) is not valid."
+            "The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics)
         )
 
     # Get embedded
@@ -107,14 +107,13 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # Get R
 # =============================================================================
 def _get_r(signal, r="default", dimension=2):
-    """
-    Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make it
-    take into account the number of dimensions. Additionally, a constant.
+    """Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make
+    it take into account the number of dimensions. Additionally, a constant is introduced.
 
-    is introduced so that for dimension=2, r = 0.2 * np.std(signal, ddof=1), which
-    is the traditional default value.
+    so that for dimension=2, r = 0.2 * np.std(signal, ddof=1), which is the traditional default value.
 
-    See nolds for more info: https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
+    See nolds for more info:
+    https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
 
     """
     if isinstance(r, str) or (r is None):
@@ -145,9 +144,7 @@ def _get_scale(signal, scale="default", dimension=2):
 # Get Coarsegrained
 # =============================================================================
 def _get_coarsegrained_rolling(signal, scale=2):
-    """
-    Used in composite multiscale entropy.
-    """
+    """Used in composite multiscale entropy."""
     if scale in [0, 1]:
         return np.array([signal])
     if scale > len(signal):
@@ -168,20 +165,20 @@ def _get_coarsegrained_rolling(signal, scale=2):
 
 
 def _get_coarsegrained(signal, scale=2, force=False):
-    """
-    Extract coarse-grained time series.
+    """Extract coarse-grained time series.
 
-    The coarse-grained time series for a scale factor Tau are obtained by
-    calculating the arithmetic mean of Tau neighboring values without overlapping.
+    The coarse-grained time series for a scale factor Tau are obtained by calculating the arithmetic
+    mean of Tau neighboring values without overlapping.
 
-    To obtain the coarse-grained time series at a scale factor of Tau ,the original
-    time series is divided into non-overlapping windows of length Tau and the
-    data points inside each window are averaged.
+    To obtain the coarse-grained time series at a scale factor of Tau ,the original time series is divided
+    into non-overlapping windows of length Tau and the data points inside each window are averaged.
 
-    This coarse-graining procedure is similar to moving averaging and the decimation of the original time series.
-    The decimation procedure shortens the length of the coarse-grained time series by a factor of Tau.
+    This coarse-graining procedure is similar to moving averaging and the decimation of the original
+    time series. The decimation procedure shortens the length of the coarse-grained time series by a
+    factor of Tau.
 
-    This is an efficient version of ``pd.Series(signal).rolling(window=scale).mean().iloc[0::].values[scale-1::scale]``.
+    This is an efficient version of
+    ``pd.Series(signal).rolling(window=scale).mean().iloc[0::].values[scale-1::scale]``.
     >>> import neurokit2 as nk
     >>> signal = [0, 2, 4, 6, 8, 10]
     >>> cs = _get_coarsegrained(signal, scale=2)

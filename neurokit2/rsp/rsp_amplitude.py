@@ -1,31 +1,32 @@
 # -*- coding: utf-8 -*-
+
 import numpy as np
-import pandas as pd
 
 from ..signal import signal_interpolate
 from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
-def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
-    """
-    Compute respiratory amplitude.
+def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monotone_cubic"):
+    """Compute respiratory amplitude.
 
-    Compute respiratory amplitude given the raw respiration signal and its
-    extrema.
+    Compute respiratory amplitude given the raw respiration signal and its extrema.
 
     Parameters
     ----------
-    rsp_cleaned : list, array or Series
+    rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by `rsp_clean()`.
-    peaks, troughs : list, array, DataFrame, Series or dict
-        The samples at which the inhalation peaks occur. If a dict or a
-        DataFrame is passed, it is assumed that these containers were obtained
-        with `rsp_findpeaks()`.
-    desired_length : int
-        By default, the returned respiration rate has the same number of
-        elements as `peaks`. If set to an integer, the returned rate will be
-        interpolated between `peaks` over `desired_length` samples. Has no
-        effect if a DataFrame is passed in as the `peaks` argument.
+    peaks : list or array or DataFrame or Series or dict
+        The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
+        assumed that these containers were obtained with `rsp_findpeaks()`.
+    troughs : list or array or DataFrame or Series or dict
+        The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
+        assumed that these containers were obtained with `rsp_findpeaks()`.
+    interpolation_method : str
+        Method used to interpolate the amplitude between peaks. See `signal_interpolate()`. 'monotone_cubic' is chosen
+        as the default interpolation method since it ensures monotone interpolation between data points
+        (i.e., it prevents physiologically implausible "overshoots" or "undershoots" in the y-direction).
+        In contrast, the widely used cubic spline interpolation does not ensure monotonicity.
+
 
     Returns
     -------
@@ -39,6 +40,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import pandas as pd
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
@@ -50,7 +52,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
 
     """
     # Format input.
-    peaks, troughs, desired_length = _rsp_fixpeaks_retrieve(peaks, troughs, len(rsp_cleaned))
+    peaks, troughs = _rsp_fixpeaks_retrieve(peaks, troughs)
 
     # To consistenty calculate amplitude, peaks and troughs must have the same
     # number of elements, and the first trough must precede the first peak.
@@ -65,7 +67,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None):
     # difference of each peak to the preceding trough.
     amplitude = rsp_cleaned[peaks] - rsp_cleaned[troughs]
 
-    # Interpolate amplitude to desired_length samples.
-    amplitude = signal_interpolate(peaks, amplitude, desired_length=desired_length)
+    # Interpolate amplitude to length of rsp_cleaned.
+    amplitude = signal_interpolate(peaks, amplitude, x_new=np.arange(len(rsp_cleaned)), method=interpolation_method)
 
     return amplitude

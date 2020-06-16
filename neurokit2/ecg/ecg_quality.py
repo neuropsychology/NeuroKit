@@ -1,9 +1,7 @@
 # - * - coding: utf-8 - * -
 import numpy as np
-import pandas as pd
-import scipy.spatial
 
-from ..epochs import epochs_create, epochs_to_df
+from ..epochs import epochs_to_df
 from ..signal import signal_interpolate
 from ..stats import distance, rescale
 from .ecg_peaks import ecg_peaks
@@ -11,8 +9,7 @@ from .ecg_segment import ecg_segment
 
 
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000):
-    """
-    Quality of ECG Signal.
+    """Quality of ECG Signal.
 
     Compute a continuous index of quality of the ECG signal, by interpolating the distance
     of each QRS segment from the average QRS segment present in the data. This index is
@@ -66,6 +63,6 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000):
     quality[nonmissing] = dist
 
     # Interpolate
-    quality = signal_interpolate(rpeaks, quality, desired_length=len(ecg_cleaned), method="quadratic")
+    quality = signal_interpolate(rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="quadratic")
 
     return quality

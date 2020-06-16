@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
-import scipy.stats
 
 from .density import density
 from .rescale import rescale
 
 
 def summary_plot(x, **kwargs):
-    """
-    Descriptive plot.
+    """Descriptive plot.
 
     Visualize a distribution with density, histogram, boxplot and rugs plots all at once.
 
