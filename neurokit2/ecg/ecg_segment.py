@@ -65,7 +65,9 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
         plt.plot(heartbeats_pivoted)
         plt.xlabel("Time (s)")
         plt.title("Individual Heart Beats")
-        cmap = iter(plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats_plot["Label"].nunique()))))  # pylint: disable=no-member
+        cmap = iter(
+            plt.cm.YlOrRd(np.linspace(0, 1, num=int(heartbeats_plot["Label"].nunique())))
+        )  # pylint: disable=no-member
         lines = []
         for x, color in zip(heartbeats_pivoted, cmap):
             (line,) = plt.plot(heartbeats_pivoted[x], color=color)
