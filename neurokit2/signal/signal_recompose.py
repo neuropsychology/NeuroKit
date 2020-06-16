@@ -1,6 +1,6 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import scipy.cluster
-import matplotlib.pyplot as plt
 
 from .signal_zerocrossings import signal_zerocrossings
 
@@ -43,12 +43,11 @@ def signal_recompose(components, method="wcorr", threshold=0.5, **kwargs):
     >>> recomposed = nk.signal_recompose(components, method='wcorr', threshold=0.90)
     >>> fig = nk.signal_plot(components)  # Visualize components
     >>> fig  #doctest: +SKIP
+
     """
     clusters = _signal_recompose_wcorr(components, threshold=threshold, **kwargs)
     recomposed = _signal_recompose_sum(components, clusters)
     return recomposed
-
-
 
 
 # =============================================================================
@@ -62,8 +61,7 @@ def _signal_recompose_sum(components, clusters):
     clusters = [np.where(clusters == cluster)[0] for cluster in np.unique(clusters)]
 
     if len(clusters) == 0:
-        raise ValueError("Not enough clusters of components detected. Please decrease the "
-                         "`threshold`.")
+        raise ValueError("Not enough clusters of components detected. Please decrease the " "`threshold`.")
     # Initialize components matrix
     recomposed = np.zeros((len(components), len(clusters)))
     for i, indices in enumerate(clusters):
@@ -77,24 +75,18 @@ def _signal_recompose_sum(components, clusters):
 
 # Weighted Correlation
 # ----------------------------------------------------------------------------
-def _signal_recompose_wcorr(components, threshold=0.5, metric='chebyshev'):
-    """
-    """
+def _signal_recompose_wcorr(components, threshold=0.5, metric="chebyshev"):
+    """"""
     # Calculate the w-correlation matrix.
     wcorr = _signal_recompose_get_wcorr(components, show=False)
 
     # Find clusters in correlation matrix
     pairwise_distances = scipy.cluster.hierarchy.distance.pdist(wcorr, metric=metric)
-    linkage = scipy.cluster.hierarchy.linkage(pairwise_distances, method='complete')
+    linkage = scipy.cluster.hierarchy.linkage(pairwise_distances, method="complete")
     threshold = threshold * pairwise_distances.max()
-    clusters = scipy.cluster.hierarchy.fcluster(linkage, threshold, 'distance')
+    clusters = scipy.cluster.hierarchy.fcluster(linkage, threshold, "distance")
 
     return clusters
-
-
-
-
-
 
 
 def _signal_recompose_get_wcorr(components, show=False):
@@ -103,6 +95,7 @@ def _signal_recompose_get_wcorr(components, show=False):
     References
     ----------
     - https://www.kaggle.com/jdarcy/introducing-ssa-for-time-series-decomposition
+
     """
     # Reorient components
     components = components.T
@@ -111,21 +104,21 @@ def _signal_recompose_get_wcorr(components, show=False):
     K = components.shape[0] - L + 1
 
     # Calculate the weights
-    w = np.array(list(np.arange(L)+1) + [L]*(K-L-1) + list(np.arange(L)+1)[::-1])
+    w = np.array(list(np.arange(L) + 1) + [L] * (K - L - 1) + list(np.arange(L) + 1)[::-1])
 
     def w_inner(F_i, F_j):
-        return w.dot(F_i*F_j)
+        return w.dot(F_i * F_j)
 
     # Calculated weighted norms, ||F_i||_w, then invert.
-    F_wnorms = np.array([w_inner(components[:,i], components[:,i]) for i in range(L)])
-    F_wnorms = F_wnorms**-0.5
+    F_wnorms = np.array([w_inner(components[:, i], components[:, i]) for i in range(L)])
+    F_wnorms = F_wnorms ** -0.5
 
     # Calculate Wcorr.
     Wcorr = np.identity(L)
     for i in range(L):
-        for j in range(i+1, L):
-            Wcorr[i,j] = abs(w_inner(components[:,i], components[:,j]) * F_wnorms[i] * F_wnorms[j])
-            Wcorr[j,i] = Wcorr[i,j]
+        for j in range(i + 1, L):
+            Wcorr[i, j] = abs(w_inner(components[:, i], components[:, j]) * F_wnorms[i] * F_wnorms[j])
+            Wcorr[j, i] = Wcorr[i, j]
 
     if show is True:
         ax = plt.imshow(Wcorr)
@@ -133,25 +126,22 @@ def _signal_recompose_get_wcorr(components, show=False):
         plt.ylabel(r"$\tilde{F}_j$")
         plt.colorbar(ax.colorbar, fraction=0.045)
         ax.colorbar.set_label("$W_{i,j}$")
-        plt.clim(0,1)
+        plt.clim(0, 1)
 
         # For plotting purposes:
         min_range = 0
-        max_range = len(Wcorr)-1
+        max_range = len(Wcorr) - 1
 
-
-        plt.xlim(min_range-0.5, max_range+0.5)
-        plt.ylim(max_range+0.5, min_range-0.5)
+        plt.xlim(min_range - 0.5, max_range + 0.5)
+        plt.ylim(max_range + 0.5, min_range - 0.5)
 
     return Wcorr
-
-
 
 
 # =============================================================================
 # Utils
 # =============================================================================
-#def _signal_decompose_meanfreq(components, sampling_rate=1000):
+# def _signal_decompose_meanfreq(components, sampling_rate=1000):
 #    """Get the mean frequency of components
 #    """
 #    duration = components.shape[1] / sampling_rate
@@ -161,4 +151,3 @@ def _signal_recompose_get_wcorr(components, show=False):
 #    for i in range(n):
 #        c = components[i, :] - np.mean(components[i, :])
 #        freqs[i] = len(signal_zerocrossings(c)) / duration
-

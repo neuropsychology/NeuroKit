@@ -72,8 +72,7 @@ def benchmark_ecg_preprocessing(function, ecg, rpeaks=None, sampling_rate=1000):
 # Utils
 # =============================================================================
 def _benchmark_ecg_preprocessing_databases(function, ecgs, rpeaks):
-    """A wrapper over _benchmark_ecg_preprocessing when the input is a database
-    """
+    """A wrapper over _benchmark_ecg_preprocessing when the input is a database."""
     # Run algorithms
     results = []
     for participant in ecgs["Participant"].unique():

@@ -1,5 +1,4 @@
-"""Top-level package for NeuroKit.
-"""
+"""Top-level package for NeuroKit."""
 import datetime
 
 from .benchmark import *
@@ -64,8 +63,9 @@ __citation__ = __cite__
 
 
 def cite():
-    """Cite NeuroKit2
+    """Cite NeuroKit2.
 
     This function will print the bibtex and the APA reference for your to copy and cite.
+
     """
     print(__cite__)

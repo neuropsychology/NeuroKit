@@ -103,9 +103,8 @@ def rsp_simulate(
 # Simple Sinusoidal Model
 # =============================================================================
 def _rsp_simulate_sinusoidal(duration=10, sampling_rate=1000, respiratory_rate=15):
-    """Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly approximates a single
-    respiratory cycle.
-    """
+    """Generate an artificial (synthetic) respiratory signal by trigonometric sine wave that roughly approximates a
+    single respiratory cycle."""
     # Generate values along the length of the duration
     rsp = signal_simulate(
         duration=duration, sampling_rate=sampling_rate, frequency=respiratory_rate / 60, amplitude=0.5

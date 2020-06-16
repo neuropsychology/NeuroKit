@@ -1,7 +1,7 @@
-import numpy as np
-import sklearn.decomposition
-import scipy.cluster
 import matplotlib.pyplot as plt
+import numpy as np
+import scipy.cluster
+import sklearn.decomposition
 
 from ..misc import as_vector
 
@@ -65,9 +65,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
     elif method in ["ssa"]:
         components = _signal_decompose_ssa(signal, n_components=n_components, **kwargs)
     else:
-        raise ValueError(
-            "NeuroKit error: signal_decompose(): 'method' should be one of 'emd'"
-        )
+        raise ValueError("NeuroKit error: signal_decompose(): 'method' should be one of 'emd'")
     return components
 
 
@@ -75,7 +73,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
 # Singular spectrum analysis (SSA)
 # =============================================================================
 def _signal_decompose_ssa(signal, n_components=None, **kwargs):
-    """Singular spectrum analysis (SSA)-based signal separation method
+    """Singular spectrum analysis (SSA)-based signal separation method.
 
     SSA decomposes a time series into a set of summable components that are grouped together and
     interpreted as trend, periodicity and noise.
@@ -83,6 +81,7 @@ def _signal_decompose_ssa(signal, n_components=None, **kwargs):
     References
     ----------
     - https://www.kaggle.com/jdarcy/introducing-ssa-for-time-series-decomposition
+
     """
     # sanitize input
     signal = as_vector(signal)
@@ -90,22 +89,21 @@ def _signal_decompose_ssa(signal, n_components=None, **kwargs):
     # Parameters
     # The window length.
     if n_components is None:
-        L = 50 if len(signal) >= 100 else int(len(signal)/2)
+        L = 50 if len(signal) >= 100 else int(len(signal) / 2)
     else:
         L = n_components
 
     # Length.
     N = len(signal)
-    if not 2 <= L <= N/2:
+    if not 2 <= L <= N / 2:
         raise ValueError("`n_components` must be in the interval [2, len(signal)/2].")
 
     # The number of columns in the trajectory matrix.
     K = N - L + 1
 
-
     # Embed the time series in a trajectory matrix by pulling the relevant subseries of F,
     # and stacking them as columns.
-    X = np.array([signal[i:L+i] for i in range(0, K)]).T
+    X = np.array([signal[i : L + i] for i in range(0, K)]).T
 
     # Decompose the trajectory matrix
     U, Sigma, VT = np.linalg.svd(X)
@@ -115,19 +113,18 @@ def _signal_decompose_ssa(signal, n_components=None, **kwargs):
     components = np.zeros((N, d))
     # Reconstruct the elementary matrices without storing them
     for i in range(d):
-        X_elem = Sigma[i]*np.outer(U[:,i], VT[i,:])
+        X_elem = Sigma[i] * np.outer(U[:, i], VT[i, :])
         X_rev = X_elem[::-1]
-        components[:,i] = [X_rev.diagonal(j).mean() for j in range(-X_rev.shape[0]+1, X_rev.shape[1])]
+        components[:, i] = [X_rev.diagonal(j).mean() for j in range(-X_rev.shape[0] + 1, X_rev.shape[1])]
 
     # Return the components
     return components.T
 
 
-
 # =============================================================================
 # ICA
 # =============================================================================
-#def _signal_decompose_scica(signal, n_components=3, **kwargs):
+# def _signal_decompose_scica(signal, n_components=3, **kwargs):
 #    # sanitize input
 #    signal = as_vector(signal)
 #

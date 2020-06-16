@@ -64,8 +64,7 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 # Methods
 # =============================================================================
 def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
-    """Based on Gael Varoquaux's implementation: https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
-    """
+    """Based on Gael Varoquaux's implementation: https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429."""
     jh = np.histogram2d(x, y, bins=bins)[0]
 
     # smooth the jh with a gaussian filter of given sigma

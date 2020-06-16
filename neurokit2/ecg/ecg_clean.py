@@ -113,8 +113,7 @@ def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
 # =============================================================================
 def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
     """Adapted from https://github.com/PIA-
-    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
-    """
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69."""
 
     order = int(0.3 * sampling_rate)
     if order % 2 == 0:
@@ -142,8 +141,7 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 # =============================================================================
 def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
     """Adapted from https://github.com/PIA-
-    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
-    """
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69."""
 
     f1 = 5 / sampling_rate
     f2 = 15 / sampling_rate
@@ -179,8 +177,7 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
 # =============================================================================
 def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
     """Adapted from https://github.com/PIA-
-    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69.
-    """
+    Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L69."""
 
     f1 = 8 / sampling_rate
     f2 = 16 / sampling_rate
