@@ -31,13 +31,6 @@ jobs:
         # The GitHub editor is 127 chars wide. See https://black.readthedocs.io/en/stable/installation_and_usage.html
         black neurokit2 --line-length 120 .
 
-    - name: Run linters
-      uses: samuelmeuli/lint-action@v1
-        with:
-            github_token: ${{ secrets.github_token }}
-            auto_fix: ${{ github.event_name == 'pull_request' }}
-            black: true
-
     - name: Fix code style with docformatter (docstrings)
       run: |
         pip install docformatter
