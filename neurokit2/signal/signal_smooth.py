@@ -14,7 +14,7 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
         Can be one of 'convolution' (default) or 'loess'.

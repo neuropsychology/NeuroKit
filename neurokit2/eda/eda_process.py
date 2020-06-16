@@ -13,7 +13,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
 
     Parameters
     ----------
-    eda_signal : list or array or Series
+    eda_signal : Union[list, np.array, pd.Series]
         The raw EDA signal.
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).

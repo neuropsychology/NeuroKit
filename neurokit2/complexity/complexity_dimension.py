@@ -11,7 +11,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag').
@@ -29,7 +29,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
         Relative tolerance (for fnn method).
     A : float
         Absolute tolerance (for fnn method)
-    **kwargs : optional
+    **kwargs
         Other arguments.
 
     Returns
@@ -119,7 +119,7 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
     return E, Es
 
 
-def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs):
+def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None):
     """Return E(d) and E^*(d) for a single d.
 
     Returns E(d) and E^*(d) for the AFN method for a single d.
@@ -153,13 +153,13 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, **kwargs):
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     dimension_seq : int
         The embedding dimension.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag').
-    **kwargs : optional
+    **kwargs
         Other arguments.
 
     Returns

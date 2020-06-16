@@ -17,7 +17,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     windows : list
         A list containing the lengths of the windows (number of data points in each subseries). Also

@@ -14,7 +14,7 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
 
     Parameters
     ----------
-    eog_cleaned : list or array or Series
+    eog_cleaned : Union[list, np.array, pd.Series]
         The cleaned EOG channel. Note that it must be positively oriented, i.e., blinks must
         appear as upward peaks.
     method : str

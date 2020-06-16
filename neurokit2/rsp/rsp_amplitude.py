@@ -13,7 +13,7 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
 
     Parameters
     ----------
-    rsp_cleaned : list or array or Series
+    rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by `rsp_clean()`.
     peaks : list or array or DataFrame or Series or dict
         The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is

@@ -20,7 +20,7 @@ def signal_filter(
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
         or "bandstop".
     sampling_rate : int

@@ -12,7 +12,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     frequency_band :tuple or list
         Tuple or list of tuples indicating the range of frequencies to compute the power in.
