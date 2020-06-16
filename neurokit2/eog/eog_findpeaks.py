@@ -4,7 +4,7 @@ import pandas as pd
 
 from ..epochs import epochs_create
 from ..misc import as_vector
-from ..signal import signal_filter, signal_findpeaks, signal_zerocrossings
+from ..signal import signal_findpeaks, signal_zerocrossings
 
 
 def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
@@ -19,10 +19,10 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
         appear as upward peaks.
     method : str
         The peak detection algorithm. Can be one of 'mne' (default) (requires the MNE package
-        to be installed), or 'brainstorm', or 'kleifges' (BLINKER algorithm).
+        to be installed), or 'brainstorm', or 'blinker'.
     sampling_rate : int
         The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied if the
-        method to be used is 'kleifges', otherwise defaults to None.
+        method to be used is 'blinker', otherwise defaults to None.
 
     Returns
     -------
@@ -52,8 +52,8 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
     >>> fig2
     >>>
     >>> # kleifges method
-    >>> kleifges = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="kleifges")
-    >>> fig3 = nk.events_plot(kleifges, eog_cleaned)  # doctest: +ELLIPSIS
+    >>> blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
+    >>> fig3 = nk.events_plot(blinker, eog_cleaned)  # doctest: +ELLIPSIS
     >>> fig3
 
 
@@ -75,10 +75,10 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
         peaks = _eog_findpeaks_mne(eog_cleaned)
     elif method in ["brainstorm"]:
         peaks = _eog_findpeaks_brainstorm(eog_cleaned)
-    elif method in ["kleifges"]:
-        peaks = _eog_findpeaks_kleifges(eog_cleaned, sampling_rate=sampling_rate)
+    elif method in ["blinker"]:
+        peaks = _eog_findpeaks_blinker(eog_cleaned, sampling_rate=sampling_rate)
     else:
-        raise ValueError("NeuroKit error: eog_peaks(): 'method' should be " "one of 'mne', 'brainstorm' or 'kleifges'.")
+        raise ValueError("NeuroKit error: eog_peaks(): 'method' should be " "one of 'mne', 'brainstorm' or 'blinker'.")
 
     return peaks
 
@@ -121,24 +121,21 @@ def _eog_findpeaks_brainstorm(eog_cleaned):
     return peaks
 
 
-def _eog_findpeaks_kleifges(eog_cleaned, sampling_rate):
+def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
     """EOG blink detection based on BLINKER algorithm.
 
     Detects only potential blink landmarks and does not separate blinks from other artifacts yet.
     https://www.frontiersin.org/articles/10.3389/fnins.2017.00012/full
 
     """
-    # bandpass filter prior to blink detection
-    eog_filtered = signal_filter(eog_cleaned, sampling_rate, lowcut=1, highcut=20)
-
     # Establish criterion
-    threshold = 1.5 * np.std(eog_filtered) + eog_filtered.mean()
+    threshold = 1.5 * np.std(eog_cleaned) + eog_cleaned.mean()
     min_blink = 0.05 * sampling_rate  # min blink frames
 
-    blink = np.full(len(eog_filtered), False, dtype=bool)
+    blink = np.full(len(eog_cleaned), False, dtype=bool)
     index = []
-    for i in range(len(eog_filtered)):
-        if eog_filtered[i] > threshold:
+    for i in range(len(eog_cleaned)):
+        if eog_cleaned[i] > threshold:
             index.append(i)
             blink[i] = True
 
@@ -146,7 +143,7 @@ def _eog_findpeaks_kleifges(eog_cleaned, sampling_rate):
 
     # Calculate blink landmarks
     epochs = epochs_create(
-        eog_filtered, events=candidates, sampling_rate=sampling_rate, epochs_start=-0.5, epochs_end=0.5
+        eog_cleaned, events=candidates, sampling_rate=sampling_rate, epochs_start=-0.5, epochs_end=0.5
     )
 
     # max value marker

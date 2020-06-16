@@ -92,7 +92,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
     else:
         raise ValueError(
             "NeuroKit error: eog_clean(): 'method' should be one of 'agarwal2019', 'brainstorm',",
-            "'mne', 'kong1998', 'blinker'."
+            "'mne', 'kong1998', 'blinker'.",
         )
 
     return clean
