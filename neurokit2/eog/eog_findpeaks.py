@@ -175,7 +175,7 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
         crossings_idx = np.sort(np.append([np.array(crossings_idx)], [max_frame]))
         max_position = int(np.where(crossings_idx == max_frame)[0])
 
-        if (max_position-1) >= 0:  # crosses zero point
+        if (max_position - 1) >= 0:  # crosses zero point
             leftzero = crossings_idx[max_position - 1]
         else:
             max_value_t = epochs[i].Signal.idxmax()
@@ -183,7 +183,7 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
             leftzero = sliced_before["Index"].loc[sliced_before["Signal"] == sliced_before["Signal"].min()]
             leftzero = np.array(leftzero)
 
-        if (max_position+1) < len(crossings_idx):  # crosses zero point
+        if (max_position + 1) < len(crossings_idx):  # crosses zero point
             rightzero = crossings_idx[max_position + 1]
         else:
             max_value_t = epochs[i].Signal.idxmax()
