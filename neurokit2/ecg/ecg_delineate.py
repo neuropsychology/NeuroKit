@@ -148,8 +148,7 @@ def ecg_delineate(
 # WAVELET METHOD (DWT)
 # =============================================================================
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
-    """Resample given points to a different sampling rate.
-    """
+    """Resample given points to a different sampling rate."""
     peaks_resample = np.array(peaks) * desired_sampling_rate / sampling_rate
     peaks_resample = [np.nan if np.isnan(x) else int(x) for x in peaks_resample.tolist()]
     return peaks_resample
@@ -427,8 +426,7 @@ def _dwt_delineate_qrs_bounds(rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250
 
 
 def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
-    """Return multiscales wavelet transforms.
-    """
+    """Return multiscales wavelet transforms."""
 
     def _apply_H_filter(signal_i, power=0):
         zeros = np.zeros(2 ** power - 1)
@@ -895,8 +893,8 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
 
 
 def _ecg_delineate_check(waves, rpeaks):
-    """This function replaces the delineated features with np.nan if its standardized distance from R-peaks is more than 3.
-    """
+    """This function replaces the delineated features with np.nan if its standardized distance from R-peaks is more than
+    3."""
     df = pd.DataFrame.from_dict(waves)
     features_columns = df.columns
 
@@ -920,8 +918,7 @@ def _ecg_delineate_check(waves, rpeaks):
 
 def _calculate_abs_z(df, columns):
     """This function helps to calculate the absolute standardized distance between R-peaks and other delineated waves
-    features by `ecg_delineate()`
-    """
+    features by `ecg_delineate()`"""
     for column in columns:
         df["Dist_R_" + column] = np.abs(standardize(df[column].sub(df["ECG_R_Peaks"], axis=0)))
     return df

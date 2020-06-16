@@ -961,8 +961,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
 
 def _ecg_findpeaks_MWA(signal, window_size):
-    """From https://github.com/berndporr/py-ecg-detectors/
-    """
+    """From https://github.com/berndporr/py-ecg-detectors/"""
 
     mwa = np.zeros(len(signal))
     sums = np.cumsum(signal)
@@ -989,8 +988,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
 
 
 def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
-    """From https://github.com/berndporr/py-ecg-detectors/
-    """
+    """From https://github.com/berndporr/py-ecg-detectors/"""
     min_distance = int(0.25 * sampling_rate)
 
     signal_peaks = [0]

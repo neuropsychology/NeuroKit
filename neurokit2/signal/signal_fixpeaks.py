@@ -139,8 +139,7 @@ def _signal_fixpeaks_neurokit(
     relative_interval_max=None,
     robust=False,
 ):
-    """Neurokit method
-    """
+    """Neurokit method."""
 
     peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
     peaks_clean = _interpolate_big(peaks, sampling_rate, interval_max, relative_interval_max, robust)
@@ -149,8 +148,7 @@ def _signal_fixpeaks_neurokit(
 
 
 def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False):
-    """kubios method
-    """
+    """kubios method."""
 
     # Get corrected peaks and normal-to-normal intervals.
     artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate)
@@ -411,9 +409,8 @@ def _correct_misaligned(misaligned_idcs, peaks):
 
 
 def _update_indices(source_idcs, update_idcs, update):
-    """For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger than
-    s.
-    """
+    """For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger
+    than s."""
     if not update_idcs:
         return update_idcs
 

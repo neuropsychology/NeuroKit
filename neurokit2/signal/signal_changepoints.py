@@ -104,8 +104,7 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
 # Cost functions
 # =============================================================================
 def _signal_changepoints_cost_mean(signal):
-    """Cost function for a normally distributed signal with a changing mean.
-    """
+    """Cost function for a normally distributed signal with a changing mean."""
     i_variance_2 = 1 / (np.var(signal) ** 2)
     cmm = [0.0]
     cmm.extend(np.cumsum(signal))
@@ -124,8 +123,7 @@ def _signal_changepoints_cost_mean(signal):
 
 
 def _signal_changepoints_cost_var(signal):
-    """Cost function for a normally distributed signal with a changing variance.
-    """
+    """Cost function for a normally distributed signal with a changing variance."""
     cumm = [0.0]
     cumm.extend(np.cumsum(np.power(np.abs(signal - np.mean(signal)), 2)))
 
@@ -138,8 +136,7 @@ def _signal_changepoints_cost_var(signal):
 
 
 def _signal_changepoints_cost_meanvar(signal):
-    """Cost function for a normally distributed signal with a changing mean and variance.
-    """
+    """Cost function for a normally distributed signal with a changing mean and variance."""
     signal = np.hstack(([0.0], np.array(signal)))
 
     cumm = np.cumsum(signal)
