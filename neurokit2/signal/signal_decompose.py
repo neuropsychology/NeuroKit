@@ -1,15 +1,24 @@
 import numpy as np
+import sklearn.decomposition
 
+from ..misc import as_vector
 from .signal_zerocrossings import signal_zerocrossings
 
 
-def signal_decompose(signal):
+def signal_decompose(signal, method="emd", **kwargs):
     """Decompose a signal.
+
+    Signal decomposition into different sources using different methods, such as Empirical Mode
+    Decomposition (EMD).
 
     Parameters
     -----------
     signal : list or array or Series
         Vector of values.
+    method : str
+        The decomposition method. Can be one of 'emd'.
+    **kwargs
+        Other arguments passed to other functions.
 
     Returns
     -------
@@ -51,13 +60,30 @@ def signal_decompose(signal):
     >>> fig2 = nk.signal_plot([signal, np.sum(c, axis=0)])
     >>> fig2 #doctest: +SKIP
     """
-    components = _signal_decompose_emd(signal, ensemble=False)
+    # Apply method
+    method = method.lower()
+    if method in ["emd"]:
+        components = _signal_decompose_emd(signal, **kwargs)
+    else:
+        raise ValueError(
+            "NeuroKit error: signal_decompose(): 'method' should be one of 'emd'"
+        )
     return components
 
 
 # =============================================================================
 # Methods
 # =============================================================================
+#def _signal_decompose_scica(signal, n_components=3, **kwargs):
+#    # sanitize input
+#    signal = as_vector(signal)
+#
+#    # Single-channel ICA (SCICA)
+#    if len(signal.shape) == 1:
+#        signal = signal.reshape(-1, 1)
+#
+#    c = sklearn.decomposition.FastICA(n_components=n_components, **kwargs).fit_transform(signal)
+
 def _signal_decompose_emd(signal, ensemble=False):
     """References
     ------------
@@ -100,8 +126,6 @@ def _signal_decompose_emd(signal, ensemble=False):
 # =============================================================================
 # Internals
 # =============================================================================
-
-
 def _signal_decompose_meanfreq(components, sampling_rate=1000):
     duration = components.shape[1] / sampling_rate
     n = len(components)
