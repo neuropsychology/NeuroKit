@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from ..misc import as_vector
 from ..signal import signal_period
 from ..signal.signal_formatpeaks import _signal_from_indices
 from .eog_clean import eog_clean
-from .eog_blinks import eog_blinks
 
 
 def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
@@ -17,7 +15,7 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     Parameters
     ----------
     eog_signal : list or array or Series
-        The raw EOG channel, derived from `nk.mne_channel_extract()`.
+        The raw EOG channel, derived from `eog_extract()`.
     raw : mne.io.Raw
         Raw EEG data.
     sampling_rate : int
@@ -47,8 +45,8 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     >>> import neurokit2 as nk
     >>>
     >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() +
-    ...                           '/MEG/sample/sample_audvis_raw.fif', preload=True)
-    >>> eog_signal = nk.mne_channel_extract(raw, what='EOG', name='EOG')
+                                  '/MEG/sample/sample_audvis_raw.fif', preload=True)
+    >>> eog_channels = nk.mne_channel_extract(raw, what='EOG', name='EOG')
 
     References
     ----------
@@ -75,27 +73,46 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
                 "NeuroKit warning: eog_process(): Please make sure your EOG signal contains "
                 "at most 2 channels of signals."
             )
-    eog_signal = as_vector(eog_signal)
 
     # Clean signal
     eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate)
 
-    eog_blinks = eog_blinks(eog_signal, sampling_rate=sampling_rate)
-    info = {"EOG_Blinks": eog_blinks}
+    eog_events = mne.preprocessing.find_eog_events(
+        raw, event_id=998, l_freq=lfreq, h_freq=hfreq, filter_length="10s", ch_name="EOG"
+    )
+
+    #    raw.add_events(eog_events, 'EOG')
+
+    #    picks = mne.pick_types(raw.info, meg=False, eeg=False, stim=False, eog=True,
+    #                           exclude='bads')
+
+    # Create blink epochs
+    #    epochs = mne.Epochs(raw, eog_events, event_id=998, tmin=-0.2, tmax=0.2, picks=picks)
+    #    data = epochs.get_data()
+    #    print("Number of detected EOG artifacts (eye blinks) : %d" % len(data))
+
+    eog_timepoints = eog_events[:, 0]
+    info = {"EOG_Blinks": eog_timepoints}
+
+    #    start = eog_timepoints[0]
+    #    end = eog_timepoints[-1]
+    #    duration = (end - start) / sampling_rate
+    #    eog_rate = duration / len(eog_timepoints)
 
     # Mark blink events
-#    signal_blinks = _signal_from_indices(eog_blinks, desired_length=len(eog_cleaned))
+    signal_blinks = _signal_from_indices(eog_timepoints, desired_length=len(eog_cleaned))
 
     # Rate computation
-#    rate = signal_period(
-#        eog_blinks,
-#        sampling_rate=sampling_rate,
-#        desired_length=len(signal_blinks),
-#        interpolation_method="monotone_cubic",
-#    )
+    rate = signal_period(
+        eog_timepoints,
+        sampling_rate=sampling_rate,
+        desired_length=len(signal_blinks),
+        interpolation_method="monotone_cubic",
+    )
 
     # Prepare output
     signals = pd.DataFrame(
-        {"EOG_Raw": eog_signal, "EOG_Clean": eog_cleaned)
+        {"EOG_Raw": eog_signal, "EOG_Clean": eog_cleaned, "EOG_Blinks": signal_blinks, "EOG_Rate": rate}
+    )
 
     return signals, info
