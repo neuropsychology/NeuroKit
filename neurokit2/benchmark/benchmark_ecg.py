@@ -105,7 +105,8 @@ def _benchmark_ecg_preprocessing(function, ecg, rpeak, sampling_rate=1000):
     try:
         found_rpeaks = function(ecg, sampling_rate=sampling_rate)
         duration = (datetime.datetime.now() - t0).total_seconds()
-    except Exception as error:  # In case of failure
+    # In case of failure
+    except Exception as error:  # pylint: disable=broad-except
         return pd.DataFrame(
             {
                 "Sampling_Rate": [sampling_rate],

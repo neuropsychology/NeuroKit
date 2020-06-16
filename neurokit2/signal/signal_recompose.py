@@ -45,8 +45,14 @@ def signal_recompose(components, method="wcorr", threshold=0.5, **kwargs):
     >>> fig  #doctest: +SKIP
 
     """
-    clusters = _signal_recompose_wcorr(components, threshold=threshold, **kwargs)
-    recomposed = _signal_recompose_sum(components, clusters)
+    # Apply method
+    method = method.lower()
+    if method in ["wcorr"]:
+        clusters = _signal_recompose_wcorr(components, threshold=threshold, **kwargs)
+        recomposed = _signal_recompose_sum(components, clusters)
+    else:
+        raise ValueError("NeuroKit error: signal_decompose(): 'method' should be one of 'emd'")
+
     return recomposed
 
 
@@ -141,13 +147,13 @@ def _signal_recompose_get_wcorr(components, show=False):
 # =============================================================================
 # Utils
 # =============================================================================
-# def _signal_decompose_meanfreq(components, sampling_rate=1000):
-#    """Get the mean frequency of components
-#    """
-#    duration = components.shape[1] / sampling_rate
-#    n = len(components)
-#    freqs = np.zeros(n)
-#
-#    for i in range(n):
-#        c = components[i, :] - np.mean(components[i, :])
-#        freqs[i] = len(signal_zerocrossings(c)) / duration
+def _signal_recompose_meanfreq(components, sampling_rate=1000):
+    """Get the mean frequency of components
+    """
+    duration = components.shape[1] / sampling_rate
+    n = len(components)
+    freqs = np.zeros(n)
+
+    for i in range(n):
+        c = components[i, :] - np.mean(components[i, :])
+        freqs[i] = len(signal_zerocrossings(c)) / duration

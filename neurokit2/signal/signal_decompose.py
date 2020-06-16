@@ -1,7 +1,4 @@
-import matplotlib.pyplot as plt
 import numpy as np
-import scipy.cluster
-import sklearn.decomposition
 
 from ..misc import as_vector
 
@@ -124,6 +121,7 @@ def _signal_decompose_ssa(signal, n_components=None, **kwargs):
 # =============================================================================
 # ICA
 # =============================================================================
+# import sklearn.decomposition
 # def _signal_decompose_scica(signal, n_components=3, **kwargs):
 #    # sanitize input
 #    signal = as_vector(signal)
