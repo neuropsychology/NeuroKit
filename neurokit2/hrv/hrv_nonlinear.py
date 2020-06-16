@@ -65,8 +65,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     References
     ----------
-    - Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear Features of Heart Rate Variability?.
-    IEEE Transactions on Biomedical Engineering, 48(11), 1342-1347.
+    - Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear 
+    Features of Heart Rate Variability?. IEEE Transactions on Biomedical Engineering, 48(11), 1342-1347.
     - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
     electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
