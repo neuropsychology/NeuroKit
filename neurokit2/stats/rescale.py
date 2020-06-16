@@ -3,8 +3,7 @@ import numpy as np
 
 
 def rescale(data, to=[0, 1]):
-    """
-    Rescale data.
+    """Rescale data.
 
     Rescale a numeric variable to a new range.
 

@@ -7,8 +7,7 @@ from .rescale import rescale
 
 
 def summary_plot(x, **kwargs):
-    """
-    Descriptive plot.
+    """Descriptive plot.
 
     Visualize a distribution with density, histogram, boxplot and rugs plots all at once.
 

@@ -6,20 +6,26 @@ import pandas as pd
 
 
 def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
-    """
-    Plot events in signal.
+    """Plot events in signal.
 
     Parameters
     ----------
-    events : list, ndarray or dict
+    events : list or ndarray or dict
         Events onset location. Can also be a list of lists, in which case it will mark them with
         different colors. If a dict is passed (e.g., from 'events_find()'), will select only the 'onset' list.
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
     show : bool
         If True, will return a plot. If False, will return a DataFrame that can be plotted externally.
-    color, linestyle : str
-        Arguments passed to matplotlib plotting.
+    color : str
+        Argument passed to matplotlib plotting.
+    linestyle : str
+        Argument passed to matplotlib plotting.
+
+    Returns
+    -------
+    fig
+        Figure representing a plot of the signal and the event markers.
 
     See Also
     --------
@@ -79,7 +85,6 @@ def events_plot(events, signal=None, show=True, color="red", linestyle="--"):
         fig = signal.plot().get_figure()
         _events_plot(events, color=color, linestyle=linestyle)
         return fig
-
     else:
         signal["Event_Onset"] = 0
         signal.iloc[events] = 1

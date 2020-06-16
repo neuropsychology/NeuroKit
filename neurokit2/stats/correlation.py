@@ -5,14 +5,15 @@ import scipy.stats
 
 
 def cor(x, y, method="pearson", show=False):
-    """
-    Density estimation.
+    """Density estimation.
 
     Computes kernel density estimates.
 
     Parameters
     -----------
-    x,y : list, array or Series
+    x : list, array or Series
+        Vectors of values.
+    y : list, array or Series
         Vectors of values.
     method : str
         Correlation method. Can be one of 'pearson', 'spearman', 'kendall'.
@@ -34,7 +35,7 @@ def cor(x, y, method="pearson", show=False):
     >>> corr #doctest: +SKIP
 
     """
-    r, p = _cor_methods(x, y, method)
+    r, p = _cor_methods(x, y, method)  # pylint: disable=unused-variable
 
     if show is True:
         _cor_plot(x, y)

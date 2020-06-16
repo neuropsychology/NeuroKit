@@ -6,14 +6,15 @@ import sklearn.neighbors
 
 
 def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):
-    """
-    Computes the (normalized) mutual information (MI) between two vectors from a joint histogram. The mutual information
-    of two variables is a measure of the mutual dependence between them. More specifically, it quantifies the "amount of
-    information" obtained about one variable by observing the other variable.
+    """Computes the (normalized) mutual information (MI) between two vectors from a joint histogram. The mutual
+    information of two variables is a measure of the mutual dependence between them. More specifically, it quantifies
+    the "amount of information" obtained about one variable by observing the other variable.
 
     Parameters
     ----------
-    x, y : list, array or Series
+    x : list or array or Series
+        A vector of values.
+    y : list or array or Series
         A vector of values.
     method : str
         Method to use. Can either be 'varoquaux' or 'nolitsa'.
@@ -44,9 +45,8 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 
     References
     ----------
-    - Studholme, jhill & jhawkes (1998). "A normalized entropy measure
-    of 3-D medical image alignment". in Proc. Medical Imaging 1998,
-    vol. 3338, San Diego, CA, pp. 132-143.
+    - Studholme, jhill & jhawkes (1998). "A normalized entropy measure of 3-D medical image alignment".
+    in Proc. Medical Imaging 1998, vol. 3338, San Diego, CA, pp. 132-143.
 
     """
     method = method.lower()
@@ -64,8 +64,7 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 # Methods
 # =============================================================================
 def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
-    """
-    Based on Gael Varoquaux's implementation: https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
+    """Based on Gael Varoquaux's implementation: https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
     """
     jh = np.histogram2d(x, y, bins=bins)[0]
 
@@ -88,11 +87,10 @@ def _mutual_information_varoquaux(x, y, bins=256, sigma=1, normalized=True):
 
 
 def _mutual_information_nolitsa(x, y, bins=256):
-    """
-    Calculate the mutual information between two random variables.
+    """Calculate the mutual information between two random variables.
 
-    Calculates mutual information, I = S(x) + S(y) - S(x,y), between two
-    random variables x and y, where S(x) is the Shannon entropy.
+    Calculates mutual information, I = S(x) + S(y) - S(x,y), between two random variables x and y, where
+    S(x) is the Shannon entropy.
 
     Based on the nolitsa package: https://github.com/manu-mannattil/nolitsa/blob/master/nolitsa/delay.py#L72
 
@@ -119,8 +117,7 @@ def _mutual_information_nolitsa(x, y, bins=256):
 # JUNK
 # =============================================================================
 def _nearest_distances(X, k=1):
-    """
-    From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
+    """From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429
     X = array(N,M)
     N = number of points
     M = number of dimensions
@@ -133,23 +130,27 @@ def _nearest_distances(X, k=1):
 
 
 def _entropy(X, k=1):
-    """
-    Returns the entropy of X. From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
+    """Returns the entropy of X. From https://gist.github.com/GaelVaroquaux/ead9898bd3c973c40429.
 
     Parameters
     -----------
-    X : array-like, shape (n_samples, n_features)
+    X : array-like or shape (n_samples, n_features)
         The data the entropy of which is computed
-    k : int, optional
+    k : int (optional)
         number of nearest neighbors for density estimation
+
+    Returns
+    -------
+    float
+        entropy of X.
+
     Notes
     ---------
-    - Kozachenko, L. F. & Leonenko, N. N. 1987 Sample estimate of entropy
-    of a random vector. Probl. Inf. Transm. 23, 95-101.
-    - Evans, D. 2008 A computationally efficient estimator for
-    mutual information, Proc. R. Soc. A 464 (2093), 1203-1215.
-    - Kraskov A, Stogbauer H, Grassberger P. (2004). Estimating mutual
-    information. Phys Rev E 69(6 Pt 2):066138.
+    - Kozachenko, L. F. & Leonenko, N. N. 1987 Sample estimate of entropy of a random vector. Probl. Inf. Transm.
+    23, 95-101.
+    - Evans, D. 2008 A computationally efficient estimator for mutual information, Proc. R. Soc. A 464 (2093),
+    1203-1215.
+    - Kraskov A, Stogbauer H, Grassberger P. (2004). Estimating mutual information. Phys Rev E 69(6 Pt 2):066138.
 
     """
 
@@ -157,12 +158,11 @@ def _entropy(X, k=1):
     r = _nearest_distances(X, k)  # squared distances
     n, d = X.shape
     volume_unit_ball = (np.pi ** (0.5 * d)) / scipy.special.gamma(0.5 * d + 1)
-    """
-    - F. Perez-Cruz, (2008). Estimation of Information Theoretic Measures
-    for Continuous Random Variables. Advances in Neural Information
-    Processing Systems 21 (NIPS). Vancouver (Canada), December.
-    return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
-    """
+
+    # Perez-Cruz et al. (2008). Estimation of Information Theoretic Measures for
+    # Continuous Random Variables, suggets returning:
+    # return d*mean(log(r))+log(volume_unit_ball)+log(n-1)-log(k)
+
     return (
         d * np.mean(np.log(r + np.finfo(X.dtype).eps))
         + np.log(volume_unit_ball)

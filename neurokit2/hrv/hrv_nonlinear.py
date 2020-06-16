@@ -10,36 +10,39 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
-    """
-    Computes nonlinear indices of Heart Rate Variability (HRV).
+    """Computes nonlinear indices of Heart Rate Variability (HRV).
 
      See references for details.
 
     Parameters
     ----------
     peaks : dict
-        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-        Dictionary returned by ecg_findpeaks, ecg_peaks, ppg_findpeaks, or
-        ppg_peaks.
+        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur. Dictionary returned
+        by ecg_findpeaks, ecg_peaks, ppg_findpeaks, or ppg_peaks.
     sampling_rate : int, optional
-        Sampling rate (Hz) of the continuous cardiac signal in which the peaks
-        occur. Should be at least twice as high as the highest frequency in vhf.
-        By default 1000.
+        Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
+        least twice as high as the highest frequency in vhf. By default 1000.
     show : bool, optional
-        If True, will return a Poincaré plot, a scattergram, which plots each
-        RR interval against the next successive one. The ellipse centers around
-        the average RR interval. By default False.
+        If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the
+        next successive one. The ellipse centers around the average RR interval. By default False.
 
     Returns
     -------
     DataFrame
         Contains non-linear HRV metrics:
-        - "*SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular to the line of identity. It is an index of short-term RR interval fluctuations i.e., beat-to-beat variability.
-        - "*SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line of identity. It is an index of long-term RR interval fluctuations.
-        - "*SD2SD1*": the ratio between short and long term fluctuations of the RR intervals (SD2 divided by SD1).
-        - "*CSI*": the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability of the Poincaré plot by its transverse variability.
-        - "*CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and transverse variability.
-        - "*CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal variability by its transverse variability. Usually used in seizure research.
+        - "*SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular
+        to the line of identity. It is an index of short-term RR interval fluctuations
+        i.e., beat-to-beat variability.
+        - "*SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line
+        of identity. It is an index of long-term RR interval fluctuations.
+        - "*SD2SD1*": the ratio between short and long term fluctuations of the RR intervals
+        (SD2 divided by SD1).
+        - "*CSI*": the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability
+        of the Poincaré plot by its transverse variability.
+        - "*CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and
+        transverse variability.
+        - "*CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal
+        variability by its transverse variability. Usually used in seizure research.
         - "*SampEn*": the sample entropy measure of HRV, calculated by `entropy_sample()`.
 
     See Also
@@ -62,10 +65,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     References
     ----------
-    - Stein, P. K. (2002). Assessing heart rate variability from real-world
-      Holter reports. Cardiac electrophysiology review, 6(3), 239-244.
-    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate
-    variability metrics and norms. Frontiers in public health, 5, 258.
+    - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
+    electrophysiology review, 6(3), 239-244.
+    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
+    Frontiers in public health, 5, 258.
 
     """
     # Sanitize input
@@ -78,9 +81,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out = {}  # Initialize empty container for results
 
     # Poincaré
+    sd_rri = np.std(rri, ddof=1) ** 2
     sd_heart_period = np.std(diff_rri, ddof=1) ** 2
     out["SD1"] = np.sqrt(sd_heart_period * 0.5)
-    out["SD2"] = np.sqrt(2 * sd_heart_period - 0.5 * sd_heart_period)
+    out["SD2"] = np.sqrt(2 * sd_rri - 0.5 * sd_heart_period)
     out["SD2SD1"] = out["SD2"] / out["SD1"]
 
     # CSI / CVI

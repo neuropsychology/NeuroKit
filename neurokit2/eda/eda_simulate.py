@@ -7,8 +7,7 @@ from ..signal import signal_distort, signal_merge
 def eda_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, scr_number=1, drift=-0.01, random_state=None
 ):
-    """
-    Simulate Electrodermal Activity (EDA) signal.
+    """Simulate Electrodermal Activity (EDA) signal.
 
     Generate an artificial (synthetic) EDA signal of a given duration and sampling rate.
 
@@ -16,17 +15,18 @@ def eda_simulate(
     ----------
     duration : int
         Desired recording length in seconds.
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired
-        length of the signal (in samples).
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second). Defaults to 1000Hz.
+    length : int
+        The desired length of the signal (in samples). Defaults to None.
     noise : float
-        Noise level (amplitude of the laplace noise).
+        Noise level (amplitude of the laplace noise). Defaults to 0.01.
     scr_number : int
-        Desired number of skin conductance responses (SCRs), i.e., peaks.
+        Desired number of skin conductance responses (SCRs), i.e., peaks. Defaults to 1.
     drift : float or list
-        The slope of a linear drift of the signal.
+        The slope of a linear drift of the signal. Defaults to -0.01.
     random_state : int
-        Seed for the random number generator.
+        Seed for the random number generator. Defaults to None.
 
     Returns
     ----------
@@ -49,7 +49,8 @@ def eda_simulate(
 
     References
     -----------
-    - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
+    - Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010). Modelling event-related skin
+      conductance responses. International Journal of Psychophysiology, 75(3), 349-356.
 
     """
     # Seed the random generator for reproducible results
@@ -94,19 +95,28 @@ def eda_simulate(
 
 
 def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.7013, decay=[3.1487, 14.1257]):
-    """
-    Simulate a canonical skin conductance response (SCR)
+    """Simulate a canonical skin conductance response (SCR)
 
-    Based on `Bach (2010) <https://sourceforge.net/p/scralyze/code/HEAD/tree/branches/version_b2.1.8/scr_bf_crf.m#l24>`_
+    Based on `Bach (2010)
+    <https://sourceforge.net/p/scralyze/code/HEAD/tree/branches/version_b2.1.8/scr_bf_crf.m#l24>`_
 
     Parameters
-    -------------
+    -----------
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second). Defaults to 1000Hz.
+    length : int
+        The desired length of the signal (in samples). Defaults to None.
     time_peak : float
         Time to peak.
     rise : float
         Variance of rise defining gaussian.
     decay : list
         Decay constants.
+
+    Returns
+    ----------
+    array
+        Vector containing the SCR signal.
 
     Examples
     --------
@@ -120,7 +130,7 @@ def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.
     t = np.linspace(sampling_rate / 10000, 90, length)
 
     gt = np.exp(-((t - time_peak) ** 2) / (2 * rise ** 2))
-    ht = np.exp(-t / decay[0]) + np.exp(-t / decay[1])
+    ht = np.exp(-t / decay[0]) + np.exp(-t / decay[1])  # pylint: disable=E1130
 
     ft = np.convolve(gt, ht)
     ft = ft[0 : len(t)]
@@ -129,16 +139,18 @@ def _eda_simulate_scr(sampling_rate=1000, length=None, time_peak=3.0745, rise=0.
 
 
 def _eda_simulate_bateman(sampling_rate=1000, t1=0.75, t2=2):
-    """
-    Generates the bateman function:
+    """Generates the bateman function:
 
     :math:`b = e^{-t/T1} - e^{-t/T2}`
 
     Parameters
     ----------
-    fsamp : float
+    sampling_rate : float
         Sampling frequency
-    par_bat: list (T1, T2)
+    t1 : float
+        Defaults to 0.75.
+    t2 : float
+        Defaults to 2.
 
         Parameters of the bateman function
     Returns

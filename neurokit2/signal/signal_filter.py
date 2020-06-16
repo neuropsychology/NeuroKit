@@ -13,14 +13,14 @@ def signal_filter(
     window_size="default",
     powerline=50,
 ):
-    """
-    Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
+    """Filter a signal using 'butterworth', 'fir' or 'savgol' filters.
 
-    Apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided) or bandpass (if both are provided) filter to the signal.
+    Apply a lowpass (if 'highcut' frequency is provided), highpass (if 'lowcut' frequency is provided)
+    or bandpass (if both are provided) filter to the signal.
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : list or array or Series
         The signal (i.e., a time series) in the form of a vector of values.
         or "bandstop".
     sampling_rate : int
@@ -30,11 +30,16 @@ def signal_filter(
     highcut : float
         Upper cutoff frequency in Hz. The default is None.
     method : str
-        Can be one of 'butterworth', 'fir', 'bessel' or 'savgol'. Note that for Butterworth, the function uses the SOS method from `scipy.signal.sosfiltfilt`, recommended for general purpose filtering. One can also specify "butterworth_ba' for a more traditional and legacy method (often implemented in other software).
+        Can be one of 'butterworth', 'fir', 'bessel' or 'savgol'. Note that for Butterworth, the function
+        uses the SOS method from `scipy.signal.sosfiltfilt`, recommended for general purpose filtering.
+        One can also specify "butterworth_ba' for a more traditional and legacy method (often implemented
+        in other software).
     order : int
         Only used if method is 'butterworth' or 'savgol'. Order of the filter (default is 2).
     window_size : int
-        Only used if method is 'savgol'. The length of the filter window (i.e. the number of coefficients). Must be an odd integer. If 'default', will be set to the sampling rate divided by 10 (101 if the sampling rate is 1000 Hz).
+        Only used if method is 'savgol'. The length of the filter window (i.e. the number of coefficients).
+        Must be an odd integer. If 'default', will be set to the sampling rate divided by 10
+        (101 if the sampling rate is 1000 Hz).
     powerline : int
         Only used if method is 'powerline'. The powerline frequency (normally 50 Hz or 60 Hz).
 
@@ -57,19 +62,49 @@ def signal_filter(
     >>> signal += nk.signal_simulate(duration=10, frequency=5) # High freq
     >>>
     >>> # Lowpass
-    >>> fig1 = pd.DataFrame({"Raw": signal, "Butter_2": nk.signal_filter(signal, highcut=3, method='butterworth', order=2), "Butter_2_BA": nk.signal_filter(signal, highcut=3, method='butterworth_ba', order=2), "Butter_5": nk.signal_filter(signal, highcut=3, method='butterworth', order=5), "Butter_5_BA": nk.signal_filter(signal, highcut=3, method='butterworth_ba', order=5), "Bessel_2": nk.signal_filter(signal, highcut=3, method='bessel', order=2), "Bessel_5": nk.signal_filter(signal, highcut=3, method='bessel', order=5), "FIR": nk.signal_filter(signal, highcut=3, method='fir')}).plot(subplots=True)
+    >>> fig1 = pd.DataFrame({"Raw": signal,
+    ...                      "Butter_2": nk.signal_filter(signal, highcut=3, method='butterworth', order=2),
+    ...                      "Butter_2_BA": nk.signal_filter(signal, highcut=3, method='butterworth_ba', order=2),
+    ...                      "Butter_5": nk.signal_filter(signal, highcut=3, method='butterworth', order=5),
+    ...                      "Butter_5_BA": nk.signal_filter(signal, highcut=3, method='butterworth_ba', order=5),
+    ...                      "Bessel_2": nk.signal_filter(signal, highcut=3, method='bessel', order=2),
+    ...                      "Bessel_5": nk.signal_filter(signal, highcut=3, method='bessel', order=5),
+    ...                      "FIR": nk.signal_filter(signal, highcut=3, method='fir')}).plot(subplots=True)
     >>> fig1 #doctest: +SKIP
 
     >>> # Highpass
-    >>> fig2 = pd.DataFrame({"Raw": signal, "Butter_2": nk.signal_filter(signal, lowcut=2, method='butterworth', order=2), "Butter_2_ba": nk.signal_filter(signal, lowcut=2, method='butterworth_ba', order=2), "Butter_5": nk.signal_filter(signal, lowcut=2, method='butterworth', order=5), "Butter_5_BA": nk.signal_filter(signal, lowcut=2, method='butterworth_ba', order=5), "Bessel_2": nk.signal_filter(signal, lowcut=2, method='bessel', order=2), "Bessel_5": nk.signal_filter(signal, lowcut=2, method='bessel', order=5), "FIR": nk.signal_filter(signal, lowcut=2, method='fir')}).plot(subplots=True)
+    >>> fig2 = pd.DataFrame({"Raw": signal,
+    ...                      "Butter_2": nk.signal_filter(signal, lowcut=2, method='butterworth', order=2),
+    ...                      "Butter_2_ba": nk.signal_filter(signal, lowcut=2, method='butterworth_ba', order=2),
+    ...                      "Butter_5": nk.signal_filter(signal, lowcut=2, method='butterworth', order=5),
+    ...                      "Butter_5_BA": nk.signal_filter(signal, lowcut=2, method='butterworth_ba', order=5),
+    ...                      "Bessel_2": nk.signal_filter(signal, lowcut=2, method='bessel', order=2),
+    ...                      "Bessel_5": nk.signal_filter(signal, lowcut=2, method='bessel', order=5),
+    ...                      "FIR": nk.signal_filter(signal, lowcut=2, method='fir')}).plot(subplots=True)
     >>> fig2 #doctest: +SKIP
 
     >>> # Bandpass in real-life scenarios
     >>> original = nk.rsp_simulate(duration=30, method="breathmetrics", noise=0)
-    >>> signal = nk.signal_distort(original, noise_frequency=[0.1, 2, 10, 100], noise_amplitude=1, powerline_amplitude=1)
+    >>> signal = nk.signal_distort(original, noise_frequency=[0.1, 2, 10, 100], noise_amplitude=1,
+    ...                            powerline_amplitude=1)
     >>>
     >>> # Bandpass between 10 and 30 breaths per minute (respiratory rate range)
-    >>> fig3 = pd.DataFrame({"Raw": signal, "Butter_2": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth', order=2), "Butter_2_BA": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth_ba', order=2), "Butter_5": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth', order=5), "Butter_5_BA": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='butterworth_ba', order=5), "Bessel_2": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='bessel', order=2), "Bessel_5": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='bessel', order=5), "FIR": nk.signal_filter(signal, lowcut=10/60, highcut=30/60, method='fir'), "Savgol": nk.signal_filter(signal, method='savgol')}).plot(subplots=True)
+    >>> fig3 = pd.DataFrame({"Raw": signal,
+    ...                      "Butter_2": nk.signal_filter(signal, lowcut=10/60, highcut=30/60,
+    ...                                                   method='butterworth', order=2),
+    ...                      "Butter_2_BA": nk.signal_filter(signal, lowcut=10/60, highcut=30/60,
+    ...                                                      method='butterworth_ba', order=2),
+    ...                      "Butter_5": nk.signal_filter(signal, lowcut=10/60, highcut=30/60,
+    ...                                                   method='butterworth', order=5),
+    ...                      "Butter_5_BA": nk.signal_filter(signal, lowcut=10/60, highcut=30/60,
+    ...                                                      method='butterworth_ba', order=5),
+    ...                      "Bessel_2": nk.signal_filter(signal, lowcut=10/60, highcut=30/60,
+    ...                                                   method='bessel', order=2),
+    ...                      "Bessel_5": nk.signal_filter(signal, lowcut=10/60, highcut=30/60,
+    ...                                                   method='bessel', order=5),
+    ...                      "FIR": nk.signal_filter(signal, lowcut=10/60, highcut=30/60,
+    ...                                              method='fir'),
+    ...                      "Savgol": nk.signal_filter(signal, method='savgol')}).plot(subplots=True)
     >>> fig3 #doctest: +SKIP
 
     """
@@ -108,10 +143,11 @@ def signal_filter(
 
 
 def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="default"):
-    """
-    Filter a signal using the Savitzky-Golay method.
+    """Filter a signal using the Savitzky-Golay method.
 
-    Default window size is chosen based on `Sadeghi, M., & Behnia, F. (2018). Optimum window length of Savitzky-Golay filters with arbitrary order. arXiv preprint arXiv:1808.10489. <https://arxiv.org/ftp/arxiv/papers/1808/1808.10489.pdf>`_.
+    Default window size is chosen based on `Sadeghi, M., & Behnia, F. (2018). Optimum window length of
+    Savitzky-Golay filters with arbitrary order. arXiv preprint arXiv:1808.10489.
+    <https://arxiv.org/ftp/arxiv/papers/1808/1808.10489.pdf>`_.
 
     """
     window_size = _signal_filter_windowsize(window_size=window_size, sampling_rate=sampling_rate)
@@ -124,8 +160,7 @@ def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="defa
 # FIR
 # =============================================================================
 def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, window_size="default"):
-    """
-    Filter a signal using a FIR filter.
+    """Filter a signal using a FIR filter.
     """
     try:
         import mne
@@ -162,8 +197,7 @@ def _signal_filter_fir(signal, sampling_rate=1000, lowcut=None, highcut=None, wi
 
 
 def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
-    """
-    Filter a signal using IIR Butterworth SOS method.
+    """Filter a signal using IIR Butterworth SOS method.
     """
     freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
 
@@ -173,8 +207,7 @@ def _signal_filter_butterworth(signal, sampling_rate=1000, lowcut=None, highcut=
 
 
 def _signal_filter_butterworth_ba(signal, sampling_rate=1000, lowcut=None, highcut=None, order=5):
-    """
-    Filter a signal using IIR Butterworth B/A method.
+    """Filter a signal using IIR Butterworth B/A method.
     """
     # Get coefficients
     freqs, filter_type = _signal_filter_sanitize(lowcut=lowcut, highcut=highcut, sampling_rate=sampling_rate)
@@ -207,8 +240,7 @@ def _signal_filter_bessel(signal, sampling_rate=1000, lowcut=None, highcut=None,
 
 
 def _signal_filter_powerline(signal, sampling_rate, powerline=50):
-    """
-    Filter out 50 Hz powerline noise by smoothing the signal with a moving average kernel with the width of one period
+    """Filter out 50 Hz powerline noise by smoothing the signal with a moving average kernel with the width of one period
     of 50Hz.
     """
 
@@ -269,5 +301,5 @@ def _signal_filter_windowsize(window_size="default", sampling_rate=1000):
     if isinstance(window_size, str):
         window_size = int(np.round(sampling_rate / 3))
         if (window_size % 2) == 0:
-            window_size + 1
+            window_size + 1  # pylint: disable=W0104
     return window_size

@@ -21,12 +21,17 @@
 import os
 import re
 import sys
-
 import mock
+import recommonmark
+
+from recommonmark.transform import AutoStructify
+
+
 
 sys.path.insert(0, os.path.abspath('../'))
 
 
+# -- Mock modules ---------------------------------------------
 MOCK_MODULES = ['scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg',
                 'scipy.spatial', 'scipy.special', 'scipy.integrate',
                 'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets', 'sklearn.metrics', 'sklearn.metrics.pairwise',
@@ -34,6 +39,7 @@ MOCK_MODULES = ['scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.
 
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()
+
 
 
 
@@ -58,7 +64,9 @@ extensions = [
     'sphinx_rtd_theme',
     'nbsphinx',
     'sphinx_nbexamples',
-    'matplotlib.sphinxext.plot_directive'
+    'matplotlib.sphinxext.plot_directive',
+    'recommonmark',
+    'sphinx_copybutton'
 ]
 
 # matplotlib plot directive
@@ -88,9 +96,8 @@ templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md']
+
 
 # The master toctree document.
 master_doc = 'index'
@@ -142,25 +149,20 @@ todo_include_todos = False
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 html_show_sphinx = False
 
-# -- Options for HTML output -------------------------------------------
+# -- Options for HTML THEME: sphinx_rtd_theme -------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
+# The theme to use for HTML and HTML Help pages.  See the documentation for a list of builtin themes.
 html_theme = 'sphinx_rtd_theme'
 html_favicon = "img/icon.ico"
 html_logo = "img/neurokit.png"
+html_static_path = ['_static']  # Folder that contain custom static files (e.g., CSS files)
 
-# Theme options are theme-specific and customize the look and feel of a
-# theme further.  For a list of options available for each theme, see the
-# documentation.
-#
-# html_theme_options = {}
+# Theme options are theme-specific and customize the look and feel of a theme further.
+# For a list of options available for each theme, see https://sphinx-rtd-theme.readthedocs.io/en/stable/configuring.html
+html_theme_options = {
+    'collapse_navigation': False  # Expandables entries
+}
 
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
 
 
 # -- Options for HTMLHelp output ---------------------------------------
@@ -196,7 +198,7 @@ author_field = u'Official Documentation'
 
 latex_elements = {
     'sphinxsetup': r"""
-        VerbatimColor={RGB}{55,71,79},
+        VerbatimColor={RGB}{38,50,56},
         verbatimwithframe=false,
         """
     # Background color of chunks
@@ -263,3 +265,12 @@ texinfo_documents = [
 # Other
 add_module_names = False  # so functions aren’t prepended with the name of the package/module
 add_function_parentheses = True  # to ensure that parentheses are added to the end of all function names
+
+
+# -- Setup for recommonmark ---------------------------------------------
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+            # 'url_resolver': lambda url: github_doc_root + url,
+            'auto_toc_tree_section': 'Contents',
+            }, True)
+    app.add_transform(AutoStructify)

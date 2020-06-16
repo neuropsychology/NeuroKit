@@ -4,7 +4,7 @@ Installation
 ============
 
 .. hint::
-   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
+   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see these guides <https://neurokit2.readthedocs.io/en/latest/contributing/index.html>`_).
 
 1. Python
 -----------------
@@ -46,7 +46,7 @@ Mac OS
 1. Install `Anaconda <https://www.anaconda.com/download/>`_
 2. Open the `terminal <https://www.youtube.com/watch?time_continue=59&v=gk2CgkURkgY>`_
 3. Run :code:`source activate root`
-4. Run :code:`pip install https://github.com/neuropsychology/NeuroKit/zipball/master`
+4. Run :code:`pip install neurokit2`
 5. Start `Spyder.exe`
 
 
@@ -66,7 +66,7 @@ This is the preferred method to install NeuroKit, as it will always install the 
 
     pip install https://github.com/neuropsychology/neurokit/zipball/master
 
-.. Hint:: Enjoy living on the edge? You can always install the latest `dev` branch to access some work-in-progress features using pip install https://github.com/neuropsychology/neurokit/zipball/dev
+.. Hint:: Enjoy living on the edge? You can always install the latest `dev` branch to access some work-in-progress features using ``pip install https://github.com/neuropsychology/neurokit/zipball/dev``
 
 
 If you don't have `pip <https://pip.pypa.io>`_ installed, this `Python installation guide <http://docs.python-guide.org/en/latest/starting/installation/>`_ can guide you through the process.

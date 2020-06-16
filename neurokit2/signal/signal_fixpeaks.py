@@ -21,49 +21,46 @@ def signal_fixpeaks(
     robust=False,
     method="Kubios",
 ):
-    """
-    Correct erroneous peak placements.
+    """Correct erroneous peak placements.
 
-    Identify and correct erroneous peak placements based on outliers in
-    peak-to-peak differences (period).
+    Identify and correct erroneous peak placements based on outliers in peak-to-peak differences (period).
 
     Parameters
     ----------
-    peaks : list, array, DataFrame, Series or dict
-        The samples at which the peaks occur. If an array is passed in, it is
-        assumed that it was obtained with `signal_findpeaks()`. If a DataFrame
-        is passed in, it is assumed to be obtained with `ecg_findpeaks()` or
-        `ppg_findpeaks()` and to be of the same length as the input signal.
+    peaks : list or array or DataFrame or Series or dict
+        The samples at which the peaks occur. If an array is passed in, it is assumed that it was obtained
+        with `signal_findpeaks()`. If a DataFrame is passed in, it is assumed to be obtained with `ecg_findpeaks()`
+        or `ppg_findpeaks()` and to be of the same length as the input signal.
     sampling_rate : int
-        The sampling frequency of the signal that contains the peaks (in Hz,
-        i.e., samples/second).
+        The sampling frequency of the signal that contains the peaks (in Hz, i.e., samples/second).
     iterative : bool
-        Whether or not to apply the artifact correction repeatedly (results
-        in superior artifact correction).
+        Whether or not to apply the artifact correction repeatedly (results in superior artifact correction).
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
-    interval_min, interval_max : float
-        The minimum or maximum interval between the peaks.
-    relative_interval_min, relative_interval_max : float
-        The minimum or maximum interval between the peaks as relative to the
-        sample (expressed in standard deviation from the mean).
+    interval_min : float
+        The minimum interval between the peaks.
+    interval_max : float
+        The maximum interval between the peaks.
+    relative_interval_min : float
+        The minimum interval between the peaks as relative to the sample (expressed in
+        standard deviation from the mean).
+    relative_interval_max : float
+        The maximum interval between the peaks as relative to the sample (expressed in
+        standard deviation from the mean).
     robust : bool
-        Use a robust method of standardization (see `standardize()`) for the
-        relative thresholds.
+        Use a robust method of standardization (see `standardize()`) for the relative thresholds.
     method : str
-        Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection
-        and correction described in Lipponen, J. A., & Tarvainen, M. P. (2019).
-        Note that "Kubios" is only meant for peaks in ECG or PPG. "Neurokit"
-        can be used with peaks in ECG, PPG, or respiratory data.
+        Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
+        in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
+        ECG or PPG. "Neurokit" can be used with peaks in ECG, PPG, or respiratory data.
 
     Returns
     -------
     peaks_clean : array
         The corrected peak locations.
     artifacts : dict
-        Only if method="Kubios". A dictionary containing the indices of
-        artifacts, accessible with the keys "ectopic", "missed", "extra", and
-        "longshort".
+        Only if method="Kubios". A dictionary containing the indices of artifacts, accessible with the
+        keys "ectopic", "missed", "extra", and "longshort".
 
     See Also
     --------
@@ -78,7 +75,8 @@ def signal_fixpeaks(
     >>> # Kubios
     >>> ecg = nk.ecg_simulate(duration=240, noise=0.25, heart_rate=70, random_state=42)
     >>> rpeaks_uncorrected = nk.ecg_findpeaks(ecg)
-    >>> artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected, iterative=True, show=True, method="Kubios")
+    >>> artifacts, rpeaks_corrected = nk.signal_fixpeaks(rpeaks_uncorrected, iterative=True,
+    ...                                                  show=True, method="Kubios")
     >>> rate_corrected = nk.signal_rate(rpeaks_corrected, desired_length=len(ecg))
     >>> rate_uncorrected = nk.signal_rate(rpeaks_uncorrected, desired_length=len(ecg))
     >>>
@@ -104,53 +102,84 @@ def signal_fixpeaks(
 
     References
     ----------
-    - Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart
-    rate variability time series artefact correction using novel beat
-    classification. Journal of medical engineering & technology, 43(3),
-    173-181. 10.1080/03091902.2019.1640306
+    - Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart rate variability time
+    series artefact correction using novel beat classification. Journal of medical engineering & technology,
+    43(3), 173-181. 10.1080/03091902.2019.1640306
 
     """
     # Format input
-    peaks, _ = _signal_formatpeaks_sanitize(peaks)
+    peaks = _signal_formatpeaks_sanitize(peaks)
 
+    # If method Kubios
     if method.lower() == "kubios":
 
-        # Get corrected peaks and normal-to-normal intervals.
-        artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate)
-        peaks_clean = _correct_artifacts(artifacts, peaks)
+        return _signal_fixpeaks_kubios(peaks, sampling_rate=sampling_rate, iterative=iterative, show=show)
 
-        if iterative:
+    # Else method is NeuroKit
+    return _signal_fixpeaks_neurokit(
+        peaks,
+        sampling_rate=sampling_rate,
+        interval_min=interval_min,
+        interval_max=interval_max,
+        relative_interval_min=relative_interval_min,
+        relative_interval_max=relative_interval_max,
+        robust=robust,
+    )
 
-            # Iteratively apply the artifact correction until the number of artifact
-            # reaches an equilibrium (i.e., the number of artifacts does not change
-            # anymore from one iteration to the next).
-            n_artifacts_previous = np.inf
+
+# =============================================================================
+# Methods
+# =============================================================================
+def _signal_fixpeaks_neurokit(
+    peaks,
+    sampling_rate=1000,
+    interval_min=None,
+    interval_max=None,
+    relative_interval_min=None,
+    relative_interval_max=None,
+    robust=False,
+):
+    """Neurokit method
+    """
+
+    peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
+    peaks_clean = _interpolate_big(peaks, sampling_rate, interval_max, relative_interval_max, robust)
+
+    return peaks_clean
+
+
+def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False):
+    """kubios method
+    """
+
+    # Get corrected peaks and normal-to-normal intervals.
+    artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate)
+    peaks_clean = _correct_artifacts(artifacts, peaks)
+
+    if iterative:
+
+        # Iteratively apply the artifact correction until the number of artifact
+        # reaches an equilibrium (i.e., the number of artifacts does not change
+        # anymore from one iteration to the next).
+        n_artifacts_previous = np.inf
+        n_artifacts_current = sum([len(i) for i in artifacts.values()])
+
+        previous_diff = 0
+
+        while n_artifacts_current - n_artifacts_previous != previous_diff:
+
+            previous_diff = n_artifacts_previous - n_artifacts_current
+
+            artifacts, subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate)
+            peaks_clean = _correct_artifacts(artifacts, peaks_clean)
+
+            n_artifacts_previous = n_artifacts_current
             n_artifacts_current = sum([len(i) for i in artifacts.values()])
 
-            previous_diff = 0
+    if show:
+        _plot_artifacts_lipponen2019(artifacts, subspaces)
 
-            while n_artifacts_current - n_artifacts_previous != previous_diff:
-
-                previous_diff = n_artifacts_previous - n_artifacts_current
-
-                artifacts, subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate)
-                peaks_clean = _correct_artifacts(artifacts, peaks_clean)
-
-                n_artifacts_previous = n_artifacts_current
-                n_artifacts_current = sum([len(i) for i in artifacts.values()])
-
-        if show:
-            _plot_artifacts_lipponen2019(artifacts, subspaces)
-
-        return artifacts, peaks_clean
-
-    elif method.lower() == "neurokit":
-
-        peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
-
-        peaks_clean = _interpolate_big(peaks, sampling_rate, interval_max, relative_interval_max, robust)
-
-        return peaks_clean
+    return artifacts, peaks_clean
 
 
 # =============================================================================
@@ -224,8 +253,8 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
         if np.abs(drrs[i]) <= 1:  # Figure 1
             i += 1
             continue
-        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))  # Figure 2a
-        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))  # Figure 2a
+        eq1 = np.logical_and(drrs[i] > 1, s12[i] < (-c1 * drrs[i] - c2))  # pylint: disable=E1111
+        eq2 = np.logical_and(drrs[i] < -1, s12[i] > (-c1 * drrs[i] + c2))  # pylint: disable=E1111
 
         if np.any([eq1, eq2]):
             # If any of the two equations is true.
@@ -243,11 +272,11 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
 
         for j in longshort_candidates:
             # Long beat.
-            eq3 = np.logical_and(drrs[j] > 1, s22[j] < -1)  # Figure 2b
+            eq3 = np.logical_and(drrs[j] > 1, s22[j] < -1)  # pylint: disable=E1111
             # Long or short.
             eq4 = np.abs(mrrs[j]) > 3  # Figure 1
             # Short beat.
-            eq5 = np.logical_and(drrs[j] < -1, s22[j] > 1)  # Figure 2b
+            eq5 = np.logical_and(drrs[j] < -1, s22[j] > 1)  # pylint: disable=E1111
 
             if ~np.any([eq3, eq4, eq5]):
                 # If none of the three equations is true: normal beat.
@@ -346,7 +375,7 @@ def _correct_missed(missed_idcs, peaks):
     # Calculate the position(s) of new beat(s). Make sure to not generate
     # negative indices. prev_peaks and next_peaks must have the same
     # number of elements.
-    valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(corrected_peaks))
+    valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(corrected_peaks))  # pylint: disable=E1111
     missed_idcs = missed_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in missed_idcs]]
     next_peaks = corrected_peaks[missed_idcs]
@@ -364,7 +393,9 @@ def _correct_misaligned(misaligned_idcs, peaks):
     # Make sure to not generate negative indices, or indices that exceed
     # the total number of peaks. prev_peaks and next_peaks must have the
     # same number of elements.
-    valid_idcs = np.logical_and(misaligned_idcs > 1, misaligned_idcs < len(corrected_peaks) - 1)
+    valid_idcs = np.logical_and(
+        misaligned_idcs > 1, misaligned_idcs < len(corrected_peaks) - 1  # pylint: disable=E1111
+    )
     misaligned_idcs = misaligned_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in misaligned_idcs]]
     next_peaks = corrected_peaks[[i + 1 for i in misaligned_idcs]]
@@ -380,8 +411,7 @@ def _correct_misaligned(misaligned_idcs, peaks):
 
 
 def _update_indices(source_idcs, update_idcs, update):
-    """
-    For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger than
+    """For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger than
     s.
     """
     if not update_idcs:

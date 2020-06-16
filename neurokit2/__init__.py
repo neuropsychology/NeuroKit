@@ -1,8 +1,8 @@
-"""
-Top-level package for NeuroKit.
+"""Top-level package for NeuroKit.
 """
 import datetime
 
+from .benchmark import *
 from .bio import *
 from .complexity import *
 from .data import *
@@ -10,6 +10,7 @@ from .ecg import *
 from .eda import *
 from .eeg import *
 from .emg import *
+from .eog import *
 from .epochs import *
 from .events import *
 from .hrv import *
@@ -21,7 +22,7 @@ from .stats import *
 
 
 # Info
-__version__ = "0.0.36"
+__version__ = "0.0.37"
 
 
 # Maintainer info
@@ -30,8 +31,7 @@ __email__ = "dom.makowski@gmail.com"
 
 
 # Citation
-__bibtex__ = (
-    """
+__bibtex__ = r"""
 @misc{neurokit2,
   doi = {10.5281/ZENODO.3597887},
   url = {https://github.com/neuropsychology/NeuroKit},
@@ -43,7 +43,6 @@ __bibtex__ = (
   year = {2020},
 }
 """
-)
 
 __cite__ = (
     """
@@ -57,11 +56,16 @@ You can cite NeuroKit2 as follows:
 
 
 Full bibtex reference:
-""" + __bibtex__
+"""
+    + __bibtex__
 )
 # Aliases for citation
 __citation__ = __cite__
 
 
 def cite():
+    """Cite NeuroKit2
+
+    This function will print the bibtex and the APA reference for your to copy and cite.
+    """
     print(__cite__)

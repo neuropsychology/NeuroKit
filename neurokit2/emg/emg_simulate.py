@@ -7,8 +7,7 @@ from ..signal import signal_resample
 def emg_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, burst_number=1, burst_duration=1.0, random_state=42
 ):
-    """
-    Simulate an EMG signal.
+    """Simulate an EMG signal.
 
     Generate an artificial (synthetic) EMG signal of a given duration and sampling rate.
 
@@ -16,16 +15,17 @@ def emg_simulate(
     ----------
     duration : int
         Desired recording length in seconds.
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired
-        length of the signal (in samples).
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
+    length : int
+        The desired length of the signal (in samples).
     noise : float
         Noise level (gaussian noise).
     burst_number : int
         Desired number of bursts of activity (active muscle periods).
     burst_duration : float or list
-        Duration of the bursts. Can be a float (each burst will have the same
-        duration) or a list of durations for each bursts.
+        Duration of the bursts. Can be a float (each burst will have the same duration) or a list of
+        durations for each bursts.
     random_state : int
         Seed for the random number generator.
 
@@ -50,7 +50,8 @@ def emg_simulate(
 
     References
     -----------
-    This function is based on `this script <https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/>`_.
+    This function is based on `this script
+    <https://scientificallysound.org/2016/08/11/python-analysing-emg-signals-part-1/>`_.
 
     """
     # Seed the random generator for reproducible results
@@ -61,7 +62,7 @@ def emg_simulate(
         length = duration * sampling_rate
 
     # Sanity checks
-    if isinstance(burst_duration, int) or isinstance(burst_duration, float):
+    if isinstance(burst_duration, (int, float)):
         burst_duration = np.repeat(burst_duration, burst_number)
 
     if len(burst_duration) > burst_number:
@@ -84,12 +85,12 @@ def emg_simulate(
     n_quiet = burst_number + 1  # number of quiet periods (in between bursts)
     duration_quiet = (duration - total_duration_bursts) / n_quiet  # duration of each quiet period
     quiets = []
-    for quiet in range(n_quiet):
+    for quiet in range(n_quiet):  # pylint: disable=W0612
         quiets += [list(np.random.uniform(-0.05, 0.05, size=int(1000 * duration_quiet)) + 0.08)]
 
     # Merge the two
     emg = []
-    for i in range(len(quiets)):
+    for i in range(len(quiets)):  # pylint: disable=C0200
         emg += quiets[i]
         if i < len(bursts):
             emg += bursts[i]

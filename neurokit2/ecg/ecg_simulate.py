@@ -10,34 +10,33 @@ from ..signal import signal_distort, signal_resample
 def ecg_simulate(
     duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=70, method="ecgsyn", random_state=None
 ):
-    """
-    Simulate an ECG/EKG signal.
+    """Simulate an ECG/EKG signal.
 
-    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies wavelets to roughly approximate cardiac cycles.
+    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either
+    the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies wavelets
+    to roughly approximate cardiac cycles.
 
     Parameters
     ----------
     duration : int
         Desired recording length in seconds.
-    sampling_rate, length : int
-        The desired sampling rate (in Hz, i.e., samples/second) or the desired length of the signal (in samples).
+    sampling_rate : int
+        The desired sampling rate (in Hz, i.e., samples/second).
+    length : int
+        The desired length of the signal (in samples).
     noise : float
         Noise level (amplitude of the laplace noise).
     heart_rate : int
         Desired simulated heart rate (in beats per minute).
     method : str
-        The model used to generate the signal. Can be 'simple' for a
-        simulation based on Daubechies wavelets that roughly approximates
-        a single cardiac cycle. If 'ecgsyn' (default), will use an
-        advanced model desbribed `McSharry et al. (2003)
-        <https://physionet.org/content/ecgsyn/>`_.
+        The model used to generate the signal. Can be 'simple' for a simulation based on Daubechies
+        wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use an
+        advanced model desbribed `McSharry et al. (2003) <https://physionet.org/content/ecgsyn/>`_.
     random_state : int
         Seed for the random number generator.
 
-
-
     Returns
-    ----------
+    -------
     array
         Vector containing the ECG signal.
 
@@ -61,7 +60,8 @@ def ecg_simulate(
 
     References
     -----------
-    - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50(3), 289-294.
+    - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for
+    generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50(3), 289-294.
     - https://github.com/diarmaidocualain/ecg_simulation
 
     """
@@ -117,8 +117,7 @@ def ecg_simulate(
 # Daubechies
 # =============================================================================
 def _ecg_simulate_daubechies(duration=10, length=None, sampling_rate=1000, heart_rate=70):
-    """
-    Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.
+    """Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.
 
     It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
     This function is based on `this script <https://github.com/diarmaidocualain/ecg_simulation>`_.
@@ -162,8 +161,7 @@ def _ecg_simulate_ecgsyn(
     ai=(1.2, -5, 30, -7.5, 0.75),
     bi=(0.25, 0.1, 0.1, 0.1, 0.4),
 ):
-    """
-    This function is a python translation of the matlab script by `McSharry & Clifford (2013)
+    """This function is a python translation of the matlab script by `McSharry & Clifford (2013)
 
     <https://physionet.org/content/ecgsyn>`_.
 
@@ -181,6 +179,11 @@ def _ecg_simulate_ecgsyn(
     % ti = angles of extrema (in degrees)
     % ai = z-position of extrema
     % bi = Gaussian width of peaks
+
+    Returns
+    -------
+    array
+        Vector containing simulated ecg signal.
 
 #    Examples
 #    --------
@@ -217,11 +220,8 @@ def _ecg_simulate_ecgsyn(
     qd = sfint / sfecg
     if q != qd:
         raise ValueError(
-            "Internal sampling frequency (sfint) must be an integer multiple of the ECG sampling frequency (sfecg). Your current choices are: sfecg = "
-            + str(sfecg)
-            + " and sfint = "
-            + str(sfint)
-            + "."
+            "Internal sampling frequency (sfint) must be an integer multiple of the ECG sampling frequency"
+            " (sfecg). Your current choices are: sfecg = " + str(sfecg) + " and sfint = " + str(sfint) + "."
         )
 
     # Define frequency parameters for rr process

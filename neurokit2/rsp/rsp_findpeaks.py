@@ -4,36 +4,31 @@ import pandas as pd
 
 
 def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
-    """
-    Extract extrema in a respiration (RSP) signal.
+    """Extract extrema in a respiration (RSP) signal.
 
-    Low-level function used by `rsp_peaks()` to identify inhalation peaks and exhalation troughs in a preprocessed
-    respiration signal using different sets of parameters. See `rsp_peaks()` for details.
+    Low-level function used by `rsp_peaks()` to identify inhalation peaks and exhalation troughs in
+    a preprocessed respiration signal using different sets of parameters. See `rsp_peaks()` for details.
 
     Parameters
     ----------
     rsp_cleaned : list, array or Series
         The cleaned respiration channel as returned by `rsp_clean()`.
     sampling_rate : int
-        The sampling frequency of 'rsp_cleaned' (in Hz,
-        i.e., samples/second).
+        The sampling frequency of 'rsp_cleaned' (in Hz, i.e., samples/second).
     method : str
-        The processing pipeline to apply. Can be one of "khodadad2018"
-        (default) or "biosppy".
+        The processing pipeline to apply. Can be one of "khodadad2018" (default) or "biosppy".
     amplitude_min : float
-        Only applies if method is "khodadad2018". Extrema that have a vertical
-        distance smaller than (outlier_threshold * average vertical distance)
-        to any direct neighbour are removed as false positive outliers. I.e.,
-        outlier_threshold should be a float with positive sign (the default is
-        0.3). Larger values of outlier_threshold correspond to more
-        conservative thresholds (i.e., more extrema removed as outliers).
+        Only applies if method is "khodadad2018". Extrema that have a vertical distance smaller than
+        (outlier_threshold * average vertical distance) to any direct neighbour are removed as false
+        positive outliers. I.e., outlier_threshold should be a float with positive sign (the default is
+        0.3). Larger values of outlier_threshold correspond to more conservative thresholds (i.e.,
+        more extrema removed as outliers).
 
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the
-        samples at which inhalation peaks and exhalation troughs occur,
-        accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
+        A dictionary containing additional information, in this case the samples at which inhalation
+        peaks and exhalation troughs occur, accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
 
     See Also
     --------
@@ -68,7 +63,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
     if method in ["khodadad", "khodadad2018"]:
         info = _rsp_findpeaks_khodadad(cleaned, amplitude_min)
     elif method == "biosppy":
-        info = _rsp_findpeaks_biosppy(cleaned)
+        info = _rsp_findpeaks_biosppy(cleaned, sampling_rate=sampling_rate)
     else:
         raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be one of 'khodadad2018' or 'biosppy'.")
 

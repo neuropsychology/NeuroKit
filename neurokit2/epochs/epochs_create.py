@@ -16,8 +16,7 @@ def epochs_create(
     event_conditions=None,
     baseline_correction=False,
 ):
-    """
-    Epoching a dataframe.
+    """Epoching a dataframe.
 
     Parameters
     ----------
@@ -25,22 +24,25 @@ def epochs_create(
         A DataFrame containing the different signal(s) as different columns.
         If a vector of values is passed, it will be transformed in a DataFrame
         with a single 'Signal' column.
-    events : list, ndarray or dict
+    events : list or ndarray or dict
         Events onset location. If a dict is passed (e.g., from ``events_find()``),
         will select only the 'onset' list. If an integer is passed,
         will use this number to create an evenly spaced list of events. If None,
         will chunk the signal into successive blocks of the set duration.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
-    epochs_start, epochs_end : int
-        Epochs start and end relative to events_onsets (in seconds). The start can be negative to
+    epochs_start : int
+        Epochs start relative to events_onsets (in seconds). The start can be negative to
         start epochs before a given event (to have a baseline for instance).
+    epochs_end : int
+        Epochs end relative to events_onsets (in seconds).
     event_labels : list
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
         An optional list containing, for each event, for example the trial category, group or
         experimental conditions.
     baseline_correction : bool
+        Defaults to False.
 
 
     Returns
@@ -86,7 +88,7 @@ def epochs_create(
     if isinstance(data, tuple):  # If a tuple of data and info is passed
         data = data[0]
 
-    if isinstance(data, list) or isinstance(data, np.ndarray) or isinstance(data, pd.Series):
+    if isinstance(data, (list, np.ndarray, pd.Series)):
         data = pd.DataFrame({"Signal": list(data)})
 
     # Sanitize events input

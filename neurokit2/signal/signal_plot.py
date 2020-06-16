@@ -8,21 +8,22 @@ from ..stats import standardize as nk_standardize
 
 
 def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, **kwargs):
-    """
-    Plot signal with events as vertical lines.
+    """Plot signal with events as vertical lines.
 
     Parameters
     ----------
     signal : array or DataFrame
         Signal array (can be a dataframe with many signals).
     sampling_rate : int
-        The sampling frequency of the signal (in Hz, i.e., samples/second). Needs
-        to be supplied if the data should be plotted over time in seconds.
-        Otherwise the data is plotted over samples. Defaults to None.
-    subsubplots : bool
+        The sampling frequency of the signal (in Hz, i.e., samples/second). Needs to be supplied if
+        the data should be plotted over time in seconds. Otherwise the data is plotted over samples.
+        Defaults to None.
+    subplots : bool
         If True, each signal is plotted in a subplot.
     standardize : bool
         If True, all signals will have the same scale (useful for visualisation).
+    **kwargs : optional
+        Arguments passed to matplotlib plotting.
 
     Examples
     ----------
@@ -33,7 +34,9 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
     >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
     >>>
-    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)), "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)), "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+    >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
+    ...                      "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
+    ...                      "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
     >>> nk.signal_plot(data, subplots=True)
     >>> nk.signal_plot([signal, data], standardize=True)
 
@@ -52,7 +55,7 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
         if isinstance(signal, list) or len(np.array(signal).shape) > 1:
             out = pd.DataFrame()
             for i, content in enumerate(signal):
-                if isinstance(content, pd.DataFrame) or isinstance(content, pd.Series):
+                if isinstance(content, (pd.DataFrame, pd.Series)):
                     out = pd.concat([out, content], axis=1, sort=True)
                 else:
                     out = pd.concat([out, pd.DataFrame({"Signal" + str(i + 1): content})], axis=1, sort=True)
@@ -61,6 +64,9 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
         # If vector is passed
         else:
             signal = pd.DataFrame({"Signal": signal})
+
+    # Copy signal
+    signal = signal.copy()
 
     # Guess continuous and events columns
     continuous_columns = list(signal.columns.values)
@@ -75,15 +81,11 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
 
     # Adjust for sampling rate
     if sampling_rate is not None:
-        x_axis = np.linspace(0, signal.shape[0] / sampling_rate, signal.shape[0])
-        x_axis = pd.DataFrame(x_axis, columns=["Time (s)"])
-        signal = pd.concat([signal, x_axis], axis=1)
-        signal = signal.set_index("Time (s)")
-    elif sampling_rate is None:
-        x_axis = np.arange(0, signal.shape[0])
-        x_axis = pd.DataFrame(x_axis, columns=["Samples"])
-        signal = pd.concat([signal, x_axis], axis=1)
-        signal = signal.set_index("Samples")
+        signal.index = signal.index / sampling_rate
+    #        x_axis = np.linspace(0, signal.shape[0] / sampling_rate, signal.shape[0])
+    #        x_axis = pd.DataFrame(x_axis, columns=["Time (s)"])
+    #        signal = pd.concat([signal, x_axis], axis=1)
+    #        signal = signal.set_index("Time (s)")
 
     # Plot accordingly
     if len(events_columns) > 0:
@@ -92,15 +94,22 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
             vector = signal[col]
             events.append(np.where(vector == np.max(vector.unique()))[0])
         plot = events_plot(events, signal=signal[continuous_columns])
-        if sampling_rate is not None:
-            plot.gca().set_xlabel("Time (seconds)")
-        elif sampling_rate is None:
+
+        if sampling_rate is None:
             plot.gca().set_xlabel("Samples")
+        else:
+            plot.gca().set_xlabel("Time (seconds)")
+
     else:
         if standardize is True:
             plot = nk_standardize(signal[continuous_columns]).plot(subplots=subplots, sharex=True, **kwargs)
         else:
             plot = signal[continuous_columns].plot(subplots=subplots, sharex=True, **kwargs)
 
+        if sampling_rate is None:
+            plt.xlabel("Samples")
+        else:
+            plt.xlabel("Time (seconds)")
+
     # Tidy legend locations
-    [plot.legend(loc=1) for plot in plt.gcf().axes]
+    [plot.legend(loc=1) for plot in plt.gcf().axes]  # pylint: disable=W0106

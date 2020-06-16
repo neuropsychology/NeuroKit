@@ -4,8 +4,7 @@ import pandas as pd
 
 
 def eda_intervalrelated(data):
-    """
-    Performs EDA analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
+    """Performs EDA analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
     ----------
@@ -90,8 +89,7 @@ def eda_intervalrelated(data):
 
 
 def _eda_intervalrelated_formatinput(interval, output={}):
-    """
-    Format input for dictionary.
+    """Format input for dictionary.
     """
     # Sanitize input
     colnames = interval.columns.values
@@ -102,7 +100,7 @@ def _eda_intervalrelated_formatinput(interval, output={}):
             "Please make sure your DataFrame"
             "contains an `SCR_Peaks` column."
         )
-        return output
+        return output  # pylint: disable=W0101
     if len([i for i in colnames if "SCR_Amplitude" in i]) == 0:
         raise ValueError(
             "NeuroKit error: eda_intervalrelated(): Wrong"
@@ -110,7 +108,7 @@ def _eda_intervalrelated_formatinput(interval, output={}):
             "Please make sure your DataFrame"
             "contains an `SCR_Amplitude` column."
         )
-        return output
+        return output  # pylint: disable=W0101
 
     peaks = interval["SCR_Peaks"].values
     amplitude = interval["SCR_Amplitude"].values

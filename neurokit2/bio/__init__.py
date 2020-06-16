@@ -1,6 +1,4 @@
-"""
-Submodule for NeuroKit.
-"""
+"""Submodule for NeuroKit."""
 
 from .bio_analyze import bio_analyze
 from .bio_process import bio_process
