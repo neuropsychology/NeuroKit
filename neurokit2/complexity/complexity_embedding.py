@@ -82,7 +82,8 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     # Sanity checks
     if dimension * delay > N:
         raise ValueError(
-            "NeuroKit error: complexity_embedding(): dimension * delay should be lower" "than length of signal."
+            "NeuroKit error: complexity_embedding(): dimension * delay should be lower than",
+            " the length of the signal."
         )
     if delay < 1:
         raise ValueError("NeuroKit error: complexity_embedding(): 'delay' has to be at least 1.")

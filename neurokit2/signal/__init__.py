@@ -23,6 +23,7 @@ from .signal_simulate import signal_simulate
 from .signal_smooth import signal_smooth
 from .signal_synchrony import signal_synchrony
 from .signal_zerocrossings import signal_zerocrossings
+from .signal_recompose import signal_recompose
 
 
 __all__ = [
@@ -49,4 +50,5 @@ __all__ = [
     "signal_autocor",
     "signal_changepoints",
     "signal_decompose",
+    "signal_recompose"
 ]
