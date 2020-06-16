@@ -4,7 +4,7 @@ from ..misc import as_vector
 from ..signal import signal_findpeaks
 
 
-def eog_peaks(eog_cleaned, method="mne"):
+def eog_findpeaks(eog_cleaned, method="mne"):
     """Locate EOG events (blinks, saccades, eye-movements, ...).
 
     Locate EOG events (blinks, saccades, eye-movements, ...).
@@ -32,15 +32,15 @@ def eog_peaks(eog_cleaned, method="mne"):
     >>> import neurokit2 as nk
     >>>
     >>> # Get data
-    >>> eog_signal = nk.data('eog_100hz')["vEOG"]
+    >>> eog_signal = nk.data('eog_100hz')
     >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
     >>>
     >>> # MNE-method
-    >>> mne = nk.eog_peaks(eog_cleaned, method="mne")
+    >>> mne = nk.eog_findpeaks(eog_cleaned, method="mne")
     >>> nk.events_plot(mne, eog_cleaned)
     >>>
     >>> # brainstorm method
-    >>> brainstorm = nk.eog_peaks(eog_cleaned, method="brainstorm")
+    >>> brainstorm = nk.eog_findpeaks(eog_cleaned, method="brainstorm")
     >>> nk.events_plot(brainstorm, eog_cleaned)
 
     References
@@ -56,9 +56,9 @@ def eog_peaks(eog_cleaned, method="mne"):
     # Apply method
     method = method.lower()
     if method in ["mne"]:
-        peaks = _eog_peaks_mne(eog_cleaned)
+        peaks = _eog_findpeaks_mne(eog_cleaned)
     elif method in ["brainstorm"]:
-        peaks = _eog_peaks_brainstorm(eog_cleaned)
+        peaks = _eog_findpeaks_brainstorm(eog_cleaned)
     else:
         raise ValueError("NeuroKit error: eog_peaks(): 'method' should be " "one of 'mne', 'brainstorm'.")
 
@@ -68,7 +68,7 @@ def eog_peaks(eog_cleaned, method="mne"):
 # =============================================================================
 # Methods
 # =============================================================================
-def _eog_peaks_mne(eog_cleaned):
+def _eog_findpeaks_mne(eog_cleaned):
     """EOG blink detection based on MNE.
 
     https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
@@ -89,7 +89,7 @@ def _eog_peaks_mne(eog_cleaned):
     return eog_events
 
 
-def _eog_peaks_brainstorm(eog_cleaned):
+def _eog_findpeaks_brainstorm(eog_cleaned):
     """EOG blink detection implemented in brainstorm.
 
     https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
