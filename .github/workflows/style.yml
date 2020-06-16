@@ -26,14 +26,17 @@ jobs:
         isort neurokit2 --recursive -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --diff
 
     - name: Fix code style with black (line lengths)
-      with:
-        github_token: ${{ secrets.github_token }}
-        auto_fix: ${{ github.event_name == 'pull_request' }}
-        black: true
       run: |
         pip install black
         # The GitHub editor is 127 chars wide. See https://black.readthedocs.io/en/stable/installation_and_usage.html
         black neurokit2 --line-length 120 .
+
+    - name: Run linters
+      uses: samuelmeuli/lint-action@v1
+        with:
+            github_token: ${{ secrets.github_token }}
+            auto_fix: ${{ github.event_name == 'pull_request' }}
+            black: true
 
     - name: Fix code style with docformatter (docstrings)
       run: |
