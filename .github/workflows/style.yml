@@ -54,7 +54,6 @@ jobs:
       with:
         message: "Commit style fixes"
         add: "*.py"
-        cwd: "./neurokit2/"
         cwd: "./tests/"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
