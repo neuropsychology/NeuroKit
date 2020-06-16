@@ -60,7 +60,8 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
         import mne
     except ImportError:
         raise ImportError(
-            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. Please install it first (`pip install mne`).",
+            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run.
+            "Please install it first (`pip install mne`).",
         )
 
     # Make sure signal is one array
@@ -76,9 +77,7 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     # Clean signal
     eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate)
 
-    eog_events = mne.preprocessing.find_eog_events(
-        raw, event_id=998, l_freq=lfreq, h_freq=hfreq, filter_length="10s", ch_name="EOG"
-    )
+    eog_events = mne.preprocessing.find_eog_events(raw, event_id=998, l_freq=lfreq, h_freq=hfreq, filter_length="10s", ch_name="EOG")
 
     #    raw.add_events(eog_events, 'EOG')
 
@@ -102,12 +101,7 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     signal_blinks = _signal_from_indices(eog_timepoints, desired_length=len(eog_cleaned))
 
     # Rate computation
-    rate = signal_period(
-        eog_timepoints,
-        sampling_rate=sampling_rate,
-        desired_length=len(signal_blinks),
-        interpolation_method="monotone_cubic",
-    )
+    rate = signal_period(eog_timepoints, sampling_rate=sampling_rate, desired_length=len(signal_blinks), interpolation_method="monotone_cubic")
 
     # Prepare output
     signals = pd.DataFrame(
