@@ -27,7 +27,7 @@ def complexity_optimize(
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay_max : int
         See :func:`~neurokit2.complexity_delay`.
@@ -285,7 +285,7 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay_max : int
         The maximum time delay (Tau) to test.
@@ -334,7 +334,7 @@ def _complexity_optimize_differential(signal, delay_max=100, dimension_max=20, s
 
             # calculate average of surrogates entropy
             for i in range(surrogate_iter):  # pylint: disable=W0612
-                surrogate, __, __ = _complexity_optimize_iaaft(signal)
+                surrogate, _, __ = _complexity_optimize_iaaft(signal)
                 surrogate_embedded = complexity_embedding(surrogate, delay=tau, dimension=dimension)
                 surrogate_entropy = _complexity_optimize_get_differential(surrogate_embedded, k=1)
                 surrogate_list.append(surrogate_entropy)
@@ -366,7 +366,7 @@ def _complexity_optimize_iaaft(signal, max_iter=1000, atol=1e-8, rtol=1e-10):
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     max_iter : int
         Maximum iterations to be performed while checking for convergence. Convergence can be achieved

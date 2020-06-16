@@ -13,7 +13,7 @@ def emg_process(emg_signal, sampling_rate=1000):
 
     Parameters
     ----------
-    emg_signal : list, array or Series
+    emg_signal : Union[list, np.array, pd.Series]
         The raw electromyography channel.
     sampling_rate : int
         The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).

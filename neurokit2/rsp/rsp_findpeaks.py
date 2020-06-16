@@ -11,7 +11,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
 
     Parameters
     ----------
-    rsp_cleaned : list, array or Series
+    rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by `rsp_clean()`.
     sampling_rate : int
         The sampling frequency of 'rsp_cleaned' (in Hz, i.e., samples/second).

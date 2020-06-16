@@ -22,14 +22,14 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, keep=None, sampling_rate
         (e.g., ecg, rsp, Photosensor etc.). If provided,
         there is no need to fill in the other arguments
         denoting the channel inputs. Defaults to None.
-    ecg : list or array or Series
+    ecg : Union[list, np.array, pd.Series]
         The raw ECG channel.
-    rsp : list or array or Series
+    rsp : Union[list, np.array, pd.Series]
         The raw RSP channel (as measured, for instance, by a
         respiration belt).
-    eda : list or array or Series
+    eda : Union[list, np.array, pd.Series]
         The raw EDA channel.
-    emg : list or array or Series
+    emg : Union[list, np.array, pd.Series]
         The raw EMG channel.
     keep : DataFrame
         Dataframe or channels to add by concatenation

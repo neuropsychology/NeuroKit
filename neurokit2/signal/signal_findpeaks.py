@@ -24,7 +24,7 @@ def signal_findpeaks(
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     height_min : float
         The minimum height (i.e., amplitude in terms of absolute values). For example,``height_min=20``
@@ -198,8 +198,8 @@ def _signal_findpeaks_scipy(signal):
 
     # Get info
     distances = _signal_findpeaks_distances(peaks)
-    heights, __, __ = scipy.signal.peak_prominences(signal, peaks)
-    widths, __, __, __ = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
+    heights, _, __ = scipy.signal.peak_prominences(signal, peaks)
+    widths, _, __, ___ = scipy.signal.peak_widths(signal, peaks, rel_height=0.5)
 
     # Prepare output
     info = {"Peaks": peaks, "Distance": distances, "Height": heights, "Width": widths}

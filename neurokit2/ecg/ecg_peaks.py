@@ -11,7 +11,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
 
     Parameters
     ----------
-    ecg_cleaned : list, array or Series
+    ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG channel as returned by `ecg_clean()`.
     sampling_rate : int
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).

@@ -13,7 +13,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
 
     Parameters
     -----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         Vector of values.
     method : str
         The decomposition method. Can be one of 'emd' or 'ssa'.
@@ -60,7 +60,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
     if method in ["emd"]:
         components = _signal_decompose_emd(signal, **kwargs)
     elif method in ["ssa"]:
-        components = _signal_decompose_ssa(signal, n_components=n_components, **kwargs)
+        components = _signal_decompose_ssa(signal, n_components=n_components)
     else:
         raise ValueError("NeuroKit error: signal_decompose(): 'method' should be one of 'emd'")
     return components
@@ -69,7 +69,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
 # =============================================================================
 # Singular spectrum analysis (SSA)
 # =============================================================================
-def _signal_decompose_ssa(signal, n_components=None, **kwargs):
+def _signal_decompose_ssa(signal, n_components=None):
     """Singular spectrum analysis (SSA)-based signal separation method.
 
     SSA decomposes a time series into a set of summable components that are grouped together and

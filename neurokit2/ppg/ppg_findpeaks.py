@@ -12,7 +12,7 @@ def ppg_findpeaks(ppg_cleaned, sampling_rate=1000, method="elgendi", show=False)
 
     Parameters
     ----------
-    ppg_cleaned : list or array or Series
+    ppg_cleaned : Union[list, np.array, pd.Series]
         The cleaned PPG channel as returned by `ppg_clean()`.
     sampling_rate : int
         The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.

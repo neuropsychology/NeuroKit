@@ -12,9 +12,9 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
 
     Parameters
     ----------
-    x : list or array or Series
+    x : Union[list, np.array, pd.Series]
         A vector of values.
-    y : list or array or Series
+    y : Union[list, np.array, pd.Series]
         A vector of values.
     method : str
         Method to use. Can either be 'varoquaux' or 'nolitsa'.

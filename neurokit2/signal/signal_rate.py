@@ -10,7 +10,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_me
 
     Parameters
     ----------
-    peaks : list, array, DataFrame, Series or dict
+    peaks : Union[list, np.array, pd.DataFrame, pd.Series, dict]
         The samples at which the peaks occur. If an array is passed in, it is assumed that it was obtained
         with `signal_findpeaks()`. If a DataFrame is passed in, it is assumed it is of the same length
         as the input signal in which occurrences of R-peaks are marked as "1", with such containers

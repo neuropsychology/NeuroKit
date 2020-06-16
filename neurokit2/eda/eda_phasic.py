@@ -13,7 +13,7 @@ def eda_phasic(eda_signal, sampling_rate=1000, method="highpass"):
 
     Parameters
     ----------
-    eda_signal : list or array or Series
+    eda_signal : Union[list, np.array, pd.Series]
         The raw EDA signal.
     sampling_rate : int
         The sampling frequency of raw EDA signal (in Hz, i.e., samples/second). Defaults to 1000Hz.

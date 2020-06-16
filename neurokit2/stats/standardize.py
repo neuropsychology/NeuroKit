@@ -14,7 +14,7 @@ def standardize(data, robust=False, window=None, **kwargs):
 
     Parameters
     ----------
-    data : list, array or Series
+    data : Union[list, np.array, pd.Series]
         Raw data.
     robust : bool
         If True, centering is done by substracting the median from the variables and dividing it by
@@ -29,7 +29,7 @@ def standardize(data, robust=False, window=None, **kwargs):
 
     Returns
     ----------
-    list, array or Series
+    list
         The standardized values.
 
 

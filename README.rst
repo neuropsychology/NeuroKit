@@ -65,7 +65,7 @@ Contributing
         :target: https://github.com/neuropsychology/NeuroKit/blob/master/LICENSE
         :alt: License
         
-.. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg
+.. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg?branch=master
         :target: https://github.com/neuropsychology/NeuroKit/actions
         :alt: GitHub CI
         

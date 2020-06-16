@@ -13,7 +13,7 @@ def ecg_eventrelated(epochs, silent=False):
 
     Parameters
     ----------
-    epochs : dict, DataFrame
+    epochs : Union[dict, pd.DataFrame]
         A dict containing one DataFrame per event/trial,
         usually obtained via `epochs_create()`, or a DataFrame
         containing all epochs, usually obtained via `epochs_to_df()`.

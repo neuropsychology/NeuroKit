@@ -8,7 +8,7 @@ def emg_intervalrelated(data):
 
     Parameters
     ----------
-    data : DataFrame, dict
+    data : Union[dict, pd.DataFrame]
         A DataFrame containing the different processed signal(s) as different columns, typically generated
         by `emg_process()` or `bio_process()`. Can also take a dict containing sets of separately
         processed DataFrames.
