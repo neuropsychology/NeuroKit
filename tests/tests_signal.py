@@ -9,6 +9,7 @@ import neurokit2 as nk
 # Signal
 # =============================================================================
 
+
 def test_signal_smooth():
 
     # TODO: test kernels other than "boxcar"
@@ -34,47 +35,37 @@ def test_signal_resample():
 
     signal = np.cos(np.linspace(start=0, stop=20, num=50))
 
-    downsampled_interpolation = nk.signal_resample(signal,
-                                                   method="interpolation",
-                                                   sampling_rate=1000,
-                                                   desired_sampling_rate=500)
-    downsampled_numpy = nk.signal_resample(signal, method="numpy",
-                                           sampling_rate=1000,
-                                           desired_sampling_rate=500)
-    downsampled_pandas = nk.signal_resample(signal, method="pandas",
-                                            sampling_rate=1000,
-                                            desired_sampling_rate=500)
-    downsampled_fft = nk.signal_resample(signal, method="FFT",
-                                         sampling_rate=1000,
-                                         desired_sampling_rate=500)
-    downsampled_poly = nk.signal_resample(signal, method="poly",
-                                          sampling_rate=1000,
-                                          desired_sampling_rate=500)
+    downsampled_interpolation = nk.signal_resample(
+        signal, method="interpolation", sampling_rate=1000, desired_sampling_rate=500
+    )
+    downsampled_numpy = nk.signal_resample(signal, method="numpy", sampling_rate=1000, desired_sampling_rate=500)
+    downsampled_pandas = nk.signal_resample(signal, method="pandas", sampling_rate=1000, desired_sampling_rate=500)
+    downsampled_fft = nk.signal_resample(signal, method="FFT", sampling_rate=1000, desired_sampling_rate=500)
+    downsampled_poly = nk.signal_resample(signal, method="poly", sampling_rate=1000, desired_sampling_rate=500)
 
     # Upsample
-    upsampled_interpolation = nk.signal_resample(downsampled_interpolation,
-                                                 method="interpolation",
-                                                 sampling_rate=500,
-                                                 desired_sampling_rate=1000)
-    upsampled_numpy = nk.signal_resample(downsampled_numpy, method="numpy",
-                                         sampling_rate=500,
-                                         desired_sampling_rate=1000)
-    upsampled_pandas = nk.signal_resample(downsampled_pandas, method="pandas",
-                                          sampling_rate=500,
-                                          desired_sampling_rate=1000)
-    upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT",
-                                       sampling_rate=500,
-                                       desired_sampling_rate=1000)
-    upsampled_poly = nk.signal_resample(downsampled_poly, method="poly",
-                                        sampling_rate=500,
-                                        desired_sampling_rate=1000)
+    upsampled_interpolation = nk.signal_resample(
+        downsampled_interpolation, method="interpolation", sampling_rate=500, desired_sampling_rate=1000
+    )
+    upsampled_numpy = nk.signal_resample(
+        downsampled_numpy, method="numpy", sampling_rate=500, desired_sampling_rate=1000
+    )
+    upsampled_pandas = nk.signal_resample(
+        downsampled_pandas, method="pandas", sampling_rate=500, desired_sampling_rate=1000
+    )
+    upsampled_fft = nk.signal_resample(downsampled_fft, method="FFT", sampling_rate=500, desired_sampling_rate=1000)
+    upsampled_poly = nk.signal_resample(downsampled_poly, method="poly", sampling_rate=500, desired_sampling_rate=1000)
 
     # Check
-    rez = pd.DataFrame({"Interpolation": upsampled_interpolation - signal,
-                        "Numpy": upsampled_numpy - signal,
-                        "Pandas": upsampled_pandas - signal,
-                        "FFT": upsampled_fft - signal,
-                        "Poly": upsampled_poly - signal})
+    rez = pd.DataFrame(
+        {
+            "Interpolation": upsampled_interpolation - signal,
+            "Numpy": upsampled_numpy - signal,
+            "Pandas": upsampled_pandas - signal,
+            "FFT": upsampled_fft - signal,
+            "Poly": upsampled_poly - signal,
+        }
+    )
     assert np.allclose(np.mean(rez.mean()), 0.0001, atol=0.0001)
 
 
@@ -99,8 +90,8 @@ def test_signal_detrend():
 
 def test_signal_filter():
 
-    signal = np.cos(np.linspace(start=0, stop=10, num=1000)) # Low freq
-    signal += np.cos(np.linspace(start=0, stop=100, num=1000)) # High freq
+    signal = np.cos(np.linspace(start=0, stop=10, num=1000))  # Low freq
+    signal += np.cos(np.linspace(start=0, stop=100, num=1000))  # High freq
     filtered = nk.signal_filter(signal, highcut=10)
     assert np.std(signal) > np.std(filtered)
 
@@ -112,9 +103,7 @@ def test_signal_filter():
     powerline = np.sin(2 * np.pi * 50 * (samples / sampling_rate))
 
     signal_corrupted = signal + powerline
-    signal_clean = nk.signal_filter(signal_corrupted,
-                                    sampling_rate=sampling_rate,
-                                    method="powerline")
+    signal_clean = nk.signal_filter(signal_corrupted, sampling_rate=sampling_rate, method="powerline")
 
     # import matplotlib.pyplot as plt
     # figure, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
@@ -123,6 +112,7 @@ def test_signal_filter():
     # ax2.plot(signal_clean * 100)
 
     assert np.allclose(sum(signal_clean - signal), -2, atol=0.2)
+
 
 def test_signal_interpolate():
 
@@ -140,8 +130,7 @@ def test_signal_findpeaks():
     signal1 = np.cos(np.linspace(start=0, stop=30, num=1000))
     info1 = nk.signal_findpeaks(signal1)
 
-    signal2 = np.concatenate([np.arange(0, 20, 0.1), np.arange(17, 30, 0.1),
-                              np.arange(30, 10, -0.1)])
+    signal2 = np.concatenate([np.arange(0, 20, 0.1), np.arange(17, 30, 0.1), np.arange(30, 10, -0.1)])
     info2 = nk.signal_findpeaks(signal2)
     assert len(info1["Peaks"]) > len(info2["Peaks"])
 
@@ -156,33 +145,33 @@ def test_signal_merge():
     assert signal[0] == signal2[0] + signal2[0]
 
 
-def test_signal_rate():    # since singal_rate wraps signal_period, the latter is tested as well
+def test_signal_rate():  # since singal_rate wraps signal_period, the latter is tested as well
 
     # Test with array.
     duration = 10
     sampling_rate = 1000
-    signal = nk.signal_simulate(duration=duration, sampling_rate=sampling_rate,
-                                frequency=1)
+    signal = nk.signal_simulate(duration=duration, sampling_rate=sampling_rate, frequency=1)
     info = nk.signal_findpeaks(signal)
     rate = nk.signal_rate(peaks=info["Peaks"], sampling_rate=1000, desired_length=len(signal))
     assert rate.shape[0] == duration * sampling_rate
 
     # Test with dictionary.produced from signal_findpeaks.
-    assert info[list(info.keys())[0]].shape == (info["Peaks"].shape[0], )
+    assert info[list(info.keys())[0]].shape == (info["Peaks"].shape[0],)
 
     # Test with DataFrame.
     duration = 120
     sampling_rate = 1000
-    rsp = nk.rsp_simulate(duration=duration, sampling_rate=sampling_rate,
-                          respiratory_rate=15, method="sinuosoidal", noise=0)
+    rsp = nk.rsp_simulate(
+        duration=duration, sampling_rate=sampling_rate, respiratory_rate=15, method="sinuosoidal", noise=0
+    )
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=sampling_rate)
     signals, info = nk.rsp_peaks(rsp_cleaned)
     rate = nk.signal_rate(signals, sampling_rate=sampling_rate, desired_length=duration * sampling_rate)
-    assert rate.shape == (signals.shape[0], )
+    assert rate.shape == (signals.shape[0],)
 
     # Test with dictionary.produced from rsp_findpeaks.
     rate = nk.signal_rate(info, sampling_rate=sampling_rate, desired_length=duration * sampling_rate)
-    assert rate.shape == (duration * sampling_rate, )
+    assert rate.shape == (duration * sampling_rate,)
 
 
 def test_signal_plot():
@@ -193,24 +182,26 @@ def test_signal_plot():
     fig = plt.gcf()
     for ax in fig.get_axes():
         handles, labels = ax.get_legend_handles_labels()
-    assert labels == ['Signal']
+    assert labels == ["Signal"]
     assert len(labels) == len(handles) == len([signal])
-    assert ax.get_xlabel() == 'Time (seconds)'
+    assert ax.get_xlabel() == "Time (seconds)"
     plt.close(fig)
 
     # Test with dataframe
-    data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0,
-                                                       stop=20, num=1000)),
-                         "Signal3": np.sin(np.linspace(start=0,
-                                                       stop=20, num=1000)),
-                         "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
+    data = pd.DataFrame(
+        {
+            "Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
+            "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
+            "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000))),
+        }
+    )
     nk.signal_plot(data, sampling_rate=None)
     fig = plt.gcf()
     for ax in fig.get_axes():
         handles, labels = ax.get_legend_handles_labels()
     assert labels == list(data.columns.values)
     assert len(labels) == len(handles) == len(data.columns)
-    assert ax.get_xlabel() == 'Samples'
+    assert ax.get_xlabel() == "Samples"
     plt.close(fig)
 
     # Test with list
@@ -220,9 +211,9 @@ def test_signal_plot():
     fig = plt.gcf()
     for ax in fig.get_axes():
         handles, labels = ax.get_legend_handles_labels()
-    assert labels == ['Signal1', 'Signal2']
+    assert labels == ["Signal1", "Signal2"]
     assert len(labels) == len(handles) == len([signal, phase])
-    assert ax.get_xlabel() == 'Samples'
+    assert ax.get_xlabel() == "Samples"
     plt.close(fig)
 
 
