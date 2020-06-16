@@ -17,9 +17,12 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
     eog_cleaned : Union[list, np.array, pd.Series]
         The cleaned EOG channel. Note that it must be positively oriented, i.e., blinks must
         appear as upward peaks.
+    sampling_rate : int
+        The signal sampling rate (in Hz, i.e., samples/second). Needed for method 'blinker' or
+        'jammes2008'.
     method : str
         The peak detection algorithm. Can be one of 'mne' (default) (requires the MNE package
-        to be installed), or 'brainstorm', or 'blinker'.
+        to be installed), or 'brainstorm', 'blinker' or 'jammes2008'.
     sampling_rate : int
         The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied if the
         method to be used is 'blinker', otherwise defaults to None.
@@ -51,10 +54,15 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
     >>> fig2 = nk.events_plot(brainstorm, eog_cleaned)  # doctest: +ELLIPSIS
     >>> fig2
     >>>
-    >>> # kleifges method
-    >>> _, blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
+    >>> # blinker method
+    >>> blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
     >>> fig3 = nk.events_plot(blinker, eog_cleaned)  # doctest: +ELLIPSIS
     >>> fig3
+    >>>
+    >>> # Jammes (2008) method
+    >>> jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="jammes2008")
+    >>> fig4 = nk.events_plot(jammes2008, eog_cleaned)  # doctest: +ELLIPSIS
+    >>> fig4
 
 
     References
@@ -77,6 +85,8 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
         peaks = _eog_findpeaks_brainstorm(eog_cleaned)
     elif method in ["blinker"]:
         peaks = _eog_findpeaks_blinker(eog_cleaned, sampling_rate=sampling_rate)
+    elif method in ["jammes2008", "jammes"]:
+        peaks = _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=sampling_rate)
     else:
         raise ValueError("NeuroKit error: eog_peaks(): 'method' should be " "one of 'mne', 'brainstorm' or 'blinker'.")
 
@@ -86,6 +96,46 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
 # =============================================================================
 # Methods
 # =============================================================================
+#def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=100):
+#    """In-house EOG blink detection.
+#
+#    """
+##    nk.signal_plot(template, sampling_rate=100)
+#    convolved = scipy.signal.convolve(eog_cleaned, template, method="direct")
+#    convolved = nk.rescale(convolved, [np.min(eog_cleaned), np.max(eog_cleaned)])
+#    nk.signal_plot([eog_cleaned, convolved])
+
+#def _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=1000):
+#    """Derivative-based method by Jammes (2008)
+#
+#    https://link.springer.com/article/10.1007/s11818-008-0351-y
+#
+#    """
+#    # Derivative
+#    derivative = np.gradient(eog_cleaned)
+#
+#    # These parameters were set by the authors "empirically". These are values based on
+#    # their figure 1.
+#    vcl = 0.5 * np.max(derivative)
+#    vol = 0.75 * np.min(derivative)
+#
+#    crosses_vcl = signal_zerocrossings(derivative - vcl, direction="up")
+#    crosses_vol = signal_zerocrossings(derivative - vol, direction="down")
+#    crosses_vol = nk.find_closest(crosses_vcl, crosses_vol, direction="above")
+#
+#    nk.events_plot([crosses_vcl, crosses_vol], eog_cleaned)
+#    nk.signal_plot([eog_cleaned, derivative, derivative - vol])
+#    durations = (crosses_vol - crosses_vcl) / sampling_rate
+#    indices = durations < 0.5
+#
+#    peaks = np.full(np.sum(indices), np.nan)
+#    for i in range(np.sum(indices)):
+#        segment = eog_cleaned[crosses_vcl[indices][i]:crosses_vol[indices][i]]
+#        peaks[i] = crosses_vcl[indices][i] + np.argmax(segment)
+#
+#    return peaks
+
+
 def _eog_findpeaks_mne(eog_cleaned):
     """EOG blink detection based on MNE.
 
@@ -110,7 +160,7 @@ def _eog_findpeaks_mne(eog_cleaned):
 def _eog_findpeaks_brainstorm(eog_cleaned):
     """EOG blink detection implemented in brainstorm.
 
-    https://github.com/mne-tools/mne-python/blob/master/mne/preprocessing/eog.py
+    https://neuroimage.usc.edu/brainstorm/Tutorials/ArtifactsDetect#Detection:_Blinks
 
     """
     # Brainstorm: "An event of interest is detected if the absolute value of the filtered
@@ -121,7 +171,7 @@ def _eog_findpeaks_brainstorm(eog_cleaned):
     return peaks
 
 
-def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
+def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
     """EOG blink detection based on BLINKER algorithm.
 
     Detects only potential blink landmarks and does not separate blinks from other artifacts yet.
@@ -224,4 +274,4 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate):
     # Blink peak markers
     peaks = np.array(peaks)
 
-    return candidate_blinks, peaks
+    return peaks
