@@ -45,7 +45,7 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
     >>> import neurokit2 as nk
     >>>
     >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() +
-                                  '/MEG/sample/sample_audvis_raw.fif', preload=True)
+    ...                           '/MEG/sample/sample_audvis_raw.fif', preload=True)
     >>> eog_channels = nk.mne_channel_extract(raw, what='EOG', name='EOG')
 
     References
@@ -60,8 +60,7 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
         import mne
     except ImportError:
         raise ImportError(
-            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. ",
-            "Please install it first (`pip install mne`).",
+            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. Please install it first (`pip install mne`).",
         )
 
     # Make sure signal is one array
@@ -112,7 +111,6 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
 
     # Prepare output
     signals = pd.DataFrame(
-        {"EOG_Raw": eog_signal, "EOG_Clean": eog_cleaned, "EOG_Blinks": signal_blinks, "EOG_Rate": rate}
-    )
+        {"EOG_Raw": eog_signal, "EOG_Clean": eog_cleaned, "EOG_Blinks": signal_blinks, "EOG_Rate": rate})
 
     return signals, info
