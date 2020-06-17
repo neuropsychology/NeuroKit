@@ -390,6 +390,30 @@ Heart Rate Variability (HRV)
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hrv.png
 
 
+ECG Delineation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Delineate the QRS complex of an electrocardiac signal (ECG) including P-peaks, T-peaks, as well as their onsets and offsets.
+
+
+.. code-block:: python
+
+
+    # Download data
+    ecg_signal = nk.data(dataset="ecg_3000hz")['ECG']
+
+    # Extract R-peaks locations
+    _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=3000)
+
+    # Delineate
+    signal, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=3000, method="dwt", show=True, show_type='all')
+
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_delineation.png
+       :target: https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html
+
+
 
 Signal Processing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -423,6 +447,7 @@ Signal Processing
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_signalprocessing.png
+
 
 Complexity (Entropy, Fractal Dimensions, ...)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

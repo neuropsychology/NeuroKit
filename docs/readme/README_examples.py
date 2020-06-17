@@ -186,6 +186,25 @@ fig.savefig("README_hrv.png", dpi=300, h_pad=3)
 
 
 # =============================================================================
+# ECG Delineation
+# =============================================================================
+
+# Download data
+ecg_signal = nk.data(dataset="ecg_3000hz")['ECG']
+
+# Extract R-peaks locations
+_, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=3000)
+
+# Delineate
+signal, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=3000, method="dwt", show=True, show_type='all')
+
+# Save plot
+fig = plt.gcf()
+fig.set_size_inches(10*1.5, 6*1.5, forward=True)
+fig.savefig("README_delineate.png", dpi=300, h_pad=3)
+
+
+# =============================================================================
 # Complexity
 # =============================================================================
 
