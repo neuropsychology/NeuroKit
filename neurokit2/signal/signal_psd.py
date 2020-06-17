@@ -60,30 +60,13 @@ def signal_psd(
 
     # MNE
     if method.lower() in ["multitapers", "mne"]:
-        try:
-            import mne
-
-            power, frequency = mne.time_frequency.psd_array_multitaper(
-                signal,
-                sfreq=sampling_rate,
-                fmin=min_frequency,
-                fmax=max_frequency,
-                adaptive=True,
-                normalization="full",
-                verbose=False,
-            )
-        except ImportError:
-            raise ImportError(
-                "NeuroKit warning: signal_psd(): the 'mne'",
-                "module is required for the 'mne' method to run.",
-                "Please install it first (`pip install mne`).",
-            )
+        power, frequency = _signal_psd_multitaper(signal, sampling_rate=sampling_rate, show=show, min_frequency=min_frequency, max_frequency=max_frequency)
 
     # BURG
     elif method.lower() in ["burg", "pburg", "spectrum"]:
         raise ValueError("NeuroKit warning: signal_psd(): the 'BURG' method has not been yet implemented.")
 
-    # Welch (Scipy)
+
     else:
         # Define window length
         if min_frequency == 0:
@@ -100,18 +83,19 @@ def signal_psd(
                 "Neurokit warning: signal_psd(): The duration of recording is too short to support a "
                 "sufficiently long window for high frequency resolution. Consider using a longer recording "
                 "or increasing the `min_frequency`"
-            )
+                )
             nperseg = int(len(signal / 2))
 
-        frequency, power = scipy.signal.welch(
-            signal,
-            fs=sampling_rate,
-            scaling="density",
-            detrend=False,
-            nfft=int(nperseg * 2),
-            average="mean",
-            nperseg=nperseg,
-        )
+        # Welch (Scipy)
+        if method.lower() in ["welch"]:
+            frequency, power = _signal_psd_welch(
+    signal, sampling_rate=sampling_rate, nperseg=nperseg
+)
+        # Lomblombscargle (Scipy)
+        elif method.lower() in ["lombscargle", "lomb"]:
+            frequency, power = _signal_psd_lomb(
+    signal, sampling_rate=sampling_rate, nperseg=nperseg, min_frequency=min_frequency, max_frequency=max_frequency
+)
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency, "Power": power})
@@ -125,3 +109,71 @@ def signal_psd(
         return ax
     else:
         return data
+
+
+# =============================================================================
+# Multitaper method
+# =============================================================================
+def _signal_psd_multitaper(
+    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf
+):
+    try:
+        import mne
+
+        power, frequency = mne.time_frequency.psd_array_multitaper(signal,
+            sfreq=sampling_rate,
+            fmin=min_frequency,
+            fmax=max_frequency,
+            adaptive=True,
+            normalization="full",
+            verbose=False,
+        )
+    except ImportError:
+        raise ImportError(
+            "NeuroKit warning: signal_psd(): the 'mne'",
+            "module is required for the 'mne' method to run.",
+            "Please install it first (`pip install mne`).",
+        )
+    return power, frequency
+
+# =============================================================================
+# Welch method
+# =============================================================================
+def _signal_psd_welch(
+    signal, sampling_rate=1000, nperseg=None
+):
+
+    frequency, power = scipy.signal.welch(
+        signal,
+        fs=sampling_rate,
+        scaling="density",
+        detrend=False,
+        nfft=int(nperseg * 2),
+        average="mean",
+        nperseg=nperseg,
+    )
+    return frequency, power
+
+
+# =============================================================================
+# Lomb method
+# =============================================================================
+def _signal_psd_lomb(
+    signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf
+):
+
+    nfft=int(nperseg * 2)
+    if max_frequency == np.inf:
+        max_frequency = 10  #sanitize highest frequency
+
+    # Specify frequency range
+    frequency = np.linspace(min_frequency, max_frequency, nfft)
+    # Compute angular frequencies
+    angular_freqs = np.asarray(2 * np.pi / frequency)
+
+    # Specify sample times
+    t = np.arange(len(signal))
+
+    power = np.asarray(scipy.signal.lombscargle(t, signal, angular_freqs, normalize=True))
+
+    return frequency, power
