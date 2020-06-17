@@ -33,7 +33,7 @@ sys.path.insert(0, os.path.abspath('../'))
 
 # -- Mock modules ---------------------------------------------
 MOCK_MODULES = ['scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg',
-                'scipy.spatial', 'scipy.special', 'scipy.integrate', 'scipy.cluster',
+                'scipy.spatial', 'scipy.special', 'scipy.integrate', 'scipy.cluster', 'scipy.optimize',
                 'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets', 'sklearn.metrics', 'sklearn.metrics.pairwise', 'sklearn.decomposition',
                 'mne', 'bioread', 'cvxopt', 'pywt']
 
