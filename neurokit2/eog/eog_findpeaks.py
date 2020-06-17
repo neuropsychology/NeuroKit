@@ -182,12 +182,21 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
     threshold = 1.5 * np.std(eog_cleaned) + eog_cleaned.mean()
     min_blink = 0.05 * sampling_rate  # min blink frames
 
-    index = []
+    potential_blinks = []
     for i in range(len(eog_cleaned)):
         if eog_cleaned[i] > threshold:
-            index.append(i)
+            potential_blinks.append(i)
 
-    candidates = np.array(index)[np.where(np.diff(index) > min_blink)[0]]
+    # Make sure each blink is 50ms long and separated by 50ms
+    indexes = np.where(np.diff(potential_blinks) > min_blink)[0]
+    individual_blinks = np.split(np.diff(potential_blinks), indexes)
+
+    blinks = []
+    for idx, i in enumerate(individual_blinks):
+        if len(i) > min_blink:
+            blinks.append(idx)
+
+    candidates = np.array(potential_blinks)[np.append(0, indexes)[blinks]]
 
     # Calculate blink landmarks
     epochs = epochs_create(
