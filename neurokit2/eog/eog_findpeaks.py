@@ -100,7 +100,6 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
 #    """In-house EOG blink detection.
 #
 #    """
-##    nk.signal_plot(template, sampling_rate=100)
 #    convolved = scipy.signal.convolve(eog_cleaned, template, method="direct")
 #    convolved = nk.rescale(convolved, [np.min(eog_cleaned), np.max(eog_cleaned)])
 #    nk.signal_plot([eog_cleaned, convolved])
