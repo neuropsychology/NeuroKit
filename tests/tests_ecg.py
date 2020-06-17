@@ -216,48 +216,25 @@ def test_ecg_intervalrelated():
 
     data = nk.data("bio_resting_5min_100hz")
     df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
-    columns = [
-        "ECG_Rate_Mean",
-        "HRV_RMSSD",
-        "HRV_MeanNN",
-        "HRV_SDNN",
-        "HRV_SDSD",
-        "HRV_CVNN",
-        "HRV_CVSD",
-        "HRV_MedianNN",
-        "HRV_MadNN",
-        "HRV_MCVNN",
-        "HRV_pNN50",
-        "HRV_pNN20",
-        "HRV_TINN",
-        "HRV_HTI",
-        "HRV_ULF",
-        "HRV_VLF",
-        "HRV_LF",
-        "HRV_HF",
-        "HRV_VHF",
-        "HRV_LFHF",
-        "HRV_LFn",
-        "HRV_HFn",
-        "HRV_LnHF",
-        "HRV_SD1",
-        "HRV_SD2",
-        "HRV_SD2SD1",
-        "HRV_CSI",
-        "HRV_CVI",
-        "HRV_CSI_Modified",
-        "HRV_SampEn",
-    ]
+    columns = ['ECG_Rate_Mean', 'HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD',
+               'HRV_CVNN', 'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
+               'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI', 'HRV_ULF',
+               'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF', 'HRV_LFn',
+               'HRV_HFn', 'HRV_LnHF', 'HRV_SD1', 'HRV_SD2', 'HRV_SD1SD2',
+               'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified', 'HRV_SampEn']
 
     # Test with signal dataframe
     features_df = nk.ecg_intervalrelated(df)
 
-    assert all(elem in columns for elem in np.array(features_df.columns.values, dtype=str))
+    assert all(elem in columns for elem
+               in np.array(features_df.columns.values, dtype=str))
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
-    epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
+    epochs = nk.epochs_create(df, events=[0, 15000],
+                              sampling_rate=100, epochs_end=150)
     features_dict = nk.ecg_intervalrelated(epochs, sampling_rate=100)
 
-    assert all(elem in columns for elem in np.array(features_dict.columns.values, dtype=str))
+    assert all(elem in columns for elem
+               in np.array(features_dict.columns.values, dtype=str))
     assert features_dict.shape[0] == 2  # Number of rows
