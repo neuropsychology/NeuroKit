@@ -14,7 +14,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
 
     Parameters
     ----------
-    ecg_cleaned : list or array or Series
+    ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG channel as returned by `ecg_clean()`.
     rpeaks : list or array or DataFrame or Series or dict
         The samples at which the different ECG peaks occur. If a dict or a DataFrame is passed, it is

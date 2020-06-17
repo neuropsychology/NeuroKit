@@ -65,6 +65,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     References
     ----------
+    - Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear
+    Features of Heart Rate Variability?. IEEE Transactions on Biomedical Engineering, 48(11), 1342-1347.
     - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
     electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
@@ -85,7 +87,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     sd_heart_period = np.std(diff_rri, ddof=1) ** 2
     out["SD1"] = np.sqrt(sd_heart_period * 0.5)
     out["SD2"] = np.sqrt(2 * sd_rri - 0.5 * sd_heart_period)
-    out["SD2SD1"] = out["SD2"] / out["SD1"]
+    out["SD1SD2"] = out["SD1"] / out["SD2"]
 
     # CSI / CVI
     T = 4 * out["SD1"]

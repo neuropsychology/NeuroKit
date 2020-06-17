@@ -9,7 +9,7 @@ def signal_zerocrossings(signal):
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
 
     Returns

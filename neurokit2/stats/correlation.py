@@ -11,9 +11,9 @@ def cor(x, y, method="pearson", show=False):
 
     Parameters
     -----------
-    x : list, array or Series
+    x : Union[list, np.array, pd.Series]
         Vectors of values.
-    y : list, array or Series
+    y : Union[list, np.array, pd.Series]
         Vectors of values.
     method : str
         Correlation method. Can be one of 'pearson', 'spearman', 'kendall'.

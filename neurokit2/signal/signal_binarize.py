@@ -11,7 +11,7 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
         The algorithm used to discriminate between the two states. Can be one of 'mixture' (default) or

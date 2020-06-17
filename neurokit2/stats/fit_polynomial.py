@@ -12,9 +12,9 @@ def fit_polynomial(y, X=None, order=2):
 
     Parameters
     ----------
-    y : list, array or Series
+    y : Union[list, np.array, pd.Series]
         The response variable (the y axis).
-    X : list, array or Series
+    X : Union[list, np.array, pd.Series]
         Explanatory variable (the x axis). If 'None', will treat y as a continuous signal.
     order : int
         The order of the polynomial. 0, 1 or > 1 for a baseline, linear or polynomial fit, respectively.
@@ -67,9 +67,9 @@ def fit_polynomial_findorder(y, X=None, max_order=6):
 
     Parameters
     ----------
-    y : list, array or Series
+    y : Union[list, np.array, pd.Series]
         The response variable (the y axis).
-    X : list, array or Series
+    X : Union[list, np.array, pd.Series]
         Explanatory variable (the x axis). If 'None', will treat y as a continuous signal.
     max_order : int
         The maximum order to test.

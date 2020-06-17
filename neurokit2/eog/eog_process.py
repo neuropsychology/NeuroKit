@@ -14,7 +14,7 @@ def eog_process(eog_signal, raw, sampling_rate=1000, lfreq=1, hfreq=10):
 
     Parameters
     ----------
-    eog_signal : list or array or Series
+    eog_signal : Union[list, np.array, pd.Series]
         The raw EOG channel, derived from `eog_extract()`.
     raw : mne.io.Raw
         Raw EEG data.

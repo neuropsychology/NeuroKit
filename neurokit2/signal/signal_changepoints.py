@@ -11,7 +11,7 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
 
     Parameters
     -----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         Vector of values.
     change : str
         Can be one of "meanvar" (default), "mean" or "var".

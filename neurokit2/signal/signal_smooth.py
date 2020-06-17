@@ -14,11 +14,11 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
 
     Parameters
     ----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
         Can be one of 'convolution' (default) or 'loess'.
-    kernel : str, array
+    kernel : Union[str, np.array]
         Only used if `method` is 'convolution'. Type of kernel to use; if array, use directly as the
         kernel. Can be one of 'median', 'boxzen', 'boxcar', 'triang', 'blackman', 'hamming', 'hann',
         'bartlett', 'flattop', 'parzen', 'bohman', 'blackmanharris', 'nuttall', 'barthann', 'kaiser'

@@ -51,7 +51,6 @@ def test_hrv():
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
 
     ecg_hrv = nk.hrv(peaks, sampling_rate=1000)
-
     assert all(
         elem
         in [
