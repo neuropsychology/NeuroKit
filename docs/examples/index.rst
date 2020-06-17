@@ -19,4 +19,5 @@ The notebooks in this repo are meant to illustrate what you can do with NeuroKit
    epochs_create
    complexity
    eog
+   fit_function
 
