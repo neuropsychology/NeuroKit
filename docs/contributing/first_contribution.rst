@@ -10,6 +10,11 @@ Now that you're familiar with `how to use GitHub <https://neurokit2.readthedocs.
 In this guide, we will discuss the two best types of contributions for beginners, as they are easy to make, super useful and safe (you cannot break the package 😏).
 
 
+Look for *"good first contribution"* issues
+-------------------------------------------
+
+If you know how to code a bit, you can check out the issues that have been flagged as `good for first contribution <https://github.com/neuropsychology/NeuroKit/labels/good%20first%20contribution%20%3Asun_with_face%3A>`_. This means that they are issue or features ideas that we believe are accessible to beginners. If you're interested, do not hesitate to comment on these issues to know more, have more info or ask for guidance! We'll be really happy to help in any way we can ☺️.
+
 
 
 Improving documentation
@@ -33,7 +38,7 @@ Tests are super important for programmers to make sure that the changes that we 
 
 Adding them is a good first issue for new contributors, as it takes little time, doesn't require advanced programming skills and is a good occasion to discover functions and how they work.
 
-By clicking on the `"coverage" badge <https://codecov.io/gh/neuropsychology/NeuroKit>`_ under the logo on the README page, then on the "neurokit2" folder button at the bottom, you can see the `breakdown of testing coverage <https://codecov.io/gh/neuropsychology/NeuroKit/tree/master/neurokit2>`_ for each submodules (folers), and if you click on one of them, the coverage for each individual file/function (`example here <https://codecov.io/gh/neuropsychology/NeuroKit/tree/master/neurokit2/stats>`_).
+By clicking on the `"coverage" badge <https://codecov.io/gh/neuropsychology/NeuroKit>`_ under the logo on the README page, then on the "neurokit2" folder button at the bottom, you can see the `breakdown of testing coverage <https://codecov.io/gh/neuropsychology/NeuroKit/tree/master/neurokit2>`_ for each submodules (folders), and if you click on one of them, the coverage for each individual file/function (`example here <https://codecov.io/gh/neuropsychology/NeuroKit/tree/master/neurokit2/stats>`_).
 
 This percentage of coverage needs be improved ☺️
 

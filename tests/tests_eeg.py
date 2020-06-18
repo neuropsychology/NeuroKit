@@ -10,7 +10,7 @@ import neurokit2 as nk
 
 def test_eeg_add_channel():
 
-    raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif', preload=True)
+    raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_raw.fif", preload=True)
 
     # len(channel) > len(raw)
     ecg1 = nk.ecg_simulate(length=170000)
@@ -44,32 +44,33 @@ def test_eeg_add_channel():
     sync_index_channel = 100
     for i in df2["Added_Channel"].tail(abs(sync_index_channel - sync_index_raw) + (len(raw) - len(ecg2))):
         assert np.isnan(i)
-    assert np.isfinite(df2["Added_Channel"].iloc[-abs(sync_index_channel - sync_index_raw) - (len(raw) - len(ecg2)) - 1])
+    assert np.isfinite(
+        df2["Added_Channel"].iloc[-abs(sync_index_channel - sync_index_raw) - (len(raw) - len(ecg2)) - 1]
+    )
 
 
 def test_mne_channel_extract():
 
-    raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif', preload=True)
+    raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_raw.fif", preload=True)
 
     # Extract 1 channel
-    what = 'EEG 053'
+    what = "EEG 053"
 
     raw_channel = nk.mne_channel_extract(raw, what)
     assert raw_channel.what == what
 
     # Extract more than 1 channel
-    what2 = ['EEG 053', 'EEG 054', 'EEG 055']
+    what2 = ["EEG 053", "EEG 054", "EEG 055"]
 
     raw_channel2 = nk.mne_channel_extract(raw, what2)
     assert len(raw_channel2.columns) == 3
-    assert all(elem in what2
-               for elem in np.array(raw_channel2.columns.values, dtype=str))
+    assert all(elem in what2 for elem in np.array(raw_channel2.columns.values, dtype=str))
 
     # Extract a category of channels
-    what3 = 'EEG'
+    what3 = "EEG"
 
     raw_channels = nk.mne_channel_extract(raw, what3)
     assert len(raw_channels.columns) == 60
 
-    raw_eeg_names = [x for x in raw.info['ch_names'] if what3 in x]
+    raw_eeg_names = [x for x in raw.info["ch_names"] if what3 in x]
     assert raw_eeg_names == list(raw_channels.columns.values)
