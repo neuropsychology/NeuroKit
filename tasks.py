@@ -11,6 +11,7 @@ from invoke import task
 
 try:
     from pathlib import Path
+
     Path().expanduser()
 except (ImportError, AttributeError):
     from pathlib2 import Path
@@ -41,18 +42,17 @@ def _delete_file(file):
             pass
 
 
-@task(help={'check': "Checks if source is formatted without applying changes"})
+@task(help={"check": "Checks if source is formatted without applying changes"})
 def format(c, check=False):
     """
     Format code
     """
     python_dirs_string = " ".join(PYTHON_DIRS)
     # Run yapf
-    yapf_options = '--recursive {}'.format('--diff' if check else '--in-place')
+    yapf_options = "--recursive {}".format("--diff" if check else "--in-place")
     c.run("yapf {} {}".format(yapf_options, python_dirs_string))
     # Run isort
-    isort_options = '--recursive {}'.format(
-        '--check-only' if check else '')
+    isort_options = "--recursive {}".format("--check-only" if check else "")
     c.run("isort {} {}".format(isort_options, python_dirs_string))
 
 
@@ -70,11 +70,11 @@ def test(c):
     """
     Run tests
     """
-    pty = platform.system() == 'Linux'
+    pty = platform.system() == "Linux"
     c.run("python {} test".format(SETUP_FILE), pty=pty)
 
 
-@task(help={'publish': "Publish the result via coveralls"})
+@task(help={"publish": "Publish the result via coveralls"})
 def coverage(c, publish=False):
     """
     Create coverage report
