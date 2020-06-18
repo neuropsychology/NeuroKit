@@ -14,7 +14,7 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
     The positive amplitude velocity ratio is the ratio of the maximum amplitude of the blink over the
     maximum velocity (rate of change) during the blink upStroke. Similarly, the negative amplitude
     velocity ratio is the ratio of the maximum amplitude of the blink over the maximum velocity found
-    in the blink downStroke. These measures have units of centiseconds.
+    in the blink downStroke. These measures have units of centiseconds and are indicators of fatigue.
 
     Parameters
     ----------

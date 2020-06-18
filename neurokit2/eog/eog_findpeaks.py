@@ -7,7 +7,7 @@ from ..misc import as_vector
 from ..stats import fit_rmse, rescale
 from ..signal import signal_findpeaks, signal_fixpeaks
 from .eog_simulate import _eog_simulate_blink
-from .eog.eog_features import _eog_features_delineate
+from .eog_features import _eog_features_delineate
 
 
 def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
