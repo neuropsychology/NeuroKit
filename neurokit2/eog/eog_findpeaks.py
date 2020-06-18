@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
 
 from ..epochs import epochs_create, epochs_to_array
 from ..misc import as_vector
 from ..stats import fit_rmse, rescale
-from ..signal import signal_findpeaks, signal_fixpeaks, signal_zerocrossings
+from ..signal import signal_findpeaks, signal_fixpeaks
 from .eog_simulate import _eog_simulate_blink
+from .eog.eog_features import _eog_features_delineate
 
 
 def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
@@ -263,110 +263,9 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
 
     candidates = np.array(potential_blinks)[np.append(0, indexes)[blinks]]
 
-    _, peaks, _, _, _, _ = _eog_findpeaks_blinker_delineate(eog_cleaned, candidates, sampling_rate=sampling_rate)
+    _, peaks, _, _, _, _ = _eog_features_delineate(eog_cleaned, candidates, sampling_rate=sampling_rate)
 
     # Blink peak markers
     peaks = np.array(peaks)
 
     return peaks
-
-# =============================================================================
-# Internals
-# =============================================================================
-
-def _eog_findpeaks_blinker_delineate(eog_cleaned, candidates, sampling_rate=1000):
-
-    # Calculate blink landmarks
-    epochs = epochs_create(
-        eog_cleaned, events=candidates, sampling_rate=sampling_rate, epochs_start=-0.5, epochs_end=0.5
-    )
-
-    # max value marker
-    candidate_blinks = []
-    peaks = []
-    leftzeros = []
-    rightzeros = []
-    downstrokes = []
-    upstrokes = []
-
-    for i in epochs:
-        max_value = epochs[i].Signal.max()
-
-        # Check if peak is at the end or start of epoch
-        t = epochs[i].loc[epochs[i]["Signal"] == max_value].index
-        if np.all(0.3 < t < 0.51):
-            # Trim end of epoch
-            epochs[i] = epochs[i][-0.5:0.3]
-            max_value = epochs[i].Signal.max()
-        if np.all(-0.51 < t < -0.3):
-            # Trim start of epoch
-            epochs[i] = epochs[i][-0.3:0.5]
-            max_value = epochs[i].Signal.max()
-
-        # Find position of peak
-        max_frame = epochs[i]["Index"].loc[epochs[i]["Signal"] == max_value]
-        max_frame = np.array(max_frame)
-        if len(max_frame) > 1:
-            max_frame = max_frame[0]  # If two points achieve max value, first one is blink
-        else:
-            max_frame = int(max_frame)
-
-        # left and right zero markers
-        crossings = signal_zerocrossings(epochs[i].Signal)
-        crossings_idx = epochs[i]["Index"].iloc[crossings]
-        crossings_idx = np.sort(np.append([np.array(crossings_idx)], [max_frame]))
-        max_position = int(np.where(crossings_idx == max_frame)[0])
-
-        if (max_position - 1) >= 0:  # crosses zero point
-            leftzero = crossings_idx[max_position - 1]
-        else:
-            max_value_t = epochs[i].Signal.idxmax()
-            sliced_before = epochs[i].loc[slice(max_value_t), :]
-            leftzero = sliced_before["Index"].loc[sliced_before["Signal"] == sliced_before["Signal"].min()]
-            leftzero = np.array(leftzero)
-
-        if (max_position + 1) < len(crossings_idx):  # crosses zero point
-            rightzero = crossings_idx[max_position + 1]
-        else:
-            max_value_t = epochs[i].Signal.idxmax()
-            sliced_before = epochs[i].loc[slice(max_value_t), :]
-            sliced_after = epochs[i].tail(epochs[i].shape[0] - sliced_before.shape[0])
-            rightzero = sliced_after["Index"].loc[sliced_after["Signal"] == sliced_after["Signal"].min()]
-            rightzero = np.array(rightzero)
-
-        # upstroke and downstroke markers
-        upstroke_idx = list(np.arange(leftzero, max_frame))
-        upstroke = epochs[i].loc[epochs[i]['Index'].isin(upstroke_idx)]
-        downstroke_idx = list(np.arange(max_frame, rightzero))
-        downstroke = epochs[i].loc[epochs[i]['Index'].isin(downstroke_idx)]
-
-        # left base and right base markers
-        leftbase_idx = list(np.arange(epochs[i]["Index"].iloc[0], leftzero))
-        leftbase_signal = epochs[i].loc[epochs[i]["Index"].isin(leftbase_idx)]
-        #        leftbase_min = leftbase_signal['Signal'].min()
-        #        leftbase = np.array(leftbase_signal['Index'].loc[leftbase_signal['Signal'] == leftbase_min])[0]
-
-        rightbase_idx = list(np.arange(rightzero, epochs[i]["Index"].iloc[epochs[i].shape[0] - 1]))
-        rightbase_signal = epochs[i].loc[epochs[i]["Index"].isin(rightbase_idx)]
-        #        rightbase_min = rightbase_signal['Signal'].min()
-        #        rightbase = np.array(rightbase_signal['Index'].loc[rightbase_signal['Signal'] == rightbase_min])[0]
-
-        # Rejecting candidate signals with low SNR (BAR = blink-amplitude-ratio)
-        inside_blink_idx = list(np.arange(leftzero, rightzero))
-        inside_blink = epochs[i].loc[epochs[i]["Index"].isin(inside_blink_idx)]
-        outside_blink = pd.concat([leftbase_signal, rightbase_signal], axis=0)
-
-        BAR = inside_blink.Signal.mean() / outside_blink.Signal[outside_blink["Signal"] > 0].mean()
-
-        # BAR values in the range [5, 20] usually capture blinks reasonably well
-        if not 3 < BAR < 50:
-            peaks.append(max_frame)
-
-        # Features of all candidates
-        candidate_blinks.append(epochs[i])
-        leftzeros.append(leftzero)
-        rightzeros.append(rightzero)
-        downstrokes.append(downstroke)
-        upstrokes.append(upstroke)
-
-    return candidate_blinks, peaks, leftzeros, rightzeros, downstrokes, upstrokes

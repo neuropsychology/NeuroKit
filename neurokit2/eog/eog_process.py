@@ -60,13 +60,13 @@ def eog_process(eog_signal, sampling_rate=1000):
 
     """
     # Make sure MNE is installed
-    try:
-        import mne
-    except ImportError:
-        raise ImportError(
-            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. "
-            "Please install it first (`pip install mne`).",
-        )
+#    try:
+#        import mne
+#    except ImportError:
+#        raise ImportError(
+#            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. "
+#            "Please install it first (`pip install mne`).",
+#        )
 
     # Make sure signal is one array
     if isinstance(eog_signal, pd.DataFrame):
