@@ -7,14 +7,19 @@ from ..epochs import epochs_create
 
 
 def eog_features(eog_cleaned, peaks, sampling_rate=1000):
-    """Extracts features of EOG eye blinks e.g., velocity measures, duration, and markers of onset and
-    offset of each blink.
+    """Extracts features of EOG eye blinks e.g., velocity measures, blink-amplitude-ratio (BAR),
+    duration, and markers of onset and offset of each blink.
 
     The positive amplitude velocity ratio (pAVR) and the negative amplitude velocity ratio (nAVR).
     The positive amplitude velocity ratio is the ratio of the maximum amplitude of the blink over the
     maximum velocity (rate of change) during the blink upStroke. Similarly, the negative amplitude
     velocity ratio is the ratio of the maximum amplitude of the blink over the maximum velocity found
     in the blink downStroke. These measures have units of centiseconds and are indicators of fatigue.
+
+    The blink-amplitude ratio (BAR) is the average amplitude of the signal between the blink leftZero and
+    rightZero zero crossings divided by the average amplitude of the positive fraction of the signal
+    “outside” the blink. BAR values in the range [5, 20]. BAR is a measure of the signal-to-noise ratio
+    (SNR) of the blink to the background in a candidate signal.
 
     Parameters
     ----------
@@ -31,7 +36,7 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
     info : dict
         A dictionary containing information of the features of the EOG blinks, accessible with keys
         "Blink_LeftZeros" (point when eye closes), "Blink_RightZeros" (point when eye opens),
-        "Blink_pAVR", "Blink_nAVR", and "Blink_Duration" (duration of each blink in seconds).
+        "Blink_pAVR", "Blink_nAVR", "Blink_BAR", and "Blink_Duration" (duration of each blink in seconds).
 
     See Also
     --------
@@ -54,7 +59,7 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
 
     """
 
-    _, _, leftzeros, rightzeros, downstrokes, upstrokes = _eog_features_delineate(
+    BARs, _, leftzeros, rightzeros, downstrokes, upstrokes = _eog_features_delineate(
         eog_cleaned, peaks, sampling_rate=sampling_rate
     )
 
@@ -88,6 +93,7 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
             "Blink_RightZeros": rightzeros,
             "Blink_pAVR": pAVR_list,
             "Blink_nAVR": nAVR_list,
+            "Blink_BAR": BARs,
             "Blink_Duration": duration_list,
             }
 
@@ -106,12 +112,12 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
     )
 
     # max value marker
-    candidate_blinks = []
     peaks = []
     leftzeros = []
     rightzeros = []
     downstrokes = []
     upstrokes = []
+    BARs = []
 
     for i in epochs:
         max_value = epochs[i].Signal.max()
@@ -182,15 +188,15 @@ def _eog_features_delineate(eog_cleaned, candidates, sampling_rate=1000):
 
         BAR = inside_blink.Signal.mean() / outside_blink.Signal[outside_blink["Signal"] > 0].mean()
 
-        # BAR values in the range [5, 20] usually capture blinks reasonably well
-        if not 3 < BAR < 50:
-            peaks.append(max_frame)
-
         # Features of all candidates
-        candidate_blinks.append(epochs[i])
+        BARs.append(BAR)
         leftzeros.append(leftzero)
         rightzeros.append(rightzero)
         downstrokes.append(downstroke)
         upstrokes.append(upstroke)
 
-    return candidate_blinks, peaks, leftzeros, rightzeros, downstrokes, upstrokes
+        # BAR values in the range [5, 20] usually capture blinks reasonably well
+        if 3 < BAR < 50:
+            peaks.append(max_frame)
+
+    return BARs, peaks, leftzeros, rightzeros, downstrokes, upstrokes
