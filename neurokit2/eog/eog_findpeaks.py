@@ -248,8 +248,8 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
     min_blink = 0.05 * sampling_rate  # min blink frames
 
     potential_blinks = []
-    for i in range(len(eog_cleaned)):
-        if eog_cleaned[i] > threshold:
+    for i, signal in enumerate(eog_cleaned):
+        if signal > threshold:
             potential_blinks.append(i)
 
     # Make sure each blink is 50ms long and separated by 50ms

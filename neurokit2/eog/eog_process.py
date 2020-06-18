@@ -17,14 +17,8 @@ def eog_process(eog_signal, sampling_rate=1000):
     ----------
     eog_signal : Union[list, np.array, pd.Series]
         The raw EOG channel, derived from `eog_extract()`.
-    raw : mne.io.Raw
-        Raw EEG data.
     sampling_rate : int
         The sampling frequency of `eog_signal` (in Hz, i.e., samples/second). Defaults to 1000.
-    lfreq : float
-        Low cut-off frequency to apply to the EOG channel (in Hz, i.e., samples/second).
-    hfreq : float
-        High cut-off frequency to apply to the EOG channel (in Hz, i.e., samples/second).
 
     Returns
     -------
@@ -34,6 +28,7 @@ def eog_process(eog_signal, sampling_rate=1000):
         - *"EOG_Clean"*: the cleaned signal.
         - *"EOG_Blinks"*: the blinks marked as "1" in a list of zeros.
         - *"EOG_Rate"*: eye blinks rate interpolated between blinks.
+
     info : dict
         A dictionary containing the samples at which the eye blinks occur, accessible with the key "EOG_Blinks".
 

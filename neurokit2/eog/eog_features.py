@@ -7,8 +7,7 @@ from ..epochs import epochs_create
 
 
 def eog_features(eog_cleaned, peaks, sampling_rate=1000):
-    """
-    Extracts features of EOG eye blinks e.g., velocity measures, duration, and markers of onset and
+    """Extracts features of EOG eye blinks e.g., velocity measures, duration, and markers of onset and
     offset of each blink.
 
     The positive amplitude velocity ratio (pAVR) and the negative amplitude velocity ratio (nAVR).
@@ -55,7 +54,7 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
 
     """
 
-    candidate_blinks, _, leftzeros, rightzeros, downstrokes, upstrokes = _eog_features_delineate(
+    _, _, leftzeros, rightzeros, downstrokes, upstrokes = _eog_features_delineate(
         eog_cleaned, peaks, sampling_rate=sampling_rate
     )
 

@@ -11,6 +11,8 @@ def signal_zerocrossings(signal, direction="both"):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+    direction : str
+        Direction in which the signal crosses zero, can be "positive", "negative" or "both" (default).
 
     Returns
     -------
