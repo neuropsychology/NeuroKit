@@ -263,6 +263,19 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
 
     candidates = np.array(potential_blinks)[np.append(0, indexes)[blinks]]
 
+    _, peaks, _, _, _, _ = _eog_findpeaks_blinker_delineate(eog_cleaned, candidates, sampling_rate=sampling_rate)
+
+    # Blink peak markers
+    peaks = np.array(peaks)
+
+    return peaks
+
+# =============================================================================
+# Internals
+# =============================================================================
+
+def _eog_findpeaks_blinker_delineate(eog_cleaned, candidates, sampling_rate=1000):
+
     # Calculate blink landmarks
     epochs = epochs_create(
         eog_cleaned, events=candidates, sampling_rate=sampling_rate, epochs_start=-0.5, epochs_end=0.5
@@ -271,6 +284,11 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
     # max value marker
     candidate_blinks = []
     peaks = []
+    leftzeros = []
+    rightzeros = []
+    downstrokes = []
+    upstrokes = []
+
     for i in epochs:
         max_value = epochs[i].Signal.max()
 
@@ -317,10 +335,10 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
             rightzero = np.array(rightzero)
 
         # upstroke and downstroke markers
-        #        upstroke_idx = list(np.arange(leftzero, max_frame))
-        #        upstroke = epochs[i].loc[epochs[i]['Index'].isin(upstroke_idx)]
-        #        downstroke_idx = list(np.arange(max_frame, rightzero))
-        #        downstroke = epochs[i].loc[epochs[i]['Index'].isin(downstroke_idx)]
+        upstroke_idx = list(np.arange(leftzero, max_frame))
+        upstroke = epochs[i].loc[epochs[i]['Index'].isin(upstroke_idx)]
+        downstroke_idx = list(np.arange(max_frame, rightzero))
+        downstroke = epochs[i].loc[epochs[i]['Index'].isin(downstroke_idx)]
 
         # left base and right base markers
         leftbase_idx = list(np.arange(epochs[i]["Index"].iloc[0], leftzero))
@@ -342,10 +360,13 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
 
         # BAR values in the range [5, 20] usually capture blinks reasonably well
         if not 3 < BAR < 50:
-            candidate_blinks.append(epochs[i])
             peaks.append(max_frame)
 
-    # Blink peak markers
-    peaks = np.array(peaks)
+        # Features of all candidates
+        candidate_blinks.append(epochs[i])
+        leftzeros.append(leftzero)
+        rightzeros.append(rightzero)
+        downstrokes.append(downstroke)
+        upstrokes.append(upstroke)
 
-    return peaks
+    return candidate_blinks, peaks, leftzeros, rightzeros, downstrokes, upstrokes
