@@ -23,6 +23,8 @@ def find_version():
 
 # Dependencies
 requirements = ["numpy", "pandas", "scipy", "sklearn", "matplotlib"]
+
+# Optional Dependencies (only needed / downloaded for testing purposes, for instance to test against some other packages)
 setup_requirements = ["pytest-runner", "numpy"]
 test_requirements = requirements + [
     "pytest",
