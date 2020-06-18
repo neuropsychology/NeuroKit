@@ -173,3 +173,5 @@ plt.plot(events, linewidth=0.25, color="black")
 plt.plot(template_scr, linewidth=2, linestyle='-', color="orange", label='SCR')
 plt.plot(template_scr2, linewidth=2, linestyle='-', color="red", label='SCR (optimized)')
 plt.legend(loc="upper right")
+
+print(np.nanmedian(p_scr, axis=0))

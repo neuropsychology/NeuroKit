@@ -52,7 +52,7 @@ def signal_fixpeaks(
     method : str
         Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
         in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
-        ECG or PPG. "Neurokit" can be used with peaks in ECG, PPG, or respiratory data.
+        ECG or PPG. "neurokit" can be used with peaks in ECG, PPG, or respiratory data.
 
     Returns
     -------
@@ -85,7 +85,7 @@ def signal_fixpeaks(
     >>> ax.plot(rate_corrected, label="heart rate with artifact correction") #doctest: +SKIP
     >>> ax.legend(loc="upper right") #doctest: +SKIP
     >>>
-    >>> # Neurokit
+    >>> # NeuroKit
     >>> signal = nk.signal_simulate(duration=4, sampling_rate=1000, frequency=1)
     >>> peaks_true = nk.signal_findpeaks(signal)["Peaks"]
     >>> peaks = np.delete(peaks_true, [1])  # create gaps
@@ -95,7 +95,7 @@ def signal_fixpeaks(
     >>> peaks = np.delete(peaks_true, [5, 15])  # create gaps
     >>> peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
     >>>
-    >>> peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5, method="Neurokit")
+    >>> peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5, method="neurokit")
     >>> # Plot and shift original peaks to the rightto see the difference.
     >>> fig = nk.events_plot([peaks + 50, peaks_corrected], signal)
     >>> fig #doctest: +SKIP

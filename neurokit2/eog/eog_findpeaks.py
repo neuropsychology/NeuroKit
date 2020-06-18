@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
-from ..epochs import epochs_create
+from ..epochs import epochs_create, epochs_to_array
 from ..misc import as_vector
-from ..signal import signal_findpeaks, signal_zerocrossings
+from ..stats import fit_rmse, rescale
+from ..signal import signal_findpeaks, signal_fixpeaks, signal_zerocrossings
+from .eog_simulate import _eog_simulate_blink
 
 
-def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
+def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
     """Locate EOG events (blinks, saccades, eye-movements, ...).
 
     Locate EOG events (blinks, saccades, eye-movements, ...).
@@ -26,6 +29,8 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
     sampling_rate : int
         The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied if the
         method to be used is 'blinker', otherwise defaults to None.
+    **kwargs
+        Other arguments passed to functions.
 
     Returns
     -------
@@ -44,25 +49,34 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
     >>> eog_signal = nk.data('eog_100hz')
     >>> eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
     >>>
+    >>> # NeuroKit method
+    >>> neurokit = nk.eog_findpeaks(eog_cleaned,
+                                    sampling_rate=100,
+                                    method="neurokit",
+                                    threshold=0.4,
+                                    show=True)
+    >>> fig1 = nk.events_plot(neurokit, eog_cleaned)  # doctest: +ELLIPSIS
+    >>> fig1
+    >>>
     >>> # MNE-method
     >>> mne = nk.eog_findpeaks(eog_cleaned, method="mne")
-    >>> fig1 = nk.events_plot(mne, eog_cleaned)  # doctest: +ELLIPSIS
-    >>> fig1
+    >>> fig2 = nk.events_plot(mne, eog_cleaned)  # doctest: +ELLIPSIS
+    >>> fig2
     >>>
     >>> # brainstorm method
     >>> brainstorm = nk.eog_findpeaks(eog_cleaned, method="brainstorm")
-    >>> fig2 = nk.events_plot(brainstorm, eog_cleaned)  # doctest: +ELLIPSIS
-    >>> fig2
+    >>> fig3 = nk.events_plot(brainstorm, eog_cleaned)  # doctest: +ELLIPSIS
+    >>> fig3
     >>>
     >>> # blinker method
     >>> blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
-    >>> fig3 = nk.events_plot(blinker, eog_cleaned)  # doctest: +ELLIPSIS
-    >>> fig3
+    >>> fig4 = nk.events_plot(blinker, eog_cleaned)  # doctest: +ELLIPSIS
+    >>> fig4
     >>>
     >>> # Jammes (2008) method
-    >>> jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="jammes2008")
-    >>> fig4 = nk.events_plot(jammes2008, eog_cleaned)  # doctest: +ELLIPSIS
-    >>> fig4
+    >>> # jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="jammes2008")
+    >>> # fig5 = nk.events_plot(jammes2008, eog_cleaned)  # doctest: +ELLIPSIS
+    >>> # fig5
 
 
     References
@@ -85,8 +99,10 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
         peaks = _eog_findpeaks_brainstorm(eog_cleaned)
     elif method in ["blinker"]:
         peaks = _eog_findpeaks_blinker(eog_cleaned, sampling_rate=sampling_rate)
-    elif method in ["jammes2008", "jammes"]:
-        peaks = _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=sampling_rate)
+    elif method in ["neurokit", "nk"]:
+        peaks = _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=sampling_rate, **kwargs)
+#    elif method in ["jammes2008", "jammes"]:
+#        peaks = _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=sampling_rate)
     else:
         raise ValueError("NeuroKit error: eog_peaks(): 'method' should be " "one of 'mne', 'brainstorm' or 'blinker'.")
 
@@ -96,13 +112,63 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne"):
 # =============================================================================
 # Methods
 # =============================================================================
-#def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=100):
-#    """In-house EOG blink detection.
-#
-#    """
-#    convolved = scipy.signal.convolve(eog_cleaned, template, method="direct")
-#    convolved = nk.rescale(convolved, [np.min(eog_cleaned), np.max(eog_cleaned)])
-#    nk.signal_plot([eog_cleaned, convolved])
+def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=1000, threshold=0.5, show=True):
+    """In-house EOG blink detection.
+
+    """
+    peaks = signal_findpeaks(eog_cleaned, relative_height_min=1)["Peaks"]
+    peaks = signal_fixpeaks(peaks=peaks,
+                            sampling_rate=sampling_rate,
+                            interval_min=0.25,
+                            method="neurokit")
+    peaks = _eog_findpeaks_neurokit_filterblinks(eog_cleaned,
+                                                 peaks,
+                                                 sampling_rate=sampling_rate,
+                                                 threshold=threshold,
+                                                 show=show)
+    return peaks
+
+
+def _eog_findpeaks_neurokit_filterblinks(eog_cleaned, peaks, sampling_rate=1000, threshold=0.5, show=False):
+    """Compare each detected event to blink template and reject it if too different.
+    """
+    # Get epoch around each blink
+    events = epochs_create(eog_cleaned,
+                              peaks,
+                              sampling_rate=sampling_rate,
+                              epochs_start=-0.4,
+                              epochs_end=0.6)
+    events = epochs_to_array(events)  # Convert to 2D array
+
+    # Generate Blink-template
+    template = _eog_simulate_blink(sampling_rate=sampling_rate)
+
+    # Get the "distance" (RMSE) between each blink and the template
+    rmse = np.full(events.shape[1], np.nan)
+    for i in range(events.shape[1]):
+        events[:, i] = rescale(events[:, i], to=[0, 1])  # Reshape to 0-1 scale
+        rmse[i] = fit_rmse(events[:, i], template)
+
+    # Plot RMSE distribution
+    if show is True:
+        plt.subplot(1, 2, 1)
+        plt.hist(rmse, color = '#FF9800')
+        plt.axvline(x=threshold, linewidth=4, color='r')
+        plt.title('RMSE Distribution (threshold = '+str(threshold) + ')')
+        plt.xlabel('RMSE')
+
+        plt.subplot(1, 2, 2)
+        plt.plot(events[:, rmse < threshold], linewidth=0.25, color="black")
+        plt.plot(events[:, rmse >= threshold], linewidth=0.5, color="red")
+        plt.plot(template, linewidth=2, color="#2196F3", label='Blink template')
+        plt.title('Accepted and rejected (red) blinks')
+        plt.legend(loc="upper right")
+
+    return peaks[rmse < threshold]
+
+
+
+
 
 #def _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=1000):
 #    """Derivative-based method by Jammes (2008)
