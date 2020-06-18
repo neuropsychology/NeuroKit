@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..eog.eog_clean import _eog_findpeaks_blinker_delineate
+from ..eog.eog_findpeaks import _eog_findpeaks_blinker_delineate
 
 
 def eog_features(eog_cleaned, peaks, sampling_rate=1000):
