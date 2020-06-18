@@ -51,7 +51,6 @@ def test_hrv():
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
 
     ecg_hrv = nk.hrv(peaks, sampling_rate=1000)
-
     assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
                         'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
                         'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI', 'HRV_ULF',
