@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None
+    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, order=15, criteria_order="KIC", criteria_corrected=True, norm=True
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -84,7 +84,7 @@ def signal_psd(
                 "sufficiently long window for high frequency resolution. Consider using a longer recording "
                 "or increasing the `min_frequency`"
                 )
-            nperseg = int(len(signal / 2))
+            nperseg = int(len(signal) / 2)
 
         # Welch (Scipy)
         if method.lower() in ["welch"]:
@@ -96,6 +96,12 @@ def signal_psd(
             frequency, power = _signal_psd_lomb(
     signal, sampling_rate=sampling_rate, nperseg=nperseg, min_frequency=min_frequency, max_frequency=max_frequency
 )
+
+        elif method.lower() in ["burg"]:
+
+
+
+
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency, "Power": power})
@@ -187,7 +193,21 @@ def _signal_psd_lomb(
 # =============================================================================
 
 
-def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
+def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corrected=True, side='one-sided', norm=True, nperseg=None):
+
+    nfft = int(nperseg * 2)
+    ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected, side=side, norm=norm)
+    psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side, norm=norm)
+
+    # signal is real, not complex
+     if nfft % 2 == 0:
+        newpsd  = psd[0:int(nfft / 2 + 1)] * 2
+    else:
+        newpsd  = psd[0:int((nfft + 1) / 2)] * 2
+    #  convert normalized frequency back to hertz, multiply by half the sample frequency.
+
+
+def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side='one-sided', norm=True):
 
     # Sanitize order and signal
     if order <= 0.:
@@ -200,14 +220,14 @@ def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
     N = len(signal)
 
     # Initialisation
-    # rho is variance of driving white noise process
+    # rho is variance of driving white noise process (prediction error)
     rho = sum(abs(signal)**2.) / float(N)
     den = rho * 2. * N
 
-    a = np.zeros(0, dtype=complex)
-    ref = np.zeros(0, dtype=complex)
-    ef = signal.astype(complex)
-    eb = signal.astype(complex)
+    ar = np.zeros(0, dtype=complex)  #AR parametric signal model estimate
+    ref = np.zeros(0, dtype=complex)  #vector K of reflection coefficients (parcor coefficients)
+    ef = signal.astype(complex)  #forward prediction error
+    eb = signal.astype(complex)  #backward prediction error
     temp = 1.
 
     # Main recursion
@@ -215,10 +235,11 @@ def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
     for k in range(0, order):
 
         # calculate the next order reflection coefficient
-        num = sum([ef[j]*eb[j - 1].conjugate() for j in range(k + 1, N)])
-        den = temp * den - abs(ef[k])**2 - abs(eb[N - 1])**2
-        kp = -2. * num / den
+        numerator = sum([ef[j]*eb[j - 1].conjugate() for j in range(k + 1, N)])
+        denominator = temp * den - abs(ef[k])**2 - abs(eb[N - 1])**2
+        kp = -2. * numerator / denominator
 
+        # Update the prediction error
         temp = 1. - abs(kp)**2.
         new_rho = temp * rho
 
@@ -239,34 +260,34 @@ def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
             raise ValueError("Found a negative value (expected positive strictly) %s."
                              "Decrease the order" % rho)
 
-        a.resize(a.size + 1)
-        a[k] = kp
+        ar.resize(ar.size + 1)
+        ar[k] = kp
         if k == 0:
             for j in range(N-1, k, -1):
-                save2 = ef[j]
-                ef[j] = save2 + kp * eb[j-1]  # Eq. (8.7)
-                eb[j] = eb[j-1] + kp.conjugate() * save2
+                ef_previous = ef[j]  # previous value
+                ef[j] = ef_previous + kp * eb[j-1]  # Eq. (8.7)
+                eb[j] = eb[j-1] + kp.conjugate() * ef_previous
 
         else:
-            # update the AR coeff
+            # Update the AR coeff
             khalf = (k + 1) // 2  # khalf must be an integer
             for j in range(0, khalf):
-                ap = a[j]  # previous value
-                a[j] = ap + kp * a[k-j-1].conjugate()  # Eq. (8.2)
+                ar_previous = ar[j]  # previous value
+                ar[j] = ar_previous + kp * ar[k-j-1].conjugate()  # Eq. (8.2)
                 if j != k-j-1:
-                    a[k-j-1] = a[k-j-1] + kp * ap.conjugate()  # Eq. (8.2)
+                    ar[k-j-1] = ar[k-j-1] + kp * ar_previous.conjugate()  # Eq. (8.2)
 
-            # update the prediction error
+            # Update the forward and backward prediction errors
             for j in range(N-1, k, -1):
-                save2 = ef[j]
-                ef[j] = save2 + kp * eb[j-1]   # Eq. (8.7)
-                eb[j] = eb[j-1] + kp.conjugate() * save2
+                ef_previous = ef[j]  # previous value
+                ef[j] = ef_previous + kp * eb[j-1]   # Eq. (8.7)
+                eb[j] = eb[j-1] + kp.conjugate() * ef_previous
 
         # save the reflection coefficient
         ref.resize(ref.size+1)
         ref[k] = kp
 
-    return a, rho, ref
+    return ar, rho, ref
 
 # =============================================================================
 # Utilities
@@ -274,19 +295,22 @@ def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
 
 
 def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
-    """criteria to automatically select order in parametric PSD
+    """Criteria to automatically select order in parametric PSD.
+
     AIC, AICc, KIC and AKICc are based on information theory. They attempt to balance the complexity
     (or length) of the model against how well the model fits the data.
     AIC and KIC are biased estimates of the asymmetric and the symmetric Kullback-Leibler divergence
-    respectively.
-    AICc and AKICc attempt to correct the bias.
+    respectively. AICc and AKICc attempt to correct the bias.
 
     Parameters
     ----------
     criteria : str
-        The criteria to be used.
+        The criteria to be used. The critera can be one of the following: AIC (Akaike Information Criterion),
+        KIC (Kullback Iinformation Criterion), FPE (Final Prediction Error Criterion), MDL (Minimum
+        Description Length), CAT (Criterion Autoregressive Transfer Function), AIC order-selection using
+        eigen values, MDL order-selection using eigen values.
     N : int
-        The sample size of the signal
+        The sample size of the signal.
     k : int
         The AR order.
     rho : int
@@ -304,4 +328,68 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
         else:
             residue = np.log(rho) + 3. * (k + 1.) / float(N)
 
+    elif criteria == "FPE":
+        fpe = rho * (N + k + 1.) / (N- k -1)
+        return fpe
+
+    elif criteria == "MDL":
+        mdl = N * np.log(rho) + k * np.log(N)
+        return mdl
+
     return residue
+
+
+def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=None, side='one-sided', norm=False):
+
+    if ar is None and ma is None:
+        raise ValueError("Either AR or MA model must be provided")
+
+    psd = np.zeros(nfft, dtype=complex)
+
+    if ar is not None:
+        ip = len(ar)
+        den = np.zeros(nfft, dtype=complex)
+        den[0] = 1.+0j
+        for k in range(0, ip):
+            den[k+1] = ar[k]
+        denf = np.fft(den, nfft)
+
+    if ma is not None:
+        iq = len(ma)
+        num = np.zeros(nfft, dtype=complex)
+        num[0] = 1.+0j
+        for k in range(0, iq):
+            num[k+1] = ma[k]
+        numf = np.fft(num, nfft)
+
+    if ar is not None and ma is not None:
+        psd = rho / sampling_rate * abs(numf)**2. / abs(denf)**2.
+    elif ar is not None:
+        psd = rho / sampling_rate / abs(denf)**2.
+    elif ma is not None:
+        psd = rho / sampling_rate * abs(numf)**2.
+
+
+    psd = np.real(psd)  # The PSD is a twosided PSD.
+
+    # convert to one-sided
+    if side == "one-sided":
+        assert len(psd) % 2 == 0
+        one_side_psd = np.array(psd[0:len(psd)//2 + 1]) * 2.
+        one_side_psd[0] /= 2.
+        one_side_psd[-1] = psd[-1]
+        psd = one_side_psd
+
+    # convert to centerdc
+    elif side == "centerdc":
+        first_half = psd[0:len(psd)//2]
+        second_half = psd[len(psd)//2:]
+        rotate_second_half = (second_half[-1:] + second_half[:-1])
+        center_psd = np.concatenate((rotate_second_half, first_half))
+        center_psd[0] = psd[-1]
+        psd = center_psd
+
+    if norm == True:
+        psd /= max(psd)
+
+    return psd
