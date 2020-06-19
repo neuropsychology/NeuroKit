@@ -139,6 +139,8 @@ def _signal_psd_multitaper(
 # =============================================================================
 # Welch method
 # =============================================================================
+
+
 def _signal_psd_welch(
     signal, sampling_rate=1000, nperseg=None
 ):
@@ -158,6 +160,8 @@ def _signal_psd_welch(
 # =============================================================================
 # Lomb method
 # =============================================================================
+
+
 def _signal_psd_lomb(
     signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf
 ):
@@ -181,6 +185,8 @@ def _signal_psd_lomb(
 # =============================================================================
 # Burg method
 # =============================================================================
+
+
 def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
 
     # Sanitize order and signal
@@ -205,7 +211,6 @@ def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
     temp = 1.
 
     # Main recursion
-    residue_list = np.zeros(order + 1)
 
     for k in range(0, order):
 
@@ -231,7 +236,8 @@ def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
         residue_old = residue_new
         rho = new_rho
         if rho <= 0:
-            raise ValueError("Found a negative value (expected positive strictly) %s. Decrease the order" % rho)
+            raise ValueError("Found a negative value (expected positive strictly) %s."
+                             "Decrease the order" % rho)
 
         a.resize(a.size + 1)
         a[k] = kp
@@ -245,7 +251,7 @@ def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
             # update the AR coeff
             khalf = (k + 1) // 2  # khalf must be an integer
             for j in range(0, khalf):
-                ap = a[j] # previous value
+                ap = a[j]  # previous value
                 a[j] = ap + kp * a[k-j-1].conjugate()  # Eq. (8.2)
                 if j != k-j-1:
                     a[k-j-1] = a[k-j-1] + kp * ap.conjugate()  # Eq. (8.2)
@@ -265,13 +271,15 @@ def _signal_psd_burg(signal, order=15, criteria=None, corrected=True):
 # =============================================================================
 # Utilities
 # =============================================================================
+
+
 def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
     """criteria to automatically select order in parametric PSD
     AIC, AICc, KIC and AKICc are based on information theory. They attempt to balance the complexity
     (or length) of the model against how well the model fits the data.
     AIC and KIC are biased estimates of the asymmetric and the symmetric Kullback-Leibler divergence
     respectively.
-    AICc and AKICc attempt to correct the bias.\
+    AICc and AKICc attempt to correct the bias.
 
     Parameters
     ----------
@@ -279,21 +287,21 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
         The criteria to be used.
     N : int
         The sample size of the signal
-    k : list, array
-        The list of AR order.
-    rho : list, array
-        The list of rho at order k.
+    k : int
+        The AR order.
+    rho : int
+        The rho at order k.
     """
     if criteria == "AIC":
         if corrected is True:
             residue = np.log(rho) + 2. * (k + 1) / (N - k - 2)
         else:
-            residue = N * np.log(np.array(rho)) + 2.* (np.array(k) + 1)
+            residue = N * np.log(np.array(rho)) + 2. * (np.array(k) + 1)
 
     elif criteria == "KIC":
         if corrected is True:
             residue = np.log(rho) + k/N/(N-k) + (3. - (k + 2.) / N) * (k + 1.) / (N - k - 2.)
         else:
-            residue = np.log(rho) + 3. * (k + 1.) /float(N)
+            residue = np.log(rho) + 3. * (k + 1.) / float(N)
 
     return residue
