@@ -106,7 +106,7 @@ for i in range(4):
     
     data = pd.read_csv("../../data/eogdb/eogdb_task" + str(i + 1) + ".csv")
 
-    for j, participant in enumerate(np.unique(data["Participant"])[0:2]):
+    for j, participant in enumerate(np.unique(data["Participant"])):
         print("  - " + str(j + 1))
 
         segment = data[data["Participant"] == participant]
@@ -182,7 +182,7 @@ data_rmse = pd.DataFrame(columns=["RMSE", "Index", "Participant", "Task", "Funct
 for i in range(4):
     data = pd.read_csv("../../data/eogdb/eogdb_task" + str(i + 1) + ".csv")
 
-    for j, participant in enumerate(np.unique(data["Participant"])[0:2]):
+    for j, participant in enumerate(np.unique(data["Participant"])):
         segment = data[data["Participant"] == participant]
         signal = segment["vEOG"]
 
@@ -241,7 +241,7 @@ for i in range(4):
     print("Task: " + str(i))
     data = pd.read_csv("../../data/eogdb/eogdb_task" + str(i + 1) + ".csv")
 
-    for j, participant in enumerate(np.unique(data["Participant"])[0:2]):
+    for j, participant in enumerate(np.unique(data["Participant"])):
         print("  - " + str(j + 1))
 
         segment = data[data["Participant"] == participant]
@@ -293,7 +293,7 @@ data_rmse = pd.DataFrame(columns=["RMSE", "Index", "Participant", "Task", "Funct
 for i in range(4):
     data = pd.read_csv("../../data/eogdb/eogdb_task" + str(i + 1) + ".csv")
 
-    for j, participant in enumerate(np.unique(data["Participant"])[0:2]):
+    for j, participant in enumerate(np.unique(data["Participant"])):
         segment = data[data["Participant"] == participant]
         signal = segment["vEOG"]
 
