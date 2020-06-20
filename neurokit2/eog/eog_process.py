@@ -2,6 +2,7 @@
 import pandas as pd
 
 from ..signal import signal_rate
+from ..misc import as_vector
 from ..signal.signal_formatpeaks import _signal_from_indices
 from .eog_clean import eog_clean
 from .eog_findpeaks import eog_findpeaks
@@ -54,24 +55,9 @@ def eog_process(eog_signal, sampling_rate=1000):
     and Computing (Allerton) (pp. 1113-1121). IEEE.
 
     """
-    # Make sure MNE is installed
-#    try:
-#        import mne
-#    except ImportError:
-#        raise ImportError(
-#            "NeuroKit error: signal_filter(): the 'mne' module is required for this method to run. "
-#            "Please install it first (`pip install mne`).",
-#        )
+    # Sanitize input
+    eog_cleaned = as_vector(eog_cleaned)
 
-    # Make sure signal is one array
-    if isinstance(eog_signal, pd.DataFrame):
-        if len(eog_signal.columns) == 2:
-            eog_signal = eog_signal.iloc[:, 0] - eog_signal.iloc[:, 1]
-        elif len(eog_signal.columns) > 2:
-            raise ValueError(
-                "NeuroKit warning: eog_process(): Please make sure your EOG signal contains "
-                "at most 2 channels of signals."
-            )
 
     # Clean signal
     eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate)

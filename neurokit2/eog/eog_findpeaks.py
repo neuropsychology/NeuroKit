@@ -11,21 +11,21 @@ from .eog_features import _eog_features_delineate
 
 
 def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
-    """Locate EOG events (blinks, saccades, eye-movements, ...).
+    """Locate EOG eye blinks.
 
-    Locate EOG events (blinks, saccades, eye-movements, ...).
+    Locate EOG eye blinks.
 
     Parameters
     ----------
     eog_cleaned : Union[list, np.array, pd.Series]
-        The cleaned EOG channel. Note that it must be positively oriented, i.e., blinks must
+        The cleaned vertical EOG channel. Note that it must be positively oriented, i.e., blinks must
         appear as upward peaks.
     sampling_rate : int
         The signal sampling rate (in Hz, i.e., samples/second). Needed for method 'blinker' or
         'jammes2008'.
     method : str
         The peak detection algorithm. Can be one of 'neurokit', 'mne' (requires the MNE package
-        to be installed), or 'brainstorm', 'blinker' or 'jammes2008'.
+        to be installed), or 'brainstorm' or 'blinker'.
     sampling_rate : int
         The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied if the
         method to be used is 'blinker', otherwise defaults to None.
@@ -51,10 +51,10 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
     >>>
     >>> # NeuroKit method
     >>> neurokit = nk.eog_findpeaks(eog_cleaned,
-                                    sampling_rate=100,
-                                    method="neurokit",
-                                    threshold=0.33,
-                                    show=True)
+    ...                             sampling_rate=100,
+    ...                             method="neurokit",
+    ...                             threshold=0.33,
+    ...                             show=True)
     >>> fig1 = nk.events_plot(neurokit, eog_cleaned)  # doctest: +ELLIPSIS
     >>> fig1
     >>>
