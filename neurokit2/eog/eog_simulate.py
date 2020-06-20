@@ -3,7 +3,7 @@ import scipy.stats
 
 
 def _eog_simulate_blink(sampling_rate=1000, length=None, method="scr", parameters="default"):
-    """Simulate a canonical blink from vertical EOG
+    """Simulate a canonical blink from vertical EOG.
 
     Recommended parameters:
 

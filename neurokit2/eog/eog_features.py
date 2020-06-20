@@ -2,13 +2,13 @@
 import numpy as np
 import pandas as pd
 
-from ..signal import signal_zerocrossings
 from ..epochs import epochs_create
+from ..signal import signal_zerocrossings
 
 
 def eog_features(eog_cleaned, peaks, sampling_rate=1000):
-    """Extracts features of EOG eye blinks e.g., velocity measures, blink-amplitude-ratio (BAR),
-    duration, and markers of onset and offset of each blink.
+    """Extracts features of EOG eye blinks e.g., velocity measures, blink-amplitude-ratio (BAR), duration, and markers
+    of onset and offset of each blink.
 
     The positive amplitude velocity ratio (pAVR) and the negative amplitude velocity ratio (nAVR).
     The positive amplitude velocity ratio is the ratio of the maximum amplitude of the blink over the
@@ -89,15 +89,16 @@ def eog_features(eog_cleaned, peaks, sampling_rate=1000):
 
     # Return info dictionary
     info = {
-            "Blink_LeftZeros": leftzeros,
-            "Blink_RightZeros": rightzeros,
-            "Blink_pAVR": pAVR_list,
-            "Blink_nAVR": nAVR_list,
-            "Blink_BAR": BARs,
-            "Blink_Duration": duration_list,
-            }
+        "Blink_LeftZeros": leftzeros,
+        "Blink_RightZeros": rightzeros,
+        "Blink_pAVR": pAVR_list,
+        "Blink_nAVR": nAVR_list,
+        "Blink_BAR": BARs,
+        "Blink_Duration": duration_list,
+    }
 
     return info
+
 
 # =============================================================================
 # Internals

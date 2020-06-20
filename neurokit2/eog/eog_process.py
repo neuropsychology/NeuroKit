@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from ..signal import signal_rate
 from ..misc import as_vector
+from ..signal import signal_rate
 from ..signal.signal_formatpeaks import _signal_from_indices
 from .eog_clean import eog_clean
 from .eog_findpeaks import eog_findpeaks
@@ -21,6 +21,8 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
         appear as upward peaks.
     sampling_rate : int
         The sampling frequency of `eog_signal` (in Hz, i.e., samples/second). Defaults to 1000.
+    **kwargs
+        Other arguments passed to other functions.
 
     Returns
     -------
@@ -73,6 +75,7 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
 
     # Prepare output
     signals = pd.DataFrame(
-        {"EOG_Raw": eog_signal, "EOG_Clean": eog_cleaned, "EOG_Blinks": signal_blinks, "EOG_Rate": rate})
+        {"EOG_Raw": eog_signal, "EOG_Clean": eog_cleaned, "EOG_Blinks": signal_blinks, "EOG_Rate": rate}
+    )
 
     return signals, info

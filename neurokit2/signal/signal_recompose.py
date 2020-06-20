@@ -156,16 +156,14 @@ def _signal_recompose_get_wcorr(components, show=False):
 # Filter method
 # =============================================================================
 def _signal_recompose_filter_sd(components, threshold=0.01):
-    """Filter by standard deviation
-    """
+    """Filter by standard deviation."""
     SDs = [np.std(components[i, :], ddof=1) for i in range(len(components))]
     indices = np.where(SDs >= threshold * np.max(SDs))
     return components[indices]
 
 
 def _signal_recompose_meanfreq(components, sampling_rate=1000):
-    """Get the mean frequency of components
-    """
+    """Get the mean frequency of components."""
     duration = components.shape[1] / sampling_rate
     n = len(components)
     freqs = np.zeros(n)
