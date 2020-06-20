@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, order=15, criteria_order="KIC", criteria_corrected=True, norm=True
+    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=True, burg_side="one-sided"
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -46,6 +46,7 @@ def signal_psd(
     >>> fig1 #doctest: +SKIP
     >>> fig2 = nk.signal_psd(signal, method="welch", min_frequency=1)
     >>> fig2 #doctest: +SKIP
+    >>> fig3 = nk.signal_psd(signal, method="burg", min_frequency=1)
     >>>
     >>> data = nk.signal_psd(signal, method="multitapers", max_frequency=30, show=False)
     >>> fig3 = data.plot(x="Frequency", y="Power")
@@ -60,12 +61,7 @@ def signal_psd(
 
     # MNE
     if method.lower() in ["multitapers", "mne"]:
-        power, frequency = _signal_psd_multitaper(signal, sampling_rate=sampling_rate, min_frequency=min_frequency, max_frequency=max_frequency)
-
-    # BURG
-    elif method.lower() in ["burg", "pburg", "spectrum"]:
-        raise ValueError("NeuroKit warning: signal_psd(): the 'BURG' method has not been yet implemented.")
-
+        frequency, power = _signal_psd_multitaper(signal, sampling_rate=sampling_rate, min_frequency=min_frequency, max_frequency=max_frequency)
 
     else:
         # Define window length
@@ -97,11 +93,9 @@ def signal_psd(
     signal, sampling_rate=sampling_rate, nperseg=nperseg, min_frequency=min_frequency, max_frequency=max_frequency
 )
 
-        elif method.lower() in ["burg"]:
-
-
-
-
+        # BURG
+        elif method.lower() in ["burg", "pburg", "spectrum"]:
+            frequency, power = _signal_psd_burg(signal, sampling_rate=sampling_rate, order=ar_order, criteria=order_criteria, corrected=order_corrected, side=burg_side, norm=burg_norm, nperseg=nperseg)
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency, "Power": power})
@@ -140,7 +134,7 @@ def _signal_psd_multitaper(
             "module is required for the 'mne' method to run.",
             "Please install it first (`pip install mne`).",
         )
-    return power, frequency
+    return frequency, power
 
 # =============================================================================
 # Welch method
@@ -193,21 +187,40 @@ def _signal_psd_lomb(
 # =============================================================================
 
 
-def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corrected=True, side='one-sided', norm=True, nperseg=None):
+def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corrected=True, side="one-sided", norm=True, nperseg=None):
 
     nfft = int(nperseg * 2)
     ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected, side=side, norm=norm)
     psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side, norm=norm)
 
     # signal is real, not complex
-     if nfft % 2 == 0:
-        newpsd  = psd[0:int(nfft / 2 + 1)] * 2
+    if nfft % 2 == 0:
+        power  = psd[0:int(nfft / 2 + 1)] * 2
     else:
-        newpsd  = psd[0:int((nfft + 1) / 2)] * 2
-    #  convert normalized frequency back to hertz, multiply by half the sample frequency.
+        power  = psd[0:int((nfft + 1) / 2)] * 2
+
+    # angular frequencies, w
+    # for one-sided psd, w spans [0, pi]
+    # for two-sdied psd, w spans [0, 2pi)
+    # for dc-centered psd, w spans (-pi, pi] for even nfft, (-pi, pi) for add nfft
+    if side == "one-sided":
+        w = np.pi * np.linspace(0, 1, len(power))
+    elif side == "two-sided":
+        w = np.pi * np.linspace(0, 2, len(power), endpoint=False)  #exclude last point
+    elif side == "centerdc":
+        if nfft % 2 == 0:
+            w = np.pi * np.linspace(-1, 1, len(power))
+        else:
+            w = np.pi * np.linspace(-1, 1, len(power) + 1, endpoint=False)  # exclude last point
+            w = w[1:]  # exclude first point (extra)
+
+    frequency = w * sampling_rate
+
+    return frequency, power
 
 
-def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side='one-sided', norm=True):
+
+def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side="one-sided", norm=True):
 
     # Sanitize order and signal
     if order <= 0.:
@@ -245,16 +258,16 @@ def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side='on
 
         if criteria is not None:
             # k=k+1 because order goes from 1 to P whereas k starts at 0.
-            residue_new = _criteria(criteria=criteria, N=N, k=k+1, rho=new_rho, corrected=corrected)
+            residual_new = _criteria(criteria=criteria, N=N, k=k+1, rho=new_rho, corrected=corrected)
             if k == 0:
-                residue_old = 2. * residue_new
+                residual_old = 2. * abs(residual_new)
 
             # Stop as criteria has reached
-            if residue_new > residue_old:
+            if residual_new > residual_old:
                 break
 
         # This should be after the criteria
-        residue_old = residue_new
+        residual_old = residual_new
         rho = new_rho
         if rho <= 0:
             raise ValueError("Found a negative value (expected positive strictly) %s."
@@ -289,6 +302,8 @@ def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side='on
 
     return ar, rho, ref
 
+
+
 # =============================================================================
 # Utilities
 # =============================================================================
@@ -318,15 +333,15 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
     """
     if criteria == "AIC":
         if corrected is True:
-            residue = np.log(rho) + 2. * (k + 1) / (N - k - 2)
+            residual = np.log(rho) + 2. * (k + 1) / (N - k - 2)
         else:
-            residue = N * np.log(np.array(rho)) + 2. * (np.array(k) + 1)
+            residual = N * np.log(np.array(rho)) + 2. * (np.array(k) + 1)
 
     elif criteria == "KIC":
         if corrected is True:
-            residue = np.log(rho) + k/N/(N-k) + (3. - (k + 2.) / N) * (k + 1.) / (N - k - 2.)
+            residual = np.log(rho) + k/N/(N-k) + (3. - (k + 2.) / N) * (k + 1.) / (N - k - 2.)
         else:
-            residue = np.log(rho) + 3. * (k + 1.) / float(N)
+            residual = np.log(rho) + 3. * (k + 1.) / float(N)
 
     elif criteria == "FPE":
         fpe = rho * (N + k + 1.) / (N- k -1)
@@ -336,10 +351,10 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
         mdl = N * np.log(rho) + k * np.log(N)
         return mdl
 
-    return residue
+    return residual
 
 
-def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=None, side='one-sided', norm=False):
+def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=None, side="one-sided", norm=False):
 
     if ar is None and ma is None:
         raise ValueError("Either AR or MA model must be provided")
@@ -352,7 +367,7 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=Non
         den[0] = 1.+0j
         for k in range(0, ip):
             den[k+1] = ar[k]
-        denf = np.fft(den, nfft)
+        denf = np.fft.fft(den, nfft)
 
     if ma is not None:
         iq = len(ma)
