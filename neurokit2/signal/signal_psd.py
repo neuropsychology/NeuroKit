@@ -273,7 +273,7 @@ def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side="on
             raise ValueError("Found a negative value (expected positive strictly) %s."
                              "Decrease the order" % rho)
 
-        ar.resize(ar.size + 1)
+        ar = np.resize(ar, ar.size + 1)
         ar[k] = kp
         if k == 0:
             for j in range(N-1, k, -1):
