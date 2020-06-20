@@ -8,7 +8,7 @@ from .eog_clean import eog_clean
 from .eog_findpeaks import eog_findpeaks
 
 
-def eog_process(eog_signal, sampling_rate=1000):
+def eog_process(eog_signal, sampling_rate=1000, **kwargs):
     """Process an EOG signal.
 
     Convenience function that automatically processes an EOG signal.
@@ -35,17 +35,15 @@ def eog_process(eog_signal, sampling_rate=1000):
 
     See Also
     --------
-    eog_extract, eog_clean
+    eog_clean, eog_findpeaks
 
     Examples
     --------
     >>> import neurokit2 as nk
-    >>> import mne
     >>>
-    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() +
-    ...                           '/MEG/sample/sample_audvis_raw.fif', preload=True)
-    >>> eog_signal = nk.mne_channel_extract(raw, what='EOG', name='EOG')
-    >>> sampling_rate = raw.info['sfreq']
+    >>> # Get data
+    >>> eog_signal = nk.data('eog_100hz')
+    >>>
     >>> signals, info = nk.eog_process(eog_signal, sampling_rate=sampling_rate)
 
     References
@@ -56,14 +54,13 @@ def eog_process(eog_signal, sampling_rate=1000):
 
     """
     # Sanitize input
-    eog_cleaned = as_vector(eog_cleaned)
-
+    eog_signal = as_vector(eog_signal)
 
     # Clean signal
-    eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate)
+    eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate, **kwargs)
 
     # Find peaks
-    peaks = eog_findpeaks(eog_cleaned, sampling_rate=sampling_rate)
+    peaks = eog_findpeaks(eog_cleaned, sampling_rate=sampling_rate, **kwargs)
 
     info = {"EOG_Blinks": peaks}
 
