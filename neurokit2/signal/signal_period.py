@@ -3,18 +3,22 @@ import numpy as np
 
 from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_interpolate import signal_interpolate
+from .signal_findpeaks import signal_findpeaks
 
 
-def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"):
+def signal_period(signal, peaks=None, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"):
     """Calculate signal period from a series of peaks.
 
     Parameters
     ----------
+    signal : Union[list, np.array, pd.Series]
+        The time-series of signal.
     peaks : Union[list, np.array, pd.DataFrame, pd.Series, dict]
         The samples at which the peaks occur. If an array is passed in, it is assumed that it was obtained
         with `signal_findpeaks()`. If a DataFrame is passed in, it is assumed it is of the same length as
         the input signal in which occurrences of R-peaks are marked as "1", with such containers obtained
-        with e.g., ecg_findpeaks() or rsp_findpeaks().
+        with e.g., ecg_findpeaks() or rsp_findpeaks(). Default is None. If default, peaks will be obtained
+        with `signal_findpeaks()`.
     sampling_rate : int
         The sampling frequency of the signal that contains peaks (in Hz, i.e., samples/second).
         Defaults to 1000.
@@ -43,10 +47,17 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
     >>> info = nk.signal_findpeaks(signal)
     >>>
-    >>> period = nk.signal_period(peaks=info["Peaks"], desired_length=len(signal))
+    >>> period = nk.signal_period(signal, peaks=info["Peaks"])
     >>> nk.signal_plot(period)
 
     """
+
+    # Sanitize input
+    if peaks is None:
+        peaks = signal_findpeaks(signal)["Peaks"]
+    if desired_length is None:
+        desired_length = len(signal)
+
     peaks = _signal_formatpeaks_sanitize(peaks)
 
     # Sanity checks.
