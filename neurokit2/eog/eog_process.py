@@ -8,7 +8,7 @@ from .eog_clean import eog_clean
 from .eog_findpeaks import eog_findpeaks
 
 
-def eog_process(eog_signal, sampling_rate=1000, **kwargs):
+def eog_process(veog_signal, sampling_rate=1000, **kwargs):
     """Process an EOG signal.
 
     Convenience function that automatically processes an EOG signal.
@@ -16,8 +16,9 @@ def eog_process(eog_signal, sampling_rate=1000, **kwargs):
 
     Parameters
     ----------
-    eog_signal : Union[list, np.array, pd.Series]
-        The raw EOG channel, derived from `eog_extract()`.
+    veog_signal : Union[list, np.array, pd.Series]
+        The raw vertical EOG channel. Note that it must be positively oriented, i.e., blinks must
+        appear as upward peaks.
     sampling_rate : int
         The sampling frequency of `eog_signal` (in Hz, i.e., samples/second). Defaults to 1000.
 
@@ -44,7 +45,7 @@ def eog_process(eog_signal, sampling_rate=1000, **kwargs):
     >>> # Get data
     >>> eog_signal = nk.data('eog_100hz')
     >>>
-    >>> signals, info = nk.eog_process(eog_signal, sampling_rate=sampling_rate)
+    >>> signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
     References
     ----------
@@ -54,7 +55,7 @@ def eog_process(eog_signal, sampling_rate=1000, **kwargs):
 
     """
     # Sanitize input
-    eog_signal = as_vector(eog_signal)
+    eog_signal = as_vector(veog_signal)
 
     # Clean signal
     eog_cleaned = eog_clean(eog_signal, sampling_rate=sampling_rate, **kwargs)

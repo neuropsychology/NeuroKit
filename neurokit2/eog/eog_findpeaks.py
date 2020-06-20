@@ -10,14 +10,14 @@ from .eog_simulate import _eog_simulate_blink
 from .eog_features import _eog_features_delineate
 
 
-def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
+def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     """Locate EOG eye blinks.
 
     Locate EOG eye blinks.
 
     Parameters
     ----------
-    eog_cleaned : Union[list, np.array, pd.Series]
+    veog_cleaned : Union[list, np.array, pd.Series]
         The cleaned vertical EOG channel. Note that it must be positively oriented, i.e., blinks must
         appear as upward peaks.
     sampling_rate : int
@@ -89,7 +89,7 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
     """
     # Sanitize input
-    eog_cleaned = as_vector(eog_cleaned)
+    eog_cleaned = as_vector(veog_cleaned)
 
     # Apply method
     method = method.lower()
