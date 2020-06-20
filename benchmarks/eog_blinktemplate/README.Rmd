@@ -387,6 +387,7 @@ print(
 ```
 
 The optimal blink template using the SCR function by @bach2010modelling has the following parameters:
+
 ```{python, eval=TRUE, echo=FALSE}
 scr = np.nanmedian(params_scr.iloc[:, [0, 1, 2, 3]], axis=0)
 print(
