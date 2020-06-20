@@ -24,7 +24,7 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
         The signal sampling rate (in Hz, i.e., samples/second). Needed for method 'blinker' or
         'jammes2008'.
     method : str
-        The peak detection algorithm. Can be one of 'mne' (default) (requires the MNE package
+        The peak detection algorithm. Can be one of 'neurokit', 'mne' (requires the MNE package
         to be installed), or 'brainstorm', 'blinker' or 'jammes2008'.
     sampling_rate : int
         The sampling frequency of the EOG signal (in Hz, i.e., samples/second). Needs to be supplied if the
@@ -53,7 +53,7 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
     >>> neurokit = nk.eog_findpeaks(eog_cleaned,
                                     sampling_rate=100,
                                     method="neurokit",
-                                    threshold=0.4,
+                                    threshold=0.33,
                                     show=True)
     >>> fig1 = nk.events_plot(neurokit, eog_cleaned)  # doctest: +ELLIPSIS
     >>> fig1
@@ -110,16 +110,16 @@ def eog_findpeaks(eog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
 
 # =============================================================================
-# Methods
+# Method - NeuroKit
 # =============================================================================
-def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=1000, threshold=0.5, show=True):
+def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=1000, threshold=0.33, show=True):
     """In-house EOG blink detection.
 
     """
-    peaks = signal_findpeaks(eog_cleaned, relative_height_min=1)["Peaks"]
+    peaks = signal_findpeaks(eog_cleaned, relative_height_min=1.25)["Peaks"]
     peaks = signal_fixpeaks(peaks=peaks,
                             sampling_rate=sampling_rate,
-                            interval_min=0.25,
+                            interval_min=0.2,
                             method="neurokit")
     peaks = _eog_findpeaks_neurokit_filterblinks(eog_cleaned,
                                                  peaks,
@@ -141,7 +141,7 @@ def _eog_findpeaks_neurokit_filterblinks(eog_cleaned, peaks, sampling_rate=1000,
     events = epochs_to_array(events)  # Convert to 2D array
 
     # Generate Blink-template
-    template = _eog_simulate_blink(sampling_rate=sampling_rate)
+    template = _eog_simulate_blink(sampling_rate=sampling_rate, method="gamma")
 
     # Get the "distance" (RMSE) between each blink and the template
     rmse = np.full(events.shape[1], np.nan)
@@ -169,7 +169,9 @@ def _eog_findpeaks_neurokit_filterblinks(eog_cleaned, peaks, sampling_rate=1000,
 
 
 
-
+# =============================================================================
+# Method - Jammes (2008)
+# =============================================================================
 #def _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=1000):
 #    """Derivative-based method by Jammes (2008)
 #
@@ -201,6 +203,9 @@ def _eog_findpeaks_neurokit_filterblinks(eog_cleaned, peaks, sampling_rate=1000,
 #    return peaks
 
 
+# =============================================================================
+# Method - MNE
+# =============================================================================
 def _eog_findpeaks_mne(eog_cleaned):
     """EOG blink detection based on MNE.
 
@@ -222,6 +227,9 @@ def _eog_findpeaks_mne(eog_cleaned):
     return eog_events
 
 
+# =============================================================================
+# Method - Brainstorm
+# =============================================================================
 def _eog_findpeaks_brainstorm(eog_cleaned):
     """EOG blink detection implemented in brainstorm.
 
@@ -236,6 +244,9 @@ def _eog_findpeaks_brainstorm(eog_cleaned):
     return peaks
 
 
+# =============================================================================
+# Method - blinker
+# =============================================================================
 def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
     """EOG blink detection based on BLINKER algorithm.
 
