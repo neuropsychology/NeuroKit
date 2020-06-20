@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=True, burg_side="one-sided"
+    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=True
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -49,11 +49,11 @@ def signal_psd(
     >>> fig3 = nk.signal_psd(signal, method="burg", min_frequency=1)
     >>>
     >>> data = nk.signal_psd(signal, method="multitapers", max_frequency=30, show=False)
-    >>> fig3 = data.plot(x="Frequency", y="Power")
-    >>> fig3 #doctest: +SKIP
-    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False, min_frequency=1)
     >>> fig4 = data.plot(x="Frequency", y="Power")
     >>> fig4 #doctest: +SKIP
+    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False, min_frequency=1)
+    >>> fig5 = data.plot(x="Frequency", y="Power")
+    >>> fig5 #doctest: +SKIP
 
     """
     # Constant Detrend
@@ -87,7 +87,7 @@ def signal_psd(
             frequency, power = _signal_psd_welch(
     signal, sampling_rate=sampling_rate, nperseg=nperseg
 )
-        # Lomblombscargle (Scipy)
+        # Lombscargle (Scipy)
         elif method.lower() in ["lombscargle", "lomb"]:
             frequency, power = _signal_psd_lomb(
     signal, sampling_rate=sampling_rate, nperseg=nperseg, min_frequency=min_frequency, max_frequency=max_frequency
@@ -95,7 +95,7 @@ def signal_psd(
 
         # BURG
         elif method.lower() in ["burg", "pburg", "spectrum"]:
-            frequency, power = _signal_psd_burg(signal, sampling_rate=sampling_rate, order=ar_order, criteria=order_criteria, corrected=order_corrected, side=burg_side, norm=burg_norm, nperseg=nperseg)
+            frequency, power = _signal_psd_burg(signal, sampling_rate=sampling_rate, order=ar_order, criteria=order_criteria, corrected=order_corrected, side="one-sided", norm=burg_norm, nperseg=nperseg)
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency, "Power": power})
@@ -168,17 +168,17 @@ def _signal_psd_lomb(
 
     nfft=int(nperseg * 2)
     if max_frequency == np.inf:
-        max_frequency = 10  #sanitize highest frequency
+        max_frequency = 20  #sanitize highest frequency
 
     # Specify frequency range
     frequency = np.linspace(min_frequency, max_frequency, nfft)
     # Compute angular frequencies
-    angular_freqs = np.asarray(2 * np.pi / frequency)
+    #angular_freqs = np.asarray(2 * np.pi / frequency)
 
     # Specify sample times
     t = np.arange(len(signal))
 
-    power = np.asarray(scipy.signal.lombscargle(t, signal, angular_freqs, normalize=True))
+    power = np.asarray(scipy.signal.lombscargle(t, signal, frequency, normalize=True))
 
     return frequency, power
 
@@ -205,16 +205,16 @@ def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corre
     # for dc-centered psd, w spans (-pi, pi] for even nfft, (-pi, pi) for add nfft
     if side == "one-sided":
         w = np.pi * np.linspace(0, 1, len(power))
-    elif side == "two-sided":
-        w = np.pi * np.linspace(0, 2, len(power), endpoint=False)  #exclude last point
-    elif side == "centerdc":
-        if nfft % 2 == 0:
-            w = np.pi * np.linspace(-1, 1, len(power))
-        else:
-            w = np.pi * np.linspace(-1, 1, len(power) + 1, endpoint=False)  # exclude last point
-            w = w[1:]  # exclude first point (extra)
+#    elif side == "two-sided":
+#        w = np.pi * np.linspace(0, 2, len(power), endpoint=False)  #exclude last point
+#    elif side == "centerdc":
+#        if nfft % 2 == 0:
+#            w = np.pi * np.linspace(-1, 1, len(power))
+#        else:
+#            w = np.pi * np.linspace(-1, 1, len(power) + 1, endpoint=False)  # exclude last point
+#            w = w[1:]  # exclude first point (extra)
 
-    frequency = w * sampling_rate
+    frequency = (w * sampling_rate) / (2 * np.pi)
 
     return frequency, power
 
@@ -235,7 +235,7 @@ def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side="on
     # Initialisation
     # rho is variance of driving white noise process (prediction error)
     rho = sum(abs(signal)**2.) / float(N)
-    den = rho * 2. * N
+    denominator = rho * 2. * N
 
     ar = np.zeros(0, dtype=complex)  #AR parametric signal model estimate
     ref = np.zeros(0, dtype=complex)  #vector K of reflection coefficients (parcor coefficients)
@@ -249,7 +249,7 @@ def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side="on
 
         # calculate the next order reflection coefficient
         numerator = sum([ef[j]*eb[j - 1].conjugate() for j in range(k + 1, N)])
-        denominator = temp * den - abs(ef[k])**2 - abs(eb[N - 1])**2
+        denominator = temp * denominator - abs(ef[k])**2 - abs(eb[N - 1])**2
         kp = -2. * numerator / denominator
 
         # Update the prediction error
@@ -392,7 +392,7 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=Non
         assert len(psd) % 2 == 0
         one_side_psd = np.array(psd[0:len(psd)//2 + 1]) * 2.
         one_side_psd[0] /= 2.
-        one_side_psd[-1] = psd[-1]
+#        one_side_psd[-1] = psd[-1]
         psd = one_side_psd
 
     # convert to centerdc
