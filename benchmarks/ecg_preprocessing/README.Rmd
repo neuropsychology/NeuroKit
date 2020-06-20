@@ -37,6 +37,7 @@ matplotlib$use("Agg", force = TRUE)
 
 # Benchmarking of ECG Preprocessing Methods
 
+*This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation).
 
 This work is a replication and extension of the work by @porr2019r, that compared the performance of different popular R-peak detectors.
 
