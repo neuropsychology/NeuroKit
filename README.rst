@@ -133,6 +133,8 @@ Examples
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
 -  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
+-  `Analyze Electrooculography EOG data <https://neurokit2.readthedocs.io/en/latest/examples/eog.html>`_
+-  `Fit a function to a signal <https://neurokit2.readthedocs.io/en/latest/tutorials/fit_function.html>`_
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
@@ -490,7 +492,7 @@ Signal Decomposition
     signal = nk.signal_simulate(duration=10, frequency=1)  # High freq
     signal += 3 * nk.signal_simulate(duration=10, frequency=3)  # Higher freq
     signal += 3 * np.linspace(0, 2, len(signal))  # Add baseline and linear trend
-    signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)  # Nonlinear trend
+    signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)  # Non-linear trend
     signal += np.random.normal(0, 0.02, len(signal))  # Add noise
 
     # Decompose signal using Empirical Mode Decomposition (EMD)
