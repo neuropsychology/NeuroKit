@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.cm
 import neurokit2 as nk
 
 
@@ -220,6 +221,39 @@ parameters
 fig = plt.gcf()
 fig.set_size_inches(10*1.5, 6*1.5, forward=True)
 fig.savefig("README_complexity_optimize.png", dpi=300, h_pad=3)
+
+# =============================================================================
+# Signal Decomposition
+# =============================================================================
+np.random.seed(333)
+
+# Create complex signal
+signal = nk.signal_simulate(duration=10, frequency=1)  # High freq
+signal += 3 * nk.signal_simulate(duration=10, frequency=3)  # Higher freq
+signal += 3 * np.linspace(0, 2, len(signal))  # Add baseline and linear trend
+signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)  # Non-linear trend
+signal += np.random.normal(0, 0.02, len(signal))  # Add noise
+
+# Decompose signal using Empirical Mode Decomposition (EMD)
+components = nk.signal_decompose(signal, method='emd')
+nk.signal_plot(components)  # Visualize components
+
+# Recompose merging correlated components
+recomposed = nk.signal_recompose(components, threshold=0.99)
+nk.signal_plot(recomposed)  # Visualize components
+
+
+# Save plot
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
+ax1.plot(signal, color="grey", label="Original Signal")
+for i in range(len(components)):
+    ax2.plot(components[i, :], color=matplotlib.cm.magma(i / len(components)), label="Component " + str(i))
+for i in range(len(recomposed)):
+    ax3.plot(recomposed[i, :], color=matplotlib.cm.viridis(i / len(recomposed)), label="Recomposed " + str(i))
+fig.set_size_inches(10, 6, forward=True)
+[ax.legend(loc=1) for ax in plt.gcf().axes]
+
+fig.savefig("README_decomposition.png", dpi=300, h_pad=3)
 
 
 # =============================================================================

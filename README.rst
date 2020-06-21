@@ -481,6 +481,29 @@ Complexity (Entropy, Fractal Dimensions, ...)
     nk.entropy_approximate(signal)
 
 
+Signal Decomposition
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    # Create complex signal
+    signal = nk.signal_simulate(duration=10, frequency=1)  # High freq
+    signal += 3 * nk.signal_simulate(duration=10, frequency=3)  # Higher freq
+    signal += 3 * np.linspace(0, 2, len(signal))  # Add baseline and linear trend
+    signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)  # Nonlinear trend
+    signal += np.random.normal(0, 0.02, len(signal))  # Add noise
+
+    # Decompose signal using Empirical Mode Decomposition (EMD)
+    components = nk.signal_decompose(signal, method='emd')
+    nk.signal_plot(components)  # Visualize components
+
+    # Recompose merging correlated components
+    recomposed = nk.signal_recompose(components, threshold=0.99)
+    nk.signal_plot(recomposed)  # Visualize components
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_decomposition.png
+        :target: https://neurokit2.readthedocs.io/en/latest/
+
 Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
