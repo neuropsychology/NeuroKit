@@ -297,7 +297,7 @@ def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side="on
                 eb[j] = eb[j-1] + kp.conjugate() * ef_previous
 
         # save the reflection coefficient
-        ref.resize(ref.size+1)
+        ref = np.resize(ref, ref.size + 1)
         ref[k] = kp
 
     return ar, rho, ref
