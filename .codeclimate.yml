@@ -11,10 +11,6 @@ engines:
       E303:
         enabled: false
 
-plugins:
-  duplication:
-    enabled: false
-    
 checks:
   argument-count:
     enabled: false
@@ -35,7 +31,7 @@ checks:
   similar-code:
     enabled: false
   identical-code:
-    enabled: true
+    enabled: false
 
 exclude_patterns:
 - "tests/"
