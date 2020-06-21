@@ -5,7 +5,7 @@ import scipy.cluster
 from .signal_zerocrossings import signal_zerocrossings
 
 
-def signal_recompose(components, method="wcorr", threshold=0.5, **kwargs):
+def signal_recompose(components, method="wcorr", threshold=0.5, keep_sd=None, **kwargs):
     """Combine signal sources after decomposition.
 
     Combine and reconstruct meaningful signal sources after signal decomposition.
@@ -18,6 +18,11 @@ def signal_recompose(components, method="wcorr", threshold=0.5, **kwargs):
         The decomposition method. Can be one of 'wcorr'.
     threshold : float
         The threshold used to group components together.
+    keep_sd : float
+        If a float is specified, will only keep the reconstructed components that are superior
+        or equal to that percentage of the max standard deviaiton (SD) of the components. For
+        instance, ``keep_sd=0.01`` will remove all components with SD is lower that 1% of the
+        max SD. This can be used to filter out noise.
     **kwargs
         Other arguments to override for instance ``metric='chebyshev'``.
 
@@ -52,6 +57,9 @@ def signal_recompose(components, method="wcorr", threshold=0.5, **kwargs):
         recomposed = _signal_recompose_sum(components, clusters)
     else:
         raise ValueError("NeuroKit error: signal_decompose(): 'method' should be one of 'emd'")
+
+    if keep_sd is not None:
+        recomposed = _signal_recompose_filter_sd(components, threshold=keep_sd)
 
     return recomposed
 
@@ -145,11 +153,17 @@ def _signal_recompose_get_wcorr(components, show=False):
 
 
 # =============================================================================
-# Utils
+# Filter method
 # =============================================================================
+def _signal_recompose_filter_sd(components, threshold=0.01):
+    """Filter by standard deviation."""
+    SDs = [np.std(components[i, :], ddof=1) for i in range(len(components))]
+    indices = np.where(SDs >= threshold * np.max(SDs))
+    return components[indices]
+
+
 def _signal_recompose_meanfreq(components, sampling_rate=1000):
-    """Get the mean frequency of components
-    """
+    """Get the mean frequency of components."""
     duration = components.shape[1] / sampling_rate
     n = len(components)
     freqs = np.zeros(n)

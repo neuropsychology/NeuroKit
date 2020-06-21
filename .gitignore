@@ -127,3 +127,7 @@ data/ludb/ECGs.csv
 data/ludb/Rpeaks.csv
 benchmarks/ecg_preprocessing/make_data.py
 data/eogdb/eogdb.csv
+data/eogdb/eogdb_task1.csv
+data/eogdb/eogdb_task2.csv
+data/eogdb/eogdb_task3.csv
+data/eogdb/eogdb_task4.csv

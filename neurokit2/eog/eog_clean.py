@@ -14,7 +14,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
     Parameters
     ----------
     eog_signal : Union[list, np.array, pd.Series]
-        The raw EOG channel.
+        The raw EOG channel (either vertical or horizontal).
     sampling_rate : int
         The sampling frequency of `eog_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
@@ -102,18 +102,17 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
 # Methods
 # =============================================================================
 def _eog_clean_neurokit(eog_signal, sampling_rate=1000):
-    """NeuroKit method
-
-    """
+    """NeuroKit method."""
     return signal_filter(
         eog_signal, sampling_rate=sampling_rate, method="butterworth", order=6, lowcut=0.25, highcut=7.5
     )
 
 
 def _eog_clean_agarwal2019(eog_signal, sampling_rate=1000):
-    """Agarwal, M., & Sivakumar, R. (2019). Blink: A Fully Automated Unsupervised Algorithm for
-    Eye-Blink Detection in EEG Signals. In 2019 57th Annual Allerton Conference on Communication,
-    Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
+    """Agarwal, M., & Sivakumar, R.
+
+    (2019). Blink: A Fully Automated Unsupervised Algorithm for Eye-Blink Detection in EEG Signals. In 2019 57th
+    Annual Allerton Conference on Communication, Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
 
     """
     return signal_filter(
@@ -131,9 +130,10 @@ def _eog_clean_brainstorm(eog_signal, sampling_rate=1000):
 
 
 def _eog_clean_blinker(eog_signal, sampling_rate=1000):
-    """Kleifges, K., Bigdely-Shamlo, N., Kerick, S. E., & Robbins, K. A. (2017). BLINKER: automated
-    extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience,
-    11, 12.
+    """Kleifges, K., Bigdely-Shamlo, N., Kerick, S.
+
+    E., & Robbins, K. A. (2017). BLINKER: automated extraction of ocular indices from EEG enabling large-scale
+    analysis. Frontiers in neuroscience, 11, 12.
 
     """
     # "Each candidate signal is band-passed filtered in the interval [1, 20] Hz prior
@@ -175,8 +175,10 @@ def _eog_clean_mne(eog_signal, sampling_rate=1000):
 
 
 def _eog_clean_kong1998(eog_signal, sampling_rate=1000):
-    """Kong, X., & Wilson, G. F. (1998). A new EOG-based eyeblink detection algorithm. Behavior
-    Research Methods, Instruments, & Computers, 30(4), 713-719.
+    """Kong, X., & Wilson, G.
+
+    F. (1998). A new EOG-based eyeblink detection algorithm. Behavior Research Methods, Instruments, & Computers,
+    30(4), 713-719.
 
     """
     #  The order E should be less than half of the expected eyeblink duration. For example, if
