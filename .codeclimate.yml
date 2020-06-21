@@ -11,7 +11,10 @@ engines:
       E303:
         enabled: false
 
-
+plugins:
+  duplication:
+    enabled: false
+    
 checks:
   argument-count:
     enabled: false
