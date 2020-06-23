@@ -404,7 +404,7 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=Non
         center_psd[0] = psd[-1]
         psd = center_psd
 
-    if norm == True:
+    if norm is True:
         psd /= max(psd)
 
     return psd
