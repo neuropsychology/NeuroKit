@@ -18,9 +18,10 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_me
     sampling_rate : int
         The sampling frequency of the signal that contains peaks (in Hz, i.e., samples/second). Defaults to 1000.
     desired_length : int
-        By default, the returned signal rate has the same number of elements as the raw signal. If
-        set to an integer, the returned signal rate will be interpolated between peaks over `desired_length`
-        samples. Has no effect if a DataFrame is passed in as the `signal` argument. Defaults to None.
+        If None, the `desired_length` is set to length of peaks. The returned signal period will
+        have the same number of elements as peaks (non-interpolated between peaks). If set to the
+        length of signal, the returned signal period will be interpolated over `desired_length` samples
+        (interpolated between peaks) and will have the same number of elements as signal. Default to None.
     interpolation_method : str
         Method used to interpolate the rate between peaks. See `signal_interpolate()`. 'monotone_cubic' is chosen
         as the default interpolation method since it ensures monotone interpolation between data points
