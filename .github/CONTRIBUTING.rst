@@ -41,7 +41,7 @@ Now, navigate to the folder where your script is by typing ``cd C:\the\folder\of
 
     isort myfile.py -l 120  --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma
     black myfile.py --line-length 120
-    docformatter myfile.py --wrap-summaries 120 --wrap-descriptions 113 --blank --make-summary-multi-line --in-place
+    docformatter myfile.py --wrap-summaries 120 --wrap-descriptions 113 --blank --in-place
     
     flake8 myfile.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203,W503
     pylint myfile.py --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --reports=n --suggestion-mode=y --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 --disable=E0401 --disable=W9006 --disable=C0330 --disable=R0914 --disable=R0912 --disable=R0915 --disable=W0102 --disable=W0511 --disable=C1801 --disable=C0111 --disable=R1705 --disable=R1720 --disable=C0301 --disable=C0415 --disable=C0103 --disable=C0302 --disable=R1716 --disable=W0632 --disable=E1136 --extension-pkg-whitelist=numpy
@@ -53,7 +53,7 @@ The first three commands will make some modifications to your code so that it is
 
     isort neurokit2 -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --recursive 
     black neurokit2 --line-length 120
-    docformatter neurokit2 --wrap-summaries 120 --wrap-descriptions 113 --blank --make-summary-multi-line --in-place --recursive
+    docformatter neurokit2 --wrap-summaries 120 --wrap-descriptions 113 --blank --in-place --recursive
     
     flake8 neurokit2 --exclude neurokit2/__init__.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203,W503
     pylint neurokit2 --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --reports=n --suggestion-mode=y --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 --disable=E0401 --disable=W9006 --disable=C0330 --disable=R0914 --disable=R0912 --disable=R0915 --disable=W0102 --disable=W0511 --disable=C1801 --disable=C0111 --disable=R1705 --disable=R1720 --disable=C0301 --disable=C0415 --disable=C0103 --disable=C0302 --disable=R1716 --disable=W0632 --disable=E1136 --extension-pkg-whitelist=numpy --exit-zero

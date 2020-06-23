@@ -1,6 +1,8 @@
 
 # Benchmarking of ECG Preprocessing Methods
 
+*This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation).
+
 This work is a replication and extension of the work by Porr & Howell
 (2019), that compared the performance of different popular R-peak
 detectors.
