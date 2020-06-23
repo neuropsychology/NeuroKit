@@ -9,7 +9,13 @@ ECG
 .. automodule:: neurokit2.ecg
    :members: 
 
-Heart Rate Variability
+PPG
+-------
+
+.. automodule:: neurokit2.ppg
+   :members: 
+
+HRV
 ------------------------
 
 .. automodule:: neurokit2.hrv
@@ -33,25 +39,15 @@ EMG
 .. automodule:: neurokit2.emg
    :members: 
 
-Automated Processing and Analysis
------------------------------------
 
-.. automodule:: neurokit2.bio
-   :members:  
- 
 EEG
 -------
 
 .. automodule:: neurokit2.eeg
    :members: 
 
-PPG
--------
 
-.. automodule:: neurokit2.ppg
-   :members: 
-
-General Signal Processing
+Signal Processing
 --------------------------
 
 .. automodule:: neurokit2.signal
@@ -63,13 +59,13 @@ Events
 .. automodule:: neurokit2.events
    :members: 
 
-Read data
+Data
 ----------
 
 .. automodule:: neurokit2.data
    :members: 
 
-Epoch data
+Epochs
 -----------
 
 .. automodule:: neurokit2.epochs
@@ -89,6 +85,10 @@ Complexity
 
 Miscellaneous
 --------------
+
+.. automodule:: neurokit2.bio
+   :members:  
+
 
 .. automodule:: neurokit2.misc
    :members: 
