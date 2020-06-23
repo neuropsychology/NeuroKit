@@ -328,7 +328,7 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         else:
             ecg_cols = [col for col in ecg_signals.columns if "ECG_R_Peaks" in col]
             if ecg_cols:
-                ecg_period = signal_rate(ecg_signals, rpeaks, sampling_rate=sampling_rate)
+                ecg_period = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_signals))
             else:
                 raise ValueError(
                     "NeuroKit error: _ecg_rsa_formatinput():" "Wrong input, we couldn't extract" "heart rate signal."

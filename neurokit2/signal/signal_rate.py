@@ -2,7 +2,7 @@
 from .signal_period import signal_period
 
 
-def signal_rate(signal, peaks=None, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"):
+def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"):
     """Calculate signal rate from a series of peaks.
 
     This function can also be called either via ``ecg_rate()``, ```ppg_rate()`` or ``rsp_rate()``
@@ -10,14 +10,11 @@ def signal_rate(signal, peaks=None, sampling_rate=1000, desired_length=None, int
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
-        The time-series of signal.
     peaks : Union[list, np.array, pd.DataFrame, pd.Series, dict]
         The samples at which the peaks occur. If an array is passed in, it is assumed that it was obtained
         with `signal_findpeaks()`. If a DataFrame is passed in, it is assumed it is of the same length
         as the input signal in which occurrences of R-peaks are marked as "1", with such containers
-        obtained with e.g., ecg_findpeaks() or rsp_findpeaks(). Default is None. If default, peaks will
-        be obtained with `signal_findpeaks()`.
+        obtained with e.g., ecg_findpeaks() or rsp_findpeaks().
     sampling_rate : int
         The sampling frequency of the signal that contains peaks (in Hz, i.e., samples/second). Defaults to 1000.
     desired_length : int
@@ -44,13 +41,14 @@ def signal_rate(signal, peaks=None, sampling_rate=1000, desired_length=None, int
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000, frequency=1)
+    >>> info = nk.signal_findpeaks(signal)
     >>>
-    >>> rate = nk.signal_rate(signal)
+    >>> rate = nk.signal_rate(peaks=info["Peaks"], desired_length=len(signal))
     >>> fig = nk.signal_plot(rate)
     >>> fig #doctest: +SKIP
 
     """
-    period = signal_period(signal, peaks, sampling_rate, desired_length, interpolation_method)
+    period = signal_period(peaks, sampling_rate, desired_length, interpolation_method)
     rate = 60 / period
 
     return rate
