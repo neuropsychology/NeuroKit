@@ -1,5 +1,9 @@
 import numpy as np
 import pandas as pd
+# setup matplotlib with Agg to run on server
+import matplotlib
+matplotlib.use('Agg')
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import matplotlib.cm
 import neurokit2 as nk
