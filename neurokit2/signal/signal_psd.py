@@ -222,7 +222,7 @@ def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corre
 
     # signal is real, not complex
     if nfft % 2 == 0:
-        power  = psd[0:int(nfft / 2 + 1)] * 2
+        power = psd[0:int(nfft / 2 + 1)] * 2
     else:
         power = psd[0:int((nfft + 1) / 2)] * 2
 
