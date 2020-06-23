@@ -259,6 +259,44 @@ fig.set_size_inches(10, 6, forward=True)
 
 fig.savefig("README_decomposition.png", dpi=300, h_pad=3)
 
+# =============================================================================
+# Signal Power Spectrum Density
+# =============================================================================
+
+# Generate signal
+signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20) + nk.signal_simulate(frequency=30)
+# Find Power Spectrum Density with different methods
+# Mutlitaper
+multitaper = nk.signal_psd(signal, method="multitapers", show=False, max_frequency=100)
+
+# Welch
+welch = nk.signal_psd(signal, method="welch", min_frequency=1, show=False, max_frequency=100)
+
+# Burg
+burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=False, ar_order=15, max_frequency=100)
+
+
+# Visualize the different methods together
+fig, ax = plt.subplots()
+
+ax.plot(welch["Frequency"], welch["Power"], label="Welch", color="#CFD8DC", linewidth=2)
+ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#00695C", linewidth=2)
+ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#0097AC", linewidth=2)
+
+ax.set_title("Power Spectrum Density (PSD)")
+ax.set_yscale('log')
+ax.set_xlabel("Frequency (Hz)")
+ax.set_ylabel("PSD (ms^2/Hz)")
+ax.legend(loc="upper right")
+
+ax.axvline(5, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+ax.axvline(20, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+ax.axvline(30, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+
+# Save plot
+fig = plt.gcf()
+fig.set_size_inches(10*1.5, 6*1.5, forward=True)
+fig.savefig("README_psd.png", dpi=300, h_pad=3)
 
 # =============================================================================
 # Statistics
