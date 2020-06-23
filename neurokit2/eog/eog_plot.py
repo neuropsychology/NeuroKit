@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def eog_plot(eog_signals, sampling_rate=None):
-    """Visualize ECG data.
+    """Visualize EOG data.
 
     Parameters
     ----------
@@ -60,7 +60,7 @@ def eog_plot(eog_signals, sampling_rate=None):
         ax1.set_xlabel("Samples")
 
     fig.suptitle("Electrooculography (EOG)", fontweight="bold")
-    plt.subplots_adjust(hspace=0.2)
+    plt.subplots_adjust(hspace=0.5)
 
     # Plot cleaned and raw EOG
     ax0.set_title("Raw and Cleaned Signal")

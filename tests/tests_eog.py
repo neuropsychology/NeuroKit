@@ -36,3 +36,13 @@ def test_eog_clean():
         verbose=False,
     )
     assert np.allclose((eog_cleaned_mne - mne_clean).mean(), 0)
+
+
+def test_eog_process():
+
+    eog_signal = nk.data("eog_200hz")["vEOG"]
+    signals, info = nk.eog_process(eog_signal, sampling_rate=200)
+
+    # Extract blinks, test across dataframe and dict
+    blinks = np.where(signals["EOG_Blinks"] == 1)[0]
+    assert np.all(blinks == info["EOG_Blinks"])
