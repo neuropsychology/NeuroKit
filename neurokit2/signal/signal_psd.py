@@ -96,17 +96,32 @@ def signal_psd(
         # Welch (Scipy)
         if method.lower() in ["welch"]:
             frequency, power = _signal_psd_welch(
-    signal, sampling_rate=sampling_rate, nperseg=nperseg
-)
+                    signal,
+                    sampling_rate=sampling_rate,
+                    nperseg=nperseg
+            )
         # Lombscargle (Scipy)
         elif method.lower() in ["lombscargle", "lomb"]:
             frequency, power = _signal_psd_lomb(
-    signal, sampling_rate=sampling_rate, nperseg=nperseg, min_frequency=min_frequency, max_frequency=max_frequency
-)
+                    signal,
+                    sampling_rate=sampling_rate,
+                    nperseg=nperseg,
+                    min_frequency=min_frequency,
+                    max_frequency=max_frequency
+            )
 
         # BURG
         elif method.lower() in ["burg", "pburg", "spectrum"]:
-            frequency, power = _signal_psd_burg(signal, sampling_rate=sampling_rate, order=ar_order, criteria=order_criteria, corrected=order_corrected, side="one-sided", norm=burg_norm, nperseg=nperseg)
+            frequency, power = _signal_psd_burg(
+                    signal,
+                    sampling_rate=sampling_rate,
+                    order=ar_order,
+                    criteria=order_criteria,
+                    corrected=order_corrected,
+                    side="one-sided",
+                    norm=burg_norm,
+                    nperseg=nperseg
+            )
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency, "Power": power})
@@ -131,13 +146,14 @@ def _signal_psd_multitaper(
     try:
         import mne
 
-        power, frequency = mne.time_frequency.psd_array_multitaper(signal,
-            sfreq=sampling_rate,
-            fmin=min_frequency,
-            fmax=max_frequency,
-            adaptive=True,
-            normalization="full",
-            verbose=False,
+        power, frequency = mne.time_frequency.psd_array_multitaper(
+                signal,
+                sfreq=sampling_rate,
+                fmin=min_frequency,
+                fmax=max_frequency,
+                adaptive=True,
+                normalization="full",
+                verbose=False,
         )
     except ImportError:
         raise ImportError(
@@ -177,14 +193,14 @@ def _signal_psd_lomb(
     signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf
 ):
 
-    nfft=int(nperseg * 2)
+    nfft = int(nperseg * 2)
     if max_frequency == np.inf:
-        max_frequency = 20  #sanitize highest frequency
+        max_frequency = 20  # sanitize highest frequency
 
     # Specify frequency range
     frequency = np.linspace(min_frequency, max_frequency, nfft)
     # Compute angular frequencies
-    #angular_freqs = np.asarray(2 * np.pi / frequency)
+    # angular_freqs = np.asarray(2 * np.pi / frequency)
 
     # Specify sample times
     t = np.arange(len(signal))
@@ -208,7 +224,7 @@ def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corre
     if nfft % 2 == 0:
         power  = psd[0:int(nfft / 2 + 1)] * 2
     else:
-        power  = psd[0:int((nfft + 1) / 2)] * 2
+        power = psd[0:int((nfft + 1) / 2)] * 2
 
     # angular frequencies, w
     # for one-sided psd, w spans [0, pi]
@@ -248,10 +264,10 @@ def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side="on
     rho = sum(abs(signal)**2.) / float(N)
     denominator = rho * 2. * N
 
-    ar = np.zeros(0, dtype=complex)  #AR parametric signal model estimate
-    ref = np.zeros(0, dtype=complex)  #vector K of reflection coefficients (parcor coefficients)
-    ef = signal.astype(complex)  #forward prediction error
-    eb = signal.astype(complex)  #backward prediction error
+    ar = np.zeros(0, dtype=complex)  # AR parametric signal model estimate
+    ref = np.zeros(0, dtype=complex)  # vector K of reflection coefficients (parcor coefficients)
+    ef = signal.astype(complex)  # forward prediction error
+    eb = signal.astype(complex)  # backward prediction error
     temp = 1.
 
     # Main recursion
@@ -357,7 +373,7 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
             residual = np.log(rho) + 3. * (k + 1.) / float(N)
 
     elif criteria == "FPE":
-        fpe = rho * (N + k + 1.) / (N- k -1)
+        fpe = rho * (N + k + 1.) / (N - k - 1)
         return fpe
 
     elif criteria == "MDL":
