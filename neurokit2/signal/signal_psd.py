@@ -15,16 +15,27 @@ def signal_psd(
         The signal (i.e., a time series) in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
-    show : bool
-        If True, will return a plot. If False, will return the density values that can be plotted externally.
     method : str
         Either 'multitapers' (default; requires the 'mne' package), or 'welch' (requires the 'scipy' package).
+    show : bool
+        If True, will return a plot. If False, will return the density values that can be plotted externally.
     min_frequency : float
         The minimum frequency.
     max_frequency : float
         The maximum frequency.
     window : int
-        Length of each window in seconds (for Welch method).
+        Length of each window in seconds (for Welch method). If None (default), window will be automatically
+        calculated to capture at least 2 cycles of min_frequency. If the length of recording does not
+        allow the formal, window will be default to half of the length of recording.
+    ar_order : int
+        The order of autoregression (for AR methods e.g. Burg).
+    order_criteria : str
+        The criteria to automatically select order in parametric PSD (for AR methods e.g. Burg).
+    order_corrected : bool
+        Specify for AIC and KIC order_criteria. If unsure which method to use to choose the order,
+        rely on the default of corrected KIC.
+    bug_norm : bool
+        Normalization for Burg method.
 
     See Also
     --------
@@ -330,6 +341,8 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
         The AR order.
     rho : int
         The rho at order k.
+    corrected : bool
+        Specify for AIC and KIC methods.
     """
     if criteria == "AIC":
         if corrected is True:
