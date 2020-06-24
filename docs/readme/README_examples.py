@@ -134,7 +134,20 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 # Process it
 #signals, info = nk.ppg_process(emg, sampling_rate=250)
 
+# =============================================================================
+# Electrooculography (EOG)
+# =============================================================================
 
+# Import EOG data
+eog_signal = nk.data("eog_100hz")
+
+# Process it
+signals, info = nk.eog_process(eog_signal, sampling_rate=100)
+
+# Plot
+plot = nk.eog_plot(signals, sampling_rate=100)
+plot.set_size_inches(10, 6, forward=True)
+plot.savefig("README_eog.png", dpi=300, h_pad=3)
 
 # =============================================================================
 # Signal Processing

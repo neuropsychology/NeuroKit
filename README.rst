@@ -302,17 +302,30 @@ Photoplethysmography (PPG/BVP)
     ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70)
 
 
+Electrooculography (EOG)
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+    
+    # Import EOG data
+    eog_signal = nk.data("eog_100hz")
+
+    # Process it
+    signals, info = nk.eog_process(eog_signal, sampling_rate=100)
+
+    # Plot
+    plot = nk.eog_plot(signals, sampling_rate=100)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png
+
+
 
 Electrogastrography (EGG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_!
 
-
-Electrooculography (EOG)
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Consider `helping us develop it <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_!
 
 Physiological Data Analysis
 ----------------------------

@@ -31,7 +31,7 @@ def eog_plot(eog_signals, sampling_rate=None):
     >>> # Process
     >>> eog_signals, info = nk.eog_process(eog_signal, sampling_rate=100)
     >>>
-    >>> nk.eog_plot(signals, sampling_rate=100) #doctest: +ELLIPSIS
+    >>> nk.eog_plot(eog_signals, sampling_rate=100) #doctest: +ELLIPSIS
     <Figure ...>
 
     See Also
@@ -60,7 +60,7 @@ def eog_plot(eog_signals, sampling_rate=None):
         ax1.set_xlabel("Samples")
 
     fig.suptitle("Electrooculography (EOG)", fontweight="bold")
-    plt.subplots_adjust(hspace=0.5)
+    plt.subplots_adjust(hspace=0.4)
 
     # Plot cleaned and raw EOG
     ax0.set_title("Raw and Cleaned Signal")
