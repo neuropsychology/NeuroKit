@@ -58,19 +58,18 @@ def hrv_frequency(
     -------
     DataFrame
         Contains frequency domain HRV metrics:
-        - "*ULF*": spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz
+        - **ULF**: The spectral power density pertaining to ultra low frequency band i.e., .0 to .0033 Hz
         by default.
-        - "*VLF*": spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz
+        - **VLF**: The spectral power density pertaining to very low frequency band i.e., .0033 to .04 Hz
         by default.
-        - "*LF*": spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
-        - "*HF*": spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
-        - "*VHF*": variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
-        - "*LFHF*": the ratio of low frequency power to high frequency power.
-        - "*LFn*": the normalized low frequency, obtained by dividing the low frequency power by
+        - **LF**: The spectral power density pertaining to low frequency band i.e., .04 to .15 Hz by default.
+        - **HF**: The spectral power density pertaining to high frequency band i.e., .15 to .4 Hz by default.
+        - **VHF**: The variability, or signal power, in very high frequency i.e., .4 to .5 Hz by default.
+        - **LFn**: The normalized low frequency, obtained by dividing the low frequency power by
         the total power.
-        - "*HFn*": the normalized high frequency, obtained by dividing the low frequency power by
+        - **HFn**: The normalized high frequency, obtained by dividing the low frequency power by
         the total power.
-        - "*LnHF*": the log transformed HF.
+        - **LnHF**: The log transformed HF.
 
     See Also
     --------

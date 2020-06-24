@@ -36,16 +36,16 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
         therefore it is redundant to report correlations with both (Ciccone, 2017).
         - **SD2**: SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line
         of identity. It is an index of long-term RR interval fluctuations.
-        - **SD2SD1**: the ratio between short and long term fluctuations of the RR intervals
-        (SD2 divided by SD1).
-        - **S**:
-        - **CSI**: the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability
+        - **SD1SD2**: the ratio between short and long term fluctuations of the RR intervals
+        (SD1 divided by SD2).
+        - **S**: Area of ellipse described by SD1 and SD2 (``pi * SD1 * SD2``).
+        - **CSI**: The Cardiac Sympathetic Index, calculated by dividing the longitudinal variability
         of the Poincaré plot by its transverse variability.
-        - **CVI**: the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and
+        - **CVI**: The Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and
         transverse variability.
-        - **CSI_Modified**: the modified CSI obtained by dividing the square of the longitudinal
+        - **CSI_Modified**: The modified CSI obtained by dividing the square of the longitudinal
         variability by its transverse variability. Usually used in seizure research.
-        - **SampEn**: the sample entropy measure of HRV, calculated by `entropy_sample()`.
+        - **SampEn**: The sample entropy measure of HRV, calculated by `entropy_sample()`.
 
     See Also
     --------
@@ -84,8 +84,11 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
 
+    # Initialize empty container for results
+    out = {}
+
     # Poincaré features (SD1, SD2, etc.)
-    out = _hrv_nonlinear_poincare(rri)
+    out = _hrv_nonlinear_poincare_basic(rri, out)
 
     # CSI / CVI
     T = 4 * out["SD1"]
@@ -106,8 +109,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 # =============================================================================
 # Get SD1 and SD2
 # =============================================================================
-def _hrv_nonlinear_poincare(rri):
-    out = {}  # Initialize empty container for results
+def _hrv_nonlinear_poincare_basic(rri, out):
+
 
 #    rri = np.array([125, 250, 100, 300])
 #
@@ -144,16 +147,23 @@ def _hrv_nonlinear_poincare(rri):
     # Area of ellipse described by SD1 and SD2
     out["S"] = np.pi * out["SD1"] * out["SD2"]
 
-#    # Area index (AI) - Yan, 2017
-#    x = rri[:-1]
-#    y = rri[1:]
-#
-#    np.arctan(y/x)
+    # Area index (AI) - Yan, 2017
+    x = rri[:-1]
+    y = rri[1:]
+
+    np.arctan(y/x)
     return out
 
 
 
+def _hrv_nonlinear_poincare_advanced(rri, out):
 
+    # Area index (AI) - Yan, 2017
+    x = rri[:-1]
+    y = rri[1:]
+
+    np.arctan(y/x)
+    return out
 
 
 

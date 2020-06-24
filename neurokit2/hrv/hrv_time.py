@@ -28,27 +28,27 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     -------
     DataFrame
         Contains time domain HRV metrics:
-        - "*RMSSD*": the square root of the mean of the sum of successive differences between
+        - **RMSSD**: The square root of the mean of the sum of successive differences between
         adjacent RR intervals. It is identical (although on another scale) to SD1, and
         therefore it is redundant to report correlations with both (Ciccone, 2017).
-        - "*MeanNN*": the mean of the RR intervals.
-        - "*SDNN*": the standard deviation of the RR intervals.
-        - "*SDSD*": the standard deviation of the successive differences between RR intervals.
-        - "*CVNN*": the standard deviation of the RR intervals (SDNN) divided by the mean of the RR
+        - **MeanNN**: The mean of the RR intervals.
+        - **SDNN**: The standard deviation of the RR intervals.
+        - **SDSD**: The standard deviation of the successive differences between RR intervals.
+        - **CVNN**: The standard deviation of the RR intervals (SDNN) divided by the mean of the RR
         intervals (MeanNN).
-        - "*CVSD*": the root mean square of the sum of successive differences (RMSSD) divided by the
+        - **CVSD**: The root mean square of the sum of successive differences (RMSSD) divided by the
         mean of the RR intervals (MeanNN).
-        - "*MedianNN*": the median of the absolute values of the successive differences between RR intervals.
-        - "*MadNN*": the median absolute deviation of the RR intervals.
-        - "*HCVNN*": the median absolute deviation of the RR intervals (MadNN) divided by the median
+        - **MedianNN**: The median of the absolute values of the successive differences between RR intervals.
+        - **MadNN**: The median absolute deviation of the RR intervals.
+        - **HCVNN**: The median absolute deviation of the RR intervals (MadNN) divided by the median
         of the absolute differences of their successive differences (MedianNN).
-        - "*IQRNN*": the interquartile range (IQR) of the RR intervals.
-        - "*pNN50*": the proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
-        - "*pNN20*": the proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
-        - "*TINN*": a geometrical parameter of the HRV, or more specifically, the baseline width of
+        - **IQRNN**: The interquartile range (IQR) of the RR intervals.
+        - **pNN50**: The proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
+        - **pNN20**: The proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
+        - **TINN**: A geometrical parameter of the HRV, or more specifically, the baseline width of
         the RR intervals distribution obtained by triangular interpolation, where the error of least
         squares determines the triangle. It is an approximation of the RR interval distribution.
-        - "*HTI*": the HRV triangular index, measuring the total number of RR intervals divded by the
+        - **HTI**: The HRV triangular index, measuring the total number of RR intervals divded by the
         height of the RR intervals histogram.
 
     See Also
