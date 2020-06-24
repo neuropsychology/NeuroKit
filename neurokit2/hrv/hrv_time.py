@@ -29,7 +29,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     DataFrame
         Contains time domain HRV metrics:
         - **RMSSD**: The square root of the mean of the sum of successive differences between
-        adjacent RR intervals. It is identical (although on another scale) to SD1, and
+        adjacent RR intervals. It is equivalent (although on another scale) to SD1, and
         therefore it is redundant to report correlations with both (Ciccone, 2017).
         - **MeanNN**: The mean of the RR intervals.
         - **SDNN**: The standard deviation of the RR intervals.

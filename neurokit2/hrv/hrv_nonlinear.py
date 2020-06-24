@@ -5,9 +5,10 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity.entropy_sample import entropy_sample
-from ..complexity.entropy_approximate import entropy_approximate
+from ..complexity import entropy_sample, entropy_approximate
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from ..misc import find_consecutive
+from ..signal import signal_zerocrossings
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
@@ -33,19 +34,26 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
         Contains non-linear HRV metrics:
         - **SD1**: SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular
         to the line of identity. It is an index of short-term RR interval fluctuations
-        i.e., beat-to-beat variability. It is identical (although on another scale) to RMSSD, and
+        i.e., beat-to-beat variability. It is equivalent (although on another scale) to RMSSD, and
         therefore it is redundant to report correlations with both (Ciccone, 2017).
         - **SD2**: SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line
         of identity. It is an index of long-term RR interval fluctuations.
         - **SD1SD2**: the ratio between short and long term fluctuations of the RR intervals
         (SD1 divided by SD2).
-        - **S**: Area of ellipse described by SD1 and SD2 (``pi * SD1 * SD2``).
+        - **S**: Area of ellipse described by SD1 and SD2 (``pi * SD1 * SD2``). It is equivalent to *SD1SD2*.
         - **CSI**: The Cardiac Sympathetic Index, calculated by dividing the longitudinal variability
         of the Poincaré plot by its transverse variability.
         - **CVI**: The Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and
         transverse variability.
         - **CSI_Modified**: The modified CSI obtained by dividing the square of the longitudinal
         variability by its transverse variability. Usually used in seizure research.
+        - **PIP**: Index of heart rate fragmentation (Costa, 2017). Percentage of inflection points.
+        - **IALS**: Index of heart rate fragmentation (Costa, 2017). Inverse of the average length of the
+        acceleration/deceleration segments.
+        - **PSS**: Index of heart rate fragmentation (Costa, 2017). Percentage of short segments.
+        - **PAS**: Index of heart rate fragmentation (Costa, 2017). Percentage of NN intervals in
+        alternation segments.
+        - **ApEn**: The approximate entropy measure of HRV, calculated by `entropy_approximate()`.
         - **SampEn**: The sample entropy measure of HRV, calculated by `entropy_sample()`.
 
     See Also
@@ -71,6 +79,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     - Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
     (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
     56(4), 674-678.
+    - Costa, M. D., Davis, R. B., & Goldberger, A. L. (2017). Heart rate fragmentation: a new approach to
+    the analysis of cardiac interbeat interval dynamics. Front. Physiol. 8, 255 (2017).
     - Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear
     Features of Heart Rate Variability?. IEEE Transactions on Biomedical Engineering, 48(11), 1342-1347.
     - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
@@ -97,6 +107,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out["CSI"] = L / T
     out["CVI"] = np.log10(L * T)
     out["CSI_Modified"] = L ** 2 / T
+
+    # Heart Rate Fragmentation
+    out = _hrv_nonlinear_fragmentation(rri, out)
 
     # Entropy
     out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
@@ -170,14 +183,39 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     return out
 
 
-def _hrv_nonlinear_fragmented(rri, out):
+def _hrv_nonlinear_fragmentation(rri, out):
     """Heart Rate Fragmentation Indices - Costa (2017)
+
+    The more fragmented a time series is, the higher the PIP, IALS, PSS, and PAS indices will be.
     """
 
-#    diff_rri = np.diff(rri)
-#    pip = len(signal_zerocrossings(diff_rri)) / len(rri)
-#
-#    nk.events_plot(zerocrossings, rri)
+    diff_rri = np.diff(rri)
+    zerocrossings = signal_zerocrossings(diff_rri)
+
+    # Percentage of inflection points (PIP)
+    out["PIP"] = len(zerocrossings) / len(rri)
+
+    # Inverse of the average length of the acceleration/deceleration segments (IALS)
+    accelerations = np.where(diff_rri > 0)[0]
+    decelerations = np.where(diff_rri < 0)[0]
+    consecutive = np.concatenate([find_consecutive(accelerations),
+                                  find_consecutive(decelerations)])
+    lengths = [len(i) for i in consecutive]
+    out["IALS"] = 1 / np.average(lengths)
+
+    # Percentage of short segments (PSS) - The complement of the percentage of NN intervals in
+    # acceleration and deceleration segments with three or more NN intervals
+    out["PSS"] = np.sum(np.asarray(lengths) < 3) / len(lengths)
+
+    # Percentage of NN intervals in alternation segments (PAS). An alternation segment is a sequence
+    # of at least four NN intervals, for which heart rate acceleration changes sign every beat. We note
+    # that PAS quantifies the amount of a particular sub-type of fragmentation (alternation). A time
+    # series may be highly fragmented and have a small amount of alternation. However, all time series
+    # with large amount of alternation are highly fragmented.
+    alternations = find_consecutive(zerocrossings)
+    lengths = [len(i) for i in alternations]
+    out["PAS"] = np.sum(np.asarray(lengths) >= 4) / len(lengths)
+
     return out
 
 
