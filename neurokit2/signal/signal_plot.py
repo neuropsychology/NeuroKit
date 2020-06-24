@@ -7,7 +7,7 @@ from ..events import events_plot
 from ..stats import standardize as nk_standardize
 
 
-def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, **kwargs):
+def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, labels=None, **kwargs):
     """Plot signal with events as vertical lines.
 
     Parameters
@@ -22,6 +22,8 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
         If True, each signal is plotted in a subplot.
     standardize : bool
         If True, all signals will have the same scale (useful for visualisation).
+    labels : str or list
+        Defaults to None.
     **kwargs : optional
         Arguments passed to matplotlib plotting.
 
@@ -32,12 +34,12 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
-    >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
+    >>> nk.signal_plot(signal, labels='signal1', sampling_rate=1000, color="red")
     >>>
     >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
     ...                      "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
     ...                      "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
-    >>> nk.signal_plot(data, subplots=True)
+    >>> nk.signal_plot(data, labels=['signal1', 'signal2', 'signal3'], subplots=True)
     >>> nk.signal_plot([signal, data], standardize=True)
 
     """
@@ -111,5 +113,10 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, *
         else:
             plt.xlabel("Time (seconds)")
 
-    # Tidy legend locations
-    [plot.legend(loc=1) for plot in plt.gcf().axes]  # pylint: disable=W0106
+    # Tidy legend locations and add labels
+    if labels is not None:
+        if subplots is False:
+            plt.legend([labels], loc=1)
+        else:
+            for i, label in enumerate(labels):
+                plot[i].legend([label], loc=1)
