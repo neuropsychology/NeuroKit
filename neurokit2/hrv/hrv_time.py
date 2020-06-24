@@ -2,6 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import scipy.stats
 
 from ..stats import mad, summary_plot
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
@@ -28,7 +29,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     DataFrame
         Contains time domain HRV metrics:
         - "*RMSSD*": the square root of the mean of the sum of successive differences between
-        adjacent RR intervals.
+        adjacent RR intervals. It is identical (although on another scale) to SD1, and
+        therefore it is redundant to report correlations with both (Ciccone, 2017).
         - "*MeanNN*": the mean of the RR intervals.
         - "*SDNN*": the standard deviation of the RR intervals.
         - "*SDSD*": the standard deviation of the successive differences between RR intervals.
@@ -40,6 +42,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
         - "*MadNN*": the median absolute deviation of the RR intervals.
         - "*HCVNN*": the median absolute deviation of the RR intervals (MadNN) divided by the median
         of the absolute differences of their successive differences (MedianNN).
+        - "*IQRNN*": the interquartile range (IQR) of the RR intervals.
         - "*pNN50*": the proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
         - "*pNN20*": the proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
         - "*TINN*": a geometrical parameter of the HRV, or more specifically, the baseline width of
@@ -67,6 +70,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
 
     References
     ----------
+    - Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
+    (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
+    56(4), 674-678.
     - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
     electrophysiology review, 6(3), 239-244.
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
@@ -97,6 +103,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     out["MedianNN"] = np.nanmedian(rri)
     out["MadNN"] = mad(rri)
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]  # Normalized
+    out["IQRNN"] = scipy.stats.iqr(rri)
 
     # Extreme-based
     nn50 = np.sum(np.abs(diff_rri) > 50)
