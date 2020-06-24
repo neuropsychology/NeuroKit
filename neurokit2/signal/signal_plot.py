@@ -39,7 +39,7 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
     >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
     ...                      "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
     ...                      "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
-    >>> nk.signal_plot(data, labels=['signal1', 'signal2', 'signal3'], subplots=True)
+    >>> nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=False)
     >>> nk.signal_plot([signal, data], standardize=True)
 
     """
@@ -115,8 +115,18 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
 
     # Tidy legend locations and add labels
     if labels is not None:
+
+        if isinstance(labels, str):
+            n_labels = len([labels])
+            labels = [labels]
+        elif isinstance(labels, list):
+            n_labels = len(labels)
+
+        if len(signal[continuous_columns].columns) != n_labels:
+            raise ValueError("NeuroKit error: signal_plot(): number of labels does not equal the number of plotted signals.")
+
         if subplots is False:
-            plt.legend([labels], loc=1)
+            plt.legend(labels, loc=1)
         else:
             for i, label in enumerate(labels):
                 plot[i].legend([label], loc=1)
