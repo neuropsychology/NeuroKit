@@ -6,6 +6,7 @@ import pandas as pd
 import scipy.stats
 
 from ..complexity.entropy_sample import entropy_sample
+from ..complexity.entropy_approximate import entropy_approximate
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
@@ -88,7 +89,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out = {}
 
     # Poincaré features (SD1, SD2, etc.)
-    out = _hrv_nonlinear_poincare_basic(rri, out)
+    out = _hrv_nonlinear_poincare(rri, out)
 
     # CSI / CVI
     T = 4 * out["SD1"]
@@ -98,7 +99,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out["CSI_Modified"] = L ** 2 / T
 
     # Entropy
-    out["SampEn"] = entropy_sample(rri, dimension=2, r=0.2 * np.std(rri, ddof=1))
+    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
+    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
 
     if show:
         _hrv_nonlinear_show(rri, out)
@@ -109,7 +111,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 # =============================================================================
 # Get SD1 and SD2
 # =============================================================================
-def _hrv_nonlinear_poincare_basic(rri, out):
+def _hrv_nonlinear_poincare(rri, out):
 
 
 #    rri = np.array([125, 250, 100, 300])
@@ -156,9 +158,11 @@ def _hrv_nonlinear_poincare_basic(rri, out):
 
 
 
-def _hrv_nonlinear_poincare_advanced(rri, out):
+def _hrv_nonlinear_poincare_hra(rri, out):
+    """Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
+    """
 
-    # Area index (AI) - Yan, 2017
+    # Area index (AI) - Yan (2017)
     x = rri[:-1]
     y = rri[1:]
 
@@ -166,7 +170,15 @@ def _hrv_nonlinear_poincare_advanced(rri, out):
     return out
 
 
+def _hrv_nonlinear_fragmented(rri, out):
+    """Heart Rate Fragmentation Indices - Costa (2017)
+    """
 
+#    diff_rri = np.diff(rri)
+#    pip = len(signal_zerocrossings(diff_rri)) / len(rri)
+#
+#    nk.events_plot(zerocrossings, rri)
+    return out
 
 
 
