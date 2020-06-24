@@ -3,6 +3,10 @@
 
 *This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation).
 
+**We'd like to publish this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
+
+## Introduction
+
 This work is a replication and extension of the work by Porr & Howell
 (2019), that compared the performance of different popular R-peak
 detectors.
