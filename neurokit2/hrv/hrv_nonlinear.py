@@ -30,20 +30,22 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     -------
     DataFrame
         Contains non-linear HRV metrics:
-        - "*SD1*": SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular
+        - **SD1**: SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular
         to the line of identity. It is an index of short-term RR interval fluctuations
-        i.e., beat-to-beat variability.
-        - "*SD2*": SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line
+        i.e., beat-to-beat variability. It is identical (although on another scale) to RMSSD, and
+        therefore it is redundant to report correlations with both (Ciccone, 2017).
+        - **SD2**: SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line
         of identity. It is an index of long-term RR interval fluctuations.
-        - "*SD2SD1*": the ratio between short and long term fluctuations of the RR intervals
+        - **SD2SD1**: the ratio between short and long term fluctuations of the RR intervals
         (SD2 divided by SD1).
-        - "*CSI*": the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability
+        - **S**:
+        - **CSI**: the Cardiac Sympathetic Index, calculated by dividing the longitudinal variability
         of the Poincaré plot by its transverse variability.
-        - "*CVI*": the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and
+        - **CVI**: the Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and
         transverse variability.
-        - "*CSI_Modified*": the modified CSI obtained by dividing the square of the longitudinal
+        - **CSI_Modified**: the modified CSI obtained by dividing the square of the longitudinal
         variability by its transverse variability. Usually used in seizure research.
-        - "*SampEn*": the sample entropy measure of HRV, calculated by `entropy_sample()`.
+        - **SampEn**: the sample entropy measure of HRV, calculated by `entropy_sample()`.
 
     See Also
     --------
@@ -65,6 +67,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     References
     ----------
+    - Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
+    (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
+    56(4), 674-678.
     - Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear
     Features of Heart Rate Variability?. IEEE Transactions on Biomedical Engineering, 48(11), 1342-1347.
     - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
@@ -78,16 +83,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
-    diff_rri = np.diff(rri)
 
-    out = {}  # Initialize empty container for results
-
-    # Poincaré
-    sd_rri = np.std(rri, ddof=1) ** 2
-    sd_heart_period = np.std(diff_rri, ddof=1) ** 2
-    out["SD1"] = np.sqrt(sd_heart_period * 0.5)
-    out["SD2"] = np.sqrt(2 * sd_rri - 0.5 * sd_heart_period)
-    out["SD1SD2"] = out["SD1"] / out["SD2"]
+    # Poincaré features (SD1, SD2, etc.)
+    out = _hrv_nonlinear_poincare(rri)
 
     # CSI / CVI
     T = 4 * out["SD1"]
@@ -105,7 +103,68 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
+# =============================================================================
+# Get SD1 and SD2
+# =============================================================================
+def _hrv_nonlinear_poincare(rri):
+    out = {}  # Initialize empty container for results
 
+#    rri = np.array([125, 250, 100, 300])
+#
+#    # PyHRV
+#    x1 = rri[:-1]
+#    x2 = rri[1:]
+#    sd1 = np.std(np.subtract(x1, x2) / np.sqrt(2), ddof=1)
+#    sd2 = np.std(np.add(x1, x2) / np.sqrt(2), ddof=1)
+#    print("PyHRV\nSD1 = " + str(sd1), "\nSD2 = " + str(sd2))
+#
+#    # Heartpy
+#    x_plus = rri[:-1]
+#    x_minus = rri[1:]
+#    x_one = (x_plus - x_minus) / np.sqrt(2)
+#    x_two = (x_plus + x_minus) / np.sqrt(2)
+#    sd1 = np.sqrt(np.var(x_one))
+#    sd2 = np.sqrt(np.var(x_two))
+#    print("HeartPy\nSD1 = " + str(sd1), "\nSD2 = " + str(sd2))
+
+    # HRV and hrvanalysis
+    diff_rri = np.diff(rri)
+    sd1 = np.sqrt(np.std(diff_rri, ddof=1) ** 2 * 0.5)
+    sd2 = np.sqrt(2 * np.std(rri, ddof=1) ** 2 - 0.5 * np.std(diff_rri, ddof=1) ** 2)
+#    print("hrv\nSD1 = " + str(sd1), "\nSD2 = " + str(sd2))
+
+#    np.sqrt(np.mean(diff_rri ** 2)) / np.sqrt(2)
+
+    out["SD1"] = sd1
+    out["SD2"] = sd2
+
+    # SD1 / SD2
+    out["SD1SD2"] = sd1 / sd2
+
+    # Area of ellipse described by SD1 and SD2
+    out["S"] = np.pi * out["SD1"] * out["SD2"]
+
+#    # Area index (AI) - Yan, 2017
+#    x = rri[:-1]
+#    y = rri[1:]
+#
+#    np.arctan(y/x)
+    return out
+
+
+
+
+
+
+
+
+
+
+
+
+# =============================================================================
+# Plot
+# =============================================================================
 def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
 
     mean_heart_period = np.mean(rri)
@@ -115,8 +174,6 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
         sd1 = float(sd1)
     if isinstance(sd2, pd.Series):
         sd2 = float(sd2)
-    ax1 = rri[:-1]
-    ax2 = rri[1:]
 
     # Poincare values
     ax1 = rri[:-1]
