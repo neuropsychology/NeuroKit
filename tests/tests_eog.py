@@ -56,6 +56,9 @@ def test_eog_findpeaks():
     brainstorm_peaks = nk.eog_findpeaks(eog_cleaned, method="brainstorm")
     assert brainstorm_peaks.size == 28
 
+    blinker_peaks = nk.eog_findpeaks(eog_cleaned, method="blinker", sampling_rate=100)
+    assert blinker_peaks.size == 14
+
 
 def test_eog_process():
 
