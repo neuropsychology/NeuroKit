@@ -137,7 +137,7 @@ plot.savefig("README_emg.png", dpi=300, h_pad=3)
 ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_state=333)
 
 # Process it
-#signals, info = nk.ppg_process(emg, sampling_rate=250)
+signals, info = nk.ppg_process(ppg, sampling_rate=250)
 
 
 
