@@ -303,6 +303,15 @@ Photoplethysmography (PPG/BVP)
     # Generate 15 seconds of PPG signal (recorded at 250 samples / second)
     ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70)
 
+    # Process it
+    signals, info = nk.ppg_process(ppg, sampling_rate=250)
+
+    # Visualize the processing
+    nk.ppg_plot(signals, sampling_rate=250)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ppg.png
+
 
 
 Electrogastrography (EGG)
