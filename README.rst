@@ -133,6 +133,8 @@ Examples
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
 -  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
+-  `Analyze Electrooculography EOG data <https://neurokit2.readthedocs.io/en/latest/examples/eog.html>`_
+-  `Fit a function to a signal <https://neurokit2.readthedocs.io/en/latest/tutorials/fit_function.html>`_
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
@@ -300,6 +302,15 @@ Photoplethysmography (PPG/BVP)
 
     # Generate 15 seconds of PPG signal (recorded at 250 samples / second)
     ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70)
+
+    # Process it
+    signals, info = nk.ppg_process(ppg, sampling_rate=250)
+
+    # Visualize the processing
+    nk.ppg_plot(signals, sampling_rate=250)
+
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_ppg.png
 
 
 Electrooculography (EOG)
@@ -493,6 +504,65 @@ Complexity (Entropy, Fractal Dimensions, ...)
     nk.entropy_sample(signal)
     nk.entropy_approximate(signal)
 
+
+Signal Decomposition
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: python
+
+    # Create complex signal
+    signal = nk.signal_simulate(duration=10, frequency=1)  # High freq
+    signal += 3 * nk.signal_simulate(duration=10, frequency=3)  # Higher freq
+    signal += 3 * np.linspace(0, 2, len(signal))  # Add baseline and linear trend
+    signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)  # Non-linear trend
+    signal += np.random.normal(0, 0.02, len(signal))  # Add noise
+
+    # Decompose signal using Empirical Mode Decomposition (EMD)
+    components = nk.signal_decompose(signal, method='emd')
+    nk.signal_plot(components)  # Visualize components
+
+    # Recompose merging correlated components
+    recomposed = nk.signal_recompose(components, threshold=0.99)
+    nk.signal_plot(recomposed)  # Visualize components
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_decomposition.png
+        :target: https://neurokit2.readthedocs.io/en/latest/
+
+Signal Power Spectrum Density (PSD)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. code-block:: python
+
+    # Generate signal with frequencies of 5, 20 and 30
+	signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20) + nk.signal_simulate(frequency=30)
+	
+	# Find Power Spectrum Density with different methods
+	# Mutlitaper
+	multitaper = nk.signal_psd(signal, method="multitapers", show=False, max_frequency=100)
+	# Welch
+	welch = nk.signal_psd(signal, method="welch", min_frequency=1, show=False, max_frequency=100)
+	# Burg
+	burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=False, ar_order=15, max_frequency=100)
+
+	# Visualize the different methods together
+	fig, ax = plt.subplots()
+
+	ax.plot(welch["Frequency"], welch["Power"], label="Welch", color="#CFD8DC", linewidth=2)
+	ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#00695C", linewidth=2)
+	ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#0097AC", linewidth=2)
+
+	ax.set_title("Power Spectrum Density (PSD)")
+	ax.set_yscale('log')
+	ax.set_xlabel("Frequency (Hz)")
+	ax.set_ylabel("PSD (ms^2/Hz)")
+	ax.legend(loc="upper right")
+
+	# Plot 3 frequencies of generated signal
+	ax.axvline(5, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+	ax.axvline(20, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+	ax.axvline(30, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_psd.png
+        :target: https://neurokit2.readthedocs.io/en/latest/
 
 Statistics
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

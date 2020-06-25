@@ -508,11 +508,11 @@ def _remove_small(peaks, sampling_rate=1000, interval_min=None, relative_interva
         return peaks
 
     if interval_min is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=len(peaks))
+        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
         peaks = peaks[interval > interval_min]
 
     if relative_interval_min is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=len(peaks))
+        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
         peaks = peaks[standardize(interval, robust=robust) > relative_interval_min]
 
     return peaks
@@ -525,11 +525,11 @@ def _interpolate_big(peaks, sampling_rate=1000, interval_max=None, relative_inte
     continue_loop = True
     while continue_loop is True:
         if interval_max is not None:
-            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=len(peaks))
+            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
             peaks, continue_loop = _interpolate_missing(peaks, interval, interval_max, sampling_rate)
 
         if relative_interval_max is not None:
-            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=len(peaks))
+            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
             interval = standardize(interval, robust=robust)
             peaks, continue_loop = _interpolate_missing(peaks, interval, interval_max, sampling_rate)
 
