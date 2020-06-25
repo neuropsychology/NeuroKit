@@ -125,33 +125,18 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 # Get SD1 and SD2
 # =============================================================================
 def _hrv_nonlinear_poincare(rri, out):
-
-
-#    rri = np.array([125, 250, 100, 300])
-#
-#    # PyHRV
-#    x1 = rri[:-1]
-#    x2 = rri[1:]
-#    sd1 = np.std(np.subtract(x1, x2) / np.sqrt(2), ddof=1)
-#    sd2 = np.std(np.add(x1, x2) / np.sqrt(2), ddof=1)
-#    print("PyHRV\nSD1 = " + str(sd1), "\nSD2 = " + str(sd2))
-#
-#    # Heartpy
-#    x_plus = rri[:-1]
-#    x_minus = rri[1:]
-#    x_one = (x_plus - x_minus) / np.sqrt(2)
-#    x_two = (x_plus + x_minus) / np.sqrt(2)
-#    sd1 = np.sqrt(np.var(x_one))
-#    sd2 = np.sqrt(np.var(x_two))
-#    print("HeartPy\nSD1 = " + str(sd1), "\nSD2 = " + str(sd2))
+    """
+    - Do existing measures of Poincare plot geometry reflect nonlinear features of heart rate variability? - Brennan (2001)
+    - Asymmetric properties of long-term and total heart rate variability - Piskorski (2011)
+    """
 
     # HRV and hrvanalysis
-    diff_rri = np.diff(rri)
-    sd1 = np.sqrt(np.std(diff_rri, ddof=1) ** 2 * 0.5)
-    sd2 = np.sqrt(2 * np.std(rri, ddof=1) ** 2 - 0.5 * np.std(diff_rri, ddof=1) ** 2)
-#    print("hrv\nSD1 = " + str(sd1), "\nSD2 = " + str(sd2))
-
-#    np.sqrt(np.mean(diff_rri ** 2)) / np.sqrt(2)
+    rri_n = rri[:-1]
+    rri_plus = rri[1:]
+    x1 = (rri_n - rri_plus) / np.sqrt(2)  # Eq.7
+    x2 = (rri_n + rri_plus) / np.sqrt(2)
+    sd1 = np.std(x1, ddof=1)
+    sd2 = np.std(x2, ddof=1)
 
     out["SD1"] = sd1
     out["SD2"] = sd2
@@ -170,32 +155,54 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     """Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
     """
 
-    x = rri[:-1]  # rri_minus, x-axis
+    x = rri[:-1]  # rri_n, x-axis
     y = rri[1:]  # rri_plus, y-axis
 
-    identity_theta = np.arctan(1)  # phase angle of line of identify
+    identity_theta = np.arctan(1)  # phase angle of line of identify (LI)
 
-    # Set of points above identity line where y > x
-    indices_above = []
-    S_all = np.empty(len(x))
+    indices_above = []  # set of points above identity line where y > x
+    dist_all = np.full(len(x), np.nan)  # list of all distances to LI
+    theta_all = np.full(len(x), np.nan)  # list of all sector angles
+    S_all = np.full(len(x), np.nan)  # list of all sector areas
+
     for i in range(len(x)):
+        if y[i] == x[i]:
+            continue  # skip points on identity line
         if y[i] > x[i]:
             indices_above.append(i)
 
+        # Distances to LI
+        dist_all[i] = abs(y[i] - x[i]) / np.sqrt(2)
+
         # Calculate the angles
         point_theta = np.arctan(y[i] / x[i])  # phase angle of the i-th point
-        sector_theta = identity_theta - point_theta
+        theta_all[i] = abs(identity_theta - point_theta)
 
         # Calculate the radius
         r = np.sqrt(x[i] ** 2 + y[i] ** 2)
 
-        # Area Index (AI)
-        S_all[i] = abs(1/2 * sector_theta * r ** 2)
+        # Sector areas
+        S_all[i] = 1/2 * theta_all[i] * r ** 2
 
-    den = np.sum(S_all)
+    # Guzik's Index (GI)
+    den = np.nansum(dist_all)
+    num = np.sum([dist_all[i] for i in indices_above])
+    out["GI"] = (num / den) * 100
+
+    # Slope Index (SI)
+    den = np.nansum(theta_all)
+    num = np.sum([theta_all[i] for i in indices_above])
+    out["SI"] = (num / den) * 100
+
+    # Area Index (AI)
+    den = np.nansum(S_all)
     num = np.sum([S_all[i] for i in indices_above])
-
     out["AI"] = (num / den) * 100
+
+    # Porta's Index (PI)
+    m = len([points for points in S_all if not np.isnan(points)])  # all points except those on LI
+    b = m - len(indices_above)  # number of points below LI
+    out["PI"] = (b / m) * 100
 
     return out
 
