@@ -130,7 +130,7 @@ def signal_psd(
     data = data.loc[np.logical_and(data["Frequency"] >= min_frequency, data["Frequency"] <= max_frequency)]
 
     if show is True:
-        ax = data.plot(x="Frequency", y="Power", logy=True, title="Power Spectral Density (PSD)")
+        ax = data.plot(x="Frequency", y="Power", logy=True, title="Power Spectral Density (ms^2/Hz)")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
         return ax
     else:
