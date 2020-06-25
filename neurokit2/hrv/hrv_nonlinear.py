@@ -162,11 +162,6 @@ def _hrv_nonlinear_poincare(rri, out):
     # Area of ellipse described by SD1 and SD2
     out["S"] = np.pi * out["SD1"] * out["SD2"]
 
-    # Area index (AI) - Yan, 2017
-    x = rri[:-1]
-    y = rri[1:]
-
-    np.arctan(y/x)
     return out
 
 
@@ -175,11 +170,33 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     """Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
     """
 
-    # Area index (AI) - Yan (2017)
-    x = rri[:-1]
-    y = rri[1:]
+    x = rri[:-1]  # rri_minus, x-axis
+    y = rri[1:]  # rri_plus, y-axis
 
-    np.arctan(y/x)
+    identity_theta = np.arctan(1)  # phase angle of line of identify
+
+    # Set of points above identity line where y > x
+    indices_above = []
+    S_all = np.empty(len(x))
+    for i in range(len(x)):
+        if y[i] > x[i]:
+            indices_above.append(i)
+
+        # Calculate the angles
+        point_theta = np.arctan(y[i] / x[i])  # phase angle of the i-th point
+        sector_theta = identity_theta - point_theta
+
+        # Calculate the radius
+        r = np.sqrt(x[i] ** 2 + y[i] ** 2)
+
+        # Area Index (AI)
+        S_all[i] = abs(1/2 * sector_theta * r ** 2)
+
+    den = np.sum(S_all)
+    num = np.sum([S_all[i] for i in indices_above])
+
+    out["AI"] = (num / den) * 100
+
     return out
 
 
