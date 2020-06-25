@@ -66,12 +66,11 @@ def ppg_plot(ppg_signals, sampling_rate=None):
     ax0.set_title("Raw and Cleaned Signal")
     ax0.plot(x_axis, ppg_signals["PPG_Raw"], color="#B0BEC5", label="Raw", zorder=1)
     ax0.plot(x_axis, ppg_signals["PPG_Clean"], color="#FB1CF0", label="Cleaned", zorder=1, linewidth=1.5)
-    ax0.legend(loc="upper right")
 
-#    # Plot blinks
-#    blinks = np.where(eog_signals["EOG_Blinks"] == 1)[0]
-#    ax0.scatter(x_axis[blinks], eog_signals["EOG_Clean"][blinks], color="#0146D7", label="Blinks", zorder=2)
-#    ax0.legend(loc="upper right")
+    # Plot peaks
+    peaks = np.where(ppg_signals["PPG_Peaks"] == 1)[0]
+    ax0.scatter(x_axis[peaks], ppg_signals["PPG_Clean"][peaks], color="#D60574", label="Peaks", zorder=2)
+    ax0.legend(loc="upper right")
 
     # Rate
     ax1.set_title("Heart Rate")
