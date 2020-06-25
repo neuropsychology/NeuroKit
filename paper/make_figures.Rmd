@@ -29,7 +29,8 @@ library(formattable)
 
 # Setup python - you need to change the path to your python distribution
 library(reticulate)
-reticulate::use_python("C:/Users/Zen Juen/Downloads/WPy-3710b/python-3.7.1.amd64/")
+# reticulate::use_python("C:/Users/Zen Juen/Downloads/WPy-3710b/python-3.7.1.amd64/")
+reticulate::use_python("D:/Downloads/WPy64-3810/python-3.8.1.amd64/")
 matplotlib <- import("matplotlib")
 matplotlib$use("Agg", force = TRUE)
 reticulate::repl_python()
@@ -78,33 +79,33 @@ data = pd.concat([data, Photosensor], axis=1)
 
 
 
-# Process and Epoch
-```{python, include=TRUE, eval=TRUE, echo = TRUE}
-# Process the data
-df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100)
+<!-- # Process and Epoch -->
+<!-- ```{python, include=TRUE, eval=TRUE, echo = TRUE} -->
+<!-- # Process the data -->
+<!-- df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], eda=data["EDA"], sampling_rate=100) -->
 
-# Find events
-events = nk.events_find(event_channel=data["Photosensor"],
-                        threshold_keep='above')
+<!-- # Find events -->
+<!-- events = nk.events_find(event_channel=data["Photosensor"], -->
+<!--                         threshold_keep='above') -->
 
-# Epoch the data
-epochs = nk.epochs_create(data=df,
-                          events=events,
-                          sampling_rate=100,
-                          epochs_start=-0.1,
-                          epochs_end=1.9)
-                          
-```
+<!-- # Epoch the data -->
+<!-- epochs = nk.epochs_create(data=df, -->
+<!--                           events=events, -->
+<!--                           sampling_rate=100, -->
+<!--                           epochs_start=-0.1, -->
+<!--                           epochs_end=1.9) -->
+
+<!-- ``` -->
 
 
-# Event-related Analysis
-```{python, include=TRUE, eval=TRUE, echo = TRUE}
-# Extract event related features
-results = nk.bio_analyze(epochs, sampling_rate=100)
+<!-- # Event-related Analysis -->
+<!-- ```{python, include=TRUE, eval=TRUE, echo = TRUE} -->
+<!-- # Extract event related features -->
+<!-- results = nk.bio_analyze(epochs, sampling_rate=100) -->
 
-# Show subset of results
-#event_table = results[["Label", "ECG_Rate_Mean", "ECG_Atrial_Phase", "ECG_Ventricular_Phase", "RSP_Rate_Mean", "RSP_Phase", "EDA_SCR", "SCR_Peak_Amplitude"]]
-```
+<!-- # Show subset of results -->
+<!-- #event_table = results[["Label", "ECG_Rate_Mean", "ECG_Atrial_Phase", "ECG_Ventricular_Phase", "RSP_Rate_Mean", "RSP_Phase", "EDA_SCR", "SCR_Peak_Amplitude"]] -->
+<!-- ``` -->
 
 
 # Interval-related analysis
@@ -120,7 +121,6 @@ results = nk.bio_analyze(df, sampling_rate=100)
 
 # Visualize
 ```{r include=TRUE, eval=TRUE, echo = FALSE, fig.width=10, fig.height=6, fig.cap="Visualize 10s of the dataset showing one event (in orange) and the other physiological signals."}
-
 library(ggpubr)
 theme_set(theme_pubr())
 
@@ -190,6 +190,8 @@ table_features <- ggtexttable(table, rows = NULL, theme = ttheme("default"))
 p <- ggarrange(plot, table_features,
                ncol=1, nrow=2,
                heights=c(1, 0.5))
+p
+
 ggsave("figures/features.png", p, height=figwidth, width=figwidth*1.5, dpi=600)
 
 # ggarrange(plot, eventrelated, intervalrelated, 
