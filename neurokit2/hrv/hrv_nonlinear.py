@@ -55,6 +55,29 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
         alternation segments.
         - **ApEn**: The approximate entropy measure of HRV, calculated by `entropy_approximate()`.
         - **SampEn**: The sample entropy measure of HRV, calculated by `entropy_sample()`.
+        - **GI**: Guzik's Index - index of heart rate asymmetry, defined as the distance of points
+        above line of identity (LI) to LI divided by the distance of all points in Poincaré plot to LI
+        except those that are located on LI.
+        - **SI**: Slope Index - index of heart rate asymmetry, defined as the phase angle of points
+        above LI divided by the phase angle of all points in Poincaré plot except those that are
+        located on LI.
+        - **AI**: Area Index - index of heart rate asymmetry, defined as the cumulative area of the
+        sectors corresponding to the points that are located above LI divided by the cumulative area
+        of sectors corresponding to all points in the Poincaré plot except those that are located on LI.
+        - **PI**: Porta's Index - index of heart rate asymmetry, defined as the number of points below
+        LI divided by the total number of points in Poincaré plot except those that are located on LI.
+        - **SD1d**: short-term variance of contributions of decelerations (prolongations of RR intervals)
+        - **SD1a**: short-term variance of contributions of accelerations (shortenings of RR intervals).
+        - **C1_deceleration**: the contributions of heart rate decelerations to short-term HRV.
+        - **C1_acceleration**: the contributions of heart rate accelerations to short-term HRV.
+        - **SD2d**: long-term variance of contributions of decelerations (prolongations of RR intervals)
+        - **SD2a**: long-term variance of contributions of accelerations (shortenings of RR intervals).
+        - **C2_deceleration**: the contributions of heart rate decelerations to long-term HRV.
+        - **C2_acceleration**: the contributions of heart rate accelerations to long-term HRV
+        - **SDNNd**: total variance of contributions of decelerations (prolongations of RR intervals)
+        - **SDNNa**: total variance of contributions of accelerations (shortenings of RR intervals)
+        - **C_deceleration**: the total contributions of heart rate decelerations to HRV.
+        - **C_acceleration**: the total contributions of heart rate accelerations to HRV.
 
     See Also
     --------
@@ -128,7 +151,6 @@ def _hrv_nonlinear_poincare(rri, out):
     """
     - Do existing measures of Poincare plot geometry reflect nonlinear features of heart rate
     variability? - Brennan (2001)
-    - Asymmetric properties of long-term and total heart rate variability - Piskorski (2011)
     """
 
     # HRV and hrvanalysis
@@ -153,7 +175,9 @@ def _hrv_nonlinear_poincare(rri, out):
 
 
 def _hrv_nonlinear_poincare_hra(rri, out):
-    """Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
+    """
+    - Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
+    - Asymmetric properties of long-term and total heart rate variability - Piskorski (2011)
     """
 
     N = len(rri) - 1
