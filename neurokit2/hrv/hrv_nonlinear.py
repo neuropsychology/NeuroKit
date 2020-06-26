@@ -126,7 +126,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 # =============================================================================
 def _hrv_nonlinear_poincare(rri, out):
     """
-    - Do existing measures of Poincare plot geometry reflect nonlinear features of heart rate variability? - Brennan (2001)
+    - Do existing measures of Poincare plot geometry reflect nonlinear features of heart rate
+    variability? - Brennan (2001)
     - Asymmetric properties of long-term and total heart rate variability - Piskorski (2011)
     """
 
@@ -155,54 +156,86 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     """Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
     """
 
+    N = len(rri) - 1
     x = rri[:-1]  # rri_n, x-axis
     y = rri[1:]  # rri_plus, y-axis
 
+    diff = y - x
+    decelerate_indices = np.where(diff > 0)[0]  # set of points above IL where y > x
+    accelerate_indices = np.where(diff < 0)[0]  # set of points below IL where y < x
+    nochange_indices = np.where(diff == 0)[0]
+
+    # Distances to centroid line l2
+    centroid_x = np.mean(x)
+    centroid_y = np.mean(y)
+    dist_l2_all = abs((x - centroid_x) + (y - centroid_y)) / np.sqrt(2)
+
+    # Distances to LI
+    dist_all = abs(y - x) / np.sqrt(2)
+
+    # Calculate the angles
     identity_theta = np.arctan(1)  # phase angle of line of identify (LI)
-
-    indices_above = []  # set of points above identity line where y > x
-    dist_all = np.full(len(x), np.nan)  # list of all distances to LI
-    theta_all = np.full(len(x), np.nan)  # list of all sector angles
-    S_all = np.full(len(x), np.nan)  # list of all sector areas
-
-    for i in range(len(x)):
-        if y[i] == x[i]:
-            continue  # skip points on identity line
-        if y[i] > x[i]:
-            indices_above.append(i)
-
-        # Distances to LI
-        dist_all[i] = abs(y[i] - x[i]) / np.sqrt(2)
-
-        # Calculate the angles
-        point_theta = np.arctan(y[i] / x[i])  # phase angle of the i-th point
-        theta_all[i] = abs(identity_theta - point_theta)
-
-        # Calculate the radius
-        r = np.sqrt(x[i] ** 2 + y[i] ** 2)
-
-        # Sector areas
-        S_all[i] = 1/2 * theta_all[i] * r ** 2
+    point_theta = np.arctan(y / x)  # phase angle of the i-th point
+    theta_all = abs(identity_theta - point_theta)
+    # Calculate the radius
+    r = np.sqrt(x ** 2 + y ** 2)
+    # Sector areas
+    S_all = 1/2 * theta_all * r ** 2
 
     # Guzik's Index (GI)
-    den = np.nansum(dist_all)
-    num = np.sum([dist_all[i] for i in indices_above])
-    out["GI"] = (num / den) * 100
+    den_GI = np.sum(dist_all)
+    num_GI = np.sum(dist_all[decelerate_indices])
+    out["GI"] = (num_GI / den_GI) * 100
 
     # Slope Index (SI)
-    den = np.nansum(theta_all)
-    num = np.sum([theta_all[i] for i in indices_above])
-    out["SI"] = (num / den) * 100
+    den_SI = np.sum(theta_all)
+    num_SI = np.sum(theta_all[decelerate_indices])
+    out["SI"] = (num_SI / den_SI) * 100
 
     # Area Index (AI)
-    den = np.nansum(S_all)
-    num = np.sum([S_all[i] for i in indices_above])
-    out["AI"] = (num / den) * 100
+    den_AI = np.sum(S_all)
+    num_AI = np.sum(S_all[decelerate_indices])
+    out["AI"] = (num_AI / den_AI) * 100
 
     # Porta's Index (PI)
-    m = len([points for points in S_all if not np.isnan(points)])  # all points except those on LI
-    b = m - len(indices_above)  # number of points below LI
+    m = N - len(nochange_indices)  # all points except those on LI
+    b = len(accelerate_indices)  # number of points below LI
     out["PI"] = (b / m) * 100
+
+    # Short-term asymmetry (SD1)
+    sd1d = np.sqrt(np.sum(dist_all[decelerate_indices] ** 2) / (N - 1))
+    sd1a = np.sqrt(np.sum(dist_all[accelerate_indices] ** 2) / (N - 1))
+
+    sd1I = np.sqrt(sd1d ** 2 + sd1a ** 2)
+    out["C1_deceleration"] = (sd1d / sd1I) ** 2
+    out["C1_acceleration"] = (sd1a / sd1I) ** 2
+    out["SD1d"] = sd1d  # SD1 deceleration
+    out["SD1a"] = sd1a  # SD1 acceleration
+    out["SD1I"] = sd1I  # SD1 based on LI, whereas SD1 is based on centroid line l1
+
+    # Long-term asymmetry (SD2)
+    longterm_dec = np.sum(dist_l2_all[decelerate_indices] ** 2) / (N - 1)
+    longterm_acc = np.sum(dist_l2_all[accelerate_indices] ** 2) / (N - 1)
+    longterm_nodiff = np.sum(dist_l2_all[nochange_indices] ** 2) / (N - 1)
+
+    sd2d = np.sqrt(longterm_dec + 0.5 * longterm_nodiff)
+    sd2a = np.sqrt(longterm_acc + 0.5 * longterm_nodiff)
+
+    sd2I = np.sqrt(sd2d ** 2 + sd2a ** 2)
+    out["C2_deceleration"] = (sd2d / sd2I) ** 2
+    out["C2_acceleration"] = (sd2a / sd2I) ** 2
+    out["SD2d"] = sd2d  # SD2 deceleration
+    out["SD2a"] = sd2a  # SD2 acceleration
+    out["SD2I"] = sd2I  # identical with SD2
+
+    # Total asymmerty (SDNN)
+    sdnnd = np.sqrt(0.5 * (sd1d ** 2 + sd2d ** 2))  # SDNN deceleration
+    sdnna = np.sqrt(0.5 * (sd1a ** 2 + sd2a ** 2))  # SDNN acceleration
+    sdnn = np.sqrt(sdnnd ** 2 + sdnna ** 2)  # should be similar to sdnn in hrv_time
+    out["C_deceleration"] = (sdnnd / sdnn) ** 2
+    out["C_acceleration"] = (sdnna / sdnn) ** 2
+    out["SDNNd"] = sdnnd
+    out["SDNNa"] = sdnna
 
     return out
 
