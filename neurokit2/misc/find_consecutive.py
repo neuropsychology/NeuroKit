@@ -1,4 +1,3 @@
-import numpy as np
 import itertools
 
 def find_consecutive(x):

@@ -68,10 +68,10 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Analyze
     >>> nk.ecg_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
-      ECG_Rate_Mean  HRV_RMSSD  ...  HRV_CVI  HRV_CSI_Modified  HRV_SampEn
+      ECG_Rate_Mean  HRV_RMSSD  ...
     0 ...
 
-    [1 rows x 30 columns]
+    [1 rows x 37 columns]
 
     """
     method = method.lower()

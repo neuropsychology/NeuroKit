@@ -44,18 +44,18 @@ def ecg_intervalrelated(data, sampling_rate=1000):
     >>>
     >>> # Single dataframe is passed
     >>> nk.ecg_intervalrelated(df, sampling_rate=100) #doctest: +ELLIPSIS
-       ECG_Rate_Mean  HRV_RMSSD  HRV_MeanNN  ...  HRV_CSI_Modified  HRV_SampEn
+       ECG_Rate_Mean  HRV_RMSSD  ...
     0      ...
 
-    [1 rows x 30 columns]
+    [1 rows x 55 columns]
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100,
     ...                           epochs_end=150)
     >>> nk.ecg_intervalrelated(epochs) #doctest: +ELLIPSIS
-       ECG_Rate_Mean  HRV_RMSSD  HRV_MeanNN  ...  HRV_CSI_Modified  HRV_SampEn
+       ECG_Rate_Mean  HRV_RMSSD ...
     1      ...
 
-    [2 rows x 30 columns]
+    [2 rows x 55 columns]
 
     """
     intervals = {}

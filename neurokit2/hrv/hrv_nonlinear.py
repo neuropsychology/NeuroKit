@@ -134,9 +134,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     # Heart Rate Fragmentation
     out = _hrv_nonlinear_fragmentation(rri, out)
 
+    # Heart Rate Asymmetry
+    out = _hrv_nonlinear_poincare_hra(rri, out)
+
     # Entropy
     out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
     out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
+
 
     if show:
         _hrv_nonlinear_show(rri, out)
@@ -144,11 +148,12 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
+
 # =============================================================================
 # Get SD1 and SD2
 # =============================================================================
 def _hrv_nonlinear_poincare(rri, out):
-    """
+    """Compute SD1 and SD2
     - Do existing measures of Poincare plot geometry reflect nonlinear features of heart rate
     variability? - Brennan (2001)
     """
@@ -173,9 +178,8 @@ def _hrv_nonlinear_poincare(rri, out):
     return out
 
 
-
 def _hrv_nonlinear_poincare_hra(rri, out):
-    """
+    """Heart Rate Asymmetry Indices
     - Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
     - Asymmetric properties of long-term and total heart rate variability - Piskorski (2011)
     """
@@ -198,9 +202,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     dist_all = abs(y - x) / np.sqrt(2)
 
     # Calculate the angles
-    identity_theta = np.arctan(1)  # phase angle of line of identify (LI)
-    point_theta = np.arctan(y / x)  # phase angle of the i-th point
-    theta_all = abs(identity_theta - point_theta)
+    theta_all = abs(np.arctan(1) - np.arctan(y / x))  # phase angle LI - phase angle of i-th point
     # Calculate the radius
     r = np.sqrt(x ** 2 + y ** 2)
     # Sector areas
@@ -298,9 +300,6 @@ def _hrv_nonlinear_fragmentation(rri, out):
     out["PAS"] = np.sum(np.asarray(lengths) >= 4) / len(lengths)
 
     return out
-
-
-
 
 
 # =============================================================================
