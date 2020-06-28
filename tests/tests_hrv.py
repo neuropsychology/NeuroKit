@@ -53,17 +53,17 @@ def test_hrv():
     ecg_hrv = nk.hrv(peaks, sampling_rate=1000)
 
     columns = ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
-       'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN', 'HRV_IQRNN',
-       'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI', 'HRV_ULF',
-       'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF', 'HRV_LFn',
-       'HRV_HFn', 'HRV_LnHF', 'HRV_SD1', 'HRV_SD2', 'HRV_SD1SD2', 'HRV_S',
-       'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified', 'HRV_PIP', 'HRV_IALS',
-       'HRV_PSS', 'HRV_PAS', 'HRV_GI', 'HRV_SI', 'HRV_AI', 'HRV_PI',
-       'HRV_C1d', 'HRV_C1a', 'HRV_SD1d',
-       'HRV_SD1a', 'HRV_C2d',
-       'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
-       'HRV_Cdn', 'HRV_Ca', 'HRV_SDNNd',
-       'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn']
+               'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN', 'HRV_IQRNN',
+               'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI', 'HRV_ULF',
+               'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF', 'HRV_LFn',
+               'HRV_HFn', 'HRV_LnHF', 'HRV_SD1', 'HRV_SD2', 'HRV_SD1SD2', 'HRV_S',
+               'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified', 'HRV_PIP', 'HRV_IALS',
+               'HRV_PSS', 'HRV_PAS', 'HRV_GI', 'HRV_SI', 'HRV_AI', 'HRV_PI',
+               'HRV_C1d', 'HRV_C1a', 'HRV_SD1d',
+               'HRV_SD1a', 'HRV_C2d',
+               'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
+               'HRV_Cd', 'HRV_Ca', 'HRV_SDNNd',
+               'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn']
 
-    assert all(elem in np.array(ecg_hrv.columns.values, dtype=str) for elem
+    assert all(elem in np.array(ecg_hrv.columns.values, dtype=object) for elem
                in columns)
