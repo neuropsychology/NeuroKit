@@ -92,6 +92,7 @@ def hrv_frequency(
     ----------
     - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
     electrophysiology review, 6(3), 239-244.
+
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
     Frontiers in public health, 5, 258.
 

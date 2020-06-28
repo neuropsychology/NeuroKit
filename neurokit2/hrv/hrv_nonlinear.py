@@ -32,52 +32,86 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     -------
     DataFrame
         Contains non-linear HRV metrics:
-        - **SD1**: SD1 is a measure of the spread of RR intervals on the Poincaré plot perpendicular
-        to the line of identity. It is an index of short-term RR interval fluctuations
-        i.e., beat-to-beat variability. It is equivalent (although on another scale) to RMSSD, and
-        therefore it is redundant to report correlations with both (Ciccone, 2017).
-        - **SD2**: SD2 is a measure of the spread of RR intervals on the Poincaré plot along the line
-        of identity. It is an index of long-term RR interval fluctuations.
-        - **SD1SD2**: the ratio between short and long term fluctuations of the RR intervals
-        (SD1 divided by SD2).
-        - **S**: Area of ellipse described by SD1 and SD2 (``pi * SD1 * SD2``). It is equivalent to *SD1SD2*.
-        - **CSI**: The Cardiac Sympathetic Index, calculated by dividing the longitudinal variability
-        of the Poincaré plot by its transverse variability.
-        - **CVI**: The Cardiac Vagal Index, equal to the logarithm of the product of longitudinal and
-        transverse variability.
-        - **CSI_Modified**: The modified CSI obtained by dividing the square of the longitudinal
-        variability by its transverse variability. Usually used in seizure research.
-        - **PIP**: Index of heart rate fragmentation (Costa, 2017). Percentage of inflection points.
-        - **IALS**: Index of heart rate fragmentation (Costa, 2017). Inverse of the average length of the
-        acceleration/deceleration segments.
-        - **PSS**: Index of heart rate fragmentation (Costa, 2017). Percentage of short segments.
-        - **PAS**: Index of heart rate fragmentation (Costa, 2017). Percentage of NN intervals in
-        alternation segments.
-        - **ApEn**: The approximate entropy measure of HRV, calculated by `entropy_approximate()`.
-        - **SampEn**: The sample entropy measure of HRV, calculated by `entropy_sample()`.
-        - **GI**: Guzik's Index - index of heart rate asymmetry, defined as the distance of points
-        above line of identity (LI) to LI divided by the distance of all points in Poincaré plot to LI
-        except those that are located on LI.
-        - **SI**: Slope Index - index of heart rate asymmetry, defined as the phase angle of points
-        above LI divided by the phase angle of all points in Poincaré plot except those that are
-        located on LI.
-        - **AI**: Area Index - index of heart rate asymmetry, defined as the cumulative area of the
-        sectors corresponding to the points that are located above LI divided by the cumulative area
-        of sectors corresponding to all points in the Poincaré plot except those that are located on LI.
-        - **PI**: Porta's Index - index of heart rate asymmetry, defined as the number of points below
-        LI divided by the total number of points in Poincaré plot except those that are located on LI.
-        - **SD1d**: short-term variance of contributions of decelerations (prolongations of RR intervals)
-        - **SD1a**: short-term variance of contributions of accelerations (shortenings of RR intervals).
-        - **C1_deceleration**: the contributions of heart rate decelerations to short-term HRV.
-        - **C1_acceleration**: the contributions of heart rate accelerations to short-term HRV.
-        - **SD2d**: long-term variance of contributions of decelerations (prolongations of RR intervals)
-        - **SD2a**: long-term variance of contributions of accelerations (shortenings of RR intervals).
-        - **C2_deceleration**: the contributions of heart rate decelerations to long-term HRV.
-        - **C2_acceleration**: the contributions of heart rate accelerations to long-term HRV
-        - **SDNNd**: total variance of contributions of decelerations (prolongations of RR intervals)
-        - **SDNNa**: total variance of contributions of accelerations (shortenings of RR intervals)
-        - **C_deceleration**: the total contributions of heart rate decelerations to HRV.
-        - **C_acceleration**: the total contributions of heart rate accelerations to HRV.
+
+        - **Characteristics of the Poincaré Plot Geometry**:
+
+            - **SD1**: SD1 is a measure of the spread of RR intervals on the Poincaré plot
+            perpendicular to the line of identity. It is an index of short-term RR interval
+            fluctuations, i.e., beat-to-beat variability. It is equivalent (although on another
+            scale) to RMSSD, and therefore it is redundant to report correlations with both
+            (Ciccone, 2017).
+
+            - **SD2**: SD2 is a measure of the spread of RR intervals on the Poincaré plot along the
+            line of identity. It is an index of long-term RR interval fluctuations.
+
+            - **SD1SD2**: the ratio between short and long term fluctuations of the RR intervals
+            (SD1 divided by SD2).
+
+            - **S**: Area of ellipse described by SD1 and SD2 (``pi * SD1 * SD2``). It is
+            proportional to *SD1SD2*.
+
+            - **CSI**: The Cardiac Sympathetic Index (Toichi, 1997), calculated by dividing the
+            longitudinal variability of the Poincaré plot (``4*SD2``) by its transverse variability (``4*SD1``).
+
+            - **CVI**: The Cardiac Vagal Index (Toichi, 1997), equal to the logarithm of the product of
+            longitudinal (``4*SD2``) and transverse variability (``4*SD1``).
+
+            - **CSI_Modified**: The modified CSI (Jeppesen, 2014) obtained by dividing the square of
+            the longitudinal variability by its transverse variability.
+
+        - **Indices of Heart Rate Asymmetry (HRA), i.e., asymmetry of the Poincaré plot** (Yan, 2017):
+
+            - **GI**: Guzik's Index, defined as the distance of points above line of identity (LI)
+            to LI divided by the distance of all points in Poincaré plot to LI except those that
+            are located on LI.
+
+            - **SI**: Slope Index, defined as the phase angle of points above LI divided by the
+            phase angle of all points in Poincaré plot except those that are located on LI.
+
+            - **AI**: Area Index, defined as the cumulative area of the sectors corresponding to
+            the points that are located above LI divided by the cumulative area of sectors
+            corresponding to all points in the Poincaré plot except those that are located on LI.
+
+            - **PI**: Porta's Index, defined as the number of points below LI divided by the total
+            number of points in Poincaré plot except those that are located on LI.
+
+            - **SD1d** and **SD1a**: short-term variance of contributions of decelerations
+            (prolongations of RR intervals) and accelerations (shortenings of RR intervals),
+            respectively (Piskorski,  2011).
+
+            - **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations
+            to short-term HRV, respectively (Piskorski,  2011).
+
+            - **SD2d** and **SD2a**: long-term variance of contributions of decelerations
+            (prolongations of RR intervals) and accelerations (shortenings of RR intervals),
+            respectively (Piskorski,  2011).
+
+            - **C2d** and **C2a**: the contributions of heart rate decelerations and accelerations
+            to long-term HRV, respectively (Piskorski,  2011).
+
+            - **SDNNd** and **SDNNa**: total variance of contributions of decelerations
+            (prolongations of RR intervals) and accelerations (shortenings of RR intervals),
+            respectively (Piskorski,  2011).
+
+            - **Cd** and **Ca**: the total contributions of heart rate decelerations and
+            accelerations to HRV.
+
+        - **Indices of Heart Rate Fragmentation** (Costa, 2017):
+
+            - **PIP**: Percentage of inflection points of the RR intervals series.
+
+            - **IALS**: Inverse of the average length of the acceleration/deceleration segments.
+
+            - **PSS**: Percentage of short segments.
+
+            - **PAS**: IPercentage of NN intervals in alternation segments.
+
+        - **Indices of Complexity**:
+
+            - **ApEn**: The approximate entropy measure of HRV, calculated by `entropy_approximate()`.
+
+            - **SampEn**: The sample entropy measure of HRV, calculated by `entropy_sample()`.
+
 
     See Also
     --------
@@ -99,17 +133,36 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     References
     ----------
+    - Yan, C., Li, P., Ji, L., Yao, L., Karmakar, C., & Liu, C. (2017). Area asymmetry of heart
+    rate variability signal. Biomedical engineering online, 16(1), 112.
+
     - Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
     (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
     56(4), 674-678.
-    - Costa, M. D., Davis, R. B., & Goldberger, A. L. (2017). Heart rate fragmentation: a new approach to
-    the analysis of cardiac interbeat interval dynamics. Front. Physiol. 8, 255 (2017).
-    - Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear
-    Features of Heart Rate Variability?. IEEE Transactions on Biomedical Engineering, 48(11), 1342-1347.
-    - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
-    electrophysiology review, 6(3), 239-244.
+
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
     Frontiers in public health, 5, 258.
+
+    - Costa, M. D., Davis, R. B., & Goldberger, A. L. (2017). Heart rate fragmentation: a new
+    approach to the analysis of cardiac interbeat interval dynamics. Front. Physiol. 8, 255 (2017).
+
+    - Jeppesen, J., Beniczky, S., Johansen, P., Sidenius, P., & Fuglsang-Frederiksen, A. (2014).
+    Using Lorenz plot and Cardiac Sympathetic Index of heart rate variability for detecting seizures
+    for patients with epilepsy. In 2014 36th Annual International Conference of the IEEE Engineering
+    in Medicine and Biology Society (pp. 4563-4566). IEEE.
+
+    - Piskorski, J., & Guzik, P. (2011). Asymmetric properties of long-term and total heart rate
+    variability. Medical & biological engineering & computing, 49(11), 1289-1297.
+
+    - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
+    electrophysiology review, 6(3), 239-244.
+
+    - Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear
+    Features of Heart Rate Variability?. IEEE Transactions on Biomedical Engineering, 48(11), 1342-1347.
+
+    - Toichi, M., Sugiura, T., Murai, T., & Sengoku, A. (1997). A new method of assessing cardiac
+    autonomic function and its comparison with spectral analysis and coefficient of variation of R–R
+    interval. Journal of the autonomic nervous system, 62(1-2), 79-84.
 
     """
     # Sanitize input
@@ -123,13 +176,6 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
     # Poincaré features (SD1, SD2, etc.)
     out = _hrv_nonlinear_poincare(rri, out)
-
-    # CSI / CVI
-    T = 4 * out["SD1"]
-    L = 4 * out["SD2"]
-    out["CSI"] = L / T
-    out["CVI"] = np.log10(L * T)
-    out["CSI_Modified"] = L ** 2 / T
 
     # Heart Rate Fragmentation
     out = _hrv_nonlinear_fragmentation(rri, out)
@@ -174,6 +220,13 @@ def _hrv_nonlinear_poincare(rri, out):
 
     # Area of ellipse described by SD1 and SD2
     out["S"] = np.pi * out["SD1"] * out["SD2"]
+
+    # CSI / CVI
+    T = 4 * out["SD1"]
+    L = 4 * out["SD2"]
+    out["CSI"] = L / T
+    out["CVI"] = np.log10(L * T)
+    out["CSI_Modified"] = L ** 2 / T
 
     return out
 
@@ -233,8 +286,8 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sd1a = np.sqrt(np.sum(dist_all[accelerate_indices] ** 2) / (N - 1))
 
     sd1I = np.sqrt(sd1d ** 2 + sd1a ** 2)
-    out["C1_deceleration"] = (sd1d / sd1I) ** 2
-    out["C1_acceleration"] = (sd1a / sd1I) ** 2
+    out["C1d"] = (sd1d / sd1I) ** 2
+    out["C1a"] = (sd1a / sd1I) ** 2
     out["SD1d"] = sd1d  # SD1 deceleration
     out["SD1a"] = sd1a  # SD1 acceleration
     out["SD1I"] = sd1I  # SD1 based on LI, whereas SD1 is based on centroid line l1
@@ -248,8 +301,8 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sd2a = np.sqrt(longterm_acc + 0.5 * longterm_nodiff)
 
     sd2I = np.sqrt(sd2d ** 2 + sd2a ** 2)
-    out["C2_deceleration"] = (sd2d / sd2I) ** 2
-    out["C2_acceleration"] = (sd2a / sd2I) ** 2
+    out["C2d"] = (sd2d / sd2I) ** 2
+    out["C2a"] = (sd2a / sd2I) ** 2
     out["SD2d"] = sd2d  # SD2 deceleration
     out["SD2a"] = sd2a  # SD2 acceleration
     out["SD2I"] = sd2I  # identical with SD2
@@ -258,8 +311,8 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     sdnnd = np.sqrt(0.5 * (sd1d ** 2 + sd2d ** 2))  # SDNN deceleration
     sdnna = np.sqrt(0.5 * (sd1a ** 2 + sd2a ** 2))  # SDNN acceleration
     sdnn = np.sqrt(sdnnd ** 2 + sdnna ** 2)  # should be similar to sdnn in hrv_time
-    out["C_deceleration"] = (sdnnd / sdnn) ** 2
-    out["C_acceleration"] = (sdnna / sdnn) ** 2
+    out["Cd"] = (sdnnd / sdnn) ** 2
+    out["Ca"] = (sdnna / sdnn) ** 2
     out["SDNNd"] = sdnnd
     out["SDNNa"] = sdnna
 
