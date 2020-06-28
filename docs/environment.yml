@@ -12,5 +12,6 @@ dependencies:
     - git+git://github.com/mgeier/nbsphinx.git@pygments-background  # Do change that when this is merged (https://github.com/spatialaudio/nbsphinx/pull/463)
     - sphinx-nbexamples
     - sphinx-gallery
-    - recommonmark
     - sphinx-copybutton
+    - recommonmark
+    - myst-parser

@@ -7,3 +7,4 @@ Contents:
    :maxdepth: 1
    
    ecg_preprocessing
+   ../../benchmarks/ecg_preprocessing/README
