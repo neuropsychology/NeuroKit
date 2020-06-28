@@ -234,8 +234,8 @@ def test_ecg_intervalrelated():
     # Test with signal dataframe
     features_df = nk.ecg_intervalrelated(df)
 
-    assert all(elem in columns for elem
-               in np.array(features_df.columns.values, dtype=str))
+    assert all(elem in np.array(features_df.columns.values, dtype=str) for elem
+               in columns)
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict

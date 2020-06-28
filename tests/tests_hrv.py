@@ -51,7 +51,8 @@ def test_hrv():
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
 
     ecg_hrv = nk.hrv(peaks, sampling_rate=1000)
-    assert all(elem in ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
+
+   columns = ['HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD', 'HRV_CVNN',
        'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN', 'HRV_IQRNN',
        'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI', 'HRV_ULF',
        'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF', 'HRV_LFn',
@@ -63,4 +64,6 @@ def test_hrv():
        'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
        'HRV_Cdn', 'HRV_Ca', 'HRV_SDNNd',
        'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn']
-               for elem in np.array(ecg_hrv.columns.values, dtype=str))
+
+   assert all(elem in np.array(ecg_hrv.columns.values, dtype=str) for elem
+               in columns)
