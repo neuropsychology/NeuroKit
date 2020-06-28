@@ -6,7 +6,7 @@ def signal_autocor(signal, lag=None, normalize=True):
 
     Parameters
     -----------
-    signal : list, array or Series
+    signal : Union[list, np.array, pd.Series]
         Vector of values.
     normalize : bool
         Normalize the autocorrelation output.

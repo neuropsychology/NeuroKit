@@ -11,7 +11,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag').
@@ -29,7 +29,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
         Relative tolerance (for fnn method).
     A : float
         Absolute tolerance (for fnn method)
-    **kwargs : optional
+    **kwargs
         Other arguments.
 
     Returns
@@ -153,13 +153,13 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, **kwargs):
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     dimension_seq : int
         The embedding dimension.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag').
-    **kwargs : optional
+    **kwargs
         Other arguments.
 
     Returns
@@ -182,8 +182,7 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, **kwargs):
 
 
 def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
-    """Return fraction of false nearest neighbors for a single d.
-    """
+    """Return fraction of false nearest neighbors for a single d."""
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
     # at both dimension d as well as dimension d + 1.

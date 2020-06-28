@@ -33,8 +33,8 @@ sys.path.insert(0, os.path.abspath('../'))
 
 # -- Mock modules ---------------------------------------------
 MOCK_MODULES = ['scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg',
-                'scipy.spatial', 'scipy.special', 'scipy.integrate',
-                'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets', 'sklearn.metrics', 'sklearn.metrics.pairwise',
+                'scipy.spatial', 'scipy.special', 'scipy.integrate', 'scipy.cluster', 'scipy.optimize',
+                'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets', 'sklearn.metrics', 'sklearn.metrics.pairwise', 'sklearn.decomposition',
                 'mne', 'bioread', 'cvxopt', 'pywt']
 
 for mod_name in MOCK_MODULES:
@@ -65,8 +65,8 @@ extensions = [
     'nbsphinx',
     'sphinx_nbexamples',
     'matplotlib.sphinxext.plot_directive',
-    'recommonmark',
-    'sphinx_copybutton'
+    'sphinx_copybutton',
+    'recommonmark'
 ]
 
 # matplotlib plot directive

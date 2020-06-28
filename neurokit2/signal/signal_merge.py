@@ -9,11 +9,14 @@ def signal_merge(signal1, signal2, time1=[0, 10], time2=[0, 10]):
 
     Parameters
     ----------
-    signal1, signal2 : list, array or Series
-        The signal (i.e., a time series)s in the form of a vector of values.
-    time1, time2 : list
-        Lists containing two numeric values corresponding to the beginning and end of 'signal1' and
-        'signal2', respectively.
+    signal1 : Union[list, np.array, pd.Series]
+        The first signal (i.e., a time series)s in the form of a vector of values.
+    signal2 : Union[list, np.array, pd.Series]
+        The second signal (i.e., a time series)s in the form of a vector of values.
+    time1 : list
+        Lists containing two numeric values corresponding to the beginning and end of ``signal1``.
+    time2 : list
+        Same as above, but for ``signal2``.
 
     Returns
     -------

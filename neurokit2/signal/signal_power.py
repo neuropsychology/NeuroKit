@@ -12,7 +12,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     frequency_band :tuple or list
         Tuple or list of tuples indicating the range of frequencies to compute the power in.
@@ -102,7 +102,9 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
 
 def _signal_power_instant_get(psd, frequency_band):
 
-    indices = np.logical_and(psd["Frequency"] >= frequency_band[0], psd["Frequency"] < frequency_band[1]).values
+    indices = np.logical_and(
+        psd["Frequency"] >= frequency_band[0], psd["Frequency"] < frequency_band[1]
+    ).values  # pylint: disable=no-member
 
     out = {}
     out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = np.trapz(

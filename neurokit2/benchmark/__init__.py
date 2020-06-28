@@ -1,5 +1,4 @@
-"""Submodule for NeuroKit.
-"""
+"""Submodule for NeuroKit."""
 
 from .benchmark_ecg import benchmark_ecg_preprocessing
 

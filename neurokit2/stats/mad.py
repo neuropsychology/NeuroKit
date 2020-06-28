@@ -7,7 +7,7 @@ def mad(x, constant=1.4826):
 
     Parameters
     ----------
-    x : list, array or Series
+    x : Union[list, np.array, pd.Series]
         A vector of values.
     constant : float
         Scale factor. Use 1.4826 for results similar to default R.

@@ -41,7 +41,7 @@ for participant in range(25):
             anno = pd.DataFrame({"Rpeaks": ecg_class.anno_cs})
             anno["Participant"] = "GUDB_%.2i" %(participant)
             anno["Sampling_Rate"] = 250
-            anno["Database"] = "GUDB_" + experiment
+            anno["Database"] = "GUDB (" + experiment + ")"
 
             # Store with the rest
             dfs_ecg.append(data)

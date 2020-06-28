@@ -10,38 +10,35 @@ def test_rsp_simulate():
     rsp1 = nk.rsp_simulate(duration=20, length=3000, random_state=42)
     assert len(rsp1) == 3000
 
-    rsp2 = nk.rsp_simulate(duration=20, length=3000, respiratory_rate=80,
-                           random_state=42)
-#    pd.DataFrame({"RSP1":rsp1, "RSP2":rsp2}).plot()
-#    pd.DataFrame({"RSP1":rsp1, "RSP2":rsp2}).hist()
-    assert (len(nk.signal_findpeaks(rsp1, height_min=0.2)["Peaks"]) <
-            len(nk.signal_findpeaks(rsp2, height_min=0.2)["Peaks"]))
+    rsp2 = nk.rsp_simulate(duration=20, length=3000, respiratory_rate=80, random_state=42)
+    #    pd.DataFrame({"RSP1":rsp1, "RSP2":rsp2}).plot()
+    #    pd.DataFrame({"RSP1":rsp1, "RSP2":rsp2}).hist()
+    assert len(nk.signal_findpeaks(rsp1, height_min=0.2)["Peaks"]) < len(
+        nk.signal_findpeaks(rsp2, height_min=0.2)["Peaks"]
+    )
 
-    rsp3 = nk.rsp_simulate(duration=20, length=3000, method="sinusoidal",
-                           random_state=42)
-    rsp4 = nk.rsp_simulate(duration=20, length=3000, method="breathmetrics",
-                           random_state=42)
-#    pd.DataFrame({"RSP3":rsp3, "RSP4":rsp4}).plot()
-    assert (len(nk.signal_findpeaks(rsp3, height_min=0.2)["Peaks"]) >
-            len(nk.signal_findpeaks(rsp4, height_min=0.2)["Peaks"]))
+    rsp3 = nk.rsp_simulate(duration=20, length=3000, method="sinusoidal", random_state=42)
+    rsp4 = nk.rsp_simulate(duration=20, length=3000, method="breathmetrics", random_state=42)
+    #    pd.DataFrame({"RSP3":rsp3, "RSP4":rsp4}).plot()
+    assert len(nk.signal_findpeaks(rsp3, height_min=0.2)["Peaks"]) > len(
+        nk.signal_findpeaks(rsp4, height_min=0.2)["Peaks"]
+    )
 
 
 def test_rsp_clean():
 
     sampling_rate = 100
     duration = 120
-    rsp = nk.rsp_simulate(duration=duration, sampling_rate=sampling_rate,
-                          respiratory_rate=15, noise=.1, random_state=42)
+    rsp = nk.rsp_simulate(
+        duration=duration, sampling_rate=sampling_rate, respiratory_rate=15, noise=0.1, random_state=42
+    )
     # Add linear drift (to test baseline removal).
-    rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate,
-                             linear_drift=True)
+    rsp += nk.signal_distort(rsp, sampling_rate=sampling_rate, linear_drift=True)
 
-    khodadad2018 = nk.rsp_clean(rsp, sampling_rate=sampling_rate,
-                                method="khodadad2018")
+    khodadad2018 = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="khodadad2018")
     assert len(rsp) == len(khodadad2018)
 
-    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate,
-                               method="biosppy")
+    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
     assert len(rsp) == len(rsp_biosppy)
 
     # Check if filter was applied.
@@ -52,27 +49,22 @@ def test_rsp_clean():
     freqs = np.fft.rfftfreq(len(rsp), 1 / sampling_rate)
 
     assert np.sum(fft_raw[freqs > 3]) > np.sum(fft_khodadad2018[freqs > 3])
-    assert np.sum(fft_raw[freqs < .05]) > np.sum(fft_khodadad2018[freqs < .05])
-    assert np.sum(fft_raw[freqs > .35]) > np.sum(fft_biosppy[freqs > .35])
-    assert np.sum(fft_raw[freqs < .1]) > np.sum(fft_biosppy[freqs < .1])
+    assert np.sum(fft_raw[freqs < 0.05]) > np.sum(fft_khodadad2018[freqs < 0.05])
+    assert np.sum(fft_raw[freqs > 0.35]) > np.sum(fft_biosppy[freqs > 0.35])
+    assert np.sum(fft_raw[freqs < 0.1]) > np.sum(fft_biosppy[freqs < 0.1])
 
     # Comparison to biosppy (https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py#L62)
-    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate,
-                               method="biosppy")
-    original, _, _ = biosppy.tools.filter_signal(signal=rsp,
-                                                 ftype='butter',
-                                                 band='bandpass',
-                                                 order=2,
-                                                 frequency=[0.1, 0.35],
-                                                 sampling_rate=sampling_rate)
+    rsp_biosppy = nk.rsp_clean(rsp, sampling_rate=sampling_rate, method="biosppy")
+    original, _, _ = biosppy.tools.filter_signal(
+        signal=rsp, ftype="butter", band="bandpass", order=2, frequency=[0.1, 0.35], sampling_rate=sampling_rate
+    )
     original = nk.signal_detrend(original, order=0)
     assert np.allclose((rsp_biosppy - original).mean(), 0, atol=1e-6)
 
 
 def test_rsp_peaks():
 
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                          respiratory_rate=15, random_state=42)
+    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15, random_state=42)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_peaks(rsp_cleaned)
     assert signals.shape == (120000, 2)
@@ -89,53 +81,55 @@ def test_rsp_peaks():
 
 def test_rsp_amplitude():
 
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                          respiratory_rate=15, method="sinusoidal", noise=0)
+    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15, method="sinusoidal", noise=0)
     rsp_cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
     signals, info = nk.rsp_peaks(rsp_cleaned)
 
     # Test with dictionary.
     amplitude = nk.rsp_amplitude(rsp, signals)
-    assert amplitude.shape == (rsp.size, )
+    assert amplitude.shape == (rsp.size,)
     assert np.abs(amplitude.mean() - 1) < 0.01
 
     # Test with DataFrame.
     amplitude = nk.rsp_amplitude(rsp, info)
-    assert amplitude.shape == (rsp.size, )
+    assert amplitude.shape == (rsp.size,)
     assert np.abs(amplitude.mean() - 1) < 0.01
 
 
 def test_rsp_process():
 
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                          respiratory_rate=15)
+    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15)
     signals, info = nk.rsp_process(rsp, sampling_rate=1000)
 
     # Only check array dimensions since functions called by rsp_process have
     # already been unit tested.
     assert signals.shape == (120000, 8)
-    assert np.array(["RSP_Raw",
-                     "RSP_Clean",
-                     "RSP_Amplitude",
-                     "RSP_Rate",
-                     "RSP_Phase",
-                     "RSP_PhaseCompletion",
-                     "RSP_Peaks",
-                     "RSP_Troughs",]) in signals.columns.values
+    assert (
+        np.array(
+            [
+                "RSP_Raw",
+                "RSP_Clean",
+                "RSP_Amplitude",
+                "RSP_Rate",
+                "RSP_Phase",
+                "RSP_PhaseCompletion",
+                "RSP_Peaks",
+                "RSP_Troughs",
+            ]
+        )
+        in signals.columns.values
+    )
 
 
 def test_rsp_plot():
 
-    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000,
-                          respiratory_rate=15)
+    rsp = nk.rsp_simulate(duration=120, sampling_rate=1000, respiratory_rate=15)
     rsp_summary, _ = nk.rsp_process(rsp, sampling_rate=1000)
     nk.rsp_plot(rsp_summary)
     # This will identify the latest figure.
     fig = plt.gcf()
     assert len(fig.axes) == 3
-    titles = ["Raw and Cleaned Signal",
-              "Breathing Rate",
-              "Breathing Amplitude"]
+    titles = ["Raw and Cleaned Signal", "Breathing Rate", "Breathing Amplitude"]
     for (ax, title) in zip(fig.get_axes(), titles):
         assert ax.get_title() == title
     plt.close(fig)
@@ -144,27 +138,25 @@ def test_rsp_plot():
 def test_rsp_eventrelated():
 
     rsp, info = nk.rsp_process(nk.rsp_simulate(duration=30, random_state=42))
-    epochs = nk.epochs_create(rsp,
-                              events=[5000, 10000, 15000],
-                              epochs_start=-0.1,
-                              epochs_end=1.9)
+    epochs = nk.epochs_create(rsp, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
     rsp_eventrelated = nk.rsp_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(np.array(rsp_eventrelated["RSP_Rate_Min"]) <
-                      np.array(rsp_eventrelated["RSP_Rate_Mean"]))
+    assert np.alltrue(np.array(rsp_eventrelated["RSP_Rate_Min"]) < np.array(rsp_eventrelated["RSP_Rate_Mean"]))
 
-    assert np.alltrue(np.array(rsp_eventrelated["RSP_Rate_Mean"]) <
-                      np.array(rsp_eventrelated["RSP_Rate_Max"]))
+    assert np.alltrue(np.array(rsp_eventrelated["RSP_Rate_Mean"]) < np.array(rsp_eventrelated["RSP_Rate_Max"]))
 
     # Test amplitude features
-    assert np.alltrue(np.array(rsp_eventrelated["RSP_Amplitude_Min"]) <
-                      np.array(rsp_eventrelated["RSP_Amplitude_Mean"]))
+    assert np.alltrue(
+        np.array(rsp_eventrelated["RSP_Amplitude_Min"]) < np.array(rsp_eventrelated["RSP_Amplitude_Mean"])
+    )
 
-    assert np.alltrue(np.array(rsp_eventrelated["RSP_Amplitude_Mean"]) <
-                      np.array(rsp_eventrelated["RSP_Amplitude_Max"]))
+    assert np.alltrue(
+        np.array(rsp_eventrelated["RSP_Amplitude_Mean"]) < np.array(rsp_eventrelated["RSP_Amplitude_Max"])
+    )
 
     assert len(rsp_eventrelated["Label"]) == 3
+
 
 def test_rsp_rrv():
 
@@ -192,6 +184,7 @@ def test_rsp_rrv():
     assert np.isnan(rsp90_rrv["RRV_LF"][0])
     assert np.isnan(rsp110_rrv["RRV_LF"][0])
 
+
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
 #                        'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF',
 #                        'RRV_LFn', 'RRV_HFn',
@@ -210,8 +203,7 @@ def test_rsp_intervalrelated():
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
-    epochs = nk.epochs_create(df, events=[0, 15000],
-                              sampling_rate=100, epochs_end=150)
+    epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
     features_dict = nk.rsp_intervalrelated(epochs)
 
     assert features_dict.shape[0] == 2  # Number of rows

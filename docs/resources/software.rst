@@ -68,6 +68,7 @@ What is the best programming language for physiological data analysis?
   - `HeartPy <https://github.com/paulvangentcom/heartrate_analysis_python>`_: ECG.
   - `hrv <https://github.com/rhenanbartels/hrv>`_: ECG.
   - `hrv-analysis <https://github.com/Aura-healthcare/hrvanalysis>`_: ECG.
+  - `pyhrv <https://github.com/PGomes92/pyhrv>`_: ECG.
   - `py-ecg-detectors <https://github.com/berndporr/py-ecg-detectors>`_: ECG.
   - `Systole <https://github.com/embodied-computation-group/systole>`_: PPG.
   - `eda-explorer <https://github.com/MITMediaLabAffectiveComputing/eda-explorer>`_: EDA.

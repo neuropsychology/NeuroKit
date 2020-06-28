@@ -94,16 +94,16 @@ def _findclosest_base(x, vals, direction="both", strictly=False):
 
 def _find_closest_single_pandas(x, vals, direction="both", strictly=False):
 
-    if direction == "both":
+    if direction in ["both", "all"]:
         index = (np.abs(vals - x)).idxmin()
 
-    if direction == "smaller":
+    if direction in ["smaller", "below"]:
         if strictly is True:
             index = (np.abs(vals[vals < x] - x)).idxmin()
         else:
             index = (np.abs(vals[vals <= x] - x)).idxmin()
 
-    if direction == "greater":
+    if direction in ["greater", "above"]:
         if strictly is True:
             index = (vals[vals > x] - x).idxmin()
         else:

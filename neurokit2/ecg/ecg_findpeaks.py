@@ -16,7 +16,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     Parameters
     ----------
-    ecg_cleaned : list or array or Series
+    ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG channel as returned by `ecg_clean()`.
     sampling_rate : int
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
@@ -961,8 +961,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
 
 def _ecg_findpeaks_MWA(signal, window_size):
-    """From https://github.com/berndporr/py-ecg-detectors/
-    """
+    """From https://github.com/berndporr/py-ecg-detectors/"""
 
     mwa = np.zeros(len(signal))
     sums = np.cumsum(signal)
@@ -989,8 +988,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
 
 
 def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
-    """From https://github.com/berndporr/py-ecg-detectors/
-    """
+    """From https://github.com/berndporr/py-ecg-detectors/"""
     min_distance = int(0.25 * sampling_rate)
 
     signal_peaks = [0]

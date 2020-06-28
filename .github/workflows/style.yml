@@ -20,31 +20,40 @@ jobs:
         python -m pip install tox-gh-actions
         tox
 
-    - name: Check isort (check import calls)
+    - name: Fix code style with isort (import calls)
       run: |
         python -m pip install isort
-        isort neurokit2 --recursive -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --check --diff
+        isort neurokit2 --recursive -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --diff
 
-    - name: Detect style errors that can be fixed by running black
+    - name: Fix code style with black (line lengths)
       run: |
         pip install black
         # The GitHub editor is 127 chars wide. See https://black.readthedocs.io/en/stable/installation_and_usage.html
-        black neurokit2 --line-length 120 --check
+        black neurokit2 --line-length 120 .
 
-    - name: Check docstrings with docformatter
+    - name: Fix code style with docformatter (docstrings)
       run: |
         pip install docformatter
         # See https://github.com/myint/docformatter
-        docformatter neurokit2 --recursive --wrap-summaries 120 --wrap-descriptions 113 --blank --pre-summary-newline --make-summary-multi-line
+        docformatter neurokit2 --wrap-summaries 120 --wrap-descriptions 113 --blank --make-summary-multi-line --recursive
 
-    - name: Detect style errors with flake8
+    - name: Detect remaining style errors with flake8
       run: |
         pip install flake8
         # The GitHub editor is 127 chars wide. See https://flake8.pycqa.org/en/latest/user/configuration.html
         flake8 neurokit2 --exclude neurokit2/__init__.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203,W503
 
-    - name: Detect style errors with Pylint (fail under)
+    - name: Detect remaining style errors with Pylint (fail under)
       run: |
         pip install pylint-fail-under
         # See http://pylint.pycqa.org/en/latest/index.html
-        pylint-fail-under neurokit2 --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --reports=n --suggestion-mode=y --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 --disable=E0401 --disable=W9006 --disable=C0330 --disable=R0914 --disable=R0912 --disable=R0915 --disable=W0102 --disable=W0511 --disable=C1801 --disable=C0111 --disable=R1705 --disable=R1720 --disable=C0301 --disable=C0415 --disable=C0103 --disable=C0302 --disable=R1716 --disable=W0632 --disable=E1136 --exit-zero --fail_under 9.97
+        pylint-fail-under neurokit2 --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --reports=n --suggestion-mode=y --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 --disable=E0401 --disable=W9006 --disable=C0330 --disable=R0914 --disable=R0912 --disable=R0915 --disable=W0102 --disable=W0511 --disable=C1801 --disable=C0111 --disable=R1705 --disable=R1720 --disable=C0301 --disable=C0415 --disable=C0103 --disable=C0302 --disable=R1716 --disable=W0632 --disable=E1136 --extension-pkg-whitelist=numpy --exit-zero --fail_under 9.95
+
+    - name: Commit changes
+      uses: EndBug/add-and-commit@v4
+      with:
+        message: "Commit style fixes"
+        add: "*.py"
+        cwd: "./neurokit2/"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
