@@ -66,8 +66,7 @@ extensions = [
     'sphinx_nbexamples',
     'matplotlib.sphinxext.plot_directive',
     'sphinx_copybutton',
-    'recommonmark',
-    'myst_parser'
+    'recommonmark'
 ]
 
 # matplotlib plot directive

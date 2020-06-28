@@ -14,4 +14,3 @@ dependencies:
     - sphinx-gallery
     - sphinx-copybutton
     - recommonmark
-    - myst-parser
