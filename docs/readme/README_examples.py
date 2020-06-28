@@ -293,7 +293,7 @@ burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=False, ar_orde
 fig, ax = plt.subplots()
 
 ax.plot(welch["Frequency"], welch["Power"].reset_index(drop=True), label="Welch", color="#CFD8DC", linewidth=2)
-ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#00695C", linewidth=2)
+ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#009688", linewidth=2)
 ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#2196F3", linewidth=2)
 
 ax.set_title("Power Spectrum Density (PSD)")
@@ -303,7 +303,7 @@ ax.set_ylabel("PSD (ms^2/Hz)")
 ax.legend(loc="upper right")
 
 for x in [5, 20, 30]:
-    ax.axvline(x, color="#FF5722", linewidth=3, ymax=0.95, linestyle="--")
+    ax.axvline(x, color="#FF5722", linewidth=1, ymax=0.95, linestyle="--")
 
 # Save plot
 fig = plt.gcf()
