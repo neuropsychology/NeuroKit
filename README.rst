@@ -434,7 +434,7 @@ ECG Delineation
 
 
 
-.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_delineation.png
+.. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_delineate.png
        :target: https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html
 
 
