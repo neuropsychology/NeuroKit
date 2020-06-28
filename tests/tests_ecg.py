@@ -216,6 +216,7 @@ def test_ecg_intervalrelated():
 
     data = nk.data("bio_resting_5min_100hz")
     df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
+
     columns = ['ECG_Rate_Mean', 'HRV_RMSSD', 'HRV_MeanNN', 'HRV_SDNN', 'HRV_SDSD',
        'HRV_CVNN', 'HRV_CVSD', 'HRV_MedianNN', 'HRV_MadNN', 'HRV_MCVNN',
        'HRV_IQRNN', 'HRV_pNN50', 'HRV_pNN20', 'HRV_TINN', 'HRV_HTI',
@@ -224,10 +225,10 @@ def test_ecg_intervalrelated():
        'HRV_SD1SD2', 'HRV_S', 'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified',
        'HRV_PIP', 'HRV_IALS', 'HRV_PSS', 'HRV_PAS', 'HRV_ApEn',
        'HRV_SampEn', 'HRV_GI', 'HRV_SI', 'HRV_AI', 'HRV_PI',
-       'HRV_C1_deceleration', 'HRV_C1_acceleration', 'HRV_SD1d',
-       'HRV_SD1a', 'HRV_SD1I', 'HRV_C2_deceleration',
-       'HRV_C2_acceleration', 'HRV_SD2d', 'HRV_SD2a', 'HRV_SD2I',
-       'HRV_C_deceleration', 'HRV_C_acceleration', 'HRV_SDNNd',
+       'HRV_C1d', 'HRV_C1a', 'HRV_SD1d',
+       'HRV_SD1a', 'HRV_C2d',
+       'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
+       'HRV_Cd', 'HRV_Ca', 'HRV_SDNNd',
        'HRV_SDNNa']
 
     # Test with signal dataframe
