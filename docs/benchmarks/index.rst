@@ -6,4 +6,4 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
-   ../../benchmarks/ecg_preprocessing/README
+   ecg_preprocessing
