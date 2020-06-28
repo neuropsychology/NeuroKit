@@ -36,6 +36,7 @@ checks:
 exclude_patterns:
 - "tests/"
 - "scripts/"
+- "benchmarks/"
 - "data/"
 - "docs/img/"
 - "docs/readme/"
