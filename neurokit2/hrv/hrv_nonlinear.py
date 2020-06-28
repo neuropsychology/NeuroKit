@@ -290,7 +290,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     out["C1a"] = (sd1a / sd1I) ** 2
     out["SD1d"] = sd1d  # SD1 deceleration
     out["SD1a"] = sd1a  # SD1 acceleration
-    out["SD1I"] = sd1I  # SD1 based on LI, whereas SD1 is based on centroid line l1
+    # out["SD1I"] = sd1I  # SD1 based on LI, whereas SD1 is based on centroid line l1
 
     # Long-term asymmetry (SD2)
     longterm_dec = np.sum(dist_l2_all[decelerate_indices] ** 2) / (N - 1)
@@ -305,7 +305,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     out["C2a"] = (sd2a / sd2I) ** 2
     out["SD2d"] = sd2d  # SD2 deceleration
     out["SD2a"] = sd2a  # SD2 acceleration
-    out["SD2I"] = sd2I  # identical with SD2
+    # out["SD2I"] = sd2I  # identical with SD2
 
     # Total asymmerty (SDNN)
     sdnnd = np.sqrt(0.5 * (sd1d ** 2 + sd2d ** 2))  # SDNN deceleration
