@@ -4,6 +4,10 @@
 *This study can be referenced by* [*citing the
 package*](https://github.com/neuropsychology/NeuroKit#citation).
 
+**We'd like to publish this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
+
+## Introduction
+
 The goal of this study is to identify a template for blinks in vertical
 EOG recordings. For this, we will optimize to candidate functions, a
 *Gamma* distribution and the *SCR* function proposed by Bach, Flandin,

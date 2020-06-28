@@ -39,6 +39,10 @@ matplotlib$use("Agg", force = TRUE)
 
 *This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation).
 
+**We'd like to publish this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
+
+## Introduction
+
 This work is a replication and extension of the work by @porr2019r, that compared the performance of different popular R-peak detectors.
 
 
@@ -181,9 +185,7 @@ library(easystats)
 library(lme4)
 
 data <- read.csv("data_detectors.csv", stringsAsFactors = FALSE) %>% 
-  mutate(Database = ifelse(str_detect(Database, "GUDB"), paste0(str_replace(Database, "GUDB_", "GUDB ("), ")"), Database),
-         Method = fct_relevel(Method, "neurokit", "pantompkins1985", "hamilton2002", "martinez2003", "christov2004", "gamboa2008", "elgendi2010", "engzeemod2012", "kalidas2017", "rodrigues2020"),
-         Participant = paste0(Database, Participant))
+  mutate(Method = fct_relevel(Method, "neurokit", "pantompkins1985", "hamilton2002", "martinez2003", "christov2004", "gamboa2008", "elgendi2010", "engzeemod2012", "kalidas2017", "rodrigues2020"))
 
 colors <- c("neurokit"="#E91E63", "pantompkins1985"="#f44336", "hamilton2002"="#FF5722", "martinez2003"="#FF9800", "christov2004"="#FFC107", "gamboa2008"="#4CAF50", "elgendi2010"="#009688", "engzeemod2012"="#2196F3", "kalidas2017"="#3F51B5", "rodrigues2020"="#9C27B0") 
 ```
