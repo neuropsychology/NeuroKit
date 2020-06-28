@@ -58,9 +58,9 @@ def test_hrv():
        'HRV_HFn', 'HRV_LnHF', 'HRV_SD1', 'HRV_SD2', 'HRV_SD1SD2', 'HRV_S',
        'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified', 'HRV_PIP', 'HRV_IALS',
        'HRV_PSS', 'HRV_PAS', 'HRV_GI', 'HRV_SI', 'HRV_AI', 'HRV_PI',
-       'HRV_C1_deceleration', 'HRV_C1_acceleration', 'HRV_SD1d',
-       'HRV_SD1a', 'HRV_SD1I', 'HRV_C2_deceleration',
-       'HRV_C2_acceleration', 'HRV_SD2d', 'HRV_SD2a', 'HRV_SD2I',
-       'HRV_C_deceleration', 'HRV_C_acceleration', 'HRV_SDNNd',
+       'HRV_C1d', 'HRV_C1a', 'HRV_SD1d',
+       'HRV_SD1a', 'HRV_C2d',
+       'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
+       'HRV_Cdn', 'HRV_Ca', 'HRV_SDNNd',
        'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn']
                for elem in np.array(ecg_hrv.columns.values, dtype=str))
