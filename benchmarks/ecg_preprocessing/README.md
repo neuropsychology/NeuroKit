@@ -1,7 +1,7 @@
 
 # Benchmarking of ECG Preprocessing Methods
 
-*This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation).
+<em>This study can be referenced by <a href="https://github.com/neuropsychology/NeuroKit#citation">citing the package</a></em>.
 
 **We'd like to publish this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
 
@@ -22,9 +22,9 @@ running on a treadmill, using a hand bike). The sampling rate is 250Hz
 for all the conditions.
 
 The script to download and format the database using the
-[**ECG-GUDB**](https://github.com/berndporr/ECG-GUDB) Python package by
+<b><a href="https://github.com/berndporr/ECG-GUDB">ECG-GUDB</a></b> Python package by
 Bernd Porr can be found
-[**here**](https://github.com/neuropsychology/NeuroKit/blob/dev/data/gudb/download_gudb.py).
+<b><a href="https://github.com/neuropsychology/NeuroKit/blob/dev/data/gudb/download_gudb.py">here</a></b>.
 
 ### MIT-BIH Arrhythmia Database
 
@@ -35,7 +35,7 @@ including common but clinically significant arrhythmias (denoted as the
 `MIT-Arrhythmia-x` database).
 
 The script to download and format the database using the can be found
-[**here**](https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_arrhythmia/download_mit_arrhythmia.py).
+<b><a href="https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_arrhythmia/download_mit_arrhythmia.py">here</a></b>.
 
 <!-- ### MIT-BIH Noise Stress Test Database -->
 
@@ -48,7 +48,7 @@ Due to memory limits, we only kept the second hour of recording of each
 participant.
 
 The script to download and format the database using the can be found
-[**here**](https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_normal/download_mit_normal.py).
+<b><a href="https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_normal/download_mit_normal.py">here</a></b>.
 
 <!-- ### Lobachevsky University Electrocardiography Database -->
 
@@ -177,7 +177,7 @@ data %>%
     scale_fill_manual(values=colors)
 ```
 
-![](figures/unnamed-chunk-6-1.png)<!-- -->
+![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-6-1.png)<!-- -->
 
 **Conclusion:** It seems that `gamboa2008` and `martinez2003` are
 particularly prone to errors, especially in the case of a noisy ECG
@@ -212,7 +212,7 @@ data %>%
     ylab("Duration (seconds per data sample)")
 ```
 
-![](figures/unnamed-chunk-8-1.png)<!-- -->
+![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-8-1.png)<!-- -->
 
 <!-- ```{r, warning=FALSE, message=FALSE} -->
 
@@ -269,7 +269,7 @@ means %>%
     ylab("Duration (seconds per data sample)")
 ```
 
-![](figures/unnamed-chunk-9-1.png)<!-- -->
+![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-9-1.png)<!-- -->
 
 **Conclusion:** It seems that `gamboa2008` and `neurokit` are the
 fastest methods, followed by `martinez2003`, `kalidas2017`,
@@ -302,7 +302,7 @@ data %>%
     ylab("Amount of Error") 
 ```
 
-![](figures/unnamed-chunk-10-1.png)<!-- -->
+![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-10-1.png)<!-- -->
 
 ##### Statistical Modelling
 
@@ -335,7 +335,7 @@ means %>%
     ylab("Amount of Error") 
 ```
 
-![](figures/unnamed-chunk-11-1.png)<!-- -->
+![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-11-1.png)<!-- -->
 
 **Conclusion:** It seems that `neurokit`, `kalidas2017` and
 `christov2004` the most accurate algorithms to detect R-peaks. This
@@ -430,7 +430,7 @@ data %>%
     ylab("Amount of Error") 
 ```
 
-![](figures/unnamed-chunk-15-1.png)<!-- -->
+![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-15-1.png)<!-- -->
 
 ##### Statistical Modelling
 
@@ -461,7 +461,7 @@ means %>%
     ylab("Amount of Error") 
 ```
 
-![](figures/unnamed-chunk-16-1.png)<!-- -->
+![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-16-1.png)<!-- -->
 
 ### Conclusion
 
@@ -471,28 +471,18 @@ method.
 # References
 
 <div id="refs" class="references">
-
-<div id="ref-howell2018high">
-
-Howell, L., & Porr, B. (2018). *High precision ecg database with
-annotated r peaks, recorded and filmed under realistic conditions*.
-
-</div>
-
-<div id="ref-moody2001impact">
-
-Moody, G. B., & Mark, R. G. (2001). The impact of the mit-bih arrhythmia
-database. *IEEE Engineering in Medicine and Biology Magazine*, *20*(3),
-45–50.
-
-</div>
-
-<div id="ref-porr2019r">
-
-Porr, B., & Howell, L. (2019). R-peak detector stress test with a new
-noisy ecg database reveals significant performance differences amongst
-popular detectors. *bioRxiv*, 722397.
-
-</div>
-
+    <div id="ref-howell2018high">
+        Howell, L., & Porr, B. (2018). <em>High precision ecg database with
+        annotated r peaks, recorded and filmed under realistic conditions</em>.
+    </div>
+    <div id="ref-moody2001impact">
+        Moody, G. B., & Mark, R. G. (2001). The impact of the mit-bih arrhythmia
+        database. <em>IEEE Engineering in Medicine and Biology Magazine</em>, <b>20</b>(3),
+        45–50.
+    </div>
+    <div id="ref-porr2019r">
+        Porr, B., & Howell, L. (2019). R-peak detector stress test with a new
+        noisy ecg database reveals significant performance differences amongst
+        popular detectors. <em>bioRxiv</em>, 722397.
+    </div>
 </div>

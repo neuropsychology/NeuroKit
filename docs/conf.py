@@ -22,10 +22,8 @@ import os
 import re
 import sys
 import mock
-import recommonmark
-
+from m2r import MdInclude
 from recommonmark.transform import AutoStructify
-
 
 
 sys.path.insert(0, os.path.abspath('../'))
@@ -269,8 +267,17 @@ add_function_parentheses = True  # to ensure that parentheses are added to the e
 
 # -- Setup for recommonmark ---------------------------------------------
 def setup(app):
+    # Use m2r only for mdinclude and recommonmark for everything else
+    # https://github.com/readthedocs/recommonmark/issues/191#issuecomment-622369992
     app.add_config_value('recommonmark_config', {
             # 'url_resolver': lambda url: github_doc_root + url,
             'auto_toc_tree_section': 'Contents',
             }, True)
     app.add_transform(AutoStructify)
+
+    # from m2r to make `mdinclude` work
+    app.add_config_value('no_underscore_emphasis', False, 'env')
+    app.add_config_value('m2r_parse_relative_links', False, 'env')
+    app.add_config_value('m2r_anonymous_references', False, 'env')
+    app.add_config_value('m2r_disable_inline_math', False, 'env')
+    app.add_directive('mdinclude', MdInclude)
