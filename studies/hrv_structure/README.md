@@ -65,7 +65,7 @@ names(data) <- stringr::str_remove(names(data), "HRV_")
 
 ### Redundant Indices
 
-#### Remove Equivalent (r \> .995)
+#### Remove Equivalent (r higher than .995)
 
 ``` r
 data %>% 
@@ -96,7 +96,7 @@ data <- data %>%
   select(-SD2d, -SD2a)  # Same as SD2
 ```
 
-#### Remove Strongly Correlated (r \> .99)
+#### Remove Strongly Correlated (r higher than .99)
 
 ``` r
 data %>% 
@@ -112,7 +112,7 @@ data %>%
 ## TINN       |         LF | 0.99 | [0.99, 0.99] | 104.44 | 210 | < .001 | Pearson |   212
 
 data <- data %>% 
-  select(-AI, -SI) %>%  # Same as GI 
+  select(-GI, -SI) %>%  # Same as AI 
   select(-SD2)  # Same as SDNN
 ```
 
@@ -188,7 +188,7 @@ n
 ## The choice of 8 dimensions is supported by 3 (21.43%) methods out of 14 (Optimal coordinates, Parallel analysis, Kaiser criterion).
 
 plot(n) +
-  theme_modern()
+  see::theme_modern()
 ```
 
 ![](../../studies/hrv_structure/figures/unnamed-chunk-9-1.png)<!-- -->
@@ -196,70 +196,95 @@ plot(n) +
 #### Interpret
 
 ``` r
-fa <- parameters::factor_analysis(data[sapply(data, is.numeric)], n=8, rotation="varimax")
+fa <- parameters::factor_analysis(data, cor=cor, n=8, rotation="varimax", fm="ols")
 
 print(fa, threshold="max", sort=TRUE)
 ## # Rotated loadings from Factor Analysis (varimax-rotation)
 ## 
-## Variable     |  MR1 |   MR2 |   MR3 |  MR4 |  MR5 |  MR7 |   MR8 |  MR6 | Complexity | Uniqueness
+## Variable     |   V1 |    V2 |    V3 |   V4 |   V5 |   V6 |    V7 |   V8 | Complexity | Uniqueness
 ## -------------------------------------------------------------------------------------------------
 ## S            | 0.99 |       |       |      |      |      |       |      |       1.01 |       0.01
-## TINN         | 0.99 |       |       |      |      |      |       |      |       1.01 |   8.99e-03
+## TINN         | 0.99 |       |       |      |      |      |       |      |       1.01 |   9.10e-03
 ## LF           | 0.98 |       |       |      |      |      |       |      |       1.03 |       0.02
-## RMSSD        | 0.94 |       |       |      |      |      |       |      |       1.24 |   7.23e-03
+## RMSSD        | 0.94 |       |       |      |      |      |       |      |       1.24 |   7.35e-03
 ## SDNN         | 0.94 |       |       |      |      |      |       |      |       1.25 |       0.02
-## CVNN         | 0.93 |       |       |      |      |      |       |      |       1.29 |   3.52e-03
-## CVSD         | 0.93 |       |       |      |      |      |       |      |       1.32 |  -8.55e-04
+## CVNN         | 0.93 |       |       |      |      |      |       |      |       1.29 |   3.47e-03
+## CVSD         | 0.93 |       |       |      |      |      |       |      |       1.32 |  -9.33e-04
 ## LFHF         | 0.81 |       |       |      |      |      |       |      |       1.55 |       0.17
-## ApEn         |      |  0.82 |       |      |      |      |       |      |       1.45 |       0.19
-## SampEn       |      |  0.70 |       |      |      |      |       |      |       2.38 |       0.21
-## HFn          |      |  0.65 |       |      |      |      |       |      |       1.71 |       0.45
-## LFn          |      | -0.62 |       |      |      |      |       |      |       2.08 |       0.43
-## CSI_Modified |      | -0.62 |       |      |      |      |       |      |       3.15 |       0.27
-## HTI          |      |  0.60 |       |      |      |      |       |      |       1.36 |       0.57
-## CSI          |      | -0.56 |       |      |      |      |       |      |       4.01 |       0.22
-## C2d          |      |       | -0.85 |      |      |      |       |      |       1.49 |       0.11
-## C2a          |      |       |  0.85 |      |      |      |       |      |       1.49 |       0.11
-## Cd           |      |       | -0.84 |      |      |      |       |      |       1.34 |       0.17
-## Ca           |      |       |  0.84 |      |      |      |       |      |       1.34 |       0.17
-## PI           |      |       |  0.73 |      |      |      |       |      |       1.64 |       0.32
-## PIP          |      |       |       | 0.99 |      |      |       |      |       1.05 |   4.71e-05
-## IALS         |      |       |       | 0.98 |      |      |       |      |       1.09 |   1.19e-03
-## PSS          |      |       |       | 0.88 |      |      |       |      |       1.08 |       0.19
-## PAS          |      |       |       | 0.76 |      |      |       |      |       1.57 |       0.28
+## ApEn         |      |  0.82 |       |      |      |      |       |      |       1.44 |       0.19
+## SampEn       |      |  0.70 |       |      |      |      |       |      |       2.34 |       0.21
+## HFn          |      |  0.64 |       |      |      |      |       |      |       1.74 |       0.45
+## CSI_Modified |      | -0.62 |       |      |      |      |       |      |       3.14 |       0.27
+## LFn          |      | -0.62 |       |      |      |      |       |      |       2.14 |       0.43
+## HTI          |      |  0.61 |       |      |      |      |       |      |       1.36 |       0.57
+## CSI          |      | -0.56 |       |      |      |      |       |      |       3.98 |       0.22
+## C2d          |      |       | -0.85 |      |      |      |       |      |       1.47 |       0.11
+## C2a          |      |       |  0.85 |      |      |      |       |      |       1.47 |       0.11
+## Ca           |      |       |  0.84 |      |      |      |       |      |       1.37 |       0.16
+## Cd           |      |       | -0.84 |      |      |      |       |      |       1.37 |       0.16
+## PI           |      |       |  0.73 |      |      |      |       |      |       1.62 |       0.32
+## PIP          |      |       |       | 0.99 |      |      |       |      |       1.05 |   5.36e-04
+## IALS         |      |       |       | 0.98 |      |      |       |      |       1.09 |   1.32e-03
+## PSS          |      |       |       | 0.88 |      |      |       |      |       1.08 |       0.20
+## PAS          |      |       |       | 0.75 |      |      |       |      |       1.57 |       0.28
 ## MCVNN        |      |       |       |      | 0.95 |      |       |      |       1.08 |       0.05
 ## MadNN        |      |       |       |      | 0.94 |      |       |      |       1.07 |       0.09
-## IQRNN        |      |       |       |      | 0.82 |      |       |      |       1.41 |       0.20
-## pNN50        |      |       |       |      | 0.65 |      |       |      |       3.00 |       0.17
+## IQRNN        |      |       |       |      | 0.82 |      |       |      |       1.42 |       0.20
+## pNN50        |      |       |       |      | 0.65 |      |       |      |       3.01 |       0.17
 ## pNN20        |      |       |       |      | 0.51 |      |       |      |       3.90 |       0.13
-## VHF          |      |       |       |      |      | 0.67 |       |      |       2.17 |       0.31
-## LnHF         |      |       |       |      |      | 0.65 |       |      |       3.72 |       0.10
-## CVI          |      |       |       |      |      | 0.63 |       |      |       3.55 |       0.07
-## HF           |      |       |       |      |      | 0.60 |       |      |       2.28 |       0.32
-## SD1SD2       |      |       |       |      |      | 0.58 |       |      |       2.99 |       0.19
-## C1a          |      |       |       |      |      |      | -0.87 |      |       1.54 |       0.05
-## C1d          |      |       |       |      |      |      |  0.87 |      |       1.54 |       0.05
-## GI           |      |       |       |      |      |      |  0.57 |      |       3.41 |       0.11
+## VHF          |      |       |       |      |      | 0.67 |       |      |       2.17 |       0.30
+## LnHF         |      |       |       |      |      | 0.65 |       |      |       3.75 |       0.10
+## CVI          |      |       |       |      |      | 0.62 |       |      |       3.58 |       0.07
+## HF           |      |       |       |      |      | 0.60 |       |      |       2.27 |       0.32
+## SD1SD2       |      |       |       |      |      | 0.58 |       |      |       3.05 |       0.19
+## C1d          |      |       |       |      |      |      |  0.87 |      |       1.55 |       0.05
+## C1a          |      |       |       |      |      |      | -0.87 |      |       1.55 |       0.05
+## AI           |      |       |       |      |      |      |  0.63 |      |       3.30 |       0.09
 ## MeanNN       |      |       |       |      |      |      |       | 0.91 |       1.38 |       0.02
 ## MedianNN     |      |       |       |      |      |      |       | 0.85 |       1.54 |       0.10
 ## 
-## The 8 latent factors (varimax rotation) accounted for 84.97% of the total variance of the original data (MR1 = 20.29%, MR2 = 12.03%, MR3 = 10.84%, MR4 = 10.44%, MR5 = 9.95%, MR7 = 7.75%, MR8 = 6.99%, MR6 = 6.68%).
+## The 8 latent factors (varimax rotation) accounted for 85.02% of the total variance of the original data (V1 = 20.29%, V2 = 12.00%, V3 = 10.74%, V4 = 10.41%, V5 = 9.95%, V6 = 7.74%, V7 = 7.22%, V8 = 6.68%).
 
-plot(fa)
+plot(fa) +
+  see::theme_modern()
 ```
 
 ![](../../studies/hrv_structure/figures/unnamed-chunk-10-1.png)<!-- -->
 
 ### Cluster Analysis
 
-#### How many clusters
+<!-- #### How many clusters  -->
 
 <!-- ```{r, message=FALSE, warning=FALSE} -->
 
-<!-- parameters::n_clusters(data, package = "all") -->
+<!-- dat <- effectsize::standardize(data[sapply(data, is.numeric)]) -->
+
+<!-- n <- parameters::n_clusters(t(dat), package = c("mclust")) -->
+
+<!-- n -->
+
+<!-- plot(n) + -->
+
+<!--   theme_modern() -->
 
 <!-- ``` -->
 
-#### Interpret
+``` r
+library(dendextend)
+
+dat <- effectsize::standardize(data[sapply(data, is.numeric)])
+
+result <- pvclust::pvclust(dat, method.dist="euclidean", method.hclust="ward.D2", nboot=10, quiet=TRUE)
+
+result %>% 
+  as.dendrogram() %>% 
+  sort() %>% 
+  dendextend::pvclust_show_signif_gradient(result, signif_col_fun = grDevices::colorRampPalette(c("black", "red"))) %>% 
+  dendextend::pvclust_show_signif(result, signif_value = c(2, 1)) %>%
+  dendextend::as.ggdend() %>% 
+  ggplot2::ggplot(horiz=TRUE, offset_labels = -1)
+```
+
+![](../../studies/hrv_structure/figures/unnamed-chunk-11-1.png)<!-- -->
 
 ## References

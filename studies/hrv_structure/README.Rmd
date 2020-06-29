@@ -104,7 +104,7 @@ names(data) <- stringr::str_remove(names(data), "HRV_")
 
 ### Redundant Indices
 
-#### Remove Equivalent (r > .995)
+#### Remove Equivalent (r higher than .995)
 
 ```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17}
 data %>% 
@@ -118,7 +118,7 @@ data <- data %>%
   select(-SD2d, -SD2a)  # Same as SD2
 ```
 
-#### Remove Strongly Correlated (r > .99)
+#### Remove Strongly Correlated (r higher than .99)
 
 ```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17}
 data %>% 
@@ -127,7 +127,7 @@ data %>%
   arrange(Parameter1, desc(abs(r)))
 
 data <- data %>% 
-  select(-AI, -SI) %>%  # Same as GI 
+  select(-GI, -SI) %>%  # Same as AI 
   select(-SD2)  # Same as SDNN
 ```
 
@@ -201,31 +201,54 @@ n <- parameters::n_factors(data, cor=cor)
 n
 
 plot(n) +
-  theme_modern()
+  see::theme_modern()
 ```
 
 #### Interpret
 
 ```{r, message=FALSE, warning=FALSE, fig.width=15, fig.height=15}
-fa <- parameters::factor_analysis(data[sapply(data, is.numeric)], n=8, rotation="varimax")
+fa <- parameters::factor_analysis(data, cor=cor, n=8, rotation="varimax", fm="ols")
 
 print(fa, threshold="max", sort=TRUE)
 
-plot(fa)
+plot(fa) +
+  see::theme_modern()
 ```
 
 
 
 ### Cluster Analysis
 
-#### How many clusters 
+<!-- #### How many clusters  -->
 
 <!-- ```{r, message=FALSE, warning=FALSE} -->
-<!-- parameters::n_clusters(data, package = "all") -->
+<!-- dat <- effectsize::standardize(data[sapply(data, is.numeric)]) -->
+
+<!-- n <- parameters::n_clusters(t(dat), package = c("mclust")) -->
+
+<!-- n -->
+
+<!-- plot(n) + -->
+<!--   theme_modern() -->
 <!-- ``` -->
 
 
-#### Interpret
+```{r, message=FALSE, warning=FALSE, fig.width=7, fig.height=10}
+library(dendextend)
+
+dat <- effectsize::standardize(data[sapply(data, is.numeric)])
+
+result <- pvclust::pvclust(dat, method.dist="euclidean", method.hclust="ward.D2", nboot=10, quiet=TRUE)
+
+result %>% 
+  as.dendrogram() %>% 
+  sort() %>% 
+  dendextend::pvclust_show_signif_gradient(result, signif_col_fun = grDevices::colorRampPalette(c("black", "red"))) %>% 
+  dendextend::pvclust_show_signif(result, signif_value = c(2, 1)) %>%
+  dendextend::as.ggdend() %>% 
+  ggplot2::ggplot(horiz=TRUE, offset_labels = -1)
+```
+
 
 
 ## References

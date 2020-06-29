@@ -331,31 +331,4 @@ fig = plt.gcf()
 fig.set_size_inches(10/1.5, 6/1.5)
 fig.savefig("README_hdi.png", dpi=300, h_pad=3)
 
-# =============================================================================
-# Popularity
-# =============================================================================
-#import popularipy  # https://github.com/DominiqueMakowski/popularipy
-#
-#downloads = popularipy.pypi_downloads("neurokit2")
-#stars = popularipy.github_stars("neuropsychology/neurokit", "b547333010d0b1253ab44569df3efd94c8a93a63 ")
-#
-#data = downloads.merge(stars)
-#
-## Plot
-#fig, axes = plt.subplots(2, 1, figsize=(7, 3))
-#
-#data.plot.area(x="Date", y="Downloads", ax=axes[0], legend=False, color="#2196F3")
-#data.plot(x="Date", y="Trend", ax=axes[0], legend=False, color="#E91E63")
-#data.plot.area(x="Date", y="Stars", ax=axes[1], legend=False, color="#FF9800")
-#
-## Clean axes
-#axes[0].xaxis.label.set_visible(False)
-#axes[0].xaxis.set_ticks_position("none")
-#axes[0].set_xticklabels([])
-#axes[0].text(0.5, 0.9, "Downloads / Day", horizontalalignment='center', transform=axes[0].transAxes)
-#axes[1].text(0.5, 0.9, "GitHub Stars", horizontalalignment='center', transform=axes[1].transAxes)
-#axes[1].xaxis.label.set_visible(False)
-#
-#fig = plt.gcf()
-#fig.set_size_inches(4*3, 2*3, forward=True)
-#fig.savefig("README_popularity.png", dpi=300)
+

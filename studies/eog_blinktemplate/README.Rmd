@@ -28,8 +28,8 @@ knitr::opts_chunk$set(
 # Setup python - you need to change the path to your python distribution
 library(reticulate)
 reticulate::use_python("D:/Downloads/WPy64-3810/python-3.8.1.amd64/")
-matplotlib <- import("matplotlib")
-matplotlib$use("Agg", force = TRUE)
+matplotlib <- import("matplotlib", convert = TRUE)
+# matplotlib$use("Agg", force = TRUE)
 ```
 
 
@@ -67,7 +67,7 @@ os.chdir(wd)
 ```
 
 
-```{python, eval=TRUE}
+```{python results="hide"}
 # import neurokit2 as nk
 import numpy as np
 import pandas as pd
@@ -95,19 +95,22 @@ def fit_scr(x, time_peak, rise, decay1, decay2):
 # Starting parameters
 plt.plot(fit_gamma(np.arange(100), 3, 3, 0.5), linewidth=2, linestyle='-', color="#4CAF50", label='Gamma')
 plt.plot(fit_scr(np.arange(100), 3.5, 0.5, 1, 1), linewidth=2, linestyle='-', color="#9C27B0", label='SCR')
+plt.savefig("figures/fig1.png")
+plt.clf()
 ```
 
+![fig1](../../studies/eog_blinktemplate/figures/fig1.png)
 #### Optimize Parameters
 
-The `eogdb` dataset is placed in the `NeuroKit/data/eogdb/` folder. 
+The `eogdb` dataset is placed in the `NeuroKit/data/eogdb/` folder.
 
-```{python include=FALSE}
+```{python, results="hide"}
 params_gamma = pd.DataFrame(columns=["loc", "a", "scale", "Participant", "Task"])
 params_scr = pd.DataFrame(columns=["time_peak", "rise", "decay1", "decay2", "Participant", "Task"])
 
 for i in range(4):
     print("Task: " + str(i))
-    
+
     data = pd.read_csv("../../data/eogdb/eogdb_task" + str(i + 1) + ".csv")
 
     for j, participant in enumerate(np.unique(data["Participant"])):
@@ -153,7 +156,7 @@ for i in range(4):
 
 Visualize the optimal templates for one task.
 
-```{python, eval=TRUE}
+```{python, results="hide"}
 data = pd.read_csv("../../data/eogdb/eogdb_task3.csv")
 cleaned = nk.eog_clean(data["vEOG"], sampling_rate=200, method='neurokit')
 blinks = nk.signal_findpeaks(cleaned, relative_height_min=1.5)["Peaks"][:-1]
@@ -171,8 +174,11 @@ plt.plot(events, linewidth=0.02, color="black")
 plt.plot(template_gamma, linewidth=2, linestyle='-', color="#4CAF50", label='Gamma')
 plt.plot(template_scr, linewidth=2, linestyle='-', color="#9C27B0", label='SCR')
 plt.legend(loc="upper right")
-plt.show()
+plt.savefig("figures/fig2.png")
+plt.clf()
 ```
+
+![fig2](../../studies/eog_blinktemplate/figures/fig2.png)
 
 
 ## Study 2: Difference between Template and EOG Events
@@ -181,7 +187,7 @@ plt.show()
 ### Methods
 
 
-```{python, eval=TRUE, include=FALSE}
+```{python, results="hide"}
 data_rmse = pd.DataFrame(columns=["RMSE", "Index", "Participant", "Task", "Function"])
 for i in range(4):
     data = pd.read_csv("../../data/eogdb/eogdb_task" + str(i + 1) + ".csv")
@@ -222,19 +228,22 @@ for i in range(4):
 
 ### Results
 
-```{python, eval=TRUE}
+```{python, results="hide"}
 p = data_rmse.pivot(index='Index', columns='Function', values='RMSE').plot.kde()
 p.set_xlim(0, 1)
 p.axvline(x=0.25, color="red")
-plt.show()
+plt.savefig("figures/fig3.png")
+plt.clf()
 ```
+
+![fig3](../../studies/eog_blinktemplate/figures/fig3.png)
 
 
 ## Study 3: Optimize the Parameters
 
 ###  Methods
 
-```{python, eval=TRUE, include=FALSE}
+```{python, results="hide"}
 optimal_gamma = np.nanmedian(params_gamma.iloc[:, [0, 1, 2]], axis=0)
 optimal_scr = np.nanmedian(params_scr.iloc[:, [0, 1, 2, 3]], axis=0)
 
@@ -292,7 +301,7 @@ for i in range(4):
 
 
 
-```{python, eval=TRUE}
+```{python}
 data_rmse = pd.DataFrame(columns=["RMSE", "Index", "Participant", "Task", "Function"])
 for i in range(4):
     data = pd.read_csv("../../data/eogdb/eogdb_task" + str(i + 1) + ".csv")
@@ -338,7 +347,7 @@ print(df.median(axis=0))
 ### Results
 
 
-```{python, eval=TRUE}
+```{python, results="hide"}
 data = pd.read_csv("../../data/eogdb/eogdb_task3.csv")
 cleaned = nk.eog_clean(data["vEOG"], sampling_rate=200, method='neurokit')
 blinks = nk.signal_findpeaks(cleaned, relative_height_min=1.5)["Peaks"]
@@ -357,10 +366,13 @@ plt.plot(template_gamma2, linewidth=2, linestyle='-', color="#2196F3", label='Ga
 plt.plot(template_scr, linewidth=2, linestyle='-', color="#9C27B0", label='SCR')
 plt.plot(template_scr2, linewidth=2, linestyle='-', color="#E91E63", label='SCR (optimized)')
 plt.legend(loc="upper right")
-plt.show()
+plt.savefig("figures/fig4.png")
+plt.clf()
 ```
 
-```{python, eval=TRUE}
+![fig4](../../studies/eog_blinktemplate/figures/fig4.png)
+
+```{python, results="hide"}
 data = pd.read_csv("../../data/eogdb/eogdb_task3.csv")
 cleaned = nk.eog_clean(data[(data["Participant"] == "S1") | (data["Participant"] == "S2")]["vEOG"], sampling_rate=200, method='neurokit')
 blinks = nk.signal_findpeaks(cleaned, relative_height_min=1.5)["Peaks"]
@@ -376,23 +388,26 @@ plt.plot(events[:, rmse >= 0.25], linewidth=0.2, color="red")
 plt.plot(template_gamma2, linewidth=2, linestyle='-', color="#2196F3", label='Gamma (optimized)')
 plt.plot(template_scr2, linewidth=2, linestyle='-', color="#E91E63", label='SCR (optimized)')
 plt.legend(loc="upper right")
-plt.show()
+plt.savefig("figures/fig5.png")
+plt.clf()
 ```
+
+![fig5](../../studies/eog_blinktemplate/figures/fig5.png)
 
 
 The optimal blink template using a gamma distribution has the following parameters:
 
-```{python, eval=TRUE, echo=FALSE}
+```{python}
 gamma = np.nanmedian(params_gamma.iloc[:, [0, 1, 2]], axis=0)
 print(
-  "- location: " + str(np.round(gamma[0], 3)) + 
-  "\n- alpha: " + str(np.round(gamma[1], 3)) + 
+  "- location: " + str(np.round(gamma[0], 3)) +
+  "\n- alpha: " + str(np.round(gamma[1], 3)) +
   "\n- scale: " + str(np.round(gamma[2], 3)))
 ```
 
 The optimal blink template using the SCR function by @bach2010modelling has the following parameters:
 
-```{python, eval=TRUE, echo=FALSE}
+```{python}
 scr = np.nanmedian(params_scr.iloc[:, [0, 1, 2, 3]], axis=0)
 print(
   "- time_peak: " + str(np.round(scr[0], 3)) +
