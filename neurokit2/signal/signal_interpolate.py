@@ -73,9 +73,7 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
     if monotone_cubic:
         interpolation_function = scipy.interpolate.PchipInterpolator(x_values, y_values, extrapolate=True)
     else:
-        interpolation_function = scipy.interpolate.interp1d(
-            x_values, y_values, kind=method, bounds_error=False, fill_value=([y_values[0]], [y_values[-1]])
-        )
+        interpolation_function = scipy.interpolate.interp1d(x_values, y_values, kind=method, bounds_error=False, fill_value=([y_values[0]], [y_values[-1]]))
 
     if isinstance(x_new, int):
         x_new = np.linspace(x_values[0], x_values[-1], x_new)
