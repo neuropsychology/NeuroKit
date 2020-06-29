@@ -1,9 +1,6 @@
 name: ✨ Style
 
-on:
-  push:
-    branches:
-      - '*'
+on: [push, pull_request]
   pull_request:
     branches:
       - master
