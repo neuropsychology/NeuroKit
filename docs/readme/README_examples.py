@@ -158,7 +158,7 @@ eog_signal = nk.data("eog_100hz")
 signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
 # Plot
-plot = nk.eog_plot(signals, sampling_rate=100)
+plot = nk.eog_plot(signals, peaks=info, sampling_rate=100)
 plot.set_size_inches(10, 6, forward=True)
 plot.savefig("README_eog.png", dpi=300, h_pad=3)
 
