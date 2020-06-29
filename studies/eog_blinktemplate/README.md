@@ -243,7 +243,7 @@ has the following parameters:
     ## - decay1: 0.356
     ## - decay2: 0.943
 
-# References
+## References
 
 <div id="refs" class="references">
 

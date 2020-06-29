@@ -401,4 +401,4 @@ print(
   "\n- decay2: " + str(np.round(scr[3], 3)))
 ```
 
-# References
+## References

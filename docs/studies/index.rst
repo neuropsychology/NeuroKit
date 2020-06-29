@@ -7,3 +7,4 @@ Contents:
    :maxdepth: 1
    
    ecg_preprocessing
+   eog_blinktemplate
