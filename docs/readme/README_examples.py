@@ -1,6 +1,11 @@
 import numpy as np
 import pandas as pd
+# setup matplotlib with Agg to run on server
+import matplotlib
+matplotlib.use('Agg')
+from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+import matplotlib.cm
 import neurokit2 as nk
 
 
@@ -132,9 +137,22 @@ plot.savefig("README_emg.png", dpi=300, h_pad=3)
 ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_state=333)
 
 # Process it
-#signals, info = nk.ppg_process(emg, sampling_rate=250)
+signals, info = nk.ppg_process(ppg, sampling_rate=250)
 
+# =============================================================================
+# Electrooculography (EOG)
+# =============================================================================
 
+# Import EOG data
+eog_signal = nk.data("eog_100hz")
+
+# Process it
+signals, info = nk.eog_process(eog_signal, sampling_rate=100)
+
+# Plot
+plot = nk.eog_plot(signals, sampling_rate=100)
+plot.set_size_inches(10, 6, forward=True)
+plot.savefig("README_eog.png", dpi=300, h_pad=3)
 
 # =============================================================================
 # Signal Processing
@@ -186,6 +204,25 @@ fig.savefig("README_hrv.png", dpi=300, h_pad=3)
 
 
 # =============================================================================
+# ECG Delineation
+# =============================================================================
+
+# Download data
+ecg_signal = nk.data(dataset="ecg_3000hz")['ECG']
+
+# Extract R-peaks locations
+_, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=3000)
+
+# Delineate
+signal, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=3000, method="dwt", show=True, show_type='all')
+
+# Save plot
+fig = plt.gcf()
+fig.set_size_inches(10*1.5, 6*1.5, forward=True)
+fig.savefig("README_delineate.png", dpi=300, h_pad=3)
+
+
+# =============================================================================
 # Complexity
 # =============================================================================
 
@@ -202,6 +239,77 @@ fig = plt.gcf()
 fig.set_size_inches(10*1.5, 6*1.5, forward=True)
 fig.savefig("README_complexity_optimize.png", dpi=300, h_pad=3)
 
+# =============================================================================
+# Signal Decomposition
+# =============================================================================
+np.random.seed(333)
+
+# Create complex signal
+signal = nk.signal_simulate(duration=10, frequency=1)  # High freq
+signal += 3 * nk.signal_simulate(duration=10, frequency=3)  # Higher freq
+signal += 3 * np.linspace(0, 2, len(signal))  # Add baseline and linear trend
+signal += 2 * nk.signal_simulate(duration=10, frequency=0.1, noise=0)  # Non-linear trend
+signal += np.random.normal(0, 0.02, len(signal))  # Add noise
+
+# Decompose signal using Empirical Mode Decomposition (EMD)
+components = nk.signal_decompose(signal, method='emd')
+nk.signal_plot(components)  # Visualize components
+
+# Recompose merging correlated components
+recomposed = nk.signal_recompose(components, threshold=0.99)
+nk.signal_plot(recomposed)  # Visualize components
+
+
+# Save plot
+fig, (ax1, ax2, ax3) = plt.subplots(3, 1, sharex=True)
+ax1.plot(signal, color="grey", label="Original Signal")
+for i in range(len(components)):
+    ax2.plot(components[i, :], color=matplotlib.cm.magma(i / len(components)), label="Component " + str(i))
+for i in range(len(recomposed)):
+    ax3.plot(recomposed[i, :], color=matplotlib.cm.viridis(i / len(recomposed)), label="Recomposed " + str(i))
+fig.set_size_inches(10, 6, forward=True)
+[ax.legend(loc=1) for ax in plt.gcf().axes]
+
+fig.savefig("README_decomposition.png", dpi=300, h_pad=3)
+
+# =============================================================================
+# Signal Power Spectrum Density
+# =============================================================================
+
+# Generate signal
+signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20) + nk.signal_simulate(frequency=30)
+# Find Power Spectrum Density with different methods
+# Mutlitaper
+multitaper = nk.signal_psd(signal, method="multitapers", show=False, max_frequency=100)
+
+# Welch
+welch = nk.signal_psd(signal, method="welch", min_frequency=1, show=False, max_frequency=100)
+
+# Burg
+burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=False, ar_order=15, max_frequency=100)
+
+
+# Visualize the different methods together
+fig, ax = plt.subplots()
+
+ax.plot(welch["Frequency"], welch["Power"], label="Welch", color="#CFD8DC", linewidth=2)
+ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#00695C", linewidth=2)
+ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#0097AC", linewidth=2)
+
+ax.set_title("Power Spectrum Density (PSD)")
+ax.set_yscale('log')
+ax.set_xlabel("Frequency (Hz)")
+ax.set_ylabel("PSD (ms^2/Hz)")
+ax.legend(loc="upper right")
+
+ax.axvline(5, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+ax.axvline(20, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+ax.axvline(30, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+
+# Save plot
+fig = plt.gcf()
+fig.set_size_inches(10*1.5, 6*1.5, forward=True)
+fig.savefig("README_psd.png", dpi=300, h_pad=3)
 
 # =============================================================================
 # Statistics

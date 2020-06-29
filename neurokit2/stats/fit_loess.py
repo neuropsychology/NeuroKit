@@ -11,9 +11,9 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
 
     Parameters
     ----------
-    y : list, array or Series
+    y : Union[list, np.array, pd.Series]
         The response variable (the y axis).
-    X : list, array or Series
+    X : Union[list, np.array, pd.Series]
         Explanatory variable (the x axis). If 'None', will treat y as a continuous signal (useful for smoothing).
     alpha : float
         The parameter which controls the degree of smoothing, which corresponds to the proportion

@@ -21,7 +21,7 @@ def entropy_multiscale(
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     scale : str or int or list
         A list of scale factors used for coarse graining the time series. If 'default', will use

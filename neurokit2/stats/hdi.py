@@ -18,7 +18,7 @@ def hdi(x, ci=0.95, show=False, **kwargs):
 
     Parameters
     ----------
-    x : list or array or Series
+    x : Union[list, np.array, pd.Series]
         A vector of values.
     ci : float
         Value of probability of the (credible) interval - CI (between 0 and 1) to be estimated.

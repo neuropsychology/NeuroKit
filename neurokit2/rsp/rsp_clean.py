@@ -16,7 +16,7 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     Parameters
     ----------
-    rsp_signal : list, array or Series
+    rsp_signal : Union[list, np.array, pd.Series]
         The raw respiration channel (as measured, for instance, by a respiration belt).
     sampling_rate : int
         The sampling frequency of `rsp_signal` (in Hz, i.e., samples/second).

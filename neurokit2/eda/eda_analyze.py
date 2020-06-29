@@ -11,7 +11,7 @@ def eda_analyze(data, sampling_rate=1000, method="auto"):
 
     Parameters
     ----------
-    data : dict, DataFrame
+    data : Union[dict, pd.DataFrame]
         A dictionary of epochs, containing one DataFrame per epoch, usually obtained via `epochs_create()`,
         or a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
         Can also take a DataFrame of processed signals from a longer period of data, typically generated

@@ -16,7 +16,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     Parameters
     ----------
-    ecg_signal : list, array or Series
+    ecg_signal : Union[list, np.array, pd.Series]
         The raw ECG channel.
     sampling_rate : int
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).

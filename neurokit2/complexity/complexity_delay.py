@@ -35,7 +35,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     Parameters
     ----------
-    signal : list or array or Series
+    signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay_max : int
         The maximum time delay (Tau or lag) to test.

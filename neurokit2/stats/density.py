@@ -11,7 +11,7 @@ def density(x, desired_length=100, bandwith=1, show=False):
 
     Parameters
     -----------
-    x : list, array or Series
+    x : Union[list, np.array, pd.Series]
         A vector of values.
     desired_length : int
         The amount of values in the returned density estimation.
@@ -23,7 +23,9 @@ def density(x, desired_length=100, bandwith=1, show=False):
     Returns
     -------
     x, y
-        The x and y axis of the density estimation.
+        The x axis of the density estimation.
+    y
+        The y axis of the density estimation.
 
     Examples
     --------

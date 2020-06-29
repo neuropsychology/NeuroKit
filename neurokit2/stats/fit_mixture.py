@@ -11,7 +11,7 @@ def fit_mixture(X=None, n_clusters=2):
 
     Parameters
     ----------
-    X : list, array or Series
+    X : Union[list, np.array, pd.Series]
         The values to classify.
     n_clusters : int
         Number of components to look for.

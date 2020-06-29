@@ -1,0 +1,11 @@
+coverage:
+  status:
+    project:
+      default:
+       enabled: yes
+       threshold: 0.2 # allow a drop of 0.2% in coverage
+       if_not_found: success
+    patch:
+      default:
+        enabled: no
+        if_not_found: success

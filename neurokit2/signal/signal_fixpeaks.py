@@ -52,7 +52,7 @@ def signal_fixpeaks(
     method : str
         Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
         in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
-        ECG or PPG. "Neurokit" can be used with peaks in ECG, PPG, or respiratory data.
+        ECG or PPG. "neurokit" can be used with peaks in ECG, PPG, or respiratory data.
 
     Returns
     -------
@@ -85,7 +85,7 @@ def signal_fixpeaks(
     >>> ax.plot(rate_corrected, label="heart rate with artifact correction") #doctest: +SKIP
     >>> ax.legend(loc="upper right") #doctest: +SKIP
     >>>
-    >>> # Neurokit
+    >>> # NeuroKit
     >>> signal = nk.signal_simulate(duration=4, sampling_rate=1000, frequency=1)
     >>> peaks_true = nk.signal_findpeaks(signal)["Peaks"]
     >>> peaks = np.delete(peaks_true, [1])  # create gaps
@@ -95,7 +95,7 @@ def signal_fixpeaks(
     >>> peaks = np.delete(peaks_true, [5, 15])  # create gaps
     >>> peaks = np.sort(np.append(peaks, [1350, 11350, 18350]))  # add artifacts
     >>>
-    >>> peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5, method="Neurokit")
+    >>> peaks_corrected = nk.signal_fixpeaks(peaks=peaks, interval_min=0.5, interval_max=1.5, method="neurokit")
     >>> # Plot and shift original peaks to the rightto see the difference.
     >>> fig = nk.events_plot([peaks + 50, peaks_corrected], signal)
     >>> fig #doctest: +SKIP
@@ -139,8 +139,7 @@ def _signal_fixpeaks_neurokit(
     relative_interval_max=None,
     robust=False,
 ):
-    """Neurokit method
-    """
+    """Neurokit method."""
 
     peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
     peaks_clean = _interpolate_big(peaks, sampling_rate, interval_max, relative_interval_max, robust)
@@ -149,8 +148,7 @@ def _signal_fixpeaks_neurokit(
 
 
 def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False):
-    """kubios method
-    """
+    """kubios method."""
 
     # Get corrected peaks and normal-to-normal intervals.
     artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate)
@@ -411,9 +409,8 @@ def _correct_misaligned(misaligned_idcs, peaks):
 
 
 def _update_indices(source_idcs, update_idcs, update):
-    """For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger than
-    s.
-    """
+    """For every element s in source_idcs, change every element u in update_idcs according to update, if u is larger
+    than s."""
     if not update_idcs:
         return update_idcs
 
@@ -511,11 +508,11 @@ def _remove_small(peaks, sampling_rate=1000, interval_min=None, relative_interva
         return peaks
 
     if interval_min is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=len(peaks))
+        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
         peaks = peaks[interval > interval_min]
 
     if relative_interval_min is not None:
-        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=len(peaks))
+        interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
         peaks = peaks[standardize(interval, robust=robust) > relative_interval_min]
 
     return peaks
@@ -528,11 +525,11 @@ def _interpolate_big(peaks, sampling_rate=1000, interval_max=None, relative_inte
     continue_loop = True
     while continue_loop is True:
         if interval_max is not None:
-            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=len(peaks))
+            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
             peaks, continue_loop = _interpolate_missing(peaks, interval, interval_max, sampling_rate)
 
         if relative_interval_max is not None:
-            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=len(peaks))
+            interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
             interval = standardize(interval, robust=robust)
             peaks, continue_loop = _interpolate_missing(peaks, interval, interval_max, sampling_rate)
 

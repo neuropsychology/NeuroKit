@@ -33,9 +33,11 @@ def hrv(peaks, sampling_rate=1000, show=False):
     -------
     DataFrame
         Contains HRV metrics from three domains:
-        - frequency (for details see hrv_frequency)
-        - time (for details see hrv_time)
-        - non-linear (for details see hrv_nonlinear)
+        - frequency
+        (see `hrv_frequency <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_frequency>`_)
+        - time (see `hrv_time <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_time>`_)
+        - non-linear
+        (see `hrv_nonlinear <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_nonlinear`_)
 
     See Also
     --------

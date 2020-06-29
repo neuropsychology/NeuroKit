@@ -21,9 +21,9 @@ def signal_synchrony(signal1, signal2, method="hilbert", window_size=50):
 
     Parameters
     ----------
-    signal1 : list or array or Series
+    signal1 : Union[list, np.array, pd.Series]
         Time series in the form of a vector of values.
-    signal2 : list or array or Series
+    signal2 : Union[list, np.array, pd.Series]
         Time series in the form of a vector of values.
     method : str
         The method to use. Can be one of 'hilbert' or 'correlation'.

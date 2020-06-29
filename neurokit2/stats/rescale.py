@@ -9,14 +9,14 @@ def rescale(data, to=[0, 1]):
 
     Parameters
     ----------
-    data : list, array or Series
+    data : Union[list, np.array, pd.Series]
         Raw data.
     to : list
         New range of values of the data after rescaling.
 
     Returns
     ----------
-    list, array or Series
+    list
         The rescaled values.
 
 

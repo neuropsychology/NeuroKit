@@ -72,8 +72,7 @@ def benchmark_ecg_preprocessing(function, ecg, rpeaks=None, sampling_rate=1000):
 # Utils
 # =============================================================================
 def _benchmark_ecg_preprocessing_databases(function, ecgs, rpeaks):
-    """A wrapper over _benchmark_ecg_preprocessing when the input is a database
-    """
+    """A wrapper over _benchmark_ecg_preprocessing when the input is a database."""
     # Run algorithms
     results = []
     for participant in ecgs["Participant"].unique():
@@ -106,7 +105,8 @@ def _benchmark_ecg_preprocessing(function, ecg, rpeak, sampling_rate=1000):
     try:
         found_rpeaks = function(ecg, sampling_rate=sampling_rate)
         duration = (datetime.datetime.now() - t0).total_seconds()
-    except Exception as error:  # In case of failure
+    # In case of failure
+    except Exception as error:  # pylint: disable=broad-except
         return pd.DataFrame(
             {
                 "Sampling_Rate": [sampling_rate],

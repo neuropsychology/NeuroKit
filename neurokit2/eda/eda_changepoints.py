@@ -11,7 +11,7 @@ def eda_changepoints(eda_cleaned):
 
     Parameters
     ----------
-    eda_cleaned : list or array or Series
+    eda_cleaned : Union[list, np.array, pd.Series]
         The cleaned EDA signal.
 
     Returns

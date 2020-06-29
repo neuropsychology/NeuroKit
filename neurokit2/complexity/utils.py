@@ -144,8 +144,7 @@ def _get_scale(signal, scale="default", dimension=2):
 # Get Coarsegrained
 # =============================================================================
 def _get_coarsegrained_rolling(signal, scale=2):
-    """Used in composite multiscale entropy.
-    """
+    """Used in composite multiscale entropy."""
     if scale in [0, 1]:
         return np.array([signal])
     if scale > len(signal):

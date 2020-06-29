@@ -27,9 +27,9 @@ affiliation:
   - id            : "2"
     institution   : "Behavioural Science Institute, Radboud University, Netherlands"
   - id            : "3"
-    institution   : "Departement de psychologie, Universite de Montréal, Canada"
+    institution   : "Departement de psychologie, Universite de Montreal, Canada"
   - id            : "4"
-    institution   : "Centre de Recherche de l'Institut Universitaire Geriatrique de Montréal"
+    institution   : "Centre de Recherche de l'Institut Universitaire Geriatrique de Montreal"
   - id            : "5"
     institution   : "Eureka Robotics, Singapore"
   - id            : "6"
@@ -224,8 +224,25 @@ knitr::kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Pe
 kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude")], format="latex", digits = 2, booktabs = TRUE, caption = "Subset of the ouput related to event-related analysis characterizing the pattern of physiological changes related to specific stimuli.", linesep="") %>%
   kableExtra::kable_styling(latex_options = c("hold_position"))
 ```
+
+
+
 ```{r include=TRUE, eval=TRUE, echo = FALSE, out.width="100%", fig.cap="Illustration of the difference between event-related analysis, focusing on activity changes in short windows (the orange rectangles), and interval-related analysis, pertaining to features of the whole signal (the grey rectangle)."}
-knitr::include_graphics("figures/features.png")
+# knitr::include_graphics("figures/features.png")
+table <- data.frame("A" = c("ECG Rate Characteristics: Mean, Amplitude",
+                            "Heart Rate Variability (HRV) indices",
+                            "Respiratory Rate Variability (RRV) indices",
+                            "Respiratory Sinus Arrhythmia (RSA) indices",
+                            "Number of SCR Peaks and mean amplitude"),
+
+                    "B" = c("ECG Rate Changes: Min, Mean, Max, Time of Min and  Max, Trend (Linear, Quadratic, R2)",
+                            "RSP Rate Changes: Min, Mean, Max, Time of Min and Max",
+                            "RSP Amplitude Measures: Min, Mean, Max",
+                            "ECG and RSP Phase: Type (Inspiration/Expiration, Systole/Diastole), Completion",
+                            "SCR peak and its characteristics (amplitude, rise time, recovery time)"))
+
+colnames(table) <- c("Event-related Features", "Interval-related Features")
+table
 ```
 
 
@@ -257,16 +274,16 @@ df, info = nk.bio_process(ecg=data["ECG"],
 results = nk.bio_analyze(df)
 
 # Show subset of results
-results[["ECG_Rate_Mean", "ECG_HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean"]]
+results[["ECG_Rate_Mean", "HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean"]]
 ```
 
 ```{r table2word, eval=FALSE, message=FALSE, warning=FALSE, echo=FALSE}
 # For word
-knitr::kable(py$results[c("ECG_Rate_Mean", "ECG_HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean")], format="markdown", digits = 3, caption = "Subset of properties characterizing the physiological activity over a period of 5 minutes of resting-state", row.names = FALSE)
+knitr::kable(py$results[c("ECG_Rate_Mean", "HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean")], format="markdown", digits = 3, caption = "Subset of properties characterizing the physiological activity over a period of 5 minutes of resting-state", row.names = FALSE)
 ```
 ```{r table2pdf, eval=TRUE, message=FALSE, warning=FALSE, echo=FALSE, out.width = "\\textwidth", fig.pos = "!ht", results = "asis"}
 # For PDFs
-kable(py$results[c("ECG_Rate_Mean", "ECG_HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean")], format="latex", digits = 2, booktabs = TRUE, caption = "Subset of properties characterizing the physiological activity over a period of 5 minutes of resting-state.", linesep="") %>%
+kable(py$results[c("ECG_Rate_Mean", "HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean")], format="latex", digits = 2, booktabs = TRUE, caption = "Subset of properties characterizing the physiological activity over a period of 5 minutes of resting-state.", linesep="") %>%
   kableExtra::kable_styling(latex_options = c("hold_position"))
 ```
 

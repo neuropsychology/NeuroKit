@@ -12,7 +12,7 @@ def emg_amplitude(emg_cleaned):
 
     Parameters
     ----------
-    emg_cleaned : list or array or Series
+    emg_cleaned : Union[list, np.array, pd.Series]
         The cleaned electromyography channel as returned by `emg_clean()`.
 
     Returns
@@ -52,7 +52,7 @@ def _emg_amplitude_tkeo(emg_cleaned):
 
     Parameters
     ----------
-    emg_cleaned : list, array or Series
+    emg_cleaned : Union[list, np.array, pd.Series]
         The cleaned electromyography channel as returned by `emg_clean()`.
 
     Returns
@@ -90,7 +90,7 @@ def _emg_amplitude_envelope(emg_cleaned, sampling_rate=1000, lowcut=10, highcut=
 
     Parameters
     ----------
-    emg_cleaned : list or array or Series
+    emg_cleaned : Union[list, np.array, pd.Series]
         The cleaned electromyography channel as returned by `emg_clean()`.
     sampling_rate : int
         The sampling frequency of `emg_signal` (in Hz, i.e., samples/second).

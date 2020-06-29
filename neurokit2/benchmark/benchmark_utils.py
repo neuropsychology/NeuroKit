@@ -27,6 +27,7 @@ def benchmark_record(record, sampling_rate, annotation, tolerance, detector):
         The detectors precision on the record given the tolerance.
     sensitivity : float
         The detectors sensitivity on the record given the tolerance.
+
     """
     detector_annotation = detector(record, sampling_rate=sampling_rate)
 
@@ -61,6 +62,7 @@ def time_record(record, sampling_rate, detector, n_runs):
     avg_time
         The run time of the detector on the record averaged over n_runs. In
         milliseconds.
+
     """
     start = timer()
     for _ in range(n_runs):

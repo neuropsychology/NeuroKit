@@ -1,0 +1,1 @@
+The folder where to put the EOGDB dataset containing vertical EOG signals.
