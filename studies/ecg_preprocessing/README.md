@@ -177,7 +177,7 @@ data %>%
     scale_fill_manual(values=colors)
 ```
 
-![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-6-1.png)<!-- -->
+![](../../studies/ecg_preprocessing/figures/unnamed-chunk-6-1.png)<!-- -->
 
 **Conclusion:** It seems that `gamboa2008` and `martinez2003` are
 particularly prone to errors, especially in the case of a noisy ECG
@@ -212,7 +212,7 @@ data %>%
     ylab("Duration (seconds per data sample)")
 ```
 
-![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-8-1.png)<!-- -->
+![](../../studies/ecg_preprocessing/figures/unnamed-chunk-8-1.png)<!-- -->
 
 <!-- ```{r, warning=FALSE, message=FALSE} -->
 
@@ -269,7 +269,7 @@ means %>%
     ylab("Duration (seconds per data sample)")
 ```
 
-![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-9-1.png)<!-- -->
+![](../../studies/ecg_preprocessing/figures/unnamed-chunk-9-1.png)<!-- -->
 
 **Conclusion:** It seems that `gamboa2008` and `neurokit` are the
 fastest methods, followed by `martinez2003`, `kalidas2017`,
@@ -302,7 +302,7 @@ data %>%
     ylab("Amount of Error") 
 ```
 
-![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-10-1.png)<!-- -->
+![](../../studies/ecg_preprocessing/figures/unnamed-chunk-10-1.png)<!-- -->
 
 ##### Statistical Modelling
 
@@ -335,7 +335,7 @@ means %>%
     ylab("Amount of Error") 
 ```
 
-![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-11-1.png)<!-- -->
+![](../../studies/ecg_preprocessing/figures/unnamed-chunk-11-1.png)<!-- -->
 
 **Conclusion:** It seems that `neurokit`, `kalidas2017` and
 `christov2004` the most accurate algorithms to detect R-peaks. This
@@ -430,7 +430,7 @@ data %>%
     ylab("Amount of Error") 
 ```
 
-![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-15-1.png)<!-- -->
+![](../../studies/ecg_preprocessing/figures/unnamed-chunk-15-1.png)<!-- -->
 
 ##### Statistical Modelling
 
@@ -461,7 +461,7 @@ means %>%
     ylab("Amount of Error") 
 ```
 
-![](../../benchmarks/ecg_preprocessing/figures/unnamed-chunk-16-1.png)<!-- -->
+![](../../studies/ecg_preprocessing/figures/unnamed-chunk-16-1.png)<!-- -->
 
 ### Conclusion
 

@@ -35,7 +35,7 @@ matplotlib$use("Agg", force = TRUE)
 
 
 
-# Estimation of a Template for Blinks in Electrooculography (EOG)
+# Blink Template Estimation for Electrooculography (EOG)
 
 *This study can be referenced by* [citing the package](https://github.com/neuropsychology/NeuroKit#citation).
 

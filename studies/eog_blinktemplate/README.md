@@ -1,5 +1,5 @@
 
-# Estimation of a Template for Blinks in Electrooculography (EOG)
+# Blink Template Estimation for Electrooculography (EOG)
 
 *This study can be referenced by* [citing the
 package](https://github.com/neuropsychology/NeuroKit#citation).
@@ -246,13 +246,9 @@ has the following parameters:
 ## References
 
 <div id="refs" class="references">
-
 <div id="ref-bach2010modelling">
-
 Bach, D. R., Flandin, G., Friston, K. J., & Dolan, R. J. (2010).
 Modelling event-related skin conductance responses. *International
 Journal of Psychophysiology*, *75*(3), 349–356.
-
 </div>
-
 </div>

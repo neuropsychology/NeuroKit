@@ -14,8 +14,12 @@ all_results = pd.DataFrame()
 
 for file in datafiles:
     for database in np.unique(file["Database"]):
+
+        print(str(database))
         data = file[file["Database"] == database]
+
         for participant in np.unique(data["Participant"]):
+
             data_participant = data[data["Participant"] == participant]
             sampling_rate = np.unique(data_participant["Sampling_Rate"])[0]
             rpeaks = data_participant["Rpeaks"].values

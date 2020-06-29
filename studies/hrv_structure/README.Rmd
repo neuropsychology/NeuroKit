@@ -4,7 +4,7 @@ output:
     toc: false
     fig_width: 10.08
     fig_height: 6
-tags: [r, hrv_factoranalysis]
+tags: [r, hrv_structure]
 vignette: >
   %\VignetteIndexEntry{README}
   \usepackage[utf8]{inputenc}
@@ -22,7 +22,7 @@ options(digits=3)
 knitr::opts_chunk$set(
   collapse = TRUE,
   dpi=450,
-  fig.path = "figures/"
+  fig.path = "../../studies/hrv_structure/figures/"
 )
 
 # Setup python - you need to change the path to your python distribution
@@ -35,9 +35,9 @@ matplotlib$use("Agg", force = TRUE)
 
 
 
-# The Factor Structure of Heart Rate Variability (HRV) Indices
+# The Structure of Indices of Heart Rate Variability (HRV)
 
-*This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation).
+*This study can be referenced by* [citing the package](https://github.com/neuropsychology/NeuroKit#citation).
 
 **We'd like to publish this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
 
@@ -97,9 +97,41 @@ library(tidyverse)
 library(easystats)
 
 data <- read.csv("data.csv", stringsAsFactors = FALSE) %>% 
-  select(-HRV_S, -HRV_SD1)  # Redundant
+  select(-HRV_ULF, -HRV_VLF)  # Empty
 names(data) <- stringr::str_remove(names(data), "HRV_")
 ```
+
+
+### Redundant Indices
+
+#### Remove Equivalent (r > .995)
+
+```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17}
+data %>% 
+  correlation::correlation() %>% 
+  filter(r > 0.995) %>% 
+  arrange(Parameter1, desc(abs(r)))
+
+data <- data %>% 
+  select(-SDSD, -SD1, -SD1d, -SD1a) %>%  # Same as RMSSD 
+  select(-SDNNd, -SDNNa) %>%  # Same as SDNN
+  select(-SD2d, -SD2a)  # Same as SD2
+```
+
+#### Remove Strongly Correlated (r > .99)
+
+```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17}
+data %>% 
+  correlation::correlation() %>% 
+  filter(r > 0.99) %>% 
+  arrange(Parameter1, desc(abs(r)))
+
+data <- data %>% 
+  select(-AI, -SI) %>%  # Same as GI 
+  select(-SD2)  # Same as SDNN
+```
+
+
 
 ### Recording Length
 
@@ -120,38 +152,39 @@ data <- effectsize::adjust(data, effect="Recording_Length") %>%
 
 ### Gaussian Graphical Model
 
+
 ```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17}
 library(ggraph)
 
 data %>% 
-  select(-ULF) %>%   # Empty 
   correlation::correlation(partial=FALSE) %>% 
-  filter(abs(r) > 0.2) %>% 
+  correlation::cor_to_pcor() %>% 
+  filter(abs(r) > 0.2) %>%
   tidygraph::as_tbl_graph(directed=FALSE) %>% 
   dplyr::mutate(closeness = tidygraph::centrality_closeness(normalized = TRUE),
                 degree = tidygraph::centrality_degree(normalized = TRUE),
                 betweeness = tidygraph::centrality_betweenness(normalized = TRUE)) %>%
   tidygraph::activate(nodes) %>%
   dplyr::mutate(group1 = as.factor(tidygraph::group_edge_betweenness()),
-                group2 = as.factor(tidygraph::group_optimal()),
-                group3 = as.factor(tidygraph::group_walktrap()),
-                group4 = as.factor(tidygraph::group_spinglass()),
+                # group2 = as.factor(tidygraph::group_optimal()),
+                # group3 = as.factor(tidygraph::group_walktrap()),
+                # group4 = as.factor(tidygraph::group_spinglass()),
                 group5 = as.factor(tidygraph::group_louvain())) %>% 
-  ggraph::ggraph(layout = "lgl") +
+  ggraph::ggraph(layout = "fr") +
     ggraph::geom_edge_arc(aes(colour = r, edge_width = abs(r)), strength = 0.1, show.legend = FALSE) +
-    ggraph::geom_node_point(aes(size = degree, color = group2), show.legend = FALSE) +
+    ggraph::geom_node_point(aes(size = degree, color = group5), show.legend = FALSE) +
     ggraph::geom_node_text(aes(label = name), colour = "white") +
     ggraph::scale_edge_color_gradient2(low = "#a20025", high = "#008a00", name = "r") +
     ggraph::theme_graph() +
     guides(edge_width = FALSE) +
-    scale_x_continuous(expand = expand_scale(c(.10, .10))) +
-    scale_y_continuous(expand = expand_scale(c(.10, .10))) +
+    scale_x_continuous(expand = expansion(c(.10, .10))) +
+    scale_y_continuous(expand = expansion(c(.10, .10))) +
     scale_size_continuous(range = c(20, 30)) +
     scale_edge_width_continuous(range = c(0.5, 2)) +
     see::scale_color_material_d(palette="rainbow", reverse=TRUE)
 ```
 
-Groups were identified using the [**tidygraph::group_optimal**](https://rdrr.io/cran/tidygraph/man/group_graph.html) algorithm.
+Groups were identified using the [tidygraph::group_optimal](https://rdrr.io/cran/tidygraph/man/group_graph.html) algorithm.
 
 
 ### Factor Analysis
@@ -160,7 +193,12 @@ Groups were identified using the [**tidygraph::group_optimal**](https://rdrr.io/
 #### How many factors 
 
 ```{r, message=FALSE, warning=FALSE}
-n <- parameters::n_factors(data[sapply(data, is.numeric)])
+cor <- correlation::correlation(data[sapply(data, is.numeric)]) %>% 
+  as.matrix()
+
+n <- parameters::n_factors(data, cor=cor)
+
+n
 
 plot(n) +
   theme_modern()
@@ -168,17 +206,26 @@ plot(n) +
 
 #### Interpret
 
-```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17}
-fa <- parameters::factor_analysis(data[sapply(data, is.numeric)], n=7, rotation="varimax")
+```{r, message=FALSE, warning=FALSE, fig.width=15, fig.height=15}
+fa <- parameters::factor_analysis(data[sapply(data, is.numeric)], n=8, rotation="varimax")
 
 print(fa, threshold="max", sort=TRUE)
+
+plot(fa)
 ```
 
-<!-- #### Visualize -->
 
-<!-- ```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17} -->
-<!-- plot(fa) -->
+
+### Cluster Analysis
+
+#### How many clusters 
+
+<!-- ```{r, message=FALSE, warning=FALSE} -->
+<!-- parameters::n_clusters(data, package = "all") -->
 <!-- ``` -->
 
 
-# References
+#### Interpret
+
+
+## References
