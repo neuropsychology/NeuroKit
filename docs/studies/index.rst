@@ -1,4 +1,4 @@
-Benchmarks
+Studies
 ##########
 
 Contents:
