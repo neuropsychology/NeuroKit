@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
+import matplotlib.gridspec
 import pandas as pd
 
-from ..epochs import epochs_create, epochs_to_array
+from ..epochs import epochs_create, epochs_to_array, epochs_to_df
 from ..stats import standardize
 
 
@@ -69,7 +69,7 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
         ax1.set_xlabel("Samples")
 
     fig.suptitle("Electrooculography (EOG)", fontweight="bold")
-    plt.subplots_adjust(hspace=0.3, wspace=0.1)
+    plt.subplots_adjust(hspace=0.3, wspace=0.2)
 
     # Plot cleaned and raw EOG
     ax0.set_title("Raw and Cleaned Signal")
@@ -92,14 +92,24 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
 
     # Plot individual blinks
     if sampling_rate is not None:
+        ax2.set_title("Individual Blinks")
+
+        # Create epochs
         events = epochs_create(eog_signals["EOG_Clean"], peaks['EOG_Blinks'],
-                                  sampling_rate=sampling_rate, epochs_start=-0.3, epochs_end=0.7)
+                               sampling_rate=sampling_rate, epochs_start=-0.3, epochs_end=0.7)
         events_array = epochs_to_array(events)  # Convert to 2D array
         events_array = standardize(events_array)  # Rescale so that all the blinks are on the same scale
 
+        blinks_df = epochs_to_df(events)
+        blinks_wide = blinks_df.pivot(index="Time", columns="Label", values="Signal")
+        blinks_wide = standardize(blinks_wide)
+
+        cmap = iter(plt.cm.RdBu(np.linspace(0, 1, num=len(events))))
+        for x, color in zip(blinks_wide, cmap):
+            ax2.plot(blinks_wide[x], color=color, linewidth=0.4, zorder=1)
+
         # Plot with their median (used here as a robust average)
-        ax2.plot(events_array, linewidth=0.4)
-        ax2.plot(np.median(events_array, axis=1), linewidth=3, linestyle='--', color="black")
-        ax2.set_title("Individual Blinks")
+        ax2.plot(np.array(blinks_wide.index), np.median(events_array, axis=1), linewidth=2, linestyle='--', color="black", label='Median')
+        ax2.legend(loc="upper right")
 
     return fig
