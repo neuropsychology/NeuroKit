@@ -64,9 +64,8 @@ Contributing
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
         :target: https://github.com/neuropsychology/NeuroKit/blob/master/LICENSE
         :alt: License
-<<<<<<< HEAD
 
-.. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg
+.. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg?branch=master
 =======
 
 .. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg?branch=master
@@ -418,7 +417,6 @@ Heart Rate Variability (HRV)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hrv.png
 
-<<<<<<< HEAD
 +--------------------------+---------------+---------+-----+-------+
 |     Existing Packages    |               |         |     |       |
 +--------------------------+---------------+---------+-----+-------+
@@ -524,14 +522,6 @@ Heart Rate Variability (HRV)
 +--------------------------+---------------+---------+-----+-------+
 | CVI                      | ✔️             |         |     |       |
 +--------------------------+---------------+---------+-----+-------+
-=======
-
-ECG Delineation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- Delineate the QRS complex of an electrocardiac signal (ECG) including P-peaks, T-peaks, as well as their onsets and offsets.
-
-
 .. code-block:: python
 
 
