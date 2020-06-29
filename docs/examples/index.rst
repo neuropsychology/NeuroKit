@@ -17,6 +17,7 @@ The notebooks in this repo are meant to illustrate what you can do with NeuroKit
    heartbeats
    ecg_delineate
    epochs_create
+   hrv
    complexity
    eog
    fit_function
