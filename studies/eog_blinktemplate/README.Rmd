@@ -4,7 +4,7 @@ output:
     toc: false
     fig_width: 10.08
     fig_height: 6
-tags: [r, eog_preprocessing]
+tags: [r, eog_blinktemplate]
 vignette: >
   %\VignetteIndexEntry{README}
   \usepackage[utf8]{inputenc}
@@ -22,7 +22,7 @@ options(digits=3)
 knitr::opts_chunk$set(
   collapse = TRUE,
   dpi=450,
-  fig.path = "figures/"
+  fig.path = "../../studies/eog_blinktemplate/figures/"
 )
 
 # Setup python - you need to change the path to your python distribution
@@ -37,7 +37,7 @@ matplotlib$use("Agg", force = TRUE)
 
 # Estimation of a Template for Blinks in Electrooculography (EOG)
 
-*This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation).
+*This study can be referenced by* [citing the package](https://github.com/neuropsychology/NeuroKit#citation).
 
 **We'd like to publish this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
 
