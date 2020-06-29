@@ -12,7 +12,7 @@ I changed the `foo()` function so that ...
 
 # Checklist
 
-Here are some things to check before creating the PR.
+Here are some things to check before creating the PR. If you encounter any issues, do let us know :)
 
 - [ ] I have read the [CONTRIBUTING](https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst#structure-and-code) file.
 - [ ] My PR is targetted at the **dev branch** (and not towards the master branch).
