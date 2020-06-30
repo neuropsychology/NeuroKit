@@ -20,6 +20,8 @@ def eog_intervalrelated(data):
 
         - *"EOG_Rate_Mean"*: the mean heart rate.
 
+        - *"EOG_Peaks_N"*: the number of blink peak occurrences.
+
     See Also
     --------
     bio_process, eog_eventrelated
@@ -36,16 +38,16 @@ def eog_intervalrelated(data):
     >>>
     >>> # Single dataframe is passed
     >>> nk.eog_intervalrelated(df) #doctest: +ELLIPSIS
-       EOG_Rate_Mean
-    0      ...
+       EOG_Peaks_N  EOG_Rate_Mean
+    0          ...            ...
     >>>
     >>> # Dictionary is passed
     >>> epochs = nk.epochs_create(df, events=[0, 30000], sampling_rate=200,
     ...                           epochs_end=120)
     >>> nk.eog_intervalrelated(epochs) #doctest: +ELLIPSIS
-       EOG_Rate_Mean
-    1      ...
-    2      ...
+       EOG_Peaks_N  EOG_Rate_Mean
+    1          ...            ...
+    2          ...            ...
 
     """
     intervals = {}
@@ -65,7 +67,7 @@ def eog_intervalrelated(data):
             # Format dataframe
             data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
 
-            # Rate
+            # Rate and Blinks quantity
             intervals[index] = _eog_intervalrelated_formatinput(data[index], intervals[index])
 
         eog_intervals = pd.DataFrame.from_dict(intervals, orient="index")
@@ -88,7 +90,18 @@ def _eog_intervalrelated_formatinput(data, output={}):
             "we couldn't extract EOG rate. Please make sure"
             "your DataFrame contains an `EOG_Rate` column."
         )
+    if len([i for i in colnames if "EOG_Blinks" in i]) == 0:
+        raise ValueError(
+            "NeuroKit error: eog_intervalrelated(): Wrong input,"
+            "we couldn't extract EOG blinks. Please make sure"
+            "your DataFrame contains an `EOG_Blinks` column."
+        )
+
+
     signal = data["EOG_Rate"].values
+    n_blinks = len(np.where(data["EOG_Blinks"] == 1)[0])
+
+    output["EOG_Peaks_N"] = n_blinks
     output["EOG_Rate_Mean"] = np.mean(signal)
 
     return output
