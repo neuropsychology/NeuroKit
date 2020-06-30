@@ -468,7 +468,7 @@ means %>%
 No significant benefits added by normalization for the `neurokit`
 method.
 
-# References
+## References
 
 <div id="refs" class="references">
     <div id="ref-howell2018high">

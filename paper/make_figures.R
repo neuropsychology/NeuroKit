@@ -1,6 +1,5 @@
 library(tidyverse)
 library(easystats)
-library(formattable)
 
 # Setup python - you need to change the path to your python distribution
 library(reticulate)
@@ -31,10 +30,10 @@ Photosensor = pd.DataFrame(Photosensor).rename({0: 'Photosensor'}, axis=1)
 data = pd.concat([data, Photosensor], axis=1)
 
 exit
-# -------------------------------------------------------------------------
 
-library(ggpubr)
-theme_set(theme_pubr())
+
+
+# Plot ----------------------------------------------------------------------
 
 df_p <- py$data %>%
   slice(0:2000) %>%
@@ -43,40 +42,72 @@ df_p <- py$data %>%
   pivot_longer(1:3) %>%
   mutate(name = fct_relevel(name, c("ECG", "RSP", "EDA")))
 
+
 plot <- df_p %>%
-  ggplot(aes(x=Time, y=value, color=name, size=name)) +
+  ggplot(aes(x=Time, y=value)) +
 
   # shaded areas
-  geom_rect(aes(xmin = 0, xmax = 2, ymin = -Inf, ymax = Inf, fill = "Event-related Analysis"), alpha = 0, color="#FF9800") +
-  geom_rect(aes(xmin = 4, xmax = 6, ymin = -Inf, ymax = Inf, fill = "Event-related Analysis"), alpha = 0, color="#FF9800") +
-  geom_rect(aes(xmin = 8, xmax = 10, ymin = -Inf, ymax = Inf, fill = "Event-related Analysis"), alpha = 0, color="#FF9800") +
-  geom_rect(aes(xmin = 12, xmax = 14, ymin = -Inf, ymax = Inf, fill = "Event-related Analysis"), alpha = 0, color="#FF9800") +
-  geom_rect(aes(xmin = 0, xmax = 20, ymin = min(df_p$value), ymax = max(df_p$value), fill = "Interval-related Analysis"), alpha = 0, color="darkgrey") +
+  annotate("rect", xmin = 2.5, xmax = 5.5, ymin = -Inf, ymax = Inf, fill = "#FF9800", alpha = 0.5) +
+  annotate("rect", xmin = 8.5, xmax = 11.5, ymin = -Inf, ymax = Inf, fill = "#FF9800", alpha = 0.5) +
+  annotate("rect", xmin = 14.5, xmax = 17.5, ymin = -Inf, ymax = Inf, fill = "#FF9800", alpha = 0.5) +
+  geom_rect(aes(xmin = 0, xmax = 0, ymin = 0, ymax = 0, fill = "Event-related Analysis"), alpha = 1, size=0) +
+  # geom_rect(aes(xmin = 8.5, xmax = 11.5, ymin = -Inf, ymax = Inf, fill = "Event-related Analysis"), alpha = 0.1, size=0) +
+  # geom_rect(aes(xmin = 14.5, xmax = 17.5, ymin = -Inf, ymax = Inf, fill = "Event-related Analysis"), alpha = 0.1, size=0) +
+
+  geom_rect(aes(xmin = 0, xmax = 0, ymin = 0, ymax =0, fill = "Interval-related Analysis"), alpha = 1, size=0) +
+  annotate("rect", xmin = 0.5, xmax = 19.5, ymin = -Inf, ymax = Inf, fill = "#4CAF50", size=0, alpha = 0.15) +
+  # geom_rect(aes(xmin = 0.5, xmax = 19.5, ymin = -Inf, ymax = Inf, fill = "Interval-related Analysis"), alpha = 0, color="darkgrey") +
 
   # signals
-  geom_line() +
+  geom_line(aes(color=name, size=name)) +
 
   # event markers
-  geom_vline(xintercept=1, linetype="dashed", size=1) +
-  geom_vline(xintercept=5, linetype="dashed", size=1) +
-  geom_vline(xintercept=9, linetype="dashed", size=1) +
-  geom_vline(xintercept=13, linetype="dashed", size=1) +
-  annotate("text", label = "Event Markers", x = 4.8, y = 5, angle=90) +
+  geom_vline(xintercept=c(3.5, 9.5, 15.5), linetype="dashed", size=0.5) +
+  annotate("text", label = "Event Markers", x = 3.20, y = 5, angle=90) +
 
   # aesthetics
   theme_modern() +
   scale_color_manual('Signal type',
                      values=c("ECG"="red", "EDA"="#9C27B0", "RSP"="#2196F3", "Photosensor"="#FF9800")) +
-  scale_size_manual(values=c("ECG"=0.66, "EDA"=2, "RSP"=2), guide=FALSE) +
-  scale_fill_manual('Analysis type',
-                    values =c("Event-related Analysis"="orange",
-                              "Interval-related Analysis"="darkgrey"),
-                    guide=guide_legend(override.aes = list(colour=c("#FF9800", "darkgrey")))) +
+  scale_size_manual(values=c("ECG"=0.33, "EDA"=1, "RSP"=1), guide=FALSE) +
+  scale_fill_manual('Regions of interest',
+                    values =c("Event-related Analysis"="#FF9800",
+                              "Interval-related Analysis"="#4CAF50"),
+                    guide=guide_legend(override.aes = list(alpha=0.2,
+                                       # colour=c("#FF9800", "#4CAF50"),
+                                       size=0))) +
   theme(axis.title.y = element_blank(),
         axis.text.y = element_blank(),
         legend.position = "right") +
-  ylab("Time (s)") +
-  ggtitle("Physiological Signals")
+  guides(color = guide_legend(override.aes = list(size = 1))) +
+  xlab("Time (s)") +
+  ggtitle("Domains of interest in physiological analyses")
+
+plot
+ggsave("figures/features.png", plot, height=6, width=6 * 1.618034, dpi=600)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Tables
 # py$event_table <- py$event_table %>%

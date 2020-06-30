@@ -13,11 +13,11 @@ author:
     affiliation   : " 1"
   - name          : "Jan C. Brammer"
     affiliation   : " 2"
-  - name          : "Francois Lespinasse"
+  - name          : "François Lespinasse"
     affiliation   : " 3, 4"
   - name          : "Hung Pham"
     affiliation   : " 5"
-  - name          : "Christopher Sch\\\"{o}lzel"
+  - name          : "Christopher Schölzel"
     affiliation   : " 6"
   - name          : "S.H. Annabel Chen"
     affiliation   : " 1, 7, 8"
@@ -27,9 +27,9 @@ affiliation:
   - id            : "2"
     institution   : "Behavioural Science Institute, Radboud University, Netherlands"
   - id            : "3"
-    institution   : "Departement de psychologie, Universite de Montreal, Canada"
+    institution   : "Département de psychologie, Université de Montréal, Canada"
   - id            : "4"
-    institution   : "Centre de Recherche de l'Institut Universitaire Geriatrique de Montreal"
+    institution   : "Centre de Recherche de l'Institut Universitaire Geriatrique de Montréal"
   - id            : "5"
     institution   : "Eureka Robotics, Singapore"
   - id            : "6"
@@ -38,13 +38,12 @@ affiliation:
     institution   : "Centre for Research and Development in Learning, Nanyang Technological University, Singapore"
   - id            : "8"
     institution   : "Lee Kong Chian School of Medicine, Nanyang Technological University, Singapore"
-
 authornote: |
-  * Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
+  \* Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
 abstract: |
-   NeuroKit2 is an open-source, community-driven, and user-friendly Python package dedicated to neurophysiological signal processing (e.g., ECG, EDA, EMG, ...). Its design philosophy is centred on user-experience and accessibility to both novice and advanced users. The package provides general functions that enable data processing in a few lines of code using validated pipelines, as well as tools dedicated to specific processing steps, offering a trade-off between efficiency and fine-tuned control. NeuroKit2 aims at improving transparency and reproducibility in neurophysiological research, as well as fostering exploration and innovation.  
+  NeuroKit2 is an open-source, community-driven, and user-friendly Python package dedicated to neurophysiological signal processing (e.g., ECG, EDA, EMG, ...). Its design philosophy is centred on user-experience and accessibility to both novice and advanced users. The package provides general functions that enable data processing in a few lines of code using validated pipelines, as well as tools dedicated to specific processing steps, offering a trade-off between efficiency and fine-tuned control. NeuroKit2 aims at improving transparency and reproducibility in neurophysiological research, as well as fostering exploration and innovation.  
 keywords          : "Neurophysiology, Biosignals, Python, ECG, EDA, EMG"
-wordcount         : "2440"
+wordcount         : "2513"
 bibliography      : ["bibliography.bib"]
 floatsintext      : yes
 figsintext        : yes
@@ -152,7 +151,35 @@ Performing an entire set of operations with sensible default parameters in one f
 
 # Examples
 
-In this section, we present two examples that illustrate the most common use-cases. The first example is an event-related paradigm, in which the interest lies in short-term physiological changes related to specific events. The second example shows how to extract the characteristics of physiological activity during a longer period of time (not necessarily tied to a specific and sudden event). The example datasets are made available with the package and can be downloaded using the `data()` function.
+In this section, we present two examples that illustrate the most common use-cases. The first example is an event-related paradigm, in which the interest lies in short-term physiological changes related to specific events (see **Figure 1** and **Table 1**). The second example shows how to extract the characteristics of physiological activity during a longer period of time (not necessarily tied to a specific and sudden event). The example datasets are made available with the package and can be downloaded using the `data()` function.
+
+
+```{r include=TRUE, eval=TRUE, echo = FALSE, out.width="100%", fig.cap="Illustration of the difference between event-related analysis, focusing on activity changes in short windows (the orange rectangles), and interval-related analysis, pertaining to features of large areas, or the whole signal (e.g., the green rectangle)."}
+knitr::include_graphics("figures/features.png")
+```
+
+```{r table3pdf, eval=TRUE, message=FALSE, warning=FALSE, echo=FALSE, out.width = "\\textwidth", fig.pos = "!ht", results = "asis"}
+# knitr::include_graphics("figures/features.png")
+table <- data.frame("A" = c("ECG Rate Changes (Min, Mean, Max, Time of Min,  Max, Trend)",
+                            "RSP Rate Changes (Min, Mean, Max, Time of Min, Max)",
+                            "RSP Amplitude Measures (Min, Mean, Max)",
+                            "ECG and RSP Phase (Inspiration/Expiration, Systole/Diastole, Completion)",
+                            "SCR peak and its characteristics (amplitude, rise time, recovery time)"),
+                    
+                    "B" = c("ECG Rate Characteristics (Mean, Amplitude)",
+                            "Heart Rate Variability (HRV) indices",
+                            "Respiratory Rate Variability (RRV) indices",
+                            "Respiratory Sinus Arrhythmia (RSA) indices",
+                            "Number of SCR Peaks and mean amplitude"))
+
+colnames(table) <- c("Event-related Features", "Interval-related Features")
+
+# For PDFs
+knitr::kable(table, format="latex", digits = 2, booktabs = TRUE, caption = "Examples of features computed in different domains.", linesep="") %>%
+  kableExtra::kable_styling(latex_options = c("hold_position"), font_size=9) %>% 
+  kableExtra::column_spec(1:2, width = "8cm")
+```
+
 
 
 ## Event-related Paradigm
@@ -227,30 +254,12 @@ kable(py$results[c("Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Ampl
 
 
 
-```{r include=TRUE, eval=TRUE, echo = FALSE, out.width="100%", fig.cap="Illustration of the difference between event-related analysis, focusing on activity changes in short windows (the orange rectangles), and interval-related analysis, pertaining to features of the whole signal (the grey rectangle)."}
-# knitr::include_graphics("figures/features.png")
-table <- data.frame("A" = c("ECG Rate Characteristics: Mean, Amplitude",
-                            "Heart Rate Variability (HRV) indices",
-                            "Respiratory Rate Variability (RRV) indices",
-                            "Respiratory Sinus Arrhythmia (RSA) indices",
-                            "Number of SCR Peaks and mean amplitude"),
-
-                    "B" = c("ECG Rate Changes: Min, Mean, Max, Time of Min and  Max, Trend (Linear, Quadratic, R2)",
-                            "RSP Rate Changes: Min, Mean, Max, Time of Min and Max",
-                            "RSP Amplitude Measures: Min, Mean, Max",
-                            "ECG and RSP Phase: Type (Inspiration/Expiration, Systole/Diastole), Completion",
-                            "SCR peak and its characteristics (amplitude, rise time, recovery time)"))
-
-colnames(table) <- c("Event-related Features", "Interval-related Features")
-table
-```
-
 
 In this example, after loading the package and the example dataset, each physiological signal is processed using `bio_process()`. Stimulus onsets in the photosensor are detected separately with `events_find()`. Once we have the preprocessed signals and the location of events, we can slice the data into segments corresponding to a time window (ranging from -0.1 to 4 seconds) around each stimulus with `epochs_create()`. Finally, relevant features are computed for each epoch (i.e., each stimulus) by passing them to `bio_analyze()`.
 
 The features include for example the changes in rate of ECG and RSP signals (e.g. maximum, minimum and mean rate after stimulus onset, and the time at which they occur), and the peak characteristics of the EDA signal (e.g., occurrence of skin conductance response (SCR), and if SCR is present, its corresponding peak amplitude, time of peak, rise and recovery time). In addition, respiration and cardiac cycle phases are extracted (i.e., the respiration phase - inspiration/expiration - and cardiac phase - systole/diastole - occurring at the onset of event).
 
-This example shows the straightforward process of extracting features of physiological responses. This pipeline can easily scale up to group-level analysis by aggregating the average of features across participants. In addition to streamlining data analyses, *NeuroKit2* aims to provide researchers an extensive suite of signal features, allowing for precise interpretations in terms of relationship between physiological activity and neurocognitive processes. In this example (see **Table 1**), exposure to negative stimuli, as compared to neutral stimuli, is related to stronger cardiac deceleration, higher skin conductance response, and accelerated breathing rate (note that this descriptive interpretation is given solely for illustrative purposes).
+This example shows the straightforward process of extracting features of physiological responses. This pipeline can easily scale up to group-level analysis by aggregating the average of features across participants. In addition to streamlining data analyses, *NeuroKit2* aims to provide researchers an extensive suite of signal features, allowing for precise interpretations in terms of relationship between physiological activity and neurocognitive processes. In this example (see **Table 2**), exposure to negative stimuli, as compared to neutral stimuli, is related to stronger cardiac deceleration, higher skin conductance response, and accelerated breathing rate (note that this descriptive interpretation is given solely for illustrative purposes).
 
 
 
@@ -289,7 +298,7 @@ kable(py$results[c("ECG_Rate_Mean", "HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean"
 
 
 
-In this example, the steps of the analysis are identical to the previous example, including loading the package, the dataset and processing the data. The difference is that there is no epoching, as we want to compute features related to the whole dataset. Thus, we can directly pass the dataframe to `bio_analyze()`, which will detect that these are not epochs, and compute the appropriate features accordingly. These include for instance the average heart and breathing rate, as well as indices of heart rate variability (HRV) and respiratory sinus arrhythmia (RSA).
+In this example, the steps of the analysis are identical to the previous example, including loading the package, the dataset and processing the data. The difference is that there is no epoching, as we want to compute features related to the whole dataset (see **Table 3**). Thus, we can directly pass the dataframe to `bio_analyze()`, which will detect that these are not epochs, and compute the appropriate features accordingly. These include for instance the average heart and breathing rate, as well as indices of heart rate variability (HRV) and respiratory sinus arrhythmia (RSA).
 
 
 This example illustrates a second type of physiological analysis, that we refer to as interval-related (as opposed to event-related). Interval-related analyses compute features of signal variability and activation patterns over a longer-term period of time (typically minutes). *NeuroKit2* allows for the fast creation of a standardized and reproducible pipeline to describe this kind of physiological activity, which can be beneficial for a wide variety of applications.
@@ -298,9 +307,11 @@ This example illustrates a second type of physiological analysis, that we refer 
 
 # Discussion
 
+
+
 *NeuroKit2* is a neurophysiological signal processing software accessible to people with all levels of programming experience and background. Its development is focused on creating an intuitive user-experience, as well as building a collaborative community. It is also a pragmatic answer to the broader need for transparent and reproducible methods in neurophysiology. Its modular structure and organization not only facilitates the use of existing and validated processing pipelines, but also creates a fertile ground for experimentation and innovation.
 
-We expect the package's future evolution to be driven by the communities' needs and the advances in related fields. For instance, although *NeuroKit2* already implements a lot of useful functions for EEG processing (such as entropy and fractal dimensions quantification), its support could be further improved (for example with high-level functions built on top of utilities provided by the leading EEG Python software, namely *MNE*; @gramfort2013meg). Possible other future directions include extending the support for other types of bodily signals (e.g., electrogastrography - EGG, electrooculography - EOG) and achieving performance gains for large datasets by using efficient algorithms. Further validation of the available processing pipelines could be made through the (re)analysis of public databases. In line with this objective, the support of standardized data structure formats (e.g. WFDB, BIDS, ...) could be extended.
+We expect the package's future evolution to be driven by the communities' needs and the advances in related fields. For instance, although *NeuroKit2* already implements a lot of useful functions for EEG processing (such as entropy and fractal dimensions quantification), its support could be further improved [for example with high-level functions built on top of utilities provided by the leading EEG Python software, namely *MNE*; @gramfort2013meg]. Possible other future directions include extending the support for other types of bodily signals (e.g., electrogastrography - EGG, electrooculography - EOG) and achieving performance gains for large datasets by using efficient algorithms. Further validation of the available processing pipelines could be made through the (re)analysis of public databases. In line with this objective, the support of standardized data structure formats (e.g. WFDB, BIDS, ...) could be extended.
 
 In conclusion, we believe that *NeuroKit2* provides useful tools for anyone who is interested in analyzing physiological data from research-grade hardware as well as wearable "smart health devices". By increasing the autonomy of researchers and practitioners, and by shortening the delay between data collection and results acquisition, *NeuroKit2* could be useful beyond academic research in neuroscience and psychology, including applications such as biofeedback, personal physiological monitoring and exercise science. Finally, we hope that *NeuroKit2* encourages users to become part of a supportive open-science community with diverse areas of expertise rather than relying on closed-source and proprietary software, thus shaping the future of neurophysiology and its related fields.
 
@@ -310,7 +321,7 @@ The authors declare that the research was conducted in the absence of commercial
 
 # Acknowledgements
 
-We would like to thank Prof. C. F. Xavier for inspiration, all the contributors (https://neurokit2.readthedocs.io/en/latest/authors.html), and the users for their support. Additionally, Francois Lespinasse would like to thank the Courtois Foundation for its support through the Courtois-NeuroMod project (https://cneuromod.ca)
+We would like to thank Prof. C. F. Xavier for inspiration, all the contributors (https://neurokit2.readthedocs.io/en/latest/authors.html), and the users for their support. Additionally, François Lespinasse would like to thank the Courtois Foundation for its support through the Courtois-NeuroMod project (https://cneuromod.ca)
 
 
 
