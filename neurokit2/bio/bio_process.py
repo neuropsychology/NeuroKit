@@ -90,7 +90,7 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, eog=None, keep=None, sam
     >>> eog = nk.data('eog_100hz')
     >>> data = nk.data('bio_eventrelated_100hz')[:len(eog)]
     >>> bio_df2, bio_info2 = nk.bio_process(ecg=data['ECG'], rsp=data['RSP'], eda=data['EDA'], emg=None,
-                                            eog=eog, keep=data['Photosensor'], sampling_rate=100)
+    ...                                     eog=eog, keep=data['Photosensor'], sampling_rate=100)
     >>> fig2 = nk.standardize(bio_df).plot(subplots=True)
     >>> fig2 #doctest: +SKIP
     """
