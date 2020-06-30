@@ -40,7 +40,7 @@ def eog_eventrelated(epochs, silent=False):
 
         - *"EOG_Rate_Min_Time"*: the time at which minimum EOG rate occurs.
 
-        - *"EOG_N_Blinks"*: Number of blink peaks during each epoch.
+        - *"EOG_Blinks_Presence"*: marked with '1' if a blink occurs in the epoch, and '0' if not.
 
     See Also
     --------
@@ -60,11 +60,11 @@ def eog_eventrelated(epochs, silent=False):
     >>>
     >>> # Analyze
     >>> nk.eog_eventrelated(epochs) #doctest: +ELLIPSIS
-      Label  Event_Onset  ...  EOG_Rate_Min_Time  EOG_N_Blinks
-    1     1          ...  ...                ...           ...
-    2     2          ...  ...                ...           ...
-    3     3          ...  ...                ...           ...
-    4     4          ...  ...                ...           ...
+      Label  Event_Onset  ...  EOG_Rate_Min_Time  EOG_Blinks_Presence
+    1     1          ...  ...                ...                  ...
+    2     2          ...  ...                ...                  ...
+    3     3          ...  ...                ...                  ...
+    4     4          ...  ...                ...                  ...
     [4 rows x 9 columns]
 
     """
@@ -115,9 +115,12 @@ def _eog_eventrelated_features(epoch, output={}):
         )
         return output
 
-    # Peak amplitude and Time of peak
-    n_blinks = len(np.where(epoch["EOG_Blinks"][epoch.index > 0] == 1)[0])
+    # Detect whether blink exists after onset of stimulus
+    blinks_presence = len(np.where(epoch["EOG_Blinks"][epoch.index > 0] == 1)[0])
 
-    output["EOG_N_Blinks"] = n_blinks
+    if blinks_presence > 0:
+        output["EOG_Blinks_Presence"] = 1
+    else:
+        output["EOG_Blinks_Presence"] = 0
 
     return output
