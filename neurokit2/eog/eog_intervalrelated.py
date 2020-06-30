@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 
-def eog_eventrelated(data, sampling_rate=1000):
+def eog_intervalrelated(data, sampling_rate=1000):
     """Performs EOG analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
 
     Parameters
