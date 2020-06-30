@@ -35,7 +35,7 @@ def eog_intervalrelated(data):
     >>> df, info = nk.eog_process(eog, sampling_rate=200)
     >>>
     >>> # Single dataframe is passed
-    >>> nk.eog_intervalrelated(df, sampling_rate=200) #doctest: +ELLIPSIS
+    >>> nk.eog_intervalrelated(df) #doctest: +ELLIPSIS
        EOG_Rate_Mean
     0      ...
     >>>
