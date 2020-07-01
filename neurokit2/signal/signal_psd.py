@@ -100,7 +100,8 @@ def signal_psd(
             frequency, power = _signal_psd_welch(
                     signal,
                     sampling_rate=sampling_rate,
-                    nperseg=nperseg
+                    nperseg=nperseg,
+                    **kwargs
             )
 
         # Lombscargle (Scipy)
