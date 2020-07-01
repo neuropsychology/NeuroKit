@@ -72,16 +72,16 @@ def test_eog_process():
 
 def test_eog_plot():
 
-    eog_signal = nk.data("eog_200hz")["vEOG"]
-    signals, info = nk.eog_process(eog_signal, sampling_rate=200)
+    eog_signal = nk.data("eog_100hz")
+    signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
     # Plot
-    nk.eog_plot(signals)
+    nk.eog_plot(signals, peaks=info, sampling_rate=100)
     fig = plt.gcf()
-    assert len(fig.axes) == 2
+    assert len(fig.axes) == 3
 
-    titles = ["Raw and Cleaned Signal", "Blink Rate"]
-    legends = [["Raw", "Cleaned", "Blinks"], ["Rate", "Mean"]]
+    titles = ["Raw and Cleaned Signal", "Blink Rate", "Individual Blinks"]
+    legends = [["Raw", "Cleaned", "Blinks"], ["Rate", "Mean"], ["Median"]]
     ylabels = ["Amplitude (mV)", "Blinks per minute"]
 
     for (ax, title, legend, ylabel) in zip(fig.get_axes(), titles, legends, ylabels):
@@ -90,6 +90,45 @@ def test_eog_plot():
         assert subplot[1] == legend
         assert ax.get_ylabel() == ylabel
 
-    assert fig.get_axes()[1].get_xlabel() == "Samples"
+    assert fig.get_axes()[1].get_xlabel() == "Time (seconds)"
     np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
     plt.close(fig)
+
+
+def test_eog_eventrelated():
+
+    eog = nk.data('eog_200hz')['vEOG']
+    eog_signals, info = nk.eog_process(eog, sampling_rate=200)
+    epochs = nk.epochs_create(eog_signals, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    eog_eventrelated = nk.eog_eventrelated(epochs)
+
+    # Test rate features
+    assert np.alltrue(np.array(eog_eventrelated["EOG_Rate_Min"]) < np.array(eog_eventrelated["EOG_Rate_Mean"]))
+
+    assert np.alltrue(np.array(eog_eventrelated["EOG_Rate_Mean"]) < np.array(eog_eventrelated["EOG_Rate_Max"]))
+
+    # Test blink presence
+    assert np.alltrue(np.array(eog_eventrelated["EOG_Blinks_Presence"]) == np.array([1, 0, 0]))
+
+
+def test_eog_intervalrelated():
+
+    eog = nk.data('eog_200hz')['vEOG']
+    eog_signals, info = nk.eog_process(eog, sampling_rate=200)
+
+    columns = ['EOG_Peaks_N', 'EOG_Rate_Mean']
+
+    # Test with signal dataframe
+    features = nk.eog_intervalrelated(eog_signals)
+
+    assert all(elem in np.array(features.columns.values, dtype=str) for elem
+               in columns)
+    assert features.shape[0] == 1  # Number of rows
+
+    # Test with dict
+    epochs = nk.epochs_create(eog_signals, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    epochs_dict = nk.eog_intervalrelated(epochs)
+
+    assert all(elem in columns for elem
+               in np.array(epochs_dict.columns.values, dtype=str))
+    assert epochs_dict.shape[0] == len(epochs)  # Number of rows
