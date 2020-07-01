@@ -105,7 +105,7 @@ One of the suggested response to that issue has been to provide, alongside the s
 Indeed, these scripts must be shareable (not always feasible with closed-source and proprietary software or programming languages), accessible (enticing documented and well-organized scripts) and reproducible (which is inherently difficult for many software relying on a graphical user interface - GUI - in which the manual point-and-click sequence is hard to automate).
 
 <!-- Response to gap -->
-*NeuroKit2* addresses these challenges by offering a free, user-friendly, and comprehensive solution for neurophysiological data processing.
+*NeuroKit2* addresses these challenges by offering a free, user-friendly, and comprehensive solution for neurophysiological data processing, with an initial focus on bodily signals (ECG, EDA, PPG, EMG, etc.).
 It is an open-source Python package, developed by a multi-disciplinary team that actively invites new collaborators.
 It aims at being accessible, well-documented, well-tested, cutting-edge, flexible and efficient, allowing users to select from a wide range of validated analysis pipelines as well as creating their own.
 Historically, *NeuroKit2* is the re-forged successor *NeuroKit1* [@neurokit1], taking on its most successful features and design choices, and re-implementing them in a professional and well-thought way.
