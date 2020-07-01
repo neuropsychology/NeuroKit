@@ -86,7 +86,7 @@ def hrv_frequency(
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>>
     >>> # Compute HRV indices
-    >>> hrv = nk.hrv_frequency(peaks, sampling_rate=100, show=True)
+    >>> hrv = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
 
     References
     ----------
@@ -142,7 +142,7 @@ def hrv_frequency(
 
     # Plot
     if show:
-        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate)
+        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate, psd_method=psd_method)
     return out
 
 
@@ -155,6 +155,7 @@ def _hrv_frequency_show(
     hf=(0.15, 0.4),
     vhf=(0.4, 0.5),
     sampling_rate=1000,
+    psd_method="welch",
     **kwargs
 ):
 
@@ -174,6 +175,6 @@ def _hrv_frequency_show(
         if window_length <= len(rri) / 2:
             break
 
-    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, max_frequency=0.5)
+    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, method=psd_method, max_frequency=0.5)
 
     _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)

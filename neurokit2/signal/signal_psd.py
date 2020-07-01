@@ -100,6 +100,7 @@ def signal_psd(
                     sampling_rate=sampling_rate,
                     nperseg=nperseg
             )
+
         # Lombscargle (Scipy)
         elif method.lower() in ["lombscargle", "lomb"]:
             frequency, power = _signal_psd_lomb(
@@ -130,7 +131,7 @@ def signal_psd(
     data = data.loc[np.logical_and(data["Frequency"] >= min_frequency, data["Frequency"] <= max_frequency)]
 
     if show is True:
-        ax = data.plot(x="Frequency", y="Power", logy=True, title="Power Spectral Density (ms^2/Hz)")
+        ax = data.plot(x="Frequency", y="Power", logy=False, title="Power Spectral Density (ms^2/Hz)")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
         return ax
     else:
@@ -293,8 +294,8 @@ def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side="on
             if residual_new > residual_old:
                 break
 
-        # This should be after the criteria
-        residual_old = residual_new
+            # This should be after the criteria
+            residual_old = residual_new
         rho = new_rho
         if rho <= 0:
             raise ValueError("Found a negative value (expected positive strictly) %s."
