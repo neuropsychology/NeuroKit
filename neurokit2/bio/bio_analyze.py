@@ -7,21 +7,22 @@ from ..ecg.ecg_rsa import ecg_rsa
 from ..eda.eda_analyze import eda_analyze
 from ..emg.emg_analyze import emg_analyze
 from ..rsp.rsp_analyze import rsp_analyze
+from ..eog.eog_analyze import eog_analyze
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto"):
     """Automated analysis of bio signals.
 
     Wrapper for other bio analyze functions of
-    electrocardiography signals (ECG), respiration signals (RSP),
-    electrodermal activity (EDA) and electromyography signals (EMG).
+    electrocardiography signals (ECG), respiration signals (RSP), electrodermal activity (EDA),
+    electromyography signals (EMG) and electrooculography signals (EOG).
 
     Parameters
     ----------
     data : DataFrame
         The DataFrame containing all the processed signals, typically
         produced by `bio_process()`, `ecg_process()`, `rsp_process()`,
-        `eda_process()`, or `emg_process()`.
+        `eda_process()`, `emg_process()` or `eog_process()`.
     sampling_rate : int
         The sampling frequency of the signals (in Hz, i.e., samples/second).
         Defaults to 1000.
@@ -35,13 +36,13 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     ----------
     DataFrame
         DataFrame of the analyzed bio features. See docstrings of `ecg_analyze()`,
-        `rsp_analyze()`, `eda_analyze()` and `emg_analyze()` for more details.
+        `rsp_analyze()`, `eda_analyze()`, `emg_analyze()` and `eog_analyze()` for more details.
         Also returns Respiratory Sinus Arrhythmia features produced by
         `ecg_rsa()` if interval-related analysis is carried out.
 
     See Also
     ----------
-    ecg_analyze, rsp_analyze, eda_analyze, emg_analyze
+    ecg_analyze, rsp_analyze, eda_analyze, emg_analyze, eog_analyze
 
     Examples
     ----------
@@ -63,7 +64,12 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     ...                           epochs_end=1.9)
     >>>
     >>> # Analyze
-    >>> nk.bio_analyze(epochs, sampling_rate=100) #doctest: +SKIP
+    >>> nk.bio_analyze(epochs, sampling_rate=100) #doctest: +ELLIPSIS
+      Label Condition  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime   RSA_P2T
+    1     1  Negative          ...  ...           ...               ...       ...
+    2     2   Neutral          ...  ...           ...               ...       ...
+    3     3   Neutral          ...  ...           ...               ...       ...
+    4     4  Negative          ...  ...           ...               ...       ...
     >>>
     >>> # Example 2: Interval-related analysis
     >>> # Download data
@@ -73,7 +79,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], sampling_rate=100)
     >>>
     >>> # Analyze
-    >>> nk.bio_analyze(df, sampling_rate=100) #doctest: +SKIP
+    >>> nk.bio_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
+       ECG_Rate_Mean  HRV_RMSSD  ...  RSA_P2T_NoRSA  RSA_PorgesBohrer
+    0            ...        ...  ...            ...               ...
 
     """
     features = pd.DataFrame()
@@ -85,6 +93,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
         rsp_cols = [col for col in data.columns if "RSP" in col]
         eda_cols = [col for col in data.columns if "EDA" in col]
         emg_cols = [col for col in data.columns if "EMG" in col]
+        eog_cols = [col for col in data.columns if "EOG" in col]
         ecg_rate_col = [col for col in data.columns if "ECG_Rate" in col]
         rsp_phase_col = [col for col in data.columns if "RSP_Phase" in col]
     elif isinstance(data, dict):
@@ -93,6 +102,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
             rsp_cols = [col for col in data[i].columns if "RSP" in col]
             eda_cols = [col for col in data[i].columns if "EDA" in col]
             emg_cols = [col for col in data[i].columns if "EMG" in col]
+            eog_cols = [col for col in data[i].columns if "EOG" in col]
             ecg_rate_col = [col for col in data[i].columns if "ECG_Rate" in col]
             rsp_phase_col = [col for col in data[i].columns if "RSP_Phase" in col]
     else:
@@ -121,6 +131,11 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     if len(emg_cols) != 0:
         emg_analyzed = emg_analyze(data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, emg_analyzed], axis=1, sort=False)
+
+    # EOG
+    if len(eog_cols) != 0:
+        eog_analyzed = eog_analyze(data, sampling_rate=sampling_rate, method=method)
+        features = pd.concat([features, eog_analyzed], axis=1, sort=False)
 
     # RSA
     if len(ecg_rate_col + rsp_phase_col) >= 3:
