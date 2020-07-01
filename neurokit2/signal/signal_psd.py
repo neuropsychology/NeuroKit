@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=False
+    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=False, **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -36,6 +36,8 @@ def signal_psd(
         rely on the default of corrected KIC.
     bug_norm : bool
         Normalization for Burg method.
+    **kwargs
+        Keyword arguments to be passed to `scipy.signal.welch()`.
 
     See Also
     --------
@@ -170,17 +172,22 @@ def _signal_psd_multitaper(
 
 
 def _signal_psd_welch(
-    signal, sampling_rate=1000, nperseg=None
+    signal, sampling_rate=1000, nperseg=None, **kwargs
 ):
+    if nperseg is not None:
+        nfft = int(nperseg*2)
+    else:
+        nfft = None
 
     frequency, power = scipy.signal.welch(
         signal,
         fs=sampling_rate,
         scaling="density",
         detrend=False,
-        nfft=int(nperseg * 2),
+        nfft=nfft,
         average="mean",
         nperseg=nperseg,
+        **kwargs
     )
     return frequency, power
 
