@@ -132,7 +132,7 @@ def _mne_to_dict_epochs(eeg):
 
         # Add info
         info = pd.DataFrame({"Label": [i] * len(df)})
-        info["Condition"] = list(eeg[0].event_id.keys())[0]
+        info["Condition"] = list(eeg[i].event_id.keys())[0]
         info["Time"] = eeg[i].times
         info.index = eeg[i].times
 
