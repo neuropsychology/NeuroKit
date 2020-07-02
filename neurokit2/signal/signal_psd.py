@@ -60,13 +60,14 @@ def signal_psd(
     >>> fig2 = nk.signal_psd(signal, method="welch", min_frequency=1)
     >>> fig2 #doctest: +SKIP
     >>> fig3 = nk.signal_psd(signal, method="burg", min_frequency=1)
+    >>> fig4 = nk.signal_psd(signal, method="lomb", min_frequency=1)
     >>>
     >>> data = nk.signal_psd(signal, method="multitapers", max_frequency=30, show=False)
-    >>> fig4 = data.plot(x="Frequency", y="Power")
-    >>> fig4 #doctest: +SKIP
-    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False, min_frequency=1)
     >>> fig5 = data.plot(x="Frequency", y="Power")
     >>> fig5 #doctest: +SKIP
+    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False, min_frequency=1)
+    >>> fig6 = data.plot(x="Frequency", y="Power")
+    >>> fig6 #doctest: +SKIP
 
     """
     # Constant Detrend
@@ -132,9 +133,10 @@ def signal_psd(
 
     # Filter
     data = data.loc[np.logical_and(data["Frequency"] >= min_frequency, data["Frequency"] <= max_frequency)]
+#    data["Power"] = 10 * np.log(data["Power"])
 
     if show is True:
-        ax = data.plot(x="Frequency", y="Power", logy=False, title="Power Spectral Density (ms^2/Hz)")
+        ax = data.plot(x="Frequency", y="Power", title="Power Spectral Density (ms^2/Hz)")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
         return ax
     else:
@@ -202,19 +204,35 @@ def _signal_psd_lomb(
     signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf
 ):
 
-    nfft = int(nperseg * 2)
-    if max_frequency == np.inf:
-        max_frequency = 20  # sanitize highest frequency
+#    nfft = int(nperseg * 2)
+#    if max_frequency == np.inf:
+#        max_frequency = 20  # sanitize highest frequency
+#
+#    # Specify frequency range
+#    frequency = np.linspace(min_frequency, max_frequency, nfft)
+#    # Compute angular frequencies
+#    # angular_freqs = np.asarray(2 * np.pi / frequency)
+#
+#    # Specify sample times
+#    t = np.arange(len(signal))
+#
+#    power = np.asarray(scipy.signal.lombscargle(t, signal, frequency, normalize=True))
+    try:
+        import astropy
+        from astropy.timeseries import LombScargle
+        if max_frequency == np.inf:
+            max_frequency = 50  # sanitize highest frequency
+        t = np.arange(len(signal)) / 1000
+        signal = signal / 1000
+        frequency, power = LombScargle(t, signal, normalization='psd').autopower(minimum_frequency=min_frequency, maximum_frequency=max_frequency)
 
-    # Specify frequency range
-    frequency = np.linspace(min_frequency, max_frequency, nfft)
-    # Compute angular frequencies
-    # angular_freqs = np.asarray(2 * np.pi / frequency)
 
-    # Specify sample times
-    t = np.arange(len(signal))
-
-    power = np.asarray(scipy.signal.lombscargle(t, signal, frequency, normalize=True))
+    except ImportError:
+        raise ImportError(
+            "NeuroKit warning: signal_psd(): the 'lomb'",
+            "module is required for the 'mne' method to run.",
+            "Please install it first (`pip install mne`).",
+        )
 
     return frequency, power
 
