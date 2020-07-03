@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=False, **kwargs
+    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, window_type=None, ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=False, **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -27,6 +27,8 @@ def signal_psd(
         Length of each window in seconds (for Welch method). If None (default), window will be automatically
         calculated to capture at least 2 cycles of min_frequency. If the length of recording does not
         allow the formal, window will be default to half of the length of recording.
+    window_type : str
+        Desired window to use. See `scipy.signal.get_window()` for list of windows.
     ar_order : int
         The order of autoregression (for AR methods e.g. Burg).
     order_criteria : str
@@ -102,6 +104,7 @@ def signal_psd(
                     signal,
                     sampling_rate=sampling_rate,
                     nperseg=nperseg,
+                    window_type=window_type,
                     **kwargs
             )
 
@@ -175,7 +178,7 @@ def _signal_psd_multitaper(
 
 
 def _signal_psd_welch(
-    signal, sampling_rate=1000, nperseg=None, **kwargs
+    signal, sampling_rate=1000, nperseg=None, window_type=None, **kwargs
 ):
     if nperseg is not None:
         nfft = int(nperseg*2)
@@ -190,6 +193,7 @@ def _signal_psd_welch(
         nfft=nfft,
         average="mean",
         nperseg=nperseg,
+        window=window_type,
         **kwargs
     )
     return frequency, power
