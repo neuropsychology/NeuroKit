@@ -5,6 +5,8 @@ import scipy.signal
 import matplotlib
 import matplotlib.pyplot as plt
 
+from ..signal.signal_detrend import signal_detrend
+
 
 def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, window=None, overlap=None, show=True):
     """Quantify changes of a nonstationary signal’s frequency over time.
@@ -30,6 +32,15 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
 
     """
     # Initialize empty container for results
+    # Define window length
+    if min_frequency == 0:
+        min_frequency = 0.04  # sanitize lowest frequency to lf
+    if window is not None:
+        nperseg = int(window * sampling_rate)
+    else:
+        # to capture at least 5 times slowest wave-length
+        nperseg = int((5 / min_frequency) * sampling_rate)
+
     out = {}
     return out
 
@@ -37,7 +48,8 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
 # Short-Time Fourier Transform (STFT)
 # =============================================================================
 
-def stft(signal, sampling_rate=1000, window=None, min_frequency=0.04, max_frequency=np.inf, overlap=None, show=True):
+
+def stft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, overlap=None, nperseg=None, show=True):
     """Short-term
     Examples
     -------
@@ -53,15 +65,6 @@ def stft(signal, sampling_rate=1000, window=None, min_frequency=0.04, max_freque
     >>> signal = nk.signal_interpolate(peaks[1:], rri, x_new=np.arange(desired_length))
     >>> f, t, stft = stft(signal, sampling_rate, max_frequency=10)
     """
-
-    # Define window length
-    if min_frequency == 0:
-        min_frequency = 0.04  # sanitize lowest frequency to lf
-    if window is not None:
-        nperseg = int(window * sampling_rate)
-    else:
-        # to capture at least 5 times slowest wave-length
-        nperseg = int((5 / min_frequency) * sampling_rate)
 
     # Check COLA
     if overlap is not None:
@@ -103,3 +106,117 @@ def stft(signal, sampling_rate=1000, window=None, min_frequency=0.04, max_freque
         ax.set_xlabel('Frequency (Hz)')
 
     return frequency, time, stft
+
+# =============================================================================
+# Smooth Pseudo-Wigner-Ville Distribution
+# =============================================================================
+
+
+def spwvd(signal, sampling_rate=1000, window_length=None, smoothing_length=None, segment_step=None, nfreqbin=None, show=True):
+    """SPWVD
+
+    References
+    ----------
+    J. M. O' Toole, M. Mesbah, and B. Boashash, (2008),
+    "A New Discrete Analytic Signal for Reducing Aliasing in the
+     Discrete Wigner-Ville Distribution", IEEE Trans.
+     """
+
+    # Define parameters
+    N = len(signal)
+    sample_spacing = 1 / sampling_rate
+    if nfreqbin is None:
+        nfreqbin = N
+
+    # Zero-padded signal to length 2N
+    signal_padded = np.append(signal, np.zeros_like(signal))
+
+    # DFT
+    signal_fft = np.fft.fft(signal_padded)
+    signal_fft[1: N-1] = signal_fft[1: N-1] * 2
+    signal_fft[N:] = 0
+
+    # Inverse FFT
+    signal_ifft = np.fft.ifft(signal_fft)
+    signal_ifft[N:] = 0
+
+    # Make analytic signal
+    a_signal = scipy.signal.hilbert(signal_detrend(signal_ifft))
+
+    # Create normalize windows in time and frequency
+    # window
+    if window_length is None:
+        window_length = np.floor(N/2.)
+    # Plus one if window length is odd
+    if window_length % 2 == 1:
+        window_length += 1
+    # smoothing window
+    if smoothing_length is None:
+        smoothing_length = np.floor(N/5.)
+    if smoothing_length % 2 == 1:
+        smoothing_length += 1
+    std_freq = window_length / (6 * np.sqrt(2 * np.log(2)))
+    std_time = smoothing_length / (6 * np.sqrt(2 * np.log(2)))
+
+    # Calculate windows
+    w_freq = scipy.signal.gaussian(window_length, std_freq)
+    w_freq /= sum(w_freq)
+
+    w_time = scipy.signal.gaussian(smoothing_length, std_time)
+    w_time /= sum(w_time)
+
+    midpt_freq = (window_length - 1) / 2
+    midpt_time = (smoothing_length - 1) / 2
+
+    # Create arrays
+    time_array = np.arange(start=0, stop=N+1, step=segment_step, dtype='int')
+    frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
+    pwvd = np.zeros(nfreqbin, len(time_array), dtype='complex')
+
+    # Calculate pwvd
+    for i, t in enumerate(time_array):
+        # time shift
+        tau_max = np.min(t+midpt_time-1, N-t+midpt_time, round(nfreqbin/2), midpt_frequency)
+        # time-lag list
+        tau = np.arange(start=-np.min(midpt_time, N-t),
+                        stop=np.min(midpt_time, t-2) + 1,
+                        step=1,
+                        dtype='int')
+        # zero frequency
+        pwvd[0, i] = np.sum(2 * (
+                w_time[midpt_time+tau] / np.sum(w_time[midpt_time+tau])) *
+                a_signal[t-tau-1] * np.conjugate(a_signal[t-tau-1]))
+        # other frequencies
+        for m in range(tau_max):
+            tau = np.arange(start=-np.min(midpt_time, N-t-m-1),
+                            stop=np.min(midpt_time, t-m-1) + 1,
+                            step=1,
+                            dtype='int')
+
+            m_time = 2 * (w_time[midpt_time+tau] / np.sum(w_time[midpt_time+tau]))
+
+            # compute positive half
+            rmm = np.sum(m_time * a_signal[t+m-tau-1] * np.conjugate(a_signal[t-m-tau]))
+            pwvd[m, i] = w_freq[midpt_freq+m-1] * rmm
+            # compute negative half
+            rmm = np.sum(m_time * a_signal[t-m-tau] * np.conjugate(a_signal[t+m-tau-1]))
+            pwvd[nfreqbin-m-1, i] = w_freq[midpt_freq-m] * rmm
+
+        m = np.round(nfreqbin / 2)
+
+        if t <= N-m and t >= m and m <= midpt_freq:
+            tau = np.arange(start=-np.min(midpt_time, N-t-m),
+                            stop=np.min(midpt_time, N-t, m) + 1,
+                            step=1,
+                            dtype='int')
+            m_time = w_time[midpt_time+tau] / np.sum(w_time[midpt_time+tau])
+            pwvd[m-1, i] = 0.5 * (
+                    np.sum(w_freq[midpt_freq+m] * (m_time * a_signal[t+m-tau-1] *
+                           np.conjugate(a_signal[t-m-tau]))) +
+                    np.sum(w_freq[midpt_freq-m] * (m_time * a_signal[t-m-tau] *
+                           np.conjugate(a_signal[t+m-tau-1]))))
+    pwvd = np.fft.fft(pwvd, axis=0)
+    # rotate for t=0, f=0 at lower left
+    pwvd = np.rot90(pwvd.T, 1)
+
+    return pwvd, time_array, frequency_array
