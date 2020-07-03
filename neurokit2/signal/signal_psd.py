@@ -222,8 +222,7 @@ def _signal_psd_lomb(
         from astropy.timeseries import LombScargle
         if max_frequency == np.inf:
             max_frequency = 50  # sanitize highest frequency
-        t = np.arange(len(signal)) / 1000
-        signal = signal / 1000
+        t = np.arange(len(signal)) / sampling_rate
         frequency, power = LombScargle(t, signal, normalization='psd').autopower(minimum_frequency=min_frequency, maximum_frequency=max_frequency)
 
 
