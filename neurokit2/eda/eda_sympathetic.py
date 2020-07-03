@@ -5,7 +5,7 @@ import numpy as np
 
 from ..signal.signal_power import _signal_power_instant_get
 from ..signal.signal_psd import _signal_psd_welch
-from .signal import signal_filter
+from ..signal import signal_filter
 
 
 def eda_sympathetic(eda_signal, frequency_band=[0.045, 0.25], show=True):
@@ -59,12 +59,14 @@ def eda_sympathetic(eda_signal, frequency_band=[0.045, 0.25], show=True):
     downsampled_2 = scipy.signal.decimate(downsampled_1, q=20, n=8)  # Keep every 20th sample
 
     # High pass filter
-    eda_filtered = signal_filter(downsampled_2, sampling_rate=2, lowcut=0.01, highcut=None, method="butterworth", order=8)
+    eda_filtered = signal_filter(downsampled_2, sampling_rate=2,
+                                 lowcut=0.01, highcut=None, method="butterworth", order=8)
 
     overlap = len(eda_filtered) // 2  # 50 % data overlap
 
     # Compute psd
-    frequency, power = _signal_psd_welch(eda_filtered, sampling_rate=2, nperseg=128, window_type='blackman', noverlap=overlap)
+    frequency, power = _signal_psd_welch(eda_filtered, sampling_rate=2,
+                                         nperseg=128, window_type='blackman', noverlap=overlap)
     psd = pd.DataFrame({"Frequency": frequency, "Power": power})
 
     # Get sympathetic nervous system indexes
