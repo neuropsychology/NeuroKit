@@ -100,12 +100,13 @@ def signal_psd(
 
         # Welch (Scipy)
         if method.lower() in ["welch"]:
+            if window_type is None:
+                window_type = 'hann'
             frequency, power = _signal_psd_welch(
                     signal,
                     sampling_rate=sampling_rate,
                     nperseg=nperseg,
-                    window_type=window_type,
-                    **kwargs
+                    window_type=window_type
             )
 
         # Lombscargle (Scipy)
