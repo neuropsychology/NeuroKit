@@ -12,44 +12,37 @@ events = mne.read_events(mne.datasets.sample.data_path() + '/MEG/sample/sample_a
 event_id = {'audio/left': 1, 'audio/right': 2,
             'visual/left': 3, 'visual/right': 4}
 
-# Create epochs
+# Create epochs (100 ms baseline + 500 ms)
 epochs = mne.Epochs(raw,
                     events,
                     event_id,
-                    tmin=-0.2,
+                    tmin=-0.1,
                     tmax=0.5,
                     picks='eeg',
                     preload=True,
                     detrend=0,
                     baseline=(None, 0))
 
-# Downsample
-# epochs = epochs.resample(sfreq=150)
-
 # Generate list of evoked objects from conditions names
 evoked = [epochs[name].average() for name in ('audio', 'visual')]
 
 # Plot topo
-mne.viz.plot_compare_evokeds(evoked, picks='eeg', axes='topo')
-plt.savefig("figures/fig1.png")
-plt.clf()
+#mne.viz.plot_compare_evokeds(evoked, picks='eeg', axes='topo')
+#plt.savefig("figures/fig1.png")
+#plt.clf()
 
 # Select subset of frontal electrodes
-picks = ["EEG 0%02d" % (i+1) for i in range(16)]
+picks = ["EEG 001", "EEG 002", "EEG 003",
+         "EEG 005", "EEG 006",
+         "EEG 010", "EEG 011", "EEG 012", "EEG 013", "EEG 014"]
+epochs = epochs.pick_channels(picks)
 
-# Create epochs of frontal electrodes
-epochs = mne.Epochs(raw,
-                    events,
-                    event_id,
-                    tmin=-0.2,
-                    tmax=0.5,
-                    picks=picks,
-                    preload=True,
-                    detrend=0,
-                    baseline=(None, 0))
+
+# Downsample
+epochs = epochs.resample(sfreq=150)
 
 # Convert to data frame and save
-nk.mne_to_df(epochs).to_csv("data.csv", index=False)
+#nk.mne_to_df(epochs).to_csv("data.csv", index=False)
 
 # =============================================================================
 # MNE-based ERP analysis
@@ -60,7 +53,9 @@ condition1 = np.mean(epochs["audio"].get_data(), axis=1)
 condition2 = np.mean(epochs["visual"].get_data(), axis=1)
 
 # Permutation test to find significant cluster of differences
-t_vals, clusters, p_vals, h0 = mne.stats.permutation_cluster_test([condition1, condition2], out_type='mask')
+t_vals, clusters, p_vals, h0 = mne.stats.permutation_cluster_test([condition1, condition2],
+                                                                  out_type='mask',
+                                                                  seed=111)
 
 # Visualize
 fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
@@ -70,17 +65,20 @@ fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 #mne.viz.plot_compare_evokeds(evoked, picks=picks, combine="mean"), axes=ax0)
 
 times = epochs.times
+ax0.axvline(x=0, linestyle="--", color="black")
 ax0.plot(times, np.mean(condition1, axis=0), label="Audio")
 ax0.plot(times, np.mean(condition2, axis=0), label="Visual")
 ax0.legend(loc="upper right")
 ax0.set_ylabel("uV")
 
 # Difference
+ax1.axvline(x=0, linestyle="--", color="black")
 ax1.plot(times, condition1.mean(axis=0) - condition2.mean(axis=0))
 ax1.axhline(y=0, linestyle="--", color="black")
 ax1.set_ylabel("Difference")
 
 # T-values
+ax2.axvline(x=0, linestyle="--", color="black")
 h = None
 for i, c in enumerate(clusters):
     c = c[0]
