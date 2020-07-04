@@ -22,9 +22,9 @@ def mne_to_df(eeg):
     >>> import mne
     >>>
     >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif',
-    ...                           preload=True) # doctest: +SKIP
+    ...                           preload=True)
     >>>
-    >>> nk.mne_to_df(raw)
+    >>> nk.mne_to_df(raw)  # doctest: +SKIP
 
     """
     # Try loading mne
@@ -71,9 +71,9 @@ def mne_to_dict(eeg):
     >>> import mne
     >>>
     >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif',
-    ...                           preload=True) # doctest: +SKIP
+    ...                           preload=True)
     >>>
-    >>> nk.mne_to_dict(raw)
+    >>> nk.mne_to_dict(raw)  # doctest: +SKIP
 
     """
     # Try loading mne
