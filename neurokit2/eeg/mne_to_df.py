@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import pandas as pd
 
 
-
-
 def mne_to_df(eeg):
-    """
-    Convert mne Raw or Epochs object to dataframe or dict of dataframes.
+    """Convert mne Raw or Epochs object to dataframe or dict of dataframes.
 
     Parameters
     ----------
     eeg : Union[mne.io.Raw, mne.Epochs]
         Raw or Epochs M/EEG data from MNE.
+
+    Returns
+    ----------
+    DataFrame
+        A DataFrame containing all epochs identifiable by the 'Label' column, which time axis
+        is stored in the 'Time' column.
 
     Examples
     ---------
@@ -46,27 +48,22 @@ def mne_to_df(eeg):
     else:
         data = _mne_to_df_evoked(eeg)
 
-
-    return(data)
-
-
-
-
-
-
-
-
-
+    return data
 
 
 def mne_to_dict(eeg):
-    """
-    Convert MNE Raw or Epochs object to a dictionnary.
+    """Convert MNE Raw or Epochs object to a dictionnary.
 
     Parameters
     ----------
     eeg : Union[mne.io.Raw, mne.Epochs]
         Raw or Epochs M/EEG data from MNE.
+
+    Returns
+    ----------
+    DataFrame
+        A DataFrame containing all epochs identifiable by the 'Label' column, which time axis
+        is stored in the 'Time' column.
 
     Examples
     ---------
@@ -92,7 +89,7 @@ def mne_to_dict(eeg):
     if isinstance(eeg, mne.Epochs):
         data = _mne_to_dict_epochs(eeg)
 
-     # If raw object
+    # If raw object
     elif isinstance(eeg, mne.io.Raw):
         data = _mne_to_dict_raw(eeg)
 
@@ -100,12 +97,7 @@ def mne_to_dict(eeg):
     else:
         data = _mne_to_dict_evoked(eeg)
 
-
-    return(data)
-
-
-
-
+    return data
 
 
 # =============================================================================
@@ -139,15 +131,15 @@ def _mne_to_dict_epochs(eeg):
         data[i] = pd.concat([info, df], axis=1)
 
     mne.set_log_level(old_verbosity_level)
-    return(data)
-
+    return data
 
 
 def _mne_to_df_epochs(eeg):
     data = _mne_to_dict_epochs(eeg)
     data = pd.concat(data)
     data = data.reset_index(drop=True)
-    return(data)
+    return data
+
 
 # =============================================================================
 # raw object
@@ -155,14 +147,15 @@ def _mne_to_df_epochs(eeg):
 def _mne_to_dict_raw(eeg):
     data = _mne_to_df_raw(eeg)
     out = data.to_dict(orient="list")
-    return(out)
+    return out
+
 
 def _mne_to_df_raw(eeg):
-    data = eeg.get_data(verbose='WARNING').T
+    data = eeg.get_data(verbose="WARNING").T
     data = pd.DataFrame(data)
     data.columns = eeg.ch_names
     data.index = eeg.times
-    return(data)
+    return data
 
 
 # =============================================================================
@@ -197,11 +190,11 @@ def _mne_to_dict_evoked(eeg):
         data[i] = pd.concat([info, df], axis=1)
 
     mne.set_log_level(old_verbosity_level)
-    return(data)
+    return data
 
 
 def _mne_to_df_evoked(eeg):
     data = _mne_to_dict_evoked(eeg)
     data = pd.concat(data)
     data = data.reset_index(drop=True)
-    return(data)
+    return data

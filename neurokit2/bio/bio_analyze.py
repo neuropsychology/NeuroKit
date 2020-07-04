@@ -6,8 +6,8 @@ from ..ecg.ecg_analyze import ecg_analyze
 from ..ecg.ecg_rsa import ecg_rsa
 from ..eda.eda_analyze import eda_analyze
 from ..emg.emg_analyze import emg_analyze
-from ..rsp.rsp_analyze import rsp_analyze
 from ..eog.eog_analyze import eog_analyze
+from ..rsp.rsp_analyze import rsp_analyze
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto"):

@@ -82,7 +82,7 @@ def eog_eventrelated(epochs, silent=False):
 
         # Number of blinks per epoch
         data[i] = _eog_eventrelated_features(epochs[i], data[i])
-        for x in ['EOG_Rate_Trend_Quadratic', 'EOG_Rate_Trend_Linear', 'EOG_Rate_Trend_R2']:
+        for x in ["EOG_Rate_Trend_Quadratic", "EOG_Rate_Trend_Linear", "EOG_Rate_Trend_R2"]:
             data[i].pop(x)
 
         # Fill with more info
