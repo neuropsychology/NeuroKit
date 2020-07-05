@@ -11,7 +11,7 @@ def ppg_simulate(
     duration=120,
     sampling_rate=1000,
     heart_rate=70,
-    frequency_modulation=0.3,
+    frequency_modulation=0.2,
     ibi_randomness=0.1,
     drift=0,
     motion_amplitude=0.1,
@@ -196,7 +196,7 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
     modulator_strength must be between 0 and 1.
 
     """
-    modulation_mean = 1.1
+    modulation_mean = 1
     # Enforce minimum inter-beat-interval of 300 milliseconds.
     if (modulation_mean - modulation_strength) * periods[
         0
@@ -214,15 +214,15 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
     if modulation_frequency > nyquist:
         print(f"Please choose a modulation frequency lower than {nyquist}.")
 
-    # Generate a sine with mean 1.1 and amplitude modulation_strength, that is,
-    # ranging from 1.1 - modulation_strength to 1.1 + modulation_strength. Note
-    # that the mean must be 1.1 rather than 1 in order to not produce periods
-    # of duration 0 (i.e., at minimum the duration period is scaled down to
-    # .1 * period instead of 0 * period).
-    modulator = modulation_strength * np.sin(2 * np.pi * modulation_frequency * seconds) + modulation_mean
+    # Generate a sine with mean 1 and amplitude 0.5 * modulation_strength, that is,
+    # ranging from 1 - 0.5 * modulation_strength to 1 + 0.5 * modulation_strength.
+    # For example, at a heart rate of 100 and modulation_strenght=1, the heart rate will
+    # fluctuate between 150 and 50. At the default modulatiom_strenght=.2, it will
+    # fluctuate between 110 and 90.
+    modulator = .5 * modulation_strength * np.sin(2 * np.pi * modulation_frequency * seconds) + modulation_mean
     periods_modulated = periods * modulator
     seconds_modulated = np.cumsum(periods_modulated)
-    seconds_modulated -= seconds_modulated[0]  # make sure seconds start at zero
+    seconds_modulated -= seconds_modulated[0]    # make sure seconds start at zero
 
     return periods_modulated, seconds_modulated
 
