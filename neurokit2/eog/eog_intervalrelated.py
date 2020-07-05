@@ -97,7 +97,6 @@ def _eog_intervalrelated_formatinput(data, output={}):
             "your DataFrame contains an `EOG_Blinks` column."
         )
 
-
     signal = data["EOG_Rate"].values
     n_blinks = len(np.where(data["EOG_Blinks"] == 1)[0])
 

@@ -4,9 +4,9 @@ import pandas as pd
 from ..ecg import ecg_process, ecg_rsa
 from ..eda import eda_process
 from ..emg import emg_process
+from ..eog import eog_process
 from ..misc import as_vector
 from ..rsp import rsp_process
-from ..eog import eog_process
 
 
 def bio_process(ecg=None, rsp=None, eda=None, emg=None, eog=None, keep=None, sampling_rate=1000):
@@ -93,6 +93,7 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, eog=None, keep=None, sam
     ...                                     eog=eog, keep=data['Photosensor'], sampling_rate=100)
     >>> fig2 = nk.standardize(bio_df).plot(subplots=True)
     >>> fig2 #doctest: +SKIP
+
     """
     bio_info = {}
     bio_df = pd.DataFrame({})

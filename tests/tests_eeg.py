@@ -74,3 +74,29 @@ def test_mne_channel_extract():
 
     raw_eeg_names = [x for x in raw.info["ch_names"] if what3 in x]
     assert raw_eeg_names == list(raw_channels.columns.values)
+
+
+def test_mne_to_df():
+
+    raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_filt-0-40_raw.fif')
+    assert len(nk.mne_to_df(raw)) == 41700
+
+
+    events = mne.read_events(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif')
+    event_id = {'audio/left': 1, 'audio/right': 2,
+                'visual/left': 3, 'visual/right': 4}
+
+    # Create epochs (100 ms baseline + 500 ms)
+    epochs = mne.Epochs(raw,
+                        events,
+                        event_id,
+                        tmin=-0.1,
+                        tmax=0.5,
+                        picks='eeg',
+                        preload=True,
+                        detrend=0,
+                        baseline=(None, 0))
+    assert len(nk.mne_to_df(epochs)) == 26208
+
+    evoked = [epochs[name].average() for name in ('audio', 'visual')]
+    assert len(nk.mne_to_df(evoked)) == 182
