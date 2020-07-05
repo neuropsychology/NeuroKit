@@ -84,27 +84,29 @@ fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 
 times = epochs.times
 ax0.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C25E9100>
+## <matplotlib.lines.Line2D object at 0x00000000C262B0A0>
 ax0.plot(times, np.mean(condition1, axis=0), label="Audio")
-## [<matplotlib.lines.Line2D object at 0x00000000C25E2CD0>]
+## [<matplotlib.lines.Line2D object at 0x00000000C261EFD0>]
 ax0.plot(times, np.mean(condition2, axis=0), label="Visual")
-## [<matplotlib.lines.Line2D object at 0x00000000C25E25E0>]
+## [<matplotlib.lines.Line2D object at 0x00000000C261E7C0>]
 ax0.legend(loc="upper right")
+## <matplotlib.legend.Legend object at 0x00000000C261E3A0>
 ax0.set_ylabel("uV")
 
 # Difference
+## Text(0, 0.5, 'uV')
 ax1.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C25E2BB0>
+## <matplotlib.lines.Line2D object at 0x00000000C25B8FA0>
 ax1.plot(times, condition1.mean(axis=0) - condition2.mean(axis=0))
-## [<matplotlib.lines.Line2D object at 0x00000000C2629880>]
+## [<matplotlib.lines.Line2D object at 0x00000000C2604580>]
 ax1.axhline(y=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C2632A90>
+## <matplotlib.lines.Line2D object at 0x00000000C26048E0>
 ax1.set_ylabel("Difference")
 
 # T-values
 ## Text(0, 0.5, 'Difference')
 ax2.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C25E28E0>
+## <matplotlib.lines.Line2D object at 0x00000000C26044C0>
 h = None
 for i, c in enumerate(clusters):
     c = c[0]
@@ -118,12 +120,12 @@ for i, c in enumerate(clusters):
                     times[c.stop - 1],
                     color=(0.3, 0.3, 0.3),
                     alpha=0.3)
-## <matplotlib.patches.Polygon object at 0x00000000C26297F0>
-## <matplotlib.patches.Polygon object at 0x00000000C1A5CE50>
+## <matplotlib.patches.Polygon object at 0x00000000C25A87F0>
+## <matplotlib.patches.Polygon object at 0x00000000C25A86D0>
 hf = ax2.plot(times, t_vals, 'g')
 if h is not None:
     plt.legend((h, ), ('cluster p-value < 0.05', ))
-## <matplotlib.legend.Legend object at 0x00000000C2629550>
+## <matplotlib.legend.Legend object at 0x00000000C25B8D90>
 plt.xlabel("time (ms)")
 ## Text(0.5, 0, 'time (ms)')
 plt.ylabel("t-values")
@@ -140,14 +142,12 @@ plt.clf()
 library(tidyverse)
 library(easystats)
 library(patchwork)
-library(rstanarm)
-library(brms)
 
 data <- read.csv("data.csv", stringsAsFactors = FALSE) %>% 
   mutate(Condition = str_remove(Condition, "/right"),
          Condition = str_remove(Condition, "/left"),
          Condition = as.factor(Condition),
-         EEG = rowMeans(select(., starts_with("EEG"))))
+         EEG = rowMeans(across(starts_with("EEG"))))
 data[stringr::str_detect(colnames(data), "EEG")] <- standardize(data[stringr::str_detect(colnames(data), "EEG")])
 ```
 
@@ -221,7 +221,7 @@ plot_model <- function(model, data){
     geom_hline(yintercept=0) +
     theme_eeg() +
     theme(axis.line.x = element_blank()) +
-    scale_fill_manual("Significant clusters (p < .05)", 
+    scale_fill_manual("Significant difference (p < .05)", 
                       values=c("Audio > Visual"="#00C853", 
                                "Audio < Visual"="#f44336"))
   p1 / p2
@@ -263,11 +263,9 @@ gam.check(model)
 ## Basis dimension (k) checking results. Low p-value (k-index<1) may
 ## indicate that k is too low, especially if edf is close to k'.
 ## 
-##                           k'  edf k-index p-value  
-## s(Time):Conditionaudio  9.00 8.85    0.98   0.025 *
-## s(Time):Conditionvisual 9.00 8.93    0.98   0.030 *
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+##                           k'  edf k-index p-value
+## s(Time):Conditionaudio  9.00 8.85    0.99    0.33
+## s(Time):Conditionvisual 9.00 8.93    0.99    0.32
 
 model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data)
 ```
