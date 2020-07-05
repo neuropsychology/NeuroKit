@@ -78,6 +78,8 @@ def ppg_simulate(
     >>> ppg = nk.ppg_simulate(duration=40, sampling_rate=500, heart_rate=75, random_state=42)
 
     """
+    np.random.seed(random_state)
+
     # At the requested sampling rate, how long is a period at the requested
     # heart-rate and how often does that period fit into the requested
     # duration?
