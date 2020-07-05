@@ -55,10 +55,8 @@ def stft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, o
     -------
     >>> import neurokit2 as nk
     >>> data = nk.data("bio_resting_5min_100hz")
-    >>> sampling_rate=1000
     >>> sampling_rate=100
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=sampling_rate)
-    >>> peaks = np.where(peaks == 1)[0]
     >>> peaks = np.where(peaks == 1)[0]
     >>> rri = np.diff(peaks) / sampling_rate * 1000
     >>> desired_length = int(np.rint(peaks[-1] / sampling_rate * sampling_rate))
@@ -112,9 +110,21 @@ def stft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, o
 # =============================================================================
 
 
-def spwvd(signal, sampling_rate=1000, window_length=None, smoothing_length=None, segment_step=None, nfreqbin=None, show=True):
-    """SPWVD
+def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=None, segment_step=1, nfreqbin=None, show=True):
+    """Smoothed Pseudo Wigner Ville Distribution
 
+    Parameters
+    ----------
+    signal : Union[list, np.array, pd.Series]
+        The signal (i.e., a time series) in the form of a vector of values.
+    sampling_rate : int
+        The sampling frequency of the signal (in Hz, i.e., samples/second)
+    freq_window : np.array
+        Frequency smoothing window.
+    time_window: np.array
+        Time smoothing window
+    nfreqbin : int
+        Number of Frequency bins
     References
     ----------
     J. M. O' Toole, M. Mesbah, and B. Boashash, (2008),
@@ -128,95 +138,112 @@ def spwvd(signal, sampling_rate=1000, window_length=None, smoothing_length=None,
     if nfreqbin is None:
         nfreqbin = N
 
-    # Zero-padded signal to length 2N
-    signal_padded = np.append(signal, np.zeros_like(signal))
-
-    # DFT
-    signal_fft = np.fft.fft(signal_padded)
-    signal_fft[1: N-1] = signal_fft[1: N-1] * 2
-    signal_fft[N:] = 0
-
-    # Inverse FFT
-    signal_ifft = np.fft.ifft(signal_fft)
-    signal_ifft[N:] = 0
-
-    # Make analytic signal
-    a_signal = scipy.signal.hilbert(signal_detrend(signal_ifft))
+#    # Zero-padded signal to length 2N
+#    signal_padded = np.append(signal, np.zeros_like(signal))
+#
+#    # DFT
+#    signal_fft = np.fft.fft(signal_padded)
+#    signal_fft[1: N-1] = signal_fft[1: N-1] * 2
+#    signal_fft[N:] = 0
+#
+#    # Inverse FFT
+#    signal_ifft = np.fft.ifft(signal_fft)
+#    signal_ifft[N:] = 0
+#
+#    # Make analytic signal
+#    a_signal = scipy.signal.hilbert(signal_detrend(signal_ifft))
 
     # Create normalize windows in time and frequency
-    # window
-    if window_length is None:
-        window_length = np.floor(N/2.)
-    # Plus one if window length is odd
-    if window_length % 2 == 1:
-        window_length += 1
-    # smoothing window
-    if smoothing_length is None:
-        smoothing_length = np.floor(N/5.)
-    if smoothing_length % 2 == 1:
-        smoothing_length += 1
-    std_freq = window_length / (6 * np.sqrt(2 * np.log(2)))
-    std_time = smoothing_length / (6 * np.sqrt(2 * np.log(2)))
+    if freq_window is None:
+        freq_length = np.floor(nfreqbin / 4.0)
+        # Plus one if window length is odd
+        if freq_length % 2 == 0:
+            freq_length += 1
+            freq_window = scipy.signal.hamming(int(freq_length))
+    elif len(freq_window) % 2 == 0:
+        raise ValueError("The length of freq_window must be odd.")
 
-    # Calculate windows
-    w_freq = scipy.signal.gaussian(window_length, std_freq)
-    w_freq /= sum(w_freq)
+    if time_window is None:
+        time_length = np.floor(N / 10.0)
+        # Plus one if window length is odd
+        if time_length % 2 == 0:
+            time_length += 1
+            time_window = scipy.signal.hamming(int(time_length))
+    elif len(time_window) % 2 ==0:
+        raise ValueError("The length of time_window must be odd.")
 
-    w_time = scipy.signal.gaussian(smoothing_length, std_time)
-    w_time /= sum(w_time)
+    midpt_freq = (len(freq_window) - 1) // 2
+    midpt_time = (len(time_window) - 1) // 2
 
-    midpt_freq = (window_length - 1) / 2
-    midpt_time = (smoothing_length - 1) / 2
+#    std_freq = freq_window / (6 * np.sqrt(2 * np.log(2)))
+#    std_time = time_window / (6 * np.sqrt(2 * np.log(2)))
+#
+#    # Calculate windows
+#    w_freq = scipy.signal.gaussian(freq_window, std_freq)
+#    w_freq /= sum(w_freq)
+#
+#    w_time = scipy.signal.gaussian(time_window, std_time)
+#    w_time /= sum(w_time)
 
     # Create arrays
-    time_array = np.arange(start=0, stop=N+1, step=segment_step, dtype='int')
-    frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
+    time_array = np.arange(stop=N, step=segment_step, dtype='int')
+#    frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
+    frequency_array = 0.% * np.arange(nfreqbin, dtype=float) / nfreqbin
     pwvd = np.zeros(nfreqbin, len(time_array), dtype='complex')
 
     # Calculate pwvd
     for i, t in enumerate(time_array):
         # time shift
-        tau_max = np.min(t+midpt_time-1, N-t+midpt_time, round(nfreqbin/2), midpt_frequency)
+        tau_max = np.min([t + midpt_time - 1,
+                          N - t + midpt_time,
+                          np.round(nfreqbin / 2.0) - 1,
+                          midpt_freq])
         # time-lag list
-        tau = np.arange(start=-np.min(midpt_time, N-t),
-                        stop=np.min(midpt_time, t-2) + 1,
-                        step=1,
+        tau = np.arange(start=-np.min([midpt_time, N - t]),
+                        stop=np.min([midpt_time, t - 1]) + 1,
                         dtype='int')
+        time_pts = (midpt_time + tau).astype(int)
+        g2 = time_window[time_pts]
+        g2 = g2 / np.sum(g2)
+        signal_pts = (t - tau - 1).astype(int)
         # zero frequency
-        pwvd[0, i] = np.sum(2 * (
-                w_time[midpt_time+tau] / np.sum(w_time[midpt_time+tau])) *
-                a_signal[t-tau-1] * np.conjugate(a_signal[t-tau-1]))
+        pwvd[0, i] = np.sum(g2 * signal[signal_pts] * np.conjugate(signal[signal_pts]))
         # other frequencies
-        for m in range(tau_max):
-            tau = np.arange(start=-np.min(midpt_time, N-t-m-1),
-                            stop=np.min(midpt_time, t-m-1) + 1,
-                            step=1,
+        for m in range(int(tau_max)):
+            tau = np.arange(start=-np.min(midpt_time, N - t -m),
+                            stop=np.min(midpt_time, t - m - 1) + 1,
                             dtype='int')
-
-            m_time = 2 * (w_time[midpt_time+tau] / np.sum(w_time[midpt_time+tau]))
-
+            time_pts = (midpt_time + tau).astype(int)
+            g2 = time_window[time_pts]
+            g2 = g2 / np.sum(g2)
+            signal_pt1 = (t + m - tau -1).astype(int)
+            signal_pt2 = (t - m - tau -1).astype(int)
             # compute positive half
-            rmm = np.sum(m_time * a_signal[t+m-tau-1] * np.conjugate(a_signal[t-m-tau]))
-            pwvd[m, i] = w_freq[midpt_freq+m-1] * rmm
+            rmm = np.sum(g2 * signal[signal_pt1] * np.conjugate(signal[signal_pt2]))
+            pwvd[m + 1, i] = freq_window[midpt_freq + m + 1] * rmm
             # compute negative half
-            rmm = np.sum(m_time * a_signal[t-m-tau] * np.conjugate(a_signal[t+m-tau-1]))
-            pwvd[nfreqbin-m-1, i] = w_freq[midpt_freq-m] * rmm
+            rmm = np.sum(g2 * signal[signal_pt2] * np.conjugate(signal[signal_pt1]))
+            pwvd[nfreqbin - m - 1, i] = freq_window[midpt_freq - m + 1] * rmm
 
-        m = np.round(nfreqbin / 2)
+        m = np.round(nfreqbin / 2.0)
 
-        if t <= N-m and t >= m and m <= midpt_freq:
-            tau = np.arange(start=-np.min(midpt_time, N-t-m),
-                            stop=np.min(midpt_time, N-t, m) + 1,
-                            step=1,
+        if t <= N - m and t >= m + 1 and m <= midpt_freq:
+            tau = np.arange(start=-np.min([midpt_time, N - t - m]),
+                            stop=np.min([midpt_time, t - 1 -m]) + 1,
                             dtype='int')
-            m_time = w_time[midpt_time+tau] / np.sum(w_time[midpt_time+tau])
-            pwvd[m-1, i] = 0.5 * (
-                    np.sum(w_freq[midpt_freq+m] * (m_time * a_signal[t+m-tau-1] *
-                           np.conjugate(a_signal[t-m-tau]))) +
-                    np.sum(w_freq[midpt_freq-m] * (m_time * a_signal[t-m-tau] *
-                           np.conjugate(a_signal[t+m-tau-1]))))
-    pwvd = np.fft.fft(pwvd, axis=0)
-    # rotate for t=0, f=0 at lower left
-    pwvd = np.rot90(pwvd.T, 1)
+            time_pts = (midpt_time + tau + 1).astype(int)
+            g2 = time_window[time_pts]
+            g2 = g2 / np.sum(g2)
+            signal_pt1 = (t + m - tau).astype(int)
+            signal_pt2 = (t - m - tau).astype(int)
+            x = np.sum(g2 * signal[signal_pt1] * np.conjugate(signal[signal_pt2])))
+            x *= freq_window[midpt_freq + m + 1]
+            y = np.sum(g2 * signal[signal_pt2] * np.conjugate(signal[signal_pt1])))
+            y *= freq_window[midpt_freq - m + 1]
+            pwvd[m, i] = 0.5 * (x + y)
 
-    return pwvd, time_array, frequency_array
+    pwvd = np.real(np.fft.fft(pwvd, axis=0))
+
+    # Visualization
+
+    return frequency_array, time_array, pwvd
