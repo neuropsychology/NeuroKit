@@ -115,7 +115,7 @@ def ppg_simulate(
 
     x_all = np.concatenate((x_onset, x_sys, x_notch, x_dia))
     x_all.sort(kind="mergesort")
-    x_all = np.rint(x_all * sampling_rate).astype(int)  # convert seconds to samples
+    x_all = np.ceil(x_all * sampling_rate).astype(int)    # convert seconds to samples
 
     y_all = np.zeros(n_period * 4)
     y_all[0::4] = y_onset
