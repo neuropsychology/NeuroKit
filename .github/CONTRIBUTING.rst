@@ -51,7 +51,7 @@ The first three commands will make some modifications to your code so that it is
 
 .. code-block::
 
-    isort neurokit2 -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --recursive 
+    isort neurokit2 -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py
     black neurokit2 --line-length 120
     docformatter neurokit2 --wrap-summaries 120 --wrap-descriptions 113 --blank --in-place --recursive
     
