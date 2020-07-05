@@ -96,7 +96,7 @@ def ppg_simulate(
     )
     # Randomly modulate duration of waves by subracting a random value between
     # 0 and ibi_randomness% of the wave duration (see function definition).
-    x_onset = _random_x_offset(x_onset, np.diff(x_onset), ibi_randomness)
+    x_onset = _random_x_offset(x_onset, ibi_randomness)
     # Corresponding signal amplitudes.
     y_onset = np.random.normal(0, 0.1, n_period)
 
@@ -229,10 +229,16 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
     return periods_modulated, seconds_modulated
 
 
-def _random_x_offset(x, x_diff, offset_weight):
+def _random_x_offset(x, offset_weight):
     """From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is
     the wave onset preceding xi. offset_weight must be between 0 and 1.
     """
+    if offset_weight >= 1:
+        offset_weight = .99
+    if offset_weight < 0:
+        offset_weight = 0
+
+    x_diff = np.diff(x)
     # Enforce minimum inter-beat-interval of 300 milliseconds.
     min_x_diff = min(x_diff)
     if (min_x_diff - (min_x_diff * offset_weight)) < 0.3:
@@ -243,16 +249,14 @@ def _random_x_offset(x, x_diff, offset_weight):
             f" milliseconds."
         )
         return x
-    offsets = []
 
-    for i in x_diff:
-        max_offset = offset_weight * i
-        offset = np.random.uniform(0, max_offset)
-        offsets.append(offset)
+    max_offsets = offset_weight * x_diff
+    offsets = [np.random.uniform(0, i) for i in max_offsets]
 
-    x[1:] -= offsets
+    x_offset = x.copy()
+    x_offset[1:] -= offsets
 
-    return x
+    return x_offset
 
 
 def _amplitude_modulation():
