@@ -134,7 +134,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=
 
     # Define parameters
     N = len(signal)
-    sample_spacing = 1 / sampling_rate
+#    sample_spacing = 1 / sampling_rate
     if nfreqbin is None:
         nfreqbin = N
 
@@ -169,7 +169,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=
         if time_length % 2 == 0:
             time_length += 1
             time_window = scipy.signal.hamming(int(time_length))
-    elif len(time_window) % 2 ==0:
+    elif len(time_window) % 2 == 0:
         raise ValueError("The length of time_window must be odd.")
 
     midpt_freq = (len(freq_window) - 1) // 2
@@ -188,7 +188,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=
     # Create arrays
     time_array = np.arange(stop=N, step=segment_step, dtype='int')
 #    frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
-    frequency_array = 0.% * np.arange(nfreqbin, dtype=float) / nfreqbin
+    frequency_array = 0.5 * np.arange(nfreqbin, dtype=float) / nfreqbin
     pwvd = np.zeros(nfreqbin, len(time_array), dtype='complex')
 
     # Calculate pwvd
@@ -210,14 +210,14 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=
         pwvd[0, i] = np.sum(g2 * signal[signal_pts] * np.conjugate(signal[signal_pts]))
         # other frequencies
         for m in range(int(tau_max)):
-            tau = np.arange(start=-np.min(midpt_time, N - t -m),
+            tau = np.arange(start=-np.min(midpt_time, N - t - m),
                             stop=np.min(midpt_time, t - m - 1) + 1,
                             dtype='int')
             time_pts = (midpt_time + tau).astype(int)
             g2 = time_window[time_pts]
             g2 = g2 / np.sum(g2)
-            signal_pt1 = (t + m - tau -1).astype(int)
-            signal_pt2 = (t - m - tau -1).astype(int)
+            signal_pt1 = (t + m - tau - 1).astype(int)
+            signal_pt2 = (t - m - tau - 1).astype(int)
             # compute positive half
             rmm = np.sum(g2 * signal[signal_pt1] * np.conjugate(signal[signal_pt2]))
             pwvd[m + 1, i] = freq_window[midpt_freq + m + 1] * rmm
@@ -229,16 +229,16 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=
 
         if t <= N - m and t >= m + 1 and m <= midpt_freq:
             tau = np.arange(start=-np.min([midpt_time, N - t - m]),
-                            stop=np.min([midpt_time, t - 1 -m]) + 1,
+                            stop=np.min([midpt_time, t - 1 - m]) + 1,
                             dtype='int')
             time_pts = (midpt_time + tau + 1).astype(int)
             g2 = time_window[time_pts]
             g2 = g2 / np.sum(g2)
             signal_pt1 = (t + m - tau).astype(int)
             signal_pt2 = (t - m - tau).astype(int)
-            x = np.sum(g2 * signal[signal_pt1] * np.conjugate(signal[signal_pt2])))
+            x = np.sum(g2 * signal[signal_pt1] * np.conjugate(signal[signal_pt2]))
             x *= freq_window[midpt_freq + m + 1]
-            y = np.sum(g2 * signal[signal_pt2] * np.conjugate(signal[signal_pt1])))
+            y = np.sum(g2 * signal[signal_pt2] * np.conjugate(signal[signal_pt1]))
             y *= freq_window[midpt_freq - m + 1]
             pwvd[m, i] = 0.5 * (x + y)
 
