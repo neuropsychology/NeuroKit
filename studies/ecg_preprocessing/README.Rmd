@@ -72,10 +72,13 @@ This database includes 18 clean long-term ECG recordings of subjects. Due to mem
 The script to download and format the database using the can be found [**here**](https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_normal/download_mit_normal.py).
 
 
-<!-- ### Lobachevsky University Electrocardiography Database -->
+### Lobachevsky University Electrocardiography Database
 
-<!-- The Lobachevsky University Electrocardiography Database [LUDB; @kalyakulina2018lu] consists of 200 10-second 12-lead ECG signal records representing different morphologies of the ECG signal. The ECGs were collected from healthy volunteers and patients. The patients had various cardiovascular diseases while some of them had pacemakers.  -->
+The Lobachevsky University Electrocardiography Database [LUDB; @kalyakulina2018lu] consists of 200 10-second 12-lead ECG signal records representing different morphologies of the ECG signal. The ECGs were collected from healthy volunteers and patients, which had various cardiovascular diseases. The boundaries of P, T waves and QRS complexes were manually annotated by cardiologists for all 200 records.
 
+### Fantasia Database
+
+The Fantasia database [@iyengar1996age] consists of twenty young and twenty elderly healthy subjects. All subjects remained in a resting state in sinus rhythm while watching the movie Fantasia (Disney, 1940) to help maintain wakefulness. The continuous ECG signals were digitized at 250 Hz. Each heartbeat was annotated using an automated arrhythmia detection algorithm, and each beat annotation was verified by visual inspection.
 
 
 
@@ -86,18 +89,18 @@ The script to download and format the database using the can be found [**here**]
 import pandas as pd
 
 # Load ECGs
-ecgs_gudb = pd.read_csv("../../data/gudb/ECGs.csv")
-ecgs_mit1 = pd.read_csv("../../data/mit_arrhythmia/ECGs.csv")
-ecgs_mit2 = pd.read_csv("../../data/mit_normal/ECGs.csv")
+ecgs = ["../../data/gudb/ECGs.csv",
+        "../../data/mit_arrhythmia/ECGs.csv",
+        "../../data/mit_normal/ECGs.csv",
+        "../../data/ludb/ECGs.csv",
+        "../../data/fantasia/ECGs.csv"]
 
 # Load True R-peaks location
-rpeaks_gudb = pd.read_csv("../../data/gudb/Rpeaks.csv")
-rpeaks_mit1 = pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv")
-rpeaks_mit2 = pd.read_csv("../../data/mit_normal/Rpeaks.csv")
-
-# Concatenate
-ecgs = pd.concat([ecgs_gudb, ecgs_mit1, ecgs_mit2], ignore_index=True)
-rpeaks = pd.concat([rpeaks_gudb, rpeaks_mit1, rpeaks_mit2], ignore_index=True)
+rpeaks = [pd.read_csv("../../data/gudb/Rpeaks.csv"),
+          pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv"),
+          pd.read_csv("../../data/mit_normal/Rpeaks.csv"),
+          pd.read_csv("../../data/ludb/Rpeaks.csv"),
+          pd.read_csv("../../data/fantasia/Rpeaks.csv")]
 ```
 
 
@@ -160,9 +163,11 @@ def rodrigues2020(ecg, sampling_rate):
 results = []
 for method in [neurokit, pantompkins1985, hamilton2002, martinez2003, christov2004, 
                gamboa2008, elgendi2010, engzeemod2012, kalidas2017, rodrigues2020]:
-    result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks)
-    result["Method"] = method.__name__
-    results.append(result)
+    for i in range(len(rpeaks)):
+        ecgs = pd.read_csv(ecgs[i])
+        result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks[i])
+        result["Method"] = method.__name__
+        results.append(result)
 results = pd.concat(results).reset_index(drop=True)
 
 results.to_csv("data_detectors.csv", index=False)

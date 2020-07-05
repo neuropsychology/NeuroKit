@@ -23,14 +23,22 @@ for file in datafiles:
             sampling_rate = np.unique(data_participant["Sampling_Rate"])[0]
             rpeaks = data_participant["Rpeaks"].values
 
-            results = nk.hrv(rpeaks, sampling_rate=sampling_rate)
-            results["Participant"] = participant
-            results["Database"] = database
-            results["Recording_Length"] = rpeaks[-1] / sampling_rate / 60
+            # Interpolate
+            rri = np.diff(rpeaks) / sampling_rate * 1000
+            desired_length = int(np.rint(rpeaks[-1] / sampling_rate * sampling_rate))
+            rri = nk.signal_interpolate(rpeaks[1:], rri, x_new=np.arange(desired_length))
 
-            all_results = pd.concat([all_results, results], axis=0)
-
-all_results.to_csv("data.csv", index=False)
+            # Get PSD
+            psd = nk.signal_psd(rri, sampling_rate=sampling_rate)
+#
+#            results = nk.hrv_frequency(rpeaks, sampling_rate=sampling_rate)
+#            results["Participant"] = participant
+#            results["Database"] = database
+#            results["Recording_Length"] = rpeaks[-1] / sampling_rate / 60
+#
+#            all_results = pd.concat([all_results, results], axis=0)
+#
+#all_results.to_csv("data.csv", index=False)
 
 
 
