@@ -22,7 +22,7 @@ options(digits=3)
 knitr::opts_chunk$set(
   collapse = TRUE,
   dpi=450,
-  fig.path = "figures/"
+  fig.path = "../../studies/ecg_preprocessing/figures/"
 )
 
 # Setup python - you need to change the path to your python distribution
@@ -164,8 +164,8 @@ results = []
 for method in [neurokit, pantompkins1985, hamilton2002, martinez2003, christov2004, 
                gamboa2008, elgendi2010, engzeemod2012, kalidas2017, rodrigues2020]:
     for i in range(len(rpeaks)):
-        ecgs = pd.read_csv(ecgs[i])
-        result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks[i])
+        data_ecg = pd.read_csv(ecgs[i])
+        result = nk.benchmark_ecg_preprocessing(method, data_ecg, rpeaks[i])
         result["Method"] = method.__name__
         results.append(result)
 results = pd.concat(results).reset_index(drop=True)
@@ -197,7 +197,7 @@ colors <- c("neurokit"="#E91E63", "pantompkins1985"="#f44336", "hamilton2002"="#
 
 #### Errors and bugs
 
-```{r, warning=FALSE, message=FALSE}
+```{r, warning=FALSE, message=FALSE, fig.height=14, fig.width=8}
 data %>% 
   mutate(Error = case_when(
     Error == "index -1 is out of bounds for axis 0 with size 0" ~ "index -1 out of bounds",
@@ -211,9 +211,9 @@ data %>%
   mutate(Error = fct_relevel(Error, "None")) %>% 
   ggplot(aes(x=Error, y=Percentage, fill=Method)) +
     geom_bar(stat="identity", position = position_dodge2(preserve = "single")) +
-    facet_wrap(~Database, nrow=2) +
+    facet_wrap(~Database, nrow=5) +
     theme_modern() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    theme(axis.text.x = element_text(size = 7, angle = 45, hjust = 1)) +
     scale_fill_manual(values=colors)
 ```
 
@@ -339,7 +339,7 @@ means %>%
     ylab("Amount of Error") 
 ```
 
-**Conclusion:** It seems that `neurokit`, `kalidas2017` and `christov2004` the most accurate algorithms to detect R-peaks. This pattern of results differs a bit from @porr2019r that outlines `engzeemod2012`, `elgendi2010`, `kalidas2017` as the most accurate and `christov2004`, `hamilton2002` and `pantompkins1985` as the worse. Discrepancies could be due to the differences in data and analysis, as here we used more databases and modelled them by respecting their hierarchical structure using mixed models.
+**Conclusion:** It seems that `neurokit`, `kalidas2017` and `martinez2003` the most accurate algorithms to detect R-peaks. This pattern of results differs a bit from @porr2019r that outlines `engzeemod2012`, `elgendi2010`, `kalidas2017` as the most accurate and `christov2004`, `hamilton2002` and `pantompkins1985` as the worse. Discrepancies could be due to the differences in data and analysis, as here we used more databases and modelled them by respecting their hierarchical structure using mixed models.
 
 ### Conclusion
 
@@ -384,9 +384,11 @@ def standardize(ecg, sampling_rate):
 ```{python, eval=FALSE}
 results = []
 for method in [none, mean_detrend, standardize]:
-    result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks)
-    result["Method"] = method.__name__
-    results.append(result)
+    for i in range(len(rpeaks)):
+        data_ecg = pd.read_csv(ecgs[i])
+        result = nk.benchmark_ecg_preprocessing(method, data_ecg, rpeaks[i])
+        result["Method"] = method.__name__
+        results.append(result)
 results = pd.concat(results).reset_index(drop=True)
 
 results.to_csv("data_normalization.csv", index=False)

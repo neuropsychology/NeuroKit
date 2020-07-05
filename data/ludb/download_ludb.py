@@ -29,7 +29,7 @@ for participant in range(200):
 
     # Get signal
     data = pd.DataFrame(data, columns=info["sig_name"])
-    data = data[["i"]]
+    data = data[["i"]].rename(columns={"i": "ECG"})
     data["Participant"] = "LUDB_%.2i" %(participant + 1)
     data["Sample"] = range(len(data))
     data["Sampling_Rate"] = info['fs']

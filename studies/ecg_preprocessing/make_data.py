@@ -77,8 +77,8 @@ for method in [neurokit, pantompkins1985, hamilton2002, martinez2003, christov20
     print(method.__name__)
     for i in range(len(rpeaks)):
         print("  - " + str(i))
-        ecgs = pd.read_csv(ecgs[i])
-        result = nk.benchmark_ecg_preprocessing(method, ecgs, rpeaks[i])
+        data_ecg = pd.read_csv(ecgs[i])
+        result = nk.benchmark_ecg_preprocessing(method, data_ecg, rpeaks[i])
         result["Method"] = method.__name__
         results.append(result)
 results = pd.concat(results).reset_index(drop=True)
@@ -99,31 +99,32 @@ results.to_csv("data_detectors.csv", index=False)
 # =============================================================================
 # Study 2
 # =============================================================================
-#def none(ecg, sampling_rate):
-#    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
-#    return info["ECG_R_Peaks"]
-#
-#def mean_removal(ecg, sampling_rate):
-#    ecg = nk.signal_detrend(ecg, order=0)
-#    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
-#    return info["ECG_R_Peaks"]
-#
-#def standardization(ecg, sampling_rate):
-#    ecg = nk.standardize(ecg)
-#    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
-#    return info["ECG_R_Peaks"]
-#
-#results = []
-#for method in [none, mean_removal, standardization]:
-#    print(method.__name__)
-#    for i in range(len(ecgs)):
-#        print("  - " + str(i))
-#        result = nk.benchmark_ecg_preprocessing(method, ecgs[i], rpeaks[i])
-#        result["Method"] = method.__name__
-#        results.append(result)
-#results = pd.concat(results).reset_index(drop=True)
-#
-#results.to_csv("data_normalization.csv", index=False)
+def none(ecg, sampling_rate):
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+
+def mean_removal(ecg, sampling_rate):
+    ecg = nk.signal_detrend(ecg, order=0)
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+
+def standardization(ecg, sampling_rate):
+    ecg = nk.standardize(ecg)
+    signal, info = nk.ecg_peaks(ecg, sampling_rate=sampling_rate, method="neurokit")
+    return info["ECG_R_Peaks"]
+
+results = []
+for method in [none, mean_removal, standardization]:
+    print(method.__name__)
+    for i in range(len(rpeaks)):
+        print("  - " + str(i))
+        data_ecg = pd.read_csv(ecgs[i])
+        result = nk.benchmark_ecg_preprocessing(method, data_ecg, rpeaks[i])
+        result["Method"] = method.__name__
+        results.append(result)
+results = pd.concat(results).reset_index(drop=True)
+
+results.to_csv("data_normalization.csv", index=False)
 
 
 
