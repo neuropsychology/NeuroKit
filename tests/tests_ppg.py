@@ -50,6 +50,37 @@ def test_ppg_simulate(duration, sampling_rate, heart_rate, freq_modulation):
     # TODO: test influence of different noise configurations
 
 
+@pytest.mark.parametrize("ibi_randomness, std_heart_rate",
+                         [(.1, 3), (.2, 5), (.3, 8), (.4, 11), (.5, 14), (.6, 19)])
+def test_ppg_simulate_ibi(ibi_randomness, std_heart_rate):
+
+    ppg = nk.ppg_simulate(
+        duration=20,
+        sampling_rate=50,
+        heart_rate=70,
+        frequency_modulation=0,
+        ibi_randomness=ibi_randomness,
+        drift=0,
+        motion_amplitude=0,
+        powerline_amplitude=0,
+        burst_amplitude=0,
+        burst_number=0,
+        random_state=42,
+        show=False,
+    )
+
+    assert ppg.size == 20 * 50
+
+    signals, _ = nk.ppg_process(ppg, sampling_rate=50)
+    assert np.allclose(signals["PPG_Rate"].mean(), 70, atol=1.5)
+
+    # Ensure that standard deviation of heart rate
+    assert np.allclose(signals["PPG_Rate"].std(), std_heart_rate, atol=1)
+
+
+    # TODO: test influence of different noise configurations
+
+
 def test_ppg_clean():
 
     sampling_rate = 500
@@ -107,4 +138,4 @@ def test_ppg_findpeaks():
     peaks = info_elgendi["PPG_Peaks"]
 
     assert peaks.size == 29
-    assert peaks.sum() == 219750
+    assert peaks.sum() == 219763
