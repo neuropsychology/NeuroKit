@@ -41,7 +41,7 @@ affiliation:
 authornote: |
   \* Correspondence concerning this article should be addressed to Dominique Makowski (HSS 04-18, 48 Nanyang Avenue, Singapore; dmakowski@ntu.edu.sg).
 abstract: |
-  NeuroKit2 is an open-source, community-driven, and user-friendly Python package dedicated to neurophysiological signal processing with an initial focus on bodily signals (e.g., ECG, EDA, EMG, EOG, PPG etc.). Its design philosophy is centred on user-experience and accessibility to both novice and advanced users. The package provides consistent high-level functions that enable data processing in a few lines of code using validated pipelines, which we illustrate in two examples covering the most typical scenarios, such as an event-related paradigm and an interval-related analysis. The package also includes tools dedicated to specific processing steps such as rate extraction and filtering methods, offering a trade-off between efficiency and fine-tuned control. Rather than focusing on specific signals, NeuroKit2 was developed to provide a comprehensive means for a simultaneous processing of a wide range of signals. Its goal is to improve transparency and reproducibility in neurophysiological research, as well as foster exploration and innovation.
+  NeuroKit2 is an open-source, community-driven, and user-friendly Python package dedicated to neurophysiological signal processing with an initial focus on bodily signals (e.g., ECG, PPG, EDA, EMG, RSP). Its design philosophy is centred on user-experience and accessibility to both novice and advanced users. The package provides a consistent set of high-level functions that enable data processing in a few lines of code using validated pipelines, which we illustrate in two examples covering the most typical scenarios, such as an event-related paradigm and an interval-related analysis. The package also includes tools dedicated to specific processing steps such as rate extraction and filtering methods, offering a trade-off between efficiency and fine-tuned control to the user. Rather than focusing on specific signals, NeuroKit2 was developed to provide a comprehensive means for a simultaneous processing of a wide range of signals. Its goal is to improve transparency and reproducibility in neurophysiological research, as well as foster exploration and innovation.
 keywords          : "Neurophysiology, Biosignals, Python, ECG, EDA, EMG"
 wordcount         : "2513"
 bibliography      : ["bibliography.bib"]
@@ -165,7 +165,7 @@ table <- data.frame("A" = c("ECG Rate Changes (Min, Mean, Max, Time of Min,  Max
                             "RSP Amplitude Measures (Min, Mean, Max)",
                             "ECG and RSP Phase (Inspiration/Expiration, Systole/Diastole, Completion)",
                             "SCR peak and its characteristics (amplitude, rise time, recovery time)"),
-                    
+
                     "B" = c("ECG Rate Characteristics (Mean, Amplitude)",
                             "Heart Rate Variability (HRV) indices",
                             "Respiratory Rate Variability (RRV) indices",
@@ -176,7 +176,7 @@ colnames(table) <- c("Event-related Features", "Interval-related Features")
 
 # For PDFs
 knitr::kable(table, format="latex", digits = 2, booktabs = TRUE, caption = "Examples of features computed in different domains.", linesep="") %>%
-  kableExtra::kable_styling(latex_options = c("hold_position"), font_size=9) %>% 
+  kableExtra::kable_styling(latex_options = c("hold_position"), font_size=9) %>%
   kableExtra::column_spec(1:2, width = "8cm")
 ```
 
