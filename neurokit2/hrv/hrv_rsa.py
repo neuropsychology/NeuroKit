@@ -8,7 +8,7 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..ecg import ecg_rsp
 
 
-def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
+def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
     """Respiratory Sinus Arrhythmia (RSA)
 
     Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence' or 'physiological
@@ -92,7 +92,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     >>> rsp_signals, _ = nk.rsp_process(data["RSP"], sampling_rate=100)
     >>>
     >>> # Get RSA features
-    >>> nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False) #doctest: +ELLIPSIS
+    >>> nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=False) #doctest: +ELLIPSIS
     {'RSA_P2T_Mean': ...,
      'RSA_P2T_Mean_log': ...,
      'RSA_P2T_SD': ...,
@@ -100,7 +100,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
      'RSA_PorgesBohrer': ...}
     >>>
     >>> # Get RSA as a continuous signal
-    >>> rsa = nk.ecg_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
+    >>> rsa = nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
     >>> rsa #doctest: +ELLIPSIS
             RSA_P2T
     0      0.09
@@ -125,10 +125,10 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
       1(06), 32.
 
     """
-    signals, ecg_period, rpeaks, __ = _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
+    signals, ecg_period, rpeaks, __ = _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
 
     # Extract cycles
-    rsp_cycles = _ecg_rsa_cycles(signals)
+    rsp_cycles = _hrv_rsa_cycles(signals)
     rsp_onsets = rsp_cycles["RSP_Inspiration_Onsets"]
     rsp_peaks = np.argwhere(signals["RSP_Peaks"].values == 1)[:, 0]
     rsp_peaks = np.array(rsp_peaks)[rsp_peaks > rsp_onsets[0]]
@@ -141,11 +141,11 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     # Methods ------------------------
 
     # Peak-to-Trough
-    rsa_p2t = _ecg_rsa_p2t(
+    rsa_p2t = _hrv_rsa_p2t(
         rsp_onsets, rpeaks, sampling_rate, continuous=continuous, ecg_period=ecg_period, rsp_peaks=rsp_peaks
     )
     # Porges-Bohrer
-    rsa_pb = _ecg_rsa_pb(ecg_period, sampling_rate, continuous=continuous)
+    rsa_pb = _hrv_rsa_pb(ecg_period, sampling_rate, continuous=continuous)
 
     if continuous is False:
         rsa = {}  # Initialize empty dict
@@ -160,7 +160,7 @@ def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
 # =============================================================================
 # Methods (Domains)
 # =============================================================================
-def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period=None, rsp_peaks=None):
+def _hrv_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period=None, rsp_peaks=None):
     """Peak-to-trough algorithm (P2T)"""
 
     # Find all RSP cycles and the Rpeaks within
@@ -193,7 +193,7 @@ def _ecg_rsa_p2t(rsp_onsets, rpeaks, sampling_rate, continuous=False, ecg_period
     return rsa
 
 
-def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
+def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
     """Porges-Bohrer method."""
     if continuous is True:
         return None
@@ -226,7 +226,7 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
     return {"RSA_PorgesBohrer": pd.concat(variance).mean()}
 
 
-# def _ecg_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method="correlation", continuous=False):
+# def _hrv_rsa_synchrony(ecg_period, rsp_signal, sampling_rate=1000, method="correlation", continuous=False):
 #    """Experimental method
 #    """
 #    if rsp_signal is None:
@@ -246,7 +246,7 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
 #        return coupling
 
 
-# def _ecg_rsa_servant(ecg_period, sampling_rate=1000, continuous=False):
+# def _hrv_rsa_servant(ecg_period, sampling_rate=1000, continuous=False):
 #    """Servant, D., Logier, R., Mouster, Y., & Goudemand, M. (2009). La variabilité de la fréquence
 # cardiaque. Intérêts en psychiatrie. L’Encéphale, 35(5), 423–428. doi:10.1016/j.encep.2008.06.016
 #    """
@@ -296,7 +296,7 @@ def _ecg_rsa_pb(ecg_period, sampling_rate, continuous=False):
 # =============================================================================
 # Internals
 # =============================================================================
-def _ecg_rsa_cycles(signals):
+def _hrv_rsa_cycles(signals):
     """Extract respiratory cycles."""
     inspiration_onsets = np.intersect1d(
         np.where(signals["RSP_Phase"] == 1)[0], np.where(signals["RSP_Phase_Completion"] == 0)[0], assume_unique=True
@@ -315,7 +315,7 @@ def _ecg_rsa_cycles(signals):
     }
 
 
-def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=1000):
+def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=1000):
     # Sanity Checks
     if isinstance(ecg_signals, tuple):
         ecg_signals = ecg_signals[0]
@@ -332,7 +332,7 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                 ecg_period = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_signals))
             else:
                 raise ValueError(
-                    "NeuroKit error: _ecg_rsa_formatinput():" "Wrong input, we couldn't extract" "heart rate signal."
+                    "NeuroKit error: _hrv_rsa_formatinput():" "Wrong input, we couldn't extract" "heart rate signal."
                 )
     if rsp_signals is None:
         rsp_cols = [col for col in ecg_signals.columns if "RSP_Phase" in col]
@@ -340,7 +340,7 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
             print(
-                "NeuroKit warning: _ecg_rsa_formatinput():"
+                "NeuroKit warning: _hrv_rsa_formatinput():"
                 "RSP signal not found. For this time, we will derive RSP"
                 " signal from ECG using ecg_rsp(). But the results are "
                 "definitely not reliable, so please provide a real RSP signal."
@@ -354,7 +354,7 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
             print(
-                "NeuroKit warning: _ecg_rsa_formatinput():"
+                "NeuroKit warning: _hrv_rsa_formatinput():"
                 "RSP signal not found. RSP signal is derived from ECG using"
                 "ecg_rsp(). Please provide RSP signal."
             )
@@ -363,7 +363,7 @@ def _ecg_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         try:
             rpeaks = _signal_formatpeaks_sanitize(ecg_signals)
         except NameError:
-            raise ValueError("NeuroKit error: _ecg_rsa_formatinput(): Wrong input, we couldn't extract rpeaks indices.")
+            raise ValueError("NeuroKit error: _hrv_rsa_formatinput(): Wrong input, we couldn't extract rpeaks indices.")
     else:
         rpeaks = _signal_formatpeaks_sanitize(rpeaks)
 
