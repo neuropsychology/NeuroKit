@@ -5,19 +5,20 @@ import pandas as pd
 from ..rsp import rsp_process
 from ..signal import signal_filter, signal_interpolate, signal_rate, signal_resample
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from .ecg_rsp import ecg_rsp
+from ..ecg import ecg_rsp
 
 
 def ecg_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
     """Respiratory Sinus Arrhythmia (RSA)
 
-    Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence', is the naturally occurring
-    variation in heart rate during the breathing cycle. Metrics to quantify it are often used as a measure
-    of parasympathetic nervous system activity. Neurophysiology informs us that the functional output
-    of the myelinated vagus originating from the nucleus ambiguus has a respiratory rhythm. Thus, there
-    would a temporal relation between the respiratory rhythm being expressed in the firing of these
-    efferent pathways and the functional effect on the heart rate rhythm manifested as RSA. Importantly,
-    several methods exist to quantify RSA:
+    Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence' or 'physiological
+    coherence' (though these terms are often encompassing a wider meaning), is the naturally occurring
+    variation in heart rate during the breathing cycle. Metrics to quantify it are often used as a
+    measure of parasympathetic nervous system activity. Neurophysiology informs us that the functional
+    output of the myelinated vagus originating from the nucleus ambiguus has a respiratory rhythm.
+    Thus, there would a temporal relation between the respiratory rhythm being expressed in the firing
+    of these efferent pathways and the functional effect on the heart rate rhythm manifested as RSA.
+    Importantly, several methods exist to quantify RSA:
 
     - The *Peak-to-trough (P2T)* algorithm measures the statistical range in milliseconds of the heart
     period oscillation associated with synchronous respiration. Operationally, subtracting the shortest

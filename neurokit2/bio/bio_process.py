@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from ..ecg import ecg_process, ecg_rsa
+from ..ecg import ecg_process
+from ..hrv import ecg_rsa
 from ..eda import eda_process
 from ..emg import emg_process
 from ..eog import eog_process
