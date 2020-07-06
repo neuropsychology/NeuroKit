@@ -25,11 +25,10 @@ import numpy as np
 import neurokit2 as nk
 
 # Load True R-peaks location
-rpeaks_gudb = pd.read_csv("../../data/gudb/Rpeaks.csv")
-rpeaks_mit1 = pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv")
-rpeaks_mit2 = pd.read_csv("../../data/mit_normal/Rpeaks.csv")
-
-datafiles = [rpeaks_gudb, rpeaks_mit1, rpeaks_mit2]
+datafiles = [pd.read_csv("../../data/gudb/Rpeaks.csv"),
+             pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv"),
+             pd.read_csv("../../data/mit_normal/Rpeaks.csv"),
+             pd.read_csv("../../data/fantasia/Rpeaks.csv")]
 
 # Get results
 all_results = pd.DataFrame()
@@ -70,50 +69,66 @@ names(data) <- stringr::str_remove(names(data), "HRV_")
 ``` r
 data %>% 
   correlation::correlation() %>% 
-  filter(r > 0.995) %>% 
+  filter(abs(r) > 0.995) %>% 
   arrange(Parameter1, desc(abs(r)))
-## Parameter1 | Parameter2 |    r |       95% CI |        t |  df |      p |  Method | n_Obs
-## -----------------------------------------------------------------------------------------
-## RMSSD      |       SDSD | 1.00 | [1.00, 1.00] | 47916.27 | 210 | < .001 | Pearson |   212
-## RMSSD      |        SD1 | 1.00 | [1.00, 1.00] | 47916.27 | 210 | < .001 | Pearson |   212
-## RMSSD      |       SD1d | 1.00 | [1.00, 1.00] |   502.01 | 210 | < .001 | Pearson |   212
-## RMSSD      |       SD1a | 1.00 | [1.00, 1.00] |   434.71 | 210 | < .001 | Pearson |   212
-## SD1        |       SD1d | 1.00 | [1.00, 1.00] |   502.34 | 210 | < .001 | Pearson |   212
-## SD1        |       SD1a | 1.00 | [1.00, 1.00] |   434.49 | 210 | < .001 | Pearson |   212
-## SD1d       |       SD1a | 1.00 | [1.00, 1.00] |   232.86 | 210 | < .001 | Pearson |   212
-## SD2        |       SD2a | 1.00 | [1.00, 1.00] |   271.30 | 210 | < .001 | Pearson |   212
-## SD2        |       SD2d | 1.00 | [1.00, 1.00] |   187.27 | 210 | < .001 | Pearson |   212
-## SDNN       |      SDNNa | 1.00 | [1.00, 1.00] |   693.15 | 210 | < .001 | Pearson |   212
-## SDNN       |      SDNNd | 1.00 | [1.00, 1.00] |   545.18 | 210 | < .001 | Pearson |   212
-## SDNNd      |      SDNNa | 1.00 | [1.00, 1.00] |   307.31 | 210 | < .001 | Pearson |   212
-## SDSD       |        SD1 | 1.00 | [1.00, 1.00] |      Inf | 210 | < .001 | Pearson |   212
-## SDSD       |       SD1d | 1.00 | [1.00, 1.00] |   502.34 | 210 | < .001 | Pearson |   212
-## SDSD       |       SD1a | 1.00 | [1.00, 1.00] |   434.49 | 210 | < .001 | Pearson |   212
+## Parameter1 | Parameter2 |     r |         95% CI |         t |  df |      p |  Method | n_Obs
+## ---------------------------------------------------------------------------------------------
+## C1d        |        C1a | -1.00 | [-1.00, -1.00] | -1.06e+09 | 250 | < .001 | Pearson |   252
+## C2d        |        C2a | -1.00 | [-1.00, -1.00] |      -Inf | 250 | < .001 | Pearson |   252
+## Cd         |         Ca | -1.00 | [-1.00, -1.00] |      -Inf | 250 | < .001 | Pearson |   252
+## RMSSD      |       SDSD |  1.00 | [ 1.00,  1.00] |  49985.56 | 250 | < .001 | Pearson |   252
+## RMSSD      |        SD1 |  1.00 | [ 1.00,  1.00] |  49985.56 | 250 | < .001 | Pearson |   252
+## RMSSD      |       SD1d |  1.00 | [ 1.00,  1.00] |    536.98 | 250 | < .001 | Pearson |   252
+## RMSSD      |       SD1a |  1.00 | [ 1.00,  1.00] |    466.36 | 250 | < .001 | Pearson |   252
+## SD1        |       SD1d |  1.00 | [ 1.00,  1.00] |    537.53 | 250 | < .001 | Pearson |   252
+## SD1        |       SD1a |  1.00 | [ 1.00,  1.00] |    465.97 | 250 | < .001 | Pearson |   252
+## SD1d       |       SD1a |  1.00 | [ 1.00,  1.00] |    249.46 | 250 | < .001 | Pearson |   252
+## SD2        |       SD2a |  1.00 | [ 1.00,  1.00] |    289.38 | 250 | < .001 | Pearson |   252
+## SD2        |       SD2d |  1.00 | [ 1.00,  1.00] |    201.76 | 250 | < .001 | Pearson |   252
+## SDNN       |      SDNNa |  1.00 | [ 1.00,  1.00] |    727.31 | 250 | < .001 | Pearson |   252
+## SDNN       |      SDNNd |  1.00 | [ 1.00,  1.00] |    578.75 | 250 | < .001 | Pearson |   252
+## SDNNd      |      SDNNa |  1.00 | [ 1.00,  1.00] |    324.46 | 250 | < .001 | Pearson |   252
+## SDSD       |        SD1 |  1.00 | [ 1.00,  1.00] |       Inf | 250 | < .001 | Pearson |   252
+## SDSD       |       SD1d |  1.00 | [ 1.00,  1.00] |    537.53 | 250 | < .001 | Pearson |   252
+## SDSD       |       SD1a |  1.00 | [ 1.00,  1.00] |    465.97 | 250 | < .001 | Pearson |   252
 
 data <- data %>% 
-  select(-SDSD, -SD1, -SD1d, -SD1a) %>%  # Same as RMSSD 
+  select(-SDSD, -SD1, -SD1d, -SD1a, -CVSD) %>%  # Same as RMSSD 
   select(-SDNNd, -SDNNa) %>%  # Same as SDNN
-  select(-SD2d, -SD2a)  # Same as SD2
+  select(-SD2d, -SD2a) %>%   # Same as SD2
+  select(-Cd) %>%   # Same as Ca
+  select(-C1d, -C2d) # Same as C1a and C2a
 ```
 
-#### Remove Strongly Correlated (r higher than .99)
+#### Remove Strongly Correlated (r higher than .98)
 
 ``` r
 data %>% 
   correlation::correlation() %>% 
-  filter(r > 0.99) %>% 
+  filter(abs(r) > 0.95) %>%
   arrange(Parameter1, desc(abs(r)))
 ## Parameter1 | Parameter2 |    r |       95% CI |      t |  df |      p |  Method | n_Obs
 ## ---------------------------------------------------------------------------------------
-## GI         |         AI | 0.99 | [0.99, 1.00] | 133.76 | 210 | < .001 | Pearson |   212
-## GI         |         SI | 0.99 | [0.99, 0.99] | 106.33 | 210 | < .001 | Pearson |   212
-## RMSSD      |       CVSD | 0.99 | [0.99, 0.99] | 112.24 | 210 | < .001 | Pearson |   212
-## SDNN       |        SD2 | 0.99 | [0.99, 0.99] | 111.13 | 210 | < .001 | Pearson |   212
-## TINN       |         LF | 0.99 | [0.99, 0.99] | 104.44 | 210 | < .001 | Pearson |   212
+## CVNN       |        SD2 | 0.97 | [0.96, 0.98] |  64.63 | 250 | < .001 | Pearson |   252
+## GI         |         AI | 0.99 | [0.99, 0.99] | 138.11 | 250 | < .001 | Pearson |   252
+## GI         |         SI | 0.99 | [0.99, 0.99] | 115.38 | 250 | < .001 | Pearson |   252
+## LF         |          S | 0.97 | [0.96, 0.98] |  62.94 | 250 | < .001 | Pearson |   252
+## MeanNN     |   MedianNN | 0.99 | [0.98, 0.99] |  99.44 | 250 | < .001 | Pearson |   252
+## PIP        |       IALS | 0.98 | [0.98, 0.99] |  86.82 | 250 | < .001 | Pearson |   252
+## RMSSD      |       SDNN | 0.98 | [0.98, 0.99] |  79.71 | 250 | < .001 | Pearson |   252
+## RMSSD      |       CVNN | 0.97 | [0.96, 0.98] |  62.71 | 250 | < .001 | Pearson |   252
+## SDNN       |        SD2 | 0.99 | [0.99, 0.99] | 119.74 | 250 | < .001 | Pearson |   252
+## SDNN       |       CVNN | 0.98 | [0.98, 0.99] |  88.51 | 250 | < .001 | Pearson |   252
+## SI         |         AI | 0.97 | [0.96, 0.98] |  62.76 | 250 | < .001 | Pearson |   252
+## TINN       |         LF | 0.96 | [0.95, 0.97] |  54.65 | 250 | < .001 | Pearson |   252
+## TINN       |          S | 0.95 | [0.94, 0.96] |  50.54 | 250 | < .001 | Pearson |   252
 
 data <- data %>% 
   select(-GI, -SI) %>%  # Same as AI 
-  select(-SD2)  # Same as SDNN
+  select(-SD2) %>%  # Same as SDNN
+  select(-MedianNN) %>%  # Same as MeanNN
+  select(-IALS) %>%  # Same as PIP
+  select(-SDNN, -CVNN) # Same as RMSSD
 ```
 
 ### Recording Length
@@ -185,7 +200,7 @@ n <- parameters::n_factors(data, cor=cor)
 n
 ## # Method Agreement Procedure:
 ## 
-## The choice of 8 dimensions is supported by 3 (21.43%) methods out of 14 (Optimal coordinates, Parallel analysis, Kaiser criterion).
+## The choice of 7 dimensions is supported by 4 (22.22%) methods out of 18 (Optimal coordinates, Parallel analysis, Kaiser criterion, R2).
 
 plot(n) +
   see::theme_modern()
@@ -193,73 +208,83 @@ plot(n) +
 
 ![](../../studies/hrv_structure/figures/unnamed-chunk-9-1.png)<!-- -->
 
-#### Interpret
+#### Exploratory Factor Analysis (EFA)
 
 ``` r
-fa <- parameters::factor_analysis(data, cor=cor, n=8, rotation="varimax", fm="ols")
+efa <- parameters::factor_analysis(data, cor=cor, n=7, rotation="varimax", fm="ml")
 
-print(fa, threshold="max", sort=TRUE)
+print(efa, threshold="max", sort=TRUE)
 ## # Rotated loadings from Factor Analysis (varimax-rotation)
 ## 
-## Variable     |   V1 |    V2 |    V3 |   V4 |   V5 |   V6 |    V7 |   V8 | Complexity | Uniqueness
-## -------------------------------------------------------------------------------------------------
-## S            | 0.99 |       |       |      |      |      |       |      |       1.01 |       0.01
-## TINN         | 0.99 |       |       |      |      |      |       |      |       1.01 |   9.10e-03
-## LF           | 0.98 |       |       |      |      |      |       |      |       1.03 |       0.02
-## RMSSD        | 0.94 |       |       |      |      |      |       |      |       1.24 |   7.35e-03
-## SDNN         | 0.94 |       |       |      |      |      |       |      |       1.25 |       0.02
-## CVNN         | 0.93 |       |       |      |      |      |       |      |       1.29 |   3.47e-03
-## CVSD         | 0.93 |       |       |      |      |      |       |      |       1.32 |  -9.33e-04
-## LFHF         | 0.81 |       |       |      |      |      |       |      |       1.55 |       0.17
-## ApEn         |      |  0.82 |       |      |      |      |       |      |       1.44 |       0.19
-## SampEn       |      |  0.70 |       |      |      |      |       |      |       2.34 |       0.21
-## HFn          |      |  0.64 |       |      |      |      |       |      |       1.74 |       0.45
-## CSI_Modified |      | -0.62 |       |      |      |      |       |      |       3.14 |       0.27
-## LFn          |      | -0.62 |       |      |      |      |       |      |       2.14 |       0.43
-## HTI          |      |  0.61 |       |      |      |      |       |      |       1.36 |       0.57
-## CSI          |      | -0.56 |       |      |      |      |       |      |       3.98 |       0.22
-## C2d          |      |       | -0.85 |      |      |      |       |      |       1.47 |       0.11
-## C2a          |      |       |  0.85 |      |      |      |       |      |       1.47 |       0.11
-## Ca           |      |       |  0.84 |      |      |      |       |      |       1.37 |       0.16
-## Cd           |      |       | -0.84 |      |      |      |       |      |       1.37 |       0.16
-## PI           |      |       |  0.73 |      |      |      |       |      |       1.62 |       0.32
-## PIP          |      |       |       | 0.99 |      |      |       |      |       1.05 |   5.36e-04
-## IALS         |      |       |       | 0.98 |      |      |       |      |       1.09 |   1.32e-03
-## PSS          |      |       |       | 0.88 |      |      |       |      |       1.08 |       0.20
-## PAS          |      |       |       | 0.75 |      |      |       |      |       1.57 |       0.28
-## MCVNN        |      |       |       |      | 0.95 |      |       |      |       1.08 |       0.05
-## MadNN        |      |       |       |      | 0.94 |      |       |      |       1.07 |       0.09
-## IQRNN        |      |       |       |      | 0.82 |      |       |      |       1.42 |       0.20
-## pNN50        |      |       |       |      | 0.65 |      |       |      |       3.01 |       0.17
-## pNN20        |      |       |       |      | 0.51 |      |       |      |       3.90 |       0.13
-## VHF          |      |       |       |      |      | 0.67 |       |      |       2.17 |       0.30
-## LnHF         |      |       |       |      |      | 0.65 |       |      |       3.75 |       0.10
-## CVI          |      |       |       |      |      | 0.62 |       |      |       3.58 |       0.07
-## HF           |      |       |       |      |      | 0.60 |       |      |       2.27 |       0.32
-## SD1SD2       |      |       |       |      |      | 0.58 |       |      |       3.05 |       0.19
-## C1d          |      |       |       |      |      |      |  0.87 |      |       1.55 |       0.05
-## C1a          |      |       |       |      |      |      | -0.87 |      |       1.55 |       0.05
-## AI           |      |       |       |      |      |      |  0.63 |      |       3.30 |       0.09
-## MeanNN       |      |       |       |      |      |      |       | 0.91 |       1.38 |       0.02
-## MedianNN     |      |       |       |      |      |      |       | 0.85 |       1.54 |       0.10
+## Variable     |   ML4 |  ML3 |  ML1 |  ML2 |  ML6 |  ML7 |   ML5 | Complexity | Uniqueness
+## -----------------------------------------------------------------------------------------
+## CSI          | -0.86 |      |      |      |      |      |       |       1.45 |       0.10
+## CSI_Modified | -0.76 |      |      |      |      |      |       |       2.04 |       0.15
+## SD1SD2       |  0.76 |      |      |      |      |      |       |       1.85 |       0.20
+## AI           |  0.68 |      |      |      |      |      |       |       2.07 |       0.28
+## HFn          |  0.62 |      |      |      |      |      |       |       1.27 |       0.56
+## LnHF         |  0.61 |      |      |      |      |      |       |       4.04 |       0.07
+## C1a          | -0.61 |      |      |      |      |      |       |       1.84 |       0.47
+## LFn          | -0.61 |      |      |      |      |      |       |       1.58 |       0.53
+## HTI          |  0.40 |      |      |      |      |      |       |       1.61 |       0.79
+## S            |       | 0.99 |      |      |      |      |       |       1.01 |       0.02
+## LF           |       | 0.98 |      |      |      |      |       |       1.01 |       0.03
+## TINN         |       | 0.98 |      |      |      |      |       |       1.02 |       0.04
+## RMSSD        |       | 0.92 |      |      |      |      |       |       1.27 |       0.04
+## LFHF         |       | 0.81 |      |      |      |      |       |       1.38 |       0.23
+## HF           |       | 0.51 |      |      |      |      |       |       2.60 |       0.45
+## MCVNN        |       |      | 0.98 |      |      |      |       |       1.05 |       0.00
+## MadNN        |       |      | 0.96 |      |      |      |       |       1.05 |       0.06
+## IQRNN        |       |      | 0.79 |      |      |      |       |       1.17 |       0.32
+## pNN50        |       |      | 0.66 |      |      |      |       |       2.81 |       0.12
+## CVI          |       |      | 0.57 |      |      |      |       |       4.46 |       0.00
+## VHF          |       |      | 0.38 |      |      |      |       |       4.93 |       0.47
+## PIP          |       |      |      | 0.99 |      |      |       |       1.02 |       0.00
+## PSS          |       |      |      | 0.94 |      |      |       |       1.03 |       0.11
+## PAS          |       |      |      | 0.79 |      |      |       |       1.48 |       0.23
+## C2a          |       |      |      |      | 0.88 |      |       |       1.30 |       0.11
+## PI           |       |      |      |      | 0.73 |      |       |       1.24 |       0.40
+## Ca           |       |      |      |      | 0.69 |      |       |       1.43 |       0.41
+## MeanNN       |       |      |      |      |      | 0.66 |       |       1.73 |       0.42
+## pNN20        |       |      |      |      |      | 0.63 |       |       3.00 |       0.04
+## SampEn       |       |      |      |      |      |      | -0.62 |       3.64 |       0.10
+## ApEn         |       |      |      |      |      |      | -0.56 |       2.86 |       0.26
 ## 
-## The 8 latent factors (varimax rotation) accounted for 85.02% of the total variance of the original data (V1 = 20.29%, V2 = 12.00%, V3 = 10.74%, V4 = 10.41%, V5 = 9.95%, V6 = 7.74%, V7 = 7.22%, V8 = 6.68%).
+## The 7 latent factors (varimax rotation) accounted for 77.28% of the total variance of the original data (ML4 = 18.09%, ML3 = 16.66%, ML1 = 13.44%, ML2 = 9.89%, ML6 = 8.20%, ML7 = 5.80%, ML5 = 5.20%).
 
-plot(fa) +
+plot(efa) +
   see::theme_modern()
 ```
 
 ![](../../studies/hrv_structure/figures/unnamed-chunk-10-1.png)<!-- -->
 
+<!-- #### Confirmatory Factor Analysis (CFA) -->
+
+<!-- ```{r, message=FALSE, warning=FALSE, fig.width=15, fig.height=15} -->
+
+<!-- library(lavaan) -->
+
+<!-- model <- parameters::efa_to_cfa(efa, threshold = "max") -->
+
+<!-- cfa <- lavaan::cfa(model, data=data) %>%  -->
+
+<!--   parameters::parameters(standardize=TRUE) -->
+
+<!-- cfa -->
+
+<!-- plot(cfa) -->
+
+<!-- ``` -->
+
 ### Cluster Analysis
 
-<!-- #### How many clusters  -->
+<!-- #### How many clusters -->
 
 <!-- ```{r, message=FALSE, warning=FALSE} -->
 
 <!-- dat <- effectsize::standardize(data[sapply(data, is.numeric)]) -->
 
-<!-- n <- parameters::n_clusters(t(dat), package = c("mclust")) -->
+<!-- n <- parameters::n_clusters(t(dat), package = c("mclust", "cluster")) -->
 
 <!-- n -->
 
