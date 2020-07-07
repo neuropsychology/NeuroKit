@@ -68,7 +68,7 @@ def signal_psd(
 
     # MNE
     if method.lower() in ["multitapers", "mne"]:
-        frequency, power = _signal_psd_multitaper(signal, sampling_rate=sampling_rate, min_frequency=min_frequency, max_frequency=max_frequency, norm=norm)
+        frequency, power = _signal_psd_multitaper(signal, sampling_rate=sampling_rate, min_frequency=min_frequency, max_frequency=max_frequency, normalization=normalization)
 
     else:
         # Define window length
