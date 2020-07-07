@@ -19,6 +19,7 @@ def hrv_frequency(
     psd_method="welch",
     show=False,
     silent=True,
+    norm=True,
     **kwargs
 ):
     """Computes frequency-domain indices of Heart Rate Variability (HRV).
@@ -51,6 +52,8 @@ def hrv_frequency(
         If False, warnings will be printed. Default to True.
     show : bool
         If True, will plot the power in the different frequency bands.
+    norm : bool
+        Normalization of power.
     **kwargs : optional
         Other arguments.
 
@@ -111,6 +114,7 @@ def hrv_frequency(
         method=psd_method,
         max_frequency=0.5,
         show=False,
+        norm=norm,
         **kwargs
     )
 

@@ -37,6 +37,7 @@ test_requirements = requirements + [
     "cvxopt",
     "PyWavelets",
     "EMD-signal",
+    "astropy"
 ]
 
 # Setup
