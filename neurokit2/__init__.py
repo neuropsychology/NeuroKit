@@ -81,7 +81,7 @@ def cite(silent=False):
     if silent is False:
         print(__cite__)
     else:
-        return(__bibtex__)
+        return __bibtex__
 
 
 def version(silent=False):
@@ -97,9 +97,11 @@ def version(silent=False):
 
     """
     if silent is False:
-        print("- OS: " + platform.system(),
-              "(" + platform.architecture()[1] + " " + platform.architecture()[0] + ")",
-              "\n- Python: " + platform.python_version(),
-              "\n- NeuroKit2: " + __version__)
+        print(
+            "- OS: " + platform.system(),
+            "(" + platform.architecture()[1] + " " + platform.architecture()[0] + ")",
+            "\n- Python: " + platform.python_version(),
+            "\n- NeuroKit2: " + __version__,
+        )
     else:
-        return(__version__)
+        return __version__
