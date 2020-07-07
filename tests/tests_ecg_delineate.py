@@ -72,6 +72,7 @@ def test_find_ecg_characteristics(attribute, test_data):
     ecg_characteristics = run_test_func(test_data)
     diff = ecg_characteristics[attribute] - test_data[attribute]
     diff = diff[diff.abs() < 0.5 * test_data["sampling_rate"]]  # remove obvious failure
+    test_data[attribute] = test_data[attribute][~np.isnan(test_data[attribute])]
     diff = diff[~np.isnan(diff)]
     report = """
 Difference statistics
