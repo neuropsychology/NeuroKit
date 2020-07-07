@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=False, norm=True, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=15, order_criteria="KIC", order_corrected=True, **kwargs
+    signal, sampling_rate=1000, method="welch", show=False, norm=True, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=16, order_criteria="KIC", order_corrected=True, **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -241,7 +241,7 @@ def _signal_psd_lomb(
 # =============================================================================
 
 
-def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corrected=True, side="one-sided", norm=True, nperseg=None):
+def _signal_psd_burg(signal, sampling_rate=1000, order=16, criteria="KIC", corrected=True, side="one-sided", norm=True, nperseg=None):
 
     nfft = int(nperseg * 2)
     ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected, side=side, norm=norm)
@@ -276,7 +276,7 @@ def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corre
 
 
 
-def _signal_arma_burg(signal, order=15, criteria="KIC", corrected=True, side="one-sided", norm=True):
+def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True, side="one-sided", norm=True):
 
     # Sanitize order and signal
     if order <= 0.:
