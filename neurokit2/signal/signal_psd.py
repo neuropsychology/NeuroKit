@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=False, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=False, **kwargs
+    signal, sampling_rate=1000, method="welch", show=False, norm=True, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=15, order_criteria="KIC", order_corrected=True, **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -19,6 +19,8 @@ def signal_psd(
         Either 'multitapers' (default; requires the 'mne' package), or 'welch' (requires the 'scipy' package).
     show : bool
         If True, will return a plot. If False, will return the density values that can be plotted externally.
+    norm : bool
+        Normalization of power.
     min_frequency : float
         The minimum frequency.
     max_frequency : float
@@ -36,8 +38,6 @@ def signal_psd(
     order_corrected : bool
         Specify for AIC and KIC order_criteria. If unsure which method to use to choose the order,
         rely on the default of corrected KIC.
-    bug_norm : bool
-        Normalization for Burg method.
     **kwargs
         Keyword arguments to be passed to `scipy.signal.welch()`.
 
@@ -68,7 +68,7 @@ def signal_psd(
 
     # MNE
     if method.lower() in ["multitapers", "mne"]:
-        frequency, power = _signal_psd_multitaper(signal, sampling_rate=sampling_rate, min_frequency=min_frequency, max_frequency=max_frequency)
+        frequency, power = _signal_psd_multitaper(signal, sampling_rate=sampling_rate, min_frequency=min_frequency, max_frequency=max_frequency, norm=norm)
 
     else:
         # Define window length
@@ -95,7 +95,8 @@ def signal_psd(
                     signal,
                     sampling_rate=sampling_rate,
                     nperseg=nperseg,
-                    window_type=window_type
+                    window_type=window_type,
+                    norm=norm
             )
 
         # Lombscargle (Scipy)
@@ -105,7 +106,8 @@ def signal_psd(
                     sampling_rate=sampling_rate,
                     nperseg=nperseg,
                     min_frequency=min_frequency,
-                    max_frequency=max_frequency
+                    max_frequency=max_frequency,
+                    norm=norm
             )
 
         # BURG
@@ -117,7 +119,7 @@ def signal_psd(
                     criteria=order_criteria,
                     corrected=order_corrected,
                     side="one-sided",
-                    norm=burg_norm,
+                    norm=norm,
                     nperseg=nperseg
             )
 
@@ -139,7 +141,7 @@ def signal_psd(
 # Multitaper method
 # =============================================================================
 def _signal_psd_multitaper(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf
+    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, norm=True
 ):
     try:
         import mne
@@ -159,6 +161,8 @@ def _signal_psd_multitaper(
             "module is required for the 'mne' method to run.",
             "Please install it first (`pip install mne`).",
         )
+    if norm is True:
+        power /= np.max(power)
     return frequency, power
 
 # =============================================================================
@@ -167,7 +171,7 @@ def _signal_psd_multitaper(
 
 
 def _signal_psd_welch(
-    signal, sampling_rate=1000, nperseg=None, window_type='hann', **kwargs
+    signal, sampling_rate=1000, nperseg=None, window_type='hann', norm=True, **kwargs
 ):
     if nperseg is not None:
         nfft = int(nperseg*2)
@@ -185,6 +189,9 @@ def _signal_psd_welch(
         window=window_type,
         **kwargs
     )
+
+    if norm is True:
+        power /= np.max(power)
     return frequency, power
 
 
@@ -194,7 +201,7 @@ def _signal_psd_welch(
 
 
 def _signal_psd_lomb(
-    signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf
+    signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf, norm=True
 ):
 
 #    nfft = int(nperseg * 2)
@@ -214,17 +221,18 @@ def _signal_psd_lomb(
         import astropy
         from astropy.timeseries import LombScargle
         if max_frequency == np.inf:
-            max_frequency = 50  # sanitize highest frequency
+            max_frequency = sampling_rate / 2  # sanitize highest frequency
         t = np.arange(len(signal)) / sampling_rate
         frequency, power = LombScargle(t, signal, normalization='psd').autopower(minimum_frequency=min_frequency, maximum_frequency=max_frequency)
 
-
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_psd(): the 'lomb'",
-            "module is required for the 'mne' method to run.",
-            "Please install it first (`pip install mne`).",
+            "NeuroKit warning: signal_psd(): the 'astropy'",
+            "module is required for the 'lomb' method to run.",
+            "Please install it first (`pip install astropy`).",
         )
+    if norm is True:
+        power /= np.max(power)
 
     return frequency, power
 
@@ -237,7 +245,7 @@ def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corre
 
     nfft = int(nperseg * 2)
     ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected, side=side, norm=norm)
-    psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side, norm=norm)
+    psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side)
 
     # signal is real, not complex
     if nfft % 2 == 0:
@@ -261,6 +269,8 @@ def _signal_psd_burg(signal, sampling_rate=1000, order=15, criteria="KIC", corre
 #            w = w[1:]  # exclude first point (extra)
 
     frequency = (w * sampling_rate) / (2 * np.pi)
+    if norm is True:
+        power /= np.max(power)
 
     return frequency, power
 
@@ -402,7 +412,7 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
     return residual
 
 
-def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=None, side="one-sided", norm=False):
+def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=None, side="one-sided"):
 
     if ar is None and ma is None:
         raise ValueError("Either AR or MA model must be provided")
@@ -451,8 +461,5 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=Non
         center_psd = np.concatenate((rotate_second_half, first_half))
         center_psd[0] = psd[-1]
         psd = center_psd
-
-    if norm is True:
-        psd /= max(psd)
 
     return psd
