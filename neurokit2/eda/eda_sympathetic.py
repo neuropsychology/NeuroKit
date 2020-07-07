@@ -2,10 +2,12 @@
 import pandas as pd
 import scipy
 import numpy as np
+import matplotlib.pyplot as plt
 
 from ..signal.signal_power import _signal_power_instant_get
 from ..signal.signal_psd import _signal_psd_welch
-from ..signal import signal_filter
+from ..signal import signal_filter, signal_resample
+from ..stats import standardize
 
 
 def eda_sympathetic(eda_signal, frequency_band=[0.045, 0.25], show=True):
@@ -39,7 +41,7 @@ def eda_sympathetic(eda_signal, frequency_band=[0.045, 0.25], show=True):
 
     Examples
     --------
-    >>> import neurokit2
+    >>> import neurokit2 as nk
     >>>
     >>> eda = nk.data('bio_resting_8min_100hz')['EDA']
     >>> indexes = nk.eda_sympathetic(eda, show=True)
@@ -84,3 +86,20 @@ def eda_sympathetic(eda_signal, frequency_band=[0.045, 0.25], show=True):
 
     out = {'EDA_Symp': eda_symp, 'EDA_SympN': eda_symp_normalized}
     return out
+
+
+def _eda_sympathetic_ghiasi(eda_signal, sampling_rate=1000, show=True):
+
+    normalized = standardize(eda_signal)
+    downsampled = signal_resample(normalized, sampling_rate=sampling_rate, desired_sampling_rate=50)
+    filtered = signal_filter(downsampled, sampling_rate=sampling_rate, lowcut=0.01, highcut=0.5, method='butterworth')
+
+    f, t, bins = scipy.signal.spectrogram(filtered, fs=sampling_rate, window='blackman', nperseg=None,
+                                          noverlap=60/sampling_rate)
+
+    if show:
+        plt.pcolormesh(t, f / 1000, 10 * np.log10(bins), cmap='viridis')
+        plt.ylabel('Frequency [kHz]')
+        plt.xlabel('Time [s]')
+
+    return bins
