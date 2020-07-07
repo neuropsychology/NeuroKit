@@ -19,7 +19,7 @@ def hrv_frequency(
     psd_method="welch",
     show=False,
     silent=True,
-    norm=True,
+    normalization=False,
     order_criteria=None,
     **kwargs
 ):
@@ -124,7 +124,7 @@ def hrv_frequency(
         method=psd_method,
         max_frequency=0.5,
         show=False,
-        norm=norm,
+        normalization=normalization,
         order_criteria=order_criteria,
         **kwargs
     )
@@ -157,7 +157,7 @@ def hrv_frequency(
 
     # Plot
     if show:
-        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate, psd_method=psd_method, order_criteria=order_criteria)
+        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate, psd_method=psd_method, order_criteria=order_criteria, normalization=normalization)
     return out
 
 
@@ -172,6 +172,7 @@ def _hrv_frequency_show(
     sampling_rate=1000,
     psd_method="welch",
     order_criteria=None,
+    normalization=True,
     **kwargs
 ):
 
@@ -191,6 +192,6 @@ def _hrv_frequency_show(
         if window_length <= len(rri) / 2:
             break
 
-    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, method=psd_method, max_frequency=0.5, order_criteria=order_criteria)
+    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, method=psd_method, max_frequency=0.5, order_criteria=order_criteria, normalization=normalization)
 
     _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)

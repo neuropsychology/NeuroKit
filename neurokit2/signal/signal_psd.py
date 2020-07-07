@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=False, norm=True, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=16, order_criteria="KIC", order_corrected=True, **kwargs
+    signal, sampling_rate=1000, method="welch", show=False, normalization=False, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=16, order_criteria="KIC", order_corrected=True, **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -19,7 +19,7 @@ def signal_psd(
         Either 'multitapers' (default; requires the 'mne' package), or 'welch' (requires the 'scipy' package).
     show : bool
         If True, will return a plot. If False, will return the density values that can be plotted externally.
-    norm : bool
+    normalization : bool
         Normalization of power.
     min_frequency : float
         The minimum frequency.
@@ -96,7 +96,7 @@ def signal_psd(
                     sampling_rate=sampling_rate,
                     nperseg=nperseg,
                     window_type=window_type,
-                    norm=norm
+                    normalization=normalization
             )
 
         # Lombscargle (Scipy)
@@ -107,7 +107,7 @@ def signal_psd(
                     nperseg=nperseg,
                     min_frequency=min_frequency,
                     max_frequency=max_frequency,
-                    norm=norm
+                    normalization=normalization
             )
 
         # BURG
@@ -119,7 +119,7 @@ def signal_psd(
                     criteria=order_criteria,
                     corrected=order_corrected,
                     side="one-sided",
-                    norm=norm,
+                    normalization=normalization,
                     nperseg=nperseg
             )
 
@@ -131,7 +131,7 @@ def signal_psd(
 #    data["Power"] = 10 * np.log(data["Power"])
 
     if show is True:
-        ax = data.plot(x="Frequency", y="Power", title="Power Spectral Density")
+        ax = data.plot(x="Frequency", y="Power", title="Power Spectral Density (" + str(method) + " method)")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
 
     return data
@@ -141,7 +141,7 @@ def signal_psd(
 # Multitaper method
 # =============================================================================
 def _signal_psd_multitaper(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, norm=True
+    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalization=True
 ):
     try:
         import mne
@@ -161,7 +161,7 @@ def _signal_psd_multitaper(
             "module is required for the 'mne' method to run.",
             "Please install it first (`pip install mne`).",
         )
-    if norm is True:
+    if normalization is True:
         power /= np.max(power)
     return frequency, power
 
@@ -171,7 +171,7 @@ def _signal_psd_multitaper(
 
 
 def _signal_psd_welch(
-    signal, sampling_rate=1000, nperseg=None, window_type='hann', norm=True, **kwargs
+    signal, sampling_rate=1000, nperseg=None, window_type='hann', normalization=True, **kwargs
 ):
     if nperseg is not None:
         nfft = int(nperseg*2)
@@ -190,7 +190,7 @@ def _signal_psd_welch(
         **kwargs
     )
 
-    if norm is True:
+    if normalization is True:
         power /= np.max(power)
     return frequency, power
 
@@ -201,7 +201,7 @@ def _signal_psd_welch(
 
 
 def _signal_psd_lomb(
-    signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf, norm=True
+    signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf, normalization=True
 ):
 
 #    nfft = int(nperseg * 2)
@@ -231,7 +231,7 @@ def _signal_psd_lomb(
             "module is required for the 'lomb' method to run.",
             "Please install it first (`pip install astropy`).",
         )
-    if norm is True:
+    if normalization is True:
         power /= np.max(power)
 
     return frequency, power
@@ -241,10 +241,10 @@ def _signal_psd_lomb(
 # =============================================================================
 
 
-def _signal_psd_burg(signal, sampling_rate=1000, order=16, criteria="KIC", corrected=True, side="one-sided", norm=True, nperseg=None):
+def _signal_psd_burg(signal, sampling_rate=1000, order=16, criteria="KIC", corrected=True, side="one-sided", normalization=True, nperseg=None):
 
     nfft = int(nperseg * 2)
-    ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected, side=side, norm=norm)
+    ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected, side=side)
     psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side)
 
     # signal is real, not complex
@@ -269,14 +269,14 @@ def _signal_psd_burg(signal, sampling_rate=1000, order=16, criteria="KIC", corre
 #            w = w[1:]  # exclude first point (extra)
 
     frequency = (w * sampling_rate) / (2 * np.pi)
-    if norm is True:
+    if normalization is True:
         power /= np.max(power)
 
     return frequency, power
 
 
 
-def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True, side="one-sided", norm=True):
+def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True, side="one-sided"):
 
     # Sanitize order and signal
     if order <= 0.:

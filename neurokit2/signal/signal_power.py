@@ -7,7 +7,7 @@ import pandas as pd
 from .signal_psd import signal_psd
 
 
-def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, norm=True, **kwargs):
+def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, normalization=False, **kwargs):
     """Compute the power of a signal in a given frequency band.
 
     Parameters
@@ -64,7 +64,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     """
 
     if continuous is False:
-        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, show=show, norm=norm, **kwargs)
+        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, show=show, normalization=normalization, **kwargs)
     else:
         out = _signal_power_continuous(signal, frequency_band, sampling_rate=sampling_rate)
 
@@ -78,7 +78,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
 # =============================================================================
 
 
-def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, norm=True, order_criteria="KIC", **kwargs):
+def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, normalization=True, order_criteria="KIC", **kwargs):
     for i in range(len(frequency_band)):  # pylint: disable=C0200
         min_frequency = frequency_band[i][0]
         if min_frequency == 0:
@@ -88,7 +88,7 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
         window_length = int((2 / min_frequency) * sampling_rate)
         if window_length <= len(signal) / 2:
             break
-    psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, norm=norm, order_criteria=order_criteria, **kwargs)
+    psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, normalization=normalization, order_criteria=order_criteria, **kwargs)
 
     out = {}
     if isinstance(frequency_band[0], (list, tuple)):
