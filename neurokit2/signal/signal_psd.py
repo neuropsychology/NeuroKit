@@ -5,7 +5,7 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=True, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=False, **kwargs
+    signal, sampling_rate=1000, method="welch", show=False, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=15, order_criteria="KIC", order_corrected=True, burg_norm=False, **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -57,19 +57,10 @@ def signal_psd(
     >>>
     >>> signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20)
     >>>
-    >>> fig1 = nk.signal_psd(signal, method="multitapers")
-    >>> fig1 #doctest: +SKIP
-    >>> fig2 = nk.signal_psd(signal, method="welch", min_frequency=1)
-    >>> fig2 #doctest: +SKIP
-    >>> fig3 = nk.signal_psd(signal, method="burg", min_frequency=1)
-    >>> fig4 = nk.signal_psd(signal, method="lomb", min_frequency=1)
-    >>>
-    >>> data = nk.signal_psd(signal, method="multitapers", max_frequency=30, show=False)
-    >>> fig5 = data.plot(x="Frequency", y="Power")
-    >>> fig5 #doctest: +SKIP
-    >>> data = nk.signal_psd(signal, method="welch", max_frequency=30, show=False, min_frequency=1)
-    >>> fig6 = data.plot(x="Frequency", y="Power")
-    >>> fig6 #doctest: +SKIP
+    >>> psd_multitapers = nk.signal_psd(signal, method="multitapers", show=True)
+    >>> psd_welch = nk.signal_psd(signal, method="welch", min_frequency=1, show=True)
+    >>> psd_burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=True)
+    >>> psd_lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, show=True)
 
     """
     # Constant Detrend
@@ -138,11 +129,10 @@ def signal_psd(
 #    data["Power"] = 10 * np.log(data["Power"])
 
     if show is True:
-        ax = data.plot(x="Frequency", y="Power", title="Power Spectral Density (ms^2/Hz)")
+        ax = data.plot(x="Frequency", y="Power", title="Power Spectral Density")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
-        return ax
-    else:
-        return data
+
+    return data
 
 
 # =============================================================================
