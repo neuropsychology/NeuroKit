@@ -2,7 +2,6 @@
 import numpy as np
 import pandas as pd
 import scipy.signal
-import matplotlib
 import matplotlib.pyplot as plt
 
 from ..signal.signal_detrend import signal_detrend
@@ -10,6 +9,8 @@ from ..signal.signal_detrend import signal_detrend
 
 def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, window=None, overlap=None, show=True):
     """Quantify changes of a nonstationary signal’s frequency over time.
+    The objective of time-frequency analysis is to offer a more informative description of the signal
+    which reveals the temporal variation of its frequency contents.
 
     Parameters
     ----------
@@ -159,7 +160,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=
         # Plus one if window length is odd
         if freq_length % 2 == 0:
             freq_length += 1
-            freq_window = scipy.signal.hamming(int(freq_length))
+        freq_window = scipy.signal.hamming(int(freq_length))
     elif len(freq_window) % 2 == 0:
         raise ValueError("The length of freq_window must be odd.")
 
@@ -168,7 +169,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=
         # Plus one if window length is odd
         if time_length % 2 == 0:
             time_length += 1
-            time_window = scipy.signal.hamming(int(time_length))
+        time_window = scipy.signal.hamming(int(time_length))
     elif len(time_window) % 2 == 0:
         raise ValueError("The length of time_window must be odd.")
 
@@ -186,10 +187,10 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=
 #    w_time /= sum(w_time)
 
     # Create arrays
-    time_array = np.arange(stop=N, step=segment_step, dtype='int')
+    time_array = np.arange(start=0, stop=N, step=segment_step, dtype=int)
 #    frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
     frequency_array = 0.5 * np.arange(nfreqbin, dtype=float) / nfreqbin
-    pwvd = np.zeros(nfreqbin, len(time_array), dtype='complex')
+    pwvd = np.zeros((nfreqbin, len(time_array)), dtype=complex)
 
     # Calculate pwvd
     for i, t in enumerate(time_array):
