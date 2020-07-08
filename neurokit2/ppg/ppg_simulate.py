@@ -11,7 +11,7 @@ def ppg_simulate(
     duration=120,
     sampling_rate=1000,
     heart_rate=70,
-    frequency_modulation=0.3,
+    frequency_modulation=0.2,
     ibi_randomness=0.1,
     drift=0,
     motion_amplitude=0.1,
@@ -78,6 +78,8 @@ def ppg_simulate(
     >>> ppg = nk.ppg_simulate(duration=40, sampling_rate=500, heart_rate=75, random_state=42)
 
     """
+    np.random.seed(random_state)
+
     # At the requested sampling rate, how long is a period at the requested
     # heart-rate and how often does that period fit into the requested
     # duration?
@@ -94,7 +96,7 @@ def ppg_simulate(
     )
     # Randomly modulate duration of waves by subracting a random value between
     # 0 and ibi_randomness% of the wave duration (see function definition).
-    x_onset = _random_x_offset(x_onset, np.diff(x_onset), ibi_randomness)
+    x_onset = _random_x_offset(x_onset, ibi_randomness)
     # Corresponding signal amplitudes.
     y_onset = np.random.normal(0, 0.1, n_period)
 
@@ -115,7 +117,7 @@ def ppg_simulate(
 
     x_all = np.concatenate((x_onset, x_sys, x_notch, x_dia))
     x_all.sort(kind="mergesort")
-    x_all = np.rint(x_all * sampling_rate).astype(int)  # convert seconds to samples
+    x_all = np.ceil(x_all * sampling_rate).astype(int)    # convert seconds to samples
 
     y_all = np.zeros(n_period * 4)
     y_all[0::4] = y_onset
@@ -196,7 +198,7 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
     modulator_strength must be between 0 and 1.
 
     """
-    modulation_mean = 1.1
+    modulation_mean = 1
     # Enforce minimum inter-beat-interval of 300 milliseconds.
     if (modulation_mean - modulation_strength) * periods[
         0
@@ -214,23 +216,29 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
     if modulation_frequency > nyquist:
         print(f"Please choose a modulation frequency lower than {nyquist}.")
 
-    # Generate a sine with mean 1.1 and amplitude modulation_strength, that is,
-    # ranging from 1.1 - modulation_strength to 1.1 + modulation_strength. Note
-    # that the mean must be 1.1 rather than 1 in order to not produce periods
-    # of duration 0 (i.e., at minimum the duration period is scaled down to
-    # .1 * period instead of 0 * period).
-    modulator = modulation_strength * np.sin(2 * np.pi * modulation_frequency * seconds) + modulation_mean
+    # Generate a sine with mean 1 and amplitude 0.5 * modulation_strength, that is,
+    # ranging from 1 - 0.5 * modulation_strength to 1 + 0.5 * modulation_strength.
+    # For example, at a heart rate of 100 and modulation_strenght=1, the heart rate will
+    # fluctuate between 150 and 50. At the default modulatiom_strenght=.2, it will
+    # fluctuate between 110 and 90.
+    modulator = .5 * modulation_strength * np.sin(2 * np.pi * modulation_frequency * seconds) + modulation_mean
     periods_modulated = periods * modulator
     seconds_modulated = np.cumsum(periods_modulated)
-    seconds_modulated -= seconds_modulated[0]  # make sure seconds start at zero
+    seconds_modulated -= seconds_modulated[0]    # make sure seconds start at zero
 
     return periods_modulated, seconds_modulated
 
 
-def _random_x_offset(x, x_diff, offset_weight):
+def _random_x_offset(x, offset_weight):
     """From each wave onset xi subtract offset_weight * (xi - xi-1) where xi-1 is
     the wave onset preceding xi. offset_weight must be between 0 and 1.
     """
+    if offset_weight >= 1:
+        offset_weight = .99
+    if offset_weight < 0:
+        offset_weight = 0
+
+    x_diff = np.diff(x)
     # Enforce minimum inter-beat-interval of 300 milliseconds.
     min_x_diff = min(x_diff)
     if (min_x_diff - (min_x_diff * offset_weight)) < 0.3:
@@ -241,16 +249,14 @@ def _random_x_offset(x, x_diff, offset_weight):
             f" milliseconds."
         )
         return x
-    offsets = []
 
-    for i in x_diff:
-        max_offset = offset_weight * i
-        offset = np.random.uniform(0, max_offset)
-        offsets.append(offset)
+    max_offsets = offset_weight * x_diff
+    offsets = [np.random.uniform(0, i) for i in max_offsets]
 
-    x[1:] -= offsets
+    x_offset = x.copy()
+    x_offset[1:] -= offsets
 
-    return x
+    return x_offset
 
 
 def _amplitude_modulation():

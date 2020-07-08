@@ -48,7 +48,7 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     >>> ecg = nk.ecg_simulate(length=170000)
     >>>
     >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg,
-    ...                          sync_index_channel=event_index_in_ecg, channel_type="ecg") # doctest: +SKIP
+    ...                          sync_index_channel=event_index_in_ecg, channel_type="ecg")  # doctest: +SKIP
 
     """
     # Try loading mne
