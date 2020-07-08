@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 import scipy.signal
+
+from ..misc import NeuroKitWarning
 
 
 def signal_psd(
@@ -101,10 +105,11 @@ def signal_psd(
 
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
-            print(
-                "Neurokit warning: signal_psd(): The duration of recording is too short to support a "
+            warn(
+                "signal_psd(): The duration of recording is too short to support a "
                 "sufficiently long window for high frequency resolution. Consider using a longer recording "
-                "or increasing the `min_frequency`"
+                "or increasing the `min_frequency`",
+                category=NeuroKitWarning
             )
             nperseg = int(len(signal) / 2)
 

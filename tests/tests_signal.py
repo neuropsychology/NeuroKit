@@ -1,6 +1,9 @@
+import warnings
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pytest
 import scipy.signal
 
 import neurokit2 as nk
@@ -226,3 +229,15 @@ def test_signal_power():
     pwr2 = nk.signal_power(signal2, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=100)
 
     assert np.allclose(np.mean(pwr1.iloc[0] - pwr2.iloc[0]), 0, atol=0.01)
+
+
+def test_signal_psd(recwarn):
+    warnings.simplefilter("always")
+
+    data = nk.data("bio_eventrelated_100hz")
+    out = nk.signal_psd(data["ECG"], sampling_rate=100)
+
+    assert list(out.columns) == ["Frequency", "Power"]
+
+    assert len(recwarn) == 1
+    assert recwarn.pop(nk.misc.NeuroKitWarning)
