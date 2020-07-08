@@ -54,7 +54,8 @@ def hrv_frequency(
     show : bool
         If True, will plot the power in the different frequency bands.
     normalization : bool
-        Normalization of power. Default to True.
+        Normalization of power by maximum PSD value. Default to True.
+        Normalization allows comparison between different PSD methods.
     **kwargs : optional
         Other arguments.
 

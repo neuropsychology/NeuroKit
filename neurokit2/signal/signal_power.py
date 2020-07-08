@@ -23,7 +23,8 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     show : bool
         If True, will return a Poincaré plot. Defaults to False.
     normalization : bool
-        Normalization of power. Default to True.
+        Normalization of power by maximum PSD value. Default to True.
+        Normalization allows comparison between different PSD methods.
     **kwargs
         Keyword arguments to be passed to `signal_psd()`.
 

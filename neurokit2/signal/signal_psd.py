@@ -14,7 +14,7 @@ def signal_psd(
     max_frequency=np.inf,
     window=None,
     window_type='hann',
-    ar_order=16,
+    order=16,
     order_criteria="KIC",
     order_corrected=True,
     **kwargs
@@ -32,7 +32,8 @@ def signal_psd(
     show : bool
         If True, will return a plot. If False, will return the density values that can be plotted externally.
     normalization : bool
-        Normalization of power. Default to True.
+        Normalization of power by maximum PSD value. Default to True.
+        Normalization allows comparison between different PSD methods.
     min_frequency : float
         The minimum frequency.
     max_frequency : float
@@ -43,7 +44,7 @@ def signal_psd(
         allow the formal, window will be default to half of the length of recording.
     window_type : str
         Desired window to use. Defaults to 'hann'. See `scipy.signal.get_window()` for list of windows.
-    ar_order : int
+    order : int
         The order of autoregression (for AR methods e.g. Burg).
     order_criteria : str
         The criteria to automatically select order in parametric PSD (for AR methods e.g. Burg).
@@ -133,7 +134,7 @@ def signal_psd(
             frequency, power = _signal_psd_burg(
                     signal,
                     sampling_rate=sampling_rate,
-                    order=ar_order,
+                    order=order,
                     criteria=order_criteria,
                     corrected=order_corrected,
                     side="one-sided",
