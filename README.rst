@@ -590,6 +590,8 @@ Popularity
         :target: https://github.com/neuropsychology/NeuroKit/network
 
 
+NeuroKit2 is one of the most welcoming package for new contributors and users, as well as the fastest growing package. So if you're still hesitating to join, don't and hop onboard 🤗
+
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
 
