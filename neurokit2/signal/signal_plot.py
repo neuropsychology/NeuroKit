@@ -34,7 +34,7 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
-    >>> nk.signal_plot(signal, labels='signal1', sampling_rate=1000, color="red")
+    >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
     >>>
     >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
     ...                      "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
@@ -120,11 +120,6 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
                 ax.plot(signal[col], c=color, **kwargs)
         else:
             plot = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
-
-
-#            plot = nk_standardize(signal[continuous_columns]).plot(subplots=subplots, sharex=True, **kwargs)
-
-#            plot = signal[continuous_columns].plot(subplots=subplots, sharex=True, **kwargs)
 
         if sampling_rate is None:
             plt.xlabel("Samples")
