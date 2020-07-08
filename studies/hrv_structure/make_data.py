@@ -3,11 +3,10 @@ import numpy as np
 import neurokit2 as nk
 
 # Load True R-peaks location
-rpeaks_gudb = pd.read_csv("../../data/gudb/Rpeaks.csv")
-rpeaks_mit1 = pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv")
-rpeaks_mit2 = pd.read_csv("../../data/mit_normal/Rpeaks.csv")
-
-datafiles = [rpeaks_gudb, rpeaks_mit1, rpeaks_mit2]
+datafiles = [pd.read_csv("../../data/gudb/Rpeaks.csv"),
+             pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv"),
+             pd.read_csv("../../data/mit_normal/Rpeaks.csv"),
+             pd.read_csv("../../data/fantasia/Rpeaks.csv")]
 
 # Get results
 all_results = pd.DataFrame()

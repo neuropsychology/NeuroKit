@@ -1,5 +1,6 @@
 import itertools
 
+
 def find_consecutive(x):
     """Find and group consecutive values in a list.
 
@@ -25,4 +26,4 @@ def find_consecutive(x):
 
     """
 
-    return [tuple(g) for k, g in itertools.groupby(x, lambda n, c=itertools.count(): n-next(c))]
+    return [tuple(g) for k, g in itertools.groupby(x, lambda n, c=itertools.count(): n - next(c))]

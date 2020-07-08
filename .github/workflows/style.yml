@@ -27,7 +27,7 @@ jobs:
     - name: Fix code style with isort (import calls)
       run: |
         python -m pip install isort
-        isort neurokit2 --recursive -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --diff
+        isort neurokit2 -l 120 --balanced --multi-line 3 --lines-between-types 1 --lines-after-imports 2 --trailing-comma --skip neurokit2/complexity/__init__.py --diff
 
     - name: Fix code style with black (line lengths)
       run: |

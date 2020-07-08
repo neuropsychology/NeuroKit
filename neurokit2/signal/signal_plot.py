@@ -123,7 +123,9 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
             n_labels = len(labels)
 
         if len(signal[continuous_columns].columns) != n_labels:
-            raise ValueError("NeuroKit error: signal_plot(): number of labels does not equal the number of plotted signals.")
+            raise ValueError(
+                "NeuroKit error: signal_plot(): number of labels does not equal the number of plotted signals."
+            )
 
         if subplots is False:
             plt.legend(labels, loc=1)

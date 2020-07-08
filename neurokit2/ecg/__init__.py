@@ -13,7 +13,6 @@ from .ecg_phase import ecg_phase
 from .ecg_plot import ecg_plot
 from .ecg_process import ecg_process
 from .ecg_quality import ecg_quality
-from .ecg_rsa import ecg_rsa
 from .ecg_rsp import ecg_rsp
 from .ecg_segment import ecg_segment
 from .ecg_simulate import ecg_simulate
@@ -30,7 +29,6 @@ __all__ = [
     "ecg_delineate",
     "ecg_rsp",
     "ecg_phase",
-    "ecg_rsa",
     "ecg_quality",
     "ecg_eventrelated",
     "ecg_intervalrelated",

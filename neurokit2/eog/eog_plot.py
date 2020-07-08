@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.gridspec
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 
 from ..epochs import epochs_create, epochs_to_array, epochs_to_df
@@ -95,8 +95,13 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
         ax2.set_title("Individual Blinks")
 
         # Create epochs
-        events = epochs_create(eog_signals["EOG_Clean"], peaks['EOG_Blinks'],
-                               sampling_rate=sampling_rate, epochs_start=-0.3, epochs_end=0.7)
+        events = epochs_create(
+            eog_signals["EOG_Clean"],
+            peaks["EOG_Blinks"],
+            sampling_rate=sampling_rate,
+            epochs_start=-0.3,
+            epochs_end=0.7,
+        )
         events_array = epochs_to_array(events)  # Convert to 2D array
         events_array = standardize(events_array)  # Rescale so that all the blinks are on the same scale
 
@@ -109,7 +114,14 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
             ax2.plot(blinks_wide[x], color=color, linewidth=0.4, zorder=1)
 
         # Plot with their median (used here as a robust average)
-        ax2.plot(np.array(blinks_wide.index), np.median(events_array, axis=1), linewidth=2, linestyle='--', color="black", label='Median')
+        ax2.plot(
+            np.array(blinks_wide.index),
+            np.median(events_array, axis=1),
+            linewidth=2,
+            linestyle="--",
+            color="black",
+            label="Median",
+        )
         ax2.legend(loc="upper right")
 
     return fig
