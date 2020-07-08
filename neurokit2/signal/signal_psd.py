@@ -9,7 +9,7 @@ def signal_psd(
     sampling_rate=1000,
     method="welch",
     show=False,
-    normalization=True,
+    normalize=True,
     min_frequency=0,
     max_frequency=np.inf,
     window=None,
@@ -31,7 +31,7 @@ def signal_psd(
         Either 'multitapers' (default; requires the 'mne' package), or 'welch' (requires the 'scipy' package).
     show : bool
         If True, will return a plot. If False, will return the density values that can be plotted externally.
-    normalization : bool
+    normalize : bool
         Normalization of power by maximum PSD value. Default to True.
         Normalization allows comparison between different PSD methods.
     min_frequency : float
@@ -86,7 +86,7 @@ def signal_psd(
                 sampling_rate=sampling_rate,
                 min_frequency=min_frequency,
                 max_frequency=max_frequency,
-                normalization=normalization
+                normalize=normalize
                 )
 
     else:
@@ -115,7 +115,7 @@ def signal_psd(
                     sampling_rate=sampling_rate,
                     nperseg=nperseg,
                     window_type=window_type,
-                    normalization=normalization
+                    normalize=normalize
             )
 
         # Lombscargle (Scipy)
@@ -126,7 +126,7 @@ def signal_psd(
                     nperseg=nperseg,
                     min_frequency=min_frequency,
                     max_frequency=max_frequency,
-                    normalization=normalization
+                    normalize=normalize
             )
 
         # BURG
@@ -138,7 +138,7 @@ def signal_psd(
                     criteria=order_criteria,
                     corrected=order_corrected,
                     side="one-sided",
-                    normalization=normalization,
+                    normalize=normalize,
                     nperseg=nperseg
             )
 
@@ -161,7 +161,7 @@ def signal_psd(
 # =============================================================================
 
 def _signal_psd_multitaper(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalization=True
+    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalize=True
 ):
     try:
         import mne
@@ -181,7 +181,7 @@ def _signal_psd_multitaper(
             "module is required for the 'mne' method to run.",
             "Please install it first (`pip install mne`).",
         )
-    if normalization is True:
+    if normalize is True:
         power /= np.max(power)
     return frequency, power
 
@@ -192,7 +192,7 @@ def _signal_psd_multitaper(
 
 
 def _signal_psd_welch(
-    signal, sampling_rate=1000, nperseg=None, window_type='hann', normalization=True, **kwargs
+    signal, sampling_rate=1000, nperseg=None, window_type='hann', normalize=True, **kwargs
 ):
     if nperseg is not None:
         nfft = int(nperseg*2)
@@ -211,7 +211,7 @@ def _signal_psd_welch(
         **kwargs
     )
 
-    if normalization is True:
+    if normalize is True:
         power /= np.max(power)
     return frequency, power
 
@@ -222,7 +222,7 @@ def _signal_psd_welch(
 
 
 def _signal_psd_lomb(
-    signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf, normalization=True
+    signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf, normalize=True
 ):
 
 #    nfft = int(nperseg * 2)
@@ -239,11 +239,11 @@ def _signal_psd_lomb(
 #
 #    power = np.asarray(scipy.signal.lombscargle(t, signal, frequency, normalize=True))
     try:
-        from astropy.timeseries import LombScargle
+        import astropy.timeseries
         if max_frequency == np.inf:
             max_frequency = sampling_rate / 2  # sanitize highest frequency
         t = np.arange(len(signal)) / sampling_rate
-        frequency, power = LombScargle(t, signal, normalization='psd').autopower(minimum_frequency=min_frequency, maximum_frequency=max_frequency)
+        frequency, power = astropy.timeseries.LombScargle(t, signal, normalization='psd').autopower(minimum_frequency=min_frequency, maximum_frequency=max_frequency)
 
     except ImportError:
         raise ImportError(
@@ -251,7 +251,7 @@ def _signal_psd_lomb(
             "module is required for the 'lomb' method to run.",
             "Please install it first (`pip install astropy`).",
         )
-    if normalization is True:
+    if normalize is True:
         power /= np.max(power)
 
     return frequency, power
@@ -263,7 +263,7 @@ def _signal_psd_lomb(
 
 
 def _signal_psd_burg(
-    signal, sampling_rate=1000, order=16, criteria="KIC", corrected=True, side="one-sided", normalization=True, nperseg=None
+    signal, sampling_rate=1000, order=16, criteria="KIC", corrected=True, side="one-sided", normalize=True, nperseg=None
 ):
 
     nfft = int(nperseg * 2)
@@ -292,7 +292,7 @@ def _signal_psd_burg(
     #            w = w[1:]  # exclude first point (extra)
 
     frequency = (w * sampling_rate) / (2 * np.pi)
-    if normalization is True:
+    if normalize is True:
         power /= np.max(power)
 
     return frequency, power
