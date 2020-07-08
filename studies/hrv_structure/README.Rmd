@@ -62,11 +62,10 @@ import numpy as np
 import neurokit2 as nk
 
 # Load True R-peaks location
-rpeaks_gudb = pd.read_csv("../../data/gudb/Rpeaks.csv")
-rpeaks_mit1 = pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv")
-rpeaks_mit2 = pd.read_csv("../../data/mit_normal/Rpeaks.csv")
-
-datafiles = [rpeaks_gudb, rpeaks_mit1, rpeaks_mit2]
+datafiles = [pd.read_csv("../../data/gudb/Rpeaks.csv"),
+             pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv"),
+             pd.read_csv("../../data/mit_normal/Rpeaks.csv"),
+             pd.read_csv("../../data/fantasia/Rpeaks.csv")]
 
 # Get results
 all_results = pd.DataFrame()
@@ -109,26 +108,31 @@ names(data) <- stringr::str_remove(names(data), "HRV_")
 ```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17}
 data %>% 
   correlation::correlation() %>% 
-  filter(r > 0.995) %>% 
+  filter(abs(r) > 0.995) %>% 
   arrange(Parameter1, desc(abs(r)))
 
 data <- data %>% 
-  select(-SDSD, -SD1, -SD1d, -SD1a) %>%  # Same as RMSSD 
+  select(-SDSD, -SD1, -SD1d, -SD1a, -CVSD) %>%  # Same as RMSSD 
   select(-SDNNd, -SDNNa) %>%  # Same as SDNN
-  select(-SD2d, -SD2a)  # Same as SD2
+  select(-SD2d, -SD2a) %>%   # Same as SD2
+  select(-Cd) %>%   # Same as Ca
+  select(-C1d, -C2d) # Same as C1a and C2a
 ```
 
-#### Remove Strongly Correlated (r higher than .99)
+#### Remove Strongly Correlated (r higher than .98)
 
 ```{r, message=FALSE, warning=FALSE, fig.width=17, fig.height=17}
 data %>% 
   correlation::correlation() %>% 
-  filter(r > 0.99) %>% 
+  filter(abs(r) > 0.95) %>%
   arrange(Parameter1, desc(abs(r)))
 
 data <- data %>% 
   select(-GI, -SI) %>%  # Same as AI 
-  select(-SD2)  # Same as SDNN
+  select(-SD2) %>%  # Same as SDNN
+  select(-MedianNN) %>%  # Same as MeanNN
+  select(-IALS) %>%  # Same as PIP
+  select(-SDNN, -CVNN) # Same as RMSSD
 ```
 
 
@@ -204,27 +208,40 @@ plot(n) +
   see::theme_modern()
 ```
 
-#### Interpret
+#### Exploratory Factor Analysis (EFA)
 
 ```{r, message=FALSE, warning=FALSE, fig.width=15, fig.height=15}
-fa <- parameters::factor_analysis(data, cor=cor, n=8, rotation="varimax", fm="ols")
+efa <- parameters::factor_analysis(data, cor=cor, n=7, rotation="varimax", fm="ml")
 
-print(fa, threshold="max", sort=TRUE)
+print(efa, threshold="max", sort=TRUE)
 
-plot(fa) +
+plot(efa) +
   see::theme_modern()
 ```
 
+<!-- #### Confirmatory Factor Analysis (CFA) -->
+
+<!-- ```{r, message=FALSE, warning=FALSE, fig.width=15, fig.height=15} -->
+<!-- library(lavaan) -->
+
+<!-- model <- parameters::efa_to_cfa(efa, threshold = "max") -->
+<!-- cfa <- lavaan::cfa(model, data=data) %>%  -->
+<!--   parameters::parameters(standardize=TRUE) -->
+
+<!-- cfa -->
+
+<!-- plot(cfa) -->
+<!-- ``` -->
 
 
 ### Cluster Analysis
 
-<!-- #### How many clusters  -->
+<!-- #### How many clusters -->
 
 <!-- ```{r, message=FALSE, warning=FALSE} -->
 <!-- dat <- effectsize::standardize(data[sapply(data, is.numeric)]) -->
 
-<!-- n <- parameters::n_clusters(t(dat), package = c("mclust")) -->
+<!-- n <- parameters::n_clusters(t(dat), package = c("mclust", "cluster")) -->
 
 <!-- n -->
 

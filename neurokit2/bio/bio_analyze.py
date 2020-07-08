@@ -2,12 +2,12 @@
 import numpy as np
 import pandas as pd
 
-from ..ecg.ecg_analyze import ecg_analyze
-from ..ecg.ecg_rsa import ecg_rsa
-from ..eda.eda_analyze import eda_analyze
-from ..emg.emg_analyze import emg_analyze
-from ..rsp.rsp_analyze import rsp_analyze
-from ..eog.eog_analyze import eog_analyze
+from ..ecg import ecg_analyze
+from ..hrv import hrv_rsa
+from ..eda import eda_analyze
+from ..emg import emg_analyze
+from ..eog import eog_analyze
+from ..rsp import rsp_analyze
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto"):
@@ -38,7 +38,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
         DataFrame of the analyzed bio features. See docstrings of `ecg_analyze()`,
         `rsp_analyze()`, `eda_analyze()`, `emg_analyze()` and `eog_analyze()` for more details.
         Also returns Respiratory Sinus Arrhythmia features produced by
-        `ecg_rsa()` if interval-related analysis is carried out.
+        `hrv_rsa()` if interval-related analysis is carried out.
 
     See Also
     ----------
@@ -188,7 +188,7 @@ def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     # RSA features for interval-related analysis
 
     if isinstance(data, pd.DataFrame):
-        rsa = ecg_rsa(data, sampling_rate=sampling_rate, continuous=False)
+        rsa = hrv_rsa(data, sampling_rate=sampling_rate, continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index").T
 
     if isinstance(data, dict):
@@ -196,7 +196,7 @@ def _bio_analyze_rsa_interval(data, sampling_rate=1000):
         for index in data:
             rsa[index] = {}  # Initialize empty container
             data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
-            rsa[index] = ecg_rsa(data[index], sampling_rate=sampling_rate)
+            rsa[index] = hrv_rsa(data[index], sampling_rate=sampling_rate)
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     return rsa

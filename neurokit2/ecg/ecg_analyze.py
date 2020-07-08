@@ -94,7 +94,7 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
 
     # Interval-related analysis
     elif method in ["interval-related", "interval", "resting-state"]:
-        features = ecg_intervalrelated(data)
+        features = ecg_intervalrelated(data, sampling_rate=sampling_rate)
 
     # Auto
     elif method in ["auto"]:
@@ -103,7 +103,7 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
             for i in data:
                 duration = len(data[i]) / sampling_rate
             if duration >= 10:
-                features = ecg_intervalrelated(data)
+                features = ecg_intervalrelated(data, sampling_rate=sampling_rate)
             else:
                 features = ecg_eventrelated(data)
 
@@ -114,7 +114,7 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
             else:
                 duration = len(data) / sampling_rate
             if duration >= 10:
-                features = ecg_intervalrelated(data)
+                features = ecg_intervalrelated(data, sampling_rate=sampling_rate)
             else:
                 features = ecg_eventrelated(data)
 

@@ -1,0 +1,1 @@
+.. mdinclude:: ../../studies/erp_gam/README.md

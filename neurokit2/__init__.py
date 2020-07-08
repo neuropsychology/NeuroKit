@@ -1,5 +1,6 @@
 """Top-level package for NeuroKit."""
 import datetime
+import platform
 
 from .benchmark import *
 from .bio import *
@@ -62,10 +63,45 @@ Full bibtex reference:
 __citation__ = __cite__
 
 
-def cite():
+# =============================================================================
+# Helper functions to retrieve info
+# =============================================================================
+def cite(silent=False):
     """Cite NeuroKit2.
 
     This function will print the bibtex and the APA reference for your to copy and cite.
 
+    Examples
+    ---------
+    >>> import neurokit2 as nk
+    >>>
+    >>> nk.cite()
+
     """
-    print(__cite__)
+    if silent is False:
+        print(__cite__)
+    else:
+        return __bibtex__
+
+
+def version(silent=False):
+    """NeuroKit2's version.
+
+    This function is a helper to retrieve the version of the package.
+
+    Examples
+    ---------
+    >>> import neurokit2 as nk
+    >>>
+    >>> nk.version()
+
+    """
+    if silent is False:
+        print(
+            "- OS: " + platform.system(),
+            "(" + platform.architecture()[1] + " " + platform.architecture()[0] + ")",
+            "\n- Python: " + platform.python_version(),
+            "\n- NeuroKit2: " + __version__,
+        )
+    else:
+        return __version__
