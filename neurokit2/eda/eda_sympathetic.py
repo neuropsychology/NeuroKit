@@ -90,11 +90,12 @@ def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True,
     eda_filtered = signal_filter(downsampled_2, sampling_rate=2,
                                  lowcut=0.01, method="butterworth", order=8)
 
-    overlap = len(eda_filtered) // 2  # 50 % data overlap
+    nperseg = 128
+    overlap = nperseg // 2  # 50 % data overlap
 
     # Compute psd
     frequency, power = _signal_psd_welch(eda_filtered, sampling_rate=2,
-                                         nperseg=128, window_type='blackman', noverlap=overlap, norm=False)
+                                         nperseg=nperseg, window_type='blackman', noverlap=overlap, normalization=False)
     psd = pd.DataFrame({"Frequency": frequency, "Power": power})
 
     # Get sympathetic nervous system indexes
