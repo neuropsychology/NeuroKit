@@ -73,7 +73,7 @@ Contributing
         :target: https://github.com/psf/black
         :alt: Black code
 
-NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
+NeuroKit2 is the most `welcoming <https://github.com/neuropsychology/NeuroKit#popularity>`_ project with a large community of contributors with all levels of programming expertise. **But the package is still far from being perfect!** Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
 
 - `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/contributing/understanding.html>`_
 - `Contributing guide <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html>`_
@@ -377,7 +377,7 @@ event-related analysis pertains to the segments of signals within the orange box
 changes pertaining to the appearance of stimuli), interval-related analysis can be
 applied on the entire 20s duration to investigate how physiology fluctuates in general.
 In this case, using `bio_analyze()` will compute features such as rate characteristics (in particular,
-variability metrices) and peak characteristics.
+variability metrics) and peak characteristics.
 
 - `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
@@ -590,7 +590,7 @@ Popularity
         :target: https://github.com/neuropsychology/NeuroKit/network
 
 
-NeuroKit2 is one of the most welcoming package for new contributors and users, as well as the fastest growing package. So if you're still hesitating to join, don't and hop onboard 🤗
+NeuroKit2 is one of the most welcoming package for new contributors and users, as well as the fastest growing package. So stop hesitating and hop onboard 🤗
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
@@ -600,4 +600,4 @@ NeuroKit2 is one of the most welcoming package for new contributors and users, a
 Notes
 -------
 
-*The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquify, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*
+*The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*
