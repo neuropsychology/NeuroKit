@@ -88,7 +88,7 @@ def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True,
 
     # High pass filter
     eda_filtered = signal_filter(downsampled_2, sampling_rate=2,
-                                 lowcut=0.01, method="butterworth", order=8)
+                                 lowcut=0.01, highcut=None, method="butterworth", order=8)
 
     nperseg = 128
     overlap = nperseg // 2  # 50 % data overlap
@@ -123,16 +123,17 @@ def _eda_sympathetic_ghiasi(eda_signal, sampling_rate=1000, frequency_band=[0.04
     min_frequency = frequency_band[0]
     max_frequency = frequency_band[1]
 
-    # Normalize, downsample, filter
-    normalized = standardize(eda_signal)
-    downsampled = signal_resample(normalized, sampling_rate=sampling_rate, desired_sampling_rate=50)
-    filtered = signal_filter(downsampled, sampling_rate=sampling_rate, lowcut=0.01, highcut=0.5, method='butterworth')
+    # Downsample, normalize, filter
+    desired_sampling_rate = 50
+    downsampled = signal_resample(eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate)
+    normalized = standardize(downsampled)
+    filtered = signal_filter(normalized, sampling_rate=desired_sampling_rate, lowcut=0.01, highcut=0.5, method='butterworth')
 
     # Divide the signal into segments and obtain the timefrequency representation
-    nperseg = int((5 / min_frequency) * sampling_rate)
+    nperseg = int((5 / min_frequency) * desired_sampling_rate)
     overlap = 59 / 50  # overlap of 59s in samples
-    frequency, time, bins = scipy.signal.spectrogram(filtered, fs=sampling_rate, window='blackman', nperseg=nperseg,
-                                                     noverlap=overlap)
+    frequency, time, bins = scipy.signal.spectrogram(filtered, fs=desired_sampling_rate, window='blackman',
+                                                     nperseg=nperseg, noverlap=overlap)
 
     lower_bound = len(frequency) - len(frequency[frequency > min_frequency])
     f = frequency[(frequency > min_frequency) & (frequency < max_frequency)]
