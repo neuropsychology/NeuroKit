@@ -123,7 +123,7 @@ def ecg_delineate(
         waves = _dwt_ecg_delineator(ecg_cleaned, rpeaks, sampling_rate=sampling_rate)
 
     else:
-        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be  one of 'peak'," "'cwt' or 'dwt'.")
+        raise ValueError("NeuroKit error: ecg_delineate(): 'method' should be one of 'peak'," "'cwt' or 'dwt'.")
 
     # Remove NaN in Peaks, Onsets, and Offsets
     waves_noNA = waves.copy()
@@ -329,31 +329,30 @@ def _dwt_delineate_tp_onsets_offsets(
     onsets = []
     offsets = []
     for i in range(len(peaks)):  # pylint: disable=C0200
-        if np.isnan(peaks[i]):
-            onsets.append(np.nan)
-            offsets.append(np.nan)
-            continue
         # look for onsets
         srch_idx_start = peaks[i] - int(duration * sampling_rate)
         srch_idx_end = peaks[i]
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             onsets.append(np.nan)
-            offsets.append(np.nan)
             continue
         dwt_local = dwtmatr[degree_onset + degree, srch_idx_start:srch_idx_end]
         onset_slope_peaks, __ = scipy.signal.find_peaks(dwt_local)
-        try:
-            epsilon_onset = onset_weight * dwt_local[onset_slope_peaks[-1]]
-            candidate_onsets = np.where(dwt_local[: onset_slope_peaks[-1]] < epsilon_onset)[0]
-            onsets.append(candidate_onsets[-1] + srch_idx_start)
-        except IndexError:
+        if len(onset_slope_peaks) == 0:
             onsets.append(np.nan)
+            continue
+        epsilon_onset = onset_weight * dwt_local[onset_slope_peaks[-1]]
+        if not (dwt_local[: onset_slope_peaks[-1]] < epsilon_onset).any():
+            onsets.append(np.nan)
+            continue
+        candidate_onsets = np.where(dwt_local[: onset_slope_peaks[-1]] < epsilon_onset)[0]
+        onsets.append(candidate_onsets[-1] + srch_idx_start)
 
         # # only for debugging
         # events_plot([candidate_onsets, onset_slope_peaks], dwt_local)
         # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
         # plt.show()
 
+    for i in range(len(peaks)):  # pylint: disable=C0200
         # look for offset
         srch_idx_start = peaks[i]
         srch_idx_end = peaks[i] + int(duration_offset * sampling_rate)
@@ -362,14 +361,15 @@ def _dwt_delineate_tp_onsets_offsets(
             continue
         dwt_local = dwtmatr[degree_offset + degree, srch_idx_start:srch_idx_end]
         offset_slope_peaks, __ = scipy.signal.find_peaks(-dwt_local)
-        try:
-            epsilon_offset = -offset_weight * dwt_local[offset_slope_peaks[0]]
-            candidate_offsets = (
-                np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0] + offset_slope_peaks[0]
-            )
-            offsets.append(candidate_offsets[0] + srch_idx_start)
-        except IndexError:
+        if len(offset_slope_peaks) == 0:
             offsets.append(np.nan)
+            continue
+        epsilon_offset = -offset_weight * dwt_local[offset_slope_peaks[0]]
+        if not (-dwt_local[onset_slope_peaks[0] :] < epsilon_offset).any():
+            offsets.append(np.nan)
+            continue
+        candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0] + offset_slope_peaks[0]
+        offsets.append(candidate_offsets[0] + srch_idx_start)
 
         # # only for debugging
         # events_plot([candidate_offsets, offset_slope_peaks], dwt_local)
@@ -391,7 +391,13 @@ def _dwt_delineate_qrs_bounds(rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250
             continue
         dwt_local = dwtmatr[2 + degree, srch_idx_start:srch_idx_end]
         onset_slope_peaks, __ = scipy.signal.find_peaks(-dwt_local)
+        if len(onset_slope_peaks) == 0:
+            onsets.append(np.nan)
+            continue
         epsilon_onset = 0.5 * -dwt_local[onset_slope_peaks[-1]]
+        if not (-dwt_local[: onset_slope_peaks[-1]] < epsilon_onset).any():
+            onsets.append(np.nan)
+            continue
         candidate_onsets = np.where(-dwt_local[: onset_slope_peaks[-1]] < epsilon_onset)[0]
         onsets.append(candidate_onsets[-1] + srch_idx_start)
 
@@ -419,8 +425,13 @@ def _dwt_delineate_qrs_bounds(rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250
             offsets.append(np.nan)
             continue
         candidate_offsets = np.where(dwt_local[onset_slope_peaks[0] :] < epsilon_offset)[0] + onset_slope_peaks[0]
-
         offsets.append(candidate_offsets[0] + srch_idx_start)
+
+        # # only for debugging
+        # events_plot(candidate_offsets, dwt_local)
+        # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
+        # plt.legend()
+        # plt.show()
 
     return onsets, offsets
 
@@ -509,6 +520,10 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
     offsets = []
     for index_peak in peaks:
         # find onset
+        if np.isnan(index_peak):
+            onsets.append(np.nan)
+            offsets.append(np.nan)
+            continue
         if peak_type == "rpeaks":
             search_window = cwtmatr[2, index_peak - half_wave_width : index_peak]
             prominence = 0.20 * max(search_window)
@@ -524,27 +539,28 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
 
         if len(wt_peaks) == 0:
             # print("Fail to find onset at index: %d", index_peak)
-            continue
-        # The last peak is nfirst in (Martinez, 2004)
-        nfirst = wt_peaks[-1] + index_peak - half_wave_width
-        if peak_type == "rpeaks":
-            if wt_peaks_data["peak_heights"][-1] > 0:
-                epsilon_onset = 0.05 * wt_peaks_data["peak_heights"][-1]
-        elif peak_type == "ppeaks":
-            epsilon_onset = 0.50 * wt_peaks_data["peak_heights"][-1]
-        elif peak_type == "tpeaks":
-            epsilon_onset = 0.25 * wt_peaks_data["peak_heights"][-1]
-        leftbase = wt_peaks_data["left_bases"][-1] + index_peak - half_wave_width
-        if peak_type == "rpeaks":
-            candidate_onsets = np.where(cwtmatr[2, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
-        elif peak_type in ["tpeaks", "ppeaks"]:
-            candidate_onsets = np.where(-cwtmatr[4, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
-
-        candidate_onsets = candidate_onsets.tolist() + [leftbase]
-        if len(candidate_onsets) == 0:
             onsets.append(np.nan)
         else:
-            onsets.append(max(candidate_onsets))
+            # The last peak is nfirst in (Martinez, 2004)
+            nfirst = wt_peaks[-1] + index_peak - half_wave_width
+            if peak_type == "rpeaks":
+                if wt_peaks_data["peak_heights"][-1] > 0:
+                    epsilon_onset = 0.05 * wt_peaks_data["peak_heights"][-1]
+            elif peak_type == "ppeaks":
+                epsilon_onset = 0.50 * wt_peaks_data["peak_heights"][-1]
+            elif peak_type == "tpeaks":
+                epsilon_onset = 0.25 * wt_peaks_data["peak_heights"][-1]
+            leftbase = wt_peaks_data["left_bases"][-1] + index_peak - half_wave_width
+            if peak_type == "rpeaks":
+                candidate_onsets = np.where(cwtmatr[2, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
+            elif peak_type in ["tpeaks", "ppeaks"]:
+                candidate_onsets = np.where(-cwtmatr[4, nfirst - 100 : nfirst] < epsilon_onset)[0] + nfirst - 100
+
+            candidate_onsets = candidate_onsets.tolist() + [leftbase]
+            if len(candidate_onsets) == 0:
+                onsets.append(np.nan)
+            else:
+                onsets.append(max(candidate_onsets))
 
         # find offset
         if peak_type == "rpeaks":
@@ -559,29 +575,30 @@ def _onset_offset_delineator(ecg, peaks, peak_type="rpeaks", sampling_rate=1000)
 
         if len(wt_peaks) == 0:
             # print("Fail to find offsets at index: %d", index_peak)
-            continue
-        nlast = wt_peaks[0] + index_peak
-        if peak_type == "rpeaks":
-            if wt_peaks_data["peak_heights"][0] > 0:
-                epsilon_offset = 0.125 * wt_peaks_data["peak_heights"][0]
-        elif peak_type == "ppeaks":
-            epsilon_offset = 0.9 * wt_peaks_data["peak_heights"][0]
-        elif peak_type == "tpeaks":
-            epsilon_offset = 0.4 * wt_peaks_data["peak_heights"][0]
-        rightbase = wt_peaks_data["right_bases"][0] + index_peak
-        if peak_type == "rpeaks":
-            candidate_offsets = np.where((-cwtmatr[2, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
-        elif peak_type in ["tpeaks", "ppeaks"]:
-            candidate_offsets = np.where((cwtmatr[4, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
-
-        candidate_offsets = candidate_offsets.tolist() + [rightbase]
-        if len(candidate_offsets) == 0:
             offsets.append(np.nan)
         else:
-            offsets.append(min(candidate_offsets))
+            nlast = wt_peaks[0] + index_peak
+            if peak_type == "rpeaks":
+                if wt_peaks_data["peak_heights"][0] > 0:
+                    epsilon_offset = 0.125 * wt_peaks_data["peak_heights"][0]
+            elif peak_type == "ppeaks":
+                epsilon_offset = 0.9 * wt_peaks_data["peak_heights"][0]
+            elif peak_type == "tpeaks":
+                epsilon_offset = 0.4 * wt_peaks_data["peak_heights"][0]
+            rightbase = wt_peaks_data["right_bases"][0] + index_peak
+            if peak_type == "rpeaks":
+                candidate_offsets = np.where((-cwtmatr[2, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
+            elif peak_type in ["tpeaks", "ppeaks"]:
+                candidate_offsets = np.where((cwtmatr[4, nlast : nlast + 100]) < epsilon_offset)[0] + nlast
 
-    onsets = np.array(onsets, dtype="int")
-    offsets = np.array(offsets, dtype="int")
+            candidate_offsets = candidate_offsets.tolist() + [rightbase]
+            if len(candidate_offsets) == 0:
+                offsets.append(np.nan)
+            else:
+                offsets.append(min(candidate_offsets))
+
+    onsets = np.array(onsets, dtype="object")
+    offsets = np.array(offsets, dtype="object")
     return onsets, offsets
 
 
@@ -612,18 +629,15 @@ def _peaks_delineator(ecg, rpeaks, sampling_rate=1000):
         peaks_tp = peaks_tp + rpeaks[i] + search_boundary
         # set threshold for heights of peaks to find significant peaks in wavelet
         threshold = 0.125 * max(search_window)
-        significant_index = []
-        significant_index = [j for j in range(len(peaks_tp)) if heights_tp["peak_heights"][j] > threshold]
-
         significant_peaks_tp = []
-        for index in significant_index:
-            significant_peaks_tp.append(peaks_tp[index])
+        significant_peaks_tp = [peaks_tp[j] for j in range(len(peaks_tp)) if heights_tp["peak_heights"][j] > threshold]
+
         significant_peaks_groups.append(_find_tppeaks(ecg, significant_peaks_tp, sampling_rate=sampling_rate))
 
     tpeaks, ppeaks = zip(*[(g[0], g[-1]) for g in significant_peaks_groups])
 
-    tpeaks = np.array(tpeaks, dtype="int")
-    ppeaks = np.array(ppeaks, dtype="int")
+    tpeaks = np.array(tpeaks, dtype="object")
+    ppeaks = np.array(ppeaks, dtype="object")
     return tpeaks, ppeaks
 
 
@@ -651,6 +665,8 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
             nb_idx = int(max_search_duration * sampling_rate)
             index_max = np.argmax(ecg[index_zero_cr - nb_idx : index_zero_cr + nb_idx]) + (index_zero_cr - nb_idx)
             tppeaks.append(index_max)
+    if len(tppeaks) == 0:
+        tppeaks = [np.nan]
     return tppeaks
 
 
