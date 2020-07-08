@@ -5,7 +5,19 @@ import scipy.signal
 
 
 def signal_psd(
-    signal, sampling_rate=1000, method="welch", show=False, normalization=False, min_frequency=0, max_frequency=np.inf, window=None, window_type='hann', ar_order=16, order_criteria="KIC", order_corrected=True, **kwargs
+    signal,
+    sampling_rate=1000,
+    method="welch",
+    show=False,
+    normalization=True,
+    min_frequency=0,
+    max_frequency=np.inf,
+    window=None,
+    window_type='hann',
+    ar_order=16,
+    order_criteria="KIC",
+    order_corrected=True,
+    **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -20,7 +32,7 @@ def signal_psd(
     show : bool
         If True, will return a plot. If False, will return the density values that can be plotted externally.
     normalization : bool
-        Normalization of power.
+        Normalization of power. Default to True.
     min_frequency : float
         The minimum frequency.
     max_frequency : float
@@ -68,7 +80,13 @@ def signal_psd(
 
     # MNE
     if method.lower() in ["multitapers", "mne"]:
-        frequency, power = _signal_psd_multitaper(signal, sampling_rate=sampling_rate, min_frequency=min_frequency, max_frequency=max_frequency, normalization=normalization)
+        frequency, power = _signal_psd_multitaper(
+                signal,
+                sampling_rate=sampling_rate,
+                min_frequency=min_frequency,
+                max_frequency=max_frequency,
+                normalization=normalization
+                )
 
     else:
         # Define window length

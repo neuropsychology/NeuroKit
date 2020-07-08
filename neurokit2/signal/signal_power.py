@@ -7,7 +7,7 @@ import pandas as pd
 from .signal_psd import signal_psd
 
 
-def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, normalization=False, **kwargs):
+def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, normalization=True, **kwargs):
     """Compute the power of a signal in a given frequency band.
 
     Parameters
@@ -22,8 +22,8 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
         Compute instant frequency, or continuous power.
     show : bool
         If True, will return a Poincaré plot. Defaults to False.
-    norm : bool
-        Normalization of power.
+    normalization : bool
+        Normalization of power. Default to True.
     **kwargs
         Keyword arguments to be passed to `signal_psd()`.
 

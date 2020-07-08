@@ -19,7 +19,7 @@ def hrv_frequency(
     psd_method="welch",
     show=False,
     silent=True,
-    normalization=False,
+    normalization=True,
     order_criteria=None,
     **kwargs
 ):
@@ -53,8 +53,8 @@ def hrv_frequency(
         If False, warnings will be printed. Default to True.
     show : bool
         If True, will plot the power in the different frequency bands.
-    norm : bool
-        Normalization of power.
+    normalization : bool
+        Normalization of power. Default to True.
     **kwargs : optional
         Other arguments.
 
