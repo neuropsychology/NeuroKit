@@ -239,7 +239,6 @@ def _signal_psd_lomb(
 #
 #    power = np.asarray(scipy.signal.lombscargle(t, signal, frequency, normalize=True))
     try:
-        import astropy
         from astropy.timeseries import LombScargle
         if max_frequency == np.inf:
             max_frequency = sampling_rate / 2  # sanitize highest frequency
