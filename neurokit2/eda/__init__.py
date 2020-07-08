@@ -13,6 +13,7 @@ from .eda_phasic import eda_phasic
 from .eda_plot import eda_plot
 from .eda_process import eda_process
 from .eda_simulate import eda_simulate
+from .eda_sympathetic import eda_sympathetic
 
 
 __all__ = [
@@ -29,4 +30,5 @@ __all__ = [
     "eda_analyze",
     "eda_autocor",
     "eda_changepoints",
+    "eda_sympathetic",
 ]
