@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 import scipy.signal
 import matplotlib.pyplot as plt
-
-from ..signal.signal_detrend import signal_detrend
 
 
 def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, window=None, overlap=None, show=True):
@@ -31,6 +28,18 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     show : bool
         If True, will return two PSD plots.
 
+    Examples
+    -------
+    >>> import neurokit2 as nk
+    >>> import numpy as np
+    >>> data = nk.data("bio_resting_5min_100hz")
+    >>> sampling_rate=100
+    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=sampling_rate)
+    >>> peaks = np.where(peaks == 1)[0]
+    >>> rri = np.diff(peaks) / sampling_rate * 1000
+    >>> desired_length = int(np.rint(peaks[-1]))
+    >>> signal = nk.signal_interpolate(peaks[1:], rri, x_new=np.arange(desired_length))
+    >>> f, t, stft = nk.signal_timefrequency(signal, sampling_rate, max_frequency=0.5, show=True)
     """
     # Initialize empty container for results
     # Define window length
@@ -42,27 +51,25 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
         # to capture at least 5 times slowest wave-length
         nperseg = int((5 / min_frequency) * sampling_rate)
 
-    out = {}
-    return out
+    frequency, time, stft = short_term_ft(
+            signal,
+            sampling_rate=sampling_rate,
+            min_frequency=min_frequency,
+            max_frequency=max_frequency,
+            overlap=overlap,
+            nperseg=nperseg,
+            show=show
+            )
+
+    return frequency, time, stft
 
 # =============================================================================
 # Short-Time Fourier Transform (STFT)
 # =============================================================================
 
 
-def stft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, overlap=None, nperseg=None, show=True):
-    """Short-term
-    Examples
-    -------
-    >>> import neurokit2 as nk
-    >>> data = nk.data("bio_resting_5min_100hz")
-    >>> sampling_rate=100
-    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=sampling_rate)
-    >>> peaks = np.where(peaks == 1)[0]
-    >>> rri = np.diff(peaks) / sampling_rate * 1000
-    >>> desired_length = int(np.rint(peaks[-1] / sampling_rate * sampling_rate))
-    >>> signal = nk.signal_interpolate(peaks[1:], rri, x_new=np.arange(desired_length))
-    >>> f, t, stft = stft(signal, sampling_rate, max_frequency=10)
+def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, overlap=None, nperseg=None, show=True):
+    """Short-term Fourier Transform.
     """
 
     # Check COLA
