@@ -285,35 +285,40 @@ fig.savefig("README_decomposition.png", dpi=300, h_pad=3)
 # =============================================================================
 
 # Generate complex signal
-signal = nk.signal_simulate(frequency=[5, 20, 30], amplitude=[1, 0.5, 0.3])
+signal = nk.signal_simulate(duration=20, frequency=[0.5, 5, 10, 15], amplitude=[2, 1.5, 0.5, 0.3], noise=0.025)
 
 # Get the PSD using different methods
-multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=100, show=True)
-welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=100, show=True)
-burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=100, order=5, show=True)
-lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=100, show=True)
+welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=20, show=True)
+multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=20, show=True)
+lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=20, show=True)
+burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
+
 
 
 # Visualize the different methods together
-fig, ax = plt.subplots()
+fig, axes = plt.subplots(nrows=2)
 
-ax.plot(welch["Frequency"], welch["Power"].reset_index(drop=True), label="Welch", color="#CFD8DC", linewidth=2)
-ax.plot(lomb["Frequency"], lomb["Power"], label="Lomb", color="#BDBDBD", linewidth=2)
-ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#009688", linewidth=2)
-ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#2196F3", linewidth=2)
+axes[0].plot(np.linspace(0, 20, len(signal)), signal, color="black", linewidth=0.5)
+axes[0].set_title("Original signal")
+axes[0].set_xlabel("Time (s)")
 
-ax.set_title("Power Spectrum Density (PSD)")
-ax.set_yscale('log')
-ax.set_xlabel("Frequency (Hz)")
-ax.set_ylabel("PSD (ms^2/Hz)")
-ax.legend(loc="upper right")
+axes[1].plot(welch["Frequency"], welch["Power"], label="Welch", color="#E91E63", linewidth=2, zorder=1)
+axes[1].plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#2196F3", linewidth=2, zorder=2)
+axes[1].plot(burg["Frequency"], burg["Power"], label="Burg", color="#4CAF50", linewidth=2, zorder=3)
+axes[1].plot(lomb["Frequency"], lomb["Power"], label="Lomb", color="#FFC107", linewidth=0.5, zorder=4)
 
-for x in [5, 20, 30]:
-    ax.axvline(x, color="#FF5722", linewidth=1, ymax=0.95, linestyle="--")
+axes[1].set_title("Power Spectrum Density (PSD)")
+axes[1].set_yscale('log')
+axes[1].set_xlabel("Frequency (Hz)")
+axes[1].set_ylabel(r"PSD ($ms^2/Hz$)")
+axes[1].legend(loc="upper right")
+
+for x in [0.5, 5, 10, 15]:
+    axes[1].axvline(x, color="#FF5722", linewidth=1, ymax=0.95, linestyle="--", label="Real Frequencies")
 
 # Save plot
 fig = plt.gcf()
-fig.set_size_inches(10*1.5, 6*1.5, forward=True)
+fig.set_size_inches(10*1.5, 8*1.5, forward=True)
 fig.savefig("README_psd.png", dpi=300, h_pad=3)
 
 # =============================================================================

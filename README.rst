@@ -533,30 +533,13 @@ Signal Power Spectrum Density (PSD)
 .. code-block:: python
 
     # Generate complex signal
-    signal = nk.signal_simulate(frequency=[5, 20, 30], amplitude=[1, 0.5, 0.3])
+    signal = nk.signal_simulate(duration=20, frequency=[0.5, 5, 10, 15], amplitude=[2, 1.5, 0.5, 0.3], noise=0.025)
 
     # Get the PSD using different methods
-    multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=100, show=True)
-    welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=100, show=True)
-    burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=100, order=5, show=True)
-
-	# Visualize the different methods together
-	fig, ax = plt.subplots()
-
-	ax.plot(welch["Frequency"], welch["Power"], label="Welch", color="#CFD8DC", linewidth=2)
-	ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#00695C", linewidth=2)
-	ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#0097AC", linewidth=2)
-
-	ax.set_title("Power Spectrum Density (PSD)")
-	ax.set_yscale('log')
-	ax.set_xlabel("Frequency (Hz)")
-	ax.set_ylabel("PSD (ms^2/Hz)")
-	ax.legend(loc="upper right")
-
-	# Plot 3 frequencies of generated signal
-	ax.axvline(5, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
-	ax.axvline(20, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
-	ax.axvline(30, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+    welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=20, show=True)
+    multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=20, show=True)
+    lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=20, show=True)
+    burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_psd.png
         :target: https://neurokit2.readthedocs.io/en/latest/
