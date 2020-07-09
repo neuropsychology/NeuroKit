@@ -28,6 +28,15 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     show : bool
         If True, will return two PSD plots.
 
+    Returns
+    -------
+    frequency : np.array
+        Frequency.
+    time : np.array
+        Time array.
+    stft : np.array
+        Short Term Fourier Transform. Time increases across its columns and frequency increases
+        down the rows.
     Examples
     -------
     >>> import neurokit2 as nk
@@ -118,21 +127,31 @@ def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=
 # =============================================================================
 
 
-def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_window=None, time_window=None, segment_step=1, nfreqbin=None, show=True):
+def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1, nfreqbin=None):
     """Smoothed Pseudo Wigner Ville Distribution
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    sampling_rate : int
-        The sampling frequency of the signal (in Hz, i.e., samples/second)
     freq_window : np.array
         Frequency smoothing window.
     time_window: np.array
         Time smoothing window
+    segment_step : int
+        The step between samples in `time_array`. Default to 1.
     nfreqbin : int
         Number of Frequency bins
+
+    Returns
+    -------
+    frequency_array : np.array
+        Frequency array.
+    time_array : np.array
+        Time array.
+    pwvd : np.array
+        SPWVD. Time increases across its columns and frequency increases
+        down the rows.
     References
     ----------
     J. M. O' Toole, M. Mesbah, and B. Boashash, (2008),
