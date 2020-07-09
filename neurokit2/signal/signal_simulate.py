@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 
-from ..misc import listify
+from ..misc import NeuroKitWarning, listify
 
 
 def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5, noise=0, silent=False):
@@ -55,25 +57,27 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5,
         nyquist = sampling_rate * 0.1
         if freq > nyquist:
             if not silent:
-                print(
-                    f"NeuroKit warning: Skipping requested frequency"
+                warn(
+                    f"Skipping requested frequency"
                     f" of {freq} Hz since it cannot be resolved at the"
                     f" sampling rate of {sampling_rate} Hz. Please increase"
                     f" sampling rate to {freq * 10} Hz or choose frequencies"
-                    f" smaller than or equal to {nyquist} Hz."
+                    f" smaller than or equal to {nyquist} Hz.",
+                    category=NeuroKitWarning
                 )
             continue
         # Also make sure that at leat one period of the frequency can be
         # captured over the duration of the signal.
         if (1 / freq) > duration:
             if not silent:
-                print(
-                    f"NeuroKit warning: Skipping requested frequency"
-                    f" of {freq} Hz since it's period of {1 / freq} seconds"
+                warn(
+                    f"Skipping requested frequency"
+                    f" of {freq} Hz since its period of {1 / freq} seconds"
                     f" exceeds the signal duration of {duration} seconds."
                     f" Please choose frequencies larger than"
                     f" {1 / duration} Hz or increase the duration of the"
-                    f" signal above {1 / freq} seconds."
+                    f" signal above {1 / freq} seconds.",
+                    category=NeuroKitWarning
                 )
             continue
 

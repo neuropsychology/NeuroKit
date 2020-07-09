@@ -13,6 +13,22 @@ import neurokit2 as nk
 # =============================================================================
 
 
+def test_signal_simulate():
+    # Warning for nyquist criterion
+    with pytest.warns(
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested frequency.*cannot be resolved.*"
+    ):
+        nk.signal_simulate(sampling_rate=100, frequency=11, silent=False)
+
+    # Warning for period duration
+    with pytest.warns(
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested frequency.*since its period of.*"
+    ):
+        nk.signal_simulate(duration=1, frequency=0.1, silent=False)
+
+
 def test_signal_smooth():
 
     # TODO: test kernels other than "boxcar"
@@ -98,6 +114,10 @@ def test_signal_filter():
     filtered = nk.signal_filter(signal, highcut=10)
     assert np.std(signal) > np.std(filtered)
 
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"The sampling rate is too low.*"):
+        with pytest.raises(ValueError):
+            nk.signal_filter(signal, method="bessel", sampling_rate=100 ,highcut=50)
+
     # Generate 10 seconds of signal with 2 Hz oscillation and added 50Hz powerline-noise.
     sampling_rate = 250
     samples = np.arange(10 * sampling_rate)
@@ -177,6 +197,12 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
     assert rate.shape == (duration * sampling_rate,)
 
 
+def test_signal_period():
+    # Test warning path of no peaks
+    with pytest.warns(nk.NeuroKitWarning, match=r"Too few peaks detected to compute the rate."):
+        nk.signal_period(np.zeros)
+
+
 def test_signal_plot():
 
     # Test with array
@@ -241,3 +267,22 @@ def test_signal_psd(recwarn):
 
     assert len(recwarn) == 1
     assert recwarn.pop(nk.misc.NeuroKitWarning)
+
+
+def test_signal_distort():
+    signal = nk.signal_simulate(duration=10, frequency=0.5, sampling_rate=10)
+
+    # Warning for nyquist criterion
+    with pytest.warns(
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested noise frequency.*cannot be resolved.*"
+    ):
+        nk.signal_distort(signal, sampling_rate=10, noise_amplitude=1, silent=False)
+
+    # Warning for period duration
+    with pytest.warns(
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested noise frequency.*since its period of.*"
+    ):
+        signal = nk.signal_simulate(duration=1, frequency=1, sampling_rate=10)
+        nk.signal_distort(signal, noise_amplitude=1, noise_frequency=0.1, silent=False)

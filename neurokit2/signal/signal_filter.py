@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import scipy.signal
+
+from ..misc import NeuroKitWarning
 
 
 def signal_filter(
@@ -257,12 +261,11 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
     # Sanity checks
     if isinstance(highcut, int):
         if sampling_rate <= 2 * highcut:
-            print(
-                "NeuroKit warning: the sampling rate is too low. Sampling rate"
-                " must exceed the Nyquist rate to avoid aliasing problem. "
-                "In this analysis, the sampling rate has to be higher than",
-                2 * highcut,
-                "Hz.",
+            warn(
+                "The sampling rate is too low. Sampling rate"
+                "must exceed the Nyquist rate to avoid aliasing problem."
+                f"In this analysis, the sampling rate has to be higher than {2 * highcut} Hz",
+                category=NeuroKitWarning
             )
 
     # Replace 0 by none

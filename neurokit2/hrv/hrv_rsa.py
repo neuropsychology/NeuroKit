@@ -4,7 +4,8 @@ from warnings import warn
 import numpy as np
 import pandas as pd
 
-from ..ecg import ecg_rsp
+# from ..ecg import ecg_rsp # TODO: why is ecg_rsp imported as a module, not a function?
+from ..ecg.ecg_rsp import ecg_rsp
 from ..misc import NeuroKitWarning
 from ..rsp import rsp_process
 from ..signal import (signal_filter, signal_interpolate, signal_rate,
@@ -140,7 +141,10 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     if len(rsp_peaks) - len(rsp_onsets) == 0:
         rsp_peaks = rsp_peaks[:-1]
     if len(rsp_peaks) - len(rsp_onsets) != -1:
-        print("NeuroKit error: ecg_rsp(): Couldn't find rsp cycles onsets and centers. Check your RSP signal.")
+        warn(
+            "Couldn't find rsp cycles onsets and centers. Check your RSP signal.",
+            category=NeuroKitWarning
+        )
 
     # Methods ------------------------
 

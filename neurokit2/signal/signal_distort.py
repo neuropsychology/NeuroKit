@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 
-from ..misc import listify
+from ..misc import NeuroKitWarning, listify
 from .signal_resample import signal_resample
 from .signal_simulate import signal_simulate
 
@@ -259,26 +261,28 @@ def _signal_distort_noise(
     nyquist = sampling_rate * 0.1
     if noise_frequency > nyquist:
         if not silent:
-            print(
-                f"NeuroKit warning: Skipping requested noise frequency"
+            warn(
+                f"Skipping requested noise frequency"
                 f" of {noise_frequency} Hz since it cannot be resolved at"
                 f" the sampling rate of {sampling_rate} Hz. Please increase"
                 f" sampling rate to {noise_frequency * 10} Hz or choose"
-                f" frequencies smaller than or equal to {nyquist} Hz."
+                f" frequencies smaller than or equal to {nyquist} Hz.",
+                category=NeuroKitWarning
             )
         return _noise
-    # Also make sure that at leat one period of the frequency can be
+    # Also make sure that at least one period of the frequency can be
     # captured over the duration of the signal.
     duration = n_samples / sampling_rate
     if (1 / noise_frequency) > duration:
         if not silent:
-            print(
-                f"NeuroKit warning: Skipping requested noise frequency"
-                f" of {noise_frequency} Hz since it's period of {1 / noise_frequency}"
+            warn(
+                f"Skipping requested noise frequency"
+                f" of {noise_frequency} Hz since its period of {1 / noise_frequency}"
                 f" seconds exceeds the signal duration of {duration} seconds."
                 f" Please choose noise frequencies larger than"
                 f" {1 / duration} Hz or increase the duration of the"
-                f" signal above {1 / noise_frequency} seconds."
+                f" signal above {1 / noise_frequency} seconds.",
+                category=NeuroKitWarning
             )
         return _noise
 

@@ -183,7 +183,7 @@ def _signal_psd_multitaper(
         )
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_psd(): the 'mne'",
+            "NeuroKit error: signal_psd(): the 'mne'",
             "module is required for the 'mne' method to run.",
             "Please install it first (`pip install mne`).",
         )
@@ -240,7 +240,7 @@ def _signal_psd_lomb(
 
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_psd(): the 'astropy'",
+            "NeuroKit error: signal_psd(): the 'astropy'",
             "module is required for the 'lomb' method to run.",
             "Please install it first (`pip install astropy`).",
         )

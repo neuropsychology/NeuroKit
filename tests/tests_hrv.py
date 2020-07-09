@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import pytest
 
 import neurokit2 as nk
@@ -100,14 +101,13 @@ def test_hrv_rsa():
     assert all(key in rsa_feature_columns for key in rsa_features.keys())
 
     # Test simulate RSP signal warning
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"RSP signal not found.*"):
-        # TODO: Traceback (most recent call last):
-        #   File "main.py", line 11, in <module>
-        #     nk.hrv_rsa(ecg_signals, rpeaks=info, sampling_rate=100, continuous=False)
-        #   File "/home/alexander/sandbox/src/github.com/awwong1/NeuroKit/neurokit2/hrv/hrv_rsa.py", line 132, in hrv_rsa
-        #     signals, ecg_period, rpeaks, __ = _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
-        #   File "/home/alexander/sandbox/src/github.com/awwong1/NeuroKit/neurokit2/hrv/hrv_rsa.py", line 345, in _hrv_rsa_formatinput
-        #     edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
-        # TypeError: 'module' object is not callable
-
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"RSP signal not found. For this.*"):
         nk.hrv_rsa(ecg_signals, rpeaks=info, sampling_rate=100, continuous=False)
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"RSP signal not found. RSP signal.*"):
+        nk.hrv_rsa(ecg_signals, pd.DataFrame(), rpeaks=info, sampling_rate=100, continuous=False)
+
+    # Test missing rsp onsets/centers
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"Couldn't find rsp cycles onsets and centers.*"):
+        rsp_signals["RSP_Peaks"] = 0
+        nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
