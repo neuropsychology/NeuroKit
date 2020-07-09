@@ -125,9 +125,15 @@ data/mit_normal/Rpeaks.csv
 data/ludb/mit-bih-normal-sinus-rhythm-database-1.0.0/*
 data/ludb/ECGs.csv
 data/ludb/Rpeaks.csv
+data/ludb/ludb-1.0.0.physionet.org
 benchmarks/ecg_preprocessing/make_data.py
 data/eogdb/eogdb.csv
 data/eogdb/eogdb_task1.csv
 data/eogdb/eogdb_task2.csv
 data/eogdb/eogdb_task3.csv
 data/eogdb/eogdb_task4.csv
+docs/readme/README_popularity.py
+paper/NeuroKit_Submission/
+data/fantasia/fantasia-database-1.0.0
+data/fantasia/ECGs.csv
+data/fantasia/Rpeaks.csv

@@ -25,6 +25,9 @@ Contributors
 * `Tiago Rodrigues <https://github.com/TiagoTostas>`_ *(IST, Lisbon)*
 * `Mitchell Bishop <https://github.com/Mitchellb16>`_ *(NINDS, USA)*
 * `Robert Richer <https://github.com/richrobe>`_ *(FAU Erlangen-Nürnberg, Germany)*
+* `Russell Anderson <https://github.com/rpanderson>`_ *(La Trobe Institute for Molecular Science, Australia)*
+* `Alexander Wong <https://github.com/awwong1>`_ *(University of Alberta, Canada)*
+* `Raimon Padrós <https://github.com/raimonpv>`_ *(Universitat politècnica de Catalunya, Spain - Massachusetts General Hospital, USA)*
 
 
 Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.

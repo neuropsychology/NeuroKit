@@ -1,13 +1,13 @@
 import numpy as np
 import pandas as pd
-# setup matplotlib with Agg to run on server
 import matplotlib
-matplotlib.use('Agg')
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import matplotlib.cm
 import neurokit2 as nk
 
+# setup matplotlib with Agg to run on server
+matplotlib.use('Agg')
 
 
 
@@ -139,6 +139,14 @@ ppg = nk.ppg_simulate(duration=15, sampling_rate=250, heart_rate=70, random_stat
 # Process it
 signals, info = nk.ppg_process(ppg, sampling_rate=250)
 
+# Visualize the processing
+nk.ppg_plot(signals, sampling_rate=250)
+
+# Save it
+plot = nk.ppg_plot(signals, sampling_rate=250)
+plot.set_size_inches(10, 6, forward=True)
+plot.savefig("README_ppg.png", dpi=300, h_pad=3)
+
 # =============================================================================
 # Electrooculography (EOG)
 # =============================================================================
@@ -150,7 +158,7 @@ eog_signal = nk.data("eog_100hz")
 signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
 # Plot
-plot = nk.eog_plot(signals, sampling_rate=100)
+plot = nk.eog_plot(signals, peaks=info, sampling_rate=100)
 plot.set_size_inches(10, 6, forward=True)
 plot.savefig("README_eog.png", dpi=300, h_pad=3)
 
@@ -276,39 +284,41 @@ fig.savefig("README_decomposition.png", dpi=300, h_pad=3)
 # Signal Power Spectrum Density
 # =============================================================================
 
-# Generate signal
-signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20) + nk.signal_simulate(frequency=30)
-# Find Power Spectrum Density with different methods
-# Mutlitaper
-multitaper = nk.signal_psd(signal, method="multitapers", show=False, max_frequency=100)
+# Generate complex signal
+signal = nk.signal_simulate(duration=20, frequency=[0.5, 5, 10, 15], amplitude=[2, 1.5, 0.5, 0.3], noise=0.025)
 
-# Welch
-welch = nk.signal_psd(signal, method="welch", min_frequency=1, show=False, max_frequency=100)
+# Get the PSD using different methods
+welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=20, show=True)
+multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=20, show=True)
+lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=20, show=True)
+burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
 
-# Burg
-burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=False, ar_order=15, max_frequency=100)
 
 
 # Visualize the different methods together
-fig, ax = plt.subplots()
+fig, axes = plt.subplots(nrows=2)
 
-ax.plot(welch["Frequency"], welch["Power"], label="Welch", color="#CFD8DC", linewidth=2)
-ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#00695C", linewidth=2)
-ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#0097AC", linewidth=2)
+axes[0].plot(np.linspace(0, 20, len(signal)), signal, color="black", linewidth=0.5)
+axes[0].set_title("Original signal")
+axes[0].set_xlabel("Time (s)")
 
-ax.set_title("Power Spectrum Density (PSD)")
-ax.set_yscale('log')
-ax.set_xlabel("Frequency (Hz)")
-ax.set_ylabel("PSD (ms^2/Hz)")
-ax.legend(loc="upper right")
+axes[1].plot(welch["Frequency"], welch["Power"], label="Welch", color="#E91E63", linewidth=2, zorder=1)
+axes[1].plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#2196F3", linewidth=2, zorder=2)
+axes[1].plot(burg["Frequency"], burg["Power"], label="Burg", color="#4CAF50", linewidth=2, zorder=3)
+axes[1].plot(lomb["Frequency"], lomb["Power"], label="Lomb", color="#FFC107", linewidth=0.5, zorder=4)
 
-ax.axvline(5, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
-ax.axvline(20, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
-ax.axvline(30, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+axes[1].set_title("Power Spectrum Density (PSD)")
+axes[1].set_yscale('log')
+axes[1].set_xlabel("Frequency (Hz)")
+axes[1].set_ylabel(r"PSD ($ms^2/Hz$)")
+
+for x in [0.5, 5, 10, 15]:
+    axes[1].axvline(x, color="#FF5722", linewidth=1, ymax=0.95, linestyle="--")
+axes[1].legend(loc="upper right")
 
 # Save plot
 fig = plt.gcf()
-fig.set_size_inches(10*1.5, 6*1.5, forward=True)
+fig.set_size_inches(10*1.5, 8*1.5, forward=True)
 fig.savefig("README_psd.png", dpi=300, h_pad=3)
 
 # =============================================================================
@@ -324,31 +334,4 @@ fig = plt.gcf()
 fig.set_size_inches(10/1.5, 6/1.5)
 fig.savefig("README_hdi.png", dpi=300, h_pad=3)
 
-# =============================================================================
-# Popularity
-# =============================================================================
-import popularipy  # https://github.com/DominiqueMakowski/popularipy
 
-downloads = popularipy.pypi_downloads("neurokit2")
-stars = popularipy.github_stars("neuropsychology/neurokit", "b547333010d0b1253ab44569df3efd94c8a93a63 ")
-
-data = downloads.merge(stars)
-
-# Plot
-fig, axes = plt.subplots(2, 1, figsize=(7, 3))
-
-data.plot.area(x="Date", y="Downloads", ax=axes[0], legend=False, color="#2196F3")
-data.plot(x="Date", y="Trend", ax=axes[0], legend=False, color="#E91E63")
-data.plot.area(x="Date", y="Stars", ax=axes[1], legend=False, color="#FF9800")
-
-# Clean axes
-axes[0].xaxis.label.set_visible(False)
-axes[0].xaxis.set_ticks_position("none")
-axes[0].set_xticklabels([])
-axes[0].text(0.5, 0.9, "Downloads / Day", horizontalalignment='center', transform=axes[0].transAxes)
-axes[1].text(0.5, 0.9, "GitHub Stars", horizontalalignment='center', transform=axes[1].transAxes)
-axes[1].xaxis.label.set_visible(False)
-
-fig = plt.gcf()
-fig.set_size_inches(4*3, 2*3, forward=True)
-fig.savefig("README_popularity.png", dpi=300)

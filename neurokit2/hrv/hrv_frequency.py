@@ -19,6 +19,8 @@ def hrv_frequency(
     psd_method="welch",
     show=False,
     silent=True,
+    normalize=True,
+    order_criteria=None,
     **kwargs
 ):
     """Computes frequency-domain indices of Heart Rate Variability (HRV).
@@ -51,6 +53,9 @@ def hrv_frequency(
         If False, warnings will be printed. Default to True.
     show : bool
         If True, will plot the power in the different frequency bands.
+    normalize : bool
+        Normalization of power by maximum PSD value. Default to True.
+        Normalization allows comparison between different PSD methods.
     **kwargs : optional
         Other arguments.
 
@@ -86,7 +91,10 @@ def hrv_frequency(
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>>
     >>> # Compute HRV indices
-    >>> hrv = nk.hrv_frequency(peaks, sampling_rate=100, show=True)
+    >>> hrv_welch = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
+    >>> hrv_burg = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="burg")
+    >>> hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="lomb")
+    >>> hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="multitapers")
 
     References
     ----------
@@ -95,6 +103,12 @@ def hrv_frequency(
 
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
     Frontiers in public health, 5, 258.
+
+    - Boardman, A., Schlindwein, F. S., & Rocha, A. P. (2002). A study on the optimum order of
+    autoregressive models for heart rate variability. Physiological measurement, 23(2), 325.
+
+    - Bachler, M. (2017). Spectral Analysis of Unevenly Spaced Data: Models and Application in Heart
+    Rate Variability. Simul. Notes Eur., 27(4), 183-190.
 
     """
     # Sanitize input
@@ -111,6 +125,8 @@ def hrv_frequency(
         method=psd_method,
         max_frequency=0.5,
         show=False,
+        normalize=normalize,
+        order_criteria=order_criteria,
         **kwargs
     )
 
@@ -142,7 +158,7 @@ def hrv_frequency(
 
     # Plot
     if show:
-        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate)
+        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate, psd_method=psd_method, order_criteria=order_criteria, normalize=normalize)
     return out
 
 
@@ -155,6 +171,9 @@ def _hrv_frequency_show(
     hf=(0.15, 0.4),
     vhf=(0.4, 0.5),
     sampling_rate=1000,
+    psd_method="welch",
+    order_criteria=None,
+    normalize=True,
     **kwargs
 ):
 
@@ -174,6 +193,6 @@ def _hrv_frequency_show(
         if window_length <= len(rri) / 2:
             break
 
-    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, max_frequency=0.5)
+    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, method=psd_method, max_frequency=0.5, order_criteria=order_criteria, normalize=normalize)
 
     _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)

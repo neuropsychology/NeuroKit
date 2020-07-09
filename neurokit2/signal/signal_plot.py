@@ -34,12 +34,12 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=1000)
-    >>> nk.signal_plot(signal, labels='signal1', sampling_rate=1000, color="red")
+    >>> nk.signal_plot(signal, sampling_rate=1000, color="red")
     >>>
     >>> data = pd.DataFrame({"Signal2": np.cos(np.linspace(start=0, stop=20, num=1000)),
     ...                      "Signal3": np.sin(np.linspace(start=0, stop=20, num=1000)),
     ...                      "Signal4": nk.signal_binarize(np.cos(np.linspace(start=0, stop=40, num=1000)))})
-    >>> nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=False)
+    >>> nk.signal_plot(data, labels=['signal_1', 'signal_2', 'signal_3'], subplots=True)
     >>> nk.signal_plot([signal, data], standardize=True)
 
     """
@@ -103,10 +103,23 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
             plot.gca().set_xlabel("Time (seconds)")
 
     else:
+
+        # Aesthetics
+        colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+                  '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+        if len(continuous_columns) > len(colors):
+            colors = plt.cm.viridis(np.linspace(0, 1, len(continuous_columns)))
+
+        # Plot
         if standardize is True:
-            plot = nk_standardize(signal[continuous_columns]).plot(subplots=subplots, sharex=True, **kwargs)
+            signal[continuous_columns] = nk_standardize(signal[continuous_columns])
+
+        if subplots is True:
+            fig, axes = plt.subplots(nrows=len(continuous_columns), ncols=1, sharex=True, **kwargs)
+            for ax, col, color in zip(axes, continuous_columns, colors):
+                ax.plot(signal[col], c=color, **kwargs)
         else:
-            plot = signal[continuous_columns].plot(subplots=subplots, sharex=True, **kwargs)
+            plot = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
 
         if sampling_rate is None:
             plt.xlabel("Samples")
@@ -114,19 +127,22 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
             plt.xlabel("Time (seconds)")
 
     # Tidy legend locations and add labels
-    if labels is not None:
+    if labels is None:
+        labels = continuous_columns.copy()
 
-        if isinstance(labels, str):
-            n_labels = len([labels])
-            labels = [labels]
-        elif isinstance(labels, list):
-            n_labels = len(labels)
+    if isinstance(labels, str):
+        n_labels = len([labels])
+        labels = [labels]
+    elif isinstance(labels, list):
+        n_labels = len(labels)
 
-        if len(signal[continuous_columns].columns) != n_labels:
-            raise ValueError("NeuroKit error: signal_plot(): number of labels does not equal the number of plotted signals.")
+    if len(signal[continuous_columns].columns) != n_labels:
+        raise ValueError(
+            "NeuroKit error: signal_plot(): number of labels does not equal the number of plotted signals."
+        )
 
-        if subplots is False:
-            plt.legend(labels, loc=1)
-        else:
-            for i, label in enumerate(labels):
-                plot[i].legend([label], loc=1)
+    if subplots is False:
+        plt.legend(labels, loc=1)
+    else:
+        for i, label in enumerate(labels):
+            axes[i].legend([label], loc=1)

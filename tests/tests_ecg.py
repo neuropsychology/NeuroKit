@@ -232,7 +232,10 @@ def test_ecg_intervalrelated():
        'HRV_SDNNa']
 
     # Test with signal dataframe
-    features_df = nk.ecg_intervalrelated(df)
+    features_df = nk.ecg_intervalrelated(df, sampling_rate=100)
+
+    # https://github.com/neuropsychology/NeuroKit/issues/304
+    assert all(features_df == nk.ecg_analyze(df, sampling_rate=100, method="interval-related"))
 
     assert all(elem in np.array(features_df.columns.values, dtype=str) for elem
                in columns)

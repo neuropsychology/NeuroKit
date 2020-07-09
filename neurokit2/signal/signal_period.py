@@ -62,9 +62,7 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
 
     if isinstance(desired_length, (int, float)):
         if desired_length <= peaks[-1]:
-            raise ValueError(
-                "NeuroKit error: desired_length must be None or larger than the index of the last peak."
-                )
+            raise ValueError("NeuroKit error: desired_length must be None or larger than the index of the last peak.")
 
     # Calculate period in sec, based on peak to peak difference and make sure
     # that rate has the same number of elements as peaks (important for

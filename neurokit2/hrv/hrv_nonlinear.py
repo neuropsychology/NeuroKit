@@ -5,10 +5,10 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import entropy_sample, entropy_approximate
-from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
+from ..complexity import entropy_approximate, entropy_sample
 from ..misc import find_consecutive
 from ..signal import signal_zerocrossings
+from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
@@ -187,7 +187,6 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
     out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
 
-
     if show:
         _hrv_nonlinear_show(rri, out)
 
@@ -199,9 +198,11 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 # Get SD1 and SD2
 # =============================================================================
 def _hrv_nonlinear_poincare(rri, out):
-    """Compute SD1 and SD2
+    """Compute SD1 and SD2.
+
     - Do existing measures of Poincare plot geometry reflect nonlinear features of heart rate
     variability? - Brennan (2001)
+
     """
 
     # HRV and hrvanalysis
@@ -232,9 +233,11 @@ def _hrv_nonlinear_poincare(rri, out):
 
 
 def _hrv_nonlinear_poincare_hra(rri, out):
-    """Heart Rate Asymmetry Indices
+    """Heart Rate Asymmetry Indices.
+
     - Asymmetry of Poincaré plot (or termed as heart rate asymmetry, HRA) - Yan (2017)
     - Asymmetric properties of long-term and total heart rate variability - Piskorski (2011)
+
     """
 
     N = len(rri) - 1
@@ -259,7 +262,7 @@ def _hrv_nonlinear_poincare_hra(rri, out):
     # Calculate the radius
     r = np.sqrt(x ** 2 + y ** 2)
     # Sector areas
-    S_all = 1/2 * theta_all * r ** 2
+    S_all = 1 / 2 * theta_all * r ** 2
 
     # Guzik's Index (GI)
     den_GI = np.sum(dist_all)
@@ -334,8 +337,7 @@ def _hrv_nonlinear_fragmentation(rri, out):
     # Inverse of the average length of the acceleration/deceleration segments (IALS)
     accelerations = np.where(diff_rri > 0)[0]
     decelerations = np.where(diff_rri < 0)[0]
-    consecutive = np.concatenate([find_consecutive(accelerations),
-                                  find_consecutive(decelerations)])
+    consecutive = np.concatenate([find_consecutive(accelerations), find_consecutive(decelerations)])
     lengths = [len(i) for i in consecutive]
     out["IALS"] = 1 / np.average(lengths)
 

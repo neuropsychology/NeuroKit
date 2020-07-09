@@ -26,7 +26,7 @@ def as_vector(x):
     """
     if isinstance(x, (pd.Series, pd.DataFrame)):
         out = x.values
-    elif isinstance(x, (str, float, int, np.int, np.int8, np.int16, np.int32, np.int64)):
+    elif isinstance(x, (str, float, int, np.int, np.intc, np.int8, np.int16, np.int32, np.int64)):
         out = np.array([x])
     else:
         out = np.array(x)
