@@ -291,12 +291,14 @@ signal = nk.signal_simulate(frequency=[5, 20, 30], amplitude=[1, 0.5, 0.3])
 multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=100, show=True)
 welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=100, show=True)
 burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=100, order=5, show=True)
+lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=100, show=True)
 
 
 # Visualize the different methods together
 fig, ax = plt.subplots()
 
 ax.plot(welch["Frequency"], welch["Power"].reset_index(drop=True), label="Welch", color="#CFD8DC", linewidth=2)
+ax.plot(lomb["Frequency"], lomb["Power"], label="Lomb", color="#BDBDBD", linewidth=2)
 ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#009688", linewidth=2)
 ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#2196F3", linewidth=2)
 
