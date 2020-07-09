@@ -49,12 +49,13 @@ def signal_psd(
     window_type : str
         Desired window to use. Defaults to 'hann'. See `scipy.signal.get_window()` for list of windows.
     order : int
-        The order of autoregression (for AR methods e.g. Burg).
+        The order of autoregression (only used for autoregressive (AR) methods such as 'burg').
     order_criteria : str
-        The criteria to automatically select order in parametric PSD (for AR methods e.g. Burg).
+        The criteria to automatically select order in parametric PSD (only used for autoregressive
+        (AR) methods such as 'burg').
     order_corrected : bool
-        Specify for AIC and KIC order_criteria. If unsure which method to use to choose the order,
-        rely on the default of corrected KIC.
+        Should the order criteria (AIC or KIC) be corrected? If unsure which method to use to choose
+        the order, rely on the default (i.e., the corrected KIC).
     **kwargs
         Keyword arguments to be passed to `scipy.signal.welch()`.
 
@@ -64,7 +65,7 @@ def signal_psd(
 
     Returns
     -------
-    pd.DataFrame
+    data : pd.DataFrame
         A DataFrame containing the Power Spectrum values and a plot if
         `show` is True.
 
@@ -120,7 +121,8 @@ def signal_psd(
                     sampling_rate=sampling_rate,
                     nperseg=nperseg,
                     window_type=window_type,
-                    normalize=normalize
+                    normalize=normalize,
+                    **kwargs
             )
 
         # Lombscargle (Scipy)
@@ -128,7 +130,6 @@ def signal_psd(
             frequency, power = _signal_psd_lomb(
                     signal,
                     sampling_rate=sampling_rate,
-                    nperseg=nperseg,
                     min_frequency=min_frequency,
                     max_frequency=max_frequency,
                     normalize=normalize
@@ -227,22 +228,9 @@ def _signal_psd_welch(
 
 
 def _signal_psd_lomb(
-    signal, sampling_rate=1000, nperseg=None, min_frequency=0, max_frequency=np.inf, normalize=True
+    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalize=True
 ):
 
-#    nfft = int(nperseg * 2)
-#    if max_frequency == np.inf:
-#        max_frequency = 20  # sanitize highest frequency
-#
-#    # Specify frequency range
-#    frequency = np.linspace(min_frequency, max_frequency, nfft)
-#    # Compute angular frequencies
-#    # angular_freqs = np.asarray(2 * np.pi / frequency)
-#
-#    # Specify sample times
-#    t = np.arange(len(signal))
-#
-#    power = np.asarray(scipy.signal.lombscargle(t, signal, frequency, normalize=True))
     try:
         import astropy.timeseries
         if max_frequency == np.inf:
@@ -272,7 +260,7 @@ def _signal_psd_burg(
 ):
 
     nfft = int(nperseg * 2)
-    ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected, side=side)
+    ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected)
     psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side)
 
     # signal is real, not complex
@@ -304,7 +292,7 @@ def _signal_psd_burg(
 
 
 
-def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True, side="one-sided"):
+def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True):
 
 
     # Sanitize order and signal

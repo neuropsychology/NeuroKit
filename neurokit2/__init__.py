@@ -22,7 +22,7 @@ from .stats import *
 
 
 # Info
-__version__ = "0.0.39"
+__version__ = "0.0.40"
 
 
 # Maintainer info

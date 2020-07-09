@@ -532,34 +532,14 @@ Signal Power Spectrum Density (PSD)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
-    # Generate signal with frequencies of 5, 20 and 30
-	signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20) + nk.signal_simulate(frequency=30)
-	
-	# Find Power Spectrum Density with different methods
-	# Mutlitaper
-	multitaper = nk.signal_psd(signal, method="multitapers", show=False, max_frequency=100)
-	# Welch
-	welch = nk.signal_psd(signal, method="welch", min_frequency=1, show=False, max_frequency=100)
-	# Burg
-	burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=False, ar_order=15, max_frequency=100)
+    # Generate complex signal
+    signal = nk.signal_simulate(duration=20, frequency=[0.5, 5, 10, 15], amplitude=[2, 1.5, 0.5, 0.3], noise=0.025)
 
-	# Visualize the different methods together
-	fig, ax = plt.subplots()
-
-	ax.plot(welch["Frequency"], welch["Power"], label="Welch", color="#CFD8DC", linewidth=2)
-	ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#00695C", linewidth=2)
-	ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#0097AC", linewidth=2)
-
-	ax.set_title("Power Spectrum Density (PSD)")
-	ax.set_yscale('log')
-	ax.set_xlabel("Frequency (Hz)")
-	ax.set_ylabel("PSD (ms^2/Hz)")
-	ax.legend(loc="upper right")
-
-	# Plot 3 frequencies of generated signal
-	ax.axvline(5, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
-	ax.axvline(20, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
-	ax.axvline(30, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+    # Get the PSD using different methods
+    welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=20, show=True)
+    multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=20, show=True)
+    lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=20, show=True)
+    burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_psd.png
         :target: https://neurokit2.readthedocs.io/en/latest/

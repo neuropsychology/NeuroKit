@@ -42,8 +42,32 @@ test_requirements = requirements + [
 
 # Setup
 setup(
+
+    # Info
+    name="neurokit2",
+    keywords="NeuroKit2, physiology, bodily signals, Python, ECG, EDA, EMG, PPG",
+    url="https://github.com/neuropsychology/NeuroKit",
+    version=find_version(),
+    description="The Python Toolbox for Neurophysiological Signal Processing.",
+    long_description=readme + "\n\n" + history,
+    long_description_content_type="text/x-rst",
+    license="MIT license",
+
+    # The name and contact of a maintainer
     author="Dominique Makowski",
     author_email="dom.makowski@gmail.com",
+
+    # Dependencies
+    install_requires=requirements,
+    setup_requires=setup_requirements,
+    extras_require={"test": test_requirements},
+    test_suite="pytest",
+    tests_require=test_requirements,
+
+    # Misc
+    packages=find_packages(),
+    include_package_data=True,
+    zip_safe=False,
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "Intended Audience :: Developers",
@@ -52,21 +76,5 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
-    ],
-    description="The Python Toolbox for Neurophysiological Signal Processing.",
-    install_requires=requirements,
-    extras_require={"test": test_requirements},
-    license="MIT license",
-    long_description=readme + "\n\n" + history,
-    long_description_content_type="text/x-rst",
-    packages=find_packages(),
-    include_package_data=True,
-    keywords="neurokit2",
-    name="neurokit2",
-    setup_requires=setup_requirements,
-    test_suite="pytest",
-    tests_require=test_requirements,
-    url="https://github.com/neuropsychology/NeuroKit",
-    version=find_version(),
-    zip_safe=False,
+    ]
 )

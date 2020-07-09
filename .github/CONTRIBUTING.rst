@@ -8,6 +8,14 @@ This package aims at being beginner-friendly. And if you're not yet familiar wit
 **Let's dive right into it!**
 
 
+Contributors acknowledgment
+---------------------------
+
+Contributing is the best way to learn programming, meeting new people and growing your professional network, getting known in the game and having a lot of fun. But **street cred** can sometimes not be enough, as it's important for young academics and students to get some "legit" rewards. We are fully aware of that. As such, **we are committed to crediting and rewarding contributors to the best of our abilities**.
+
+For instance, contributors of features, or tough bug fixes will be listed as official `Contributors <https://neurokit2.readthedocs.io/en/dev/authors.html>`_ section of our website. Additionally, frequent contributors that also get involved in general maintaining (e.g., participating in issues, fixing stuff, reviewing PRs, writing docs etc.) might be moved to the **core team**, as a part of the package maintainers (i.e., package coauthors), in which case they'll be expected to be more generally involved in the direction of the development. Finally, we expect this project (the development of the package *per se* and all of the discussions/experimentations that are around it) to result in several **publications** (could be about some features of the package, but also some tutorial papers, validation studies or whatnot). Obviously, people that contributed and allowed for a paper to be written will be included as authors.
+
+Long story short, we want this project to be helpful to you, whether you're a user, a contributor, or anything in between :) As always, do not hesitate to ask us if you have any questions.
 
 
 NeuroKit's style
