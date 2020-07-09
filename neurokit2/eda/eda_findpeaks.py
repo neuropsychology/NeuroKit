@@ -293,7 +293,31 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
 
 def _eda_findpeaks_nabian2018(eda_phasic):
+    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
+    approach by Nabian et al. (2018).
 
+    Parameters
+    ----------
+    eda_phasic : array
+        Input filterd EDA signal.
+
+    Returns
+    -------
+    onsets : array
+        Indices of the SCR onsets.
+    peaks : array
+        Indices of the SRC peaks.
+    amplitudes : array
+        SCR pulse amplitudes.
+
+    References
+    ----------
+    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
+    Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
+    journal of translational engineering in health and medicine, 6, 2800711.
+    https://doi.org/10.1109/JTEHM.2018.2878000
+
+    """
     # zero crossings
     pos_crossings = signal_zerocrossings(eda_phasic, direction="positive")
     neg_crossings = signal_zerocrossings(eda_phasic, direction="negative")
