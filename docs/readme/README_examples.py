@@ -1,13 +1,13 @@
 import numpy as np
 import pandas as pd
-# setup matplotlib with Agg to run on server
 import matplotlib
-matplotlib.use('Agg')
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import matplotlib.cm
 import neurokit2 as nk
 
+# setup matplotlib with Agg to run on server
+matplotlib.use('Agg')
 
 
 
@@ -284,17 +284,13 @@ fig.savefig("README_decomposition.png", dpi=300, h_pad=3)
 # Signal Power Spectrum Density
 # =============================================================================
 
-# Generate signal
-signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20) + nk.signal_simulate(frequency=30)
-# Find Power Spectrum Density with different methods
-# Mutlitaper
-multitaper = nk.signal_psd(signal, method="multitapers", show=False, max_frequency=100)
+# Generate complex signal
+signal = nk.signal_simulate(frequency=[5, 20, 30], amplitude=[1, 0.5, 0.3])
 
-# Welch
-welch = nk.signal_psd(signal, method="welch", min_frequency=1, show=False, max_frequency=100)
-
-# Burg
-burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=False, ar_order=15, max_frequency=100)
+# Get the PSD using different methods
+multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=100, show=True)
+welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=100, show=True)
+burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=100, order=5, show=True)
 
 
 # Visualize the different methods together
