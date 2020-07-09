@@ -86,10 +86,12 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         info = _eda_findpeaks_neurokit(eda_phasic, amplitude_min=amplitude_min)
     elif method in ["vanhalem2020", "vanhalem", "halem2020"]:
         info = _eda_findpeaks_vanhalem2020(eda_phasic, sampling_rate=sampling_rate)
+    elif method in ["nabian2018", "nabian"]:
+        info = _eda_findpeaks_nabian2018(eda_phasic)
     else:
         raise ValueError(
             "NeuroKit error: eda_findpeaks(): 'method' should be one of 'neurokit', 'gamboa2008', 'kim2004'"
-            " or 'vanhalem2020'."
+            " 'vanhalem2020' or 'nabian2018'."
         )
 
     return info
@@ -286,5 +288,39 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
     # output
     info = {"SCR_Onsets": onsets, "SCR_Peaks": pks, "SCR_Height": amps}
+
+    return info
+
+
+def _eda_findpeaks_nabian2018(eda_phasic):
+
+    # zero crossings
+    pos_crossings = signal_zerocrossings(eda_phasic, direction="positive")
+    neg_crossings = signal_zerocrossings(eda_phasic, direction="negative")
+
+    # Sanitize consecutive crossings
+    if len(pos_crossings) > len(neg_crossings):
+        pos_crossings = pos_crossings[0:len(neg_crossings)]
+    elif len(pos_crossings) < len(neg_crossings):
+        neg_crossings = neg_crossings[0:len(pos_crossings)]
+
+    peaks_list = []
+    onsets_list = []
+    amps_list = []
+    for i, j in zip(pos_crossings, neg_crossings):
+        window = eda_phasic[i:j]
+        amp = np.max(window)
+
+        # Detected SCRs with amplitudes less than 10% of max SCR amplitude will be eliminated
+        diff = amp - eda_phasic[i]
+        if not diff < (0.1 * amp):
+            peaks = np.where(eda_phasic == amp)[0]
+            peaks_list.append(peaks)
+            onsets_list.append(i)
+            amps_list.append(amp)
+
+    # output
+    info = {"SCR_Onsets": np.array(onsets_list), "SCR_Peaks": np.hstack(np.array(peaks_list)),
+            "SCR_Height": np.array(amps_list)}
 
     return info
