@@ -45,12 +45,13 @@ def signal_psd(
     window_type : str
         Desired window to use. Defaults to 'hann'. See `scipy.signal.get_window()` for list of windows.
     order : int
-        The order of autoregression (for AR methods e.g. Burg).
+        The order of autoregression (only used for autoregressive (AR) methods such as 'burg').
     order_criteria : str
-        The criteria to automatically select order in parametric PSD (for AR methods e.g. Burg).
+        The criteria to automatically select order in parametric PSD (only used for autoregressive
+        (AR) methods such as 'burg').
     order_corrected : bool
-        Specify for AIC and KIC order_criteria. If unsure which method to use to choose the order,
-        rely on the default of corrected KIC.
+        Should the order criteria (AIC or KIC) be corrected? If unsure which method to use to choose
+        the order, rely on the default (i.e., the corrected KIC).
     **kwargs
         Keyword arguments to be passed to `scipy.signal.welch()`.
 

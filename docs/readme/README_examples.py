@@ -311,10 +311,10 @@ axes[1].set_title("Power Spectrum Density (PSD)")
 axes[1].set_yscale('log')
 axes[1].set_xlabel("Frequency (Hz)")
 axes[1].set_ylabel(r"PSD ($ms^2/Hz$)")
-axes[1].legend(loc="upper right")
 
 for x in [0.5, 5, 10, 15]:
-    axes[1].axvline(x, color="#FF5722", linewidth=1, ymax=0.95, linestyle="--", label="Real Frequencies")
+    axes[1].axvline(x, color="#FF5722", linewidth=1, ymax=0.95, linestyle="--")
+axes[1].legend(loc="upper right")
 
 # Save plot
 fig = plt.gcf()
