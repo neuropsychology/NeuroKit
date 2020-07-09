@@ -5,7 +5,7 @@ from .find_closest import find_closest
 from .find_consecutive import find_consecutive
 from .listify import listify
 from .type_converters import as_vector
-from .warn import NeuroKitWarning
+from .warnings import NeuroKitWarning
 
 __all__ = [
     "listify",
