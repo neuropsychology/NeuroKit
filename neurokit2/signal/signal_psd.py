@@ -107,7 +107,7 @@ def signal_psd(
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
             warn(
-                "signal_psd(): The duration of recording is too short to support a "
+                "The duration of recording is too short to support a "
                 "sufficiently long window for high frequency resolution. Consider using a longer recording "
                 "or increasing the `min_frequency`",
                 category=NeuroKitWarning
@@ -450,7 +450,7 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=Non
         num[0] = 1.0 + 0j
         for k in range(0, iq):
             num[k + 1] = ma[k]
-        numf = np.fft(num, nfft)
+        numf = np.fft.fft(num, nfft)
 
     if ar is not None and ma is not None:
         psd = rho / sampling_rate * abs(numf) ** 2.0 / abs(denf) ** 2.0

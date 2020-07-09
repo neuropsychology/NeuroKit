@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 
-from ..rsp import rsp_process
-from ..signal import signal_filter, signal_interpolate, signal_rate, signal_resample
-from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..ecg import ecg_rsp
+from ..misc import NeuroKitWarning
+from ..rsp import rsp_process
+from ..signal import (signal_filter, signal_interpolate, signal_rate,
+                      signal_resample)
+from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 
 
 def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
@@ -339,11 +343,11 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         if len(rsp_cols) != 2:
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
-            print(
-                "NeuroKit warning: _hrv_rsa_formatinput():"
+            warn(
                 "RSP signal not found. For this time, we will derive RSP"
-                " signal from ECG using ecg_rsp(). But the results are "
-                "definitely not reliable, so please provide a real RSP signal."
+                "signal from ECG using ecg_rsp(). But the results are"
+                "definitely not reliable, so please provide a real RSP signal.",
+                category=NeuroKitWarning
             )
     elif isinstance(rsp_signals, tuple):
         rsp_signals = rsp_signals[0]
@@ -353,10 +357,10 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         if len(rsp_cols) != 2:
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
-            print(
-                "NeuroKit warning: _hrv_rsa_formatinput():"
+            warn(
                 "RSP signal not found. RSP signal is derived from ECG using"
-                "ecg_rsp(). Please provide RSP signal."
+                "ecg_rsp(). Please provide RSP signal.",
+                category=NeuroKitWarning
             )
 
     if rpeaks is None:

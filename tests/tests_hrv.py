@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 import neurokit2 as nk
 
@@ -43,6 +44,12 @@ def test_hrv_frequency():
     assert np.isnan(hrv1["HRV_VLF"][0])
     assert np.isnan(hrv2["HRV_LF"][0])
 
+    # Test warning on too short duration
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"The duration of recording is too short.*"):
+        ecg3 = nk.ecg_simulate(duration=10, sampling_rate=2000, heart_rate=70, random_state=42)
+        _, peaks3 = nk.ecg_process(ecg3, sampling_rate=2000)
+        nk.hrv_frequency(peaks3, sampling_rate=2000, silent=False)
+
 
 def test_hrv():
 
@@ -67,3 +74,40 @@ def test_hrv():
 
     assert all(elem in np.array(ecg_hrv.columns.values, dtype=object) for elem
                in columns)
+
+
+def test_hrv_rsa():
+    data = nk.data("bio_eventrelated_100hz")
+    ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
+    rsp_signals, _ = nk.rsp_process(data["RSP"], sampling_rate=100)
+
+    rsa_feature_columns = [
+      'RSA_P2T_Mean',
+      'RSA_P2T_Mean_log',
+      'RSA_P2T_SD',
+      'RSA_P2T_NoRSA',
+      'RSA_PorgesBohrer',
+     ]
+
+    rsa_features = nk.hrv_rsa(
+        ecg_signals,
+        rsp_signals,
+        rpeaks=info,
+        sampling_rate=100,
+        continuous=False
+    )
+
+    assert all(key in rsa_feature_columns for key in rsa_features.keys())
+
+    # Test simulate RSP signal warning
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"RSP signal not found.*"):
+        # TODO: Traceback (most recent call last):
+        #   File "main.py", line 11, in <module>
+        #     nk.hrv_rsa(ecg_signals, rpeaks=info, sampling_rate=100, continuous=False)
+        #   File "/home/alexander/sandbox/src/github.com/awwong1/NeuroKit/neurokit2/hrv/hrv_rsa.py", line 132, in hrv_rsa
+        #     signals, ecg_period, rpeaks, __ = _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
+        #   File "/home/alexander/sandbox/src/github.com/awwong1/NeuroKit/neurokit2/hrv/hrv_rsa.py", line 345, in _hrv_rsa_formatinput
+        #     edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
+        # TypeError: 'module' object is not callable
+
+        nk.hrv_rsa(ecg_signals, rpeaks=info, sampling_rate=100, continuous=False)

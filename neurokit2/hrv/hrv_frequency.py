@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 from ..signal.signal_power import _signal_power_instant_plot, signal_power
 from ..signal.signal_psd import signal_psd
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
@@ -138,11 +141,11 @@ def hrv_frequency(
     if silent is False:
         for frequency in out.keys():
             if out[frequency] == 0.0:
-                print(
-                    "Neurokit warning: hrv_frequency(): The duration of recording is too short to allow "
-                    " reliable computation of signal power in frequency band "
-                    + frequency
-                    + ". Its power is returned as zero."
+                warn(
+                    "The duration of recording is too short to allow"
+                    "reliable computation of signal power in frequency band " + frequency + "."
+                    "Its power is returned as zero.",
+                    category=NeuroKitWarning
                 )
 
     # Normalized

@@ -2,6 +2,7 @@
 import biosppy
 import matplotlib.pyplot as plt
 import numpy as np
+import pytest
 
 import neurokit2 as nk
 
@@ -180,6 +181,38 @@ def test_ecg_eventrelated():
     assert np.alltrue(np.array(ecg_eventrelated["ECG_Rate_Mean"]) < np.array(ecg_eventrelated["ECG_Rate_Max"]))
 
     assert len(ecg_eventrelated["Label"]) == 3
+
+    # Test warning on missing columns
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `ECG_Phase_Artrial`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["ECG_Phase_Atrial"]
+        nk.ecg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `ECG_Phase_Artrial`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["ECG_Phase_Ventricular"]
+        nk.ecg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `ECG_Quality`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["ECG_Quality"]
+        nk.ecg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `ECG_Rate`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["ECG_Rate"]
+        nk.ecg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    # Test warning on long epochs (eventrelated_utils)
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*duration of your epochs seems.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        first_epoch_copy.index = range(len(first_epoch_copy))
+        nk.ecg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
 
 def test_ecg_delineate():

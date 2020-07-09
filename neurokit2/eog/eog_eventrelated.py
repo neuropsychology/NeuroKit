@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 
 from ..epochs.eventrelated_utils import (
@@ -7,6 +9,7 @@ from ..epochs.eventrelated_utils import (
     _eventrelated_sanitizeinput,
     _eventrelated_sanitizeoutput,
 )
+from ..misc import NeuroKitWarning
 
 
 def eog_eventrelated(epochs, silent=False):
@@ -83,7 +86,7 @@ def eog_eventrelated(epochs, silent=False):
         # Number of blinks per epoch
         data[i] = _eog_eventrelated_features(epochs[i], data[i])
         for x in ["EOG_Rate_Trend_Quadratic", "EOG_Rate_Trend_Linear", "EOG_Rate_Trend_R2"]:
-            data[i].pop(x)
+            data[i].pop(x, None)
 
         # Fill with more info
         data[i] = _eventrelated_addinfo(epochs[i], data[i])
@@ -99,19 +102,19 @@ def eog_eventrelated(epochs, silent=False):
 def _eog_eventrelated_features(epoch, output={}):
 
     # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "EOG_Blinks" in i]) == 0:
-        print(
-            "NeuroKit warning: eog_eventrelated(): input does not"
-            "have an `EOG_Blinks` column. Unable to process blink features."
+    if "EOG_Blinks" not in epoch:
+        warn(
+            "input does not have an `EOG_Blinks` column."
+            "Unable to process blink features.",
+            category=NeuroKitWarning
         )
         return output
 
-    if len([i for i in colnames if "EOG_Rate" in i]) == 0:
-        print(
-            "NeuroKit warning: eog_eventrelated(): input does not"
-            "have an `EOG_Rate` column."
-            "Will skip computation of EOG rate."
+    if "EOG_Rate" not in epoch:
+        warn(
+            "input does not have an `EOG_Rate` column."
+            "Will skip computation of EOG rate.",
+            category=NeuroKitWarning
         )
         return output
 

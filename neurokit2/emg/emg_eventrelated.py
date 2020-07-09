@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 
-from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_sanitizeinput, _eventrelated_sanitizeoutput
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
+                                         _eventrelated_sanitizeinput,
+                                         _eventrelated_sanitizeoutput)
+from ..misc import NeuroKitWarning
 
 
 def emg_eventrelated(epochs, silent=False):
@@ -56,7 +61,14 @@ def emg_eventrelated(epochs, silent=False):
         data[i] = {}  # Initialize an empty dict for the current epoch
 
         # Activation following event
-        if np.any(epochs[i]["EMG_Onsets"][epochs[i].index > 0] != 0):
+        if "EMG_Onsets" not in epochs[i]:
+            warn(
+                "input does not have an `EMG_Onsets` column."
+                "Unable to process EMG features.",
+                category=NeuroKitWarning
+            )
+            data[i]["EMG_Activation"] = 0
+        elif np.any(epochs[i]["EMG_Onsets"][epochs[i].index > 0] != 0):
             data[i]["EMG_Activation"] = 1
         else:
             data[i]["EMG_Activation"] = 0
@@ -84,19 +96,11 @@ def emg_eventrelated(epochs, silent=False):
 def _emg_eventrelated_features(epoch, output={}):
 
     # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "EMG_Onsets" in i]) == 0:
-        print(
-            "NeuroKit warning: emg_eventrelated(): input does not"
-            "have an `EMG_Onsets` column. Unable to process EMG features."
-        )
-        return output
-
-    if len([i for i in colnames if "EMG_Activity" or "EMG_Amplitude" in i]) == 0:
-        print(
-            "NeuroKit warning: emg_eventrelated(): input does not"
-            "have an `EMG_Activity` column or `EMG_Amplitude` column."
-            "Will skip computation of EMG amplitudes."
+    if "EMG_Activity" not in epoch or "EMG_Amplitude" not in epoch:
+        warn(
+            "input does not have an `EMG_Activity` column or `EMG_Amplitude` column."
+            "Will skip computation of EMG amplitudes.",
+            category=NeuroKitWarning
         )
         return output
 

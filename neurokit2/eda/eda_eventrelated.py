@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 
-from ..epochs.eventrelated_utils import _eventrelated_addinfo, _eventrelated_sanitizeinput, _eventrelated_sanitizeoutput
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
+                                         _eventrelated_sanitizeinput,
+                                         _eventrelated_sanitizeoutput)
+from ..misc import NeuroKitWarning
 
 
 def eda_eventrelated(epochs, silent=False):
@@ -115,12 +120,11 @@ def eda_eventrelated(epochs, silent=False):
 def _eda_eventrelated_eda(epoch, output={}):
 
     # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "EDA_Phasic" in i]) == 0:
-        print(
-            "NeuroKit warning: eda_eventrelated(): input does not"
-            "have an `EDA_Phasic` column. Will skip computation"
-            "of maximum amplitude of phasic EDA component."
+    if "EDA_Phasic" not in epoch:
+        warn(
+            "input does not have an `EDA_Phasic` column."
+            "Will skip computation of maximum amplitude of phasic EDA component.",
+            category=NeuroKitWarning
         )
         return output
 
@@ -131,28 +135,27 @@ def _eda_eventrelated_eda(epoch, output={}):
 def _eda_eventrelated_scr(epoch, output={}):
 
     # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "SCR_Amplitude" in i]) == 0:
-        print(
-            "NeuroKit warning: eda_eventrelated(): input does not"
-            "have an `SCR_Amplitude` column. Will skip computation"
-            "of SCR peak amplitude."
+    if "SCR_Amplitude" not in epoch:
+        warn(
+            "input does not have an `SCR_Amplitude` column."
+            "Will skip computation of SCR peak amplitude.",
+            category=NeuroKitWarning
         )
         return output
 
-    if len([i for i in colnames if "SCR_RecoveryTime" in i]) == 0:
-        print(
-            "NeuroKit warning: eda_eventrelated(): input does not"
-            "have an `SCR_RecoveryTime` column. Will skip computation"
-            "of SCR half-recovery times."
+    if "SCR_RecoveryTime" not in epoch:
+        warn(
+            "input does not have an `SCR_RecoveryTime` column."
+            "Will skip computation of SCR half-recovery times.",
+            category=NeuroKitWarning
         )
         return output
 
-    if len([i for i in colnames if "SCR_RiseTime" in i]) == 0:
-        print(
-            "NeuroKit warning: eda_eventrelated(): input does not"
-            "have an `SCR_RiseTime` column. Will skip computation"
-            "of SCR rise times."
+    if "SCR_RiseTime" not in epoch:
+        warn(
+            "input does not have an `SCR_RiseTime` column."
+            "Will skip computation of SCR rise times.",
+            category=NeuroKitWarning
         )
         return output
 
