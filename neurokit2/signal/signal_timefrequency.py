@@ -163,7 +163,7 @@ def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1
     N = len(signal)
 #    sample_spacing = 1 / sampling_rate
     if nfreqbin is None:
-        nfreqbin = N
+        nfreqbin = 300
 
 #    # Zero-padded signal to length 2N
 #    signal_padded = np.append(signal, np.zeros_like(signal))
@@ -183,7 +183,7 @@ def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1
     # Create normalize windows in time and frequency
     if freq_window is None:
         freq_length = np.floor(nfreqbin / 4.0)
-        # Plus one if window length is odd
+        # Plus one if window length is not odd
         if freq_length % 2 == 0:
             freq_length += 1
         freq_window = scipy.signal.hamming(int(freq_length))
@@ -192,7 +192,7 @@ def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1
 
     if time_window is None:
         time_length = np.floor(N / 10.0)
-        # Plus one if window length is odd
+        # Plus one if window length is not odd
         if time_length % 2 == 0:
             time_length += 1
         time_window = scipy.signal.hamming(int(time_length))
@@ -237,8 +237,8 @@ def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1
         pwvd[0, i] = np.sum(g2 * signal[signal_pts] * np.conjugate(signal[signal_pts]))
         # other frequencies
         for m in range(int(tau_max)):
-            tau = np.arange(start=-np.min(midpt_time, N - t - m),
-                            stop=np.min(midpt_time, t - m - 1) + 1,
+            tau = np.arange(start=-np.min([midpt_time, N - t - m]),
+                            stop=np.min([midpt_time, t - m - 1]) + 1,
                             dtype='int')
             time_pts = (midpt_time + tau).astype(int)
             g2 = time_window[time_pts]
