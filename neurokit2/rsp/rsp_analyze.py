@@ -80,7 +80,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto"):
 
     # Interval-related analysis
     elif method in ["interval-related", "interval", "resting-state"]:
-        features = rsp_intervalrelated(data)
+        features = rsp_intervalrelated(data, sampling_rate)
 
     # Auto
     elif method in ["auto"]:
@@ -89,7 +89,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto"):
             for i in data:
                 duration = len(data[i]) / sampling_rate
             if duration >= 10:
-                features = rsp_intervalrelated(data)
+                features = rsp_intervalrelated(data, sampling_rate)
             else:
                 features = rsp_eventrelated(data)
 
@@ -100,7 +100,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto"):
             else:
                 duration = len(data) / sampling_rate
             if duration >= 10:
-                features = rsp_intervalrelated(data)
+                features = rsp_intervalrelated(data, sampling_rate)
             else:
                 features = rsp_eventrelated(data)
 

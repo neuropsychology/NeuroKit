@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a5fbd7de-1bfb-4b79-bdac-dd068dddfe1f" name="Default Changelist" comment="" />
+    <list default="true" id="a5fbd7de-1bfb-4b79-bdac-dd068dddfe1f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neurokit2/rsp/rsp_analyze.py" beforeDir="false" afterPath="$PROJECT_DIR$/neurokit2/rsp/rsp_analyze.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/neurokit2/rsp/rsp_rrv.py" beforeDir="false" afterPath="$PROJECT_DIR$/neurokit2/rsp/rsp_rrv.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,10 +33,10 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -62,18 +66,6 @@
       <method v="2" />
     </configuration>
   </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
-  </component>
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -94,17 +86,9 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1576465541167">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="781" y="438" key="Github.CreateGistDialog" timestamp="1594356233675">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="137" y="18" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1576465541167" />
-    <state x="184" y="6" key="SettingsEditor" timestamp="1576388119071">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="184" y="6" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1576388119071" />
-    <state x="384" y="187" key="com.intellij.ide.util.TipDialog" timestamp="1576573441528">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="384" y="187" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1576573441528" />
+    <state x="781" y="438" key="Github.CreateGistDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1594356233675" />
   </component>
 </project>
