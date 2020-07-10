@@ -20,7 +20,7 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
         The sampling frequency of the EDA signal (in Hz, i.e., samples/second).
     method : str
         The processing pipeline to apply. Can be one of "neurokit" (default),
-        "gamboa2008", "kim2004" (the default in BioSPPy) or "vanhalem2020".
+        "gamboa2008", "kim2004" (the default in BioSPPy), "vanhalem2020" or "nabian2018".
     amplitude_min : float
         Only used if 'method' is 'neurokit' or 'kim2004'. Minimum threshold by which to exclude
         SCRs (peaks) as relative to the largest amplitude in the signal.
@@ -53,8 +53,9 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     >>> kim2004 = nk.eda_findpeaks(eda_phasic, method="kim2004")
     >>> neurokit = nk.eda_findpeaks(eda_phasic, method="neurokit")
     >>> vanhalem2020 = nk.eda_findpeaks(eda_phasic, method="vanhalem2020")
+    >>> nabian2018 = nk.eda_findpeaks(eda_phasic, method="nabian2018")
     >>> fig = nk.events_plot([gamboa2008["SCR_Peaks"], kim2004["SCR_Peaks"], vanhalem2020["SCR_Peaks"],
-    ...                       neurokit["SCR_Peaks"]], eda_phasic)
+    ...                       neurokit["SCR_Peaks"], nabian2018["SCR_Peaks"]], eda_phasic)
     >>> fig #doctest: +SKIP
 
     References
@@ -68,6 +69,11 @@ def eda_findpeaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_m
     - van Halem, S., Van Roekel, E., Kroencke, L., Kuper, N., & Denissen, J. (2020).
       Moments That Matter? On the Complexity of Using Triggers Based on Skin Conductance to Sample
       Arousing Events Within an Experience Sampling Framework. European Journal of Personality.
+
+    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., & Ostadabbas, S. (2018). An
+      Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE
+      journal of translational engineering in health and medicine, 6, 2800711.
+      https://doi.org/10.1109/JTEHM.2018.2878000
 
     """
     # Try to retrieve the right column if a dataframe is passed
