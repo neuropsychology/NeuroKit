@@ -95,6 +95,9 @@ def test_eog_plot():
     np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
     plt.close(fig)
 
+    with pytest.raises(ValueError, match=r'NeuroKit error: eog_plot.*'):
+        nk.eog_plot(None)
+
 
 def test_eog_eventrelated():
 

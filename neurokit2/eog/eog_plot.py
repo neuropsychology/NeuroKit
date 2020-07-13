@@ -50,7 +50,7 @@ def eog_plot(eog_signals, peaks=None, sampling_rate=None):
     # Sanity-check input.
     if not isinstance(eog_signals, pd.DataFrame):
         raise ValueError(
-            "NeuroKit error: The `eog_signals` argument must"
+            "NeuroKit error: eog_plot(): The `eog_signals` argument must"
             " be the DataFrame returned by `eog_process()`."
         )
 
