@@ -56,6 +56,8 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     # Define window length
     if min_frequency == 0:
         min_frequency = 0.04  # sanitize lowest frequency to lf
+    if max_frequency == np.inf:
+        max_frequency = sampling_rate // 2  # nyquist
     if window is not None:
         nperseg = int(window * sampling_rate)
     else:
@@ -278,3 +280,48 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
     # Visualization
 
     return frequency_array, time_array, pwvd
+
+# =============================================================================
+# Continuous Wavelet Transform (CWT) - Morlet
+# =============================================================================
+
+
+def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, show=True):
+    """
+    References
+    ----------
+    - Neto, O. P., Pinheiro, A. O., Pereira Jr, V. L., Pereira, R., Baltatu, O. C., & Campos, L. A. (2016).
+    Morlet wavelet transforms of heart rate variability for autonomic nervous system activity.
+    Applied and Computational Harmonic Analysis, 40(1), 200-206.
+
+   - Wachowiak, M. P., Wachowiak-Smolíková, R., Johnson, M. J., Hay, D. C., Power, K. E.,
+   & Williams-Bell, F. M. (2018). Quantitative feature analysis of continuous analytic wavelet transforms
+   of electrocardiography and electromyography. Philosophical Transactions of the Royal Society A:
+   Mathematical, Physical and Engineering Sciences, 376(2126), 20170250.
+    """
+
+    # central frequency
+    w = 6.  # recommended
+
+    # frequency
+    freq = np.linspace(min_frequency, max_frequency, sampling_rate // 2)
+
+    # Time
+    time = np.arange(len(signal)) / sampling_rate
+    widths = w * sampling_rate / (2 * freq * np.pi)
+
+    # Mother wavelet = Morlet
+    cwtm = scipy.signal.cwt(signal, scipy.signal.morlet2, widths, w=w)
+
+    # Visualisation
+    if show is True:
+        plt.figure()
+#        spec = plt.pcolormesh(time, freq, np.abs(cwtm), cmap='viridis', shading='gouraud')
+        spec = plt.pcolormesh(time, freq, np.abs(cwtm),
+                              cmap=plt.get_cmap("magma"))
+        plt.colorbar(spec)
+        plt.title('Continuous Wavelet Transform Magnitude')
+        plt.ylabel('Frequency (Hz)')
+        plt.xlabel('Time (sec)')
+
+    return freq, time, cwtm
