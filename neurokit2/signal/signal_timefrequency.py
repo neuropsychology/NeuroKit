@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from ..signal.signal_detrend import signal_detrend
 
 
-def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, window=None, overlap=None, show=True):
+def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, method="stft", window=None, nfreqbin=None, overlap=None, show=True):
     """Quantify changes of a nonstationary signal’s frequency over time.
     The objective of time-frequency analysis is to offer a more informative description of the signal
     which reveals the temporal variation of its frequency contents.
@@ -17,13 +17,17 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
         The signal (i.e., a time series) in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
+    method : str
+        Time-Frequency decomposition method.
     min_frequency : float
         The minimum frequency.
     max_frequency : float
         The maximum frequency.
     window : int
         Length of each segment in seconds. If None (default), window will be automatically
-        calculated.
+        calculated. For stft method
+    nfreqbin : int, float
+        Number of frequency bins. If None (default), nfreqbin will be set to 0.5*sampling_rate.
     overlap : int
         Number of points to overlap between segments. If None, noverlap = nperseg // 8. Defaults to None.
         When specified, the Constant OverLap Add (COLA) constraint must be met.
@@ -50,7 +54,8 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     >>> rri = np.diff(peaks) / sampling_rate * 1000
     >>> desired_length = int(np.rint(peaks[-1]))
     >>> signal = nk.signal_interpolate(peaks[1:], rri, x_new=np.arange(desired_length))
-    >>> f, t, stft = nk.signal_timefrequency(signal, sampling_rate, max_frequency=0.5, show=True)
+    >>> f, t, stft = nk.signal_timefrequency(signal, sampling_rate, max_frequency=0.5, method="stft", show=True)
+    >>> f, t, cwtm = nk.signal_timefrequency(signal, sampling_rate, max_frequency=0.5, method="cwt", show=True)
     """
     # Initialize empty container for results
     # Define window length
@@ -58,23 +63,35 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
         min_frequency = 0.04  # sanitize lowest frequency to lf
     if max_frequency == np.inf:
         max_frequency = sampling_rate // 2  # nyquist
-    if window is not None:
-        nperseg = int(window * sampling_rate)
-    else:
-        # to capture at least 5 times slowest wave-length
-        nperseg = int((2 / min_frequency) * sampling_rate)
 
-    frequency, time, stft = short_term_ft(
-            signal,
-            sampling_rate=sampling_rate,
-            min_frequency=min_frequency,
-            max_frequency=max_frequency,
-            overlap=overlap,
-            nperseg=nperseg,
-            show=show
-            )
+    # STFT
+    if method.lower() in ["stft"]:
+        if window is not None:
+            nperseg = int(window * sampling_rate)
+        else:
+            # to capture at least 5 times slowest wave-length
+            nperseg = int((2 / min_frequency) * sampling_rate)
 
-    return frequency, time, stft
+        frequency, time, tfr = short_term_ft(
+                signal,
+                sampling_rate=sampling_rate,
+                min_frequency=min_frequency,
+                max_frequency=max_frequency,
+                overlap=overlap,
+                nperseg=nperseg,
+                show=show
+                )
+    # CWT
+    elif method.lower() in ["cwt", "wavelet"]:
+        frequency, time, tfr = continuous_wt(
+                signal,
+                sampling_rate=sampling_rate,
+                min_frequency=min_frequency,
+                max_frequency=max_frequency,
+                show=show
+                )
+
+    return frequency, time, tfr
 
 # =============================================================================
 # Short-Time Fourier Transform (STFT)
@@ -286,7 +303,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
 # =============================================================================
 
 
-def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, show=True):
+def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, nfreqbin=None, show=True):
     """
     References
     ----------
@@ -303,10 +320,13 @@ def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=
     # central frequency
     w = 6.  # recommended
 
-    # frequency
-    freq = np.linspace(min_frequency, max_frequency, sampling_rate // 2)
+    if nfreqbin is None:
+        nfreqbin = sampling_rate // 2
 
-    # Time
+    # frequency
+    freq = np.linspace(min_frequency, max_frequency, nfreqbin)
+
+    # time
     time = np.arange(len(signal)) / sampling_rate
     widths = w * sampling_rate / (2 * freq * np.pi)
 
