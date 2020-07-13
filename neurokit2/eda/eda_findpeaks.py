@@ -324,6 +324,10 @@ def _eda_findpeaks_nabian2018(eda_phasic):
     https://doi.org/10.1109/JTEHM.2018.2878000
 
     """
+
+    # smooth
+    eda_phasic = signal_smooth(eda_phasic, kernel="bartlett", size=20)
+
     # zero crossings
     pos_crossings = signal_zerocrossings(eda_phasic, direction="positive")
     neg_crossings = signal_zerocrossings(eda_phasic, direction="negative")
