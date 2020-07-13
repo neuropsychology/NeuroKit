@@ -232,8 +232,8 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
 
 def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
-    """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et
-    al.(2004).
+    """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
+    approach by Kim et al.(2004).
 
     Parameters
     ----------
