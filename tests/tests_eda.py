@@ -1,8 +1,10 @@
+import platform
+
 import biosppy
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import platform
+import pytest
 
 import neurokit2 as nk
 
@@ -151,6 +153,31 @@ def test_eda_eventrelated():
     assert int(pd.DataFrame(eda_eventrelated.values[no_activation]).isna().sum()) == 4
 
     assert len(eda_eventrelated["Label"]) == 3
+
+    # Test warning on missing columns
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EDA_Phasic`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["EDA_Phasic"]
+        nk.eda_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `SCR_Amplitude`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["SCR_Amplitude"]
+        nk.eda_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `SCR_RecoveryTime`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["SCR_RecoveryTime"]
+        nk.eda_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `SCR_RiseTime`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["SCR_RiseTime"]
+        nk.eda_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
 
 def test_eda_intervalrelated():

@@ -47,7 +47,7 @@ def eda_changepoints(eda_cleaned):
             colnames = eda_cleaned.columns.values
             if len([i for i in colnames if "EDA_Clean" in i]) == 0:
                 raise ValueError(
-                    "NeuroKit warning: eda_changepoints(): Your input does not contain the cleaned EDA signal."
+                    "NeuroKit error: eda_changepoints(): Your input does not contain the cleaned EDA signal."
                 )
             else:
                 eda_cleaned = eda_cleaned["EDA_Clean"]
