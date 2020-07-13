@@ -92,17 +92,18 @@ def _microstates_duration_plot(durations, types, ax=None):
     else:
         fig = None
 
-        parts = ax.violinplot(data, vert=False, showmedians=True, showextrema=False)
-        for component in parts:
-            if isinstance(parts[component], list):
-                for part in parts[component]:
-                    part.set_facecolor('#FF5722')
-                    part.set_edgecolor('white')
-            else:
-                parts[component].set_edgecolor('black')
-        ax.set_xlabel("Duration (s)")
-        ax.set_title("Duration")
+    parts = ax.violinplot(data, vert=False, showmedians=True, showextrema=False)
+    for component in parts:
+        if isinstance(parts[component], list):
+            for part in parts[component]:
+                part.set_facecolor('#FF5722')
+                part.set_edgecolor('white')
+        else:
+            parts[component].set_edgecolor('black')
+    ax.set_xlabel("Duration (s)")
+    ax.set_title("Duration")
 
+    return fig
 
 # =============================================================================
 # Prevalence
@@ -151,6 +152,8 @@ def _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=None, ax_d
     plt.legend()
     ax_prop.set_title("Proportion")
     ax_distrib.set_title("Lifetime Distribution")
+
+    return fig
 
 
 # Lifetime distribution
