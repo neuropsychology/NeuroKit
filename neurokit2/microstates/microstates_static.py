@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+import matplotlib.gridspec as gs
 from ..misc import find_groups, as_vector
 
 
@@ -13,7 +14,7 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     >>> import neurokit2 as nk
     >>>
     >>> microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
-    >>> nk.microstates_static(microstates, sampling_rate=100)
+    >>> nk.microstates_static(microstates, sampling_rate=100, show=True)
     """
     out = {}
     microstates = as_vector(microstates)
@@ -22,9 +23,15 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     out, durations, types = _microstates_duration(microstates, sampling_rate=sampling_rate, out=out)
 
     if show is True:
-        fig, axes = plt.subplots(nrows=2)
-        axes[0] = _microstates_prevalence_plot(microstates, lifetimes, out)
-        axes[1] = _microstates_duration_plot(durations, types)
+        fig = plt.figure(constrained_layout=False)
+        spec = gs.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
+
+        ax0 = fig.add_subplot(spec[1, :])
+        ax1 = fig.add_subplot(spec[0, :-1])
+        ax2 = fig.add_subplot(spec[0, 1])
+
+        _microstates_duration_plot(durations, types, ax=ax0)
+        _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=ax1, ax_distrib=ax2)
 
     df = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("Microstate_")
 
@@ -70,7 +77,7 @@ def _microstates_duration(microstates, sampling_rate=1000, out=None):
 
 
 
-def _microstates_duration_plot(durations, types):
+def _microstates_duration_plot(durations, types, ax=None):
     """
     """
     # Make data for violin
@@ -80,18 +87,21 @@ def _microstates_duration_plot(durations, types):
         data.append(durations[types == s])
 
     # Plot
-    fig, ax = plt.subplots(ncols=1)
-    parts = ax.violinplot(data, vert=False, showmedians=True, showextrema=False)
-    for component in parts:
-        if isinstance(parts[component], list):
-            for part in parts[component]:
-                part.set_facecolor('#FF5722')
-                part.set_edgecolor('white')
-        else:
-            parts[component].set_edgecolor('black')
-    plt.xlabel("Duration (s)")
-    ax.set_title("Duration")
+    if ax is None:
+        fig, ax = plt.subplots(ncols=1)
+    else:
+        fig = None
 
+        parts = ax.violinplot(data, vert=False, showmedians=True, showextrema=False)
+        for component in parts:
+            if isinstance(parts[component], list):
+                for part in parts[component]:
+                    part.set_facecolor('#FF5722')
+                    part.set_edgecolor('white')
+            else:
+                parts[component].set_edgecolor('black')
+        ax.set_xlabel("Duration (s)")
+        ax.set_title("Duration")
 
 
 # =============================================================================
@@ -121,17 +131,26 @@ def _microstates_prevalence(microstates, out=None):
     return out, lifetimes
 
 
-def _microstates_prevalence_plot(microstates, lifetimes, out):
+def _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=None, ax_distrib=None):
     """
     """
     states = np.unique(microstates)
-    fig, axes = plt.subplots(ncols=2)
+
+    # Plot
+    if ax_prop is None and ax_distrib is None:
+        fig, axes = plt.subplots(ncols=2)
+        ax_prop = axes[0]
+        ax_distrib = axes[1]
+    else:
+        fig = None
+
     for s in states:
-        axes[0].bar(s, out[str(s) + "_Proportion"])
-        axes[1].plot(lifetimes[s], label=str(s))
+        ax_prop.bar(s, out[str(s) + "_Proportion"])
+        ax_distrib.plot(lifetimes[s], label=str(s))
+
     plt.legend()
-    axes[0].set_title("Proportion")
-    axes[1].set_title("Lifetime Distribution")
+    ax_prop.set_title("Proportion")
+    ax_distrib.set_title("Lifetime Distribution")
 
 
 # Lifetime distribution
