@@ -14,7 +14,12 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     >>> import neurokit2 as nk
     >>>
     >>> microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
-    >>> nk.microstates_static(microstates, sampling_rate=100, show=True)
+    >>> nk.microstates_static(microstates, sampling_rate=100)  #doctest: +ELLIPSIS
+      Microstate_0_Proportion  ...  Microstate_Average_DurationMedian
+    0 ...                      ...  ...
+
+    [1 rows x 14 columns]
+
     """
     out = {}
     microstates = as_vector(microstates)
@@ -44,11 +49,11 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
 # =============================================================================
 def _microstates_duration(microstates, sampling_rate=1000, out=None):
     """
-    Examples
-    --------
-    >>> import numpy as np
-    >>> microstates = np.random.randint(0, 5, 1000)
-    >>> _microstates_basic(microstates, sampling_rate=100)  #doctest: +SKIP
+#    Examples
+#    --------
+#    >>> import numpy as np
+#    >>> microstates = np.random.randint(0, 5, 1000)
+#    >>> _microstates_basic(microstates, sampling_rate=100)  #doctest: +SKIP
     """
     states = np.unique(microstates)
 
@@ -78,8 +83,7 @@ def _microstates_duration(microstates, sampling_rate=1000, out=None):
 
 
 def _microstates_duration_plot(durations, types, ax=None):
-    """
-    """
+
     # Make data for violin
     states = np.unique(types)
     data = []
@@ -105,16 +109,17 @@ def _microstates_duration_plot(durations, types, ax=None):
 
     return fig
 
+
 # =============================================================================
 # Prevalence
 # =============================================================================
 def _microstates_prevalence(microstates, out=None):
     """
-    Examples
-    --------
-    >>> import numpy as np
-    >>> microstates = np.random.randint(0, 5, 1000)
-    >>> AUC, lifetimes = _microstates_prevalence(microstates, sampling_rate=100)  #doctest: +SKIP
+#    Examples
+#    --------
+#    >>> import numpy as np
+#    >>> microstates = np.random.randint(0, 5, 1000)
+#    >>> AUC, lifetimes = _microstates_prevalence(microstates, sampling_rate=100)
     """
     n = len(microstates)
     states = np.unique(microstates)
@@ -196,5 +201,3 @@ def _microstates_lifetime(microstates, out=None):
         out[str(s) + "_LifetimeDistribution"] = np.trapz(lifetimes[s])
 
     return out, lifetimes
-
-
