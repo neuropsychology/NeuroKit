@@ -262,10 +262,10 @@ def _signal_distort_noise(
     if noise_frequency > nyquist:
         if not silent:
             warn(
-                f"Skipping requested noise frequency"
-                f" of {noise_frequency} Hz since it cannot be resolved at"
-                f" the sampling rate of {sampling_rate} Hz. Please increase"
-                f" sampling rate to {noise_frequency * 10} Hz or choose"
+                f"Skipping requested noise frequency "
+                f" of {noise_frequency} Hz since it cannot be resolved at "
+                f" the sampling rate of {sampling_rate} Hz. Please increase "
+                f" sampling rate to {noise_frequency * 10} Hz or choose "
                 f" frequencies smaller than or equal to {nyquist} Hz.",
                 category=NeuroKitWarning
             )
@@ -276,11 +276,11 @@ def _signal_distort_noise(
     if (1 / noise_frequency) > duration:
         if not silent:
             warn(
-                f"Skipping requested noise frequency"
-                f" of {noise_frequency} Hz since its period of {1 / noise_frequency}"
-                f" seconds exceeds the signal duration of {duration} seconds."
-                f" Please choose noise frequencies larger than"
-                f" {1 / duration} Hz or increase the duration of the"
+                f"Skipping requested noise frequency "
+                f" of {noise_frequency} Hz since its period of {1 / noise_frequency} "
+                f" seconds exceeds the signal duration of {duration} seconds. "
+                f" Please choose noise frequencies larger than "
+                f" {1 / duration} Hz or increase the duration of the "
                 f" signal above {1 / noise_frequency} seconds.",
                 category=NeuroKitWarning
             )

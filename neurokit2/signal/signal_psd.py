@@ -107,9 +107,9 @@ def signal_psd(
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
             warn(
-                "The duration of recording is too short to support a "
-                "sufficiently long window for high frequency resolution. Consider using a longer recording "
-                "or increasing the `min_frequency`",
+                "The duration of recording is too short to support a"
+                " sufficiently long window for high frequency resolution."
+                " Consider using a longer recording or increasing the `min_frequency`",
                 category=NeuroKitWarning
             )
             nperseg = int(len(signal) / 2)
@@ -184,8 +184,8 @@ def _signal_psd_multitaper(
     except ImportError:
         raise ImportError(
             "NeuroKit error: signal_psd(): the 'mne'",
-            "module is required for the 'mne' method to run.",
-            "Please install it first (`pip install mne`).",
+            " module is required for the 'mne' method to run.",
+            " Please install it first (`pip install mne`).",
         )
     if normalize is True:
         power /= np.max(power)
@@ -241,8 +241,8 @@ def _signal_psd_lomb(
     except ImportError:
         raise ImportError(
             "NeuroKit error: signal_psd(): the 'astropy'",
-            "module is required for the 'lomb' method to run.",
-            "Please install it first (`pip install astropy`).",
+            " module is required for the 'lomb' method to run.",
+            " Please install it first (`pip install astropy`).",
         )
     if normalize is True:
         power /= np.max(power)

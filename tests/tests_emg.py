@@ -117,7 +117,7 @@ def test_emg_eventrelated():
         del first_epoch_copy["EMG_Activity"]
         nk.emg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EMG_Activity`.*"):
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an.*`EMG_Amplitude`.*"):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["EMG_Amplitude"]

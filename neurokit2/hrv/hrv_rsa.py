@@ -340,7 +340,8 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                 ecg_period = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_signals))
             else:
                 raise ValueError(
-                    "NeuroKit error: _hrv_rsa_formatinput():" "Wrong input, we couldn't extract" "heart rate signal."
+                    "NeuroKit error: _hrv_rsa_formatinput():"
+                    "Wrong input, we couldn't extract" "heart rate signal."
                 )
     if rsp_signals is None:
         rsp_cols = [col for col in ecg_signals.columns if "RSP_Phase" in col]
@@ -349,8 +350,8 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
             rsp_signals, _ = rsp_process(edr, sampling_rate)
             warn(
                 "RSP signal not found. For this time, we will derive RSP"
-                "signal from ECG using ecg_rsp(). But the results are"
-                "definitely not reliable, so please provide a real RSP signal.",
+                " signal from ECG using ecg_rsp(). But the results are"
+                " definitely not reliable, so please provide a real RSP signal.",
                 category=NeuroKitWarning
             )
     elif isinstance(rsp_signals, tuple):
@@ -362,8 +363,8 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
             warn(
-                "RSP signal not found. RSP signal is derived from ECG using"
-                "ecg_rsp(). Please provide RSP signal.",
+                "RSP signal not found. RSP signal is derived from ECG using ecg_rsp()."
+                " Please provide RSP signal.",
                 category=NeuroKitWarning
             )
 
@@ -371,7 +372,9 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         try:
             rpeaks = _signal_formatpeaks_sanitize(ecg_signals)
         except NameError:
-            raise ValueError("NeuroKit error: _hrv_rsa_formatinput(): Wrong input, we couldn't extract rpeaks indices.")
+            raise ValueError(
+                "NeuroKit error: _hrv_rsa_formatinput(): "
+                "Wrong input, we couldn't extract rpeaks indices.")
     else:
         rpeaks = _signal_formatpeaks_sanitize(rpeaks)
 

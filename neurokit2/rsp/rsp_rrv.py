@@ -154,8 +154,8 @@ def _rsp_rrv_frequency(
             if out[frequency] == 0.0:
                 warn(
                     "The duration of recording is too short to allow"
-                    "reliable computation of signal power in frequency band " + frequency + "."
-                    "Its power is returned as zero.",
+                    " reliable computation of signal power in frequency band " + frequency + "."
+                    " Its power is returned as zero.",
                     category=NeuroKitWarning
                 )
 
@@ -215,7 +215,7 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
             cols = [col for col in df.columns if "RSP_Peaks" in col]
             if len(cols) == 0:
                 raise ValueError(
-                    "NeuroKit error: _rsp_rrv_formatinput(): Wrong input,"
+                    "NeuroKit error: _rsp_rrv_formatinput(): Wrong input, "
                     "we couldn't extract rsp_rate and peaks indices."
                 )
             else:
@@ -228,8 +228,8 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
             peaks = _signal_formatpeaks_sanitize(df, key="RSP_Peaks")
         except NameError:
             raise ValueError(
-                "NeuroKit error: _rsp_rrv_formatinput():"
-                "Wrong input, we couldn't extract"
+                "NeuroKit error: _rsp_rrv_formatinput(): "
+                "Wrong input, we couldn't extract "
                 "respiratory peaks indices."
             )
     else:

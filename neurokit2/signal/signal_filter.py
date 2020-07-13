@@ -134,8 +134,8 @@ def signal_filter(
             filtered = _signal_filter_powerline(signal, sampling_rate, powerline)
         else:
             raise ValueError(
-                "NeuroKit error: signal_filter(): 'method' should be "
-                "one of 'butterworth', 'butterworth_ba', 'bessel',"
+                "NeuroKit error: signal_filter(): 'method' should be"
+                " one of 'butterworth', 'butterworth_ba', 'bessel',"
                 " 'savgol' or 'fir'."
             )
     return filtered
@@ -263,8 +263,8 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
         if sampling_rate <= 2 * highcut:
             warn(
                 "The sampling rate is too low. Sampling rate"
-                "must exceed the Nyquist rate to avoid aliasing problem."
-                f"In this analysis, the sampling rate has to be higher than {2 * highcut} Hz",
+                " must exceed the Nyquist rate to avoid aliasing problem."
+                f" In this analysis, the sampling rate has to be higher than {2 * highcut} Hz",
                 category=NeuroKitWarning
             )
 

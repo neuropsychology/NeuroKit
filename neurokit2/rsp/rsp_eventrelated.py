@@ -109,8 +109,8 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
     # Sanitize input
     if "RSP_Amplitude" not in epoch:
         warn(
-            "input does not have an `RSP_Amplitude` column."
-            "Will skip all amplitude-related features.",
+            "Input does not have an `RSP_Amplitude` column."
+            " Will skip all amplitude-related features.",
             category=NeuroKitWarning
         )
         return output
@@ -136,8 +136,8 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
     # Sanitize input
     if "RSP_Phase" not in epoch:
         warn(
-            "input does not have an `RSP_Phase` column."
-            "Will not indicate whether event onset concurs with inspiration.",
+            "Input does not have an `RSP_Phase` column."
+            " Will not indicate whether event onset concurs with inspiration.",
             category=NeuroKitWarning
         )
         return output

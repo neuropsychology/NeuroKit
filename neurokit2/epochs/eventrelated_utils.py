@@ -16,8 +16,8 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
 
     if not isinstance(epochs, dict):
         raise ValueError(
-            "NeuroKit error: " + str(what) + "_eventrelated(): Please specify an input"
-            "that is of the correct form i.e., either a dictionary"
+            "NeuroKit error: " + str(what) + "_eventrelated(): Please specify an input "
+            "that is of the correct form i.e., either a dictionary "
             "or dataframe."
         )
 
@@ -27,7 +27,7 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
         if length_mean > 10:
             warn(
                 str(what) + "_eventrelated():"
-                "The duration of your epochs seems quite long. You might want"
+                " The duration of your epochs seems quite long. You might want"
                 " to use " + str(what) + "_intervalrelated().",
                 category=NeuroKitWarning
             )
@@ -79,8 +79,8 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
     colnames = epoch.columns.values
     if len([i for i in colnames if var in i]) == 0:
         warn(
-            "input does not have an `" + var + "` column."
-            "Will skip all rate-related features.",
+            "Input does not have an `" + var + "` column."
+            " Will skip all rate-related features.",
             category=NeuroKitWarning
         )
         return output

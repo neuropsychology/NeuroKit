@@ -63,8 +63,8 @@ def emg_eventrelated(epochs, silent=False):
         # Activation following event
         if "EMG_Onsets" not in epochs[i]:
             warn(
-                "input does not have an `EMG_Onsets` column."
-                "Unable to process EMG features.",
+                "Input does not have an `EMG_Onsets` column."
+                " Unable to process EMG features.",
                 category=NeuroKitWarning
             )
             data[i]["EMG_Activation"] = 0
@@ -98,8 +98,8 @@ def _emg_eventrelated_features(epoch, output={}):
     # Sanitize input
     if "EMG_Activity" not in epoch or "EMG_Amplitude" not in epoch:
         warn(
-            "input does not have an `EMG_Activity` column or `EMG_Amplitude` column."
-            "Will skip computation of EMG amplitudes.",
+            "Input does not have an `EMG_Activity` column or `EMG_Amplitude` column."
+            " Will skip computation of EMG amplitudes.",
             category=NeuroKitWarning
         )
         return output

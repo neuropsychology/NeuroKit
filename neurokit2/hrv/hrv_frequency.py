@@ -143,8 +143,8 @@ def hrv_frequency(
             if out[frequency] == 0.0:
                 warn(
                     "The duration of recording is too short to allow"
-                    "reliable computation of signal power in frequency band " + frequency + "."
-                    "Its power is returned as zero.",
+                    " reliable computation of signal power in frequency band " + frequency + "."
+                    " Its power is returned as zero.",
                     category=NeuroKitWarning
                 )
 

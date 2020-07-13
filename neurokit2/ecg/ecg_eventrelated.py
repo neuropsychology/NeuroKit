@@ -139,8 +139,8 @@ def _ecg_eventrelated_phase(epoch, output={}):
     # Sanitize input
     if "ECG_Phase_Atrial" not in epoch or "ECG_Phase_Ventricular" not in epoch:
         warn(
-            "input does not have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
-            "Will not indicate whether event onset concurs with cardiac phase.",
+            "Input does not have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
+            " Will not indicate whether event onset concurs with cardiac phase.",
             category=NeuroKitWarning
         )
         return output
@@ -162,8 +162,8 @@ def _ecg_eventrelated_quality(epoch, output={}):
     colnames = epoch.columns.values
     if len([i for i in colnames if "ECG_Quality" in i]) == 0:
         warn(
-            "input does not have an `ECG_Quality` column."
-            "Quality of the signal is not computed.",
+            "Input does not have an `ECG_Quality` column."
+            " Quality of the signal is not computed.",
             category=NeuroKitWarning
         )
         return output

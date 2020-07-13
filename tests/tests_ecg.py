@@ -189,7 +189,7 @@ def test_ecg_eventrelated():
         del first_epoch_copy["ECG_Phase_Atrial"]
         nk.ecg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `ECG_Phase_Artrial`.*"):
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an.*`ECG_Phase_Ventricular`"):
         first_epoch_key = list(epochs.keys())[0]
         first_epoch_copy = epochs[first_epoch_key].copy()
         del first_epoch_copy["ECG_Phase_Ventricular"]
