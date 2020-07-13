@@ -19,6 +19,7 @@ from .ppg import *
 from .rsp import *
 from .signal import *
 from .stats import *
+from .microstates import *
 
 
 # Info
