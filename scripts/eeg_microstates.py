@@ -1,10 +1,11 @@
 import mne
+import scipy
 import numpy as np
 import pandas as pd
 import mne_microstates
 import neurokit2 as nk
 import matplotlib.pyplot as plt
-
+import seaborn as sns
 
 # =============================================================================
 # Microstates
@@ -20,16 +21,16 @@ raw = raw.pick_types(meg=False, eeg=True)
 raw = raw.set_eeg_reference('average')
 
 # Highpass filter the data a little bit
-raw = raw.filter(0.2, None)
+raw = raw.filter(1, 35)
 
 # Segment the data into 6 microstates
-topos, microstates = mne_microstates.segment(raw.get_data(), n_states=6)
+topos, microstates = mne_microstates.segment(raw.get_data(), n_states=4)
 
 # Plot the topographic maps of the found microstates
-#mne_microstates.plot_maps(topos, raw.info)
+mne_microstates.plot_maps(topos, raw.info)
 
 # Plot the segmentation of the first 500 samples
-#mne_microstates.plot_segmentation(microstates[:500], raw.get_data()[:, :500], raw.times[:500])
+mne_microstates.plot_segmentation(microstates[:500], raw.get_data()[:, :500], raw.times[:500])
 
 
 # =============================================================================
@@ -44,9 +45,7 @@ events = events[events["Condition"].isin([1, 2, 3, 4])]
 events["Condition"].loc[events["Condition"].isin([1, 2])] = "Audio"
 events["Condition"].loc[events["Condition"] != "Audio"] = "Visual"
 
-
-
-epochs = nk.epochs_create(microstates, events["Index"], sampling_rate=150, epochs_end=1, event_conditions=events["Condition"])
+epochs = nk.epochs_create(microstates, events["Index"], sampling_rate=150, epochs_end=0.5, event_conditions=events["Condition"])
 
 
 # =============================================================================
@@ -54,12 +53,23 @@ epochs = nk.epochs_create(microstates, events["Index"], sampling_rate=150, epoch
 # =============================================================================
 df = []  # Initialize an empty dict
 for i in epochs.keys():
-    data = nk.microstates_static(epochs[i]["Signal"].values, sampling_rate=150)
+    data = nk.microstates_static(epochs[i]["Signal"], sampling_rate=150)
+    data = pd.concat([data, nk.microstates_dynamic(epochs[i]["Signal"])], axis=1)
     data["Condition"] = epochs[i]["Condition"][0]
     df.append(data)
-df = pd.concat(data, axis=0)
+df = pd.concat(df, axis=0).reset_index(drop=True)
 
 
 # =============================================================================
 # Analysis
 # =============================================================================
+variables = [("Microstate_" + str(state) + "_" + var) for state in np.unique(microstates) for var in ["Proportion", "LifetimeDistribution", "DurationMedian", "DurationMean"]]
+variables += list(df.copy().filter(regex='_to_').columns)
+
+
+for var in variables:
+    ttest = scipy.stats.ttest_ind(df[df["Condition"] == "Audio"][var], df[df["Condition"] == "Visual"][var], equal_var=False, nan_policy="omit")
+    if ttest[1] < 0.2:
+        print(var + ": t = %.2f, p = %.2f" % (ttest[0], ttest[1]))
+
+df.copy().filter(regex='Proportion|Condition').boxplot(by="Condition")

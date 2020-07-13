@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import matplotlib.gridspec
 from matplotlib import pyplot as plt
-import matplotlib.gridspec as gs
 from ..misc import find_groups, as_vector
 
 
@@ -24,7 +24,7 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
 
     if show is True:
         fig = plt.figure(constrained_layout=False)
-        spec = gs.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
+        spec = matplotlib.gridspec.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
 
         ax0 = fig.add_subplot(spec[1, :])
         ax1 = fig.add_subplot(spec[0, :-1])
