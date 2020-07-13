@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 from matplotlib import pyplot as plt
-from ..misc import find_groups
+from ..misc import find_groups, as_vector
 
 
 def microstates_static(microstates, sampling_rate=1000, show=False):
@@ -15,6 +16,7 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     >>> nk.microstates_static(microstates, sampling_rate=100)
     """
     out = {}
+    microstates = as_vector(microstates)
 
     out, lifetimes = _microstates_prevalence(microstates, out=out)
     out, durations, types = _microstates_duration(microstates, sampling_rate=sampling_rate, out=out)
@@ -24,7 +26,9 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
         axes[0] = _microstates_prevalence_plot(microstates, lifetimes, out)
         axes[1] = _microstates_duration_plot(durations, types)
 
-    return out
+    df = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("Microstate_")
+
+    return df
 
 
 
@@ -37,9 +41,8 @@ def _microstates_duration(microstates, sampling_rate=1000, out=None):
     --------
     >>> import numpy as np
     >>> microstates = np.random.randint(0, 5, 1000)
-    >>> _microstates_basic(microstates, sampling_rate=100)
+    >>> _microstates_basic(microstates, sampling_rate=100)  #doctest: +SKIP
     """
-    n = len(microstates)
     states = np.unique(microstates)
 
     if out is None:
@@ -56,10 +59,10 @@ def _microstates_duration(microstates, sampling_rate=1000, out=None):
 
     # Average duration
     for s in states:
-        out["Microstate_" + str(s) + "_DurationMean"] = np.mean(durations[types == s])
-        out["Microstate_" + str(s) + "_DurationMedian"] = np.median(durations[types == s])
-    out["Microstate_Average_DurationMean"] = np.mean(durations)
-    out["Microstate_Average_DurationMedian"] = np.median(durations)
+        out[str(s) + "_DurationMean"] = np.mean(durations[types == s])
+        out[str(s) + "_DurationMedian"] = np.median(durations[types == s])
+    out["Average_DurationMean"] = np.mean(durations)
+    out["Average_DurationMedian"] = np.median(durations)
 
 
 
@@ -100,7 +103,7 @@ def _microstates_prevalence(microstates, out=None):
     --------
     >>> import numpy as np
     >>> microstates = np.random.randint(0, 5, 1000)
-    >>> _microstates_prevalence(microstates, sampling_rate=100)
+    >>> AUC, lifetimes = _microstates_prevalence(microstates, sampling_rate=100)  #doctest: +SKIP
     """
     n = len(microstates)
     states = np.unique(microstates)
@@ -110,7 +113,7 @@ def _microstates_prevalence(microstates, out=None):
 
     # Average proportion
     for s in states:
-        out["Microstate_" + str(s) + "_Proportion"] = np.sum(microstates == s) / n
+        out[str(s) + "_Proportion"] = np.sum(microstates == s) / n
 
     # Leftime distribution
     out, lifetimes = _microstates_lifetime(microstates, out=out)
@@ -124,7 +127,7 @@ def _microstates_prevalence_plot(microstates, lifetimes, out):
     states = np.unique(microstates)
     fig, axes = plt.subplots(ncols=2)
     for s in states:
-        axes[0].bar(s, out["Microstate_" + str(s) + "_Proportion"])
+        axes[0].bar(s, out[str(s) + "_Proportion"])
         axes[1].plot(lifetimes[s], label=str(s))
     plt.legend()
     axes[0].set_title("Proportion")
@@ -137,12 +140,6 @@ def _microstates_lifetime(microstates, out=None):
     """Based on https://github.com/Frederic-vW/eeg_microstates
 
     Compute the lifetime distributions for each symbol in a symbolic sequence X with ns symbols.
-
-    Examples
-    --------
-    >>> import numpy as np
-    >>> microstates = np.random.randint(0, 5, 1000)
-    >>> lifetimes, auc = _microstates_lifetimes(microstates, show=True)
     """
     n = len(microstates)
     states = np.unique(microstates)
@@ -174,7 +171,7 @@ def _microstates_lifetime(microstates, out=None):
     if out is None:
         out = {}
     for s in states:
-        out["Microstate_" + str(s) + "_LifetimeDistribution"] = np.trapz(lifetimes[s])
+        out[str(s) + "_LifetimeDistribution"] = np.trapz(lifetimes[s])
 
     return out, lifetimes
 
