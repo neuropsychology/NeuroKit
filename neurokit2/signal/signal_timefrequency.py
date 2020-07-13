@@ -3,6 +3,8 @@ import numpy as np
 import scipy.signal
 import matplotlib.pyplot as plt
 
+from ..signal.signal_detrend import signal_detrend
+
 
 def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, window=None, overlap=None, show=True):
     """Quantify changes of a nonstationary signal’s frequency over time.
@@ -58,7 +60,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
         nperseg = int(window * sampling_rate)
     else:
         # to capture at least 5 times slowest wave-length
-        nperseg = int((5 / min_frequency) * sampling_rate)
+        nperseg = int((2 / min_frequency) * sampling_rate)
 
     frequency, time, stft = short_term_ft(
             signal,
@@ -94,7 +96,8 @@ def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=
         nperseg=nperseg,
         nfft=None,
         detrend=False,
-        noverlap=overlap
+        noverlap=overlap,
+        mode="complex"
     )
 
     # Visualization
@@ -127,17 +130,17 @@ def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=
 # =============================================================================
 
 
-def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1, nfreqbin=None):
+def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=None, segment_step=1, nfreqbin=None, window_method="hamming"):
     """Smoothed Pseudo Wigner Ville Distribution
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    freq_window : np.array
-        Frequency smoothing window.
-    time_window: np.array
-        Time smoothing window
+    freq_length : np.array
+        Lenght of frequency smoothing window.
+    time_length: np.array
+        Lenght of time smoothing window
     segment_step : int
         The step between samples in `time_array`. Default to 1.
     nfreqbin : int
@@ -161,61 +164,62 @@ def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1
 
     # Define parameters
     N = len(signal)
-#    sample_spacing = 1 / sampling_rate
+    sample_spacing = 1 / sampling_rate
     if nfreqbin is None:
         nfreqbin = 300
 
-#    # Zero-padded signal to length 2N
-#    signal_padded = np.append(signal, np.zeros_like(signal))
-#
-#    # DFT
-#    signal_fft = np.fft.fft(signal_padded)
-#    signal_fft[1: N-1] = signal_fft[1: N-1] * 2
-#    signal_fft[N:] = 0
-#
-#    # Inverse FFT
-#    signal_ifft = np.fft.ifft(signal_fft)
-#    signal_ifft[N:] = 0
-#
-#    # Make analytic signal
-#    a_signal = scipy.signal.hilbert(signal_detrend(signal_ifft))
+    # Zero-padded signal to length 2N
+    signal_padded = np.append(signal, np.zeros_like(signal))
 
-    # Create normalize windows in time and frequency
-    if freq_window is None:
-        freq_length = np.floor(nfreqbin / 4.0)
+    # DFT
+    signal_fft = np.fft.fft(signal_padded)
+    signal_fft[1: N-1] = signal_fft[1: N-1] * 2
+    signal_fft[N:] = 0
+
+    # Inverse FFT
+    signal_ifft = np.fft.ifft(signal_fft)
+    signal_ifft[N:] = 0
+
+    # Make analytic signal
+    signal = scipy.signal.hilbert(signal_detrend(signal_ifft))
+
+    # Create smoothing windows in time and frequency
+    if freq_length is None:
+        freq_length = np.floor(N / 4.0)
         # Plus one if window length is not odd
         if freq_length % 2 == 0:
             freq_length += 1
-        freq_window = scipy.signal.hamming(int(freq_length))
-    elif len(freq_window) % 2 == 0:
-        raise ValueError("The length of freq_window must be odd.")
+    elif len(freq_length) % 2 == 0:
+        raise ValueError("The length of frequency smoothing window must be odd.")
 
-    if time_window is None:
+    if time_length is None:
         time_length = np.floor(N / 10.0)
         # Plus one if window length is not odd
         if time_length % 2 == 0:
             time_length += 1
-        time_window = scipy.signal.hamming(int(time_length))
-    elif len(time_window) % 2 == 0:
-        raise ValueError("The length of time_window must be odd.")
+    elif len(time_length) % 2 == 0:
+        raise ValueError("The length of time smoothing window must be odd.")
 
+    if window_method == "hamming":
+        freq_window = scipy.signal.hamming(int(freq_length))  # normalize by max
+        time_window = scipy.signal.hamming(int(time_length))  # normalize by max
+    elif window_method == "gaussian":
+        std_freq = freq_length / (6 * np.sqrt(2 * np.log(2)))
+        freq_window = scipy.signal.gaussian(freq_length, std_freq)
+        freq_window /= max(freq_window)
+        std_time = time_length / (6 * np.sqrt(2 * np.log(2)))
+        time_window = scipy.signal.gaussian(time_length, std_time)
+        time_window /= max(time_window)
+    # to add warning if method is not one of the supported methods
+
+    # Mid-point index of windows
     midpt_freq = (len(freq_window) - 1) // 2
     midpt_time = (len(time_window) - 1) // 2
-
-#    std_freq = freq_window / (6 * np.sqrt(2 * np.log(2)))
-#    std_time = time_window / (6 * np.sqrt(2 * np.log(2)))
-#
-#    # Calculate windows
-#    w_freq = scipy.signal.gaussian(freq_window, std_freq)
-#    w_freq /= sum(w_freq)
-#
-#    w_time = scipy.signal.gaussian(time_window, std_time)
-#    w_time /= sum(w_time)
 
     # Create arrays
     time_array = np.arange(start=0, stop=N, step=segment_step, dtype=int)
 #    frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
-    frequency_array = 0.5 * np.arange(nfreqbin, dtype=float) / nfreqbin
+    frequency_array = 0.5 * np.arange(nfreqbin, dtype=float) / N
     pwvd = np.zeros((nfreqbin, len(time_array)), dtype=complex)
 
     # Calculate pwvd
@@ -223,7 +227,7 @@ def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1
         # time shift
         tau_max = np.min([t + midpt_time - 1,
                           N - t + midpt_time,
-                          np.round(nfreqbin / 2.0) - 1,
+                          np.round(N / 2.0) - 1,
                           midpt_freq])
         # time-lag list
         tau = np.arange(start=-np.min([midpt_time, N - t]),
@@ -252,7 +256,7 @@ def smooth_pseudo_wvd(signal, freq_window=None, time_window=None, segment_step=1
             rmm = np.sum(g2 * signal[signal_pt2] * np.conjugate(signal[signal_pt1]))
             pwvd[nfreqbin - m - 1, i] = freq_window[midpt_freq - m + 1] * rmm
 
-        m = np.round(nfreqbin / 2.0)
+        m = np.round(N / 2.0)
 
         if t <= N - m and t >= m + 1 and m <= midpt_freq:
             tau = np.arange(start=-np.min([midpt_time, N - t - m]),
