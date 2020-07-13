@@ -24,11 +24,11 @@ def emg_activation(
     emg_amplitude : array
         At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
         ``emg_amplitude()`` for methods like 'threshold' or 'mixture'), and / or the cleaned EMG signal
-        (for methods like 'pelt').
+        (for methods like 'pelt' or 'biosppy').
     emg_cleaned : array
         At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
         ``emg_amplitude()`` for methods like 'threshold' or 'mixture'), and / or the cleaned EMG signal
-        (for methods like 'pelt').
+        (for methods like 'pelt' or 'biosppy').
     sampling_rate : int
         The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).
     method : str
