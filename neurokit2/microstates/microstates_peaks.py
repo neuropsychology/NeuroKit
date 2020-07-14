@@ -2,6 +2,7 @@
 import numpy as np
 import scipy.signal
 
+
 def microstates_peaks(eeg, sampling_rate=1000, normalize=True, robust=False):
     """Find peaks of stability using the GFP
 

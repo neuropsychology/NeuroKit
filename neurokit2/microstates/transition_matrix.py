@@ -158,9 +158,15 @@ def _transition_matrix_observed(sequence):
     # Convert to probabilities
     matrix = matrix / np.sum(matrix, axis=0)[:, None]
 
+    # filling in a row containing zeros with uniform p values
+    uniform_p = 1 / n_states
+    zero_row = np.argwhere(matrix.sum(axis=1) == 0).ravel()
+    matrix[zero_row, :] = uniform_p
+
     # Convert to DataFrame
     out = pd.DataFrame(matrix, index=states, columns=states)
     return out
+
 
 
 def _transition_matrix_expected(observed_matrix):
@@ -169,6 +175,7 @@ def _transition_matrix_expected(observed_matrix):
     expected_matrix = scipy.stats.contingency.expected_freq(observed_matrix.values)
     expected_matrix = pd.DataFrame(expected_matrix, index=observed_matrix.index, columns=observed_matrix.columns)
     return expected_matrix
+
 
 
 def _transition_matrix_symmetry(sequence):
