@@ -9,6 +9,9 @@ from ..misc import find_groups, as_vector
 def microstates_static(microstates, sampling_rate=1000, show=False):
     """Static properties of microstates
 
+    The duration of each microstate is also referred to as the Ratio of Time Covered (RTT) in
+    some microstates publications.
+
     Examples
     --------
     >>> import neurokit2 as nk
@@ -49,11 +52,6 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
 # =============================================================================
 def _microstates_duration(microstates, sampling_rate=1000, out=None):
     """
-#    Examples
-#    --------
-#    >>> import numpy as np
-#    >>> microstates = np.random.randint(0, 5, 1000)
-#    >>> _microstates_basic(microstates, sampling_rate=100)  #doctest: +SKIP
     """
     states = np.unique(microstates)
 
@@ -115,11 +113,6 @@ def _microstates_duration_plot(durations, types, ax=None):
 # =============================================================================
 def _microstates_prevalence(microstates, out=None):
     """
-#    Examples
-#    --------
-#    >>> import numpy as np
-#    >>> microstates = np.random.randint(0, 5, 1000)
-#    >>> AUC, lifetimes = _microstates_prevalence(microstates, sampling_rate=100)
     """
     n = len(microstates)
     states = np.unique(microstates)

@@ -27,12 +27,19 @@ raw = raw.filter(1, 35)
 topos, microstates = mne_microstates.segment(raw.get_data(), n_states=4)
 
 # Plot the topographic maps of the found microstates
-mne_microstates.plot_maps(topos, raw.info)
+#mne_microstates.plot_maps(topos, raw.info)
 
 # Plot the segmentation of the first 500 samples
-mne_microstates.plot_segmentation(microstates[:500], raw.get_data()[:, :500], raw.times[:500])
+#mne_microstates.plot_segmentation(microstates[:500], raw.get_data()[:, :500], raw.times[:500])
 
+data = raw.get_data()
 
+raw.data.std(0)
+np.sqrt((D * D).mean(axis=0))
+
+a = np.sqrt((data * data).mean(axis=0))
+b = np.abs(data.mean(axis=0))
+a == b
 # =============================================================================
 # Epochs
 # =============================================================================
@@ -51,10 +58,14 @@ epochs = nk.epochs_create(microstates, events["Index"], sampling_rate=150, epoch
 # =============================================================================
 # Results
 # =============================================================================
+nk.microstates_static(microstates, sampling_rate=150)["Microstate_Average_DurationMean"]
+
 df = []  # Initialize an empty dict
 for i in epochs.keys():
     data = nk.microstates_static(epochs[i]["Signal"], sampling_rate=150)
-    data = pd.concat([data, nk.microstates_dynamic(epochs[i]["Signal"])], axis=1)
+    data = pd.concat([data,
+                      nk.microstates_dynamic(epochs[i]["Signal"]),
+                      nk.microstates_complexity(epochs[i]["Signal"])], axis=1)
     data["Condition"] = epochs[i]["Condition"][0]
     df.append(data)
 df = pd.concat(df, axis=0).reset_index(drop=True)
@@ -65,6 +76,7 @@ df = pd.concat(df, axis=0).reset_index(drop=True)
 # =============================================================================
 variables = [("Microstate_" + str(state) + "_" + var) for state in np.unique(microstates) for var in ["Proportion", "LifetimeDistribution", "DurationMedian", "DurationMean"]]
 variables += list(df.copy().filter(regex='_to_').columns)
+variables += ["Microstate_Entropy_Shannon"]
 
 
 for var in variables:
