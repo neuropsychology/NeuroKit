@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
 
 from ..epochs.eventrelated_utils import (
     _eventrelated_addinfo,
@@ -6,6 +7,7 @@ from ..epochs.eventrelated_utils import (
     _eventrelated_sanitizeinput,
     _eventrelated_sanitizeoutput,
 )
+from ..misc import NeuroKitWarning
 
 
 def ecg_eventrelated(epochs, silent=False):
@@ -135,13 +137,11 @@ def ecg_eventrelated(epochs, silent=False):
 def _ecg_eventrelated_phase(epoch, output={}):
 
     # Sanitize input
-    colnames = epoch.columns.values
-    if len([i for i in colnames if "ECG_Phase_Atrial" in i]) == 0:
-        print(
-            "NeuroKit warning: ecg_eventrelated(): input does not"
-            "have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
-            "Will not indicate whether event onset concurs with cardiac"
-            "phase."
+    if "ECG_Phase_Atrial" not in epoch or "ECG_Phase_Ventricular" not in epoch:
+        warn(
+            "Input does not have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
+            " Will not indicate whether event onset concurs with cardiac phase.",
+            category=NeuroKitWarning
         )
         return output
 
@@ -161,10 +161,10 @@ def _ecg_eventrelated_quality(epoch, output={}):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if "ECG_Quality" in i]) == 0:
-        print(
-            "NeuroKit warning: ecg_eventrelated(): input does not"
-            "have an `ECG_Quality` column. Quality of the signal"
-            "is not computed."
+        warn(
+            "Input does not have an `ECG_Quality` column."
+            " Quality of the signal is not computed.",
+            category=NeuroKitWarning
         )
         return output
 

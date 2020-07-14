@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pytest
 
 import neurokit2 as nk
 
@@ -19,6 +20,11 @@ def test_events_find():
 
     events = nk.events_find(signal, inter_min=300)
     assert list(events["onset"]) == [0, 550, 864]
+
+    # No events found warning
+    signal = np.zeros(1000)
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r'No events found.*'):
+        nk.events_find(signal)
 
 
 def test_events_to_mne():

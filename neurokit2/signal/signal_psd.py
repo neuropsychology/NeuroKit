@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 import scipy.signal
+
+from ..misc import NeuroKitWarning
 
 
 def signal_psd(
@@ -102,10 +106,11 @@ def signal_psd(
 
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
-            print(
-                "Neurokit warning: signal_psd(): The duration of recording is too short to support a "
-                "sufficiently long window for high frequency resolution. Consider using a longer recording "
-                "or increasing the `min_frequency`"
+            warn(
+                "The duration of recording is too short to support a"
+                " sufficiently long window for high frequency resolution."
+                " Consider using a longer recording or increasing the `min_frequency`",
+                category=NeuroKitWarning
             )
             nperseg = int(len(signal) / 2)
 
@@ -178,9 +183,9 @@ def _signal_psd_multitaper(
         )
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_psd(): the 'mne'",
-            "module is required for the 'mne' method to run.",
-            "Please install it first (`pip install mne`).",
+            "NeuroKit error: signal_psd(): the 'mne'",
+            " module is required for the 'mne' method to run.",
+            " Please install it first (`pip install mne`).",
         )
     if normalize is True:
         power /= np.max(power)
@@ -235,9 +240,9 @@ def _signal_psd_lomb(
 
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_psd(): the 'astropy'",
-            "module is required for the 'lomb' method to run.",
-            "Please install it first (`pip install astropy`).",
+            "NeuroKit error: signal_psd(): the 'astropy'",
+            " module is required for the 'lomb' method to run.",
+            " Please install it first (`pip install astropy`).",
         )
     if normalize is True:
         power /= np.max(power)
@@ -445,7 +450,7 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=Non
         num[0] = 1.0 + 0j
         for k in range(0, iq):
             num[k + 1] = ma[k]
-        numf = np.fft(num, nfft)
+        numf = np.fft.fft(num, nfft)
 
     if ar is not None and ma is not None:
         psd = rho / sampling_rate * abs(numf) ** 2.0 / abs(denf) ** 2.0

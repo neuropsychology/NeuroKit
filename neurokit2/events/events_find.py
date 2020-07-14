@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import itertools
+from warnings import warn
 
 import numpy as np
 
+from ..misc import NeuroKitWarning
 from ..signal import signal_binarize
 
 
@@ -87,9 +89,9 @@ def events_find(
 
     # Warning when no events detected
     if len(events["onset"]) == 0:
-        print(
-            "NeuroKit warning: events_find(): No events found. Check your "
-            "event_channel or adjust 'threhsold' or 'keep' arguments."
+        warn(
+            "No events found. Check your event_channel or adjust 'threshold' or 'keep' arguments.",
+            category=NeuroKitWarning
         )
         return events
 
