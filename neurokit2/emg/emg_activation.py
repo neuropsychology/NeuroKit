@@ -48,11 +48,11 @@ def emg_activation(
         The minimum duration of a period of activity or non-activity in seconds.
         If 'default', will be set to 0.05 (50 ms).
     size: float or int
-        Detection window size (seconds). Applicable only if ``method`` is 'biosppy' or 'silva', defaults to
+        Detection window size (seconds). Applicable only if ``method`` is 'biosppy' or 'silva'. If None, defaults to
         0.05 for 'biosppy' and 20 for 'silva'.
     threshold_size : int
         Window size for calculation of the adaptive threshold. Must be bigger than the detection window size.
-        Applicable only if ``method`` is 'silva', defaults to 22.
+        Applicable only if ``method`` is 'silva'. If None, defaults to 22.
     kwargs : optional
         Other arguments.
 
