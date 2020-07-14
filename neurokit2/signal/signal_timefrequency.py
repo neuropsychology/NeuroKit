@@ -11,6 +11,30 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     The objective of time-frequency analysis is to offer a more informative description of the signal
     which reveals the temporal variation of its frequency contents.
 
+    There are many different Time-Frequency Representations (TFRs) available:
+
+    - Linear TFRs: efficient but create tradeoff between time and frequency resolution
+        - Short Time Fourier Transform (STFT): the time-domain signal is windowed into short segments
+        and FT is applied to each segment, mapping the signal into the TF plane. This method assumes
+        that the signal is quasi-stationary (stationary over the duration of the window). The width
+        of the window is the trade-off between good time (requires short duration window) versus good
+        frequency resolution (requires long duration windows)
+        - Wavelet Transform (WT): similar to STFT but instead of a fixed duration window functrion, a
+        varying window length by scaling the axis of the window is used. At low frequency, WT proves
+        high spectral resolution but poor temporal resolution. On the other hand, for high frequencies,
+        the WT provides high temporal resolution but poor spectral resolution.
+
+    - Quadratic TFRs: better resolution but computationally expensive and suffers from having
+    cross terms between multiple signal components
+        - Wigner Ville Distribution (WVD): while providing very good resolution in time and frequency
+        of the underlying signal structure, because of its bilinear nature, existence of negative values,
+        the WVD has misleading TF results in the case of multi-component signals such as EEG due to the
+        presence of cross terms and inference terms. Cross WVD terms can be reduced by using moothing kernal
+        functions as well as analyzing the analytic signal (instead of the original signal)
+        - Smoothed Pseudo Wigner Ville Distribution (SPWVD): to address the problem of cross-terms
+        suppression, SPWVD allows two independent analysis windows, one in time and the other in frequency
+        domains.
+
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
