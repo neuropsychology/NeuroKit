@@ -90,11 +90,6 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
 
     # STFT
     if method.lower() in ["stft"]:
-        if window is not None:
-            nperseg = int(window * sampling_rate)
-        else:
-            # to capture at least 5 times slowest wave-length
-            nperseg = int((2 / min_frequency) * sampling_rate)
 
         frequency, time, tfr = short_term_ft(
                 signal,
@@ -126,10 +121,11 @@ def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=
     """Short-term Fourier Transform.
     """
 
-    # Check COLA
-    if overlap is not None:
-        if not scipy.signal.check_COLA(scipy.signal.hann(nperseg, sym=True), nperseg, overlap):
-            raise ValueError("The Constant OverLap Add (COLA) constraint is not met")
+     if window is not None:
+            nperseg = int(window * sampling_rate)
+        else:
+            # to capture at least 5 times slowest wave-length
+            nperseg = int((2 / min_frequency) * sampling_rate)
 
     frequency, time, stft = scipy.signal.spectrogram(
         signal,
