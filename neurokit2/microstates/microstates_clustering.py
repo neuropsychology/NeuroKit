@@ -8,12 +8,16 @@ from matplotlib import pyplot as plt
 import mne
 import warnings
 
+from ..stats import mad, standardize
+from ..eeg import eeg_gfp
+from .microstates_peaks import microstates_peaks
 
 
-def segment(data, n_states=4, n_inits=10, max_iter=1000, thresh=1e-6,
-            normalize=False, min_peak_dist=2, max_n_peaks=10000,
-            random_state=None, verbose=None):
+def microstate_cluster(data, n_states=4, n_inits=10, max_iter=1000, thresh=1e-6, select = "gfp",
+            normalize=False, robust=False, min_peak_dist=2, max_n_peaks=10000,
+            random_state=None):
     """Segment a continuous signal into microstates.
+
     Peaks in the global field power (GFP) are used to find microstates, using a
     modified K-means algorithm. Several runs of the modified K-means algorithm
     are performed, using different random initializations. The run that
@@ -63,22 +67,23 @@ def segment(data, n_states=4, n_inits=10, max_iter=1000, thresh=1e-6,
            estimation and validation. IEEE Transactions on Biomedical
            Engineering.
     """
-    if normalize:
-        data = zscore(data, axis=1)
+    # If MNE object
+    if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
+        sampling_rate = eeg.info["sfreq"]
+        eeg = eeg.get_data()
+
+    # Normalization
+    if normalize is True:
+        eeg = standardize(eeg, **kwargs)
 
     # Find peaks in the global field power (GFP)
-    gfp = np.std(data, axis=0)
-    peaks, _ = find_peaks(gfp, distance=min_peak_dist)
-    n_peaks = len(peaks)
+    if select == "gfp":
+        gfp = eeg_gfp(eeg, sampling_rate=sampling_rate, normalize=normalize, robust=robust, method="l1", **kwargs)
+    else:
+        gfp = False
+    peaks = microstates_peaks(eeg, gfp, sampling_rate=sampling_rate, **kwargs)
 
-    # Limit the number of peaks by randomly selecting them
-    if max_n_peaks is not None:
-        max_n_peaks = min(n_peaks, max_n_peaks)
-        if not isinstance(random_state, np.random.RandomState):
-            random_state = np.random.RandomState(random_state)
-        chosen_peaks = random_state.choice(n_peaks, size=max_n_peaks,
-                                           replace=False)
-        peaks = peaks[chosen_peaks]
+
 
     # Cache this value for later
     gfp_sum_sq = np.sum(gfp ** 2)
@@ -90,7 +95,7 @@ def segment(data, n_states=4, n_inits=10, max_iter=1000, thresh=1e-6,
     best_segmentation = None
     for _ in range(n_inits):
         maps = _modified_kmeans(data[:, peaks], n_states, n_inits, max_iter, thresh,
-                           random_state, verbose)
+                           random_state)
         activation = maps.dot(data)
         segmentation = np.argmax(np.abs(activation), axis=0)
         map_corr = _correlate_vectors(data, maps[segmentation].T)
@@ -103,12 +108,20 @@ def segment(data, n_states=4, n_inits=10, max_iter=1000, thresh=1e-6,
 
     return best_maps, best_segmentation
 
+# =============================================================================
+# Internals
+# =============================================================================
+def microstate_prepare_data(eeg, sampling_rate=None, select="gfp", normalize=False, **kwargs):
+    """
+    """
+
+
 
 # =============================================================================
 # Clustering algorithms
 # =============================================================================
 
-def _modified_kmeans(data, n_states=4, n_inits=10, max_iter=1000, thresh=1e-6, random_state=None, verbose=None):
+def _modified_kmeans(data, n_states=4, n_inits=10, max_iter=1000, thresh=1e-6, random_state=None,):
     """The modified K-means clustering algorithm.
     See :func:`segment` for the meaning of the parameters and return
     values.
