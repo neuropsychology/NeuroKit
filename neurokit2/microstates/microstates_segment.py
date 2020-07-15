@@ -8,6 +8,7 @@ from ..eeg import eeg_gfp
 from .microstates_peaks import microstates_peaks
 from .microstates_prepare_data import _microstates_prepare_data
 from .microstates_quality import microstates_gev
+from .microstates_classify import microstates_classify
 
 
 def microstates_segment(eeg, n_microstates=4, train="gfp", sampling_rate=None, standardize_eeg=False, n_runs=10, max_iterations=1000, seed=None, **kwargs):
@@ -105,11 +106,15 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", sampling_rate=None, s
         if gev > best_gev:
             best_gev, best_microstates, best_segmentation = gev, microstates, segmentation
 
+    # Prepare output
     out = {"Microstates": best_microstates,
            "Sequence": best_segmentation,
            "GEV": best_gev,
            "GFP": gfp,
            "Info": info}
+
+    # Reorder
+    out = microstates_classify(out)
 
     return out
 

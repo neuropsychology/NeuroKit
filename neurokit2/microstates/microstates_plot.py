@@ -15,7 +15,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
     >>> microstates = nk.microstates_segment(eeg, select="gfp")
-    >>> nk.microstates_plot(microstates, eeg)
+    >>> nk.microstates_plot(out, gfp=out["GFP"][0:500])
     """
     # Try retrieving info
     if isinstance(microstates, dict):
