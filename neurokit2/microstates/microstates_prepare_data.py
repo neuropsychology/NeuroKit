@@ -7,7 +7,7 @@ from ..eeg import eeg_gfp
 from ..stats import standardize
 
 
-def _microstates_prepare_data(eeg, sampling_rate=None, select="gfp", standardize_eeg=True, **kwargs):
+def _microstates_prepare_data(eeg, sampling_rate=None, train="gfp", standardize_eeg=True, **kwargs):
     """
     """
     # If MNE object
@@ -22,15 +22,12 @@ def _microstates_prepare_data(eeg, sampling_rate=None, select="gfp", standardize
     if standardize_eeg is True:
         eeg = standardize(eeg, **kwargs)
 
-    # Find peaks in the global field power (GFP)
-    if select == "gfp":
-        gfp = eeg_gfp(eeg, sampling_rate=sampling_rate, normalize=True, method="l1", **kwargs)
+    # Get GFP
+    gfp = eeg_gfp(eeg, sampling_rate=sampling_rate, normalize=True, method="l1", **kwargs)
 
-    # Get Peaks
-    peaks = microstates_peaks(eeg, gfp, sampling_rate=sampling_rate, **kwargs)
-
-    # Get GFP regardless of the selection
-    if select != "gfp":
-        gfp = eeg_gfp(eeg, sampling_rate=sampling_rate, normalize=True, method="l1", **kwargs)
+    # Find peaks in the global field power (GFP) or take a given amount of indices
+    if train == "gfp":
+        train = gfp
+    peaks = microstates_peaks(eeg, gfp=train, sampling_rate=sampling_rate, **kwargs)
 
     return eeg, peaks, gfp, info

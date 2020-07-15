@@ -55,11 +55,11 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
 
     # If we don't want to rely on peaks but take uniformly spaced samples (used in microstates_clustering)
     if isinstance(gfp, (int, float, str)):
-        if isinstance(gfp, str):
-            gfp = 1
-        if isinstance(gfp, float) and gfp <= 1:
+        if isinstance(gfp, str):  # If gfp = 'all'
+            gfp = len(eeg[0, :])
+        if gfp <= 1:  # If fraction
             gfp = np.int(gfp * len(eeg[0, :]))
-        return np.linspace(0, len(eeg[0, :]), gfp, dtype=np.int)
+        return np.linspace(0, len(eeg[0, :]), gfp, endpoint=False, dtype=np.int)
 
     # If GFP peaks
     if gfp is None:

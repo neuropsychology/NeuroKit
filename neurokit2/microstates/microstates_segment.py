@@ -78,7 +78,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", sampling_rate=None, s
     """
     # Sanitize input
     data, indices, gfp, info = _microstates_prepare_data(eeg,
-                                                         select=select,
+                                                         train=train,
                                                          sampling_rate=sampling_rate,
                                                          standardize_eeg=standardize_eeg,
                                                          **kwargs)

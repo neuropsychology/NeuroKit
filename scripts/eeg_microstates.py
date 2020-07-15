@@ -22,7 +22,7 @@ raw = nk.eeg_rereference(raw, 'average')
 raw = raw.filter(1, 35)
 
 # Segment the data into 6 microstates
-out = nk.microstates_segment(raw, train="all", n_microstates=4, standardize_eeg=True)
+out = nk.microstates_segment(raw, train="gfp", n_microstates=4, standardize_eeg=True)
 
 # Plot the topographic maps of the found microstates
 nk.microstates_plot(out, gfp=out["GFP"][0:500])
