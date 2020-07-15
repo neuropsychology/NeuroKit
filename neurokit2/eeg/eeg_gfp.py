@@ -2,11 +2,11 @@
 import numpy as np
 import pandas as pd
 
-from ..stats import mad
+from ..stats import standardize
 from ..signal import signal_filter
 
 
-def eeg_gfp(eeg, sampling_rate=None, normalize=False, robust=False, method="l1", smooth=0):
+def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, robust=False, standardize_eeg=False):
     """Global Field Power (GFP)
 
     Global Field Power (GFP) constitutes a reference-independent measure of response strength.
@@ -23,27 +23,40 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, robust=False, method="l1",
         smoothing is requested.
     normalize : bool
         Should the data by standardized (z-score) the data across time prior to GFP extraction.
-    robust : bool
-        If True, the normalization and the GFP extraction will be done using the median/MAD instead
-        of the mean/SD.
     method : str
         Can be either 'l1' or 'l2' to use the L1 or L2 norm.
     smooth : float
         Can be either None or a float. If a float, will use this value, multiplied by the
-        sampling rate
+        sampling rate.
+    robust : bool
+        If True, the GFP extraction (the data standardization if requested) will be done using the
+        median/MAD instead of the mean/SD.
+    standardize_eeg : bool
+        Should the data by standardized (z-score) the data across time prior to GFP extraction. See
+        ``nk.standardize()``.
 
     Examples
     ---------
     >>> import neurokit2 as nk
     >>>
     >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> eeg = eeg.set_eeg_reference('average')
+    >>> eeg = nk.eeg_rereference(eeg, 'average')
+    >>> eeg = eeg.get_data()[:, 0:500]  # Get the 500 first data points
     >>>
-    >>> gfp = nk.eeg_gfp(eeg)
-    >>> gfp_z = nk.eeg_gfp(eeg, normalize=True)
-    >>> gfp_zr = nk.eeg_gfp(eeg, normalize=True, robust=True)
-    >>> gfp_s = nk.eeg_gfp(eeg, smooth=0.05)
-    >>> nk.signal_plot([gfp[0:500], gfp_z[0:500], gfp_zr[0:500], gfp_s[0:500]], standardize=True)
+    >>> # Compare  L1 and L2 norms
+    >>> l1 = nk.eeg_gfp(eeg, method="l1", normalize=True)
+    >>> l2 = nk.eeg_gfp(eeg, method="l2", normalize=True)
+    >>> nk.signal_plot([l1, l2])
+    >>>
+    >>> # Mean-based vs. Median-based
+    >>> gfp = nk.eeg_gfp(eeg, normalize=True)
+    >>> gfp_r = nk.eeg_gfp(eeg, normalize=True, robust=True)
+    >>> nk.signal_plot([gfp, gfp_r])
+    >>>
+    >>> # Standardize the data
+    >>> gfp = nk.eeg_gfp(eeg, normalize=True)
+    >>> gfp_z = nk.eeg_gfp(eeg, normalize=True, standardize_eeg=True)
+    >>> nk.signal_plot([gfp, gfp_r])
 
     References
     ----------
@@ -57,24 +70,19 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, robust=False, method="l1",
         sampling_rate = eeg.info["sfreq"]
         eeg = eeg.get_data()
 
-    # Average reference
-    if robust is False:
-        eeg = eeg - np.mean(eeg, axis=0, keepdims=True)
-    else:
-        eeg = eeg - np.median(eeg, axis=0, keepdims=True)
-
     # Normalization
-    if normalize is True:
-        if robust is False:
-            eeg = eeg / np.std(eeg, axis=0, ddof=0)
-        else:
-            eeg = eeg / mad(eeg, axis=0)
+    if standardize_eeg is True:
+        eeg = standardize(eeg, robust=robust)
 
     # Compute GFP
     if method.lower() == "l1":
         gfp = _eeg_gfp_L1(eeg, robust=robust)
     else:
         gfp = _eeg_gfp_L2(eeg, robust=robust)
+
+    # Normalize (between 0 and 1)
+    if normalize is True:
+        gfp = gfp / np.max(gfp)
 
     # Smooth
     if smooth is not None and smooth != 0:

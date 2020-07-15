@@ -19,11 +19,15 @@ def mne_to_df(eeg):
     Examples
     ---------
     >>> import neurokit2 as nk
-    >>> import mne
     >>>
-    >>> raw = nk.mne_data()
+    >>> eeg = nk.mne_data("filt-0-40_raw")
+    >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
-    >>> nk.mne_to_df(raw)  # doctest: +SKIP
+    >>> gfp = nk.eeg_gfp(eeg)
+    >>> gfp_z = nk.eeg_gfp(eeg, normalize=True)
+    >>> gfp_zr = nk.eeg_gfp(eeg, normalize=True, robust=True)
+    >>> gfp_s = nk.eeg_gfp(eeg, smooth=0.05)
+    >>> nk.signal_plot([gfp[0:500], gfp_z[0:500], gfp_zr[0:500], gfp_s[0:500]], standardize=True)
 
     """
     # Try loading mne

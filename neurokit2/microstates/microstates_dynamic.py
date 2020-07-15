@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-from .transition_matrix import transition_matrix
+from ..complexity import transition_matrix
 from ..misc import as_vector
 
 

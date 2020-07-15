@@ -42,19 +42,32 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
         raise ValueError("NeuroKit error: microstates_peaks(): The sampling_rate is requested ",
                          "for this function to run. Please provide it as an argument.")
 
+    # If we want ALL the indices
     if gfp is False:
         return np.arange(len(eeg))
 
+    # If we don't want to rely on peaks but take uniformly spaced samples (used in microstates_clustering)
+    if isinstance(gfp, (int, float, str)):
+        if isinstance(gfp, str):
+            gfp = 1
+        if isinstance(gfp, float) and gfp <= 1:
+            gfp = np.int(gfp * len(eeg[0, :]))
+        return np.linspace(0, len(eeg[0, :]), gfp, dtype=np.int)
+
+    # If GFP peaks
     if gfp is None:
         gfp = eeg_gfp(eeg, **kwargs)
 
-    peaks = _microstates_peaks_gfp(eeg, gfp=None, sampling_rate=None, distance_between=0.01)
+    peaks = _microstates_peaks_gfp(eeg, gfp=gfp, sampling_rate=sampling_rate, distance_between=distance_between)
+
     return peaks
 
 
 
 
-
+# =============================================================================
+# Methods
+# =============================================================================
 def _microstates_peaks_gfp(eeg, gfp=None, sampling_rate=None, distance_between=0.01):
 
     minimum_separation = int(distance_between * sampling_rate)  # 10 ms (Microstate EEGlab toolbox)
@@ -62,6 +75,7 @@ def _microstates_peaks_gfp(eeg, gfp=None, sampling_rate=None, distance_between=0
         minimum_separation = 1
 
     peaks_gfp, _ = scipy.signal.find_peaks(gfp, distance=minimum_separation)
+
     # Alternative methods: (doesn't work best IMO)
 #    peaks_gfp = scipy.signal.find_peaks_cwt(gfp, np.arange(minimum_separation, int(0.2 * sampling_rate)))
 #    peaks_gfp = scipy.signal.argrelmax(gfp)[0]
