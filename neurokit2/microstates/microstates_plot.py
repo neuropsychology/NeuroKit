@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 import matplotlib
 import matplotlib.pyplot as plt
+import matplotlib.gridspec
 
 
 def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
@@ -14,7 +14,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
     >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
-    >>> microstates = nk.microstates_clustering(eeg, select="gfp")
+    >>> microstates = nk.microstates_segment(eeg, select="gfp")
     >>> nk.microstates_plot(microstates, eeg)
     """
     # Try retrieving info
@@ -26,14 +26,28 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
         segmentation = microstates["Sequence"]
         microstates = microstates["Microstates"]
 
-    _microstates_plot_topos(microstates, info=info)
-    _microstates_plot_segmentation(segmentation, gfp, info)
+    # Prepare figure layout
+    fig = plt.figure(constrained_layout=False)
+    spec = matplotlib.gridspec.GridSpec(ncols=len(microstates), nrows=2)
+
+    ax_bottom = fig.add_subplot(spec[1, :])  # bottom row
+
+    axes_list = []
+    for i, _ in enumerate(microstates):
+        ax = fig.add_subplot(spec[0, i])
+        axes_list.append(ax)
+
+    # Plot
+    _microstates_plot_topos(microstates, info=info, ax=axes_list)
+    _microstates_plot_segmentation(segmentation, gfp, info, ax=ax_bottom)
+
+    return fig
 
     pass
 
 
 
-def _microstates_plot_topos(microstates, info):
+def _microstates_plot_topos(microstates, info, ax=None):
     """Plot prototypical microstate maps.
     """
     # Sanity check
@@ -49,14 +63,20 @@ def _microstates_plot_topos(microstates, info):
             "Please install it first (`pip install mne`).",
         )
 
-    plt.figure(figsize=(2 * len(microstates), 2))
+    # Plot
+    if ax is None:
+        fig, ax = plt.subplots(ncols=len(microstates), figsize=(2 * len(microstates), 2))
+    else:
+        fig = None
+
     for i, map in enumerate(microstates):
-        plt.subplot(1, len(microstates), i + 1)
-        mne.viz.plot_topomap(map, info)
-        plt.title('%d' % i)
+        mne.viz.plot_topomap(map, info, axes=ax[i])
+        ax[i].set_title('%d' % i)
+
+    return fig
 
 
-def _microstates_plot_segmentation(segmentation, gfp, info=None):
+def _microstates_plot_segmentation(segmentation, gfp, info=None, ax=None):
     """Plot a microstate segmentation.
     """
     # Sanity checks
@@ -74,22 +94,28 @@ def _microstates_plot_segmentation(segmentation, gfp, info=None):
     if len(segmentation) < len(gfp):
         gfp = gfp[0:len(segmentation)]
 
+    # Plot
+    if ax is None:
+        fig, ax = plt.subplots(figsize=(6 * np.ptp(times), 2))
+    else:
+        fig = None
+
     n_states = len(np.unique(segmentation))
-    plt.figure(figsize=(6 * np.ptp(times), 2))
     cmap = plt.cm.get_cmap('plasma', n_states)
-    plt.plot(times, gfp, color='black', linewidth=1)
+    ax.plot(times, gfp, color='black', linewidth=1)
     for state, color in zip(range(n_states), cmap.colors):
-        plt.fill_between(times, gfp, color=color,
-                         where=(segmentation == state))
+        ax.fill_between(times, gfp, color=color,
+                        where=(segmentation == state))
     norm = matplotlib.colors.Normalize(vmin=0, vmax=n_states)
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
     sm.set_array([])
-    plt.colorbar(sm)
-    plt.yticks([])
+    plt.colorbar(sm, ax=ax)
+    ax.set_yticks([])
     if info is not None and "sfreq" in info.keys():
-        plt.xlabel('Time (s)')
+        ax.set_xlabel('Time (s)')
     else:
-        plt.xlabel('Sample')
-    plt.title('Sequence of %d microstates' % n_states)
-    plt.autoscale(tight=True)
-    plt.tight_layout()
+        ax.set_xlabel('Sample')
+    ax.set_title('Segmentation into %d microstates' % n_states)
+    ax.autoscale(tight=True)
+
+    return fig
