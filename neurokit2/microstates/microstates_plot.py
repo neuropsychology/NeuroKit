@@ -115,7 +115,8 @@ def _microstates_plot_segmentation(segmentation, gfp, info=None, ax=None):
         ax.set_xlabel('Time (s)')
     else:
         ax.set_xlabel('Sample')
-    ax.set_title('Segmentation into %d microstates' % n_states)
+    ax.set_ylabel('Global Field Power (GFP)')
+    ax.set_title('Sequence of the %d microstates' % n_states)
     ax.autoscale(tight=True)
 
     return fig
