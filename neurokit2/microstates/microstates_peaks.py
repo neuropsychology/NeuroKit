@@ -9,16 +9,24 @@ from ..eeg import eeg_gfp
 def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, **kwargs):
     """Find peaks of stability using the GFP
 
-    Microstate boarders were determined by relative minima of GFP together with relative maxima in Diss.
-
-    https://www.researchgate.net/publication/7432398_Response_inhibition_deficits_in_externalizing_child_psychiatric_disorders_An_ERP-study_with_the_Stop-task
+    Peaks in the global field power (GFP) are often used to find microstates.
 
     Parameters
     ----------
+    eeg : np.ndarray
+        An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
+    gfp : list
+        The Global Field Power (GFP). If None, will be obtained via ``eeg_gfp()``.
+    sampling_rate : int
+        sampling_rate : int
+        The sampling frequency of the signal (in Hz, i.e., samples/second).
     distance_between : float
         The minimum distance (this value is to be multiplied by the sampling rate) between peaks.
         The default is 0.01, which corresponds to 10 ms (as suggested in the Microstate EEGlab
         toolbox).
+    **kwargs
+        Additional arguments to be passed to ``eeg_gfp()``.
+
     Examples
     ---------
     >>> import neurokit2 as nk

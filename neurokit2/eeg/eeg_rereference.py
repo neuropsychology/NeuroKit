@@ -11,7 +11,7 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
 
     Parameters
     -----------
-    eeg : np.array
+    eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     reference : str
         See ``mne.set_eeg_reference()``. Most common references include 'average'.

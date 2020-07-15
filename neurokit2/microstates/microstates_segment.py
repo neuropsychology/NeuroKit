@@ -17,18 +17,19 @@ from .microstates_quality import microstates_gev
 
 
 def microstates_segment(eeg, n_microstates=4, select="gfp", sampling_rate=None, standardize_eeg=False, n_runs=10, max_iterations=500, seed=None, **kwargs):
-    """Segment a continuous signal into microstates.
+    """Segment a continuous M/EEG signal into microstates using different clustering algorithms.
 
     Peaks in the global field power (GFP) are used to find microstates, using a
     modified K-means algorithm. Several runs of the modified K-means algorithm
     are performed, using different random initializations. The run that
     resulted in the best segmentation, as measured by global explained variance
     (GEV), is used.
+
     Parameters
     ----------
-    data : ndarray, shape (n_channels, n_samples)
-        The data to find the microstates in
-    n_states : int
+    eeg : np.ndarray
+        An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
+    n_microstates : int
         The number of unique microstates to find. Defaults to 4.
     n_inits : int
         The number of random initializations to use for the k-means algorithm.
@@ -71,12 +72,17 @@ def microstates_segment(eeg, n_microstates=4, select="gfp", sampling_rate=None, 
     >>>
     >>> out = nk.microstates_segment(eeg)
     >>> nk.microstates_plot(out, gfp=out["GFP"][0:500])
+    >>>
+    >>> out = nk.microstates_segment(eeg)
+    >>> nk.microstates_plot(out, gfp=out["GFP"][0:500])
+
 
     References
     ----------
     - Pascual-Marqui, R. D., Michel, C. M., & Lehmann, D. (1995). Segmentation of brain
     electrical activity into microstates: model estimation and validation. IEEE Transactions
     on Biomedical Engineering.
+
     """
     # Sanitize input
     data, indices, gfp, info = _microstates_prepare_data(eeg,

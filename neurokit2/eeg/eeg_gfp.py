@@ -16,7 +16,7 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
 
     Parameters
     ----------
-    eeg : np.array
+    eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if
