@@ -92,11 +92,11 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", sampling_rate=None, s
     best_microstates = None
     best_segmentation = None
     for i in range(n_runs):
-        microstates = _modified_kmeans_cluster(data[:, indices],
-                                               n_microstates=n_microstates,
-                                               max_iterations=max_iterations,
-                                               threshold=1e-6,
-                                               seed=seed)
+        microstates = _modified_kmeans_cluster_marjin(data[:, indices],
+                                                      n_microstates=n_microstates,
+                                                      max_iterations=max_iterations,
+                                                      threshold=1e-6,
+                                                      seed=seed)
 
         segmentation = _modified_kmeans_predict(data, microstates)
 
@@ -133,8 +133,10 @@ def _modified_kmeans_predict(data, microstates):
     return segmentation
 
 
-def _modified_kmeans_cluster(data, n_microstates=4, max_iterations=1000, threshold=1e-6, seed=None):
-    """The modified K-means clustering algorithm.
+def _modified_kmeans_cluster_marjin(data, n_microstates=4, max_iterations=1000, threshold=1e-6, seed=None):
+    """The modified K-means clustering algorithm, as implemented by Marijn van Vliet
+
+    https://github.com/wmvanvliet/mne_microstates/blob/master/microstates.py
 
     Parameters
     -----------
@@ -191,3 +193,173 @@ def _modified_kmeans_cluster(data, n_microstates=4, max_iterations=1000, thresho
     return states
 
 
+
+
+def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_error=1e-6, max_iterations=500):
+    """The modified K-means clustering algorithm, as implemented by von Wagner et al. (2017)
+
+    https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py
+
+    Args:
+        data: numpy.array, size = number of EEG channels
+        n_maps: number of microstate maps
+        n_runs: number of K-means runs (optional)
+        maxerr: maximum error for convergence (optional)
+        maxiter: maximum number of iterations (optional)
+        doplot: plot the results, default=False (optional)
+    Returns:
+        maps: microstate maps (number of maps x number of channels)
+        L: sequence of microstate labels
+        gfp_peaks: indices of local GFP maxima
+        gev: global explained variance (0..1)
+        cv: value of the cross-validation criterion
+    """
+
+    n_t = data.shape[0]
+    n_ch = data.shape[1]
+    data = data - data.mean(axis=1, keepdims=True)
+
+    # Get local maxima of 1D-array
+    def locmax(x):
+        dx = np.diff(x) # discrete 1st derivative
+        zc = np.diff(np.sign(dx)) # zero-crossings of dx
+        m = 1 + np.where(zc == -2)[0] # indices of local max.
+        return m
+
+    # GFP peaks
+    gfp = np.std(data, axis=1)
+    gfp_peaks = locmax(gfp)
+    gfp_values = gfp[gfp_peaks]
+    gfp2 = np.sum(gfp_values**2)  # normalizing constant in GEV
+    n_gfp = gfp_peaks.shape[0]
+
+    # clustering of GFP peak maps only
+    V = data[gfp_peaks, :]
+    sumV2 = np.sum(V**2)
+
+    # store results for each k-means run
+    cv_list = []  # cross-validation criterion for each k-means run
+    gev_list = []  # GEV of each map for each k-means run
+    gevT_list = []  # total GEV values for each k-means run
+    maps_list = []  # microstate maps for each k-means run
+    L_list = []  # microstate label sequence for each k-means run
+
+    for run in range(n_runs):
+        # initialize random cluster centroids (indices w.r.t. n_gfp)
+        rndi = np.random.permutation(n_gfp)[:n_microstates]
+        maps = V[rndi, :]
+        # normalize row-wise (across EEG channels)
+        maps /= np.sqrt(np.sum(maps**2, axis=1, keepdims=True))
+        # initialize
+        n_iter = 0
+        var0 = 1.0
+        var1 = 0.0
+        # convergence criterion: variance estimate (step 6)
+        while ( (np.abs((var0-var1)/var0) > max_error) & (n_iter < max_iterations) ):
+            # (step 3) microstate sequence (= current cluster assignment)
+            C = np.dot(V, maps.T)
+            C /= (n_ch*np.outer(gfp[gfp_peaks], np.std(maps, axis=1)))
+            L = np.argmax(C**2, axis=1)
+            # (step 4)
+            for k in range(n_microstates):
+                Vt = V[L==k, :]
+                # (step 4a)
+                Sk = np.dot(Vt.T, Vt)
+                # (step 4b)
+                evals, evecs = np.linalg.eig(Sk)
+                v = evecs[:, np.argmax(np.abs(evals))]
+                maps[k, :] = v/np.sqrt(np.sum(v**2))
+            # (step 5)
+            var1 = var0
+            var0 = sumV2 - np.sum(np.sum(maps[L, :]*V, axis=1)**2)
+            var0 /= (n_gfp*(n_ch-1))
+            n_iter += 1
+        if (n_iter < max_iterations):
+            print("\t\tK-means run {:d}/{:d} converged after {:d} iterations.".format(run+1, n_runs, n_iter))
+        else:
+            print("\t\tK-means run {:d}/{:d} did NOT converge after {:d} iterations.".format(run+1, n_runs, max_iterations))
+
+        # CROSS-VALIDATION criterion for this run (step 8)
+        C_ = np.dot(data, maps.T)
+        C_ /= (n_ch*np.outer(gfp, np.std(maps, axis=1)))
+        L_ = np.argmax(C_**2, axis=1)
+        var = np.sum(data**2) - np.sum(np.sum(maps[L_, :]*data, axis=1)**2)
+        var /= (n_t*(n_ch-1))
+        cv = var * (n_ch-1)**2/(n_ch-n_microstates-1.)**2
+
+        # GEV (global explained variance) of cluster k
+        gev = np.zeros(n_microstates)
+        for k in range(n_microstates):
+            r = L == k
+            gev[k] = np.sum(gfp_values[r]**2 * C[r, k]**2)/gfp2
+        gev_total = np.sum(gev)
+
+        # store
+        cv_list.append(cv)
+        gev_list.append(gev)
+        gevT_list.append(gev_total)
+        maps_list.append(maps)
+        L_list.append(L_)
+
+    # select best run
+    k_opt = np.argmin(cv_list)
+    # k_opt = np.argmax(gevT_list)
+    maps = maps_list[k_opt]
+    # ms_gfp = ms_list[k_opt] # microstate sequence at GFP peaks
+    gev = gev_list[k_opt]
+    L_ = L_list[k_opt]
+
+    # Plot
+#    if doplot:
+#        plt.ion()
+#        # matplotlib's perceptually uniform sequential colormaps:
+#        # magma, inferno, plasma, viridis
+#        cm = plt.cm.magma
+#        fig, axarr = plt.subplots(1, n_microstates, figsize=(20,5))
+#        fig.patch.set_facecolor('white')
+#        for imap in range(n_microstates):
+#            axarr[imap].imshow(eeg2map(maps[imap, :]), cmap=cm, origin='lower')
+#            axarr[imap].set_xticks([])
+#            axarr[imap].set_xticklabels([])
+#            axarr[imap].set_yticks([])
+#            axarr[imap].set_yticklabels([])
+#        title = "K-means cluster centroids"
+#        axarr[0].set_title(title, fontsize=16, fontweight="bold")
+#        plt.show()
+#
+#        # --- assign map labels manually ---
+#        order_str = raw_input("\n\t\tAssign map labels (e.g. 0, 2, 1, 3): ")
+#        order_str = order_str.replace(",", "")
+#        order_str = order_str.replace(" ", "")
+#        if (len(order_str) != n_microstates):
+#            if (len(order_str)==0):
+#                print("\t\tEmpty input string.")
+#            else:
+#                print("\t\tParsed manual input: {:s}".format(", ".join(order_str)))
+#                print("\t\tNumber of labels does not equal number of clusters.")
+#            print("\t\tContinue using the original assignment...\n")
+#        else:
+#            order = np.zeros(n_microstates, dtype=int)
+#            for i, s in enumerate(order_str):
+#                order[i] = int(s)
+#            print("\t\tRe-ordered labels: {:s}".format(", ".join(order_str)))
+#            # re-order return variables
+#            maps = maps[order,:]
+#            for i in range(len(L)):
+#                L[i] = order[L[i]]
+#            gev = gev[order]
+#            # Figure
+#            fig, axarr = plt.subplots(1, n_microstates, figsize=(20,5))
+#            fig.patch.set_facecolor('white')
+#            for imap in range(n_microstates):
+#                axarr[imap].imshow(eeg2map(maps[imap, :]), cmap=cm, origin='lower')
+#                axarr[imap].set_xticks([])
+#                axarr[imap].set_xticklabels([])
+#                axarr[imap].set_yticks([])
+#                axarr[imap].set_yticklabels([])
+#            title = "re-ordered K-means cluster centroids"
+#            axarr[0].set_title(title, fontsize=16, fontweight="bold")
+#            plt.show()
+#            plt.ioff()
+    # return maps, L_, gfp_peaks, gev, cv
+    return maps
