@@ -2,7 +2,6 @@ import mne
 import scipy
 import numpy as np
 import pandas as pd
-import mne_microstates
 import neurokit2 as nk
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -11,35 +10,23 @@ import seaborn as sns
 # Microstates
 # =============================================================================
 # Read original file (too big to be uploaded on github)
-#raw = mne.io.read_raw_fif("../data/eeg_restingstate_300hz.fif", preload=True)
 raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_filt-0-40_raw.fif', preload=True)
 
 # Selecting the sensor types to use in the analysis. In this example, we use only EEG channels
 raw = raw.pick_types(meg=False, eeg=True)
 
 # Always use an average EEG reference when doing microstate analysis
-raw = raw.set_eeg_reference('average')
+raw = nk.eeg_rereference(raw, 'average')
 
 # Highpass filter the data a little bit
 raw = raw.filter(1, 35)
 
 # Segment the data into 6 microstates
-topos, microstates = mne_microstates.segment(raw.get_data(), n_states=4)
+out = nk.microstates_segment(raw, train="all", n_microstates=4, standardize_eeg=True)
 
 # Plot the topographic maps of the found microstates
-#mne_microstates.plot_maps(topos, raw.info)
+nk.microstates_plot(out, gfp=out["GFP"][0:500])
 
-# Plot the segmentation of the first 500 samples
-#mne_microstates.plot_segmentation(microstates[:500], raw.get_data()[:, :500], raw.times[:500])
-
-data = raw.get_data()
-
-raw.data.std(0)
-np.sqrt((D * D).mean(axis=0))
-
-a = np.sqrt((data * data).mean(axis=0))
-b = np.abs(data.mean(axis=0))
-a == b
 # =============================================================================
 # Epochs
 # =============================================================================
@@ -52,13 +39,13 @@ events = events[events["Condition"].isin([1, 2, 3, 4])]
 events["Condition"].loc[events["Condition"].isin([1, 2])] = "Audio"
 events["Condition"].loc[events["Condition"] != "Audio"] = "Visual"
 
-epochs = nk.epochs_create(microstates, events["Index"], sampling_rate=150, epochs_end=0.5, event_conditions=events["Condition"])
+epochs = nk.epochs_create(out["Sequence"], events["Index"], sampling_rate=150, epochs_end=0.5, event_conditions=events["Condition"])
 
 
 # =============================================================================
 # Results
 # =============================================================================
-nk.microstates_static(microstates, sampling_rate=150)["Microstate_Average_DurationMean"]
+nk.microstates_static(out["Sequence"], sampling_rate=150)["Microstate_Average_DurationMean"]
 
 df = []  # Initialize an empty dict
 for i in epochs.keys():
@@ -74,7 +61,7 @@ df = pd.concat(df, axis=0).reset_index(drop=True)
 # =============================================================================
 # Analysis
 # =============================================================================
-variables = [("Microstate_" + str(state) + "_" + var) for state in np.unique(microstates) for var in ["Proportion", "LifetimeDistribution", "DurationMedian", "DurationMean"]]
+variables = [("Microstate_" + str(state) + "_" + var) for state in np.unique(out["Sequence"]) for var in ["Proportion", "LifetimeDistribution", "DurationMedian", "DurationMean"]]
 variables += list(df.copy().filter(regex='_to_').columns)
 variables += ["Microstate_Entropy_Shannon"]
 

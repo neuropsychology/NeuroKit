@@ -32,8 +32,8 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
         If True, the GFP extraction (the data standardization if requested) will be done using the
         median/MAD instead of the mean/SD.
     standardize_eeg : bool
-        Should the data by standardized (z-score) the data across time prior to GFP extraction. See
-        ``nk.standardize()``.
+        Standardized (z-score) the data across time prior to GFP extraction
+        using ``nk.standardize()``.
 
     Examples
     ---------

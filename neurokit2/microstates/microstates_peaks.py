@@ -18,7 +18,6 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
     gfp : list
         The Global Field Power (GFP). If None, will be obtained via ``eeg_gfp()``.
     sampling_rate : int
-        sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     distance_between : float
         The minimum distance (this value is to be multiplied by the sampling rate) between peaks.

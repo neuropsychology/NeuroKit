@@ -1,12 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-from scipy.stats import zscore
-from scipy.signal import find_peaks
-from scipy.linalg import eigh
-import matplotlib as mpl
-from matplotlib import pyplot as plt
-import mne
 import warnings
 
 from ..stats import mad, standardize
@@ -16,13 +10,11 @@ from .microstates_prepare_data import _microstates_prepare_data
 from .microstates_quality import microstates_gev
 
 
-def microstates_segment(eeg, n_microstates=4, select="gfp", sampling_rate=None, standardize_eeg=False, n_runs=10, max_iterations=500, seed=None, **kwargs):
+def microstates_segment(eeg, n_microstates=4, train="gfp", sampling_rate=None, standardize_eeg=False, n_runs=10, max_iterations=1000, seed=None, **kwargs):
     """Segment a continuous M/EEG signal into microstates using different clustering algorithms.
 
-    Peaks in the global field power (GFP) are used to find microstates, using a
-    modified K-means algorithm. Several runs of the modified K-means algorithm
-    are performed, using different random initializations. The run that
-    resulted in the best segmentation, as measured by global explained variance
+    Several runs of the clustering algorithm are performed, using different random initializations.
+    The run that resulted in the best segmentation, as measured by global explained variance
     (GEV), is used.
 
     Parameters
@@ -31,30 +23,30 @@ def microstates_segment(eeg, n_microstates=4, select="gfp", sampling_rate=None, 
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     n_microstates : int
         The number of unique microstates to find. Defaults to 4.
-    n_inits : int
+    train : str | int | float
+        Method for selecting the timepoints how which to train the clustering algorithm. Can be
+        'gfp' to use the peaks found in the Peaks in the global field power. Can be 'all', in which
+        case it will select all the datapoints. It can also be a number or a ratio, in which case
+        it will select the corresponding number of evenly spread data points. For instance,
+        ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5`` will select
+        half the data. See ``microstates_peaks()``.
+    sampling_rate : int
+        The sampling frequency of the signal (in Hz, i.e., samples/second).
+    standardize_eeg : bool
+        Standardized (z-score) the data across time prior to GFP extraction
+        using ``nk.standardize()``.
+    n_runs : int
         The number of random initializations to use for the k-means algorithm.
         The best fitting segmentation across all initializations is used.
         Defaults to 10.
-    max_iter : int
+    max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
         Defaults to 1000.
-    thresh : float
-        The threshold of convergence for the k-means algorithm, based on
-        relative change in noise variance. Defaults to 1e-6.
-    normalize : bool
-        Whether to normalize (z-score) the data across time before running the
-        k-means algorithm. Defaults to ``False``.
-    min_peak_dist : int
-        Minimum distance (in samples) between peaks in the GFP. Defaults to 2.
-    max_n_peaks : int | None
-        Maximum number of GFP peaks to use in the k-means algorithm. Chosen
-        randomly. Set to ``None`` to use all peaks. Defaults to 10000.
-    random_state : int | numpy.random.RandomState | None
+    seed : int | numpy.random.RandomState | None
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
-    verbose : int | bool | None
-        Controls the verbosity.
+
     Returns
     -------
     maps : ndarray, shape (n_channels, n_states)
@@ -114,7 +106,7 @@ def microstates_segment(eeg, n_microstates=4, select="gfp", sampling_rate=None, 
             best_gev, best_microstates, best_segmentation = gev, microstates, segmentation
 
     out = {"Microstates": best_microstates,
-           "Segmentation": best_segmentation,
+           "Sequence": best_segmentation,
            "GEV": best_gev,
            "GFP": gfp,
            "Info": info}
@@ -136,8 +128,14 @@ def _modified_kmeans_predict(data, microstates):
     return segmentation
 
 
-def _modified_kmeans_cluster(data, n_microstates=4, max_iterations=500, threshold=1e-6, seed=None):
+def _modified_kmeans_cluster(data, n_microstates=4, max_iterations=1000, threshold=1e-6, seed=None):
     """The modified K-means clustering algorithm.
+
+    Parameters
+    -----------
+    threshhold : float
+        The threshold of convergence for the k-means algorithm, based on
+        relative change in noise variance. Defaults to 1e-6.
     """
     if not isinstance(seed, np.random.RandomState):
         seed = np.random.RandomState(seed)

@@ -23,7 +23,7 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
             info = microstates["Info"]
         if gfp is None and "GFP" in microstates.keys():
             gfp = microstates["GFP"]
-        segmentation = microstates["Segmentation"]
+        segmentation = microstates["Sequence"]
         microstates = microstates["Microstates"]
 
     _microstates_plot_topos(microstates, info=info)
@@ -90,6 +90,6 @@ def _microstates_plot_segmentation(segmentation, gfp, info=None):
         plt.xlabel('Time (s)')
     else:
         plt.xlabel('Sample')
-    plt.title('Segmentation into %d microstates' % n_states)
+    plt.title('Sequence of %d microstates' % n_states)
     plt.autoscale(tight=True)
     plt.tight_layout()
