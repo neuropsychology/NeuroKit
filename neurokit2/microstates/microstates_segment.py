@@ -195,7 +195,7 @@ def _modified_kmeans_cluster_marjin(data, n_microstates=4, max_iterations=1000, 
 
 
 
-def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_iterations=1000, max_error=1e-6):
+def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_iterations=1000, threshold=1e-6):
     """The modified K-means clustering algorithm, as implemented by von Wagner et al. (2017)
 
     https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py
@@ -214,7 +214,6 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_iter
         gev: global explained variance (0..1)
         cv: value of the cross-validation criterion
     """
-
     n_channels, n_samples = data.shape
     data = data - data.mean(axis=1, keepdims=True)
 
@@ -246,64 +245,66 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_iter
     for run in range(n_runs):
         # initialize random cluster centroids (indices w.r.t. n_gfp)
         rndi = np.random.permutation(n_gfp)[:n_microstates]
-        maps = V[rndi, :]
-        # normalize row-wise (across EEG channels)
-        maps /= np.sqrt(np.sum(maps**2, axis=1, keepdims=True))
+
+        # Assign each sample to the best matching microstate
+        activation = V[rndi, :]
+        activation /= np.sqrt(np.sum(activation**2, axis=1, keepdims=True))  # normalize row-wise (across EEG channels)
+
         # initialize
         n_iter = 0
-        var0 = 1.0
-        var1 = 0.0
+        prev_residual = 1
+        residual = 0
         # convergence criterion: variance estimate (step 6)
-        while ( (np.abs((var0-var1)/var0) > max_error) & (n_iter < max_iterations) ):
+        while ((np.abs((prev_residual - residual) / prev_residual) > threshold) & (n_iter < max_iterations) ):
             # (step 3) microstate sequence (= current cluster assignment)
-            C = np.dot(V, maps.T)
-            C /= (n_samples*np.outer(gfp[gfp_peaks], np.std(maps, axis=1)))
-            L = np.argmax(C**2, axis=1)
+            C = np.dot(V, activation.T)
+            C /= (n_samples*np.outer(gfp[gfp_peaks], np.std(activation, axis=1)))
+            L = np.argmax(C**2, axis=1)  # Label each of the len(n_gfp) maps
             # (step 4)
-            for k in range(n_microstates):
-                Vt = V[L==k, :]
+            for state in range(n_microstates):
+                Vt = V[L == state, :]
                 # (step 4a)
                 Sk = np.dot(Vt.T, Vt)
                 # (step 4b)
                 evals, evecs = np.linalg.eig(Sk)
                 v = evecs[:, np.argmax(np.abs(evals))]
-                maps[k, :] = v/np.sqrt(np.sum(v**2))
+                activation[state, :] = v/np.sqrt(np.sum(v**2))
             # (step 5)
-            var1 = var0
-            var0 = sumV2 - np.sum(np.sum(maps[L, :]*V, axis=1)**2)
-            var0 /= (n_gfp*(n_samples-1))
+            residual = prev_residual
+            prev_residual = sumV2 - np.sum(np.sum(activation[L, :]*V, axis=1)**2)
+            prev_residual /= (n_gfp*(n_samples-1))
             n_iter += 1
-        if (n_iter < max_iterations):
-            print("\t\tK-means run {:d}/{:d} converged after {:d} iterations.".format(run+1, n_runs, n_iter))
-        else:
-            print("\t\tK-means run {:d}/{:d} did NOT converge after {:d} iterations.".format(run+1, n_runs, max_iterations))
+
+        if n_iter == max_iterations:
+            warnings.warn("Modified K-means algorithm failed to converge after " + str(n_iter) + " ",
+                          "iterations. Consider increasing 'max_iterations'.")
 
         # CROSS-VALIDATION criterion for this run (step 8)
-        C_ = np.dot(data, maps.T)
-        C_ /= (n_samples*np.outer(gfp, np.std(maps, axis=1)))
+        C_ = np.dot(data, activation.T)
+        C_ /= (n_samples*np.outer(gfp, np.std(activation, axis=1)))
         L_ = np.argmax(C_**2, axis=1)
-        var = np.sum(data**2) - np.sum(np.sum(maps[L_, :]*data, axis=1)**2)
+        var = np.sum(data**2) - np.sum(np.sum(activation[L_, :]*data, axis=1)**2)
         var /= (n_channels*(n_samples-1))
         cv = var * (n_samples-1)**2/(n_samples-n_microstates-1.)**2
 
         # GEV (global explained variance) of cluster k
         gev = np.zeros(n_microstates)
-        for k in range(n_microstates):
-            r = L == k
-            gev[k] = np.sum(gfp_values[r]**2 * C[r, k]**2)/gfp2
+        for state in range(n_microstates):
+            r = L == state
+            gev[state] = np.sum(gfp_values[r]**2 * C[r, state]**2)/gfp2
         gev_total = np.sum(gev)
 
         # store
         cv_list.append(cv)
         gev_list.append(gev)
         gevT_list.append(gev_total)
-        maps_list.append(maps)
+        maps_list.append(activation)
         L_list.append(L_)
 
     # select best run
     k_opt = np.argmin(cv_list)
     # k_opt = np.argmax(gevT_list)
-    maps = maps_list[k_opt]
+    activation = maps_list[k_opt]
     # ms_gfp = ms_list[k_opt] # microstate sequence at GFP peaks
     gev = gev_list[k_opt]
     L_ = L_list[k_opt]
@@ -361,4 +362,4 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_iter
 #            plt.show()
 #            plt.ioff()
     # return maps, L_, gfp_peaks, gev, cv
-    return maps
+    return activation
