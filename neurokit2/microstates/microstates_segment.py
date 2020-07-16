@@ -109,6 +109,8 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', samp
                                                           seed=seed)
         elif method == 'frederic':
             microstates = _modified_kmeans_cluster_frederic(data,
+                                                            gfp=gfp,
+                                                            indices=indices,
                                                             n_microstates=n_microstates,
                                                             max_iterations=max_iterations,
                                                             threshold=1e-6)
@@ -208,16 +210,14 @@ def _modified_kmeans_cluster_marjin(data, n_microstates=4, max_iterations=1000, 
     return states
 
 
-
-
-def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_iterations=1000, threshold=1e-6):
+def _modified_kmeans_cluster_frederic(data, gfp=None, indices=None, n_microstates=4, n_runs=10, max_iterations=1000, threshold=1e-6):
     """The modified K-means clustering algorithm, as implemented by von Wagner et al. (2017)
 
     https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py
     """
     data = data.T
     n_samples, n_channels = data.shape
-    data = data - data.mean(axis=1, keepdims=True)
+#    data = data - data.mean(axis=1, keepdims=True)
 
     # Get local maxima of 1D-array
     def locmax(x):
@@ -227,8 +227,12 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_iter
         return m
 
     # GFP peaks
-    gfp = np.std(data, axis=1)
-    gfp_peaks = locmax(gfp)  # sample points of gfp peaks
+    if gfp is None and indices is None:
+        gfp = np.std(data, axis=1)
+        gfp_peaks = locmax(gfp)  # sample points of gfp peaks
+    else:
+        gfp_peaks = indices
+
     gfp_values = gfp[gfp_peaks]  # values of gfp peaks
     gfp2 = np.sum(gfp_values**2)  # normalizing constant in GEV
     n_gfp = gfp_peaks.shape[0]
