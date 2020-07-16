@@ -195,7 +195,7 @@ def _modified_kmeans_cluster_marjin(data, n_microstates=4, max_iterations=1000, 
 
 
 
-def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_error=1e-6, max_iterations=500):
+def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_iterations=1000, max_error=1e-6):
     """The modified K-means clustering algorithm, as implemented by von Wagner et al. (2017)
 
     https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py
@@ -215,8 +215,7 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_erro
         cv: value of the cross-validation criterion
     """
 
-    n_t = data.shape[0]
-    n_ch = data.shape[1]
+    n_channels, n_samples = data.shape
     data = data - data.mean(axis=1, keepdims=True)
 
     # Get local maxima of 1D-array
@@ -228,8 +227,8 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_erro
 
     # GFP peaks
     gfp = np.std(data, axis=1)
-    gfp_peaks = locmax(gfp)
-    gfp_values = gfp[gfp_peaks]
+    gfp_peaks = locmax(gfp)  # sample points of gfp peaks
+    gfp_values = gfp[gfp_peaks]  # values of gfp peaks
     gfp2 = np.sum(gfp_values**2)  # normalizing constant in GEV
     n_gfp = gfp_peaks.shape[0]
 
@@ -258,7 +257,7 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_erro
         while ( (np.abs((var0-var1)/var0) > max_error) & (n_iter < max_iterations) ):
             # (step 3) microstate sequence (= current cluster assignment)
             C = np.dot(V, maps.T)
-            C /= (n_ch*np.outer(gfp[gfp_peaks], np.std(maps, axis=1)))
+            C /= (n_samples*np.outer(gfp[gfp_peaks], np.std(maps, axis=1)))
             L = np.argmax(C**2, axis=1)
             # (step 4)
             for k in range(n_microstates):
@@ -272,7 +271,7 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_erro
             # (step 5)
             var1 = var0
             var0 = sumV2 - np.sum(np.sum(maps[L, :]*V, axis=1)**2)
-            var0 /= (n_gfp*(n_ch-1))
+            var0 /= (n_gfp*(n_samples-1))
             n_iter += 1
         if (n_iter < max_iterations):
             print("\t\tK-means run {:d}/{:d} converged after {:d} iterations.".format(run+1, n_runs, n_iter))
@@ -281,11 +280,11 @@ def _modified_kmeans_cluster_frederic(data, n_microstates=4, n_runs=10, max_erro
 
         # CROSS-VALIDATION criterion for this run (step 8)
         C_ = np.dot(data, maps.T)
-        C_ /= (n_ch*np.outer(gfp, np.std(maps, axis=1)))
+        C_ /= (n_samples*np.outer(gfp, np.std(maps, axis=1)))
         L_ = np.argmax(C_**2, axis=1)
         var = np.sum(data**2) - np.sum(np.sum(maps[L_, :]*data, axis=1)**2)
-        var /= (n_t*(n_ch-1))
-        cv = var * (n_ch-1)**2/(n_ch-n_microstates-1.)**2
+        var /= (n_channels*(n_samples-1))
+        cv = var * (n_samples-1)**2/(n_samples-n_microstates-1.)**2
 
         # GEV (global explained variance) of cluster k
         gev = np.zeros(n_microstates)
