@@ -18,6 +18,11 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", sampling_rate=None, s
     The run that resulted in the best segmentation, as measured by global explained variance
     (GEV), is used.
 
+    The microstates clustering is typically fitted on the EEG data at the global field power (GFP)
+    peaks to maximize the signal to noise ratio and focus on moments of high global neuronal
+    synchronization. It is assumed that the topography around a GFP peak remains stable and is at
+    its highest signal-to-noise ratio at the GFP peak.
+
     Parameters
     ----------
     eeg : np.ndarray

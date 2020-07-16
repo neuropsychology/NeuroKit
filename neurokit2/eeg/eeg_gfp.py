@@ -12,7 +12,7 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
     Global Field Power (GFP) constitutes a reference-independent measure of response strength.
     GFP was first introduced by Lehmann and Skrandies (1980) and has since become a commonplace
     measure among M/EEG users. Mathematically, GFP is the standard deviation of all electrodes
-    at a given time
+    at a given time.
 
     Parameters
     ----------
