@@ -288,6 +288,8 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+    sampling_rate : int
+        The sampling frequency of the signal (in Hz, i.e., samples/second).
     freq_length : np.ndarray
         Lenght of frequency smoothing window.
     time_length: np.array
@@ -295,7 +297,9 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
     segment_step : int
         The step between samples in `time_array`. Default to 1.
     nfreqbin : int
-        Number of Frequency bins
+        Number of Frequency bins.
+    window_method : str
+        Method used to create smoothing windows. Can be "hanning"/ "hamming" or "gaussian".
 
     Returns
     -------
@@ -368,7 +372,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
     midpt_time = (len(time_window) - 1) // 2
 
     # Create arrays
-    time_array = np.arange(start=0, stop=N, step=segment_step, dtype=int)
+    time_array = np.arange(start=0, stop=N, step=segment_step, dtype=int) / sampling_rate
     # frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
     frequency_array = 0.5 * np.arange(nfreqbin, dtype=float) / N
     pwvd = np.zeros((nfreqbin, len(time_array)), dtype=complex)
