@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from ..signal.signal_detrend import signal_detrend
 
 
-def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, method="stft", window=None, nfreqbin=None, overlap=None, analytical_signal=True, show=True):
+def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, method="stft", window=None, nfreqbin=None, overlap=None, analytical_signal=True, show=True):
     """Quantify changes of a nonstationary signal’s frequency over time.
     The objective of time-frequency analysis is to offer a more informative description of the signal
     which reveals the temporal variation of its frequency contents.
@@ -85,7 +85,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     # Define window length
     if min_frequency == 0:
         min_frequency = 0.04  # sanitize lowest frequency to lf
-    if max_frequency == np.inf:
+    if max_frequency is None:
         max_frequency = sampling_rate // 2  # nyquist
 
     # STFT
@@ -146,7 +146,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
 # =============================================================================
 
 
-def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, overlap=None, window=None, nperseg=None):
+def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None, window=None, nperseg=None):
     """Short-term Fourier Transform.
     """
 
@@ -176,8 +176,9 @@ def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=
 # =============================================================================
 
 
-def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=np.inf, nfreqbin=None):
-    """
+def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, nfreqbin=None):
+    """Continuous Wavelet Transform.
+
     References
     ----------
     - Neto, O. P., Pinheiro, A. O., Pereira Jr, V. L., Pereira, R., Baltatu, O. C., & Campos, L. A. (2016).
@@ -213,7 +214,7 @@ def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=
 # Wigner-Ville Distribution
 # =============================================================================
 def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, method="WignerVille"):
-    """Wigner Ville Distribution of signal.
+    """Wigner Ville Distribution and Pseudo-Wigner Ville Distribution.
     """
     # Compute the analytical signal
     if analytical_signal:
