@@ -287,7 +287,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    freq_length : np.array
+    freq_length : np.ndarray
         Lenght of frequency smoothing window.
     time_length: np.array
         Lenght of time smoothing window
@@ -298,11 +298,11 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
 
     Returns
     -------
-    frequency_array : np.array
+    frequency_array : np.ndarray
         Frequency array.
-    time_array : np.array
+    time_array : np.ndarray
         Time array.
-    pwvd : np.array
+    pwvd : np.ndarray
         SPWVD. Time increases across its columns and frequency increases
         down the rows.
     References
@@ -314,7 +314,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
 
     # Define parameters
     N = len(signal)
-    sample_spacing = 1 / sampling_rate
+    # sample_spacing = 1 / sampling_rate
     if nfreqbin is None:
         nfreqbin = 300
 
@@ -368,7 +368,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
 
     # Create arrays
     time_array = np.arange(start=0, stop=N, step=segment_step, dtype=int)
-#    frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
+    # frequency_array = np.fft.fftfreq(nfreqbin, sample_spacing)[0:nfreqbin / 2]
     frequency_array = 0.5 * np.arange(nfreqbin, dtype=float) / N
     pwvd = np.zeros((nfreqbin, len(time_array)), dtype=complex)
 
