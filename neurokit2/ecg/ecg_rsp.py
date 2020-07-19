@@ -45,7 +45,7 @@ def ecg_rsp(ecg_rate, sampling_rate=1000, method="vangent2019"):
     ...                              "charlton2016": nk.ecg_rsp(ecg_rate, sampling_rate=100, method="charlton2016"),
     ...                              "soni2019": nk.ecg_rsp(ecg_rate, sampling_rate=100,
     ...                                                     method="soni2019")})).plot() #doctest: +ELLIPSIS
-    <matplotlib.axes._subplots.AxesSubplot object at ...>
+    <AxesSubplot:>
 
     References
     ----------

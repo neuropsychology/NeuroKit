@@ -73,8 +73,8 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     -------
     >>> import neurokit2 as nk
     >>> import numpy as np
-    >>> signal = nk.signal_simulate(100, sampling_rate=100, frequency=10.0) +
-    ... 2 * nk.signal_simulate(100, sampling_rate=100, frequency=3.0)
+    >>> signal = nk.signal_simulate(100, sampling_rate=100, frequency=10.0)
+    ... + 2 * nk.signal_simulate(100, sampling_rate=100, frequency=3.0)
     >>> sampling_rate=100
     >>> f, t, stft = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="stft", show=True)
     >>> f, t, cwtm = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="cwt", show=True)
