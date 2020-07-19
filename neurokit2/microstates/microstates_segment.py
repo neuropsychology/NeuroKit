@@ -217,7 +217,7 @@ def _modified_kmeans_cluster_frederic(data, gfp=None, indices=None, n_microstate
     https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py
     """
 
-    data = data[:, indices].T
+    data = data.T
     n_samples, n_channels = data.shape
 #    data = data - data.mean(axis=1, keepdims=True)
 
@@ -240,8 +240,7 @@ def _modified_kmeans_cluster_frederic(data, gfp=None, indices=None, n_microstate
     n_gfp = gfp_peaks.shape[0]
 
     # clustering of GFP peak maps only
-#    V = data[gfp_peaks, :]
-    V = data.copy()
+    V = data[gfp_peaks, :]
     sumV2 = np.sum(V**2)
 
     # store results for each k-means run
@@ -289,8 +288,7 @@ def _modified_kmeans_cluster_frederic(data, gfp=None, indices=None, n_microstate
 
     # CROSS-VALIDATION criterion for this run (step 8)
     C_ = np.dot(data, activation.T)
-#    C_ /= (n_samples*np.outer(gfp, np.std(activation, axis=1)))
-    C_ /= (n_samples*np.outer(gfp_values, np.std(activation, axis=1)))
+    C_ /= (n_samples*np.outer(gfp, np.std(activation, axis=1)))
     L_ = np.argmax(C_**2, axis=1)
     var = np.sum(data**2) - np.sum(np.sum(activation[L_, :]*data, axis=1)**2)
     var /= (n_channels*(n_samples-1))
