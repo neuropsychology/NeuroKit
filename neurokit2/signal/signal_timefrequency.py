@@ -95,7 +95,6 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
                 signal,
                 sampling_rate=sampling_rate,
                 min_frequency=min_frequency,
-                max_frequency=max_frequency,
                 overlap=overlap,
                 window=window
                 )
@@ -134,8 +133,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
                 signal=signal,
                 method=method,
                 min_frequency=min_frequency,
-                max_frequency=max_frequency,
-                sampling_rate=sampling_rate
+                max_frequency=max_frequency
                 )
 
 
@@ -146,7 +144,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
 # =============================================================================
 
 
-def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None, window=None, nperseg=None):
+def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None, window=None):
     """Short-term Fourier Transform.
     """
 
@@ -438,7 +436,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
 # =============================================================================
 # Plot function
 # =============================================================================
-def plot_timefrequency(tfr, time, frequency, signal=None, method="stft", min_frequency=0.0, max_frequency=None, sampling_rate=1000):
+def plot_timefrequency(tfr, time, frequency, signal=None, method="stft", min_frequency=0.0, max_frequency=None):
     """Visualize a time-frequency matrix.
     """
     if max_frequency is None:
