@@ -4,8 +4,6 @@ import itertools
 def find_consecutive(x):
     """Find and group consecutive values in a list.
 
-    Creates a list of integer values of a given length from start to stop, spread by an exponential function.
-
     Parameters
     ----------
     x : list
@@ -20,7 +18,7 @@ def find_consecutive(x):
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> x =[2, 3, 4, 5, 12, 13, 14, 15, 16, 17, 20]
+    >>> x = [2, 3, 4, 5, 12, 13, 14, 15, 16, 17, 20]
     >>> nk.find_consecutive(x)
     [(2, 3, 4, 5), (12, 13, 14, 15, 16, 17), (20,)]
 

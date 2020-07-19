@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 
+# from ..ecg import ecg_rsp # TODO: why is ecg_rsp imported as a module, not a function?
+from ..ecg.ecg_rsp import ecg_rsp
+from ..misc import NeuroKitWarning
 from ..rsp import rsp_process
-from ..signal import signal_filter, signal_interpolate, signal_rate, signal_resample
+from ..signal import (signal_filter, signal_interpolate, signal_rate,
+                      signal_resample)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from ..ecg import ecg_rsp
 
 
 def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
@@ -136,7 +141,10 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     if len(rsp_peaks) - len(rsp_onsets) == 0:
         rsp_peaks = rsp_peaks[:-1]
     if len(rsp_peaks) - len(rsp_onsets) != -1:
-        print("NeuroKit error: ecg_rsp(): Couldn't find rsp cycles onsets and centers. Check your RSP signal.")
+        warn(
+            "Couldn't find rsp cycles onsets and centers. Check your RSP signal.",
+            category=NeuroKitWarning
+        )
 
     # Methods ------------------------
 
@@ -332,18 +340,19 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                 ecg_period = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_signals))
             else:
                 raise ValueError(
-                    "NeuroKit error: _hrv_rsa_formatinput():" "Wrong input, we couldn't extract" "heart rate signal."
+                    "NeuroKit error: _hrv_rsa_formatinput():"
+                    "Wrong input, we couldn't extract" "heart rate signal."
                 )
     if rsp_signals is None:
         rsp_cols = [col for col in ecg_signals.columns if "RSP_Phase" in col]
         if len(rsp_cols) != 2:
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
-            print(
-                "NeuroKit warning: _hrv_rsa_formatinput():"
+            warn(
                 "RSP signal not found. For this time, we will derive RSP"
-                " signal from ECG using ecg_rsp(). But the results are "
-                "definitely not reliable, so please provide a real RSP signal."
+                " signal from ECG using ecg_rsp(). But the results are"
+                " definitely not reliable, so please provide a real RSP signal.",
+                category=NeuroKitWarning
             )
     elif isinstance(rsp_signals, tuple):
         rsp_signals = rsp_signals[0]
@@ -353,17 +362,19 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         if len(rsp_cols) != 2:
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
-            print(
-                "NeuroKit warning: _hrv_rsa_formatinput():"
-                "RSP signal not found. RSP signal is derived from ECG using"
-                "ecg_rsp(). Please provide RSP signal."
+            warn(
+                "RSP signal not found. RSP signal is derived from ECG using ecg_rsp()."
+                " Please provide RSP signal.",
+                category=NeuroKitWarning
             )
 
     if rpeaks is None:
         try:
             rpeaks = _signal_formatpeaks_sanitize(ecg_signals)
         except NameError:
-            raise ValueError("NeuroKit error: _hrv_rsa_formatinput(): Wrong input, we couldn't extract rpeaks indices.")
+            raise ValueError(
+                "NeuroKit error: _hrv_rsa_formatinput(): "
+                "Wrong input, we couldn't extract rpeaks indices.")
     else:
         rpeaks = _signal_formatpeaks_sanitize(rpeaks)
 

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 
-from ..misc import find_closest
+from ..misc import NeuroKitWarning, find_closest
 from ..stats import fit_r2
 from .epochs_to_df import _df_to_epochs
 
@@ -14,8 +16,8 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
 
     if not isinstance(epochs, dict):
         raise ValueError(
-            "NeuroKit error: " + str(what) + "_eventrelated(): Please specify an input"
-            "that is of the correct form i.e., either a dictionary"
+            "NeuroKit error: " + str(what) + "_eventrelated(): Please specify an input "
+            "that is of the correct form i.e., either a dictionary "
             "or dataframe."
         )
 
@@ -23,10 +25,11 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
     if silent is False:
         length_mean = np.mean([np.max(epochs[i].index) - np.min(epochs[i].index) for i in epochs.keys()])
         if length_mean > 10:
-            print(
-                "Neurokit warning: " + str(what) + "_eventrelated():"
-                "The duration of your epochs seems quite long. You might want"
-                " to use " + str(what) + "_intervalrelated()."
+            warn(
+                str(what) + "_eventrelated():"
+                " The duration of your epochs seems quite long. You might want"
+                " to use " + str(what) + "_intervalrelated().",
+                category=NeuroKitWarning
             )
     return epochs
 
@@ -75,9 +78,10 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
     # Sanitize input
     colnames = epoch.columns.values
     if len([i for i in colnames if var in i]) == 0:
-        print(
-            "NeuroKit warning: *_eventrelated(): input does not"
-            "have an `" + var + "` column. Will skip all rate-related features."
+        warn(
+            "Input does not have an `" + var + "` column."
+            " Will skip all rate-related features.",
+            category=NeuroKitWarning
         )
         return output
 
