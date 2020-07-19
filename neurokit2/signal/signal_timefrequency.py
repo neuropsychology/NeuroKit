@@ -73,16 +73,13 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     -------
     >>> import neurokit2 as nk
     >>> import numpy as np
-    >>> data = nk.data("bio_resting_5min_100hz")
+    >>> signal = nk.signal_simulate(100, sampling_rate=100, frequency=10.0) +
+    ... 2 * nk.signal_simulate(100, sampling_rate=100, frequency=3.0)
     >>> sampling_rate=100
-    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=sampling_rate)
-    >>> peaks = np.where(peaks == 1)[0]
-    >>> rri = np.diff(peaks) / sampling_rate * 1000
-    >>> desired_length = int(np.rint(peaks[-1]))
-    >>> signal = nk.signal_interpolate(peaks[1:], rri, x_new=np.arange(desired_length))
-    >>> f, t, stft = nk.signal_timefrequency(signal, sampling_rate, max_frequency=0.5, method="stft", show=True)
-    >>> f, t, cwtm = nk.signal_timefrequency(signal, sampling_rate, max_frequency=0.5, method="cwt", show=True)
-    >>> f, t, wvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=0.5, method="wvd", show=True)
+    >>> f, t, stft = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="stft", show=True)
+    >>> f, t, cwtm = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="cwt", show=True)
+    >>> f, t, wvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="wvd", show=True)
+    >>> f, t, pwvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="pwvd", show=True)
     """
     # Initialize empty container for results
     # Define window length
