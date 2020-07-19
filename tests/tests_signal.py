@@ -268,7 +268,7 @@ def test_signal_timefrequency():
     assert len(time) == stft.shape[1]
     indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
     indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
-    assert np.sum(abs(stft[indices_freq5])) < np.sum(abs(stft[indices_freq20]))
+    assert np.sum(stft[indices_freq5]) < np.sum(stft[indices_freq20])
 
     # wavelet transform
     frequency, time, cwtm = nk.signal_timefrequency(signal, method="cwt", max_frequency=50, show=False)
@@ -277,7 +277,24 @@ def test_signal_timefrequency():
     assert len(time) == cwtm.shape[1]
     indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
     indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
-    assert np.sum(abs(cwtm[indices_freq5])) < np.sum(abs(cwtm[indices_freq20]))
+    assert np.sum(cwtm[indices_freq5]) < np.sum(cwtm[indices_freq20])
+
+    # wvd
+    frequency, time, wvd = nk.signal_timefrequency(signal, method="wvd", max_frequency=50, show=False)
+    assert len(frequency) == wvd.shape[0]
+    assert len(time) == wvd.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(wvd[indices_freq5]) < np.sum(wvd[indices_freq20])
+
+    # pwvd
+    frequency, time, pwvd = nk.signal_timefrequency(signal, method="pwvd",
+                                                    max_frequency=50, show=False)
+    assert len(frequency) == pwvd.shape[0]
+    assert len(time) == pwvd.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(pwvd[indices_freq5]) < np.sum(pwvd[indices_freq20])
 
 def test_signal_psd(recwarn):
     warnings.simplefilter("always")
