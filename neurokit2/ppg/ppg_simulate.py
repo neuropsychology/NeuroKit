@@ -35,7 +35,10 @@ def ppg_simulate(
     sampling_rate : int
         The desired sampling rate (in Hz, i.e., samples/second). The default is 1000.
     heart_rate : int
-        Desired simulated heart rate (in beats per minute). The default is 70.
+        Desired simulated heart rate (in beats per minute). The default is 70. Note that for the
+        ECGSYN method, random fluctuations are to be expected to mimick a real heart rate. These
+        fluctuations can cause some slight discrepancies between the requested heart rate and the
+        empirical heart rate, especially for shorter signals.
     frequency_modulation : float
         Float between 0 and 1. Determines how pronounced respiratory sinus arrythmia (RSA) is
         (0 corresponds to absence of RSA). The default is 0.3.

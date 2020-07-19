@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 
+from ..misc import NeuroKitWarning
 from .signal_formatpeaks import _signal_formatpeaks_sanitize
 from .signal_interpolate import signal_interpolate
 
@@ -54,9 +57,9 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
 
     # Sanity checks.
     if np.size(peaks) <= 3:
-        print(
-            "NeuroKit warning: _signal_formatpeaks(): too few peaks detected"
-            " to compute the rate. Returning empty vector."
+        warn(
+            "Too few peaks detected to compute the rate. Returning empty vector.",
+            category=NeuroKitWarning
         )
         return np.full(desired_length, np.nan)
 

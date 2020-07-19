@@ -50,7 +50,7 @@ def mne_channel_extract(raw, what, name=None):
     elif isinstance(what, list):
         if not all(x in channels_all for x in what):
             raise ValueError(
-                "NeuroKit warning: mne_channel_extract(): List of channels not found. Please "
+                "NeuroKit error: mne_channel_extract(): List of channels not found. Please "
                 "check channel names in raw.info['ch_names']. "
             )
 

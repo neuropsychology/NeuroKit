@@ -2,6 +2,7 @@ import biosppy
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pytest
 import scipy.stats
 
 import neurokit2 as nk
@@ -102,6 +103,25 @@ def test_emg_eventrelated():
     )
 
     assert len(emg_eventrelated["Label"]) == 3
+
+    # Test warning on missing columns
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EMG_Onsets`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["EMG_Onsets"]
+        nk.emg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EMG_Activity`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["EMG_Activity"]
+        nk.emg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an.*`EMG_Amplitude`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["EMG_Amplitude"]
+        nk.emg_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
 
 def test_emg_intervalrelated():

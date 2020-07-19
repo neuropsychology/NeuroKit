@@ -2,6 +2,7 @@
 import biosppy
 import matplotlib.pyplot as plt
 import numpy as np
+import pytest
 
 import neurokit2 as nk
 
@@ -157,6 +158,19 @@ def test_rsp_eventrelated():
 
     assert len(rsp_eventrelated["Label"]) == 3
 
+    # Test warning on missing columns
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `RSP_Amplitude`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["RSP_Amplitude"]
+        nk.rsp_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `RSP_Phase`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["RSP_Phase"]
+        nk.rsp_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
 
 def test_rsp_rrv():
 
@@ -184,6 +198,15 @@ def test_rsp_rrv():
     assert np.isnan(rsp90_rrv["RRV_LF"][0])
     assert np.isnan(rsp110_rrv["RRV_LF"][0])
 
+    # Test warning on too short duration
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"The duration of recording is too short.*"):
+        short_rsp90 = nk.rsp_simulate(duration=10, sampling_rate=1000, respiratory_rate=90, 
+                                      random_state=42)
+        short_cleaned90 = nk.rsp_clean(short_rsp90, sampling_rate=1000)
+        _, short_peaks90 = nk.rsp_peaks(short_cleaned90)
+        short_rsp_rate90 = nk.signal_rate(short_peaks90, desired_length=len(short_rsp90))
+
+        nk.rsp_rrv(short_rsp_rate90, short_peaks90)
 
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
 #                        'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF',
