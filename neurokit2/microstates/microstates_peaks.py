@@ -43,7 +43,8 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
     >>> peaks3 = nk.microstates_peaks(eeg, distance_between=0.10)
     >>> nk.events_plot([peaks1[peaks1 < 500],
     ...                 peaks2[peaks2 < 500],
-    ...                 peaks3[peaks3 < 500]], gfp[0:500])
+    ...                 peaks3[peaks3 < 500]], gfp[0:500]) #doctest: +ELLIPSIS
+    <Figure ...>
 
     See Also
     --------
@@ -101,3 +102,4 @@ def _microstates_peaks_gfp(eeg, gfp=None, sampling_rate=None, distance_between=0
 #    peaks_diss, _ = scipy.signal.find_peaks(diss, distance=minimum_separation)
 
     return peaks_gfp
+

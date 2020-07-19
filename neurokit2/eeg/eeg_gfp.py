@@ -132,7 +132,3 @@ def _eeg_gfp_L2(eeg, robust=False):
     else:
         gfp = mad(eeg, axis=0)
     return gfp
-
-
-
-
