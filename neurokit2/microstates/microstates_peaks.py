@@ -26,6 +26,11 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
     **kwargs
         Additional arguments to be passed to ``eeg_gfp()``.
 
+    Returns
+    -------
+    peaks : array
+        The index of the sample where GFP peaks occur.
+
     Examples
     ---------
     >>> import neurokit2 as nk
@@ -39,6 +44,10 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
     >>> nk.events_plot([peaks1[peaks1 < 500],
     ...                 peaks2[peaks2 < 500],
     ...                 peaks3[peaks3 < 500]], gfp[0:500])
+
+    See Also
+    --------
+    eeg_gfp
 
     """
     if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:

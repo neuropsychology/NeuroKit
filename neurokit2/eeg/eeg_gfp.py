@@ -16,13 +16,13 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
 
     Parameters
     ----------
-    eeg : np.ndarray
+    eeg : array
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if
         smoothing is requested.
     normalize : bool
-        Should the data by standardized (z-score) the data across time prior to GFP extraction.
+        Normalize (divide each data point by the maximum value of the data) across time prior to GFP extraction.
     method : str
         Can be either 'l1' or 'l2' to use the L1 or L2 norm.
     smooth : float
@@ -32,8 +32,12 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
         If True, the GFP extraction (the data standardization if requested) will be done using the
         median/MAD instead of the mean/SD.
     standardize_eeg : bool
-        Standardized (z-score) the data across time prior to GFP extraction
-        using ``nk.standardize()``.
+        Standardize (z-score) the data across time prior to GFP extraction using ``nk.standardize()``.
+
+    Returns
+    -------
+    gfp : array
+        The global field power of each sample point in the data.
 
     Examples
     ---------
@@ -43,20 +47,23 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>> eeg = eeg.get_data()[:, 0:500]  # Get the 500 first data points
     >>>
-    >>> # Compare  L1 and L2 norms
+    >>> # Compare L1 and L2 norms
     >>> l1 = nk.eeg_gfp(eeg, method="l1", normalize=True)
     >>> l2 = nk.eeg_gfp(eeg, method="l2", normalize=True)
-    >>> nk.signal_plot([l1, l2])
+    >>> nk.signal_plot([l1, l2]) #doctest: +ELLIPSIS
+    <Figure ...>
     >>>
     >>> # Mean-based vs. Median-based
     >>> gfp = nk.eeg_gfp(eeg, normalize=True)
     >>> gfp_r = nk.eeg_gfp(eeg, normalize=True, robust=True)
-    >>> nk.signal_plot([gfp, gfp_r])
+    >>> nk.signal_plot([gfp, gfp_r]) #doctest: +ELLIPSIS
+    <Figure ...>
     >>>
     >>> # Standardize the data
     >>> gfp = nk.eeg_gfp(eeg, normalize=True)
     >>> gfp_z = nk.eeg_gfp(eeg, normalize=True, standardize_eeg=True)
-    >>> nk.signal_plot([gfp, gfp_r])
+    >>> nk.signal_plot([gfp, gfp_z]) #doctest: +ELLIPSIS
+    <Figure ...>
 
     References
     ----------

@@ -58,11 +58,10 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', samp
 
     Returns
     -------
-    maps : ndarray, shape (n_channels, n_states)
-        The topographic maps of the found unique microstates.
-    segmentation : ndarray, shape (n_samples,)
-        For each sample, the index of the microstate to which the sample has
-        been assigned.
+    maps : array
+        The topographic maps of the found unique microstates which has a shape of n_channels x n_states
+    segmentation : array
+        For each sample, the index of the microstate to which the sample has been assigned.
 
     Examples
     ---------
@@ -73,12 +72,14 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', samp
     >>>
     >>> # Compare methods
     >>> out_marjin = nk.microstates_segment(eeg, method='marjin')
-    >>> nk.microstates_plot(out_marjin, gfp=out["GFP"][0:500])
-    >>>
+    >>> nk.microstates_plot(out_marjin, gfp=out_marjin["GFP"][0:500])
     >>>
     >>> out_frederic = nk.microstates_segment(eeg, method='frederic')
-    >>> nk.microstates_plot(out_frederic, gfp=out["GFP"][0:500])
+    >>> nk.microstates_plot(out_frederic, gfp=out_frederic["GFP"][0:500])
 
+    See Also
+    --------
+    eeg_gfp, microstates_peaks, microstates_gev, microstates_classify
 
     References
     ----------
@@ -91,7 +92,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', samp
     data, indices, gfp, info = _microstates_prepare_data(eeg,
                                                          train=train,
                                                          sampling_rate=sampling_rate,
-                                                         standardize_eeg=standardize_eeg,
+                                                         standardize_eeg=standardize_eeg
                                                          **kwargs)
 
     # Normalizing constant (used later for GEV)
