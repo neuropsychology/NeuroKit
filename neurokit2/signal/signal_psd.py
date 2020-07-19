@@ -404,6 +404,11 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
     corrected : bool
         Specify for AIC and KIC methods.
 
+    Returns
+    -------
+    residual : int, float
+        Residuals to select the optimal order.
+
     """
     if criteria == "AIC":
         if corrected is True:
