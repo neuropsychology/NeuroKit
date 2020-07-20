@@ -322,25 +322,28 @@ def _get_multipeak_window(nperseg, window_number=8):
 
     loge = np.log10(np.exp(1))
     C = 2 * K1 / 10 / B / loge
-    l = [1: nperseg - 1].T
+    length = np.arange(1, nperseg).conj().transpose()
     r0 = 2 / C * (1 - np.exp(-C * B / 2))
-    r = (2 * C - np.exp(-C * B / 2) * (2 * C * np.cos(np.pi * B. * l) - \
-          4 * np.pi * l * np.sin(np.pi * B * l))) / (C**2 + (2 * np.pi * l)**2)
-    rpeak = [r0, r]  # Covariance function peaked spectrum
+    r_num = (2 * C - np.exp(-C * B / 2) * (2 * C * np.cos(np.pi * B * length) - 4 * np.pi * length * \
+                        np.sin(np.pi * B * length)))
+    r_den = (C**2 + (2 * np.pi * length)**2)
+    r = np.divide(r_num, r_den)
 
-    r = 2 * np.sin(np.pi * B * l) / (2 * np.pi * l)
-    rbox = [B, r]
+    rpeak = np.append(r0, r)  # Covariance function peaked spectrum
 
-    rpen = 10**(K2 / 10) * [1, np.zeros(nperseg - 1 ,1)] - /
-    (10**(K2 / 10) - 1) * rbox  # Covariance function penalty function
+    r = 2 * np.sin(np.pi * B * length) / (2 * np.pi * length)
+    rbox = np.append(B, r)
+
+    rpen = 10**(K2 / 10) * np.append(1, np.zeros((nperseg - 1 ,1))) - (10**(K2 / 10) - 1) * rbox  # Covariance function penalty function
 
     Ry = scipy.linalg.toeplitz(rpeak)
     Rx = scipy.linalg.toeplitz(rpen)
     RR = scipy.linalg.cholesky(Rx)
-    C = scipy.linalg.inv(RR.T) * Ry * scipy.linalg.inv(RR)
+    C = np.matmul(scipy.linalg.inv(RR.conj().transpose()), Ry)
+    C = np.matmul(C, scipy.linalg.inv(RR))
     Q ,T = scipy.linalg.schur(C)
     F = scipy.linalg.inv(RR) * Q
-    RD = F.T * Ry * F
+    RD = F.conj().transpose() * Ry * F
     RD = np.diag(RD)
     RDN = np.sort(RD)
     h = np.argsort(RD)
