@@ -3,6 +3,7 @@ from warnings import warn
 
 import numpy as np
 import pandas as pd
+import scipy
 
 # from ..ecg import ecg_rsp # TODO: why is ecg_rsp imported as a module, not a function?
 from ..ecg.ecg_rsp import ecg_rsp
@@ -300,6 +301,59 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
 #    # Not sure what to do next, sent an email to Servant.
 #    pass
 
+# =============================================================================
+# Second-by-second RSA
+# =============================================================================
+
+def hrv_rsa_gates(rsa):
+    return rsa
+
+def _get_multipeak_window(nperseg, window_number=8):
+    """Get Peak Matched Multiple Window
+    References
+    ----------
+    Hansson, M., & Salomonsson, G. (1997). A multiple window method for estimation of peaked spectra.
+    IEEE Transactions on Signal Processing, 45(3), 778-781.
+    """
+    K1 = 20  # Peak in dB
+    K2 = 30  # Penalty value in dB
+
+    B = (window_number + 2) / nperseg  # Resolution in spectrum
+
+    loge = np.log10(np.exp(1))
+    C = 2 * K1 / 10 / B / loge
+    l = [1: nperseg - 1].T
+    r0 = 2 / C * (1 - np.exp(-C * B / 2))
+    r = (2 * C - np.exp(-C * B / 2) * (2 * C * np.cos(np.pi * B. * l) - \
+          4 * np.pi * l * np.sin(np.pi * B * l))) / (C**2 + (2 * np.pi * l)**2)
+    rpeak = [r0, r]  # Covariance function peaked spectrum
+
+    r = 2 * np.sin(np.pi * B * l) / (2 * np.pi * l)
+    rbox = [B, r]
+
+    rpen = 10**(K2 / 10) * [1, np.zeros(nperseg - 1 ,1)] - /
+    (10**(K2 / 10) - 1) * rbox  # Covariance function penalty function
+
+    Ry = scipy.linalg.toeplitz(rpeak)
+    Rx = scipy.linalg.toeplitz(rpen)
+    RR = scipy.linalg.cholesky(Rx)
+    C = scipy.linalg.inv(RR.T) * Ry * scipy.linalg.inv(RR)
+    Q ,T = scipy.linalg.schur(C)
+    F = scipy.linalg.inv(RR) * Q
+    RD = F.T * Ry * F
+    RD = np.diag(RD)
+    RDN = np.sort(RD)
+    h = np.argsort(RD)
+    for i in range(len(RD)):
+        FN(:,i)=F(:,h(i)) / np.sqrt(F(:,h(i)).T * F(:,h(i)))
+
+    RDN = RDN(len(RD): -1: 1)
+    FN = FN(:,len(RD): -1: 1)
+
+    weight = RDN(1: window_number) / np.sum(RDN(1: window_number))
+    multipeak = FN(:,1: window_number)
+
+    return multipeak, weight
 
 # =============================================================================
 # Internals
