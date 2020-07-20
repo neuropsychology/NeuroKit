@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 import warnings
+import scipy
 
 from ..stats import mad, standardize
 from ..eeg import eeg_gfp
@@ -118,6 +119,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
                                                           init_times=init_times,
                                                           n_microstates=n_microstates,
                                                           max_iterations=max_iterations,
+                                                          eigenvector_method=True,
                                                           threshold=1e-6)
         elif method == 'frederic':
             microstates = _modified_kmeans_cluster_frederic(data, init_times=init_times,
@@ -147,9 +149,6 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
     return out
 
 
-
-
-
 # =============================================================================
 # Clustering algorithms
 # =============================================================================
@@ -162,7 +161,8 @@ def _modified_kmeans_predict(data, microstates):
 
 
 def _modified_kmeans_cluster_marjin(data, init_times=None,
-                                    n_microstates=4, max_iterations=1000, threshold=1e-6):
+                                    n_microstates=4, max_iterations=1000, threshold=1e-6,
+                                    eigenvector_method=True):
     """The modified K-means clustering algorithm, as implemented by Marijn van Vliet.
 
     https://github.com/wmvanvliet/mne_microstates/blob/master/microstates.py
@@ -215,8 +215,18 @@ def _modified_kmeans_cluster_marjin(data, init_times=None,
             idx = (segmentation == state)
             if np.sum(idx) == 0:
                 warnings.warn('Some microstates are never activated')
-            specific_state = data[:, idx]  # Filter out specific state
-            states[state] = specific_state.dot(activation[state, idx])
+                states[state] = 0
+                continue
+
+            if eigenvector_method:
+                # Find largest eigenvector
+                cov = data[:, idx].dot(data[:, idx].T)
+                _, vec = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
+                states[state] = vec.ravel()
+            else:
+                specific_state = data[:, idx]  # Filter out specific state
+                states[state] = specific_state.dot(activation[state, idx])
+
             states[state] /= np.linalg.norm(states[state])
 
         # Estimate residual noise
@@ -272,11 +282,11 @@ def _modified_kmeans_cluster_frederic(data, init_times=None, gfp=None, indices=N
 
         # (step 4)
         for state in range(n_microstates):
-            Vt = data[segmentation == state, :]  # Filter out the specific state
-            # (step 4a)
-            Sk = np.dot(Vt.T, Vt)
+            specific_state = data[segmentation == state, :]  # Filter out the specific state
+            # (step 4a) Find largest eigenvector
+            cov = np.dot(specific_state.T, specific_state)
             # (step 4b)
-            evals, evecs = np.linalg.eig(Sk)
+            evals, evecs = np.linalg.eig(cov)
             v = evecs[:, np.argmax(np.abs(evals))]
             states[state, :] = v/np.sqrt(np.sum(v**2))
 
