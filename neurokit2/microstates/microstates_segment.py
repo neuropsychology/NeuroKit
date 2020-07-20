@@ -110,7 +110,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
     # Random timepoints
     if not isinstance(seed, np.random.RandomState):
         seed = np.random.RandomState(seed)
-    init_times = seed.choice(len(data[:, indices]), size=n_microstates, replace=False)
+    init_times = seed.choice(len(indices), size=n_microstates, replace=False)
 
     for i in range(n_runs):
         if method == 'marjin':
@@ -194,7 +194,6 @@ def _modified_kmeans_cluster_marjin(data, init_times=None,
     data_sum_sq = np.sum(data ** 2)
 
     # Select random timepoints for our initial topographic maps
-#    init_times = seed.choice(n_samples, size=n_microstates, replace=False)
     states = data[:, init_times].T
     states /= np.linalg.norm(states, axis=1, keepdims=True)  # Normalize the maps
 
@@ -216,8 +215,8 @@ def _modified_kmeans_cluster_marjin(data, init_times=None,
             idx = (segmentation == state)
             if np.sum(idx) == 0:
                 warnings.warn('Some microstates are never activated')
-                states[state] = 0
-            states[state] = data[:, idx].dot(activation[state, idx])
+            specific_state = data[:, idx]  # Filter out specific state
+            states[state] = specific_state.dot(activation[state, idx])
             states[state] /= np.linalg.norm(states[state])
 
         # Estimate residual noise
@@ -256,8 +255,8 @@ def _modified_kmeans_cluster_frederic(data, init_times=None, gfp=None, indices=N
 
     # Select random timepoints for our initial topographic maps
 #    init_times = np.random.permutation(n_samples)[:n_microstates]
-    activation = data[init_times, :]
-    activation /= np.sqrt(np.sum(activation**2, axis=1, keepdims=True))  # normalize row-wise (across EEG channels)
+    states = data[init_times, :]
+    states /= np.sqrt(np.sum(states**2, axis=1, keepdims=True))  # normalize row-wise (across EEG channels)
 
     # Convergence criterion: variance estimate
     n_iter = 0
@@ -266,25 +265,25 @@ def _modified_kmeans_cluster_frederic(data, init_times=None, gfp=None, indices=N
 
     while ((np.abs((prev_residual - residual) / prev_residual) > threshold) & (n_iter < max_iterations)):
         # (step 3) microstate sequence (= current cluster assignment)
-        C = np.dot(data, activation.T)
+        C = np.dot(data, states.T)
         # Additional step in this algorithm but does not seem to affect labelling
-        C /= (n_channels*np.outer(gfp_values, np.std(activation, axis=1)))
-        L = np.argmax(C**2, axis=1)  # Label each of the len(n_gfp) maps
+        C /= (n_channels*np.outer(gfp_values, np.std(states, axis=1)))
+        segmentation = np.argmax(C**2, axis=1)  # Label each of the len(n_gfp) maps
 
         # (step 4)
         for state in range(n_microstates):
-            Vt = data[L == state, :]
+            Vt = data[segmentation == state, :]  # Filter out the specific state
             # (step 4a)
             Sk = np.dot(Vt.T, Vt)
             # (step 4b)
             evals, evecs = np.linalg.eig(Sk)
             v = evecs[:, np.argmax(np.abs(evals))]
-            activation[state, :] = v/np.sqrt(np.sum(v**2))
+            states[state, :] = v/np.sqrt(np.sum(v**2))
 
         # (step 5)
         # Estimate residual noise and next iteration
         residual = prev_residual
-        act_sum_sq = np.sum(np.sum(activation[L, :] * data, axis=1) ** 2)
+        act_sum_sq = np.sum(np.sum(states[segmentation, :] * data, axis=1) ** 2)
         prev_residual = data_sum_sq - act_sum_sq
         prev_residual /= (n_gfp * (n_channels - 1))
         n_iter += 1
@@ -293,4 +292,4 @@ def _modified_kmeans_cluster_frederic(data, init_times=None, gfp=None, indices=N
         warnings.warn("Modified K-means algorithm failed to converge after " + str(n_iter) + "",
                       "iterations. Consider increasing 'max_iterations'.")
 
-    return activation
+    return states
