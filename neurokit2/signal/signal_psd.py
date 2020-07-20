@@ -56,7 +56,7 @@ def signal_psd(
     order_corrected : bool
         Should the order criteria (AIC or KIC) be corrected? If unsure which method to use to choose
         the order, rely on the default (i.e., the corrected KIC).
-    **kwargs
+    **kwargs  : optional
         Keyword arguments to be passed to `scipy.signal.welch()`.
 
     See Also
@@ -403,6 +403,11 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
         The rho at order k.
     corrected : bool
         Specify for AIC and KIC methods.
+
+    Returns
+    -------
+    residual : int, float
+        Residuals to select the optimal order.
 
     """
     if criteria == "AIC":
