@@ -3,7 +3,7 @@ from warnings import warn
 
 import numpy as np
 import pandas as pd
-import scipy
+import scipy.linalg
 
 # from ..ecg import ecg_rsp # TODO: why is ecg_rsp imported as a module, not a function?
 from ..ecg.ecg_rsp import ecg_rsp
@@ -339,22 +339,23 @@ def _get_multipeak_window(nperseg, window_number=8):
     Ry = scipy.linalg.toeplitz(rpeak)
     Rx = scipy.linalg.toeplitz(rpen)
     RR = scipy.linalg.cholesky(Rx)
-    C = np.matmul(scipy.linalg.inv(RR.conj().transpose()), Ry)
-    C = np.matmul(C, scipy.linalg.inv(RR))
-    Q ,T = scipy.linalg.schur(C)
-    F = scipy.linalg.inv(RR) * Q
-    RD = F.conj().transpose() * Ry * F
+    C = scipy.linalg.inv(RR.conj().transpose()).dot(Ry).dot(scipy.linalg.inv(RR))
+    T, Q = scipy.linalg.schur(C)
+    F = scipy.linalg.inv(RR).dot(Q)
+    RD = F.conj().transpose().dot(Ry).dot(F)
     RD = np.diag(RD)
     RDN = np.sort(RD)
     h = np.argsort(RD)
+
+    FN = np.zeros((nperseg, nperseg))
     for i in range(len(RD)):
-        FN(:,i)=F(:,h(i)) / np.sqrt(F(:,h(i)).T * F(:,h(i)))
+        FN[:,i] = F[:,h[i]] / np.sqrt(F[:,h[i]].conj().transpose().dot(F[:,h[i]]))
 
-    RDN = RDN(len(RD): -1: 1)
-    FN = FN(:,len(RD): -1: 1)
+    RDN = RDN[len(RD) - 1: 0: -1]
+    FN = FN[:,len(RD) - 1: 0: -1]
 
-    weight = RDN(1: window_number) / np.sum(RDN(1: window_number))
-    multipeak = FN(:,1: window_number)
+    weight = RDN[: window_number] / np.sum(RDN[: window_number])
+    multipeak = FN[:,0: window_number]
 
     return multipeak, weight
 
