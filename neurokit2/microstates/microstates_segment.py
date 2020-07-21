@@ -119,7 +119,6 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
                                                           init_times=init_times,
                                                           n_microstates=n_microstates,
                                                           max_iterations=max_iterations,
-                                                          eigenvector_method=True,
                                                           threshold=1e-6)
         elif method == 'frederic':
             microstates = _modified_kmeans_cluster_frederic(data, init_times=init_times,
@@ -161,8 +160,7 @@ def _modified_kmeans_predict(data, microstates):
 
 
 def _modified_kmeans_cluster_marjin(data, init_times=None,
-                                    n_microstates=4, max_iterations=1000, threshold=1e-6,
-                                    eigenvector_method=True):
+                                    n_microstates=4, max_iterations=1000, threshold=1e-6):
     """The modified K-means clustering algorithm, as implemented by Marijn van Vliet.
 
     https://github.com/wmvanvliet/mne_microstates/blob/master/microstates.py
@@ -218,15 +216,12 @@ def _modified_kmeans_cluster_marjin(data, init_times=None,
                 states[state] = 0
                 continue
 
-            if eigenvector_method:
-                # Find largest eigenvector
-                cov = data[:, idx].dot(data[:, idx].T)
-                _, vec = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
-                states[state] = vec.ravel()
-            else:
-                specific_state = data[:, idx]  # Filter out specific state
-                states[state] = specific_state.dot(activation[state, idx])
-
+#            # Find largest eigenvector
+#            cov = data[:, idx].dot(data[:, idx].T)
+#            _, vec = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
+#            states[state] = vec.ravel()
+            specific_state = data[:, idx]  # Filter out specific state
+            states[state] = specific_state.dot(activation[state, idx])
             states[state] /= np.linalg.norm(states[state])
 
         # Estimate residual noise
