@@ -121,7 +121,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
                                                           max_iterations=max_iterations,
                                                           threshold=1e-6)
         elif method == 'frederic':
-            microstates = _modified_kmeans_cluster_frederic(data, init_times=init_times,
+            microstates = _modified_kmeans_cluster_frederic(data[:, indices], init_times=init_times,
                                                             gfp=gfp, indices=indices,
                                                             n_microstates=n_microstates,
                                                             max_iterations=max_iterations,
@@ -172,6 +172,8 @@ def _modified_kmeans_cluster_marjin(data, init_times=None,
     max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
         Defaults to 1000.
+    init_times : array
+        Random timepoints to be selected for topographic maps.
     threshold : float
         The threshold of convergence for the k-means algorithm, based on
         relative change in noise variance. Defaults to 1e-6.
@@ -248,7 +250,6 @@ def _modified_kmeans_cluster_frederic(data, init_times=None, gfp=None, indices=N
 
     data = data.T
     n_samples, n_channels = data.shape
-    data = data[indices, :]
 
     # Get GFP info
     gfp_values = gfp[indices]
@@ -259,7 +260,6 @@ def _modified_kmeans_cluster_frederic(data, init_times=None, gfp=None, indices=N
     data_sum_sq = np.sum(data ** 2)
 
     # Select random timepoints for our initial topographic maps
-#    init_times = np.random.permutation(n_samples)[:n_microstates]
     states = data[init_times, :]
     states /= np.sqrt(np.sum(states**2, axis=1, keepdims=True))  # normalize row-wise (across EEG channels)
 
