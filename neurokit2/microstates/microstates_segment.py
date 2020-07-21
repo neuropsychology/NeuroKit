@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import warnings
-from sklearn.decomposition import PCA
+from sklearn.decomposition import PCA, FastICA
 
 from .microstates_prepare_data import _microstates_prepare_data
 from .microstates_quality import microstates_gev, microstates_crossvalidation
@@ -83,9 +83,12 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
     >>> nk.microstates_plot(out_frederic, gfp=out_frederic["GFP"][0:500])
     >>>
     >>> # PCA
-    >>> out_pca = nk.microstates_segment(eeg, method='pca')
+    >>> out_pca = nk.microstates_segment(eeg, method='pca', standardize_eeg=True)
     >>> nk.microstates_plot(out_pca, gfp=out_pca["GFP"][0:500])
-
+    >>>
+    >>> # ICA
+    >>> out_ica = nk.microstates_segment(eeg, method='ica', standardize_eeg=True)
+    >>> nk.microstates_plot(out_ica, gfp=out_ica["GFP"][0:500])
 
     See Also
     --------
@@ -141,6 +144,8 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
             microstates, explained_var, total_explained_var = _pca_cluster(data[:, indices], n_microstates=n_microstates)
             pca_info = {'Explained Variance': explained_var,
                         'Total Explained Variance': total_explained_var}
+        elif method == 'ica':
+            microstates = _ica_cluster(data[:, indices], n_microstates=n_microstates, max_iterations=max_iterations)
 
         microstates_list.append(microstates)
 
@@ -347,15 +352,35 @@ def _pca_cluster(data, n_microstates=4):
     """Run Principal Component Analysis (PCA) for clustering.
     """
     data = data.T
-    data_norm = data - data.mean(axis=1, keepdims=True)
+#    data_norm = data - data.mean(axis=1, keepdims=True)
+#    data_norm /= data_norm.std(axis=1, keepdims=True)
+
+    # Fit PCA
     pca = PCA(n_components=n_microstates, copy=True, whiten=True, svd_solver='auto')
-    pca.fit(data_norm)
+    pca.fit(data)
     states = np.array([pca.components_[state, :] for state in range(n_microstates)])
 
+    # Compute variance
     explained_var = pca.explained_variance_ratio_
     total_explained_var = np.sum(pca.explained_variance_ratio_)
 
     return states, explained_var, total_explained_var
+
+
+def _ica_cluster(data, n_microstates=4, max_iterations=1000):
+    """Run Independent Component Analysis (ICA) for clustering.
+    """
+
+    data = data.T
+#    data_norm = data - data.mean(axis=1, keepdims=True)
+#    data_norm /= data_norm.std(axis=1, keepdims=True)
+
+    # Fit ICA
+    ica = FastICA(n_components=n_microstates, algorithm='parallel', whiten=True, fun='exp', max_iter=max_iterations)
+    ica.fit_transform(data)
+    states = np.array([ica.components_[state, :] for state in range(n_microstates)])
+
+    return states
 
 
 #def _aahc_cluster(data, init_times=None, gfp=None, indices=None,
