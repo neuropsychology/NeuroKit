@@ -102,7 +102,9 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
                 sampling_rate=sampling_rate,
                 min_frequency=min_frequency,
                 overlap=overlap,
-                window=window
+                window=window,
+                mode=mode,
+                window_type=window_type
                 )
     # CWT
     elif method.lower() in ["cwt", "wavelet"]:
@@ -151,7 +153,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
 
 
 def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None,
-                  window=None, window_type='hann', mode='complex'):
+                  window=None, window_type='hann', mode='psd'):
     """Short-term Fourier Transform.
     """
 
