@@ -7,7 +7,7 @@ from ..misc import find_groups, as_vector
 
 
 def microstates_static(microstates, sampling_rate=1000, show=False):
-    """Static properties of microstates
+    """Static properties of microstates.
 
     The duration of each microstate is also referred to as the Ratio of Time Covered (RTT) in
     some microstates publications.
@@ -51,8 +51,6 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
 # Duration
 # =============================================================================
 def _microstates_duration(microstates, sampling_rate=1000, out=None):
-    """
-    """
     states = np.unique(microstates)
 
     if out is None:
@@ -112,8 +110,6 @@ def _microstates_duration_plot(durations, types, ax=None):
 # Prevalence
 # =============================================================================
 def _microstates_prevalence(microstates, out=None):
-    """
-    """
     n = len(microstates)
     states = np.unique(microstates)
 
@@ -131,8 +127,6 @@ def _microstates_prevalence(microstates, out=None):
 
 
 def _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=None, ax_distrib=None):
-    """
-    """
     states = np.unique(microstates)
 
     # Plot

@@ -12,10 +12,15 @@ def microstates_classify(microstates, segmentation=None):
 
     Parameters
     ----------
-    microstates : array | dict
+    microstates : Union[np.array, dict]
         Array of microstates maps or dict (output from ``microstates_segment``).
-    segmentation : array | list
+    segmentation : Union[np.array, dict]
         Vector containing the segmentation.
+
+    Returns
+    -------
+    dict
+        As returned by ``nk.microstates_segment()``.
 
     Examples
     ------------
@@ -31,7 +36,6 @@ def microstates_classify(microstates, segmentation=None):
     >>> # Reorder
     >>> out = nk.microstates_classify(out)
     >>> nk.microstates_plot(out, gfp=out["GFP"][0:100])
-
 
     """
     # Prepare the output type
@@ -80,7 +84,7 @@ def _microstates_sort(microstates):
     coefs_linear = np.zeros(n_states)
     for i in order_original:
         state = microstates[i, :]
-        intercept, coefs_linear[i], coefs_quadratic[i] = np.polyfit(state, np.arange(len(state)), 2)
+        _, coefs_linear[i], coefs_quadratic[i] = np.polyfit(state, np.arange(len(state)), 2)
 
     # For each state, which is the biggest trend, linear or quadratic
     order_quad = order_original[np.abs(coefs_linear) <= np.abs(coefs_quadratic)]
@@ -89,7 +93,6 @@ def _microstates_sort(microstates):
     # Reorder each
     order_quad = order_quad[np.argsort(coefs_quadratic[order_quad])]
     order_lin = order_lin[np.argsort(coefs_linear[order_lin])]
-
 
     new_order = np.concatenate([order_quad, order_lin])
 

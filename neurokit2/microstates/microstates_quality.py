@@ -3,8 +3,26 @@ import numpy as np
 import pandas as pd
 
 
-def microstates_gev(eeg, microstates, segmentation, gfp, **kwargs):
+def microstates_gev(eeg, microstates, segmentation, gfp):
     """Global Explained Variance (GEV)
+
+    Parameters
+    ----------
+    eeg : np.ndarray
+        An array (channels, times) of M/EEG data obtained from Raw or Epochs object from MNE.
+    microstates : np.ndarray
+        The topographic maps of the found unique microstates which has a shape of n_channels x n_states,
+        generated from ``nk.microstates_segment()``.
+    segmentation : np.ndarray
+        For each sample, the index of the microstate to which the sample has been assigned. Defaults to None.
+    gfp : np.ndarray
+        The Global Field Power (GFP) of the data.
+
+    Returns
+    -------
+    float
+        The Global Explained Variance (GEV) of the generated microstates.
+
     """
     # Normalizing constant (used later for GEV)
     if isinstance(gfp, (list, np.ndarray, pd.Series)):
@@ -20,7 +38,27 @@ def microstates_gev(eeg, microstates, segmentation, gfp, **kwargs):
 def microstates_crossvalidation(eeg, microstates, gfp, n_channels, n_samples):
     """Compute Cross-Validation Criterion
 
-    https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518
+    Adapted from https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518
+
+    Parameters
+    ----------
+    eeg : np.ndarray
+        An array (channels, times) of M/EEG data obtained from Raw or Epochs object from MNE.
+    microstates : np.ndarray
+        The topographic maps of the found unique microstates which has a shape of n_channels x n_states,
+        generated from ``nk.microstates_segment()``.
+    gfp : np.ndarray
+        The Global Field Power (GFP) of the data.
+    n_channels : int
+        Number of channels, or electrodes.
+    n_samples : int
+        Number of timepoints or samples of the data.
+
+    Returns
+    -------
+    float
+        The Cross-Validation criterion of the generated microstates.
+
     """
 
     cluster = np.dot(eeg.T, microstates.T)

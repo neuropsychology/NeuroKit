@@ -6,7 +6,26 @@ import matplotlib.gridspec
 
 
 def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
-    """
+    """Plots the clustered microstates.
+
+    Parameters
+    ----------
+    microstates : np.ndarray
+        The topographic maps of the found unique microstates which has a shape of n_channels x n_states,
+        generated from ``nk.microstates_segment()``.
+    segmentation : array
+        For each sample, the index of the microstate to which the sample has been assigned. Defaults to None.
+    gfp : array
+        The range of global field power (GFP) values to visualize. Defaults to None, which will plot
+        the whole range of GFP values.
+    info : dict
+        The dictionary output of ``nk.microstates_segment()``. Defaults to None.
+
+    Returns
+    -------
+    fig
+        Plot of prototypical microstates maps and GFP across time.
+
     Examples
     ---------
     >>> import neurokit2 as nk
@@ -15,7 +34,9 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
     >>> microstates = nk.microstates_segment(eeg, select="gfp")
-    >>> nk.microstates_plot(out, gfp=out["GFP"][0:500])
+    >>> nk.microstates_plot(out, gfp=out["GFP"][0:500]) #doctest: +ELLIPSIS
+    <Figure ...>
+
     """
     # Try retrieving info
     if isinstance(microstates, dict):

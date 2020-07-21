@@ -16,7 +16,7 @@ def _microstates_prepare_data(eeg, sampling_rate=None, train="gfp", standardize_
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to None.
-    train : str | int | float
+    train : Union[str, int, float]
         Method for selecting the timepoints how which to train the clustering algorithm. Can be
         'gfp' to use the peaks found in the Peaks in the global field power. Can be 'all', in which
         case it will select all the datapoints. It can also be a number or a ratio, in which case

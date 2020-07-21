@@ -75,17 +75,15 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
     if gfp is None:
         gfp = eeg_gfp(eeg, **kwargs)
 
-    peaks = _microstates_peaks_gfp(eeg, gfp=gfp, sampling_rate=sampling_rate, distance_between=distance_between)
+    peaks = _microstates_peaks_gfp(gfp=gfp, sampling_rate=sampling_rate, distance_between=distance_between)
 
     return peaks
-
-
 
 
 # =============================================================================
 # Methods
 # =============================================================================
-def _microstates_peaks_gfp(eeg, gfp=None, sampling_rate=None, distance_between=0.01):
+def _microstates_peaks_gfp(gfp=None, sampling_rate=None, distance_between=0.01):
 
     minimum_separation = int(distance_between * sampling_rate)  # 10 ms (Microstate EEGlab toolbox)
     if minimum_separation == 0:
@@ -102,4 +100,3 @@ def _microstates_peaks_gfp(eeg, gfp=None, sampling_rate=None, distance_between=0
 #    peaks_diss, _ = scipy.signal.find_peaks(diss, distance=minimum_separation)
 
     return peaks_gfp
-

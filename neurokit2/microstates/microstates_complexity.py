@@ -6,6 +6,7 @@ from ..complexity import entropy_shannon
 
 def microstates_complexity(microstates):
     """Complexity of microstates pattern
+
     """
     microstates = as_vector(microstates)
     out = {}
