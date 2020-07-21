@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 from ..signal.signal_power import _signal_power_instant_get
 from ..signal.signal_psd import _signal_psd_welch
+from ..signal import signal_timefrequency
 from ..signal import signal_filter, signal_resample
 from ..stats import standardize
 
@@ -130,10 +131,13 @@ def _eda_sympathetic_ghiasi(eda_signal, sampling_rate=1000, frequency_band=[0.04
     filtered = signal_filter(normalized, sampling_rate=desired_sampling_rate, lowcut=0.01, highcut=0.5, method='butterworth')
 
     # Divide the signal into segments and obtain the timefrequency representation
-    nperseg = int((5 / min_frequency) * desired_sampling_rate)
     overlap = 59 / 50  # overlap of 59s in samples
-    frequency, time, bins = scipy.signal.spectrogram(filtered, fs=desired_sampling_rate, window='blackman',
-                                                     nperseg=nperseg, noverlap=overlap)
+
+    frequency, time, bins = signal_timefrequency(filtered, sampling_rate=desired_sampling_rate,
+                                                 min_frequency=min_frequency,
+                                                 max_frequency=max_frequency, method="stft",
+                                                 window=None, window_type='blackman', mode='psd',
+                                                 overlap=overlap)
 
     lower_bound = len(frequency) - len(frequency[frequency > min_frequency])
     f = frequency[(frequency > min_frequency) & (frequency < max_frequency)]

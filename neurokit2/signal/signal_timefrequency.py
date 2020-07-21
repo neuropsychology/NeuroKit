@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from ..signal.signal_detrend import signal_detrend
 
 
-def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, method="stft", window=None, nfreqbin=None, overlap=None, analytical_signal=True, show=True):
+def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, method="stft", window=None, window_type='hann', mode='psd', nfreqbin=None, overlap=None, analytical_signal=True, show=True):
     """Quantify changes of a nonstationary signal’s frequency over time.
     The objective of time-frequency analysis is to offer a more informative description of the signal
     which reveals the temporal variation of its frequency contents.
@@ -50,6 +50,12 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     window : int
         Length of each segment in seconds. If None (default), window will be automatically
         calculated. For stft method
+    window_type : str
+        Type of window to create, defaults to 'hann'. See ``scipy.signal.get_window()`` to see full
+        options of windows. For stft method.
+    mode : str
+        Type of return values for stft method. Can be 'psd', 'complex' (default, equivalent to output of
+        stft with no padding or boundary extension), 'magnitude', 'angle', 'phase'. Default to 'psd'.
     nfreqbin : int, float
         Number of frequency bins. If None (default), nfreqbin will be set to 0.5*sampling_rate.
     overlap : int
@@ -144,7 +150,8 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
 # =============================================================================
 
 
-def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None, window=None):
+def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None,
+                  window=None, window_type='hann', mode='complex'):
     """Short-term Fourier Transform.
     """
 
@@ -157,13 +164,13 @@ def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None, 
     frequency, time, tfr = scipy.signal.spectrogram(
         signal,
         fs=sampling_rate,
-        window='hann',
+        window=window_type,
         scaling='density',
         nperseg=nperseg,
         nfft=None,
         detrend=False,
         noverlap=overlap,
-        mode="complex"
+        mode=mode
     )
 
     return frequency, time, np.abs(tfr)
