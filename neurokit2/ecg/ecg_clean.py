@@ -47,7 +47,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     ...                         "ECG_Elgendi" : nk.ecg_clean(ecg, sampling_rate=1000, method="elgendi2010"),
     ...                         "ECG_EngZeeMod" : nk.ecg_clean(ecg, sampling_rate=1000, method="engzeemod2012")})
      >>> signals.plot() #doctest: +ELLIPSIS
-     <matplotlib.axes._subplots.AxesSubplot object at ...>
+     <AxesSubplot:>
 
 
     References
