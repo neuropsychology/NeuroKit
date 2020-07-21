@@ -10,8 +10,9 @@ from ..ecg.ecg_rsp import ecg_rsp
 from ..misc import NeuroKitWarning
 from ..rsp import rsp_process
 from ..signal import (signal_filter, signal_interpolate, signal_rate,
-                      signal_resample)
+                      signal_resample, signal_timefrequency)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
+from .hrv.hrv_utils import _hrv_get_rri
 
 
 def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
@@ -305,8 +306,24 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
 # Second-by-second RSA
 # =============================================================================
 
-def hrv_rsa_gates(rsa):
+def hrv_rsa_gates(rpeaks, sampling_rate=1000, min_frequency=0.12, max_frequency=0.40, nperseg=None):
+
+    rri, sampling_rate = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate, interpolate=True)
+    # Re-sample at 4 Hz
+    desired_sampling_rate = 4
+    rri = signal_resample(rri, sampling_rate=sampling_rate,
+                          desired_sampling_rate=desired_sampling_rate)
+
+    window = 32  # 32 seconds
+    overlap = 31  # 31 seconds
+
+    frequency, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
+                                                min_frequency=min_frequency,
+                                                max_frequency=max_frequency, method="stft",
+                                                window=window, overlap=overlap, show=False)
+    rsa = 1
     return rsa
+
 
 def _get_multipeak_window(nperseg, window_number=8):
     """Get Peak Matched Multiple Window
