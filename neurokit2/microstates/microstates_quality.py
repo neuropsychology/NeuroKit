@@ -2,10 +2,6 @@
 import numpy as np
 import pandas as pd
 
-from .microstates_peaks import microstates_peaks
-from ..eeg import eeg_gfp
-from ..stats import standardize
-
 
 def microstates_gev(eeg, microstates, segmentation, gfp, **kwargs):
     """Global Explained Variance (GEV)
@@ -21,7 +17,34 @@ def microstates_gev(eeg, microstates, segmentation, gfp, **kwargs):
     return gev
 
 
+def microstates_crossvalidation(eeg, microstates, gfp, n_channels, n_samples):
+    """Compute Cross-Validation Criterion
 
+    https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518
+    """
+
+    cluster = np.dot(eeg.T, microstates.T)
+    cluster /= (n_channels*np.outer(gfp, np.std(microstates, axis=1)))
+    sum_sq = np.argmax(cluster**2, axis=1)
+    var = np.sum(eeg.T**2) - np.sum(np.sum(microstates[sum_sq, :]*eeg.T, axis=1)**2)
+    var /= (n_samples*(n_channels-1))
+    criterion = var * (n_channels - 1)**2/(n_channels - len(microstates) - 1.)**2
+
+    return criterion
+
+#        # GEV (global explained variance) of cluster k
+#        gev = np.zeros(n_maps)
+#        for k in range(n_maps):
+#            r = L==k
+#            gev[k] = np.sum(gfp_values[r]**2 * C[r,k]**2)/gfp2
+#        gev_total = np.sum(gev)
+#
+#        # store
+#        cv_list.append(cv)
+#        gev_list.append(gev)
+#        gevT_list.append(gev_total)
+#        maps_list.append(maps)
+#        L_list.append(L_)
 
 
 def _correlate_vectors(A, B, axis=0):
@@ -43,6 +66,7 @@ def _correlate_vectors(A, B, axis=0):
         The second collection of vectors
     axis : int
         The axis that contains the elements of each vector. Defaults to 0.
+
     Returns
     -------
     corr : ndarray, shape (m,)

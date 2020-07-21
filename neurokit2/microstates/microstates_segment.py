@@ -8,7 +8,7 @@ from ..stats import mad, standardize
 from ..eeg import eeg_gfp
 from .microstates_peaks import microstates_peaks
 from .microstates_prepare_data import _microstates_prepare_data
-from .microstates_quality import microstates_gev
+from .microstates_quality import microstates_gev, microstates_crossvalidation
 from .microstates_classify import microstates_classify
 
 
@@ -132,6 +132,10 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
         # Save iteration with highest global explained variance (GEV)
         gev = microstates_gev(data, microstates, segmentation, gfp_sum_sq)
 
+        # Compute cross validation criterion
+        cv = microstates_crossvalidation(data, microstates, gfp,
+                                         n_channels=data.shape[0], n_samples=data.shape[1])
+
         if gev > best_gev:
             best_gev, best_microstates, best_segmentation = gev, microstates, segmentation
 
@@ -140,6 +144,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
            "Sequence": best_segmentation,
            "GEV": best_gev,
            "GFP": gfp,
+           "Cross-Validation Criterion": cv,
            "Info": info}
 
     # Reorder
