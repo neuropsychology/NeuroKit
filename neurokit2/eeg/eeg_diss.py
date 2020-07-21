@@ -30,7 +30,8 @@ def eeg_diss(eeg, gfp=None, **kwargs):
     >>>
     >>> gfp = nk.eeg_gfp(eeg)
     >>> diss = nk.eeg_diss(eeg, gfp=gfp)
-    >>> nk.signal_plot([gfp[0:300], diss[0:300]], standardize=True)
+    >>> nk.signal_plot([gfp[0:300], diss[0:300]], standardize=True) #doctest: +ELLIPSIS
+    <Figure ...>
 
     References
     ----------

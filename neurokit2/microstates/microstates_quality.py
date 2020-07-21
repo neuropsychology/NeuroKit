@@ -46,17 +46,18 @@ def _correlate_vectors(A, B, axis=0):
 
     Parameters
     ----------
-    A : ndarray, shape (n, m)
-        The first collection of vectors
-    B : ndarray, shape (n, m)
-        The second collection of vectors
+    A : array
+        The first collection of vectors of shape (n, m)
+    B : array
+        The second collection of vectors of shape (n, m)
     axis : int
         The axis that contains the elements of each vector. Defaults to 0.
 
     Returns
     -------
-    corr : ndarray, shape (m,)
-        For each pair of vectors, the correlation between them.
+    corr : array
+        For each pair of vectors, the correlation between them with shape (m, )
+
     """
     An = A - np.mean(A, axis=axis)
     Bn = B - np.mean(B, axis=axis)

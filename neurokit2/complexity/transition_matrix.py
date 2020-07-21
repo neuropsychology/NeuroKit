@@ -19,7 +19,12 @@ def transition_matrix(sequence):
     >>>
     >>> sequence = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
     >>> out = nk.transition_matrix(sequence)
-    >>> out["Observed"]
+    >>> out["Observed"] #doctest: +ELLIPSIS
+              0         1         2
+    0  0.750000  0.250000  0.000000
+    1  0.333333  0.333333  0.333333
+    2  0.000000  0.250000  0.750000
+
     """
     out = {}
 
@@ -55,7 +60,8 @@ def transition_matrix_simulate(matrix, n=10):
     >>> sequence = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
     >>> matrix = nk.transition_matrix(sequence)["Observed"]
     >>>
-    >>> nk.transition_matrix_simulate(matrix, n=10)
+    >>> x = nk.transition_matrix_simulate(matrix, n=10)
+    >>> x #doctest: +SKIP
     """
     states = matrix.columns.values
 
