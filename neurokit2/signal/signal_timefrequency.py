@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from ..signal.signal_detrend import signal_detrend
 
 
-def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, method="stft", window=None, window_type='hann', mode='complex', nfreqbin=None, overlap=None, analytical_signal=True, show=True):
+def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, method="stft", window=None, window_type='hann', mode='psd', nfreqbin=None, overlap=None, analytical_signal=True, show=True):
     """Quantify changes of a nonstationary signal’s frequency over time.
     The objective of time-frequency analysis is to offer a more informative description of the signal
     which reveals the temporal variation of its frequency contents.
@@ -55,7 +55,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
         options of windows. For stft method.
     mode : str
         Type of return values for stft method. Can be 'psd', 'complex' (default, equivalent to output of
-        stft with no padding or boundary extension), 'magnitude', 'angle', 'phase'.
+        stft with no padding or boundary extension), 'magnitude', 'angle', 'phase'. Default to 'psd'.
     nfreqbin : int, float
         Number of frequency bins. If None (default), nfreqbin will be set to 0.5*sampling_rate.
     overlap : int
