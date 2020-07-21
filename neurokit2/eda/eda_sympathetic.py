@@ -136,7 +136,7 @@ def _eda_sympathetic_ghiasi(eda_signal, sampling_rate=1000, frequency_band=[0.04
     frequency, time, bins = signal_timefrequency(filtered, sampling_rate=desired_sampling_rate,
                                                  min_frequency=min_frequency,
                                                  max_frequency=max_frequency, method="stft",
-                                                 window=None, window_type='blackman',
+                                                 window=60, window_type='blackman',
                                                  overlap=overlap)
 
     lower_bound = len(frequency) - len(frequency[frequency > min_frequency])
