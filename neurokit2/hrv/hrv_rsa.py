@@ -306,22 +306,39 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
 # Second-by-second RSA
 # =============================================================================
 
-def hrv_rsa_gates(rpeaks, sampling_rate=1000, min_frequency=0.12, max_frequency=0.40, nperseg=None):
+def hrv_rsa_gates(rpeaks, sampling_rate=1000, min_frequency=0.12, max_frequency=0.40, window=None
+                  window_number=None):
 
+    # Retried IBI and interpolate it
     rri, sampling_rate = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate, interpolate=True)
+
     # Re-sample at 4 Hz
     desired_sampling_rate = 4
     rri = signal_resample(rri, sampling_rate=sampling_rate,
                           desired_sampling_rate=desired_sampling_rate)
 
-    window = 32  # 32 seconds
-    overlap = 31  # 31 seconds
+    # Sanitize parameters
+    if window is not None:
+        overlap = int((window - 1) * desired_sampling_rate)
+    else:
+        window = 32  # 32 seconds
+        overlap = 31 * desired_sampling_rate  # 31 seconds
+    nperseg = window * desired_sampling_rate
+    if window_number is None:
+        window_number = 8
 
-    frequency, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
+    # Get multipeak window
+    multipeak, weight = _get_multipeak_window(nperseg, window_number)
+
+    for i in range(4):
+        frequency, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
                                                 min_frequency=min_frequency,
                                                 max_frequency=max_frequency, method="stft",
-                                                window=window, overlap=overlap, show=False)
-    rsa = 1
+                                                window=multipeak[:, i], overlap=overlap, show=False)
+        if i == 1:
+            rsa = np.zeros_like(psd)
+        rsa = psd * weight(i) + rsa  # add weights to 1
+
     return rsa
 
 
