@@ -13,7 +13,7 @@ from .microstates_classify import microstates_classify
 
 
 def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_method='l1', sampling_rate=None,
-                        standardize_eeg=False, n_runs=10, max_iterations=1000, seed=None, **kwargs):
+                        standardize_eeg=False, n_runs=10, max_iterations=1000, criterion='gev', seed=None, **kwargs):
     """Segment a continuous M/EEG signal into microstates using different clustering algorithms.
 
     Several runs of the clustering algorithm are performed, using different random initializations.
@@ -55,6 +55,11 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
     max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
         Defaults to 1000.
+    criterion : str
+        Which criterion to use to choose the best run for k-means algorithm, can be 'gev' (default) which selects
+        the best run based on the highest global explained variance, or 'cv' which selects the best run
+        based on the lowest cross-validation criterion. See ``nk.microstates_gev()``
+        and ``nk.microstates_crossvalidation()`` for more details respectively.
     seed : int | numpy.random.RandomState | None
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
@@ -83,7 +88,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
 
     See Also
     --------
-    eeg_gfp, microstates_peaks, microstates_gev, microstates_classify
+    eeg_gfp, microstates_peaks, microstates_gev, microstates_crossvalidation, microstates_classify
 
     References
     ----------
@@ -104,16 +109,20 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
     gfp_sum_sq = np.sum(gfp**2)
 
     # Do several runs of the k-means algorithm, keep track of the best segmentation.
-    best_gev = 0
-    best_microstates = None
-    best_segmentation = None
+#    best_gev = 0
+#    best_microstates = None
+#    best_segmentation = None
+    segmentation_list = []
+    microstates_list = []
+    cv_list = []
+    gev_list = []
 
     # Random timepoints
     if not isinstance(seed, np.random.RandomState):
         seed = np.random.RandomState(seed)
-    init_times = seed.choice(len(indices), size=n_microstates, replace=False)
 
     for i in range(n_runs):
+        init_times = seed.choice(len(indices), size=n_microstates, replace=False)
         if method == 'marjin':
             microstates = _modified_kmeans_cluster_marjin(data[:, indices],
                                                           init_times=init_times,
@@ -126,25 +135,40 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
                                                             n_microstates=n_microstates,
                                                             max_iterations=max_iterations,
                                                             threshold=1e-6)
+        microstates_list.append(microstates)
 
+        # Predict
         segmentation = _modified_kmeans_predict(data, microstates)
+        segmentation_list.append(segmentation)
 
-        # Save iteration with highest global explained variance (GEV)
+        # Select best run with highest global explained variance (GEV) or cross-validation criterion
         gev = microstates_gev(data, microstates, segmentation, gfp_sum_sq)
+        gev_list.append(gev)
 
-        # Compute cross validation criterion
         cv = microstates_crossvalidation(data, microstates, gfp,
                                          n_channels=data.shape[0], n_samples=data.shape[1])
+        cv_list.append(cv)
 
-        if gev > best_gev:
-            best_gev, best_microstates, best_segmentation = gev, microstates, segmentation
+        # Select optimal
+        if criterion == 'gev':
+            optimal = np.argmax(gev_list)
+        elif criterion == 'cv':
+            optimal = np.argmin(cv_list)
+
+        best_microstates = microstates_list[optimal]
+        best_segmentation = segmentation_list[optimal]
+        best_gev = gev_list[optimal]
+        best_cv = cv_list[optimal]
+
+#        if gev > best_gev:
+#            best_gev, best_microstates, best_segmentation = gev, microstates, segmentation
 
     # Prepare output
     out = {"Microstates": best_microstates,
            "Sequence": best_segmentation,
            "GEV": best_gev,
            "GFP": gfp,
-           "Cross-Validation Criterion": cv,
+           "Cross-Validation Criterion": best_cv,
            "Info": info}
 
     # Reorder
@@ -152,6 +176,10 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
 
     return out
 
+#    # select best run
+#    k_opt = np.argmin(cv_list)
+#    #k_opt = np.argmax(gevT_list)
+#    maps = maps_list[k_opt]
 
 # =============================================================================
 # Clustering algorithms
