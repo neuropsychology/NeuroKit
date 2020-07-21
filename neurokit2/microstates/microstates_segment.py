@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 import warnings
-import scipy
 
-from ..stats import mad, standardize
-from ..eeg import eeg_gfp
-from .microstates_peaks import microstates_peaks
 from .microstates_prepare_data import _microstates_prepare_data
 from .microstates_quality import microstates_gev, microstates_crossvalidation
 from .microstates_classify import microstates_classify

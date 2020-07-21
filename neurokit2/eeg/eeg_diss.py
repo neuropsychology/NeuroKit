@@ -3,8 +3,6 @@ import numpy as np
 import pandas as pd
 
 from .eeg_gfp import eeg_gfp
-from ..stats import mad
-
 
 
 def eeg_diss(eeg, gfp=None, **kwargs):

@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import pandas as pd
 from ..misc import as_vector
 from ..complexity import entropy_shannon
-
 
 
 def microstates_complexity(microstates):

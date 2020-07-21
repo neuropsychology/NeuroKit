@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import pandas as pd
 from ..complexity import transition_matrix
 from ..misc import as_vector
-
 
 
 def microstates_dynamic(microstates):

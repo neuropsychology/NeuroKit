@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import pandas as pd
 
 from ..misc import replace
 
@@ -32,7 +31,6 @@ def microstates_classify(microstates, segmentation=None):
     >>> # Reorder
     >>> out = nk.microstates_classify(out)
     >>> nk.microstates_plot(out, gfp=out["GFP"][0:100])
-
 
 
     """
@@ -67,7 +65,6 @@ def microstates_classify(microstates, segmentation=None):
         return states, segmentation
     else:
         return states
-
 
 
 # =============================================================================

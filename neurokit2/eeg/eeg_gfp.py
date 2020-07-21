@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-from ..stats import standardize
+from ..stats import standardize, mad
 from ..signal import signal_filter
 
 

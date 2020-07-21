@@ -32,20 +32,6 @@ def microstates_crossvalidation(eeg, microstates, gfp, n_channels, n_samples):
 
     return criterion
 
-#        # GEV (global explained variance) of cluster k
-#        gev = np.zeros(n_maps)
-#        for k in range(n_maps):
-#            r = L==k
-#            gev[k] = np.sum(gfp_values[r]**2 * C[r,k]**2)/gfp2
-#        gev_total = np.sum(gev)
-#
-#        # store
-#        cv_list.append(cv)
-#        gev_list.append(gev)
-#        gevT_list.append(gev_total)
-#        maps_list.append(maps)
-#        L_list.append(L_)
-
 
 def _correlate_vectors(A, B, axis=0):
     """Compute pairwise correlation of multiple pairs of vectors.

@@ -5,9 +5,6 @@ import itertools
 import scipy.stats
 
 
-
-
-
 def transition_matrix(sequence):
     """Empirical transition matrix
 
@@ -42,10 +39,6 @@ def transition_matrix(sequence):
     out.update(_transition_matrix_symmetry(sequence))
 
     return out
-
-
-
-
 
 
 def transition_matrix_simulate(matrix, n=10):
@@ -83,8 +76,6 @@ def transition_matrix_simulate(matrix, n=10):
         seq[i] = _sample
 
     return states[seq]
-
-
 
 
 def transition_matrix_plot(matrix):
@@ -168,14 +159,12 @@ def _transition_matrix_observed(sequence):
     return out
 
 
-
 def _transition_matrix_expected(observed_matrix):
     """
     """
     expected_matrix = scipy.stats.contingency.expected_freq(observed_matrix.values)
     expected_matrix = pd.DataFrame(expected_matrix, index=observed_matrix.index, columns=observed_matrix.columns)
     return expected_matrix
-
 
 
 def _transition_matrix_symmetry(sequence):
@@ -226,7 +215,7 @@ def _transition_matrix_stationarity(sequence, size=100, alpha=0.05):
             "NeuroKit error: _transition_matrix_stationarity(): the size of the blocks is too high.",
             " Decrease the 'size' argument.")
 
-    nl =  r* size
+#    nl =  r* size
 
     f_ijk = np.zeros((r, n_states, n_states))
     f_ij = np.zeros((r, n_states))

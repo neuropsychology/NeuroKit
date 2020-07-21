@@ -2,9 +2,6 @@
 import numpy as np
 import pandas as pd
 
-from ..stats import mad
-from ..signal import signal_filter
-
 
 def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     """EEG Rereferencing
