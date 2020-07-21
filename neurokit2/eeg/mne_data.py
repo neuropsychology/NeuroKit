@@ -8,6 +8,11 @@ def mne_data(what="raw"):
     what : str
         Can be 'raw' or 'filt-0-40_raw' (a filtered version).
 
+    Returns
+    -------
+    raw object
+        The raw mne object.
+
     Examples
     ---------
     >>> import neurokit2 as nk

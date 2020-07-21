@@ -19,8 +19,9 @@ def find_groups(x):
     >>> import neurokit2 as nk
     >>>
     >>> x = [2, 2, 2, 2, 1, 3, 3, 2, 2, 2, 1]
-    >>> nk.find_groups(x)
-    [(2, 3, 4, 5), (12, 13, 14, 15, 16, 17), (20,)]
+    >>> groups = nk.find_groups(x)
+    >>> groups #doctest: +ELLIPSIS
+    [[2, 2, 2, 2], [1], [3, 3], [2, 2, 2], [1]]
 
     """
 

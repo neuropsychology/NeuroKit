@@ -50,20 +50,17 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
     >>> # Compare L1 and L2 norms
     >>> l1 = nk.eeg_gfp(eeg, method="l1", normalize=True)
     >>> l2 = nk.eeg_gfp(eeg, method="l2", normalize=True)
-    >>> nk.signal_plot([l1, l2]) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.signal_plot([l1, l2])
     >>>
     >>> # Mean-based vs. Median-based
     >>> gfp = nk.eeg_gfp(eeg, normalize=True)
     >>> gfp_r = nk.eeg_gfp(eeg, normalize=True, robust=True)
-    >>> nk.signal_plot([gfp, gfp_r]) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.signal_plot([gfp, gfp_r])
     >>>
     >>> # Standardize the data
     >>> gfp = nk.eeg_gfp(eeg, normalize=True)
     >>> gfp_z = nk.eeg_gfp(eeg, normalize=True, standardize_eeg=True)
-    >>> nk.signal_plot([gfp, gfp_z]) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.signal_plot([gfp, gfp_z])
 
     References
     ----------
@@ -102,8 +99,7 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
 # Utilities
 # =============================================================================
 def _eeg_gfp_smoothing(gfp, sampling_rate=None, window_size=0.02):
-    """
-    Smooth the Global Field Power Curve
+    """Smooth the Global Field Power Curve
     """
     if sampling_rate is None:
         raise ValueError("NeuroKit error: eeg_gfp(): You requested to smooth the GFP, for which ",

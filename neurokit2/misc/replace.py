@@ -18,7 +18,9 @@ def replace(data, replacement_dict):
     >>>
     >>> data = [0, 1, 2, 3]
     >>> replacement = {0: 99, 3: 42}
-    >>> nk.replace(data, replacement)
+    >>> replaced = nk.replace(data, replacement)
+    >>> replaced #doctest: +ELLIPSIS
+    array([99,  1,  2, 42])
 
     """
     # Extract out keys and values

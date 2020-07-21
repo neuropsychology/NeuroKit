@@ -14,6 +14,13 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
         See ``mne.set_eeg_reference()``. Most common references include 'average'.
     robust : bool
         If True and reference is 'average', will substract the median instead of the mean.
+    **kwargs
+        Optional arguments to be passed into ``mne.set_eeg_rereference()``.
+
+    Returns
+    -------
+    raw object
+        The rereferenced raw mne object.
 
     Examples
     ---------
@@ -31,7 +38,6 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     >>> # Compare the rerefering of an array to MNE
     >>> data_mne = eeg.copy().set_eeg_reference('average', verbose=False).get_data()
     >>> data_nk = nk.eeg_rereference(eeg.get_data(), 'average')
-    >>> np.all(data_mne == data_nk)
 
     """
     # If MNE object
@@ -47,8 +53,7 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
 # Methods
 # =============================================================================
 def eeg_rereference_array(eeg, reference="average", robust=False):
-    """
-    """
+
     # Average reference
     if reference == "average":
         if robust is False:
@@ -62,8 +67,7 @@ def eeg_rereference_array(eeg, reference="average", robust=False):
     return eeg
 
 def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
-    """
-    """
+
     eeg = eeg.copy()
     if reference == "average" and robust is True:
         eeg._data = eeg_rereference_array(eeg._data, reference=reference, robust=robust)
