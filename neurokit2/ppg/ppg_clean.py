@@ -14,7 +14,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
         The raw PPG channel.
     heart_rate : Union[int, float]
         The heart rate of the PPG signal. Applicable only if method is "nabian2018" to check
-        that filter frequency is appropriate.
+        filter frequency is appropriate.
     sampling_rate : int
         The sampling frequency of the PPG (in Hz, i.e., samples/second). The default is 1000.
     method : str
