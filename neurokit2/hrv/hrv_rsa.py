@@ -306,7 +306,7 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
 # Second-by-second RSA
 # =============================================================================
 
-def hrv_rsa_gates(rpeaks, sampling_rate=1000, min_frequency=0.12, max_frequency=0.40, window=None
+def hrv_rsa_gates(rpeaks, sampling_rate=1000, min_frequency=0.12, max_frequency=0.40, window=None,
                   window_number=None):
 
     # Retried IBI and interpolate it
