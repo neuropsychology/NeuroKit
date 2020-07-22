@@ -6,7 +6,7 @@ import sklearn.cluster
 import sklearn.metrics
 import scipy.spatial
 
-from .cluster import cluster_kmeans
+from .cluster import cluster
 from .cluster_quality import cluster_quality
 
 
@@ -28,7 +28,10 @@ def cluster_findnumber(data, n_max=10, show=False):
     results = []
     for i in range(1, n_max):
         # Cluster
-        clustering, clusters, clustering_function = cluster_kmeans(data, n_clusters=i, return_function=True)
+        clustering, clusters, clustering_function = cluster(data,
+                                                            method="kmeans",
+                                                            n_clusters=i,
+                                                            return_function=True)
 
         # Compute indices of clustering quality
         _, quality = cluster_quality(data, clustering, clusters, clustering_function)

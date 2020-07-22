@@ -13,7 +13,7 @@ from .mutual_information import mutual_information
 from .rescale import rescale
 from .standardize import standardize
 from .summary import summary_plot
-from .cluster import cluster_kmeans
+from .cluster import cluster
 from .cluster_quality import cluster_quality
 from .cluster_findnumber import cluster_findnumber
 
@@ -36,7 +36,7 @@ __all__ = [
     "fit_r2",
     "mutual_information",
     "summary_plot",
-    "cluster_kmeans",
+    "cluster",
     "cluster_quality",
     "cluster_findnumber"
 ]

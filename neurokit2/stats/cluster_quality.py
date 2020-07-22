@@ -19,7 +19,7 @@ def cluster_quality(data, clustering, clusters, clustering_function=None, n_rand
     >>> data = sklearn.datasets.load_iris().data
     >>>
     >>> # Cluster
-    >>> clustering, clusters = nk.cluster_kmeans(data, n_clusters=3)
+    >>> clustering, clusters = nk.cluster(data, method="kmeans", n_clusters=3)
     >>>
     >>> # Compute indices of clustering quality
     >>> individual, general = nk.cluster_quality(data, clustering, clusters)
