@@ -9,8 +9,13 @@ def replace(data, replacement_dict):
     ----------
     data : array
         The data to replace values.
-    replacement_dict
+    replacement_dict : dict
         A replacement dictionary of the form ``{old_value: new_value}``.
+
+    Returns
+    -------
+    array
+        Array containing the replaced values.
 
     Examples
     --------

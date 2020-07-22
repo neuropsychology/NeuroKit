@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+import itertools
 import numpy as np
 import pandas as pd
-import itertools
 import scipy.stats
 
 
@@ -12,6 +12,16 @@ def transition_matrix(sequence):
     Chi-square test against the expected transition matrix.
 
     Based on https://github.com/Frederic-vW/eeg_microstates and https://github.com/maximtrp/mchmm
+
+    Parameters
+    ----------
+    sequence : np.ndarray
+        1D array of numbers.
+
+    Returns
+    -------
+    dict
+        Contains information of the expected and observed transition matrix.
 
     Examples
     --------
@@ -56,6 +66,7 @@ def transition_matrix_simulate(matrix, n=10):
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import numpy as np
     >>>
     >>> sequence = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
     >>> matrix = nk.transition_matrix(sequence)["Observed"]
@@ -166,8 +177,7 @@ def _transition_matrix_observed(sequence):
 
 
 def _transition_matrix_expected(observed_matrix):
-    """
-    """
+
     expected_matrix = scipy.stats.contingency.expected_freq(observed_matrix.values)
     expected_matrix = pd.DataFrame(expected_matrix, index=observed_matrix.index, columns=observed_matrix.columns)
     return expected_matrix
@@ -205,7 +215,7 @@ def _transition_matrix_symmetry(sequence):
 
 
 
-def _transition_matrix_stationarity(sequence, size=100, alpha=0.05):
+def _transition_matrix_stationarity(sequence, size=100):
     """Test conditional homogeneity of non-overlapping blocks of
     length l of symbolic sequence X with ns symbols
     cf. Kullback, Technometrics (1962), Table 9.1.

@@ -19,7 +19,7 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
 
     Returns
     -------
-    raw object
+    object
         The rereferenced raw mne object.
 
     Examples

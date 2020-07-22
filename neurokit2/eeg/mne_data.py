@@ -10,7 +10,7 @@ def mne_data(what="raw"):
 
     Returns
     -------
-    raw object
+    object
         The raw mne object.
 
     Examples
