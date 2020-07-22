@@ -146,7 +146,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
         seed = np.random.RandomState(seed)
 
     # Run choice of clustering algorithm
-    for range(n_runs):
+    for i in range(n_runs):
         init_times = seed.choice(len(indices), size=n_microstates, replace=False)
         if method == 'marjin':
             microstates = _modified_kmeans_cluster_marjin(data[:, indices],
