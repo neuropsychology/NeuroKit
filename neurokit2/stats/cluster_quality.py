@@ -105,8 +105,8 @@ def _cluster_quality_gap(data, clusters, clustering_function, n_random=10):
     maxs = np.max(data, axis=0)
     sum_squares_random = np.zeros(random_data.shape[-1])
     for i in range(len(sum_squares_random)):
-        random_data[:, :, i] = random_data[:, :, i] * scipy.matrix(np.diag(maxs - mins)) + mins
-        random_clustering, random_clusters = clustering_function(random_data[:, :, i])
-        sum_squares_random[i] = _cluster_quality_sumsquares(random_data[:, :, i], random_clusters)
+        random_data[..., i] = random_data[..., i] * scipy.matrix(np.diag(maxs - mins)) + mins
+        random_clustering, random_clusters = clustering_function(random_data[..., i])
+        sum_squares_random[i] = _cluster_quality_sumsquares(random_data[..., i], random_clusters)
     gap = np.log(np.mean(sum_squares_random))-np.log(sum_squares_within)
     return gap

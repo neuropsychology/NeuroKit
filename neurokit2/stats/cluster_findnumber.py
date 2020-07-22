@@ -11,7 +11,7 @@ from .cluster_quality import cluster_quality
 
 
 
-def cluster_findnumber(data, n_max=10, show=False):
+def cluster_findnumber(data, method="kmeans", n_max=10, show=False):
     """
     Examples
     ----------
@@ -23,13 +23,13 @@ def cluster_findnumber(data, n_max=10, show=False):
     >>> data = sklearn.datasets.load_iris().data
     >>>
     >>> # Cluster
-    >>> nk.cluster_findnumber(data, show=True)
+    >>> nk.cluster_findnumber(data, method="kmeans", show=True)
     """
     results = []
     for i in range(1, n_max):
         # Cluster
         clustering, clusters, clustering_function = cluster(data,
-                                                            method="kmeans",
+                                                            method=method,
                                                             n_clusters=i,
                                                             return_function=True)
 
@@ -42,6 +42,7 @@ def cluster_findnumber(data, n_max=10, show=False):
     if show is True:
         normalized = (results - results.min()) / (results.max() - results.min())
         normalized["n_Clusters"] = np.rint(normalized["n_Clusters"].values * (n_max - 1)) + 1
+        normalized.columns = normalized.columns.str.replace('Score', 'Normalized')
         normalized.plot(x="n_Clusters")
     return results
 
