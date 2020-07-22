@@ -4,6 +4,7 @@ import pandas as pd
 import sklearn.datasets
 import sklearn.cluster
 import sklearn.metrics
+import sklearn.mixture
 import scipy.spatial
 
 
@@ -26,6 +27,7 @@ def cluster_quality(data, clustering, clusters, clustering_function=None, n_rand
     >>> general
     """
     n_clusters = len(clusters)
+    clustering = clustering["Cluster"]
 
     # Individual
     individual = {}
@@ -60,6 +62,16 @@ def cluster_quality(data, clustering, clusters, clustering_function=None, n_rand
                                                     clustering_function,
                                                     n_random=n_random)
 
+    # Mixture models
+#    if clustering_function is not None:
+#        try:
+#            general["Score_AIC"] = clustering_function.aic(data)
+#            general["Score_BIC"] = clustering_function.bic(data)
+#            general["Score_LogLikelihood"] = clustering_function.score(data)
+#        except AttributeError:
+#            pass
+
+
     general = pd.DataFrame.from_dict(general, orient="index").T
     return individual, general
 
@@ -69,7 +81,7 @@ def cluster_quality(data, clustering, clusters, clustering_function=None, n_rand
 # Utils
 # =============================================================================
 def _cluster_quality_distance(data, clusters):
-    """Within-clusters sum of squares
+    """Distance between samples and clusters
     """
     distance = scipy.spatial.distance.cdist(data, clusters)
     return distance
