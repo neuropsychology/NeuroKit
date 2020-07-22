@@ -4,7 +4,7 @@ import pandas as pd
 
 from ..events import events_find
 from ..misc import as_vector
-from ..signal import signal_binarize, signal_changepoints, signal_formatpeaks
+from ..signal import signal_binarize, signal_changepoints, signal_formatpeaks, signal_smooth
 
 
 def emg_activation(
@@ -14,8 +14,9 @@ def emg_activation(
     method="threshold",
     threshold="default",
     duration_min="default",
+    size=None,
+    threshold_size=None,
     **kwargs,
-    size=0.05
 ):
     """Detects onset in EMG signal based on the amplitude threshold.
 
@@ -24,30 +25,37 @@ def emg_activation(
     emg_amplitude : array
         At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
         ``emg_amplitude()`` for methods like 'threshold' or 'mixture'), and / or the cleaned EMG signal
-        (for methods like 'pelt' or 'biosppy').
+        (for methods like 'pelt', 'biosppy' or 'silva').
     emg_cleaned : array
         At least one EMG-related signal. Either the amplitude of the EMG signal, obtained from
         ``emg_amplitude()`` for methods like 'threshold' or 'mixture'), and / or the cleaned EMG signal
-        (for methods like 'pelt' or 'biosppy').
+        (for methods like 'pelt', 'biosppy' or 'silva').
     sampling_rate : int
         The sampling frequency of ``emg_signal`` (in Hz, i.e., samples/second).
     method : str
         The algorithm used to discriminate between activity and baseline. Can be one of 'mixture'
         (default) or 'threshold'. If 'mixture', will use a Gaussian Mixture Model to categorize
         between the two states. If 'threshold', will consider as activated all points which
-        amplitude is superior to the threshold.
-    threshold : float
+        amplitude is superior to the threshold. Can also be `pelt` or `biosppy` or `silva`.
+    threshold : str
         If ``method`` is 'mixture', then it corresponds to the minimum probability required to be considered
         as activated (default to 0.33). If `method` is 'threshold', then it corresponds to the minimum
-        amplitude to detect as onset. Defaults to one tenth of the standard deviation of ``emg_amplitude``.
+        amplitude to detect as onset i.e., defaults to one tenth of the standard deviation of ``emg_amplitude``.
+        If ``method`` is 'silva', defaults to 0.05. If ``method`` is 'biosppy', defaults to 1.2 times of the mean
+        of the absolute of the smoothed, full-wave-rectified signal. If ``method`` is 'pelt', threshold defaults to
+        None as changepoints are used as a basis for detection.
     duration_min : float
         The minimum duration of a period of activity or non-activity in seconds.
         If 'default', will be set to 0.05 (50 ms).
+    size: float or int
+        Detection window size (seconds). Applicable only if ``method`` is 'biosppy' or 'silva'. If None, defaults to
+        0.05 for 'biosppy' and 20 for 'silva'.
+    threshold_size : int
+        Window size for calculation of the adaptive threshold. Must be bigger than the detection window size.
+        Applicable only if ``method`` is 'silva'. If None, defaults to 22.
     kwargs : optional
         Other arguments.
-    size: float, optional
-        Detection window size (seconds).
-        
+
 
     Returns
     -------
@@ -81,13 +89,29 @@ def emg_activation(
     >>>
     >>> # Threshold method
     >>> activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="pelt")
-    >>> nk.signal_plot([emg_cleaned, activity["EMG_Activity"]])
+    >>> fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
     >>> fig #doctest: +SKIP
+    >>>
+    >>> # Biosppy method
+    >>> activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="biosppy")
+    >>> fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+    >>> fig #doctest: +SKIP
+    >>>
+    >>> # Silva method
+    >>> activity, info = nk.emg_activation(emg_cleaned=emg_cleaned, method="silva")
+    >>> fig = nk.events_plot([info["EMG_Offsets"], info["EMG_Onsets"]], emg_cleaned)
+    >>> fig #doctest: +SKIP
+
 
     References
     ----------
     - BioSPPy: https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/emg.py
+
     - Modified emg.py for BioSPPy: https://gist.github.com/tostasmistas/747f4585198411c8c4bda5f312f27dfb
+
+    - Silva H, Scherer R, Sousa J, Londral A , "Towards improving the ssability of
+    electromyographic interfacess", Journal of Oral Rehabilitation, pp. 1–2, 2012.
+
     """
     # Sanity checks.
     if emg_amplitude is not None:
@@ -108,23 +132,44 @@ def emg_activation(
                 "NeuroKit error: emg_activation(): 'threshold' method needs 'emg_amplitude' signal to be passed."
             )
         activity = _emg_activation_threshold(emg_amplitude, threshold=threshold)
+
     elif method == "mixture":
         if emg_amplitude is None:
             raise ValueError(
                 "NeuroKit error: emg_activation(): 'mixture' method needs 'emg_amplitude' signal to be passed."
             )
         activity = _emg_activation_mixture(emg_amplitude, threshold=threshold)
+
     elif method == "pelt":
         if emg_cleaned is None:
             raise ValueError(
-                "NeuroKit error: emg_activation(): 'pelt' method needs 'emg_cleaned' (cleaned or raw EMG) signal to be passed."
+                "NeuroKit error: emg_activation(): 'pelt' method needs 'emg_cleaned' (cleaned or raw EMG) signal to "
+                "be passed."
             )
         activity = _emg_activation_pelt(emg_cleaned, duration_min=duration_min, **kwargs)
+
     elif method == "biosppy":
         if emg_cleaned is None:
-            raise ValueError( "NeuroKit error: emg_activation(): 'biosppy' method needs 'emg_cleaned' (cleaned EMG) signal to be passed."
-            )
-        activity = _emg_activation_biosppy(emg_cleaned, sampling_rate=1000, size=0.05, threshold=threshold)
+            raise ValueError(
+                    "NeuroKit error: emg_activation(): 'biosppy' method needs 'emg_cleaned' (cleaned EMG) "
+                    "signal to be passed."
+                             )
+        if size is None:
+            size = 0.05
+        activity = _emg_activation_biosppy(emg_cleaned, sampling_rate=sampling_rate, size=size, threshold=threshold)
+
+    elif method == "silva":
+        if emg_cleaned is None:
+            raise ValueError(
+                    "NeuroKit error: emg_activation(): 'silva' method needs 'emg_cleaned' (cleaned EMG) "
+                    "signal to be passed."
+                             )
+        if size is None:
+            size = 20
+        if threshold_size is None:
+            threshold_size = 22
+        activity = _emg_activation_silva(emg_cleaned, sampling_rate=sampling_rate, size=size, threshold=threshold, threshold_size=threshold_size)
+
     else:
         raise ValueError(
             "NeuroKit error: emg_activation(): 'method' should be one of 'mixture', 'threshold', 'pelt' or 'biosppy'."
@@ -225,25 +270,24 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
 
     return activity
 
-def _emg_activation_biosppy(signal=emg_cleaned, sampling_rate=1000, size=0.05, threshold="default"):
+
+def _emg_activation_biosppy(emg_cleaned, sampling_rate=1000, size=0.05, threshold="default"):
+    """Adapted from `find_onsets` in Biosppy.
+    """
 
     # check inputs
-    if signal is None:
+    if emg_cleaned is None:
         raise TypeError("Please specify an input signal.")
 
     # full-wave rectification
-    fwlo = np.abs(signal)
+    fwlo = np.abs(emg_cleaned)
 
     # smooth
     size = int(sampling_rate * size)
-    # mvgav, _ = st.smoother(signal=fwlo,
-    #                         kernel='boxzen',
-    #                         size=size,
-    #                         mirror=True)
-    mvgav = nk.signal_smooth(fwlo, method = "convolution", kernel="boxzen", size=size)
+    mvgav = signal_smooth(fwlo, method="convolution", kernel="boxzen", size=size)
 
     # threshold
-    if threshold is "default":
+    if threshold == "default":
         aux = np.abs(mvgav)
         threshold = 1.2 * np.mean(aux)
 
@@ -251,7 +295,7 @@ def _emg_activation_biosppy(signal=emg_cleaned, sampling_rate=1000, size=0.05, t
     # length = len(signal)
     # start = np.nonzero(mvgav > threshold)[0]
     # stop = np.nonzero(mvgav <= threshold)[0]
-    
+
     # onsets = np.union1d(np.intersect1d(start - 1, stop),
     #                     np.intersect1d(start + 1, stop))
 
@@ -259,9 +303,66 @@ def _emg_activation_biosppy(signal=emg_cleaned, sampling_rate=1000, size=0.05, t
     #     if onsets[-1] >= length:
     #         onsets[-1] = length - 1
 
-    activity = nk.signal_binarize(mvgav,method="threshold",threshold=threshold)
+    activity = signal_binarize(mvgav, method="threshold", threshold=threshold)
+
     return activity
-    
+
+
+def _emg_activation_silva(emg_cleaned, sampling_rate=1000,
+                          size=20, threshold_size=22, threshold='default'):
+    """Follows the approach by Silva et al. 2012, adapted from `Biosppy`.
+    """
+
+    if threshold_size <= size:
+        raise ValueError("NeuroKit error: emg_activation(): The window size for calculation of the "
+                         "adaptive threshold must be bigger than the detection window size.")
+
+    if threshold == 'default':
+        threshold = 0.05
+
+    # subtract baseline offset
+    signal_zero_mean = emg_cleaned - np.mean(emg_cleaned)
+
+    # full-wave rectification
+    fwlo = np.abs(signal_zero_mean)
+
+    # moving average for calculating the test function
+    tf_mvgav = np.convolve(fwlo, np.ones((size,)) / size, mode='valid')
+
+    # moving average for calculating the adaptive threshold
+    threshold_mvgav = np.convolve(fwlo, np.ones((threshold_size,)) / threshold_size, mode='valid')
+
+    onset_time_list = []
+    offset_time_list = []
+    onset = False
+    for k in range(0, len(threshold_mvgav)):
+        if onset is True:
+            # an onset was previously detected, look for offset time
+            if tf_mvgav[k] < threshold_mvgav[k] and tf_mvgav[k] < threshold:
+                offset_time_list.append(k)
+                onset = False
+                # the offset has been detected, and we can look for another activation
+        else:
+            # we only look for another onset if a previous offset was detected
+            if tf_mvgav[k] >= threshold_mvgav[k] and tf_mvgav[k] >= threshold:
+                onset_time_list.append(k)
+                onset = True
+
+    onsets = np.union1d(onset_time_list,
+                        offset_time_list)
+
+    # adjust indices because of moving average
+    onsets += int(size / 2)
+
+    binary = np.full(len(emg_cleaned), np.nan)
+    binary[onsets[0::2]] = 0
+    binary[onsets[1::2]] = 1
+
+    activity = pd.Series(binary).fillna(method="bfill").values
+    activity = pd.Series(activity).fillna(0)
+
+    return activity
+
 
 # =============================================================================
 # Internals
