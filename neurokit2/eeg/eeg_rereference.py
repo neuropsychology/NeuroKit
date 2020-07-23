@@ -11,9 +11,12 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     reference : str
-        See ``mne.set_eeg_reference()``. Most common references include 'average'.
+        See ``mne.set_eeg_reference()``. Can be a string (e.g., 'average', 'lap' for Laplacian
+        "reference-free" transformation, i.e., CSD), or a list (e.g., ['TP9', 'TP10'] for mastoid
+        reference).
     robust : bool
-        If True and reference is 'average', will substract the median instead of the mean.
+        Only applied if reference is 'average'. If True, will substract the median instead of
+        the mean.
     **kwargs
         Optional arguments to be passed into ``mne.set_eeg_rereference()``.
 
@@ -35,9 +38,19 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     >>> nk.signal_plot([avg.get_data()[0, 0:1000],
     ...                 avg_r.get_data()[0, 0:1000]])
     >>>
-    >>> # Compare the rerefering of an array to MNE
+    >>> # Compare the rerefering of an array vs. the MNE object
     >>> data_mne = eeg.copy().set_eeg_reference('average', verbose=False).get_data()
     >>> data_nk = nk.eeg_rereference(eeg.get_data(), 'average')
+    >>>
+    >>> # Difference between average and LAP
+    >>> lap = nk.eeg_rereference(eeg, 'lap')
+    >>>
+    >>> nk.signal_plot([avg.get_data()[0, 0:1000],
+    ...                 lap.get_data()[0, 0:1000]])
+
+    References
+    -----------
+    - Trujillo, L. T., Stanfield, C. T., & Vela, R. D. (2017). The effect of electroencephalogram (EEG) reference choice on information-theoretic measures of the complexity and integration of EEG signals. Frontiers in Neuroscience, 11, 425.
 
     """
     # If MNE object
@@ -72,6 +85,17 @@ def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
     if reference == "average" and robust is True:
         eeg._data = eeg_rereference_array(eeg._data, reference=reference, robust=robust)
         eeg.info["custom_ref_applied"] = True
+    elif reference in ["lap","csd"]:
+        try:
+            import mne
+        except ImportError:
+            raise ImportError(
+                "NeuroKit error: eeg_add_channel(): the 'mne' module (version > 0.20) is required "
+                "for this function to run. Please install it first (`pip install mne`).",
+            )
+        old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
+        eeg = mne.preprocessing.compute_current_source_density(eeg)
+        mne.set_log_level(old_verbosity_level)
     else:
         eeg = eeg.set_eeg_reference(reference, verbose=False, **kwargs)
 
