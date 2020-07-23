@@ -12,7 +12,7 @@ from ..rsp import rsp_process
 from ..signal import (signal_filter, signal_interpolate, signal_rate,
                       signal_resample, signal_timefrequency)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from .hrv.hrv_utils import _hrv_get_rri
+from .hrv_utils import _hrv_get_rri
 
 
 def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
