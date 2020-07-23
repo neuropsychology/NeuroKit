@@ -46,32 +46,9 @@ for i, file in enumerate(files):
     raw = autoreject.get_rejection_threshold(raw, picks="eeg")
 
 
-
-
-
 raw.info["ch_names"]
 nk.signal_plot(event)
 mne.viz.plot_raw(raw)
 
 
-
-
-def eeg_badchannels(eeg):
-    """Find bad channels
-    """
-    data, time = raw[mne.pick_types(raw.info, eeg=True)]
-
-    results = []
-    for i in range(len(data)):
-        channel = data[i, :]
-        info = {"Channel": [i],
-                "SD": [np.nanstd(channel, ddof=1)],
-                "Mean": [np.nanmean(channel)]}
-        results.append(pd.DataFrame(info))
-    results = pd.concat(results, axis=0)
-    results = results.set_index("Channel")
-
-    z = nk.standardize(results)
-    results["Outlier"] = (z.abs() > scipy.stats.norm.ppf(.99)).sum(axis=1) / len(results.columns)
-    bads = np.where(results["Outlier"] >= 0.5)[0]
 

@@ -39,12 +39,12 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     >>> import neurokit2 as nk
     >>> import mne
     >>>
+    >>> raw = nk.mne_data("filt-0-40_raw")
+    >>> ecg = nk.ecg_simulate(length=50000)
+    >>>
     >>> # Let the 42nd sample point in the EEG signal correspond to the 333rd point in the ECG
     >>> event_index_in_eeg = 42
     >>> event_index_in_ecg = 333
-    >>>
-    >>> raw = nk.mne_data()
-    >>> ecg = nk.ecg_simulate(length=170000)
     >>>
     >>> raw = nk.mne_channel_add(raw,
     ...                          ecg,

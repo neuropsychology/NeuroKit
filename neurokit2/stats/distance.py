@@ -12,7 +12,6 @@ def distance(X=None, method="mahalanobis"):
 
     Compute distance using different metrics.
 
-
     Parameters
     ----------
     X : array or DataFrame
@@ -24,7 +23,6 @@ def distance(X=None, method="mahalanobis"):
     -------
     array
         Vector containing the distance values.
-
 
     Examples
     ---------
