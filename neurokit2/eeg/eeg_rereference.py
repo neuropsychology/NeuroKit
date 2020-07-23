@@ -46,7 +46,7 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     >>> lap = nk.eeg_rereference(eeg, 'lap')
     >>>
     >>> nk.signal_plot([avg.get_data()[0, 0:1000],
-    ...                 lap.get_data()[0, 0:1000]])
+    ...                 lap.get_data()[0, 0:1000]], standardize=True)
 
     References
     -----------
@@ -88,9 +88,11 @@ def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
     elif reference in ["lap","csd"]:
         try:
             import mne
+            if mne.__version__ < '0.20':
+                raise ImportError
         except ImportError:
             raise ImportError(
-                "NeuroKit error: eeg_add_channel(): the 'mne' module (version > 0.20) is required "
+                "NeuroKit error: eeg_rereference(): the 'mne' module (version > 0.20) is required "
                 "for this function to run. Please install it first (`pip install mne`).",
             )
         old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
