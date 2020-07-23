@@ -8,7 +8,7 @@ import sklearn.mixture
 import scipy.spatial
 
 
-def cluster_quality(data, clustering, clusters, clustering_function=None, n_random=10):
+def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
     """
     Examples
     ----------
@@ -20,12 +20,15 @@ def cluster_quality(data, clustering, clusters, clustering_function=None, n_rand
     >>> data = sklearn.datasets.load_iris().data
     >>>
     >>> # Cluster
-    >>> clustering, clusters = nk.cluster(data, method="kmeans", n_clusters=3)
+    >>> clustering, clusters, info = nk.cluster(data, method="kmeans", n_clusters=3)
     >>>
     >>> # Compute indices of clustering quality
-    >>> individual, general = nk.cluster_quality(data, clustering, clusters)
+    >>> individual, general = nk.cluster_quality(data, clustering, clusters, info)
     >>> general
     """
+    if isinstance(clustering, tuple):
+        clustering, clusters, info = clustering
+
     n_clusters = len(clusters)
     clustering = clustering["Cluster"]
 
@@ -56,21 +59,17 @@ def cluster_quality(data, clustering, clusters, clustering_function=None, n_rand
     general["Score_VarianceExplained"] = _cluster_quality_variance(data, clustering, clusters)
 
     # Gap statistic
-    if clustering_function is not None:
-        general["Score_GAP"] = _cluster_quality_gap(data,
-                                                    clusters,
-                                                    clustering_function,
-                                                    n_random=n_random)
+    general["Score_GAP"] = _cluster_quality_gap(data,
+                                                clusters,
+                                                info["clustering_function"],
+                                                n_random=n_random)
 
     # Mixture models
-#    if clustering_function is not None:
-#        try:
-#            general["Score_AIC"] = clustering_function.aic(data)
-#            general["Score_BIC"] = clustering_function.bic(data)
-#            general["Score_LogLikelihood"] = clustering_function.score(data)
-#        except AttributeError:
-#            pass
-
+    if "sklearn_model" in info:
+        if isinstance(info["sklearn_model"], sklearn.mixture.GaussianMixture):
+            general["Score_AIC"] = info["sklearn_model"].aic(data)
+            general["Score_BIC"] = info["sklearn_model"].bic(data)
+            general["Score_LogLikelihood"] = info["sklearn_model"].score(data)
 
     general = pd.DataFrame.from_dict(general, orient="index").T
     return individual, general
@@ -118,7 +117,7 @@ def _cluster_quality_gap(data, clusters, clustering_function, n_random=10):
     sum_squares_random = np.zeros(random_data.shape[-1])
     for i in range(len(sum_squares_random)):
         random_data[..., i] = random_data[..., i] * scipy.matrix(np.diag(maxs - mins)) + mins
-        random_clustering, random_clusters = clustering_function(random_data[..., i])
+        random_clustering, random_clusters, info = clustering_function(random_data[..., i])
         sum_squares_random[i] = _cluster_quality_sumsquares(random_data[..., i], random_clusters)
     gap = np.log(np.mean(sum_squares_random))-np.log(sum_squares_within)
     return gap

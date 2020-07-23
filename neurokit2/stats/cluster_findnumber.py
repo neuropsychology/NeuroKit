@@ -11,7 +11,7 @@ from .cluster_quality import cluster_quality
 
 
 
-def cluster_findnumber(data, method="kmeans", n_max=10, show=False):
+def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
     """
     Examples
     ----------
@@ -28,13 +28,13 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False):
     results = []
     for i in range(1, n_max):
         # Cluster
-        clustering, clusters, clustering_function = cluster(data,
-                                                            method=method,
-                                                            n_clusters=i,
-                                                            return_function=True)
+        clustering, clusters, info = cluster(data,
+                                             method=method,
+                                             n_clusters=i,
+                                             **kwargs)
 
         # Compute indices of clustering quality
-        _, quality = cluster_quality(data, clustering, clusters, clustering_function)
+        _, quality = cluster_quality(data, clustering, clusters, info, **kwargs)
         results.append(quality)
 
     results = pd.concat(results, axis=0)
