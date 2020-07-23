@@ -24,6 +24,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_hierarchical, clusters_hierarchical, info = nk.cluster(data, method="hierarchical", n_clusters=3)
     >>> clustering_agglomerative, clusters_agglomerative , info= nk.cluster(data, method="agglomerative", n_clusters=3)
     >>> clustering_mixture, clusters_mixture, info = nk.cluster(data, method="mixture", n_clusters=3)
+    >>> clustering_bayes, clusters_bayes, info = nk.cluster(data, method="mixturebayesian", n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
     >>> fig, axes = plt.subplots(ncols=2, nrows=3)
@@ -42,6 +43,9 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> axes[2, 0].scatter(data[:, 2], data[:, 3], c=clustering_mixture['Cluster'])
     >>> axes[2, 0].scatter(clusters_mixture[:, 2], clusters_mixture[:, 3], c='red')
     >>> axes[2, 0].set_title("Mixture")
+    >>> axes[2, 1].scatter(data[:, 2], data[:, 3], c=clustering_bayes['Cluster'])
+    >>> axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c='red')
+    >>> axes[2, 1].set_title("Bayesian Mixture")
     """
     method = method.lower()
     if method in ["kmeans", "k", "k-means", "kmean"]:
@@ -52,6 +56,13 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     elif method in ["mixture", "mixt"]:
         out =  _cluster_mixture(data,
                                n_clusters=n_clusters,
+                               bayesian=False,
+                               random_state=random_state,
+                               **kwargs)
+    elif method in ["bayesianmixture", "bayesmixt", "mixturebayesian", "mixturebayes"]:
+        out =  _cluster_mixture(data,
+                               n_clusters=n_clusters,
+                               bayesian=True,
                                random_state=random_state,
                                **kwargs)
     else:
@@ -134,13 +145,19 @@ def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
     return prediction, clusters, info
 
 
-def _cluster_mixture(data, n_clusters=2, random_state=None, **kwargs):
+def _cluster_mixture(data, n_clusters=2, bayesian=False, random_state=None, **kwargs):
     """Mixture model
     """
     # Initialize clustering function
-    clustering_model = sklearn.mixture.GaussianMixture(n_components=n_clusters,
-                                                          random_state=random_state,
-                                                          **kwargs)
+    if bayesian is False:
+        clustering_model = sklearn.mixture.GaussianMixture(n_components=n_clusters,
+                                                           random_state=random_state,
+                                                           **kwargs)
+    else:
+        clustering_model = sklearn.mixture.BayesianGaussianMixture(n_components=n_clusters,
+                                                                   random_state=random_state,
+                                                                   **kwargs)
+
     # Fit
     clustering = clustering_model.fit_predict(data)
 
