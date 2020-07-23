@@ -33,6 +33,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     --------
     >>> import neurokit2 as nk
     >>> import pandas as pd
+    >>> import matplotlib.pyplot as plt
     >>>
     >>> ppg = nk.ppg_simulate(heart_rate=75, duration=30)
     >>> ppg_elgendi = nk.ppg_clean(ppg, method='elgendi')
