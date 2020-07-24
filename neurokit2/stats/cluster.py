@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import sklearn.cluster
 import sklearn.mixture
-from sklearn.decomposition import PCA, FastICA
+import sklearn.decomposition
 import scipy.spatial
 import functools
 
@@ -251,17 +251,27 @@ def _cluster_pca(data, n_clusters=2, random_state=None, **kwargs):
     """Principal Component Analysis (PCA) for clustering.
     """
     # Fit PCA
-    pca = PCA(n_components=n_clusters, copy=True, whiten=True, svd_solver='auto', random_state=random_state)
-    pca.fit(data)
-    states = np.array([pca.components_[state, :] for state in range(n_clusters)])
+    pca = sklearn.decomposition.PCA(n_components=n_clusters,
+                                    copy=True,
+                                    whiten=True,
+                                    svd_solver='auto',
+                                    random_state=random_state,
+                                    **kwargs)
+    pca = pca.fit(data)
+    # clusters = np.array([pca.components_[state, :] for state in range(n_clusters)])
 
-    # Compute variance
-    explained_var = pca.explained_variance_ratio_
-    total_explained_var = np.sum(pca.explained_variance_ratio_)
+    # Compute variance explained
+#    explained_var = pca.explained_variance_ratio_
+#    total_explained_var = np.sum(pca.explained_variance_ratio_)
 
     # Get distance
-    prediction = _cluster_getdistance(data, states)
-#    prediction["Cluster"] = clustering
+    prediction = pca.transform(data)
+    prediction = pd.DataFrame(prediction).add_prefix("Loading_")
+    prediction["Cluster"] = prediction.abs().idxmax(axis=1).values
+    prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
+
+    # Recover states from clustering
+    clusters = _cluster_getclusters(data, prediction["Cluster"])
 
     # Copy function with given parameters
     clustering_function = functools.partial(_cluster_pca,
@@ -272,20 +282,18 @@ def _cluster_pca(data, n_clusters=2, random_state=None, **kwargs):
     # Info dump
     info = {"n_clusters": n_clusters,
             "clustering_function": clustering_function,
-            "random_state": random_state,
-            "explained_variance": explained_var,
-            "total_explained_variance": total_explained_var}
+            "random_state": random_state}
 
-    return prediction, states, info
+    return prediction, clusters, info
 
 
 def _cluster_ica(data, n_clusters=2, max_iterations=1000, random_state=None, **kwargs):
     """Independent Component Analysis (ICA) for clustering.
     """
     # Fit ICA
-    ica = FastICA(n_components=n_clusters, algorithm='parallel', whiten=True, fun='exp',
+    ica = sklearn.decomposition.FastICA(n_components=n_clusters, algorithm='parallel', whiten=True, fun='exp',
                   max_iter=max_iterations, random_state=random_state)
-    ica.fit_transform(data)
+    ica = ica.fit(data)
     states = np.array([ica.components_[state, :] for state in range(n_clusters)])
 
     # Get distance
