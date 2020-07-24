@@ -33,8 +33,8 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
     >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
-    >>> microstates = nk.microstates_segment(eeg, select="gfp")
-    >>> nk.microstates_plot(out, gfp=out["GFP"][0:500]) #doctest: +ELLIPSIS
+    >>> microstates = nk.microstates_segment(eeg, method='kmod')
+    >>> nk.microstates_plot(microstates, gfp=microstates["GFP"][0:500]) #doctest: +ELLIPSIS
     <Figure ...>
 
     """
