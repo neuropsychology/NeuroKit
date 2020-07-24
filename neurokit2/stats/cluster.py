@@ -32,7 +32,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
-    >>> fig, axes = plt.subplots(ncols=2, nrows=3)
+    >>> fig, axes = plt.subplots(ncols=2, nrows=4)
     >>> axes[0, 0].scatter(data[:, 2], data[:, 3], c=clustering_kmeans['Cluster'])
     >>> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
     >>> axes[0, 0].set_title("k-means")
@@ -51,6 +51,9 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> axes[2, 1].scatter(data[:, 2], data[:, 3], c=clustering_bayes['Cluster'])
     >>> axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c='red')
     >>> axes[2, 1].set_title("Bayesian Mixture")
+    >>> axes[3, 0].scatter(data[:, 2], data[:, 3], c=clustering_pca['Cluster'])
+    >>> axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c='red')
+    >>> axes[3, 0].set_title("PCA")
     """
     method = method.lower()
 
