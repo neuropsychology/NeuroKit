@@ -25,6 +25,16 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
     >>> # Compute indices of clustering quality
     >>> individual, general = nk.cluster_quality(data, clustering, clusters, info)
     >>> general
+
+    References
+    ----------
+    - Tibshirani, R., Walther, G., & Hastie, T. (2001). Estimating the number of clusters in a
+    data set via the gap statistic. Journal of the Royal Statistical Society: Series B
+    (Statistical Methodology), 63(2), 411-423.
+
+    - Mohajer, M., Englmeier, K. H., & Schmid, V. J. (2011). A comparison of Gap statistic
+    definitions with and without logarithm function. arXiv preprint arXiv:1103.4767.
+
     """
     if isinstance(clustering, tuple):
         clustering, clusters, info = clustering
@@ -59,10 +69,11 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
     general["Score_VarianceExplained"] = _cluster_quality_variance(data, clustering, clusters)
 
     # Gap statistic
-    general["Score_GAP"] = _cluster_quality_gap(data,
-                                                clusters,
-                                                info["clustering_function"],
-                                                n_random=n_random)
+    general.update(_cluster_quality_gap(data,
+                                        clustering,
+                                        clusters,
+                                        info,
+                                        n_random=n_random))
 
     # Mixture models
     if "sklearn_model" in info:
@@ -86,13 +97,11 @@ def _cluster_quality_distance(data, clusters):
     return distance
 
 
-
 def _cluster_quality_sumsquares(data, clusters):
     """Within-clusters sum of squares
     """
     min_distance = np.min(_cluster_quality_distance(data, clusters), axis=1)
     return np.sum(min_distance**2)
-
 
 
 
@@ -105,19 +114,39 @@ def _cluster_quality_variance(data, clustering, clusters):
 
 
 
-
-def _cluster_quality_gap(data, clusters, clustering_function, n_random=10):
-    """GAP statistic
+def _cluster_quality_gap(data, clustering, clusters, info, n_random=10):
+    """GAP statistic and modified GAP statistic by Mohajer (2011).
     """
-    sum_squares_within = _cluster_quality_sumsquares(data, clusters)
+    dispersion = _cluster_quality_sumsquares(data, clusters)
 
-    random_data = scipy.random.random_sample(size=(*data.shape, n_random))
-    mins = np.min(data, axis=0)
-    maxs = np.max(data, axis=0)
-    sum_squares_random = np.zeros(random_data.shape[-1])
-    for i in range(len(sum_squares_random)):
-        random_data[..., i] = random_data[..., i] * scipy.matrix(np.diag(maxs - mins)) + mins
-        random_clustering, random_clusters, info = clustering_function(random_data[..., i])
-        sum_squares_random[i] = _cluster_quality_sumsquares(random_data[..., i], random_clusters)
-    gap = np.log(np.mean(sum_squares_random))-np.log(sum_squares_within)
-    return gap
+    mins, maxs = np.min(data, axis=0), np.max(data, axis=0)
+    dispersion_random = np.full(n_random, np.nan)
+
+    for i in range(n_random):
+
+        # Random data
+        random_data = np.random.random_sample(size=data.shape)
+
+        # Rescale random
+        m = (maxs - mins) / (np.max(random_data, axis=0) - np.min(random_data, axis=0))
+        b = mins - (m * np.min(random_data, axis=0))
+        random_data = m * random_data + b
+
+        # Cluster random
+        random_clustering, random_clusters, info = info["clustering_function"](random_data)
+        dispersion_random[i] = _cluster_quality_sumsquares(random_data, random_clusters)
+
+    # Compute GAP
+    gap = np.mean(np.log(dispersion_random)) - np.log(dispersion)
+
+    # Compute standard deviation
+    sd_k = np.sqrt(np.mean((np.log(dispersion_random) - np.mean(np.log(dispersion_random))) ** 2.0))
+    s_k = np.sqrt(1.0 + 1.0 / n_random) * sd_k
+
+    # Calculate Gap* statistic by Mohajer (2011)
+    gap_star = np.mean(dispersion_random) - dispersion
+    sd_k_star = np.sqrt(np.mean((dispersion_random - dispersion) ** 2.0))
+    s_k_star = np.sqrt(1.0 + 1.0 / n_random) * sd_k_star
+
+    out = {"Score_GAP": gap, "Score_GAPmod": gap_star, "Score_GAP_sk": s_k, "Score_GAPmod_sk": s_k_star}
+    return out
