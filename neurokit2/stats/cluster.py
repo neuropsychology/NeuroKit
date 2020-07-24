@@ -54,6 +54,9 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> axes[3, 0].scatter(data[:, 2], data[:, 3], c=clustering_pca['Cluster'])
     >>> axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c='red')
     >>> axes[3, 0].set_title("PCA")
+    >>> axes[3, 1].scatter(data[:, 2], data[:, 3], c=clustering_ica['Cluster'])
+    >>> axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c='red')
+    >>> axes[3, 1].set_title("ICA")
     """
     method = method.lower()
 
@@ -287,18 +290,25 @@ def _cluster_pca(data, n_clusters=2, random_state=None, **kwargs):
     return prediction, clusters, info
 
 
-def _cluster_ica(data, n_clusters=2, max_iterations=1000, random_state=None, **kwargs):
+def _cluster_ica(data, n_clusters=2, random_state=None, **kwargs):
     """Independent Component Analysis (ICA) for clustering.
     """
     # Fit ICA
-    ica = sklearn.decomposition.FastICA(n_components=n_clusters, algorithm='parallel', whiten=True, fun='exp',
-                  max_iter=max_iterations, random_state=random_state)
+    ica = sklearn.decomposition.FastICA(n_components=n_clusters,
+                                        algorithm='parallel',
+                                        whiten=True,
+                                        fun='exp',
+                                        random_state=random_state,
+                                        **kwargs)
+
     ica = ica.fit(data)
-    states = np.array([ica.components_[state, :] for state in range(n_clusters)])
+#    clusters = np.array([ica.components_[state, :] for state in range(n_clusters)])
 
     # Get distance
-    prediction = _cluster_getdistance(data, states)
-#    prediction["Cluster"] = clustering
+    prediction = ica.transform(data)
+    prediction = pd.DataFrame(prediction).add_prefix("Loading_")
+    prediction["Cluster"] = prediction.abs().idxmax(axis=1).values
+    prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
 
     # Copy function with given parameters
     clustering_function = functools.partial(_cluster_ica,
@@ -306,12 +316,15 @@ def _cluster_ica(data, n_clusters=2, max_iterations=1000, random_state=None, **k
                                             random_state=random_state,
                                             **kwargs)
 
+    # Recover states from clustering
+    clusters = _cluster_getclusters(data, prediction["Cluster"])
+
     # Info dump
     info = {"n_clusters": n_clusters,
             "clustering_function": clustering_function,
             "random_state": random_state}
 
-    return prediction, states, info
+    return prediction, clusters, info
 
 
 def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
