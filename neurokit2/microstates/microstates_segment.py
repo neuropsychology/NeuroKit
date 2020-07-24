@@ -164,14 +164,16 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
     else:
         segmentation, microstates, info = cluster(data[:, indices], method=method,
                                                   n_clusters=n_microstates, random_state=seed, **kwargs)
-        microstates_list.append(microstates)
+    microstates_list.append(microstates)
 
 #        # Predict
 #        segmentation = _modified_kmeans_predict(data, microstates)
 #        segmentation_list.append(segmentation)
 
     # Select best run with highest global explained variance (GEV) or cross-validation criterion
-    gev = microstates_gev(data, microstates, segmentation["Cluster"], gfp_sum_sq)
+    segmentation = _modified_kmeans_predict(data, microstates)  # needs to be changed
+    segmentation_list.append(segmentation)
+    gev = microstates_gev(data, microstates, segmentation, gfp_sum_sq)
     gev_list.append(gev)
 
     cv = microstates_crossvalidation(data, microstates, gfp,
@@ -209,10 +211,9 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
 ## =============================================================================
 ## Clustering algorithms
 ## =============================================================================
-#def _modified_kmeans_predict(data, microstates):
-#    """Back-fit kmeans clustering on data
-#    """
-#    activation = microstates.dot(data)
-#    segmentation = np.argmax(np.abs(activation), axis=0)
-#    return segmentation
-#
+def _modified_kmeans_predict(data, microstates):
+    """Back-fit kmeans clustering on data
+    """
+    activation = microstates.dot(data)
+    segmentation = np.argmax(np.abs(activation), axis=0)
+    return segmentation
