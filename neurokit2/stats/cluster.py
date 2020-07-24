@@ -143,7 +143,8 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
     return prediction, clusters, info
 
 
-def _cluster_kmod(data, init_times=None, n_clusters=2, max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
+def _cluster_kmod(data, init_times=None, n_clusters=2,
+                  max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
     """The modified K-means clustering algorithm, as implemented by Marijn van Vliet.
 
     https://github.com/wmvanvliet/mne_microstates/blob/master/microstates.py
@@ -158,7 +159,7 @@ def _cluster_kmod(data, init_times=None, n_clusters=2, max_iterations=1000, thre
         The maximum number of iterations to perform in the k-means algorithm.
         Defaults to 1000.
     init_times : array
-        Random timepoints to be selected for topographic maps.
+        Random timepoints to be selected for topographic maps. Defaults to None.
     threshold : float
         The threshold of convergence for the k-means algorithm, based on
         relative change in noise variance. Defaults to 1e-6.
@@ -185,6 +186,7 @@ def _cluster_kmod(data, init_times=None, n_clusters=2, max_iterations=1000, thre
     if init_times is None:
         init_times = random_state.choice(n_samples, size=n_clusters, replace=False)
 
+    # Iterations
     states = data[:, init_times].T
     states /= np.linalg.norm(states, axis=1, keepdims=True)  # Normalize the maps
 

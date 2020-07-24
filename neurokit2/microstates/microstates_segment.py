@@ -88,7 +88,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
 
     >>> # Kmeans
     >>> out_kmeans = nk.microstates_segment(eeg, method='kmeans')
-    >>> nk.microstates_plot(out_kmeans, gfp=out_kmod["GFP"][0:500]) #doctest: +ELLIPSIS
+    >>> nk.microstates_plot(out_kmeans, gfp=out_kmeans["GFP"][0:500]) #doctest: +ELLIPSIS
     <Figure ...>
 
     >>> # Modified kmeans
@@ -134,7 +134,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
     # Normalizing constant (used later for GEV)
     gfp_sum_sq = np.sum(gfp**2)
 
-    # Do several runs of the k-means algorithm, keep track of the best segmentation.
+    # Do several runs of the modified k-means algorithm, keep track of the best segmentation.
 #    best_gev = 0
 #    best_microstates = None
 #    best_segmentation = None
@@ -149,47 +149,41 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
 
     # Run choice of clustering algorithm
     if method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
+        # Iterations
         for i in range(n_runs):
             init_times = seed.choice(len(indices), size=n_microstates, replace=False)
             segmentation, microstates, info = cluster(data[:, indices].T, method=method, init_times=init_times,
                                                       n_clusters=n_microstates, random_state=seed,
                                                       max_iterations=max_iterations, threshold=1e-6)
-    elif method in ["ica", "independent component", "independent component analysis"]:
-        segmentation, microstates, info = cluster(data[:, indices].T, method=method,
-                                                  n_clusters=n_microstates, random_state=seed,
-                                                  max_iterations=max_iterations)
-    elif method in ["pca", "principal component analysis", "principal component"]:
-        segmentation, microstates, info = cluster(data[:, indices].T, method=method,
-                                                  n_clusters=n_microstates, random_state=seed)
+            microstates_list.append(microstates)
+            segmentation_list.append(np.array(segmentation["Cluster"]))
+            # Select best run with highest global explained variance (GEV) or cross-validation criterion
+            gev = microstates_gev(data[:, indices], microstates, segmentation["Cluster"], gfp_sum_sq)
+            gev_list.append(gev)
+            cv = microstates_crossvalidation(data, microstates, gfp,
+                                             n_channels=data.shape[0], n_samples=data.shape[1])
+            cv_list.append(cv)
+
     else:
-        segmentation, microstates, info = cluster(data[:, indices], method=method,
-                                                  n_clusters=n_microstates, random_state=seed, **kwargs)
-    microstates_list.append(microstates)
+        segmentation, best_microstates, info = cluster(data[:, indices].T, method=method,
+                                                       n_clusters=n_microstates, random_state=seed, **kwargs)
 
-#        # Predict
-#        segmentation = _modified_kmeans_predict(data, microstates)
-#        segmentation_list.append(segmentation)
-
-    # Select best run with highest global explained variance (GEV) or cross-validation criterion
-    segmentation = _modified_kmeans_predict(data, microstates)  # needs to be changed
-    segmentation_list.append(segmentation)
-    gev = microstates_gev(data, microstates, segmentation, gfp_sum_sq)
-    gev_list.append(gev)
-
-    cv = microstates_crossvalidation(data, microstates, gfp,
-                                     n_channels=data.shape[0], n_samples=data.shape[1])
-    cv_list.append(cv)
-
-    # Select optimal
-    if criterion == 'gev':
-        optimal = np.argmax(gev_list)
-    elif criterion == 'cv':
-        optimal = np.argmin(cv_list)
-
-    best_microstates = microstates_list[optimal]
-    best_segmentation = segmentation_list[optimal]
-    best_gev = gev_list[optimal]
-    best_cv = cv_list[optimal]
+    # Obtain cross validation and gev for all methods
+    if method not in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
+        best_gev = microstates_gev(data[:, indices], best_microstates, segmentation["Cluster"], gfp_sum_sq)
+        best_cv = microstates_crossvalidation(data, best_microstates, gfp,
+                                              n_channels=data.shape[0], n_samples=data.shape[1])
+        best_segmentation = segmentation["Cluster"]
+    # Select best k-mod run with highest global explained variance (GEV) or cross-validation criterion
+    else:
+        if criterion == 'gev':
+            optimal = np.argmax(gev_list)
+        elif criterion == 'cv':
+            optimal = np.argmin(cv_list)
+        best_microstates = microstates_list[optimal]
+        best_segmentation = segmentation_list[optimal]
+        best_gev = gev_list[optimal]
+        best_cv = cv_list[optimal]
 
 #        if gev > best_gev:
 #            best_gev, best_microstates, best_segmentation = gev, microstates, segmentation
@@ -205,15 +199,4 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
     # Reorder
     out = microstates_classify(out)
 
-    return microstates, segmentation, out
-
-
-## =============================================================================
-## Clustering algorithms
-## =============================================================================
-def _modified_kmeans_predict(data, microstates):
-    """Back-fit kmeans clustering on data
-    """
-    activation = microstates.dot(data)
-    segmentation = np.argmax(np.abs(activation), axis=0)
-    return segmentation
+    return out
