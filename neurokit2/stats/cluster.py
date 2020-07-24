@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import sklearn.cluster
 import sklearn.mixture
+from sklearn.decomposition import PCA, FastICA
 import scipy.spatial
 import functools
 
@@ -27,6 +28,8 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_agglomerative, clusters_agglomerative , info= nk.cluster(data, method="agglomerative", n_clusters=3)
     >>> clustering_mixture, clusters_mixture, info = nk.cluster(data, method="mixture", n_clusters=3)
     >>> clustering_bayes, clusters_bayes, info = nk.cluster(data, method="mixturebayesian", n_clusters=3)
+    >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
+    >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
     >>> fig, axes = plt.subplots(ncols=2, nrows=3)
@@ -50,26 +53,44 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> axes[2, 1].set_title("Bayesian Mixture")
     """
     method = method.lower()
+
+    # K-means
     if method in ["kmeans", "k", "k-means", "kmean"]:
         out =  _cluster_kmeans(data,
                                n_clusters=n_clusters,
                                random_state=random_state,
                                **kwargs)
+
+    # Modified k-means
     elif method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
         out = _cluster_kmod(data, n_clusters=n_clusters,
                             random_state=random_state, **kwargs)
+
+    # PCA
+    elif method in ["pca", "principal", "principal component analysis"]:
+        out = _cluster_pca(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
+
+    # ICA
+    elif method in ["ica", "independent", "independent component analysis"]:
+        out = _cluster_pca(data, n_clusters=n_clusters, random_state=random_state, **kwargs)
+
+    # Mixture
     elif method in ["mixture", "mixt"]:
         out =  _cluster_mixture(data,
                                n_clusters=n_clusters,
                                bayesian=False,
                                random_state=random_state,
                                **kwargs)
+
+    # Bayesian
     elif method in ["bayesianmixture", "bayesmixt", "mixturebayesian", "mixturebayes"]:
         out =  _cluster_mixture(data,
                                n_clusters=n_clusters,
                                bayesian=True,
                                random_state=random_state,
                                **kwargs)
+
+    # Others
     else:
         out =  _cluster_sklearn(data,
                                 n_clusters=n_clusters,
@@ -116,7 +137,7 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
     return prediction, clusters, info
 
 
-def _cluster_kmod(data, init_times=None, n_clusters=4, max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
+def _cluster_kmod(data, init_times=None, n_clusters=2, max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
     """The modified K-means clustering algorithm, as implemented by Marijn van Vliet.
 
     https://github.com/wmvanvliet/mne_microstates/blob/master/microstates.py
@@ -146,6 +167,7 @@ def _cluster_kmod(data, init_times=None, n_clusters=4, max_iterations=1000, thre
         The topographic maps of the found unique microstates which has a shape of n_channels x n_states
 
     """
+    data = data.T
     n_channels, n_samples = data.shape
 
     # Cache this value for later
@@ -202,8 +224,10 @@ def _cluster_kmod(data, init_times=None, n_clusters=4, max_iterations=1000, thre
         warnings.warn("Modified K-means algorithm failed to converge after " + str(i) + "",
                       "iterations. Consider increasing 'max_iterations'.")
 
-    # Get distance
+    # Get distance, and back fit k-means clustering on data
     prediction = _cluster_getdistance(data.T, states)
+    activation = states.dot(data)
+    segmentation = np.argmax(np.abs(activation), axis=0)
     prediction["Cluster"] = segmentation
 
     # Copy function with given parameters
@@ -219,6 +243,64 @@ def _cluster_kmod(data, init_times=None, n_clusters=4, max_iterations=1000, thre
 
     return prediction, states, info
 
+
+def _cluster_pca(data, n_clusters=2, random_state=None, **kwargs):
+    """Principal Component Analysis (PCA) for clustering.
+    """
+    # Fit PCA
+    pca = PCA(n_components=n_clusters, copy=True, whiten=True, svd_solver='auto', random_state=random_state)
+    pca.fit(data)
+    states = np.array([pca.components_[state, :] for state in range(n_clusters)])
+
+    # Compute variance
+    explained_var = pca.explained_variance_ratio_
+    total_explained_var = np.sum(pca.explained_variance_ratio_)
+
+    # Get distance
+    prediction = _cluster_getdistance(data, states)
+#    prediction["Cluster"] = clustering
+
+    # Copy function with given parameters
+    clustering_function = functools.partial(_cluster_pca,
+                                            n_clusters=n_clusters,
+                                            random_state=random_state,
+                                            **kwargs)
+
+    # Info dump
+    info = {"n_clusters": n_clusters,
+            "clustering_function": clustering_function,
+            "random_state": random_state,
+            "explained_variance": explained_var,
+            "total_explained_variance": total_explained_var}
+
+    return prediction, states, info
+
+
+def _cluster_ica(data, n_clusters=2, max_iterations=1000, random_state=None, **kwargs):
+    """Independent Component Analysis (ICA) for clustering.
+    """
+    # Fit ICA
+    ica = FastICA(n_components=n_clusters, algorithm='parallel', whiten=True, fun='exp',
+                  max_iter=max_iterations, random_state=random_state)
+    ica.fit_transform(data)
+    states = np.array([ica.components_[state, :] for state in range(n_clusters)])
+
+    # Get distance
+    prediction = _cluster_getdistance(data, states)
+#    prediction["Cluster"] = clustering
+
+    # Copy function with given parameters
+    clustering_function = functools.partial(_cluster_ica,
+                                            n_clusters=n_clusters,
+                                            random_state=random_state,
+                                            **kwargs)
+
+    # Info dump
+    info = {"n_clusters": n_clusters,
+            "clustering_function": clustering_function,
+            "random_state": random_state}
+
+    return prediction, states, info
 
 
 def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
