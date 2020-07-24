@@ -10,7 +10,7 @@ from .microstates_classify import microstates_classify
 from ..stats import cluster
 
 
-def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_method='l1', sampling_rate=None,
+def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_method='l1', sampling_rate=None,
                         standardize_eeg=False, n_runs=10, max_iterations=1000, criterion='gev', seed=None, **kwargs):
     """Segment a continuous M/EEG signal into microstates using different clustering algorithms.
 
@@ -37,7 +37,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
         ``train=10`` will select 10 equally spaced datapoints, whereas ``train=0.5`` will select
         half the data. See ``microstates_peaks()``.
     method : str
-        The algorithm for clustering. Can be one of 'kmeans', the modified k-means algorithm 'kmod',
+        The algorithm for clustering. Can be one of 'kmeans', the modified k-means algorithm 'kmod' (default),
         'pca' (Principal Component Analysis), 'ica' (Independent Component Analysis), or
         'aahc' (Atomize and Agglomerate Hierarchical Clustering) which is more computationally heavy.
     gfp_method : str
@@ -124,12 +124,12 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
 
     """
     # Sanitize input
-    data, indices, gfp, info = _microstates_prepare_data(eeg,
-                                                         train=train,
-                                                         sampling_rate=sampling_rate,
-                                                         standardize_eeg=standardize_eeg,
-                                                         gfp_method=gfp_method,
-                                                         **kwargs)
+    data, indices, gfp, info_mne = _microstates_prepare_data(eeg,
+                                                             train=train,
+                                                             sampling_rate=sampling_rate,
+                                                             standardize_eeg=standardize_eeg,
+                                                             gfp_method=gfp_method,
+                                                             **kwargs)
 
     # Normalizing constant (used later for GEV)
     gfp_sum_sq = np.sum(gfp**2)
@@ -194,7 +194,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='marjin', gfp_
            "GEV": best_gev,
            "GFP": gfp,
            "Cross-Validation Criterion": best_cv,
-           "Info": info}
+           "Info": info_mne}
 
     # Reorder
     out = microstates_classify(out)
