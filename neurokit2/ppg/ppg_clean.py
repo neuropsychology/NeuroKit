@@ -45,7 +45,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     ...                         "PPG_Elgendi" : ppg_elgendi,
     ...                         "PPG_Nabian" : ppg_nabian})
     >>> signals.plot() #doctest: +ELLIPSIS
-    <matplotlib.axes._subplots.AxesSubplot object at ...>
+     <AxesSubplot:>
 
     References
     ----------
