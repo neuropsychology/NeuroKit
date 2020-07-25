@@ -11,7 +11,7 @@ from ..stats import cluster
 
 
 def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_method='l1', sampling_rate=None,
-                        standardize_eeg=False, n_runs=10, max_iterations=1000, criterion='gev', seed=None, **kwargs):
+                        standardize_eeg=False, n_runs=10, max_iterations=1000, criterion='gev', random_state=None, **kwargs):
     """Segment a continuous M/EEG signal into microstates using different clustering algorithms.
 
     Several runs of the clustering algorithm are performed, using different random initializations.
@@ -61,7 +61,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
         the best run based on the highest global explained variance, or 'cv' which selects the best run
         based on the lowest cross-validation criterion. See ``nk.microstates_gev()``
         and ``nk.microstates_crossvalidation()`` for more details respectively.
-    seed : Union[int, numpy.random.RandomState]
+    random_state : Union[int, numpy.random.RandomState]
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
@@ -124,7 +124,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
 
     """
     # Sanitize input
-    data, indices, gfp, info_mne = nk.microstates_clean(eeg,
+    data, indices, gfp, info_mne = microstates_clean(eeg,
                                                      train=train,
                                                      sampling_rate=sampling_rate,
                                                      standardize_eeg=standardize_eeg,
@@ -144,16 +144,16 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
     gev_list = []
 
     # Random timepoints
-    if not isinstance(seed, np.random.RandomState):
-        seed = np.random.RandomState(seed)
+    if not isinstance(random_state, np.random.RandomState):
+        random_state = np.random.RandomState(random_state)
 
     # Run choice of clustering algorithm
     if method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
         # Iterations
         for i in range(n_runs):
-            init_times = seed.choice(len(indices), size=n_microstates, replace=False)
+            init_times = random_state.choice(len(indices), size=n_microstates, replace=False)
             segmentation, microstates, info = cluster(data[:, indices].T, method=method, init_times=init_times,
-                                                      n_clusters=n_microstates, random_state=seed,
+                                                      n_clusters=n_microstates, random_state=random_state,
                                                       max_iterations=max_iterations, threshold=1e-6)
             microstates_list.append(microstates)
             segmentation_list.append(np.array(segmentation["Cluster"]))
@@ -166,7 +166,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
 
     else:
         segmentation, best_microstates, info = cluster(data[:, indices].T, method=method,
-                                                       n_clusters=n_microstates, random_state=seed, **kwargs)
+                                                       n_clusters=n_microstates, random_state=random_state, **kwargs)
 
     # Obtain cross validation and gev for all methods
     if method not in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
