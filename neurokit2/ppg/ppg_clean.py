@@ -40,7 +40,7 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     >>> ppg_elgendi = nk.ppg_clean(ppg, method='elgendi')
     >>> ppg_nabian = nk.ppg_clean(ppg, method='nabian2018', heart_rate=75)
     >>>
-    >>> # Plot to compare methods
+    >>> # Plot and compare methods
     >>> signals = pd.DataFrame({"PPG_Raw" : ppg,
     ...                         "PPG_Elgendi" : ppg_elgendi,
     ...                         "PPG_Nabian" : ppg_nabian})
