@@ -6,6 +6,7 @@ import sklearn.cluster
 import sklearn.mixture
 import sklearn.decomposition
 import scipy.spatial
+import scipy.linalg
 import functools
 
 
@@ -43,14 +44,13 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     ----------
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
-    >>> import sklearn.datasets
     >>>
     >>> # Load the iris dataset
-    >>> data = sklearn.datasets.load_iris().data
+    >>> data = nk.data("iris")
     >>>
     >>> # Cluster using different methods
     >>> clustering_kmeans, clusters_kmeans, info = nk.cluster(data, method="kmeans", n_clusters=3)
-    >>> clustering_kmod, clusters_kmod, info = nk.cluster(data.T, method="kmod", n_clusters=3)
+    >>> clustering_kmod, clusters_kmod, info = nk.cluster(data, method="kmod", n_clusters=3)
     >>> clustering_spectral, clusters_spectral, info = nk.cluster(data, method="spectral", n_clusters=3)
     >>> clustering_hierarchical, clusters_hierarchical, info = nk.cluster(data, method="hierarchical", n_clusters=3)
     >>> clustering_agglomerative, clusters_agglomerative, info= nk.cluster(data, method="agglomerative", n_clusters=3)
@@ -60,7 +60,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
-    >>> fig, axes = plt.subplots(ncols=2, nrows=4)
+    >>> fig, axes = plt.subplots(ncols=2, nrows=5)
     >>> axes[0, 0].scatter(data[:, 2], data[:, 3], c=clustering_kmeans['Cluster'])
     >>> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
     >>> axes[0, 0].set_title("k-means")
@@ -85,9 +85,15 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> axes[3, 1].scatter(data[:, 2], data[:, 3], c=clustering_ica['Cluster'])
     >>> axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c='red')
     >>> axes[3, 1].set_title("ICA")
+    >>> axes[4, 0].scatter(data[:, 2], data[:, 3], c=clustering_kmod['Cluster'])
+    >>> axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c='red')
+    >>> axes[4, 0].set_title("modified K-means")
     """
-    method = method.lower()
+    # Sanity fixes
+    if isinstance(data, pd.DataFrame):
+        data = data.values
 
+    method = method.lower()
     # K-means
     if method in ["kmeans", "k", "k-means", "kmean"]:
         out =  _cluster_kmeans(data,
@@ -191,7 +197,7 @@ def _cluster_kmod(data, init_times=None, n_clusters=2,
     threshold : float
         The threshold of convergence for the k-means algorithm, based on
         relative change in noise variance. Defaults to 1e-6.
-    seed : int | numpy.random.RandomState | None
+    random_state : int | numpy.random.RandomState | None
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
@@ -217,8 +223,6 @@ def _cluster_kmod(data, init_times=None, n_clusters=2,
     # Iterations
     states = data[:, init_times].T
     states /= np.linalg.norm(states, axis=1, keepdims=True)  # Normalize the maps
-
-    prev_residual = np.inf
 
     # Convergence criterion: variance estimate (step 6)
     i = 0
@@ -262,13 +266,14 @@ def _cluster_kmod(data, init_times=None, n_clusters=2,
 
     # Get distance, and back fit k-means clustering on data
     prediction = _cluster_getdistance(data.T, states)
-    activation = states.dot(data)
-    segmentation = np.argmax(np.abs(activation), axis=0)
-    prediction["Cluster"] = segmentation
+    prediction["Cluster"] = prediction.abs().idxmin(axis=1).values
+    prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
 
     # Copy function with given parameters
     clustering_function = functools.partial(_cluster_kmod,
                                             n_clusters=n_clusters,
+                                            max_iterations=max_iterations,
+                                            threshold=threshold,
                                             random_state=random_state,
                                             **kwargs)
 

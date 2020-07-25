@@ -17,10 +17,9 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
     ----------
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
-    >>> import sklearn.datasets
     >>>
     >>> # Load the iris dataset
-    >>> data = sklearn.datasets.load_iris().data
+    >>> data = nk.data("iris")
     >>>
     >>> # How many clusters
     >>> results = nk.cluster_findnumber(data, method="kmeans", show=True)

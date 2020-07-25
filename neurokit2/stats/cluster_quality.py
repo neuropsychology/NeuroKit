@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-import sklearn.datasets
 import sklearn.cluster
 import sklearn.metrics
 import sklearn.mixture
@@ -14,10 +13,9 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
     ----------
     >>> import neurokit2 as nk
     >>> import matplotlib.pyplot as plt
-    >>> import sklearn.datasets
     >>>
     >>> # Load the iris dataset
-    >>> data = sklearn.datasets.load_iris().data
+    >>> data = nk.data("iris")
     >>>
     >>> # Cluster
     >>> clustering, clusters, info = nk.cluster(data, method="kmeans", n_clusters=3)
