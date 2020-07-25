@@ -4,7 +4,7 @@ import numpy as np
 import scipy
 from sklearn.decomposition import PCA, FastICA
 
-from .microstates_prepare_data import _microstates_prepare_data
+from .microstates_clean import microstates_clean
 from .microstates_quality import microstates_gev, microstates_crossvalidation
 from .microstates_classify import microstates_classify
 from ..stats import cluster
@@ -85,12 +85,12 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
     >>>
     >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
     >>> eeg = nk.eeg_rereference(eeg, 'average')
-
+    >>>
     >>> # Kmeans
     >>> out_kmeans = nk.microstates_segment(eeg, method='kmeans')
     >>> nk.microstates_plot(out_kmeans, gfp=out_kmeans["GFP"][0:500]) #doctest: +ELLIPSIS
     <Figure ...>
-
+    >>>
     >>> # Modified kmeans
     >>> out_kmod = nk.microstates_segment(eeg, method='kmod')
     >>> nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500]) #doctest: +ELLIPSIS
@@ -124,12 +124,12 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
 
     """
     # Sanitize input
-    data, indices, gfp, info_mne = _microstates_prepare_data(eeg,
-                                                             train=train,
-                                                             sampling_rate=sampling_rate,
-                                                             standardize_eeg=standardize_eeg,
-                                                             gfp_method=gfp_method,
-                                                             **kwargs)
+    data, indices, gfp, info_mne = nk.microstates_clean(eeg,
+                                                     train=train,
+                                                     sampling_rate=sampling_rate,
+                                                     standardize_eeg=standardize_eeg,
+                                                     gfp_method=gfp_method,
+                                                     **kwargs)
 
     # Normalizing constant (used later for GEV)
     gfp_sum_sq = np.sum(gfp**2)
