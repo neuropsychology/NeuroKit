@@ -9,6 +9,28 @@ import scipy.spatial
 
 def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
     """
+    Compute quality of the clustering using several metrices.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        A matrix array of data (e.g., channels, sample points of M/EEG data)
+    clustering : DataFrame
+        Information about the distance of samples from their respective clusters, generated from ``nk.cluster()``.
+    clusters : np.ndarray
+        Coordinates of cluster centers, which has a shape of n_clusters x n_features, generated from ``nk.cluster()``.
+    info : dict
+        Information about the number of clusters, the function and model used for clustering, generated from ``nk.cluster()``.
+    n_random : int
+        The number of random initializations to cluster random data for calculating the GAP statistic.
+
+    Returns
+    -------
+    individual : DataFrame
+        Indices of cluster quality scores for each sample point.
+    general : DataFrame
+        Indices of cluster quality scores for all clusters.
+
     Examples
     ----------
     >>> import neurokit2 as nk
@@ -22,7 +44,10 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
     >>>
     >>> # Compute indices of clustering quality
     >>> individual, general = nk.cluster_quality(data, clustering, clusters, info)
-    >>> general
+    >>> general #doctest: +ELLIPSIS
+       n_Clusters  Score_Silhouette  ...  Score_GAP_sk  Score_GAPmod_sk
+    0         3.0          0.552819  ...       0.04253        272.00734
+    [1 rows x 9 columns]
 
     References
     ----------
@@ -114,6 +139,9 @@ def _cluster_quality_variance(data, clustering, clusters):
 
 def _cluster_quality_gap(data, clustering, clusters, info, n_random=10):
     """GAP statistic and modified GAP statistic by Mohajer (2011).
+
+    The GAP statistic compares the total within intra-cluster variation for different values of k
+    with their expected values under null reference distribution of the data.
     """
     dispersion = _cluster_quality_sumsquares(data, clusters)
 
@@ -128,7 +156,7 @@ def _cluster_quality_gap(data, clustering, clusters, info, n_random=10):
         # Rescale random
         m = (maxs - mins) / (np.max(random_data, axis=0) - np.min(random_data, axis=0))
         b = mins - (m * np.min(random_data, axis=0))
-        random_data = m * random_data + b
+        random_data = np.array(m) * random_data + np.array(b)
 
         # Cluster random
         random_clustering, random_clusters, info = info["clustering_function"](random_data)
