@@ -1,18 +1,46 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
-import sklearn.datasets
-import sklearn.cluster
-import sklearn.metrics
-import scipy.spatial
 
 from .cluster import cluster
 from .cluster_quality import cluster_quality
 
 
-
 def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
     """
+    Find the optimal number of clusters based on different metrices of quality.
+
+    Parameters
+    ----------
+    data : np.ndarray
+        An array (channels, times) of M/EEG data.
+    method : str
+        The clustering algorithm to be passed into ``nk.cluster()``.
+    n_max : int
+        Runs the clustering alogrithm from 1 to n_max desired clusters in ``nk.cluster()`` with quality
+        metrices produced for each cluster number.
+    show : bool
+        Returns figure if True.
+    **kwargs
+        Other arguments to be passed into ``nk.cluster()`` and ``nk.cluster_quality()``.
+
+    Returns
+    -------
+    DataFrame
+        The different quality scores for each number of clusters:
+        - Score_Silhouette
+        - Score_Calinski
+        - Score_Bouldin
+        - Score_VarianceExplained
+        - Score_GAP
+        - Score_GAPmod
+        - Score_GAP_diff
+        - Score_GAPmod_diff
+
+    See Also
+    --------
+    cluster, cluster_quality
+
     Examples
     ----------
     >>> import neurokit2 as nk
@@ -23,6 +51,7 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
     >>>
     >>> # How many clusters
     >>> results = nk.cluster_findnumber(data, method="kmeans", show=True)
+
     """
     results = []
     for i in range(1, n_max):

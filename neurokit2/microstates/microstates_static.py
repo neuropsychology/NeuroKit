@@ -12,6 +12,21 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     The duration of each microstate is also referred to as the Ratio of Time Covered (RTT) in
     some microstates publications.
 
+    Parameters
+    ----------
+    microstates : np.ndarray
+        The topographic maps of the found unique microstates which has a shape of n_channels x n_states,
+        generated from ``nk.microstates_segment()``.
+    sampling_rate : int
+        The sampling frequency of the signal (in Hz, i.e., samples/second). Defaults to 1000.
+    show : bool
+        Returns a plot of microstate duration, proportion, and lifetime distribution if True.
+
+    Returns
+    -------
+    DataFrame
+        Values of microstates proportion, lifetime distribution and duration (median, mean, and their averages).
+
     Examples
     --------
     >>> import neurokit2 as nk
@@ -72,10 +87,7 @@ def _microstates_duration(microstates, sampling_rate=1000, out=None):
     out["Average_DurationMean"] = np.mean(durations)
     out["Average_DurationMedian"] = np.median(durations)
 
-
-
     return out, durations, types
-
 
 
 def _microstates_duration_plot(durations, types, ax=None):

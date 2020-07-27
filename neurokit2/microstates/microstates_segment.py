@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
-import warnings
 import numpy as np
-import scipy
-from sklearn.decomposition import PCA, FastICA
 
 from .microstates_clean import microstates_clean
 from .microstates_quality import microstates_gev, microstates_crossvalidation

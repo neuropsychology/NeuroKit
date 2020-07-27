@@ -50,7 +50,9 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
 
     References
     -----------
-    - Trujillo, L. T., Stanfield, C. T., & Vela, R. D. (2017). The effect of electroencephalogram (EEG) reference choice on information-theoretic measures of the complexity and integration of EEG signals. Frontiers in Neuroscience, 11, 425.
+    - Trujillo, L. T., Stanfield, C. T., & Vela, R. D. (2017). The effect of electroencephalogram (EEG)
+    reference choice on information-theoretic measures of the complexity and integration of EEG signals.
+    Frontiers in Neuroscience, 11, 425.
 
     """
     # If MNE object

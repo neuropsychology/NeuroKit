@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import numpy as np
+#import numpy as np
 
 
 #def find_elbow(x, show=False):

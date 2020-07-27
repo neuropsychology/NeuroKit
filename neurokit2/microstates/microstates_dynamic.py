@@ -9,9 +9,28 @@ def microstates_dynamic(microstates):
 
     Based on https://github.com/Frederic-vW/eeg_microstates and https://github.com/maximtrp/mchmm
 
+    Parameters
+    ----------
+    microstates : np.ndarray
+        The topographic maps of the found unique microstates which has a shape of n_channels x n_states,
+        generated from ``nk.microstates_segment()``.
+
+    Returns
+    -------
+    DataFrame
+        Dynamic properties of microstates:
+        - Results of the observed transition matrix
+        - Chi-square test statistics of the observed microstates against the expected microstates
+        - Symmetry test statistics of the observed microstates against the expected microstates
+
+    See Also
+    --------
+    transition_matrix
+
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import numpy as np
     >>>
     >>> microstates = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
     >>> nk.microstates_dynamic(microstates) #doctest: +ELIIPSIS
@@ -39,8 +58,3 @@ def microstates_dynamic(microstates):
     df = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("Microstate_")
 
     return df
-
-
-
-
-

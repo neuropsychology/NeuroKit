@@ -15,7 +15,7 @@ def microstates_classify(microstates, segmentation=None):
     microstates : Union[np.array, dict]
         Array of microstates maps or dict (output from ``microstates_segment``).
     segmentation : Union[np.array, dict]
-        Vector containing the segmentation.
+        Vector containing the segmentation. Defaults to None.
 
     Returns
     -------

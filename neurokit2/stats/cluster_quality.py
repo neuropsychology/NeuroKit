@@ -46,7 +46,8 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
     >>> individual, general = nk.cluster_quality(data, clustering, clusters, info)
     >>> general #doctest: +ELLIPSIS
        n_Clusters  Score_Silhouette  ...  Score_GAP_sk  Score_GAPmod_sk
-    0         3.0          0.552819  ...       0.04253        272.00734
+    0         ...               ...  ...           ...              ...
+
     [1 rows x 9 columns]
 
     References
