@@ -1,8 +1,8 @@
-# -*- coding: utf-8 -*-
-#import numpy as np
+-*- coding: utf-8 -*-
+# import numpy as np
 
 
-#def find_elbow(x, show=False):
+# def find_elbow(x, show=False):
 #    """
 #    Examples
 #    ---------
@@ -29,12 +29,11 @@
 #
 #    np.where(diff < 0.1)
 #
-#
 #    gradient = np.gradient(x)
 #
 #    if show is True:
 #        x_range = range(len(x))
 #        plt.plot(x_range, x)
 #        plt.plot(x_range, diff)
-##        plt.plot(x_range, curve)
+#        plt.plot(x_range, curve)
 #        plt.plot(x_range, gradient)
