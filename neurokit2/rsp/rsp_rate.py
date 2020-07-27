@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from ..signal import (signal_resample, signal_rate, signal_findpeaks, signal_interpolate,
-                      signal_filter, signal_timefrequency, signal_period)
+from ..signal import (signal_resample, signal_rate, signal_interpolate,
+                      signal_filter)
 from .rsp_peaks import rsp_peaks
 
 
@@ -119,25 +119,3 @@ def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1,
     rsp_rate = np.multiply(rsp_rate, 60)
 
     return np.array(rsp_rate)
-
-
-#    plt.figure()
-#    plt.subplot(211)
-#    plt.plot(rsp_cleanedx)
-#    plt.grid()
-#    plt.title('Raw Data')
-#    plt.subplot(212)
-##    plt.title('Peak method')
-#    plt.plot(rsp_ratex, label="peak")
-#    plt.grid()
-##    plt.subplot(213)
-##    plt.title('xcorr method')
-#    plt.plot(rsp_rate2x, label="tam")
-##    plt.grid()
-##    plt.subplot(414)
-##    plt.title('xcorr_modified method')
-#    plt.plot(rsp_rate3x, label="miso")
-#    plt.legend()
-##    plt.grid()
-#    plt.xlabel('Time (Samples)')
-#    plt.ylabel('Breath per Minute')
