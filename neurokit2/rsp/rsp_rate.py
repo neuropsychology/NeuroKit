@@ -2,11 +2,8 @@
 import numpy as np
 
 from ..signal import (signal_resample, signal_rate, signal_findpeaks, signal_interpolate,
-                      signal_filter)
+                      signal_filter, signal_timefrequency, signal_period)
 from .rsp_peaks import rsp_peaks
-
-from matplotlib import pyplot as plt
-import scipy.stats
 
 
 def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1, method="peak",
@@ -38,21 +35,27 @@ def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1,
     Example
     -------
     >>> import neurokit2 as nk
-    >>> rsp_signal = nk.rsp_simulate(100, respiratory_rate=15)
+    >>> rsp_signal = nk.data("rsp_200hz.txt").iloc[:,0]
+    >>> sampling_rate=200
     >>> rsp_cleaned = nk.rsp_clean(rsp_signal)
-    >>>
-    >>> rsp_rate = nk.rsp_rate(rsp_cleaned, method="peaks")
-    >>> rsp_rate2 = nk.rsp_rate(rsp_cleaned, method="xcorr")
+    >>> rsp_rate_peak = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="peaks")
+    >>> rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="xcorr")
     """
 
     if method.lower() in ["peak", "peaks", "signal_rate"]:
         if peaks is None:
             peaks, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
-        rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(rsp_cleaned))
+        rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(rsp_cleaned), interpolation_method="linear")
 
-    if method.lower() in ["cross-correlation", "xcorr"]:
+    elif method.lower() in ["cross-correlation", "xcorr"]:
         rsp_rate = _rsp_rate_xcorr(rsp_cleaned, sampling_rate=sampling_rate,
                                    window=window, hop_size=hop_size)
+
+    else:
+        raise ValueError(
+                "NeuroKit error: rsp_rate(): 'method' should be"
+                " one of 'peak', or 'cross-correlation'."
+                )
 
     return rsp_rate
 
@@ -77,7 +80,7 @@ def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1):
     for start in np.arange(0, N, hop_size):
         window_segment = rsp[start: start + window_length]
         if len(window_segment) < window_length:
-            continue # the last frames that are smaller than windlow_length
+            break # the last frames that are smaller than windlow_length
         # Calculate the 1-order difference
         diff = np.ediff1d(window_segment)
         norm_diff = diff / np.max(diff)
@@ -97,13 +100,9 @@ def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1):
         # Append max_frequency to rsp_rate - instanteneous rate
         rsp_rate.append(max_frequency)
 
-    # Find maxima and interpolate - does not make sense, comment out
-#    peaks_info = signal_findpeaks(rsp_rate)
-#    x = peaks_info["Peaks"]
-#    y = [rsp_rate[i] for i in x]
     x = np.arange(len(rsp_rate))
     y = rsp_rate
-    rsp_rate = signal_interpolate(x, y, x_new=len(rsp_cleaned))
+    rsp_rate = signal_interpolate(x, y, x_new=len(rsp_cleaned), method="linear")
     # Smoothing
     rsp_rate = signal_filter(rsp_rate, highcut=0.1, order=4, sampling_rate=sampling_rate)
 
@@ -112,19 +111,24 @@ def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1):
 
     return np.array(rsp_rate)
 
+
 #    plt.figure()
-#    plt.subplot(311)
-#    plt.plot(rsp_cleaned)
+#    plt.subplot(211)
+#    plt.plot(rsp_cleanedx)
 #    plt.grid()
 #    plt.title('Raw Data')
-#    plt.subplot(312)
-#    plt.title('Peak method')
-#    plt.plot(rsp_rate)
+#    plt.subplot(212)
+##    plt.title('Peak method')
+#    plt.plot(rsp_ratex, label="peak")
 #    plt.grid()
-#    plt.subplot(313)
-#    plt.title('xcorr method')
-#    plt.plot(rsp_rate2)
-#    plt.grid()
+##    plt.subplot(213)
+##    plt.title('xcorr method')
+#    plt.plot(rsp_rate2x, label="tam")
+##    plt.grid()
+##    plt.subplot(414)
+##    plt.title('xcorr_modified method')
+#    plt.plot(rsp_rate3x, label="miso")
+#    plt.legend()
+##    plt.grid()
 #    plt.xlabel('Time (Samples)')
 #    plt.ylabel('Breath per Minute')
-
