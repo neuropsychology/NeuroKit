@@ -6,8 +6,7 @@ from ..signal import (signal_resample, signal_rate, signal_findpeaks, signal_int
 from .rsp_peaks import rsp_peaks
 
 
-def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1, method="peak",
-             peak_method="khodadad2018"):
+def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1, method="peak", peak_method="khodadad2018", interpolation_method="monotone_cubic"):
     """Find respiration rate by cross-correlation method.
     Parameters
     ----------
@@ -26,6 +25,12 @@ def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1,
         the principal frequency of oscillation.
     peak_method : str
         Method to identify respiration peaks. Can be one of "khodadad2018" (default) or "biosppy".
+    interpolation_method : str
+        Method used to interpolate the rate between peaks. See `signal_interpolate()`. 'monotone_cubic'
+        is chosen as the default interpolation method since it ensures monotone interpolation between
+        data points (i.e., it prevents physiologically implausible "overshoots" or "undershoots" in the
+        y-direction). In contrast, the widely used cubic spline interpolation does not ensure
+        monotonicity.
 
     Return
     ------
@@ -45,11 +50,13 @@ def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1,
     if method.lower() in ["peak", "peaks", "signal_rate"]:
         if peaks is None:
             peaks, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
-        rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(rsp_cleaned), interpolation_method="linear")
+        rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(rsp_cleaned),
+                               interpolation_method=interpolation_method)
 
     elif method.lower() in ["cross-correlation", "xcorr"]:
         rsp_rate = _rsp_rate_xcorr(rsp_cleaned, sampling_rate=sampling_rate,
-                                   window=window, hop_size=hop_size)
+                                   window=window, hop_size=hop_size,
+                                   interpolation_method=interpolation_method)
 
     else:
         raise ValueError(
@@ -66,12 +73,14 @@ def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1,
 # =============================================================================
 
 
-def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1):
+def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1,
+                    interpolation_method="monotone_cubic"):
 
     N = len(rsp_cleaned)
     # Downsample data to 10Hz
     desired_sampling_rate = 10
-    rsp = signal_resample(rsp_cleaned, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate)
+    rsp = signal_resample(rsp_cleaned, sampling_rate=sampling_rate,
+                          desired_sampling_rate=desired_sampling_rate)
 
     # Define paramters
     window_length = int(desired_sampling_rate * window)
@@ -102,7 +111,7 @@ def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1):
 
     x = np.arange(len(rsp_rate))
     y = rsp_rate
-    rsp_rate = signal_interpolate(x, y, x_new=len(rsp_cleaned), method="linear")
+    rsp_rate = signal_interpolate(x, y, x_new=len(rsp_cleaned), method=interpolation_method)
     # Smoothing
     rsp_rate = signal_filter(rsp_rate, highcut=0.1, order=4, sampling_rate=sampling_rate)
 
