@@ -58,6 +58,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_bayes, clusters_bayes, info = nk.cluster(data, method="mixturebayesian", n_clusters=3)
     >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
+    >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
 #    >>> fig, axes = plt.subplots(ncols=2, nrows=5)  #doctest: +SKIP
@@ -88,6 +89,9 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
 #    >>> axes[4, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmod['Cluster'])
 #    >>> axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c='red')
 #    >>> axes[4, 0].set_title("modified K-means")
+#    >>> axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
+#    >>> axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
+#    >>> axes[4, 1].set_title("AAHC (Frederic's method)")
 
     """
     # Sanity fixes
@@ -123,19 +127,26 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
                                random_state=random_state,
                                **kwargs)
 
+    # Frederic's AAHC
+    elif method in ["aahc_frederic", "aahc_eegmicrostates"]:
+        out = _cluster_aahc(data,
+                            n_clusters=n_clusters,
+                            random_state=random_state,
+                            **kwargs)
+
     # Bayesian
     elif method in ["bayesianmixture", "bayesmixt", "mixturebayesian", "mixturebayes"]:
         out =  _cluster_mixture(data,
-                               n_clusters=n_clusters,
-                               bayesian=True,
-                               random_state=random_state,
-                               **kwargs)
+                                n_clusters=n_clusters,
+                                bayesian=True,
+                                random_state=random_state,
+                                **kwargs)
 
     # Others
     else:
-        out =  _cluster_sklearn(data,
-                                n_clusters=n_clusters,
-                                **kwargs)
+        out = _cluster_sklearn(data,
+                               n_clusters=n_clusters,
+                               **kwargs)
 
     return out
 
@@ -434,135 +445,139 @@ def _cluster_mixture(data, n_clusters=2, bayesian=False, random_state=None, **kw
 
     return prediction, clusters, info
 
-#from sys import stdout
-#states, L = _frederic_aahc(data, n_clusters=4)
-#
-#def _frederic_aahc(data, n_clusters=3, doplot=False):
-#    """Atomize and Agglomerative Hierarchical Clustering Algorithm
-#    AAHC (Murray et al., Brain Topography, 2008)
-#    Args:
-#        data: EEG data to cluster, numpy.array (n_samples, n_channels)
-#        N_clusters: desired number of clusters
-#        doplot: boolean, plot maps
-#    Returns:
-#        maps: n_maps x n_channels (numpy.array)
-#    """
-#
-#    def extract_row(A, k):
-#        v = A[k,:]
-#        A_ = np.vstack((A[:k,:],A[k+1:,:]))
-#        return A_, v
-#
-#    def extract_item(A, k):
-#        a = A[k]
-#        A_ = A[:k] + A[k+1:]
-#        return A_, a
-#
-#    def locmax(x):
-#        """Get local maxima of 1D-array
-#        Args:
-#            x: numeric sequence
-#        Returns:
-#            m: list, 1D-indices of local maxima
-#        """
-#        dx = np.diff(x) # discrete 1st derivative
-#        zc = np.diff(np.sign(dx)) # zero-crossings of dx
-#        m = 1 + np.where(zc == -2)[0] # indices of local max.
-#        return m
-#
-#    #print("\n\t--- AAHC ---")
-#    nt, nch = data.shape
-#
-#    # --- get GFP peaks ---
-#    gfp = data.std(axis=1)
-#    gfp_peaks = locmax(gfp)
-#    #gfp_peaks = gfp_peaks[:100]
-#    #n_gfp = gfp_peaks.shape[0]
-#    gfp2 = np.sum(gfp**2) # normalizing constant in GEV
-#
-#    # --- initialize clusters ---
-#    maps = data[gfp_peaks,:]
-#    # --- store original gfp peaks and indices ---
-#    cluster_data = data[gfp_peaks,:]
-#    #n_maps = n_gfp
-#    n_maps = maps.shape[0]
-#    print("\t[+] Initial number of clusters: {:d}\n".format(n_maps))
-#
-#    # --- cluster indices w.r.t. original size, normalized GFP peak data ---
-#    Ci = [[k] for k in range(n_maps)]
-#
-#    # --- main loop: atomize + agglomerate ---
-#    while (n_maps > n_clusters):
-#        s = "\r{:s}\r\t\tAAHC > n: {:d} => {:d}".format(80*" ", n_maps, n_maps-1)
-#        stdout.write(s); stdout.flush()
-#        #print("\n\tAAHC > n: {:d} => {:d}".format(n_maps, n_maps-1))
-#
-#        # --- correlations of the data sequence with each cluster ---
-#        m_x, s_x = data.mean(axis=1, keepdims=True), data.std(axis=1)
-#        m_y, s_y = maps.mean(axis=1, keepdims=True), maps.std(axis=1)
-#        s_xy = 1.*nch*np.outer(s_x, s_y)
-#        C = np.dot(data-m_x, np.transpose(maps-m_y)) / s_xy
-#
-#        # --- microstate sequence, ignore polarity ---
-#        L = np.argmax(C**2, axis=1)
-#
-#        # --- GEV (global explained variance) of cluster k ---
-#        gev = np.zeros(n_maps)
-#        for k in range(n_maps):
-#            r = L==k
-#            gev[k] = np.sum(gfp[r]**2 * C[r,k]**2)/gfp2
-#
-#        # --- merge cluster with the minimum GEV ---
-#        imin = np.argmin(gev)
-#        #print("\tre-cluster: {:d}".format(imin))
-#
-#        # --- N => N-1 ---
-#        maps, _ = extract_row(maps, imin)
-#        Ci, reC = extract_item(Ci, imin)
-#        re_cluster = []  # indices of updated clusters
-#        #C_sgn = np.zeros(nt)
-#        for k in reC:  # map index to re-assign
-#            c = cluster_data[k,:]
-#            m_x, s_x = maps.mean(axis=1, keepdims=True), maps.std(axis=1)
-#            m_y, s_y = c.mean(), c.std()
-#            s_xy = 1.*nch*s_x*s_y
-#            C = np.dot(maps-m_x, c-m_y)/s_xy
-#            inew = np.argmax(C**2) # ignore polarity
-#            #C_sgn[k] = C[inew]
-#            re_cluster.append(inew)
-#            Ci[inew].append(k)
-#        n_maps = len(Ci)
-#
-#        # --- update clusters ---
-#        re_cluster = list(set(re_cluster)) # unique list of updated clusters
-#
-#        ''' re-clustering by modified mean
-#        for i in re_cluster:
-#            idx = Ci[i]
-#            c = np.zeros(nch) # new cluster average
-#            for k in idx: # add to new cluster, polarity according to corr. sign
-#                if (C_sgn[k] >= 0):
-#                    c += cluster_data[k,:]
-#                else:
-#                    c -= cluster_data[k,:]
-#            c /= len(idx)
-#            maps[i] = c
-#            #maps[i] = (c-np.mean(c))/np.std(c) # normalize the new cluster
-#        del C_sgn
-#        '''
-#
-#        # re-clustering by eigenvector method
-#        for i in re_cluster:
-#            idx = Ci[i]
-#            Vt = cluster_data[idx,:]
-#            Sk = np.dot(Vt.T, Vt)
-#            evals, evecs = np.linalg.eig(Sk)
-#            c = evecs[:, np.argmax(np.abs(evals))]
-#            c = np.real(c)
-#            maps[i] = c/np.sqrt(np.sum(c**2))
-#
-#    print()
-#    return maps, L
+
+def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None, random_state=None, **kwargs):
+    """Atomize and Agglomerative Hierarchical Clustering Algorithm, AAHC (Murray et al., Brain Topography, 2008),
+    implemented by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518
+
+    Preprocessing steps of GFP computation are necessary for the algorithm to run. If gfp arguments are specified,
+    data is assumed to have been filtered out based on gfp peaks (e.g., data[:, indices]), if not specified,
+    gfp indices will be calculated in the algorithm and data is assumed to be the full un-preprocessed input.
+    """
+    # Try loading sys
+    try:
+        from sys import stdout
+    except ImportError:
+        raise ImportError(
+            "NeuroKit error: cluster(): the 'sys' module is required for this function to run. ",
+            "Please install it first (`pip install sys`).",
+        )
+
+    # Internal functions for aahc
+    def extract_row(A, k):
+        v = A[k, :]
+        A_ = np.vstack((A[:k, :], A[k+1:, :]))
+        return A_, v
+
+    def extract_item(A, k):
+        a = A[k]
+        A_ = A[:k] + A[k+1:]
+        return A_, a
+
+    def locmax(x):
+        """Get local maxima of 1D-array
+        Args:
+            x: numeric sequence
+        Returns:
+            m: list, 1D-indices of local maxima
+        """
+        dx = np.diff(x)  # discrete 1st derivative
+        zc = np.diff(np.sign(dx))  # zero-crossings of dx
+        m = 1 + np.where(zc == -2)[0]  # indices of local max.
+        return m
+
+    # Sanitize
+    if isinstance(data, pd.DataFrame):
+        data = np.array(data)
+    nt, nch = data.shape
+
+    # If preprocessing is not Done already
+    if gfp is None and gfp_peaks is None and gfp_sum_sq is None:
+        gfp = data.std(axis=1)
+        gfp_peaks = locmax(gfp)
+        gfp_sum_sq = np.sum(gfp**2)  # normalizing constant in GEV
+        maps = data[gfp_peaks, :]  # initialize clusters
+        cluster_data = data[gfp_peaks, :]  # store original gfp peak indices
+    else:
+        maps = data.copy()
+        cluster_data = data.copy()
+
+    n_maps = maps.shape[0]
+    print("\t[+] Initial number of clusters: {:d}\n".format(n_maps))
+
+    # cluster indices w.r.t. original size, normalized GFP peak data
+    Ci = [[k] for k in range(n_maps)]
+
+    # Main loop: atomize + agglomerate
+    while (n_maps > n_clusters):
+        s = "\r{:s}\r\t\tAAHC > n: {:d} => {:d}".format(80*" ", n_maps, n_maps-1)
+        stdout.write(s); stdout.flush()
+
+        # correlations of the data sequence with each cluster
+        m_x, s_x = data.mean(axis=1, keepdims=True), data.std(axis=1)
+        m_y, s_y = maps.mean(axis=1, keepdims=True), maps.std(axis=1)
+        s_xy = 1.*nch*np.outer(s_x, s_y)
+        C = np.dot(data-m_x, np.transpose(maps-m_y)) / s_xy
+
+        # microstate sequence, ignore polarity
+        L = np.argmax(C**2, axis=1)
+
+        # GEV (global explained variance) of cluster k
+        gev = np.zeros(n_maps)
+        for k in range(n_maps):
+            r = L == k
+            gev[k] = np.sum(gfp[r]**2 * C[r, k]**2)/gfp_sum_sq
+
+        # merge cluster with the minimum GEV
+        imin = np.argmin(gev)
+
+        # N => N-1
+        maps, _ = extract_row(maps, imin)
+        Ci, reC = extract_item(Ci, imin)
+        re_cluster = []  # indices of updated clusters
+        for k in reC:  # map index to re-assign
+            c = cluster_data[k, :]
+            m_x, s_x = maps.mean(axis=1, keepdims=True), maps.std(axis=1)
+            m_y, s_y = c.mean(), c.std()
+            s_xy = 1.*nch*s_x*s_y
+            C = np.dot(maps-m_x, c-m_y)/s_xy
+            inew = np.argmax(C**2)  # ignore polarity
+            re_cluster.append(inew)
+            Ci[inew].append(k)
+        n_maps = len(Ci)
+
+        # Update clusters
+        re_cluster = list(set(re_cluster))  # unique list of updated clusters
+
+        # re-clustering by eigenvector method
+        for i in re_cluster:
+            idx = Ci[i]
+            Vt = cluster_data[idx, :]
+            Sk = np.dot(Vt.T, Vt)
+            evals, evecs = np.linalg.eig(Sk)
+            c = evecs[:, np.argmax(np.abs(evals))]
+            c = np.real(c)
+            maps[i] = c/np.sqrt(np.sum(c**2))
+
+    # Get distance
+    prediction = _cluster_getdistance(cluster_data, maps)
+    prediction["Cluster"] = prediction.abs().idxmax(axis=1).values
+    prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
+
+    # Function
+    clustering_function = functools.partial(_cluster_aahc,
+                                            n_clusters=n_clusters,
+                                            random_state=random_state,
+                                            **kwargs)
+
+    # Info dump
+    info = {"n_clusters": n_clusters,
+            "clustering_function": clustering_function,
+            "random_state": random_state}
+
+    return prediction, maps, info
+
+
 
 # =============================================================================
 # Utils
