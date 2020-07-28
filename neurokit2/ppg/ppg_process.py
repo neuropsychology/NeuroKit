@@ -11,7 +11,7 @@ from .ppg_findpeaks import ppg_findpeaks
 def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
     """Process a photoplethysmogram (PPG)  signal.
 
-    Convenience function that automatically processes an electromyography signal.
+    Convenience function that automatically processes a photoplethysmogram signal.
 
     Parameters
     ----------
