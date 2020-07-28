@@ -2,7 +2,6 @@
 import pandas as pd
 import scipy
 import numpy as np
-import matplotlib.pyplot as plt
 
 from ..signal.signal_power import _signal_power_instant_get
 from ..signal.signal_psd import _signal_psd_welch
