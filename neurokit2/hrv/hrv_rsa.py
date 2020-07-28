@@ -15,7 +15,8 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .hrv_utils import _hrv_get_rri
 
 
-def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False):
+def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False,
+            window=None, window_number=None):
     """Respiratory Sinus Arrhythmia (RSA)
 
     Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence' or 'physiological
@@ -66,6 +67,12 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
         If False, will return RSA properties computed from the data (one value per index).
         If True, will return continuous estimations of RSA of the same length as the signal.
         See below for more details.
+    window : int
+        For calculating RSA second by second. Length of each segment in seconds. If None (default),
+        window will be set at 32 seconds.
+    window_number : int
+        Between 2 and 8. For caculating RSA second by second. Number of windows to be calculated in
+        Peak Matched Multiple Window. If None (default), window_number will be set at 8.
 
     Returns
     ----------
@@ -104,16 +111,19 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
      'RSA_P2T_Mean_log': ...,
      'RSA_P2T_SD': ...,
      'RSA_P2T_NoRSA': ...,
-     'RSA_PorgesBohrer': ...}
+     'RSA_PorgesBohrer': ...,
+     'RSA_Gate_Mean': ...,
+     'RSA_Gate_Mean_log': ...,
+     'RSA_Gate_SD': ...}
     >>>
     >>> # Get RSA as a continuous signal
     >>> rsa = nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
     >>> rsa #doctest: +ELLIPSIS
-            RSA_P2T
-    0      0.09
-    1      0.09
-    2      0.09
-    ...    ...
+            RSA_P2T  RSA_Gates
+    0         ...         ...
+    1         ...         ...
+    2         ...         ...
+    ...       ...         ...
 
     [15000 rows x 1 columns]
     >>> nk.signal_plot([ecg_signals["ECG_Rate"], rsp_signals["RSP_Rate"], rsa], standardize=True)
@@ -157,12 +167,18 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     # Porges-Bohrer
     rsa_pb = _hrv_rsa_pb(ecg_period, sampling_rate, continuous=continuous)
 
+    #RSAsecondbysecond
+    rsa_gates = _hrv_rsa_gates(ecg_period, rpeaks, sampling_rate=sampling_rate,
+                               window=window, window_number=window_number, continuous=continuous)
+
     if continuous is False:
         rsa = {}  # Initialize empty dict
         rsa.update(rsa_p2t)
         rsa.update(rsa_pb)
+        rsa.update(rsa_gates)
     else:
-        rsa = pd.DataFrame({"RSA_P2T": rsa_p2t})
+        rsa = pd.DataFrame({"RSA_P2T": rsa_p2t,
+                            "RSA_Gates": rsa_gates})
 
     return rsa
 
@@ -306,24 +322,27 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
 # Second-by-second RSA
 # =============================================================================
 
-def hrv_rsa_gates(rpeaks, sampling_rate=1000, min_frequency=0.12, max_frequency=0.40, window=None,
-                  window_number=None):
+def _hrv_rsa_gates(ecg_period, rpeaks, sampling_rate=1000, window=None, window_number=None,
+                   continuous=False):
 
-    # Retried IBI and interpolate it
+    # Boundaries of rsa freq
+    min_frequency=0.12
+    max_frequency=0.40
+    # Retrived IBI and interpolate it
     rri, sampling_rate = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate, interpolate=True)
 
     # Re-sample at 4 Hz
-    desired_sampling_rate = 4
-    rri = signal_resample(rri, sampling_rate=sampling_rate,
-                          desired_sampling_rate=desired_sampling_rate)
+#    desired_sampling_rate = 4
+#    rri = signal_resample(rri, sampling_rate=sampling_rate,
+#                          desired_sampling_rate=desired_sampling_rate)
 
     # Sanitize parameters
     if window is not None:
-        overlap = int((window - 1) * desired_sampling_rate)
+        overlap = int((window - 1) * sampling_rate)
     else:
         window = 32  # 32 seconds
-        overlap = 31 * desired_sampling_rate  # 31 seconds
-    nperseg = window * desired_sampling_rate
+        overlap = 31 * sampling_rate  # 31 seconds
+    nperseg = window * sampling_rate
     if window_number is None:
         window_number = 8
 
@@ -331,14 +350,39 @@ def hrv_rsa_gates(rpeaks, sampling_rate=1000, min_frequency=0.12, max_frequency=
     multipeak, weight = _get_multipeak_window(nperseg, window_number)
 
     for i in range(4):
-        frequency, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
-                                                min_frequency=min_frequency,
-                                                max_frequency=max_frequency, method="stft",
-                                                window=multipeak[:, i], overlap=overlap, show=False)
-        if i == 1:
+        frequency, time, psd = signal_timefrequency(rri, sampling_rate=sampling_rate,
+                                                    min_frequency=min_frequency,
+                                                    max_frequency=max_frequency, method="stft",
+                                                    window=window, window_type=multipeak[:, i],
+                                                    overlap=overlap, show=False)
+        if i == 0:
             rsa = np.zeros_like(psd)
-        rsa = psd * weight(i) + rsa  # add weights to 1
+        rsa = psd * weight[i] + rsa  # add weights
+    meanRSA = np.log(2 * sum(rsa) / nperseg)
 
+    # Sanitize output
+    if continuous is False:
+        rsa = {"RSA_Gate_Mean": np.nanmean(meanRSA)}
+        rsa["RSA_Gate_Mean_log"] = np.log(rsa["RSA_Gate_Mean"])  # pylint: disable=E1111
+        rsa["RSA_Gate_SD"] = np.nanstd(meanRSA, ddof=1)
+    else:
+        # For window=32, meanRSA is RSA from 16th second to xth second where x=recording
+        # duration-16secs
+        # Padding the missing first and list window/2 segments
+        pad_length = window / 2
+        time_start = np.arange(0, pad_length)
+        time_end = np.arange(time[-1], time[-1] + pad_length)[1: ]
+        time = np.concatenate((time_start, time, time_end))
+
+        rsa_start = np.full(len(time_start), meanRSA[0])
+        rsa_end = np.full(len(time_end), meanRSA[-1])
+        meanRSA = np.concatenate((rsa_start, meanRSA, rsa_end))
+
+        # Convert to samples
+        time = np.multiply(time, sampling_rate)
+
+        rsa = signal_interpolate(time.astype(int), meanRSA, x_new=len(ecg_period),
+                                 method="monotone_cubic")
     return rsa
 
 
