@@ -133,11 +133,19 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
                 method="pseudoWignerVille"
                 )
 
+    # Sanitize output
+    if max_frequency is None:
+        max_frequency = frequency[-1]
+    lower_bound = len(frequency) - len(frequency[frequency >= min_frequency])
+    f = frequency[(frequency >= min_frequency) & (frequency <= max_frequency)]
+    z = tfr[lower_bound:lower_bound + len(f)]
+
+
     if show is True:
         plot_timefrequency(
-                tfr,
+                z,
                 time,
-                frequency,
+                f,
                 signal=signal,
                 method=method,
                 min_frequency=min_frequency,
@@ -145,7 +153,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
                 )
 
 
-    return frequency, time, tfr
+    return f, time, z
 
 # =============================================================================
 # Short-Time Fourier Transform (STFT)
@@ -445,14 +453,9 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
 # =============================================================================
 # Plot function
 # =============================================================================
-def plot_timefrequency(tfr, time, frequency, signal=None, method="stft", min_frequency=0.0, max_frequency=None):
+def plot_timefrequency(z, time, f, signal=None, method="stft"):
     """Visualize a time-frequency matrix.
     """
-    if max_frequency is None:
-        max_frequency = frequency[-1]
-    lower_bound = len(frequency) - len(frequency[frequency >= min_frequency])
-    f = frequency[(frequency >= min_frequency) & (frequency <= max_frequency)]
-    z = tfr[lower_bound:lower_bound + len(f)]
 
     if method == "stft":
         figure_title = "Short-time Fourier Transform Magnitude"
