@@ -59,8 +59,8 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
     >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
-    >>>
-    >>> # Visualize classification and 'average cluster'
+
+#    >>> # Visualize classification and 'average cluster'
 #    >>> fig, axes = plt.subplots(ncols=2, nrows=5)  #doctest: +SKIP
 #    >>> axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans['Cluster'])
 #    >>> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
@@ -446,7 +446,7 @@ def _cluster_mixture(data, n_clusters=2, bayesian=False, random_state=None, **kw
     return prediction, clusters, info
 
 
-def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None, random_state=None, **kwargs):
+def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None, random_state=None, use_peaks=False, **kwargs):
     """Atomize and Agglomerative Hierarchical Clustering Algorithm, AAHC (Murray et al., Brain Topography, 2008),
     implemented by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518
 
@@ -496,8 +496,12 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
         gfp = data.std(axis=1)
         gfp_peaks = locmax(gfp)
         gfp_sum_sq = np.sum(gfp**2)  # normalizing constant in GEV
-        maps = data[gfp_peaks, :]  # initialize clusters
-        cluster_data = data[gfp_peaks, :]  # store original gfp peak indices
+        if use_peaks:
+            maps = data[gfp_peaks, :]  # initialize clusters
+            cluster_data = data[gfp_peaks, :]  # store original gfp peak indices
+        else:
+            maps = data.copy()
+            cluster_data = data.copy()
     else:
         maps = data.copy()
         cluster_data = data.copy()
