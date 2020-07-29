@@ -7,8 +7,7 @@ from .cluster_quality import cluster_quality
 
 
 def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
-    """
-    Find the optimal number of clusters based on different metrices of quality.
+    """Find the optimal number of clusters based on different metrices of quality.
 
     Parameters
     ----------

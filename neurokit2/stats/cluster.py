@@ -11,8 +11,7 @@ import functools
 
 
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
-    """
-    Performs clustering of data according to different algorithms.
+    """Performs clustering of data according to different algorithms.
 
     Parameters
     ----------
@@ -198,25 +197,31 @@ def _cluster_kmod(data, init_times=None, n_clusters=2,
     -----------
     data : np.ndarray
         An array (channels x times) of MEEG data, obtained from Raw or Epochs object from MNE.
-    n_microstates : int
-        The number of unique microstates to find. Defaults to 4.
     max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
         Defaults to 1000.
     init_times : array
         Random timepoints to be selected for topographic maps. Defaults to None.
+    n_clusters : int
+        The number of unique microstates to find. Defaults to 4.
     threshold : float
         The threshold of convergence for the k-means algorithm, based on
         relative change in noise variance. Defaults to 1e-6.
-    random_state : int | numpy.random.RandomState | None
+    random_state : Union[int, numpy.random.RandomState, None]
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
+    **kwargs
+        Other arguments to be passed into ``sklearn`` functions.
 
     Returns
     -------
-    states : array
-        The topographic maps of the found unique microstates which has a shape of n_channels x n_states
+    clustering : DataFrame
+        Information about the distance of samples from their respective clusters.
+    clusters : np.ndarray
+        Coordinates of cluster centers, which has a shape of n_clusters x n_features.
+    info : dict
+        Information about the number of clusters, the function and model used for clustering.
 
     """
     data = data.T
@@ -489,7 +494,7 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
     # Sanitize
     if isinstance(data, pd.DataFrame):
         data = np.array(data)
-    nt, nch = data.shape
+    _, nch = data.shape
 
     # If preprocessing is not Done already
     if gfp is None and gfp_peaks is None and gfp_sum_sq is None:

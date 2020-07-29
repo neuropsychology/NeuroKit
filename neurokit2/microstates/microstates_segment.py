@@ -191,7 +191,8 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
            "GEV": best_gev,
            "GFP": gfp,
            "Cross-Validation Criterion": best_cv,
-           "Info": info_mne}
+           "Info_MNE": info_mne,
+           "Info_Cluster": info}
 
     # Reorder
     out = microstates_classify(out)

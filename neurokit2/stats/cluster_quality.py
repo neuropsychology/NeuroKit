@@ -8,8 +8,7 @@ import scipy.spatial
 
 
 def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
-    """
-    Compute quality of the clustering using several metrices.
+    """Compute quality of the clustering using several metrices.
 
     Parameters
     ----------
@@ -90,11 +89,10 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
         general["Score_Bouldin"] = sklearn.metrics.davies_bouldin_score(data, clustering)
 
     # Variance explained
-    general["Score_VarianceExplained"] = _cluster_quality_variance(data, clustering, clusters)
+    general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters)
 
     # Gap statistic
     general.update(_cluster_quality_gap(data,
-                                        clustering,
                                         clusters,
                                         info,
                                         n_random=n_random))
@@ -129,7 +127,7 @@ def _cluster_quality_sumsquares(data, clusters):
 
 
 
-def _cluster_quality_variance(data, clustering, clusters):
+def _cluster_quality_variance(data, clusters):
     """Variance explained by clustering
     """
     sum_squares_within =_cluster_quality_sumsquares(data, clusters)
@@ -138,7 +136,7 @@ def _cluster_quality_variance(data, clustering, clusters):
 
 
 
-def _cluster_quality_gap(data, clustering, clusters, info, n_random=10):
+def _cluster_quality_gap(data, clusters, info, n_random=10):
     """GAP statistic and modified GAP statistic by Mohajer (2011).
 
     The GAP statistic compares the total within intra-cluster variation for different values of k
@@ -160,7 +158,7 @@ def _cluster_quality_gap(data, clustering, clusters, info, n_random=10):
         random_data = np.array(m) * random_data + np.array(b)
 
         # Cluster random
-        random_clustering, random_clusters, info = info["clustering_function"](random_data)
+        _, random_clusters, info = info["clustering_function"](random_data)
         dispersion_random[i] = _cluster_quality_sumsquares(random_data, random_clusters)
 
     # Compute GAP
