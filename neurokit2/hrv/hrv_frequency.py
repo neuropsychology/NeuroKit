@@ -59,6 +59,9 @@ def hrv_frequency(
     normalize : bool
         Normalization of power by maximum PSD value. Default to True.
         Normalization allows comparison between different PSD methods.
+    order_criteria : str
+        The criteria to automatically select order in parametric PSD (only used for autoregressive
+        (AR) methods such as 'burg'). Defaults to None.
     **kwargs : optional
         Other arguments.
 

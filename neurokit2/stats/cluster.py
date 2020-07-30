@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import warnings
+import functools
 import numpy as np
 import pandas as pd
 import sklearn.cluster
@@ -7,7 +8,6 @@ import sklearn.mixture
 import sklearn.decomposition
 import scipy.spatial
 import scipy.linalg
-import functools
 
 
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
@@ -57,40 +57,40 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_bayes, clusters_bayes, info = nk.cluster(data, method="mixturebayesian", n_clusters=3)
     >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
-    >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
-    >>>
-    >>> # Visualize classification and 'average cluster'
-    >>> fig, axes = plt.subplots(ncols=2, nrows=5)  #doctest: +SKIP
-    >>> axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans['Cluster'])
-    >>> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
-    >>> axes[0, 0].set_title("k-means")
-    >>> axes[0, 1].scatter(data.iloc[:,[2]], data.iloc[:, [3]], c=clustering_spectral['Cluster'])
-    >>> axes[0, 1].scatter(clusters_spectral[:, 2], clusters_spectral[:, 3], c='red')
-    >>> axes[0, 1].set_title("Spectral")
-    >>> axes[1, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_hierarchical['Cluster'])
-    >>> axes[1, 0].scatter(clusters_hierarchical[:, 2], clusters_hierarchical[:, 3], c='red')
-    >>> axes[1, 0].set_title("Hierarchical")
-    >>> axes[1, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_agglomerative['Cluster'])
-    >>> axes[1, 1].scatter(clusters_agglomerative[:, 2], clusters_agglomerative[:, 3], c='red')
-    >>> axes[1, 1].set_title("Agglomerative")
-    >>> axes[2, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_mixture['Cluster'])
-    >>> axes[2, 0].scatter(clusters_mixture[:, 2], clusters_mixture[:, 3], c='red')
-    >>> axes[2, 0].set_title("Mixture")
-    >>> axes[2, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_bayes['Cluster'])
-    >>> axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c='red')
-    >>> axes[2, 1].set_title("Bayesian Mixture")
-    >>> axes[3, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_pca['Cluster'])
-    >>> axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c='red')
-    >>> axes[3, 0].set_title("PCA")
-    >>> axes[3, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_ica['Cluster'])
-    >>> axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c='red')
-    >>> axes[3, 1].set_title("ICA")
-    >>> axes[4, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmod['Cluster'])
-    >>> axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c='red')
-    >>> axes[4, 0].set_title("modified K-means")
-    >>> axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
-    >>> axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
-    >>> axes[4, 1].set_title("AAHC (Frederic's method)")
+    >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3) #doctest: +SKIP
+
+#    >>> # Visualize classification and 'average cluster'
+#    >>> fig, axes = plt.subplots(ncols=2, nrows=5)  #doctest: +SKIP
+#    >>> axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans['Cluster'])
+#    >>> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
+#    >>> axes[0, 0].set_title("k-means")
+#    >>> axes[0, 1].scatter(data.iloc[:,[2]], data.iloc[:, [3]], c=clustering_spectral['Cluster'])
+#    >>> axes[0, 1].scatter(clusters_spectral[:, 2], clusters_spectral[:, 3], c='red')
+#    >>> axes[0, 1].set_title("Spectral")
+#    >>> axes[1, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_hierarchical['Cluster'])
+#    >>> axes[1, 0].scatter(clusters_hierarchical[:, 2], clusters_hierarchical[:, 3], c='red')
+#    >>> axes[1, 0].set_title("Hierarchical")
+#    >>> axes[1, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_agglomerative['Cluster'])
+#    >>> axes[1, 1].scatter(clusters_agglomerative[:, 2], clusters_agglomerative[:, 3], c='red')
+#    >>> axes[1, 1].set_title("Agglomerative")
+#    >>> axes[2, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_mixture['Cluster'])
+#    >>> axes[2, 0].scatter(clusters_mixture[:, 2], clusters_mixture[:, 3], c='red')
+#    >>> axes[2, 0].set_title("Mixture")
+#    >>> axes[2, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_bayes['Cluster'])
+#    >>> axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c='red')
+#    >>> axes[2, 1].set_title("Bayesian Mixture")
+#    >>> axes[3, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_pca['Cluster'])
+#    >>> axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c='red')
+#    >>> axes[3, 0].set_title("PCA")
+#    >>> axes[3, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_ica['Cluster'])
+#    >>> axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c='red')
+#    >>> axes[3, 1].set_title("ICA")
+#    >>> axes[4, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmod['Cluster'])
+#    >>> axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c='red')
+#    >>> axes[4, 0].set_title("modified K-means")
+#    >>> axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
+#    >>> axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
+#    >>> axes[4, 1].set_title("AAHC (Frederic's method)")
 
     """
     # Sanity fixes

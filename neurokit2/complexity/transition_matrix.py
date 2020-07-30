@@ -95,11 +95,11 @@ def transition_matrix_simulate(matrix, n=10):
     return states[seq]
 
 
-def transition_matrix_plot(matrix):
-    """
-    """
-    print("Sorry, we didn't find a statisfactory way of plotting the transition graphs. Consider ",
-          "helping if you have some plotting skills!")
+# def transition_matrix_plot(matrix):
+#    """
+#    """
+#    print("Sorry, we didn't find a statisfactory way of plotting the transition graphs. Consider ",
+#          "helping if you have some plotting skills!")
 
 #    try:
 #        import networkx as nx

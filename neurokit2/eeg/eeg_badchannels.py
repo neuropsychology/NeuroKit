@@ -7,8 +7,6 @@ from ..stats import standardize, mad, hdi
 from ..signal import signal_zerocrossings
 
 
-
-
 def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99):
     """Find bad channels.
 
@@ -26,13 +24,20 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99):
         ``scipy.stats.norm.ppf(.975) ~= 1.96``. The default value (.99) means that all observations
         beyond 2.33 SD from the mean will be classified as outliers.
 
+    Returns
+    -------
+    list
+        List of bad channel names
+    DataFrame
+        Information of each channel, such as standard deviation (SD), mean, median absolute deviation (MAD),
+        skewness, kurtosis, amplitude, highest density intervals, number of zero crossings.
+
     Examples
     ---------
     >>> import neurokit2 as nk
     >>>
     >>> eeg = nk.mne_data("filt-0-40_raw")
     >>> bads, info = nk.eeg_badchannels(eeg)
-
 
     """
     if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
@@ -45,7 +50,7 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99):
             )
         selection = mne.pick_types(eeg.info, eeg=True)
         ch_names = np.array(eeg.ch_names)[selection]
-        eeg, time = eeg[selection]
+        eeg, _ = eeg[selection]
     else:
         ch_names = np.arange(len(eeg))
 
