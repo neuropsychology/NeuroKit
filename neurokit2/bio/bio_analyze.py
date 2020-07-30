@@ -82,9 +82,10 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Analyze
     >>> nk.bio_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
-       ECG_Rate_Mean  HRV_RMSSD  ...  RSA_P2T_NoRSA  RSA_PorgesBohrer
+       ECG_Rate_Mean  HRV_RMSSD  ...  RSA_Gates_Mean_log  RSA_Gates_SD
     0            ...        ...  ...            ...               ...
 
+    [1 rows x 84 columns]
     """
     features = pd.DataFrame()
     method = method.lower()
