@@ -125,7 +125,7 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     2         ...         ...
     ...       ...         ...
 
-    [15000 rows x 1 columns]
+    [15000 rows x 2 columns]
     >>> nk.signal_plot([ecg_signals["ECG_Rate"], rsp_signals["RSP_Rate"], rsa], standardize=True)
 
     References
@@ -168,8 +168,24 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     rsa_pb = _hrv_rsa_pb(ecg_period, sampling_rate, continuous=continuous)
 
     #RSAsecondbysecond
-    rsa_gates = _hrv_rsa_gates(ecg_period, rpeaks, sampling_rate=sampling_rate,
+    if window is None:
+        window = 32  # 32 seconds
+    input_duration = rpeaks[-1] / sampling_rate
+    if input_duration >= window:
+        rsa_gates = _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=sampling_rate,
                                window=window, window_number=window_number, continuous=continuous)
+    else:
+        warn(
+                "The duration of recording is shorter than the duration of the window (%s seconds)."
+                " Returning RSA by Gates method as Nan."
+                " Consider using a longer recording." %(window),
+                category=NeuroKitWarning
+            )
+        if continuous is False:
+            rsa_gates = np.nan
+        else:
+            rsa_gates = np.full(len(rsa_p2t), np.nan)
+
 
     if continuous is False:
         rsa = {}  # Initialize empty dict
@@ -322,7 +338,7 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
 # Second-by-second RSA
 # =============================================================================
 
-def _hrv_rsa_gates(ecg_period, rpeaks, sampling_rate=1000, window=None, window_number=None,
+def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_number=None,
                    continuous=False):
 
     # Boundaries of rsa freq
@@ -332,17 +348,13 @@ def _hrv_rsa_gates(ecg_period, rpeaks, sampling_rate=1000, window=None, window_n
     rri, sampling_rate = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate, interpolate=True)
 
     # Re-sample at 4 Hz
-#    desired_sampling_rate = 4
-#    rri = signal_resample(rri, sampling_rate=sampling_rate,
-#                          desired_sampling_rate=desired_sampling_rate)
+    desired_sampling_rate = 4
+    rri = signal_resample(rri, sampling_rate=sampling_rate,
+                          desired_sampling_rate=desired_sampling_rate)
 
     # Sanitize parameters
-    if window is not None:
-        overlap = int((window - 1) * sampling_rate)
-    else:
-        window = 32  # 32 seconds
-        overlap = 31 * sampling_rate  # 31 seconds
-    nperseg = window * sampling_rate
+    overlap = int((window - 1) * desired_sampling_rate)
+    nperseg = window * desired_sampling_rate
     if window_number is None:
         window_number = 8
 
@@ -350,7 +362,7 @@ def _hrv_rsa_gates(ecg_period, rpeaks, sampling_rate=1000, window=None, window_n
     multipeak, weight = _get_multipeak_window(nperseg, window_number)
 
     for i in range(4):
-        frequency, time, psd = signal_timefrequency(rri, sampling_rate=sampling_rate,
+        frequency, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
                                                     min_frequency=min_frequency,
                                                     max_frequency=max_frequency, method="stft",
                                                     window=window, window_type=multipeak[:, i],
@@ -381,7 +393,7 @@ def _hrv_rsa_gates(ecg_period, rpeaks, sampling_rate=1000, window=None, window_n
         # Convert to samples
         time = np.multiply(time, sampling_rate)
 
-        rsa = signal_interpolate(time.astype(int), meanRSA, x_new=len(ecg_period),
+        rsa = signal_interpolate(time.astype(int), meanRSA, x_new=len(ecg_signals),
                                  method="monotone_cubic")
     return rsa
 
