@@ -187,16 +187,16 @@ def _bio_analyze_findduration(data, sampling_rate=1000):
 def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     # RSA features for interval-related analysis
 
+
     if isinstance(data, pd.DataFrame):
         rsa = hrv_rsa(data, sampling_rate=sampling_rate, continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index").T
 
-    if isinstance(data, dict):
-        rsa = {}
+    elif isinstance(data, dict):
         for index in data:
             rsa[index] = {}  # Initialize empty container
             data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
-            rsa[index] = hrv_rsa(data[index], sampling_rate=sampling_rate)
+            rsa[index] = hrv_rsa(data[index], sampling_rate=sampling_rate, continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     return rsa
@@ -211,8 +211,9 @@ def _bio_analyze_rsa_event(data, rsa={}):
             rsa[i] = _bio_analyze_rsa_epoch(data[i], rsa[i])
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
-    if isinstance(data, pd.DataFrame):
-        rsa = data.groupby("Label")["RSA_P2T"].mean()
+    elif isinstance(data, pd.DataFrame):
+        rsa["RSA_P2T"] = np.nanmean(data.groupby("Label")["RSA_P2T"])
+        rsa["RSA_Gates"] = np.nanmean(data.groupby("Label")["RSA_Gates"])
         # TODO Needs further fixing
 
     return rsa
@@ -221,12 +222,18 @@ def _bio_analyze_rsa_event(data, rsa={}):
 def _bio_analyze_rsa_epoch(epoch, output={}):
     # RSA features for event-related analysis: epoching
 
+    # To remove baseline
     if np.min(epoch.index.values) <= 0:
         baseline = epoch["RSA_P2T"][epoch.index <= 0].values
         signal = epoch["RSA_P2T"][epoch.index > 0].values
         output["RSA_P2T"] = np.mean(signal) - np.mean(baseline)
+        baseline = epoch["RSA_Gates"][epoch.index <= 0].values
+        signal = epoch["RSA_Gates"][epoch.index > 0].values
+        output["RSA_Gates"] = np.nanmean(signal) - np.nanmean(baseline)
     else:
         signal = epoch["RSA_P2T"].values
         output["RSA_P2T"] = np.mean(signal)
+        signal = epoch["RSA_Gates"].values
+        output["RSA_Gates"] = np.nanmean(signal)
 
     return output
