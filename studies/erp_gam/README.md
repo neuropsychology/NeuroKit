@@ -95,29 +95,21 @@ fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 
 times = epochs.times
 ax0.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000BFB4DC70>
 ax0.plot(times, np.mean(condition1, axis=0), label="Audio")
-## [<matplotlib.lines.Line2D object at 0x00000000BFB66370>]
 ax0.plot(times, np.mean(condition2, axis=0), label="Visual")
-## [<matplotlib.lines.Line2D object at 0x00000000BFB66700>]
 ax0.legend(loc="upper right")
-## <matplotlib.legend.Legend object at 0x00000000BFB66970>
 ax0.set_ylabel("uV")
 
 # Difference
-## Text(0, 0.5, 'uV')
 ax1.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000BFB66880>
 ax1.plot(times, condition1.mean(axis=0) - condition2.mean(axis=0))
-## [<matplotlib.lines.Line2D object at 0x00000000BFB790A0>]
 ax1.axhline(y=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000BFB6DF10>
+## <matplotlib.lines.Line2D object at 0x00000000BFB5C490>
 ax1.set_ylabel("Difference")
 
 # T-values
 ## Text(0, 0.5, 'Difference')
 ax2.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000BFB66D90>
 h = None
 for i, c in enumerate(clusters):
     c = c[0]
@@ -131,16 +123,12 @@ for i, c in enumerate(clusters):
                     times[c.stop - 1],
                     color=(0.3, 0.3, 0.3),
                     alpha=0.3)
-## <matplotlib.patches.Polygon object at 0x00000000BFB79940>
-## <matplotlib.patches.Polygon object at 0x00000000BFB86250>
 hf = ax2.plot(times, t_vals, 'g')
 if h is not None:
     plt.legend((h, ), ('cluster p-value < 0.05', ))
-## <matplotlib.legend.Legend object at 0x00000000BFB79D00>
+## <matplotlib.legend.Legend object at 0x00000000BFB5CF10>
 plt.xlabel("time (ms)")
-## Text(0.5, 0, 'time (ms)')
 plt.ylabel("t-values")
-## Text(0, 0.5, 't-values')
 plt.savefig("figures/fig2.png")
 plt.clf()
 ```
@@ -251,7 +239,7 @@ difference between the two conditions.
 ``` r
 library(mgcv)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition), data=data)
+model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition), data=data, method="REML")
 ```
 
 ``` r
@@ -265,20 +253,21 @@ It is possible to increase the number of degrees of freedom.
 ``` r
 gam.check(model)
 ## 
-## Method: GCV   Optimizer: magic
-## Smoothing parameter selection converged after 10 iterations.
-## The RMS GCV score gradient at convergence was 1.61e-06 .
-## The Hessian was positive definite.
+## Method: REML   Optimizer: outer newton
+## full convergence after 7 iterations.
+## Gradient range [-0.00982,0.00773]
+## (score 36811 & scale 0.968).
+## Hessian positive definite, eigenvalue range [3.28,13102].
 ## Model rank =  20 / 20 
 ## 
 ## Basis dimension (k) checking results. Low p-value (k-index<1) may
 ## indicate that k is too low, especially if edf is close to k'.
 ## 
 ##                           k'  edf k-index p-value
-## s(Time):Conditionaudio  9.00 8.85    1.01    0.70
-## s(Time):Conditionvisual 9.00 8.93    1.01    0.66
+## s(Time):Conditionaudio  9.00 8.65    0.99    0.34
+## s(Time):Conditionvisual 9.00 8.81    0.99    0.41
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data)
+model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data, method="REML")
 ```
 
 ``` r
