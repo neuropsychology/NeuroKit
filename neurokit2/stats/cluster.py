@@ -58,39 +58,39 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
     >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
-
-#    >>> # Visualize classification and 'average cluster'
-#    >>> fig, axes = plt.subplots(ncols=2, nrows=5)  #doctest: +SKIP
-#    >>> axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans['Cluster'])
-#    >>> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
-#    >>> axes[0, 0].set_title("k-means")
-#    >>> axes[0, 1].scatter(data.iloc[:,[2]], data.iloc[:, [3]], c=clustering_spectral['Cluster'])
-#    >>> axes[0, 1].scatter(clusters_spectral[:, 2], clusters_spectral[:, 3], c='red')
-#    >>> axes[0, 1].set_title("Spectral")
-#    >>> axes[1, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_hierarchical['Cluster'])
-#    >>> axes[1, 0].scatter(clusters_hierarchical[:, 2], clusters_hierarchical[:, 3], c='red')
-#    >>> axes[1, 0].set_title("Hierarchical")
-#    >>> axes[1, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_agglomerative['Cluster'])
-#    >>> axes[1, 1].scatter(clusters_agglomerative[:, 2], clusters_agglomerative[:, 3], c='red')
-#    >>> axes[1, 1].set_title("Agglomerative")
-#    >>> axes[2, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_mixture['Cluster'])
-#    >>> axes[2, 0].scatter(clusters_mixture[:, 2], clusters_mixture[:, 3], c='red')
-#    >>> axes[2, 0].set_title("Mixture")
-#    >>> axes[2, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_bayes['Cluster'])
-#    >>> axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c='red')
-#    >>> axes[2, 1].set_title("Bayesian Mixture")
-#    >>> axes[3, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_pca['Cluster'])
-#    >>> axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c='red')
-#    >>> axes[3, 0].set_title("PCA")
-#    >>> axes[3, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_ica['Cluster'])
-#    >>> axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c='red')
-#    >>> axes[3, 1].set_title("ICA")
-#    >>> axes[4, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmod['Cluster'])
-#    >>> axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c='red')
-#    >>> axes[4, 0].set_title("modified K-means")
-#    >>> axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
-#    >>> axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
-#    >>> axes[4, 1].set_title("AAHC (Frederic's method)")
+    >>>
+    >>> # Visualize classification and 'average cluster'
+    >>> fig, axes = plt.subplots(ncols=2, nrows=5)  #doctest: +SKIP
+    >>> axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans['Cluster'])
+    >>> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
+    >>> axes[0, 0].set_title("k-means")
+    >>> axes[0, 1].scatter(data.iloc[:,[2]], data.iloc[:, [3]], c=clustering_spectral['Cluster'])
+    >>> axes[0, 1].scatter(clusters_spectral[:, 2], clusters_spectral[:, 3], c='red')
+    >>> axes[0, 1].set_title("Spectral")
+    >>> axes[1, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_hierarchical['Cluster'])
+    >>> axes[1, 0].scatter(clusters_hierarchical[:, 2], clusters_hierarchical[:, 3], c='red')
+    >>> axes[1, 0].set_title("Hierarchical")
+    >>> axes[1, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_agglomerative['Cluster'])
+    >>> axes[1, 1].scatter(clusters_agglomerative[:, 2], clusters_agglomerative[:, 3], c='red')
+    >>> axes[1, 1].set_title("Agglomerative")
+    >>> axes[2, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_mixture['Cluster'])
+    >>> axes[2, 0].scatter(clusters_mixture[:, 2], clusters_mixture[:, 3], c='red')
+    >>> axes[2, 0].set_title("Mixture")
+    >>> axes[2, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_bayes['Cluster'])
+    >>> axes[2, 1].scatter(clusters_bayes[:, 2], clusters_bayes[:, 3], c='red')
+    >>> axes[2, 1].set_title("Bayesian Mixture")
+    >>> axes[3, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_pca['Cluster'])
+    >>> axes[3, 0].scatter(clusters_pca[:, 2], clusters_pca[:, 3], c='red')
+    >>> axes[3, 0].set_title("PCA")
+    >>> axes[3, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_ica['Cluster'])
+    >>> axes[3, 1].scatter(clusters_ica[:, 2], clusters_ica[:, 3], c='red')
+    >>> axes[3, 1].set_title("ICA")
+    >>> axes[4, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmod['Cluster'])
+    >>> axes[4, 0].scatter(clusters_kmod[:, 2], clusters_kmod[:, 3], c='red')
+    >>> axes[4, 0].set_title("modified K-means")
+    >>> axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
+    >>> axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
+    >>> axes[4, 1].set_title("AAHC (Frederic's method)")
 
     """
     # Sanity fixes
@@ -151,9 +151,15 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
 
 
 # =============================================================================
-# Methods
+# =============================================================================
+# # Methods
+# =============================================================================
 # =============================================================================
 
+
+# =============================================================================
+# Kmeans
+# =============================================================================
 def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
     """K-means clustering algorithm
     """
@@ -186,8 +192,10 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 
     return prediction, clusters, info
 
-
-def _cluster_kmod(data, init_times=None, n_clusters=2,
+# =============================================================================
+# Modified K-means
+# =============================================================================
+def _cluster_kmod(data, n_clusters=2, init_times=None,
                   max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
     """The modified K-means clustering algorithm, as adapted from Marijn van Vliet.
 
@@ -224,8 +232,8 @@ def _cluster_kmod(data, init_times=None, n_clusters=2,
         Information about the number of clusters, the function and model used for clustering.
 
     """
+    n_samples, n_channels = data.shape
     data = data.T
-    n_channels, n_samples = data.shape
 
     # Cache this value for later
     data_sum_sq = np.sum(data ** 2)
@@ -248,7 +256,6 @@ def _cluster_kmod(data, init_times=None, n_clusters=2,
         # Assign each sample to the best matching microstate
         activation = states.dot(data)
         segmentation = np.argmax(np.abs(activation), axis=0)
-        # assigned_activations = np.choose(segmentations, all_activations)
 
         # Recompute the topographic maps of the microstates, based on the
         # samples that were assigned to each state.
@@ -263,8 +270,6 @@ def _cluster_kmod(data, init_times=None, n_clusters=2,
             cov = data[:, idx].dot(data[:, idx].T)
             _, vec = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
             states[state] = vec.ravel()
-#            specific_state = data[:, idx]  # Filter out specific state
-#            states[state] = specific_state.dot(activation[state, idx])
             states[state] /= np.linalg.norm(states[state])
 
         # Estimate residual noise
@@ -300,7 +305,73 @@ def _cluster_kmod(data, init_times=None, n_clusters=2,
 
     return prediction, states, info
 
+def _cluster_kmod_apply(data, n_clusters=2, max_iterations=1000,
+                        threshold=1e-6, random_state=None, **kwargs):
+    """
+    """
+    n_samples, n_channels = data.shape
 
+    # Cache this value for later
+    data_sum_sq = np.sum(data ** 2)
+
+    # Select random timepoints for our initial topographic maps
+    if not isinstance(random_state, np.random.RandomState):
+        random_state = np.random.RandomState(random_state)
+    init_times = random_state.choice(n_samples, size=n_clusters, replace=False)
+
+    # Iterations
+    clusters = data[init_times, :]
+    clusters /= np.linalg.norm(clusters, axis=1, keepdims=True)  # Normalize the maps
+
+    # Convergence criterion: variance estimate (step 6)
+    prev_residual = 1
+    residual = 0
+    for i in range(max_iterations):
+        # Assign each sample to the best matching microstate
+        activation = clusters.dot(data.T)
+        segmentation = np.argmax(np.abs(activation), axis=0)
+
+        # Recompute the topographic maps of the microstates, based on the
+        # samples that were assigned to each state.
+        for state in np.arange(n_clusters):
+            idx = (segmentation == state)
+            if np.sum(idx) == 0:
+                warnings.warn('Some microstates are never activated')
+                clusters[state] = 0
+                continue
+
+            # Find largest eigenvector
+            cov = data[idx, :].T.dot(data[idx, :])
+            _, vec = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
+            clusters[state] = vec.ravel() / np.linalg.norm(clusters[state])
+
+        # Estimate residual noise
+        act_sum_sq = np.sum(np.sum(clusters[segmentation].T * data.T, axis=0) ** 2)
+        residual = np.abs(data_sum_sq - act_sum_sq)
+        residual /= np.float(n_samples * (n_channels - 1))
+
+        # Have we converged?
+        if np.abs((prev_residual - residual) / prev_residual) > threshold:
+            break
+
+        # Next iteration
+        prev_residual = residual
+
+    if i == max_iterations:
+        warnings.warn("Modified K-means algorithm failed to converge after " + str(i) + "",
+                      "iterations. Consider increasing 'max_iterations'.")
+
+    # Info dump
+    info = {"n_clusters": n_clusters,
+            "random_state": random_state}
+
+    return segmentation, clusters, info
+
+
+
+# =============================================================================
+# PCA
+# =============================================================================
 def _cluster_pca(data, n_clusters=2, random_state=None, **kwargs):
     """Principal Component Analysis (PCA) for clustering.
     """
@@ -341,6 +412,9 @@ def _cluster_pca(data, n_clusters=2, random_state=None, **kwargs):
     return prediction, clusters, info
 
 
+# =============================================================================
+# ICA
+# =============================================================================
 def _cluster_ica(data, n_clusters=2, random_state=None, **kwargs):
     """Independent Component Analysis (ICA) for clustering.
     """
@@ -378,6 +452,9 @@ def _cluster_ica(data, n_clusters=2, random_state=None, **kwargs):
     return prediction, clusters, info
 
 
+# =============================================================================
+# SKLEARN
+# =============================================================================
 def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
     """Spectral clustering
     """
@@ -450,7 +527,9 @@ def _cluster_mixture(data, n_clusters=2, bayesian=False, random_state=None, **kw
 
     return prediction, clusters, info
 
-
+# =============================================================================
+# AAHC
+# =============================================================================
 def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None, random_state=None, use_peaks=False, **kwargs):
     """Atomize and Agglomerative Hierarchical Clustering Algorithm, AAHC (Murray et al., Brain Topography, 2008),
     implemented by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518
@@ -589,7 +668,9 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
 
 
 # =============================================================================
-# Utils
+# =============================================================================
+# # Utils
+# =============================================================================
 # =============================================================================
 def _cluster_getdistance(data, clusters):
     """Distance between samples and clusters
