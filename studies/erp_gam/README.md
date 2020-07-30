@@ -10,11 +10,22 @@ us\!**
 
 ## Introduction
 
-The aim of this study is to show how to analyze event-related potentials
-(ERP), i.e., evoked potentials under a regression framework, for
-instance by using Bayesian General Additive Models (GAM).
+The aim of this study is to explore the feasibility of analyzing
+event-related potentials (ERP) under a regression framework, through the
+usage of non-linear links (using splines, and General Additive Models -
+GAMs). Combined with the usage of mixed models, theoretical benefits
+include the incorporation of more information (such as data at the
+single-trial, - and even single-channel - level), as well as the
+computation of marginal means and contrasts, allowing for a flexible and
+powerful way of analysing differences between conditions.
 
 ## Procedure
+
+We will start by running a “traditional” ERP analysis for a single
+subject using the MNE Python package (Gramfort et al., 2013, 2014) to
+obtain “gold standard” baseline patterns of results. Then, we will first
+attempt to model the evoked potentials using a simple linear model with
+splines, before applying GAMs.
 
 ### Data
 
@@ -84,29 +95,29 @@ fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 
 times = epochs.times
 ax0.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C262B0A0>
+## <matplotlib.lines.Line2D object at 0x00000000BFB4DC70>
 ax0.plot(times, np.mean(condition1, axis=0), label="Audio")
-## [<matplotlib.lines.Line2D object at 0x00000000C261EFD0>]
+## [<matplotlib.lines.Line2D object at 0x00000000BFB66370>]
 ax0.plot(times, np.mean(condition2, axis=0), label="Visual")
-## [<matplotlib.lines.Line2D object at 0x00000000C261E7C0>]
+## [<matplotlib.lines.Line2D object at 0x00000000BFB66700>]
 ax0.legend(loc="upper right")
-## <matplotlib.legend.Legend object at 0x00000000C261E3A0>
+## <matplotlib.legend.Legend object at 0x00000000BFB66970>
 ax0.set_ylabel("uV")
 
 # Difference
 ## Text(0, 0.5, 'uV')
 ax1.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C25B8FA0>
+## <matplotlib.lines.Line2D object at 0x00000000BFB66880>
 ax1.plot(times, condition1.mean(axis=0) - condition2.mean(axis=0))
-## [<matplotlib.lines.Line2D object at 0x00000000C2604580>]
+## [<matplotlib.lines.Line2D object at 0x00000000BFB790A0>]
 ax1.axhline(y=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C26048E0>
+## <matplotlib.lines.Line2D object at 0x00000000BFB6DF10>
 ax1.set_ylabel("Difference")
 
 # T-values
 ## Text(0, 0.5, 'Difference')
 ax2.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C26044C0>
+## <matplotlib.lines.Line2D object at 0x00000000BFB66D90>
 h = None
 for i, c in enumerate(clusters):
     c = c[0]
@@ -120,12 +131,12 @@ for i, c in enumerate(clusters):
                     times[c.stop - 1],
                     color=(0.3, 0.3, 0.3),
                     alpha=0.3)
-## <matplotlib.patches.Polygon object at 0x00000000C25A87F0>
-## <matplotlib.patches.Polygon object at 0x00000000C25A86D0>
+## <matplotlib.patches.Polygon object at 0x00000000BFB79940>
+## <matplotlib.patches.Polygon object at 0x00000000BFB86250>
 hf = ax2.plot(times, t_vals, 'g')
 if h is not None:
     plt.legend((h, ), ('cluster p-value < 0.05', ))
-## <matplotlib.legend.Legend object at 0x00000000C25B8D90>
+## <matplotlib.legend.Legend object at 0x00000000BFB79D00>
 plt.xlabel("time (ms)")
 ## Text(0.5, 0, 'time (ms)')
 plt.ylabel("t-values")
@@ -264,8 +275,8 @@ gam.check(model)
 ## indicate that k is too low, especially if edf is close to k'.
 ## 
 ##                           k'  edf k-index p-value
-## s(Time):Conditionaudio  9.00 8.85    0.99    0.33
-## s(Time):Conditionvisual 9.00 8.93    0.99    0.32
+## s(Time):Conditionaudio  9.00 8.85    1.01    0.70
+## s(Time):Conditionvisual 9.00 8.93    1.01    0.66
 
 model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data)
 ```
@@ -282,9 +293,31 @@ plot_model(model, data)
 data_long <- data %>%
   pivot_longer(starts_with("EEG."), names_to="Channel")
 
-# Won't converge, too much data!
+# 
 # model <- lme4::lmer(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
 # model <- glmmTMB::glmmTMB(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
 ```
 
+Unfortunately, this won’t converge, too much data :(
+
 ## References
+
+<div id="refs" class="references">
+
+<div id="ref-gramfort2013meg">
+
+Gramfort, A., Luessi, M., Larson, E., Engemann, D. A., Strohmeier, D.,
+Brodbeck, C., … others. (2013). MEG and eeg data analysis with
+mne-python. *Frontiers in Neuroscience*, *7*, 267.
+
+</div>
+
+<div id="ref-gramfort2014mne">
+
+Gramfort, A., Luessi, M., Larson, E., Engemann, D. A., Strohmeier, D.,
+Brodbeck, C., … Hämäläinen, M. S. (2014). MNE software for processing
+meg and eeg data. *Neuroimage*, *86*, 446–460.
+
+</div>
+
+</div>
