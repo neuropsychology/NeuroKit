@@ -130,15 +130,15 @@ def _eda_sympathetic_ghiasi(eda_signal, sampling_rate=1000, frequency_band=[0.04
     filtered = signal_filter(normalized, sampling_rate=desired_sampling_rate, lowcut=0.01, highcut=0.5, method='butterworth')
 
     # Divide the signal into segments and obtain the timefrequency representation
-    overlap = 59 / 50  # overlap of 59s in samples
+    overlap = 59 * 50  # overlap of 59s in samples
 
     frequency, time, bins = signal_timefrequency(filtered, sampling_rate=desired_sampling_rate,
                                                  min_frequency=min_frequency,
                                                  max_frequency=max_frequency, method="stft",
-                                                 window=None, window_type='blackman', mode='psd',
+                                                 window=60, window_type='blackman',
                                                  overlap=overlap, show=show)
 
-    eda_symp = np.mean(z)
+    eda_symp = np.mean(bins)
     eda_symp_normalized = eda_symp / np.max(bins)
 
     out = {'EDA_Symp': eda_symp, 'EDA_SympN': eda_symp_normalized}

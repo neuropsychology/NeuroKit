@@ -22,7 +22,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     DataFrame
         A dataframe containing the analyzed RSP features. The analyzed
         features consist of the following:
-        - *"RSP_Rate_Mean"*: the mean heart rate.
+        - *"RSP_Rate_Mean"*: the mean respiratory rate.
         - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude.
         - *"RSP_RRV"*: the different respiratory rate variability metrices. See `rsp_rrv()`
         docstrings for details.
