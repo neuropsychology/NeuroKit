@@ -362,7 +362,7 @@ def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_
     multipeak, weight = _get_multipeak_window(nperseg, window_number)
 
     for i in range(4):
-        frequency, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
+        _, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
                                                     min_frequency=min_frequency,
                                                     max_frequency=max_frequency, method="stft",
                                                     window=window, window_type=multipeak[:, i],
@@ -430,7 +430,7 @@ def _get_multipeak_window(nperseg, window_number=8):
     Rx = scipy.linalg.toeplitz(rpen)
     RR = scipy.linalg.cholesky(Rx)
     C = scipy.linalg.inv(RR.conj().transpose()).dot(Ry).dot(scipy.linalg.inv(RR))
-    T, Q = scipy.linalg.schur(C)
+    _, Q = scipy.linalg.schur(C)
     F = scipy.linalg.inv(RR).dot(Q)
     RD = F.conj().transpose().dot(Ry).dot(F)
     RD = np.diag(RD)
