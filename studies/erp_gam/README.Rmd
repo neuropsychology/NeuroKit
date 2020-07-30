@@ -276,7 +276,7 @@ This plot shows the original raw averages (dotted lines), the predicted values b
 ```{r, message=FALSE, warning=FALSE}
 library(mgcv)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition), data=data)
+model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition), data=data, method="REML")
 ```
 
 ```{r, message=FALSE, warning=FALSE}
@@ -288,7 +288,7 @@ It is possible to increase the number of degrees of freedom.
 ```{r, message=FALSE, warning=FALSE, fig.keep='none'}
 gam.check(model)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data)
+model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data, method="REML")
 ```
 
 ```{r, message=FALSE, warning=FALSE}
