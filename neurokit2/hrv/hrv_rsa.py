@@ -112,9 +112,9 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
      'RSA_P2T_SD': ...,
      'RSA_P2T_NoRSA': ...,
      'RSA_PorgesBohrer': ...,
-     'RSA_Gate_Mean': ...,
-     'RSA_Gate_Mean_log': ...,
-     'RSA_Gate_SD': ...}
+     'RSA_Gates_Mean': ...,
+     'RSA_Gates_Mean_log': ...,
+     'RSA_Gates_SD': ...}
     >>>
     >>> # Get RSA as a continuous signal
     >>> rsa = nk.hrv_rsa(ecg_signals, rsp_signals, info, sampling_rate=100, continuous=True)
@@ -374,9 +374,9 @@ def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_
 
     # Sanitize output
     if continuous is False:
-        rsa = {"RSA_Gate_Mean": np.nanmean(meanRSA)}
-        rsa["RSA_Gate_Mean_log"] = np.log(rsa["RSA_Gate_Mean"])  # pylint: disable=E1111
-        rsa["RSA_Gate_SD"] = np.nanstd(meanRSA, ddof=1)
+        rsa = {"RSA_Gates_Mean": np.nanmean(meanRSA)}
+        rsa["RSA_Gates_Mean_log"] = np.log(rsa["RSA_Gates_Mean"])  # pylint: disable=E1111
+        rsa["RSA_Gates_SD"] = np.nanstd(meanRSA, ddof=1)
     else:
         # For window=32, meanRSA is RSA from 16th second to xth second where x=recording
         # duration-16secs

@@ -100,10 +100,10 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
         frequency, time, tfr = short_term_ft(
                 signal,
                 sampling_rate=sampling_rate,
-                min_frequency=min_frequency,
                 overlap=overlap,
                 window=window,
                 mode=mode,
+                min_frequency=min_frequency,
                 window_type=window_type
                 )
     # CWT
@@ -134,8 +134,6 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
                 )
 
     # Sanitize output
-    if max_frequency is None:
-        max_frequency = frequency[-1]
     lower_bound = len(frequency) - len(frequency[frequency >= min_frequency])
     f = frequency[(frequency >= min_frequency) & (frequency <= max_frequency)]
     z = tfr[lower_bound:lower_bound + len(f)]
@@ -148,8 +146,6 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
                 f,
                 signal=signal,
                 method=method,
-                min_frequency=min_frequency,
-                max_frequency=max_frequency
                 )
 
 

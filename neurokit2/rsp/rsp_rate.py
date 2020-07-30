@@ -12,6 +12,9 @@ def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1,
     ----------
     rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by `rsp_clean()`.
+    peaks : Union[list, np.array, pd.Series, pd.DataFrame]
+        The respiration peaks as returned by `rsp_peaks()`. If None (default), respiration peaks
+        will be automatically identified from the `rsp_clean` signal.
     sampling_rate : int
         The sampling frequency of 'rsp_cleaned' (in Hz, i.e., samples/second).
     window : int
@@ -49,7 +52,7 @@ def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1,
 
     if method.lower() in ["peak", "peaks", "signal_rate"]:
         if peaks is None:
-            peaks, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
+            peaks, _ = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
         rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(rsp_cleaned),
                                interpolation_method=interpolation_method)
 

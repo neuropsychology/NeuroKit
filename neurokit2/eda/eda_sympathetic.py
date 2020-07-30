@@ -132,7 +132,7 @@ def _eda_sympathetic_ghiasi(eda_signal, sampling_rate=1000, frequency_band=[0.04
     # Divide the signal into segments and obtain the timefrequency representation
     overlap = 59 * 50  # overlap of 59s in samples
 
-    frequency, time, bins = signal_timefrequency(filtered, sampling_rate=desired_sampling_rate,
+    _, _, bins = signal_timefrequency(filtered, sampling_rate=desired_sampling_rate,
                                                  min_frequency=min_frequency,
                                                  max_frequency=max_frequency, method="stft",
                                                  window=60, window_type='blackman',
