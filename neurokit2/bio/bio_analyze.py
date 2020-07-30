@@ -65,11 +65,13 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Analyze
     >>> nk.bio_analyze(epochs, sampling_rate=100) #doctest: +ELLIPSIS
-      Label Condition  Event_Onset  ...  SCR_RiseTime  SCR_RecoveryTime   RSA_P2T
-    1     1  Negative          ...  ...           ...               ...       ...
-    2     2   Neutral          ...  ...           ...               ...       ...
-    3     3   Neutral          ...  ...           ...               ...       ...
-    4     4  Negative          ...  ...           ...               ...       ...
+      Label Condition  Event_Onset  ...         RSA_Gates
+    1     1  Negative          ...  ...           ...
+    2     2   Neutral          ...  ...           ...
+    3     3   Neutral          ...  ...           ...
+    4     4  Negative          ...  ...           ...
+
+    [4 rows x 39 columns]
     >>>
     >>> # Example 2: Interval-related analysis
     >>> # Download data
@@ -80,9 +82,10 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Analyze
     >>> nk.bio_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
-       ECG_Rate_Mean  HRV_RMSSD  ...  RSA_P2T_NoRSA  RSA_PorgesBohrer
+       ECG_Rate_Mean  HRV_RMSSD  ...  RSA_Gates_Mean_log  RSA_Gates_SD
     0            ...        ...  ...            ...               ...
 
+    [1 rows x 84 columns]
     """
     features = pd.DataFrame()
     method = method.lower()
@@ -187,16 +190,16 @@ def _bio_analyze_findduration(data, sampling_rate=1000):
 def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     # RSA features for interval-related analysis
 
+
     if isinstance(data, pd.DataFrame):
         rsa = hrv_rsa(data, sampling_rate=sampling_rate, continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index").T
 
-    if isinstance(data, dict):
-        rsa = {}
+    elif isinstance(data, dict):
         for index in data:
             rsa[index] = {}  # Initialize empty container
             data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
-            rsa[index] = hrv_rsa(data[index], sampling_rate=sampling_rate)
+            rsa[index] = hrv_rsa(data[index], sampling_rate=sampling_rate, continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     return rsa
@@ -211,8 +214,9 @@ def _bio_analyze_rsa_event(data, rsa={}):
             rsa[i] = _bio_analyze_rsa_epoch(data[i], rsa[i])
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
-    if isinstance(data, pd.DataFrame):
-        rsa = data.groupby("Label")["RSA_P2T"].mean()
+    elif isinstance(data, pd.DataFrame):
+        rsa["RSA_P2T"] = np.nanmean(data.groupby("Label")["RSA_P2T"])
+        rsa["RSA_Gates"] = np.nanmean(data.groupby("Label")["RSA_Gates"])
         # TODO Needs further fixing
 
     return rsa
@@ -221,12 +225,18 @@ def _bio_analyze_rsa_event(data, rsa={}):
 def _bio_analyze_rsa_epoch(epoch, output={}):
     # RSA features for event-related analysis: epoching
 
+    # To remove baseline
     if np.min(epoch.index.values) <= 0:
         baseline = epoch["RSA_P2T"][epoch.index <= 0].values
         signal = epoch["RSA_P2T"][epoch.index > 0].values
         output["RSA_P2T"] = np.mean(signal) - np.mean(baseline)
+        baseline = epoch["RSA_Gates"][epoch.index <= 0].values
+        signal = epoch["RSA_Gates"][epoch.index > 0].values
+        output["RSA_Gates"] = np.nanmean(signal) - np.nanmean(baseline)
     else:
         signal = epoch["RSA_P2T"].values
         output["RSA_P2T"] = np.mean(signal)
+        signal = epoch["RSA_Gates"].values
+        output["RSA_Gates"] = np.nanmean(signal)
 
     return output
