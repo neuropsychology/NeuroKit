@@ -9,7 +9,7 @@ from .complexity_embedding import complexity_embedding
 from .complexity_optimize import complexity_optimize
 from .complexity_r import complexity_r
 from .complexity_simulate import complexity_simulate
-from .transition_matrix import transition_matrix, transition_matrix_simulate, transition_matrix_plot
+from .transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Entropy
 from .entropy_shannon import entropy_shannon

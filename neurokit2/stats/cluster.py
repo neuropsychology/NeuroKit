@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import warnings
+import functools
 import numpy as np
 import pandas as pd
 import sklearn.cluster
@@ -7,7 +8,6 @@ import sklearn.mixture
 import sklearn.decomposition
 import scipy.spatial
 import scipy.linalg
-import functools
 
 
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):

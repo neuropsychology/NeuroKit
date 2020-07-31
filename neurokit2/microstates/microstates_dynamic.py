@@ -51,7 +51,7 @@ def microstates_dynamic(microstates):
         for col in T.columns:
             out[str(T.loc[row].name) + "_to_" + str(T[col].name)] = T[col][row]
 
-    for rez in results.keys():
+    for _, rez in enumerate(results):
         if rez not in ["Observed", "Expected"]:
             out[rez] = results[rez]
 

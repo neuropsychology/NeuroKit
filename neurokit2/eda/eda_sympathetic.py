@@ -11,8 +11,7 @@ from ..stats import standardize
 
 
 def eda_sympathetic(eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25], method='posada', show=False):
-    """
-    Obtain electrodermal activity (EDA) indexes of sympathetic nervous system.
+    """Obtain electrodermal activity (EDA) indexes of sympathetic nervous system.
 
     Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
     of EDA signal is represented in the frequency band of 0.045-0.25Hz.
