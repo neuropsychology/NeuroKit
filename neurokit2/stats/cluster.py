@@ -49,7 +49,6 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>>
     >>> # Cluster using different methods
     >>> clustering_kmeans, clusters_kmeans, info = nk.cluster(data, method="kmeans", n_clusters=3)
-    >>> clustering_kmod, clusters_kmod, info = nk.cluster(data, method="kmod", n_clusters=3)
     >>> clustering_spectral, clusters_spectral, info = nk.cluster(data, method="spectral", n_clusters=3)
     >>> clustering_hierarchical, clusters_hierarchical, info = nk.cluster(data, method="hierarchical", n_clusters=3)
     >>> clustering_agglomerative, clusters_agglomerative, info= nk.cluster(data, method="agglomerative", n_clusters=3)
@@ -57,6 +56,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_bayes, clusters_bayes, info = nk.cluster(data, method="mixturebayesian", n_clusters=3)
     >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
+    >>> clustering_kmod, clusters_kmod, info = nk.cluster(data, method="kmod", n_clusters=3)
     >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
@@ -195,23 +195,22 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 # =============================================================================
 # Modified K-means
 # =============================================================================
-def _cluster_kmod(data, n_clusters=2, init_times=None,
-                  max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
-    """The modified K-means clustering algorithm, as adapted from Marijn van Vliet.
+def _cluster_kmod(data, n_clusters=4, max_iterations=1000,
+                        threshold=1e-6, random_state=None, **kwargs):
+    """The modified K-means clustering algorithm,
 
-    https://github.com/wmvanvliet/mne_microstates/blob/master/microstates.py
+    adapted from Marijn van Vliet and Frederic von Wegner.
+
+    https://github.com/wmvanvliet/mne_microstates
+    https://github.com/Frederic-vW/eeg_microstates
 
     Parameters
     -----------
-    data : np.ndarray
-        An array (channels x times) of MEEG data, obtained from Raw or Epochs object from MNE.
+    n_clusters : int
+        The number of unique microstates to find. Defaults to 4.
     max_iterations : int
         The maximum number of iterations to perform in the k-means algorithm.
         Defaults to 1000.
-    init_times : array
-        Random timepoints to be selected for topographic maps. Defaults to None.
-    n_clusters : int
-        The number of unique microstates to find. Defaults to 4.
     threshold : float
         The threshold of convergence for the k-means algorithm, based on
         relative change in noise variance. Defaults to 1e-6.
@@ -231,83 +230,6 @@ def _cluster_kmod(data, n_clusters=2, init_times=None,
     info : dict
         Information about the number of clusters, the function and model used for clustering.
 
-    """
-    n_samples, n_channels = data.shape
-    data = data.T
-
-    # Cache this value for later
-    data_sum_sq = np.sum(data ** 2)
-
-    # Select random timepoints for our initial topographic maps
-    if not isinstance(random_state, np.random.RandomState):
-        random_state = np.random.RandomState(random_state)
-    if init_times is None:
-        init_times = random_state.choice(n_samples, size=n_clusters, replace=False)
-
-    # Iterations
-    states = data[:, init_times].T
-    states /= np.linalg.norm(states, axis=1, keepdims=True)  # Normalize the maps
-
-    # Convergence criterion: variance estimate (step 6)
-    i = 0
-    prev_residual = 1
-    residual = 0
-    while ((np.abs((prev_residual - residual) / prev_residual) > threshold) & (i < max_iterations)):
-        # Assign each sample to the best matching microstate
-        activation = states.dot(data)
-        segmentation = np.argmax(np.abs(activation), axis=0)
-
-        # Recompute the topographic maps of the microstates, based on the
-        # samples that were assigned to each state.
-        for state in np.arange(n_clusters):
-            idx = (segmentation == state)
-            if np.sum(idx) == 0:
-                warnings.warn('Some microstates are never activated')
-                states[state] = 0
-                continue
-
-            # Find largest eigenvector
-            cov = data[:, idx].dot(data[:, idx].T)
-            _, vec = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
-            states[state] = vec.ravel()
-            states[state] /= np.linalg.norm(states[state])
-
-        # Estimate residual noise
-        act_sum_sq = np.sum(np.sum(states[segmentation].T * data, axis=0) ** 2)
-        residual = np.abs(data_sum_sq - act_sum_sq)
-        residual /= np.float(n_samples * (n_channels - 1))
-
-        # Next iteration
-        prev_residual = residual
-        i += 1
-
-    if i == max_iterations:
-        warnings.warn("Modified K-means algorithm failed to converge after " + str(i) + "",
-                      "iterations. Consider increasing 'max_iterations'.")
-
-    # Get distance, and back fit k-means clustering on data
-    prediction = _cluster_getdistance(data.T, states)
-    prediction["Cluster"] = prediction.abs().idxmin(axis=1).values
-    prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
-
-    # Copy function with given parameters
-    clustering_function = functools.partial(_cluster_kmod,
-                                            n_clusters=n_clusters,
-                                            max_iterations=max_iterations,
-                                            threshold=threshold,
-                                            random_state=random_state,
-                                            **kwargs)
-
-    # Info dump
-    info = {"n_clusters": n_clusters,
-            "clustering_function": clustering_function,
-            "random_state": random_state}
-
-    return prediction, states, info
-
-def _cluster_kmod_apply(data, n_clusters=2, max_iterations=1000,
-                        threshold=1e-6, random_state=None, **kwargs):
-    """
     """
     n_samples, n_channels = data.shape
 
@@ -361,11 +283,26 @@ def _cluster_kmod_apply(data, n_clusters=2, max_iterations=1000,
         warnings.warn("Modified K-means algorithm failed to converge after " + str(i) + "",
                       "iterations. Consider increasing 'max_iterations'.")
 
+    # De-normalize
+    clusters_unnormalized = _cluster_getclusters(data, segmentation)
+    prediction = _cluster_getdistance(data, clusters_unnormalized)
+    prediction["Cluster"] = segmentation
+
+     # Copy function with given parameters
+    clustering_function = functools.partial(_cluster_kmod,
+                                            n_clusters=n_clusters,
+                                            max_iterations=max_iterations,
+                                            threshold=threshold,
+                                            random_state=random_state,
+                                            **kwargs)
+
     # Info dump
     info = {"n_clusters": n_clusters,
-            "random_state": random_state}
+            "clustering_function": clustering_function,
+            "random_state": random_state,
+            "clusters_normalized": clusters}
 
-    return segmentation, clusters, info
+    return prediction, clusters_unnormalized, info
 
 
 
@@ -591,15 +528,12 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
         cluster_data = data.copy()
 
     n_maps = maps.shape[0]
-    print("\t[+] Initial number of clusters: {:d}\n".format(n_maps))
 
     # cluster indices w.r.t. original size, normalized GFP peak data
     Ci = [[k] for k in range(n_maps)]
 
     # Main loop: atomize + agglomerate
     while (n_maps > n_clusters):
-        s = "\r{:s}\r\t\tAAHC > n: {:d} => {:d}".format(80*" ", n_maps, n_maps-1)
-        stdout.write(s); stdout.flush()
 
         # correlations of the data sequence with each cluster
         m_x, s_x = data.mean(axis=1, keepdims=True), data.std(axis=1)
