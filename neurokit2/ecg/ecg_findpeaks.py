@@ -5,7 +5,9 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import signal_findpeaks, signal_plot, signal_smooth, signal_zerocrossings
+import neurokit2 as nk
+
+from neurokit2.signal import signal_findpeaks, signal_plot, signal_smooth, signal_zerocrossings
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
@@ -56,6 +58,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> # Different methods
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
     >>> pantompkins1985 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
+    >>> nabian2018 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="nabian2018"), method="nabian2018")
     >>> hamilton2002 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
     >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
     >>> christov2004 = nk.ecg_findpeaks(cleaned, method="christov2004")
@@ -68,6 +71,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> # Visualize
     >>> nk.events_plot([neurokit["ECG_R_Peaks"],
     ...                       pantompkins1985["ECG_R_Peaks"],
+    ...                       nabian2018["ECG_R_Peaks"],
     ...                       hamilton2002["ECG_R_Peaks"],
     ...                       christov2004["ECG_R_Peaks"],
     ...                       gamboa2008["ECG_R_Peaks"],
@@ -105,6 +109,10 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real Time
       Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
+      
+    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018). 
+      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. 
+      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11. doi:10.1109/jtehm.2018.2878000
 
     """
     # Try retrieving right column
@@ -123,6 +131,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned, sampling_rate, show=show)
     elif method in ["pantompkins", "pantompkins1985"]:
         rpeaks = _ecg_findpeaks_pantompkins(ecg_cleaned, sampling_rate)
+    elif method in ["nabian", "nabian2018"]:
+        rpeaks = _ecg_findpeaks_nabian2018(ecg_cleaned, sampling_rate)
     elif method in ["gamboa2008", "gamboa"]:
         rpeaks = _ecg_findpeaks_gamboa(ecg_cleaned, sampling_rate)
     elif method in ["ssf", "slopesumfunction", "zong", "zong2003"]:
@@ -305,6 +315,35 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
     mwa_peaks = np.array(mwa_peaks, dtype="int")
     return mwa_peaks
 
+# ===========================================================================
+# Nabian et al. (2018)
+# ===========================================================================
+def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000):
+    """R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins
+    algorithm.
+    
+    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018). 
+    An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. 
+    IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11. 
+    doi:10.1109/jtehm.2018.2878000
+    
+    """ 
+    window_size = int(0.4 * sampling_rate)
+    
+    peaks = np.zeros(len(signal))
+    
+    for i in range(1+window_size,len(signal)-window_size):
+        ecg_window = signal[i-window_size:i+window_size]
+        rpeak = np.argmax(ecg_window)
+    
+        if i == (i-window_size-1+rpeak):
+            peaks[i] = 1
+    
+    rpeaks = np.where(peaks==1)[0]
+            
+    # min_distance = 200
+    
+    return rpeaks
 
 # =============================================================================
 # Hamilton (2002)
@@ -1006,6 +1045,8 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
 
     missed_peaks = []
     peaks = []
+
+detection = cleaned 
 
     for i in range(len(detection)):  # pylint: disable=R1702,C0200
 
