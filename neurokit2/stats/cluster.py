@@ -93,7 +93,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> axes[4, 1].set_title("AAHC (Frederic's method)")
 
     """
-    # Sanity fixes
+    # Sanity checks
     if isinstance(data, pd.DataFrame):
         data = data.values
 

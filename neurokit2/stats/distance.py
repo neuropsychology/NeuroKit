@@ -26,11 +26,10 @@ def distance(X=None, method="mahalanobis"):
 
     Examples
     ---------
-    >>> from sklearn import datasets
     >>> import neurokit2 as nk
     >>>
-    >>> X = datasets.load_iris().data
-    >>> vector = distance(X)
+    >>> X = nk.data("iris")
+    >>> vector = nk.distance(X)
     >>> vector #doctest: +SKIP
 
     """

@@ -47,7 +47,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
        n_Clusters  Score_Silhouette  ...  Score_GAP_sk  Score_GAPmod_sk
     0         ...               ...  ...           ...              ...
 
-    [1 rows x 9 columns]
+    [1 rows x 10 columns]
 
     References
     ----------
@@ -59,8 +59,12 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
     definitions with and without logarithm function. arXiv preprint arXiv:1103.4767.
 
     """
+    # Sanity checks
     if isinstance(clustering, tuple):
         clustering, clusters, info = clustering
+
+    if isinstance(data, pd.DataFrame):
+        data = data.values
 
     n_clusters = len(clusters)
     clustering = clustering["Cluster"]
@@ -103,6 +107,18 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
             general["Score_AIC"] = info["sklearn_model"].aic(data)
             general["Score_BIC"] = info["sklearn_model"].bic(data)
             general["Score_LogLikelihood"] = info["sklearn_model"].score(data)
+            # For sklearn version > 0.20
+            try:
+                import sklearn.model_selection
+                general["Score_CV10"] = np.mean(
+                        sklearn.model_selection.cross_val_score(info["sklearn_model"], data, cv=10)
+                        )
+            # sklearn version < 0.20 compatibility
+            except ModuleNotFoundError:
+                import sklearn.cross_validation
+                general["Score_CV10"] = np.mean(
+                        sklearn.cross_validation.cross_val_score(info["sklearn_model"], data, cv=10)
+                        )
 
     general = pd.DataFrame.from_dict(general, orient="index").T
     return individual, general
