@@ -4,7 +4,7 @@ import numpy as np
 from ..misc import replace
 
 
-def microstates_classify(microstates, segmentation=None):
+def microstates_classify(segmentation, microstates):
     """Reorder (sort) the microstates (experimental).
 
     Based on the pattern of values in the vector of channels (thus, depends on how channels
@@ -12,15 +12,15 @@ def microstates_classify(microstates, segmentation=None):
 
     Parameters
     ----------
-    microstates : Union[np.array, dict]
-        Array of microstates maps or dict (output from ``microstates_segment``).
     segmentation : Union[np.array, dict]
-        Vector containing the segmentation. Defaults to None.
+        Vector containing the segmentation.
+    microstates : Union[np.array, dict]
+        Array of microstates maps . Defaults to None.
 
     Returns
     -------
-    dict
-        As returned by ``nk.microstates_segment()``.
+    segmentation, microstates
+        Tuple containing re-ordered input.
 
     Examples
     ------------
@@ -38,37 +38,15 @@ def microstates_classify(microstates, segmentation=None):
     >>> nk.microstates_plot(out, gfp=out["GFP"][0:100])
 
     """
-    # Prepare the output type
-    if segmentation is None:
-        return_segmentation = False
-    else:
-        return_segmentation = True
-
-    # Try retrieving info
-    if isinstance(microstates, dict):
-        segmentation = microstates["Sequence"]
-        states = microstates["Microstates"]
-    else:
-        segmentation = None
-        states = microstates
-
     # Reorder
-    new_order = _microstates_sort(states)
-    states = states[new_order]
-    if segmentation is not None:
-        replacement = {i: j for i, j in enumerate(new_order)}
-        segmentation = replace(segmentation, replacement)
+    new_order = _microstates_sort(microstates)
+    microstates = microstates[new_order]
 
+    replacement = {i: j for i, j in enumerate(new_order)}
+    segmentation = replace(segmentation, replacement)
 
-    if isinstance(microstates, dict):
-        microstates["Microstates"] = states
-        microstates["Sequence"] = segmentation
-        states = microstates
+    return segmentation, microstates
 
-    if return_segmentation is True:
-        return states, segmentation
-    else:
-        return states
 
 
 # =============================================================================

@@ -243,12 +243,15 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000,
 
     # Iterations
     clusters = data[init_times, :]
-    clusters /= np.linalg.norm(clusters, axis=1, keepdims=True)  # Normalize the maps
+
+    # Normalize row-wise (across EEG channels)
+    clusters /= np.linalg.norm(clusters, axis=1, keepdims=True)
 
     # Convergence criterion: variance estimate (step 6)
     prev_residual = 1
     residual = 0
     for i in range(max_iterations):
+
         # Assign each sample to the best matching microstate
         activation = clusters.dot(data.T)
         segmentation = np.argmax(np.abs(activation), axis=0)
