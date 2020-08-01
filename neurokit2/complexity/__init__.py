@@ -81,6 +81,5 @@ __all__ = [
     "complexity_d2",
     "complexity_plot",
     "transition_matrix",
-    "transition_matrix_simulate",
-    "transition_matrix_plot",
+    "transition_matrix_simulate"
 ]
