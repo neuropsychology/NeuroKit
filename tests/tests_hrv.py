@@ -3,6 +3,7 @@ import pandas as pd
 import pytest
 
 import neurokit2 as nk
+import neurokit2.misc as misc
 
 
 def test_hrv_time():
@@ -88,6 +89,9 @@ def test_hrv_rsa():
       'RSA_P2T_SD',
       'RSA_P2T_NoRSA',
       'RSA_PorgesBohrer',
+      'RSA_Gates_Mean',
+      'RSA_Gates_Mean_log',
+      'RSA_Gates_SD'
      ]
 
     rsa_features = nk.hrv_rsa(
@@ -101,13 +105,13 @@ def test_hrv_rsa():
     assert all(key in rsa_feature_columns for key in rsa_features.keys())
 
     # Test simulate RSP signal warning
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"RSP signal not found. For this.*"):
+    with pytest.warns(misc.NeuroKitWarning, match=r"RSP signal not found. For this.*"):
         nk.hrv_rsa(ecg_signals, rpeaks=info, sampling_rate=100, continuous=False)
 
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"RSP signal not found. RSP signal.*"):
+    with pytest.warns(misc.NeuroKitWarning, match=r"RSP signal not found. RSP signal.*"):
         nk.hrv_rsa(ecg_signals, pd.DataFrame(), rpeaks=info, sampling_rate=100, continuous=False)
 
     # Test missing rsp onsets/centers
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"Couldn't find rsp cycles onsets and centers.*"):
+    with pytest.warns(misc.NeuroKitWarning, match=r"Couldn't find rsp cycles onsets and centers.*"):
         rsp_signals["RSP_Peaks"] = 0
         nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)

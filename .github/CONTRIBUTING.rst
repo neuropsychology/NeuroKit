@@ -34,6 +34,20 @@ Structure and code
 - Please *document and comment* your code, so that the purpose of each step (or code line) is stated in a clear and understandable way.
 - Don't forget to add tests and documentation (a description, examples, etc.) to your functions.
 
+Naming conventions
+^^^^^^^^^^^^^^^^^^^^
+
+We like consistency for the names of functions, arguments etc.
+
+Also, when you create a **new branch**, consider naming it with a pattern corresponding to the content of your additions. For instance, ``fix/fix_this_bug``, ``feature/add_that``, ``docs/add_info_on_this``, ``change/changed_default_arg``, ``improvement/this_function_faster``. Likewise, when you make a **pull request** (PR), name it accordingly with the main type between brackets, example:
+
+- [Fix] bug fix etc
+- [Feature] new feature or function
+- [Docs] typos, documentation and new articles
+- [Change] changes in args, names, functions etc (often breaking changes)
+- [Improvement] refining of code, efficiency improvements etc.
+
+
 Run code checks
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -66,8 +80,8 @@ The first three commands will make some modifications to your code so that it is
     flake8 neurokit2 --exclude neurokit2/__init__.py --max-line-length=127 --max-complexity=10 --ignore E303,C901,E203,W503
     pylint neurokit2 --max-line-length=127 --load-plugins=pylint.extensions.docparams --load-plugins=pylint.extensions.docstyle --variable-naming-style=any --argument-naming-style=any --reports=n --suggestion-mode=y --disable=E303 --disable=R0913 --disable=R0801 --disable=C0114 --disable=E203 --disable=E0401 --disable=W9006 --disable=C0330 --disable=R0914 --disable=R0912 --disable=R0915 --disable=W0102 --disable=W0511 --disable=C1801 --disable=C0111 --disable=R1705 --disable=R1720 --disable=C0301 --disable=C0415 --disable=C0103 --disable=C0302 --disable=R1716 --disable=W0632 --disable=E1136 --extension-pkg-whitelist=numpy --exit-zero
 
-Avoid Semantic Errors
-^^^^^^^^^^^^^^^^^^^^^^
+Common errors and warnings
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Most errors detected by our code checks can be easily automated with ``isort``, ``black``, and ``docformatter``. This leaves us with the semantic errors picked up by ``pylint``, the last style check, which often have to be fixed manually. Below is a list of the most common semantic errors that occur when writing code/documentation, so before you commit any changes, do make sure you have fixed these.
 

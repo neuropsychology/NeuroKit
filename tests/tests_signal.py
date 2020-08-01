@@ -257,6 +257,45 @@ def test_signal_power():
     assert np.allclose(np.mean(pwr1.iloc[0] - pwr2.iloc[0]), 0, atol=0.01)
 
 
+def test_signal_timefrequency():
+
+    signal = nk.signal_simulate(duration = 50, frequency=5) + 2 * nk.signal_simulate(duration = 50, frequency=20)
+
+    # short-time fourier transform
+    frequency, time, stft = nk.signal_timefrequency(signal, method="stft", min_frequency=1, max_frequency=50, show=False)
+
+    assert len(frequency) == stft.shape[0]
+    assert len(time) == stft.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(stft[indices_freq5]) < np.sum(stft[indices_freq20])
+
+    # wavelet transform
+    frequency, time, cwtm = nk.signal_timefrequency(signal, method="cwt", max_frequency=50, show=False)
+
+    assert len(frequency) == cwtm.shape[0]
+    assert len(time) == cwtm.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(cwtm[indices_freq5]) < np.sum(cwtm[indices_freq20])
+
+    # wvd
+    frequency, time, wvd = nk.signal_timefrequency(signal, method="wvd", max_frequency=50, show=False)
+    assert len(frequency) == wvd.shape[0]
+    assert len(time) == wvd.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(wvd[indices_freq5]) < np.sum(wvd[indices_freq20])
+
+    # pwvd
+    frequency, time, pwvd = nk.signal_timefrequency(signal, method="pwvd",
+                                                    max_frequency=50, show=False)
+    assert len(frequency) == pwvd.shape[0]
+    assert len(time) == pwvd.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(pwvd[indices_freq5]) < np.sum(pwvd[indices_freq20])
+
 def test_signal_psd(recwarn):
     warnings.simplefilter("always")
 
@@ -286,3 +325,4 @@ def test_signal_distort():
     ):
         signal = nk.signal_simulate(duration=1, frequency=1, sampling_rate=10)
         nk.signal_distort(signal, noise_amplitude=1, noise_frequency=0.1, silent=False)
+

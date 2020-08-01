@@ -2,10 +2,10 @@
 import pandas as pd
 import scipy
 import numpy as np
-import matplotlib.pyplot as plt
 
 from ..signal.signal_power import _signal_power_instant_get
 from ..signal.signal_psd import _signal_psd_welch
+from ..signal import signal_timefrequency
 from ..signal import signal_filter, signal_resample
 from ..stats import standardize
 
@@ -129,34 +129,15 @@ def _eda_sympathetic_ghiasi(eda_signal, sampling_rate=1000, frequency_band=[0.04
     filtered = signal_filter(normalized, sampling_rate=desired_sampling_rate, lowcut=0.01, highcut=0.5, method='butterworth')
 
     # Divide the signal into segments and obtain the timefrequency representation
-    nperseg = int((5 / min_frequency) * desired_sampling_rate)
-    overlap = 59 / 50  # overlap of 59s in samples
-    frequency, time, bins = scipy.signal.spectrogram(filtered, fs=desired_sampling_rate, window='blackman',
-                                                     nperseg=nperseg, noverlap=overlap)
+    overlap = 59 * 50  # overlap of 59s in samples
 
-    lower_bound = len(frequency) - len(frequency[frequency > min_frequency])
-    f = frequency[(frequency > min_frequency) & (frequency < max_frequency)]
-    z = bins[lower_bound:lower_bound + len(f)]
+    _, _, bins = signal_timefrequency(filtered, sampling_rate=desired_sampling_rate,
+                                                 min_frequency=min_frequency,
+                                                 max_frequency=max_frequency, method="stft",
+                                                 window=60, window_type='blackman',
+                                                 overlap=overlap, show=show)
 
-    # Visualization
-    if show is True:
-        fig = plt.figure()
-        spec = plt.pcolormesh(time, f, np.abs(z),
-                              cmap=plt.get_cmap("viridis"))
-        plt.colorbar(spec)
-        plt.title('STFT Magnitude')
-        plt.ylabel('Frequency (Hz)')
-        plt.xlabel('Time (sec)')
-
-        fig, ax = plt.subplots()
-        for i in range(len(time)):
-            ax.plot(f, np.abs(z[:, i]), label="Segment" + str(np.arange(len(time))[i] + 1))
-        ax.legend()
-        ax.set_title('Power Spectrum Density (PSD)')
-        ax.set_ylabel('PSD (ms^2/Hz)')
-        ax.set_xlabel('Frequency (Hz)')
-
-    eda_symp = np.mean(z)
+    eda_symp = np.mean(bins)
     eda_symp_normalized = eda_symp / np.max(bins)
 
     out = {'EDA_Symp': eda_symp, 'EDA_SympN': eda_symp_normalized}
