@@ -73,7 +73,9 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
         data = data.values
 
     n_clusters = len(clusters)
-    clustering = clustering["Cluster"]
+
+    if isinstance(clustering, pd.DataFrame):
+        clustering = clustering["Cluster"]
 
     # Individual
     individual = {}

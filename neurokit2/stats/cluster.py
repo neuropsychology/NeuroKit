@@ -8,6 +8,8 @@ import sklearn.mixture
 import sklearn.decomposition
 import scipy.spatial
 import scipy.linalg
+
+
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     """Performs clustering of data according to different algorithms.
 
