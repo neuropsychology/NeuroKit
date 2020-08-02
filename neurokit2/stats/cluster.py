@@ -8,8 +8,6 @@ import sklearn.mixture
 import sklearn.decomposition
 import scipy.spatial
 import scipy.linalg
-
-
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     """Performs clustering of data according to different algorithms.
 
@@ -195,8 +193,7 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 # =============================================================================
 # Modified K-means
 # =============================================================================
-def _cluster_kmod(data, n_clusters=4, max_iterations=1000,
-                        threshold=1e-6, random_state=None, **kwargs):
+def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
     """The modified K-means clustering algorithm,
 
     adapted from Marijn van Vliet and Frederic von Wegner.
@@ -254,8 +251,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000,
 
         # Step 3: Assign each sample to the best matching microstate
         activation = clusters.dot(data.T)
-#        activation /= (n_channels * np.outer(gfp_values, np.std(clusters, axis=1)).T)  # From eeg_microstates
-        segmentation = np.argmax(activation ** 2, axis=0)
+        segmentation = np.argmax(np.abs(activation), axis=0)
 
         # Step 4: Recompute the topographic maps of the microstates, based on the
         # samples that were assigned to each state.
@@ -278,8 +274,8 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000,
             state_vals = eigen_vectors.ravel()
 
             # Get map (method 2 - see https://github.com/wmvanvliet/mne_microstates/issues/5)
-#            state_vals = data_state.T.dot(activation[idx, state])
-#            state_vals = state_vals / np.linalg.norm(state_vals[state])  # Normalize Map
+#            state_vals = data_state.T.dot(activation[state, idx])
+#            state_vals = state_vals / np.linalg.norm(state_vals)  # Normalize Map
 
             # Normalize map
             clusters[state, :] = state_vals
@@ -623,6 +619,7 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
 # # Utils
 # =============================================================================
 # =============================================================================
+
 def _cluster_getdistance(data, clusters):
     """Distance between samples and clusters
     """

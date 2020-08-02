@@ -4,10 +4,14 @@ import pandas as pd
 import sklearn.cluster
 import sklearn.metrics
 import sklearn.mixture
+try:
+    import sklearn.model_selection as sklearn_model_selection  # sklearn version > 0.20
+except ModuleNotFoundError:
+    import sklearn.cross_validation as sklearn_model_selection  # sklearn version < 0.20
 import scipy.spatial
 
 
-def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
+def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **kwargs):
     """Compute quality of the clustering using several metrices.
 
     Parameters
@@ -22,6 +26,8 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
         Information about the number of clusters, the function and model used for clustering, generated from ``nk.cluster()``.
     n_random : int
         The number of random initializations to cluster random data for calculating the GAP statistic.
+    **kwargs
+        Other argument to be passed on, for instance GFP as 'sd' in microstates.
 
     Returns
     -------
@@ -94,6 +100,8 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
 
     # Variance explained
     general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters)
+    general["Score_GEV"] = _cluster_quality_gev(data, clusters, clustering, **kwargs)
+    general["Score_CrossValidation"] = _cluster_quality_crossvalidation(data, clusters, clustering)
 
     # Gap statistic
     general.update(_cluster_quality_gap(data,
@@ -107,18 +115,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10):
             general["Score_AIC"] = info["sklearn_model"].aic(data)
             general["Score_BIC"] = info["sklearn_model"].bic(data)
             general["Score_LogLikelihood"] = info["sklearn_model"].score(data)
-            # For sklearn version > 0.20
-            try:
-                import sklearn.model_selection
-                general["Score_CV10"] = np.mean(
-                        sklearn.model_selection.cross_val_score(info["sklearn_model"], data, cv=10)
-                        )
-            # sklearn version < 0.20 compatibility
-            except ModuleNotFoundError:
-                import sklearn.cross_validation
-                general["Score_CV10"] = np.mean(
-                        sklearn.cross_validation.cross_val_score(info["sklearn_model"], data, cv=10)
-                        )
+            sklearn_model_selection.cross_val_score(info["sklearn_model"], data, cv=10)
 
     general = pd.DataFrame.from_dict(general, orient="index").T
     return individual, general
@@ -191,3 +188,61 @@ def _cluster_quality_gap(data, clusters, info, n_random=10):
 
     out = {"Score_GAP": gap, "Score_GAPmod": gap_star, "Score_GAP_sk": s_k, "Score_GAPmod_sk": s_k_star}
     return out
+
+
+def _cluster_quality_crossvalidation(data, clusters, clustering):
+    """Cross-validation index
+
+    The original code by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L600
+    leads to an error when the denominator is 0.
+    """
+    n_rows, n_cols = data.shape
+    var = np.sum(data**2) - np.sum(np.sum(clusters[clustering, :] * data, axis=1)**2)
+    var /= (n_rows*(n_cols-1))
+#    cv = var * (n_cols-1)**2 / (n_cols-len(clusters)-1)**2
+    cv = var * (n_cols-1)**2 / len(clusters)
+    return cv
+
+
+def _cluster_quality_gev(data, clusters, clustering, sd=None):
+    """Global Variance Explained (GEV)
+    """
+    if sd is None:
+        sd = np.std(data, axis=1)
+    map_corr = _correlate_vectors(data.T, clusters[clustering].T)
+    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd ** 2)
+    return gev
+
+
+
+def _correlate_vectors(A, B, axis=0):
+    """Compute pairwise correlation of multiple pairs of vectors.
+    Fast way to compute correlation of multiple pairs of vectors without
+    computing all pairs as would with corr(A,B). Borrowed from Oli at Stack
+    overflow.
+
+    Note the resulting coefficients vary slightly from the ones
+    obtained from corr due differences in the order of the calculations.
+    (Differences are of a magnitude of 1e-9 to 1e-17 depending of the tested
+    data).
+
+    Parameters
+    ----------
+    A : array
+        The first collection of vectors of shape (n, m)
+    B : array
+        The second collection of vectors of shape (n, m)
+    axis : int
+        The axis that contains the elements of each vector. Defaults to 0.
+
+    Returns
+    -------
+    corr : array
+        For each pair of vectors, the correlation between them with shape (m, )
+
+    """
+    An = A - np.mean(A, axis=axis)
+    Bn = B - np.mean(B, axis=axis)
+    An /= np.linalg.norm(An, axis=axis)
+    Bn /= np.linalg.norm(Bn, axis=axis)
+    return np.sum(An * Bn, axis=axis)
