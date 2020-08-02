@@ -19,7 +19,7 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
         Runs the clustering alogrithm from 1 to n_max desired clusters in ``nk.cluster()`` with quality
         metrices produced for each cluster number.
     show : bool
-        Returns figure if True.
+        Plot indices normalized on the same scale.
     **kwargs
         Other arguments to be passed into ``nk.cluster()`` and ``nk.cluster_quality()``.
 
@@ -43,7 +43,6 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
     Examples
     ----------
     >>> import neurokit2 as nk
-    >>> import matplotlib.pyplot as plt
     >>>
     >>> # Load the iris dataset
     >>> data = nk.data("iris")
@@ -64,7 +63,7 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
         _, quality = cluster_quality(data, clustering, clusters, info, **kwargs)
         results.append(quality)
 
-    results = pd.concat(results, axis=0)
+    results = pd.concat(results, axis=0).reset_index(drop=True)
 
     # Gap Diff
     results["Score_GAP_diff"] = results["Score_GAP"] - results["Score_GAP"].shift(-1) + results["Score_GAP_sk"].shift(-1)
@@ -73,7 +72,7 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
 
     if show is True:
         normalized = (results - results.min()) / (results.max() - results.min())
-        normalized["n_Clusters"] = np.rint(normalized["n_Clusters"].values * (n_max - 1)) + 1
+        normalized["n_Clusters"] = np.rint(np.arange(1, n_max))
         normalized.columns = normalized.columns.str.replace('Score', 'Normalized')
         normalized.plot(x="n_Clusters")
     return results

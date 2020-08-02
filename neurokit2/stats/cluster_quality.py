@@ -72,33 +72,16 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     if isinstance(data, pd.DataFrame):
         data = data.values
 
-    n_clusters = len(clusters)
-
     if isinstance(clustering, pd.DataFrame):
         clustering = clustering["Cluster"]
 
-    # Individual
-    individual = {}
-    if n_clusters == 1:
-        individual["Clustering_Silhouette"] = np.full(len(clustering), np.nan)
-    else:
-        individual["Clustering_Silhouette"] = sklearn.metrics.silhouette_samples(data, clustering)
+    individual, general = _cluster_quality_sklearn(data, clustering, clusters)
 
+    # Individual distance from centroid
     distance = _cluster_quality_distance(data, clusters)
     distance = {"Clustering_Distance_" + str(i): distance[:, i] for i in range(distance.shape[1])}
     individual.update(distance)
     individual = pd.DataFrame(individual)
-
-    # General
-    general = {"n_Clusters": n_clusters}
-    if n_clusters == 1:
-        general["Score_Silhouette"] = np.nan
-        general["Score_Calinski"] = np.nan
-        general["Score_Bouldin"] = np.nan
-    else:
-        general["Score_Silhouette"] = sklearn.metrics.silhouette_score(data, clustering)
-        general["Score_Calinski"] = sklearn.metrics.calinski_harabasz_score(data, clustering)
-        general["Score_Bouldin"] = sklearn.metrics.davies_bouldin_score(data, clustering)
 
     # Variance explained
     general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters)
@@ -127,6 +110,32 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
 # =============================================================================
 # Utils
 # =============================================================================
+def _cluster_quality_sklearn(data, clustering, clusters):
+    """Metrics from sklearn
+    """
+    n_clusters = len(clusters)
+
+    # Individual scores
+    individual = {}
+    if n_clusters == 1:
+        individual["Clustering_Silhouette"] = np.full(len(clustering), np.nan)
+    else:
+        individual["Clustering_Silhouette"] = sklearn.metrics.silhouette_samples(data, clustering)
+
+    # General clustering quality scores
+    general = {"n_Clusters": n_clusters}
+    if n_clusters == 1:
+        general["Score_Silhouette"] = np.nan
+        general["Score_Calinski"] = np.nan
+        general["Score_Bouldin"] = np.nan
+    else:
+        general["Score_Silhouette"] = sklearn.metrics.silhouette_score(data, clustering)
+        general["Score_Calinski"] = sklearn.metrics.calinski_harabasz_score(data, clustering)
+        general["Score_Bouldin"] = sklearn.metrics.davies_bouldin_score(data, clustering)
+
+    return individual, general
+
+
 def _cluster_quality_distance(data, clusters):
     """Distance between samples and clusters
     """

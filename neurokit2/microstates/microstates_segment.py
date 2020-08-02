@@ -189,6 +189,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
             "GEV": gev,
             "GFP": gfp,
             "Polarity": polarity,
+            "Info_algorithm": info,
             "Info": info_mne}
 
     return info
