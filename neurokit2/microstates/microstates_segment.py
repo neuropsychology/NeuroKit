@@ -2,9 +2,9 @@
 import numpy as np
 
 from .microstates_clean import microstates_clean
-from .microstates_quality import microstates_gev, microstates_crossvalidation
 from .microstates_classify import microstates_classify
 from ..stats import cluster
+from ..stats.cluster_quality import _cluster_quality_gev
 
 
 def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_method='l1', sampling_rate=None,
@@ -128,73 +128,77 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
                                                      gfp_method=gfp_method,
                                                      **kwargs)
 
-    # Normalizing constant (used later for GEV)
-    gfp_sum_sq = np.sum(gfp**2)
-
-    # Do several runs of the modified k-means algorithm, keep track of the best segmentation.
-#    best_gev = 0
-#    best_microstates = None
-#    best_segmentation = None
-    segmentation_list = []
-    microstates_list = []
-    cv_list = []
-    gev_list = []
-
-    # Random timepoints
-    if not isinstance(random_state, np.random.RandomState):
-        random_state = np.random.RandomState(random_state)
-
-    # Run choice of clustering algorithm
+    # Run clustering algorithm
     if method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
-        # Iterations
-        for i in range(n_runs):
-            init_times = random_state.choice(len(indices), size=n_microstates, replace=False)
-            segmentation, microstates, info = cluster(data[:, indices].T, method=method, init_times=init_times,
-                                                      n_clusters=n_microstates, random_state=random_state,
-                                                      max_iterations=max_iterations, threshold=1e-6)
-            microstates_list.append(microstates)
-            segmentation_list.append(np.array(segmentation["Cluster"]))
-            # Select best run with highest global explained variance (GEV) or cross-validation criterion
-            gev = microstates_gev(data[:, indices], microstates, segmentation["Cluster"], gfp_sum_sq)
-            gev_list.append(gev)
-            cv = microstates_crossvalidation(data, microstates, gfp,
-                                             n_channels=data.shape[0], n_samples=data.shape[1])
-            cv_list.append(cv)
+
+        # If no random state specified, generate a random state
+        if not isinstance(random_state, np.random.RandomState):
+            random_state = np.random.RandomState(random_state)
+
+        # Generate one random integer for each run
+        random_state = random_state.choice(range(n_runs * 1000), n_runs, replace=False)
+
+        # Initialize values
+        gev = 0
+        microstates = None
+        segmentation = None
+        polarity = None
+
+        # Do several runs of the k-means algorithm, keep track of the best segmentation.
+        for run in range(n_runs):
+
+            # Run clustering on subset of data
+            _, _, info = cluster(data[:, indices].T,
+                                 method="kmod",
+                                 n_clusters=n_microstates,
+                                 random_state=random_state[run],
+                                 max_iterations=max_iterations,
+                                 threshold=1e-6)
+            current_microstates = info["clusters_normalized"]
+
+            # Run segmentation on the whole dataset
+            s, p, g = _microstates_segment_runsegmentation(data, current_microstates, gfp)
+
+            # If better (higher GEV), keep this segmentation
+            if g > gev:
+                microstates, segmentation, polarity, gev = current_microstates, s, p, g
+
 
     else:
-        segmentation, best_microstates, info = cluster(data[:, indices].T, method=method,
-                                                       n_clusters=n_microstates, random_state=random_state, **kwargs)
+        # Run clustering algorithm on subset
+        _, microstates, _ = cluster(data[:, indices].T,
+                                    method=method,
+                                    n_clusters=n_microstates,
+                                    random_state=random_state,
+                                    **kwargs)
 
-    # Obtain cross validation and gev for all methods
-    if method not in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
-        best_gev = microstates_gev(data[:, indices], best_microstates, segmentation["Cluster"], gfp_sum_sq)
-        best_cv = microstates_crossvalidation(data, best_microstates, gfp,
-                                              n_channels=data.shape[0], n_samples=data.shape[1])
-        best_segmentation = segmentation["Cluster"]
-    # Select best k-mod run with highest global explained variance (GEV) or cross-validation criterion
-    else:
-        if criterion == 'gev':
-            optimal = np.argmax(gev_list)
-        elif criterion == 'cv':
-            optimal = np.argmin(cv_list)
-        best_microstates = microstates_list[optimal]
-        best_segmentation = segmentation_list[optimal]
-        best_gev = gev_list[optimal]
-        best_cv = cv_list[optimal]
-
-#        if gev > best_gev:
-#            best_gev, best_microstates, best_segmentation = gev, microstates, segmentation
-
-    # Prepare output
-    out = {"Microstates": best_microstates,
-           "Sequence": best_segmentation,
-           "GEV": best_gev,
-           "GFP": gfp,
-           "Cross-Validation Criterion": best_cv,
-           "Info_MNE": info_mne,
-           "Info_Cluster": info}
+        # Run segmentation on the whole dataset
+        segmentation, polarity, gev = _microstates_segment_runsegmentation(data, microstates, gfp)
 
     # Reorder
-    out = microstates_classify(out)
+    segmentation, microstates  = microstates_classify(segmentation, microstates)
 
-    return out
+    # Output
+    info = {"Microstates": microstates,
+            "Sequence": segmentation,
+            "GEV": gev,
+            "GFP": gfp,
+            "Polarity": polarity,
+            "Info": info_mne}
+
+    return info
+
+
+
+# =============================================================================
+# Utils
+# =============================================================================
+def _microstates_segment_runsegmentation(data, microstates, gfp):
+    # Find microstate corresponding to each datapoint
+    activation = microstates.dot(data)
+    segmentation = np.argmax(np.abs(activation), axis=0)
+    polarity = np.sign(np.choose(segmentation, activation))
+
+    # Get Global Explained Variance (GEV)
+    gev = _cluster_quality_gev(data.T, microstates, segmentation, sd=gfp)
+    return segmentation, polarity, gev
