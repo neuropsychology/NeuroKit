@@ -406,9 +406,9 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
 
     Returns
     -------
-    residual : int, float
+    residual : Union[int, float]
         Residuals to select the optimal order.
-        
+
     """
     if criteria == "AIC":
         if corrected is True:

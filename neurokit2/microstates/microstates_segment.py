@@ -4,7 +4,7 @@ import numpy as np
 from .microstates_clean import microstates_clean
 from .microstates_classify import microstates_classify
 from ..stats import cluster
-from ..stats.cluster_quality import cluster_quality, _cluster_quality_gev
+from ..stats.cluster_quality import _cluster_quality_gev
 
 
 def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_method='l1', sampling_rate=None,
@@ -189,11 +189,9 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
             "GEV": gev,
             "GFP": gfp,
             "Polarity": polarity,
-#            "Quality": quality,
             "Info": info_mne}
 
     return info
-
 
 
 # =============================================================================

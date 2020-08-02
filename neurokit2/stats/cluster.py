@@ -60,7 +60,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
-    >>> fig, axes = plt.subplots(ncols=2, nrows=5)  #doctest: +SKIP
+    >>> fig, axes = plt.subplots(ncols=2, nrows=5)
     >>> axes[0, 0].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_kmeans['Cluster'])
     >>> axes[0, 0].scatter(clusters_kmeans[:, 2], clusters_kmeans[:, 3], c='red')
     >>> axes[0, 0].set_title("k-means")
@@ -490,14 +490,6 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
     data is assumed to have been filtered out based on gfp peaks (e.g., data[:, indices]), if not specified,
     gfp indices will be calculated in the algorithm and data is assumed to be the full un-preprocessed input.
     """
-    # Try loading sys
-    try:
-        from sys import stdout
-    except ImportError:
-        raise ImportError(
-            "NeuroKit error: cluster(): the 'sys' module is required for this function to run. ",
-            "Please install it first (`pip install sys`).",
-        )
 
     # Internal functions for aahc
     def extract_row(A, k):
