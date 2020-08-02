@@ -233,7 +233,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000,
     """
     n_samples, n_channels = data.shape
 
-    # Cache this value for later
+    # Cache this value for later to compute residual
     data_sum_sq = np.sum(data ** 2)
 
     # Select random timepoints for our initial topographic maps
@@ -241,42 +241,56 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000,
         random_state = np.random.RandomState(random_state)
     init_times = random_state.choice(n_samples, size=n_clusters, replace=False)
 
-    # Iterations
+    # Initialize random cluster centroids
     clusters = data[init_times, :]
 
     # Normalize row-wise (across EEG channels)
-    clusters /= np.linalg.norm(clusters, axis=1, keepdims=True)
+    clusters = clusters / np.sqrt(np.sum(clusters**2, axis=1, keepdims=True))
 
-    # Convergence criterion: variance estimate (step 6)
+    # Initialize iteration
     prev_residual = 1
     residual = 0
     for i in range(max_iterations):
 
-        # Assign each sample to the best matching microstate
+        # Step 3: Assign each sample to the best matching microstate
         activation = clusters.dot(data.T)
-        segmentation = np.argmax(np.abs(activation), axis=0)
+#        activation /= (n_channels * np.outer(gfp_values, np.std(clusters, axis=1)).T)  # From eeg_microstates
+        segmentation = np.argmax(activation ** 2, axis=0)
 
-        # Recompute the topographic maps of the microstates, based on the
+        # Step 4: Recompute the topographic maps of the microstates, based on the
         # samples that were assigned to each state.
         for state in np.arange(n_clusters):
+
+            # Get data fro specific state
             idx = (segmentation == state)
+            data_state = data[idx, :]
+
+            # Sanity check
             if np.sum(idx) == 0:
-                warnings.warn('Some microstates are never activated')
                 clusters[state] = 0
                 continue
 
-            # Find largest eigenvector
-            cov = data[idx, :].T.dot(data[idx, :])
-            _, vec = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
-            clusters[state] = vec.ravel() / np.linalg.norm(clusters[state])
+            # Find largest eigenvector (step 4a)
+            cov = np.dot(data_state.T, data_state)
+            # (step 4b)
+            eigen_vals, eigen_vectors = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
+            # Get normalized map (method by Marijn)
+            state_vals = eigen_vectors.ravel()
 
-        # Estimate residual noise
-        act_sum_sq = np.sum(np.sum(clusters[segmentation].T * data.T, axis=0) ** 2)
+            # Get map (method 2 - see https://github.com/wmvanvliet/mne_microstates/issues/5)
+#            state_vals = data_state.T.dot(activation[idx, state])
+#            state_vals = state_vals / np.linalg.norm(state_vals[state])  # Normalize Map
+
+            # Normalize map
+            clusters[state, :] = state_vals
+
+        # Estimate residual noise (step 5)
+        act_sum_sq = np.sum(np.sum(clusters[segmentation, :] * data, axis=1) ** 2)
         residual = np.abs(data_sum_sq - act_sum_sq)
-        residual /= np.float(n_samples * (n_channels - 1))
+        residual = residual / np.float(n_samples * (n_channels - 1))
 
-        # Have we converged?
-        if np.abs((prev_residual - residual) / prev_residual) > threshold:
+        # Have we converged? Convergence criterion: variance estimate (step 6)
+        if np.abs((prev_residual - residual) / prev_residual) < threshold:
             break
 
         # Next iteration
