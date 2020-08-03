@@ -337,7 +337,7 @@ def _hrv_nonlinear_fragmentation(rri, out):
     # Inverse of the average length of the acceleration/deceleration segments (IALS)
     accelerations = np.where(diff_rri > 0)[0]
     decelerations = np.where(diff_rri < 0)[0]
-    consecutive = np.concatenate([find_consecutive(accelerations), find_consecutive(decelerations)])
+    consecutive = find_consecutive(accelerations) + find_consecutive(decelerations)
     lengths = [len(i) for i in consecutive]
     out["IALS"] = 1 / np.average(lengths)
 

@@ -115,3 +115,19 @@ def test_hrv_rsa():
     with pytest.warns(misc.NeuroKitWarning, match=r"Couldn't find rsp cycles onsets and centers.*"):
         rsp_signals["RSP_Peaks"] = 0
         nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
+
+
+def test_hrv_nonlinear_fragmentation():
+    # https://github.com/neuropsychology/NeuroKit/issues/344
+    from neurokit2.hrv.hrv_nonlinear import _hrv_nonlinear_fragmentation
+
+    edge_rri = np.array([888.0, 1262.0, 1290.0, 1274.0, 1300.0, 1244.0, 1266.0])
+    test_out = {}
+
+    _hrv_nonlinear_fragmentation(edge_rri, out=test_out)
+    assert test_out == {
+        "IALS": 0.8333333333333334,
+        "PAS": 1.0,
+        "PIP": 0.5714285714285714,
+        "PSS": 1.0,
+    }
