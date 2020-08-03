@@ -268,18 +268,20 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
                 clusters[state] = 0
                 continue
 
-            # Find largest eigenvector (step 4a)
-            cov = np.dot(data_state.T, data_state)
-            # (step 4b)
-            eigen_vals, eigen_vectors = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
-            # Get normalized map (method by Marijn)
-            state_vals = eigen_vectors.ravel()
+            # Retrieve map values
+
+            # # Method 1 : slower than method 2
+            # cov = np.dot(data_state.T, data_state)  # Find largest eigenvector (step 4a)
+            # # (step 4b)
+            # eigen_vals, eigen_vectors = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
+            # # Get normalized map (method by Marijn)
+            # state_vals = eigen_vectors.ravel()
 
             # Get map (method 2 - see https://github.com/wmvanvliet/mne_microstates/issues/5)
-#            state_vals = data_state.T.dot(activation[state, idx])
-#            state_vals = state_vals / np.linalg.norm(state_vals)  # Normalize Map
+            state_vals = data_state.T.dot(activation[state, idx])
+            state_vals /= np.linalg.norm(state_vals)  # Normalize Map
 
-            # Normalize map
+            # Store map
             clusters[state, :] = state_vals
 
         # Estimate residual noise (step 5)

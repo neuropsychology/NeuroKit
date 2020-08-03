@@ -73,7 +73,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
         data = data.values
 
     if isinstance(clustering, pd.DataFrame):
-        clustering = clustering["Cluster"]
+        clustering = clustering["Cluster"].values
 
     individual, general = _cluster_quality_sklearn(data, clustering, clusters)
 
@@ -213,6 +213,23 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
 #    cv = var * (n_cols-1)**2 / (n_cols-len(clusters)-1)**2
     cv = var * (n_cols-1)**2 / len(clusters)
     return cv
+
+
+# def _cluster_quality_gev(data, clusters, clustering, sd=None):
+#     if sd is None:
+#         sd = np.std(data, axis=1)
+#
+#     # Normalize row-wise (across columns)
+#     clusters /= np.sqrt(np.sum(clusters**2, axis=1, keepdims=True))
+#     activation = np.dot(data, clusters.T)
+#     activation /= (data.shape[1] * np.outer(sd, np.std(clusters, axis=1)))
+#
+#     gev = np.zeros(len(clusters))
+#     for k in range(len(clusters)):
+#         idx = (clustering == k)
+#         gev[k] = np.sum(sd[idx]**2 * activation[idx, k]**2)
+#     gev_total = np.sum(gev) / np.sum(sd ** 2)
+#     return gev_total
 
 
 def _cluster_quality_gev(data, clusters, clustering, sd=None):
