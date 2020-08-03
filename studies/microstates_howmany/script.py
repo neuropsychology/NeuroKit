@@ -13,7 +13,9 @@ import scipy.stats
 data_path = "D:/Dropbox/RECHERCHE/N/NeuroKit/data/rs_eeg_texas/data/"
 files = os.listdir(data_path)
 
-for i, file in enumerate(files):
+
+results = []
+for i, file in enumerate(files[0:2]):
     print(i)
 
     # Read
@@ -49,14 +51,12 @@ for i, file in enumerate(files):
     # Rereference
     raw = nk.eeg_rereference(raw, "average")
 
-    # Extract GFP
-    gfp = nk.eeg_gfp(raw)
 
-    # Get data
-    indices = nk.microstates_peaks(raw, gfp=gfp, sampling_rate=sampling_rate)
-    data = raw.get_data()[:, indices]
-
-    results = nk.cluster_findnumber(data, n_max=20, method="kmeans", show=True)
+    for method in ["kmdo"]:
+        rez = nk.microstates_findnumber(raw, n_max=6, show=False, method="kmod")
+        rez["Method"] = method
+        rez["Participant"] = file
+        results.append(rez)
 
 
 
