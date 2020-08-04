@@ -61,4 +61,3 @@ def eeg_diss(eeg, gfp=None, **kwargs):
     diss = np.insert(diss, 0, 0, axis=0)
 
     return diss
-

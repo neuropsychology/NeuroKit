@@ -167,18 +167,18 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     # Porges-Bohrer
     rsa_pb = _hrv_rsa_pb(ecg_period, sampling_rate, continuous=continuous)
 
-    #RSAsecondbysecond
+    # RSAsecondbysecond
     if window is None:
         window = 32  # 32 seconds
     input_duration = rpeaks[-1] / sampling_rate
     if input_duration >= window:
         rsa_gates = _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=sampling_rate,
-                               window=window, window_number=window_number, continuous=continuous)
+                                   window=window, window_number=window_number, continuous=continuous)
     else:
         warn(
                 "The duration of recording is shorter than the duration of the window (%s seconds)."
                 " Returning RSA by Gates method as Nan."
-                " Consider using a longer recording." %(window),
+                " Consider using a longer recording." % (window),
                 category=NeuroKitWarning
             )
         if continuous is False:
@@ -342,8 +342,8 @@ def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_
                    continuous=False):
 
     # Boundaries of rsa freq
-    min_frequency=0.12
-    max_frequency=0.40
+    min_frequency = 0.12
+    max_frequency = 0.40
     # Retrived IBI and interpolate it
     rri, sampling_rate = _hrv_get_rri(rpeaks, sampling_rate=sampling_rate, interpolate=True)
 
@@ -363,10 +363,10 @@ def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_
 
     for i in range(4):
         _, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
-                                                    min_frequency=min_frequency,
-                                                    max_frequency=max_frequency, method="stft",
-                                                    window=window, window_type=multipeak[:, i],
-                                                    overlap=overlap, show=False)
+                                            min_frequency=min_frequency,
+                                            max_frequency=max_frequency, method="stft",
+                                            window=window, window_type=multipeak[:, i],
+                                            overlap=overlap, show=False)
         if i == 0:
             rsa = np.zeros_like(psd)
         rsa = psd * weight[i] + rsa  # add weights
@@ -383,7 +383,7 @@ def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_
         # Padding the missing first and list window/2 segments
         pad_length = window / 2
         time_start = np.arange(0, pad_length)
-        time_end = np.arange(time[-1], time[-1] + pad_length)[1: ]
+        time_end = np.arange(time[-1], time[-1] + pad_length)[1:]
         time = np.concatenate((time_start, time, time_end))
 
         rsa_start = np.full(len(time_start), meanRSA[0])
@@ -414,8 +414,8 @@ def _get_multipeak_window(nperseg, window_number=8):
     C = 2 * K1 / 10 / B / loge
     length = np.arange(1, nperseg).conj().transpose()
     r0 = 2 / C * (1 - np.exp(-C * B / 2))
-    r_num = (2 * C - np.exp(-C * B / 2) * (2 * C * np.cos(np.pi * B * length) - 4 * np.pi * length * \
-                        np.sin(np.pi * B * length)))
+    r_num = (2 * C - np.exp(-C * B / 2) * (2 * C * np.cos(np.pi * B * length) - 4 * np.pi * length *
+                            np.sin(np.pi * B * length)))
     r_den = (C**2 + (2 * np.pi * length)**2)
     r = np.divide(r_num, r_den)
 
@@ -424,7 +424,7 @@ def _get_multipeak_window(nperseg, window_number=8):
     r = 2 * np.sin(np.pi * B * length) / (2 * np.pi * length)
     rbox = np.append(B, r)
 
-    rpen = 10**(K2 / 10) * np.append(1, np.zeros((nperseg - 1 ,1))) - (10**(K2 / 10) - 1) * rbox  # Covariance function penalty function
+    rpen = 10**(K2 / 10) * np.append(1, np.zeros((nperseg - 1, 1))) - (10**(K2 / 10) - 1) * rbox  # Covariance function penalty function
 
     Ry = scipy.linalg.toeplitz(rpeak)
     Rx = scipy.linalg.toeplitz(rpen)
@@ -439,13 +439,13 @@ def _get_multipeak_window(nperseg, window_number=8):
 
     FN = np.zeros((nperseg, nperseg))
     for i in range(len(RD)):
-        FN[:,i] = F[:,h[i]] / np.sqrt(F[:,h[i]].conj().transpose().dot(F[:,h[i]]))
+        FN[:, i] = F[: , h[i]] / np.sqrt(F[: , h[i]].conj().transpose().dot(F[: , h[i]]))
 
     RDN = RDN[len(RD) - 1: 0: -1]
-    FN = FN[:,len(RD) - 1: 0: -1]
+    FN = FN[: , len(RD) - 1: 0: -1]
 
     weight = RDN[: window_number] / np.sum(RDN[: window_number])
-    multipeak = FN[:,0: window_number]
+    multipeak = FN[: , 0: window_number]
 
     return multipeak, weight
 

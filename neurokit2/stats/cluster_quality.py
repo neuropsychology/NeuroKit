@@ -154,7 +154,7 @@ def _cluster_quality_sumsquares(data, clusters):
 def _cluster_quality_variance(data, clusters):
     """Variance explained by clustering
     """
-    sum_squares_within =_cluster_quality_sumsquares(data, clusters)
+    sum_squares_within = _cluster_quality_sumsquares(data, clusters)
     sum_squares_total = np.sum(scipy.spatial.distance.pdist(data)**2)/data.shape[0]
     return (sum_squares_total - sum_squares_within) / sum_squares_total
 

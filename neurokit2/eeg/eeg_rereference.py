@@ -87,7 +87,7 @@ def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
     if reference == "average" and robust is True:
         eeg._data = eeg_rereference_array(eeg._data, reference=reference, robust=robust)
         eeg.info["custom_ref_applied"] = True
-    elif reference in ["lap","csd"]:
+    elif reference in ["lap", "csd"]:
         try:
             import mne
             if mne.__version__ < '0.20':
