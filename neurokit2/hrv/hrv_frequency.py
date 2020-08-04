@@ -61,7 +61,7 @@ def hrv_frequency(
         Normalization allows comparison between different PSD methods.
     order_criteria : str
         The criteria to automatically select order in parametric PSD (only used for autoregressive
-        (AR) methods such as 'burg').
+        (AR) methods such as 'burg'). Defaults to None.
     **kwargs : optional
         Other arguments.
 

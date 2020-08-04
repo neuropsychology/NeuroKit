@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-
 import pandas as pd
+import sklearn.datasets
 
 
 def data(dataset="bio_eventrelated_100hz"):
@@ -32,6 +32,9 @@ def data(dataset="bio_eventrelated_100hz"):
     # TODO: one could further improve this function with like
     # selectors 'ecg=True, eda=True, restingstate=True' that would
     # find the most appropriate dataset
+    if dataset == "iris":
+        data = sklearn.datasets.load_iris()
+        return pd.DataFrame(data.data, columns=data["feature_names"])
 
     path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
 

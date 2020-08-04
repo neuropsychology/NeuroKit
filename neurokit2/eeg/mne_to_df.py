@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-
+import numpy as np
 
 def mne_to_df(eeg):
     """Convert mne Raw or Epochs object to dataframe or dict of dataframes.
@@ -19,12 +19,15 @@ def mne_to_df(eeg):
     Examples
     ---------
     >>> import neurokit2 as nk
-    >>> import mne
     >>>
-    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif',
-    ...                           preload=True)  # doctest: +SKIP
+    >>> eeg = nk.mne_data("filt-0-40_raw")
+    >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
-    >>> nk.mne_to_df(raw)  # doctest: +SKIP
+    >>> gfp = nk.eeg_gfp(eeg)
+    >>> gfp_z = nk.eeg_gfp(eeg, normalize=True)
+    >>> gfp_zr = nk.eeg_gfp(eeg, normalize=True, robust=True)
+    >>> gfp_s = nk.eeg_gfp(eeg, smooth=0.05)
+    >>> nk.signal_plot([gfp[0:500], gfp_z[0:500], gfp_zr[0:500], gfp_s[0:500]], standardize=True)
 
     """
     # Try loading mne
@@ -43,6 +46,10 @@ def mne_to_df(eeg):
     # If raw object
     elif isinstance(eeg, mne.io.Raw):
         data = _mne_to_df_raw(eeg)
+
+    # If array or dataframe, skip and return
+    elif isinstance(eeg, (pd.DataFrame, np.ndarray)):
+        return data
 
     # it might be an evoked object
     else:
@@ -70,8 +77,7 @@ def mne_to_dict(eeg):
     >>> import neurokit2 as nk
     >>> import mne
     >>>
-    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif',
-    ...                           preload=True)  # doctest: +SKIP
+    >>> raw = nk.mne_data()
     >>>
     >>> nk.mne_to_dict(raw)  # doctest: +SKIP
 
@@ -92,6 +98,10 @@ def mne_to_dict(eeg):
     # If raw object
     elif isinstance(eeg, mne.io.Raw):
         data = _mne_to_dict_raw(eeg)
+
+    # If array or dataframe, skip and return
+    elif isinstance(eeg, (pd.DataFrame, np.ndarray)):
+        return data
 
     # it might be an evoked object
     else:

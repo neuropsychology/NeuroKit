@@ -114,14 +114,19 @@ def signal_filter(
     """
     method = method.lower()
 
-    # Sanity checks
-    if method != "powerline":
-        if lowcut is None and highcut is None:
-            return signal
 
     if method in ["sg", "savgol", "savitzky-golay"]:
         filtered = _signal_filter_savgol(signal, sampling_rate, order, window_size=window_size)
+    elif method in ["powerline"]:
+            filtered = _signal_filter_powerline(signal, sampling_rate, powerline)
     else:
+
+        # Sanity checks
+        if lowcut is None and highcut is None:
+            raise ValueError(
+                "NeuroKit error: signal_filter(): you need to specify a 'lowcut' or a 'highcut'."
+            )
+
         if method in ["butter", "butterworth"]:
             filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["butter_ba", "butterworth_ba"]:
@@ -130,12 +135,10 @@ def signal_filter(
             filtered = _signal_filter_bessel(signal, sampling_rate, lowcut, highcut, order)
         elif method in ["fir"]:
             filtered = _signal_filter_fir(signal, sampling_rate, lowcut, highcut, window_size=window_size)
-        elif method in ["powerline"]:
-            filtered = _signal_filter_powerline(signal, sampling_rate, powerline)
         else:
             raise ValueError(
-                "NeuroKit error: signal_filter(): 'method' should be"
-                " one of 'butterworth', 'butterworth_ba', 'bessel',"
+                "NeuroKit error: signal_filter(): 'method' should be",
+                " one of 'butterworth', 'butterworth_ba', 'bessel',",
                 " 'savgol' or 'fir'."
             )
     return filtered
@@ -155,8 +158,10 @@ def _signal_filter_savgol(signal, sampling_rate=1000, order=2, window_size="defa
 
     """
     window_size = _signal_filter_windowsize(window_size=window_size, sampling_rate=sampling_rate)
+    if window_size % 2 == 0:
+        window_size += 1  # Make sure it's odd
 
-    filtered = scipy.signal.savgol_filter(signal, window_length=window_size, polyorder=order)
+    filtered = scipy.signal.savgol_filter(signal, window_length=int(window_size), polyorder=order)
     return filtered
 
 

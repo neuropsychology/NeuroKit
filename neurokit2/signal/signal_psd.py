@@ -260,7 +260,7 @@ def _signal_psd_burg(
 ):
 
     nfft = int(nperseg * 2)
-    ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected)
+    ar, rho, _ = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected)
     psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side)
 
     # signal is real, not complex
@@ -406,7 +406,7 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
 
     Returns
     -------
-    residual : int, float
+    residual : Union[int, float]
         Residuals to select the optimal order.
 
     """

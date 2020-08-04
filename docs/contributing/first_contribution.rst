@@ -89,7 +89,7 @@ I could have written `assert output == 5`, however, I decided instead to check t
 
 You can see examples of tests in the existing `test files <https://github.com/neuropsychology/NeuroKit/tree/master/tests>`_.
 
-
+And if you want to deepen your understanding of the topic, check-out this very accessible `pytest tutorial for data science <https://github.com/poldrack/pytest_tutorial>`_.
 
 
 
