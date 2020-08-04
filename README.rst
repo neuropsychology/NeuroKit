@@ -132,9 +132,9 @@ Examples
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
--  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
+-  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/examples/complexity.html>`_
 -  `Analyze Electrooculography EOG data <https://neurokit2.readthedocs.io/en/latest/examples/eog.html>`_
--  `Fit a function to a signal <https://neurokit2.readthedocs.io/en/latest/tutorials/fit_function.html>`_
+-  `Fit a function to a signal <https://neurokit2.readthedocs.io/en/latest/examples/fit_function.html>`_
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
