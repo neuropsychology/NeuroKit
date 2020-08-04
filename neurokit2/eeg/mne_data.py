@@ -20,7 +20,7 @@ def mne_data(what="raw"):
     >>> raw = nk.mne_data(what="raw")
 
     """
-        # Try loading mne
+    # Try loading mne
     try:
         import mne
     except ImportError:
@@ -39,4 +39,3 @@ def mne_data(what="raw"):
 
     mne.set_log_level(old_verbosity_level)
     return data
-

@@ -1,7 +1,7 @@
 """Submodule for NeuroKit."""
 
 # Aliases
-#from ..signal import signal_rate as rsp_rate
+# from ..signal import signal_rate as rsp_rate
 from .rsp_rate import rsp_rate
 from .rsp_amplitude import rsp_amplitude
 from .rsp_analyze import rsp_analyze

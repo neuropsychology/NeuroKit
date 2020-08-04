@@ -178,7 +178,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
         segmentation, polarity, gev = _microstates_segment_runsegmentation(data, microstates, gfp)
 
     # Reorder
-    segmentation, microstates  = microstates_classify(segmentation, microstates)
+    segmentation, microstates = microstates_classify(segmentation, microstates)
 
     # CLustering quality
 #    quality = cluster_quality(data, segmentation, clusters=microstates, info=info, n_random=10, sd=gfp)

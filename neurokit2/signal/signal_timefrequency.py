@@ -251,10 +251,10 @@ def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, met
     # This is discrete frequency (should we return?)
     if n_freqbins % 2 == 0:
         frequency = np.hstack((np.arange(n_freqbins / 2),
-                           np.arange(-n_freqbins / 2, 0)))
+                               np.arange(-n_freqbins / 2, 0)))
     else:
         frequency = np.hstack((np.arange((n_freqbins - 1) / 2),
-                           np.arange(-(n_freqbins - 1) / 2, 0)))
+                               np.arange(-(n_freqbins - 1) / 2, 0)))
     tfr = np.zeros((n_freqbins, time.shape[0]), dtype=complex)  # the time-frequency matrix
 
     tausec = round(n_freqbins / 2.0)

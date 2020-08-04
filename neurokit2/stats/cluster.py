@@ -99,7 +99,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     method = method.lower()
     # K-means
     if method in ["kmeans", "k", "k-means", "kmean"]:
-        out =  _cluster_kmeans(data,
+        out = _cluster_kmeans(data,
                                n_clusters=n_clusters,
                                random_state=random_state,
                                **kwargs)
@@ -119,7 +119,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
 
     # Mixture
     elif method in ["mixture", "mixt"]:
-        out =  _cluster_mixture(data,
+        out = _cluster_mixture(data,
                                n_clusters=n_clusters,
                                bayesian=False,
                                random_state=random_state,
@@ -134,7 +134,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
 
     # Bayesian
     elif method in ["bayesianmixture", "bayesmixt", "mixturebayesian", "mixturebayes"]:
-        out =  _cluster_mixture(data,
+        out = _cluster_mixture(data,
                                 n_clusters=n_clusters,
                                 bayesian=True,
                                 random_state=random_state,
@@ -170,7 +170,8 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
     # Fit
     clustering = clustering_model.fit_predict(data)
 
-    # Get representatives (identical to _cluster_getclusters(), but why recompute when already included)
+    # Get representatives (identical to _cluster_getclusters(),
+    # but why recompute when already included)
     clusters = clustering_model.cluster_centers_
 
     # Get distance
@@ -304,7 +305,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
     prediction = _cluster_getdistance(data, clusters_unnormalized)
     prediction["Cluster"] = segmentation
 
-     # Copy function with given parameters
+    # Copy function with given parameters
     clustering_function = functools.partial(_cluster_kmod,
                                             n_clusters=n_clusters,
                                             max_iterations=max_iterations,
@@ -472,7 +473,7 @@ def _cluster_mixture(data, n_clusters=2, bayesian=False, random_state=None, **kw
                                             random_state=random_state,
                                             **kwargs)
 
-        # Info dump
+    # Info dump
     info = {"n_clusters": n_clusters,
             "clustering_function": clustering_function,
             "sklearn_model": clustering_model,
@@ -483,6 +484,8 @@ def _cluster_mixture(data, n_clusters=2, bayesian=False, random_state=None, **kw
 # =============================================================================
 # AAHC
 # =============================================================================
+
+
 def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None, random_state=None, use_peaks=False, **kwargs):
     """Atomize and Agglomerative Hierarchical Clustering Algorithm, AAHC (Murray et al., Brain Topography, 2008),
     implemented by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L518

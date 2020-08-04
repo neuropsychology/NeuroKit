@@ -203,9 +203,9 @@ def _transition_matrix_symmetry(sequence):
     T = 0.0
     for i, j in np.ndindex(f_ij.shape):
         if (i != j):
-            f = f_ij[i,j]*f_ij[j,i]
+            f = f_ij[i, j] * f_ij[j, i]
             if (f > 0):
-                T += (f_ij[i,j]*np.log((2.*f_ij[i,j])/(f_ij[i,j]+f_ij[j,i])))
+                T += (f_ij[i, j] * np.log((2. * f_ij[i, j]) / (f_ij[i, j] + f_ij[j, i])))
 
     out = {}
     out["Symmetry_t"] = T * 2.0
@@ -225,7 +225,7 @@ def _transition_matrix_stationarity(sequence, size=100):
     states = np.unique(sequence)
     n_states = len(states)
     n = len(sequence)
-    r = int(np.floor(n / size)) # number of blocks
+    r = int(np.floor(n / size))  # number of blocks
     if r < 5:
         raise ValueError(
             "NeuroKit error: _transition_matrix_stationarity(): the size of the blocks is too high.",
@@ -240,13 +240,13 @@ def _transition_matrix_stationarity(sequence, size=100):
     f_j = np.zeros(n_states)
 
     # calculate f_ijk (time / block dep. transition matrix)
-    for i in  range(r): # block index
-        for ii in range(size-1): # pos. inside the current block
+    for i in range(r): # block index
+        for ii in range(size-1):  # pos. inside the current block
             j = sequence[i*size + ii]
             k = sequence[i*size + ii + 1]
-            f_ijk[i,j,k] += 1.0
-            f_ij[i,j] += 1.0
-            f_jk[j,k] += 1.0
+            f_ijk[i, j, k] += 1.0
+            f_ij[i, j] += 1.0
+            f_jk[j, k] += 1.0
             f_i[i] += 1.0
             f_j[j] += 1.0
 
@@ -254,9 +254,9 @@ def _transition_matrix_stationarity(sequence, size=100):
     T = 0.0
     for i, j, k in np.ndindex(f_ijk.shape):
         # conditional homogeneity
-        f = f_ijk[i,j,k]*f_j[j]*f_ij[i,j]*f_jk[j,k]
+        f = f_ijk[i, j, k] * f_j[j] * f_ij[i, j] * f_jk[j, k]
         if (f > 0):
-            T += (f_ijk[i,j,k]*np.log((f_ijk[i,j,k]*f_j[j])/(f_ij[i,j]*f_jk[j,k])))
+            T += (f_ijk[i, j, k] * np.log((f_ijk[i, j, k] * f_j[j]) / (f_ij[i, j] * f_jk[j, k])))
 
     out = {}
     out["Stationarity_t"] = T * 2.0

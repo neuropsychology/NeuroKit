@@ -92,7 +92,7 @@ def _rsp_rate_xcorr(rsp_cleaned, sampling_rate=1000, window=10, hop_size=1,
     for start in np.arange(0, N, hop_size):
         window_segment = rsp[start: start + window_length]
         if len(window_segment) < window_length:
-            break # the last frames that are smaller than windlow_length
+            break  # the last frames that are smaller than windlow_length
         # Calculate the 1-order difference
         diff = np.ediff1d(window_segment)
         norm_diff = diff / np.max(diff)
