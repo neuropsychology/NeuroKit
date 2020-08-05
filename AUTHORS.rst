@@ -27,6 +27,7 @@ Contributors
 * `Robert Richer <https://github.com/richrobe>`_ *(FAU Erlangen-Nürnberg, Germany)*
 * `Russell Anderson <https://github.com/rpanderson>`_ *(La Trobe Institute for Molecular Science, Australia)*
 * `Alexander Wong <https://github.com/awwong1>`_ *(University of Alberta, Canada)*
+* `Elaine Teo <https://github.com/elaineteo2000>`_ *(University College London)*
 * `Raimon Padrós <https://github.com/raimonpv>`_ *(Universitat politècnica de Catalunya, Spain - Massachusetts General Hospital, USA)*
 * `Minsoo Yeo <https://github.com/minsooyeo>`_ *(Taewoong Medical Co., Ltd., ROK)*
 
