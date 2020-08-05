@@ -100,9 +100,9 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     # K-means
     if method in ["kmeans", "k", "k-means", "kmean"]:
         out = _cluster_kmeans(data,
-                               n_clusters=n_clusters,
-                               random_state=random_state,
-                               **kwargs)
+                              n_clusters=n_clusters,
+                              random_state=random_state,
+                              **kwargs)
 
     # Modified k-means
     elif method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
@@ -135,10 +135,10 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     # Bayesian
     elif method in ["bayesianmixture", "bayesmixt", "mixturebayesian", "mixturebayes"]:
         out = _cluster_mixture(data,
-                                n_clusters=n_clusters,
-                                bayesian=True,
-                                random_state=random_state,
-                                **kwargs)
+                               n_clusters=n_clusters,
+                               bayesian=True,
+                               random_state=random_state,
+                               **kwargs)
 
     # Others
     else:

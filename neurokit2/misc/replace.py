@@ -39,6 +39,6 @@ def replace(data, replacement_dict):
     vs = v[sidx]
     idx = np.searchsorted(ks, data)
 
-    idx[idx==len(vs)] = 0
+    idx[idx == len(vs)] = 0
     mask = ks[idx] == data
     return np.where(mask, vs[idx], data)

@@ -415,7 +415,8 @@ def _get_multipeak_window(nperseg, window_number=8):
     length = np.arange(1, nperseg).conj().transpose()
     r0 = 2 / C * (1 - np.exp(-C * B / 2))
     r_num = (2 * C - np.exp(-C * B / 2) * (2 * C * np.cos(np.pi * B * length) - 4 * np.pi * length *
-                            np.sin(np.pi * B * length)))
+                                           np.sin(np.pi * B * length)))
+
     r_den = (C**2 + (2 * np.pi * length)**2)
     r = np.divide(r_num, r_den)
 

@@ -240,7 +240,7 @@ def _transition_matrix_stationarity(sequence, size=100):
     f_j = np.zeros(n_states)
 
     # calculate f_ijk (time / block dep. transition matrix)
-    for i in range(r): # block index
+    for i in range(r):  # block index
         for ii in range(size-1):  # pos. inside the current block
             j = sequence[i*size + ii]
             k = sequence[i*size + ii + 1]
