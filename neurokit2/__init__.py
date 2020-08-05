@@ -2,6 +2,14 @@
 import datetime
 import platform
 
+# Dependencies
+import numpy as np
+import pandas as pd
+import scipy
+import sklearn
+import matplotlib
+
+# Export functions
 from .benchmark import *
 from .bio import *
 from .complexity import *
@@ -19,10 +27,11 @@ from .ppg import *
 from .rsp import *
 from .signal import *
 from .stats import *
+from .microstates import *
 
 
 # Info
-__version__ = "0.0.39"
+__version__ = "0.0.40"
 
 
 # Maintainer info
@@ -102,6 +111,11 @@ def version(silent=False):
             "(" + platform.architecture()[1] + " " + platform.architecture()[0] + ")",
             "\n- Python: " + platform.python_version(),
             "\n- NeuroKit2: " + __version__,
+            "\n\n- NumPy: " + np.__version__,
+            "\n- Pandas: " + pd.__version__,
+            "\n- SciPy: " + scipy.__version__,
+            "\n- sklearn: " + sklearn.__version__,
+            "\n- matplotlib: " + matplotlib.__version__,
         )
     else:
         return __version__

@@ -39,16 +39,18 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
     >>> import neurokit2 as nk
     >>> import mne
     >>>
-    >>> # Let's say that the 42nd sample point in the EEG correspond to the 333rd point in the ECG
+    >>> raw = nk.mne_data("filt-0-40_raw")
+    >>> ecg = nk.ecg_simulate(length=50000)
+    >>>
+    >>> # Let the 42nd sample point in the EEG signal correspond to the 333rd point in the ECG
     >>> event_index_in_eeg = 42
     >>> event_index_in_ecg = 333
     >>>
-    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + '/MEG/sample/sample_audvis_raw.fif',
-    ...                           preload=True) # doctest: +SKIP
-    >>> ecg = nk.ecg_simulate(length=170000)
-    >>>
-    >>> raw = nk.mne_channel_add(raw, ecg, sync_index_raw=event_index_in_eeg,
-    ...                          sync_index_channel=event_index_in_ecg, channel_type="ecg")  # doctest: +SKIP
+    >>> raw = nk.mne_channel_add(raw,
+    ...                          ecg,
+    ...                          sync_index_raw=event_index_in_eeg,
+    ...                          sync_index_channel=event_index_in_ecg,
+    ...                          channel_type="ecg")  # doctest: +SKIP
 
     """
     # Try loading mne
@@ -84,9 +86,13 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
         # Crop to fit the raw data
         channel = list(channel)[0 : len(raw)]
 
+    old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
+
     info = mne.create_info([channel_name], raw.info["sfreq"], ch_types=channel_type)
     channel = mne.io.RawArray([channel], info)
 
     raw.add_channels([channel], force_update_info=True)
+
+    mne.set_log_level(old_verbosity_level)
 
     return raw

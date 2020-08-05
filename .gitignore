@@ -132,6 +132,7 @@ data/eogdb/eogdb_task1.csv
 data/eogdb/eogdb_task2.csv
 data/eogdb/eogdb_task3.csv
 data/eogdb/eogdb_task4.csv
+data/rs_eeg_texas/data/
 docs/readme/README_popularity.py
 paper/NeuroKit_Submission/
 data/fantasia/fantasia-database-1.0.0

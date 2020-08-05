@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 import scipy.signal
+
+from ..misc import NeuroKitWarning
 
 
 def signal_psd(
@@ -52,7 +56,7 @@ def signal_psd(
     order_corrected : bool
         Should the order criteria (AIC or KIC) be corrected? If unsure which method to use to choose
         the order, rely on the default (i.e., the corrected KIC).
-    **kwargs
+    **kwargs  : optional
         Keyword arguments to be passed to `scipy.signal.welch()`.
 
     See Also
@@ -102,10 +106,11 @@ def signal_psd(
 
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
-            print(
-                "Neurokit warning: signal_psd(): The duration of recording is too short to support a "
-                "sufficiently long window for high frequency resolution. Consider using a longer recording "
-                "or increasing the `min_frequency`"
+            warn(
+                "The duration of recording is too short to support a"
+                " sufficiently long window for high frequency resolution."
+                " Consider using a longer recording or increasing the `min_frequency`",
+                category=NeuroKitWarning
             )
             nperseg = int(len(signal) / 2)
 
@@ -178,9 +183,9 @@ def _signal_psd_multitaper(
         )
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_psd(): the 'mne'",
-            "module is required for the 'mne' method to run.",
-            "Please install it first (`pip install mne`).",
+            "NeuroKit error: signal_psd(): the 'mne'",
+            " module is required for the 'mne' method to run.",
+            " Please install it first (`pip install mne`).",
         )
     if normalize is True:
         power /= np.max(power)
@@ -235,9 +240,9 @@ def _signal_psd_lomb(
 
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_psd(): the 'astropy'",
-            "module is required for the 'lomb' method to run.",
-            "Please install it first (`pip install astropy`).",
+            "NeuroKit error: signal_psd(): the 'astropy'",
+            " module is required for the 'lomb' method to run.",
+            " Please install it first (`pip install astropy`).",
         )
     if normalize is True:
         power /= np.max(power)
@@ -255,7 +260,7 @@ def _signal_psd_burg(
 ):
 
     nfft = int(nperseg * 2)
-    ar, rho, ref = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected)
+    ar, rho, _ = _signal_arma_burg(signal, order=order, criteria=criteria, corrected=corrected)
     psd = _signal_psd_from_arma(ar=ar, rho=rho, sampling_rate=sampling_rate, nfft=nfft, side=side)
 
     # signal is real, not complex
@@ -399,6 +404,11 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
     corrected : bool
         Specify for AIC and KIC methods.
 
+    Returns
+    -------
+    residual : Union[int, float]
+        Residuals to select the optimal order.
+
     """
     if criteria == "AIC":
         if corrected is True:
@@ -445,7 +455,7 @@ def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=Non
         num[0] = 1.0 + 0j
         for k in range(0, iq):
             num[k + 1] = ma[k]
-        numf = np.fft(num, nfft)
+        numf = np.fft.fft(num, nfft)
 
     if ar is not None and ma is not None:
         psd = rho / sampling_rate * abs(numf) ** 2.0 / abs(denf) ** 2.0

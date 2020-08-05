@@ -197,7 +197,7 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
         import mne
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_power(): the 'mne'",
+            "NeuroKit error: signal_power(): the 'mne'",
             "module is required. ",
             "Please install it first (`pip install mne`).",
         )

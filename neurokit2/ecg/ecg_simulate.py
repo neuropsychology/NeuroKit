@@ -27,7 +27,10 @@ def ecg_simulate(
     noise : float
         Noise level (amplitude of the laplace noise).
     heart_rate : int
-        Desired simulated heart rate (in beats per minute).
+        Desired simulated heart rate (in beats per minute). The default is 70. Note that for the
+        ECGSYN method, random fluctuations are to be expected to mimick a real heart rate. These
+        fluctuations can cause some slight discrepancies between the requested heart rate and the
+        empirical heart rate, especially for shorter signals.
     method : str
         The model used to generate the signal. Can be 'simple' for a simulation based on Daubechies
         wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use an
@@ -49,9 +52,7 @@ def ecg_simulate(
     >>> ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")
     >>> pd.DataFrame({"ECG_Simple": ecg1,
     ...               "ECG_Complex": ecg2}).plot(subplots=True) #doctest: +ELLIPSIS
-    array([<matplotlib.axes._subplots.AxesSubplot object at ...>,
-       <matplotlib.axes._subplots.AxesSubplot object at ...>],
-      dtype=object)
+    array([<AxesSubplot:>, <AxesSubplot:>], dtype=object)
 
     See Also
     --------
