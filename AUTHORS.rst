@@ -28,6 +28,8 @@ Contributors
 * `Russell Anderson <https://github.com/rpanderson>`_ *(La Trobe Institute for Molecular Science, Australia)*
 * `Alexander Wong <https://github.com/awwong1>`_ *(University of Alberta, Canada)*
 * `Elaine Teo <https://github.com/elaineteo2000>`_ *(University College London)*
+* `Raimon Padrós <https://github.com/raimonpv>`_ *(Universitat politècnica de Catalunya, Spain - Massachusetts General Hospital, USA)*
+* `Minsoo Yeo <https://github.com/minsooyeo>`_ *(Taewoong Medical Co., Ltd., ROK)*
 
 
 Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.

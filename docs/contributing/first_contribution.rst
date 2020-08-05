@@ -9,6 +9,11 @@ Now that you're familiar with `how to use GitHub <https://neurokit2.readthedocs.
 
 In this guide, we will discuss the two best types of contributions for beginners, as they are easy to make, super useful and safe (you cannot break the package 😏).
 
+Talk about it
+------------------
+
+Contributing to the development of a package also means helping to popularize it, so that more people hear about it and use it. So do not hesitate to **talk about it on social media** (twitter, reddit, research gate, ...) and present it to your students or colleagues. Also, do not hesitate to write blogposts about it (or even make some videos if you're a YouTube influencer 😎). And let us know if you do that, we'll try to boost your outreach by retweeting, sharing and spreading it.
+
 
 Look for *"good first contribution"* issues
 -------------------------------------------
@@ -84,7 +89,7 @@ I could have written `assert output == 5`, however, I decided instead to check t
 
 You can see examples of tests in the existing `test files <https://github.com/neuropsychology/NeuroKit/tree/master/tests>`_.
 
-
+And if you want to deepen your understanding of the topic, check-out this very accessible `pytest tutorial for data science <https://github.com/poldrack/pytest_tutorial>`_.
 
 
 

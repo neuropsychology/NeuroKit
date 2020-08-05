@@ -1,6 +1,9 @@
+import warnings
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import pytest
 import scipy.signal
 
 import neurokit2 as nk
@@ -8,6 +11,22 @@ import neurokit2 as nk
 # =============================================================================
 # Signal
 # =============================================================================
+
+
+def test_signal_simulate():
+    # Warning for nyquist criterion
+    with pytest.warns(
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested frequency.*cannot be resolved.*"
+    ):
+        nk.signal_simulate(sampling_rate=100, frequency=11, silent=False)
+
+    # Warning for period duration
+    with pytest.warns(
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested frequency.*since its period of.*"
+    ):
+        nk.signal_simulate(duration=1, frequency=0.1, silent=False)
 
 
 def test_signal_smooth():
@@ -95,6 +114,10 @@ def test_signal_filter():
     filtered = nk.signal_filter(signal, highcut=10)
     assert np.std(signal) > np.std(filtered)
 
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"The sampling rate is too low.*"):
+        with pytest.raises(ValueError):
+            nk.signal_filter(signal, method="bessel", sampling_rate=100 ,highcut=50)
+
     # Generate 10 seconds of signal with 2 Hz oscillation and added 50Hz powerline-noise.
     sampling_rate = 250
     samples = np.arange(10 * sampling_rate)
@@ -174,6 +197,12 @@ def test_signal_rate():  # since singal_rate wraps signal_period, the latter is 
     assert rate.shape == (duration * sampling_rate,)
 
 
+def test_signal_period():
+    # Test warning path of no peaks
+    with pytest.warns(nk.NeuroKitWarning, match=r"Too few peaks detected to compute the rate."):
+        nk.signal_period(np.zeros)
+
+
 def test_signal_plot():
 
     # Test with array
@@ -226,3 +255,74 @@ def test_signal_power():
     pwr2 = nk.signal_power(signal2, [[0.9, 1.6], [1.4, 2.0]], sampling_rate=100)
 
     assert np.allclose(np.mean(pwr1.iloc[0] - pwr2.iloc[0]), 0, atol=0.01)
+
+
+def test_signal_timefrequency():
+
+    signal = nk.signal_simulate(duration = 50, frequency=5) + 2 * nk.signal_simulate(duration = 50, frequency=20)
+
+    # short-time fourier transform
+    frequency, time, stft = nk.signal_timefrequency(signal, method="stft", min_frequency=1, max_frequency=50, show=False)
+
+    assert len(frequency) == stft.shape[0]
+    assert len(time) == stft.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(stft[indices_freq5]) < np.sum(stft[indices_freq20])
+
+    # wavelet transform
+    frequency, time, cwtm = nk.signal_timefrequency(signal, method="cwt", max_frequency=50, show=False)
+
+    assert len(frequency) == cwtm.shape[0]
+    assert len(time) == cwtm.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(cwtm[indices_freq5]) < np.sum(cwtm[indices_freq20])
+
+    # wvd
+    frequency, time, wvd = nk.signal_timefrequency(signal, method="wvd", max_frequency=50, show=False)
+    assert len(frequency) == wvd.shape[0]
+    assert len(time) == wvd.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(wvd[indices_freq5]) < np.sum(wvd[indices_freq20])
+
+    # pwvd
+    frequency, time, pwvd = nk.signal_timefrequency(signal, method="pwvd",
+                                                    max_frequency=50, show=False)
+    assert len(frequency) == pwvd.shape[0]
+    assert len(time) == pwvd.shape[1]
+    indices_freq5 = np.logical_and(frequency > 3, frequency < 7)
+    indices_freq20 = np.logical_and(frequency > 18, frequency < 22)
+    assert np.sum(pwvd[indices_freq5]) < np.sum(pwvd[indices_freq20])
+
+def test_signal_psd(recwarn):
+    warnings.simplefilter("always")
+
+    data = nk.data("bio_eventrelated_100hz")
+    out = nk.signal_psd(data["ECG"], sampling_rate=100)
+
+    assert list(out.columns) == ["Frequency", "Power"]
+
+    assert len(recwarn) == 1
+    assert recwarn.pop(nk.misc.NeuroKitWarning)
+
+
+def test_signal_distort():
+    signal = nk.signal_simulate(duration=10, frequency=0.5, sampling_rate=10)
+
+    # Warning for nyquist criterion
+    with pytest.warns(
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested noise frequency.*cannot be resolved.*"
+    ):
+        nk.signal_distort(signal, sampling_rate=10, noise_amplitude=1, silent=False)
+
+    # Warning for period duration
+    with pytest.warns(
+        nk.misc.NeuroKitWarning,
+        match=r"Skipping requested noise frequency.*since its period of.*"
+    ):
+        signal = nk.signal_simulate(duration=1, frequency=1, sampling_rate=10)
+        nk.signal_distort(signal, noise_amplitude=1, noise_frequency=0.1, silent=False)
+

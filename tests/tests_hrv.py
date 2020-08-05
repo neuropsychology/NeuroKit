@@ -1,6 +1,9 @@
 import numpy as np
+import pandas as pd
+import pytest
 
 import neurokit2 as nk
+import neurokit2.misc as misc
 
 
 def test_hrv_time():
@@ -43,6 +46,12 @@ def test_hrv_frequency():
     assert np.isnan(hrv1["HRV_VLF"][0])
     assert np.isnan(hrv2["HRV_LF"][0])
 
+    # Test warning on too short duration
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r"The duration of recording is too short.*"):
+        ecg3 = nk.ecg_simulate(duration=10, sampling_rate=2000, heart_rate=70, random_state=42)
+        _, peaks3 = nk.ecg_process(ecg3, sampling_rate=2000)
+        nk.hrv_frequency(peaks3, sampling_rate=2000, silent=False)
+
 
 def test_hrv():
 
@@ -67,3 +76,58 @@ def test_hrv():
 
     assert all(elem in np.array(ecg_hrv.columns.values, dtype=object) for elem
                in columns)
+
+
+def test_hrv_rsa():
+    data = nk.data("bio_eventrelated_100hz")
+    ecg_signals, info = nk.ecg_process(data["ECG"], sampling_rate=100)
+    rsp_signals, _ = nk.rsp_process(data["RSP"], sampling_rate=100)
+
+    rsa_feature_columns = [
+      'RSA_P2T_Mean',
+      'RSA_P2T_Mean_log',
+      'RSA_P2T_SD',
+      'RSA_P2T_NoRSA',
+      'RSA_PorgesBohrer',
+      'RSA_Gates_Mean',
+      'RSA_Gates_Mean_log',
+      'RSA_Gates_SD'
+     ]
+
+    rsa_features = nk.hrv_rsa(
+        ecg_signals,
+        rsp_signals,
+        rpeaks=info,
+        sampling_rate=100,
+        continuous=False
+    )
+
+    assert all(key in rsa_feature_columns for key in rsa_features.keys())
+
+    # Test simulate RSP signal warning
+    with pytest.warns(misc.NeuroKitWarning, match=r"RSP signal not found. For this.*"):
+        nk.hrv_rsa(ecg_signals, rpeaks=info, sampling_rate=100, continuous=False)
+
+    with pytest.warns(misc.NeuroKitWarning, match=r"RSP signal not found. RSP signal.*"):
+        nk.hrv_rsa(ecg_signals, pd.DataFrame(), rpeaks=info, sampling_rate=100, continuous=False)
+
+    # Test missing rsp onsets/centers
+    with pytest.warns(misc.NeuroKitWarning, match=r"Couldn't find rsp cycles onsets and centers.*"):
+        rsp_signals["RSP_Peaks"] = 0
+        nk.hrv_rsa(ecg_signals, rsp_signals, rpeaks=info, sampling_rate=100, continuous=False)
+
+
+def test_hrv_nonlinear_fragmentation():
+    # https://github.com/neuropsychology/NeuroKit/issues/344
+    from neurokit2.hrv.hrv_nonlinear import _hrv_nonlinear_fragmentation
+
+    edge_rri = np.array([888.0, 1262.0, 1290.0, 1274.0, 1300.0, 1244.0, 1266.0])
+    test_out = {}
+
+    _hrv_nonlinear_fragmentation(edge_rri, out=test_out)
+    assert test_out == {
+        "IALS": 0.8333333333333334,
+        "PAS": 1.0,
+        "PIP": 0.5714285714285714,
+        "PSS": 1.0,
+    }

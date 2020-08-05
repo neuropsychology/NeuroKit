@@ -7,7 +7,7 @@ import pandas as pd
 from .signal_psd import signal_psd
 
 
-def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, **kwargs):
+def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, normalize=True, **kwargs):
     """Compute the power of a signal in a given frequency band.
 
     Parameters
@@ -22,6 +22,9 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
         Compute instant frequency, or continuous power.
     show : bool
         If True, will return a Poincaré plot. Defaults to False.
+    normalize : bool
+        Normalization of power by maximum PSD value. Default to True.
+        Normalization allows comparison between different PSD methods.
     **kwargs
         Keyword arguments to be passed to `signal_psd()`.
 
@@ -62,7 +65,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     """
 
     if continuous is False:
-        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, show=show, **kwargs)
+        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, show=show, normalize=normalize, **kwargs)
     else:
         out = _signal_power_continuous(signal, frequency_band, sampling_rate=sampling_rate)
 
@@ -76,7 +79,7 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
 # =============================================================================
 
 
-def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, **kwargs):
+def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, normalize=True, order_criteria="KIC", **kwargs):
     for i in range(len(frequency_band)):  # pylint: disable=C0200
         min_frequency = frequency_band[i][0]
         if min_frequency == 0:
@@ -86,7 +89,7 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
         window_length = int((2 / min_frequency) * sampling_rate)
         if window_length <= len(signal) / 2:
             break
-    psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, **kwargs)
+    psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, normalize=normalize, order_criteria=order_criteria, **kwargs)
 
     out = {}
     if isinstance(frequency_band[0], (list, tuple)):
@@ -194,7 +197,7 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
         import mne
     except ImportError:
         raise ImportError(
-            "NeuroKit warning: signal_power(): the 'mne'",
+            "NeuroKit error: signal_power(): the 'mne'",
             "module is required. ",
             "Please install it first (`pip install mne`).",
         )

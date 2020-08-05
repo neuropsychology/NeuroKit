@@ -12,7 +12,6 @@ def distance(X=None, method="mahalanobis"):
 
     Compute distance using different metrics.
 
-
     Parameters
     ----------
     X : array or DataFrame
@@ -25,14 +24,12 @@ def distance(X=None, method="mahalanobis"):
     array
         Vector containing the distance values.
 
-
     Examples
     ---------
-    >>> from sklearn import datasets
     >>> import neurokit2 as nk
     >>>
-    >>> X = datasets.load_iris().data
-    >>> vector = distance(X)
+    >>> X = nk.data("iris")
+    >>> vector = nk.distance(X)
     >>> vector #doctest: +SKIP
 
     """

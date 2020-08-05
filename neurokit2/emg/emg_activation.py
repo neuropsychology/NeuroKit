@@ -168,7 +168,7 @@ def emg_activation(
             size = 20
         if threshold_size is None:
             threshold_size = 22
-        activity = _emg_activation_silva(emg_cleaned, sampling_rate=sampling_rate, size=size, threshold=threshold, threshold_size=threshold_size)
+        activity = _emg_activation_silva(emg_cleaned, size=size, threshold=threshold, threshold_size=threshold_size)
 
     else:
         raise ValueError(
@@ -308,7 +308,7 @@ def _emg_activation_biosppy(emg_cleaned, sampling_rate=1000, size=0.05, threshol
     return activity
 
 
-def _emg_activation_silva(emg_cleaned, sampling_rate=1000,
+def _emg_activation_silva(emg_cleaned,
                           size=20, threshold_size=22, threshold='default'):
     """Follows the approach by Silva et al. 2012, adapted from `Biosppy`.
     """

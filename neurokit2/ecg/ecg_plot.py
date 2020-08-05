@@ -50,7 +50,7 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
     """
     # Sanity-check input.
     if not isinstance(ecg_signals, pd.DataFrame):
-        print(
+        raise ValueError(
             "NeuroKit error: ecg_plot(): The `ecg_signals` argument must be the "
             "DataFrame returned by `ecg_process()`."
         )

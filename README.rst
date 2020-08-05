@@ -73,7 +73,7 @@ Contributing
         :target: https://github.com/psf/black
         :alt: Black code
 
-NeuroKit2 is a collaborative project with a community of contributors with all levels of development expertise. Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
+NeuroKit2 is the most `welcoming <https://github.com/neuropsychology/NeuroKit#popularity>`_ project with a large community of contributors with all levels of programming expertise. **But the package is still far from being perfect!** Thus, if you have some ideas for **improvement**, **new features**, or just want to **learn Python** and do something useful at the same time, do not hesitate and check out the following guides:
 
 - `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/contributing/understanding.html>`_
 - `Contributing guide <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html>`_
@@ -132,9 +132,9 @@ Examples
 -  `Analyze Respiratory Rate Variability (RRV) <https://neurokit2.readthedocs.io/en/latest/examples/rrv.html>`_
 -  `Extract and Visualize Individual Heartbeats <https://neurokit2.readthedocs.io/en/latest/examples/heartbeats.html>`_
 -  `Locate P, Q, S and T waves in ECG <https://neurokit2.readthedocs.io/en/latest/examples/ecg_delineate.html>`_
--  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/tutorials/complexity.html>`_
+-  `Complexity Analysis of Physiological Signals <https://neurokit2.readthedocs.io/en/latest/examples/complexity.html>`_
 -  `Analyze Electrooculography EOG data <https://neurokit2.readthedocs.io/en/latest/examples/eog.html>`_
--  `Fit a function to a signal <https://neurokit2.readthedocs.io/en/latest/tutorials/fit_function.html>`_
+-  `Fit a function to a signal <https://neurokit2.readthedocs.io/en/latest/examples/fit_function.html>`_
 
 *You can try out these examples directly* `in your browser <https://github.com/neuropsychology/NeuroKit/tree/master/docs/examples#cloud-based-interactive-examples>`_.
 
@@ -377,7 +377,7 @@ event-related analysis pertains to the segments of signals within the orange box
 changes pertaining to the appearance of stimuli), interval-related analysis can be
 applied on the entire 20s duration to investigate how physiology fluctuates in general.
 In this case, using `bio_analyze()` will compute features such as rate characteristics (in particular,
-variability metrices) and peak characteristics.
+variability metrics) and peak characteristics.
 
 - `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
@@ -532,34 +532,14 @@ Signal Power Spectrum Density (PSD)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. code-block:: python
 
-    # Generate signal with frequencies of 5, 20 and 30
-	signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20) + nk.signal_simulate(frequency=30)
-	
-	# Find Power Spectrum Density with different methods
-	# Mutlitaper
-	multitaper = nk.signal_psd(signal, method="multitapers", show=False, max_frequency=100)
-	# Welch
-	welch = nk.signal_psd(signal, method="welch", min_frequency=1, show=False, max_frequency=100)
-	# Burg
-	burg = nk.signal_psd(signal, method="burg", min_frequency=1, show=False, ar_order=15, max_frequency=100)
+    # Generate complex signal
+    signal = nk.signal_simulate(duration=20, frequency=[0.5, 5, 10, 15], amplitude=[2, 1.5, 0.5, 0.3], noise=0.025)
 
-	# Visualize the different methods together
-	fig, ax = plt.subplots()
-
-	ax.plot(welch["Frequency"], welch["Power"], label="Welch", color="#CFD8DC", linewidth=2)
-	ax.plot(multitaper["Frequency"], multitaper["Power"], label="Multitaper", color="#00695C", linewidth=2)
-	ax.plot(burg["Frequency"], burg["Power"], label="Burg", color="#0097AC", linewidth=2)
-
-	ax.set_title("Power Spectrum Density (PSD)")
-	ax.set_yscale('log')
-	ax.set_xlabel("Frequency (Hz)")
-	ax.set_ylabel("PSD (ms^2/Hz)")
-	ax.legend(loc="upper right")
-
-	# Plot 3 frequencies of generated signal
-	ax.axvline(5, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
-	ax.axvline(20, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
-	ax.axvline(30, color="#689F38", linewidth=3, ymax=0.95, linestyle="--")
+    # Get the PSD using different methods
+    welch = nk.signal_psd(signal, method="welch", min_frequency=1, max_frequency=20, show=True)
+    multitaper = nk.signal_psd(signal, method="multitapers", max_frequency=20, show=True)
+    lomb = nk.signal_psd(signal, method="lomb", min_frequency=1, max_frequency=20, show=True)
+    burg = nk.signal_psd(signal, method="burg", min_frequency=1, max_frequency=20, order=10, show=True)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_psd.png
         :target: https://neurokit2.readthedocs.io/en/latest/
@@ -590,6 +570,8 @@ Popularity
         :target: https://github.com/neuropsychology/NeuroKit/network
 
 
+NeuroKit2 is one of the most welcoming package for new contributors and users, as well as the fastest growing package. So stop hesitating and hop onboard 🤗
+
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_popularity.png
         :target: https://pypi.python.org/pypi/neurokit2
 
@@ -598,4 +580,4 @@ Popularity
 Notes
 -------
 
-*The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquify, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*
+*The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*

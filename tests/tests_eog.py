@@ -2,6 +2,7 @@
 import numpy as np
 import mne
 import matplotlib.pyplot as plt
+import pytest
 
 import neurokit2 as nk
 
@@ -94,6 +95,9 @@ def test_eog_plot():
     np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
     plt.close(fig)
 
+    with pytest.raises(ValueError, match=r'NeuroKit error: eog_plot.*'):
+        nk.eog_plot(None)
+
 
 def test_eog_eventrelated():
 
@@ -109,6 +113,19 @@ def test_eog_eventrelated():
 
     # Test blink presence
     assert np.alltrue(np.array(eog_eventrelated["EOG_Blinks_Presence"]) == np.array([1, 0, 0]))
+
+    # Test warning on missing columns
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EOG_Blinks`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["EOG_Blinks"]
+        nk.eog_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
+
+    with pytest.warns(nk.misc.NeuroKitWarning, match=r".*does not have an `EOG_Rate`.*"):
+        first_epoch_key = list(epochs.keys())[0]
+        first_epoch_copy = epochs[first_epoch_key].copy()
+        del first_epoch_copy["EOG_Rate"]
+        nk.eog_eventrelated({**epochs, first_epoch_key: first_epoch_copy})
 
 
 def test_eog_intervalrelated():

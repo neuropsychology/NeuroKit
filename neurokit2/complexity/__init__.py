@@ -9,14 +9,15 @@ from .complexity_embedding import complexity_embedding
 from .complexity_optimize import complexity_optimize
 from .complexity_r import complexity_r
 from .complexity_simulate import complexity_simulate
-from .entropy_approximate import entropy_approximate
-from .entropy_fuzzy import entropy_fuzzy
-from .entropy_multiscale import entropy_multiscale
-from .entropy_sample import entropy_sample
+from .transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Entropy
 from .entropy_shannon import entropy_shannon
 from .fractal_correlation import fractal_correlation
+from .entropy_approximate import entropy_approximate
+from .entropy_fuzzy import entropy_fuzzy
+from .entropy_multiscale import entropy_multiscale
+from .entropy_sample import entropy_sample
 
 # Fractal
 from .fractal_dfa import fractal_dfa
@@ -79,4 +80,6 @@ __all__ = [
     "complexity_mfdfa",
     "complexity_d2",
     "complexity_plot",
+    "transition_matrix",
+    "transition_matrix_simulate"
 ]

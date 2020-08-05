@@ -44,12 +44,15 @@ matplotlib$use("Agg", force = TRUE)
 
 ## Introduction
 
-The aim of this study is to show how to analyze event-related potentials (ERP), i.e., evoked potentials under a regression framework, for instance by using Bayesian General Additive Models (GAM).
 
 
+The aim of this study is to explore the feasibility of analyzing event-related potentials (ERP) under a regression framework, through the usage of non-linear links (using splines, and General Additive Models - GAMs). Combined with the usage of mixed models, theoretical benefits include the incorporation of more information (such as data at the single-trial, - and even single-channel - level), as well as the computation of marginal means and contrasts, allowing for a flexible and powerful way of analysing differences between conditions.
 
 
 ## Procedure
+
+We will start by running a "traditional" ERP analysis for a single subject using the MNE Python package [@gramfort2014mne; @gramfort2013meg] to obtain "gold standard" baseline patterns of results. Then, we will first attempt to model the evoked potentials using a simple linear model with splines, before applying GAMs.
+
 
 ### Data
 
@@ -273,7 +276,7 @@ This plot shows the original raw averages (dotted lines), the predicted values b
 ```{r, message=FALSE, warning=FALSE}
 library(mgcv)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition), data=data)
+model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, bs="cr"), data=data, method="REML")
 ```
 
 ```{r, message=FALSE, warning=FALSE}
@@ -285,7 +288,7 @@ It is possible to increase the number of degrees of freedom.
 ```{r, message=FALSE, warning=FALSE, fig.keep='none'}
 gam.check(model)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data)
+model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr"), data=data, method="REML")
 ```
 
 ```{r, message=FALSE, warning=FALSE}
@@ -302,10 +305,13 @@ plot_model(model, data)
 data_long <- data %>%
   pivot_longer(starts_with("EEG."), names_to="Channel")
 
-# Won't converge, too much data!
+# model <- gamm4::gamm4(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr"),
+#                       random=~(1|Channel), data=data_long)
 # model <- lme4::lmer(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
 # model <- glmmTMB::glmmTMB(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
 ```
+
+Unfortunately, this won't converge, too much data :(
 
 
 ## References

@@ -41,7 +41,10 @@ def emg_plot(emg_signals, sampling_rate=None):
 
     # Sanity-check input.
     if not isinstance(emg_signals, pd.DataFrame):
-        print("NeuroKit error: The `emg_signals` argument must be the DataFrame returned by `emg_process()`.")
+        raise ValueError(
+            "NeuroKit error: The `emg_signals` argument must"
+            " be the DataFrame returned by `emg_process()`."
+        )
 
     # Determine what to display on the x-axis, mark activity.
     if sampling_rate is not None:
