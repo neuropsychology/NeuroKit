@@ -273,22 +273,26 @@ This plot shows the original raw averages (dotted lines), the predicted values b
 
 ### General Additive Model (GAM)
 
+Fit a GAM with cubic splines using the `bam()` function that is optimized for very large datasets.
+
 ```{r, message=FALSE, warning=FALSE}
 library(mgcv)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, bs="cr"), data=data, method="REML")
+model <- mgcv::bam(EEG ~ Condition + s(Time, by = Condition, bs="cr"), data=data)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
 plot_model(model, data)
 ```
 
-It is possible to increase the number of degrees of freedom.
+As we can see, though it gives decent results, it seems like the default smoothing is a bit too strong. This is an issue as our process of interest (event-related potentials) are known to be of very high frequency with sharp changes. 
+
+Fortunately, it is possible to decrease the smoothness by increasing the number of degrees of freedom of the smooth term. We will set the dimension *k* to 5\% to the length of the epochs, which in our case corresponds to `0.05 * 600 ms`.
 
 ```{r, message=FALSE, warning=FALSE, fig.keep='none'}
 gam.check(model)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr"), data=data, method="REML")
+model <- mgcv::bam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr"), data=data)
 ```
 
 ```{r, message=FALSE, warning=FALSE}
@@ -301,17 +305,25 @@ plot_model(model, data)
 
 ### Using data from all the channels
 
+
+We will add use the data from all the channels of the cluster by adding them as a random factor in the model (random slopes are added for the condition factor).
+
 ```{r, message=FALSE, warning=FALSE}
 data_long <- data %>%
-  pivot_longer(starts_with("EEG."), names_to="Channel")
+  pivot_longer(starts_with("EEG."), names_to="Channel") %>% 
+  mutate(Channel = as.factor(Channel))
 
-# model <- gamm4::gamm4(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr"),
-#                       random=~(1|Channel), data=data_long)
-# model <- lme4::lmer(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
-# model <- glmmTMB::glmmTMB(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
+model_full <- mgcv::bam(value ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr") + s(Condition, Channel, bs='re'), data=data_long)
+
+plot_model(model_full, data)
 ```
 
-Unfortunately, this won't converge, too much data :(
+```{r, message=FALSE, warning=FALSE}
+performance::compare_performance(model, model_full)
+```
 
+## Conclusion
+
+GAMs offer a flexible and powerful way to model ERPs. Moreover, these models can be extended to include more covariates, hopefully increasing the signal to noise ratio.
 
 ## References

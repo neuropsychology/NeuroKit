@@ -95,20 +95,24 @@ fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 
 times = epochs.times
 ax0.axvline(x=0, linestyle="--", color="black")
+## <matplotlib.lines.Line2D object at 0x00000000C7AE7640>
 ax0.plot(times, np.mean(condition1, axis=0), label="Audio")
+## [<matplotlib.lines.Line2D object at 0x00000000C7AF2D30>]
 ax0.plot(times, np.mean(condition2, axis=0), label="Visual")
+## [<matplotlib.lines.Line2D object at 0x00000000C7AF2F40>]
 ax0.legend(loc="upper right")
+## <matplotlib.legend.Legend object at 0x00000000C7AF2EE0>
 ax0.set_ylabel("uV")
 
 # Difference
 ax1.axvline(x=0, linestyle="--", color="black")
 ax1.plot(times, condition1.mean(axis=0) - condition2.mean(axis=0))
+## [<matplotlib.lines.Line2D object at 0x00000000C7B08B20>]
 ax1.axhline(y=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000BFB5C490>
+## <matplotlib.lines.Line2D object at 0x00000000C7B08CD0>
 ax1.set_ylabel("Difference")
 
 # T-values
-## Text(0, 0.5, 'Difference')
 ax2.axvline(x=0, linestyle="--", color="black")
 h = None
 for i, c in enumerate(clusters):
@@ -123,12 +127,16 @@ for i, c in enumerate(clusters):
                     times[c.stop - 1],
                     color=(0.3, 0.3, 0.3),
                     alpha=0.3)
+## <matplotlib.patches.Polygon object at 0x00000000C7B18550>
+## <matplotlib.patches.Polygon object at 0x00000000C7B18BE0>
 hf = ax2.plot(times, t_vals, 'g')
 if h is not None:
     plt.legend((h, ), ('cluster p-value < 0.05', ))
-## <matplotlib.legend.Legend object at 0x00000000BFB5CF10>
+## <matplotlib.legend.Legend object at 0x00000000C7B18D00>
 plt.xlabel("time (ms)")
+## Text(0.5, 0, 'time (ms)')
 plt.ylabel("t-values")
+## Text(0, 0.5, 't-values')
 plt.savefig("figures/fig2.png")
 plt.clf()
 ```
@@ -236,10 +244,13 @@ difference between the two conditions.
 
 ### General Additive Model (GAM)
 
+Fit a GAM with cubic splines using the `bam()` function that is
+optimized for very large datasets.
+
 ``` r
 library(mgcv)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition), data=data, method="REML")
+model <- mgcv::bam(EEG ~ Condition + s(Time, by = Condition, bs="cr"), data=data)
 ```
 
 ``` r
@@ -248,26 +259,36 @@ plot_model(model, data)
 
 ![](../../studies/erp_gam/figures/unnamed-chunk-12-1.png)<!-- -->
 
-It is possible to increase the number of degrees of freedom.
+As we can see, though it gives decent results, it seems like the default
+smoothing is a bit too strong. This is an issue as our process of
+interest (event-related potentials) are known to be of very high
+frequency with sharp changes.
+
+Fortunately, it is possible to decrease the smoothness by increasing the
+number of degrees of freedom of the smooth term. We will set the
+dimension *k* to 5% to the length of the epochs, which in our case
+corresponds to `0.05 * 600 ms`.
 
 ``` r
 gam.check(model)
 ## 
-## Method: REML   Optimizer: outer newton
-## full convergence after 7 iterations.
-## Gradient range [-0.00982,0.00773]
-## (score 36811 & scale 0.968).
-## Hessian positive definite, eigenvalue range [3.28,13102].
+## Method: fREML   Optimizer: perf newton
+## full convergence after 8 iterations.
+## Gradient range [-2.92e-07,2.28e-07]
+## (score 36800 & scale 0.967).
+## Hessian positive definite, eigenvalue range [3.3,13102].
 ## Model rank =  20 / 20 
 ## 
 ## Basis dimension (k) checking results. Low p-value (k-index<1) may
 ## indicate that k is too low, especially if edf is close to k'.
 ## 
-##                           k'  edf k-index p-value
-## s(Time):Conditionaudio  9.00 8.65    0.99    0.34
-## s(Time):Conditionvisual 9.00 8.81    0.99    0.41
+##                           k'  edf k-index p-value  
+## s(Time):Conditionaudio  9.00 8.68    0.98   0.040 *
+## s(Time):Conditionvisual 9.00 8.83    0.98   0.065 .
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data, method="REML")
+model <- mgcv::bam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr"), data=data)
 ```
 
 ``` r
@@ -278,16 +299,37 @@ plot_model(model, data)
 
 ### Using data from all the channels
 
+We will add use the data from all the channels of the cluster by adding
+them as a random factor in the model (random slopes are added for the
+condition factor).
+
 ``` r
 data_long <- data %>%
-  pivot_longer(starts_with("EEG."), names_to="Channel")
+  pivot_longer(starts_with("EEG."), names_to="Channel") %>% 
+  mutate(Channel = as.factor(Channel))
 
-# 
-# model <- lme4::lmer(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
-# model <- glmmTMB::glmmTMB(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
+model_full <- mgcv::bam(value ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr") + s(Condition, Channel, bs='re'), data=data_long)
+
+plot_model(model_full, data)
 ```
 
-Unfortunately, this won’t converge, too much data :(
+![](../../studies/erp_gam/figures/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+performance::compare_performance(model, model_full)
+## # Comparison of Model Performance Indices
+## 
+## Model      | Type |      AIC |      BIC |   R2 | RMSE | BF
+## ----------------------------------------------------------
+## model      |  bam | 73490.40 | 73777.79 | 0.04 | 0.98 |   
+## model_full |  bam | 7.35e+05 | 7.36e+05 | 0.03 | 0.98 |  0
+```
+
+## Conclusion
+
+GAMs offer a flexible and powerful way to model ERPs. Moreover, these
+models can be extended to include more covariates, hopefully increasing
+the signal to noise ratio.
 
 ## References
 
