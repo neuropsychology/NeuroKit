@@ -276,13 +276,18 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
             # eigen_vals, eigen_vectors = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
             # # Get normalized map (method by Marijn)
             # state_vals = eigen_vectors.ravel()
-
             # Get map (method 2 - see https://github.com/wmvanvliet/mne_microstates/issues/5)
-            state_vals = data_state.T.dot(activation[state, idx])
-            state_vals /= np.linalg.norm(state_vals)  # Normalize Map
+            # state_vals = data_state.T.dot(activation[state, idx])
+            # state_vals /= np.linalg.norm(state_vals)
+            # clusters[state, :] = state_vals
 
-            # Store map
-            clusters[state, :] = state_vals
+            # step 4a
+            Sk = np.dot(data_state.T, data_state)
+            # step 4b
+            eigen_vals, eigen_vectors = scipy.linalg.eigh(Sk)
+            state_vals = eigen_vectors[:, np.argmax(np.abs(eigen_vals))]
+            state_vals /= np.linalg.norm(state_vals)  # Normalize Map
+            clusters[state, :] = state_vals  # Store map
 
         # Estimate residual noise (step 5)
         act_sum_sq = np.sum(np.sum(clusters[segmentation, :] * data, axis=1) ** 2)
