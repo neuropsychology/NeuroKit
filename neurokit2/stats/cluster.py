@@ -244,11 +244,11 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
     clusters = data[init_times, :]
 
     # Normalize row-wise (across EEG channels)
-    clusters = clusters / np.sqrt(np.sum(clusters**2, axis=1, keepdims=True))
+    clusters /= np.linalg.norm(clusters, axis=1, keepdims=True)  # Normalize the maps
+
 
     # Initialize iteration
-    prev_residual = 1
-    residual = 0
+    prev_residual = 0
     for i in range(max_iterations):
 
         # Step 3: Assign each sample to the best matching microstate
@@ -290,11 +290,11 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         residual = residual / np.float(n_samples * (n_channels - 1))
 
         # Have we converged? Convergence criterion: variance estimate (step 6)
-        if np.abs((prev_residual - residual) / prev_residual) < threshold:
+        if np.abs(prev_residual - residual) < (threshold * residual):
             break
 
         # Next iteration
-        prev_residual = residual
+        prev_residual = residual.copy()
 
     if i == max_iterations:
         warnings.warn("Modified K-means algorithm failed to converge after " + str(i) + "",
