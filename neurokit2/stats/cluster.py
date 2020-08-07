@@ -224,10 +224,16 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
         random_state = np.random.RandomState(random_state)
     ids_of_medoids = np.random.choice(n_samples, n_clusters, replace=False)
 
-    # Find euclidean distance between objects to their medoids
+    # Find distance between objects to their medoids, can be euclidean or manhatten
+    def find_distance(x, y, dist_method='euclidean'):
+        if dist_method == 'euclidean':
+            return np.sqrt(np.sum(np.square(x - y), axis=-1))
+        elif dist_method == 'manhatten':
+            return np.sum(np.abs(x - y), axis=-1)
+
     individual_points = data[:, None, :]
     medoid_points = data[None, ids_of_medoids, :]
-    distance = np.sqrt(np.sum(np.square(individual_points - medoid_points), axis=-1))
+    distance = find_distance(individual_points, medoid_points)
 
     # Assign each point to the nearest medoid
     segmentation = np.argmin(distance, axis=1)
@@ -240,14 +246,11 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
 
         for i in range(n_clusters):
             indices = np.intersect1d(np.where(segmentation == i)[0], subset)
-            updated_individual_points = data[indices, None, :]
-            updated_medoid_points = data[None, indices, :]
-            distances = np.sqrt(np.sum(np.square(updated_individual_points - updated_medoid_points),
-                                       axis=-1)).sum(axis=0)
+            distances = find_distance(data[indices, None, :], data[None, indices, :]).sum(axis=0)
             ids_of_medoids[i] = indices[np.argmin(distances)]
 
         # Step 3: Reassign objects to medoids
-        new_distances = np.sqrt(np.sum(np.square(data[:, None, :] - data[None, ids_of_medoids, :]), axis=-1))
+        new_distances = find_distance(data[:, None, :], data[None, ids_of_medoids, :])
         new_assignments = np.argmin(new_distances, axis=1)
         diffs = np.mean(new_assignments != segmentation)
         segmentation = new_assignments
