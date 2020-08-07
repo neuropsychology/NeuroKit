@@ -8,7 +8,7 @@ from ..stats.cluster_quality import _cluster_quality_gev
 
 
 def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_method='l1', sampling_rate=None,
-                        standardize_eeg=False, n_runs=10, max_iterations=1000, criterion='gev', random_state=None, **kwargs):
+                        standardize_eeg=False, n_runs=10, max_iterations=1000, criterion='gev', random_state=None, optimize=False, **kwargs):
     """Segment a continuous M/EEG signal into microstates using different clustering algorithms.
 
     Several runs of the clustering algorithm are performed, using different random initializations.
@@ -62,6 +62,9 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
+     optimize : bool
+        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
+        For the k-means modified method. Default to False.
 
     Returns
     -------
@@ -155,7 +158,8 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
                                          n_clusters=n_microstates,
                                          random_state=random_state[run],
                                          max_iterations=max_iterations,
-                                         threshold=1e-6)
+                                         threshold=1e-6,
+                                         optimize=optimize)
             current_microstates = current_info["clusters_normalized"]
             current_residual = current_info["residual"]
 
