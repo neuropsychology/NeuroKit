@@ -192,6 +192,83 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 
     return prediction, clusters, info
 
+
+# =============================================================================
+# K-medoids
+# =============================================================================
+
+
+def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random_state=None):
+    """Peforms k-medoids clustering, adapted from Frederic von Wegner.
+
+    https://github.com/Frederic-vW/eeg_microstates
+
+    """
+    # Sanitize
+    if isinstance(data, pd.DataFrame):
+        data = np.array(data)
+
+    n = data.shape[0]
+    dpsim = np.zeros((max_iterations, n_runs))
+    idx = np.zeros((n, n_runs))
+
+    # Generate similarity matrix
+    similarity_matrix = np.corrcoef(data)
+    similarity_matrix = similarity_matrix**2  # ignore EEG polarity
+
+    for run in range(n_runs):
+
+        # Select random samples
+        tmp = np.random.permutation(range(n))
+        mu = tmp[:n_clusters]
+
+        #Initialize interation
+        iteration = 0
+        done = (iteration == max_iterations)
+        while (not done):
+            muold = mu
+            dpsim[iteration, run] = 0
+            iteration += 1
+
+            # Find class assignments
+            segmentation = np.argmax(similarity_matrix[:, mu], axis=1) # max position of each row
+
+            # Set assignments of exemplars to themselves
+            segmentation[mu] = range(n_clusters)
+            for cluster in range(n_clusters):  # For each class, find new exemplar
+                segmentation_index = np.where(segmentation == cluster)[0]
+                S_I_rowsum = np.sum(similarity_matrix[segmentation_index][:, segmentation_index], axis=0)
+                Scl = max(S_I_rowsum)
+                ii = np.argmax(S_I_rowsum)
+                dpsim[iteration, run] = dpsim[iteration, run] + Scl
+                mu[cluster] = segmentation_index[ii]
+            if all(muold == mu) | (iteration == max_iterations):
+                done = 1
+        idx[:, run] = mu[segmentation]
+        dpsim[iteration+1:, run] = dpsim[iteration, run]
+
+#    kmed_maps = np.unique(idx)
+#    clusters = np.array([data[kmed_maps[k].__int__(), :] for k in range(n_clusters)])
+
+    # Get prediction
+    clusters = _cluster_getclusters(data, segmentation)
+    prediction = _cluster_getdistance(data, clusters)
+    prediction["Cluster"] = segmentation
+
+    # Copy function with given parameters
+    clustering_function = functools.partial(_cluster_kmedoids,
+                                            n_clusters=n_clusters,
+                                            max_iterations=max_iterations,
+                                            random_state=random_state)
+
+    # Info dump
+    info = {"n_clusters": n_clusters,
+            "clustering_function": clustering_function,
+            "random_state": random_state}
+
+    return prediction, clusters, info
+
+
 # =============================================================================
 # Modified K-means
 # =============================================================================
