@@ -35,8 +35,9 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
         half the data. See ``microstates_peaks()``.
     method : str
         The algorithm for clustering. Can be one of 'kmeans', the modified k-means algorithm 'kmod' (default),
-        'pca' (Principal Component Analysis), 'ica' (Independent Component Analysis), or
-        'aahc' (Atomize and Agglomerate Hierarchical Clustering) which is more computationally heavy.
+        'kmedoids' (k-centers or k-medoids clustering), 'pca' (Principal Component Analysis),
+        'ica' (Independent Component Analysis), or 'aahc' (Atomize and Agglomerate Hierarchical Clustering)
+        which is more computationally heavy.
     gfp_method : str
         The GFP extraction method, can be either 'l1' (default) or 'l2' to use the L1 or L2 norm.
         See ``nk.eeg_gfp()`` for more details.

@@ -18,9 +18,9 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     data : np.ndarray
         Matrix array of data (E.g., an array (channels, times) of M/EEG data).
     method : str
-        The algorithm for clustering. Can be one of 'kmeans' (default) modified k-means algorithm 'kmod',
-        'pca' (Principal Component Analysis), 'ica' (Independent Component Analysis),
-        'agglomerative' (Atomize and Agglomerate Hierarchical Clustering), 'hierarchical', 'spectral',
+        The algorithm for clustering. Can be one of 'kmeans' (default), modified k-means algorithm 'kmod',
+        'kmedoids' (k-centers or k-medoids clustering), 'pca' (Principal Component Analysis), 'ica' (Independent Component
+        Analysis), 'agglomerative' (Atomize and Agglomerate Hierarchical Clustering), 'hierarchical', 'spectral',
         'mixture', 'mixturebayesian'. See ``sklearn`` for methods details.
     n_clusters : int
         The desired number of clusters.
@@ -57,6 +57,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
     >>> clustering_kmod, clusters_kmod, info = nk.cluster(data, method="kmod", n_clusters=3)
+    >>> clustering_kmedoids, clusters_kmedoids, info = nk.cluster(data, method="kmedoids", n_clusters=3)
     >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
@@ -108,6 +109,10 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     elif method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
         out = _cluster_kmod(data, n_clusters=n_clusters,
                             random_state=random_state, **kwargs)
+    # K-medoids
+    elif method in ["kmedoids", "k-medoids", "k-centers"]:
+        out = _cluster_kmedoids(data, n_clusters=n_clusters,
+                                random_state=random_state, **kwargs)
 
     # PCA
     elif method in ["pca", "principal", "principal component analysis"]:
@@ -198,16 +203,12 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 # =============================================================================
 
 
-def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random_state=None):
+def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random_state=None, **kwargs):
     """Peforms k-medoids clustering, adapted from Frederic von Wegner.
 
     https://github.com/Frederic-vW/eeg_microstates
 
     """
-    # Sanitize
-    if isinstance(data, pd.DataFrame):
-        data = np.array(data)
-
     n = data.shape[0]
     dpsim = np.zeros((max_iterations, n_runs))
     idx = np.zeros((n, n_runs))
@@ -216,13 +217,13 @@ def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random
     similarity_matrix = np.corrcoef(data)
     similarity_matrix = similarity_matrix**2  # ignore EEG polarity
 
-    for run in range(n_runs):
+    for run in np.arange(n_runs):
 
         # Select random samples
         tmp = np.random.permutation(range(n))
         mu = tmp[:n_clusters]
 
-        #Initialize interation
+        # Initialize interation
         iteration = 0
         done = (iteration == max_iterations)
         while (not done):
@@ -231,11 +232,11 @@ def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random
             iteration += 1
 
             # Find class assignments
-            segmentation = np.argmax(similarity_matrix[:, mu], axis=1) # max position of each row
+            segmentation = np.argmax(similarity_matrix[:, mu], axis=1)  # max position of each row
 
             # Set assignments of exemplars to themselves
             segmentation[mu] = range(n_clusters)
-            for cluster in range(n_clusters):  # For each class, find new exemplar
+            for cluster in np.arange(n_clusters):  # For each class, find new exemplar
                 segmentation_index = np.where(segmentation == cluster)[0]
                 S_I_rowsum = np.sum(similarity_matrix[segmentation_index][:, segmentation_index], axis=0)
                 Scl = max(S_I_rowsum)
@@ -247,11 +248,11 @@ def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random
         idx[:, run] = mu[segmentation]
         dpsim[iteration+1:, run] = dpsim[iteration, run]
 
-#    kmed_maps = np.unique(idx)
-#    clusters = np.array([data[kmed_maps[k].__int__(), :] for k in range(n_clusters)])
+    # Data points as centroids
+    kmed_maps = np.unique(idx)
+    clusters = np.array([np.array(data)[int(kmed_maps[k]), :] for k in range(n_clusters)])
 
     # Get prediction
-    clusters = _cluster_getclusters(data, segmentation)
     prediction = _cluster_getdistance(data, clusters)
     prediction["Cluster"] = segmentation
 
@@ -264,7 +265,8 @@ def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random
     # Info dump
     info = {"n_clusters": n_clusters,
             "clustering_function": clustering_function,
-            "random_state": random_state}
+            "random_state": random_state,
+            "clusters": clusters}
 
     return prediction, clusters, info
 
