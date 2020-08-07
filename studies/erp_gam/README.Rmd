@@ -172,7 +172,11 @@ plt.savefig("figures/fig2.png")
 plt.clf()
 ```
 
+
 ![fig2](../../studies/erp_gam/figures/fig2.png)
+
+As we can see in the figure, the auditive condition led to a significantly different negative deflection around 100 ms (referred to as the [N100](https://en.wikipedia.org/wiki/N100), while the visual condition is related to a positive, *yet not significant*, deflection around 180 ms (the [P200](https://en.wikipedia.org/wiki/P200)), and later a significant negative deflection. Let's see if we can reproduce this pattern of results under a regression framework.
+
 
 ## Results
 
@@ -205,6 +209,8 @@ theme_eeg <- function(){
 
 ### Visualize Average
 
+We will start by visualizing the "simple" grand average of all epochs as thick lines, as well as all epochs as thin lines. This will serve us as a baseline to check if our regression approach is on track.
+
 ```{r, message=FALSE, warning=FALSE}
 data %>%
   group_by(Time, Condition) %>%
@@ -220,9 +226,11 @@ data %>%
 
 ### Spline Regression
 
+We sill start by running a spline regression and specifying the degrees of freedom as a function of the epoch length. As our epoch is 600 ms (including the baseline), we will select a fraction (5\%) of that.
+
 
 ```{r, message=FALSE, warning=FALSE}
-model <- lm(EEG ~ Condition * splines::bs(Time, df=0.04 * 600), data=data)
+model <- lm(EEG ~ Condition * splines::bs(Time, df=0.05 * 600), data=data)
 ```
 
 
@@ -287,7 +295,7 @@ plot_model(model, data)
 
 As we can see, though it gives decent results, it seems like the default smoothing is a bit too strong. This is an issue as our process of interest (event-related potentials) are known to be of very high frequency with sharp changes. 
 
-Fortunately, it is possible to decrease the smoothness by increasing the number of degrees of freedom of the smooth term. We will set the dimension *k* to 5\% to the length of the epochs, which in our case corresponds to `0.05 * 600 ms`.
+Fortunately, it is possible to decrease the smoothness by increasing the number of degrees of freedom of the smooth term. Similarly to the spline regression above, we will set the dimension *k* to 5\% to the length of the epochs, which in our case corresponds to `0.05 * 600 ms`.
 
 ```{r, message=FALSE, warning=FALSE, fig.keep='none'}
 gam.check(model)
