@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import warnings
 import numpy as np
 import pandas as pd
 import sklearn.cluster
@@ -207,11 +208,17 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
     The original code by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L600
     leads to an error when the denominator is 0.
     """
-    n_rows, n_cols = data.shape
+    n_rows, n_cols = data.shape  # n_sample, n_channel
     var = np.sum(data**2) - np.sum(np.sum(clusters[clustering, :] * data, axis=1)**2)
-    var /= (n_rows*(n_cols-1))
-#    cv = var * (n_cols-1)**2 / (n_cols-len(clusters)-1)**2
-    cv = var * (n_cols-1)**2 / len(clusters)
+    var /= (n_rows * (n_cols - 1))
+    try:
+        cv = var * (n_cols - 1)**2 / (n_cols - len(clusters) - 1)**2
+    except ValueError:
+        cv = var
+        warnings.warn("Number of columns in data (" + str(n_cols) + ") is smaller",
+                      "than the number of cluster (" + str(len(clusters)) + ") plus 1."
+                      "Returnin the residual noise instead.")
+#    cv = var * (n_cols - 1)**2 / len(clusters)
     return cv
 
 
@@ -232,14 +239,21 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
 #     return gev_total
 
 
-def _cluster_quality_gev(data, clusters, clustering, sd=None):
+def _cluster_quality_gev(data, clusters, clustering, sd=None, n_microstates=4):
     """Global Variance Explained (GEV)
     """
     if sd is None:
         sd = np.std(data, axis=1)
     map_corr = _correlate_vectors(data.T, clusters[clustering].T)
-    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd ** 2)
-    return gev
+
+    gev_all = np.zeros(n_microstates)
+    for state in range(n_microstates):
+        idx = (clustering == state)
+        gev_all[state] = np.sum((sd[idx] * map_corr[idx])**2) / np.sum(sd**2)
+
+    gev = np.sum(gev_all)
+#    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd**2)
+    return gev, gev_all
 
 
 
