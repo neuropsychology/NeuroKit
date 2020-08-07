@@ -192,51 +192,6 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 
     return prediction, clusters, info
 
-
-# =============================================================================
-# K-medoids
-# =============================================================================
-
-def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000):
-
-    n = data.shape[0]
-    dpsim = np.zeros((max_iterations, n_runs))
-    idx = np.zeros((n, n_runs))
-
-    for run in range(n_runs):
-        tmp = np.random.permutation(range(n))  # select random samples
-        mu = tmp[:n_clusters]  # choose n_clusters out of the random samples
-        iteration = 0  # initialize interation
-        done = (iteration == max_iterations)
-        while ( not done ):
-            iteration += 1
-            muold = mu
-            dpsim[iteration, run] = 0
-            # Find class assignments
-            cl = np.argmax(data[:, mu], axis=1) # max pos. of each row
-            # Set assignments of exemplars to themselves
-            cl[mu] = range(n_clusters)
-            for cluster in range(n_clusters): # For each class, find new exemplar
-                I = np.where(cl == cluster)[0]
-                S_I_rowsum = np.sum(data[I][:, I], axis=0)
-                Scl = max(S_I_rowsum)
-                ii = np.argmax(S_I_rowsum)
-                dpsim[iteration, run] = dpsim[iteration, run] + Scl
-                mu[cluster] = I[ii]
-            if all(muold == mu) | (iteration == max_iterations):
-                done = 1
-        idx[:, run] = mu[cl]
-        dpsim[t+1:, run] = dpsim[iteration, run]
-    return np.unique(idx)
-    print("\n\t[+] Clustering algorithm: K-MEDOIDS.")
-#        C = np.corrcoef(data_cluster_norm)
-#        C = C**2 # ignore EEG polarity
-#        kmed_maps = kmedoids(S=C, K=n_clusters, nruns=10, maxits=500)
-    maps = np.array([data_cluster[kmed_maps[k].__int__(),:] for k in range(n_clusters)])
-#
-
-    return maps
-
 # =============================================================================
 # Modified K-means
 # =============================================================================
