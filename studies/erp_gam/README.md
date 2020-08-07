@@ -95,19 +95,21 @@ fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 
 times = epochs.times
 ax0.axvline(x=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000C7AF7640>
+## <matplotlib.lines.Line2D object at 0x00000000BFAE7640>
 ax0.plot(times, np.mean(condition1, axis=0), label="Audio")
-## [<matplotlib.lines.Line2D object at 0x00000000C7B03D30>]
+## [<matplotlib.lines.Line2D object at 0x00000000BFAF3D30>]
 ax0.plot(times, np.mean(condition2, axis=0), label="Visual")
-## [<matplotlib.lines.Line2D object at 0x00000000C7B03F40>]
+## [<matplotlib.lines.Line2D object at 0x00000000BFAF3F40>]
 ax0.legend(loc="upper right")
-## <matplotlib.legend.Legend object at 0x00000000C7B03EE0>
+## <matplotlib.legend.Legend object at 0x00000000BFAF3EE0>
 ax0.set_ylabel("uV")
 
 # Difference
 ax1.axvline(x=0, linestyle="--", color="black")
 ax1.plot(times, condition1.mean(axis=0) - condition2.mean(axis=0))
+## [<matplotlib.lines.Line2D object at 0x00000000BFB07B20>]
 ax1.axhline(y=0, linestyle="--", color="black")
+## <matplotlib.lines.Line2D object at 0x00000000BFB07CD0>
 ax1.set_ylabel("Difference")
 
 # T-values
@@ -125,12 +127,12 @@ for i, c in enumerate(clusters):
                     times[c.stop - 1],
                     color=(0.3, 0.3, 0.3),
                     alpha=0.3)
-## <matplotlib.patches.Polygon object at 0x00000000C7B262E0>
-## <matplotlib.patches.Polygon object at 0x00000000C7B26C10>
+## <matplotlib.patches.Polygon object at 0x00000000BFB16550>
+## <matplotlib.patches.Polygon object at 0x00000000BFB16BE0>
 hf = ax2.plot(times, t_vals, 'g')
 if h is not None:
     plt.legend((h, ), ('cluster p-value < 0.05', ))
-## <matplotlib.legend.Legend object at 0x00000000C7B26D30>
+## <matplotlib.legend.Legend object at 0x00000000BFB16D00>
 plt.xlabel("time (ms)")
 ## Text(0.5, 0, 'time (ms)')
 plt.ylabel("t-values")
@@ -254,9 +256,11 @@ plot_model(model, data)
 
 This plot shows the original raw averages (dotted lines), the predicted
 values by the model and their confidence interval (CI), as well as the
-difference between the two conditions.
+difference between the two conditions (estimated as marginal contrasts).
 
 ### General Additive Model (GAM)
+
+General Additive Model (GAM)
 
 Fit a GAM with cubic splines using the `bam()` function that is
 optimized for very large datasets.
@@ -297,8 +301,8 @@ gam.check(model)
 ## indicate that k is too low, especially if edf is close to k'.
 ## 
 ##                           k'  edf k-index p-value
-## s(Time):Conditionaudio  9.00 8.68       1    0.58
-## s(Time):Conditionvisual 9.00 8.83       1    0.54
+## s(Time):Conditionaudio  9.00 8.68    1.02    0.92
+## s(Time):Conditionvisual 9.00 8.83    1.02    0.89
 
 model <- mgcv::bam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr"), data=data)
 ```
@@ -311,21 +315,41 @@ plot_model(model, data)
 
 ### Using data from all the channels
 
+It is important to note that all the channels contribute in the same way
+to these differences, and taking into account the variability of this
+data could reinforce our model.
+
+``` r
+# Reshape the data in a long format
+data_long <- data %>%
+  pivot_longer(starts_with("EEG."), names_to="Channel", values_to="Signal") %>% 
+  mutate(Channel = as.factor(Channel))
+
+data_long %>% 
+  group_by(Condition, Channel, Time) %>% 
+  summarise_all(mean) %>% 
+  ggplot(aes(x=Time, y=Signal)) +
+  geom_line(aes(color=Condition, group=interaction(Condition, Channel))) +
+  scale_color_manual(values=c("audio"="#FF5722", "visual"="#2196F3")) +
+  scale_fill_manual(values=c("audio"="#FF5722", "visual"="#2196F3")) +
+  ylab("EEG") +
+  theme_eeg() +
+  ggtitle("Average effet of each channel")
+```
+
+![](../../studies/erp_gam/figures/unnamed-chunk-15-1.png)<!-- -->
+
 We will add use the data from all the channels of the cluster by adding
 them as a random factor in the model (random slopes are added for the
 condition factor).
 
 ``` r
-data_long <- data %>%
-  pivot_longer(starts_with("EEG."), names_to="Channel") %>% 
-  mutate(Channel = as.factor(Channel))
-
-model_full <- mgcv::bam(value ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr") + s(Condition, Channel, bs='re'), data=data_long)
+model_full <- mgcv::bam(Signal ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr") + s(Condition, Channel, bs='re'), data=data_long)
 
 plot_model(model_full, data)
 ```
 
-![](../../studies/erp_gam/figures/unnamed-chunk-15-1.png)<!-- -->
+![](../../studies/erp_gam/figures/unnamed-chunk-16-1.png)<!-- -->
 
 ``` r
 performance::compare_performance(model, model_full)
