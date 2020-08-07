@@ -140,6 +140,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
 
         # Initialize values
         gev = 0
+        cv = np.inf
         microstates = None
         segmentation = None
         polarity = None
@@ -156,15 +157,23 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
                                          max_iterations=max_iterations,
                                          threshold=1e-6)
             current_microstates = current_info["clusters_normalized"]
+            current_residual = current_info["residual"]
 
             # Run segmentation on the whole dataset
             s, p, g = _microstates_segment_runsegmentation(data, current_microstates, gfp)
 
-            # If better (i.e., higher GEV), keep this segmentation
-            if g > gev:
-                microstates, segmentation, polarity, gev = current_microstates, s, p, g
-                info = current_info
-
+            if criterion == "gev":
+                # If better (i.e., higher GEV), keep this segmentation
+                if g > gev:
+                    microstates, segmentation, polarity, gev = current_microstates, s, p, g
+                    info = current_info
+            elif criterion == "cv":
+                # If better (i.e., lower CV), keep this segmentation
+                # R2 and residual are proportional, use residual instead of R2
+                if current_residual < cv:
+                    microstates, segmentation, polarity, cv = current_microstates, s, p, current_residual
+                    gev = g
+                    info -= current_info
 
     else:
         # Run clustering algorithm on subset

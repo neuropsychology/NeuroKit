@@ -322,7 +322,8 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
     info = {"n_clusters": n_clusters,
             "clustering_function": clustering_function,
             "random_state": random_state,
-            "clusters_normalized": clusters}
+            "clusters_normalized": clusters,
+            "residual": residual}
 
     return prediction, clusters_unnormalized, info
 
