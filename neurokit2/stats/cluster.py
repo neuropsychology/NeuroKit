@@ -217,12 +217,12 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
     # Sanitize
     if isinstance(data, pd.DataFrame):
         data = np.array(data)
-    n = data.shape[0]
+    n_samples = data.shape[0]
 
     # Step 1: Initialize random medoids
     if not isinstance(random_state, np.random.RandomState):
         random_state = np.random.RandomState(random_state)
-    ids_of_medoids = np.random.choice(n, n_clusters, replace=False)
+    ids_of_medoids = np.random.choice(n_samples, n_clusters, replace=False)
 
     # Find euclidean distance between objects to their medoids
     individual_points = data[:, None, :]
@@ -236,7 +236,7 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
     for i in range(max_iterations):
         # Find new random medoids
         ids_of_medoids = np.full(n_clusters, -1, dtype=int)
-        subset = np.random.choice(n, n, replace=False)
+        subset = np.random.choice(n_samples, n_samples, replace=False)
 
         for i in range(n_clusters):
             indices = np.intersect1d(np.where(segmentation == i)[0], subset)
