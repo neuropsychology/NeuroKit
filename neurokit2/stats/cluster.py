@@ -92,6 +92,12 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >> axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
     >> axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
     >> axes[4, 1].set_title("AAHC (Frederic's method)")
+
+    Refereneces
+    -----------
+    - Park, H. S., & Jun, C. H. (2009). A simple and fast algorithm for K-medoids
+    clustering. Expert systems with applications, 36(2), 3336-3341.
+
     """
     # Sanity checks
     if isinstance(data, pd.DataFrame):
@@ -204,9 +210,11 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 
 
 def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random_state=None, **kwargs):
-    """Peforms k-medoids clustering, adapted from Frederic von Wegner.
+    """Peforms k-medoids clustering which is based on the most centrally located object in a cluster.
+    Less sensitive to outliers than K-means clustering. Adapted from Frederic von Wegner.
 
     https://github.com/Frederic-vW/eeg_microstates
+    Original proposed algorithm from Park & Jun (2009)
 
     """
     n = data.shape[0]
@@ -269,6 +277,46 @@ def _cluster_kmedoids(data, n_clusters=2, n_runs=10, max_iterations=1000, random
             "clusters": clusters}
 
     return prediction, clusters, info
+
+def _cluster_kmedoids_try(data, n_clusters=2, max_iterations=1000, random_state=None, **kwargs):
+
+    n = data.shape[0]
+
+    # Step 1: Initialize random medoids
+    if not isinstance(random_state, np.random.RandomState):
+        random_state = np.random.RandomState(random_state)
+    ids_of_medoids = np.random.choice(n, n_clusters, replace=False)
+
+    # Find euclidean distance between every pair of objects
+    individual_points = np.array(data)[:, None,:]
+    medoid_points = np.array(data)[None, ids_of_medoids, :]
+    distance = np.sqrt(np.sum(np.square(individual_points - medoid_points), axis=-1))
+
+    # Assign each point to the nearest medoid
+    segmentation = np.argmin(distance, axis=1)
+
+    for i in range(max_iterations):
+        ids_of_medoids = np.full(n_clusters, -1, dtype=int)
+        subset = np.random.choice(n, 100, replace=False)
+
+        # Find new medoids
+        for i in range(n_clusters):
+            indices = np.intersect1d(np.where(segmentation == i)[0], subset)
+            updated_individual_points = np.array(data)[indices, None, :]
+            updated_medoid_points = np.array(data)[None, indices,:]
+            distances = np.sqrt(np.sum(np.square(updated_individual_points - updated_medoid_points), axis=-1)).sum(axis=0)
+            ids_of_medoids[i] = indices[np.argmin(distances)]
+
+        # Reassign new points
+        new_distances = np.sqrt(np.sum(np.square(np.array(data)[:, None,:] - np.array(data)[None, ids_of_medoids,:]), axis=-1))
+        new_assignments = np.argmin(new_distances, axis=1)
+        diffs = np.mean(new_assignments != segmentation)
+        segmentation = new_assignments
+
+        if diffs <= 0.01:
+            break
+
+    return segmentation, ids_of_medoids
 
 
 # =============================================================================
