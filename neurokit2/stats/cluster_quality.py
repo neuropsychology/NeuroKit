@@ -86,7 +86,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
 
     # Variance explained
     general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters)
-    general["Score_GEV"] = _cluster_quality_gev(data, clusters, clustering, **kwargs)
+    general["Score_GEV"], _ = _cluster_quality_gev(data, clusters, clustering, **kwargs)
     general["Score_CrossValidation"] = _cluster_quality_crossvalidation(data, clusters, clustering)
 
     # Gap statistic
@@ -213,9 +213,9 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
     var /= (n_rows * (n_cols - 1))
     try:
         cv = var * (n_cols - 1)**2 / (n_cols - len(clusters) - 1)**2
-    except ValueError:
+    except ZeroDivisionError:
         cv = var
-        warnings.warn("Number of columns in data (" + str(n_cols) + ") is smaller",
+        warnings.warn("Number of columns in data (" + str(n_cols) + ") is smaller "
                       "than the number of cluster (" + str(len(clusters)) + ") plus 1."
                       "Returnin the residual noise instead.")
 #    cv = var * (n_cols - 1)**2 / len(clusters)
