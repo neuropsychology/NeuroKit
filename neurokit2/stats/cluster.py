@@ -10,7 +10,7 @@ import scipy.spatial
 import scipy.linalg
 
 
-def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
+def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=False, **kwargs):
     """Performs clustering of data according to different algorithms.
 
     Parameters
@@ -27,6 +27,9 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     random_state : Union[int, numpy.random.RandomState]
         The ``RandomState`` for the random number generator. Defaults to ``None``, in which case a
         different random state is chosen each time this function is called.
+    optimize : bool
+        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
+        For the Kmeans modified method. Default to False.
     **kwargs
         Other arguments to be passed into ``sklearn`` functions.
 
@@ -107,7 +110,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     # Modified k-means
     elif method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
         out = _cluster_kmod(data, n_clusters=n_clusters,
-                            random_state=random_state, **kwargs)
+                            random_state=random_state, optimize=optimize, **kwargs)
 
     # PCA
     elif method in ["pca", "principal", "principal component analysis"]:
@@ -195,7 +198,8 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 # =============================================================================
 # Modified K-means
 # =============================================================================
-def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
+def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, random_state=None,
+                  optimize=False, **kwargs):
     """The modified K-means clustering algorithm,
 
     adapted from Marijn van Vliet and Frederic von Wegner.
@@ -217,6 +221,9 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
+    optimized : bool
+        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
+        For the Kmeans modified method. Default to False.
     **kwargs
         Other arguments to be passed into ``sklearn`` functions.
 
@@ -244,11 +251,11 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
     clusters = data[init_times, :]
 
     # Normalize row-wise (across EEG channels)
-    clusters = clusters / np.sqrt(np.sum(clusters**2, axis=1, keepdims=True))
+    clusters /= np.linalg.norm(clusters, axis=1, keepdims=True)  # Normalize the maps
+
 
     # Initialize iteration
-    prev_residual = 1
-    residual = 0
+    prev_residual = 0
     for i in range(max_iterations):
 
         # Step 3: Assign each sample to the best matching microstate
@@ -270,19 +277,19 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
 
             # Retrieve map values
 
-            # # Method 1 : slower than method 2
-            # cov = np.dot(data_state.T, data_state)  # Find largest eigenvector (step 4a)
-            # # (step 4b)
-            # eigen_vals, eigen_vectors = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
-            # # Get normalized map (method by Marijn)
-            # state_vals = eigen_vectors.ravel()
+            if optimize:
+                # Method 2 - optimized segmentation
+                state_vals = data_state.T.dot(activation[state, idx])
+            else:
+                # Method 1 - eighen value
+                # step 4a
+                Sk = np.dot(data_state.T, data_state)
+                # step 4b
+                eigen_vals, eigen_vectors = scipy.linalg.eigh(Sk)
+                state_vals = eigen_vectors[:, np.argmax(np.abs(eigen_vals))]
 
-            # Get map (method 2 - see https://github.com/wmvanvliet/mne_microstates/issues/5)
-            state_vals = data_state.T.dot(activation[state, idx])
             state_vals /= np.linalg.norm(state_vals)  # Normalize Map
-
-            # Store map
-            clusters[state, :] = state_vals
+            clusters[state, :] = state_vals  # Store map
 
         # Estimate residual noise (step 5)
         act_sum_sq = np.sum(np.sum(clusters[segmentation, :] * data, axis=1) ** 2)
@@ -290,11 +297,11 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         residual = residual / np.float(n_samples * (n_channels - 1))
 
         # Have we converged? Convergence criterion: variance estimate (step 6)
-        if np.abs((prev_residual - residual) / prev_residual) < threshold:
+        if np.abs(prev_residual - residual) < (threshold * residual):
             break
 
         # Next iteration
-        prev_residual = residual
+        prev_residual = residual.copy()
 
     if i == max_iterations:
         warnings.warn("Modified K-means algorithm failed to converge after " + str(i) + "",
@@ -317,7 +324,8 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
     info = {"n_clusters": n_clusters,
             "clustering_function": clustering_function,
             "random_state": random_state,
-            "clusters_normalized": clusters}
+            "clusters_normalized": clusters,
+            "residual": residual}
 
     return prediction, clusters_unnormalized, info
 
