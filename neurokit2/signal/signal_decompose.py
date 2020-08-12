@@ -112,6 +112,7 @@ def _signal_decompose_ssa(signal, n_components=None):
     components = np.zeros((N, d))
     # Reconstruct the elementary matrices without storing them
     for i in range(d):
+        X_elem = sigma[i] * np.outer(u[:, i], vt[i, :])
         X_rev = X_elem[::-1]
         components[:, i] = [X_rev.diagonal(j).mean() for j in range(-X_rev.shape[0] + 1, X_rev.shape[1])]
 
