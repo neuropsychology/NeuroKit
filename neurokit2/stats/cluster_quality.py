@@ -144,12 +144,15 @@ def _cluster_quality_distance(data, clusters):
     return distance
 
 
-def _cluster_quality_sumsquares(data, clusters):
-    """Within-clusters sum of squares
+def _cluster_quality_sumsquares(data, clusters, clustering):
+    """Sumsquares of the distance of each data point to its respective cluster
     """
-    min_distance = np.min(_cluster_quality_distance(data, clusters), axis=1)
+    distance = _cluster_quality_distance(data, clusters)
+    min_distance = []  # distance from each sample to the centroid of its cluster
+    for idx in range(len(data)):
+        cluster_identity = clustering[idx]
+        min_distance.append(distance[idx, cluster_identity])
     return np.sum(min_distance**2)
-
 
 
 def _cluster_quality_variance(data, clusters):
