@@ -216,8 +216,8 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
     except ZeroDivisionError:
         cv = var
         warnings.warn("Number of columns in data (" + str(n_cols) + ") is smaller "
-                      "than the number of cluster (" + str(len(clusters)) + ") plus 1."
-                      "Returnin the residual noise instead.")
+                      "than the number of cluster (" + str(len(clusters)) + ") plus 1. "
+                      "Returning the residual noise instead.")
 #    cv = var * (n_cols - 1)**2 / len(clusters)
     return cv
 
@@ -256,6 +256,25 @@ def _cluster_quality_gev(data, clusters, clustering, sd=None, n_microstates=4):
     return gev, gev_all
 
 
+def _cluster_quality_dispersion(data, clusters, clustering, n_microstates=4):
+    """Sumsquares of the distances between samples within each clusters.
+    An error measure for a n_microstate cluster where the lower the better.
+    Can be used to compare and find the optimal number of clusters.
+    """
+
+    n_rows, n_cols = data.shape  # n_sample, n_channel
+    dispersion_state = np.zeros(n_microstates)
+    for state in range(n_microstates):
+        idx = (clustering == state)
+        data_state = data[idx, :]
+        state_size = len(data_state)  # number of samples in this cluster
+        # pair-wise distance between members of the same cluster
+        distance = scipy.spatial.distance.cdist(data_state, data_state)
+        # sumsquares of distances
+        dispersion_state[state] = 0.5 * np.sum(distance**2) / state_size
+
+    dispersion = np.sum(dispersion_state)
+    return dispersion
 
 def _correlate_vectors(A, B, axis=0):
     """Compute pairwise correlation of multiple pairs of vectors.
