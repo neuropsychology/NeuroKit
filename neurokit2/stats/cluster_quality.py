@@ -89,6 +89,9 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     general["Score_GEV"], _ = _cluster_quality_gev(data, clusters, clustering, **kwargs)
     general["Score_CrossValidation"] = _cluster_quality_crossvalidation(data, clusters, clustering)
 
+    # Dispersion
+    general["Dispersion"] = _cluster_quality_dispersion(data, clusters, clustering, **kwargs)
+
     # Gap statistic
     general.update(_cluster_quality_gap(data,
                                         clusters,
@@ -153,6 +156,27 @@ def _cluster_quality_sumsquares(data, clusters, clustering):
         cluster_identity = clustering[idx]
         min_distance.append(distance[idx, cluster_identity])
     return np.sum(min_distance**2)
+
+def _cluster_quality_dispersion(data, clusters, clustering, n_microstates=4):
+    """Sumsquares of the distances between samples within each clusters.
+    An error measure for a n_microstate cluster where the lower the better.
+    Can be used to compare and find the optimal number of clusters.
+    """
+
+    n_rows, n_cols = data.shape  # n_sample, n_channel
+    dispersion_state = np.zeros(n_microstates)
+    for state in range(n_microstates):
+        idx = (clustering == state)
+        data_state = data[idx, :]
+        state_size = len(data_state)  # number of samples in this cluster
+        # pair-wise distance between members of the same cluster
+        distance = scipy.spatial.distance.cdist(data_state, data_state)
+        # sumsquares of distances
+        dispersion_state[state] = 0.5 * np.sum(distance**2) / state_size
+
+    dispersion = np.sum(dispersion_state)
+    return dispersion
+
 
 
 def _cluster_quality_variance(data, clusters):
@@ -257,27 +281,6 @@ def _cluster_quality_gev(data, clusters, clustering, sd=None, n_microstates=4):
     gev = np.sum(gev_all)
 #    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd**2)
     return gev, gev_all
-
-
-def _cluster_quality_dispersion(data, clusters, clustering, n_microstates=4):
-    """Sumsquares of the distances between samples within each clusters.
-    An error measure for a n_microstate cluster where the lower the better.
-    Can be used to compare and find the optimal number of clusters.
-    """
-
-    n_rows, n_cols = data.shape  # n_sample, n_channel
-    dispersion_state = np.zeros(n_microstates)
-    for state in range(n_microstates):
-        idx = (clustering == state)
-        data_state = data[idx, :]
-        state_size = len(data_state)  # number of samples in this cluster
-        # pair-wise distance between members of the same cluster
-        distance = scipy.spatial.distance.cdist(data_state, data_state)
-        # sumsquares of distances
-        dispersion_state[state] = 0.5 * np.sum(distance**2) / state_size
-
-    dispersion = np.sum(dispersion_state)
-    return dispersion
 
 def _correlate_vectors(A, B, axis=0):
     """Compute pairwise correlation of multiple pairs of vectors.
