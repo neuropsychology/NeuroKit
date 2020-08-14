@@ -74,7 +74,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
 
          # Dispersion
         dispersion = _cluster_quality_dispersion(data.T, microstates,
-                                                 segmentation, n_microstates)
+                                                 segmentation, n_clusters=n_microstates)
         # Dispersion(k)
 
         dispersion_current = dispersion * n_microstates**(2 / n_channel)
@@ -91,10 +91,10 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
         dispersion_diff_previous = dispersion_diff.copy()
 
         results.append(rez)
-#        results.append(pd.DataFrame.from_dict(rez, orient="index").T)
-
-#    results = pd.concat(results, axis=0).reset_index(drop=True)
     results = pd.DataFrame(results)
+#        results.append(pd.DataFrame.from_dict(rez, orient="index").T)
+#    results = pd.concat(results, axis=0).reset_index(drop=True)
+
 
     if show is True:
         normalized = (results - results.min()) / (results.max() - results.min())

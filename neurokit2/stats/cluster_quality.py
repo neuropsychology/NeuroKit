@@ -158,15 +158,15 @@ def _cluster_quality_sumsquares(data, clusters, clustering):
         min_distance.append(distance[idx, cluster_identity])
     return np.sum(min_distance**2)
 
-def _cluster_quality_dispersion(data, clusters, clustering, n_microstates=4):
+def _cluster_quality_dispersion(data, clusters, clustering, n_clusters=4):
     """Sumsquares of the distances between samples within each clusters.
-    An error measure for a n_microstate cluster where the lower the better.
+    An error measure for a n_clusters cluster where the lower the better.
     Can be used to compare and find the optimal number of clusters.
     """
 
     n_rows, n_cols = data.shape  # n_sample, n_channel
-    dispersion_state = np.zeros(n_microstates)
-    for state in range(n_microstates):
+    dispersion_state = np.zeros(n_clusters)
+    for state in range(n_clusters):
         idx = (clustering == state)
         data_state = data[idx, :]
         state_size = len(data_state)  # number of samples in this cluster
@@ -267,15 +267,15 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
 #     return gev_total
 
 
-def _cluster_quality_gev(data, clusters, clustering, sd=None, n_microstates=4):
+def _cluster_quality_gev(data, clusters, clustering, sd=None, n_clusters=4):
     """Global Variance Explained (GEV)
     """
     if sd is None:
         sd = np.std(data, axis=1)
     map_corr = _correlate_vectors(data.T, clusters[clustering].T)
 
-    gev_all = np.zeros(n_microstates)
-    for state in range(n_microstates):
+    gev_all = np.zeros(n_clusters)
+    for state in range(n_clusters):
         idx = (clustering == state)
         gev_all[state] = np.sum((sd[idx] * map_corr[idx])**2) / np.sum(sd**2)
 

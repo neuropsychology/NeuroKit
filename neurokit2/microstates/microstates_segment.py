@@ -229,5 +229,5 @@ def _microstates_segment_runsegmentation(data, microstates, gfp, n_microstates):
 
     # Get Global Explained Variance (GEV)
     gev, gev_all = _cluster_quality_gev(data.T, microstates, segmentation, sd=gfp,
-                                        n_microstates=n_microstates)
+                                        n_clusters=n_microstates)
     return segmentation, polarity, gev, gev_all
