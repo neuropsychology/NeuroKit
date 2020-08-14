@@ -9,6 +9,7 @@ import sklearn.decomposition
 import scipy.spatial
 import scipy.linalg
 
+from .cluster_quality import _cluster_quality_distance
 
 def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=False, **kwargs):
     """Performs clustering of data according to different algorithms.
@@ -189,7 +190,7 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
     clusters = clustering_model.cluster_centers_
 
     # Get distance
-    prediction = _cluster_getdistance(data, clusters)
+    prediction = _cluster_quality_distance(data, clusters, to_dataframe=True)
     prediction["Cluster"] = clustering
 
     # Copy function with given parameters
@@ -267,7 +268,7 @@ def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None
     clusters = data[ids_of_medoids]
 
     # Get prediction
-    prediction = _cluster_getdistance(data, clusters)
+    prediction = _cluster_quality_distance(data, clusters, to_dataframe=True)
     prediction["Cluster"] = segmentation
 
     # Copy function with given parameters
@@ -399,7 +400,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
 
     # De-normalize
     clusters_unnormalized = _cluster_getclusters(data, segmentation)
-    prediction = _cluster_getdistance(data, clusters_unnormalized)
+    prediction = _cluster_quality_distance(data, clusters_unnormalized, to_dataframe=True)
     prediction["Cluster"] = segmentation
 
     # Copy function with given parameters
@@ -525,7 +526,7 @@ def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
     clusters = _cluster_getclusters(data, clustering)
 
     # Get distance
-    prediction = _cluster_getdistance(data, clusters)
+    prediction = _cluster_quality_distance(data, clusters, to_dataframe=True)
     prediction["Cluster"] = clustering
 
     # Else, copy function
@@ -691,7 +692,7 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
             maps[i] = c/np.sqrt(np.sum(c**2))
 
     # Get distance
-    prediction = _cluster_getdistance(cluster_data, maps)
+    prediction = _cluster_quality_distance(cluster_data, maps, to_dataframe=True)
     prediction["Cluster"] = prediction.abs().idxmax(axis=1).values
     prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
 
@@ -715,14 +716,6 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
 # # Utils
 # =============================================================================
 # =============================================================================
-
-def _cluster_getdistance(data, clusters):
-    """Distance between samples and clusters
-    """
-    distance = scipy.spatial.distance.cdist(data, clusters)
-    distance = pd.DataFrame(distance).add_prefix("Distance_")
-    return distance
-
 
 def _cluster_getclusters(data, clustering):
     """Get average representatives of clusters

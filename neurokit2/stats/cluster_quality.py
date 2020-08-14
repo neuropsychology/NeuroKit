@@ -140,12 +140,13 @@ def _cluster_quality_sklearn(data, clustering, clusters):
     return individual, general
 
 
-def _cluster_quality_distance(data, clusters):
+def _cluster_quality_distance(data, clusters, to_dataframe=False):
     """Distance between samples and clusters
     """
     distance = scipy.spatial.distance.cdist(data, clusters)
+    if to_dataframe is True:
+        distance = pd.DataFrame(distance).add_prefix("Distance_")
     return distance
-
 
 def _cluster_quality_sumsquares(data, clusters, clustering):
     """Sumsquares of the distance of each data point to its respective cluster
