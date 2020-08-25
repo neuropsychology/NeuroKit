@@ -117,7 +117,7 @@ The package is implemented in Python 3 [@python3], which means that *NeuroKit2's
 
 
 <!-- Reliability and Evolution -->
-*NeuroKit2* aims at being reliable and trustworthy, including peer-reviewed processing pipelines and functions tested against established software such as *BioSPPy* [@biosppy], *hrv* [*under review*](https://github.com/openjournals/joss-reviews/issues/1867), *PySiology* [@PySiology], *HeartPy* [@HeartPy], *systole* [@Systole] or *nolds* [@nolds]. The repository leverages a comprehensive test suite and continuous integration to ensure stability and prevent errors. Thanks to its collaborative and open development, *NeuroKit2* can remain cutting-edge and continuously evolve, adapt, and integrate new methods as they are emerging.
+*NeuroKit2* aims at being reliable and trustworthy, including peer-reviewed processing pipelines and functions tested against established software such as *BioSPPy* [@biosppy], *hrv* [*under review*](https://github.com/openjournals/joss-reviews/issues/1867), *PySiology* [@PySiology], *HeartPy* [@HeartPy], *systole* [@Systole] or *nolds* [@nolds]. Unittest-based tests are implemented through *pytest* which provides comprehensive reports of test results, making code failures easibly traceable. Brief examples are also documented through docstrings that simultaneously function as *doctests*. As of 25 August 2020, *NeuroKit2* has a code coverage of 83.3% and its build status can be tracked via its GitHub repository. Overall, the repository leverages a comprehensive test suite and continuous integration (CI) through the Travis-CI platform to ensure stability and prevent errors. Thanks to its collaborative and open development, *NeuroKit2* can remain cutting-edge and continuously evolve, adapt, and integrate new methods as they are emerging.
 
 
 <!-- Powerful and flexible: API -->
@@ -147,6 +147,10 @@ The mid-level functions are assembled in high-level wrappers, that are convenien
 
 Performing an entire set of operations with sensible default parameters in one function can be rewarding, especially for beginners, allowing them to perform cutting-edge processing or replication of research steps without requiring much programming expertise. Moreover, it contributes to the demystification of the usage of programming tools (as opposed to GUI-based software such as *SPSS*, *Kubios*, or *Acqknowledge*), providing a welcoming framework to further explore the complexities of physiological data processing. Importantly, more advanced users can easily build custom analysis pipelines by using the low- and mid-level functions, allowing for a finer control over the processing parameters. We believe that this implementation is a well-calibrated trade-off between flexibility and user-friendliness.
 
+
+# Installing NeuroKit2 
+
+*NeuroKit2* can be installed using pip as `pip` as demonstrated in this short tutorial here (*https://neurokit2.readthedocs.io/en/latest/installation.html#neurokit*). This `readthedocs` page also comprises of a full list of instructions on how to install Python (supported versions are 3.7, 3.8 and 3.9) with different operating systems.
 
 
 # Examples
