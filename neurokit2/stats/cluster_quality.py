@@ -161,13 +161,12 @@ def _cluster_quality_sumsquares(data, clusters, clustering):
     min_distance_squared = [i**2 for i in min_distance]
     return np.sum(min_distance_squared)
 
-def _cluster_quality_dispersion(data, clusters, clustering, n_clusters=4):
+def _cluster_quality_dispersion(data, clustering, n_clusters=4):
     """Sumsquares of the distances between samples within each clusters.
     An error measure for a n_clusters cluster where the lower the better.
     Can be used to compare and find the optimal number of clusters.
     """
 
-    n_rows, n_cols = data.shape  # n_sample, n_channel
     dispersion_state = np.zeros(n_clusters)
     for state in range(n_clusters):
         idx = (clustering == state)

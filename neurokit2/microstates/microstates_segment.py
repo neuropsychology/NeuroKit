@@ -63,7 +63,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
-     optimize : bool
+    optimize : bool
         To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
         For the k-means modified method. Default to False.
 
@@ -183,7 +183,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
                 # R2 and residual are proportional, use residual instead of R2
                 if current_residual < cv:
                     microstates, segmentation, polarity = current_microstates, s, p
-                    cv, g, gev_all = current_residual, g, g_all
+                    cv, gev, gev_all = current_residual, g, g_all
                     info -= current_info
 
     else:
