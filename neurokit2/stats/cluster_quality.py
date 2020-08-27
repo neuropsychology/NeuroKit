@@ -85,7 +85,8 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     individual = pd.DataFrame(individual)
 
     # Variance explained
-    general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters)
+    general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters,
+                                                                   clustering)
     general["Score_GEV"], _ = _cluster_quality_gev(data, clusters, clustering, **kwargs)
     general["Score_CrossValidation"] = _cluster_quality_crossvalidation(data, clusters, clustering)
 
@@ -95,6 +96,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     # Gap statistic
     general.update(_cluster_quality_gap(data,
                                         clusters,
+                                        clustering,
                                         info,
                                         n_random=n_random))
 
@@ -156,7 +158,8 @@ def _cluster_quality_sumsquares(data, clusters, clustering):
     for idx in range(len(data)):
         cluster_identity = clustering[idx]
         min_distance.append(distance[idx, cluster_identity])
-    return np.sum(min_distance**2)
+    min_distance_squared = [i**2 for i in min_distance]
+    return np.sum(min_distance_squared)
 
 def _cluster_quality_dispersion(data, clusters, clustering, n_clusters=4):
     """Sumsquares of the distances between samples within each clusters.
@@ -180,22 +183,22 @@ def _cluster_quality_dispersion(data, clusters, clustering, n_clusters=4):
 
 
 
-def _cluster_quality_variance(data, clusters):
+def _cluster_quality_variance(data, clusters, clustering):
     """Variance explained by clustering
     """
-    sum_squares_within = _cluster_quality_sumsquares(data, clusters)
+    sum_squares_within = _cluster_quality_sumsquares(data, clusters, clustering)
     sum_squares_total = np.sum(scipy.spatial.distance.pdist(data)**2)/data.shape[0]
     return (sum_squares_total - sum_squares_within) / sum_squares_total
 
 
 
-def _cluster_quality_gap(data, clusters, info, n_random=10):
+def _cluster_quality_gap(data, clusters, clustering, info, n_random=10):
     """GAP statistic and modified GAP statistic by Mohajer (2011).
 
     The GAP statistic compares the total within intra-cluster variation for different values of k
     with their expected values under null reference distribution of the data.
     """
-    dispersion = _cluster_quality_sumsquares(data, clusters)
+    dispersion = _cluster_quality_sumsquares(data, clusters, clustering)
 
     mins, maxs = np.min(data, axis=0), np.max(data, axis=0)
     dispersion_random = np.full(n_random, np.nan)
@@ -212,7 +215,10 @@ def _cluster_quality_gap(data, clusters, info, n_random=10):
 
         # Cluster random
         _, random_clusters, info = info["clustering_function"](random_data)
-        dispersion_random[i] = _cluster_quality_sumsquares(random_data, random_clusters)
+        random_activation = random_clusters.dot(random_data.T)
+        random_clustering = np.argmax(np.abs(random_activation), axis=0)
+        dispersion_random[i] = _cluster_quality_sumsquares(random_data, random_clusters,
+                                                           random_clustering)
 
     # Compute GAP
     gap = np.mean(np.log(dispersion_random)) - np.log(dispersion)
