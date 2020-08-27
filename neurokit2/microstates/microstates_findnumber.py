@@ -3,7 +3,6 @@ import numpy as np
 import pandas as pd
 
 from .microstates_segment import microstates_segment
-from ..stats.cluster_quality import _cluster_quality_sklearn
 from ..stats.cluster_quality import _cluster_quality_dispersion
 
 def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
