@@ -91,7 +91,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     general["Score_CrossValidation"] = _cluster_quality_crossvalidation(data, clusters, clustering)
 
     # Dispersion
-    general["Dispersion"] = _cluster_quality_dispersion(data, clusters, clustering, **kwargs)
+    general["Dispersion"] = _cluster_quality_dispersion(data, clustering, **kwargs)
 
     # Gap statistic
     general.update(_cluster_quality_gap(data,
@@ -167,7 +167,9 @@ def _cluster_quality_dispersion(data, clustering, n_clusters=4):
     Can be used to compare and find the optimal number of clusters.
     """
 
-    dispersion_state = np.zeros(n_clusters)
+#    dispersion_state = np.zeros(n_clusters)
+    dispersion_state = []
+    print(n_clusters)
     for state in range(n_clusters):
         idx = (clustering == state)
         data_state = data[idx, :]
@@ -175,7 +177,7 @@ def _cluster_quality_dispersion(data, clustering, n_clusters=4):
         # pair-wise distance between members of the same cluster
         distance = scipy.spatial.distance.cdist(data_state, data_state)
         # sumsquares of distances
-        dispersion_state[state] = 0.5 * np.sum(distance**2) / state_size
+        dispersion_state.append(0.5 * np.sum(distance**2) / state_size)
 
     dispersion = np.sum(dispersion_state)
     return dispersion
