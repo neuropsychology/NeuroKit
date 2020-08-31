@@ -167,9 +167,7 @@ def _cluster_quality_dispersion(data, clustering, n_clusters=4):
     Can be used to compare and find the optimal number of clusters.
     """
 
-#    dispersion_state = np.zeros(n_clusters)
     dispersion_state = []
-    print(n_clusters)
     for state in range(n_clusters):
         idx = (clustering == state)
         data_state = data[idx, :]
