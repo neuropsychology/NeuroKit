@@ -35,8 +35,9 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
         half the data. See ``microstates_peaks()``.
     method : str
         The algorithm for clustering. Can be one of 'kmeans', the modified k-means algorithm 'kmod' (default),
-        'pca' (Principal Component Analysis), 'ica' (Independent Component Analysis), or
-        'aahc' (Atomize and Agglomerate Hierarchical Clustering) which is more computationally heavy.
+        'kmedoids' (k-centers or k-medoids clustering), 'pca' (Principal Component Analysis),
+        'ica' (Independent Component Analysis), or 'aahc' (Atomize and Agglomerate Hierarchical Clustering)
+        which is more computationally heavy.
     gfp_method : str
         The GFP extraction method, can be either 'l1' (default) or 'l2' to use the L1 or L2 norm.
         See ``nk.eeg_gfp()`` for more details.
@@ -62,7 +63,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
-     optimize : bool
+    optimize : bool
         To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
         For the k-means modified method. Default to False.
 
@@ -95,6 +96,10 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
     >>> out_kmod = nk.microstates_segment(eeg, method='kmod')
     >>> nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500]) #doctest: +ELLIPSIS
     <Figure ...>
+    >>>
+    >>> # K-medoids
+    >>> out_kmedoids = nk.microstates_segment(eeg, method='kmedoids')
+    >>> nk.microstates_plot(out_kmedoids, gfp=out_kmedoids["GFP"][0:500])
     >>>
     >>> # PCA
     >>> out_pca = nk.microstates_segment(eeg, method='pca', standardize_eeg=True)
@@ -178,7 +183,7 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
                 # R2 and residual are proportional, use residual instead of R2
                 if current_residual < cv:
                     microstates, segmentation, polarity = current_microstates, s, p
-                    cv, g, gev_all = current_residual, g, g_all
+                    cv, gev, gev_all = current_residual, g, g_all
                     info -= current_info
 
     else:
@@ -224,5 +229,5 @@ def _microstates_segment_runsegmentation(data, microstates, gfp, n_microstates):
 
     # Get Global Explained Variance (GEV)
     gev, gev_all = _cluster_quality_gev(data.T, microstates, segmentation, sd=gfp,
-                                        n_microstates=n_microstates)
+                                        n_clusters=n_microstates)
     return segmentation, polarity, gev, gev_all

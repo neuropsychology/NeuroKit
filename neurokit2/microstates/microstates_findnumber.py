@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from .microstates_segment import microstates_segment
-from ..stats.cluster_quality import _cluster_quality_sklearn
+from ..stats.cluster_quality import _cluster_quality_dispersion
 
 def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
     """Estimate optimal number of microstates.
@@ -51,9 +51,13 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
 
 
     # Loop accross number and get indices of fit
+    n_channel, _ = data.shape
+    dispersion_previous = np.nan
+    dispersion_diff_previous = np.nan
     results = []
-    for n_microstates in range(2, n_max):
-        out = microstates_segment(eeg, n_microstates=n_microstates, **kwargs)
+    for idx, n_microstates in enumerate(range(2, n_max + 1)):
+        print(idx, n_microstates)
+        out = microstates_segment(eeg, n_microstates=n_microstates)
 
         segmentation = out["Sequence"]
         microstates = out["Microstates"]
@@ -61,12 +65,35 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
 #        sd = out["GFP"]
 
 #        nk.cluster_quality(data.T, segmentation, clusters=microstates, info=info, n_random=10, sd=gfp)
-        _, rez = _cluster_quality_sklearn(data.T, segmentation, microstates)
+
+#        _, rez = _cluster_quality_sklearn(data.T, segmentation, microstates)
+        rez = {}
 
         rez["Score_GEV"] = out["GEV"]
-        results.append(pd.DataFrame.from_dict(rez, orient="index").T)
 
-    results = pd.concat(results, axis=0).reset_index(drop=True)
+         # Dispersion
+        dispersion = _cluster_quality_dispersion(data.T, microstates,
+                                                 segmentation, n_clusters=n_microstates)
+        # Dispersion(k)
+
+        dispersion_current = dispersion * n_microstates**(2 / n_channel)
+        # dispersion_dff(k) = dispersion(k-1) - dispersion(k)
+        dispersion_diff = dispersion_previous - dispersion_current
+
+        # Calculate KL criterion
+        # KL(k) = abs(dispersion_diff(k) / dispersion_diff(k+1))
+        rez["KL_Criterion"] = np.nan
+        if idx not in [0]:
+            results[idx - 1]["KL_Criterion"] = np.abs(dispersion_diff_previous / dispersion_diff)
+        # Update for next round
+        dispersion_previous = dispersion_current.copy()
+        dispersion_diff_previous = dispersion_diff.copy()
+
+        results.append(rez)
+    results = pd.DataFrame(results)
+#        results.append(pd.DataFrame.from_dict(rez, orient="index").T)
+#    results = pd.concat(results, axis=0).reset_index(drop=True)
+
 
     if show is True:
         normalized = (results - results.min()) / (results.max() - results.min())
