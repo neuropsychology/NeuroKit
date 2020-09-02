@@ -76,7 +76,7 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     >>> # Jammes (2008) method
     >>> # jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="jammes2008")
     >>> # fig5 = nk.events_plot(jammes2008, eog_cleaned)
-    >>> # fig5  # doctest: +SKIP
+    >>> # fig5
 
 
     References
