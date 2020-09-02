@@ -37,8 +37,6 @@ def microstates_dynamic(microstates):
            Microstate_0_to_0  ...  Microstate_Symmetry_p
         0               0.75  ...                    1.0
 
-    [1 rows x 15 columns]
-
     """
     microstates = as_vector(microstates)
     out = {}

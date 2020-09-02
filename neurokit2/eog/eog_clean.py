@@ -56,8 +56,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
     ...                     "agarwal2019": agarwal2019,
     ...                     "mne": mne,
     ...                     "brainstorm": brainstorm,
-    ...                     "blinker": blinker}).plot(subplots=True)  #doctest: +ELLIPSIS
-    <matplotlib.axes._subplots.AxesSubplot at ...>
+    ...                     "blinker": blinker}).plot(subplots=True)
 
 
     References

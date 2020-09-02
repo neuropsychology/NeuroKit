@@ -12,6 +12,7 @@ def _eog_simulate_blink(sampling_rate=1000, length=None, method="scr", parameter
 
     Examples
     --------
+    >>> import neurokit2 as nk
     >>> blink_scr = _eog_simulate_blink(sampling_rate=100,
     ...                                 method='scr',
     ...                                 parameters=[3.644, 0.422, 0.356, 0.943])

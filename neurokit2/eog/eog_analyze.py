@@ -49,8 +49,8 @@ def eog_analyze(data, sampling_rate=1000, method="auto"):
     ...                           epochs_start=-0.1,epochs_end=1.9)
     >>>
     >>> # Analyze
-    >>> nk.eog_analyze(epochs, sampling_rate=100) #doctest: +ELLIPSIS
-      Label  Event_Onset  ...  EOG_Rate_Min_Time  EOG_N_Blinks
+    >>> nk.eog_analyze(epochs, sampling_rate=100)  #doctest: +ELLIPSIS
+      Label  Event_Onset  ...  EOG_Rate_Min_Time  EOG_Blinks_Presence
     1     1          ...  ...                ...           ...
     2     2          ...  ...                ...           ...
     3     3          ...  ...                ...           ...
@@ -59,7 +59,7 @@ def eog_analyze(data, sampling_rate=1000, method="auto"):
     >>>
     >>> # Example 2: Interval-related analysis with same dataset
     >>>
-    >>> nk.eog_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
+    >>> nk.eog_analyze(df, sampling_rate=100)  #doctest: +ELLIPSIS
       EOG_Rate_Mean
     0 ...
 
