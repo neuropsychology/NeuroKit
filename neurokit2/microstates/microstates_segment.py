@@ -93,8 +93,8 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
     >>> nk.microstates_plot(out_kmeans, gfp=out_kmeans["GFP"][0:500]) #doctest: +ELLIPSIS
     <Figure ...>
     >>>
-    >>> # Modified kmeans
-    >>> out_kmod = nk.microstates_segment(eeg, method='kmod')
+    >>> # Modified kmeans (currently comment out due to memory eror)
+    >>> #out_kmod = nk.microstates_segment(eeg, method='kmod')
     >>> nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500]) #doctest: +ELLIPSIS
     <Figure ...>
     >>>

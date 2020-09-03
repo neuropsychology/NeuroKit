@@ -39,7 +39,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
     >>> # Estimate optimal number (takes some time)
-    >>> results = nk.microstates_findnumber(eeg, n_max=6, show=True, method="kmod")
+    >>> results = nk.microstates_findnumber(eeg, n_max=4, show=True, method="kmod")
 
     """
     # Retrieve data
@@ -61,7 +61,6 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
         out = microstates_segment(eeg, n_microstates=n_microstates)
 
         segmentation = out["Sequence"]
-        microstates = out["Microstates"]
 #        info = out["Info_algorithm"]
 #        sd = out["GFP"]
 
