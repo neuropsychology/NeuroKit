@@ -36,7 +36,8 @@ def microstates_classify(segmentation, microstates):
     >>>
     >>> # Reorder
     >>> out = nk.microstates_classify(out)
-    >>> nk.microstates_plot(out, gfp=out["GFP"][0:100])
+    >>> nk.microstates_plot(out, gfp=out["GFP"][0:100])  #doctest: +ELLIPSIS
+    <Figure ...>
 
     """
     # Reorder

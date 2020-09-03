@@ -73,8 +73,8 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
         rez["Score_GEV"] = out["GEV"]
 
         # Dispersion
-        dispersion = _cluster_quality_dispersion(data.T, microstates,
-                                                 segmentation, n_clusters=n_microstates)
+        dispersion = _cluster_quality_dispersion(data.T, clustering=segmentation,
+                                                 n_clusters=n_microstates)
         # Dispersion(k)
 
         dispersion_current = dispersion * n_microstates**(2 / n_channel)
