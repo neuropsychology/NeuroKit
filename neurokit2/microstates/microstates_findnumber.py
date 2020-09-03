@@ -34,7 +34,8 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
     ------------
     >>> import neurokit2 as nk
     >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
+    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +ELLIPSIS
+    ...
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
     >>> # Estimate optimal number (takes some time)

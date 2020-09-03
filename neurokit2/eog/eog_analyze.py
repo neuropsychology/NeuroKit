@@ -60,8 +60,8 @@ def eog_analyze(data, sampling_rate=1000, method="auto"):
     >>> # Example 2: Interval-related analysis with same dataset
     >>>
     >>> nk.eog_analyze(df, sampling_rate=100)  #doctest: +ELLIPSIS
-      EOG_Rate_Mean
-    0 ...
+      EOG_Peaks_N      ...
+    0         ...      ...
 
     """
     method = method.lower()

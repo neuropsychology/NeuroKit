@@ -84,7 +84,8 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +SKIP
+    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +ELLIPSIS
+    ...
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
     >>> # Kmeans

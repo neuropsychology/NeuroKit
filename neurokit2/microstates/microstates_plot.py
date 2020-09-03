@@ -30,7 +30,8 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +SKIP
+    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +ELLIPSIS
+    ...
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
     >>> microstates = nk.microstates_segment(eeg, method='kmod')
