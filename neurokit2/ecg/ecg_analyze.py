@@ -57,7 +57,7 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     2     2   Neutral  ...                               ...              ...
     3     3   Neutral  ...                               ...              ...
     4     4  Negative  ...                               ...              ...
-
+    ...
     [4 rows x 17 columns]
     >>>
     >>> # Example 2: Download the resting-state data
@@ -70,7 +70,7 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     >>> nk.ecg_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
       ECG_Rate_Mean  HRV_RMSSD  ...
     0 ...
-
+    ...
     [1 rows x 37 columns]
 
     """
@@ -87,7 +87,8 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
 
         if len([i for i in colnames if "Label" in i]) == 0:
             raise ValueError(
-                "NeuroKit error: ecg_analyze(): Wrong input or method," "we couldn't extract epochs features."
+                "NeuroKit error: ecg_analyze(): Wrong input or method,"
+                "we couldn't extract epochs features."
             )
         else:
             features = ecg_eventrelated(data)
