@@ -9,11 +9,15 @@ def signal_formatpeaks(info, desired_length, peak_indices=None):
         peak_indices = [key for key in info.keys() if "Peaks" in key]
 
     signals = {}
-    for feature in info.keys():
+    for feature, values in info.items():
+        if isinstance(values, list) and (not values):    # skip empty lists
+            continue
+        if isinstance(values, np.ndarray) and (values.size == 0):    # skip empty arrays
+            continue
         if any(x in str(feature) for x in ["Peak", "Onset", "Offset", "Trough", "Recovery"]):
-            signals[feature] = _signal_from_indices(info[feature], desired_length, 1)
+            signals[feature] = _signal_from_indices(values, desired_length, 1)
         else:
-            signals[feature] = _signal_from_indices(peak_indices, desired_length, info[feature])
+            signals[feature] = _signal_from_indices(peak_indices, desired_length, values)
     signals = pd.DataFrame(signals)
     return signals
 
