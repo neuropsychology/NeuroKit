@@ -92,6 +92,9 @@ ENV/
 .spyderproject
 .spyproject
 
+# vscode stuff
+.vscode/
+
 # Rope project settings
 .ropeproject
 
