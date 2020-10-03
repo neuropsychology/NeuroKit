@@ -10,10 +10,6 @@ def signal_formatpeaks(info, desired_length, peak_indices=None):
 
     signals = {}
     for feature, values in info.items():
-        if isinstance(values, list) and (not values):    # skip empty lists
-            continue
-        if isinstance(values, np.ndarray) and (values.size == 0):    # skip empty arrays
-            continue
         if any(x in str(feature) for x in ["Peak", "Onset", "Offset", "Trough", "Recovery"]):
             signals[feature] = _signal_from_indices(values, desired_length, 1)
         else:
@@ -33,7 +29,12 @@ def _signal_from_indices(indices, desired_length=None, value=1):
     Used in *_findpeaks to transform vectors of peak indices to signal.
 
     """
-    signal = np.zeros(desired_length)
+    signal = np.zeros(desired_length, dtype=np.int)
+
+    if isinstance(indices, list) and (not indices):    # skip empty lists
+        return signal
+    if isinstance(indices, np.ndarray) and (indices.size == 0):    # skip empty arrays
+        return signal
 
     # Force indices as int
     if isinstance(indices[0], np.float):
@@ -51,7 +52,7 @@ def _signal_from_indices(indices, desired_length=None, value=1):
     return signal
 
 
-def _signal_formatpeaks_sanitize(peaks, key="Peaks"):
+def _signal_formatpeaks_sanitize(peaks, key="Peaks"):    # FIXME: private function not used in this module
     # Attempt to retrieve column.
     if isinstance(peaks, tuple):
         if isinstance(peaks[0], (dict, pd.DataFrame)):
