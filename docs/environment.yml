@@ -5,7 +5,7 @@ dependencies:
   #- sphinx>=1.4  # Get WIP version of sphinx with MD stuff
   - pip
   - pandoc
-  - nbconvert
+  - nbconvert==5.6.1
   - ipykernel
   - pip:
     - sphinx
