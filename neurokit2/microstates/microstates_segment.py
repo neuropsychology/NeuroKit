@@ -108,8 +108,7 @@ def microstates_segment(
     >>>
     >>> # Modified kmeans (currently comment out due to memory error)
     >>> #out_kmod = nk.microstates_segment(eeg, method='kmod')
-    >>> # nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500]) #doctest: +ELLIPSIS
-    # <Figure ...>
+    >>> # nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500])
     >>>
     >>> # K-medoids
     >>> out_kmedoids = nk.microstates_segment(eeg, method='kmedoids')
