@@ -110,9 +110,9 @@ def microstates_segment(
     >>> #out_kmod = nk.microstates_segment(eeg, method='kmod')
     >>> # nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500])
     >>>
-    >>> # K-medoids
-    >>> out_kmedoids = nk.microstates_segment(eeg, method='kmedoids')
-    >>> nk.microstates_plot(out_kmedoids, gfp=out_kmedoids["GFP"][0:500])
+    >>> # K-medoids (currently comment out due to memory error)
+    >>> #out_kmedoids = nk.microstates_segment(eeg, method='kmedoids')
+    >>> #nk.microstates_plot(out_kmedoids, gfp=out_kmedoids["GFP"][0:500])
     >>>
     >>> # PCA
     >>> out_pca = nk.microstates_segment(eeg, method='pca', standardize_eeg=True)

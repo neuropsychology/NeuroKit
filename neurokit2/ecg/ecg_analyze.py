@@ -51,14 +51,9 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
     >>>
     >>> # Analyze
-    >>> nk.ecg_analyze(epochs, sampling_rate=100) #doctest: +ELLIPSIS
-      Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
-    1     1  Negative  ...                               ...              ...
-    2     2   Neutral  ...                               ...              ...
-    3     3   Neutral  ...                               ...              ...
-    4     4  Negative  ...                               ...              ...
-    ...
-    [4 rows x 17 columns]
+    >>> analyze_epochs = nk.ecg_analyze(epochs, sampling_rate=100)
+    >>> analyze_epochs #doctest: +SKIP
+
     >>>
     >>> # Example 2: Download the resting-state data
     >>> data = nk.data("bio_resting_5min_100hz")
@@ -67,8 +62,8 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     >>> df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
     >>>
     >>> # Analyze
-    >>> analyze = nk.ecg_analyze(df, sampling_rate=100)
-    >>> analyze #doctest: +SKIP
+    >>> analyze_df = nk.ecg_analyze(df, sampling_rate=100)
+    >>> analyze_df #doctest: +SKIP
 
     """
     method = method.lower()
