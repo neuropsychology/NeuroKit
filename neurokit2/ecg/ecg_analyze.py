@@ -67,11 +67,8 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
     >>> df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
     >>>
     >>> # Analyze
-    >>> nk.ecg_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
-      ECG_Rate_Mean  HRV_RMSSD  ...
-    0 ...
-    ...
-    [1 rows x 37 columns]
+    >>> analyze = nk.ecg_analyze(df, sampling_rate=100)
+    >>> analyze #doctest: +SKIP
 
     """
     method = method.lower()

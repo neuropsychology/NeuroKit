@@ -1,14 +1,27 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from .microstates_clean import microstates_clean
-from .microstates_classify import microstates_classify
 from ..stats import cluster
 from ..stats.cluster_quality import _cluster_quality_gev
+from .microstates_classify import microstates_classify
+from .microstates_clean import microstates_clean
 
 
-def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_method='l1', sampling_rate=None,
-                        standardize_eeg=False, n_runs=10, max_iterations=1000, criterion='gev', random_state=None, optimize=False, **kwargs):
+def microstates_segment(
+    eeg,
+    n_microstates=4,
+    train="gfp",
+    method="kmod",
+    gfp_method="l1",
+    sampling_rate=None,
+    standardize_eeg=False,
+    n_runs=10,
+    max_iterations=1000,
+    criterion="gev",
+    random_state=None,
+    optimize=False,
+    **kwargs
+):
     """Segment a continuous M/EEG signal into microstates using different clustering algorithms.
 
     Several runs of the clustering algorithm are performed, using different random initializations.
@@ -95,8 +108,8 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
     >>>
     >>> # Modified kmeans (currently comment out due to memory error)
     >>> #out_kmod = nk.microstates_segment(eeg, method='kmod')
-    >>> nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500]) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> # nk.microstates_plot(out_kmod, gfp=out_kmod["GFP"][0:500]) #doctest: +ELLIPSIS
+    # <Figure ...>
     >>>
     >>> # K-medoids
     >>> out_kmedoids = nk.microstates_segment(eeg, method='kmedoids')
@@ -130,12 +143,14 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
 
     """
     # Sanitize input
-    data, indices, gfp, info_mne = microstates_clean(eeg,
-                                                     train=train,
-                                                     sampling_rate=sampling_rate,
-                                                     standardize_eeg=standardize_eeg,
-                                                     gfp_method=gfp_method,
-                                                     **kwargs)
+    data, indices, gfp, info_mne = microstates_clean(
+        eeg,
+        train=train,
+        sampling_rate=sampling_rate,
+        standardize_eeg=standardize_eeg,
+        gfp_method=gfp_method,
+        **kwargs
+    )
 
     # Run clustering algorithm
     if method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
@@ -159,24 +174,32 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
         for run in range(n_runs):
 
             # Run clustering on subset of data
-            _, _, current_info = cluster(data[:, indices].T,
-                                         method="kmod",
-                                         n_clusters=n_microstates,
-                                         random_state=random_state[run],
-                                         max_iterations=max_iterations,
-                                         threshold=1e-6,
-                                         optimize=optimize)
+            _, _, current_info = cluster(
+                data[:, indices].T,
+                method="kmod",
+                n_clusters=n_microstates,
+                random_state=random_state[run],
+                max_iterations=max_iterations,
+                threshold=1e-6,
+                optimize=optimize,
+            )
             current_microstates = current_info["clusters_normalized"]
             current_residual = current_info["residual"]
 
             # Run segmentation on the whole dataset
-            s, p, g, g_all = _microstates_segment_runsegmentation(data, current_microstates, gfp,
-                                                                  n_microstates=n_microstates)
+            s, p, g, g_all = _microstates_segment_runsegmentation(
+                data, current_microstates, gfp, n_microstates=n_microstates
+            )
 
             if criterion == "gev":
                 # If better (i.e., higher GEV), keep this segmentation
                 if g > gev:
-                    microstates, segmentation, polarity, gev = current_microstates, s, p, g
+                    microstates, segmentation, polarity, gev = (
+                        current_microstates,
+                        s,
+                        p,
+                        g,
+                    )
                     gev_all = g_all
                     info = current_info
             elif criterion == "cv":
@@ -189,32 +212,36 @@ def microstates_segment(eeg, n_microstates=4, train="gfp", method='kmod', gfp_me
 
     else:
         # Run clustering algorithm on subset
-        _, microstates, info = cluster(data[:, indices].T,
-                                       method=method,
-                                       n_clusters=n_microstates,
-                                       random_state=random_state,
-                                       **kwargs)
+        _, microstates, info = cluster(
+            data[:, indices].T,
+            method=method,
+            n_clusters=n_microstates,
+            random_state=random_state,
+            **kwargs
+        )
 
         # Run segmentation on the whole dataset
         segmentation, polarity, gev, gev_all = _microstates_segment_runsegmentation(
-                data, microstates, gfp, n_microstates=n_microstates
-                )
+            data, microstates, gfp, n_microstates=n_microstates
+        )
 
     # Reorder
     segmentation, microstates = microstates_classify(segmentation, microstates)
 
     # CLustering quality
-#    quality = cluster_quality(data, segmentation, clusters=microstates, info=info, n_random=10, sd=gfp)
+    #    quality = cluster_quality(data, segmentation, clusters=microstates, info=info, n_random=10, sd=gfp)
 
     # Output
-    info = {"Microstates": microstates,
-            "Sequence": segmentation,
-            "GEV": gev,
-            "GEV_per_microstate": gev_all,
-            "GFP": gfp,
-            "Polarity": polarity,
-            "Info_algorithm": info,
-            "Info": info_mne}
+    info = {
+        "Microstates": microstates,
+        "Sequence": segmentation,
+        "GEV": gev,
+        "GEV_per_microstate": gev_all,
+        "GFP": gfp,
+        "Polarity": polarity,
+        "Info_algorithm": info,
+        "Info": info_mne,
+    }
 
     return info
 
@@ -229,6 +256,7 @@ def _microstates_segment_runsegmentation(data, microstates, gfp, n_microstates):
     polarity = np.sign(np.choose(segmentation, activation))
 
     # Get Global Explained Variance (GEV)
-    gev, gev_all = _cluster_quality_gev(data.T, microstates, segmentation, sd=gfp,
-                                        n_clusters=n_microstates)
+    gev, gev_all = _cluster_quality_gev(
+        data.T, microstates, segmentation, sd=gfp, n_clusters=n_microstates
+    )
     return segmentation, polarity, gev, gev_all
