@@ -81,7 +81,8 @@ library(easystats)
 
 # Setup python - you need to change the path to your python distribution
 library(reticulate)
-reticulate::use_python("D:/Downloads/WPy64-3810/python-3.8.1.amd64/")
+# reticulate::use_python("D:/Downloads/WPy64-3810/python-3.8.1.amd64/")
+reticulate::use_python("C:/Users/Dom/Desktop/WPy-3710/python-3.7.1.amd64/")
 matplotlib <- import("matplotlib")
 matplotlib$use("Agg", force = TRUE)
 ```
@@ -209,7 +210,7 @@ df, info = nk.bio_process(ecg=data["ECG"],
                           sampling_rate=100)
 
 # Extract features
-results = nk.bio_analyze(df)
+results = nk.bio_analyze(df, sampling_rate=100)
 
 # Show subset of results
 results[["ECG_Rate_Mean", "HRV_RMSSD", "RSP_Rate_Mean", "RSA_P2T_Mean"]]
@@ -268,7 +269,7 @@ epochs = nk.epochs_create(data=df,
                           epochs_end=4)
 
 # Extract event related features
-results = nk.bio_analyze(epochs)
+results = nk.bio_analyze(epochs, sampling_rate=100)
 
 # Show subset of results
 results[["Condition", "ECG_Rate_Mean", "RSP_Rate_Mean", "EDA_Peak_Amplitude"]]
