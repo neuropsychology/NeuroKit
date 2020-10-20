@@ -229,7 +229,7 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
 
     # Compute mRRs: time series of deviation of RRs from median.
     df = pd.DataFrame({"signal": rr})
-    medrr = df.rolling(medfilt_order, center=True, min_periods=1).median().signal.values()
+    medrr = df.rolling(medfilt_order, center=True, min_periods=1).median().signal.values
     mrrs = rr - medrr
     mrrs[mrrs < 0] = mrrs[mrrs < 0] * 2
     # Normalize by threshold.
@@ -314,8 +314,8 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
 def _compute_threshold(signal, alpha, window_width):
 
     df = pd.DataFrame({"signal": np.abs(signal)})
-    q1 = df.rolling(window_width, center=True, min_periods=1).quantile(0.25).signal.values()
-    q3 = df.rolling(window_width, center=True, min_periods=1).quantile(0.75).signal.values()
+    q1 = df.rolling(window_width, center=True, min_periods=1).quantile(0.25).signal.values
+    q3 = df.rolling(window_width, center=True, min_periods=1).quantile(0.75).signal.values
     th = alpha * ((q3 - q1) / 2)
 
     return th
