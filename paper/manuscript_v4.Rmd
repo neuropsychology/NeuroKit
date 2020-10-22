@@ -147,7 +147,7 @@ For example, the `rsp_clean()` function uses `signal_filter()` and `signal_detre
 ## High-level Wrappers for Processing and Analysis
 
 ```{r include=TRUE, eval=TRUE, echo = FALSE, out.width="100%", fig.cap="Illustration of the NeuroKit2 package architecture, in the case of ECG signal processing."}
-knitr::include_graphics("figures/nk_architecture.tif")
+knitr::include_graphics("figures/nk_architecture.pdf")
 ```
 
 The mid-level functions are assembled in high-level wrappers, that are convenient entry points for new users. For instance, the `ecg_process()` function internally chains the mid-level functions `ecg_clean()`, `ecg_peaks()`, `ecg_quality()`, `ecg_delineate()`, and `ecg_phase()`, as shown in **Figure 1**. A specific processing pipeline can be selected with the `method` argument that is then propagated throughout the internal functions. Easily switching between processing pipelines allows for the comparison of different methods, and streamlines critical but time-consuming steps in reproducible research, such as the validation of data preparation and quality control [@Quintana2016]. Finally, the package includes convenience-functions (e.g., `bio_process`) that enable the combined processing of multiple types of signals at once (e.g., `bio_process(ecg=ecg_signal, eda=eda_signal)`).
