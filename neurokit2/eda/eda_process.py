@@ -66,7 +66,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
     """
     # Series check for non-default index
     if type(eda_signal) is pd.Series and type(eda_signal.index) != pd.RangeIndex:
-        eda_signal.reset_index(inplace=True, drop=True)
+        eda_signal = eda_signal.reset_index(drop=True)
 
     # Preprocess
     eda_cleaned = eda_clean(eda_signal, sampling_rate=sampling_rate, method=method)
