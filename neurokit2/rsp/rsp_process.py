@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from ..signal import signal_rate
+from ..signal import signal_rate, signal_sanitize
 from .rsp_amplitude import rsp_amplitude
 from .rsp_clean import rsp_clean
 from .rsp_peaks import rsp_peaks
@@ -60,6 +60,9 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     >>> fig #doctest: +SKIP
 
     """
+    # Sanitize input
+    rsp_signal = signal_sanitize(rsp_signal)
+
     # Clean signal
     rsp_cleaned = rsp_clean(rsp_signal, sampling_rate=sampling_rate, method=method)
 
