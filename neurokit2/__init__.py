@@ -31,7 +31,7 @@ from .microstates import *
 
 
 # Info
-__version__ = "0.0.40"
+__version__ = "0.0.41"
 
 
 # Maintainer info

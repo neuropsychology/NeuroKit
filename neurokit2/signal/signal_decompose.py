@@ -50,7 +50,7 @@ def signal_decompose(signal, method="emd", n_components=None, **kwargs):
     >>> fig  #doctest: +SKIP
     >>>
     >>> # SSA method
-    >>> components = nk.signal_decompose(signal, method="ssa")
+    >>> components = nk.signal_decompose(signal, method="ssa", n_components=5)
     >>> fig = nk.signal_plot(components)  # Visualize components
     >>> fig  #doctest: +SKIP
 
@@ -102,15 +102,17 @@ def _signal_decompose_ssa(signal, n_components=None):
     # and stacking them as columns.
     X = np.array([signal[i : L + i] for i in range(0, K)]).T
 
-    # Decompose the trajectory matrix
-    U, Sigma, VT = np.linalg.svd(X)
+    # Get n components
     d = np.linalg.matrix_rank(X)
+
+    # Decompose the trajectory matrix
+    u, sigma, vt = np.linalg.svd(X, full_matrices=False)
 
     # Initialize components matrix
     components = np.zeros((N, d))
     # Reconstruct the elementary matrices without storing them
     for i in range(d):
-        X_elem = Sigma[i] * np.outer(U[:, i], VT[i, :])
+        X_elem = sigma[i] * np.outer(u[:, i], vt[i, :])
         X_rev = X_elem[::-1]
         components[:, i] = [X_rev.diagonal(j).mean() for j in range(-X_rev.shape[0] + 1, X_rev.shape[1])]
 

@@ -9,8 +9,9 @@ import sklearn.decomposition
 import scipy.spatial
 import scipy.linalg
 
+from .cluster_quality import _cluster_quality_distance
 
-def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
+def cluster(data, method="kmeans", n_clusters=2, random_state=None, optimize=False, **kwargs):
     """Performs clustering of data according to different algorithms.
 
     Parameters
@@ -18,15 +19,18 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     data : np.ndarray
         Matrix array of data (E.g., an array (channels, times) of M/EEG data).
     method : str
-        The algorithm for clustering. Can be one of 'kmeans' (default) modified k-means algorithm 'kmod',
-        'pca' (Principal Component Analysis), 'ica' (Independent Component Analysis),
-        'agglomerative' (Atomize and Agglomerate Hierarchical Clustering), 'hierarchical', 'spectral',
+        The algorithm for clustering. Can be one of 'kmeans' (default), modified k-means algorithm 'kmod',
+        'kmedoids' (k-centers or k-medoids clustering), 'pca' (Principal Component Analysis), 'ica' (Independent Component
+        Analysis), 'agglomerative' (Atomize and Agglomerate Hierarchical Clustering), 'hierarchical', 'spectral',
         'mixture', 'mixturebayesian'. See ``sklearn`` for methods details.
     n_clusters : int
         The desired number of clusters.
     random_state : Union[int, numpy.random.RandomState]
         The ``RandomState`` for the random number generator. Defaults to ``None``, in which case a
         different random state is chosen each time this function is called.
+    optimize : bool
+        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
+        For the Kmeans modified method. Default to False.
     **kwargs
         Other arguments to be passed into ``sklearn`` functions.
 
@@ -57,6 +61,7 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >>> clustering_pca, clusters_pca, info = nk.cluster(data, method="pca", n_clusters=3)
     >>> clustering_ica, clusters_ica, info = nk.cluster(data, method="ica", n_clusters=3)
     >>> clustering_kmod, clusters_kmod, info = nk.cluster(data, method="kmod", n_clusters=3)
+    >>> clustering_kmedoids, clusters_kmedoids, info = nk.cluster(data, method="kmedoids", n_clusters=3)
     >>> clustering_aahc, clusters_aahc, info = nk.cluster(data, method='aahc_frederic', n_clusters=3)
     >>>
     >>> # Visualize classification and 'average cluster'
@@ -91,6 +96,12 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     >> axes[4, 1].scatter(data.iloc[:,[2]], data.iloc[:,[3]], c=clustering_aahc['Cluster'])
     >> axes[4, 1].scatter(clusters_aahc[:, 2], clusters_aahc[:, 3], c='red')
     >> axes[4, 1].set_title("AAHC (Frederic's method)")
+
+    Refereneces
+    -----------
+    - Park, H. S., & Jun, C. H. (2009). A simple and fast algorithm for K-medoids
+    clustering. Expert systems with applications, 36(2), 3336-3341.
+
     """
     # Sanity checks
     if isinstance(data, pd.DataFrame):
@@ -107,7 +118,11 @@ def cluster(data, method="kmeans", n_clusters=2, random_state=None, **kwargs):
     # Modified k-means
     elif method in ["kmods", "kmod", "kmeans modified", "modified kmeans"]:
         out = _cluster_kmod(data, n_clusters=n_clusters,
-                            random_state=random_state, **kwargs)
+                            random_state=random_state, optimize=optimize, **kwargs)
+    # K-medoids
+    elif method in ["kmedoids", "k-medoids", "k-centers"]:
+        out = _cluster_kmedoids(data, n_clusters=n_clusters,
+                                random_state=random_state, **kwargs)
 
     # PCA
     elif method in ["pca", "principal", "principal component analysis"]:
@@ -175,7 +190,7 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
     clusters = clustering_model.cluster_centers_
 
     # Get distance
-    prediction = _cluster_getdistance(data, clusters)
+    prediction = _cluster_quality_distance(data, clusters, to_dataframe=True)
     prediction["Cluster"] = clustering
 
     # Copy function with given parameters
@@ -192,10 +207,90 @@ def _cluster_kmeans(data, n_clusters=2, random_state=None, **kwargs):
 
     return prediction, clusters, info
 
+
+# =============================================================================
+# K-medoids
+# =============================================================================
+
+def _cluster_kmedoids(data, n_clusters=2, max_iterations=1000, random_state=None, **kwargs):
+    """Peforms k-medoids clustering which is based on the most centrally located object in a cluster.
+    Less sensitive to outliers than K-means clustering.
+
+    Adapted from https://github.com/rakeshvar/kmedoids/. Original proposed algorithm from Park & Jun (2009).
+   """
+    # Sanitize
+    if isinstance(data, pd.DataFrame):
+        data = np.array(data)
+    n_samples = data.shape[0]
+
+    # Step 1: Initialize random medoids
+    if not isinstance(random_state, np.random.RandomState):
+        random_state = np.random.RandomState(random_state)
+    ids_of_medoids = np.random.choice(n_samples, n_clusters, replace=False)
+
+    # Find distance between objects to their medoids, can be euclidean or manhatten
+    def find_distance(x, y, dist_method='euclidean'):
+        if dist_method == 'euclidean':
+            return np.sqrt(np.sum(np.square(x - y), axis=-1))
+        elif dist_method == 'manhatten':
+            return np.sum(np.abs(x - y), axis=-1)
+
+    individual_points = data[:, None, :]
+    medoid_points = data[None, ids_of_medoids, :]
+    distance = find_distance(individual_points, medoid_points)
+
+    # Assign each point to the nearest medoid
+    segmentation = np.argmin(distance, axis=1)
+
+    # Step 2: Update medoids
+    for i in range(max_iterations):
+        # Find new random medoids
+        ids_of_medoids = np.full(n_clusters, -1, dtype=int)
+        subset = np.random.choice(n_samples, n_samples, replace=False)
+
+        for i in range(n_clusters):
+            indices = np.intersect1d(np.where(segmentation == i)[0], subset)
+            distances = find_distance(data[indices, None, :], data[None, indices, :]).sum(axis=0)
+            ids_of_medoids[i] = indices[np.argmin(distances)]
+
+        # Step 3: Reassign objects to medoids
+        new_distances = find_distance(data[:, None, :], data[None, ids_of_medoids, :])
+        new_assignments = np.argmin(new_distances, axis=1)
+        diffs = np.mean(new_assignments != segmentation)
+        segmentation = new_assignments
+
+        # If more than 10% of assignments are equal to previous segmentation,
+        # go back to step 2 (threshold arbitrary?)
+        if diffs <= 0.01:
+            break
+
+    # Data points as centroids
+    clusters = data[ids_of_medoids]
+
+    # Get prediction
+    prediction = _cluster_quality_distance(data, clusters, to_dataframe=True)
+    prediction["Cluster"] = segmentation
+
+    # Copy function with given parameters
+    clustering_function = functools.partial(_cluster_kmedoids,
+                                            n_clusters=n_clusters,
+                                            max_iterations=max_iterations,
+                                            random_state=random_state)
+
+    # Info dump
+    info = {"n_clusters": n_clusters,
+            "clustering_function": clustering_function,
+            "random_state": random_state,
+            "clusters": clusters}
+
+    return prediction, clusters, info
+
+
 # =============================================================================
 # Modified K-means
 # =============================================================================
-def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, random_state=None, **kwargs):
+def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, random_state=None,
+                  optimize=False, **kwargs):
     """The modified K-means clustering algorithm,
 
     adapted from Marijn van Vliet and Frederic von Wegner.
@@ -217,6 +312,9 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         The seed or ``RandomState`` for the random number generator. Defaults
         to ``None``, in which case a different seed is chosen each time this
         function is called.
+    optimized : bool
+        To use a new optimized method in https://www.biorxiv.org/content/10.1101/289850v1.full.pdf.
+        For the Kmeans modified method. Default to False.
     **kwargs
         Other arguments to be passed into ``sklearn`` functions.
 
@@ -244,11 +342,11 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
     clusters = data[init_times, :]
 
     # Normalize row-wise (across EEG channels)
-    clusters = clusters / np.sqrt(np.sum(clusters**2, axis=1, keepdims=True))
+    clusters /= np.linalg.norm(clusters, axis=1, keepdims=True)  # Normalize the maps
+
 
     # Initialize iteration
-    prev_residual = 1
-    residual = 0
+    prev_residual = 0
     for i in range(max_iterations):
 
         # Step 3: Assign each sample to the best matching microstate
@@ -270,19 +368,19 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
 
             # Retrieve map values
 
-            # # Method 1 : slower than method 2
-            # cov = np.dot(data_state.T, data_state)  # Find largest eigenvector (step 4a)
-            # # (step 4b)
-            # eigen_vals, eigen_vectors = scipy.linalg.eigh(cov, eigvals=(n_channels-1, n_channels-1))
-            # # Get normalized map (method by Marijn)
-            # state_vals = eigen_vectors.ravel()
+            if optimize:
+                # Method 2 - optimized segmentation
+                state_vals = data_state.T.dot(activation[state, idx])
+            else:
+                # Method 1 - eighen value
+                # step 4a
+                Sk = np.dot(data_state.T, data_state)
+                # step 4b
+                eigen_vals, eigen_vectors = scipy.linalg.eigh(Sk)
+                state_vals = eigen_vectors[:, np.argmax(np.abs(eigen_vals))]
 
-            # Get map (method 2 - see https://github.com/wmvanvliet/mne_microstates/issues/5)
-            state_vals = data_state.T.dot(activation[state, idx])
             state_vals /= np.linalg.norm(state_vals)  # Normalize Map
-
-            # Store map
-            clusters[state, :] = state_vals
+            clusters[state, :] = state_vals  # Store map
 
         # Estimate residual noise (step 5)
         act_sum_sq = np.sum(np.sum(clusters[segmentation, :] * data, axis=1) ** 2)
@@ -290,11 +388,11 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         residual = residual / np.float(n_samples * (n_channels - 1))
 
         # Have we converged? Convergence criterion: variance estimate (step 6)
-        if np.abs((prev_residual - residual) / prev_residual) < threshold:
+        if np.abs(prev_residual - residual) < (threshold * residual):
             break
 
         # Next iteration
-        prev_residual = residual
+        prev_residual = residual.copy()
 
     if i == max_iterations:
         warnings.warn("Modified K-means algorithm failed to converge after " + str(i) + "",
@@ -302,7 +400,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
 
     # De-normalize
     clusters_unnormalized = _cluster_getclusters(data, segmentation)
-    prediction = _cluster_getdistance(data, clusters_unnormalized)
+    prediction = _cluster_quality_distance(data, clusters_unnormalized, to_dataframe=True)
     prediction["Cluster"] = segmentation
 
     # Copy function with given parameters
@@ -317,7 +415,8 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
     info = {"n_clusters": n_clusters,
             "clustering_function": clustering_function,
             "random_state": random_state,
-            "clusters_normalized": clusters}
+            "clusters_normalized": clusters,
+            "residual": residual}
 
     return prediction, clusters_unnormalized, info
 
@@ -427,7 +526,7 @@ def _cluster_sklearn(data, method="spectral", n_clusters=2, **kwargs):
     clusters = _cluster_getclusters(data, clustering)
 
     # Get distance
-    prediction = _cluster_getdistance(data, clusters)
+    prediction = _cluster_quality_distance(data, clusters, to_dataframe=True)
     prediction["Cluster"] = clustering
 
     # Else, copy function
@@ -593,7 +692,7 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
             maps[i] = c/np.sqrt(np.sum(c**2))
 
     # Get distance
-    prediction = _cluster_getdistance(cluster_data, maps)
+    prediction = _cluster_quality_distance(cluster_data, maps, to_dataframe=True)
     prediction["Cluster"] = prediction.abs().idxmax(axis=1).values
     prediction["Cluster"] = [np.where(prediction.columns == state)[0][0] for state in prediction["Cluster"]]
 
@@ -617,14 +716,6 @@ def _cluster_aahc(data, n_clusters=2, gfp=None, gfp_peaks=None, gfp_sum_sq=None,
 # # Utils
 # =============================================================================
 # =============================================================================
-
-def _cluster_getdistance(data, clusters):
-    """Distance between samples and clusters
-    """
-    distance = scipy.spatial.distance.cdist(data, clusters)
-    distance = pd.DataFrame(distance).add_prefix("Distance_")
-    return distance
-
 
 def _cluster_getclusters(data, clustering):
     """Get average representatives of clusters

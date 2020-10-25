@@ -2,7 +2,7 @@
 import numpy as np
 
 
-def rescale(data, to=[0, 1]):
+def rescale(data, to=[0, 1], scale=None):
     """Rescale data.
 
     Rescale a numeric variable to a new range.
@@ -13,6 +13,10 @@ def rescale(data, to=[0, 1]):
         Raw data.
     to : list
         New range of values of the data after rescaling.
+    scale : list
+        A list or tuple of two values specifying the actual range
+        of the data. If None, the minimum and the maximum of the
+        provided data will be used.
 
     Returns
     ----------
@@ -24,16 +28,16 @@ def rescale(data, to=[0, 1]):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> nk.rescale(data=[3, 1, 2, 4, 6], to=[0, 1]) #doctest: +ELLIPSIS
+    >>> nk.rescale([3, 1, 2, 4, 6], to=[0, 1]) #doctest: +ELLIPSIS
     [0.4, 0.0, 0.2, 0.6000000000000001, 1.0]
 
     """
 
     # Return appropriate type
     if isinstance(data, list):
-        data = list(_rescale(np.array(data), to=to))
+        data = list(_rescale(np.array(data), to=to, scale=scale))
     else:
-        data = _rescale(data, to=to)
+        data = _rescale(data, to=to, scale=scale)
 
     return data
 
@@ -41,5 +45,8 @@ def rescale(data, to=[0, 1]):
 # =============================================================================
 # Internals
 # =============================================================================
-def _rescale(data, to=[0, 1]):
-    return (to[1] - to[0]) / (np.nanmax(data) - np.nanmin(data)) * (data - np.nanmin(data)) + to[0]
+def _rescale(data, to=[0, 1], scale=None):
+    if scale is None:
+        scale = [np.nanmin(data), np.nanmax(data)]
+
+    return (to[1] - to[0]) / (scale[1] - scale[0]) * (data - scale[0]) + to[0]

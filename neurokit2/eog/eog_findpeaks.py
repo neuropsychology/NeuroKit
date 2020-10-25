@@ -55,27 +55,27 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     ...                             method="neurokit",
     ...                             threshold=0.33,
     ...                             show=True)
-    >>> fig1 = nk.events_plot(neurokit, eog_cleaned)  # doctest: +ELLIPSIS
-    >>> fig1
+    >>> fig1 = nk.events_plot(neurokit, eog_cleaned)
+    >>> fig1  # doctest: +SKIP
     >>>
     >>> # MNE-method
     >>> mne = nk.eog_findpeaks(eog_cleaned, method="mne")
-    >>> fig2 = nk.events_plot(mne, eog_cleaned)  # doctest: +ELLIPSIS
-    >>> fig2
+    >>> fig2 = nk.events_plot(mne, eog_cleaned)
+    >>> fig2  # doctest: +SKIP
     >>>
     >>> # brainstorm method
     >>> brainstorm = nk.eog_findpeaks(eog_cleaned, method="brainstorm")
-    >>> fig3 = nk.events_plot(brainstorm, eog_cleaned)  # doctest: +ELLIPSIS
-    >>> fig3
+    >>> fig3 = nk.events_plot(brainstorm, eog_cleaned)
+    >>> fig3  # doctest: +SKIP
     >>>
     >>> # blinker method
     >>> blinker = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="blinker")
-    >>> fig4 = nk.events_plot(blinker, eog_cleaned)  # doctest: +ELLIPSIS
-    >>> fig4
+    >>> fig4 = nk.events_plot(blinker, eog_cleaned)
+    >>> fig4  # doctest: +SKIP
     >>>
     >>> # Jammes (2008) method
     >>> # jammes2008 = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="jammes2008")
-    >>> # fig5 = nk.events_plot(jammes2008, eog_cleaned)  # doctest: +ELLIPSIS
+    >>> # fig5 = nk.events_plot(jammes2008, eog_cleaned)
     >>> # fig5
 
 

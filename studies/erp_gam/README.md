@@ -95,20 +95,24 @@ fig, (ax0, ax1, ax2) = plt.subplots(nrows=3, ncols=1, sharex=True)
 
 times = epochs.times
 ax0.axvline(x=0, linestyle="--", color="black")
+## <matplotlib.lines.Line2D object at 0x00000000BFAE7640>
 ax0.plot(times, np.mean(condition1, axis=0), label="Audio")
+## [<matplotlib.lines.Line2D object at 0x00000000BFAF3D30>]
 ax0.plot(times, np.mean(condition2, axis=0), label="Visual")
+## [<matplotlib.lines.Line2D object at 0x00000000BFAF3F40>]
 ax0.legend(loc="upper right")
+## <matplotlib.legend.Legend object at 0x00000000BFAF3EE0>
 ax0.set_ylabel("uV")
 
 # Difference
 ax1.axvline(x=0, linestyle="--", color="black")
 ax1.plot(times, condition1.mean(axis=0) - condition2.mean(axis=0))
+## [<matplotlib.lines.Line2D object at 0x00000000BFB07B20>]
 ax1.axhline(y=0, linestyle="--", color="black")
-## <matplotlib.lines.Line2D object at 0x00000000BFB5C490>
+## <matplotlib.lines.Line2D object at 0x00000000BFB07CD0>
 ax1.set_ylabel("Difference")
 
 # T-values
-## Text(0, 0.5, 'Difference')
 ax2.axvline(x=0, linestyle="--", color="black")
 h = None
 for i, c in enumerate(clusters):
@@ -123,17 +127,29 @@ for i, c in enumerate(clusters):
                     times[c.stop - 1],
                     color=(0.3, 0.3, 0.3),
                     alpha=0.3)
+## <matplotlib.patches.Polygon object at 0x00000000BFB16550>
+## <matplotlib.patches.Polygon object at 0x00000000BFB16BE0>
 hf = ax2.plot(times, t_vals, 'g')
 if h is not None:
     plt.legend((h, ), ('cluster p-value < 0.05', ))
-## <matplotlib.legend.Legend object at 0x00000000BFB5CF10>
+## <matplotlib.legend.Legend object at 0x00000000BFB16D00>
 plt.xlabel("time (ms)")
+## Text(0.5, 0, 'time (ms)')
 plt.ylabel("t-values")
+## Text(0, 0.5, 't-values')
 plt.savefig("figures/fig2.png")
 plt.clf()
 ```
 
 ![fig2](../../studies/erp_gam/figures/fig2.png)
+
+As we can see in the figure, the auditive condition led to a
+significantly different negative deflection around 100 ms (referred to
+as the [N100](https://en.wikipedia.org/wiki/N100), while the visual
+condition is related to a positive, *yet not significant*, deflection
+around 180 ms (the [P200](https://en.wikipedia.org/wiki/P200)), and
+later a significant negative deflection. Let’s see if we can reproduce
+this pattern of results under a regression framework.
 
 ## Results
 
@@ -164,6 +180,10 @@ theme_eeg <- function(){
 
 ### Visualize Average
 
+We will start by visualizing the “simple” grand average of all epochs as
+thick lines, as well as all epochs as thin lines. This will serve us as
+a baseline to check if our regression approach is on track.
+
 ``` r
 data %>%
   group_by(Time, Condition) %>%
@@ -181,8 +201,12 @@ data %>%
 
 ### Spline Regression
 
+We sill start by running a spline regression and specifying the degrees
+of freedom as a function of the epoch length. As our epoch is 600 ms
+(including the baseline), we will select a fraction (5%) of that.
+
 ``` r
-model <- lm(EEG ~ Condition * splines::bs(Time, df=0.04 * 600), data=data)
+model <- lm(EEG ~ Condition * splines::bs(Time, df=0.05 * 600), data=data)
 ```
 
 ``` r
@@ -232,14 +256,19 @@ plot_model(model, data)
 
 This plot shows the original raw averages (dotted lines), the predicted
 values by the model and their confidence interval (CI), as well as the
-difference between the two conditions.
+difference between the two conditions (estimated as marginal contrasts).
 
 ### General Additive Model (GAM)
+
+General Additive Model (GAM)
+
+Fit a GAM with cubic splines using the `bam()` function that is
+optimized for very large datasets.
 
 ``` r
 library(mgcv)
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition), data=data, method="REML")
+model <- mgcv::bam(EEG ~ Condition + s(Time, by = Condition, bs="cr"), data=data)
 ```
 
 ``` r
@@ -248,26 +277,34 @@ plot_model(model, data)
 
 ![](../../studies/erp_gam/figures/unnamed-chunk-12-1.png)<!-- -->
 
-It is possible to increase the number of degrees of freedom.
+As we can see, though it gives decent results, it seems like the default
+smoothing is a bit too strong. This is an issue as our process of
+interest (event-related potentials) are known to be of very high
+frequency with sharp changes.
+
+Fortunately, it is possible to decrease the smoothness by increasing the
+number of degrees of freedom of the smooth term. Similarly to the spline
+regression above, we will set the dimension *k* to 5% to the length of
+the epochs, which in our case corresponds to `0.05 * 600 ms`.
 
 ``` r
 gam.check(model)
 ## 
-## Method: REML   Optimizer: outer newton
-## full convergence after 7 iterations.
-## Gradient range [-0.00982,0.00773]
-## (score 36811 & scale 0.968).
-## Hessian positive definite, eigenvalue range [3.28,13102].
+## Method: fREML   Optimizer: perf newton
+## full convergence after 8 iterations.
+## Gradient range [-2.92e-07,2.28e-07]
+## (score 36800 & scale 0.967).
+## Hessian positive definite, eigenvalue range [3.3,13102].
 ## Model rank =  20 / 20 
 ## 
 ## Basis dimension (k) checking results. Low p-value (k-index<1) may
 ## indicate that k is too low, especially if edf is close to k'.
 ## 
 ##                           k'  edf k-index p-value
-## s(Time):Conditionaudio  9.00 8.65    0.99    0.34
-## s(Time):Conditionvisual 9.00 8.81    0.99    0.41
+## s(Time):Conditionaudio  9.00 8.68    1.02    0.92
+## s(Time):Conditionvisual 9.00 8.83    1.02    0.89
 
-model <- mgcv::gam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600), data=data, method="REML")
+model <- mgcv::bam(EEG ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr"), data=data)
 ```
 
 ``` r
@@ -278,16 +315,57 @@ plot_model(model, data)
 
 ### Using data from all the channels
 
-``` r
-data_long <- data %>%
-  pivot_longer(starts_with("EEG."), names_to="Channel")
+It is important to note that all the channels contribute in the same way
+to these differences, and taking into account the variability of this
+data could reinforce our model.
 
-# 
-# model <- lme4::lmer(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
-# model <- glmmTMB::glmmTMB(value ~ Condition * splines::bs(Time, df=0.02 * 700) + (1|Channel), data=data_long)
+``` r
+# Reshape the data in a long format
+data_long <- data %>%
+  pivot_longer(starts_with("EEG."), names_to="Channel", values_to="Signal") %>% 
+  mutate(Channel = as.factor(Channel))
+
+data_long %>% 
+  group_by(Condition, Channel, Time) %>% 
+  summarise_all(mean) %>% 
+  ggplot(aes(x=Time, y=Signal)) +
+  geom_line(aes(color=Condition, group=interaction(Condition, Channel))) +
+  scale_color_manual(values=c("audio"="#FF5722", "visual"="#2196F3")) +
+  scale_fill_manual(values=c("audio"="#FF5722", "visual"="#2196F3")) +
+  ylab("EEG") +
+  theme_eeg() +
+  ggtitle("Average effet of each channel")
 ```
 
-Unfortunately, this won’t converge, too much data :(
+![](../../studies/erp_gam/figures/unnamed-chunk-15-1.png)<!-- -->
+
+We will add use the data from all the channels of the cluster by adding
+them as a random factor in the model (random slopes are added for the
+condition factor).
+
+``` r
+model_full <- mgcv::bam(Signal ~ Condition + s(Time, by = Condition, k = 0.05 * 600, bs="cr") + s(Condition, Channel, bs='re'), data=data_long)
+
+plot_model(model_full, data)
+```
+
+![](../../studies/erp_gam/figures/unnamed-chunk-16-1.png)<!-- -->
+
+``` r
+performance::compare_performance(model, model_full)
+## # Comparison of Model Performance Indices
+## 
+## Model      | Type |      AIC |      BIC |   R2 | RMSE | BF
+## ----------------------------------------------------------
+## model      |  bam | 73490.40 | 73777.79 | 0.04 | 0.98 |   
+## model_full |  bam | 7.35e+05 | 7.36e+05 | 0.03 | 0.98 |  0
+```
+
+## Conclusion
+
+GAMs offer a flexible and powerful way to model ERPs. Moreover, these
+models can be extended to include more covariates, hopefully increasing
+the signal to noise ratio.
 
 ## References
 

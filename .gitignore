@@ -92,6 +92,9 @@ ENV/
 .spyderproject
 .spyproject
 
+# vscode stuff
+.vscode/
+
 # Rope project settings
 .ropeproject
 
@@ -138,3 +141,4 @@ paper/NeuroKit_Submission/
 data/fantasia/fantasia-database-1.0.0
 data/fantasia/ECGs.csv
 data/fantasia/Rpeaks.csv
+data/RealObjectsEEG

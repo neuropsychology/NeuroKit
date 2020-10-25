@@ -5,12 +5,12 @@ dependencies:
   #- sphinx>=1.4  # Get WIP version of sphinx with MD stuff
   - pip
   - pandoc
-  - nbconvert
+  - nbconvert==5.6.1
   - ipykernel
   - pip:
     - sphinx
     # - git+https://git@github.com/sphinx-doc/sphinx.git@refs/pull/7739/head#egg=sphinx  # Do change that when this is merged (https://github.com/sphinx-doc/sphinx/pull/7739)
-    - git+git://github.com/mgeier/nbsphinx.git@pygments-background  # Do change that when this is merged (https://github.com/spatialaudio/nbsphinx/pull/463)
+    - git+git://github.com/mgeier/nbsphinx.git@master  # Do change that when this is merged (https://github.com/spatialaudio/nbsphinx/pull/463)
     - sphinx-nbexamples
     - sphinx-gallery
     - sphinx-copybutton

@@ -33,12 +33,11 @@ def microstates_dynamic(microstates):
     >>> import numpy as np
     >>>
     >>> microstates = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
-    >>> nk.microstates_dynamic(microstates) #doctest: +ELIIPSIS
+    >>> nk.microstates_dynamic(microstates)  #doctest: +ELLIPSIS
            Microstate_0_to_0  ...  Microstate_Symmetry_p
-        0               0.75  ...                    1.0
+    0                    ...  ...                    ...
 
     [1 rows x 15 columns]
-
     """
     microstates = as_vector(microstates)
     out = {}

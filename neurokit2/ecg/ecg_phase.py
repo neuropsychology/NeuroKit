@@ -75,14 +75,15 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
         __, delineate_info = ecg_delineate(ecg_cleaned, sampling_rate=sampling_rate)
 
     # Try retrieving right column
-    if isinstance(delineate_info, dict):
-        toffsets = delineate_info["ECG_T_Offsets"]
-        toffsets = [int(x) for x in toffsets if ~np.isnan(x)]
-        toffsets = np.array(toffsets)
+    if isinstance(delineate_info, dict):    # FIXME: if this evaluates to False, toffsets and ppeaks are not instantiated
 
-        ppeaks = delineate_info["ECG_P_Peaks"]
-        ppeaks = [int(x) for x in ppeaks if ~np.isnan(x)]
-        ppeaks = np.array(ppeaks)
+        toffsets = np.full(len(ecg_cleaned), False, dtype=bool)
+        toffsets_idcs = [int(x) for x in delineate_info["ECG_T_Offsets"] if ~np.isnan(x)]
+        toffsets[toffsets_idcs] = True
+
+        ppeaks = np.full(len(ecg_cleaned), False, dtype=bool)
+        ppeaks_idcs = [int(x) for x in delineate_info["ECG_P_Peaks"] if ~np.isnan(x)]
+        ppeaks[ppeaks_idcs] = True
 
     # Atrial Phase
     atrial = np.full(len(ecg_cleaned), np.nan)

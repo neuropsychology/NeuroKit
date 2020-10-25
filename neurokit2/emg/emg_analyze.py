@@ -46,10 +46,12 @@ def emg_analyze(data, sampling_rate=1000, method="auto"):
     ...                           epochs_start=-0.1, epochs_end=1.9)
     >>>
     >>> # Event-related analysis
-    >>> nk.emg_analyze(epochs, method="event-related") #doctest: +SKIP
+    >>> analyze_epochs = nk.emg_analyze(epochs, method="event-related")
+    >>> analyze_epochs #doctest: +SKIP
     >>>
     >>> # Interval-related analysis
-    >>> nk.emg_analyze(emg_signals, method="interval-related") #doctest: +SKIP
+    >>> analyze_df = nk.emg_analyze(emg_signals, method="interval-related")
+    >>> analyze_df #doctest: +SKIP
 
     """
     method = method.lower()

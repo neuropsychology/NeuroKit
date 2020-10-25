@@ -26,16 +26,17 @@ def microstates_classify(segmentation, microstates):
     ------------
     >>> import neurokit2 as nk
     >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)
+    >>> eeg = nk.mne_data("filt-0-40_raw").filter(1, 35)  #doctest: +ELLIPSIS
+    Filtering raw data ...
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
     >>> # Original order
     >>> out = nk.microstates_segment(eeg)
-    >>> nk.microstates_plot(out, gfp=out["GFP"][0:100])
+    >>> nk.microstates_plot(out, gfp=out["GFP"][0:100]) #doctest: +ELLIPSIS
+    <Figure ...>
     >>>
     >>> # Reorder
-    >>> out = nk.microstates_classify(out)
-    >>> nk.microstates_plot(out, gfp=out["GFP"][0:100])
+    >>> out = nk.microstates_classify(out["Sequence"], out["Microstates"])
 
     """
     # Reorder
@@ -46,7 +47,6 @@ def microstates_classify(segmentation, microstates):
     segmentation = replace(segmentation, replacement)
 
     return segmentation, microstates
-
 
 
 # =============================================================================
@@ -62,7 +62,9 @@ def _microstates_sort(microstates):
     coefs_linear = np.zeros(n_states)
     for i in order_original:
         state = microstates[i, :]
-        _, coefs_linear[i], coefs_quadratic[i] = np.polyfit(state, np.arange(len(state)), 2)
+        _, coefs_linear[i], coefs_quadratic[i] = np.polyfit(
+            state, np.arange(len(state)), 2
+        )
 
     # For each state, which is the biggest trend, linear or quadratic
     order_quad = order_original[np.abs(coefs_linear) <= np.abs(coefs_quadratic)]
