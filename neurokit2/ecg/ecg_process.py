@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
-from ..signal import signal_rate
+from ..signal import signal_rate, signal_sanitize
 from .ecg_clean import ecg_clean
 from .ecg_delineate import ecg_delineate
 from .ecg_peaks import ecg_peaks
@@ -89,6 +89,9 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
     <Figure ...>
 
     """
+    # Sanitize input
+    ecg_signal = signal_sanitize(ecg_signal)
+
     ecg_cleaned = ecg_clean(ecg_signal, sampling_rate=sampling_rate, method=method)
     # R-peaks
     instant_peaks, rpeaks, = ecg_peaks(
