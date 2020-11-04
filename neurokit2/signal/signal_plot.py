@@ -90,6 +90,9 @@ def signal_plot(
     # Adjust for sampling rate
     if sampling_rate is not None:
         signal.index = signal.index / sampling_rate
+        title_x = "Time (seconds)"
+    else:
+        title_x = "Time"
     #        x_axis = np.linspace(0, signal.shape[0] / sampling_rate, signal.shape[0])
     #        x_axis = pd.DataFrame(x_axis, columns=["Time (s)"])
     #        signal = pd.concat([signal, x_axis], axis=1)
@@ -103,10 +106,10 @@ def signal_plot(
             events.append(np.where(vector == np.max(vector.unique()))[0])
         plot = events_plot(events, signal=signal[continuous_columns])
 
-        if sampling_rate is None:
+        if sampling_rate is None and signal.index.is_integer():
             plot.gca().set_xlabel("Samples")
         else:
-            plot.gca().set_xlabel("Time (seconds)")
+            plot.gca().set_xlabel(title_x)
 
     else:
 
@@ -141,10 +144,10 @@ def signal_plot(
                 subplots=False, sharex=True, **kwargs
             )
 
-        if sampling_rate is None:
+        if sampling_rate is None and signal.index.is_integer():
             plt.xlabel("Samples")
         else:
-            plt.xlabel("Time (seconds)")
+            plt.xlabel(title_x)
 
     # Tidy legend locations and add labels
     if labels is None:
