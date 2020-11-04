@@ -7,7 +7,9 @@ from ..events import events_plot
 from ..stats import standardize as nk_standardize
 
 
-def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, labels=None, **kwargs):
+def signal_plot(
+    signal, sampling_rate=None, subplots=False, standardize=False, labels=None, **kwargs
+):
     """Plot signal with events as vertical lines.
 
     Parameters
@@ -60,7 +62,11 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
                 if isinstance(content, (pd.DataFrame, pd.Series)):
                     out = pd.concat([out, content], axis=1, sort=True)
                 else:
-                    out = pd.concat([out, pd.DataFrame({"Signal" + str(i + 1): content})], axis=1, sort=True)
+                    out = pd.concat(
+                        [out, pd.DataFrame({"Signal" + str(i + 1): content})],
+                        axis=1,
+                        sort=True,
+                    )
             signal = out
 
         # If vector is passed
@@ -105,8 +111,18 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
     else:
 
         # Aesthetics
-        colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
-                  '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+        colors = [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#9467bd",
+            "#8c564b",
+            "#e377c2",
+            "#7f7f7f",
+            "#bcbd22",
+            "#17becf",
+        ]
         if len(continuous_columns) > len(colors):
             colors = plt.cm.viridis(np.linspace(0, 1, len(continuous_columns)))
 
@@ -115,11 +131,15 @@ def signal_plot(signal, sampling_rate=None, subplots=False, standardize=False, l
             signal[continuous_columns] = nk_standardize(signal[continuous_columns])
 
         if subplots is True:
-            fig, axes = plt.subplots(nrows=len(continuous_columns), ncols=1, sharex=True, **kwargs)
+            fig, axes = plt.subplots(
+                nrows=len(continuous_columns), ncols=1, sharex=True, **kwargs
+            )
             for ax, col, color in zip(axes, continuous_columns, colors):
                 ax.plot(signal[col], c=color, **kwargs)
         else:
-            plot = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
+            plot = signal[continuous_columns].plot(
+                subplots=False, sharex=True, **kwargs
+            )
 
         if sampling_rate is None:
             plt.xlabel("Samples")
