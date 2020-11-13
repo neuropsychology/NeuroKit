@@ -47,7 +47,7 @@ def read_bitalino(filename):
         list(metadata.keys())[0]
     ]  # convert json header to dict (only select first device / MAC address)
     sampling_rate = metadata["sampling rate"]
-    channels = np.array(metadata["channels"]) + 5  # analog channels start from column 5
+    channels = np.arange(len(metadata["channels"])) + 5  # analog channels start from column 5
 
     # Read data
     data = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
