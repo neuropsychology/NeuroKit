@@ -31,7 +31,7 @@ def read_bitalino(filename):
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> data, sampling_rate = nk.read_bitalino("data.txt")
+    >>> #data, sampling_rate = nk.read_bitalino("data.txt")
     """
     # read metadata
     with open(filename, "r") as f:
