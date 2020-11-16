@@ -105,6 +105,7 @@ Scripts must be shareable (not always feasible with closed-source and proprietar
 
 <!-- Response to gap -->
 *NeuroKit2*, addresses these challenges by offering a free, user-centered, and comprehensive solution for neurophysiological data processing, with an initial focus on bodily signals including ECG (electrocardiography is used to measure cardiac activity), PPG (photoplethysmogram is an optical measurement of blood flow), RSP (respiration measures), EDA (electrodermal activity measuring the electrical conductance of the skin), EMG (electromyography measuring muscular activity) and EOG (electrooculography measuring eye movements). It also provides modality-independent functions that can be used for other modalities such as EEG (electroencephalography measuring electrical activity of the brain), for which more specific support is in development.
+
 The open-source Python package is developed by a multi-disciplinary team that actively invites new collaborators. The target audience of *NeuroKit2* includes both experienced and novice programmers. Although being a programming-based tool, users not familiar with Python or other languages can start using the software (and improve their programming skills along the way) by following our step-by-step examples. Moreover, we also include a thorough tutorial on Python installation, as well as a "10 minutes introduction to Python" in the documentation. While many of the existing software caters to a single signal modality (e.g., *KUBIOS*\copyright [@tarvainen2014kubios], *HeartPy* [@HeartPy] and *pyHRV* [@gomes2019pyhrv] for ECG, *cvxEDA* [@greco2015cvxeda], *Ledalab* [@benedek2010continuous], and *SCRalyze* [@bach2014head] for EDA), *NeuroKit2* provides support for various signals and allows its users to process signals from multiple physiological modalities with a uniform application programming interface (API). It aims at being accessible, well-documented, well-tested, cutting-edge, flexible and efficient. The library allows users to select from a wide range of validated analysis pipelines and to create custom pipelines tailored to specific analyses requirements.
 Historically, *NeuroKit2* is the re-forged successor of *NeuroKit1* [@neurokit1], taking over its most successful features and design choices, and re-implementing them in a way that adheres to current best practices in open source software development.
 
@@ -156,7 +157,7 @@ Performing an entire set of operations with sensible default parameters in one f
 
 # Installing NeuroKit2
 
-*NeuroKit2* is available on PyPI and can be installed using pip (via '*pip install neurokit2*' command). Detailed instructions on how to install Python are also available in the *installation* section of the package's documentation.
+*NeuroKit2* is available on PyPI, a repository of software for the Python programming language. and can be installed using pip (via '*pip install neurokit2*' command). Detailed instructions on how to install Python are also available in the *installation* section of the package's documentation.
 
 
 # Examples
@@ -235,7 +236,7 @@ Interval-related analyses compute features of signal variability and activation 
 
 This example dataset contains ECG, RSP and EDA signals of one participant who was presented with four emotional images [from the NAPS database; @marchewka2014nencki] in a typical (albeit shortened) experimental psychology paradigm.
 
-The signals are 2.5 minutes long and are recorded at a frequency of 100Hz [note that the sampling rate is lower than usually required, see @Quintana2016, in order to be able to include the example data in the *NeuroKit2* distribution]. It has 4 channels including three physiological signals, and one corresponding to events marked with a photosensor (signal strength decreases when a stimulus appears on the screen).
+The signals are 2.5 minutes (150 seconds) long and are recorded at a frequency of 100Hz [note that the sampling rate is lower than usually required, see @Quintana2016, in order to be able to include the example data in the *NeuroKit2* distribution]. It has 4 channels including three physiological signals, and one corresponding to events marked with a photosensor (signal strength decreases when a stimulus appears on the screen).
 
 
 
