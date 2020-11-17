@@ -7,16 +7,18 @@ import pandas as pd
 from ..signal import signal_resample
 
 
-def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolation", impute_missing=True):
+def read_acqknowledge(
+    filename, sampling_rate="max", resample_method="interpolation", impute_missing=True
+):
     """Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
 
-    The function outputs both the dataframe and the sampling rate (encoded within the
-    AcqKnowledge) file.
+    The function outputs both the dataframe and the sampling rate (retrieved from the
+    AcqKnowledge file).
 
     Parameters
     ----------
     filename :  str
-        Filename (with or without the extension) of a BIOPAC's AcqKnowledge file.
+        Filename (with or without the extension) of a BIOPAC's AcqKnowledge file (e.g., 'data.acq').
     sampling_rate : int
         Sampling rate (in Hz, i.e., samples/second). Since an AcqKnowledge file can contain
         signals recorded at different rates, harmonization is necessary in order to convert it
@@ -35,9 +37,9 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
     Returns
     ----------
     df : DataFrame
-        The AcqKnowledge file converted to a dataframe.
+        The AcqKnowledge file as a pandas dataframe.
     sampling rate: int
-        The AcqKnowledge file converted to its sampling rate.
+        The sampling rate at which the data is sampled.
 
     See Also
     --------
@@ -65,7 +67,10 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
         filename += ".acq"
 
     if os.path.exists(filename) is False:
-        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't" " find the following file: " + filename)
+        raise ValueError(
+            "NeuroKit error: read_acqknowledge(): couldn't"
+            " find the following file: " + filename
+        )
 
     # Read file
     file = bioread.read(filename)
@@ -107,7 +112,10 @@ def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolat
                 data[channel] = data[channel][0:length]
             if len(data[channel]) < length:
                 data[channel] = np.concatenate(
-                    [data[channel], np.full((length - len(data[channel])), data[channel][-1])]
+                    [
+                        data[channel],
+                        np.full((length - len(data[channel])), data[channel][-1]),
+                    ]
                 )
 
     # Final dataframe
