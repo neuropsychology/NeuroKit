@@ -8,7 +8,7 @@ from ..signal import signal_distort, signal_resample
 
 
 def ecg_simulate(
-    duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=70, method="ecgsyn", random_state=None
+    duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=70, heart_rate_std=1, method="ecgsyn", random_state=None
 ):
     """Simulate an ECG/EKG signal.
 
@@ -31,6 +31,8 @@ def ecg_simulate(
         ECGSYN method, random fluctuations are to be expected to mimick a real heart rate. These
         fluctuations can cause some slight discrepancies between the requested heart rate and the
         empirical heart rate, especially for shorter signals.
+    heart_rate_std : int
+        Desired heart rate standard deviation (beats per minute).
     method : str
         The model used to generate the signal. Can be 'simple' for a simulation based on Daubechies
         wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use an
@@ -87,7 +89,7 @@ def ecg_simulate(
             N=approx_number_beats,
             Anoise=0,
             hrmean=heart_rate,
-            hrstd=1,
+            hrstd=heart_rate_std,
             lfhfratio=0.5,
             sfint=sampling_rate,
             ti=(-70, -15, 0, 15, 100),
