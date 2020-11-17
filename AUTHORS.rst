@@ -30,6 +30,7 @@ Contributors
 * `Elaine Teo <https://github.com/elaineteo2000>`_ *(University College London)*
 * `Raimon Padrós <https://github.com/raimonpv>`_ *(Universitat politècnica de Catalunya, Spain - Massachusetts General Hospital, USA)*
 * `Minsoo Yeo <https://github.com/minsooyeo>`_ *(Taewoong Medical Co., Ltd., ROK)*
+* `Celal Savur <https://github.com/csavur>`_ *(Rochester Institute of Technology, USA)*
 * `Jacob Epifano <https://github.com/jrepifano>`_ *(Rowan University - Children's Hospital of Philadelphia, USA)*
 
 
