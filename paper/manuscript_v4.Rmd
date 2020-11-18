@@ -80,7 +80,9 @@ library(easystats)
 
 # Setup python - you need to change the path to your python distribution
 library(reticulate)
-reticulate::use_python("C:/Users/Pham Thanh Tam/Desktop/WPy-3710b/python-3.7.1.amd64/")
+# reticulate::use_python("C:/Users/Pham Thanh Tam/Desktop/WPy-3710b/python-3.7.1.amd64/")
+# reticulate::use_python("D:/Downloads/WPy64-3810/python-3.8.1.amd64/")
+reticulate::use_python("C:/Users/Dom/Desktop/WPy64-3860/python-3.8.6.amd64/")
 matplotlib <- import("matplotlib")
 matplotlib$use("Agg", force = TRUE)
 ```
