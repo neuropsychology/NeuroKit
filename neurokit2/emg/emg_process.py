@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
+from ..signal import signal_sanitize
 from .emg_activation import emg_activation
 from .emg_amplitude import emg_amplitude
 from .emg_clean import emg_clean
@@ -47,6 +48,9 @@ def emg_process(emg_signal, sampling_rate=1000):
     >>> fig #doctest: +SKIP
 
     """
+    # Sanitize input
+    emg_signal = signal_sanitize(emg_signal)
+
     # Clean signal
     emg_cleaned = emg_clean(emg_signal, sampling_rate=sampling_rate)
 

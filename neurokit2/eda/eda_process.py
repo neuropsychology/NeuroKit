@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
 
+from ..signal import signal_sanitize
 from .eda_clean import eda_clean
 from .eda_peaks import eda_peaks
 from .eda_phasic import eda_phasic
@@ -64,6 +65,9 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
     >>> fig #doctest: +SKIP
 
     """
+    # Sanitize input
+    eda_signal = signal_sanitize(eda_signal)
+
     # Series check for non-default index
     if type(eda_signal) is pd.Series and type(eda_signal.index) != pd.RangeIndex:
         eda_signal = eda_signal.reset_index(drop=True)
@@ -74,7 +78,10 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
 
     # Find peaks
     peak_signal, info = eda_peaks(
-        eda_decomposed["EDA_Phasic"].values, sampling_rate=sampling_rate, method=method, amplitude_min=0.1
+        eda_decomposed["EDA_Phasic"].values,
+        sampling_rate=sampling_rate,
+        method=method,
+        amplitude_min=0.1,
     )
 
     # Store
