@@ -52,6 +52,5 @@ def read_bitalino(filename):
     # Read data
     data = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
     data.columns = metadata["sensor"]
-    data = data.set_index(np.arange(0, len(data) / sampling_rate, 1 / sampling_rate))
 
     return data, sampling_rate
