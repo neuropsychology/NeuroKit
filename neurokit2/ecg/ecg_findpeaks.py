@@ -5,7 +5,7 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import signal_findpeaks, signal_plot, signal_smooth, signal_zerocrossings
+from ..signal import signal_findpeaks, signal_plot, signal_smooth, signal_zerocrossings, signal_sanitize
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
@@ -122,6 +122,9 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
                 ecg_cleaned = ecg_cleaned["ECG_Raw"]
             except NameError:
                 ecg_cleaned = ecg_cleaned["ECG"]
+
+    # Sanitize input
+    ecg_cleaned = signal_sanitize(ecg_cleaned)
 
     method = method.lower()  # remove capitalised letters
     # Run peak detection algorithm
