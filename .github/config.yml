@@ -10,6 +10,7 @@ newIssueWelcomeComment: >
 newPRWelcomeComment: >
   Thanks for opening this pull request! We'll make sure it's perfect before merging 🤗
   ![force](https://media.giphy.com/media/l1AsJoOWnvy0CuyFq/giphy.gif)
+  
   Make sure to read the [contributing guide](https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst#structure-and-code). Also, if you think that your contribution is worthy of it, you can consider adding yourself to the [Contributors list](https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst) (feel free to ask us if you have any doubts).
   
 # Configuration for first-pr-merge - https://github.com/behaviorbot/first-pr-merge
