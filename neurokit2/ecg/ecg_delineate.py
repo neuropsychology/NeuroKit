@@ -150,8 +150,8 @@ def ecg_delineate(
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     """Resample given points to a different sampling rate."""
     if isinstance(peaks, np.ndarray):    # peaks are passed in from previous processing steps
-        # Prevent overflow by casting to np.int64 (peaks might be passed in containing np.int32).
-        peaks.astype(dtype=np.int64, copy=False)
+        # Prevent overflow by converting to np.int64 (peaks might be passed in containing np.int32).
+        peaks = peaks.astype(dtype=np.int64)
     elif isinstance(peaks, list):    # peaks returned from internal functions
         # Cannot be converted to int since list might contain np.nan. Automatically cast to np.float64 if list contains np.nan.
         peaks = np.array(peaks)
