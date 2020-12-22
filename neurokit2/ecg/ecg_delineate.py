@@ -369,7 +369,7 @@ def _dwt_delineate_tp_onsets_offsets(
             offsets.append(np.nan)
             continue
         candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0] + offset_slope_peaks[0]
-        if(len(candidate_offsets)>0):
+        if(len(candidate_offsets) > 0):
             offsets.append(candidate_offsets[0] + srch_idx_start)
         else:
             offsets.append(np.nan)
