@@ -178,6 +178,9 @@ Citation
       year = {2020},
     }
 
+
+**Let us know if you used NeuroKit in a publication!** Open a new `discussion <https://github.com/neuropsychology/NeuroKit/discussions>`_ (select the *NK in publications* category) and link the paper. The community would be happy to know about how you used it and learn about your research. We could also feature it once we have a section on the website for papers that used the software.
+
 ..
     Design
     --------
