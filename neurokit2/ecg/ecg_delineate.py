@@ -365,7 +365,7 @@ def _dwt_delineate_tp_onsets_offsets(
             offsets.append(np.nan)
             continue
         epsilon_offset = -offset_weight * dwt_local[offset_slope_peaks[0]]
-        if not (-dwt_local[onset_slope_peaks[0] :] < epsilon_offset).any():
+        if not (-dwt_local[offset_slope_peaks[0] :] < epsilon_offset).any():
             offsets.append(np.nan)
             continue
         candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0] + offset_slope_peaks[0]
