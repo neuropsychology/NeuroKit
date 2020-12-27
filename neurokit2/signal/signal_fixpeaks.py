@@ -156,23 +156,22 @@ def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=Fals
 
     if iterative:
 
-        # Iteratively apply the artifact correction until the number of artifact
-        # reaches an equilibrium (i.e., the number of artifacts does not change
-        # anymore from one iteration to the next).
-        n_artifacts_previous = np.inf
+        # Iteratively apply the artifact correction until the number
+        # of artifacts stops decreasing.
         n_artifacts_current = sum([len(i) for i in artifacts.values()])
 
-        previous_diff = 0
+        while True:
 
-        while n_artifacts_current - n_artifacts_previous != previous_diff:
-
-            previous_diff = n_artifacts_previous - n_artifacts_current
-
-            artifacts, subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate)
-            peaks_clean = _correct_artifacts(artifacts, peaks_clean)
+            new_artifacts, new_subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate)
 
             n_artifacts_previous = n_artifacts_current
-            n_artifacts_current = sum([len(i) for i in artifacts.values()])
+            n_artifacts_current = sum([len(i) for i in new_artifacts.values()])
+            if n_artifacts_current >= n_artifacts_previous:
+                break
+
+            artifacts = new_artifacts
+            subspaces = new_subspaces
+            peaks_clean = _correct_artifacts(artifacts, peaks_clean)
 
     if show:
         _plot_artifacts_lipponen2019(artifacts, subspaces)
