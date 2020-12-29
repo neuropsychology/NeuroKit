@@ -5,7 +5,8 @@ import pandas as pd
 import scipy.signal
 
 from ..epochs import epochs_create, epochs_to_df
-from ..signal import signal_findpeaks, signal_formatpeaks, signal_resample, signal_smooth, signal_zerocrossings
+from ..signal import (signal_findpeaks, signal_formatpeaks, signal_resample,
+                      signal_smooth, signal_zerocrossings)
 from ..stats import standardize
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
@@ -371,14 +372,12 @@ def _dwt_delineate_tp_onsets_offsets(
             offsets.append(np.nan)
             continue
         epsilon_offset = -offset_weight * dwt_local[offset_slope_peaks[0]]
-        if not (-dwt_local[onset_slope_peaks[0] :] < epsilon_offset).any():
+        if not (-dwt_local[offset_slope_peaks[0] :] < epsilon_offset).any():
             offsets.append(np.nan)
             continue
         candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0] + offset_slope_peaks[0]
-        if(len(candidate_offsets) > 0):
-            offsets.append(candidate_offsets[0] + srch_idx_start)
-        else:
-            offsets.append(np.nan)
+        offsets.append(candidate_offsets[0] + srch_idx_start)
+
 
         # # only for debugging
         # events_plot([candidate_offsets, offset_slope_peaks], dwt_local)
