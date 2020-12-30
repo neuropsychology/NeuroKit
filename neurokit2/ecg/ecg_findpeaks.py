@@ -919,7 +919,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
         correct_sign = signal_1[index_cur] < 0 and signal_1[index_next] > 0  # pylint: disable=R1716
         near = (index_next - index_cur) < max_R_peak_dist  # limit 2
         if near and correct_sign:
-            rpeaks.append(signal_zerocrossings(signal_1[index_cur:index_next])[0] + index_cur)
+            rpeaks.append(signal_zerocrossings(signal_1[index_cur:index_next+1])[0] + index_cur)
 
     rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks

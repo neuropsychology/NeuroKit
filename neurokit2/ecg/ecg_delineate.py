@@ -262,7 +262,7 @@ def _dwt_delineate_tp_peaks(
         for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
             correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0  # pylint: disable=R1716
             if correct_sign:
-                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt])[0] + idx_peak
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt+1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
                 score = ecg_local[idx_zero] - (float(idx_zero) / sampling_rate - (rt_duration - 0.5 * qrs_width))
@@ -303,7 +303,7 @@ def _dwt_delineate_tp_peaks(
         for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
             correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0  # pylint: disable=R1716
             if correct_sign:
-                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt])[0] + idx_peak
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt+1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
                 score = ecg_local[idx_zero] - abs(
@@ -669,7 +669,7 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
         #    near = (index_next - index_cur) < max_wv_peak_dist #limit 2
         #    if near and correct_sign:
         if correct_sign:
-            index_zero_cr = signal_zerocrossings(cwtmatr[4, :][index_cur:index_next])[0] + index_cur
+            index_zero_cr = signal_zerocrossings(cwtmatr[4, :][index_cur:index_next+1])[0] + index_cur
             nb_idx = int(max_search_duration * sampling_rate)
             index_max = np.argmax(ecg[index_zero_cr - nb_idx : index_zero_cr + nb_idx]) + (index_zero_cr - nb_idx)
             tppeaks.append(index_max)
