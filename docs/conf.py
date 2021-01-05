@@ -64,7 +64,8 @@ extensions = [
     'sphinx_nbexamples',
     'matplotlib.sphinxext.plot_directive',
     'sphinx_copybutton',
-    'recommonmark'
+    'recommonmark',
+    'sphinx.ext.autosectionlabel'
 ]
 
 # matplotlib plot directive

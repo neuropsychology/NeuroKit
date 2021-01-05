@@ -50,13 +50,19 @@ And **boom** 💥 your analysis is done 😎
 Installation
 -------------
 
-To install NeuroKit2, run this command in your terminal:
+You can install NeuroKit2 from `PyPI <https://pypi.org/project/neurokit2/>`_
 
 .. code-block::
 
     pip install neurokit2
 
-If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
+or `conda-forge <https://anaconda.org/conda-forge/neurokit2>`_
+
+.. code-block::
+
+    conda install -c conda-forge neurokit2
+
+If you're not sure what to do, read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
 Contributing
 -------------
@@ -64,11 +70,11 @@ Contributing
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
         :target: https://github.com/neuropsychology/NeuroKit/blob/master/LICENSE
         :alt: License
-        
+
 .. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg?branch=master
         :target: https://github.com/neuropsychology/NeuroKit/actions
         :alt: GitHub CI
-        
+
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
         :target: https://github.com/psf/black
         :alt: Black code
@@ -320,7 +326,7 @@ Electrooculography (EOG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
-    
+
     # Import EOG data
     eog_signal = nk.data("eog_100hz")
 
