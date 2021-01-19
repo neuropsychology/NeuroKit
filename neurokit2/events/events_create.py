@@ -35,7 +35,7 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
     >>>
     >>> events = nk.events_create(event_onsets = [500, 1500, 2500, 5000])
     >>> events #doctest: +ELLIPSIS
-    {'onset': array(...),
+    {'onset': [...],
      'duration': array(...),
      'label': array(...)}
 
