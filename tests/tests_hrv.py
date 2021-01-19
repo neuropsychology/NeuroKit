@@ -27,7 +27,7 @@ def test_hrv_time():
     assert np.all(hrv_fast["HRV_pNN50"] == hrv_slow["HRV_pNN50"])
     assert np.all(hrv_fast["HRV_pNN20"] < hrv_slow["HRV_pNN20"])
     assert np.all(hrv_fast["HRV_TINN"] < hrv_slow["HRV_TINN"])
-    assert np.all(hrv_fast["HRV_HTI"] < hrv_slow["HRV_HTI"])
+    assert np.all(hrv_fast["HRV_HTI"] > hrv_slow["HRV_HTI"])
 
 
 def test_hrv_frequency():
