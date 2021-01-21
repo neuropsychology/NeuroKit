@@ -37,11 +37,11 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
         The order of the polynoiam trend, 1 for the linear trend.
     multifractal : bool
         If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the argument
-        ```q`` is taken into account.
+        ``q`` is taken into account.
     q : list
         The sequence of fractal exponents when ``multifractal=True``. Must be a sequence between -10
-        and 10 (nota that zero will be removed, since the code does not converge there). Setting
-        q = 2 (default) gives a result close to a standard DFA. For instance, Ihlen (2012) usese ``
+        and 10 (note that zero will be removed, since the code does not converge there). Setting
+        q = 2 (default) gives a result of a standard DFA. For instance, Ihlen (2012) uses ``
         q=[-5, -3, -1, 0, 1, 3, 5]``.
     show : bool
         Visualise the trend between the window size and the fluctuations.
@@ -73,6 +73,8 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
 
     - `nolds <https://github.com/CSchoel/nolds/>`_
 
+    - `MFDFA <https://github.com/LRydin/MFDFA/>`_
+
     - `Youtube introduction <https://www.youtube.com/watch?v=o0LndP2OlUI>`_
 
     """
@@ -84,11 +86,12 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     if integrate is True:
         signal = np.cumsum(signal - np.mean(signal))  # Get signal profile
 
-    # Sanitize fractal power
-    if multifractal is True:
-        q = _fractal_mfdfa_q(q)
+    # Sanitize fractal power (cannot be close to 0)
+    q = _cleanse_q(q)
 
-    fluctuations = np.zeros(len(windows))
+    # Function to store fluctuations. For DFA this is an array. For MFDFA, this is a matrix
+    # of size (len(windows),len(q))
+    fluctuations = np.zeros((len(windows),len(q)))
     # Start looping over windows
     for i, window in enumerate(windows):
 
@@ -96,7 +99,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
         segments = _fractal_dfa_getwindow(signal, n, window, overlap=overlap)
 
         # Get polynomial trends
-        trends = _fractal_dfa_trends(segments, window, order=1)
+        trends = _fractal_dfa_trends(segments, window, order=order)
 
         # Get local fluctuation
         fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, multifractal, q)
@@ -110,7 +113,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     if len(fluctuations) == 0:
         return np.nan
     else:
-        dfa = np.polyfit(np.log2(windows), np.log2(fluctuations), order)
+        dfa = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
 
     if show is True:
         _fractal_dfa_plot(windows, fluctuations, dfa)
@@ -152,6 +155,8 @@ def _fractal_dfa_findwindows(n, windows="default"):
 
 
 def _fractal_dfa_getwindow(signal, n, window, overlap=True):
+    # This function reshapes the segments from a one-dimensional array to a matrix for faster
+    # polynomail fittings. 'Overlap' reshapes into several overlapping partitions of the data
     if overlap:
         segments = np.array([signal[i : i + window] for i in np.arange(0, n - window, window // 2)])
     else:
@@ -177,8 +182,11 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
 
     if multifractal is True:
         var = np.var(detrended, axis=1)
+        # obtain the fluctuation function, which is a function of the windows and of q
         fluctuation = np.float_power(np.mean(np.float_power(var, q / 2), axis=1) / 2, 1 / q.T)
-        fluctuation = np.mean(fluctuation)  # Average over qs (not sure of that!)
+
+        # To recover just the conventional DFA, find q=2
+        # fluctuation = np.mean(fluctuation)
 
     else:
         # Compute Root Mean Square (RMS)
@@ -200,11 +208,11 @@ def _fractal_dfa_plot(windows, fluctuations, dfa):
 
 
 # =============================================================================
-#  Utils MDDFA
+#  Utils MFDFA
 # =============================================================================
 
 
-def _fractal_mfdfa_q(q=2):
+def _cleanse_q(q=2):
     # TODO: Add log calculator for q ≈ 0
 
     # Fractal powers as floats
