@@ -86,6 +86,10 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     if integrate is True:
         signal = np.cumsum(signal - np.mean(signal))  # Get signal profile
 
+    # Enforce DFA in case 'multifractal = False' but 'q' is not 2
+    if multifractal == False:
+        q = 2
+
     # Sanitize fractal power (cannot be close to 0)
     q = _cleanse_q(q)
 
@@ -110,15 +114,25 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     fluctuations = fluctuations[nonzero]
 
     # Compute trend
+    if show is True:
+        _fractal_dfa_plot(windows, fluctuations, multifractal, q)
+
+    # if multifractal, then no return, since DFA fit to extract the Hurst coefficient
+    # is only la
     if len(fluctuations) == 0:
         return np.nan
+    if multifractal == False:
+        dfa = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)[0]
     else:
-        dfa = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
+        dfa = np.zeros(len(q))
+        for i in range(len(q)):
+            dfa[i] = np.polyfit(np.log2(windows), np.log2(fluctuations[:,i]), 1)[0]
 
-    if show is True:
-        _fractal_dfa_plot(windows, fluctuations, dfa)
+    return dfa
 
-    return dfa[0]
+
+
+
 
 
 # =============================================================================
@@ -183,8 +197,9 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
     if multifractal is True:
         var = np.var(detrended, axis=1)
         # obtain the fluctuation function, which is a function of the windows and of q
-        fluctuation = np.float_power(np.mean(np.float_power(var, q / 2), axis=1) / 2, 1 / q.T)
+        fluctuation = np.float_power(np.mean(np.float_power(var, q / 2), axis=1), 1 / q.T)
 
+        # Remnant:
         # To recover just the conventional DFA, find q=2
         # fluctuation = np.mean(fluctuation)
 
@@ -196,10 +211,21 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
     return fluctuation
 
 
-def _fractal_dfa_plot(windows, fluctuations, dfa):
-    fluctfit = 2 ** np.polyval(dfa, np.log2(windows))
-    plt.loglog(windows, fluctuations, "bo")
-    plt.loglog(windows, fluctfit, "r", label=r"$\alpha$ = %0.3f" % dfa[0])
+def _fractal_dfa_plot(windows, fluctuations, multifractal, q):
+
+    if multifractal == False:
+        dfa = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
+
+        fluctfit = 2 ** np.polyval(dfa, np.log2(windows))
+        plt.loglog(windows, fluctuations, "bo")
+        plt.loglog(windows, fluctfit, "r", label=r"$\alpha$ = {:.3f}".format(dfa[0][0]))
+    else:
+        for i in range(len(q)):
+            dfa = np.polyfit(np.log2(windows), np.log2(fluctuations[:,i]), 1)
+
+            fluctfit = 2 ** np.polyval(dfa, np.log2(windows))
+            plt.loglog(windows, fluctuations, "bo")
+            plt.loglog(windows, fluctfit, "r", label=r"$\alpha$ = {:.3f}, q={:.1f}".format(dfa[0],q[i][0]))
     plt.title("DFA")
     plt.xlabel(r"$\log_{2}$(Window)")
     plt.ylabel(r"$\log_{2}$(Fluctuation)")
