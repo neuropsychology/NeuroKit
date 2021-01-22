@@ -9,6 +9,7 @@ from .signal_distort import signal_distort
 from .signal_filter import signal_filter
 from .signal_findpeaks import signal_findpeaks
 from .signal_fixpeaks import signal_fixpeaks
+from .signal_flatline import signal_flatline
 from .signal_formatpeaks import signal_formatpeaks
 from .signal_interpolate import signal_interpolate
 from .signal_merge import signal_merge
@@ -20,13 +21,12 @@ from .signal_psd import signal_psd
 from .signal_rate import signal_rate
 from .signal_recompose import signal_recompose
 from .signal_resample import signal_resample
+from .signal_sanitize import signal_sanitize
 from .signal_simulate import signal_simulate
 from .signal_smooth import signal_smooth
 from .signal_synchrony import signal_synchrony
-from .signal_zerocrossings import signal_zerocrossings
 from .signal_timefrequency import signal_timefrequency
-from .signal_sanitize import signal_sanitize
-
+from .signal_zerocrossings import signal_zerocrossings
 
 __all__ = [
     "signal_simulate",
@@ -54,5 +54,6 @@ __all__ = [
     "signal_decompose",
     "signal_recompose",
     "signal_timefrequency",
-    "signal_sanitize"
+    "signal_sanitize",
+    "signal_flatline"
 ]
