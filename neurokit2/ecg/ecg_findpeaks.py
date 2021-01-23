@@ -24,7 +24,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
         'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012',
-        'kalidas2017', 'martinez2003', 'rodrigues2020' or 'promac'.
+        'kalidas2017', 'martinez2003', 'rodrigues2021' or 'promac'.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the algorithm.
         Useful for debugging.
@@ -64,7 +64,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> elgendi2010 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
     >>> engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
     >>> kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
-    >>> rodrigues2020 = nk.ecg_findpeaks(cleaned, method="rodrigues2020")
+    >>> rodrigues2021 = nk.ecg_findpeaks(cleaned, method="rodrigues2021")
     >>>
     >>> # Visualize
     >>> nk.events_plot([neurokit["ECG_R_Peaks"],
@@ -77,7 +77,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     ...                       engzeemod2012["ECG_R_Peaks"],
     ...                       kalidas2017["ECG_R_Peaks"],
     ...                       martinez2003["ECG_R_Peaks"],
-    ...                       rodrigues2020["ECG_R_Peaks"]], cleaned) #doctest: +ELLIPSIS
+    ...                       rodrigues2021["ECG_R_Peaks"]], cleaned) #doctest: +ELLIPSIS
     <Figure ...>
     >>>
     >>> # Method-agreement
@@ -91,13 +91,16 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     References
     --------------
+    - Rodrigues, Tiago & Samoutphonh, Sirisack & Plácido da Silva, Hugo & Fred, Ana. (2021). 
+      A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices. 
+    
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
       PhD ThesisUniversidade.
 
-    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003, September). An open-source algorithm to
+    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003). An open-source algorithm to
       detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
 
-    - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
+    - Hamilton, P. (2002, September). Open source ECG analysis. In Computers in cardiology (pp. 101-104). IEEE.
 
     - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on
       biomedical engineering, (3), 230-236.
@@ -105,10 +108,10 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     - Engelse, W. A. H., & Zeelenberg, C. (1979). A single scan algorithm for QRS detection and feature
       extraction IEEE Comput Cardiol. Long Beach: IEEE Computer Society.
 
-    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real Time
+    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012). Real Time
       Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
 
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018).
+    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).
       An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
       IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11. doi:10.1109/jtehm.2018.2878000
 
@@ -150,7 +153,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         rpeaks = _ecg_findpeaks_kalidas(ecg_cleaned, sampling_rate)
     elif method in ["martinez2003", "martinez"]:
         rpeaks = _ecg_findpeaks_WT(ecg_cleaned, sampling_rate)
-    elif method in ["rodrigues2020", "rodrigues", "asi"]:
+    elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
         rpeaks = _ecg_findpeaks_rodrigues(ecg_cleaned, sampling_rate)
     elif method in ["promac", "all"]:
         rpeaks = _ecg_findpeaks_promac(ecg_cleaned, sampling_rate=sampling_rate, threshold=0.33, show=show)
