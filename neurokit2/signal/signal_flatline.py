@@ -24,7 +24,9 @@ def signal_flatline(signal, threshold=0.01):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=5)
-    >>> nk.signal_flatline(signal)
+    >>> nk.signal_flatline(signal) #doctest: +ELLIPSIS
+    0.008
+    
 
     """
     diff = np.diff(signal)
