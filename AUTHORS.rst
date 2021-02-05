@@ -49,15 +49,16 @@ Full bibtex reference:
 
 .. code-block:: tex
 
-@article{Makowski2021neurokit,
-    author={Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
-    title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
-    journal={Behavior Research Methods},
-    year={2021},
-    month={Feb},
-    day={02},
-    abstract={NeuroKit2 is an open-source, community-driven, and user-centered Python package for neurophysiological signal processing. It provides a comprehensive suite of processing routines for a variety of bodily signals (e.g., ECG, PPG, EDA, EMG, RSP). These processing routines include high-level functions that enable data processing in a few lines of code using validated pipelines, which we illustrate in two examples covering the most typical scenarios, such as an event-related paradigm and an interval-related analysis. The package also includes tools for specific processing steps such as rate extraction and filtering methods, offering a trade-off between high-level convenience and fine-tuned control. Its goal is to improve transparency and reproducibility in neurophysiological research, as well as foster exploration and innovation. Its design philosophy is centred on user-experience and accessibility to both novice and advanced users.},
-    issn={1554-3528},
-    doi={10.3758/s13428-020-01516-y},
-    url={https://doi.org/10.3758/s13428-020-01516-y}
-}
+    @article{Makowski2021neurokit,
+      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
+      title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
+      journal={Behavior Research Methods},
+      year={2021},
+      month={Feb},
+      day={02},
+      abstract={NeuroKit2 is an open-source, community-driven, and user-centered Python package for neurophysiological signal processing. It provides a comprehensive suite of processing routines for a variety of bodily signals (e.g., ECG, PPG, EDA, EMG, RSP). These processing routines include high-level functions that enable data processing in a few lines of code using validated pipelines, which we illustrate in two examples covering the most typical scenarios, such as an event-related paradigm and an interval-related analysis. The package also includes tools for specific processing steps such as rate extraction and filtering methods, offering a trade-off between high-level convenience and fine-tuned control. Its goal is to improve transparency and reproducibility in neurophysiological research, as well as foster exploration and innovation. Its design philosophy is centred on user-experience and accessibility to both novice and advanced users.},
+      issn={1554-3528},
+      doi={10.3758/s13428-020-01516-y},
+      url={https://doi.org/10.3758/s13428-020-01516-y}
+    }
+..
