@@ -160,7 +160,7 @@ Citation
    :target: https://neurokit2.readthedocs.io/en/latest/authors.html
 
 
-The **NeuroKit** paper can be found `here <https://doi.org/10.3758/s13428-020-01516-y>`_. Additionally, you can get the reference directly from Python by running:
+The **NeuroKit** paper can be found `here <https://doi.org/10.3758/s13428-020-01516-y>`_ 🎉 Additionally, you can get the reference directly from Python by running:
 
 .. code-block:: python
 
@@ -172,7 +172,7 @@ The **NeuroKit** paper can be found `here <https://doi.org/10.3758/s13428-020-01
     You can cite NeuroKit2 as follows:
 
     - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
-    Sch�lzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
+    Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
     Behavior Research Methods. https://doi.org/10.3758/s13428-020-01516-y
 
     Full bibtex reference:
