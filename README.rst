@@ -170,18 +170,21 @@ Citation
     You can cite NeuroKit2 as follows:
 
     - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
-    Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
+    Sch�lzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
     Behavior Research Methods. https://doi.org/10.3758/s13428-020-01516-y
 
     Full bibtex reference:
 
-    @misc{neurokit2,
-      doi = {10.5281/ZENODO.3597887},
-      url = {https://github.com/neuropsychology/NeuroKit},
-      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran\c{c}ois and Pham, Hung and Schölzel, Christopher and S H Chen, Annabel},
-      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
-      publisher = {Zenodo},
-      year = {2020},
+    @article{Makowski2021neurokit,
+        author={Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
+        title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
+        journal={Behavior Research Methods},
+        year={2021},
+        month={Feb},
+        day={02},
+        issn={1554-3528},
+        doi={10.3758/s13428-020-01516-y},
+        url={https://doi.org/10.3758/s13428-020-01516-y}
     }
 
 
