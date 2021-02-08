@@ -5,7 +5,8 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import signal_findpeaks, signal_plot, signal_smooth, signal_zerocrossings, signal_sanitize
+from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
+                      signal_smooth, signal_zerocrossings)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
@@ -91,9 +92,9 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     References
     --------------
-    - Rodrigues, Tiago & Samoutphonh, Sirisack & Plácido da Silva, Hugo & Fred, Ana. (2021). 
-      A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices. 
-    
+    - Rodrigues, Tiago & Samoutphonh, Sirisack & Plácido da Silva, Hugo & Fred, Ana. (2021).
+      A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices.
+
     - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
       PhD ThesisUniversidade.
 
