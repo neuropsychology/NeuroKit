@@ -149,7 +149,7 @@ def _buddhabrot(size=1000, iterations=100, real_range=(-2, 2), imaginary_range=(
 
     # Inflate size to match -2, 2
     x = np.array((np.array(real_range) + 2) / 4 * size, int)
-    size = np.int(size * (size / (x[1] - x[0])))
+    size = int(size * (size / (x[1] - x[0])))
 
     img = np.zeros([size, size], int)
     c = _buddhabrot_initialize(

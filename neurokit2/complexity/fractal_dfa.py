@@ -130,12 +130,12 @@ def _fractal_dfa_findwindows(n, windows="default"):
 
     # Default windows number
     if windows is None or isinstance(windows, str):
-        windows = np.int(n / 10)
+        windows = int(n / 10)
 
     # Default windows sequence
     if isinstance(windows, int):
         windows = expspace(
-            10, np.int(n / 10), windows, base=2
+            10, int(n / 10), windows, base=2
         )  # see https://github.com/neuropsychology/NeuroKit/issues/206
         windows = np.unique(windows)  # keep only unique
 
@@ -208,7 +208,7 @@ def _fractal_mfdfa_q(q=2):
     # TODO: Add log calculator for q ≈ 0
 
     # Fractal powers as floats
-    q = np.asarray_chkfinite(q, dtype=np.float)
+    q = np.asarray_chkfinite(q, dtype=float)
 
     # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
     q = q[(q < -0.1) + (q > 0.1)]

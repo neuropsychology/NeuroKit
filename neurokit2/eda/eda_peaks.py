@@ -118,7 +118,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
     # Onsets (remove onsets with no peaks)
     valid_onsets = ~np.isnan(info["SCR_Onsets"])
     valid_onsets[valid_onsets] = info["SCR_Onsets"][valid_onsets] < np.nanmax(info["SCR_Peaks"])
-    onsets = info["SCR_Onsets"][valid_onsets].astype(np.int)
+    onsets = info["SCR_Onsets"][valid_onsets].astype(int)
 
     if len(onsets) != len(peaks):
         raise ValueError(

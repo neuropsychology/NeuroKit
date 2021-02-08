@@ -1,9 +1,9 @@
+import nolds
 import numpy as np
 import pandas as pd
-import neurokit2 as nk
-import nolds
-
 from pyentrp import entropy as pyentrp
+
+import neurokit2 as nk
 
 """
 For the testing of complexity, we test our implementations against existing and established ones.
@@ -89,6 +89,7 @@ def test_complexity_vs_R():
     assert np.allclose(sampen, 0.09185509, atol=0.01)
 
 
+
 # =============================================================================
 # Comparison against Python implementations
 # =============================================================================
@@ -169,6 +170,21 @@ def wikipedia_sampen(signal, m=2, r=1):
     # Return SampEn
     return -np.log(A / B)
 
+
+# =============================================================================
+# entropy_estimators (https://github.com/paulbrodersen/entropy_estimators)
+# =============================================================================
+
+"""
+import numpy as np
+from entropy_estimators import continuous
+
+x = np.random.randn(10000)
+
+# I don't know what this compute though
+continuous.get_h_mvn(x)
+continuous.get_h(x, k=5)
+"""
 
 # =============================================================================
 # Pyeeg

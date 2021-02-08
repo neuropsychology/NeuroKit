@@ -385,7 +385,7 @@ def _cluster_kmod(data, n_clusters=4, max_iterations=1000, threshold=1e-6, rando
         # Estimate residual noise (step 5)
         act_sum_sq = np.sum(np.sum(clusters[segmentation, :] * data, axis=1) ** 2)
         residual = np.abs(data_sum_sq - act_sum_sq)
-        residual = residual / np.float(n_samples * (n_channels - 1))
+        residual = residual / float(n_samples * (n_channels - 1))
 
         # Have we converged? Convergence criterion: variance estimate (step 6)
         if np.abs(prev_residual - residual) < (threshold * residual):

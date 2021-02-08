@@ -66,7 +66,7 @@ def events_find(
 
     See Also
     --------
-    events_plot, events_to_mne
+    events_plot, events_to_mne, events_create
 
     Example
     ----------

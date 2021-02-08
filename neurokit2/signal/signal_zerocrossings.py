@@ -24,7 +24,7 @@ def signal_zerocrossings(signal, direction="both"):
     >>> import numpy as np
     >>> import neurokit2 as nk
     >>>
-    >>> signal = np.cos(np.linspace(start=0, stop=15, num=1000))
+    >>> signal = nk.signal_simulate(duration=5)
     >>> zeros = nk.signal_zerocrossings(signal)
     >>> fig = nk.events_plot(zeros, signal)
     >>> fig #doctest: +SKIP

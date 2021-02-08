@@ -20,7 +20,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         Defaults to 1000.
     method : str
         The processing pipeline to apply. Can be one of 'neurokit' (default),
-        'biosppy', 'pamtompkins1985', 'hamilton2002', 'elgendi2010', 'engzeemod2012'.
+        'biosppy', 'pantompkins1985', 'hamilton2002', 'elgendi2010', 'engzeemod2012'.
 
     Returns
     -------
@@ -90,7 +90,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     else:
         raise ValueError(
             "NeuroKit error: ecg_clean(): 'method' should be "
-            "one of 'neurokit', 'biosppy', 'pamtompkins1985',"
+            "one of 'neurokit', 'biosppy', 'pantompkins1985',"
             " 'hamilton2002', 'elgendi2010', 'engzeemod2012'."
         )
     return clean

@@ -5,7 +5,8 @@ import pandas as pd
 import scipy.signal
 
 from ..epochs import epochs_create, epochs_to_df
-from ..signal import signal_findpeaks, signal_formatpeaks, signal_resample, signal_smooth, signal_zerocrossings
+from ..signal import (signal_findpeaks, signal_formatpeaks, signal_resample,
+                      signal_smooth, signal_zerocrossings)
 from ..stats import standardize
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
@@ -149,7 +150,13 @@ def ecg_delineate(
 # =============================================================================
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     """Resample given points to a different sampling rate."""
-    peaks_resample = np.array(peaks) * desired_sampling_rate / sampling_rate
+    if isinstance(peaks, np.ndarray):    # peaks are passed in from previous processing steps
+        # Prevent overflow by converting to np.int64 (peaks might be passed in containing np.int32).
+        peaks = peaks.astype(dtype=np.int64)
+    elif isinstance(peaks, list):    # peaks returned from internal functions
+        # Cannot be converted to int since list might contain np.nan. Automatically cast to np.float64 if list contains np.nan.
+        peaks = np.array(peaks)
+    peaks_resample = peaks * desired_sampling_rate / sampling_rate
     peaks_resample = [np.nan if np.isnan(x) else int(x) for x in peaks_resample.tolist()]
     return peaks_resample
 
@@ -255,7 +262,7 @@ def _dwt_delineate_tp_peaks(
         for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
             correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0  # pylint: disable=R1716
             if correct_sign:
-                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt])[0] + idx_peak
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt+1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
                 score = ecg_local[idx_zero] - (float(idx_zero) / sampling_rate - (rt_duration - 0.5 * qrs_width))
@@ -296,7 +303,7 @@ def _dwt_delineate_tp_peaks(
         for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
             correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0  # pylint: disable=R1716
             if correct_sign:
-                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt])[0] + idx_peak
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt+1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
                 score = ecg_local[idx_zero] - abs(
@@ -365,11 +372,12 @@ def _dwt_delineate_tp_onsets_offsets(
             offsets.append(np.nan)
             continue
         epsilon_offset = -offset_weight * dwt_local[offset_slope_peaks[0]]
-        if not (-dwt_local[onset_slope_peaks[0] :] < epsilon_offset).any():
+        if not (-dwt_local[offset_slope_peaks[0] :] < epsilon_offset).any():
             offsets.append(np.nan)
             continue
         candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0] + offset_slope_peaks[0]
         offsets.append(candidate_offsets[0] + srch_idx_start)
+
 
         # # only for debugging
         # events_plot([candidate_offsets, offset_slope_peaks], dwt_local)
@@ -661,7 +669,7 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
         #    near = (index_next - index_cur) < max_wv_peak_dist #limit 2
         #    if near and correct_sign:
         if correct_sign:
-            index_zero_cr = signal_zerocrossings(cwtmatr[4, :][index_cur:index_next])[0] + index_cur
+            index_zero_cr = signal_zerocrossings(cwtmatr[4, :][index_cur:index_next+1])[0] + index_cur
             nb_idx = int(max_search_duration * sampling_rate)
             index_max = np.argmax(ecg[index_zero_cr - nb_idx : index_zero_cr + nb_idx]) + (index_zero_cr - nb_idx)
             tppeaks.append(index_max)

@@ -70,8 +70,8 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
 
     # Run algorithm
     F = np.zeros(length + 1)
-    R = np.array([0], dtype=np.int)
-    candidates = np.zeros(length + 1, dtype=np.int)
+    R = np.array([0], dtype=int)
+    candidates = np.zeros(length + 1, dtype=int)
 
     F[0] = -penalty  # pylint: disable=E1130
 
@@ -89,7 +89,7 @@ def _signal_changepoints_pelt(signal, change="meanvar", penalty=None):
         ineq_prune = [val < F[tstar] for val in F_cost]
         R = [cpt_cands[j] for j, val in enumerate(ineq_prune) if val]
         R.append(tstar - 1)
-        R = np.array(R, dtype=np.int)
+        R = np.array(R, dtype=int)
 
     last = candidates[-1]
     changepoints = [last]

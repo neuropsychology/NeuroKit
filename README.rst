@@ -50,13 +50,19 @@ And **boom** 💥 your analysis is done 😎
 Installation
 -------------
 
-To install NeuroKit2, run this command in your terminal:
+You can install NeuroKit2 from `PyPI <https://pypi.org/project/neurokit2/>`_
 
 .. code-block::
 
     pip install neurokit2
 
-If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
+or `conda-forge <https://anaconda.org/conda-forge/neurokit2>`_
+
+.. code-block::
+
+    conda install -c conda-forge neurokit2
+
+If you're not sure what to do, read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
 Contributing
 -------------
@@ -64,11 +70,11 @@ Contributing
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
         :target: https://github.com/neuropsychology/NeuroKit/blob/master/LICENSE
         :alt: License
-        
+
 .. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg?branch=master
         :target: https://github.com/neuropsychology/NeuroKit/actions
         :alt: GitHub CI
-        
+
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
         :target: https://github.com/psf/black
         :alt: Black code
@@ -154,6 +160,8 @@ Citation
    :target: https://neurokit2.readthedocs.io/en/latest/authors.html
 
 
+The **NeuroKit** paper can be found `here <https://doi.org/10.3758/s13428-020-01516-y>`_ 🎉 Additionally, you can get the reference directly from Python by running:
+
 .. code-block:: python
 
     nk.cite()
@@ -163,20 +171,26 @@ Citation
 
     You can cite NeuroKit2 as follows:
 
-    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lesspinasse, F., Pham, H.,
-      Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological
-      Signal Processing. Retrieved March 28, 2020, from https://github.com/neuropsychology/NeuroKit
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+    Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
+    Behavior Research Methods. https://doi.org/10.3758/s13428-020-01516-y
 
     Full bibtex reference:
 
-    @misc{neurokit2,
-      doi = {10.5281/ZENODO.3597887},
-      url = {https://github.com/neuropsychology/NeuroKit},
-      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran\c{c}ois and Pham, Hung and Schölzel, Christopher and S H Chen, Annabel},
-      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
-      publisher = {Zenodo},
-      year = {2020},
+    @article{Makowski2021neurokit,
+        author={Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
+        title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
+        journal={Behavior Research Methods},
+        year={2021},
+        month={Feb},
+        day={02},
+        issn={1554-3528},
+        doi={10.3758/s13428-020-01516-y},
+        url={https://doi.org/10.3758/s13428-020-01516-y}
     }
+
+
+**Let us know if you used NeuroKit in a publication!** Open a new `discussion <https://github.com/neuropsychology/NeuroKit/discussions>`_ (select the *NK in publications* category) and link the paper. The community would be happy to know about how you used it and learn about your research. We could also feature it once we have a section on the website for papers that used the software.
 
 ..
     Design
@@ -317,7 +331,7 @@ Electrooculography (EOG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
-    
+
     # Import EOG data
     eog_signal = nk.data("eog_100hz")
 
