@@ -152,7 +152,7 @@ def _fractal_correlation_get_r(r, signal, dist):
         elif r == "Corr_Dim":
             r_min, r_max = np.min(dist[np.where(dist > 0)]), np.exp(np.floor(np.log(np.max(dist))))
 
-            n_r = np.int(np.floor(np.log(r_max / r_min))) + 1
+            n_r = int(np.floor(np.log(r_max / r_min))) + 1
 
             ones = -1 * np.ones([n_r])
             r_vals = r_max * np.exp(ones * np.arange(n_r) - ones)

@@ -169,7 +169,7 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
 
     y_line = np.zeros((length, 1))
     norm = np.zeros((length, 1))
-    nwin = np.int(np.ceil((length - window) / stepsize))
+    nwin = int(np.ceil((length - window) / stepsize))
     yfit = np.zeros((nwin, window))
     xwt = (np.arange(1, window + 1) - window / 2) / (window / 2)
     wt = np.power(1 - np.power(np.absolute(xwt), 3), 3)  # pylint: disable=E1111

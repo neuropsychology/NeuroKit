@@ -80,7 +80,7 @@ def transition_matrix_simulate(matrix, n=10):
     _start = np.argmax(matrix.sum(axis=1) / matrix.sum())
 
     # simulated sequence init
-    seq = np.zeros(n, dtype=np.int)
+    seq = np.zeros(n, dtype=int)
     seq[0] = _start
 
     # random seeds

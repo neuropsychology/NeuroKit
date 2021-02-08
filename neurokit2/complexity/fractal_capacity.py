@@ -54,7 +54,7 @@
 #    n = 2**np.floor(np.log(p) / np.log(2))
 #
 #    # Extract the exponent
-#    n = np.int(np.log(n)/np.log(2))
+#    n = int(np.log(n)/np.log(2))
 #
 #    # Build successive box sizes (from 2**n down to 2**1)
 #    sizes = 2**np.arange(n, 1, -1)
