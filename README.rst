@@ -160,6 +160,8 @@ Citation
    :target: https://neurokit2.readthedocs.io/en/latest/authors.html
 
 
+The **NeuroKit** paper can be found `here <https://doi.org/10.3758/s13428-020-01516-y>`_. Additionally, you can get the reference directly from Python by running:
+
 .. code-block:: python
 
     nk.cite()
