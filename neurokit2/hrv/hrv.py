@@ -10,7 +10,7 @@ from .hrv_time import hrv_time
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv(peaks, sampling_rate=1000, show=False):
+def hrv(peaks, sampling_rate=1000, show=False, errbar=False):
     """Computes indices of Heart Rate Variability (HRV).
 
     Computes HRV indices in the time-, frequency-, and nonlinear domain. Note that a minimum duration
@@ -81,12 +81,12 @@ def hrv(peaks, sampling_rate=1000, show=False):
         # Indices for plotting
         out_plot = out.copy(deep=False)
 
-        _hrv_plot(peaks, out_plot, sampling_rate)
+        _hrv_plot(peaks, out_plot, sampling_rate, errbar)
 
     return out
 
 
-def _hrv_plot(peaks, out, sampling_rate=1000):
+def _hrv_plot(peaks, out, errbar, sampling_rate=1000,):
 
     fig = plt.figure(constrained_layout=False)
     spec = gs.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
@@ -107,7 +107,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000):
     # Distribution of RR intervals
     peaks = _hrv_sanitize_input(peaks)
     rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
-    ax_distrib = summary_plot(rri, ax=ax_distrib)
+    ax_distrib = summary_plot(rri, errbar, ax=ax_distrib)
 
     # Poincare plot
     out.columns = [col.replace("HRV_", "") for col in out.columns]
