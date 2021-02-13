@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 
+
 def mne_to_df(eeg):
     """Convert mne Raw or Epochs object to dataframe or dict of dataframes.
 

@@ -141,7 +141,7 @@ def _ecg_eventrelated_phase(epoch, output={}):
         warn(
             "Input does not have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
             " Will not indicate whether event onset concurs with cardiac phase.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
@@ -162,9 +162,8 @@ def _ecg_eventrelated_quality(epoch, output={}):
     colnames = epoch.columns.values
     if len([i for i in colnames if "ECG_Quality" in i]) == 0:
         warn(
-            "Input does not have an `ECG_Quality` column."
-            " Quality of the signal is not computed.",
-            category=NeuroKitWarning
+            "Input does not have an `ECG_Quality` column." " Quality of the signal is not computed.",
+            category=NeuroKitWarning,
         )
         return output
 

@@ -8,7 +8,14 @@ from ..signal import signal_distort, signal_resample
 
 
 def ecg_simulate(
-    duration=10, length=None, sampling_rate=1000, noise=0.01, heart_rate=70, heart_rate_std=1, method="ecgsyn", random_state=None
+    duration=10,
+    length=None,
+    sampling_rate=1000,
+    noise=0.01,
+    heart_rate=70,
+    heart_rate_std=1,
+    method="ecgsyn",
+    random_state=None,
 ):
     """Simulate an ECG/EKG signal.
 
@@ -166,40 +173,40 @@ def _ecg_simulate_ecgsyn(
 ):
     """This function is a python translation of the matlab script by `McSharry & Clifford (2013)
 
-    <https://physionet.org/content/ecgsyn>`_.
+        <https://physionet.org/content/ecgsyn>`_.
 
-    Parameters
-    ----------
-    % Operation uses the following parameters (default values in []s):
-    % sfecg: ECG sampling frequency [256 Hertz]
-    % N: approximate number of heart beats [256]
-    % Anoise: Additive uniformly distributed measurement noise [0 mV]
-    % hrmean: Mean heart rate [60 beats per minute]
-    % hrstd: Standard deviation of heart rate [1 beat per minute]
-    % lfhfratio: LF/HF ratio [0.5]
-    % sfint: Internal sampling frequency [256 Hertz]
-    % Order of extrema: (P Q R S T)
-    % ti = angles of extrema (in degrees)
-    % ai = z-position of extrema
-    % bi = Gaussian width of peaks
+        Parameters
+        ----------
+        % Operation uses the following parameters (default values in []s):
+        % sfecg: ECG sampling frequency [256 Hertz]
+        % N: approximate number of heart beats [256]
+        % Anoise: Additive uniformly distributed measurement noise [0 mV]
+        % hrmean: Mean heart rate [60 beats per minute]
+        % hrstd: Standard deviation of heart rate [1 beat per minute]
+        % lfhfratio: LF/HF ratio [0.5]
+        % sfint: Internal sampling frequency [256 Hertz]
+        % Order of extrema: (P Q R S T)
+        % ti = angles of extrema (in degrees)
+        % ai = z-position of extrema
+        % bi = Gaussian width of peaks
 
-    Returns
-    -------
-    array
-        Vector containing simulated ecg signal.
+        Returns
+        -------
+        array
+            Vector containing simulated ecg signal.
 
-#    Examples
-#    --------
-#    >>> import matplotlib.pyplot as plt
-#    >>> import neurokit2 as nk
-#    >>>
-#    >>> s = _ecg_simulate_ecgsynth()
-#    >>> x = np.linspace(0, len(s)-1, len(s))
-#    >>> num_points = 4000
-#    >>>
-#    >>> num_points = min(num_points, len(s))
-#    >>> plt.plot(x[:num_points], s[:num_points]) #doctest: +SKIP
-#    >>> plt.show() #doctest: +SKIP
+    #    Examples
+    #    --------
+    #    >>> import matplotlib.pyplot as plt
+    #    >>> import neurokit2 as nk
+    #    >>>
+    #    >>> s = _ecg_simulate_ecgsynth()
+    #    >>> x = np.linspace(0, len(s)-1, len(s))
+    #    >>> num_points = 4000
+    #    >>>
+    #    >>> num_points = min(num_points, len(s))
+    #    >>> plt.plot(x[:num_points], s[:num_points]) #doctest: +SKIP
+    #    >>> plt.show() #doctest: +SKIP
 
     """
 

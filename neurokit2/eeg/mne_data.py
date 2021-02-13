@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+
 def mne_data(what="raw"):
-    """Utility function to easily access MNE datasets
+    """Utility function to easily access MNE datasets.
 
     Parameters
     -----------
@@ -33,7 +34,7 @@ def mne_data(what="raw"):
 
     if what in ["raw", "filt-0-40_raw"]:
         path = mne.datasets.sample.data_path()
-        path += '/MEG/sample/sample_audvis_' + what + '.fif'
+        path += "/MEG/sample/sample_audvis_" + what + ".fif"
         data = mne.io.read_raw_fif(path, preload=True)
         data = data.pick_types(meg=False, eeg=True)
 

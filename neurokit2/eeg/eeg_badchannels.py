@@ -59,17 +59,19 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99):
         channel = eeg[i, :]
 
         hdi_values = hdi(channel, ci=0.90)
-        info = {"Channel": [i],
-                "SD": [np.nanstd(channel, ddof=1)],
-                "Mean": [np.nanmean(channel)],
-                "MAD": [mad(channel)],
-                "Median": [np.nanmedian(channel)],
-                "Skewness": [scipy.stats.skew(channel)],
-                "Kurtosis": [scipy.stats.kurtosis(channel)],
-                "Amplitude": [np.max(channel) - np.min(channel)],
-                "CI_low": [hdi_values[0]],
-                "CI_high": [hdi_values[1]],
-                "n_ZeroCrossings": [len(signal_zerocrossings(channel - np.nanmean(channel)))]}
+        info = {
+            "Channel": [i],
+            "SD": [np.nanstd(channel, ddof=1)],
+            "Mean": [np.nanmean(channel)],
+            "MAD": [mad(channel)],
+            "Median": [np.nanmedian(channel)],
+            "Skewness": [scipy.stats.skew(channel)],
+            "Kurtosis": [scipy.stats.kurtosis(channel)],
+            "Amplitude": [np.max(channel) - np.min(channel)],
+            "CI_low": [hdi_values[0]],
+            "CI_high": [hdi_values[1]],
+            "n_ZeroCrossings": [len(signal_zerocrossings(channel - np.nanmean(channel)))],
+        }
         results.append(pd.DataFrame(info))
     results = pd.concat(results, axis=0)
     results = results.set_index("Channel")

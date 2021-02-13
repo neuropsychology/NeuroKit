@@ -63,7 +63,7 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5,
                     f" sampling rate of {sampling_rate} Hz. Please increase"
                     f" sampling rate to {freq * 10} Hz or choose frequencies"
                     f" smaller than or equal to {nyquist} Hz.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
             continue
         # Also make sure that at leat one period of the frequency can be
@@ -77,7 +77,7 @@ def signal_simulate(duration=10, sampling_rate=1000, frequency=1, amplitude=0.5,
                     f" Please choose frequencies larger than"
                     f" {1 / duration} Hz or increase the duration of the"
                     f" signal above {1 / freq} seconds.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
             continue
 

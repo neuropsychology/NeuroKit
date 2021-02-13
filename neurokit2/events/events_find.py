@@ -91,7 +91,7 @@ def events_find(
     if len(events["onset"]) == 0:
         warn(
             "No events found. Check your event_channel or adjust 'threshold' or 'keep' arguments.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return events
 

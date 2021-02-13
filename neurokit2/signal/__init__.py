@@ -55,5 +55,5 @@ __all__ = [
     "signal_recompose",
     "signal_timefrequency",
     "signal_sanitize",
-    "signal_flatline"
+    "signal_flatline",
 ]

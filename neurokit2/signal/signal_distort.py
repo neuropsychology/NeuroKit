@@ -267,7 +267,7 @@ def _signal_distort_noise(
                 f" the sampling rate of {sampling_rate} Hz. Please increase "
                 f" sampling rate to {noise_frequency * 10} Hz or choose "
                 f" frequencies smaller than or equal to {nyquist} Hz.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
         return _noise
     # Also make sure that at least one period of the frequency can be
@@ -282,7 +282,7 @@ def _signal_distort_noise(
                 f" Please choose noise frequencies larger than "
                 f" {1 / duration} Hz or increase the duration of the "
                 f" signal above {1 / noise_frequency} seconds.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
         return _noise
 

@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def signal_sanitize(signal):
-    """Reset indexing for Pandas Series
+    """Reset indexing for Pandas Series.
 
     Parameters
     ----------

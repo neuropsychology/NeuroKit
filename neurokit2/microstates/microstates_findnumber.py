@@ -72,9 +72,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
         rez["Score_GEV"] = out["GEV"]
 
         # Dispersion
-        dispersion = _cluster_quality_dispersion(
-            data.T, clustering=segmentation, n_clusters=n_microstates
-        )
+        dispersion = _cluster_quality_dispersion(data.T, clustering=segmentation, n_clusters=n_microstates)
         # Dispersion(k)
 
         dispersion_current = dispersion * n_microstates ** (2 / n_channel)
@@ -85,9 +83,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
         # KL(k) = abs(dispersion_diff(k) / dispersion_diff(k+1))
         rez["KL_Criterion"] = np.nan
         if idx not in [0]:
-            results[idx - 1]["KL_Criterion"] = np.abs(
-                dispersion_diff_previous / dispersion_diff
-            )
+            results[idx - 1]["KL_Criterion"] = np.abs(dispersion_diff_previous / dispersion_diff)
         # Update for next round
         dispersion_previous = dispersion_current.copy()
         dispersion_diff_previous = dispersion_diff.copy()

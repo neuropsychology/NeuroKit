@@ -141,10 +141,22 @@ def _rsp_rrv_time(bbi):
 
 
 def _rsp_rrv_frequency(
-    rsp_period, vlf=(0, 0.04), lf=(0.04, 0.15), hf=(0.15, 0.4), sampling_rate=1000, method="welch", show=False, silent=True
+    rsp_period,
+    vlf=(0, 0.04),
+    lf=(0.04, 0.15),
+    hf=(0.15, 0.4),
+    sampling_rate=1000,
+    method="welch",
+    show=False,
+    silent=True,
 ):
     power = signal_power(
-        rsp_period, frequency_band=[vlf, lf, hf], sampling_rate=sampling_rate, method=method, max_frequency=0.5, show=show
+        rsp_period,
+        frequency_band=[vlf, lf, hf],
+        sampling_rate=sampling_rate,
+        method=method,
+        max_frequency=0.5,
+        show=show,
     )
     power.columns = ["VLF", "LF", "HF"]
     out = power.to_dict(orient="index")[0]
@@ -156,7 +168,7 @@ def _rsp_rrv_frequency(
                     "The duration of recording is too short to allow"
                     " reliable computation of signal power in frequency band " + frequency + "."
                     " Its power is returned as zero.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
 
     # Normalized

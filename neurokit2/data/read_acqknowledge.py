@@ -7,9 +7,7 @@ import pandas as pd
 from ..signal import signal_resample
 
 
-def read_acqknowledge(
-    filename, sampling_rate="max", resample_method="interpolation", impute_missing=True
-):
+def read_acqknowledge(filename, sampling_rate="max", resample_method="interpolation", impute_missing=True):
     """Read and format a BIOPAC's AcqKnowledge file into a pandas' dataframe.
 
     The function outputs both the dataframe and the sampling rate (retrieved from the
@@ -67,10 +65,7 @@ def read_acqknowledge(
         filename += ".acq"
 
     if os.path.exists(filename) is False:
-        raise ValueError(
-            "NeuroKit error: read_acqknowledge(): couldn't"
-            " find the following file: " + filename
-        )
+        raise ValueError("NeuroKit error: read_acqknowledge(): couldn't" " find the following file: " + filename)
 
     # Read file
     file = bioread.read(filename)

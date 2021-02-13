@@ -31,9 +31,9 @@ def _signal_from_indices(indices, desired_length=None, value=1):
     """
     signal = np.zeros(desired_length, dtype=int)
 
-    if isinstance(indices, list) and (not indices):    # skip empty lists
+    if isinstance(indices, list) and (not indices):  # skip empty lists
         return signal
-    if isinstance(indices, np.ndarray) and (indices.size == 0):    # skip empty arrays
+    if isinstance(indices, np.ndarray) and (indices.size == 0):  # skip empty arrays
         return signal
 
     # Force indices as int
@@ -52,7 +52,7 @@ def _signal_from_indices(indices, desired_length=None, value=1):
     return signal
 
 
-def _signal_formatpeaks_sanitize(peaks, key="Peaks"):    # FIXME: private function not used in this module
+def _signal_formatpeaks_sanitize(peaks, key="Peaks"):  # FIXME: private function not used in this module
     # Attempt to retrieve column.
     if isinstance(peaks, tuple):
         if isinstance(peaks[0], (dict, pd.DataFrame)):

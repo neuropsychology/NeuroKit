@@ -33,4 +33,4 @@ def signal_flatline(signal, threshold=0.01):
 
     flatline = np.where(np.abs(diff) < threshold)[0]
 
-    return (len(flatline) / len(signal))
+    return len(flatline) / len(signal)

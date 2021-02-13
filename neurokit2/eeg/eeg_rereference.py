@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
-    """EEG Rereferencing
+    """EEG Rereferencing.
 
     Parameters
     -----------
@@ -63,7 +63,6 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     return eeg
 
 
-
 # =============================================================================
 # Methods
 # =============================================================================
@@ -76,10 +75,12 @@ def eeg_rereference_array(eeg, reference="average", robust=False):
         else:
             eeg = eeg - np.median(eeg, axis=0, keepdims=True)
     else:
-        raise ValueError("NeuroKit error: eeg_rereference(): Only 'average' rereferencing",
-                         " is supported for data arrays for now.")
+        raise ValueError(
+            "NeuroKit error: eeg_rereference(): Only 'average' rereferencing", " is supported for data arrays for now."
+        )
 
     return eeg
+
 
 def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
 
@@ -90,7 +91,8 @@ def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
     elif reference in ["lap", "csd"]:
         try:
             import mne
-            if mne.__version__ < '0.20':
+
+            if mne.__version__ < "0.20":
                 raise ImportError
         except ImportError:
             raise ImportError(

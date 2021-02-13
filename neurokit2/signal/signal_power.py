@@ -65,7 +65,9 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     """
 
     if continuous is False:
-        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, show=show, normalize=normalize, **kwargs)
+        out = _signal_power_instant(
+            signal, frequency_band, sampling_rate=sampling_rate, show=show, normalize=normalize, **kwargs
+        )
     else:
         out = _signal_power_continuous(signal, frequency_band, sampling_rate=sampling_rate)
 
@@ -79,7 +81,9 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
 # =============================================================================
 
 
-def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, normalize=True, order_criteria="KIC", **kwargs):
+def _signal_power_instant(
+    signal, frequency_band, sampling_rate=1000, show=False, normalize=True, order_criteria="KIC", **kwargs
+):
     for i in range(len(frequency_band)):  # pylint: disable=C0200
         min_frequency = frequency_band[i][0]
         if min_frequency == 0:
@@ -89,7 +93,15 @@ def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False
         window_length = int((2 / min_frequency) * sampling_rate)
         if window_length <= len(signal) / 2:
             break
-    psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, normalize=normalize, order_criteria=order_criteria, **kwargs)
+    psd = signal_psd(
+        signal,
+        sampling_rate=sampling_rate,
+        show=False,
+        min_frequency=min_frequency,
+        normalize=normalize,
+        order_criteria=order_criteria,
+        **kwargs
+    )
 
     out = {}
     if isinstance(frequency_band[0], (list, tuple)):

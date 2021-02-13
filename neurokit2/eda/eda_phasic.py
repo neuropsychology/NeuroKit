@@ -174,13 +174,16 @@ def _eda_phasic_cvxeda(
     # bateman ARMA model
     a1 = 1.0 / min(tau1, tau0)  # a1 > a0
     a0 = 1.0 / max(tau1, tau0)
-    ar = np.array(
-        [
-            (a1 * frequency + 2.0) * (a0 * frequency + 2.0),
-            2.0 * a1 * a0 * frequency ** 2 - 8.0,
-            (a1 * frequency - 2.0) * (a0 * frequency - 2.0),
-        ]
-    ) / ((a1 - a0) * frequency ** 2)
+    ar = (
+        np.array(
+            [
+                (a1 * frequency + 2.0) * (a0 * frequency + 2.0),
+                2.0 * a1 * a0 * frequency ** 2 - 8.0,
+                (a1 * frequency - 2.0) * (a0 * frequency - 2.0),
+            ]
+        )
+        / ((a1 - a0) * frequency ** 2)
+    )
     ma = np.array([1.0, 2.0, 1.0])
 
     # matrices for ARMA model

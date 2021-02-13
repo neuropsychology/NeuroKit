@@ -86,7 +86,12 @@ def hrv(peaks, sampling_rate=1000, show=False, errbar=False):
     return out
 
 
-def _hrv_plot(peaks, out, errbar, sampling_rate=1000,):
+def _hrv_plot(
+    peaks,
+    out,
+    errbar,
+    sampling_rate=1000,
+):
 
     fig = plt.figure(constrained_layout=False)
     spec = gs.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])

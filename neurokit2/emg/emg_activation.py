@@ -151,9 +151,9 @@ def emg_activation(
     elif method == "biosppy":
         if emg_cleaned is None:
             raise ValueError(
-                    "NeuroKit error: emg_activation(): 'biosppy' method needs 'emg_cleaned' (cleaned EMG) "
-                    "signal to be passed."
-                             )
+                "NeuroKit error: emg_activation(): 'biosppy' method needs 'emg_cleaned' (cleaned EMG) "
+                "signal to be passed."
+            )
         if size is None:
             size = 0.05
         activity = _emg_activation_biosppy(emg_cleaned, sampling_rate=sampling_rate, size=size, threshold=threshold)
@@ -161,9 +161,9 @@ def emg_activation(
     elif method == "silva":
         if emg_cleaned is None:
             raise ValueError(
-                    "NeuroKit error: emg_activation(): 'silva' method needs 'emg_cleaned' (cleaned EMG) "
-                    "signal to be passed."
-                             )
+                "NeuroKit error: emg_activation(): 'silva' method needs 'emg_cleaned' (cleaned EMG) "
+                "signal to be passed."
+            )
         if size is None:
             size = 20
         if threshold_size is None:
@@ -272,8 +272,7 @@ def _emg_activation_pelt(emg_cleaned, threshold="default", duration_min=0.05, **
 
 
 def _emg_activation_biosppy(emg_cleaned, sampling_rate=1000, size=0.05, threshold="default"):
-    """Adapted from `find_onsets` in Biosppy.
-    """
+    """Adapted from `find_onsets` in Biosppy."""
 
     # check inputs
     if emg_cleaned is None:
@@ -308,16 +307,20 @@ def _emg_activation_biosppy(emg_cleaned, sampling_rate=1000, size=0.05, threshol
     return activity
 
 
-def _emg_activation_silva(emg_cleaned,
-                          size=20, threshold_size=22, threshold='default'):
-    """Follows the approach by Silva et al. 2012, adapted from `Biosppy`.
+def _emg_activation_silva(emg_cleaned, size=20, threshold_size=22, threshold="default"):
+    """Follows the approach by Silva et al.
+
+    2012, adapted from `Biosppy`.
+
     """
 
     if threshold_size <= size:
-        raise ValueError("NeuroKit error: emg_activation(): The window size for calculation of the "
-                         "adaptive threshold must be bigger than the detection window size.")
+        raise ValueError(
+            "NeuroKit error: emg_activation(): The window size for calculation of the "
+            "adaptive threshold must be bigger than the detection window size."
+        )
 
-    if threshold == 'default':
+    if threshold == "default":
         threshold = 0.05
 
     # subtract baseline offset
@@ -327,10 +330,10 @@ def _emg_activation_silva(emg_cleaned,
     fwlo = np.abs(signal_zero_mean)
 
     # moving average for calculating the test function
-    tf_mvgav = np.convolve(fwlo, np.ones((size,)) / size, mode='valid')
+    tf_mvgav = np.convolve(fwlo, np.ones((size,)) / size, mode="valid")
 
     # moving average for calculating the adaptive threshold
-    threshold_mvgav = np.convolve(fwlo, np.ones((threshold_size,)) / threshold_size, mode='valid')
+    threshold_mvgav = np.convolve(fwlo, np.ones((threshold_size,)) / threshold_size, mode="valid")
 
     onset_time_list = []
     offset_time_list = []
@@ -348,8 +351,7 @@ def _emg_activation_silva(emg_cleaned,
                 onset_time_list.append(k)
                 onset = True
 
-    onsets = np.union1d(onset_time_list,
-                        offset_time_list)
+    onsets = np.union1d(onset_time_list, offset_time_list)
 
     # adjust indices because of moving average
     onsets += int(size / 2)

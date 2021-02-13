@@ -62,9 +62,7 @@ def eda_intervalrelated(data):
             )
         amp_cols = [col for col in data.columns if "SCR_Amplitude" in col]
         if len(amp_cols) == 1:
-            intervals["Peaks_Amplitude_Mean"] = (
-                np.nansum(data[amp_cols[0]].values) / data[peaks_cols[0]].values.sum()
-            )
+            intervals["Peaks_Amplitude_Mean"] = np.nansum(data[amp_cols[0]].values) / data[peaks_cols[0]].values.sum()
         else:
             raise ValueError(
                 "NeuroKit error: eda_intervalrelated(): Wrong"
@@ -73,17 +71,13 @@ def eda_intervalrelated(data):
                 "contains an `SCR_Amplitude` column."
             )
 
-        eda_intervals = pd.DataFrame.from_dict(intervals, orient="index").T.add_prefix(
-            "SCR_"
-        )
+        eda_intervals = pd.DataFrame.from_dict(intervals, orient="index").T.add_prefix("SCR_")
 
     elif isinstance(data, dict):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
-            intervals[index] = _eda_intervalrelated_formatinput(
-                data[index], intervals[index]
-            )
+            intervals[index] = _eda_intervalrelated_formatinput(data[index], intervals[index])
         eda_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
     return eda_intervals

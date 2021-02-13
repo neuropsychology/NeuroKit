@@ -54,10 +54,7 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
     results = []
     for i in range(1, n_max):
         # Cluster
-        clustering, clusters, info = cluster(data,
-                                             method=method,
-                                             n_clusters=i,
-                                             **kwargs)
+        clustering, clusters, info = cluster(data, method=method, n_clusters=i, **kwargs)
 
         # Compute indices of clustering quality
         _, quality = cluster_quality(data, clustering, clusters, info, **kwargs)
@@ -66,13 +63,17 @@ def cluster_findnumber(data, method="kmeans", n_max=10, show=False, **kwargs):
     results = pd.concat(results, axis=0).reset_index(drop=True)
 
     # Gap Diff
-    results["Score_GAP_diff"] = results["Score_GAP"] - results["Score_GAP"].shift(-1) + results["Score_GAP_sk"].shift(-1)
-    results["Score_GAPmod_diff"] = results["Score_GAPmod"] - results["Score_GAPmod"].shift(-1) + results["Score_GAPmod_sk"].shift(-1)
+    results["Score_GAP_diff"] = (
+        results["Score_GAP"] - results["Score_GAP"].shift(-1) + results["Score_GAP_sk"].shift(-1)
+    )
+    results["Score_GAPmod_diff"] = (
+        results["Score_GAPmod"] - results["Score_GAPmod"].shift(-1) + results["Score_GAPmod_sk"].shift(-1)
+    )
     results = results.drop(["Score_GAP_sk", "Score_GAPmod_sk"], axis=1)
 
     if show is True:
         normalized = (results - results.min()) / (results.max() - results.min())
         normalized["n_Clusters"] = np.rint(np.arange(1, n_max))
-        normalized.columns = normalized.columns.str.replace('Score', 'Normalized')
+        normalized.columns = normalized.columns.str.replace("Score", "Normalized")
         normalized.plot(x="n_Clusters")
     return results

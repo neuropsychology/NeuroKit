@@ -7,7 +7,7 @@ from ..eeg import eeg_gfp
 
 
 def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, **kwargs):
-    """Find peaks of stability using the GFP
+    """Find peaks of stability using the GFP.
 
     Peaks in the global field power (GFP) are often used to find microstates.
 
@@ -56,8 +56,10 @@ def microstates_peaks(eeg, gfp=None, sampling_rate=None, distance_between=0.01, 
         eeg = eeg.get_data()
 
     if sampling_rate is None:
-        raise ValueError("NeuroKit error: microstates_peaks(): The sampling_rate is requested ",
-                         "for this function to run. Please provide it as an argument.")
+        raise ValueError(
+            "NeuroKit error: microstates_peaks(): The sampling_rate is requested ",
+            "for this function to run. Please provide it as an argument.",
+        )
 
     # If we want ALL the indices
     if gfp is False:
@@ -92,11 +94,11 @@ def _microstates_peaks_gfp(gfp=None, sampling_rate=None, distance_between=0.01):
     peaks_gfp, _ = scipy.signal.find_peaks(gfp, distance=minimum_separation)
 
     # Alternative methods: (doesn't work best IMO)
-#    peaks_gfp = scipy.signal.find_peaks_cwt(gfp, np.arange(minimum_separation, int(0.2 * sampling_rate)))
-#    peaks_gfp = scipy.signal.argrelmax(gfp)[0]
+    #    peaks_gfp = scipy.signal.find_peaks_cwt(gfp, np.arange(minimum_separation, int(0.2 * sampling_rate)))
+    #    peaks_gfp = scipy.signal.argrelmax(gfp)[0]
 
     # Use DISS
-#    diss = nk.eeg_diss(eeg, gfp)
-#    peaks_diss, _ = scipy.signal.find_peaks(diss, distance=minimum_separation)
+    #    diss = nk.eeg_diss(eeg, gfp)
+    #    peaks_diss, _ = scipy.signal.find_peaks(diss, distance=minimum_separation)
 
     return peaks_gfp

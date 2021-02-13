@@ -5,6 +5,7 @@ import pandas as pd
 import sklearn.cluster
 import sklearn.metrics
 import sklearn.mixture
+
 try:
     import sklearn.model_selection as sklearn_model_selection  # sklearn version > 0.20
 except ModuleNotFoundError:
@@ -85,8 +86,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     individual = pd.DataFrame(individual)
 
     # Variance explained
-    general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters,
-                                                                   clustering)
+    general["Score_VarianceExplained"] = _cluster_quality_variance(data, clusters, clustering)
     general["Score_GEV"], _ = _cluster_quality_gev(data, clusters, clustering, **kwargs)
     general["Score_CrossValidation"] = _cluster_quality_crossvalidation(data, clusters, clustering)
 
@@ -94,11 +94,7 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     general["Dispersion"] = _cluster_quality_dispersion(data, clustering, **kwargs)
 
     # Gap statistic
-    general.update(_cluster_quality_gap(data,
-                                        clusters,
-                                        clustering,
-                                        info,
-                                        n_random=n_random))
+    general.update(_cluster_quality_gap(data, clusters, clustering, info, n_random=n_random))
 
     # Mixture models
     if "sklearn_model" in info:
@@ -112,13 +108,11 @@ def cluster_quality(data, clustering, clusters=None, info=None, n_random=10, **k
     return individual, general
 
 
-
 # =============================================================================
 # Utils
 # =============================================================================
 def _cluster_quality_sklearn(data, clustering, clusters):
-    """Metrics from sklearn
-    """
+    """Metrics from sklearn."""
     n_clusters = len(clusters)
 
     # Individual scores
@@ -143,59 +137,59 @@ def _cluster_quality_sklearn(data, clustering, clusters):
 
 
 def _cluster_quality_distance(data, clusters, to_dataframe=False):
-    """Distance between samples and clusters
-    """
+    """Distance between samples and clusters."""
     distance = scipy.spatial.distance.cdist(data, clusters)
     if to_dataframe is True:
         distance = pd.DataFrame(distance).add_prefix("Distance_")
     return distance
 
+
 def _cluster_quality_sumsquares(data, clusters, clustering):
-    """Sumsquares of the distance of each data point to its respective cluster
-    """
+    """Sumsquares of the distance of each data point to its respective cluster."""
     distance = _cluster_quality_distance(data, clusters)
     min_distance = []  # distance from each sample to the centroid of its cluster
     for idx in range(len(data)):
         cluster_identity = clustering[idx]
         min_distance.append(distance[idx, cluster_identity])
-    min_distance_squared = [i**2 for i in min_distance]
+    min_distance_squared = [i ** 2 for i in min_distance]
     return np.sum(min_distance_squared)
+
 
 def _cluster_quality_dispersion(data, clustering, n_clusters=4):
     """Sumsquares of the distances between samples within each clusters.
-    An error measure for a n_clusters cluster where the lower the better.
-    Can be used to compare and find the optimal number of clusters.
+
+    An error measure for a n_clusters cluster where the lower the better. Can be used to compare and find the
+    optimal number of clusters.
+
     """
 
     dispersion_state = []
     for state in range(n_clusters):
-        idx = (clustering == state)
+        idx = clustering == state
         data_state = data[idx, :]
         state_size = len(data_state)  # number of samples in this cluster
         # pair-wise distance between members of the same cluster
         distance = scipy.spatial.distance.cdist(data_state, data_state)
         # sumsquares of distances
-        dispersion_state.append(0.5 * np.sum(distance**2) / state_size)
+        dispersion_state.append(0.5 * np.sum(distance ** 2) / state_size)
 
     dispersion = np.sum(dispersion_state)
     return dispersion
 
 
-
 def _cluster_quality_variance(data, clusters, clustering):
-    """Variance explained by clustering
-    """
+    """Variance explained by clustering."""
     sum_squares_within = _cluster_quality_sumsquares(data, clusters, clustering)
-    sum_squares_total = np.sum(scipy.spatial.distance.pdist(data)**2)/data.shape[0]
+    sum_squares_total = np.sum(scipy.spatial.distance.pdist(data) ** 2) / data.shape[0]
     return (sum_squares_total - sum_squares_within) / sum_squares_total
-
 
 
 def _cluster_quality_gap(data, clusters, clustering, info, n_random=10):
     """GAP statistic and modified GAP statistic by Mohajer (2011).
 
-    The GAP statistic compares the total within intra-cluster variation for different values of k
-    with their expected values under null reference distribution of the data.
+    The GAP statistic compares the total within intra-cluster variation for different values of k with their
+    expected values under null reference distribution of the data.
+
     """
     dispersion = _cluster_quality_sumsquares(data, clusters, clustering)
 
@@ -216,8 +210,7 @@ def _cluster_quality_gap(data, clusters, clustering, info, n_random=10):
         _, random_clusters, info = info["clustering_function"](random_data)
         random_activation = random_clusters.dot(random_data.T)
         random_clustering = np.argmax(np.abs(random_activation), axis=0)
-        dispersion_random[i] = _cluster_quality_sumsquares(random_data, random_clusters,
-                                                           random_clustering)
+        dispersion_random[i] = _cluster_quality_sumsquares(random_data, random_clusters, random_clustering)
 
     # Compute GAP
     gap = np.mean(np.log(dispersion_random)) - np.log(dispersion)
@@ -236,22 +229,25 @@ def _cluster_quality_gap(data, clusters, clustering, info, n_random=10):
 
 
 def _cluster_quality_crossvalidation(data, clusters, clustering):
-    """Cross-validation index
+    """Cross-validation index.
 
     The original code by https://github.com/Frederic-vW/eeg_microstates/blob/master/eeg_microstates.py#L600
     leads to an error when the denominator is 0.
+
     """
     n_rows, n_cols = data.shape  # n_sample, n_channel
-    var = np.sum(data**2) - np.sum(np.sum(clusters[clustering, :] * data, axis=1)**2)
-    var /= (n_rows * (n_cols - 1))
+    var = np.sum(data ** 2) - np.sum(np.sum(clusters[clustering, :] * data, axis=1) ** 2)
+    var /= n_rows * (n_cols - 1)
     try:
-        cv = var * (n_cols - 1)**2 / (n_cols - len(clusters) - 1)**2
+        cv = var * (n_cols - 1) ** 2 / (n_cols - len(clusters) - 1) ** 2
     except ZeroDivisionError:
         cv = var
-        warnings.warn("Number of columns in data (" + str(n_cols) + ") is smaller "
-                      "than the number of cluster (" + str(len(clusters)) + ") plus 1. "
-                      "Returning the residual noise instead.")
-#    cv = var * (n_cols - 1)**2 / len(clusters)
+        warnings.warn(
+            "Number of columns in data (" + str(n_cols) + ") is smaller "
+            "than the number of cluster (" + str(len(clusters)) + ") plus 1. "
+            "Returning the residual noise instead."
+        )
+    #    cv = var * (n_cols - 1)**2 / len(clusters)
     return cv
 
 
@@ -273,26 +269,24 @@ def _cluster_quality_crossvalidation(data, clusters, clustering):
 
 
 def _cluster_quality_gev(data, clusters, clustering, sd=None, n_clusters=4):
-    """Global Variance Explained (GEV)
-    """
+    """Global Variance Explained (GEV)"""
     if sd is None:
         sd = np.std(data, axis=1)
     map_corr = _correlate_vectors(data.T, clusters[clustering].T)
 
     gev_all = np.zeros(n_clusters)
     for state in range(n_clusters):
-        idx = (clustering == state)
-        gev_all[state] = np.sum((sd[idx] * map_corr[idx])**2) / np.sum(sd**2)
+        idx = clustering == state
+        gev_all[state] = np.sum((sd[idx] * map_corr[idx]) ** 2) / np.sum(sd ** 2)
 
     gev = np.sum(gev_all)
-#    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd**2)
+    #    gev = np.sum((sd * map_corr) ** 2) / np.sum(sd**2)
     return gev, gev_all
 
+
 def _correlate_vectors(A, B, axis=0):
-    """Compute pairwise correlation of multiple pairs of vectors.
-    Fast way to compute correlation of multiple pairs of vectors without
-    computing all pairs as would with corr(A,B). Borrowed from Oli at Stack
-    overflow.
+    """Compute pairwise correlation of multiple pairs of vectors. Fast way to compute correlation of multiple pairs of
+    vectors without computing all pairs as would with corr(A,B). Borrowed from Oli at Stack overflow.
 
     Note the resulting coefficients vary slightly from the ones
     obtained from corr due differences in the order of the calculations.

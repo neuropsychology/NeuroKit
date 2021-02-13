@@ -6,10 +6,22 @@ import matplotlib.pyplot as plt
 from ..signal.signal_detrend import signal_detrend
 
 
-def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, method="stft", window=None, window_type='hann', mode='psd', nfreqbin=None, overlap=None, analytical_signal=True, show=True):
-    """Quantify changes of a nonstationary signal’s frequency over time.
-    The objective of time-frequency analysis is to offer a more informative description of the signal
-    which reveals the temporal variation of its frequency contents.
+def signal_timefrequency(
+    signal,
+    sampling_rate=1000,
+    min_frequency=0.04,
+    max_frequency=None,
+    method="stft",
+    window=None,
+    window_type="hann",
+    mode="psd",
+    nfreqbin=None,
+    overlap=None,
+    analytical_signal=True,
+    show=True,
+):
+    """Quantify changes of a nonstationary signal’s frequency over time. The objective of time-frequency analysis is to
+    offer a more informative description of the signal which reveals the temporal variation of its frequency contents.
 
     There are many different Time-Frequency Representations (TFRs) available:
 
@@ -86,6 +98,7 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     >>> f, t, cwtm = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="cwt", show=True)
     >>> f, t, wvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="wvd", show=True)
     >>> f, t, pwvd = nk.signal_timefrequency(signal, sampling_rate, max_frequency=20, method="pwvd", show=True)
+
     """
     # Initialize empty container for results
     # Define window length
@@ -98,68 +111,64 @@ def signal_timefrequency(signal, sampling_rate=1000, min_frequency=0.04, max_fre
     if method.lower() in ["stft"]:
 
         frequency, time, tfr = short_term_ft(
-                signal,
-                sampling_rate=sampling_rate,
-                overlap=overlap,
-                window=window,
-                mode=mode,
-                min_frequency=min_frequency,
-                window_type=window_type
-                )
+            signal,
+            sampling_rate=sampling_rate,
+            overlap=overlap,
+            window=window,
+            mode=mode,
+            min_frequency=min_frequency,
+            window_type=window_type,
+        )
     # CWT
     elif method.lower() in ["cwt", "wavelet"]:
         frequency, time, tfr = continuous_wt(
-                signal,
-                sampling_rate=sampling_rate,
-                min_frequency=min_frequency,
-                max_frequency=max_frequency
-                )
+            signal, sampling_rate=sampling_rate, min_frequency=min_frequency, max_frequency=max_frequency
+        )
     # WVD
     elif method in ["WignerVille", "wvd"]:
         frequency, time, tfr = wvd(
-                signal,
-                sampling_rate=sampling_rate,
-                n_freqbins=nfreqbin,
-                analytical_signal=analytical_signal,
-                method="WignerVille"
-                )
+            signal,
+            sampling_rate=sampling_rate,
+            n_freqbins=nfreqbin,
+            analytical_signal=analytical_signal,
+            method="WignerVille",
+        )
     # pseudoWVD
     elif method in ["pseudoWignerVille", "pwvd"]:
         frequency, time, tfr = wvd(
-                signal,
-                sampling_rate=sampling_rate,
-                n_freqbins=nfreqbin,
-                analytical_signal=analytical_signal,
-                method="pseudoWignerVille"
-                )
+            signal,
+            sampling_rate=sampling_rate,
+            n_freqbins=nfreqbin,
+            analytical_signal=analytical_signal,
+            method="pseudoWignerVille",
+        )
 
     # Sanitize output
     lower_bound = len(frequency) - len(frequency[frequency >= min_frequency])
     f = frequency[(frequency >= min_frequency) & (frequency <= max_frequency)]
-    z = tfr[lower_bound:lower_bound + len(f)]
-
+    z = tfr[lower_bound : lower_bound + len(f)]
 
     if show is True:
         plot_timefrequency(
-                z,
-                time,
-                f,
-                signal=signal,
-                method=method,
-                )
-
+            z,
+            time,
+            f,
+            signal=signal,
+            method=method,
+        )
 
     return f, time, z
+
 
 # =============================================================================
 # Short-Time Fourier Transform (STFT)
 # =============================================================================
 
 
-def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None,
-                  window=None, window_type='hann', mode='psd'):
-    """Short-term Fourier Transform.
-    """
+def short_term_ft(
+    signal, sampling_rate=1000, min_frequency=0.04, overlap=None, window=None, window_type="hann", mode="psd"
+):
+    """Short-term Fourier Transform."""
 
     if window is not None:
         nperseg = int(window * sampling_rate)
@@ -171,12 +180,12 @@ def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None,
         signal,
         fs=sampling_rate,
         window=window_type,
-        scaling='density',
+        scaling="density",
         nperseg=nperseg,
         nfft=None,
         detrend=False,
         noverlap=overlap,
-        mode=mode
+        mode=mode,
     )
 
     return frequency, time, np.abs(tfr)
@@ -190,20 +199,21 @@ def short_term_ft(signal, sampling_rate=1000, min_frequency=0.04, overlap=None,
 def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=None, nfreqbin=None):
     """Continuous Wavelet Transform.
 
-    References
-    ----------
-    - Neto, O. P., Pinheiro, A. O., Pereira Jr, V. L., Pereira, R., Baltatu, O. C., & Campos, L. A. (2016).
-    Morlet wavelet transforms of heart rate variability for autonomic nervous system activity.
-    Applied and Computational Harmonic Analysis, 40(1), 200-206.
+     References
+     ----------
+     - Neto, O. P., Pinheiro, A. O., Pereira Jr, V. L., Pereira, R., Baltatu, O. C., & Campos, L. A. (2016).
+     Morlet wavelet transforms of heart rate variability for autonomic nervous system activity.
+     Applied and Computational Harmonic Analysis, 40(1), 200-206.
 
-   - Wachowiak, M. P., Wachowiak-Smolíková, R., Johnson, M. J., Hay, D. C., Power, K. E.,
-   & Williams-Bell, F. M. (2018). Quantitative feature analysis of continuous analytic wavelet transforms
-   of electrocardiography and electromyography. Philosophical Transactions of the Royal Society A:
-   Mathematical, Physical and Engineering Sciences, 376(2126), 20170250.
+    - Wachowiak, M. P., Wachowiak-Smolíková, R., Johnson, M. J., Hay, D. C., Power, K. E.,
+    & Williams-Bell, F. M. (2018). Quantitative feature analysis of continuous analytic wavelet transforms
+    of electrocardiography and electromyography. Philosophical Transactions of the Royal Society A:
+    Mathematical, Physical and Engineering Sciences, 376(2126), 20170250.
+
     """
 
     # central frequency
-    w = 6.  # recommended
+    w = 6.0  # recommended
 
     if nfreqbin is None:
         nfreqbin = sampling_rate // 2
@@ -225,8 +235,7 @@ def continuous_wt(signal, sampling_rate=1000, min_frequency=0.04, max_frequency=
 # Wigner-Ville Distribution
 # =============================================================================
 def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, method="WignerVille"):
-    """Wigner Ville Distribution and Pseudo-Wigner Ville Distribution.
-    """
+    """Wigner Ville Distribution and Pseudo-Wigner Ville Distribution."""
     # Compute the analytical signal
     if analytical_signal:
         signal = scipy.signal.hilbert(signal_detrend(signal))
@@ -241,7 +250,7 @@ def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, met
         windows_length = n_freqbins // 4
         windows_length = windows_length - windows_length % 2 + 1
         windows = scipy.hamming(windows_length)
-        fwindows[fwindows_mpts + np.arange(- windows_length // 2, windows_length // 2)] = windows
+        fwindows[fwindows_mpts + np.arange(-windows_length // 2, windows_length // 2)] = windows
     else:
         fwindows = np.ones(n_freqbins + 1)
         fwindows_mpts = len(fwindows) // 2
@@ -250,19 +259,22 @@ def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, met
 
     # This is discrete frequency (should we return?)
     if n_freqbins % 2 == 0:
-        frequency = np.hstack((np.arange(n_freqbins / 2),
-                               np.arange(-n_freqbins / 2, 0)))
+        frequency = np.hstack((np.arange(n_freqbins / 2), np.arange(-n_freqbins / 2, 0)))
     else:
-        frequency = np.hstack((np.arange((n_freqbins - 1) / 2),
-                               np.arange(-(n_freqbins - 1) / 2, 0)))
+        frequency = np.hstack((np.arange((n_freqbins - 1) / 2), np.arange(-(n_freqbins - 1) / 2, 0)))
     tfr = np.zeros((n_freqbins, time.shape[0]), dtype=complex)  # the time-frequency matrix
 
     tausec = round(n_freqbins / 2.0)
     winlength = tausec - 1
     # taulens: len of tau for each step
-    taulens = np.min(np.c_[np.arange(signal.shape[0]),
-                           signal.shape[0] - np.arange(signal.shape[0]) - 1,
-                           winlength * np.ones(time.shape)], axis=1)
+    taulens = np.min(
+        np.c_[
+            np.arange(signal.shape[0]),
+            signal.shape[0] - np.arange(signal.shape[0]) - 1,
+            winlength * np.ones(time.shape),
+        ],
+        axis=1,
+    )
     conj_signal = np.conj(signal)
     # iterate and compute the wv for each indices
     for idx in range(time.shape[0]):
@@ -271,9 +283,10 @@ def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, met
         indices = np.remainder(n_freqbins + tau, n_freqbins).astype(int)
         tfr[indices, idx] = fwindows[fwindows_mpts + tau] * signal[idx + tau] * conj_signal[idx - tau]
         if (idx < signal.shape[0] - tausec) and (idx >= tausec + 1):
-            tfr[tausec, idx] = fwindows[fwindows_mpts + tausec] * signal[idx + tausec] * \
-                np.conj(signal[idx - tausec]) + \
-                fwindows[fwindows_mpts - tausec] * signal[idx - tausec] * conj_signal[idx + tausec]
+            tfr[tausec, idx] = (
+                fwindows[fwindows_mpts + tausec] * signal[idx + tausec] * np.conj(signal[idx - tausec])
+                + fwindows[fwindows_mpts - tausec] * signal[idx - tausec] * conj_signal[idx + tausec]
+            )
             tfr[tausec, idx] *= 0.5
 
     # Now tfr contains the product of the signal segments and its conjugate.
@@ -292,8 +305,16 @@ def wvd(signal, sampling_rate=1000, n_freqbins=None, analytical_signal=True, met
 # =============================================================================
 
 
-def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=None, segment_step=1, nfreqbin=None, window_method="hamming"):
-    """Smoothed Pseudo Wigner Ville Distribution
+def smooth_pseudo_wvd(
+    signal,
+    sampling_rate=1000,
+    freq_length=None,
+    time_length=None,
+    segment_step=1,
+    nfreqbin=None,
+    window_method="hamming",
+):
+    """Smoothed Pseudo Wigner Ville Distribution.
 
     Parameters
     ----------
@@ -326,7 +347,8 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
     J. M. O' Toole, M. Mesbah, and B. Boashash, (2008),
     "A New Discrete Analytic Signal for Reducing Aliasing in the
      Discrete Wigner-Ville Distribution", IEEE Trans.
-     """
+
+    """
 
     # Define parameters
     N = len(signal)
@@ -339,7 +361,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
 
     # DFT
     signal_fft = np.fft.fft(signal_padded)
-    signal_fft[1: N-1] = signal_fft[1: N-1] * 2
+    signal_fft[1 : N - 1] = signal_fft[1 : N - 1] * 2
     signal_fft[N:] = 0
 
     # Inverse FFT
@@ -391,14 +413,9 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
     # Calculate pwvd
     for i, t in enumerate(time_array):
         # time shift
-        tau_max = np.min([t + midpt_time - 1,
-                          N - t + midpt_time,
-                          np.round(N / 2.0) - 1,
-                          midpt_freq])
+        tau_max = np.min([t + midpt_time - 1, N - t + midpt_time, np.round(N / 2.0) - 1, midpt_freq])
         # time-lag list
-        tau = np.arange(start=-np.min([midpt_time, N - t]),
-                        stop=np.min([midpt_time, t - 1]) + 1,
-                        dtype='int')
+        tau = np.arange(start=-np.min([midpt_time, N - t]), stop=np.min([midpt_time, t - 1]) + 1, dtype="int")
         time_pts = (midpt_time + tau).astype(int)
         g2 = time_window[time_pts]
         g2 = g2 / np.sum(g2)
@@ -407,9 +424,9 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
         pwvd[0, i] = np.sum(g2 * signal[signal_pts] * np.conjugate(signal[signal_pts]))
         # other frequencies
         for m in range(int(tau_max)):
-            tau = np.arange(start=-np.min([midpt_time, N - t - m]),
-                            stop=np.min([midpt_time, t - m - 1]) + 1,
-                            dtype='int')
+            tau = np.arange(
+                start=-np.min([midpt_time, N - t - m]), stop=np.min([midpt_time, t - m - 1]) + 1, dtype="int"
+            )
             time_pts = (midpt_time + tau).astype(int)
             g2 = time_window[time_pts]
             g2 = g2 / np.sum(g2)
@@ -425,9 +442,9 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
         m = np.round(N / 2.0)
 
         if t <= N - m and t >= m + 1 and m <= midpt_freq:
-            tau = np.arange(start=-np.min([midpt_time, N - t - m]),
-                            stop=np.min([midpt_time, t - 1 - m]) + 1,
-                            dtype='int')
+            tau = np.arange(
+                start=-np.min([midpt_time, N - t - m]), stop=np.min([midpt_time, t - 1 - m]) + 1, dtype="int"
+            )
             time_pts = (midpt_time + tau + 1).astype(int)
             g2 = time_window[time_pts]
             g2 = g2 / np.sum(g2)
@@ -450,8 +467,7 @@ def smooth_pseudo_wvd(signal, sampling_rate=1000, freq_length=None, time_length=
 # Plot function
 # =============================================================================
 def plot_timefrequency(z, time, f, signal=None, method="stft"):
-    """Visualize a time-frequency matrix.
-    """
+    """Visualize a time-frequency matrix."""
 
     if method == "stft":
         figure_title = "Short-time Fourier Transform Magnitude"
@@ -459,9 +475,9 @@ def plot_timefrequency(z, time, f, signal=None, method="stft"):
         for i in range(len(time)):
             ax.plot(f, z[:, i], label="Segment" + str(np.arange(len(time))[i] + 1))
         ax.legend()
-        ax.set_title('Signal Spectrogram')
-        ax.set_ylabel('STFT Magnitude')
-        ax.set_xlabel('Frequency (Hz)')
+        ax.set_title("Signal Spectrogram")
+        ax.set_ylabel("STFT Magnitude")
+        ax.set_xlabel("Frequency (Hz)")
 
     elif method == "cwt":
         figure_title = "Continuous Wavelet Transform Magnitude"
@@ -469,8 +485,8 @@ def plot_timefrequency(z, time, f, signal=None, method="stft"):
         figure_title = "Wigner Ville Distrubution Spectrogram"
         fig = plt.figure()
         plt.plot(time, signal)
-        plt.xlabel('Time (sec)')
-        plt.ylabel('Signal')
+        plt.xlabel("Time (sec)")
+        plt.ylabel("Signal")
 
     elif method == "pwvd":
         figure_title = "Pseudo Wigner Ville Distribution Spectrogram"
@@ -479,6 +495,6 @@ def plot_timefrequency(z, time, f, signal=None, method="stft"):
     spec = ax.pcolormesh(time, f, z, cmap=plt.get_cmap("magma"))
     plt.colorbar(spec)
     ax.set_title(figure_title)
-    ax.set_ylabel('Frequency (Hz)')
-    ax.set_xlabel('Time (sec)')
+    ax.set_ylabel("Frequency (Hz)")
+    ax.set_xlabel("Time (sec)")
     return fig

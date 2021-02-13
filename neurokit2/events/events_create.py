@@ -43,8 +43,7 @@ def events_create(event_onsets, event_durations=None, event_labels=None, event_c
     if event_durations is None:
         event_durations = np.diff(np.concatenate(([0], event_onsets)))
 
-    events = {"onset": event_onsets,
-              "duration": event_durations}
+    events = {"onset": event_onsets, "duration": event_durations}
 
     events = _events_find_label(events, event_labels=event_labels, event_conditions=event_conditions)
 

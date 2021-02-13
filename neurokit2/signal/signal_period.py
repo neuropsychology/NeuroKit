@@ -57,10 +57,7 @@ def signal_period(peaks, sampling_rate=1000, desired_length=None, interpolation_
 
     # Sanity checks.
     if np.size(peaks) <= 3:
-        warn(
-            "Too few peaks detected to compute the rate. Returning empty vector.",
-            category=NeuroKitWarning
-        )
+        warn("Too few peaks detected to compute the rate. Returning empty vector.", category=NeuroKitWarning)
         return np.full(desired_length, np.nan)
 
     if isinstance(desired_length, (int, float)):

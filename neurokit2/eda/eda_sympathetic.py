@@ -10,7 +10,7 @@ from ..signal import signal_filter, signal_resample
 from ..stats import standardize
 
 
-def eda_sympathetic(eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25], method='posada', show=False):
+def eda_sympathetic(eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25], method="posada", show=False):
     """Obtain electrodermal activity (EDA) indexes of sympathetic nervous system.
 
     Derived from Posada-Quintero et al. (2016), who argue that dynamics of the sympathetic component
@@ -69,8 +69,7 @@ def eda_sympathetic(eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25]
     elif method.lower() in ["posada", "posada-quintero", "quintero"]:
         out = _eda_sympathetic_posada(eda_signal, frequency_band=frequency_band, show=show)
     else:
-        raise ValueError("NeuroKit error: eda_sympathetic(): 'method' should be "
-                         "one of 'ghiasi', 'posada'.")
+        raise ValueError("NeuroKit error: eda_sympathetic(): 'method' should be " "one of 'ghiasi', 'posada'.")
 
     return out
 
@@ -79,6 +78,7 @@ def eda_sympathetic(eda_signal, sampling_rate=1000, frequency_band=[0.045, 0.25]
 # Methods
 # =============================================================================
 
+
 def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True, out={}):
 
     # First step of downsampling
@@ -86,25 +86,28 @@ def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True,
     downsampled_2 = scipy.signal.decimate(downsampled_1, q=20, n=8)  # Keep every 20th sample
 
     # High pass filter
-    eda_filtered = signal_filter(downsampled_2, sampling_rate=2,
-                                 lowcut=0.01, highcut=None, method="butterworth", order=8)
+    eda_filtered = signal_filter(
+        downsampled_2, sampling_rate=2, lowcut=0.01, highcut=None, method="butterworth", order=8
+    )
 
     nperseg = 128
     overlap = nperseg // 2  # 50 % data overlap
 
     # Compute psd
-    frequency, power = _signal_psd_welch(eda_filtered, sampling_rate=2,
-                                         nperseg=nperseg, window_type='blackman', noverlap=overlap, normalize=False)
+    frequency, power = _signal_psd_welch(
+        eda_filtered, sampling_rate=2, nperseg=nperseg, window_type="blackman", noverlap=overlap, normalize=False
+    )
     psd = pd.DataFrame({"Frequency": frequency, "Power": power})
 
     # Get sympathetic nervous system indexes
     eda_symp = _signal_power_instant_get(psd, frequency_band=[frequency_band[0], frequency_band[1]])
-    eda_symp = eda_symp.get('0.04-0.25Hz')
+    eda_symp = eda_symp.get("0.04-0.25Hz")
 
     # Compute normalized psd
-    psd['Power'] /= np.max(psd['Power'])
-    eda_symp_normalized = _signal_power_instant_get(psd, frequency_band=[frequency_band[0],
-                                                                         frequency_band[1]]).get('0.04-0.25Hz')
+    psd["Power"] /= np.max(psd["Power"])
+    eda_symp_normalized = _signal_power_instant_get(psd, frequency_band=[frequency_band[0], frequency_band[1]]).get(
+        "0.04-0.25Hz"
+    )
 
     psd_plot = psd.loc[np.logical_and(psd["Frequency"] >= frequency_band[0], psd["Frequency"] <= frequency_band[1])]
 
@@ -112,7 +115,7 @@ def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True,
         ax = psd_plot.plot(x="Frequency", y="Power", title="EDA Power Spectral Density (ms^2/Hz)")
         ax.set(xlabel="Frequency (Hz)", ylabel="Spectrum")
 
-    out = {'EDA_Symp': eda_symp, 'EDA_SympN': eda_symp_normalized}
+    out = {"EDA_Symp": eda_symp, "EDA_SympN": eda_symp_normalized}
 
     return out
 
@@ -126,20 +129,28 @@ def _eda_sympathetic_ghiasi(eda_signal, sampling_rate=1000, frequency_band=[0.04
     desired_sampling_rate = 50
     downsampled = signal_resample(eda_signal, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate)
     normalized = standardize(downsampled)
-    filtered = signal_filter(normalized, sampling_rate=desired_sampling_rate, lowcut=0.01, highcut=0.5, method='butterworth')
+    filtered = signal_filter(
+        normalized, sampling_rate=desired_sampling_rate, lowcut=0.01, highcut=0.5, method="butterworth"
+    )
 
     # Divide the signal into segments and obtain the timefrequency representation
     overlap = 59 * 50  # overlap of 59s in samples
 
-    _, _, bins = signal_timefrequency(filtered, sampling_rate=desired_sampling_rate,
-                                      min_frequency=min_frequency,
-                                      max_frequency=max_frequency, method="stft",
-                                      window=60, window_type='blackman',
-                                      overlap=overlap, show=show)
+    _, _, bins = signal_timefrequency(
+        filtered,
+        sampling_rate=desired_sampling_rate,
+        min_frequency=min_frequency,
+        max_frequency=max_frequency,
+        method="stft",
+        window=60,
+        window_type="blackman",
+        overlap=overlap,
+        show=show,
+    )
 
     eda_symp = np.mean(bins)
     eda_symp_normalized = eda_symp / np.max(bins)
 
-    out = {'EDA_Symp': eda_symp, 'EDA_SympN': eda_symp_normalized}
+    out = {"EDA_Symp": eda_symp, "EDA_SympN": eda_symp_normalized}
 
     return out

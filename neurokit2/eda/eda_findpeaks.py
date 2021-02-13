@@ -232,8 +232,8 @@ def _eda_findpeaks_gamboa2008(eda_phasic):
 
 
 def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
-    """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
-    approach by Kim et al.(2004).
+    """KBK method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Kim et
+    al.(2004).
 
     Parameters
     ----------
@@ -299,8 +299,8 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
 
 
 def _eda_findpeaks_nabian2018(eda_phasic):
-    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the
-    approach by Nabian et al. (2018).
+    """Basic method to extract Skin Conductivity Responses (SCR) from an EDA signal following the approach by Nabian et
+    al. (2018).
 
     Parameters
     ----------
@@ -334,9 +334,9 @@ def _eda_findpeaks_nabian2018(eda_phasic):
 
     # Sanitize consecutive crossings
     if len(pos_crossings) > len(neg_crossings):
-        pos_crossings = pos_crossings[0:len(neg_crossings)]
+        pos_crossings = pos_crossings[0 : len(neg_crossings)]
     elif len(pos_crossings) < len(neg_crossings):
-        neg_crossings = neg_crossings[0:len(pos_crossings)]
+        neg_crossings = neg_crossings[0 : len(pos_crossings)]
 
     peaks_list = []
     onsets_list = []
@@ -354,7 +354,10 @@ def _eda_findpeaks_nabian2018(eda_phasic):
             amps_list.append(amp)
 
     # output
-    info = {"SCR_Onsets": np.array(onsets_list), "SCR_Peaks": np.hstack(np.array(peaks_list)),
-            "SCR_Height": np.array(amps_list)}
+    info = {
+        "SCR_Onsets": np.array(onsets_list),
+        "SCR_Peaks": np.hstack(np.array(peaks_list)),
+        "SCR_Height": np.array(amps_list),
+    }
 
     return info

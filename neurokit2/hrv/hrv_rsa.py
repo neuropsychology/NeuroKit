@@ -9,14 +9,14 @@ import scipy.linalg
 from ..ecg.ecg_rsp import ecg_rsp
 from ..misc import NeuroKitWarning
 from ..rsp import rsp_process
-from ..signal import (signal_filter, signal_interpolate, signal_rate,
-                      signal_resample, signal_timefrequency)
+from ..signal import signal_filter, signal_interpolate, signal_rate, signal_resample, signal_timefrequency
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from .hrv_utils import _hrv_get_rri
 
 
-def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False,
-            window=None, window_number=None):
+def hrv_rsa(
+    ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False, window=None, window_number=None
+):
     """Respiratory Sinus Arrhythmia (RSA)
 
     Respiratory sinus arrhythmia (RSA), also referred to as 'cardiac coherence' or 'physiological
@@ -153,10 +153,7 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
     if len(rsp_peaks) - len(rsp_onsets) == 0:
         rsp_peaks = rsp_peaks[:-1]
     if len(rsp_peaks) - len(rsp_onsets) != -1:
-        warn(
-            "Couldn't find rsp cycles onsets and centers. Check your RSP signal.",
-            category=NeuroKitWarning
-        )
+        warn("Couldn't find rsp cycles onsets and centers. Check your RSP signal.", category=NeuroKitWarning)
 
     # Methods ------------------------
 
@@ -172,20 +169,25 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
         window = 32  # 32 seconds
     input_duration = rpeaks[-1] / sampling_rate
     if input_duration >= window:
-        rsa_gates = _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=sampling_rate,
-                                   window=window, window_number=window_number, continuous=continuous)
+        rsa_gates = _hrv_rsa_gates(
+            ecg_signals,
+            rpeaks,
+            sampling_rate=sampling_rate,
+            window=window,
+            window_number=window_number,
+            continuous=continuous,
+        )
     else:
         warn(
-                "The duration of recording is shorter than the duration of the window (%s seconds)."
-                " Returning RSA by Gates method as Nan."
-                " Consider using a longer recording." % (window),
-                category=NeuroKitWarning
-            )
+            "The duration of recording is shorter than the duration of the window (%s seconds)."
+            " Returning RSA by Gates method as Nan."
+            " Consider using a longer recording." % (window),
+            category=NeuroKitWarning,
+        )
         if continuous is False:
             rsa_gates = np.nan
         else:
             rsa_gates = np.full(len(rsa_p2t), np.nan)
-
 
     if continuous is False:
         rsa = {}  # Initialize empty dict
@@ -193,8 +195,7 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
         rsa.update(rsa_pb)
         rsa.update(rsa_gates)
     else:
-        rsa = pd.DataFrame({"RSA_P2T": rsa_p2t,
-                            "RSA_Gates": rsa_gates})
+        rsa = pd.DataFrame({"RSA_P2T": rsa_p2t, "RSA_Gates": rsa_gates})
 
     return rsa
 
@@ -338,8 +339,8 @@ def _hrv_rsa_pb(ecg_period, sampling_rate, continuous=False):
 # Second-by-second RSA
 # =============================================================================
 
-def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_number=None,
-                   continuous=False):
+
+def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_number=None, continuous=False):
 
     # Boundaries of rsa freq
     min_frequency = 0.12
@@ -349,8 +350,7 @@ def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_
 
     # Re-sample at 4 Hz
     desired_sampling_rate = 4
-    rri = signal_resample(rri, sampling_rate=sampling_rate,
-                          desired_sampling_rate=desired_sampling_rate)
+    rri = signal_resample(rri, sampling_rate=sampling_rate, desired_sampling_rate=desired_sampling_rate)
 
     # Sanitize parameters
     overlap = int((window - 1) * desired_sampling_rate)
@@ -362,11 +362,17 @@ def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_
     multipeak, weight = _get_multipeak_window(nperseg, window_number)
 
     for i in range(4):
-        _, time, psd = signal_timefrequency(rri, sampling_rate=desired_sampling_rate,
-                                            min_frequency=min_frequency,
-                                            max_frequency=max_frequency, method="stft",
-                                            window=window, window_type=multipeak[:, i],
-                                            overlap=overlap, show=False)
+        _, time, psd = signal_timefrequency(
+            rri,
+            sampling_rate=desired_sampling_rate,
+            min_frequency=min_frequency,
+            max_frequency=max_frequency,
+            method="stft",
+            window=window,
+            window_type=multipeak[:, i],
+            overlap=overlap,
+            show=False,
+        )
         if i == 0:
             rsa = np.zeros_like(psd)
         rsa = psd * weight[i] + rsa  # add weights
@@ -393,8 +399,7 @@ def _hrv_rsa_gates(ecg_signals, rpeaks, sampling_rate=1000, window=None, window_
         # Convert to samples
         time = np.multiply(time, sampling_rate)
 
-        rsa = signal_interpolate(time.astype(int), meanRSA, x_new=len(ecg_signals),
-                                 method="monotone_cubic")
+        rsa = signal_interpolate(time.astype(int), meanRSA, x_new=len(ecg_signals), method="monotone_cubic")
     return rsa
 
 
@@ -414,10 +419,11 @@ def _get_multipeak_window(nperseg, window_number=8):
     C = 2 * K1 / 10 / B / loge
     length = np.arange(1, nperseg).conj().transpose()
     r0 = 2 / C * (1 - np.exp(-C * B / 2))
-    r_num = (2 * C - np.exp(-C * B / 2) * (2 * C * np.cos(np.pi * B * length) - 4 * np.pi * length *
-                                           np.sin(np.pi * B * length)))
+    r_num = 2 * C - np.exp(-C * B / 2) * (
+        2 * C * np.cos(np.pi * B * length) - 4 * np.pi * length * np.sin(np.pi * B * length)
+    )
 
-    r_den = (C**2 + (2 * np.pi * length)**2)
+    r_den = C ** 2 + (2 * np.pi * length) ** 2
     r = np.divide(r_num, r_den)
 
     rpeak = np.append(r0, r)  # Covariance function peaked spectrum
@@ -425,7 +431,9 @@ def _get_multipeak_window(nperseg, window_number=8):
     r = 2 * np.sin(np.pi * B * length) / (2 * np.pi * length)
     rbox = np.append(B, r)
 
-    rpen = 10**(K2 / 10) * np.append(1, np.zeros((nperseg - 1, 1))) - (10**(K2 / 10) - 1) * rbox  # Covariance function penalty function
+    rpen = (
+        10 ** (K2 / 10) * np.append(1, np.zeros((nperseg - 1, 1))) - (10 ** (K2 / 10) - 1) * rbox
+    )  # Covariance function penalty function
 
     Ry = scipy.linalg.toeplitz(rpeak)
     Rx = scipy.linalg.toeplitz(rpen)
@@ -440,15 +448,16 @@ def _get_multipeak_window(nperseg, window_number=8):
 
     FN = np.zeros((nperseg, nperseg))
     for i in range(len(RD)):
-        FN[:, i] = F[: , h[i]] / np.sqrt(F[: , h[i]].conj().transpose().dot(F[: , h[i]]))
+        FN[:, i] = F[:, h[i]] / np.sqrt(F[:, h[i]].conj().transpose().dot(F[:, h[i]]))
 
-    RDN = RDN[len(RD) - 1: 0: -1]
-    FN = FN[: , len(RD) - 1: 0: -1]
+    RDN = RDN[len(RD) - 1 : 0 : -1]
+    FN = FN[:, len(RD) - 1 : 0 : -1]
 
-    weight = RDN[: window_number] / np.sum(RDN[: window_number])
-    multipeak = FN[: , 0: window_number]
+    weight = RDN[:window_number] / np.sum(RDN[:window_number])
+    multipeak = FN[:, 0:window_number]
 
     return multipeak, weight
+
 
 # =============================================================================
 # Internals
@@ -489,8 +498,7 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                 ecg_period = signal_rate(rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_signals))
             else:
                 raise ValueError(
-                    "NeuroKit error: _hrv_rsa_formatinput():"
-                    "Wrong input, we couldn't extract" "heart rate signal."
+                    "NeuroKit error: _hrv_rsa_formatinput():" "Wrong input, we couldn't extract" "heart rate signal."
                 )
     if rsp_signals is None:
         rsp_cols = [col for col in ecg_signals.columns if "RSP_Phase" in col]
@@ -501,7 +509,7 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                 "RSP signal not found. For this time, we will derive RSP"
                 " signal from ECG using ecg_rsp(). But the results are"
                 " definitely not reliable, so please provide a real RSP signal.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
     elif isinstance(rsp_signals, tuple):
         rsp_signals = rsp_signals[0]
@@ -512,9 +520,8 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
             warn(
-                "RSP signal not found. RSP signal is derived from ECG using ecg_rsp()."
-                " Please provide RSP signal.",
-                category=NeuroKitWarning
+                "RSP signal not found. RSP signal is derived from ECG using ecg_rsp()." " Please provide RSP signal.",
+                category=NeuroKitWarning,
             )
 
     if rpeaks is None:
@@ -522,8 +529,8 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
             rpeaks = _signal_formatpeaks_sanitize(ecg_signals)
         except NameError:
             raise ValueError(
-                "NeuroKit error: _hrv_rsa_formatinput(): "
-                "Wrong input, we couldn't extract rpeaks indices.")
+                "NeuroKit error: _hrv_rsa_formatinput(): " "Wrong input, we couldn't extract rpeaks indices."
+            )
     else:
         rpeaks = _signal_formatpeaks_sanitize(rpeaks)
 

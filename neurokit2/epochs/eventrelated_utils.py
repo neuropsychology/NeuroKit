@@ -29,7 +29,7 @@ def _eventrelated_sanitizeinput(epochs, what="ecg", silent=False):
                 str(what) + "_eventrelated():"
                 " The duration of your epochs seems quite long. You might want"
                 " to use " + str(what) + "_intervalrelated().",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
     return epochs
 
@@ -79,9 +79,8 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
     colnames = epoch.columns.values
     if len([i for i in colnames if var in i]) == 0:
         warn(
-            "Input does not have an `" + var + "` column."
-            " Will skip all rate-related features.",
-            category=NeuroKitWarning
+            "Input does not have an `" + var + "` column." " Will skip all rate-related features.",
+            category=NeuroKitWarning,
         )
         return output
 

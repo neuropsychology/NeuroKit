@@ -61,7 +61,6 @@ def microstates_static(microstates, sampling_rate=1000, show=False):
     return df
 
 
-
 # =============================================================================
 # Duration
 # =============================================================================
@@ -108,10 +107,10 @@ def _microstates_duration_plot(durations, types, ax=None):
     for component in parts:
         if isinstance(parts[component], list):
             for part in parts[component]:
-                part.set_facecolor('#FF5722')
-                part.set_edgecolor('white')
+                part.set_facecolor("#FF5722")
+                part.set_edgecolor("white")
         else:
-            parts[component].set_edgecolor('black')
+            parts[component].set_edgecolor("black")
     ax.set_xlabel("Duration (s)")
     ax.set_title("Duration")
 
@@ -163,9 +162,10 @@ def _microstates_prevalence_plot(microstates, lifetimes, out, ax_prop=None, ax_d
 # Lifetime distribution
 # ------------------------
 def _microstates_lifetime(microstates, out=None):
-    """Based on https://github.com/Frederic-vW/eeg_microstates
+    """Based on https://github.com/Frederic-vW/eeg_microstates.
 
     Compute the lifetime distributions for each symbol in a symbolic sequence X with ns symbols.
+
     """
     n = len(microstates)
     states = np.unique(microstates)
@@ -191,7 +191,7 @@ def _microstates_lifetime(microstates, out=None):
     for s in states:
         for j in range(len(tau_dict[s])):
             tau = tau_dict[s][j]
-            lifetimes[s][int(tau)-1] += 1.0
+            lifetimes[s][int(tau) - 1] += 1.0
 
     # Get Area under curve (AUCs)
     if out is None:

@@ -32,14 +32,13 @@ def read_bitalino(filename):
     >>> import neurokit2 as nk
     >>>
     >>> #data, sampling_rate = nk.read_bitalino("data.txt")
+
     """
     # read metadata
     with open(filename, "r") as f:
 
         if "OpenSignals" not in f.readline():  # read first line
-            raise ValueError(
-                "NeuroKit error: read_bitalino(): Text file is not in OpenSignals format."
-            )
+            raise ValueError("NeuroKit error: read_bitalino(): Text file is not in OpenSignals format.")
 
         metadata = json.loads(f.readline()[1:])  # read second line
 

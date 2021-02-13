@@ -99,11 +99,12 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
 # Utilities
 # =============================================================================
 def _eeg_gfp_smoothing(gfp, sampling_rate=None, window_size=0.02):
-    """Smooth the Global Field Power Curve
-    """
+    """Smooth the Global Field Power Curve."""
     if sampling_rate is None:
-        raise ValueError("NeuroKit error: eeg_gfp(): You requested to smooth the GFP, for which ",
-                         "we need to know the sampling_rate. Please provide it as an argument.")
+        raise ValueError(
+            "NeuroKit error: eeg_gfp(): You requested to smooth the GFP, for which ",
+            "we need to know the sampling_rate. Please provide it as an argument.",
+        )
     window = int(window_size * sampling_rate)
     if window > 2:
         gfp = signal_filter(gfp, method="savgol", order=2, window_size=window)
@@ -115,12 +116,14 @@ def _eeg_gfp_smoothing(gfp, sampling_rate=None, window_size=0.02):
 # Methods
 # =============================================================================
 
+
 def _eeg_gfp_L1(eeg, robust=False):
     if robust is False:
         gfp = np.sum(np.abs(eeg - np.mean(eeg, axis=0)), axis=0) / len(eeg)
     else:
         gfp = np.sum(np.abs(eeg - np.median(eeg, axis=0)), axis=0) / len(eeg)
     return gfp
+
 
 def _eeg_gfp_L2(eeg, robust=False):
     if robust is False:

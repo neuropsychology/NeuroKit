@@ -38,5 +38,5 @@ __all__ = [
     "summary_plot",
     "cluster",
     "cluster_quality",
-    "cluster_findnumber"
+    "cluster_findnumber",
 ]

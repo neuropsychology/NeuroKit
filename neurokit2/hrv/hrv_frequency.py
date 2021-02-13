@@ -148,7 +148,7 @@ def hrv_frequency(
                     "The duration of recording is too short to allow"
                     " reliable computation of signal power in frequency band " + frequency + "."
                     " Its power is returned as zero.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
 
     # Normalized
@@ -164,7 +164,14 @@ def hrv_frequency(
 
     # Plot
     if show:
-        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate, psd_method=psd_method, order_criteria=order_criteria, normalize=normalize)
+        _hrv_frequency_show(
+            rri,
+            out_bands,
+            sampling_rate=sampling_rate,
+            psd_method=psd_method,
+            order_criteria=order_criteria,
+            normalize=normalize,
+        )
     return out
 
 
@@ -199,6 +206,15 @@ def _hrv_frequency_show(
         if window_length <= len(rri) / 2:
             break
 
-    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, method=psd_method, max_frequency=0.5, order_criteria=order_criteria, normalize=normalize)
+    psd = signal_psd(
+        rri,
+        sampling_rate=sampling_rate,
+        show=False,
+        min_frequency=min_frequency,
+        method=psd_method,
+        max_frequency=0.5,
+        order_criteria=order_criteria,
+        normalize=normalize,
+    )
 
     _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)

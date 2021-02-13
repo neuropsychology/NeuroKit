@@ -104,17 +104,13 @@ def _eog_eventrelated_features(epoch, output={}):
     # Sanitize input
     if "EOG_Blinks" not in epoch:
         warn(
-            "Input does not have an `EOG_Blinks` column."
-            " Unable to process blink features.",
-            category=NeuroKitWarning
+            "Input does not have an `EOG_Blinks` column." " Unable to process blink features.", category=NeuroKitWarning
         )
         return output
 
     if "EOG_Rate" not in epoch:
         warn(
-            "Input does not have an `EOG_Rate` column."
-            " Will skip computation of EOG rate.",
-            category=NeuroKitWarning
+            "Input does not have an `EOG_Rate` column." " Will skip computation of EOG rate.", category=NeuroKitWarning
         )
         return output
 

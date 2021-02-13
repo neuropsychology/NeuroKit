@@ -114,18 +114,15 @@ def signal_filter(
     """
     method = method.lower()
 
-
     if method in ["sg", "savgol", "savitzky-golay"]:
         filtered = _signal_filter_savgol(signal, sampling_rate, order, window_size=window_size)
     elif method in ["powerline"]:
-            filtered = _signal_filter_powerline(signal, sampling_rate, powerline)
+        filtered = _signal_filter_powerline(signal, sampling_rate, powerline)
     else:
 
         # Sanity checks
         if lowcut is None and highcut is None:
-            raise ValueError(
-                "NeuroKit error: signal_filter(): you need to specify a 'lowcut' or a 'highcut'."
-            )
+            raise ValueError("NeuroKit error: signal_filter(): you need to specify a 'lowcut' or a 'highcut'.")
 
         if method in ["butter", "butterworth"]:
             filtered = _signal_filter_butterworth(signal, sampling_rate, lowcut, highcut, order)
@@ -139,7 +136,7 @@ def signal_filter(
             raise ValueError(
                 "NeuroKit error: signal_filter(): 'method' should be",
                 " one of 'butterworth', 'butterworth_ba', 'bessel',",
-                " 'savgol' or 'fir'."
+                " 'savgol' or 'fir'.",
             )
     return filtered
 
@@ -270,7 +267,7 @@ def _signal_filter_sanitize(lowcut=None, highcut=None, sampling_rate=1000, norma
                 "The sampling rate is too low. Sampling rate"
                 " must exceed the Nyquist rate to avoid aliasing problem."
                 f" In this analysis, the sampling rate has to be higher than {2 * highcut} Hz",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
 
     # Replace 0 by none

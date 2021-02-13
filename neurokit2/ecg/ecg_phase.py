@@ -75,7 +75,7 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
         __, delineate_info = ecg_delineate(ecg_cleaned, sampling_rate=sampling_rate)
 
     # Try retrieving right column
-    if isinstance(delineate_info, dict):    # FIXME: if this evaluates to False, toffsets and ppeaks are not instantiated
+    if isinstance(delineate_info, dict):  # FIXME: if this evaluates to False, toffsets and ppeaks are not instantiated
 
         toffsets = np.full(len(ecg_cleaned), False, dtype=bool)
         toffsets_idcs = [int(x) for x in delineate_info["ECG_T_Offsets"] if ~np.isnan(x)]

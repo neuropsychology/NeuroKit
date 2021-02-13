@@ -3,7 +3,7 @@ import numpy as np
 
 
 def replace(data, replacement_dict):
-    """Replace values using a dictionary
+    """Replace values using a dictionary.
 
     Parameters
     ----------

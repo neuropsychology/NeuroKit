@@ -66,9 +66,11 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
 
     return clean
 
+
 # =============================================================================
 # Methods
 # =============================================================================
+
 
 def _ppg_clean_elgendi(ppg_signal, sampling_rate):
 
@@ -79,7 +81,10 @@ def _ppg_clean_elgendi(ppg_signal, sampling_rate):
 
 
 def _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=None):
-    """Low-pass filter for continuous BP signal preprocessing, adaopted from Nabian et al. (2018).
+    """Low-pass filter for continuous BP signal preprocessing, adaopted from Nabian et al.
+
+    (2018).
+
     """
 
     # Determine low-pass filter value
@@ -89,10 +94,14 @@ def _ppg_clean_nabian2018(ppg_signal, sampling_rate, heart_rate=None):
     if heart_rate is not None:
         heart_rate = heart_rate / 60
 
-        if not highcut >= 10*heart_rate and not highcut < 0.5*sampling_rate:
-            raise ValueError("Neurokit error: Highcut value should be at least 10 times heart rate and"
-                             " less than 0.5 times sampling rate.")
+        if not highcut >= 10 * heart_rate and not highcut < 0.5 * sampling_rate:
+            raise ValueError(
+                "Neurokit error: Highcut value should be at least 10 times heart rate and"
+                " less than 0.5 times sampling rate."
+            )
 
-    filtered = signal_filter(ppg_signal, sampling_rate=sampling_rate, lowcut=None, highcut=highcut, order=2, method="butterworth")
+    filtered = signal_filter(
+        ppg_signal, sampling_rate=sampling_rate, lowcut=None, highcut=highcut, order=2, method="butterworth"
+    )
 
     return filtered

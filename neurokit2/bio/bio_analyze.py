@@ -86,6 +86,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto"):
     0            ...        ...  ...            ...               ...
 
     [1 rows x 84 columns]
+
     """
     features = pd.DataFrame()
     method = method.lower()
@@ -189,7 +190,6 @@ def _bio_analyze_findduration(data, sampling_rate=1000):
 
 def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     # RSA features for interval-related analysis
-
 
     if isinstance(data, pd.DataFrame):
         rsa = hrv_rsa(data, sampling_rate=sampling_rate, continuous=False)

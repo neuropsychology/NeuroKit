@@ -5,8 +5,7 @@ import pandas as pd
 import scipy.signal
 
 from ..epochs import epochs_create, epochs_to_df
-from ..signal import (signal_findpeaks, signal_formatpeaks, signal_resample,
-                      signal_smooth, signal_zerocrossings)
+from ..signal import signal_findpeaks, signal_formatpeaks, signal_resample, signal_smooth, signal_zerocrossings
 from ..stats import standardize
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
@@ -150,10 +149,10 @@ def ecg_delineate(
 # =============================================================================
 def _dwt_resample_points(peaks, sampling_rate, desired_sampling_rate):
     """Resample given points to a different sampling rate."""
-    if isinstance(peaks, np.ndarray):    # peaks are passed in from previous processing steps
+    if isinstance(peaks, np.ndarray):  # peaks are passed in from previous processing steps
         # Prevent overflow by converting to np.int64 (peaks might be passed in containing np.int32).
         peaks = peaks.astype(dtype=np.int64)
-    elif isinstance(peaks, list):    # peaks returned from internal functions
+    elif isinstance(peaks, list):  # peaks returned from internal functions
         # Cannot be converted to int since list might contain np.nan. Automatically cast to np.float64 if list contains np.nan.
         peaks = np.array(peaks)
     peaks_resample = peaks * desired_sampling_rate / sampling_rate
@@ -262,7 +261,7 @@ def _dwt_delineate_tp_peaks(
         for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
             correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0  # pylint: disable=R1716
             if correct_sign:
-                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt+1])[0] + idx_peak
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak : idx_peak_nxt + 1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
                 score = ecg_local[idx_zero] - (float(idx_zero) / sampling_rate - (rt_duration - 0.5 * qrs_width))
@@ -303,7 +302,7 @@ def _dwt_delineate_tp_peaks(
         for idx_peak, idx_peak_nxt in zip(peaks[:-1], peaks[1:]):
             correct_sign = dwt_local[idx_peak] > 0 and dwt_local[idx_peak_nxt] < 0  # pylint: disable=R1716
             if correct_sign:
-                idx_zero = signal_zerocrossings(dwt_local[idx_peak:idx_peak_nxt+1])[0] + idx_peak
+                idx_zero = signal_zerocrossings(dwt_local[idx_peak : idx_peak_nxt + 1])[0] + idx_peak
                 # This is the score assigned to each peak. The peak with the highest score will be
                 # selected.
                 score = ecg_local[idx_zero] - abs(
@@ -378,7 +377,6 @@ def _dwt_delineate_tp_onsets_offsets(
         candidate_offsets = np.where(-dwt_local[offset_slope_peaks[0] :] < epsilon_offset)[0] + offset_slope_peaks[0]
         offsets.append(candidate_offsets[0] + srch_idx_start)
 
-
         # # only for debugging
         # events_plot([candidate_offsets, offset_slope_peaks], dwt_local)
         # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
@@ -451,7 +449,13 @@ def _dwt_compute_multiscales(ecg: np.ndarray, max_degree):
         zeros = np.zeros(2 ** power - 1)
         timedelay = 2 ** power
         banks = np.r_[
-            1.0 / 8, zeros, 3.0 / 8, zeros, 3.0 / 8, zeros, 1.0 / 8,
+            1.0 / 8,
+            zeros,
+            3.0 / 8,
+            zeros,
+            3.0 / 8,
+            zeros,
+            1.0 / 8,
         ]
         signal_f = scipy.signal.convolve(signal_i, banks, mode="full")
         signal_f[:-timedelay] = signal_f[timedelay:]  # timeshift: 2 steps
@@ -669,7 +673,7 @@ def _find_tppeaks(ecg, keep_tp, sampling_rate=1000):
         #    near = (index_next - index_cur) < max_wv_peak_dist #limit 2
         #    if near and correct_sign:
         if correct_sign:
-            index_zero_cr = signal_zerocrossings(cwtmatr[4, :][index_cur:index_next+1])[0] + index_cur
+            index_zero_cr = signal_zerocrossings(cwtmatr[4, :][index_cur : index_next + 1])[0] + index_cur
             nb_idx = int(max_search_duration * sampling_rate)
             index_max = np.argmax(ecg[index_zero_cr - nb_idx : index_zero_cr + nb_idx]) + (index_zero_cr - nb_idx)
             tppeaks.append(index_max)
@@ -832,40 +836,40 @@ def _ecg_delineate_plot(ecg_signal, rpeaks=None, signals=None, signal_features_t
 
     """#    Examples.
 
-#    --------
-#    >>> import neurokit2 as nk
-#    >>> import numpy as np
-#    >>> import pandas as pd
-#    >>> import matplotlib.pyplot as plt
-#
-#    >>> ecg_signal = np.array(pd.read_csv(
-#    "https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/ecg_1000hz.csv"))[:, 1]
-#
-#    >>> # Extract R-peaks locations
-#    >>> _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)
-#
-#    >>> # Delineate the ECG signal with ecg_delineate()
-#    >>> signals, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=1000)
-#
-#    >>> # Plot the ECG signal with markings on ECG peaks
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-#                            signal_features_type='peaks', sampling_rate=1000)
-#
-#    >>> # Plot the ECG signal with markings on boundaries of R peaks
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-#                            signal_features_type='bound_R', sampling_rate=1000)
-#
-#    >>> # Plot the ECG signal with markings on boundaries of P peaks
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-#                            signal_features_type='bound_P', sampling_rate=1000)
-#
-#    >>> # Plot the ECG signal with markings on boundaries of T peaks
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-#                            signal_features_type='bound_T', sampling_rate=1000)
-#
-#    >>> # Plot the ECG signal with markings on all peaks and boundaries
-#    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-#                            signal_features_type='all', sampling_rate=1000)
+    #    --------
+    #    >>> import neurokit2 as nk
+    #    >>> import numpy as np
+    #    >>> import pandas as pd
+    #    >>> import matplotlib.pyplot as plt
+    #
+    #    >>> ecg_signal = np.array(pd.read_csv(
+    #    "https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/ecg_1000hz.csv"))[:, 1]
+    #
+    #    >>> # Extract R-peaks locations
+    #    >>> _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)
+    #
+    #    >>> # Delineate the ECG signal with ecg_delineate()
+    #    >>> signals, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=1000)
+    #
+    #    >>> # Plot the ECG signal with markings on ECG peaks
+    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+    #                            signal_features_type='peaks', sampling_rate=1000)
+    #
+    #    >>> # Plot the ECG signal with markings on boundaries of R peaks
+    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+    #                            signal_features_type='bound_R', sampling_rate=1000)
+    #
+    #    >>> # Plot the ECG signal with markings on boundaries of P peaks
+    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+    #                            signal_features_type='bound_P', sampling_rate=1000)
+    #
+    #    >>> # Plot the ECG signal with markings on boundaries of T peaks
+    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+    #                            signal_features_type='bound_T', sampling_rate=1000)
+    #
+    #    >>> # Plot the ECG signal with markings on all peaks and boundaries
+    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+    #                            signal_features_type='all', sampling_rate=1000)
 
     """
 

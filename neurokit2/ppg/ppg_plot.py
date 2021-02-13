@@ -43,8 +43,7 @@ def ppg_plot(ppg_signals, sampling_rate=None):
     # Sanity-check input.
     if not isinstance(ppg_signals, pd.DataFrame):
         raise ValueError(
-            "NeuroKit error: The `ppg_signals` argument must"
-            " be the DataFrame returned by `ppg_process()`."
+            "NeuroKit error: The `ppg_signals` argument must" " be the DataFrame returned by `ppg_process()`."
         )
 
     # X-axis

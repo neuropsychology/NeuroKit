@@ -17,7 +17,7 @@ def signal_psd(
     min_frequency=0,
     max_frequency=np.inf,
     window=None,
-    window_type='hann',
+    window_type="hann",
     order=16,
     order_criteria="KIC",
     order_corrected=True,
@@ -87,12 +87,12 @@ def signal_psd(
     # MNE
     if method.lower() in ["multitapers", "mne"]:
         frequency, power = _signal_psd_multitaper(
-                signal,
-                sampling_rate=sampling_rate,
-                min_frequency=min_frequency,
-                max_frequency=max_frequency,
-                normalize=normalize
-                )
+            signal,
+            sampling_rate=sampling_rate,
+            min_frequency=min_frequency,
+            max_frequency=max_frequency,
+            normalize=normalize,
+        )
 
     else:
         # Define window length
@@ -110,42 +110,42 @@ def signal_psd(
                 "The duration of recording is too short to support a"
                 " sufficiently long window for high frequency resolution."
                 " Consider using a longer recording or increasing the `min_frequency`",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
             nperseg = int(len(signal) / 2)
 
         # Welch (Scipy)
         if method.lower() in ["welch"]:
             frequency, power = _signal_psd_welch(
-                    signal,
-                    sampling_rate=sampling_rate,
-                    nperseg=nperseg,
-                    window_type=window_type,
-                    normalize=normalize,
-                    **kwargs
+                signal,
+                sampling_rate=sampling_rate,
+                nperseg=nperseg,
+                window_type=window_type,
+                normalize=normalize,
+                **kwargs
             )
 
         # Lombscargle (Scipy)
         elif method.lower() in ["lombscargle", "lomb"]:
             frequency, power = _signal_psd_lomb(
-                    signal,
-                    sampling_rate=sampling_rate,
-                    min_frequency=min_frequency,
-                    max_frequency=max_frequency,
-                    normalize=normalize
+                signal,
+                sampling_rate=sampling_rate,
+                min_frequency=min_frequency,
+                max_frequency=max_frequency,
+                normalize=normalize,
             )
 
         # BURG
         elif method.lower() in ["burg", "pburg", "spectrum"]:
             frequency, power = _signal_psd_burg(
-                    signal,
-                    sampling_rate=sampling_rate,
-                    order=order,
-                    criteria=order_criteria,
-                    corrected=order_corrected,
-                    side="one-sided",
-                    normalize=normalize,
-                    nperseg=nperseg
+                signal,
+                sampling_rate=sampling_rate,
+                order=order,
+                criteria=order_criteria,
+                corrected=order_corrected,
+                side="one-sided",
+                normalize=normalize,
+                nperseg=nperseg,
             )
 
     # Store results
@@ -153,7 +153,7 @@ def signal_psd(
 
     # Filter
     data = data.loc[np.logical_and(data["Frequency"] >= min_frequency, data["Frequency"] <= max_frequency)]
-#    data["Power"] = 10 * np.log(data["Power"])
+    #    data["Power"] = 10 * np.log(data["Power"])
 
     if show is True:
         ax = data.plot(x="Frequency", y="Power", title="Power Spectral Density (" + str(method) + " method)")
@@ -166,9 +166,8 @@ def signal_psd(
 # Multitaper method
 # =============================================================================
 
-def _signal_psd_multitaper(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalize=True
-):
+
+def _signal_psd_multitaper(signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalize=True):
     try:
         import mne
 
@@ -197,11 +196,9 @@ def _signal_psd_multitaper(
 # =============================================================================
 
 
-def _signal_psd_welch(
-    signal, sampling_rate=1000, nperseg=None, window_type='hann', normalize=True, **kwargs
-):
+def _signal_psd_welch(signal, sampling_rate=1000, nperseg=None, window_type="hann", normalize=True, **kwargs):
     if nperseg is not None:
-        nfft = int(nperseg*2)
+        nfft = int(nperseg * 2)
     else:
         nfft = None
 
@@ -227,16 +224,17 @@ def _signal_psd_welch(
 # =============================================================================
 
 
-def _signal_psd_lomb(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalize=True
-):
+def _signal_psd_lomb(signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalize=True):
 
     try:
         import astropy.timeseries
+
         if max_frequency == np.inf:
             max_frequency = sampling_rate / 2  # sanitize highest frequency
         t = np.arange(len(signal)) / sampling_rate
-        frequency, power = astropy.timeseries.LombScargle(t, signal, normalization='psd').autopower(minimum_frequency=min_frequency, maximum_frequency=max_frequency)
+        frequency, power = astropy.timeseries.LombScargle(t, signal, normalization="psd").autopower(
+            minimum_frequency=min_frequency, maximum_frequency=max_frequency
+        )
 
     except ImportError:
         raise ImportError(
@@ -291,9 +289,7 @@ def _signal_psd_burg(
     return frequency, power
 
 
-
 def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True):
-
 
     # Sanitize order and signal
     if order <= 0.0:
@@ -433,8 +429,7 @@ def _criteria(criteria=None, N=None, k=None, rho=None, corrected=True):
     return residual
 
 
-def _signal_psd_from_arma(ar=None, ma=None, rho=1., sampling_rate=1000, nfft=None, side="one-sided"):
-
+def _signal_psd_from_arma(ar=None, ma=None, rho=1.0, sampling_rate=1000, nfft=None, side="one-sided"):
 
     if ar is None and ma is None:
         raise ValueError("Either AR or MA model must be provided")

@@ -120,7 +120,7 @@ def ppg_simulate(
 
     x_all = np.concatenate((x_onset, x_sys, x_notch, x_dia))
     x_all.sort(kind="mergesort")
-    x_all = np.ceil(x_all * sampling_rate).astype(int)    # convert seconds to samples
+    x_all = np.ceil(x_all * sampling_rate).astype(int)  # convert seconds to samples
 
     y_all = np.zeros(n_period * 4)
     y_all[0::4] = y_onset
@@ -224,10 +224,10 @@ def _frequency_modulation(periods, seconds, modulation_frequency, modulation_str
     # For example, at a heart rate of 100 and modulation_strenght=1, the heart rate will
     # fluctuate between 150 and 50. At the default modulatiom_strenght=.2, it will
     # fluctuate between 110 and 90.
-    modulator = .5 * modulation_strength * np.sin(2 * np.pi * modulation_frequency * seconds) + modulation_mean
+    modulator = 0.5 * modulation_strength * np.sin(2 * np.pi * modulation_frequency * seconds) + modulation_mean
     periods_modulated = periods * modulator
     seconds_modulated = np.cumsum(periods_modulated)
-    seconds_modulated -= seconds_modulated[0]    # make sure seconds start at zero
+    seconds_modulated -= seconds_modulated[0]  # make sure seconds start at zero
 
     return periods_modulated, seconds_modulated
 
@@ -237,7 +237,7 @@ def _random_x_offset(x, offset_weight):
     the wave onset preceding xi. offset_weight must be between 0 and 1.
     """
     if offset_weight >= 1:
-        offset_weight = .99
+        offset_weight = 0.99
     if offset_weight < 0:
         offset_weight = 0
 
