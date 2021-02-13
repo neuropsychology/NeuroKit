@@ -30,7 +30,8 @@ def summary_plot(x, errbar=False, **kwargs):
         fig, ax = plt.subplots()
 
     # Histogram
-    counts, bins = np.histogram(x,range=(np.nanmin(x), np.nanmax(x)), **kwargs)
+    x = x[~np.isnan(x)]
+    counts, bins = np.histogram(x, **kwargs)
     bin_centers = 0.5 * (bins[1:] + bins[:-1])
     menStd = np.sqrt(counts)
     if errbar:
