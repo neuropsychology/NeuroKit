@@ -10,7 +10,7 @@ from .hrv_time import hrv_time
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv(peaks, sampling_rate=1000, show=False):
+def hrv(peaks, sampling_rate=1000, show=False, errorbar=False):
     """Computes indices of Heart Rate Variability (HRV).
 
     Computes HRV indices in the time-, frequency-, and nonlinear domain. Note that a minimum duration
@@ -28,6 +28,9 @@ def hrv(peaks, sampling_rate=1000, show=False):
         least twice as high as the highest frequency in vhf. By default 1000.
     show : bool, optional
         If True, returns the plots that are generates for each of the domains.
+
+    errorbar : bool, optional
+        If true, returns on the histogram plot an error bar for each bin.
 
     Returns
     -------
@@ -81,12 +84,12 @@ def hrv(peaks, sampling_rate=1000, show=False):
         # Indices for plotting
         out_plot = out.copy(deep=False)
 
-        _hrv_plot(peaks, out_plot, sampling_rate)
+        _hrv_plot(peaks, out_plot, sampling_rate, errorbar)
 
     return out
 
 
-def _hrv_plot(peaks, out, sampling_rate=1000):
+def _hrv_plot(peaks, out, sampling_rate=1000, err=False):
 
     fig = plt.figure(constrained_layout=False)
     spec = gs.GridSpec(ncols=2, nrows=2, height_ratios=[1, 1], width_ratios=[1, 1])
@@ -107,7 +110,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000):
     # Distribution of RR intervals
     peaks = _hrv_sanitize_input(peaks)
     rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
-    ax_distrib = summary_plot(rri, ax=ax_distrib)
+    ax_distrib = summary_plot(rri, errorbar=err, ax=ax_distrib)
 
     # Poincare plot
     out.columns = [col.replace("HRV_", "") for col in out.columns]

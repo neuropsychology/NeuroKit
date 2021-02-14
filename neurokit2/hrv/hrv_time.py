@@ -8,7 +8,7 @@ from ..stats import mad, summary_plot
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv_time(peaks, sampling_rate=1000, show=False):
+def hrv_time(peaks, sampling_rate=1000, show=False, errorbar=False):
     """Computes time-domain indices of Heart Rate Variability (HRV).
 
      See references for details.
@@ -23,6 +23,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
         least twice as high as the highest frequency in vhf. By default 1000.
     show : bool
         If True, will plot the distribution of R-R intervals.
+    errorbar : bool, optional
+        If true, returns on the histogram plot an error bar for each bin.
 
     Returns
     -------
@@ -119,15 +121,15 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
 
     if show:
-        _hrv_time_show(rri)
+        _hrv_time_show(rri, errorbar)
 
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
 
-def _hrv_time_show(rri, **kwargs):
+def _hrv_time_show(rri, errorbar, **kwargs):
 
-    fig = summary_plot(rri, **kwargs)
+    fig = summary_plot(rri, errorbar, **kwargs)
     plt.xlabel("R-R intervals (ms)")
     fig.suptitle("Distribution of R-R intervals")
 
