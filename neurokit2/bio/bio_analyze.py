@@ -215,9 +215,18 @@ def _bio_analyze_rsa_event(data, rsa={}):
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     elif isinstance(data, pd.DataFrame):
-        rsa["RSA_P2T"] = np.nanmean(data.groupby("Label")["RSA_P2T"])
-        rsa["RSA_Gates"] = np.nanmean(data.groupby("Label")["RSA_Gates"])
-        # TODO Needs further fixing
+
+        # Convert back to dict
+        for label, df in data.groupby('Label'):
+            rsa[label] = {}
+            epoch = df.set_index('Time')
+            rsa[label] = _bio_analyze_rsa_epoch(epoch, rsa[label])
+        
+        rsa = pd.DataFrame.from_dict(rsa, orient="index")
+        # Fix index sorting to combine later with features dataframe
+        rsa.index = rsa.index.astype(int)
+        rsa = rsa.sort_index().rename_axis(None)
+        rsa.index = rsa.index.astype(str)
 
     return rsa
 
