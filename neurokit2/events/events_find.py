@@ -158,7 +158,7 @@ def _events_find_label(events, event_labels=None, event_conditions=None, functio
             "NeuroKit error: "
             + function_name
             + "(): oops, it seems like you provided "
-            + str(n)
+            + str(len(event_labels))
             + " `event_labels`, but "
             + str(n)
             + " events got detected :(. Check your event names or the event signal!"
@@ -173,7 +173,7 @@ def _events_find_label(events, event_labels=None, event_conditions=None, functio
                 "NeuroKit error: "
                 + function_name
                 + "(): oops, it seems like you provided "
-                + str(n)
+                + str(len(event_conditions))
                 + " `event_conditions`, but "
                 + str(n)
                 + " events got detected :(. Check your event conditions or the event signal!"
