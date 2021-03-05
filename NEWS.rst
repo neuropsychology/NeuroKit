@@ -15,3 +15,8 @@ New Features
 
 * Use duration from `events_find()` as `epochs_end` in `epochs_create()`
 
+Fix Bugs
++++++++++++++
+
+* Fix type of value in `signal_formatpeaks()` to ensure slice assignment is done on the same type
+
