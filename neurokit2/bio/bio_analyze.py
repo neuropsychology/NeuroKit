@@ -221,7 +221,6 @@ def _bio_analyze_rsa_event(data, rsa={}):
             rsa[label] = {}
             epoch = df.set_index('Time')
             rsa[label] = _bio_analyze_rsa_epoch(epoch, rsa[label])
-        
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
         # Fix index sorting to combine later with features dataframe
         rsa.index = rsa.index.astype(int)
