@@ -160,19 +160,13 @@ def _eda_eventrelated_scr(epoch, output={}):
         return output
 
     # Peak amplitude and Time of peak
-    if any(epoch["SCR_Amplitude"][epoch.index > 0] != 0):
-        first_activation = np.where(epoch["SCR_Amplitude"][epoch.index > 0] != 0)[0][0]
-        peak_amplitude = epoch["SCR_Amplitude"][epoch.index > 0].iloc[first_activation]
-        output["SCR_Peak_Amplitude"] = peak_amplitude
-        output["SCR_Peak_Amplitude_Time"] = epoch["SCR_Amplitude"][epoch.index > 0].index[first_activation]
-        # Rise Time
-        rise_time = epoch["SCR_RiseTime"][epoch.index > 0].iloc[first_activation]
-        output["SCR_RiseTime"] = rise_time
-    else:
-        output["SCR_Peak_Amplitude"] = np.nan
-        output["SCR_Peak_Amplitude_Time"] = np.nan
-        output["SCR_RiseTime"] = np.nan
-
+    first_activation = np.where(epoch["SCR_Amplitude"][epoch.index > 0] != 0)[0][0]
+    peak_amplitude = epoch["SCR_Amplitude"][epoch.index > 0].iloc[first_activation]
+    output["SCR_Peak_Amplitude"] = peak_amplitude
+    output["SCR_Peak_Amplitude_Time"] = epoch["SCR_Amplitude"][epoch.index > 0].index[first_activation]
+    # Rise Time
+    rise_time = epoch["SCR_RiseTime"][epoch.index > 0].iloc[first_activation]
+    output["SCR_RiseTime"] = rise_time
 
     # Recovery Time
     if any(epoch["SCR_RecoveryTime"][epoch.index > 0] != 0):
