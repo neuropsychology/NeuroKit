@@ -13,5 +13,5 @@ News
 New Features
 +++++++++++++
 
-*Use duration from `events_find()` as `epochs_end` in `epochs_create()`
+* Use duration from `events_find()` as `epochs_end` in `epochs_create()`
 
