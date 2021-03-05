@@ -11,7 +11,7 @@ def epochs_create(
     events=None,
     sampling_rate=1000,
     epochs_start=0,
-    epochs_end=1,
+    epochs_end="from_events",
     event_labels=None,
     event_conditions=None,
     baseline_correction=False,
@@ -31,11 +31,17 @@ def epochs_create(
         will chunk the signal into successive blocks of the set duration.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
-    epochs_start : int
+    epochs_start : int, list
         Epochs start relative to events_onsets (in seconds). The start can be negative to
         start epochs before a given event (to have a baseline for instance).
-    epochs_end : int
+        An integer can be specified to have the same start for all epochs.
+        A list of equal length to the events can be specified to have a different start for each epoch.
+    epochs_end : int, list
         Epochs end relative to events_onsets (in seconds).
+        An integer can be specified to have the same end for all epochs.
+        A list of equal length to the events can be specified to have a different end for each epoch.
+        If "from_events", events must be a dict (from ``events_find()`).
+        Duration from events will be used as epochs_end.
     event_labels : list
         A list containing unique event identifiers. If `None`, will use the event index number.
     event_conditions : list
@@ -106,6 +112,8 @@ def epochs_create(
         event_conditions = list(events["condition"])
 
     # Create epochs
+    if epochs_end == "from_events":
+        epochs_end = list(events["duration"])
     parameters = listify(
         onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end
     )

@@ -6,3 +6,12 @@ News
 -------------------
 
 * First release on PyPI.
+
+0.1.1
+-------------------
+
+New Features
++++++++++++++
+
+*Use duration from `events_find()` as `epochs_end` in `epochs_create()`
+
