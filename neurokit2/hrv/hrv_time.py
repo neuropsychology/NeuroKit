@@ -8,7 +8,7 @@ from ..stats import mad, summary_plot
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv_time(peaks, sampling_rate=1000, show=False):
+def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes time-domain indices of Heart Rate Variability (HRV).
 
      See references for details.
@@ -119,7 +119,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False):
     out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
 
     if show:
-        _hrv_time_show(rri)
+        _hrv_time_show(rri, **kwargs)
 
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
