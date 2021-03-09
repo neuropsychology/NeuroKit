@@ -4,7 +4,7 @@ from ..stats import standardize
 
 def find_outliers(data, exclude=5, tail="two-tail"):
     """
-    Identify outliers (abnormal values) using the standard deviation.
+    Identify outliers (abnormal values).
 
     Parameters
     ----------
