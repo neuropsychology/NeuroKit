@@ -5,6 +5,7 @@ import pandas as pd
 
 from .mad import mad
 from ..misc import NeuroKitWarning
+from ..misc.check_type import is_string
 
 def standardize(data, robust=False, window=None, **kwargs):
     """Standardization of data.
@@ -71,8 +72,9 @@ def standardize(data, robust=False, window=None, **kwargs):
             out = list(_standardize(np.array(data), robust=robust, window=window, **kwargs))
 
     elif isinstance(data, pd.DataFrame):
-        _data = data.loc[:, ~is_string(data)]
-        to_append = data.loc[:, is_string(data)]
+        # only standardize columns that are not string and are not nan
+        _data = data.loc[:, ~is_string(data) & ~np.array(data.isnull().all())]
+        to_append = data.loc[:, is_string(data) | np.array(data.isnull().all())]
         out = pd.DataFrame(_standardize(_data, robust=robust, window=window, **kwargs))
         out = pd.concat([to_append, out], axis=1)
 
@@ -132,15 +134,3 @@ def _standardize(data, robust=False, window=None, **kwargs):
             z = z.values
 
     return z
-
-
-def is_string(x):
-    if isinstance(x, list):
-        out = [isinstance(member, str) for member in x]
-    if isinstance(x, pd.DataFrame):
-        out = [member == 'object' for member in list(x.dtypes)]
-    if isinstance(x, pd.Series):
-        out = [x.dtype == "object"]
-    if isinstance(x, np.ndarray):
-       out = [x.dtype == "U1"]
-    return np.array(out)
