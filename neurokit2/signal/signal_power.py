@@ -44,8 +44,8 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     >>> import numpy as np
     >>>
     >>> # Instant power
-    >>> signal = nk.signal_simulate(frequency=5) + 0.5*nk.signal_simulate(frequency=20)
-    >>> power_plot = nk.signal_power(signal, frequency_band=[(18, 22), (10, 14)], method="welch", show=True)
+    >>> signal = nk.signal_simulate(duration=60, frequency=10) + 3*nk.signal_simulate(duration=60, frequency=20)
+    >>> power_plot = nk.signal_power(signal, frequency_band=[(8, 12), (18, 22)], method="welch", show=True)
     >>> power_plot #doctest: +SKIP
     >>>
     >>> # Continuous (simulated signal)

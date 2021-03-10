@@ -7,8 +7,8 @@ import neurokit2.misc as misc
 
 
 def test_hrv_time():
-    ecg_slow = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=70, random_state=42)
-    ecg_fast = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
+    ecg_slow = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=60, random_state=42)
+    ecg_fast = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=150, random_state=42)
 
     _, peaks_slow = nk.ecg_process(ecg_slow, sampling_rate=1000)
     _, peaks_fast = nk.ecg_process(ecg_fast, sampling_rate=1000)
@@ -27,7 +27,7 @@ def test_hrv_time():
     assert np.all(hrv_fast["HRV_pNN50"] == hrv_slow["HRV_pNN50"])
     assert np.all(hrv_fast["HRV_pNN20"] < hrv_slow["HRV_pNN20"])
     assert np.all(hrv_fast["HRV_TINN"] < hrv_slow["HRV_TINN"])
-    assert np.all(hrv_fast["HRV_HTI"] > hrv_slow["HRV_HTI"])
+    assert np.all(hrv_fast["HRV_HTI"] != hrv_slow["HRV_HTI"])
 
 
 def test_hrv_frequency():

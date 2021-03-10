@@ -10,13 +10,13 @@ def signal_formatpeaks(info, desired_length, peak_indices=None):
 
     signals = {}
     for feature, values in info.items():
-        if any(x in str(feature) for x in ["Peak", "Onset", "Offset", "Trough", "Recovery"]):
+        if feature != "SCR_RecoveryTime" and any(x in str(feature) for x in ["Peak", "Onset", "Offset", "Trough", "Recovery"]):
             signals[feature] = _signal_from_indices(values, desired_length, 1)
+            signals[feature] = signals[feature].astype('int64')  # indexing of feature using 1 and 0
         else:
             signals[feature] = _signal_from_indices(peak_indices, desired_length, values)
     signals = pd.DataFrame(signals)
     return signals
-
 
 # =============================================================================
 # Internals
@@ -29,7 +29,7 @@ def _signal_from_indices(indices, desired_length=None, value=1):
     Used in *_findpeaks to transform vectors of peak indices to signal.
 
     """
-    signal = np.zeros(desired_length, dtype=int)
+    signal = np.zeros(desired_length, dtype=float)
 
     if isinstance(indices, list) and (not indices):    # skip empty lists
         return signal

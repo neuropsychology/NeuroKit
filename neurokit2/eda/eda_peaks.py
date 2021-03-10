@@ -109,13 +109,13 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
 
     # Sanity checks -----------------------------------------------------------
 
-    # Peaks (remove peaks with no onset)
+    # Peaks (remove peaks before first onset)
     valid_peaks = np.logical_and(
         info["SCR_Peaks"] > np.nanmin(info["SCR_Onsets"]), ~np.isnan(info["SCR_Onsets"])
     )  # pylint: disable=E1111
     peaks = info["SCR_Peaks"][valid_peaks]
 
-    # Onsets (remove onsets with no peaks)
+    # Onsets (remove onsets with after last peak)
     valid_onsets = ~np.isnan(info["SCR_Onsets"])
     valid_onsets[valid_onsets] = info["SCR_Onsets"][valid_onsets] < np.nanmax(info["SCR_Peaks"])
     onsets = info["SCR_Onsets"][valid_onsets].astype(int)
@@ -132,7 +132,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
     amplitude = np.full(len(info["SCR_Height"]), np.nan)
     amplitude[valid_peaks] = info["SCR_Height"][valid_peaks] - eda_phasic[onsets]
 
-    # Rise times
+    # Rise times (in seconds)
     risetime = np.full(len(info["SCR_Peaks"]), np.nan)
     risetime[valid_peaks] = (peaks - onsets) / sampling_rate
 
