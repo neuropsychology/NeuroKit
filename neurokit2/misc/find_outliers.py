@@ -2,7 +2,7 @@ import numpy as np
 import scipy
 from ..stats import standardize
 
-def find_outliers(data, exclude=5, tail="two-tail"):
+def find_outliers(data, exclude=0.05, side="both"):
     """
     Identify outliers (abnormal values).
 
@@ -11,10 +11,10 @@ def find_outliers(data, exclude=5, tail="two-tail"):
     data : list or ndarray
         Data array
     exclude : int, float
-        Percentage of extreme observation to be excluded.
-    tail: str
-        Can be "two-tail", "left-tail" or "right-tail. If exclude=5 and tail="two-tail", 2.5% of extreme
-        observation of each tail will be marked as outliers.
+        Proportion of extreme observation to be excluded.
+    side: str
+        Can be "both", "left" or "right". If exclude=0.05 and side="both", 2.5% of extreme
+        observation of each side will be marked as outliers.
 
     Returns
     ----------
@@ -28,12 +28,13 @@ def find_outliers(data, exclude=5, tail="two-tail"):
     """
 
     z = np.array(standardize(data))
-    if tail == "two-tail":
-        exclude = exclude / 2
-        outliers = abs(z) > scipy.stats.norm.ppf(1 - exclude / 100)
-    if tail == "left-tail":
-        outliers = z < -scipy.stats.norm.ppf(1 - exclude / 100)
-    if tail == "right-tail":
-        outliers = z > scipy.stats.norm.ppf(1 - exclude / 100)
+    if side == "both":
+        outliers = abs(z) > scipy.stats.norm.ppf(1 - (exclude / 2))
+    elif side == "left":
+        outliers = z < -scipy.stats.norm.ppf(1 - exclude)
+    elif side == "right":
+        outliers = z > scipy.stats.norm.ppf(1 - exclude)
+    else:
+        raise ValueError("side must be "both", "left" or "right"."
     outliers = np.array(outliers)
     return outliers
