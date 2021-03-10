@@ -35,6 +35,7 @@ def find_outliers(data, exclude=0.05, side="both"):
     elif side == "right":
         outliers = z > scipy.stats.norm.ppf(1 - exclude)
     else:
-        raise ValueError("side must be "both", "left" or "right"."
+        raise ValueError("side must be 'both', 'left' or 'right'.")
+
     outliers = np.array(outliers)
     return outliers
