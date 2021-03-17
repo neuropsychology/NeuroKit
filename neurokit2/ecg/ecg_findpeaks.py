@@ -1006,29 +1006,28 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
 
 def _ecg_findpeaks_MWA(signal, window_size):
-    """From https://github.com/berndporr/py-ecg-detectors/"""
+    """Based on https://github.com/berndporr/py-ecg-detectors/
 
-    mwa = np.zeros(len(signal))
+    Optimized for vectorized computation.
+    """
+
     sums = np.cumsum(signal)
 
-    def get_mean(begin, end):
-        if begin == 0:
-            return sums[end - 1] / end
+    # Compute moving average for the first `window_size` elements.
+    # The denominator grows until it reaches `window_size`.
+    mwa_head = sums[:window_size] / np.arange(1, window_size + 1)
 
-        dif = sums[end - 1] - sums[begin - 1]
-        return dif / (end - begin)
+    # Compute moving average for all the remaining elements based on the
+    # difference of the cumulative sum across `window_size` elements.
+    mwa_tail = (sums[window_size:] - sums[:-window_size]) / window_size
 
-    for i in range(len(signal)):  # pylint: disable=C0200
-        if i < window_size:
-            section = signal[0:i]
-        else:
-            section = get_mean(i - window_size, i)
-
-        if i != 0:
-            mwa[i] = np.mean(section)
-        else:
-            mwa[i] = signal[i]
-
+    # TODO: Is the following construct intentional? This produces exactly
+    # equal output as the code before the above optimization, but the shift
+    # by one seems like a potential bug in the earlier code. See the test
+    # case in tests/tests_ecg_findpeaks_MWA.py for example output.
+    mwa = np.concatenate([signal[0:1], mwa_head, mwa_tail[:-1]])
+    # Here's a possibly more correct version:
+    # mwas = np.concatenate([mwa_head, mwa_tail])
     return mwa
 
 
