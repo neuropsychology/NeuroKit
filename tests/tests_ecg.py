@@ -225,7 +225,7 @@ def test_ecg_delineate():
     number_rpeaks = len(rpeaks["ECG_R_Peaks"])
 
     # Method 1: derivative
-    _, waves_derivative = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate)
+    _, waves_derivative = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate, method="peaks")
     assert len(waves_derivative["ECG_P_Peaks"]) == number_rpeaks
     assert len(waves_derivative["ECG_Q_Peaks"]) == number_rpeaks
     assert len(waves_derivative["ECG_S_Peaks"]) == number_rpeaks
