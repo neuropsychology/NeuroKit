@@ -13,7 +13,7 @@ from .ecg_segment import ecg_segment
 
 
 def ecg_delineate(
-    ecg_cleaned, rpeaks=None, sampling_rate=1000, method="peak", show=False, show_type="peaks", check=False
+    ecg_cleaned, rpeaks=None, sampling_rate=1000, method="dwt", show=False, show_type="peaks", check=False
 ):
     """Delineate QRS complex.
 
@@ -720,6 +720,9 @@ def _ecg_delineator_peak(ecg, rpeaks=None, sampling_rate=1000):
         # Onsets/Offsets ------
         P_onsets.append(_ecg_delineator_peak_P_onset(rpeak, heartbeat, R, P))
         T_offsets.append(_ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T))
+        # Manual fix for T_offsets
+        if T_offsets[-1] >= len(ecg):
+            T_offsets[-1] = np.nan
 
     # Return info dictionary
     return {
@@ -808,7 +811,7 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
     if T is None:
         return np.nan
 
-    segment = heartbeat.iloc[R + T :]  # Select left of P wave
+    segment = heartbeat.iloc[R + T :]  # Select right of T wave
     try:
         signal = signal_smooth(segment["Signal"].values, size=R / 10)
     except TypeError:
