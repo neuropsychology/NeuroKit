@@ -1021,14 +1021,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
     # difference of the cumulative sum across `window_size` elements.
     mwa_tail = (sums[window_size:] - sums[:-window_size]) / window_size
 
-    # TODO: Is the following construct intentional? This produces exactly
-    # equal output as the code before the above optimization, but the shift
-    # by one seems like a potential bug in the earlier code. See the test
-    # case in tests/tests_ecg_findpeaks_MWA.py for example output.
-    mwa = np.concatenate([signal[0:1], mwa_head, mwa_tail[:-1]])
-    # Here's a possibly more correct version:
-    # mwas = np.concatenate([mwa_head, mwa_tail])
-    return mwa
+    return np.concatenate([mwa_head, mwa_tail])
 
 
 def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
