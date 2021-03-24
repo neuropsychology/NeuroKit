@@ -119,7 +119,6 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     # ECG
     if len(ecg_cols) != 0:
         ecg_data = data.copy()
-        
         if window_lengths != 'constant':
             if 'ECG' in window_lengths.keys():  # only for epochs
                 ecg_data = _bio_analyze_slicewindow(ecg_data, window_lengths, signal='ECG')
@@ -127,12 +126,10 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
         ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, ecg_analyzed], axis=1, sort=False)
 
-        
-
     # RSP
     if len(rsp_cols) != 0:
-        rsp_data = data.copy()        
-    
+        rsp_data = data.copy()
+
         if window_lengths != 'constant':
             if 'RSP' in window_lengths.keys():  # only for epochs
                 rsp_data = _bio_analyze_slicewindow(rsp_data, window_lengths, signal='RSP')
@@ -143,7 +140,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     # EDA
     if len(eda_cols) != 0:
         eda_data = data.copy()
-        
+
         if window_lengths != 'constant':
             if 'EDA' in window_lengths.keys():  # only for epochs
                 eda_data = _bio_analyze_slicewindow(eda_data, window_lengths, signal='EDA')
@@ -154,11 +151,11 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     # EMG
     if len(emg_cols) != 0:
         emg_data = data.copy()
-        
+
         if window_lengths != 'constant':
             if 'EMG' in window_lengths.keys():  # only for epochs
                 emg_data = _bio_analyze_slicewindow(emg_data, window_lengths, signal='EMG')
-                
+
         emg_analyzed = emg_analyze(emg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, emg_analyzed], axis=1, sort=False)
 
@@ -169,7 +166,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
         if window_lengths != 'constant':
             if 'EOG' in window_lengths.keys():  # only for epochs
                 eog_data = _bio_analyze_slicewindow(eog_data, window_lengths, signal='EOG')
-        
+
         eog_analyzed = eog_analyze(eog_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, eog_analyzed], axis=1, sort=False)
 
