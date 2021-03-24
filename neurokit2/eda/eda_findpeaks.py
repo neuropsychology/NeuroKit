@@ -286,7 +286,6 @@ def _eda_findpeaks_kim2004(eda_phasic, sampling_rate=1000, amplitude_min=0.1):
             ZC += [zeros[i + 1]]
             pks += [zeros[i] + np.argmax(df[zeros[i] : zeros[i + 1]])]
 
-    scrs = np.array(scrs, dtype=object)
     amps = np.array(amps)
     ZC = np.array(ZC)
     pks = np.array(pks)
