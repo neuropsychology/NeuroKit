@@ -26,9 +26,9 @@ def rsp_intervalrelated(data, sampling_rate=1000):
         - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude.
         - *"RSP_RRV"*: the different respiratory rate variability metrices. See `rsp_rrv()`
         docstrings for details.
-        - *"RSP_Inspiration"*: the average inspiratory duration.
-        - *"RSP_Expiration"*: the average expiratory duration.
-        - *"RSP_IE_Ratio"*: the inspiratory-to-expiratory time ratio (I/E).
+        - *"RSP_Phase_Duration_Inspiration"*: the average inspiratory duration.
+        - *"RSP_Phase_Duration_Expiration"*: the average expiratory duration.
+        - *"RSP_Phase_Duration_Ratio "*: the inspiratory-to-expiratory time ratio (I/E).
 
     See Also
     --------
@@ -162,10 +162,10 @@ def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
             
     exp_times = np.array(exp_end - exp_start) / sampling_rate
 
-    output["RSP_Inspiration"] = np.mean(insp_times)
-    output["RSP_Expiration"] = np.mean(exp_times)
-    output["RSP_IE_Ratio"] = np.mean(insp_times) / np.mean(exp_times)
-
+    output["RSP_Phase_Duration_Inspiration"] = np.mean(insp_times)
+    output["RSP_Phase_Duration_Expiration"] = np.mean(exp_times)
+    output["RSP_Phase_Duration_Ratio"] = output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
+    
     return output
 
 
