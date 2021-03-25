@@ -26,6 +26,9 @@ def rsp_intervalrelated(data, sampling_rate=1000):
         - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude.
         - *"RSP_RRV"*: the different respiratory rate variability metrices. See `rsp_rrv()`
         docstrings for details.
+        - *"RSP_Inspiration"*: the average inspiratory duration.
+        - *"RSP_Expiration"*: the average expiratory duration.
+        - *"RSP_IE_Ratio"*: the inspiratory-to-expiratory time ratio (I/E).
 
     See Also
     --------
@@ -42,7 +45,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     >>> df, info = nk.rsp_process(data["RSP"], sampling_rate=100)
 
     >>> # Single dataframe is passed
-    >>> nk.rsp_intervalrelated(df) #doctest: +SKIP
+    >>> nk.rsp_intervalrelated(df, sampling_rate=100) #doctest: +SKIP
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
     >>> nk.rsp_intervalrelated(epochs) #doctest: +SKIP
@@ -54,7 +57,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     if isinstance(data, pd.DataFrame):
         rate_cols = [col for col in data.columns if "RSP_Rate" in col]
         if len(rate_cols) == 1:
-            intervals.update(_rsp_intervalrelated_formatinput(data))
+            intervals.update(_rsp_intervalrelated_formatinput(data, sampling_rate))
             intervals.update(_rsp_intervalrelated_rrv(data, sampling_rate))
         else:
             raise ValueError(
@@ -83,8 +86,8 @@ def rsp_intervalrelated(data, sampling_rate=1000):
             # Format dataframe
             data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
 
-            # Rate and Amplitude
-            intervals[index] = _rsp_intervalrelated_formatinput(data[index], intervals[index])
+            # Rate, Amplitude and Phase
+            intervals[index] = _rsp_intervalrelated_formatinput(data[index], sampling_rate, intervals[index])
 
             # RRV
             intervals[index] = _rsp_intervalrelated_rrv(data[index], sampling_rate, intervals[index])
@@ -99,7 +102,7 @@ def rsp_intervalrelated(data, sampling_rate=1000):
 # =============================================================================
 
 
-def _rsp_intervalrelated_formatinput(data, output={}):
+def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
     # Sanitize input
     colnames = data.columns.values
     if len([i for i in colnames if "RSP_Rate" in i]) == 0:
@@ -122,6 +125,46 @@ def _rsp_intervalrelated_formatinput(data, output={}):
 
     output["RSP_Rate_Mean"] = np.mean(rate)
     output["RSP_Amplitude_Mean"] = np.mean(amplitude)
+
+    if len([i for i in colnames if "RSP_Phase" in i]) == 0:
+        raise ValueError(
+            "NeuroKit error: rsp_intervalrelated(): Wrong"
+            "input we couldn't extract respiratory phases."
+            "Please make sure your DataFrame"
+            "contains `RSP_Phase` and `RSP_Phase_Completion` columns."
+        )
+
+    # Extract inspiration durations
+    insp_phases = data[data["RSP_Phase"] == 1]
+    insp_start = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 0]
+    insp_end = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 1]
+    
+    # Check for unequal lengths and remove last n values (usually end of recording)
+    diff = abs(len(insp_start) - len(insp_end))
+    if len(insp_start) > len(insp_end):
+        insp_start = insp_start[:len(insp_start)-diff]
+    elif len(insp_end) > len(insp_start):
+        insp_end = insp_end[:len(insp_end)-diff]
+
+    insp_times = np.array(insp_end - insp_start) / sampling_rate
+
+    # Extract expiration durations    
+    exp_phases = data[data["RSP_Phase"] == 0]
+    exp_start = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 0]
+    exp_end = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 1]
+    
+    # Check for unequal lengths and remove last n values (usually end of recording)
+    diff = abs(len(exp_start) - len(exp_end))
+    if len(exp_start) > len(exp_end):
+        exp_start = exp_start[:len(exp_start)-diff]
+    elif len(exp_end) > len(exp_start):
+        exp_end = exp_end[:len(exp_end)-diff]
+            
+    exp_times = np.array(exp_end - exp_start) / sampling_rate
+
+    output["RSP_Inspiration"] = np.mean(insp_times)
+    output["RSP_Expiration"] = np.mean(exp_times)
+    output["RSP_IE_Ratio"] = np.mean(insp_times) / np.mean(exp_times)
 
     return output
 
