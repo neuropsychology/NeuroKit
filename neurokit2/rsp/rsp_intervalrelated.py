@@ -138,7 +138,7 @@ def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
     insp_phases = data[data["RSP_Phase"] == 1]
     insp_start = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 0]
     insp_end = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 1]
-    
+
     # Check for unequal lengths and remove last n values (usually end of recording)
     diff = abs(len(insp_start) - len(insp_end))
     if len(insp_start) > len(insp_end):
@@ -148,24 +148,24 @@ def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
 
     insp_times = np.array(insp_end - insp_start) / sampling_rate
 
-    # Extract expiration durations    
+    # Extract expiration durations
     exp_phases = data[data["RSP_Phase"] == 0]
     exp_start = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 0]
     exp_end = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 1]
-    
+
     # Check for unequal lengths and remove last n values (usually end of recording)
     diff = abs(len(exp_start) - len(exp_end))
     if len(exp_start) > len(exp_end):
         exp_start = exp_start[:len(exp_start)-diff]
     elif len(exp_end) > len(exp_start):
         exp_end = exp_end[:len(exp_end)-diff]
-            
+
     exp_times = np.array(exp_end - exp_start) / sampling_rate
 
     output["RSP_Phase_Duration_Inspiration"] = np.mean(insp_times)
     output["RSP_Phase_Duration_Expiration"] = np.mean(exp_times)
     output["RSP_Phase_Duration_Ratio"] = output["RSP_Phase_Duration_Inspiration"] / output["RSP_Phase_Duration_Expiration"]
-    
+
     return output
 
 
