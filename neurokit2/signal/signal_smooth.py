@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import scipy.ndimage
 import scipy.signal
 
 from ..stats import fit_loess
@@ -75,6 +76,7 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
         raise TypeError("NeuroKit error: signal_smooth(): 'kernel' should be a string.")
 
     # Check length.
+    size = int(size)
     if size > length or size < 1:
         raise TypeError("NeuroKit error: signal_smooth(): 'size' should be between 1 and length of the signal.")
 
@@ -86,10 +88,15 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
 
     # Convolution
     else:
-        if kernel == "boxzen":
+        if kernel == "boxcar":
+            # This is faster than using np.convolve (like is done in _signal_smoothing)
+            # because of optimizations made possible by the uniform boxcar kernel shape.
+            smoothed = scipy.ndimage.uniform_filter1d(signal, size, mode='nearest')
+
+        elif kernel == "boxzen":
             # hybrid method
             # 1st pass - boxcar kernel
-            x = _signal_smoothing(signal, kernel="boxcar", size=size)
+            x = scipy.ndimage.uniform_filter1d(signal, size, mode='nearest')
 
             # 2nd pass - parzen kernel
             smoothed = _signal_smoothing(x, kernel="parzen", size=size)
@@ -112,14 +119,13 @@ def _signal_smoothing_median(signal, size=5):
     if size % 2 == 0:
         size += 1
 
-    smoothed = scipy.signal.medfilt(signal, kernel_size=int(size))
+    smoothed = scipy.signal.medfilt(signal, kernel_size=size)
     return smoothed
 
 
-def _signal_smoothing(signal, kernel="boxcar", size=5):
+def _signal_smoothing(signal, kernel, size=5):
 
     # Get window.
-    size = int(size)
     window = scipy.signal.get_window(kernel, size)
     w = window / window.sum()
 

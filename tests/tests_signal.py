@@ -40,6 +40,13 @@ def test_signal_smooth():
     assert np.allclose(np.std(smooth2), 0.1771, atol=0.0001)
 
 
+def test_signal_smooth_boxcar():
+    signal = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], dtype=float)
+    np.testing.assert_array_almost_equal(
+        nk.signal_smooth(signal, kernel="boxcar", size=3),
+        [(1+1+2)/3, 2, 3, 4, 5, 6, 7, 8, 9, (9+10+10)/3])
+
+
 def test_signal_binarize():
 
     signal = np.cos(np.linspace(start=0, stop=20, num=1000))

@@ -1011,17 +1011,27 @@ def _ecg_findpeaks_MWA(signal, window_size):
     Optimized for vectorized computation.
     """
 
-    sums = np.cumsum(signal)
+    window_size = int(window_size)
 
-    # Compute moving average for the first `window_size` elements.
-    # The denominator grows until it reaches `window_size`.
-    mwa_head = sums[:window_size] / np.arange(1, window_size + 1)
+    # Scipy's uniform_filter1d is a fast and accurate way of computing
+    # moving averages. By default it computes the averages of `window_size`
+    # elements centered around each element in the input array, including
+    # `(window_size - 1) // 2` elements after the current element (when
+    # `window_size` is even, the extra element is taken from before). To
+    # return causal moving averages, i.e. each output element is the average
+    # of window_size input elements ending at that position, we use the
+    # `origin` argument to shift the filter computation accordingly.
+    mwa = scipy.ndimage.uniform_filter1d(
+        signal, window_size, origin=(window_size - 1) // 2)
 
-    # Compute moving average for all the remaining elements based on the
-    # difference of the cumulative sum across `window_size` elements.
-    mwa_tail = (sums[window_size:] - sums[:-window_size]) / window_size
+    # Compute actual moving averages for the first `window_size - 1` elements,
+    # which the uniform_filter1d function computes using padding. We want
+    # those output elements to be averages of only the input elements until
+    # that position.
+    head_size = min(window_size - 1, len(signal))
+    mwa[:head_size] = np.cumsum(signal[:head_size]) / np.linspace(1, head_size, head_size)
 
-    return np.concatenate([mwa_head, mwa_tail])
+    return mwa
 
 
 def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
