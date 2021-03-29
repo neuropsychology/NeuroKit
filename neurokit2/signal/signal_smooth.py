@@ -91,12 +91,12 @@ def signal_smooth(signal, method="convolution", kernel="boxzen", size=10, alpha=
         if kernel == "boxcar":
             # This is faster than using np.convolve (like is done in _signal_smoothing)
             # because of optimizations made possible by the uniform boxcar kernel shape.
-            smoothed = scipy.ndimage.uniform_filter1d(signal, size, mode='nearest')
+            smoothed = scipy.ndimage.uniform_filter1d(signal, size, mode="nearest")
 
         elif kernel == "boxzen":
             # hybrid method
             # 1st pass - boxcar kernel
-            x = scipy.ndimage.uniform_filter1d(signal, size, mode='nearest')
+            x = scipy.ndimage.uniform_filter1d(signal, size, mode="nearest")
 
             # 2nd pass - parzen kernel
             smoothed = _signal_smoothing(x, kernel="parzen", size=size)

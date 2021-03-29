@@ -5,8 +5,7 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
-                      signal_smooth, signal_zerocrossings)
+from ..signal import signal_findpeaks, signal_plot, signal_sanitize, signal_smooth, signal_zerocrossings
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
@@ -325,8 +324,7 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
 # Nabian et al. (2018)
 # ===========================================================================
 def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000):
-    """R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins
-    algorithm.
+    """R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.
 
     - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018).
     An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
@@ -338,11 +336,11 @@ def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000):
 
     peaks = np.zeros(len(signal))
 
-    for i in range(1+window_size, len(signal)-window_size):
-        ecg_window = signal[i-window_size:i+window_size]
+    for i in range(1 + window_size, len(signal) - window_size):
+        ecg_window = signal[i - window_size : i + window_size]
         rpeak = np.argmax(ecg_window)
 
-        if i == (i-window_size-1+rpeak):
+        if i == (i - window_size - 1 + rpeak):
             peaks[i] = 1
 
     rpeaks = np.where(peaks == 1)[0]
@@ -350,6 +348,7 @@ def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000):
     # min_distance = 200
 
     return rpeaks
+
 
 # =============================================================================
 # Hamilton (2002)
@@ -784,11 +783,11 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
     # Try loading pywt
     try:
         import pywt
-    except ImportError:
+    except ImportError as import_error:
         raise ImportError(
             "NeuroKit error: ecg_findpeaks(): the 'PyWavelets' module is required for"
             " this method to run. Please install it first (`pip install PyWavelets`)."
-        )
+        ) from import_error
 
     swt_level = 3
     padding = -1
@@ -872,11 +871,11 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
     # Try loading pywt
     try:
         import pywt
-    except ImportError:
+    except ImportError as import_error:
         raise ImportError(
             "NeuroKit error: ecg_delineator(): the 'PyWavelets' module is required for"
             " this method to run. Please install it first (`pip install PyWavelets`)."
-        )
+        ) from import_error
     # first derivative of the Gaissian signal
     scales = np.array([1, 2, 4, 8, 16])
     cwtmatr, __ = pywt.cwt(signal, scales, "gaus1", sampling_period=1.0 / sampling_rate)
@@ -923,7 +922,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
         correct_sign = signal_1[index_cur] < 0 and signal_1[index_next] > 0  # pylint: disable=R1716
         near = (index_next - index_cur) < max_R_peak_dist  # limit 2
         if near and correct_sign:
-            rpeaks.append(signal_zerocrossings(signal_1[index_cur:index_next+1])[0] + index_cur)
+            rpeaks.append(signal_zerocrossings(signal_1[index_cur : index_next + 1])[0] + index_cur)
 
     rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
@@ -1009,6 +1008,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
     """Based on https://github.com/berndporr/py-ecg-detectors/
 
     Optimized for vectorized computation.
+
     """
 
     window_size = int(window_size)
@@ -1021,8 +1021,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
     # return causal moving averages, i.e. each output element is the average
     # of window_size input elements ending at that position, we use the
     # `origin` argument to shift the filter computation accordingly.
-    mwa = scipy.ndimage.uniform_filter1d(
-        signal, window_size, origin=(window_size - 1) // 2)
+    mwa = scipy.ndimage.uniform_filter1d(signal, window_size, origin=(window_size - 1) // 2)
 
     # Compute actual moving averages for the first `window_size - 1` elements,
     # which the uniform_filter1d function computes using padding. We want
