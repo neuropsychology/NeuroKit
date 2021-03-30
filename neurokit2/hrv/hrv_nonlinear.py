@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import entropy_approximate, entropy_sample
+from ..complexity import entropy_approximate, entropy_sample, entropy_multiscale
 from ..misc import find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
@@ -112,6 +112,12 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
             - **SampEn**: The sample entropy measure of HRV, calculated by `entropy_sample()`.
 
+            - **MSE**: The multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
+
+            - **CMSE**: The composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
+
+            - **RCMSE**: The refined composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
+
 
     See Also
     --------
@@ -186,6 +192,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     # Entropy
     out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
     out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
+    out["MSE"] = entropy_multiscale(rri, dimension=2, r="default", composite=False, refined=False)
+    out["CMSE"] = entropy_multiscale(rri, dimension=2, r="default", composite=True, refined=False)
+    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r="default", composite=True, refined=True)
 
     if show:
         _hrv_nonlinear_show(rri, out)
