@@ -696,6 +696,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
     thi = False
     thf_list = []
     thf = False
+    newM5 = False
 
     for i in range(len(low_pass)):  # pylint: disable=C0200
 
@@ -713,7 +714,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
             if newM5 > 1.5 * MM[-1]:
                 newM5 = 1.1 * MM[-1]
 
-        elif QRS and i == QRS[-1] + ms200:
+        elif newM5 and QRS and i == QRS[-1] + ms200:
             MM.append(newM5)
             if len(MM) > 5:
                 MM.pop(0)
@@ -765,6 +766,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
             thi = False
             thf = False
 
+    r_peaks.pop(0)  # removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold
     r_peaks = np.array(r_peaks, dtype="int")
     return r_peaks
 
