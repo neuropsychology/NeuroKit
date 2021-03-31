@@ -192,9 +192,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     # Entropy
     out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
     out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
-    out["MSE"] = entropy_multiscale(rri, dimension=2, r="default", composite=False, refined=False)
-    out["CMSE"] = entropy_multiscale(rri, dimension=2, r="default", composite=True, refined=False)
-    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r="default", composite=True, refined=True)
+    out["MSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=False, refined=False)
+    out["CMSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=True, refined=False)
+    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=True, refined=True)
 
     if show:
         _hrv_nonlinear_show(rri, out)
