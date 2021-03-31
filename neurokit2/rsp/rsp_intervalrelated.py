@@ -139,12 +139,17 @@ def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
     insp_start = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 0]
     insp_end = insp_phases.index[insp_phases["RSP_Phase_Completion"] == 1]
 
-    # Check for unequal lengths and remove last n values (usually end of recording)
+    # Check that start of phase is before end of phase
+    if insp_start[0] > insp_end[0]:
+        insp_end = insp_end[1:]
+
+    # Check for unequal lengths 
     diff = abs(len(insp_start) - len(insp_end))
     if len(insp_start) > len(insp_end):
-        insp_start = insp_start[:len(insp_start)-diff]
+        insp_start = insp_start[:len(insp_start)-diff] # remove extra start points
     elif len(insp_end) > len(insp_start):
-        insp_end = insp_end[:len(insp_end)-diff]
+        insp_end = insp_end[:len(insp_end)-diff] # remove extra end points
+
 
     insp_times = np.array(insp_end - insp_start) / sampling_rate
 
@@ -153,12 +158,16 @@ def _rsp_intervalrelated_formatinput(data, sampling_rate, output={}):
     exp_start = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 0]
     exp_end = exp_phases.index[exp_phases["RSP_Phase_Completion"] == 1]
 
-    # Check for unequal lengths and remove last n values (usually end of recording)
+    # Check that start of phase is before end of phase
+    if exp_start[0] > exp_end[0]:
+        exp_end = exp_end[1:]
+
+    # Check for unequal lengths 
     diff = abs(len(exp_start) - len(exp_end))
     if len(exp_start) > len(exp_end):
-        exp_start = exp_start[:len(exp_start)-diff]
+        exp_start = exp_start[:len(exp_start)-diff] # remove extra start points
     elif len(exp_end) > len(exp_start):
-        exp_end = exp_end[:len(exp_end)-diff]
+        exp_end = exp_end[:len(exp_end)-diff] # remove extra end points
 
     exp_times = np.array(exp_end - exp_start) / sampling_rate
 
