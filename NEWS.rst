@@ -20,6 +20,7 @@ New Features
 * (experimental) Add error bars in the summary plot method to illustrate standard error of each bin
 * Additional features for `nk.rsp_intervalrelated()`: average inspiratory and expiratory durations, inspiratory-to-expiratory (I/E) time ratio
 * Add multiscale entropy measures (MSE, CMSE, RCMSE) into `nk.hrv_nonlinear()` 
+* Allow for data resampling in `nk.read_bitalino()`
 
 Fix Bugs
 +++++++++++++
