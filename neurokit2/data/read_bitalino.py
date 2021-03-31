@@ -74,7 +74,7 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
             signal = pd.Series(signal)
             signals = pd.concat([signals, signal], axis=1)
         data = signals.copy()
-    
+
     data.columns = metadata["sensor"]
-        
+
     return data, sampling_rate
