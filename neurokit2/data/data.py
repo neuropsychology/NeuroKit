@@ -2,6 +2,7 @@
 import os
 import pandas as pd
 import sklearn.datasets
+import json
 
 
 def data(dataset="bio_eventrelated_100hz"):
@@ -38,11 +39,25 @@ def data(dataset="bio_eventrelated_100hz"):
 
     path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
 
-    # Specific case
+
+    # Specific case for txt file
     if dataset.lower() in ["eeg", "eeg.txt"]:
         df = pd.read_csv(path + "eeg.txt")
         return df.values[:, 0]
 
+    # Specific case for json file
+    if dataset.lower() in ["resting_state_1000hz", "resting_state_1000hz.json"]: 
+        data = pd.read_json("resting_state_1000hz.json", orient='index')
+        df = []
+        for participant, row in data.iterrows():
+            for _, data_string in row.items():
+                data_list = json.loads(data_string)
+                data_pd = pd.DataFrame(data_list)
+                df.append(data_pd)
+        df = pd.concat(df)
+        
+        return df
+        
     # General case
     file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable
     if ext == "":
