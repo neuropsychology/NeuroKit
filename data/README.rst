@@ -107,7 +107,7 @@ Resting state *(5 min)*
 
 
 
-Resting state *(8 min)*
+Resting state *(8 min)* - Single subject
 ---------------------------
 
 +----------------+-----------+----------------------------+
@@ -127,4 +127,18 @@ Resting state *(8 min)*
   - `eda_analyze() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda_analyze>`_
   - `eda_intervalrelated() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.eda_intervalrelated>`_
 
+
+Resting state *(8 min)* - Two subjects
+---------------------------
+
++-------------------+-----------+----------------------------------------------------+
+| Type              | Frequency | Signals                                            |
++===================+===========+====================================================+
+| Multiple-subjects | 1000 Hz   | ECG, RSP, Photosensor (with Participant ID labels) |
+| resting state     |           |                                                    |
++-------------------+-----------+----------------------------------------------------+
+
+.. code-block:: python
+
+	data = nk.data(dataset="bio_resting_8min_1000hz")
 
