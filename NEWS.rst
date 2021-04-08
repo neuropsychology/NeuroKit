@@ -21,7 +21,7 @@ New Features
 * Additional features for `nk.rsp_intervalrelated()`: average inspiratory and expiratory durations, inspiratory-to-expiratory (I/E) time ratio
 * Add multiscale entropy measures (MSE, CMSE, RCMSE) into `nk.hrv_nonlinear()` 
 * Allow for data resampling in `nk.read_bitalino()`
-* Add `resting_state_4000hz.json` into database for reading with `nk.data()`
+* Add `bio_resting_8min_200hz` into database for reading with `nk.data()`
 
 Fix Bugs
 +++++++++++++
