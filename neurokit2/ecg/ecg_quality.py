@@ -89,8 +89,16 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 
 
 #=============================================================================
-#Zhao (2018)
+'''Zhao & Zhang (2018)'''
+
+'''Carreiras C, Alves AP, Lourenço A, Canento F, Silva H, Fred A, et al. BioSPPy
+ - Biosignal Processing in Python, 2015-, https://github.com/PIA-Group/BioSPPy/ [Online; accessed <year>-<month>-<day>].'''
+
+# First define the SQIs (Signal Quality Indexes)
+# Implemented by Tiago Tostas
 #=============================================================================
+
+## pSQI is the evaluation index of QRS wave quality. 
 def pSQI(signal, f_thr=0.01):
     """ Return the flatline percentage of the signal
     Parameters
@@ -115,8 +123,10 @@ def pSQI(signal, f_thr=0.01):
 
     return (len(flatline) / length) * 100
 
+
+## fSQI returns the ration between two frequency power bands.
 def fSQI(ecg_signal, fs=1000.0, nseg=1024, num_spectrum=[5, 20], dem_spectrum=None, mode='simple'):
-    """ Returns the ration between two frequency power bands.
+    """
     Parameters
     ----------
     ecg_signal : array
@@ -158,6 +168,7 @@ def fSQI(ecg_signal, fs=1000.0, nseg=1024, num_spectrum=[5, 20], dem_spectrum=No
     elif (mode == 'bas'):
         return 1 - num_power / dem_power
     
+## Kurtosis kSQI is a measure of Gaussianity.
 def kSQI(signal, fisher=True):
     """ Return the kurtosis of the signal
     Parameters
@@ -177,8 +188,9 @@ def kSQI(signal, fisher=True):
 
     return scipy.stats.kurtosis(signal, fisher=fisher)
 
+## The percentage of beats detected by wqrs that were also detected by eplimited.
 def bSQI(detector_1, detector_2, fs=1000., mode='simple', search_window=150):
-    """ Comparison of the output of two detectors.
+    """
     Parameters
     ----------
     detector_1 : array
@@ -256,14 +268,14 @@ def _ecg_quality_zhao2018(signal, detector_1, detector_2, sampling_rate=1000, se
     bassqi = fSQI(signal, fs=sampling_rate, nseg=nseg, num_spectrum=[0, 1], dem_spectrum=[0, 40], mode='bas')
 
     if mode == 'simple':
-        ## First stage rules (0 = unqualified, 1 = suspicious, 2 = optimal)
-        ## qSQI rules
-        # if qsqi > 0.90:
-        #     qsqi_class = 2
-        # elif qsqi < 0.60:
-        #     qsqi_class = 0
-        # else:
-        #     qsqi_class = 1
+        # First stage rules (0 = unqualified, 1 = suspicious, 2 = optimal)
+        # qSQI rules
+        if qsqi > 0.90:
+            qsqi_class = 2
+        elif qsqi < 0.60:
+            qsqi_class = 0
+        else:
+            qsqi_class = 1
 
         ## pSQI rules
         ## Get the maximum bpm
@@ -308,104 +320,3 @@ def _ecg_quality_zhao2018(signal, detector_1, detector_2, sampling_rate=1000, se
             return 'Excellent'
         else:
             return 'Barely acceptable'
-
-    # elif mode == 'fuzzy':
-    #     # Transform qSQI range from [0, 1] to [0, 100]
-    #     qsqi = qsqi * 100.0
-    #     # UqH (Excellent)
-    #     if qsqi <= 80:
-    #         UqH = 0
-    #     elif qsqi >= 90:
-    #         UqH = qsqi / 100.0
-    #     else:
-    #         UqH = 1.0 / (1 + (1 / np.power(0.3 * (qsqi - 80), 2)))
-
-    #     # UqI (Barely acceptable)
-    #     UqI = 1.0 / (1 + np.power((qsqi - 75) / 7.5, 2))
-
-    #     # UqJ (unacceptable)
-    #     if qsqi <= 55:
-    #         UqJ = 1
-    #     else:
-    #         UqJ = 1.0 / (1 + np.power((qsqi - 55) / 5.0, 2))
-
-    #     # Get R1
-    #     R1 = np.array([UqH, UqI, UqJ])
-
-    #     # pSQI
-    #     # UpH
-    #     if psqi <= 0.25:
-    #         UpH = 0
-    #     elif psqi >= 0.35:
-    #         UpH = 1
-    #     else:
-    #         UpH = 0.1 * (psqi - 0.25)
-
-    #     # UpI
-    #     if psqi < 0.18:
-    #         UpI = 0
-    #     elif psqi >= 0.32:
-    #         UpI = 0
-    #     elif psqi >= 0.18 and psqi < 0.22:
-    #         UpI = 25 * (psqi - 0.18)
-    #     elif psqi >= 0.22 and psqi < 0.28:
-    #         UpI = 1
-    #     else:
-    #         UpI = 25 * (0.32 - psqi)
-
-    #     # UpJ
-    #     if psqi < 0.15:
-    #         UpJ = 1
-    #     elif psqi > 0.25:
-    #         UpJ = 0
-    #     else:
-    #         UpJ = 0.1 * (0.25 - psqi)
-
-    #     # Get R2
-    #     R2 = np.array([UpH, UpI, UpJ])
-
-    #     # kSQI
-    #     # Get R3
-    #     if ksqi > 5:
-    #         R3 = np.array([1, 0, 0])
-    #     else:
-    #         R3 = np.array([0, 0, 1])
-
-    #     # basSQI
-    #     # UbH
-    #     if bassqi <= 90:
-    #         UbH = 0
-    #     elif bassqi >= 95:
-    #         UbH = bassqi / 100.0
-    #     else:
-    #         UbH = 1.0 / (1 + (1 / np.power(0.8718 * (bassqi - 90), 2)))
-
-    #     # UbI
-    #     if bassqi <= 85:
-    #         UbI = 1
-    #     else:
-    #         UbI = 1.0 / (1 + np.power((bassqi - 85) / 5.0, 2))
-
-    #     # UbJ
-    #     UbJ = 1.0 / (1 + np.power((bassqi - 95) / 2.5, 2))
-
-    #     # R4
-    #     R4 = np.array([UbH, UbI, UbJ])
-
-    #     # evaluation matrix R
-    #     R = np.vstack([R1, R2, R3, R4])
-
-    #     # weight vector W
-    #     W = np.array([0.4, 0.4, 0.1, 0.1])
-
-    #     S = np.array([np.sum((R[:, 0] * W)), np.sum((R[:, 1] * W)), np.sum((R[:, 2] * W))])
-
-    #     # classify
-    #     V = np.sum(np.power(S, 2) * [1, 2, 3]) / np.sum(np.power(S, 2))
-
-    #     if (V < 1.5):
-    #         return 'Excellent'
-    #     elif (V >= 2.40):
-    #         return 'Unnacceptable'
-    #     else:
-    #         return 'Barely acceptable'
