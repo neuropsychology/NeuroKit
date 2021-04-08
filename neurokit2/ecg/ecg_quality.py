@@ -6,7 +6,7 @@ from ..signal import signal_interpolate
 from ..stats import distance, rescale
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
-from scipy import stats, integrate, signal
+import scipy
 
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS"):
     """Quality of ECG Signal.
@@ -139,13 +139,13 @@ def fSQI(ecg_signal, fs=1000.0, nseg=1024, num_spectrum=[5, 20], dem_spectrum=No
 
     def power_in_range(f_range, f, Pxx_den):
         _indexes = np.where((f >= f_range[0]) & (f <= f_range[1]))[0]
-        _power = integrate.trapz(Pxx_den[_indexes], f[_indexes])
+        _power = scipy.integrate.trapz(Pxx_den[_indexes], f[_indexes])
         return _power
 
     if (ecg_signal is None):
         raise TypeError("Please specify an input signal")
 
-    f, Pxx_den = signal.welch(ecg_signal, fs, nperseg=nseg)
+    f, Pxx_den = scipy.signal.welch(ecg_signal, fs, nperseg=nseg)
     num_power = power_in_range(num_spectrum, f, Pxx_den)
 
     if (dem_spectrum is None):
@@ -175,7 +175,7 @@ def kSQI(signal, fisher=True):
     if signal is None:
         raise TypeError("Please specify an input signal")
 
-    return stats.kurtosis(signal, fisher=fisher)
+    return scipy.stats.kurtosis(signal, fisher=fisher)
 
 def bSQI(detector_1, detector_2, fs=1000., mode='simple', search_window=150):
     """ Comparison of the output of two detectors.
@@ -309,103 +309,103 @@ def _ecg_quality_zhao2018(signal, detector_1, detector_2, sampling_rate=1000, se
         else:
             return 'Barely acceptable'
 
-    elif mode == 'fuzzy':
-        # Transform qSQI range from [0, 1] to [0, 100]
-        qsqi = qsqi * 100.0
-        # UqH (Excellent)
-        if qsqi <= 80:
-            UqH = 0
-        elif qsqi >= 90:
-            UqH = qsqi / 100.0
-        else:
-            UqH = 1.0 / (1 + (1 / np.power(0.3 * (qsqi - 80), 2)))
+    # elif mode == 'fuzzy':
+    #     # Transform qSQI range from [0, 1] to [0, 100]
+    #     qsqi = qsqi * 100.0
+    #     # UqH (Excellent)
+    #     if qsqi <= 80:
+    #         UqH = 0
+    #     elif qsqi >= 90:
+    #         UqH = qsqi / 100.0
+    #     else:
+    #         UqH = 1.0 / (1 + (1 / np.power(0.3 * (qsqi - 80), 2)))
 
-        # UqI (Barely acceptable)
-        UqI = 1.0 / (1 + np.power((qsqi - 75) / 7.5, 2))
+    #     # UqI (Barely acceptable)
+    #     UqI = 1.0 / (1 + np.power((qsqi - 75) / 7.5, 2))
 
-        # UqJ (unacceptable)
-        if qsqi <= 55:
-            UqJ = 1
-        else:
-            UqJ = 1.0 / (1 + np.power((qsqi - 55) / 5.0, 2))
+    #     # UqJ (unacceptable)
+    #     if qsqi <= 55:
+    #         UqJ = 1
+    #     else:
+    #         UqJ = 1.0 / (1 + np.power((qsqi - 55) / 5.0, 2))
 
-        # Get R1
-        R1 = np.array([UqH, UqI, UqJ])
+    #     # Get R1
+    #     R1 = np.array([UqH, UqI, UqJ])
 
-        # pSQI
-        # UpH
-        if psqi <= 0.25:
-            UpH = 0
-        elif psqi >= 0.35:
-            UpH = 1
-        else:
-            UpH = 0.1 * (psqi - 0.25)
+    #     # pSQI
+    #     # UpH
+    #     if psqi <= 0.25:
+    #         UpH = 0
+    #     elif psqi >= 0.35:
+    #         UpH = 1
+    #     else:
+    #         UpH = 0.1 * (psqi - 0.25)
 
-        # UpI
-        if psqi < 0.18:
-            UpI = 0
-        elif psqi >= 0.32:
-            UpI = 0
-        elif psqi >= 0.18 and psqi < 0.22:
-            UpI = 25 * (psqi - 0.18)
-        elif psqi >= 0.22 and psqi < 0.28:
-            UpI = 1
-        else:
-            UpI = 25 * (0.32 - psqi)
+    #     # UpI
+    #     if psqi < 0.18:
+    #         UpI = 0
+    #     elif psqi >= 0.32:
+    #         UpI = 0
+    #     elif psqi >= 0.18 and psqi < 0.22:
+    #         UpI = 25 * (psqi - 0.18)
+    #     elif psqi >= 0.22 and psqi < 0.28:
+    #         UpI = 1
+    #     else:
+    #         UpI = 25 * (0.32 - psqi)
 
-        # UpJ
-        if psqi < 0.15:
-            UpJ = 1
-        elif psqi > 0.25:
-            UpJ = 0
-        else:
-            UpJ = 0.1 * (0.25 - psqi)
+    #     # UpJ
+    #     if psqi < 0.15:
+    #         UpJ = 1
+    #     elif psqi > 0.25:
+    #         UpJ = 0
+    #     else:
+    #         UpJ = 0.1 * (0.25 - psqi)
 
-        # Get R2
-        R2 = np.array([UpH, UpI, UpJ])
+    #     # Get R2
+    #     R2 = np.array([UpH, UpI, UpJ])
 
-        # kSQI
-        # Get R3
-        if ksqi > 5:
-            R3 = np.array([1, 0, 0])
-        else:
-            R3 = np.array([0, 0, 1])
+    #     # kSQI
+    #     # Get R3
+    #     if ksqi > 5:
+    #         R3 = np.array([1, 0, 0])
+    #     else:
+    #         R3 = np.array([0, 0, 1])
 
-        # basSQI
-        # UbH
-        if bassqi <= 90:
-            UbH = 0
-        elif bassqi >= 95:
-            UbH = bassqi / 100.0
-        else:
-            UbH = 1.0 / (1 + (1 / np.power(0.8718 * (bassqi - 90), 2)))
+    #     # basSQI
+    #     # UbH
+    #     if bassqi <= 90:
+    #         UbH = 0
+    #     elif bassqi >= 95:
+    #         UbH = bassqi / 100.0
+    #     else:
+    #         UbH = 1.0 / (1 + (1 / np.power(0.8718 * (bassqi - 90), 2)))
 
-        # UbI
-        if bassqi <= 85:
-            UbI = 1
-        else:
-            UbI = 1.0 / (1 + np.power((bassqi - 85) / 5.0, 2))
+    #     # UbI
+    #     if bassqi <= 85:
+    #         UbI = 1
+    #     else:
+    #         UbI = 1.0 / (1 + np.power((bassqi - 85) / 5.0, 2))
 
-        # UbJ
-        UbJ = 1.0 / (1 + np.power((bassqi - 95) / 2.5, 2))
+    #     # UbJ
+    #     UbJ = 1.0 / (1 + np.power((bassqi - 95) / 2.5, 2))
 
-        # R4
-        R4 = np.array([UbH, UbI, UbJ])
+    #     # R4
+    #     R4 = np.array([UbH, UbI, UbJ])
 
-        # evaluation matrix R
-        R = np.vstack([R1, R2, R3, R4])
+    #     # evaluation matrix R
+    #     R = np.vstack([R1, R2, R3, R4])
 
-        # weight vector W
-        W = np.array([0.4, 0.4, 0.1, 0.1])
+    #     # weight vector W
+    #     W = np.array([0.4, 0.4, 0.1, 0.1])
 
-        S = np.array([np.sum((R[:, 0] * W)), np.sum((R[:, 1] * W)), np.sum((R[:, 2] * W))])
+    #     S = np.array([np.sum((R[:, 0] * W)), np.sum((R[:, 1] * W)), np.sum((R[:, 2] * W))])
 
-        # classify
-        V = np.sum(np.power(S, 2) * [1, 2, 3]) / np.sum(np.power(S, 2))
+    #     # classify
+    #     V = np.sum(np.power(S, 2) * [1, 2, 3]) / np.sum(np.power(S, 2))
 
-        if (V < 1.5):
-            return 'Excellent'
-        elif (V >= 2.40):
-            return 'Unnacceptable'
-        else:
-            return 'Barely acceptable'
+    #     if (V < 1.5):
+    #         return 'Excellent'
+    #     elif (V >= 2.40):
+    #         return 'Unnacceptable'
+    #     else:
+    #         return 'Barely acceptable'
