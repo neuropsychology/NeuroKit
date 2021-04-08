@@ -46,8 +46,8 @@ def data(dataset="bio_eventrelated_100hz"):
         return df.values[:, 0]
 
     # Specific case for json file
-    if dataset.lower() in ["bio_resting_8min_1000hz", "bio_resting_8min_1000hz.json"]: 
-        data = pd.read_json("bio_resting_8min_1000hz.json", orient='index')
+    if dataset.lower() in ["bio_resting_8min_200hz", "bio_resting_8min_200hz.json"]: 
+        data = pd.read_json("bio_resting_8min_200hz.json", orient='index')
         df = []
         for participant, row in data.iterrows():
             for _, data_string in row.items():
