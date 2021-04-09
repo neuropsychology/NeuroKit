@@ -53,11 +53,15 @@ def data(dataset="bio_eventrelated_100hz"):
         
     # Specific case for json file
     if dataset.endswith(".json"):
-        try:
-            df = json.loads(dataset)
-        except:
-            with urllib.request.urlopen(path + dataset) as url:
-                df = json.loads(url.read().decode())
+        data = pd.read_json(dataset, orient='index')
+        df = []
+        for participant, row in data.iterrows():
+            for _, data_string in row.items():
+                data_list = json.loads(data_string)
+                data_pd = pd.DataFrame(data_list)
+                df.append(data_pd)
+        df = pd.concat(df)
+        
         return df
 
     # CSV and text
