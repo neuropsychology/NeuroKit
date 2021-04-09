@@ -3,6 +3,7 @@ import os
 import pandas as pd
 import sklearn.datasets
 import json
+import urllib
 
 
 def data(dataset="bio_eventrelated_100hz"):
@@ -33,36 +34,38 @@ def data(dataset="bio_eventrelated_100hz"):
     # TODO: one could further improve this function with like
     # selectors 'ecg=True, eda=True, restingstate=True' that would
     # find the most appropriate dataset
+    
+    dataset = dataset.tolower()
+    path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
+    
+    # Specific requests
     if dataset == "iris":
         data = sklearn.datasets.load_iris()
         return pd.DataFrame(data.data, columns=data["feature_names"])
-
-    path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
-
-
-    # Specific case for txt file
-    if dataset.lower() in ["eeg", "eeg.txt"]:
+    
+    if dataset in ["eeg", "eeg.txt"]:
         df = pd.read_csv(path + "eeg.txt")
         return df.values[:, 0]
-
+    
+    # Add extension
+    if dataset in ["bio_resting_8min_200hz"]:
+        dataset += ".json"
+        
     # Specific case for json file
-    if dataset.lower() in ["bio_resting_8min_200hz", "bio_resting_8min_200hz.json"]: 
-        data = pd.read_json("bio_resting_8min_200hz.json", orient='index')
-        df = []
-        for participant, row in data.iterrows():
-            for _, data_string in row.items():
-                data_list = json.loads(data_string)
-                data_pd = pd.DataFrame(data_list)
-                df.append(data_pd)
-        df = pd.concat(df)
-        
+    if dataset.endswith(".json"):
+        try:
+            df = json.loads(dataset)
+        except:
+            with urllib.request.urlopen(path + dataset) as url:
+                df = json.loads(url.read().decode())
         return df
-        
-    # General case
-    file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable
-    if ext == "":
-        df = pd.read_csv(path + dataset + ".csv")
-    else:
-        df = pd.read_csv(path + dataset)
+
+    # CSV and text
+    if dataset.endswith(".txt") or dataset.endswith(".csv"):
+        try:
+            df = pd.read_csv(dataset)
+        except:
+            df = pd.read_csv(path + dataset)
+    
 
     return df
