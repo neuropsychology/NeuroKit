@@ -35,7 +35,7 @@ def data(dataset="bio_eventrelated_100hz"):
     # selectors 'ecg=True, eda=True, restingstate=True' that would
     # find the most appropriate dataset
     
-    dataset = dataset.tolower()
+    dataset = dataset.lower()
     path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
     
     # Specific requests
