@@ -36,7 +36,7 @@ def data(dataset="bio_eventrelated_100hz"):
     # find the most appropriate dataset
     
     dataset = dataset.lower()
-    path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
+    path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/"
     
     # Specific requests
     if dataset == "iris":
@@ -53,23 +53,23 @@ def data(dataset="bio_eventrelated_100hz"):
         
     # Specific case for json file
     if dataset.endswith(".json"):
-        data = pd.read_json(dataset, orient='index')
-        df = []
+        data = pd.read_json(path + dataset, orient='index')
+        df = {}
         for participant, row in data.iterrows():
             for _, data_string in row.items():
                 data_list = json.loads(data_string)
                 data_pd = pd.DataFrame(data_list)
-                df.append(data_pd)
-        df = pd.concat(df)
+                df[participant] = data_pd
         
         return df
 
-    # CSV and text
-    if dataset.endswith(".txt") or dataset.endswith(".csv"):
-        try:
-            df = pd.read_csv(dataset)
-        except:
-            df = pd.read_csv(path + dataset)
-    
-
+    # General case
+    file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable
+    if ext == "":
+        if dataset not in ['rsp_200hz']:
+            df = pd.read_csv(path + dataset + ".csv")
+        else:
+            df = pd.read_csv(path + dataset + ".txt")
+    else:
+        df = pd.read_csv(path + dataset)
     return df
