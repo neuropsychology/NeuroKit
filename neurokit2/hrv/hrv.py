@@ -91,11 +91,11 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     # Compute RSA if rsp data is available
     if isinstance(peaks, pd.DataFrame):
         rsp_cols = [col for col in peaks.columns if "RSP_Phase" in col]
-        if len(rsp_cols) != 0:
+        if len(rsp_cols) == 2:
             rsp_signals = peaks[rsp_cols]
             rsa = hrv_rsa(peaks, rsp_signals, sampling_rate=sampling_rate)
             out.append(pd.DataFrame([rsa]))
-
+        
     out = pd.concat(out, axis=1)
 
     # Plot
