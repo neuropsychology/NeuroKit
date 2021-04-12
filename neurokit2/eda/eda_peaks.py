@@ -90,13 +90,13 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     # Get basic
     info = eda_findpeaks(eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min)
     info = eda_fixpeaks(info)
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     # Get additional features (rise time, half recovery time, etc.)
     info = _eda_peaks_getfeatures(info, eda_phasic, sampling_rate, recovery_percentage=0.5)
 
     # Prepare output.
     peak_signal = signal_formatpeaks(info, desired_length=len(eda_phasic), peak_indices=info["SCR_Peaks"])
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     return peak_signal, info
 

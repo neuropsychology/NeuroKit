@@ -64,7 +64,8 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
     """
     info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min)
     info = rsp_fixpeaks(info)
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
     peak_signal = signal_formatpeaks(info, desired_length=len(rsp_cleaned), peak_indices=info["RSP_Peaks"])
+
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     return peak_signal, info

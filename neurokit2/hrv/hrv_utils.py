@@ -72,7 +72,10 @@ def _hrv_sanitize_dict_or_df(peaks):
     # Get columns
     if isinstance(peaks, dict):
         cols = np.array(list(peaks.keys()))
-        sampling_rate = peaks['sampling_rate']
+        if 'sampling_rate' in cols:
+            sampling_rate = peaks['sampling_rate']
+        else:
+            sampling_rate = None
     elif isinstance(peaks, pd.DataFrame):
         cols = peaks.columns.values
         sampling_rate = None
