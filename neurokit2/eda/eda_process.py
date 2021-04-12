@@ -49,7 +49,8 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
         - *"SCR_Recovery"*: the samples at which SCR peaks recover (decline) to half amplitude, marked
           as "1" in a list of zeros.
     info : dict
-        A dictionary containing the information of each SCR peak (see `eda_findpeaks()`).
+        A dictionary containing the information of each SCR peak (see `eda_findpeaks()`),
+        as well as the signals' sampling rate.
 
     See Also
     --------
@@ -83,6 +84,7 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
         method=method,
         amplitude_min=0.1,
     )
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     # Store
     signals = pd.DataFrame({"EDA_Raw": eda_signal, "EDA_Clean": eda_cleaned})

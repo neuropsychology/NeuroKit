@@ -73,7 +73,7 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
           percentage (from 0 to 1), representing the stage of the current cardiac phase.
     info : dict
         A dictionary containing the samples at which the R-peaks occur, accessible with the key
-        "ECG_Peaks".
+        "ECG_Peaks", as well as the signals' sampling rate.
 
     See Also
     --------
@@ -113,5 +113,8 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     signals = pd.concat([signals, instant_peaks, delineate_signal, cardiac_phase], axis=1)
 
+    # Rpeaks location and sampling rate in dict info        
     info = rpeaks
+    info['sampling_rate'] = sampling_rate
+    
     return signals, info

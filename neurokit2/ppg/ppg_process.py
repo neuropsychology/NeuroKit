@@ -30,7 +30,7 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
         - *"PPG_Peaks"*: the PPG peaks marked as "1" in a list of zeros.
 
     info : dict
-        A dictionary containing the information of peaks.
+        A dictionary containing the information of peaks and the signals' sampling rate.
 
     See Also
     --------
@@ -54,6 +54,7 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
 
     # Find peaks
     info = ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, **kwargs)
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     # Mark peaks
     peaks_signal = _signal_from_indices(info["PPG_Peaks"], desired_length=len(ppg_cleaned))

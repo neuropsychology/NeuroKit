@@ -38,7 +38,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     info : dict
         A dictionary containing additional information, in this case the aplitude of the SCR, the samples
         at which the SCR onset and the SCR peaks occur. Accessible with the keys "SCR_Amplitude",
-        "SCR_Onsets", and "SCR_Peaks" respectively.
+        "SCR_Onsets", and "SCR_Peaks" respectively. It also contains the signals' sampling rate.
     signals : DataFrame
         A DataFrame of same length as the input signal in which occurences of SCR peaks are marked as
         "1" in lists of zeros with the same length as `eda_cleaned`. Accessible with the keys "SCR_Peaks".
@@ -90,6 +90,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     # Get basic
     info = eda_findpeaks(eda_phasic, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min)
     info = eda_fixpeaks(info)
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     # Get additional features (rise time, half recovery time, etc.)
     info = _eda_peaks_getfeatures(info, eda_phasic, sampling_rate, recovery_percentage=0.5)

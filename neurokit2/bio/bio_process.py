@@ -64,7 +64,8 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, eog=None, keep=None, sam
     bio_info : dict
         A dictionary containing the samples of peaks,
         troughs, amplitudes, onsets, offsets, periods of activation,
-        recovery times of the respective processed signals.
+        recovery times of the respective processed signals,
+        as well as the signals' sampling rate.
 
 
     See Also
@@ -176,5 +177,8 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, eog=None, keep=None, sam
     if ecg is not None and rsp is not None:
         rsa = hrv_rsa(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=sampling_rate, continuous=True)
         bio_df = pd.concat([bio_df, rsa], axis=1)
+
+    # Add sampling rate in dict info        
+    bio_info['sampling_rate'] = sampling_rate
 
     return bio_df, bio_info
