@@ -7,6 +7,7 @@ from ..stats import summary_plot
 from .hrv_frequency import _hrv_frequency_show, hrv_frequency
 from .hrv_nonlinear import _hrv_nonlinear_show, hrv_nonlinear
 from .hrv_time import hrv_time
+from .hrv_rsa import hrv_rsa
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
@@ -39,7 +40,10 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
         - time (see `hrv_time <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_time>`_)
         - non-linear
         (see `hrv_nonlinear <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_nonlinear`_)
-
+        If RSP data is provided (e.g., output of `bio_process`):
+        - rsa 
+        (see `hrv_rsa <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_rsa`_)
+            
     See Also
     --------
     ecg_peaks, ppg_peaks, hrv_time, hrv_frequency, hrv_nonlinear
@@ -51,12 +55,19 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     >>> # Download data
     >>> data = nk.data("bio_resting_5min_100hz")
     >>>
-    >>> # Find peaks
-    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+    >>> # Clean signal and Find peaks
+    >>> ecg_cleaned = nk.ecg_clean(data["ECG"], sampling_rate=100)
+    >>> peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100)
     >>>
     >>> # Compute HRV indices
     >>> hrv_indices = nk.hrv(peaks, sampling_rate=100, show=True)
     >>> hrv_indices #doctest: +SKIP
+    >>>
+    >>> # Compute HRV from processed signals
+    >>> signals, info = nk.bio_process(data, sampling_rate=100)
+    >>> hrv = nk.hrv(signals, sampling_rate=100, show=True)
+    >>> hrv #doctest: +SKIP
+    
 
     References
     ----------
@@ -74,6 +85,14 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     out.append(hrv_time(peaks, sampling_rate=sampling_rate))
     out.append(hrv_frequency(peaks, sampling_rate=sampling_rate))
     out.append(hrv_nonlinear(peaks, sampling_rate=sampling_rate))
+
+    # Compute RSA if rsp data is available
+    if isinstance(peaks, pd.DataFrame):
+        rsp_cols = [col for col in peaks.columns if "RSP_Phase" in col]
+        if len(rsp_cols) != 0:
+            rsp_signals = peaks[rsp_cols]
+            rsa = hrv_rsa(peaks, rsp_signals, sampling_rate=sampling_rate)
+            out.append(pd.DataFrame([rsa]))
 
     out = pd.concat(out, axis=1)
 

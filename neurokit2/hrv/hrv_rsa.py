@@ -152,11 +152,11 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
 
     if len(rsp_peaks) - len(rsp_onsets) == 0:
         rsp_peaks = rsp_peaks[:-1]
-    if len(rsp_peaks) - len(rsp_onsets) != -1:
-        warn(
-            "Couldn't find rsp cycles onsets and centers. Check your RSP signal.",
-            category=NeuroKitWarning
-        )
+    # if len(rsp_peaks) - len(rsp_onsets) != -1:
+    #     warn(
+    #         "Couldn't find rsp cycles onsets and centers. Check your RSP signal.",
+    #         category=NeuroKitWarning
+    #     )
 
     # Methods ------------------------
 
