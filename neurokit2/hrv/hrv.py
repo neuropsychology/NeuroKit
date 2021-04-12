@@ -39,11 +39,13 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
         (see `hrv_frequency <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_frequency>`_)
         - time (see `hrv_time <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_time>`_)
         - non-linear
-        (see `hrv_nonlinear <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_nonlinear`_)
+        (see `hrv_nonlinear <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_nonlinear>`_)
         If RSP data is provided (e.g., output of `bio_process`):
         - rsa 
-        (Otherwise, to compute ECG-derived respiration, use `hrv_rsa <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_rsa`_)
-         If no raw respiratory data is available, users can also choose to use `ecg_rsp <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg.ecg_rsp`_ to
+         Otherwise, to compute ECG-derived respiration,
+         use `hrv_rsa <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_rsa>`_
+         If no raw respiratory data is available, users can also choose to use
+         `ecg_rsp <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg.ecg_rsp`_ to
          obtain ECG-derived respiratory signal, although this is not an ideal procedure.
 
     See Also

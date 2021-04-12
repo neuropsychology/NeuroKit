@@ -3,7 +3,6 @@ import os
 import pandas as pd
 import sklearn.datasets
 import json
-import urllib
 
 
 def data(dataset="bio_eventrelated_100hz"):
@@ -36,13 +35,13 @@ def data(dataset="bio_eventrelated_100hz"):
     # find the most appropriate dataset
     
     dataset = dataset.lower()
-    path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/"
+    path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
     
     # Specific requests
     if dataset == "iris":
         data = sklearn.datasets.load_iris()
         return pd.DataFrame(data.data, columns=data["feature_names"])
-    
+
     if dataset in ["eeg", "eeg.txt"]:
         df = pd.read_csv(path + "eeg.txt")
         return df.values[:, 0]
@@ -50,10 +49,13 @@ def data(dataset="bio_eventrelated_100hz"):
     # Add extension
     if dataset in ["bio_resting_8min_200hz"]:
         dataset += ".json"
-        
+
     # Specific case for json file
     if dataset.endswith(".json"):
-        data = pd.read_json(path + dataset, orient='index')
+        if 'https' not in dataset:
+            data = pd.read_json(path + dataset, orient='index')
+        else:
+            data = pd.read_json(dataset, orient='index')
         df = {}
         for participant, row in data.iterrows():
             for _, data_string in row.items():
@@ -71,5 +73,8 @@ def data(dataset="bio_eventrelated_100hz"):
         else:
             df = pd.read_csv(path + dataset + ".txt")
     else:
-        df = pd.read_csv(path + dataset)
+        if 'https' not in dataset:
+            df = pd.read_csv(path + dataset)
+        else:
+            df = pd.read_csv(dataset)
     return df
