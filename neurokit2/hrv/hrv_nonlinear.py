@@ -174,6 +174,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     """
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
+    if isinstance(peaks, tuple):  # Detect actual sampling rate
+        peaks, sampling_rate = peaks[0], peaks[1]
 
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)

@@ -47,6 +47,11 @@ def _hrv_sanitize_input(peaks=None):
 # =============================================================================
 def _hrv_sanitize_tuple(peaks):
 
+    # Get sampling rate
+    info = [i for i in peaks if isinstance(i, dict)]
+    sampling_rate = info[0]['sampling_rate']
+
+    # Get peaks
     if isinstance(peaks[0], (dict, pd.DataFrame)):
         try:
             peaks = _hrv_sanitize_dict_or_df(peaks[0])
@@ -58,7 +63,8 @@ def _hrv_sanitize_tuple(peaks):
                     peaks = _hrv_sanitize_peaks(peaks[1])
             else:
                 peaks = _hrv_sanitize_peaks(peaks[0])
-    return peaks
+    
+    return peaks, sampling_rate
 
 
 def _hrv_sanitize_dict_or_df(peaks):
@@ -66,8 +72,10 @@ def _hrv_sanitize_dict_or_df(peaks):
     # Get columns
     if isinstance(peaks, dict):
         cols = np.array(list(peaks.keys()))
+        sampling_rate = peaks['sampling_rate']
     elif isinstance(peaks, pd.DataFrame):
         cols = peaks.columns.values
+        sampling_rate = None
 
     cols = cols[["Peak" in s for s in cols]]
 
@@ -83,7 +91,10 @@ def _hrv_sanitize_dict_or_df(peaks):
 
     peaks = _hrv_sanitize_peaks(peaks[cols[0]])
 
-    return peaks
+    if sampling_rate is not None:
+        return peaks, sampling_rate
+    else:
+        return peaks
 
 
 def _hrv_sanitize_peaks(peaks):

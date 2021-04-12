@@ -23,6 +23,7 @@ New Features
 * Allow for data resampling in `nk.read_bitalino()`
 * Add `bio_resting_8min_200hz` into database for reading with `nk.data()`
 * Allow for `hrv()` to compute RSA indices if respiratory data is present
+* All `hrv` functions to automatically detect correct sampling rate if tuple or dict is passed as input
 
 Fix Bugs
 +++++++++++++
