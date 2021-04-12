@@ -42,11 +42,13 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
         (see `hrv_nonlinear <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_nonlinear`_)
         If RSP data is provided (e.g., output of `bio_process`):
         - rsa 
-        (see `hrv_rsa <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_rsa`_)
-            
+        (Otherwise, to compute ECG-derived respiration, use `hrv_rsa <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_rsa`_)
+         If no raw respiratory data is available, users can also choose to use `ecg_rsp <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg.ecg_rsp`_ to
+         obtain ECG-derived respiratory signal, although this is not an ideal procedure.
+
     See Also
     --------
-    ecg_peaks, ppg_peaks, hrv_time, hrv_frequency, hrv_nonlinear
+    ecg_peaks, ppg_peaks, hrv_time, hrv_frequency, hrv_nonlinear, hrv_rsa
 
     Examples
     --------
@@ -57,7 +59,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     >>>
     >>> # Clean signal and Find peaks
     >>> ecg_cleaned = nk.ecg_clean(data["ECG"], sampling_rate=100)
-    >>> peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100)
+    >>> peaks, info = nk.ecg_peaks(ecg_cleaned, sampling_rate=100, correct_artifacts=True)
     >>>
     >>> # Compute HRV indices
     >>> hrv_indices = nk.hrv(peaks, sampling_rate=100, show=True)
