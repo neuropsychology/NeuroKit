@@ -33,10 +33,10 @@ def data(dataset="bio_eventrelated_100hz"):
     # TODO: one could further improve this function with like
     # selectors 'ecg=True, eda=True, restingstate=True' that would
     # find the most appropriate dataset
-    
+
     dataset = dataset.lower()
     path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/"
-    
+
     # Specific requests
     if dataset == "iris":
         data = sklearn.datasets.load_iris()
@@ -45,7 +45,7 @@ def data(dataset="bio_eventrelated_100hz"):
     if dataset in ["eeg", "eeg.txt"]:
         df = pd.read_csv(path + "eeg.txt")
         return df.values[:, 0]
-    
+
     # Add extension
     if dataset in ["bio_resting_8min_200hz"]:
         dataset += ".json"
@@ -62,7 +62,7 @@ def data(dataset="bio_eventrelated_100hz"):
                 data_list = json.loads(data_string)
                 data_pd = pd.DataFrame(data_list)
                 df[participant] = data_pd
-        
+     
         return df
 
     # General case

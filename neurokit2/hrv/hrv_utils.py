@@ -63,7 +63,7 @@ def _hrv_sanitize_tuple(peaks):
                     peaks = _hrv_sanitize_peaks(peaks[1])
             else:
                 peaks = _hrv_sanitize_peaks(peaks[0])
-    
+
     return peaks, sampling_rate
 
 

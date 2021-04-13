@@ -113,8 +113,8 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
 
     signals = pd.concat([signals, instant_peaks, delineate_signal, cardiac_phase], axis=1)
 
-    # Rpeaks location and sampling rate in dict info        
+    # Rpeaks location and sampling rate in dict info
     info = rpeaks
     info['sampling_rate'] = sampling_rate
-    
+
     return signals, info

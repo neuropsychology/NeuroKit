@@ -25,9 +25,9 @@ def ppg_eventrelated(epochs, silent=False):
         A dataframe containing the analyzed PPG features for each epoch, with each epoch indicated by
         the `Label` column (if not present, by the `Index` column). The analyzed features consist of
         the following:
-        
+
         - *"PPG_Rate_Baseline"*: the baseline heart rate (at stimulus onset).
-            
+
         - *"PPG_Rate_Max"*: the maximum heart rate after stimulus onset.
 
         - *"PPG_Rate_Min"*: the minimum heart rate after stimulus onset.

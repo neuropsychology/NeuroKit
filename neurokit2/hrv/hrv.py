@@ -22,9 +22,9 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     Parameters
     ----------
     peaks : dict
-        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur. 
+        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
         Can be a list of indices or the output(s) of other functions such as ecg_peaks,
-        ppg_peaks, ecg_process or bio_process. 
+        ppg_peaks, ecg_process or bio_process.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
@@ -41,7 +41,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
         - non-linear
         (see `hrv_nonlinear <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_nonlinear>`_)
         If RSP data is provided (e.g., output of `bio_process`):
-        - rsa 
+        - rsa
          Otherwise, to compute ECG-derived respiration,
          use `hrv_rsa <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.hrv.hrv_rsa>`_
          If no raw respiratory data is available, users can also choose to use
@@ -71,7 +71,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     >>> signals, info = nk.bio_process(data, sampling_rate=100)
     >>> hrv = nk.hrv(signals, sampling_rate=100, show=True)
     >>> hrv #doctest: +SKIP
-    
+
 
     References
     ----------
@@ -97,7 +97,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
             rsp_signals = peaks[rsp_cols]
             rsa = hrv_rsa(peaks, rsp_signals, sampling_rate=sampling_rate)
             out.append(pd.DataFrame([rsa]))
-        
+
     out = pd.concat(out, axis=1)
 
     # Plot

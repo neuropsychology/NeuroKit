@@ -178,7 +178,7 @@ def bio_process(ecg=None, rsp=None, eda=None, emg=None, eog=None, keep=None, sam
         rsa = hrv_rsa(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=sampling_rate, continuous=True)
         bio_df = pd.concat([bio_df, rsa], axis=1)
 
-    # Add sampling rate in dict info        
+    # Add sampling rate in dict info
     bio_info['sampling_rate'] = sampling_rate
 
     return bio_df, bio_info
