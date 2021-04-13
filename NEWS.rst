@@ -25,6 +25,7 @@ New Features
 * Reading of url links in `nk.data()`
 * Allow for `nk.hrv()` to compute RSA indices if respiratory data is present
 * All `hrv` functions to automatically detect correct sampling rate if tuple or dict is passed as input
+* Add support for PPG analysis: `nk.ppg_eventrelated()`, `nk.ppg_intervalrelated()`, `nk.ppg_analyze()`
 
 Fix Bugs
 +++++++++++++
