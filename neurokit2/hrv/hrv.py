@@ -102,6 +102,8 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
 
     # Plot
     if show:
+        if isinstance(peaks, dict):
+            peaks = peaks["ECG_R_Peaks"]
         # Indices for plotting
         out_plot = out.copy(deep=False)
 
