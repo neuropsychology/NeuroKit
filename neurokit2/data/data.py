@@ -62,7 +62,7 @@ def data(dataset="bio_eventrelated_100hz"):
                 data_list = json.loads(data_string)
                 data_pd = pd.DataFrame(data_list)
                 df[participant] = data_pd
-     
+
         return df
 
     # General case

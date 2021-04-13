@@ -8,6 +8,7 @@ from ..eda import eda_analyze
 from ..emg import emg_analyze
 from ..eog import eog_analyze
 from ..rsp import rsp_analyze
+from ..ppg import ppg_analyze
 
 
 def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constant'):
@@ -81,7 +82,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     >>> data = nk.data("bio_resting_5min_100hz")
     >>>
     >>> # Process the data
-    >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], sampling_rate=100)
+    >>> df, info = nk.bio_process(ecg=data["ECG"], rsp=data["RSP"], ppg=data["PPG"], sampling_rate=100)
     >>>
     >>> # Analyze
     >>> nk.bio_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
@@ -99,6 +100,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
         rsp_cols = [col for col in data.columns if "RSP" in col]
         eda_cols = [col for col in data.columns if "EDA" in col]
         emg_cols = [col for col in data.columns if "EMG" in col]
+        ppg_cols = [col for col in data.columns if "PPG" in col]
         eog_cols = [col for col in data.columns if "EOG" in col]
         ecg_rate_col = [col for col in data.columns if "ECG_Rate" in col]
         rsp_phase_col = [col for col in data.columns if "RSP_Phase" in col]
@@ -108,6 +110,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
             rsp_cols = [col for col in data[i].columns if "RSP" in col]
             eda_cols = [col for col in data[i].columns if "EDA" in col]
             emg_cols = [col for col in data[i].columns if "EMG" in col]
+            ppg_cols = [col for col in data[i].columns if "PPG" in col]
             eog_cols = [col for col in data[i].columns if "EOG" in col]
             ecg_rate_col = [col for col in data[i].columns if "ECG_Rate" in col]
             rsp_phase_col = [col for col in data[i].columns if "RSP_Phase" in col]
@@ -158,6 +161,17 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
 
         emg_analyzed = emg_analyze(emg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, emg_analyzed], axis=1, sort=False)
+
+    # EMG
+    if len(ppg_cols) != 0:
+        ppg_data = data.copy()
+
+        if window_lengths != 'constant':
+            if 'PPG' in window_lengths.keys():  # only for epochs
+                ppg_data = _bio_analyze_slicewindow(ppg_data, window_lengths, signal='PPG')
+
+        ppg_analyzed = ppg_analyze(ppg_data, sampling_rate=sampling_rate, method=method)
+        features = pd.concat([features, ppg_analyzed], axis=1, sort=False)
 
     # EOG
     if len(eog_cols) != 0:
