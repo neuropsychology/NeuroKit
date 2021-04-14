@@ -6,12 +6,14 @@ import pandas as pd
 import scipy.stats
 
 from ..complexity import entropy_approximate, entropy_sample, entropy_multiscale
+from ..complexity.fractal_dfa import fractal_dfa
+from ..complexity.fractal_correlation import fractal_correlation
 from ..misc import find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
+def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
      See references for details.
@@ -28,6 +30,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     show : bool, optional
         If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the
         next successive one. The ellipse centers around the average RR interval. By default False.
+    **kwargs : optional
+        Other arguments.
+
 
     Returns
     -------
@@ -119,6 +124,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
             - **RCMSE**: The refined composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
 
+            - **CorrDim**: The correlation dimension of the HR signal, calculated by `fractal_correlation()`.
+
+            - **DFA**: The detrended fluctuation analysis of the HR signal, calculated by `fractal_dfa()`.
+
 
     See Also
     --------
@@ -198,6 +207,11 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out["MSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=False, refined=False)
     out["CMSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=True, refined=False)
     out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=True, refined=True)
+
+    # Fractal
+    out["CorrDim"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
+    out["DFA"] = fractal_dfa(rri, windows="default", overlap=True, integrate=True,
+                             order=1, multifractal=False, **kwargs)
 
     if show:
         _hrv_nonlinear_show(rri, out)

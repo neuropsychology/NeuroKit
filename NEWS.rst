@@ -19,7 +19,7 @@ New Features
 * Add utility function - `nk.check_type()` to return appropriate boolean values of input (integer, list, ndarray, pandas dataframe or pandas series)
 * (experimental) Add error bars in the summary plot method to illustrate standard error of each bin
 * Additional features for `nk.rsp_intervalrelated()`: average inspiratory and expiratory durations, inspiratory-to-expiratory (I/E) time ratio
-* Add multiscale entropy measures (MSE, CMSE, RCMSE) into `nk.hrv_nonlinear()` 
+* Add multiscale entropy measures (MSE, CMSE, RCMSE) and fractal methods (Detrended Fluctuation Analysis, Correlation Dimension) into `nk.hrv_nonlinear()` 
 * Allow for data resampling in `nk.read_bitalino()`
 * Add `bio_resting_8min_200hz` into database for reading with `nk.data()`
 * Reading of url links in `nk.data()`
