@@ -3,31 +3,46 @@ Heart Rate Variability (HRV) Analysis Methods
 
 Time-Domain Analysis
 ---------------------
+**Deviation-based Indices**
 
-**RMSSD**
+- **SDNN** (ms): Standard deviation of NN intervals
+- **SDANN** (ms): Standard deviation of average NN intervals extracted from 5 minute segments of time series data
+- **SDNNI** (ms): Mean of the standard deviations of NN intervals per 5 minute segments of time series data
 
-**SDNN**
+**Difference-based Indices**
 
-**SDNN index**
+- **RMSSD** (ms): Square root of the mean squared differences between successive NN intervals
 
-**SDANN**
+.. math::
+    $RMSSD = \sqrt{\frac{1}{N-1}\sum\limits_{n=1}^{N-1}({RR}_{n+1}-{RR}_{n})^2}$
+
+- **SDSD** (ms): Standard deviation of the successive NN intervals differences
+- **pNN20** (%): Proportion of successive NN intervals larger than 20ms
+- **pNN50** (%): Proportion of successive NN intervals larger than 50ms
+
+
+**Geometric Indices**
 
 
 Frequency-Domain Analysis
 ---------------------
-**HF**
 
-**LF** 
+- Power spectrum divied into four frequency bands (units in Hz): ultra-low frequency, **ULF** ( ≤0.003 Hz);  very low frequency, **VLF** (0.0033--0.04 Hz); low frequency, **LF** (0.04--0.15 Hz) and high frequency, **HF** (0.15--0.4 Hz). 
 
-**VLF**
+- Power in normalized units (ms^2): 
+ - **LFn**
+ - **HFn**
 
-**ULF**
+- Natural logarithm of absolute powers of VLF, LF, and HF bands
 
-**LF/HF ratio**
+- **LF/HF ratio**
 
 
 Non-linear Dynamics
 ---------------------
+
+**Poincare Plot Anlysis**
+
 **Sample Entropy**
 
 **Approximate Entropy**
@@ -37,7 +52,6 @@ Non-linear Dynamics
 **Detrended Fluctuation Analysis (DFA)**
 
 **Correlation Dimension (CD)**
-
 
 
 
