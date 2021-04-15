@@ -4,20 +4,52 @@ Heart Rate Variability (HRV) Analysis Methods
 
 Time-Domain Analysis
 ---------------------
+Time-domain measures reflect the total variability of HR and are relatively indiscriminate when it comes to precisely quantifying the respective contributions of different underlying regulatory mechanisms. 
+However, this "general" sensitivity can be seen as a positive feature (e.g., in exploratory studies or when specific underlying neurophysiological mechanisms are not the focus). 
+Moreover, as they are easy to compute and interpret, time-domain measures are still among the most commonly reported HRV indices.
 
+The time-domain indices can be categorized into deviation-based and difference-based indcies where the formal are calculated directly from the normal beat-to-beat intervals (normal RR intervals or NN intervals), and the later are derived fronm the difference between successive NN intervals.
 
 **Deviation-based Indices**
+# add R-R interval graph to explain RR and mean RR
+# explain that RR here refers to normal NN intervals
+# there are a total of $N$ number of intervals in the signal and $RR_{n}$ denotes the value of nth RR interval
 
-- **SDNN** (ms): Standard deviation of NN intervals
-- **SDANN** (ms): Standard deviation of average NN intervals extracted from 5 minute segments of time series data
-- **SDNNI** (ms): Mean of the standard deviations of NN intervals per 5 minute segments of time series data
+..math::
+	\overline{RR} = \frac{1}{N}\sum\limits_{n=1}^{N}{RR}_{n}
+
+
+- **SDNN** (ms): Standard deviation of RR intervals
+*SDNN* is the square root of the total variance in the entire recording and therefore, it encompasses both short-term high frequency variation and long-term low frequency components of the HR signals.
+.. math::
+    SDNN = \sqrt{\frac{1}{N-1}\sum\limits_{n=1}^{N}({RR}_{n}-\overline{RR})^2}
+
+	
+- **SDANN** (ms): Standard deviation of average RR intervals extracted from 5-minute segments of time series data
+*SDANN* is an estimate of long-term components contributing to HRV.
+For $M$ denoting the total number of 5-minute segment and $\overline{{RR5}}_{m}$ denoting the average of all RR intervals in the mth 5-minute segment:
+.. math::
+	\overline{\overline{RR}} = \frac{1}{M}\sum\limits_{m=1}^{M}\overline{{RR5}}_{m}
+    SDANN = \sqrt{\frac{1}{M-1}\sum\limits_{m=1}^{M}(\overline{{RR5}}_{m}-\overline{\overline{RR}})^2}
+
+
+- **SDNNI** (ms): Mean of the standard deviations of RR intervals per 5 minute segments of time series data
+*SDNNI* assesses the variability within the short intervals and hence is an estimate of short term components that modulate HR signals.
+.. math::
+	SDNNI = \frac{1}{M}\sum\limits_{m=1}^{M}{SDNN}_{m}
+
+
 
 **Difference-based Indices**
+For $N$ number of RR intervals, there are $N-1$ number of successive RR intervals differences (RRdiff). The RRdiff can be calculated by:
+.. math::
+	RRdiff_{n} = RR_{n+1}-RR_{n}
+
 
 - **RMSSD** (ms): Square root of the mean squared differences between successive NN intervals
 
 .. math::
-    $RMSSD = \sqrt{\frac{1}{N-1}\sum\limits_{n=1}^{N-1}({RR}_{n+1}-{RR}_{n})^2}$
+    RMSSD = \sqrt{\frac{1}{N-1}\sum\limits_{n=1}^{N-1}(RRdiff_{n})^2}
 
 - **SDSD** (ms): Standard deviation of the successive NN intervals differences
 - **pNN20** (%): Proportion of successive NN intervals larger than 20ms
