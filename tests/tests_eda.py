@@ -108,15 +108,6 @@ def test_eda_peaks():
     onsets, peaks, amplitudes = biosppy.eda.kbk_scr(eda_phasic, sampling_rate=1000)
     assert np.allclose((info["SCR_Peaks"] - peaks).mean(), 0, atol=1)
 
-    # Check that indices and values positions match
-    peak_positions = np.where(info["SCR_Peaks"] != 0)[0]
-    assert np.all(peak_positions == np.where(info["SCR_Amplitude"] != 0)[0])
-    assert np.all(peak_positions == np.where(info["SCR_Height"] != 0)[0])
-    assert np.all(peak_positions == np.where(info["SCR_RiseTime"] != 0)[0])
-    
-    recovery_positions = np.where(info["SCR_Recovery"] != 0)[0]
-    assert np.all(recovery_positions == np.where(info["SCR_RecoveryTime"] != 0)[0])
-    
 
 def test_eda_process():
 
