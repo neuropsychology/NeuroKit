@@ -20,7 +20,7 @@ def signal_formatpeaks(info, desired_length, peak_indices=None, other_indices=No
             # Sanitize indices and values
             other_indices, values = _signal_sanitize_indices(other_indices, values)
             # Append recovery time values to signal
-            signals[feature] = _signal_from_indices(other_indices, desired_length, values)            
+            signals[feature] = _signal_from_indices(other_indices, desired_length, values)
         else:
             # Sanitize indices and values
             peak_indices, values = _signal_sanitize_indices(peak_indices, values)
@@ -41,7 +41,7 @@ def _signal_sanitize_indices(indices, values):
         for i in to_drop:
             indices = np.delete(indices, i)
             values = np.delete(values, i)
-        
+
     return indices, values
 
 def _signal_from_indices(indices, desired_length=None, value=1):

@@ -156,7 +156,7 @@ def test_ecg_findpeaks():
 
     # Test engzeemod2012 method
     info_engzeemod = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
-    assert info_engzeemod["ECG_R_Peaks"].size == 70
+    assert info_engzeemod["ECG_R_Peaks"].size == 69
 
     # Test kalidas2017 method
     info_kalidas = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
@@ -262,7 +262,8 @@ def test_ecg_intervalrelated():
        'HRV_SD1a', 'HRV_C2d',
        'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
        'HRV_Cd', 'HRV_Ca', 'HRV_SDNNd',
-       'HRV_SDNNa']
+       'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn', 'HRV_MSE',
+       'HRV_CMSE', 'HRV_RCMSE', 'HRV_DFA', 'HRV_CorrDim']
 
     # Test with signal dataframe
     features_df = nk.ecg_intervalrelated(df, sampling_rate=100)
