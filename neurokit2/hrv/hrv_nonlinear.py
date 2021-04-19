@@ -6,7 +6,7 @@ import pandas as pd
 import scipy.stats
 
 from ..complexity import entropy_approximate, entropy_sample, entropy_multiscale
-from ..complexity.fractal_dfa import fractal_dfa
+from ..complexity.fractal_dfa import fractal_dfa, _fractal_dfa_findwindows
 from ..complexity.fractal_correlation import fractal_correlation
 from ..misc import find_consecutive
 from ..signal import signal_zerocrossings
@@ -31,7 +31,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
         If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the
         next successive one. The ellipse centers around the average RR interval. By default False.
     **kwargs : optional
-        Other arguments.
+        Other arguments to be passed into `fractal_dfa()` and `fractal_correlation()`.
 
 
     Returns
@@ -208,10 +208,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out["CMSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=True, refined=False)
     out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=True, refined=True)
 
-    # Fractal
+    # Fractal, skip computation if too short
+    windows = _fractal_dfa_findwindows(len(rri), **kwargs)
+    if len(windows) < 2 or np.min(windows) < 2 or np.max(windows) >= len(rri):
+        out["DFA"] = np.nan
+    else:
+        out["DFA"] = fractal_dfa(rri, multifractal=False, **kwargs)
     out["CorrDim"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
-    out["DFA"] = fractal_dfa(rri, windows="default", overlap=True, integrate=True,
-                             order=1, multifractal=False, **kwargs)
 
     if show:
         _hrv_nonlinear_show(rri, out)
