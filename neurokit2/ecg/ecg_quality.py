@@ -1,6 +1,7 @@
 # - * - coding: utf-8 - * -
 import numpy as np
 import scipy
+from warnings import warn
 
 from ..epochs import epochs_to_df
 from ..signal.signal_power import signal_power
@@ -8,6 +9,7 @@ from ..signal import signal_interpolate
 from ..stats import distance, rescale
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
+from ..misc import NeuroKitWarning
 
 
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS", approach=None):
@@ -21,11 +23,14 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
     The "zhao2018" method (Zhao et la., 2018) was originally designed for signal with a length of 10 seconds.
     It extracts several signal quality indexes (SQIs): QRS wave power spectrum distribution
     pSQI, kurtosis kSQI, and baseline relative power basSQI. An additional R peak detection match qSQI was
-    originally computed in the paper but left out in this algorithm.
+    originally computed in the paper but left out in this algorithm. The indices were originally weighted
+    with a ratio of [0.4, 0.4, 0.1, 0.1] to generate the final classification outcome, but
+    because qSQI was dropped, the weights have been rearranged to [0.6, 0.2, 0.2] for
+    pSQI, kSQI and basSQI respectively.
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
+    ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG signal in the form of a vector of values.
     rpeaks : tuple or list
         The list of R-peak samples returned by `ecg_peaks()`. If None, peaks is computed from
@@ -34,12 +39,12 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     method : str
         The method for computing ECG signal quality, can be "averageQRS" (default) or "zhao2018".
-    mode : str
+    approach : str
         The data fusion approach as documented in Zhao et al. (2018). Can be "simple"
         or "fuzzy". The former performs simple heuristic fusion of SQIs and the latter performs
         fuzzy comprehensive evaluation. If None (default), simple heuristic fusion is used.
     **kwargs
-        Keyword arguments to be passed to `signal_power()`.
+        Keyword arguments to be passed to `signal_power()` in the computation of basSQI and pSQI.
 
     Returns
     -------
@@ -66,15 +71,28 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
     >>> quality = nk.ecg_quality(ecg_cleaned, sampling_rate=300)
     >>>
     >>> nk.signal_plot([ecg_cleaned, quality], standardize=True)
+    >>>
+    >>> # Zhao et al. (2018) method
+    >>> quality = nk.ecg_quality(ecg_cleaned, sampling_rate=300, method="zhao2018", approach="fuzzy")
 
     """
+
     method = method.lower()  # remove capitalised letters
+
     # Run peak detection algorithm
     if method in ["averageqrs"]:
         quality = _ecg_quality_averageQRS(ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate)
     elif method in ["zhao2018", "zhao", "SQI"]:
         if approach is None:
             approach = "simple"
+        elif approach not in ["simple", "fuzzy"]:
+            warn(
+                "Please enter a relevant input if using method='zhao2018',"
+                " 'simple' for simple heuristic fusion approach or"
+                " 'fuzzy' for fuzzy comprehensive evaluation.",
+                category=NeuroKitWarning
+            )
+
         quality = _ecg_quality_zhao2018(ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate,
                                         mode=approach)
 
@@ -82,7 +100,7 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
 
 
 # =============================================================================
-# Average QRS
+# Average QRS method
 # =============================================================================
 def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 
@@ -119,10 +137,10 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 
 
 #=============================================================================
-#Zhao (2018)
+#Zhao (2018) method
 #=============================================================================
 def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
-                          nseg=1024, kurtosis_method="fisher", mode="simple", **kwargs):
+                          window=1024, kurtosis_method="fisher", mode="simple", **kwargs):
     """Return ECG quality classification of based on Zhao et al. (2018),
     based on three indices: pSQI, kSQI, basSQI (qSQI not included here).
 
@@ -135,13 +153,15 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
+    ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG signal in the form of a vector of values.
     rpeaks : tuple or list
         The list of R-peak samples returned by `ecg_peaks()`. If None, peaks is computed from
         the signal input.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
+    window : int
+        Length of each window in seconds. See `signal_psd()`.
     kurtosis_method : str
         Compute kurtosis (kSQI) based on "fisher" (default) or "pearson" definition.
     mode : str
@@ -164,10 +184,10 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
 
     # Compute indexes
     kSQI = _ecg_quality_kSQI(ecg_cleaned, method=kurtosis_method)
-    pSQI = _ecg_quality_pSQI(ecg_cleaned, sampling_rate=sampling_rate, nseg=nseg, **kwargs)
-    basSQI = _ecg_quality_basSQI(ecg_cleaned, sampling_rate=sampling_rate, nseg=nseg, **kwargs)
+    pSQI = _ecg_quality_pSQI(ecg_cleaned, sampling_rate=sampling_rate, window=window, **kwargs)
+    basSQI = _ecg_quality_basSQI(ecg_cleaned, sampling_rate=sampling_rate, window=window, **kwargs)
 
-    # Classify indices
+    # Classify indices based on simple heuristic fusion
     if mode == 'simple':
         # First stage rules (0 = unqualified, 1 = suspicious, 2 = optimal)
 
@@ -215,6 +235,7 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         else:
             return 'Barely acceptable'
 
+    # Classify indices based on fuzzy comprehensive evaluation
     elif mode == 'fuzzy':
         # *R1 left out because of lack of qSQI
 
@@ -307,25 +328,27 @@ def _ecg_quality_kSQI(ecg_cleaned, method="fisher"):
     elif method == "pearson":
         return scipy.stats.kurtosis(ecg_cleaned, fisher=False)
 
-def _ecg_quality_pSQI(ecg_cleaned, sampling_rate=1000, nseg=1024, num_spectrum=[5, 15], dem_spectrum=[5, 40], **kwargs):
+def _ecg_quality_pSQI(ecg_cleaned, sampling_rate=1000, window=1024, num_spectrum=[5, 15],
+                      dem_spectrum=[5, 40], **kwargs):
     """Power Spectrum Distribution of QRS Wave.
     """
 
     psd = signal_power(ecg_cleaned, sampling_rate=sampling_rate,
                        frequency_band=[num_spectrum, dem_spectrum],
-                       method="welch", normalize=False, window=nseg, **kwargs)
+                       method="welch", normalize=False, window=window, **kwargs)
 
     num_power = psd.iloc[0][0]
     dem_power = psd.iloc[0][1]
 
     return num_power / dem_power
 
-def _ecg_quality_basSQI(ecg_cleaned, sampling_rate=1000, nseg=1024, num_spectrum=[0, 1], dem_spectrum=[0, 40], **kwargs):
+def _ecg_quality_basSQI(ecg_cleaned, sampling_rate=1000, window=1024, num_spectrum=[0, 1],
+                        dem_spectrum=[0, 40], **kwargs):
     """Relative Power in the Baseline.
     """
     psd = signal_power(ecg_cleaned, sampling_rate=sampling_rate,
                        frequency_band=[num_spectrum, dem_spectrum],
-                       method="welch", normalize=False, window=nseg, **kwargs)
+                       method="welch", normalize=False, window=window, **kwargs)
 
     num_power = psd.iloc[0][0]
     dem_power = psd.iloc[0][1]
