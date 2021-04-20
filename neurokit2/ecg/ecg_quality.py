@@ -43,8 +43,10 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
 
     Returns
     -------
-    array
-        Vector containing the quality index ranging from 0 to 1.
+    array or str
+        Vector containing the quality index ranging from 0 to 1 for "averageQRS" method,
+        returns string classification ("Unacceptable", "Barely Acceptable" or "Excellent")
+        of the signal for "zhao2018 method".
 
     See Also
     --------
@@ -75,7 +77,7 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
             approach = "simple"
         quality = _ecg_quality_zhao2018(ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate,
                                         mode=approach)
-        
+
     return quality
 
 
@@ -149,7 +151,6 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
     **kwargs
         Keyword arguments to be passed to `signal_power()`.
 
-
     Returns
     -------
     str
@@ -170,13 +171,13 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
     if mode == 'simple':
         # First stage rules (0 = unqualified, 1 = suspicious, 2 = optimal)
 
-        ## Get the maximum bpm
+        # Get the maximum bpm
         if len(rpeaks) > 1:
             ecg_rate = 60000.0 / (1000.0 / sampling_rate * np.min(np.diff(rpeaks)))
         else:
             ecg_rate = 1
 
-        ## pSQI classification
+        # pSQI classification
         if ecg_rate < 130:
             l1, l2, l3 = 0.5, 0.8, 0.4
         else:
@@ -189,13 +190,13 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         else:
             pSQI_class = 0
 
-        ## kSQI classification
+        # kSQI classification
         if kSQI > 5:
             kSQI_class = 2
         else:
             kSQI_class = 0
 
-        ## basSQI classification
+        # basSQI classification
         if basSQI >= 0.95:
             basSQI_class = 2
         elif basSQI < 0.9:
@@ -218,7 +219,7 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         # *R1 left out because of lack of qSQI
 
         # pSQI
-        ## UpH
+        # UpH
         if pSQI <= 0.25:
             UpH = 0
         elif pSQI >= 0.35:
@@ -226,7 +227,7 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         else:
             UpH = 0.1 * (pSQI - 0.25)
 
-        ## UpI
+        # UpI
         if pSQI < 0.18:
             UpI = 0
         elif pSQI >= 0.32:
@@ -238,7 +239,7 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         else:
             UpI = 25 * (0.32 - pSQI)
 
-        ## UpJ
+        # UpJ
         if pSQI < 0.15:
             UpJ = 1
         elif pSQI > 0.25:
@@ -246,18 +247,18 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         else:
             UpJ = 0.1 * (0.25 - pSQI)
 
-        ## Get R2
+        # Get R2
         R2 = np.array([UpH, UpI, UpJ])
 
         # kSQI
-        ## Get R3
+        # Get R3
         if kSQI > 5:
             R3 = np.array([1, 0, 0])
         else:
             R3 = np.array([0, 0, 1])
 
         # basSQI
-        ## UbH
+        # UbH
         if basSQI <= 90:
             UbH = 0
         elif basSQI >= 95:
@@ -265,16 +266,16 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         else:
             UbH = 1.0 / (1 + (1 / np.power(0.8718 * (basSQI - 90), 2)))
 
-        ## UbJ
+        # UbJ
         if basSQI <= 85:
             UbJ = 1
         else:
             UbJ = 1.0 / (1 + np.power((basSQI - 85) / 5.0, 2))
 
-        ## UbI
+        # UbI
         UbI = 1.0 / (1 + np.power((basSQI - 95) / 2.5, 2))
 
-        ## Get R4
+        # Get R4
         R4 = np.array([UbH, UbI, UbJ])
 
         # evaluation matrix R (remove R1 because of lack of qSQI)
@@ -297,13 +298,13 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         else:
             return 'Barely acceptable'
 
-def _ecg_quality_kSQI(ecg_cleaned, method="Fisher"):
+def _ecg_quality_kSQI(ecg_cleaned, method="fisher"):
     """ Return the kurtosis of the signal, with Fisher's or Pearson's method.
     """
 
-    if method == "Fisher":
+    if method == "fisher":
         return scipy.stats.kurtosis(ecg_cleaned, fisher=True)
-    elif method == "Pearson":
+    elif method == "pearson":
         return scipy.stats.kurtosis(ecg_cleaned, fisher=False)
 
 def _ecg_quality_pSQI(ecg_cleaned, sampling_rate=1000, nseg=1024, num_spectrum=[5, 15], dem_spectrum=[5, 40], **kwargs):
@@ -313,10 +314,10 @@ def _ecg_quality_pSQI(ecg_cleaned, sampling_rate=1000, nseg=1024, num_spectrum=[
     psd = signal_power(ecg_cleaned, sampling_rate=sampling_rate,
                        frequency_band=[num_spectrum, dem_spectrum],
                        method="welch", normalize=False, window=nseg, **kwargs)
-    
+
     num_power = psd.iloc[0][0]
     dem_power = psd.iloc[0][1]
-    
+
     return num_power / dem_power
 
 def _ecg_quality_basSQI(ecg_cleaned, sampling_rate=1000, nseg=1024, num_spectrum=[0, 1], dem_spectrum=[0, 40], **kwargs):
@@ -325,8 +326,8 @@ def _ecg_quality_basSQI(ecg_cleaned, sampling_rate=1000, nseg=1024, num_spectrum
     psd = signal_power(ecg_cleaned, sampling_rate=sampling_rate,
                        frequency_band=[num_spectrum, dem_spectrum],
                        method="welch", normalize=False, window=nseg, **kwargs)
-    
+
     num_power = psd.iloc[0][0]
     dem_power = psd.iloc[0][1]
-    
+
     return 1 - num_power / dem_power
