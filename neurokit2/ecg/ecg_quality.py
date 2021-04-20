@@ -1,12 +1,14 @@
 # - * - coding: utf-8 - * -
 import numpy as np
+import scipy
 
 from ..epochs import epochs_to_df
+from ..signal.signal_power import signal_power
 from ..signal import signal_interpolate
 from ..stats import distance, rescale
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
-from scipy import stats, integrate, signal
+
 
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS"):
     """Quality of ECG Signal.
@@ -91,129 +93,41 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 #=============================================================================
 #Zhao (2018)
 #=============================================================================
-def pSQI(signal, f_thr=0.01):
-    """ Return the flatline percentage of the signal
-    Parameters
-    ----------
-    signal : array
-        ECG signal.
-    f_thr : float, optional
-        Flatline threshold, in mV / sample
-    Returns
-    -------
-    flatline_percentage : float
-        Percentage of signal where the absolute value of the derivative is lower then the threshold.
+def _ecg_quality_kSQI(ecg_cleaned, method="Fisher"):
+    """ Return the kurtosis of the signal, with Fisher's or Pearson's method.
     """
 
-    if signal is None:
-        raise TypeError("Please specify an input signal")
+    if method == "Fisher":
+        kurtosis = scipy.stats.kurtosis(ecg_cleaned, fisher=True)
+    elif method == "Pearson":
+        kurtosis = scipy.stats.kurtosis(ecg_cleaned, fisher=False)
 
-    diff = np.diff(signal)
-    length = len(diff)
+    return kurtosis
 
-    flatline = np.where(abs(diff) < f_thr)[0]
-
-    return (len(flatline) / length) * 100
-
-def fSQI(ecg_signal, fs=1000.0, nseg=1024, num_spectrum=[5, 20], dem_spectrum=None, mode='simple'):
-    """ Returns the ration between two frequency power bands.
-    Parameters
-    ----------
-    ecg_signal : array
-        ECG signal.
-    fs : float, optional
-        ECG sampling frequency, in Hz.
-    nseg : int, optional
-        Frequency axis resolution.
-    num_spectrum : array, optional
-        Frequency bandwidth for the ratio's numerator, in Hz.
-    dem_spectrum : array, optional
-        Frequency bandwidth for the ratio's denominator, in Hz. If None, then the whole spectrum is used.
-    mode : str, optional
-        If 'simple' just do the ration, if is 'bas', then do 1 - num_power.
-    Returns
-    -------
-    Ratio : float
-        Ratio between two powerbands.
+def _ecg_quality_pSQI(ecg_cleaned, sampling_rate=1000, nseg=1024, num_spectrum=[5, 15], dem_spectrum=[5, 40], **kwargs):
+    """Power Spectrum Distribution of QRS Wave.
     """
 
-    def power_in_range(f_range, f, Pxx_den):
-        _indexes = np.where((f >= f_range[0]) & (f <= f_range[1]))[0]
-        _power = integrate.trapz(Pxx_den[_indexes], f[_indexes])
-        return _power
-
-    if (ecg_signal is None):
-        raise TypeError("Please specify an input signal")
-
-    f, Pxx_den = signal.welch(ecg_signal, fs, nperseg=nseg)
-    num_power = power_in_range(num_spectrum, f, Pxx_den)
-
-    if (dem_spectrum is None):
-        dem_power = power_in_range([0, float(fs / 2.0)], f, Pxx_den)
-    else:
-        dem_power = power_in_range(dem_spectrum, f, Pxx_den)
-
-    if (mode == 'simple'):
-        return num_power / dem_power
-    elif (mode == 'bas'):
-        return 1 - num_power / dem_power
+    psd = signal_power(ecg_cleaned, sampling_rate=sampling_rate,
+                       frequency_band=[num_spectrum, dem_spectrum],
+                       method="welch", normalize=False, window=nseg, **kwargs)
     
-def kSQI(signal, fisher=True):
-    """ Return the kurtosis of the signal
-    Parameters
-    ----------
-    signal : array
-        ECG signal.
-    fisher : bool, optional
-        If True,Fisher’s definition is used (normal ==> 0.0). If False, Pearson’s definition is used (normal ==> 3.0).
-    Returns
-    -------
-    kurtosis : float
-        Kurtosis value.
+    num_power = psd.iloc[0][0]
+    dem_power = psd.iloc[0][1]
+    
+    return num_power / dem_power
+
+def _ecg_quality_basSQI(ecg_cleaned, sampling_rate=1000, nseg=1024, num_spectrum=[0, 1], dem_spectrum=[0, 40], **kwargs):
+    """Relative Power in the Baseline.
     """
-
-    if signal is None:
-        raise TypeError("Please specify an input signal")
-
-    return stats.kurtosis(signal, fisher=fisher)
-
-def bSQI(detector_1, detector_2, fs=1000., mode='simple', search_window=150):
-    """ Comparison of the output of two detectors.
-    Parameters
-    ----------
-    detector_1 : array
-        Output of the first detector.
-    detector_2 : array
-        Output of the second detector.
-    fs: int, optional
-        Sampling rate, in Hz.
-    mode : str, optional
-        If 'simple', return only the percentage of beats detected by both. If 'matching', return the peak matching degree.
-        If 'n_double' returns the number of matches divided by the sum of all minus the matches.
-    search_window : int, optional
-        Search window around each peak, in ms.
-    Returns
-    -------
-    bSQI : float
-        Performance of both detectors.
-   """
-
-    if detector_1 is None or detector_2 is None:
-        raise TypeError("Input Error, check detectors outputs")
-    search_window = int(search_window / 1000 * fs)
-    both = 0
-    for i in detector_1:
-        for j in range(max([0, i - search_window]), i + search_window):
-            if j in detector_2:
-                both += 1
-                break
-
-    if mode == 'simple':
-        return (both / len(detector_1)) * 100
-    elif mode == 'matching':
-        return (2 * both) / (len(detector_1) + len(detector_2))
-    elif mode == 'n_double':
-        return both / (len(detector_1) + len(detector_2) - both)
+    psd = signal_power(ecg_cleaned, sampling_rate=sampling_rate,
+                       frequency_band=[num_spectrum, dem_spectrum],
+                       method="welch", normalize=False, window=nseg, **kwargs)
+    
+    num_power = psd.iloc[0][0]
+    dem_power = psd.iloc[0][1]
+    
+    return 1 - num_power / dem_power
 
 
 def _ecg_quality_zhao2018(signal, detector_1, detector_2, sampling_rate=1000, search_window=100, nseg=1024, mode='simple'):
