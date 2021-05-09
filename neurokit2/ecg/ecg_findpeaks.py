@@ -1036,7 +1036,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
 
 
 def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
-    """From https://github.com/berndporr/py-ecg-detectors/"""
+    """Based on https://github.com/berndporr/py-ecg-detectors/"""
     min_distance = int(0.25 * sampling_rate)
 
     signal_peaks = [0]
@@ -1048,7 +1048,6 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     threshold_I1 = 0.0
     threshold_I2 = 0.0
 
-    RR_missed = 0
     index = 0
     indexes = []
 
@@ -1066,20 +1065,24 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
                 signal_peaks.append(peak)
                 indexes.append(index)
                 SPKI = 0.125 * detection[signal_peaks[-1]] + 0.875 * SPKI
-                if RR_missed != 0 and signal_peaks[-1] - signal_peaks[-2] > RR_missed:
-                    missed_section_peaks = peaks[indexes[-2] + 1 : indexes[-1]]
-                    missed_section_peaks2 = []
-                    for missed_peak in missed_section_peaks:
-                        if missed_peak - signal_peaks[-2] > min_distance:
-                            if signal_peaks[-1] - missed_peak > min_distance:
-                                if detection[missed_peak] > threshold_I2:
-                                    missed_section_peaks2.append(missed_peak)
+                # RR_missed threshold is based on the previous eight R-R intervals
+                if len(signal_peaks) > 9:
+                    RR_ave = (signal_peaks[-2] - signal_peaks[-10]) // 8
+                    RR_missed = int(1.66 * RR_ave)
+                    if signal_peaks[-1] - signal_peaks[-2] > RR_missed:
+                        missed_section_peaks = peaks[indexes[-2] + 1 : indexes[-1]]
+                        missed_section_peaks2 = []
+                        for missed_peak in missed_section_peaks:
+                            if missed_peak - signal_peaks[-2] > min_distance:
+                                if signal_peaks[-1] - missed_peak > min_distance:
+                                    if detection[missed_peak] > threshold_I2:
+                                        missed_section_peaks2.append(missed_peak)
 
-                    if missed_section_peaks2:
-                        missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
-                        missed_peaks.append(missed_peak)
-                        signal_peaks.append(signal_peaks[-1])
-                        signal_peaks[-2] = missed_peak
+                        if missed_section_peaks2:
+                            missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
+                            missed_peaks.append(missed_peak)
+                            signal_peaks.append(signal_peaks[-1])
+                            signal_peaks[-2] = missed_peak
 
             else:
                 noise_peaks.append(peak)
@@ -1087,11 +1090,6 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
 
             threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
             threshold_I2 = 0.5 * threshold_I1
-
-            if len(signal_peaks) > 8:
-                RR = np.diff(signal_peaks[-9:])
-                RR_ave = int(np.mean(RR))
-                RR_missed = int(1.66 * RR_ave)
 
             index += 1
 
