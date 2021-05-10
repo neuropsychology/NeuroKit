@@ -1,0 +1,21 @@
+name: 'Toxicity check'
+on: 
+  issue_comment:
+    types: ['created', 'edited', 'deleted']
+  pull_request_review:
+  pull_request_review_comment:
+  issues:
+    types: ['opened', 'edited', 'deleted', 'closed', 'reopened', 'locked', 'unlocked']
+  pull_request:
+    types: ['opened', 'edited', 'closed', 'reopened', 'locked', 'unlocked']
+
+jobs:
+  toxicity-check-job:
+    runs-on: ubuntu-latest
+    name: Toxicity check job
+    steps:
+      - name: Toxicity check
+        uses: TheDutchDevil/toxicity-detection-bot@24daca390d3bd54407c59f848a67090eb02aa447
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LOG_KEY: '16afdd20-7804-4ea7-b55f-e78db302d533'
