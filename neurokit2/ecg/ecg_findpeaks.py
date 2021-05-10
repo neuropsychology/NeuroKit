@@ -1039,6 +1039,7 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     """Based on https://github.com/berndporr/py-ecg-detectors/
 
     Optimized for vectorized computation.
+
     """
     min_peak_distance = int(0.3 * sampling_rate)
     min_missed_distance = int(0.25 * sampling_rate)
@@ -1054,7 +1055,7 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     # TODO: Using plateau_size=(1,1) here avoids detecting flat peaks and
     # maintains original py-ecg-detectors behaviour, but is not obviously
     # correct. Should we remove that setting to find also flat peaks?
-    peaks, _ = scipy.signal.find_peaks(detection, plateau_size=(1,1))
+    peaks, _ = scipy.signal.find_peaks(detection, plateau_size=(1, 1))
     for index, peak in enumerate(peaks):
         peak_value = detection[peak]
 
@@ -1068,8 +1069,9 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
                 RR_missed = int(1.66 * RR_ave)
                 if peak - last_peak > RR_missed:
                     missed_peaks = peaks[last_index + 1 : index]
-                    missed_peaks = missed_peaks[(missed_peaks > last_peak + min_missed_distance) &
-                                                (missed_peaks < peak - min_missed_distance)]
+                    missed_peaks = missed_peaks[
+                        (missed_peaks > last_peak + min_missed_distance) & (missed_peaks < peak - min_missed_distance)
+                    ]
                     threshold_I2 = 0.5 * threshold_I1
                     missed_peaks = missed_peaks[detection[missed_peaks] > threshold_I2]
                     if len(missed_peaks) > 0:
