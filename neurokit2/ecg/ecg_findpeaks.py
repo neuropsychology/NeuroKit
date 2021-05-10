@@ -1042,17 +1042,15 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     """
     min_distance = int(0.25 * sampling_rate)
 
-    signal_peaks = [0]
+    signal_peaks = []
 
     SPKI = 0.0
     NPKI = 0.0
 
-    threshold_I1 = 0.0
-    threshold_I2 = 0.0
-
-    indexes = []
-
     missed_peaks = []
+
+    last_peak = 0
+    last_index = -1
 
     # TODO: Using plateau_size=(1,1) here avoids detecting flat peaks and
     # maintains original py-ecg-detectors behaviour, but is not obviously
@@ -1062,17 +1060,16 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
         peak_value = detection[peak]
 
         threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
-        if peak_value > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
+        if peak_value > threshold_I1 and (peak - last_peak) > 0.3 * sampling_rate:
             signal_peaks.append(peak)
-            indexes.append(index)
 
             SPKI = 0.125 * peak_value + 0.875 * SPKI
             # RR_missed threshold is based on the previous eight R-R intervals
             if len(signal_peaks) > 9:
                 RR_ave = (signal_peaks[-2] - signal_peaks[-10]) // 8
                 RR_missed = int(1.66 * RR_ave)
-                if signal_peaks[-1] - signal_peaks[-2] > RR_missed:
-                    missed_section_peaks = peaks[indexes[-2] + 1 : indexes[-1]]
+                if peak - last_peak > RR_missed:
+                    missed_section_peaks = peaks[last_index + 1 : index]
                     missed_section_peaks2 = []
                     for missed_peak in missed_section_peaks:
                         if missed_peak - signal_peaks[-2] > min_distance:
@@ -1084,12 +1081,12 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
                     if missed_section_peaks2:
                         missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
                         missed_peaks.append(missed_peak)
-                        signal_peaks.append(signal_peaks[-1])
+                        signal_peaks.append(peak)
                         signal_peaks[-2] = missed_peak
 
+            last_peak = peak
+            last_index = index
         else:
             NPKI = 0.125 * peak_value + 0.875 * NPKI
-
-    signal_peaks.pop(0)
 
     return signal_peaks
