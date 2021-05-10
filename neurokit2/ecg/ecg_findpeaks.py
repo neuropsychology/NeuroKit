@@ -1036,7 +1036,10 @@ def _ecg_findpeaks_MWA(signal, window_size):
 
 
 def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
-    """Based on https://github.com/berndporr/py-ecg-detectors/"""
+    """Based on https://github.com/berndporr/py-ecg-detectors/
+
+    Optimized for vectorized computation.
+    """
     min_distance = int(0.25 * sampling_rate)
 
     signal_peaks = [0]
@@ -1048,50 +1051,45 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     threshold_I1 = 0.0
     threshold_I2 = 0.0
 
-    index = 0
     indexes = []
 
     missed_peaks = []
-    peaks = []
 
-    for i in range(len(detection)):  # pylint: disable=R1702,C0200
+    # TODO: Using plateau_size=(1,1) here avoids detecting flat peaks and
+    # maintains original py-ecg-detectors behaviour, but is not obviously
+    # correct. Should we remove that setting to find also flat peaks?
+    peaks, _ = scipy.signal.find_peaks(detection, plateau_size=(1,1))
+    for index, peak in enumerate(peaks):
+        if detection[peak] > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
+            signal_peaks.append(peak)
+            indexes.append(index)
 
-        # pylint: disable=R1716
-        if i > 0 and i < len(detection) - 1 and detection[i - 1] < detection[i] and detection[i + 1] < detection[i]:
-            peak = i
-            peaks.append(peak)  # pylint: disable=R1716
-            if detection[peak] > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
+            SPKI = 0.125 * detection[signal_peaks[-1]] + 0.875 * SPKI
+            # RR_missed threshold is based on the previous eight R-R intervals
+            if len(signal_peaks) > 9:
+                RR_ave = (signal_peaks[-2] - signal_peaks[-10]) // 8
+                RR_missed = int(1.66 * RR_ave)
+                if signal_peaks[-1] - signal_peaks[-2] > RR_missed:
+                    missed_section_peaks = peaks[indexes[-2] + 1 : indexes[-1]]
+                    missed_section_peaks2 = []
+                    for missed_peak in missed_section_peaks:
+                        if missed_peak - signal_peaks[-2] > min_distance:
+                            if signal_peaks[-1] - missed_peak > min_distance:
+                                if detection[missed_peak] > threshold_I2:
+                                    missed_section_peaks2.append(missed_peak)
 
-                signal_peaks.append(peak)
-                indexes.append(index)
-                SPKI = 0.125 * detection[signal_peaks[-1]] + 0.875 * SPKI
-                # RR_missed threshold is based on the previous eight R-R intervals
-                if len(signal_peaks) > 9:
-                    RR_ave = (signal_peaks[-2] - signal_peaks[-10]) // 8
-                    RR_missed = int(1.66 * RR_ave)
-                    if signal_peaks[-1] - signal_peaks[-2] > RR_missed:
-                        missed_section_peaks = peaks[indexes[-2] + 1 : indexes[-1]]
-                        missed_section_peaks2 = []
-                        for missed_peak in missed_section_peaks:
-                            if missed_peak - signal_peaks[-2] > min_distance:
-                                if signal_peaks[-1] - missed_peak > min_distance:
-                                    if detection[missed_peak] > threshold_I2:
-                                        missed_section_peaks2.append(missed_peak)
+                    if missed_section_peaks2:
+                        missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
+                        missed_peaks.append(missed_peak)
+                        signal_peaks.append(signal_peaks[-1])
+                        signal_peaks[-2] = missed_peak
 
-                        if missed_section_peaks2:
-                            missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
-                            missed_peaks.append(missed_peak)
-                            signal_peaks.append(signal_peaks[-1])
-                            signal_peaks[-2] = missed_peak
+        else:
+            noise_peaks.append(peak)
+            NPKI = 0.125 * detection[noise_peaks[-1]] + 0.875 * NPKI
 
-            else:
-                noise_peaks.append(peak)
-                NPKI = 0.125 * detection[noise_peaks[-1]] + 0.875 * NPKI
-
-            threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
-            threshold_I2 = 0.5 * threshold_I1
-
-            index += 1
+        threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
+        threshold_I2 = 0.5 * threshold_I1
 
     signal_peaks.pop(0)
 
