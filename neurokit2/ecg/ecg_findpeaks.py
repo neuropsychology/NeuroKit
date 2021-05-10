@@ -1040,14 +1040,13 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
 
     Optimized for vectorized computation.
     """
-    min_distance = int(0.25 * sampling_rate)
+    min_peak_distance = int(0.3 * sampling_rate)
+    min_missed_distance = int(0.25 * sampling_rate)
 
     signal_peaks = []
 
     SPKI = 0.0
     NPKI = 0.0
-
-    missed_peaks = []
 
     last_peak = 0
     last_index = -1
@@ -1060,32 +1059,27 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
         peak_value = detection[peak]
 
         threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
-        if peak_value > threshold_I1 and (peak - last_peak) > 0.3 * sampling_rate:
+        if peak_value > threshold_I1 and peak > last_peak + min_peak_distance:
             signal_peaks.append(peak)
 
-            SPKI = 0.125 * peak_value + 0.875 * SPKI
             # RR_missed threshold is based on the previous eight R-R intervals
             if len(signal_peaks) > 9:
                 RR_ave = (signal_peaks[-2] - signal_peaks[-10]) // 8
                 RR_missed = int(1.66 * RR_ave)
                 if peak - last_peak > RR_missed:
-                    missed_section_peaks = peaks[last_index + 1 : index]
-                    missed_section_peaks2 = []
-                    for missed_peak in missed_section_peaks:
-                        if missed_peak - signal_peaks[-2] > min_distance:
-                            if signal_peaks[-1] - missed_peak > min_distance:
-                                threshold_I2 = 0.5 * threshold_I1
-                                if detection[missed_peak] > threshold_I2:
-                                    missed_section_peaks2.append(missed_peak)
-
-                    if missed_section_peaks2:
-                        missed_peak = missed_section_peaks2[np.argmax(detection[missed_section_peaks2])]
-                        missed_peaks.append(missed_peak)
+                    missed_peaks = peaks[last_index + 1 : index]
+                    missed_peaks = missed_peaks[(missed_peaks > last_peak + min_missed_distance) &
+                                                (missed_peaks < peak - min_missed_distance)]
+                    threshold_I2 = 0.5 * threshold_I1
+                    missed_peaks = missed_peaks[detection[missed_peaks] > threshold_I2]
+                    if len(missed_peaks) > 0:
+                        signal_peaks[-1] = missed_peaks[np.argmax(detection[missed_peaks])]
                         signal_peaks.append(peak)
-                        signal_peaks[-2] = missed_peak
 
             last_peak = peak
             last_index = index
+
+            SPKI = 0.125 * peak_value + 0.875 * SPKI
         else:
             NPKI = 0.125 * peak_value + 0.875 * NPKI
 
