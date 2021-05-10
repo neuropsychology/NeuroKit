@@ -1043,7 +1043,6 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     min_distance = int(0.25 * sampling_rate)
 
     signal_peaks = [0]
-    noise_peaks = []
 
     SPKI = 0.0
     NPKI = 0.0
@@ -1060,11 +1059,14 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     # correct. Should we remove that setting to find also flat peaks?
     peaks, _ = scipy.signal.find_peaks(detection, plateau_size=(1,1))
     for index, peak in enumerate(peaks):
-        if detection[peak] > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
+        peak_value = detection[peak]
+
+        threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
+        if peak_value > threshold_I1 and (peak - signal_peaks[-1]) > 0.3 * sampling_rate:
             signal_peaks.append(peak)
             indexes.append(index)
 
-            SPKI = 0.125 * detection[signal_peaks[-1]] + 0.875 * SPKI
+            SPKI = 0.125 * peak_value + 0.875 * SPKI
             # RR_missed threshold is based on the previous eight R-R intervals
             if len(signal_peaks) > 9:
                 RR_ave = (signal_peaks[-2] - signal_peaks[-10]) // 8
@@ -1075,6 +1077,7 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
                     for missed_peak in missed_section_peaks:
                         if missed_peak - signal_peaks[-2] > min_distance:
                             if signal_peaks[-1] - missed_peak > min_distance:
+                                threshold_I2 = 0.5 * threshold_I1
                                 if detection[missed_peak] > threshold_I2:
                                     missed_section_peaks2.append(missed_peak)
 
@@ -1085,11 +1088,7 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
                         signal_peaks[-2] = missed_peak
 
         else:
-            noise_peaks.append(peak)
-            NPKI = 0.125 * detection[noise_peaks[-1]] + 0.875 * NPKI
-
-        threshold_I1 = NPKI + 0.25 * (SPKI - NPKI)
-        threshold_I2 = 0.5 * threshold_I1
+            NPKI = 0.125 * peak_value + 0.875 * NPKI
 
     signal_peaks.pop(0)
 
