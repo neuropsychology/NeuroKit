@@ -1052,9 +1052,13 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
     last_peak = 0
     last_index = -1
 
-    # TODO: Using plateau_size=(1,1) here avoids detecting flat peaks and
-    # maintains original py-ecg-detectors behaviour, but is not obviously
-    # correct. Should we remove that setting to find also flat peaks?
+    # NOTE: Using plateau_size=(1,1) here avoids detecting flat peaks and
+    # maintains original py-ecg-detectors behaviour. Flat peaks are typically
+    # found in measurement artifacts where the signal saturates at maximum
+    # recording amplitude. Such cases should not be detected as peaks. If we
+    # do encounter recordings where even normal R peaks are flat, then changing
+    # this to something like plateau_size=(1, sampling_rate // 10) might make
+    # sense. See also https://github.com/neuropsychology/NeuroKit/pull/450.
     peaks, _ = scipy.signal.find_peaks(detection, plateau_size=(1, 1))
     for index, peak in enumerate(peaks):
         peak_value = detection[peak]
