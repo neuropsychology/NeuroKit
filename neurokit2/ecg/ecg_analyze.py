@@ -5,7 +5,7 @@ from .ecg_eventrelated import ecg_eventrelated
 from .ecg_intervalrelated import ecg_intervalrelated
 
 
-def ecg_analyze(data, sampling_rate=1000, method="auto"):
+def ecg_analyze(data, sampling_rate=1000, method="auto", time_start=None, time_end=None):
     """Performs ECG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-
     state data.
 
@@ -23,6 +23,14 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
         Can be one of 'event-related' for event-related analysis on epochs, or 'interval-related' for
         analysis on longer periods of data. Defaults to 'auto' where the right method will be chosen
         based on the mean duration of the data ('event-related' for duration under 10s).
+    time_start : int
+        For event-related analysis, a smaller epoch within the epoch of an event can be specified.
+        The ECG rate-related features of this "sub-epoch" (e.g., ECG_Rate, ECG_Rate_Max),
+        relative to the baseline (where applicable), will be computed. time_start is the start of
+        this "sub-epoch", in seconds, e.g., time_start = 1. Defaults to None.
+    time_end : int, dict
+        time_end is the end of the "sub-epoch". Defaults to None.
+
 
     Returns
     -------
@@ -83,7 +91,7 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
                 "we couldn't extract epochs features."
             )
         else:
-            features = ecg_eventrelated(data)
+            features = ecg_eventrelated(data, time_start=time_start, time_end=time_end)
 
     # Interval-related analysis
     elif method in ["interval-related", "interval", "resting-state"]:
@@ -98,7 +106,7 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
             if duration >= 10:
                 features = ecg_intervalrelated(data, sampling_rate=sampling_rate)
             else:
-                features = ecg_eventrelated(data)
+                features = ecg_eventrelated(data, time_start=time_start, time_end=time_end)
 
         if isinstance(data, pd.DataFrame):
             if "Label" in data.columns:
@@ -109,6 +117,6 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
             if duration >= 10:
                 features = ecg_intervalrelated(data, sampling_rate=sampling_rate)
             else:
-                features = ecg_eventrelated(data)
+                features = ecg_eventrelated(data, time_start=time_start, time_end=time_end)
 
     return features
