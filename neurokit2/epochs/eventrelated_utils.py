@@ -73,7 +73,7 @@ def _eventrelated_sanitizeoutput(data):
     return df
 
 
-def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
+def _eventrelated_rate(epoch, output={}, var="ECG_Rate", time_start=None, time_end=None):
 
     # Sanitize input
     colnames = epoch.columns.values
@@ -89,8 +89,59 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
     zero = find_closest(0, epoch.index.values, return_index=True)  # Find closest to 0
     baseline = epoch[var].iloc[zero]
 
-    signal = epoch[var].values[zero + 1 : :]
-    index = epoch.index.values[zero + 1 : :]
+    # Create smaller epoch within epoch provided when applicable
+    # Sanitize time_start and time_end format
+    if isinstance(time_start, dict):
+        if var not in time_start.keys():
+            time_start = None
+            warn(
+                "`time_start` for `" + var + "` is not provided. "
+                "If it's intentional, set `time_start` for `" + var + "` to None to silent this warning.",
+                category=NeuroKitWarning
+                )
+        else:
+            time_start = time_start[var]
+    if isinstance(time_end, dict):
+        if var not in time_end.keys():
+            time_end = None
+            warn(
+                "`time_end` for `" + var + "` is not provided. "
+                "If it's intentional, set `time_end` for `" + var + "` to None to silent this warning.",
+                category=NeuroKitWarning
+                )
+        else:
+            time_end = time_end[var]
+
+    # Normal behaviour if time_start and time_end are both None
+    if time_start is None and time_end is None:
+        signal = epoch[var].values[zero + 1 : :]
+        index = epoch.index.values[zero + 1 : :]
+    else:
+        # Sanitize time_start and time_end values
+        if time_start is None:
+            time_start = epoch.index.values[zero]  # set time_start to time zero
+        if time_end is None:
+            time_end = epoch.index.values[-1]
+        if time_start < np.min(epoch.index.values):
+            time_start = epoch.index.values[0]
+            warn(
+                "`time_start` provided for `" + var + "` is earlier than the start of the epoch. "
+                "For this analysis, `time_start` is set to the start of the epoch.",
+                category=NeuroKitWarning
+                )
+        if time_end > np.max(epoch.index.values):
+            time_end = epoch.index.values[-1]
+            warn(
+                "`time_end` provided for `" + var + "` is later than the end of the epoch. "
+                "For this analysis, `time_end` is set to the end of the epoch.",
+                category=NeuroKitWarning
+                )
+
+        # Truncate a smaller epoch within the input epoch
+        epoch_start = find_closest(time_start, epoch.index.values, return_index=True)
+        epoch_end = find_closest(time_end, epoch.index.values, return_index=True)
+        signal = epoch[var].values[epoch_start : epoch_end + 1]
+        index = epoch.index.values[epoch_start : epoch_end + 1]
 
     # Max / Min / Mean
     output[var + "_Baseline"] = baseline

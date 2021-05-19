@@ -10,7 +10,7 @@ from ..epochs.eventrelated_utils import (
 from ..misc import NeuroKitWarning
 
 
-def ecg_eventrelated(epochs, silent=False):
+def ecg_eventrelated(epochs, silent=False, time_start=None, time_end=None):
     """Performs event-related ECG analysis on epochs.
 
     Parameters
@@ -21,6 +21,13 @@ def ecg_eventrelated(epochs, silent=False):
         containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
+    time_start : int
+        A smaller epoch within the epoch of an event can be specified.
+        The ECG rate-related features of this "sub-epoch" (e.g., ECG_Rate, ECG_Rate_Max),
+        relative to the baseline (where applicable), will be computed. time_start is the start of
+        this "sub-epoch", in seconds, e.g., time_start = 1. Defaults to None.
+    time_end : int, dict
+        time_end is the end of the "sub-epoch". Defaults to None.
 
     Returns
     -------
@@ -114,7 +121,7 @@ def ecg_eventrelated(epochs, silent=False):
         data[i] = {}  # Initialize empty container
 
         # Rate
-        data[i] = _eventrelated_rate(epochs[i], data[i], var="ECG_Rate")
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="ECG_Rate", time_start=time_start, time_end=time_end)
 
         # Cardiac Phase
         data[i] = _ecg_eventrelated_phase(epochs[i], data[i])
