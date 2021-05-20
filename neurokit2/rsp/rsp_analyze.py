@@ -5,7 +5,7 @@ from .rsp_eventrelated import rsp_eventrelated
 from .rsp_intervalrelated import rsp_intervalrelated
 
 
-def rsp_analyze(data, sampling_rate=1000, method="auto", time_start=None, time_end=None):
+def rsp_analyze(data, sampling_rate=1000, method="auto", rate_start=None, rate_end=None):
     """Performs RSP analysis on either epochs (event-related analysis) or on longer periods of data such as resting-
     state data.
 
@@ -22,13 +22,14 @@ def rsp_analyze(data, sampling_rate=1000, method="auto", time_start=None, time_e
         Can be one of 'event-related' for event-related analysis on epochs, or 'interval-related' for
         analysis on longer periods of data. Defaults to 'auto' where the right method will be chosen
         based on the mean duration of the data ('event-related' for duration under 10s).
-    time_start : int
-        For event-related analysis, a smaller epoch within the epoch of an event can be specified.
+    rate_start : int
+        For event-related analysis, a smaller "sub-epoch" within the epoch of an event can be specified
+        using rate_start and rate_end.
         The RSP rate-related features of this "sub-epoch" (e.g., RSP_Rate, RSP_Rate_Max),
-        relative to the baseline (where applicable), will be computed. time_start is the start of
-        this "sub-epoch", in seconds, e.g., time_start = 1. Defaults to None.
-    time_end : int
-        time_end is the end of the "sub-epoch". Defaults to None.
+        relative to the baseline (where applicable), will be computed. rate_start is the start of
+        this "sub-epoch", in seconds, e.g., rate_start = 1. Defaults to None.
+    rate_end : int
+        rate_end is the end of the "sub-epoch". Defaults to None.
 
     Returns
     -------
@@ -83,7 +84,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto", time_start=None, time_e
                 "NeuroKit error: rsp_analyze(): Wrong input or method, we couldn't extract extract epochs features."
             )
         else:
-            features = rsp_eventrelated(data, time_start=time_start, time_end=time_end)
+            features = rsp_eventrelated(data, rate_start=rate_start, rate_end=rate_end)
 
     # Interval-related analysis
     elif method in ["interval-related", "interval", "resting-state"]:
@@ -98,7 +99,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto", time_start=None, time_e
             if duration >= 10:
                 features = rsp_intervalrelated(data, sampling_rate)
             else:
-                features = rsp_eventrelated(data, time_start=time_start, time_end=time_end)
+                features = rsp_eventrelated(data, rate_start=rate_start, rate_end=rate_end)
 
         if isinstance(data, pd.DataFrame):
             if "Label" in data.columns:
@@ -109,6 +110,6 @@ def rsp_analyze(data, sampling_rate=1000, method="auto", time_start=None, time_e
             if duration >= 10:
                 features = rsp_intervalrelated(data, sampling_rate)
             else:
-                features = rsp_eventrelated(data, time_start=time_start, time_end=time_end)
+                features = rsp_eventrelated(data, rate_start=rate_start, rate_end=rate_end)
 
     return features

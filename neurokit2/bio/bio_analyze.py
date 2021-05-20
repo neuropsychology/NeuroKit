@@ -11,7 +11,7 @@ from ..rsp import rsp_analyze
 from ..ppg import ppg_analyze
 
 
-def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constant', time_start=None, time_end=None):
+def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constant', rate_start=None, rate_end=None):
     """Automated analysis of bio signals.
 
     Wrapper for other bio analyze functions of
@@ -35,17 +35,18 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     window_lengths : dict
         Defaults to 'constant'. Add a dictionary of epoch start and end times for different
         types of signals e.g., window_lengths = {'ECG': [0.5, 1.5], 'EDA': [0.5, 3.5]}
-    time_start : int, dict
-        For event-related analysis, a smaller epoch within the epoch of an event can be specified.
+    rate_start : int, dict
+        For event-related analysis, a smaller "sub-epoch" within the epoch of an event can be specified
+        using rate_start and rate_end.
         The ECG and RSP rate-related features of this "sub-epoch" (e.g., ECG_Rate, ECG_Rate_Max),
-        relative to the baseline (where applicable), will be computed. time_start is the start of
-        this "sub-epoch", in seconds, e.g., time_start = 1 or time_start = {'ECG_Rate': 1, 'RSP_Rate': 2}
-        if different time_start for different signal is desired. Defaults to None.
-    time_end : int, dict
-        time_end is the end of the "sub-epoch". Similar to time_start, it can be an int or a dict.
-        Note that for both time_start and time_end, if a dict is provided, the dictionary is expected
+        relative to the baseline (where applicable), will be computed. rate_start is the start of
+        this "sub-epoch", in seconds, e.g., rate_start = 1 or rate_start = {'ECG_Rate': 1, 'RSP_Rate': 2}
+        if different rate_start for different signal is desired. Defaults to None.
+    rate_end : int, dict
+        rate_end is the end of the "sub-epoch". Similar to rate_start, it can be an int or a dict.
+        Note that for both rate_start and rate_end, if a dict is provided, the dictionary is expected
         to have values for both `ECG_Rate` and `RSP_Rate`. Set the value to None where applicable
-        e.g., time_end = {'ECG_Rate': 1, 'RSP_Rate': None}. Defaults to None.
+        e.g., rate_end = {'ECG_Rate': 1, 'RSP_Rate': None}. Defaults to None.
 
     Returns
     ----------
@@ -137,7 +138,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
             if 'ECG' in window_lengths.keys():  # only for epochs
                 ecg_data = _bio_analyze_slicewindow(ecg_data, window_lengths, signal='ECG')
 
-        ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate, method=method, time_start=time_start, time_end=time_end)
+        ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate, method=method, rate_start=rate_start, rate_end=rate_end)
         features = pd.concat([features, ecg_analyzed], axis=1, sort=False)
 
     # RSP
@@ -148,7 +149,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
             if 'RSP' in window_lengths.keys():  # only for epochs
                 rsp_data = _bio_analyze_slicewindow(rsp_data, window_lengths, signal='RSP')
 
-        rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate, method=method, time_start=time_start, time_end=time_end)
+        rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate, method=method, rate_start=rate_start, rate_end=rate_end)
         features = pd.concat([features, rsp_analyzed], axis=1, sort=False)
 
     # EDA
