@@ -73,7 +73,7 @@ def _eventrelated_sanitizeoutput(data):
     return df
 
 
-def _eventrelated_rate(epoch, output={}, var="ECG_Rate", rate_start=None, rate_end=None):
+def _eventrelated_rate(epoch, output={}, var="ECG_Rate", subepoch_rate=[None, None]):
 
     # Sanitize input
     colnames = epoch.columns.values
@@ -91,26 +91,31 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate", rate_start=None, rate_e
 
     # Create smaller epoch within epoch provided when applicable
     # Sanitize rate_start and rate_end format
-    if isinstance(rate_start, dict):
-        if var not in rate_start.keys():
-            rate_start = None
+    if isinstance(subepoch_rate, dict):
+        if var not in subepoch_rate.keys():
+            subepoch_rate = [None, None]
             warn(
-                "`" + var + "` was not found in the dictionary, setting `rate_start` to None. "
-                "If it's intentional, add  `'" + var + "': None` to the dict to silence this warning.",
+                "`" + var + "` was not found in the dictionary, setting both the start and stop of
+                "`" + var + "` to None. If it's intentional, add  `'" + var + "': [None, None]` to
+                "the dict to silence this warning.",
                 category=NeuroKitWarning
                 )
         else:
-            rate_start = rate_start[var]
-    if isinstance(rate_end, dict):
-        if var not in rate_end.keys():
-            rate_end = None
-            warn(
-                "`" + var + "` was not found in the dictionary, setting `rate_end` to None. "
-                "If it's intentional, add  `'" + var + "': None` to the dict to silence this warning.",
-                category=NeuroKitWarning
+            subepoch_rate = subepoch_rate[var]
+
+    if not isinstance(subepoch_rate, list):
+        raise TypeError(
+                "NeuroKit error: Expecting `subepoch_rate` as a list with length of 2, "
+                "e.g., [epoch_start, epoch_stop]. "
                 )
-        else:
-            rate_end = rate_end[var]
+    elif len(subepoch_rate) != 2:
+         raise ValueError(
+                "NeuroKit error: Expecting `subepoch_rate` as a list with length of 2, "
+                "e.g., [epoch_start, epoch_stop]. "
+                )
+    else:
+        rate_start = subepoch_rate[0]
+        rate_end = subepoch_rate[1]
 
     # Normal behaviour if rate_start and rate_end are both None
     if rate_start is None and rate_end is None:
@@ -126,7 +131,7 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate", rate_start=None, rate_e
             rate_start = epoch.index.values[0]
             warn(
                 "`rate_start` provided for `" + var + "` is earlier than the start of the epoch. "
-                "For this analysis, `rate_start` is set to the start of the epoch.",
+                "For this analysis, `rate_start` is set to 0 second (of the epoch).",
                 category=NeuroKitWarning
                 )
         if rate_end > np.max(epoch.index.values):
