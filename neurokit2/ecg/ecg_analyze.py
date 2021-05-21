@@ -116,5 +116,6 @@ def ecg_analyze(data, sampling_rate=1000, method="auto", subepoch_rate=[None, No
             if duration >= 10:
                 features = ecg_intervalrelated(data, sampling_rate=sampling_rate)
             else:
+                features = ecg_eventrelated(data, subepoch_rate=subepoch_rate)
 
     return features

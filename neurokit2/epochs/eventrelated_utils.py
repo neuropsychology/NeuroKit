@@ -95,8 +95,8 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate", subepoch_rate=[None, No
         if var not in subepoch_rate.keys():
             subepoch_rate = [None, None]
             warn(
-                "`" + var + "` was not found in the dictionary, setting both the start and stop of
-                "`" + var + "` to None. If it's intentional, add  `'" + var + "': [None, None]` to
+                "`" + var + "` was not found in the dictionary, setting both the start and stop of"
+                "`" + var + "` to None. If it's intentional, add  `'" + var + "': [None, None]` to"
                 "the dict to silence this warning.",
                 category=NeuroKitWarning
                 )
