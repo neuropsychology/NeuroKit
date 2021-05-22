@@ -3,16 +3,14 @@ from warnings import warn
 
 import numpy as np
 
-from ..epochs.eventrelated_utils import (
-    _eventrelated_addinfo,
-    _eventrelated_rate,
-    _eventrelated_sanitizeinput,
-    _eventrelated_sanitizeoutput,
-)
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
+                                         _eventrelated_rate,
+                                         _eventrelated_sanitizeinput,
+                                         _eventrelated_sanitizeoutput)
 from ..misc import NeuroKitWarning
 
 
-def rsp_eventrelated(epochs, silent=False, time_start=None, time_end=None):
+def rsp_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
     """Performs event-related RSP analysis on epochs.
 
     Parameters
@@ -22,13 +20,12 @@ def rsp_eventrelated(epochs, silent=False, time_start=None, time_end=None):
         or a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
-    time_start : int
-        A smaller epoch within the epoch of an event can be specified.
-        The RSP rate-related features of this "sub-epoch" (e.g., RSP_Rate, RSP_Rate_Max),
-        relative to the baseline (where applicable), will be computed. time_start is the start of
-        this "sub-epoch", in seconds, e.g., time_start = 1. Defaults to None.
-    time_end : int
-        time_end is the end of the "sub-epoch". Defaults to None.
+    subepoch_rate : list
+        A smaller "sub-epoch" within the epoch of an event can be specified.
+        The ECG rate-related features of this "sub-epoch" (e.g., RSP_Rate, RSP_Rate_Max),
+        relative to the baseline (where applicable), will be computed. The first value of the list specifies
+        the start of the sub-epoch and the second specifies the end of the sub-epoch (in seconds),
+        e.g., subepoch_rate = [1, 3] or subepoch_rate = [1, None]. Defaults to [None, None].
 
     Returns
     -------
@@ -90,7 +87,7 @@ def rsp_eventrelated(epochs, silent=False, time_start=None, time_end=None):
         data[i] = {}  # Initialize empty container
 
         # Rate
-        data[i] = _eventrelated_rate(epochs[i], data[i], var="RSP_Rate", time_start=time_start, time_end=time_end)
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="RSP_Rate", subepoch_rate=subepoch_rate)
 
         # Amplitude
         data[i] = _rsp_eventrelated_amplitude(epochs[i], data[i])

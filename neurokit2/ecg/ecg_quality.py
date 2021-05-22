@@ -136,9 +136,9 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
     return quality
 
 
-#=============================================================================
-#Zhao (2018) method
-#=============================================================================
+# =============================================================================
+# Zhao (2018) method
+# =============================================================================
 def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
                           window=1024, kurtosis_method="fisher", mode="simple", **kwargs):
     """Return ECG quality classification of based on Zhao et al. (2018),
