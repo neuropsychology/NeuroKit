@@ -73,8 +73,8 @@ def test_rsp_peaks():
     assert signals["RSP_Troughs"].sum() == 28
     assert info["RSP_Peaks"].shape[0] == 28
     assert info["RSP_Troughs"].shape[0] == 28
-    assert np.allclose(info["RSP_Peaks"].sum(), 1643817)
-    assert np.allclose(info["RSP_Troughs"].sum(), 1586588)
+    assert np.allclose(info["RSP_Peaks"].sum(), 1643836)
+    assert np.allclose(info["RSP_Troughs"].sum(), 1586580)
     # Assert that extrema start with a trough and end with a peak.
     assert info["RSP_Peaks"][0] > info["RSP_Troughs"][0]
     assert info["RSP_Peaks"][-1] > info["RSP_Troughs"][-1]
@@ -200,7 +200,7 @@ def test_rsp_rrv():
 
     # Test warning on too short duration
     with pytest.warns(nk.misc.NeuroKitWarning, match=r"The duration of recording is too short.*"):
-        short_rsp90 = nk.rsp_simulate(duration=10, sampling_rate=1000, respiratory_rate=90, 
+        short_rsp90 = nk.rsp_simulate(duration=10, sampling_rate=1000, respiratory_rate=90,
                                       random_state=42)
         short_cleaned90 = nk.rsp_clean(short_rsp90, sampling_rate=1000)
         _, short_peaks90 = nk.rsp_peaks(short_cleaned90)

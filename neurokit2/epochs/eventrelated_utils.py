@@ -109,7 +109,7 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate", subepoch_rate=[None, No
                 "e.g., [epoch_start, epoch_stop]. "
                 )
     elif len(subepoch_rate) != 2:
-         raise ValueError(
+        raise ValueError(
                 "NeuroKit error: Expecting `subepoch_rate` as a list with length of 2, "
                 "e.g., [epoch_start, epoch_stop]. "
                 )
