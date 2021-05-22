@@ -17,3 +17,4 @@ Here are some things to check before creating the PR. If you encounter any issue
 - [ ] I have read the [CONTRIBUTING](https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst#structure-and-code) file.
 - [ ] My PR is targetted at the **dev branch** (and not towards the master branch).
 - [ ] I ran the [CODE CHECKS](https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst#run-code-checks) on the files I added or modified and fixed the errors.
+- [ ] I have added the newly added features to **News.rst** (if applicable)

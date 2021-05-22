@@ -3,15 +3,15 @@ import numpy as np
 import pandas as pd
 
 from ..ecg import ecg_analyze
-from ..hrv import hrv_rsa
 from ..eda import eda_analyze
 from ..emg import emg_analyze
 from ..eog import eog_analyze
-from ..rsp import rsp_analyze
+from ..hrv import hrv_rsa
 from ..ppg import ppg_analyze
+from ..rsp import rsp_analyze
 
 
-def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constant'):
+def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constant', subepoch_rate=[None, None]):
     """Automated analysis of bio signals.
 
     Wrapper for other bio analyze functions of
@@ -35,6 +35,13 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     window_lengths : dict
         Defaults to 'constant'. Add a dictionary of epoch start and end times for different
         types of signals e.g., window_lengths = {'ECG': [0.5, 1.5], 'EDA': [0.5, 3.5]}
+    subepoch_rate : list, dict
+        For event-related analysis,, a smaller "sub-epoch" within the epoch of an event can be specified.
+        The ECG and RSP rate-related features of this "sub-epoch" (e.g., ECG_Rate, ECG_Rate_Max),
+        relative to the baseline (where applicable), will be computed, e.g., subepoch_rate = [1, 3]
+        or subepoch_rate = {'ECG_Rate' = [1, 2], 'RSP_Rate' = [1.5, None]} if different sub-epoch length
+        for different signal is desired. Defaults to [None, None]. The first value of the list specifies
+        the start of the sub-epoch and the second specifies the end of the sub-epoch (in seconds),
 
     Returns
     ----------
@@ -126,7 +133,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
             if 'ECG' in window_lengths.keys():  # only for epochs
                 ecg_data = _bio_analyze_slicewindow(ecg_data, window_lengths, signal='ECG')
 
-        ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate, method=method)
+        ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate, method=method, subepoch_rate=subepoch_rate)
         features = pd.concat([features, ecg_analyzed], axis=1, sort=False)
 
     # RSP
@@ -137,7 +144,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
             if 'RSP' in window_lengths.keys():  # only for epochs
                 rsp_data = _bio_analyze_slicewindow(rsp_data, window_lengths, signal='RSP')
 
-        rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate, method=method)
+        rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate, method=method, subepoch_rate=subepoch_rate)
         features = pd.concat([features, rsp_analyzed], axis=1, sort=False)
 
     # EDA

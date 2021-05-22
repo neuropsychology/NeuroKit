@@ -73,7 +73,7 @@ def _eventrelated_sanitizeoutput(data):
     return df
 
 
-def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
+def _eventrelated_rate(epoch, output={}, var="ECG_Rate", subepoch_rate=[None, None]):
 
     # Sanitize input
     colnames = epoch.columns.values
@@ -89,8 +89,64 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
     zero = find_closest(0, epoch.index.values, return_index=True)  # Find closest to 0
     baseline = epoch[var].iloc[zero]
 
-    signal = epoch[var].values[zero + 1 : :]
-    index = epoch.index.values[zero + 1 : :]
+    # Create smaller epoch within epoch provided when applicable
+    # Sanitize rate_start and rate_end format
+    if isinstance(subepoch_rate, dict):
+        if var not in subepoch_rate.keys():
+            subepoch_rate = [None, None]
+            warn(
+                "`" + var + "` was not found in the dictionary, setting both the start and stop of"
+                "`" + var + "` to None. If it's intentional, add  `'" + var + "': [None, None]` to"
+                "the dict to silence this warning.",
+                category=NeuroKitWarning
+                )
+        else:
+            subepoch_rate = subepoch_rate[var]
+
+    if not isinstance(subepoch_rate, list):
+        raise TypeError(
+                "NeuroKit error: Expecting `subepoch_rate` as a list with length of 2, "
+                "e.g., [epoch_start, epoch_stop]. "
+                )
+    elif len(subepoch_rate) != 2:
+         raise ValueError(
+                "NeuroKit error: Expecting `subepoch_rate` as a list with length of 2, "
+                "e.g., [epoch_start, epoch_stop]. "
+                )
+    else:
+        rate_start = subepoch_rate[0]
+        rate_end = subepoch_rate[1]
+
+    # Normal behaviour if rate_start and rate_end are both None
+    if rate_start is None and rate_end is None:
+        signal = epoch[var].values[zero + 1 : :]
+        index = epoch.index.values[zero + 1 : :]
+    else:
+        # Sanitize rate_start and rate_end values
+        if rate_start is None:
+            rate_start = epoch.index.values[zero]  # set rate_start to time zero
+        if rate_end is None:
+            rate_end = epoch.index.values[-1]
+        if rate_start < np.min(epoch.index.values):
+            rate_start = epoch.index.values[0]
+            warn(
+                "`rate_start` provided for `" + var + "` is earlier than the start of the epoch. "
+                "For this analysis, `rate_start` is set to 0 second (of the epoch).",
+                category=NeuroKitWarning
+                )
+        if rate_end > np.max(epoch.index.values):
+            rate_end = epoch.index.values[-1]
+            warn(
+                "`rate_end` provided for `" + var + "` is later than the end of the epoch. "
+                "For this analysis, `rate_end` is set to the end of the epoch.",
+                category=NeuroKitWarning
+                )
+
+        # Truncate a smaller epoch within the input epoch
+        epoch_start = find_closest(rate_start, epoch.index.values, return_index=True)
+        epoch_end = find_closest(rate_end, epoch.index.values, return_index=True)
+        signal = epoch[var].values[epoch_start + 1 : epoch_end + 1]
+        index = epoch.index.values[epoch_start + 1 : epoch_end + 1]
 
     # Max / Min / Mean
     output[var + "_Baseline"] = baseline
