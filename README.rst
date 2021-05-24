@@ -10,8 +10,8 @@
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg?logo=pypi&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://img.shields.io/travis/neuropsychology/neurokit/master?label=Travis%20CI&logo=travis
-        :target: https://travis-ci.org/neuropsychology/NeuroKit
+.. image:: https://github.com/neuropsychology/NeuroKit/actions/workflows/tests.yml/badge.svg
+        :target: https://github.com/neuropsychology/NeuroKit/actions/workflows/tests.yml
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit
