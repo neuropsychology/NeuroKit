@@ -16,8 +16,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     Parameters
     ----------
     peaks : dict
-        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur. Dictionary returned
-        by ecg_findpeaks, ecg_peaks, ppg_findpeaks, or ppg_peaks.
+        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
+        Can be a list of indices or the output(s) of other functions such as ecg_peaks,
+        ppg_peaks, ecg_process or bio_process.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
@@ -83,6 +84,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     """
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
+    if isinstance(peaks, tuple):  # Detect actual sampling rate
+        peaks, sampling_rate = peaks[0], peaks[1]
 
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)

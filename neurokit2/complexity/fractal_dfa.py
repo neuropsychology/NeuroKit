@@ -79,6 +79,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     # Sanity checks
     n = len(signal)
     windows = _fractal_dfa_findwindows(n, windows)
+    _fractal_dfa_findwindows_warning(windows, n)  # Return warning for too short windows
 
     # Preprocessing
     if integrate is True:
@@ -139,6 +140,10 @@ def _fractal_dfa_findwindows(n, windows="default"):
         )  # see https://github.com/neuropsychology/NeuroKit/issues/206
         windows = np.unique(windows)  # keep only unique
 
+    return windows
+
+def _fractal_dfa_findwindows_warning(windows, n):
+
     # Check windows
     if len(windows) < 2:
         raise ValueError("NeuroKit error: fractal_dfa(): more than one window is needed.")
@@ -148,8 +153,6 @@ def _fractal_dfa_findwindows(n, windows="default"):
         raise ValueError(
             "NeuroKit error: fractal_dfa(): the window cannot contain more data points than the" "time series."
         )
-    return windows
-
 
 def _fractal_dfa_getwindow(signal, n, window, overlap=True):
     if overlap:

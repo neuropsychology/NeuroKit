@@ -5,14 +5,13 @@ import numpy as np
 import pandas as pd
 import scipy.linalg
 
-# from ..ecg import ecg_rsp # TODO: why is ecg_rsp imported as a module, not a function?
 from ..ecg.ecg_rsp import ecg_rsp
 from ..misc import NeuroKitWarning
 from ..rsp import rsp_process
 from ..signal import (signal_filter, signal_interpolate, signal_rate,
                       signal_resample, signal_timefrequency)
 from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
-from .hrv_utils import _hrv_get_rri
+from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, continuous=False,
@@ -142,6 +141,10 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
       1(06), 32.
 
     """
+    rpeaks = _hrv_sanitize_input(rpeaks)
+    if isinstance(rpeaks, tuple):  # Detect actual sampling rate
+        rpeaks, sampling_rate = rpeaks[0], rpeaks[1]
+
     signals, ecg_period, rpeaks, __ = _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks, sampling_rate)
 
     # Extract cycles
@@ -154,9 +157,9 @@ def hrv_rsa(ecg_signals, rsp_signals=None, rpeaks=None, sampling_rate=1000, cont
         rsp_peaks = rsp_peaks[:-1]
     if len(rsp_peaks) - len(rsp_onsets) != -1:
         warn(
-            "Couldn't find rsp cycles onsets and centers. Check your RSP signal.",
-            category=NeuroKitWarning
-        )
+             "Couldn't find rsp cycles onsets and centers. Check your RSP signal.",
+             category=NeuroKitWarning
+         )
 
     # Methods ------------------------
 

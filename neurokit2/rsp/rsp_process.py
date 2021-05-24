@@ -44,7 +44,8 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         representing the stage of the current respiratory phase.
     info : dict
         A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,
-        accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
+        accessible with the keys "RSP_Peaks", and "RSP_Troughs" respectively,
+        as well as the signals' sampling rate.
 
     See Also
     --------
@@ -68,6 +69,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     # Extract, fix and format peaks
     peak_signal, info = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=0.3)
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     # Get additional parameters
     phase = rsp_phase(peak_signal, desired_length=len(rsp_signal))

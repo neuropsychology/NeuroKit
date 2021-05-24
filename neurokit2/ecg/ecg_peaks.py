@@ -31,7 +31,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
         in a list of zeros with the same length as `ecg_cleaned`. Accessible with the keys "ECG_R_Peaks".
     info : dict
         A dictionary containing additional information, in this case the samples at which R-peaks occur,
-        accessible with the key "ECG_R_Peaks".
+        accessible with the key "ECG_R_Peaks", as well as the signals' sampling rate.
 
     See Also
     --------
@@ -78,5 +78,6 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
     instant_peaks = signal_formatpeaks(rpeaks, desired_length=len(ecg_cleaned), peak_indices=rpeaks)
     signals = instant_peaks
     info = rpeaks
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     return signals, info

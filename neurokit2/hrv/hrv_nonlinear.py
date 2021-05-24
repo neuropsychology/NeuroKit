@@ -5,13 +5,15 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import entropy_approximate, entropy_sample
+from ..complexity import entropy_approximate, entropy_sample, entropy_multiscale
+from ..complexity.fractal_dfa import fractal_dfa, _fractal_dfa_findwindows
+from ..complexity.fractal_correlation import fractal_correlation
 from ..misc import find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
+def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
      See references for details.
@@ -19,14 +21,18 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     Parameters
     ----------
     peaks : dict
-        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur. Dictionary returned
-        by ecg_findpeaks, ecg_peaks, ppg_findpeaks, or ppg_peaks.
+        Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
+        Can be a list of indices or the output(s) of other functions such as ecg_peaks,
+        ppg_peaks, ecg_process or bio_process.
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
     show : bool, optional
         If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the
         next successive one. The ellipse centers around the average RR interval. By default False.
+    **kwargs : optional
+        Other arguments to be passed into `fractal_dfa()` and `fractal_correlation()`.
+
 
     Returns
     -------
@@ -112,6 +118,16 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
 
             - **SampEn**: The sample entropy measure of HRV, calculated by `entropy_sample()`.
 
+            - **MSE**: The multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
+
+            - **CMSE**: The composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
+
+            - **RCMSE**: The refined composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
+
+            - **CorrDim**: The correlation dimension of the HR signal, calculated by `fractal_correlation()`.
+
+            - **DFA**: The detrended fluctuation analysis of the HR signal, calculated by `fractal_dfa()`.
+
 
     See Also
     --------
@@ -167,6 +183,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     """
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
+    if isinstance(peaks, tuple):  # Detect actual sampling rate
+        peaks, sampling_rate = peaks[0], peaks[1]
 
     # Compute R-R intervals (also referred to as NN) in milliseconds
     rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
@@ -184,8 +202,20 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False):
     out = _hrv_nonlinear_poincare_hra(rri, out)
 
     # Entropy
-    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
-    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
+    r = 0.2 * np.std(rri, ddof=1)
+    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=r)
+    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=r)
+    out["MSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False)
+    out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)
+    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)
+
+    # Fractal, skip computation if too short
+    windows = _fractal_dfa_findwindows(len(rri), **kwargs)
+    if len(windows) < 2 or np.min(windows) < 2 or np.max(windows) >= len(rri):
+        out["DFA"] = np.nan
+    else:
+        out["DFA"] = fractal_dfa(rri, multifractal=False, **kwargs)
+    out["CorrDim"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
 
     if show:
         _hrv_nonlinear_show(rri, out)

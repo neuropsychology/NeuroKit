@@ -34,7 +34,8 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
         - *"EOG_Rate"*: eye blinks rate interpolated between blinks.
 
     info : dict
-        A dictionary containing the samples at which the eye blinks occur, accessible with the key "EOG_Blinks".
+        A dictionary containing the samples at which the eye blinks occur, accessible with the key "EOG_Blinks"
+        as well as the signals' sampling rate.
 
     See Also
     --------
@@ -66,6 +67,7 @@ def eog_process(veog_signal, sampling_rate=1000, **kwargs):
     peaks = eog_findpeaks(eog_cleaned, sampling_rate=sampling_rate, **kwargs)
 
     info = {"EOG_Blinks": peaks}
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     # Mark (potential) blink events
     signal_blinks = _signal_from_indices(peaks, desired_length=len(eog_cleaned))
