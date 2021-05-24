@@ -202,11 +202,12 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out = _hrv_nonlinear_poincare_hra(rri, out)
 
     # Entropy
-    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
-    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=0.2 * np.std(rri, ddof=1))
-    out["MSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=False, refined=False)
-    out["CMSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=True, refined=False)
-    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=0.2 * np.std(rri, ddof=1), composite=True, refined=True)
+    r = 0.2 * np.std(rri, ddof=1)
+    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=r)
+    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=r)
+    out["MSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False)
+    out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)
+    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)
 
     # Fractal, skip computation if too short
     windows = _fractal_dfa_findwindows(len(rri), **kwargs)

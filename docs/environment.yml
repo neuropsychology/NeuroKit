@@ -9,9 +9,9 @@ dependencies:
   - ipykernel
   - pip:
     - sphinx
-    - git+https://github.com/spatialaudio/nbsphinx.git@master
+    - git+https://github.com/spatialaudio/nbsphinx.git@master # Do change that when this is merged (https://github.com/spatialaudio/nbsphinx/pull/463)
     #- sphinx-nbexamples  
-    - git+https://github.com/Chilipp/sphinx-nbexamples.git@master # use app.add_css_file for sphinx >= 3.0
+    - git+https://github.com/Chilipp/sphinx-nbexamples.git@master # Use app.add_css_file for sphinx >= 3.0, change when https://github.com/Chilipp/sphinx-nbexamples is released
     - sphinx-gallery
     - sphinx-copybutton
     - recommonmark
