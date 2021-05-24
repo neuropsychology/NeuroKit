@@ -1,4 +1,4 @@
-name:📊Tests
+name: Tests
 
 # on: [push, pull_request]
 on:
