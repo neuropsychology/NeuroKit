@@ -791,6 +791,8 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
             " this method to run. Please install it first (`pip install PyWavelets`)."
         ) from import_error
 
+    signal_length = len(signal)
+
     swt_level = 3
     padding = -1
     for i in range(1000):
@@ -814,6 +816,9 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
 
     b, a = scipy.signal.butter(3, [f1 * 2, f2 * 2], btype="bandpass")
     filtered_squared = scipy.signal.lfilter(b, a, squared)
+
+    # Drop padding to avoid detecting peaks inside it (#456)
+    filtered_squared = filtered_squared[:signal_length]
 
     filt_peaks = _ecg_findpeaks_peakdetect(filtered_squared, sampling_rate)
 
