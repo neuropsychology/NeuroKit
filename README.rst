@@ -339,7 +339,7 @@ Electrooculography (EOG)
     signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
     # Plot
-    plot = nk.eog_plot(signals, sampling_rate=100)
+    plot = nk.eog_plot(signals, info, sampling_rate=100)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png
