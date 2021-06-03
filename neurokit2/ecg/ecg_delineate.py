@@ -38,8 +38,8 @@ def ecg_delineate(
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 500.
     method : str
-        Can be one of 'peak' (default) for a peak-based method, 'cwt' for continuous wavelet transform
-        or 'dwt' for discrete wavelet transform.
+        Can be one of 'peak' for a peak-based method, 'cwt' for continuous wavelet transform
+        or 'dwt' (default) for discrete wavelet transform.
     show : bool
         If True, will return a plot to visualizing the delineated waves
         information.
