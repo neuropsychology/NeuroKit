@@ -113,13 +113,13 @@ def epochs_create(
 
     # Create epochs
     if epochs_end == "from_events":
-        epochs_end = list(events["duration"])
+        epochs_end = [i / sampling_rate for i in events["duration"]]
     parameters = listify(
         onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end
     )
 
     # Find the maximum numbers of samples in an epoch
-    parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
+    parameters["duration"] = list(np.array(parameters["end"]) - np.array(parameters["start"]))
     epoch_max_duration = int(max((i * sampling_rate for i in parameters["duration"])))
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
