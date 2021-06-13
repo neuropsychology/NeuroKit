@@ -1003,6 +1003,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
             Thr *= np.exp(-Pth / sampling_rate)
             i += 1
 
+    rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
 
 
