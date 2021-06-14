@@ -396,12 +396,10 @@ variability metrics) and peak characteristics.
 - `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
 
-
 Heart Rate Variability (HRV)
 ----------------------------
 .. image:: https://img.shields.io/badge/DOI-hrv-red
         :target: https://www.mdpi.com/1424-8220/21/12/3998
-        :alt: 10.3390/s21123998
 
 If you are looking for:
 
@@ -409,33 +407,33 @@ If you are looking for:
 - a discussion of their significance in psychological research and practices
 - a step-by-step guide for HRV analysis using **NeuroKit2**
 
-the **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** paper is a good place to start. The full-text of the work can be found `here <https://doi.org/10.3390/s21123998>`_ 🎉 
+the **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** paper is a good place to start. The full-text of the work can be found `here <https://doi.org/10.3390/s21123998>`_
 
 
 .. code-block:: tex
 
-    You can also cite the paper as follows:
+    You can cite NeuroKit2 as follows:
 
-	- Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021). 
-	Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial. 
-	Sensors, 21(12), 3998. https://doi:10.3390/s21123998
+    - Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021).
+    Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial.
+    Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 
     Full bibtex reference:
 
-	@article{Pham_2021, 
-		author={Pham, Tam and Lau, Zen Juen and Chen, S. H. Annabel and Makowski, Dominique},
-		title={Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial}, 
-		volume={21}, 
-		ISSN={1424-8220}, 
-		url={http://dx.doi.org/10.3390/s21123998}, 
-		DOI={10.3390/s21123998}, 
-		number={12}, 
-		journal={Sensors}, 
-		publisher={MDPI AG}, 
-		year={2021}, 
-		month={Jun}, 
-		pages={3998}
-	}
+    @article{Pham_2021,
+        author={Pham, Tam and Lau, Zen Juen and Chen, S. H. Annabel and Makowski, Dominique},
+        title={Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial},
+        volume={21},
+        ISSN={1424-8220},
+        url={http://dx.doi.org/10.3390/s21123998},
+        DOI={10.3390/s21123998},
+        number={12},
+        journal={Sensors},
+        publisher={MDPI AG},
+        year={2021},
+        month={Jun},
+        pages={3998}
+    }
 
 - **Compute HRV indices**
 
