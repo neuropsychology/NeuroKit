@@ -401,6 +401,13 @@ Heart Rate Variability (HRV)
 .. image:: https://img.shields.io/badge/DOI-hrv-red
         :target: https://www.mdpi.com/1424-8220/21/12/3998
 
+If you are looking for:
+
+- a comprehensive review of the most up-to-date HRV indices
+- a discussion of their significance in psychological research and practices
+- a step-by-step guide for HRV analysis using **NeuroKit2**
+
+the **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** paper is a good place to start. The full-text of the work can be found `here <https://doi.org/10.3390/s21123998>`_
 
 
 - **Compute HRV indices**
