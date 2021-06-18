@@ -143,6 +143,7 @@ def test_eog_intervalrelated():
     assert features.shape[0] == 1  # Number of rows
 
     # Test with dict
+    columns.append('Label')
     epochs = nk.epochs_create(eog_signals, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
     epochs_dict = nk.eog_intervalrelated(epochs)
 
