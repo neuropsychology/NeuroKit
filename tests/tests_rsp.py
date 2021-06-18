@@ -226,6 +226,7 @@ def test_rsp_intervalrelated():
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
+    columns.append('Label')
     epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
     features_dict = nk.rsp_intervalrelated(epochs)
 

@@ -257,6 +257,7 @@ def test_eda_intervalrelated():
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
+    columns.append('Label')
     epochs = nk.epochs_create(df, events=[0, 25300], sampling_rate=100, epochs_end=20)
     features_dict = nk.eda_intervalrelated(epochs)
 
