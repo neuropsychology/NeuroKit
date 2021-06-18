@@ -44,6 +44,7 @@ New Features
 	* users can create a smaller sub-epoch within the event-related epoch
 	* the rate-related features of ECG and RSP signals are calculated over the sub-epoch
 	* the remaining features are calculated over the original epoch, not the sub-epoch
+* Add labelling for interval related features if a dictionary of dataframes is passed
 
 Fixes
 +++++++++++++
