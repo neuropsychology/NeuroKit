@@ -20,8 +20,7 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
     therefore relative, and 1 corresponds to heartbeats that are the closest to the average
     sample and 0 corresponds to the most distance heartbeat, from that average sample.
 
-    The "zhao2018" method (Zhao et la., 2018) was originally designed for signal with a length of 10 seconds.
-    It extracts several signal quality indexes (SQIs): QRS wave power spectrum distribution
+    The "zhao2018" method (Zhao et la., 2018) extracts several signal quality indexes (SQIs): QRS wave power spectrum distribution
     pSQI, kurtosis kSQI, and baseline relative power basSQI. An additional R peak detection match qSQI was
     originally computed in the paper but left out in this algorithm. The indices were originally weighted
     with a ratio of [0.4, 0.4, 0.1, 0.1] to generate the final classification outcome, but
