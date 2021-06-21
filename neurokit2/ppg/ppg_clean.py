@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
-from ..misc import as_vector
+from warnings import warn
+
+import numpy as np
+import pandas as pd
+
+from ..misc import as_vector, NeuroKitWarning
 from ..signal import signal_filter
 
 
@@ -56,6 +61,16 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
     """
     ppg_signal = as_vector(ppg_signal)
 
+    # Missing data
+    n_missing = np.sum(np.isnan(ppg_signal))
+    if n_missing > 0:
+        warn(
+            "There are " + str(n_missing) + " missing data points in your signal."
+            " Filling missing values by using the forward filling method.",
+            category=NeuroKitWarning
+        )
+        ppg_signal = _ppg_clean_missing(ppg_signal)
+
     method = method.lower()
     if method in ["elgendi"]:
         clean = _ppg_clean_elgendi(ppg_signal, sampling_rate)
@@ -65,6 +80,16 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
         raise ValueError("Neurokit error: Please use one of the following methods: 'elgendi' or 'nabian2018'.")
 
     return clean
+
+
+# =============================================================================
+# Handle missing data
+# =============================================================================
+def _ppg_clean_missing(ppg_signal):
+
+    ppg_signal = pd.DataFrame.pad(pd.Series(ppg_signal))
+
+    return ppg_signal
 
 # =============================================================================
 # Methods

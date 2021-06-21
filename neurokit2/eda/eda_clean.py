@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
+import pandas as pd
 import scipy.signal
 
-from ..misc import as_vector
+from ..misc import as_vector, NeuroKitWarning
 from ..signal import signal_filter, signal_smooth
 
 
@@ -42,6 +45,16 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
     """
     eda_signal = as_vector(eda_signal)
 
+    # Missing data
+    n_missing = np.sum(np.isnan(eda_signal))
+    if n_missing > 0:
+        warn(
+            "There are " + str(n_missing) + " missing data points in your signal."
+            " Filling missing values by using the forward filling method.",
+            category=NeuroKitWarning
+        )
+        eda_signal = _eda_clean_missing(eda_signal)
+
     method = method.lower()  # remove capitalised letters
     if method == "biosppy":
         clean = _eda_clean_biosppy(eda_signal, sampling_rate)
@@ -52,6 +65,15 @@ def eda_clean(eda_signal, sampling_rate=1000, method="neurokit"):
 
     return clean
 
+
+# =============================================================================
+# Handle missing data
+# =============================================================================
+def _eda_clean_missing(eda_signal):
+
+    eda_signal = pd.DataFrame.pad(pd.Series(eda_signal))
+
+    return eda_signal
 
 # =============================================================================
 # NK
