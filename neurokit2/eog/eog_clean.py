@@ -113,7 +113,7 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
 # =============================================================================
 # Handle missing data
 # =============================================================================
-def _ecg_clean_missing(eog_signal):
+def _eog_clean_missing(eog_signal):
 
     eog_signal = pd.DataFrame.pad(pd.Series(eog_signal))
 
