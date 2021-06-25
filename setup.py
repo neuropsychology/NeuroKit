@@ -33,7 +33,7 @@ test_requirements = requirements + [
     "mne",
     "pyentrp",
     "nolds",
-    "biosppy",
+    "biosppy==0.6.1",
     "cvxopt",
     "PyWavelets",
     "EMD-signal",
