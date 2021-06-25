@@ -12,7 +12,7 @@ Breaking Changes
 New Features
 +++++++++++++
 
-* None
+* Add computation of standard deviation in `eventrelated()` functions for *ECG_Rate_SD*, *EMG_Amplitude_SD*, *EOG_Rate_SD*, *PPG_Rate_SD*, *RSP_Rate_SD*, *RSP_Amplitude_SD*
 
 Fixes
 +++++++++++++
