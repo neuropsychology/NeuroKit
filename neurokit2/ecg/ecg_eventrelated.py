@@ -39,6 +39,8 @@ def ecg_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
 
         - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
 
+        - *"ECG_Rate_SD"*: the standard deviation of the heart rate after stimulus onset.
+
         - *"ECG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
 
         - *"ECG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
@@ -85,7 +87,7 @@ def ecg_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
     2     2          ...  ...                               ...               ...
     3     3          ...  ...                               ...               ...
 
-    [3 rows x 16 columns]
+    [3 rows x 17 columns]
     >>>
     >>> # Example with real data
     >>> data = nk.data("bio_eventrelated_100hz")
@@ -105,7 +107,7 @@ def ecg_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
     3     3   Neutral  ...                               ...               ...
     4     4  Negative  ...                               ...               ...
 
-    [4 rows x 17 columns]
+    [4 rows x 18 columns]
 
     """
     # Sanity checks

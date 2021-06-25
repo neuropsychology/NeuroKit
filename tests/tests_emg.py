@@ -95,7 +95,7 @@ def test_emg_eventrelated():
 
     # Test amplitude features
     no_activation = np.where(emg_eventrelated["EMG_Activation"] == 0)[0][0]
-    assert int(pd.DataFrame(emg_eventrelated.values[no_activation]).isna().sum()) == 4
+    assert int(pd.DataFrame(emg_eventrelated.values[no_activation]).isna().sum()) == 5
 
     assert np.alltrue(
         np.nansum(np.array(emg_eventrelated["EMG_Amplitude_Mean"]))

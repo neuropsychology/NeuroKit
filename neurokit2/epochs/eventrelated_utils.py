@@ -153,6 +153,7 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate", subepoch_rate=[None, No
     output[var + "_Max"] = np.max(signal) - baseline
     output[var + "_Min"] = np.min(signal) - baseline
     output[var + "_Mean"] = np.mean(signal) - baseline
+    output[var + "_SD"] = np.std(signal)
 
     # Time of Max / Min
     output[var + "_Max_Time"] = index[np.argmax(signal)]
