@@ -83,8 +83,8 @@ def rsp_intervalrelated(data, sampling_rate=1000):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
-            # Format dataframe
-            data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
+            # Add label info
+            intervals[index]['Label'] = data[index]['Label'].iloc[0]
 
             # Rate, Amplitude and Phase
             intervals[index] = _rsp_intervalrelated_formatinput(data[index], sampling_rate, intervals[index])

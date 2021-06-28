@@ -32,6 +32,7 @@ def emg_eventrelated(epochs, silent=False):
             for the below features.
             - *"EMG_Amplitude_Mean"*: the mean amplitude of the activity.
             - *"EMG_Amplitude_Max"*: the maximum amplitude of the activity.
+            - *"EMG_Amplitude_SD"*: the standard deviation of the activity amplitude.
             - *"EMG_Amplitude_Max_Time"*: the time of maximum amplitude.
             - *"EMG_Bursts"*: the number of activations, or bursts of activity, within each epoch.
 
@@ -79,6 +80,7 @@ def emg_eventrelated(epochs, silent=False):
         else:
             data[i]["EMG_Amplitude_Mean"] = np.nan
             data[i]["EMG_Amplitude_Max"] = np.nan
+            data[i]["EMG_Amplitude_SD"] = np.nan
             data[i]["EMG_Amplitude_Max_Time"] = np.nan
             data[i]["EMG_Bursts"] = np.nan
 
@@ -115,6 +117,7 @@ def _emg_eventrelated_features(epoch, output={}):
 
     output["EMG_Amplitude_Mean"] = mean
     output["EMG_Amplitude_Max"] = maximum
+    output["EMG_Amplitude_SD"] = np.std(epoch["EMG_Amplitude"][epoch.index > 0].iloc[activated_signal])
     output["EMG_Amplitude_Max_Time"] = time
     output["EMG_Bursts"] = activations
 

@@ -39,6 +39,8 @@ def eog_eventrelated(epochs, silent=False):
 
         - *"EOG_Rate_Mean"*: the mean EOG rate after stimulus onset.
 
+        - *"EOG_Rate_SD"*: the standard deviation of the EOG rate after stimulus onset.
+
         - *"EOG_Rate_Max_Time"*: the time at which maximum EOG rate occurs.
 
         - *"EOG_Rate_Min_Time"*: the time at which minimum EOG rate occurs.
@@ -68,7 +70,7 @@ def eog_eventrelated(epochs, silent=False):
     2     2          ...  ...                ...                  ...
     3     3          ...  ...                ...                  ...
     4     4          ...  ...                ...                  ...
-    [4 rows x 9 columns]
+    [4 rows x 10 columns]
 
     """
     # Sanity checks

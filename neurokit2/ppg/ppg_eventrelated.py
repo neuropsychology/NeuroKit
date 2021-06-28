@@ -34,6 +34,8 @@ def ppg_eventrelated(epochs, silent=False):
 
         - *"PPG_Rate_Mean"*: the mean heart rate after stimulus onset.
 
+        - *"PPG_Rate_SD"*: the standard deviation of the heart rate after stimulus onset.
+
         - *"PPG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
 
         - *"PPG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
@@ -68,7 +70,7 @@ def ppg_eventrelated(epochs, silent=False):
     2     2          ...  ...                    ...                ...
     3     3          ...  ...                    ...                ...
 
-    [3 rows x 11 columns]
+    [3 rows x 12 columns]
 
     """
     # Sanity checks
