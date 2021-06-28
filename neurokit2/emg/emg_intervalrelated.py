@@ -72,6 +72,9 @@ def emg_intervalrelated(data):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
+            # Add label info
+            intervals[index]['Label'] = data[index]['Label'].iloc[0]
+
             intervals[index] = _emg_intervalrelated_formatinput(data[index], intervals[index])
         emg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 

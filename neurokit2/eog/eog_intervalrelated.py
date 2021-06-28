@@ -45,9 +45,9 @@ def eog_intervalrelated(data):
     >>> epochs = nk.epochs_create(df, events=[0, 30000], sampling_rate=200,
     ...                           epochs_end=120)
     >>> nk.eog_intervalrelated(epochs) #doctest: +ELLIPSIS
-       EOG_Peaks_N  EOG_Rate_Mean
-    1          ...            ...
-    2          ...            ...
+       Label  EOG_Peaks_N  EOG_Rate_Mean
+    1    ...          ...            ...
+    2    ...          ...            ...
 
     """
     intervals = {}
@@ -64,8 +64,8 @@ def eog_intervalrelated(data):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
-            # Format dataframe
-            data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
+            # Add label info
+            intervals[index]['Label'] = data[index]['Label'].iloc[0]
 
             # Rate and Blinks quantity
             intervals[index] = _eog_intervalrelated_formatinput(data[index], intervals[index])

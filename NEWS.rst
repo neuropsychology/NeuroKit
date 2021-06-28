@@ -12,7 +12,7 @@ Breaking Changes
 New Features
 +++++++++++++
 
-* None
+* Add labelling for interval related features if a dictionary of dataframes is passed
 
 Fixes
 +++++++++++++
