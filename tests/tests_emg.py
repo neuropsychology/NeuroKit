@@ -137,6 +137,7 @@ def test_emg_intervalrelated():
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
+    columns.append('Label')
     epochs = nk.epochs_create(emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20)
     features_dict = nk.emg_intervalrelated(epochs)
 
