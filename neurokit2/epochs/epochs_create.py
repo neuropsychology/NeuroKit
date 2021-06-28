@@ -159,4 +159,19 @@ def epochs_create(
         # Store
         epochs[label] = epoch
 
+    # Sanitize dtype of individual columns
+    for i in epochs:
+
+        for colname, column in epochs[i].select_dtypes(include=['object']).iteritems():
+
+            # Check whether columns are indices or label/condition
+            values = column.unique().tolist() 
+            zero_or_one = False if False in [x in [0, 1] for x in values] else True
+
+            if zero_or_one:
+            # Force to int64
+                 epochs[i][colname] = epochs[i][colname].astype('int64')
+            else:
+                 epochs[i][colname] = epochs[i][colname].astype('string')
+
     return epochs

@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
+import pandas as pd
 import scipy.signal
 
-from ..misc import as_vector
+from ..misc import as_vector, NeuroKitWarning
 from ..signal import signal_detrend, signal_filter
 
 
@@ -51,6 +54,16 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     """
     rsp_signal = as_vector(rsp_signal)
 
+    # Missing data
+    n_missing = np.sum(np.isnan(rsp_signal))
+    if n_missing > 0:
+        warn(
+            "There are " + str(n_missing) + " missing data points in your signal."
+            " Filling missing values by using the forward filling method.",
+            category=NeuroKitWarning
+        )
+        rsp_signal = _rsp_clean_missing(rsp_signal)
+
     method = method.lower()  # remove capitalised letters
     if method in ["khodadad", "khodadad2018"]:
         clean = _rsp_clean_khodadad2018(rsp_signal, sampling_rate)
@@ -61,6 +74,15 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     return clean
 
+
+# =============================================================================
+# Handle missing data
+# =============================================================================
+def _rsp_clean_missing(rsp_signal):
+
+    rsp_signal = pd.DataFrame.pad(pd.Series(rsp_signal))
+
+    return rsp_signal
 
 # =============================================================================
 # Khodadad et al. (2018)

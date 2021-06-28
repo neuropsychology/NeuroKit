@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
+import pandas as pd
 import scipy.ndimage
 
-from ..misc import as_vector
+from ..misc import as_vector, NeuroKitWarning
 from ..signal import signal_filter
 
 
@@ -74,6 +77,16 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
     # Sanitize input
     eog_signal = as_vector(eog_signal)
 
+    # Missing data
+    n_missing = np.sum(np.isnan(eog_signal))
+    if n_missing > 0:
+        warn(
+            "There are " + str(n_missing) + " missing data points in your signal."
+            " Filling missing values by using the forward filling method.",
+            category=NeuroKitWarning
+        )
+        eog_signal = _eog_clean_missing(eog_signal)
+
     # Apply method
     method = method.lower()
     if method in ["neurokit", "nk"]:
@@ -96,6 +109,15 @@ def eog_clean(eog_signal, sampling_rate=1000, method="neurokit"):
 
     return clean
 
+
+# =============================================================================
+# Handle missing data
+# =============================================================================
+def _eog_clean_missing(eog_signal):
+
+    eog_signal = pd.DataFrame.pad(pd.Series(eog_signal))
+
+    return eog_signal
 
 # =============================================================================
 # Methods

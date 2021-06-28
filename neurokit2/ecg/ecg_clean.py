@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
+import pandas as pd
 import scipy.signal
 
-from ..misc import as_vector
+from ..misc import as_vector, NeuroKitWarning
 from ..signal import signal_filter
 
 
@@ -60,6 +63,16 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
     """
     ecg_signal = as_vector(ecg_signal)
 
+    # Missing data
+    n_missing = np.sum(np.isnan(ecg_signal))
+    if n_missing > 0:
+        warn(
+            "There are " + str(n_missing) + " missing data points in your signal."
+            " Filling missing values by using the forward filling method.",
+            category=NeuroKitWarning
+        )
+        ecg_signal = _ecg_clean_missing(ecg_signal)
+
     method = method.lower()  # remove capitalised letters
     if method in ["nk", "nk2", "neurokit", "neurokit2"]:
         clean = _ecg_clean_nk(ecg_signal, sampling_rate)
@@ -95,6 +108,15 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         )
     return clean
 
+
+# =============================================================================
+# Handle missing data
+# =============================================================================
+def _ecg_clean_missing(ecg_signal):
+
+    ecg_signal = pd.DataFrame.pad(pd.Series(ecg_signal))
+
+    return ecg_signal
 
 # =============================================================================
 # Neurokit
