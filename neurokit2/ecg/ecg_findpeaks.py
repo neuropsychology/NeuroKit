@@ -935,7 +935,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
 # =============================================================================
 
 
-def ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
+def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
     """Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).
 
     References
