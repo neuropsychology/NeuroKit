@@ -129,10 +129,14 @@ def ecg_delineate(
     # Remove NaN in Peaks, Onsets, and Offsets
     waves_noNA = waves.copy()
     for feature in waves_noNA.keys():
-        waves_noNA[feature] = [int(x) for x in waves_noNA[feature] if ~np.isnan(x)]
+        waves_noNA[feature] = [int(x) for x in waves_noNA[feature] if ~np.isnan(x) and x > 0]
 
     instant_peaks = signal_formatpeaks(waves_noNA, desired_length=len(ecg_cleaned))
     signals = instant_peaks
+
+    waves_sanitized = {}
+    for feature, values in waves.items():
+        waves_sanitized[feature] = [x for x in values if x > 0]
 
     if show is True:
         _ecg_delineate_plot(
@@ -140,9 +144,9 @@ def ecg_delineate(
         )
 
     if check is True:
-        waves = _ecg_delineate_check(waves, rpeaks)
+        waves_sanitized = _ecg_delineate_check(waves_sanitized, rpeaks)
 
-    return signals, waves
+    return signals, waves_sanitized
 
 
 # =============================================================================
