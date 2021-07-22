@@ -962,7 +962,6 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
     rpeaks = []
     i = 1
-    tf = len(signal)
     Ramptotal = 0
 
     # Double derivative squared
@@ -974,10 +973,10 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
     b = np.array(np.ones(N))
     a = [1]
     processed_ecg = scipy.signal.lfilter(b, a, squar)
+    tf = len(processed_ecg)
 
     # R-peak finder FSM
-    while i < tf - sampling_rate:  # ignore last second of recording
-
+    while i < tf:  # ignore last second of recording
         # State 1: looking for maximum
         tf1 = np.round(i + Rmin * sampling_rate)
         Rpeakamp = 0
@@ -999,7 +998,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
         # State 3: decreasing threshold
         Thr = Ramptotal
-        while processed_ecg[i] < Thr:
+        while i < tf and processed_ecg[i] < Thr:
             Thr *= np.exp(-Pth / sampling_rate)
             i += 1
 
