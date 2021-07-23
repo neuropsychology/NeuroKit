@@ -46,7 +46,8 @@ def ecg_delineate(
     show_type: str
         The type of delineated waves information showed in the plot.
     check : bool
-        Defaults to False. If True, replaces the delineated features with np.nan if its standardized distance from R-peaks is more than 3.
+        Defaults to False. If True, replaces the delineated features with np.nan if its standardized distance
+        from R-peaks is more than 3.
 
     Returns
     -------
