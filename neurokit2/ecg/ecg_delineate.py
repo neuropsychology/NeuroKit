@@ -57,10 +57,9 @@ def ecg_delineate(
         T-peaks, P-onsets and T-offsets occur, accessible with the key "ECG_P_Peaks", "ECG_Q_Peaks",
         "ECG_S_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_T_Offsets" respectively.
 
-        For wavelet methods, the dictionary contains the samples at which P-peaks, T-peaks, P-onsets,
-        P-offsets, T-onsets, T-offsets, QRS-onsets and QRS-offsets occur, accessible with the key
-        "ECG_P_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_P_Offsets", "ECG_T_Onsets", "ECG_T_Offsets",
-        "ECG_R_Onsets", "ECG_R_Offsets" respectively.
+        For wavelet methods, in addition to the above information, the dictionary contains the samples at which QRS-onsets and
+        QRS-offsets occur, accessible with the key "ECG_P_Peaks", "ECG_T_Peaks", "ECG_P_Onsets", "ECG_P_Offsets",
+        "ECG_Q_Peaks", "ECG_S_Peaks", "ECG_T_Onsets", "ECG_T_Offsets", "ECG_R_Onsets", "ECG_R_Offsets" respectively.
 
     signals : DataFrame
         A DataFrame of same length as the input signal in which occurences of
@@ -191,7 +190,7 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     # Adopting manual method from "peak" method
     qpeaks = []
     speaks = []
-    heartbeats = ecg_segment(ecg, rpeaks, sampling_rate)
+    heartbeats = ecg_segment(ecg, rpeaks, sampling_rate=sampling_rate)
     for i, rpeak in enumerate(rpeaks):
         heartbeat = heartbeats[str(i + 1)]
         # Get index of R peaks
@@ -544,15 +543,33 @@ def _ecg_delineator_cwt(ecg, rpeaks=None, sampling_rate=1000):
     # tpeaks onsets and offsets
     t_onsets, t_offsets = _onset_offset_delineator(ecg, tpeaks, peak_type="tpeaks", sampling_rate=sampling_rate)
 
+    # No dwt defined method for Q and S peak
+    # Adopting manual method from "peak" method
+    q_peaks = []
+    s_peaks = []
+    heartbeats = ecg_segment(ecg, rpeaks, sampling_rate=sampling_rate)
+    for i, rpeak in enumerate(rpeaks):
+        heartbeat = heartbeats[str(i + 1)]
+        # Get index of R peaks
+        R = heartbeat.index.get_loc(np.min(heartbeat.index.values[heartbeat.index.values > 0]))
+        # Q wave
+        Q_index, Q = _ecg_delineator_peak_Q(rpeak, heartbeat, R)
+        q_peaks.append(Q_index)
+        # S wave
+        S_index, S = _ecg_delineator_peak_S(rpeak, heartbeat)
+        s_peaks.append(S_index)
+
     # Return info dictionary
     return {
+        "ECG_P_Onsets": p_onsets,
         "ECG_P_Peaks": ppeaks,
-        "ECG_T_Peaks": tpeaks,
+        "ECG_P_Offsets": p_offsets,
+        "ECG_Q_Peaks": q_peaks,
         "ECG_R_Onsets": qrs_onsets,
         "ECG_R_Offsets": qrs_offsets,
-        "ECG_P_Onsets": p_onsets,
-        "ECG_P_Offsets": p_offsets,
+        "ECG_S_Peaks": s_peaks,
         "ECG_T_Onsets": t_onsets,
+        "ECG_T_Peaks": tpeaks,
         "ECG_T_Offsets": t_offsets,
     }
 
