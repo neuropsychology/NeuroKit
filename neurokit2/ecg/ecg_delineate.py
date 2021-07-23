@@ -46,7 +46,7 @@ def ecg_delineate(
     show_type: str
         The type of delineated waves information showed in the plot.
     check : bool
-        Defaults to False.
+        Defaults to False. If True, replaces the delineated features with np.nan if its standardized distance from R-peaks is more than 3.
 
     Returns
     -------
@@ -76,7 +76,7 @@ def ecg_delineate(
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
     >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
     >>> _, rpeaks = nk.ecg_peaks(cleaned, sampling_rate=1000)
-    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000, method="peak")
+    >>> signals, waves = nk.ecg_delineate(cleaned, rpeaks, sampling_rate=1000)
     >>> nk.events_plot(waves["ECG_P_Peaks"], cleaned) #doctest: +ELLIPSIS
     <Figure ...>
     >>> nk.events_plot(waves["ECG_T_Peaks"], cleaned) #doctest: +ELLIPSIS
@@ -136,7 +136,7 @@ def ecg_delineate(
 
     waves_sanitized = {}
     for feature, values in waves.items():
-        waves_sanitized[feature] = [x for x in values if x > 0]
+        waves_sanitized[feature] = [x for x in values if x > 0 or x is np.nan]
 
     if show is True:
         _ecg_delineate_plot(
@@ -186,6 +186,23 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
         Dictionary of the points.
 
     """
+    # No dwt defined method for Q and S peak
+    # Adopting manual method from "peak" method
+    qpeaks = []
+    speaks = []
+    heartbeats = ecg_segment(ecg, rpeaks, sampling_rate)
+    for i, rpeak in enumerate(rpeaks):
+        heartbeat = heartbeats[str(i + 1)]
+        # Get index of R peaks
+        R = heartbeat.index.get_loc(np.min(heartbeat.index.values[heartbeat.index.values > 0]))
+        # Q wave
+        Q_index, Q = _ecg_delineator_peak_Q(rpeak, heartbeat, R)
+        qpeaks.append(Q_index)
+        # S wave
+        S_index, S = _ecg_delineator_peak_S(rpeak, heartbeat)
+        speaks.append(S_index)
+
+    # dwt to delineate tp waves, onsets, offsets and qrs ontsets and offsets
     ecg = signal_resample(ecg, sampling_rate=sampling_rate, desired_sampling_rate=analysis_sampling_rate)
     dwtmatr = _dwt_compute_multiscales(ecg, 9)
 
@@ -208,14 +225,16 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     )
 
     return dict(
-        ECG_T_Peaks=_dwt_resample_points(tpeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
-        ECG_T_Onsets=_dwt_resample_points(tonsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
-        ECG_T_Offsets=_dwt_resample_points(toffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_P_Peaks=_dwt_resample_points(ppeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_P_Onsets=_dwt_resample_points(ponsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_P_Offsets=_dwt_resample_points(poffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_Q_Peaks= qpeaks,
         ECG_R_Onsets=_dwt_resample_points(qrs_onsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
         ECG_R_Offsets=_dwt_resample_points(qrs_offsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_S_Peaks= speaks,
+        ECG_T_Peaks=_dwt_resample_points(tpeaks, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_T_Onsets=_dwt_resample_points(tonsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
+        ECG_T_Offsets=_dwt_resample_points(toffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
     )
 
 
@@ -236,6 +255,33 @@ def _dwt_delineate_tp_peaks(
     epsilon_T_weight=0.25,
     epsilon_P_weight=0.02,
 ):
+    """
+    Parameters
+    ----------
+    ecg : Union[list, np.array, pd.Series]
+        The cleaned ECG channel as returned by `ecg_clean()`.
+    rpeaks : Union[list, np.array, pd.Series]
+        The samples at which R-peaks occur. Accessible with the key "ECG_R_Peaks" in the info dictionary
+        returned by `ecg_findpeaks()`.
+    dwtmatr : np.array
+        Output of `_dwt_compute_multiscales()`. Multiscales of wavelet transform.
+    sampling_rate : int
+        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
+    qrs_width : int
+        Approximate duration of qrs in seconds. Default to 0.13 seconds.
+    p2r_duration : int
+        Approximate duration from P peaks to R peaks in seconds.
+    rt_duration : int
+        Approximate duration from R peaks to T peaks in secons.
+    degree_tpeak : int
+        Wavelet transform of scales 2**3.
+    degree_tpeak : int
+        Wavelet transform of scales 2**2.
+    epsilon_T_weight : int
+        Epsilon of RMS value of wavelet transform. Appendix (A.3).
+    epsilon_P_weight : int
+        Epsilon of RMS value of wavelet transform. Appendix (A.4).
+    """
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
     degree_add = _dwt_compensate_degree(sampling_rate)
 
