@@ -16,12 +16,12 @@ from .ecg_segment import ecg_segment
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS", approach=None):
     """Quality of ECG Signal.
 
-    The "averageQRS" method computes a continuous index of quality of the ECG signal, by interpolating the distance
+    The **"averageQRS"** method computes a continuous index of quality of the ECG signal, by interpolating the distance
     of each QRS segment from the average QRS segment present in the data. This index is
     therefore relative: 1 corresponds to heartbeats that are the closest to the average
     sample and 0 corresponds to the most distant heartbeat from that average sample. Note that 1 does not necessarily means "good": if the majority of samples are bad, than being close to the average will likely mean bad as well. Use this index with care and plot it alongside your ECG signal to see if it makes sense.
 
-    The "zhao2018" method (Zhao et la., 2018) extracts several signal quality indexes (SQIs):
+    The **"zhao2018"** method (Zhao et la., 2018) extracts several signal quality indexes (SQIs):
     QRS wave power spectrum distribution pSQI, kurtosis kSQI, and baseline relative power basSQI.
     An additional R peak detection match qSQI was originally computed in the paper but left out
     in this algorithm. The indices were originally weighted with a ratio of [0.4, 0.4, 0.1, 0.1] to
