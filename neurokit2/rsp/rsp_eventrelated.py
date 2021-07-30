@@ -37,11 +37,13 @@ def rsp_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
         - *"RSP_Rate_Max"*: the maximum respiratory rate after stimulus onset.
         - *"RSP_Rate_Min"*: the minimum respiratory rate after stimulus onset.
         - *"RSP_Rate_Mean"*: the mean respiratory rate after stimulus onset.
+        - *"RSP_Rate_SD"*: the standard deviation of the respiratory rate after stimulus onset.
         - *"RSP_Rate_Max_Time"*: the time at which maximum respiratory rate occurs.
         - *"RSP_Rate_Min_Time"*: the time at which minimum respiratory rate occurs.
-        - *"RSP_Amplitude_Max"*: the maximum respiratory amplitude after stimulus onset.
-        - *"RSP_Amplitude_Min"*: the minimum respiratory amplitude after stimulus onset.
-        - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude after stimulus onset.
+        - *"RSP_Amplitude_Max"*: the change in maximum respiratory amplitude from before stimulus onset.
+        - *"RSP_Amplitude_Min"*: the change in minimum respiratory amplitude from before stimulus onset.
+        - *"RSP_Amplitude_Mean"*: the change in mean respiratory amplitude from before stimulus onset.
+        - *"RSP_Amplitude_SD"*: the standard deviation of the respiratory amplitude after stimulus onset.
         - *"RSP_Phase"*: indication of whether the onset of the event concurs with respiratory
         inspiration (1) or expiration (0).
         - *"RSP_PhaseCompletion"*: indication of the stage of the current respiration phase (0 to 1)
@@ -131,6 +133,7 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
     output["RSP_Amplitude_Max"] = np.max(signal) - np.mean(baseline)
     output["RSP_Amplitude_Min"] = np.min(signal) - np.mean(baseline)
     output["RSP_Amplitude_Mean"] = np.mean(signal) - np.mean(baseline)
+    output["RSP_Amplitude_SD"] = np.std(signal)
 
     return output
 

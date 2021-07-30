@@ -791,6 +791,8 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
             " this method to run. Please install it first (`pip install PyWavelets`)."
         ) from import_error
 
+    signal_length = len(signal)
+
     swt_level = 3
     padding = -1
     for i in range(1000):
@@ -814,6 +816,9 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
 
     b, a = scipy.signal.butter(3, [f1 * 2, f2 * 2], btype="bandpass")
     filtered_squared = scipy.signal.lfilter(b, a, squared)
+
+    # Drop padding to avoid detecting peaks inside it (#456)
+    filtered_squared = filtered_squared[:signal_length]
 
     filt_peaks = _ecg_findpeaks_peakdetect(filtered_squared, sampling_rate)
 
@@ -957,7 +962,6 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
     rpeaks = []
     i = 1
-    tf = len(signal)
     Ramptotal = 0
 
     # Double derivative squared
@@ -969,10 +973,10 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
     b = np.array(np.ones(N))
     a = [1]
     processed_ecg = scipy.signal.lfilter(b, a, squar)
+    tf = len(processed_ecg)
 
     # R-peak finder FSM
-    while i < tf - sampling_rate:  # ignore last second of recording
-
+    while i < tf:  # ignore last second of recording
         # State 1: looking for maximum
         tf1 = np.round(i + Rmin * sampling_rate)
         Rpeakamp = 0
@@ -994,10 +998,11 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 
         # State 3: decreasing threshold
         Thr = Ramptotal
-        while processed_ecg[i] < Thr:
+        while i < tf and processed_ecg[i] < Thr:
             Thr *= np.exp(-Pth / sampling_rate)
             i += 1
 
+    rpeaks = np.array(rpeaks, dtype="int")
     return rpeaks
 
 

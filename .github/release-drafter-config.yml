@@ -15,6 +15,8 @@ version-resolver:
 
 template: |
   ## 🚀 What’s New
+  
+  See the [NEWS](https://github.com/neuropsychology/NeuroKit/blob/master/NEWS.rst) file for the changelog.
 
   $CHANGES
   

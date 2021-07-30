@@ -1,32 +1,34 @@
 # - * - coding: utf-8 - * -
-import numpy as np
-import scipy
 from warnings import warn
 
+import numpy as np
+import scipy
+
 from ..epochs import epochs_to_df
-from ..signal.signal_power import signal_power
+from ..misc import NeuroKitWarning
 from ..signal import signal_interpolate
+from ..signal.signal_power import signal_power
 from ..stats import distance, rescale
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
-from ..misc import NeuroKitWarning
 
 
 def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS", approach=None):
     """Quality of ECG Signal.
 
-    The "averageQRS" method computes a continuous index of quality of the ECG signal, by interpolating the distance
+    The **"averageQRS"** method computes a continuous index of quality of the ECG signal, by interpolating the distance
     of each QRS segment from the average QRS segment present in the data. This index is
-    therefore relative, and 1 corresponds to heartbeats that are the closest to the average
-    sample and 0 corresponds to the most distance heartbeat, from that average sample.
+    therefore relative: 1 corresponds to heartbeats that are the closest to the average
+    sample and 0 corresponds to the most distant heartbeat from that average sample. Note that 1 does not necessarily means
+    "good": if the majority of samples are bad, than being close to the average will likely mean bad as well. Use this index
+    with care and plot it alongside your ECG signal to see if it makes sense.
 
-    The "zhao2018" method (Zhao et la., 2018) was originally designed for signal with a length of 10 seconds.
-    It extracts several signal quality indexes (SQIs): QRS wave power spectrum distribution
-    pSQI, kurtosis kSQI, and baseline relative power basSQI. An additional R peak detection match qSQI was
-    originally computed in the paper but left out in this algorithm. The indices were originally weighted
-    with a ratio of [0.4, 0.4, 0.1, 0.1] to generate the final classification outcome, but
-    because qSQI was dropped, the weights have been rearranged to [0.6, 0.2, 0.2] for
-    pSQI, kSQI and basSQI respectively.
+    The **"zhao2018"** method (Zhao et la., 2018) extracts several signal quality indexes (SQIs):
+    QRS wave power spectrum distribution pSQI, kurtosis kSQI, and baseline relative power basSQI.
+    An additional R peak detection match qSQI was originally computed in the paper but left out
+    in this algorithm. The indices were originally weighted with a ratio of [0.4, 0.4, 0.1, 0.1] to
+    generate the final classification outcome, but because qSQI was dropped,
+    the weights have been rearranged to [0.6, 0.2, 0.2] for pSQI, kSQI and basSQI respectively.
 
     Parameters
     ----------
@@ -90,11 +92,12 @@ def ecg_quality(ecg_cleaned, rpeaks=None, sampling_rate=1000, method="averageQRS
                 "Please enter a relevant input if using method='zhao2018',"
                 " 'simple' for simple heuristic fusion approach or"
                 " 'fuzzy' for fuzzy comprehensive evaluation.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
 
-        quality = _ecg_quality_zhao2018(ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate,
-                                        mode=approach)
+        quality = _ecg_quality_zhao2018(
+            ecg_cleaned, rpeaks=rpeaks, sampling_rate=sampling_rate, mode=approach
+        )
 
     return quality
 
@@ -131,7 +134,9 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
     quality[nonmissing] = dist
 
     # Interpolate
-    quality = signal_interpolate(rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="quadratic")
+    quality = signal_interpolate(
+        rpeaks, quality, x_new=np.arange(len(ecg_cleaned)), method="quadratic"
+    )
 
     return quality
 
@@ -139,8 +144,15 @@ def _ecg_quality_averageQRS(ecg_cleaned, rpeaks=None, sampling_rate=1000):
 # =============================================================================
 # Zhao (2018) method
 # =============================================================================
-def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
-                          window=1024, kurtosis_method="fisher", mode="simple", **kwargs):
+def _ecg_quality_zhao2018(
+    ecg_cleaned,
+    rpeaks=None,
+    sampling_rate=1000,
+    window=1024,
+    kurtosis_method="fisher",
+    mode="simple",
+    **kwargs
+):
     """Return ECG quality classification of based on Zhao et al. (2018),
     based on three indices: pSQI, kSQI, basSQI (qSQI not included here).
 
@@ -188,7 +200,7 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
     basSQI = _ecg_quality_basSQI(ecg_cleaned, sampling_rate=sampling_rate, window=window, **kwargs)
 
     # Classify indices based on simple heuristic fusion
-    if mode == 'simple':
+    if mode == "simple":
         # First stage rules (0 = unqualified, 1 = suspicious, 2 = optimal)
 
         # Get the maximum bpm
@@ -229,14 +241,14 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         n_suspicious = len(np.where(class_matrix == 1)[0])
         n_unqualified = len(np.where(class_matrix == 0)[0])
         if n_unqualified >= 2 or (n_unqualified == 1 and n_suspicious == 2):
-            return 'Unacceptable'
+            return "Unacceptable"
         elif n_optimal >= 2 and n_unqualified == 0:
-            return 'Excellent'
+            return "Excellent"
         else:
-            return 'Barely acceptable'
+            return "Barely acceptable"
 
     # Classify indices based on fuzzy comprehensive evaluation
-    elif mode == 'fuzzy':
+    elif mode == "fuzzy":
         # *R1 left out because of lack of qSQI
 
         # pSQI
@@ -312,43 +324,67 @@ def _ecg_quality_zhao2018(ecg_cleaned, rpeaks=None, sampling_rate=1000,
         # classify
         V = np.sum(np.power(S, 2) * [1, 2, 3]) / np.sum(np.power(S, 2))
 
-        if (V < 1.5):
-            return 'Excellent'
-        elif (V >= 2.40):
-            return 'Unnacceptable'
+        if V < 1.5:
+            return "Excellent"
+        elif V >= 2.40:
+            return "Unnacceptable"
         else:
-            return 'Barely acceptable'
+            return "Barely acceptable"
+
 
 def _ecg_quality_kSQI(ecg_cleaned, method="fisher"):
-    """ Return the kurtosis of the signal, with Fisher's or Pearson's method.
-    """
+    """Return the kurtosis of the signal, with Fisher's or Pearson's method."""
 
     if method == "fisher":
         return scipy.stats.kurtosis(ecg_cleaned, fisher=True)
     elif method == "pearson":
         return scipy.stats.kurtosis(ecg_cleaned, fisher=False)
 
-def _ecg_quality_pSQI(ecg_cleaned, sampling_rate=1000, window=1024, num_spectrum=[5, 15],
-                      dem_spectrum=[5, 40], **kwargs):
-    """Power Spectrum Distribution of QRS Wave.
-    """
 
-    psd = signal_power(ecg_cleaned, sampling_rate=sampling_rate,
-                       frequency_band=[num_spectrum, dem_spectrum],
-                       method="welch", normalize=False, window=window, **kwargs)
+def _ecg_quality_pSQI(
+    ecg_cleaned,
+    sampling_rate=1000,
+    window=1024,
+    num_spectrum=[5, 15],
+    dem_spectrum=[5, 40],
+    **kwargs
+):
+    """Power Spectrum Distribution of QRS Wave."""
+
+    psd = signal_power(
+        ecg_cleaned,
+        sampling_rate=sampling_rate,
+        frequency_band=[num_spectrum, dem_spectrum],
+        method="welch",
+        normalize=False,
+        window=window,
+        **kwargs
+    )
 
     num_power = psd.iloc[0][0]
     dem_power = psd.iloc[0][1]
 
     return num_power / dem_power
 
-def _ecg_quality_basSQI(ecg_cleaned, sampling_rate=1000, window=1024, num_spectrum=[0, 1],
-                        dem_spectrum=[0, 40], **kwargs):
-    """Relative Power in the Baseline.
-    """
-    psd = signal_power(ecg_cleaned, sampling_rate=sampling_rate,
-                       frequency_band=[num_spectrum, dem_spectrum],
-                       method="welch", normalize=False, window=window, **kwargs)
+
+def _ecg_quality_basSQI(
+    ecg_cleaned,
+    sampling_rate=1000,
+    window=1024,
+    num_spectrum=[0, 1],
+    dem_spectrum=[0, 40],
+    **kwargs
+):
+    """Relative Power in the Baseline."""
+    psd = signal_power(
+        ecg_cleaned,
+        sampling_rate=sampling_rate,
+        frequency_band=[num_spectrum, dem_spectrum],
+        method="welch",
+        normalize=False,
+        window=window,
+        **kwargs
+    )
 
     num_power = psd.iloc[0][0]
     dem_power = psd.iloc[0][1]

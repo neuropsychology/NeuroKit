@@ -34,15 +34,17 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
         strongly anticorrelated signals, this transformation should be applied two times (i.e., provide
         ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
     order : int
-        The order of the polynoiam trend, 1 for the linear trend.
+        The order of the polynomial trend for detrending, 1 for the linear trend.
     multifractal : bool
         If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the argument
         ```q`` is taken into account.
     q : list
-        The sequence of fractal exponents when ``multifractal=True``. Must be a sequence between -10
+        The sequence of multifractal parameters when ``multifractal=True``. Must be a sequence between -10
         and 10 (nota that zero will be removed, since the code does not converge there). Setting
         q = 2 (default) gives a result close to a standard DFA. For instance, Ihlen (2012) usese ``
-        q=[-5, -3, -1, 0, 1, 3, 5]``.
+        q=[-5, -3, -1, 0, 1, 3, 5]``. In general, positive q moments amplify the contribution of fractal
+        components with larger amplitude and negative q moments amplify the contribution of fractal components
+        with smaller amplitude (Kantelhardt et al., 2002)
     show : bool
         Visualise the trend between the window size and the fluctuations.
 
@@ -66,6 +68,10 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     -----------
     - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended fluctuation analysis in Matlab.
       Frontiers in physiology, 3, 141.
+
+    - Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S., Bunde, A., &
+      Stanley, H. E. (2002). Multifractal detrended fluctuation analysis of nonstationary time series.
+      Physica A: Statistical Mechanics and its Applications, 316(1-4), 87-114.
 
     - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V., Mansvelder, H. D., &
       Linkenkaer-Hansen, K. (2012). Detrended fluctuation analysis: a scale-free view on neuronal

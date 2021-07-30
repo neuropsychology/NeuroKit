@@ -113,13 +113,13 @@ def epochs_create(
 
     # Create epochs
     if epochs_end == "from_events":
-        epochs_end = list(events["duration"])
+        epochs_end = [i / sampling_rate for i in events["duration"]]
     parameters = listify(
         onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end
     )
 
     # Find the maximum numbers of samples in an epoch
-    parameters["duration"] = np.array(parameters["end"]) - np.array(parameters["start"])
+    parameters["duration"] = list(np.array(parameters["end"]) - np.array(parameters["start"]))
     epoch_max_duration = int(max((i * sampling_rate for i in parameters["duration"])))
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
@@ -158,5 +158,20 @@ def epochs_create(
 
         # Store
         epochs[label] = epoch
+
+    # Sanitize dtype of individual columns
+    for i in epochs:
+
+        for colname, column in epochs[i].select_dtypes(include=['object']).iteritems():
+
+            # Check whether columns are indices or label/condition
+            values = column.unique().tolist()
+            zero_or_one = False if False in [x in [0, 1] for x in values] else True
+
+            if zero_or_one:
+                # Force to int64
+                epochs[i][colname] = epochs[i][colname].astype('int64')
+            else:
+                epochs[i][colname] = epochs[i][colname].astype('string')
 
     return epochs

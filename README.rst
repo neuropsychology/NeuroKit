@@ -10,8 +10,8 @@
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg?logo=pypi&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://img.shields.io/travis/neuropsychology/neurokit/master?label=Travis%20CI&logo=travis
-        :target: https://travis-ci.org/neuropsychology/NeuroKit
+.. image:: https://github.com/neuropsychology/NeuroKit/actions/workflows/tests.yml/badge.svg
+        :target: https://github.com/neuropsychology/NeuroKit/actions/workflows/tests.yml
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit
@@ -160,7 +160,7 @@ Citation
    :target: https://neurokit2.readthedocs.io/en/latest/authors.html
 
 
-The **NeuroKit** paper can be found `here <https://doi.org/10.3758/s13428-020-01516-y>`_ 🎉 Additionally, you can get the reference directly from Python by running:
+The **NeuroKit2** paper can be found `here <https://doi.org/10.3758/s13428-020-01516-y>`_ 🎉 Additionally, you can get the reference directly from Python by running:
 
 .. code-block:: python
 
@@ -190,7 +190,7 @@ The **NeuroKit** paper can be found `here <https://doi.org/10.3758/s13428-020-01
     }
 
 
-**Let us know if you used NeuroKit in a publication!** Open a new `discussion <https://github.com/neuropsychology/NeuroKit/discussions>`_ (select the *NK in publications* category) and link the paper. The community would be happy to know about how you used it and learn about your research. We could also feature it once we have a section on the website for papers that used the software.
+**Let us know if you used NeuroKit2 in a publication!** Open a new `discussion <https://github.com/neuropsychology/NeuroKit/discussions>`_ (select the *NK in publications* category) and link the paper. The community would be happy to know about how you used it and learn about your research. We could also feature it once we have a section on the website for papers that used the software.
 
 ..
     Design
@@ -339,7 +339,7 @@ Electrooculography (EOG)
     signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
     # Plot
-    plot = nk.eog_plot(signals, sampling_rate=100)
+    plot = nk.eog_plot(signals, info, sampling_rate=100)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png
@@ -396,12 +396,43 @@ variability metrics) and peak characteristics.
 - `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
 
-Miscellaneous
-----------------------------
-
-
 Heart Rate Variability (HRV)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
+.. image:: https://img.shields.io/badge/DOI-hrv-red
+        :target: https://www.mdpi.com/1424-8220/21/12/3998
+
+If you are looking for:
+
+- a comprehensive review of the most up-to-date HRV indices
+- a discussion of their significance in psychological research and practices
+- a step-by-step guide for HRV analysis using **NeuroKit2**
+
+the **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** `paper <https://doi.org/10.3390/s21123998>`_ is a good place to start.
+
+.. code-block:: tex
+
+    You can cite the paper as follows:
+
+    - Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021).
+    Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial.
+    Sensors, 21(12), 3998. https://doi:10.3390/s21123998
+
+    Full bibtex reference:
+
+    @article{Pham_2021,
+        author={Pham, Tam and Lau, Zen Juen and Chen, S. H. Annabel and Makowski, Dominique},
+        title={Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial},
+        volume={21},
+        ISSN={1424-8220},
+        url={http://dx.doi.org/10.3390/s21123998},
+        DOI={10.3390/s21123998},
+        number={12},
+        journal={Sensors},
+        publisher={MDPI AG},
+        year={2021},
+        month={Jun},
+        pages={3998}
+    }
 
 - **Compute HRV indices**
 
@@ -427,6 +458,8 @@ Heart Rate Variability (HRV)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hrv.png
 
+Miscellaneous
+----------------------------
 
 ECG Delineation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
