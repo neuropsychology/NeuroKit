@@ -398,16 +398,15 @@ variability metrics) and peak characteristics.
 
 Heart Rate Variability (HRV)
 ----------------------------
-.. image:: https://img.shields.io/badge/DOI-hrv-red
+.. image:: https://img.shields.io/badge/Tutorial-HRV-green
         :target: https://www.mdpi.com/1424-8220/21/12/3998
 
-If you are looking for:
+Check-out our **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** `paper <https://doi.org/10.3390/s21123998>`_ for:
 
 - a comprehensive review of the most up-to-date HRV indices
 - a discussion of their significance in psychological research and practices
 - a step-by-step guide for HRV analysis using **NeuroKit2**
 
-the **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** `paper <https://doi.org/10.3390/s21123998>`_ is a good place to start.
 
 .. code-block:: tex
 
@@ -417,24 +416,8 @@ the **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analy
     Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial.
     Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 
-    Full bibtex reference:
 
-    @article{Pham_2021,
-        author={Pham, Tam and Lau, Zen Juen and Chen, S. H. Annabel and Makowski, Dominique},
-        title={Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial},
-        volume={21},
-        ISSN={1424-8220},
-        url={http://dx.doi.org/10.3390/s21123998},
-        DOI={10.3390/s21123998},
-        number={12},
-        journal={Sensors},
-        publisher={MDPI AG},
-        year={2021},
-        month={Jun},
-        pages={3998}
-    }
-
-- **Compute HRV indices**
+- **Compute HRV indices using Python**
 
   - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.
   - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF).
