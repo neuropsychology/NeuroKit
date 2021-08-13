@@ -73,7 +73,7 @@ def test_hrv():
                'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
                'HRV_Cd', 'HRV_Ca', 'HRV_SDNNd',
                'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn', 'HRV_MSE', 'HRV_CMSE',
-               'HRV_RCMSE', 'HRV_DFA', 'HRV_CorrDim']
+               'HRV_RCMSE', 'HRV_DFA_α1', 'HRV_DFA_α2', 'HRV_CD']
 
     assert all(elem in np.array(ecg_hrv.columns.values, dtype=object) for elem
                in columns)
