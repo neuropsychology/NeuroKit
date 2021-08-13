@@ -4,45 +4,58 @@ import numpy as np
 
 from ..misc import expspace
 
+def fractal_dfa(signal, windows = "default", overlap = True, integrate = True,
+                order = 1, multifractal = False, q = 2, show = False):
+    """(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA).
 
-def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1, multifractal=False, q=2, show=False):
-    """(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA)
+    Python implementation of Detrended Fluctuation Analysis (DFA) or
+    Multifractal DFA of a signal. Detrended fluctuation analysis, much like the
+    Hurst exponent, is used to find long-term statistical dependencies in time
+    series.
 
-    Python implementation of Detrended Fluctuation Analysis (DFA) or Multifractal DFA of a signal.
-    Detrended fluctuation analysis, much like the Hurst exponent, is used to find long-term statistical
-    dependencies in time series.
-
-    This function can be called either via ``fractal_dfa()`` or ``complexity_dfa()``, and its multifractal
-    variant can be directly accessed via ``fractal_mfdfa()`` or ``complexity_mfdfa()``
+    This function can be called either via `fractal_dfa()` or
+    `complexity_dfa()`, and its multifractal variant can be directly accessed
+    via `fractal_mfdfa()` or `complexity_mfdfa()`.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+
     windows : list
-        A list containing the lengths of the windows (number of data points in each subseries). Also
-        referred to as 'lag' or 'scale'. If 'default', will set it to a logarithmic scale (so that each
-        window scale has the same weight) with a minimum of 4 and maximum of a tenth of the length
+        A list containing the lengths of the windows (number of data points in
+        each subseries). Also referred to as 'lag' or 'scale'. If 'default',
+        will set it to a logarithmic scale (so that each window scale has the
+        same weight) with a minimum of 4 and maximum of a tenth of the length
         (to have more than 10 windows to calculate the average fluctuation).
+
     overlap : bool
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
+
     integrate : bool
-        It is common practice to convert the signal to a random walk (i.e., detrend and integrate,
-        which corresponds to the signal 'profile'). Note that it leads to the flattening of the signal,
-        which can lead to the loss of some details (see Ihlen, 2012 for an explanation). Note that for
-        strongly anticorrelated signals, this transformation should be applied two times (i.e., provide
-        ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
+        It is common practice to convert the signal to a random walk (i.e.,
+        detrend and integrate, which corresponds to the signal 'profile'). Note
+        that it leads to the flattening of the signal, which can lead to the
+        loss of some details (see Ihlen, 2012 for an explanation). Note that for
+        strongly anticorrelated signals, this transformation should be applied
+        two times (i.e., provide `np.cumsum(signal - np.mean(signal))` instead
+        of `signal`).
+
     order : int
         The order of the polynomial detrending, 1 for the linear trend.
+
     multifractal : bool
-        If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in which case the argument
-        ``q`` is taken into account.
+        If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in
+        which case the argument `q` is taken into account.
+
     q : list
-        The sequence of fractal exponents when ``multifractal=True``. Must be a sequence between -10
-        and 10 (note that zero will be removed, since the code does not converge there). Setting
-        q = 2 (default) gives a result of a standard DFA. For instance, Ihlen (2012) uses ``
-        q=[-5, -3, -1, 0, 1, 3, 5]``.
+        The sequence of fractal exponents when ``multifractal=True``. Must be a
+        sequence between `-10` and `10` (note that zero will be removed, since
+        the code does not converge there). Setting `q = 2` (default) gives a
+        result of a standard DFA. For instance, Ihlen (2012) uses
+        `q = [-5, -3, -1, 0, 1, 3, 5]`.
+
     show : bool
         Visualise the trend between the window size and the fluctuations.
 
@@ -64,12 +77,13 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
 
     References
     -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended fluctuation analysis in Matlab.
-      Frontiers in physiology, 3, 141.
+    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
+      fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
 
-    - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V., Mansvelder, H. D., &
-      Linkenkaer-Hansen, K. (2012). Detrended fluctuation analysis: a scale-free view on neuronal
-      oscillations. Frontiers in physiology, 3, 450.
+    - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V.,
+      Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended fluctuation
+      analysis: a scale-free view on neuronal oscillations. Frontiers in
+      physiology, 3, 450.
 
     - `nolds <https://github.com/CSchoel/nolds/>`_
 
@@ -87,16 +101,21 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     q = _cleanse_q(q)
 
     # '_fractal_dfa()' does the heavy lifting,
-    windows, fluctuations = _fractal_dfa(signal = signal, windows = windows, overlap = overlap,
-                                         integrate = integrate, order = order,
-                                         multifractal = multifractal, q = q)
+    windows, fluctuations = _fractal_dfa(
+                                signal = signal,
+                                windows = windows,
+                                overlap = overlap,
+                                integrate = integrate,
+                                order = order,
+                                multifractal = multifractal,
+                                q = q
+                            )
 
     # Plot if show is True.
     if show is True:
         _fractal_dfa_plot(windows, fluctuations, multifractal, q)
 
-    # if multifractal, then no return, since DFA fit to extract the Hurst coefficient
-    # is only la
+
     if len(fluctuations) == 0:
         return np.nan
     if multifractal == False:
@@ -104,7 +123,11 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True, order=1
     else:
         dfa = np.zeros(len(q))
         for i in range(len(q)):
-            dfa[i] = np.polyfit(np.log2(windows), np.log2(fluctuations[:,i]), 1)[0]
+            dfa[i] = np.polyfit(
+                        np.log2(windows),
+                        np.log2(fluctuations[:,i]),
+                        1
+                     )[0]
 
     return dfa
 
@@ -138,9 +161,10 @@ def _fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     if integrate is True:
         signal = np.cumsum(signal - np.mean(signal))  # Get signal profile
 
-    # Function to store fluctuations. For DFA this is an array. For MFDFA, this is a matrix
-    # of size (len(windows),len(q))
+    # Function to store fluctuations. For DFA this is an array. For MFDFA, this
+    # is a matrix of size (len(windows),len(q))
     fluctuations = np.zeros((len(windows),len(q)))
+
     # Start looping over windows
     for i, window in enumerate(windows):
 
@@ -151,10 +175,16 @@ def _fractal_dfa(signal, windows="default", overlap=True, integrate=True,
         trends = _fractal_dfa_trends(segments, window, order=order)
 
         # Get local fluctuation
-        fluctuations[i] = _fractal_dfa_fluctuation(segments, trends, multifractal, q)
+        fluctuations[i] = _fractal_dfa_fluctuation(
+                              segments,
+                              trends,
+                              multifractal,
+                              q
+                          )
 
-    # I would not advise this part. I understand the need to remove zeros, but I would
-    # instead suggest masking it with numpy.ma masked arrays.
+    # I would not advise this part. I understand the need to remove zeros, but I
+    # would instead suggest masking it with numpy.ma masked arrays. Note that
+    # when 'q' is a list,  windows[nonzero] increases in size.
 
     # Filter zeros
     # nonzero = np.nonzero(fluctuations)[0]
@@ -182,34 +212,48 @@ def _fractal_dfa_findwindows(n, windows="default"):
 
     # Check windows
     if len(windows) < 2:
-        raise ValueError("NeuroKit error: fractal_dfa(): more than one window is needed.")
+        raise ValueError(
+            "NeuroKit error: fractal_dfa(): more than one window is needed."
+        )
+
     if np.min(windows) < 2:
-        raise ValueError("NeuroKit error: fractal_dfa(): there must be at least 2 data points" "in each window")
+        raise ValueError(
+            "NeuroKit error: fractal_dfa(): there must be at least 2 data "
+            "points in each window"
+        )
     if np.max(windows) >= n:
         raise ValueError(
-            "NeuroKit error: fractal_dfa(): the window cannot contain more data points than the" "time series."
+            "NeuroKit error: fractal_dfa(): the window cannot contain more data"
+            " points than the" "time series."
         )
     return windows
 
 
-def _fractal_dfa_getwindow(signal, n, window, overlap=True):
-    # This function reshapes the segments from a one-dimensional array to a matrix for faster
-    # polynomail fittings. 'Overlap' reshapes into several overlapping partitions of the data
+def _fractal_dfa_getwindow(signal, n, window, overlap = True):
+    # This function reshapes the segments from a one-dimensional array to a
+    # matrix for faster polynomail fittings. 'Overlap' reshapes into several
+    # overlapping partitions of the data
+
     if overlap:
-        segments = np.array([signal[i : i + window] for i in np.arange(0, n - window, window // 2)])
+        segments = np.array([signal[i : i + window]
+                             for i in np.arange(0, n - window, window // 2)
+                            ])
     else:
         segments = signal[: n - (n % window)]
         segments = segments.reshape((signal.shape[0] // window, window))
+
     return segments
 
 
-def _fractal_dfa_trends(segments, window, order=1):
+def _fractal_dfa_trends(segments, window, order = 1):
     x = np.arange(window)
 
     coefs = np.polyfit(x[:window], segments.T, order).T
 
-    # TODO: Could this be optimized? Something like np.polyval(x[:window], coefs)
-    trends = np.array([np.polyval(coefs[j], x) for j in np.arange(len(segments))])
+    # TODO: Could this be optimized? Something like np.polyval(x[:window],coefs)
+    trends = np.array([np.polyval(coefs[j], x)
+                       for j in np.arange(len(segments))
+                      ])
 
     return trends
 
@@ -220,8 +264,10 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
 
     if multifractal is True:
         var = np.var(detrended, axis=1)
-        # obtain the fluctuation function, which is a function of the windows and of q
-        fluctuation = np.float_power(np.mean(np.float_power(var, q / 2), axis=1), 1 / q.T)
+        # obtain the fluctuation function, which is a function of the windows
+        # and of q
+        fluctuation = \
+            np.float_power(np.mean(np.float_power(var, q / 2), axis=1), 1 / q.T)
 
         # Remnant:
         # To recover just the conventional DFA, find q=2
@@ -242,7 +288,8 @@ def _fractal_dfa_plot(windows, fluctuations, multifractal, q):
 
         fluctfit = 2 ** np.polyval(dfa, np.log2(windows))
         plt.loglog(windows, fluctuations, "bo")
-        plt.loglog(windows, fluctfit, "r", label=r"$\alpha$ = {:.3f}".format(dfa[0][0]))
+        plt.loglog(windows, fluctfit, "r",
+                   label=r"$\alpha$ = {:.3f}".format(dfa[0][0]))
     else:
         for i in range(len(q)):
             dfa = np.polyfit(np.log2(windows), np.log2(fluctuations[:,i]), 1)
@@ -251,7 +298,9 @@ def _fractal_dfa_plot(windows, fluctuations, multifractal, q):
             fluctfit = 2 ** np.polyval(dfa, np.log2(windows))
 
             plt.loglog(windows, fluctuations, "bo")
-            plt.loglog(windows, fluctfit, "r", label=r"$\alpha$ = {:.3f}, q={:.1f}".format(dfa[0],q[i][0]))
+            plt.loglog(windows, fluctfit, "r",
+                label=r"$\alpha$ = {:.3f}, q={:.1f}".format(dfa[0],q[i][0])
+            )
 
     plt.title("DFA")
     plt.xlabel(r"$\log_{2}$(Window)")

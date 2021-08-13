@@ -34,30 +34,40 @@ def singularity_spectrum(signal, q = "default", lim = [None, None],
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+
     q : list
         The sequence of fractal exponents. Must be a sequence between -10
         and 10 (note that zero will be removed, since the code does not converge
-        there). If "default", will become 'np.linspace(-5,5,41)'.
+        there). If "default", will takes the form `np.linspace(-10,10,41)`.
+
     lim: list (default `[1, lag.size//2]`)
         List of lower and upper lag limits. If none, the polynomial fittings
         will be restrict to half the maximal lag and discard the first lag
         point.
+
     windows : list
-        A list containing the lengths of the windows (number of data points in each subseries). Also
-        referred to as 'lag' or 'scale'. If 'default', will set it to a logarithmic scale (so that each
-        window scale has the same weight) with a minimum of 4 and maximum of a tenth of the length
+        A list containing the lengths of the windows (number of data points in
+        each subseries). Also referred to as 'lag' or 'scale'. If 'default',
+        will set it to a logarithmic scale (so that each window scale has the
+        same weight) with a minimum of 4 and maximum of a tenth of the length
         (to have more than 10 windows to calculate the average fluctuation).
+
     overlap : bool
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
+
     integrate : bool
-        It is common practice to convert the signal to a random walk (i.e., detrend and integrate,
-        which corresponds to the signal 'profile'). Note that it leads to the flattening of the signal,
-        which can lead to the loss of some details (see Ihlen, 2012 for an explanation). Note that for
-        strongly anticorrelated signals, this transformation should be applied two times (i.e., provide
-        ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
+        It is common practice to convert the signal to a random walk (i.e.,
+        detrend and integrate, which corresponds to the signal 'profile'). Note
+        that it leads to the flattening of the signal, which can lead to the
+        loss of some details (see Ihlen, 2012 for an explanation). Note that for
+        strongly anticorrelated signals, this transformation should be applied
+        two times (i.e., provide `np.cumsum(signal - np.mean(signal))` instead
+        of `signal`).
+
     order : int
         The order of the polynomial detrending, 1 for the linear trend.
+
     show : bool
         Visualise the singularity plot.
 
@@ -78,18 +88,17 @@ def singularity_spectrum(signal, q = "default", lim = [None, None],
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, noise=0.05)
-    >>> dfa1 = nk.singularity_spectrum(signal, show=True)
-    >>> dfa1 #doctest: +SKIP
-
+    >>> alpha, f = nk.singularity_spectrum(signal, show=True)
+    >>> alpha, f #doctest: +SKIP
 
     References
     -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended fluctuation analysis in Matlab.
-      Frontiers in physiology, 3, 141.
+    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
+      fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
 
-    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A. Bunde, H. E. Stanley
-      (2002). Multifractal detrended fluctuation analysis of nonstationary time series. Physica A,
-      316(1-4), 87–114.
+    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A.
+      Bunde, H. E. Stanley (2002). Multifractal detrended fluctuation analysis
+      of nonstationary time series. Physica A, 316(1-4), 87–114.
 
     Notes
     -----
@@ -210,61 +219,71 @@ def scaling_exponents(signal, q = list(range(-10,10)), lim = [None, None],
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    q : list (default 'list(range(-10,10))')
+
+    q : list
         The sequence of fractal exponents. Must be a sequence between -10
-        and 10 (note that zero will be removed, since the code does not converge there).
+        and 10 (note that zero will be removed, since the code does not converge
+        there). If "default", will takes the form `np.linspace(-10,10,41)`.
+
     lim: list (default `[1, lag.size//2]`)
         List of lower and upper lag limits. If none, the polynomial fittings
         will be restrict to half the maximal lag and discard the first lag
         point.
+
     windows : list
-        A list containing the lengths of the windows (number of data points in each subseries). Also
-        referred to as 'lag' or 'scale'. If 'default', will set it to a logarithmic scale (so that each
-        window scale has the same weight) with a minimum of 4 and maximum of a tenth of the length
+        A list containing the lengths of the windows (number of data points in
+        each subseries). Also referred to as 'lag' or 'scale'. If 'default',
+        will set it to a logarithmic scale (so that each window scale has the
+        same weight) with a minimum of 4 and maximum of a tenth of the length
         (to have more than 10 windows to calculate the average fluctuation).
+
     overlap : bool
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
+
     integrate : bool
-        It is common practice to convert the signal to a random walk (i.e., detrend and integrate,
-        which corresponds to the signal 'profile'). Note that it leads to the flattening of the signal,
-        which can lead to the loss of some details (see Ihlen, 2012 for an explanation). Note that for
-        strongly anticorrelated signals, this transformation should be applied two times (i.e., provide
-        ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
+        It is common practice to convert the signal to a random walk (i.e.,
+        detrend and integrate, which corresponds to the signal 'profile'). Note
+        that it leads to the flattening of the signal, which can lead to the
+        loss of some details (see Ihlen, 2012 for an explanation). Note that for
+        strongly anticorrelated signals, this transformation should be applied
+        two times (i.e., provide `np.cumsum(signal - np.mean(signal))` instead
+        of `signal`).
+
     order : int
         The order of the polynomial detrending, 1 for the linear trend.
+
     show : bool
-        Visualise the singularity plot.
+        Visualise the multifractal scaling exponents.
 
     Returns
     -------
-    hq: np.array
-        Singularity strength `hq`. The width of this function indicates the
-        strength of the multifractality. A width of `max(hq) - min(hq) ≈ 0`
-        means the data is monofractal.
+    q: np.array
+        The `q` powers.
 
-    Dq: np.array
-        Singularity spectrum `Dq`. The location of the maximum of `Dq` (with
-         `hq` as the abscissa) should be 1 and indicates the most prominent
-         exponent in the data.
+    tau: np.array
+        Scaling exponents `τ`. A usually increasing function of `q` from
+        which the fractality of the data can be determined by its shape. A truly
+        linear tau indicates monofractality, whereas a curved one (usually
+        curving around small `q` values) indicates multifractality.
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, noise=0.05)
-    >>> dfa1 = nk.singularity_spectrum(signal, show=True)
-    >>> dfa1 #doctest: +SKIP
+    >>> q, tau = nk.scaling_exponents(signal, show=True)
+    >>> q, tau #doctest: +SKIP
 
 
     References
     -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended fluctuation analysis in Matlab.
-      Frontiers in physiology, 3, 141.
+    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
+      fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
 
-    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A. Bunde, H. E. Stanley
-      (2002). Multifractal detrended fluctuation analysis of nonstationary time series. Physica A,
-      316(1-4), 87–114.
+    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A.
+      Bunde, H. E. Stanley (2002). Multifractal detrended fluctuation analysis
+      of nonstationary time series. Physica A, 316(1-4), 87–114.
 
     Notes
     -----
@@ -381,62 +400,70 @@ def hurst_exponents(signal, q = "default", lim = [None, None],
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+
     q : list
         The sequence of fractal exponents. Must be a sequence between -10
         and 10 (note that zero will be removed, since the code does not converge
-        there). If "default", will become 'np.linspace(-5,5,41)'.
+        there). If "default", will takes the form `np.linspace(-10,10,41)`.
+
     lim: list (default `[1, lag.size//2]`)
         List of lower and upper lag limits. If none, the polynomial fittings
         will be restrict to half the maximal lag and discard the first lag
         point.
+
     windows : list
-        A list containing the lengths of the windows (number of data points in each subseries). Also
-        referred to as 'lag' or 'scale'. If 'default', will set it to a logarithmic scale (so that each
-        window scale has the same weight) with a minimum of 4 and maximum of a tenth of the length
+        A list containing the lengths of the windows (number of data points in
+        each subseries). Also referred to as 'lag' or 'scale'. If 'default',
+        will set it to a logarithmic scale (so that each window scale has the
+        same weight) with a minimum of 4 and maximum of a tenth of the length
         (to have more than 10 windows to calculate the average fluctuation).
+
     overlap : bool
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
+
     integrate : bool
-        It is common practice to convert the signal to a random walk (i.e., detrend and integrate,
-        which corresponds to the signal 'profile'). Note that it leads to the flattening of the signal,
-        which can lead to the loss of some details (see Ihlen, 2012 for an explanation). Note that for
-        strongly anticorrelated signals, this transformation should be applied two times (i.e., provide
-        ``np.cumsum(signal - np.mean(signal))`` instead of ``signal``).
+        It is common practice to convert the signal to a random walk (i.e.,
+        detrend and integrate, which corresponds to the signal 'profile'). Note
+        that it leads to the flattening of the signal, which can lead to the
+        loss of some details (see Ihlen, 2012 for an explanation). Note that for
+        strongly anticorrelated signals, this transformation should be applied
+        two times (i.e., provide `np.cumsum(signal - np.mean(signal))` instead
+        of `signal`).
+
     order : int
         The order of the polynomial detrending, 1 for the linear trend.
+
     show : bool
         Visualise the singularity plot.
 
     Returns
     -------
-    hq: np.array
-        Singularity strength `hq`. The width of this function indicates the
-        strength of the multifractality. A width of `max(hq) - min(hq) ≈ 0`
-        means the data is monofractal.
+    q: np.array
+        The `q` powers.
 
-    Dq: np.array
-        Singularity spectrum `Dq`. The location of the maximum of `Dq` (with
-         `hq` as the abscissa) should be 1 and indicates the most prominent
-         exponent in the data.
+    hq: np.array
+        Singularity strength `h(q)`. The width of this function indicates the
+        strength of the multifractality. A width of `max(h(q)) - min(h(q)) ≈ 0`
+        means the data is monofractal.
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, noise=0.05)
-    >>> dfa1 = nk.singularity_spectrum(signal, show=True)
-    >>> dfa1 #doctest: +SKIP
+    >>> q, hq = nk.hurst_exponents(signal, show=True)
+    >>> q, hq #doctest: +SKIP
 
 
     References
     -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended fluctuation analysis in Matlab.
-      Frontiers in physiology, 3, 141.
+    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
+      fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
 
-    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A. Bunde, H. E. Stanley
-      (2002). Multifractal detrended fluctuation analysis of nonstationary time series. Physica A,
-      316(1-4), 87–114.
+    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A.
+      Bunde, H. E. Stanley (2002). Multifractal detrended fluctuation analysis
+      of nonstationary time series. Physica A, 316(1-4), 87–114.
 
     Notes
     -----
