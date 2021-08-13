@@ -23,8 +23,7 @@
 
 **The Python Toolbox for Neurophysiological Signal Processing**
 
-This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
-It's a user-friendly package providing easy access to advanced biosignal processing routines.
+**NeuroKit2** is a user-friendly package providing easy access to advanced biosignal processing routines.
 Researchers and clinicians without extensive knowledge of programming or biomedical signal processing
 can **analyze physiological data with only two lines of code**.
 
