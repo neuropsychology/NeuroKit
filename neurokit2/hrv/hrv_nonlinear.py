@@ -13,7 +13,7 @@ from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
+def hrv_nonlinear(peaks, sampling_rate=1000, dfa_short_window=[4, 16], dfa_long_window=[16, 64], show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
      See references for details.
@@ -27,6 +27,12 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
+    dfa_short_window : list
+        A list containing the number of heartbeats to compute the DFA short term scaling exponent, α1.
+        Defaults to [4, 16] based on Peng et al. (1995).
+    dfa_long_window : list
+        A list containing the number of heartbeats to compute the DFA long term scaling exponent, α2.
+        Defaults to [16, 64] based on Peng et al. (1995).
     show : bool, optional
         If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the
         next successive one. The ellipse centers around the average RR interval. By default False.
@@ -124,10 +130,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
             - **RCMSE**: The refined composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
 
-            - **CorrDim**: The correlation dimension of the HR signal, calculated by `fractal_correlation()`.
+            - **CD**: The correlation dimension of the HR signal, calculated by `fractal_correlation()`.
 
-            - **DFA**: The detrended fluctuation analysis of the HR signal, calculated by `fractal_dfa()`.
+            - **DFA_α1**: The detrended fluctuation analysis of the HR signal corresponding to short-term
+            correlations, calculated by `fractal_dfa()`.
 
+            - **DFA_α2**: The detrended fluctuation analysis of the HR signal corresponding to long-term
+            correlations, calculated by `fractal_dfa()`.
 
     See Also
     --------
@@ -180,6 +189,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     autonomic function and its comparison with spectral analysis and coefficient of variation of R–R
     interval. Journal of the autonomic nervous system, 62(1-2), 79-84.
 
+    - Peng, C. K., Havlin, S., Stanley, H. E., & Goldberger, A. L. (1995). Quantification of scaling
+    exponents and crossover phenomena in nonstationary heartbeat time series. Chaos: an interdisciplinary
+    journal of nonlinear science, 5(1), 82-87.
+
     """
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
@@ -212,10 +225,12 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     # Fractal, skip computation if too short
     windows = _fractal_dfa_findwindows(len(rri), **kwargs)
     if len(windows) < 2 or np.min(windows) < 2 or np.max(windows) >= len(rri):
-        out["DFA"] = np.nan
+        out["DFA_α1"] = np.nan
+        out["DFA_α2"] = np.nan
     else:
-        out["DFA"] = fractal_dfa(rri, multifractal=False, **kwargs)
-    out["CorrDim"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
+        out["DFA_α1"] = fractal_dfa(rri, multifractal=False, windows=dfa_short_window, **kwargs)
+        out["DFA_α2"] = fractal_dfa(rri, multifractal=False, windows=dfa_long_window, **kwargs)
+    out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
 
     if show:
         _hrv_nonlinear_show(rri, out)
