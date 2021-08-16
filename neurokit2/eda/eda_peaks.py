@@ -38,7 +38,7 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     info : dict
         A dictionary containing additional information, in this case the aplitude of the SCR, the samples
         at which the SCR onset and the SCR peaks occur. Accessible with the keys "SCR_Amplitude",
-        "SCR_Onsets", and "SCR_Peaks" respectively.
+        "SCR_Onsets", and "SCR_Peaks" respectively. It also contains the signals' sampling rate.
     signals : DataFrame
         A DataFrame of same length as the input signal in which occurences of SCR peaks are marked as
         "1" in lists of zeros with the same length as `eda_cleaned`. Accessible with the keys "SCR_Peaks".
@@ -95,7 +95,9 @@ def eda_peaks(eda_phasic, sampling_rate=1000, method="neurokit", amplitude_min=0
     info = _eda_peaks_getfeatures(info, eda_phasic, sampling_rate, recovery_percentage=0.5)
 
     # Prepare output.
-    peak_signal = signal_formatpeaks(info, desired_length=len(eda_phasic), peak_indices=info["SCR_Peaks"])
+    peak_signal = signal_formatpeaks(info, desired_length=len(eda_phasic),
+                                     peak_indices=info["SCR_Peaks"], other_indices=info["SCR_Recovery"])
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     return peak_signal, info
 
@@ -109,16 +111,16 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
 
     # Sanity checks -----------------------------------------------------------
 
-    # Peaks (remove peaks with no onset)
+    # Peaks (remove peaks before first onset)
     valid_peaks = np.logical_and(
         info["SCR_Peaks"] > np.nanmin(info["SCR_Onsets"]), ~np.isnan(info["SCR_Onsets"])
     )  # pylint: disable=E1111
     peaks = info["SCR_Peaks"][valid_peaks]
 
-    # Onsets (remove onsets with no peaks)
+    # Onsets (remove onsets with after last peak)
     valid_onsets = ~np.isnan(info["SCR_Onsets"])
     valid_onsets[valid_onsets] = info["SCR_Onsets"][valid_onsets] < np.nanmax(info["SCR_Peaks"])
-    onsets = info["SCR_Onsets"][valid_onsets].astype(np.int)
+    onsets = info["SCR_Onsets"][valid_onsets].astype(int)
 
     if len(onsets) != len(peaks):
         raise ValueError(
@@ -132,7 +134,7 @@ def _eda_peaks_getfeatures(info, eda_phasic, sampling_rate=1000, recovery_percen
     amplitude = np.full(len(info["SCR_Height"]), np.nan)
     amplitude[valid_peaks] = info["SCR_Height"][valid_peaks] - eda_phasic[onsets]
 
-    # Rise times
+    # Rise times (in seconds)
     risetime = np.full(len(info["SCR_Peaks"]), np.nan)
     risetime[valid_peaks] = (peaks - onsets) / sampling_rate
 

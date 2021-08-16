@@ -47,15 +47,15 @@ def ecg_intervalrelated(data, sampling_rate=1000):
        ECG_Rate_Mean  HRV_RMSSD  ...
     0      ...
 
-    [1 rows x 55 columns]
+    [1 rows x 58 columns]
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100,
     ...                           epochs_end=150)
     >>> nk.ecg_intervalrelated(epochs) #doctest: +ELLIPSIS
-       ECG_Rate_Mean  HRV_RMSSD ...
-    1      ...
+       Label  ECG_Rate_Mean ...
+    1   ...
 
-    [2 rows x 55 columns]
+    [2 rows x 59 columns]
 
     """
     intervals = {}
@@ -78,8 +78,8 @@ def ecg_intervalrelated(data, sampling_rate=1000):
         for index in data:
             intervals[index] = {}  # Initialize empty container
 
-            # Format dataframe
-            data[index] = data[index].set_index("Index").drop(["Label"], axis=1)
+            # Add label info
+            intervals[index]['Label'] = data[index]['Label'].iloc[0]
 
             # Rate
             intervals[index] = _ecg_intervalrelated_formatinput(data[index], intervals[index])

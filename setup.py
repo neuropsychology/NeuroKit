@@ -22,7 +22,7 @@ def find_version():
 
 
 # Dependencies
-requirements = ["numpy", "pandas", "scipy", "sklearn", "matplotlib"]
+requirements = ["numpy", "pandas", "scipy", "scikit-learn", "matplotlib"]
 
 # Optional Dependencies (only needed / downloaded for testing purposes, for instance to test against some other packages)
 setup_requirements = ["pytest-runner", "numpy"]
@@ -33,7 +33,7 @@ test_requirements = requirements + [
     "mne",
     "pyentrp",
     "nolds",
-    "biosppy",
+    "biosppy==0.6.1",
     "cvxopt",
     "PyWavelets",
     "EMD-signal",

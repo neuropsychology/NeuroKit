@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
 
-from ..epochs.eventrelated_utils import (
-    _eventrelated_addinfo,
-    _eventrelated_rate,
-    _eventrelated_sanitizeinput,
-    _eventrelated_sanitizeoutput,
-)
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
+                                         _eventrelated_rate,
+                                         _eventrelated_sanitizeinput,
+                                         _eventrelated_sanitizeoutput)
 from ..misc import NeuroKitWarning
 
 
-def ecg_eventrelated(epochs, silent=False):
+def ecg_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
     """Performs event-related ECG analysis on epochs.
 
     Parameters
@@ -21,6 +19,12 @@ def ecg_eventrelated(epochs, silent=False):
         containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
+    subepoch_rate : list
+        A smaller "sub-epoch" within the epoch of an event can be specified.
+        The ECG rate-related features of this "sub-epoch" (e.g., ECG_Rate, ECG_Rate_Max),
+        relative to the baseline (where applicable), will be computed. The first value of the list specifies
+        the start of the sub-epoch and the second specifies the end of the sub-epoch (in seconds),
+        e.g., subepoch_rate = [1, 3] or subepoch_rate = [1, None]. Defaults to [None, None].
 
     Returns
     -------
@@ -34,6 +38,8 @@ def ecg_eventrelated(epochs, silent=False):
         - *"ECG_Rate_Min"*: the minimum heart rate after stimulus onset.
 
         - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
+
+        - *"ECG_Rate_SD"*: the standard deviation of the heart rate after stimulus onset.
 
         - *"ECG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
 
@@ -81,7 +87,7 @@ def ecg_eventrelated(epochs, silent=False):
     2     2          ...  ...                               ...               ...
     3     3          ...  ...                               ...               ...
 
-    [3 rows x 16 columns]
+    [3 rows x 17 columns]
     >>>
     >>> # Example with real data
     >>> data = nk.data("bio_eventrelated_100hz")
@@ -101,7 +107,7 @@ def ecg_eventrelated(epochs, silent=False):
     3     3   Neutral  ...                               ...               ...
     4     4  Negative  ...                               ...               ...
 
-    [4 rows x 17 columns]
+    [4 rows x 18 columns]
 
     """
     # Sanity checks
@@ -114,7 +120,7 @@ def ecg_eventrelated(epochs, silent=False):
         data[i] = {}  # Initialize empty container
 
         # Rate
-        data[i] = _eventrelated_rate(epochs[i], data[i], var="ECG_Rate")
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="ECG_Rate", subepoch_rate=subepoch_rate)
 
         # Cardiac Phase
         data[i] = _ecg_eventrelated_phase(epochs[i], data[i])

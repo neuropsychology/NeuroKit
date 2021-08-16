@@ -3,16 +3,14 @@ from warnings import warn
 
 import numpy as np
 
-from ..epochs.eventrelated_utils import (
-    _eventrelated_addinfo,
-    _eventrelated_rate,
-    _eventrelated_sanitizeinput,
-    _eventrelated_sanitizeoutput,
-)
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
+                                         _eventrelated_rate,
+                                         _eventrelated_sanitizeinput,
+                                         _eventrelated_sanitizeoutput)
 from ..misc import NeuroKitWarning
 
 
-def rsp_eventrelated(epochs, silent=False):
+def rsp_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
     """Performs event-related RSP analysis on epochs.
 
     Parameters
@@ -22,6 +20,12 @@ def rsp_eventrelated(epochs, silent=False):
         or a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
+    subepoch_rate : list
+        A smaller "sub-epoch" within the epoch of an event can be specified.
+        The ECG rate-related features of this "sub-epoch" (e.g., RSP_Rate, RSP_Rate_Max),
+        relative to the baseline (where applicable), will be computed. The first value of the list specifies
+        the start of the sub-epoch and the second specifies the end of the sub-epoch (in seconds),
+        e.g., subepoch_rate = [1, 3] or subepoch_rate = [1, None]. Defaults to [None, None].
 
     Returns
     -------
@@ -33,11 +37,13 @@ def rsp_eventrelated(epochs, silent=False):
         - *"RSP_Rate_Max"*: the maximum respiratory rate after stimulus onset.
         - *"RSP_Rate_Min"*: the minimum respiratory rate after stimulus onset.
         - *"RSP_Rate_Mean"*: the mean respiratory rate after stimulus onset.
+        - *"RSP_Rate_SD"*: the standard deviation of the respiratory rate after stimulus onset.
         - *"RSP_Rate_Max_Time"*: the time at which maximum respiratory rate occurs.
         - *"RSP_Rate_Min_Time"*: the time at which minimum respiratory rate occurs.
-        - *"RSP_Amplitude_Max"*: the maximum respiratory amplitude after stimulus onset.
-        - *"RSP_Amplitude_Min"*: the minimum respiratory amplitude after stimulus onset.
-        - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude after stimulus onset.
+        - *"RSP_Amplitude_Max"*: the change in maximum respiratory amplitude from before stimulus onset.
+        - *"RSP_Amplitude_Min"*: the change in minimum respiratory amplitude from before stimulus onset.
+        - *"RSP_Amplitude_Mean"*: the change in mean respiratory amplitude from before stimulus onset.
+        - *"RSP_Amplitude_SD"*: the standard deviation of the respiratory amplitude after stimulus onset.
         - *"RSP_Phase"*: indication of whether the onset of the event concurs with respiratory
         inspiration (1) or expiration (0).
         - *"RSP_PhaseCompletion"*: indication of the stage of the current respiration phase (0 to 1)
@@ -83,7 +89,7 @@ def rsp_eventrelated(epochs, silent=False):
         data[i] = {}  # Initialize empty container
 
         # Rate
-        data[i] = _eventrelated_rate(epochs[i], data[i], var="RSP_Rate")
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="RSP_Rate", subepoch_rate=subepoch_rate)
 
         # Amplitude
         data[i] = _rsp_eventrelated_amplitude(epochs[i], data[i])
@@ -127,6 +133,7 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
     output["RSP_Amplitude_Max"] = np.max(signal) - np.mean(baseline)
     output["RSP_Amplitude_Min"] = np.min(signal) - np.mean(baseline)
     output["RSP_Amplitude_Mean"] = np.mean(signal) - np.mean(baseline)
+    output["RSP_Amplitude_SD"] = np.std(signal)
 
     return output
 

@@ -164,7 +164,6 @@ def _eda_eventrelated_scr(epoch, output={}):
     peak_amplitude = epoch["SCR_Amplitude"][epoch.index > 0].iloc[first_activation]
     output["SCR_Peak_Amplitude"] = peak_amplitude
     output["SCR_Peak_Amplitude_Time"] = epoch["SCR_Amplitude"][epoch.index > 0].index[first_activation]
-
     # Rise Time
     rise_time = epoch["SCR_RiseTime"][epoch.index > 0].iloc[first_activation]
     output["SCR_RiseTime"] = rise_time

@@ -33,9 +33,34 @@ Contributors
 * `Celal Savur <https://github.com/csavur>`_ *(Rochester Institute of Technology, USA)*
 * `Jacob Epifano <https://github.com/jrepifano>`_ *(Rowan University - Children's Hospital of Philadelphia, USA)*
 * `Leonardo Rydin Gorjão <https://github.com/lrydin>`_ *(OsloMet, Norway)*
+* `Jukka Zitting <https://github.com/jukka>`_
 
 
 Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
 
+How to Cite
+-------------
 
-More details `here <https://github.com/neuropsychology/NeuroKit/graphs/contributors>`_.
+
+Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
+Behavior Research Methods. https://doi.org/10.3758/s13428-020-01516-y
+
+
+Full bibtex reference:
+
+.. code-block:: tex
+
+    @article{Makowski2021neurokit,
+      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
+      title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
+      journal={Behavior Research Methods},
+      year={2021},
+      month={Feb},
+      day={02},
+      abstract={NeuroKit2 is an open-source, community-driven, and user-centered Python package for neurophysiological signal processing. It provides a comprehensive suite of processing routines for a variety of bodily signals (e.g., ECG, PPG, EDA, EMG, RSP). These processing routines include high-level functions that enable data processing in a few lines of code using validated pipelines, which we illustrate in two examples covering the most typical scenarios, such as an event-related paradigm and an interval-related analysis. The package also includes tools for specific processing steps such as rate extraction and filtering methods, offering a trade-off between high-level convenience and fine-tuned control. Its goal is to improve transparency and reproducibility in neurophysiological research, as well as foster exploration and innovation. Its design philosophy is centred on user-experience and accessibility to both novice and advanced users.},
+      issn={1554-3528},
+      doi={10.3758/s13428-020-01516-y},
+      url={https://doi.org/10.3758/s13428-020-01516-y}
+    }
+..

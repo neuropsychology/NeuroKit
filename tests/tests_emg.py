@@ -95,7 +95,7 @@ def test_emg_eventrelated():
 
     # Test amplitude features
     no_activation = np.where(emg_eventrelated["EMG_Activation"] == 0)[0][0]
-    assert int(pd.DataFrame(emg_eventrelated.values[no_activation]).isna().sum()) == 4
+    assert int(pd.DataFrame(emg_eventrelated.values[no_activation]).isna().sum()) == 5
 
     assert np.alltrue(
         np.nansum(np.array(emg_eventrelated["EMG_Amplitude_Mean"]))
@@ -137,6 +137,7 @@ def test_emg_intervalrelated():
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
+    columns.append('Label')
     epochs = nk.epochs_create(emg_signals, events=[0, 20000], sampling_rate=1000, epochs_end=20)
     features_dict = nk.emg_intervalrelated(epochs)
 

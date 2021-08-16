@@ -32,7 +32,7 @@ def emg_process(emg_signal, sampling_rate=1000):
         - *"EMG_Offsets"*: the offsets of the amplitude, marked as "1" in a list of zeros.
     info : dict
         A dictionary containing the information of each amplitude onset, offset, and peak activity
-        (see `emg_activation()`).
+        (see `emg_activation()`), as well as the signals' sampling rate.
 
     See Also
     --------
@@ -59,6 +59,7 @@ def emg_process(emg_signal, sampling_rate=1000):
 
     # Get onsets, offsets, and periods of activity
     activity_signal, info = emg_activation(amplitude, sampling_rate=sampling_rate, threshold="default")
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     # Prepare output
     signals = pd.DataFrame({"EMG_Raw": emg_signal, "EMG_Clean": emg_cleaned, "EMG_Amplitude": amplitude})

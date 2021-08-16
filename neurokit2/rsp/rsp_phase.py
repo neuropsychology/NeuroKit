@@ -28,7 +28,7 @@ def rsp_phase(peaks, troughs=None, desired_length=None):
     -------
     signals : DataFrame
         A DataFrame of same length as `rsp_signal` containing the following columns:
-        - *"RSP_Inspiration"*: breathing phase, marked by "1" for inspiration and "0" for expiration.
+        - *"RSP_Phase"*: breathing phase, marked by "1" for inspiration and "0" for expiration.
         - *"RSP_Phase_Completion"*: breathing phase completion, expressed in percentage (from 0 to 1),
         representing the stage of the current respiratory phase.
 

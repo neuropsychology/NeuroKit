@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
+import pandas as pd
 import scipy.signal
 
-from ..misc import as_vector
+from ..misc import as_vector, NeuroKitWarning
 from ..signal import signal_detrend
 
 
@@ -43,6 +46,16 @@ def emg_clean(emg_signal, sampling_rate=1000):
     """
     emg_signal = as_vector(emg_signal)
 
+    # Missing data
+    n_missing = np.sum(np.isnan(emg_signal))
+    if n_missing > 0:
+        warn(
+            "There are " + str(n_missing) + " missing data points in your signal."
+            " Filling missing values by using the forward filling method.",
+            category=NeuroKitWarning
+        )
+        emg_signal = _emg_clean_missing(emg_signal)
+
     # Parameters
     order = 4
     frequency = 100
@@ -56,3 +69,12 @@ def emg_clean(emg_signal, sampling_rate=1000):
     clean = signal_detrend(filtered, order=0)
 
     return clean
+
+# =============================================================================
+# Handle missing data
+# =============================================================================
+def _emg_clean_missing(emg_signal):
+
+    emg_signal = pd.DataFrame.pad(pd.Series(emg_signal))
+
+    return emg_signal

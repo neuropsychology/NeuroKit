@@ -8,6 +8,8 @@ from .listify import listify
 from .type_converters import as_vector
 from .replace import replace
 from .warnings import NeuroKitWarning
+from .check_type import check_type
+from .find_outliers import find_outliers
 
 
 __all__ = [
@@ -19,4 +21,6 @@ __all__ = [
     "expspace",
     "replace",
     "NeuroKitWarning",
+    "check_type",
+    "find_outliers"
 ]

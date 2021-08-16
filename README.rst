@@ -10,8 +10,8 @@
 .. image:: https://img.shields.io/pypi/v/neurokit2.svg?logo=pypi&logoColor=FFE873
         :target: https://pypi.python.org/pypi/neurokit2
 
-.. image:: https://img.shields.io/travis/neuropsychology/neurokit/master?label=Travis%20CI&logo=travis
-        :target: https://travis-ci.org/neuropsychology/NeuroKit
+.. image:: https://github.com/neuropsychology/NeuroKit/actions/workflows/tests.yml/badge.svg
+        :target: https://github.com/neuropsychology/NeuroKit/actions/workflows/tests.yml
 
 .. image:: https://codecov.io/gh/neuropsychology/NeuroKit/branch/master/graph/badge.svg
         :target: https://codecov.io/gh/neuropsychology/NeuroKit
@@ -50,13 +50,19 @@ And **boom** 💥 your analysis is done 😎
 Installation
 -------------
 
-To install NeuroKit2, run this command in your terminal:
+You can install NeuroKit2 from `PyPI <https://pypi.org/project/neurokit2/>`_
 
 .. code-block::
 
     pip install neurokit2
 
-If you're not sure how/what to do, be sure to read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
+or `conda-forge <https://anaconda.org/conda-forge/neurokit2>`_
+
+.. code-block::
+
+    conda install -c conda-forge neurokit2
+
+If you're not sure what to do, read our `installation guide <https://neurokit2.readthedocs.io/en/latest/installation.html>`_.
 
 Contributing
 -------------
@@ -64,11 +70,11 @@ Contributing
 .. image:: https://img.shields.io/badge/License-MIT-blue.svg
         :target: https://github.com/neuropsychology/NeuroKit/blob/master/LICENSE
         :alt: License
-        
+
 .. image:: https://github.com/neuropsychology/neurokit/workflows/%E2%9C%A8%20Style/badge.svg?branch=master
         :target: https://github.com/neuropsychology/NeuroKit/actions
         :alt: GitHub CI
-        
+
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
         :target: https://github.com/psf/black
         :alt: Black code
@@ -154,6 +160,8 @@ Citation
    :target: https://neurokit2.readthedocs.io/en/latest/authors.html
 
 
+The **NeuroKit2** paper can be found `here <https://doi.org/10.3758/s13428-020-01516-y>`_ 🎉 Additionally, you can get the reference directly from Python by running:
+
 .. code-block:: python
 
     nk.cite()
@@ -163,20 +171,26 @@ Citation
 
     You can cite NeuroKit2 as follows:
 
-    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lesspinasse, F., Pham, H.,
-      Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological
-      Signal Processing. Retrieved March 28, 2020, from https://github.com/neuropsychology/NeuroKit
+    - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+    Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
+    Behavior Research Methods. https://doi.org/10.3758/s13428-020-01516-y
 
     Full bibtex reference:
 
-    @misc{neurokit2,
-      doi = {10.5281/ZENODO.3597887},
-      url = {https://github.com/neuropsychology/NeuroKit},
-      author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran\c{c}ois and Pham, Hung and Schölzel, Christopher and S H Chen, Annabel},
-      title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
-      publisher = {Zenodo},
-      year = {2020},
+    @article{Makowski2021neurokit,
+        author={Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
+        title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
+        journal={Behavior Research Methods},
+        year={2021},
+        month={Feb},
+        day={02},
+        issn={1554-3528},
+        doi={10.3758/s13428-020-01516-y},
+        url={https://doi.org/10.3758/s13428-020-01516-y}
     }
+
+
+**Let us know if you used NeuroKit2 in a publication!** Open a new `discussion <https://github.com/neuropsychology/NeuroKit/discussions>`_ (select the *NK in publications* category) and link the paper. The community would be happy to know about how you used it and learn about your research. We could also feature it once we have a section on the website for papers that used the software.
 
 ..
     Design
@@ -317,7 +331,7 @@ Electrooculography (EOG)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
-    
+
     # Import EOG data
     eog_signal = nk.data("eog_100hz")
 
@@ -325,7 +339,7 @@ Electrooculography (EOG)
     signals, info = nk.eog_process(eog_signal, sampling_rate=100)
 
     # Plot
-    plot = nk.eog_plot(signals, sampling_rate=100)
+    plot = nk.eog_plot(signals, info, sampling_rate=100)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_eog.png
@@ -382,14 +396,28 @@ variability metrics) and peak characteristics.
 - `Interval-related example <https://neurokit2.readthedocs.io/en/latest/examples/intervalrelated.html>`_
 
 
-Miscellaneous
-----------------------------
-
-
 Heart Rate Variability (HRV)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
+.. image:: https://img.shields.io/badge/Tutorial-HRV-green
+        :target: https://www.mdpi.com/1424-8220/21/12/3998
 
-- **Compute HRV indices**
+Check-out our **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** `paper <https://doi.org/10.3390/s21123998>`_ for:
+
+- a comprehensive review of the most up-to-date HRV indices
+- a discussion of their significance in psychological research and practices
+- a step-by-step guide for HRV analysis using **NeuroKit2**
+
+
+.. code-block:: tex
+
+    You can cite the paper as follows:
+
+    - Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021).
+    Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial.
+    Sensors, 21(12), 3998. https://doi:10.3390/s21123998
+
+
+- **Compute HRV indices using Python**
 
   - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.
   - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF).
@@ -413,6 +441,8 @@ Heart Rate Variability (HRV)
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_hrv.png
 
+Miscellaneous
+----------------------------
 
 ECG Delineation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

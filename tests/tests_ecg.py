@@ -156,7 +156,7 @@ def test_ecg_findpeaks():
 
     # Test engzeemod2012 method
     info_engzeemod = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
-    assert info_engzeemod["ECG_R_Peaks"].size == 70
+    assert info_engzeemod["ECG_R_Peaks"].size == 69
 
     # Test kalidas2017 method
     info_kalidas = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
@@ -225,7 +225,7 @@ def test_ecg_delineate():
     number_rpeaks = len(rpeaks["ECG_R_Peaks"])
 
     # Method 1: derivative
-    _, waves_derivative = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate)
+    _, waves_derivative = nk.ecg_delineate(ecg, rpeaks, sampling_rate=sampling_rate, method="peaks")
     assert len(waves_derivative["ECG_P_Peaks"]) == number_rpeaks
     assert len(waves_derivative["ECG_Q_Peaks"]) == number_rpeaks
     assert len(waves_derivative["ECG_S_Peaks"]) == number_rpeaks
@@ -257,12 +257,13 @@ def test_ecg_intervalrelated():
        'HRV_LFn', 'HRV_HFn', 'HRV_LnHF', 'HRV_SD1', 'HRV_SD2',
        'HRV_SD1SD2', 'HRV_S', 'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified',
        'HRV_PIP', 'HRV_IALS', 'HRV_PSS', 'HRV_PAS', 'HRV_ApEn',
-       'HRV_SampEn', 'HRV_GI', 'HRV_SI', 'HRV_AI', 'HRV_PI',
+       'HRV_SampEn', 'HRV_MSE', 'HRV_CMSE', 'HRV_RCMSE', 'HRV_GI', 'HRV_SI', 'HRV_AI', 'HRV_PI',
        'HRV_C1d', 'HRV_C1a', 'HRV_SD1d',
        'HRV_SD1a', 'HRV_C2d',
        'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
        'HRV_Cd', 'HRV_Ca', 'HRV_SDNNd',
-       'HRV_SDNNa']
+       'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn', 'HRV_MSE',
+       'HRV_CMSE', 'HRV_RCMSE', 'HRV_DFA', 'HRV_CorrDim']
 
     # Test with signal dataframe
     features_df = nk.ecg_intervalrelated(df, sampling_rate=100)
@@ -275,6 +276,7 @@ def test_ecg_intervalrelated():
     assert features_df.shape[0] == 1  # Number of rows
 
     # Test with dict
+    columns.append('Label')
     epochs = nk.epochs_create(df, events=[0, 15000],
                               sampling_rate=100, epochs_end=150)
     features_dict = nk.ecg_intervalrelated(epochs, sampling_rate=100)

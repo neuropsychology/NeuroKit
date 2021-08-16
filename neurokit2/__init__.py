@@ -31,7 +31,7 @@ from .microstates import *
 
 
 # Info
-__version__ = "0.0.42"
+__version__ = "0.1.4"
 
 
 # Maintainer info
@@ -41,15 +41,16 @@ __email__ = "dom.makowski@gmail.com"
 
 # Citation
 __bibtex__ = r"""
-@misc{neurokit2,
-  doi = {10.5281/ZENODO.3597887},
-  url = {https://github.com/neuropsychology/NeuroKit},
-  author = {Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lesspinasse,
-            Fran\c{c}ois and Pham, Hung and Schölzel, Christopher and S H Chen, Annabel},
-  title = {NeuroKit2: A Python Toolbox for Neurophysiological Signal Processing},
-  publisher = {Zenodo},
-  month={Mar},
-  year = {2020},
+@article{Makowski2021neurokit,
+    author={Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
+    title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
+    journal={Behavior Research Methods},
+    year={2021},
+    month={Feb},
+    day={02},
+    issn={1554-3528},
+    doi={10.3758/s13428-020-01516-y},
+    url={https://doi.org/10.3758/s13428-020-01516-y}
 }
 """
 

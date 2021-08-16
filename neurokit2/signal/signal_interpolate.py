@@ -22,11 +22,11 @@ def signal_interpolate(x_values, y_values, x_new=None, method="quadratic"):
         before or after the first and the last valus of x_values.
     method : str
         Method of interpolation. Can be 'linear', 'nearest', 'zero', 'slinear', 'quadratic', 'cubic',
-        'previous', 'next' or 'monotone_cubic'.  'zero', 'slinear', 'quadratic' and 'cubic' refer to
-        a spline interpolation of zeroth, first, second or third order; 'previous' and 'next' simply
-        return the previous or next value of the point) or as an integer specifying the order of the
+        'previous', 'next' or 'monotone_cubic'. The methods 'zero', 'slinear', 'quadratic' and 'cubic' refer to
+        a spline interpolation of zeroth, first, second or third order; whereas 'previous' and 'next' simply
+        return the previous or next value of the point. An integer specifying the order of the
         spline interpolator to use.
-        See https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html
+        See `here <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_
         for details on the 'monotone_cubic' method.
 
     Returns

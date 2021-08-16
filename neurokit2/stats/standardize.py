@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
 import numpy as np
 import pandas as pd
 
 from .mad import mad
-
+from ..misc import NeuroKitWarning
+from ..misc.check_type import is_string
 
 def standardize(data, robust=False, window=None, **kwargs):
     """Standardization of data.
@@ -59,15 +61,42 @@ def standardize(data, robust=False, window=None, **kwargs):
     """
     # Return appropriate type
     if isinstance(data, list):
-        data = list(_standardize(np.array(data), robust=robust, window=window, **kwargs))
-    elif isinstance(data, pd.DataFrame):
-        data = pd.DataFrame(_standardize(data, robust=robust, window=window, **kwargs))
-    elif isinstance(data, pd.Series):
-        data = pd.Series(_standardize(data, robust=robust, window=window, **kwargs))
-    else:
-        data = _standardize(data, robust=robust, window=window, **kwargs)
+        if any(is_string(data)):
+            out = data
+            warn(
+                "The data is not standardized."
+                "Some elements in the list is of string type.",
+                category=NeuroKitWarning
+            )
+        else:
+            out = list(_standardize(np.array(data), robust=robust, window=window, **kwargs))
 
-    return data
+    elif isinstance(data, pd.DataFrame):
+        # only standardize columns that are not string and are not nan
+        _data = data.loc[:, ~is_string(data) & ~np.array(data.isnull().all())]
+        to_append = data.loc[:, is_string(data) | np.array(data.isnull().all())]
+        out = pd.DataFrame(_standardize(_data, robust=robust, window=window, **kwargs))
+        out = pd.concat([to_append, out], axis=1)
+
+    elif isinstance(data, pd.Series):
+        if is_string(data):
+            out = data
+            warn(
+                "The data is not standardized as it is of string type.",
+                category=NeuroKitWarning)
+        else:
+            out = pd.Series(_standardize(data, robust=robust, window=window, **kwargs))
+
+    else:
+        if is_string(data):
+            out = data
+            warn(
+                "The data is not standardized as it is of string type.",
+                category=NeuroKitWarning)
+        else:
+            out = _standardize(data, robust=robust, window=window, **kwargs)
+
+    return out
 
 
 # =============================================================================

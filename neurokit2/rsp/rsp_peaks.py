@@ -36,7 +36,8 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
     -------
     info : dict
         A dictionary containing additional information, in this case the samples at which inhalation
-        peaks and exhalation troughs occur, accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
+        peaks and exhalation troughs occur, accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively,
+        as well as the signals' sampling rate.
     peak_signal : DataFrame
         A DataFrame of same length as the input signal in which occurences of inhalation peaks and
         exhalation troughs are marked as "1" in lists of zeros with the same length as `rsp_cleaned`.
@@ -64,5 +65,7 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
     info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min)
     info = rsp_fixpeaks(info)
     peak_signal = signal_formatpeaks(info, desired_length=len(rsp_cleaned), peak_indices=info["RSP_Peaks"])
+
+    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
 
     return peak_signal, info

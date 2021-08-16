@@ -44,7 +44,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
         of `signal`).
 
     order : int
-        The order of the polynomial detrending, 1 for the linear trend.
+       The order of the polynomial trend for detrending, 1 for the linear trend.
 
     multifractal : bool
         If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in
@@ -55,7 +55,10 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
         sequence between `-10` and `10` (note that zero will be removed, since
         the code does not converge there). Setting `q = 2` (default) gives a
         result of a standard DFA. For instance, Ihlen (2012) uses
-        `q = [-5, -3, -1, 0, 1, 3, 5]`.
+        `q = [-5, -3, -1, 0, 1, 3, 5]`. In general, positive q moments amplify 
+        the contribution of fractal components with larger amplitude and 
+        negative q moments amplify the contribution of fractal with smaller
+        amplitude (Kantelhardt et al., 2002)
 
     show : bool
         Visualise the trend between the window size and the fluctuations.
@@ -81,10 +84,15 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
       fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
 
+    - Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S., 
+      Bunde, A., & Stanley, H. E. (2002). Multifractal detrended fluctuation 
+      analysis of nonstationary time series. Physica A: Statistical 
+      Mechanics and its Applications, 316(1-4), 87-114.
+
     - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V.,
-      Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended fluctuation
-      analysis: a scale-free view on neuronal oscillations. Frontiers in
-      physiology, 3, 450.
+      Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended
+      fluctuation analysis: a scale-free view on neuronal oscillations. 
+      Frontiers in physiology, 3, 450.
 
     - `nolds <https://github.com/CSchoel/nolds/>`_
 
@@ -93,6 +101,14 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     - `Youtube introduction <https://www.youtube.com/watch?v=o0LndP2OlUI>`_
 
     """
+    # Sanity checks
+    n = len(signal)
+    windows = _fractal_dfa_findwindows(n, windows)
+    _fractal_dfa_findwindows_warning(windows, n)  # Return warning for too short windows
+
+    # Preprocessing
+    if integrate is True:
+        signal = np.cumsum(signal - np.mean(signal))  # Get signal profile
 
     # Enforce DFA in case 'multifractal = False' but 'q' is not 2
     if multifractal is False:
@@ -201,14 +217,18 @@ def _fractal_dfa_findwindows(n, windows="default"):
 
     # Default windows number
     if windows is None or isinstance(windows, str):
-        windows = np.int(n / 10)
+        windows = int(n / 10)
 
     # Default windows sequence
     if isinstance(windows, int):
         windows = expspace(
-            10, np.int(n / 10), windows, base=2
+            10, int(n / 10), windows, base=2
         )  # see https://github.com/neuropsychology/NeuroKit/issues/206
         windows = np.unique(windows)  # keep only unique
+
+    return windows
+
+def _fractal_dfa_findwindows_warning(windows, n):
 
     # Check windows
     if len(windows) < 2:
@@ -226,8 +246,6 @@ def _fractal_dfa_findwindows(n, windows="default"):
             "NeuroKit error: fractal_dfa(): the window cannot contain more data"
             " points than the" "time series."
         )
-    return windows
-
 
 def _fractal_dfa_getwindow(signal, n, window, overlap=True):
     # This function reshapes the segments from a one-dimensional array to a
@@ -727,7 +745,7 @@ def _cleanse_q(q=2):
     # TODO: Add log calculator for q ≈ 0
 
     # Fractal powers as floats
-    q = np.asarray_chkfinite(q, dtype=np.float)
+    q = np.asarray_chkfinite(q, dtype=float)
 
     # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
     q = q[(q < -0.1) + (q > 0.1)]
