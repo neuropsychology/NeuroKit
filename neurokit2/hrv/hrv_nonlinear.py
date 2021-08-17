@@ -13,7 +13,7 @@ from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv_nonlinear(peaks, sampling_rate=1000, dfa_short_window=[4, 16], dfa_long_window=[16, 64], show=False, **kwargs):
+def hrv_nonlinear(peaks, sampling_rate=1000, dfa_windows=[(4, 11), (12, None)], show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
      See references for details.
@@ -27,12 +27,12 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_short_window=[4, 16], dfa_long_
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
-    dfa_short_window : list
-        A list containing the number of heartbeats to compute the DFA short term scaling exponent, α1.
-        Defaults to [4, 16] based on Peng et al. (1995).
-    dfa_long_window : list
-        A list containing the number of heartbeats to compute the DFA long term scaling exponent, α2.
-        Defaults to [16, 64] based on Peng et al. (1995).
+    dfa_windows : list
+        A list of tuples containing the number of heartbeats to compute the DFA short term scaling
+        exponent, α1 and the long term scaling exponent, α2, respectively.
+        Defaults to [[4, 11], [12, None]], where
+        α1 is estimated from 4 to 11 heartbeats and α2 is estimated from a larger number of heartbeats,
+        i.e., 11 beats and above, based on Acharya et al. (2002).
     show : bool, optional
         If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the
         next successive one. The ellipse centers around the average RR interval. By default False.
@@ -189,9 +189,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_short_window=[4, 16], dfa_long_
     autonomic function and its comparison with spectral analysis and coefficient of variation of R–R
     interval. Journal of the autonomic nervous system, 62(1-2), 79-84.
 
-    - Peng, C. K., Havlin, S., Stanley, H. E., & Goldberger, A. L. (1995). Quantification of scaling
-    exponents and crossover phenomena in nonstationary heartbeat time series. Chaos: an interdisciplinary
-    journal of nonlinear science, 5(1), 82-87.
+    - Acharya, R. U., Lim, C. M., & Joseph, P. (2002). Heart rate variability analysis using
+    correlation dimension and detrended fluctuation analysis. Itbm-Rbm, 23(6), 333-339.
 
     """
     # Sanitize input
@@ -214,6 +213,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_short_window=[4, 16], dfa_long_
     # Heart Rate Asymmetry
     out = _hrv_nonlinear_poincare_hra(rri, out)
 
+    # DFA
+    out = _hrv_dfa(peaks, rri, out, dfa_windows=dfa_windows, **kwargs)
+
     # Entropy
     r = 0.2 * np.std(rri, ddof=1)
     out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=r)
@@ -222,14 +224,6 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_short_window=[4, 16], dfa_long_
     out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)
     out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)
 
-    # Fractal, skip computation if too short
-    windows = _fractal_dfa_findwindows(len(rri), **kwargs)
-    if len(windows) < 2 or np.min(windows) < 2 or np.max(windows) >= len(rri):
-        out["DFA_α1"] = np.nan
-        out["DFA_α2"] = np.nan
-    else:
-        out["DFA_α1"] = fractal_dfa(rri, multifractal=False, windows=dfa_short_window, **kwargs)
-        out["DFA_α2"] = fractal_dfa(rri, multifractal=False, windows=dfa_long_window, **kwargs)
     out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
 
     if show:
@@ -238,6 +232,27 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_short_window=[4, 16], dfa_long_
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
+
+def _hrv_dfa(peaks, rri, out, dfa_windows=[(4, 11), (12, None)], n_windows="default", **kwargs):
+    
+    # Determine max beats
+    if dfa_windows[1][1] is None:
+        max_beats = len(peaks) / 10
+
+    if n_windows == "default":
+        n_windows_short = int(dfa_windows[0][1] - dfa_windows[0][0] + 1)
+        n_windows_long = int(max_beats - dfa_windows[1][0] + 1)
+    elif isinstance(n_windows, list):
+        n_windows_short = n_windows[0]
+        n_windows_long = n_windows[1]
+    
+    short_window = np.linspace(dfa_windows[0][0], dfa_windows[0][1], n_windows_short).astype(int)
+    long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
+
+    out["DFA_α1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)['slopes'][0]
+    out["DFA_α2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)['slopes'][0]
+
+    return out
 
 # =============================================================================
 # Get SD1 and SD2
