@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -55,8 +56,8 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
         sequence between `-10` and `10` (note that zero will be removed, since
         the code does not converge there). Setting `q = 2` (default) gives a
         result of a standard DFA. For instance, Ihlen (2012) uses
-        `q = [-5, -3, -1, 0, 1, 3, 5]`. In general, positive q moments amplify 
-        the contribution of fractal components with larger amplitude and 
+        `q = [-5, -3, -1, 0, 1, 3, 5]`. In general, positive q moments amplify
+        the contribution of fractal components with larger amplitude and
         negative q moments amplify the contribution of fractal with smaller
         amplitude (Kantelhardt et al., 2002)
 
@@ -84,14 +85,14 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
       fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
 
-    - Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S., 
-      Bunde, A., & Stanley, H. E. (2002). Multifractal detrended fluctuation 
-      analysis of nonstationary time series. Physica A: Statistical 
+    - Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E., Havlin, S.,
+      Bunde, A., & Stanley, H. E. (2002). Multifractal detrended fluctuation
+      analysis of nonstationary time series. Physica A: Statistical
       Mechanics and its Applications, 316(1-4), 87-114.
 
     - Hardstone, R., Poil, S. S., Schiavone, G., Jansen, R., Nikulin, V. V.,
       Mansvelder, H. D., & Linkenkaer-Hansen, K. (2012). Detrended
-      fluctuation analysis: a scale-free view on neuronal oscillations. 
+      fluctuation analysis: a scale-free view on neuronal oscillations.
       Frontiers in physiology, 3, 450.
 
     - `nolds <https://github.com/CSchoel/nolds/>`_
@@ -127,26 +128,23 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
                                          q=q
                                          )
 
+    if len(fluctuations) == 0:
+        return np.nan
+
+    slopes = _slopes(windows, fluctuations, q)
+    out = {'q' : q[:,0],
+           'windows' : windows,
+           'fluctuations' : fluctuations,
+           'slopes' : slopes}
+
+    if multifractal is True:
+        out['tau'], out['hq'], out['Dq'] = singularity_spectrum(windows, fluctuations, q, slopes)
+
     # Plot if show is True.
     if show is True:
         _fractal_dfa_plot(windows, fluctuations, multifractal, q)
 
-    if len(fluctuations) == 0:
-        return np.nan
-    if multifractal is False:
-        dfa = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)[0]
-    else:
-        # Allocated array for slopes
-        dfa = np.zeros(len(q))
-
-        # Find slopes of each q-power
-        for i in range(len(q)):
-            dfa[i] = np.polyfit(np.log2(windows),
-                                np.log2(fluctuations[:, i]),
-                                1
-                                )[0]
-
-    return dfa
+    return out
 
 # =============================================================================
 # Utilities
@@ -164,22 +162,11 @@ def _fractal_dfa(signal, windows="default", overlap=True, integrate=True,
 
     fluctuations : np.ndarray
         The detrended fluctuations, from DFA or MFDFA.
-
     """
-
-    # Sanitize fractal power (cannot be close to 0)
-    q = _cleanse_q(q)
-
-    # Sanity checks
-    n = len(signal)
-    windows = _fractal_dfa_findwindows(n, windows)
-
-    # Preprocessing
-    if integrate is True:
-        signal = np.cumsum(signal - np.mean(signal))  # Get signal profile
 
     # Function to store fluctuations. For DFA this is an array. For MFDFA, this
     # is a matrix of size (len(windows),len(q))
+    n = len(signal)
     fluctuations = np.zeros((len(windows), len(q)))
 
     # Start looping over windows
@@ -209,6 +196,133 @@ def _fractal_dfa(signal, windows="default", overlap=True, integrate=True,
 
     return windows, fluctuations
 
+
+
+# =============================================================================
+#  Utils MFDFA
+# =============================================================================
+
+# This is based on Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E.,
+# Havlin, S., Bunde, A., & Stanley, H. E., Multifractal detrended fluctuation
+# analysis of nonstationary time series. Physica A, 316(1-4), 87-114, 2002 as
+# well as on nolds (https://github.com/CSchoel/nolds) and on work by  Espen A.
+# F. Ihlen, Introduction to multifractal detrended fluctuation analysis in
+# Matlab, Front. Physiol., 2012, https://doi.org/10.3389/fphys.2012.00141
+#
+# It was designed by Leonardo Rydin Gorjão as part of MFDFA
+# (https://github.com/LRydin/MFDFA). It is included here by the author and
+# altered to fit NK to the best of its extent.
+
+
+def singularity_spectrum(windows, fluctuations, q, slopes):
+    """Extract the slopes of the fluctuation function to futher obtain the
+    singularity strength `α` (or Hölder exponents) and singularity spectrum
+    `f(α)` (or fractal dimension). This is iconically shaped as an inverse
+    parabola, but most often it is difficult to obtain the negative `q` terms,
+    and one can focus on the left side of the parabola (`q>0`).
+
+    Note that these measures rarely match the theoretical expectation,
+    thus a variation of ± 0.25 is absolutely reasonable.
+
+    The parameters are mostly identical to `fractal_mfdfa()`, as one needs to
+    perform MFDFA to obtain the singularity spectrum. Calculating only the
+    DFA is insufficient, as it only has `q=2`, and a set of `q` values are
+    needed. Here defaulted to `q = list(range(-5,5))`, where the `0` element
+    is removed by `_cleanse_q()`.
+
+    Parameters
+    ----------
+    windows : list
+        A list containing the lengths of the windows. Output of `_fractal_dfa()`.
+
+    fluctuations : np.ndarray
+        The detrended fluctuations, from DFA or MFDFA. Output of `_fractal_dfa()`.
+
+    q : list or np.array (default `np.linspace(-10,10,41)`)
+        The sequence of fractal exponents. Must be a sequence between -10
+        and 10 (note that zero will be removed, since the code does not converge
+        there). If "default", will takes the form `np.linspace(-10,10,41)`.
+
+    slopes : np.ndarray
+        The slopes of each `q` power obtained with MFDFA. Output of `_slopes()`.
+
+    Returns
+    -------
+    tau: np.array
+        Scaling exponents `τ`. A usually increasing function of `q` from
+        which the fractality of the data can be determined by its shape. A truly
+        linear tau indicates monofractality, whereas a curved one (usually
+        curving around small `q` values) indicates multifractality.
+
+    hq: np.array
+        Singularity strength `hq`. The width of this function indicates the
+        strength of the multifractality. A width of `max(hq) - min(hq) ≈ 0`
+        means the data is monofractal.
+
+    Dq: np.array
+        Singularity spectrum `Dq`. The location of the maximum of `Dq` (with
+         `hq` as the abscissa) should be 1 and indicates the most prominent
+         exponent in the data.
+
+    Notes
+    -----
+    This was first designed and implemented by Leonardo Rydin in
+    `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
+    """
+
+    # Calculate τ
+    tau = q[:, 0] * slopes - 1
+
+    # Calculate hq or α, which needs tau
+    hq = np.gradient(tau) / np.gradient(q[:, 0])
+
+    # Calculate Dq or f(α), which needs tau and q
+    Dq = q[:, 0] * hq - tau
+
+    return tau, hq, Dq
+
+# =============================================================================
+#  Utils
+# =============================================================================
+def _cleanse_q(q=2):
+    # TODO: Add log calculator for q ≈ 0
+
+    # Fractal powers as floats
+    q = np.asarray_chkfinite(q, dtype=float)
+
+    # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
+    q = q[(q < -0.1) + (q > 0.1)]
+
+    # Reshape q to perform np.float_power
+    q = q.reshape(-1, 1)
+
+    return q
+
+
+def _slopes(windows, fluctuations, q):
+    """
+    Extract the slopes of each `q` power obtained with MFDFA to later produce
+    either the singularity spectrum or the multifractal exponents.
+
+    Notes
+    -----
+    This was first designed and implemented by Leonardo Rydin in
+    `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
+
+    """
+
+    # Ensure mfdfa has the same q-power entries as q
+    if fluctuations.shape[1] != q.shape[0]:
+        raise ValueError(
+            "Fluctuation function and q powers don't match in dimension.")
+
+    # Allocated array for slopes
+    slopes = np.zeros(len(q))
+    # Find slopes of each q-power
+    for i in range(len(q)):
+        slopes[i] = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)[0]
+
+    return slopes
 
 def _fractal_dfa_findwindows(n, windows="default"):
     # Convert to array
@@ -287,10 +401,6 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
         fluctuation = \
             np.float_power(np.mean(np.float_power(var, q / 2), axis=1), 1 / q.T)
 
-        # Remnant:
-        # To recover just the conventional DFA, find q=2
-        # fluctuation = np.mean(fluctuation)
-
     else:
         # Compute Root Mean Square (RMS)
         fluctuation = np.sum(detrended ** 2, axis=1) / detrended.shape[1]
@@ -298,502 +408,49 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
 
     return fluctuation
 
+# =============================================================================
+#  Plots
+# =============================================================================
 
-def _fractal_dfa_plot(windows, fluctuations, multifractal, q):
+def _fractal_dfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
+
+    # Prepare figure
+    fig = plt.figure(constrained_layout=False)
+    spec = matplotlib.gridspec.GridSpec(
+        ncols=2, nrows=2
+    )
+
+    ax_fluctuation = fig.add_subplot(spec[0, 0])
+    ax_spectrum = fig.add_subplot(spec[0, 1])
+    ax_tau = fig.add_subplot(spec[1, 0])
+    ax_hq = fig.add_subplot(spec[1, 1])
+
+    ax_fluctuation.set_title(r"DFA")
+    ax_fluctuation.set_xlabel(r"$\log_{2}$(Window)")
+    ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
 
     if multifractal is False:
-        dfa = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
-
-        fluctfit = 2 ** np.polyval(dfa, np.log2(windows))
-        plt.loglog(windows, fluctuations, "bo")
-        plt.loglog(windows, fluctfit, "r",
-                   label=r"$\alpha$ = {:.3f}".format(dfa[0][0]))
+        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
+        fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
+        ax_fluctuation.loglog(windows, fluctuations, "bo")
+        ax_fluctuation.loglog(windows, fluctfit, "r",
+                   label=r"$\alpha$ = {:.3f}".format(polyfit[0][0]))
     else:
         for i in range(len(q)):
-            dfa = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
-
-            fluctfit = 2 ** np.polyval(dfa, np.log2(windows))
-
-            plt.loglog(windows, fluctuations, "bo")
-            plt.loglog(windows, fluctfit, "r",
+            polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
+            fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
+            ax_fluctuation.loglog(windows, fluctuations, "bo")
+            ax_fluctuation.loglog(windows, fluctfit, "r",
                        label=(r"$\alpha$ = {:.3f}, q={:.1f}"
-                              ).format(dfa[0], q[i][0])
+                              ).format(polyfit[0], q[i][0])
                        )
 
-    plt.title(r"DFA")
-    plt.xlabel(r"$\log_{2}$(Window)")
-    plt.ylabel(r"$\log_{2}$(Fluctuation)")
-    plt.legend()
-    plt.show()
+    _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)
+    _scaling_exponents_plot(q, tau, ax=ax_tau)
+    _hurst_exponents_plot(q, hq, ax=ax_hq)
 
 
-# =============================================================================
-#  Utils MFDFA
-# =============================================================================
-
-# This is based on Kantelhardt, J. W., Zschiegner, S. A., Koscielny-Bunde, E.,
-# Havlin, S., Bunde, A., & Stanley, H. E., Multifractal detrended fluctuation
-# analysis of nonstationary time series. Physica A, 316(1-4), 87-114, 2002 as
-# well as on nolds (https://github.com/CSchoel/nolds) and on work by  Espen A.
-# F. Ihlen, Introduction to multifractal detrended fluctuation analysis in
-# Matlab, Front. Physiol., 2012, https://doi.org/10.3389/fphys.2012.00141
-#
-# It was designed by Leonardo Rydin Gorjão as part of MFDFA
-# (https://github.com/LRydin/MFDFA). It is included here by the author and
-# altered to fit NK to the best of its extent.
-
-
-def singularity_spectrum(signal, q="default", lim=[None, None],
-                         windows="default", overlap=True, integrate=True,
-                         order=1, show=False):
-    """Extract the slopes of the fluctuation function to futher obtain the
-    singularity strength `α` (or Hölder exponents) and singularity spectrum
-    `f(α)` (or fractal dimension). This is iconically shaped as an inverse
-    parabola, but most often it is difficult to obtain the negative `q` terms,
-    and one can focus on the left side of the parabola (`q>0`).
-
-    Note that these measures rarely match the theoretical expectation,
-    thus a variation of ± 0.25 is absolutely reasonable.
-
-    The parameters are mostly identical to `fractal_mfdfa()`, as one needs to
-    perform MFDFA to obtain the singularity spectrum. Calculating only the
-    DFA is insufficient, as it only has `q=2`, and a set of `q` values are
-    needed. Here defaulted to `q = list(range(-5,5))`, where the `0` element
-    is removed by `_cleanse_q()`.
-
-    Parameters
-    ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
-
-    q : list or np.array (default `np.linspace(-10,10,41)`)
-        The sequence of fractal exponents. Must be a sequence between -10
-        and 10 (note that zero will be removed, since the code does not converge
-        there). If "default", will takes the form `np.linspace(-10,10,41)`.
-
-    lim: list (default `[1, lag.size//2]`)
-        List of lower and upper lag limits. If none, the polynomial fittings
-        will be restrict to half the maximal lag and discard the first lag
-        point.
-
-    windows : list
-        A list containing the lengths of the windows (number of data points in
-        each subseries). Also referred to as 'lag' or 'scale'. If 'default',
-        will set it to a logarithmic scale (so that each window scale has the
-        same weight) with a minimum of 4 and maximum of a tenth of the length
-        (to have more than 10 windows to calculate the average fluctuation).
-
-    overlap : bool
-        Defaults to True, where the windows will have a 50% overlap
-        with each other, otherwise non-overlapping windows will be used.
-
-    integrate : bool
-        It is common practice to convert the signal to a random walk (i.e.,
-        detrend and integrate, which corresponds to the signal 'profile'). Note
-        that it leads to the flattening of the signal, which can lead to the
-        loss of some details (see Ihlen, 2012 for an explanation). Note that for
-        strongly anticorrelated signals, this transformation should be applied
-        two times (i.e., provide `np.cumsum(signal - np.mean(signal))` instead
-        of `signal`).
-
-    order : int
-        The order of the polynomial detrending, 1 for the linear trend.
-
-    show : bool
-        Visualise the singularity plot.
-
-    Returns
-    -------
-    hq: np.array
-        Singularity strength `hq`. The width of this function indicates the
-        strength of the multifractality. A width of `max(hq) - min(hq) ≈ 0`
-        means the data is monofractal.
-
-    Dq: np.array
-        Singularity spectrum `Dq`. The location of the maximum of `Dq` (with
-         `hq` as the abscissa) should be 1 and indicates the most prominent
-         exponent in the data.
-
-    Examples
-    ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=3, noise=0.05)
-    >>> alpha, f = nk.singularity_spectrum(signal, show=True)
-    >>> alpha, f #doctest: +SKIP
-
-    References
-    -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
-      fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
-
-    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A.
-      Bunde, H. E. Stanley (2002). Multifractal detrended fluctuation analysis
-      of nonstationary time series. Physica A, 316(1-4), 87–114.
-
-    Notes
-    -----
-    This was first designed and implemented by Leonardo Rydin in
-    `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
-
-    """
-
-    # Draw q values
-    if isinstance(q, str):
-        q = list(np.linspace(-10, 10, 41))
-
-    q = _cleanse_q(q)
-
-    # obtain the windows and fluctuations
-    windows, fluctuations = _fractal_dfa(signal=signal,
-                                         windows=windows,
-                                         overlap=overlap,
-                                         integrate=integrate,
-                                         order=order,
-                                         multifractal=True,
-                                         q=q
-                                         )
-
-    # flatten q for the multiplications ahead
-    q = q.flatten()
-
-    # if no limits given
-    if lim[0] is None and lim[1] is None:
-        lim = [1, windows.size // 2]
-
-    # Calculate the slopes
-    slopes = _slopes(windows, fluctuations, q, lim)
-
-    # Calculate τ
-    tau = q * slopes - 1
-
-    # Calculate α, which needs tau
-    alpha = np.gradient(tau) / np.gradient(q)
-
-    # Calculate Dq, which needs tau and q
-    f = q * alpha - tau
-
-    if show is True:
-        singularity_spectrum_plot(alpha, f)
-
-    return alpha, f
-
-# Scaling exponents
-
-
-def scaling_exponents(signal, q="default", lim=[None, None],
-                      windows="default", overlap=True, integrate=True,
-                      order=1, show=False):
-    """Calculate the multifractal scaling exponents `τ`, which is given
-    by
-
-    .. math::
-
-       \tau(q) = qh(q) - 1.
-
-    To evaluate the scaling exponent `τ`, plot it vs `q`. If the
-    relation between `τ` is linear, the data is monofractal. If not,
-    it is multifractal.
-
-    Note that these measures rarely match the theoretical expectation,
-    thus a variation of ± 0.25 is absolutely reasonable.
-
-    The parameters are mostly identical to `fractal_mfdfa()`, as one needs to
-    perform MFDFA to obtain the singularity spectrum. Calculating only the
-    DFA is insufficient, as it only has `q=2`, and a set of `q` values are
-    needed. Here defaulted to `q = np.linspace(-10,10,41)`, where the `0`
-    element is removed by `_cleanse_q()`.
-
-    Parameters
-    ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
-
-    q : list or np.array (default `np.linspace(-10,10,41)`)
-        The sequence of fractal exponents. Must be a sequence between -10
-        and 10 (note that zero will be removed, since the code does not converge
-        there). If "default", will takes the form `np.linspace(-10,10,41)`.
-
-    lim: list (default `[1, lag.size//2]`)
-        List of lower and upper lag limits. If none, the polynomial fittings
-        will be restrict to half the maximal lag and discard the first lag
-        point.
-
-    windows : list
-        A list containing the lengths of the windows (number of data points in
-        each subseries). Also referred to as 'lag' or 'scale'. If 'default',
-        will set it to a logarithmic scale (so that each window scale has the
-        same weight) with a minimum of 4 and maximum of a tenth of the length
-        (to have more than 10 windows to calculate the average fluctuation).
-
-    overlap : bool
-        Defaults to True, where the windows will have a 50% overlap
-        with each other, otherwise non-overlapping windows will be used.
-
-    integrate : bool
-        It is common practice to convert the signal to a random walk (i.e.,
-        detrend and integrate, which corresponds to the signal 'profile'). Note
-        that it leads to the flattening of the signal, which can lead to the
-        loss of some details (see Ihlen, 2012 for an explanation). Note that for
-        strongly anticorrelated signals, this transformation should be applied
-        two times (i.e., provide `np.cumsum(signal - np.mean(signal))` instead
-        of `signal`).
-
-    order : int
-        The order of the polynomial detrending, 1 for the linear trend.
-
-    show : bool
-        Visualise the multifractal scaling exponents.
-
-    Returns
-    -------
-    q: np.array
-        The `q` powers.
-
-    tau: np.array
-        Scaling exponents `τ`. A usually increasing function of `q` from
-        which the fractality of the data can be determined by its shape. A truly
-        linear tau indicates monofractality, whereas a curved one (usually
-        curving around small `q` values) indicates multifractality.
-
-    Examples
-    ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=3, noise=0.05)
-    >>> q, tau = nk.scaling_exponents(signal, show=True)
-    >>> q, tau #doctest: +SKIP
-
-
-    References
-    -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
-      fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
-
-    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A.
-      Bunde, H. E. Stanley (2002). Multifractal detrended fluctuation analysis
-      of nonstationary time series. Physica A, 316(1-4), 87–114.
-
-    Notes
-    -----
-    This was first designed and implemented by Leonardo Rydin in
-    `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
-
-    """
-
-    # Draw q values
-    if isinstance(q, str):
-        q = list(np.linspace(-10, 10, 41))
-
-    q = _cleanse_q(q)
-
-    # obtain the windows and fluctuations
-    windows, fluctuations = _fractal_dfa(signal=signal,
-                                         windows=windows,
-                                         overlap=overlap,
-                                         integrate=integrate,
-                                         order=order,
-                                         multifractal=True,
-                                         q=q
-                                         )
-
-    # flatten q for the multiplications ahead
-    q = q.flatten()
-
-    # if no limits given
-    if lim[0] is None and lim[1] is None:
-        lim = [1, windows.size // 2]
-
-    # Calculate the slopes
-    slopes = _slopes(windows, fluctuations, q, lim)
-
-    # Calculate τ
-    tau = q * slopes - 1
-
-    if show is True:
-        scaling_exponents_plot(q, tau)
-
-    return q, tau
-
-# Generalised Hurst exponents
-
-
-def hurst_exponents(signal, q="default", lim=[None, None], windows="default",
-                    overlap=True, integrate=True, order=1, show=False):
-    """Calculate the generalised Hurst exponents `h(q)` from the multifractal
-    `fractal_dfa()`, which are simply the slopes of each DFA for various `q`
-    powers.
-
-    Note that these measures rarely match the theoretical expectation,
-    thus a variation of ± 0.25 is absolutely reasonable.
-
-    The parameters are mostly identical to `fractal_mfdfa()`, as one needs to
-    perform MFDFA to obtain the singularity spectrum. Calculating only the
-    DFA is insufficient, as it only has `q=2`, and a set of `q` values are
-    needed. Here defaulted to `q = np.linspace(-10,10,41)`, where the `0`
-    element is removed by `_cleanse_q()`.
-
-    Parameters
-    ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
-
-    q : list or np.array (default `np.linspace(-10,10,41)`)
-        The sequence of fractal exponents. Must be a sequence between -10
-        and 10 (note that zero will be removed, since the code does not converge
-        there). If "default", will takes the form `np.linspace(-10,10,41)`.
-
-    lim: list (default `[1, lag.size//2]`)
-        List of lower and upper lag limits. If none, the polynomial fittings
-        will be restrict to half the maximal lag and discard the first lag
-        point.
-
-    windows : list
-        A list containing the lengths of the windows (number of data points in
-        each subseries). Also referred to as 'lag' or 'scale'. If 'default',
-        will set it to a logarithmic scale (so that each window scale has the
-        same weight) with a minimum of 4 and maximum of a tenth of the length
-        (to have more than 10 windows to calculate the average fluctuation).
-
-    overlap : bool
-        Defaults to True, where the windows will have a 50% overlap
-        with each other, otherwise non-overlapping windows will be used.
-
-    integrate : bool
-        It is common practice to convert the signal to a random walk (i.e.,
-        detrend and integrate, which corresponds to the signal 'profile'). Note
-        that it leads to the flattening of the signal, which can lead to the
-        loss of some details (see Ihlen, 2012 for an explanation). Note that for
-        strongly anticorrelated signals, this transformation should be applied
-        two times (i.e., provide `np.cumsum(signal - np.mean(signal))` instead
-        of `signal`).
-
-    order : int
-        The order of the polynomial detrending, 1 for the linear trend.
-
-    show : bool
-        Visualise the singularity plot.
-
-    Returns
-    -------
-    q: np.array
-        The `q` powers.
-
-    hq: np.array
-        Singularity strength `h(q)`. The width of this function indicates the
-        strength of the multifractality. A width of `max(h(q)) - min(h(q)) ≈ 0`
-        means the data is monofractal.
-
-    Examples
-    ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=3, noise=0.05)
-    >>> q, hq = nk.hurst_exponents(signal, show=True)
-    >>> q, hq #doctest: +SKIP
-
-
-    References
-    -----------
-    - Ihlen, E. A. F. E. (2012). Introduction to multifractal detrended
-      fluctuation analysis in Matlab. Frontiers in physiology, 3, 141.
-
-    - J. W. Kantelhardt, S. A. Zschiegner, E. Koscielny-Bunde, S. Havlin, A.
-      Bunde, H. E. Stanley (2002). Multifractal detrended fluctuation analysis
-      of nonstationary time series. Physica A, 316(1-4), 87–114.
-
-    Notes
-    -----
-    This was first designed and implemented by Leonardo Rydin in
-    `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
-
-    """
-
-    # Draw q values
-    if isinstance(q, str):
-        q = list(np.linspace(-10, 10, 41))
-
-    q = _cleanse_q(q)
-
-    # obtain the windows and fluctuations
-    windows, fluctuations = _fractal_dfa(signal=signal,
-                                         windows=windows,
-                                         overlap=overlap,
-                                         integrate=integrate,
-                                         order=order,
-                                         multifractal=True,
-                                         q=q
-                                         )
-
-    # flatten q for the multiplications ahead
-    q = q.flatten()
-
-    # if no limits given
-    if lim[0] is None and lim[1] is None:
-        lim = [1, windows.size // 2]
-
-    # Calculate the slopes
-    hq = _slopes(windows, fluctuations, q, lim)
-
-    if show is True:
-        hurst_exponents_plot(q, hq)
-
-    return q, hq
-
-
-def _cleanse_q(q=2):
-    # TODO: Add log calculator for q ≈ 0
-
-    # Fractal powers as floats
-    q = np.asarray_chkfinite(q, dtype=float)
-
-    # Ensure q≈0 is removed, since it does not converge. Limit set at |q| < 0.1
-    q = q[(q < -0.1) + (q > 0.1)]
-
-    # Reshape q to perform np.float_power
-    q = q.reshape(-1, 1)
-
-    return q
-
-
-def _slopes(windows, fluctuations, q, lim=[None, None]):
-    """
-    Extra the slopes of each `q` power obtained with MFDFA to later produce
-    either the singularity spectrum or the multifractal exponents.
-
-    Notes
-    -----
-    This was first designed and implemented by Leonardo Rydin in
-    `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
-
-    """
-
-    # if no limits given
-    if lim[0] is None and lim[1] is None:
-        lim = [windows[1], windows[windows.size // 2]]
-
-    # clean q
-    q = _cleanse_q(q)
-
-    # Fractal powers as floats
-    q = np.asarray_chkfinite(q, dtype=float)
-
-    # Ensure mfdfa has the same q-power entries as q
-    if fluctuations.shape[1] != q.shape[0]:
-        raise ValueError(
-            "Fluctuation function and q powers don't match in dimension.")
-
-    # Allocated array for slopes
-    dfa = np.zeros(len(q))
-
-    # Find slopes of each q-power
-    for i in range(len(q)):
-        dfa[i] = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)[0]
-
-    return dfa
-
-
-def singularity_spectrum_plot(alpha, f):
+def _singularity_spectrum_plot(hq, Dq, ax=None):
     """
     Plots the singularity spectrum.
 
@@ -817,18 +474,15 @@ def singularity_spectrum_plot(alpha, f):
 
     """
 
-    plt.plot(alpha, f, 'o-')
+    ax.plot(hq, Dq, 'o-')
 
-    plt.title("Singularity Spectrum")
-    plt.ylabel(r'f(α)')
-    plt.xlabel(r'α')
-    # plt.legend()
-    plt.show()
+    ax.set_title("Singularity Spectrum")
+    ax.set_ylabel(r'f(α)')
+    ax.set_xlabel(r'α')
 
     return None
 
-
-def scaling_exponents_plot(q, tau):
+def _scaling_exponents_plot(q, tau, ax=None):
     """
     Plots the scaling exponents, which is conventionally given with `q` in the
     abscissa and `tau` in the ordinates.
@@ -848,18 +502,16 @@ def scaling_exponents_plot(q, tau):
 
     """
 
-    plt.plot(q, tau, 'o-')
+    ax.plot(q, tau, 'o-')
 
-    plt.title("Scaling Exponents")
-    plt.ylabel(r'τ(q)')
-    plt.xlabel(r'q')
-    # plt.legend()
-    plt.show()
+    ax.set_title("Scaling Exponents")
+    ax.set_ylabel(r'τ(q)')
+    ax.set_xlabel(r'q')
 
     return None
 
 
-def hurst_exponents_plot(q, hq):
+def _hurst_exponents_plot(q, hq, ax=None):
     """
     Plots the generalised Hurst exponents with `q` in the abscissa and
     `hq` in the ordinates.
@@ -880,12 +532,10 @@ def hurst_exponents_plot(q, hq):
 
     """
 
-    plt.plot(q, hq, 'o-')
+    ax.plot(q, hq, 'o-')
 
-    plt.title("Generalised Hurst Exponents")
-    plt.ylabel(r'h(q)')
-    plt.xlabel(r'q')
-    # plt.legend()
-    plt.show()
+    ax.set_title("Generalised Hurst Exponents")
+    ax.set_ylabel(r'h(q)')
+    ax.set_xlabel(r'q')
 
     return None
