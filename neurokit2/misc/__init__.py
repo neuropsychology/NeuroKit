@@ -10,6 +10,7 @@ from .replace import replace
 from .warnings import NeuroKitWarning
 from .check_type import check_type
 from .find_outliers import find_outliers
+from .intervals_to_peaks import intervals_to_peaks
 
 
 __all__ = [
@@ -22,5 +23,6 @@ __all__ = [
     "replace",
     "NeuroKitWarning",
     "check_type",
-    "find_outliers"
+    "find_outliers",
+    "intervals_to_peaks"
 ]
