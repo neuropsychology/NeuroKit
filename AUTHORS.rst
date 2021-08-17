@@ -32,6 +32,7 @@ Contributors
 * `Minsoo Yeo <https://github.com/minsooyeo>`_ *(Taewoong Medical Co., Ltd., ROK)*
 * `Celal Savur <https://github.com/csavur>`_ *(Rochester Institute of Technology, USA)*
 * `Jacob Epifano <https://github.com/jrepifano>`_ *(Rowan University - Children's Hospital of Philadelphia, USA)*
+* `Leonardo Rydin Gorjão <https://github.com/lrydin>`_ *(OsloMet, Norway)*
 * `Jukka Zitting <https://github.com/jukka>`_
 
 

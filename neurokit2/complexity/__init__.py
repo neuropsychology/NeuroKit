@@ -20,7 +20,7 @@ from .entropy_multiscale import entropy_multiscale
 from .entropy_sample import entropy_sample
 
 # Fractal
-from .fractal_dfa import fractal_dfa
+from .fractal_dfa import fractal_dfa, singularity_spectrum, scaling_exponents, hurst_exponents
 from .fractal_mandelbrot import fractal_mandelbrot
 
 
