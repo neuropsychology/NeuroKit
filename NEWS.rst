@@ -1,6 +1,26 @@
 News
 =====
 
+
+0.1.4
+-------------------
+
+Breaking Changes
++++++++++++++++++
+
+* None
+
+New Features
++++++++++++++
+
+* Add convenience function `intervals_to_peaks()` useful for RRI or BBI conversion to peak indices
+
+Fixes
++++++++++++++
+
+* None
+
+
 0.1.3
 -------------------
 
