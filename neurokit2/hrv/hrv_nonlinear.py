@@ -5,9 +5,10 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import entropy_approximate, entropy_sample, entropy_multiscale
-from ..complexity.fractal_dfa import fractal_dfa
+from ..complexity import (entropy_approximate, entropy_multiscale,
+                          entropy_sample)
 from ..complexity.fractal_correlation import fractal_correlation
+from ..complexity.fractal_dfa import fractal_dfa
 from ..misc import find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
@@ -132,11 +133,35 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_windows=[(4, 11), (12, None)], 
 
             - **CD**: The correlation dimension of the HR signal, calculated by `fractal_correlation()`.
 
-            - **DFA_α1**: The detrended fluctuation analysis of the HR signal corresponding to short-term
-            correlations, calculated by `fractal_dfa()`.
+            - **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal corresponding
+            to short-term correlations, calculated by `fractal_dfa()`.
 
-            - **DFA_α2**: The detrended fluctuation analysis of the HR signal corresponding to long-term
-            correlations, calculated by `fractal_dfa()`.
+            - **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal corresponding
+            to long-term correlations, calculated by `fractal_dfa()`.
+
+            - **DFA_alpha1_ExpRange**: The multifractal detrended fluctuation analysis of the HR signal
+            corresponding to short-term correlations, calculated by `fractal_dfa()`. ExpRange is the range of
+            singularity exponents, correspoinding to the width of the singularity spectrum.
+
+            - **DFA_alpha2_ExpRange**: The multifractal detrended fluctuation analysis of the HR signal
+            corresponding to long-term correlations, calculated by `fractal_dfa()`. ExpRange is the range of
+            singularity exponents, correspoinding to the width of the singularity spectrum.
+
+            - **DFA_alpha1_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
+
+            - **DFA_alpha2_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
+
+            - **DFA_alpha1_DimRange**: The multifractal detrended fluctuation analysis of the HR signal
+            corresponding to short-term correlations, calculated by `fractal_dfa()`. DimRange is the range of
+            singularity dimensions, correspoinding to the height of the singularity spectrum.
+
+            - **DFA_alpha2_DimRange**: The multifractal detrended fluctuation analysis of the HR signal
+            corresponding to long-term correlations, calculated by `fractal_dfa()`. DimRange is the range of
+            singularity dimensions, correspoinding to the height of the singularity spectrum.
+
+            - **DFA_alpha1_DimMean**: Multifractal DFA. Dimmean is the mean of singularity dimensions.
+
+            - **DFA_alpha2_DimMean**: Multifractal DFA. Dimmean is the mean of singularity dimensions.
 
     See Also
     --------
@@ -231,30 +256,6 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_windows=[(4, 11), (12, None)], 
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
-
-def _hrv_dfa(peaks, rri, out, dfa_windows=[(4, 11), (12, None)], n_windows="default", **kwargs):
-    
-    # Determine max beats
-    if dfa_windows[1][1] is None:
-        max_beats = len(peaks) / 10
-    else:
-        max_beats = dfa_windows[1][1]
-
-    # No. of windows to compute for short and long term
-    if n_windows == "default":
-        n_windows_short = int(dfa_windows[0][1] - dfa_windows[0][0] + 1)
-        n_windows_long = int(max_beats - dfa_windows[1][0] + 1)
-    elif isinstance(n_windows, list):
-        n_windows_short = n_windows[0]
-        n_windows_long = n_windows[1]
-    
-    short_window = np.linspace(dfa_windows[0][0], dfa_windows[0][1], n_windows_short).astype(int)
-    long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
-
-    out["DFA_α1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)['slopes'][0]
-    out["DFA_α2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)['slopes'][0]
-
-    return out
 
 # =============================================================================
 # Get SD1 and SD2
@@ -418,6 +419,52 @@ def _hrv_nonlinear_fragmentation(rri, out):
 
     return out
 
+
+# =============================================================================
+# DFA
+# =============================================================================
+def _hrv_dfa(peaks, rri, out, dfa_windows=[(4, 11), (12, None)], n_windows="default", **kwargs):
+
+    # Determine max beats
+    if dfa_windows[1][1] is None:
+        max_beats = len(peaks) / 10
+    else:
+        max_beats = dfa_windows[1][1]
+
+    # No. of windows to compute for short and long term
+    if n_windows == "default":
+        n_windows_short = int(dfa_windows[0][1] - dfa_windows[0][0] + 1)
+        n_windows_long = int(max_beats - dfa_windows[1][0] + 1)
+    elif isinstance(n_windows, list):
+        n_windows_short = n_windows[0]
+        n_windows_long = n_windows[1]
+
+    short_window = np.linspace(dfa_windows[0][0], dfa_windows[0][1], n_windows_short).astype(int)
+    long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
+
+    # For monofractal
+    out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)['slopes'][0]
+    out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)['slopes'][0]
+
+    # For multifractal
+    mdfa_alpha1 = fractal_dfa(rri,
+                              multifractal=True,
+                              q = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                              windows=short_window, **kwargs)
+    out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
+    out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
+    out["DFA_alpha1_DimRange"] = mdfa_alpha1['DimRange']
+    out["DFA_alpha1_DimMean"] = mdfa_alpha1['DimMean']
+    mdfa_alpha2 = fractal_dfa(rri,
+                              multifractal=True,
+                              q = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                              windows=long_window, **kwargs)
+    out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
+    out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
+    out["DFA_alpha2_DimRange"] = mdfa_alpha2['DimRange']
+    out["DFA_alpha2_DimMean"] = mdfa_alpha2['DimMean']
+
+    return out
 
 # =============================================================================
 # Plot
