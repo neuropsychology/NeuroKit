@@ -414,40 +414,58 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
 
 def _fractal_dfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
 
-    # Prepare figure
-    fig = plt.figure(constrained_layout=False)
-    spec = matplotlib.gridspec.GridSpec(
-        ncols=2, nrows=2
-    )
+    if multifractal is True:
+        # Prepare figure
+        fig = plt.figure(constrained_layout=False)
+        spec = matplotlib.gridspec.GridSpec(
+            ncols=2, nrows=2
+        )
 
-    ax_fluctuation = fig.add_subplot(spec[0, 0])
-    ax_spectrum = fig.add_subplot(spec[0, 1])
-    ax_tau = fig.add_subplot(spec[1, 0])
-    ax_hq = fig.add_subplot(spec[1, 1])
+        ax_fluctuation = fig.add_subplot(spec[0, 0])
+        ax_spectrum = fig.add_subplot(spec[0, 1])
+        ax_tau = fig.add_subplot(spec[1, 0])
+        ax_hq = fig.add_subplot(spec[1, 1])
 
-    ax_fluctuation.set_title(r"DFA")
-    ax_fluctuation.set_xlabel(r"$\log_{2}$(Window)")
-    ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
+        n = len(q)
+        colors = plt.cm.plasma(np.linspace(0,1,n))
 
-    if multifractal is False:
-        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
-        fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
-        ax_fluctuation.loglog(windows, fluctuations, "bo")
-        ax_fluctuation.loglog(windows, fluctfit, "r",
-                   label=r"$\alpha$ = {:.3f}".format(polyfit[0][0]))
-    else:
+        # Plot the fluctuation plot
+        # Plot the points
+        for i in range(len(q)):
+            polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
+            ax_fluctuation.loglog(windows, fluctuations, "bo", c='#d2dade', markersize=5, base=2)
+        # Plot the polyfit line
         for i in range(len(q)):
             polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
             fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
-            ax_fluctuation.loglog(windows, fluctuations, "bo")
-            ax_fluctuation.loglog(windows, fluctfit, "r",
+            ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2,
                        label=(r"$\alpha$ = {:.3f}, q={:.1f}"
                               ).format(polyfit[0], q[i][0])
                        )
 
-    _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)
-    _scaling_exponents_plot(q, tau, ax=ax_tau)
-    _hurst_exponents_plot(q, hq, ax=ax_hq)
+        # Plot the singularity spectrum
+        _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)
+        # Plot tau against q
+        _scaling_exponents_plot(q, tau, ax=ax_tau)
+        # Plot hq against q
+        _hurst_exponents_plot(q, hq, ax=ax_hq)
+
+        ax_fluctuation.set_xlabel(r"$\log_{2}$(Window)")
+        ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
+        ax_fluctuation.legend(loc="lower right")
+        fig.suptitle('Multifractal Detrended Fluctuation Analysis')
+
+    elif multifractal is False:
+        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
+        fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
+        plt.loglog(windows, fluctuations, "bo", c='#90A4AE')
+        plt.loglog(windows, fluctfit, "r", c='#E91E63 ',
+                   label=r"$\alpha$ = {:.3f}".format(polyfit[0][0]))
+        plt.legend(loc="lower right")
+        plt.title('Detrended Fluctuation Analysis')
+
+
+    return None
 
 
 def _singularity_spectrum_plot(hq, Dq, ax=None):
@@ -474,11 +492,11 @@ def _singularity_spectrum_plot(hq, Dq, ax=None):
 
     """
 
-    ax.plot(hq, Dq, 'o-')
+    ax.plot(hq, Dq, 'o-', c='#FFC107')
 
-    ax.set_title("Singularity Spectrum")
-    ax.set_ylabel(r'f(α)')
-    ax.set_xlabel(r'α')
+#    ax.set_title("Singularity Spectrum")
+    ax.set_ylabel(r'Singularity dimension ($D_q$)')
+    ax.set_xlabel(r'Singularity exponent ($h_q$)')
 
     return None
 
@@ -502,11 +520,11 @@ def _scaling_exponents_plot(q, tau, ax=None):
 
     """
 
-    ax.plot(q, tau, 'o-')
+    ax.plot(q, tau, 'o-', c='#E91E63')
 
-    ax.set_title("Scaling Exponents")
-    ax.set_ylabel(r'τ(q)')
-    ax.set_xlabel(r'q')
+#    ax.set_title("Scaling Exponents")
+    ax.set_ylabel(r'Scaling exponents ($τ_q$)')
+    ax.set_xlabel(r'Multifractal parameter ($q$)')
 
     return None
 
@@ -532,10 +550,10 @@ def _hurst_exponents_plot(q, hq, ax=None):
 
     """
 
-    ax.plot(q, hq, 'o-')
+    ax.plot(q, hq, 'o-', c='#2196F3')
 
-    ax.set_title("Generalised Hurst Exponents")
-    ax.set_ylabel(r'h(q)')
-    ax.set_xlabel(r'q')
+#    ax.set_title("Generalised Hurst Exponents")
+    ax.set_ylabel(r'Generalized Hurst Exponents ($h_q$)')
+    ax.set_xlabel(r'Multifractal parameter ($q$)')
 
     return None
