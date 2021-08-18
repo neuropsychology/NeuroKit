@@ -80,11 +80,11 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
         - "*RRV_DFA_alpha2*": the long-term fluctuation value. Will only be computed if mora than 640 breath
         cycles in the signal.
 
-        - **RRV_alpha1_ExpRange**: Multifractal DFA. ExpRange is the range of singularity exponents, correspoinding to the width
-        of the singularity spectrum.
+        - **RRV_alpha1_ExpRange**: Multifractal DFA. ExpRange is the range of singularity exponents, correspoinding to the
+        width of the singularity spectrum.
 
-        - **RRV_alpha2_ExpRange**: Multifractal DFA. ExpRange is the range of singularity exponents, correspoinding to the width
-        of the singularity spectrum.
+        - **RRV_alpha2_ExpRange**: Multifractal DFA. ExpRange is the range of singularity exponents, correspoinding to the
+        width of the singularity spectrum.
 
         - **RRV_alpha1_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
 
@@ -229,29 +229,28 @@ def _rsp_rrv_nonlinear(bbi):
     # DFA
     if len(bbi) / 10 > 16:
         out["DFA_alpha1"] = fractal_dfa(bbi, windows=np.arange(4, 17), multifractal=False)['slopes'][0]
+        # For multifractal
+        mdfa_alpha1 = fractal_dfa(bbi,
+                                multifractal=True,
+                                q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                                windows=np.arange(4, 17))
+
+        out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
+        out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
+        out["DFA_alpha1_DimRange"] = mdfa_alpha1['DimRange']
+        out["DFA_alpha1_DimMean"] = mdfa_alpha1['DimMean']
     if len(bbi) > 65:
         out["DFA_alpha2"] = fractal_dfa(bbi, windows=np.arange(16, 65), multifractal=False)['slopes'][0]
+        # For multifractal
+        mdfa_alpha2 = fractal_dfa(bbi,
+                                multifractal=True,
+                                q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                                windows=np.arange(16, 65))
 
-    # For multifractal
-    mdfa_alpha1 = fractal_dfa(bbi,
-                              multifractal=True,
-                              q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
-                              windows=np.arange(4, 17))
-
-    out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
-    out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
-    out["DFA_alpha1_DimRange"] = mdfa_alpha1['DimRange']
-    out["DFA_alpha1_DimMean"] = mdfa_alpha1['DimMean']
-
-    mdfa_alpha2 = fractal_dfa(bbi,
-                              multifractal=True,
-                              q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
-                              windows=np.arange(16, 65))
-
-    out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
-    out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
-    out["DFA_alpha2_DimRange"] = mdfa_alpha2['DimRange']
-    out["DFA_alpha2_DimMean"] = mdfa_alpha2['DimMean']
+        out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
+        out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
+        out["DFA_alpha2_DimRange"] = mdfa_alpha2['DimRange']
+        out["DFA_alpha2_DimMean"] = mdfa_alpha2['DimMean']
 
     return out
 
