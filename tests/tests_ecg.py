@@ -256,14 +256,16 @@ def test_ecg_intervalrelated():
        'HRV_ULF', 'HRV_VLF', 'HRV_LF', 'HRV_HF', 'HRV_VHF', 'HRV_LFHF',
        'HRV_LFn', 'HRV_HFn', 'HRV_LnHF', 'HRV_SD1', 'HRV_SD2',
        'HRV_SD1SD2', 'HRV_S', 'HRV_CSI', 'HRV_CVI', 'HRV_CSI_Modified',
-       'HRV_PIP', 'HRV_IALS', 'HRV_PSS', 'HRV_PAS', 'HRV_ApEn',
-       'HRV_SampEn', 'HRV_MSE', 'HRV_CMSE', 'HRV_RCMSE', 'HRV_GI', 'HRV_SI', 'HRV_AI', 'HRV_PI',
-       'HRV_C1d', 'HRV_C1a', 'HRV_SD1d',
-       'HRV_SD1a', 'HRV_C2d',
-       'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
-       'HRV_Cd', 'HRV_Ca', 'HRV_SDNNd',
-       'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn', 'HRV_MSE',
-       'HRV_CMSE', 'HRV_RCMSE', 'HRV_DFA', 'HRV_CorrDim']
+       'HRV_PIP', 'HRV_IALS', 'HRV_PSS', 'HRV_PAS', 'HRV_GI', 'HRV_SI',
+       'HRV_AI', 'HRV_PI', 'HRV_C1d', 'HRV_C1a', 'HRV_SD1d', 'HRV_SD1a',
+       'HRV_C2d', 'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a', 'HRV_Cd', 'HRV_Ca',
+       'HRV_SDNNd', 'HRV_SDNNa', 'HRV_DFA_alpha1',
+       'HRV_DFA_alpha1_ExpRange', 'HRV_DFA_alpha1_ExpMean',
+       'HRV_DFA_alpha1_DimRange', 'HRV_DFA_alpha1_DimMean',
+       'HRV_DFA_alpha2', 'HRV_DFA_alpha2_ExpRange',
+       'HRV_DFA_alpha2_ExpMean', 'HRV_DFA_alpha2_DimRange',
+       'HRV_DFA_alpha2_DimMean', 'HRV_ApEn', 'HRV_SampEn', 'HRV_MSE',
+       'HRV_CMSE', 'HRV_RCMSE', 'HRV_CD']
 
     # Test with signal dataframe
     features_df = nk.ecg_intervalrelated(df, sampling_rate=100)

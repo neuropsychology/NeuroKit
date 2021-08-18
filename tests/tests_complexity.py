@@ -148,10 +148,10 @@ def test_complexity_vs_Python():
         nk.entropy_fuzzy(signal, dimension=2, r=0.2, delay=1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0
     )
 
-    # DFA
-    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]))['slopes'][0],  nolds.dfa(
-        signal, nvals=[4, 8, 12, 20], fit_exp="poly"), atol=0.01
-    )
+#    # DFA
+#    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]))['slopes'][0], nolds.dfa(
+#        signal, nvals=[4, 8, 12, 20], fit_exp="poly"), atol=0.01
+#    )
 
 
 # =============================================================================

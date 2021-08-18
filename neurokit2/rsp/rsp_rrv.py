@@ -232,7 +232,7 @@ def _rsp_rrv_nonlinear(bbi):
         # For multifractal
         mdfa_alpha1 = fractal_dfa(bbi,
                                 multifractal=True,
-                                q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                                q=np.arange(-5, 6),
                                 windows=np.arange(4, 17))
 
         out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
@@ -244,7 +244,7 @@ def _rsp_rrv_nonlinear(bbi):
         # For multifractal
         mdfa_alpha2 = fractal_dfa(bbi,
                                 multifractal=True,
-                                q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                                q=np.arange(-5, 6),
                                 windows=np.arange(16, 65))
 
         out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']

@@ -69,17 +69,18 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
 
     Returns
     ----------
-    dfa : float
-        The DFA coefficient.
+    dfa : dict
+        If multifractal is False, the dictionary contains
 
     Examples
     ----------
     >>> import neurokit2 as nk
+    >>> import numpy as np
     >>>
-    >>> signal = nk.signal_simulate(duration=3, noise=0.05)
+    >>> signal = nk.signal_simulate(duration=10, noise=0.05)
     >>> dfa1 = nk.fractal_dfa(signal, show=True)
     >>> dfa1 #doctest: +SKIP
-    >>> dfa2 = nk.fractal_mfdfa(signal, q=np.arange(-3, 4), show=True)
+    >>> dfa2 = nk.fractal_mfdfa(signal, q=np.arange(-5, 6), show=True)
     >>> dfa2 #doctest: +SKIP
 
 
@@ -145,13 +146,19 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
 
     # Plot if show is True.
     if show is True:
-        _fractal_dfa_plot(windows=windows,
-                          fluctuations=fluctuations,
-                          multifractal=multifractal,
-                          q=q,
-                          tau=out['tau'],
-                          hq=out['hq'],
-                          Dq=out['Dq'])
+        if multifractal is True:
+            _fractal_mdfa_plot(windows=windows,
+                              fluctuations=fluctuations,
+                              multifractal=multifractal,
+                              q=q,
+                              tau=out['tau'],
+                              hq=out['hq'],
+                              Dq=out['Dq'])
+        else:
+            _fractal_dfa_plot(windows=windows,
+                              fluctuations=fluctuations,
+                              multifractal=multifractal,
+                              q=q)
 
     return out
 
@@ -301,6 +308,7 @@ def singularity_spectrum(windows, fluctuations, q, slopes):
 
     return out
 
+
 # =============================================================================
 #  Utils
 # =============================================================================
@@ -449,58 +457,63 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
 # =============================================================================
 
 
-def _fractal_dfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
+def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
 
-    if multifractal is True:
-        # Prepare figure
-        fig = plt.figure(constrained_layout=False)
-        spec = matplotlib.gridspec.GridSpec(
-            ncols=2, nrows=2
-        )
+    # Prepare figure
+    fig = plt.figure(constrained_layout=False)
+    spec = matplotlib.gridspec.GridSpec(
+        ncols=2, nrows=2
+    )
 
-        ax_fluctuation = fig.add_subplot(spec[0, 0])
-        ax_spectrum = fig.add_subplot(spec[0, 1])
-        ax_tau = fig.add_subplot(spec[1, 0])
-        ax_hq = fig.add_subplot(spec[1, 1])
+    ax_fluctuation = fig.add_subplot(spec[0, 0])
+    ax_spectrum = fig.add_subplot(spec[0, 1])
+    ax_tau = fig.add_subplot(spec[1, 0])
+    ax_hq = fig.add_subplot(spec[1, 1])
 
-        n = len(q)
-        colors = plt.cm.plasma(np.linspace(0,1,n))
+    n = len(q)
+    colors = plt.cm.plasma(np.linspace(0,1,n))
 
-        # Plot the fluctuation plot
-        # Plot the points
-        for i in range(len(q)):
-            polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
-            ax_fluctuation.loglog(windows, fluctuations, "bo", c='#d2dade', markersize=5, base=2)
-        # Plot the polyfit line
-        for i in range(len(q)):
-            polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
-            fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
-            ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2,
-                       label=(r"$\alpha$ = {:.3f}, q={:.1f}"
-                              ).format(polyfit[0], q[i][0])
-                       )
-
-        # Plot the singularity spectrum
-        _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)
-        # Plot tau against q
-        _scaling_exponents_plot(q, tau, ax=ax_tau)
-        # Plot hq against q
-        _hurst_exponents_plot(q, hq, ax=ax_hq)
-
-        ax_fluctuation.set_xlabel(r"$\log_{2}$(Window)")
-        ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
-        ax_fluctuation.legend(loc="lower right")
-        fig.suptitle('Multifractal Detrended Fluctuation Analysis')
-
-    elif multifractal is False:
-        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
+    # Plot the fluctuation plot
+    # Plot the points
+    for i in range(len(q)):
+        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
+        ax_fluctuation.loglog(windows, fluctuations, "bo", c='#d2dade', markersize=5, base=2)
+    # Plot the polyfit line
+    for i in range(len(q)):
+        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
         fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
-        plt.loglog(windows, fluctuations, "bo", c='#90A4AE')
-        plt.loglog(windows, fluctfit, "r", c='#E91E63 ',
-                   label=r"$\alpha$ = {:.3f}".format(polyfit[0][0]))
-        plt.legend(loc="lower right")
-        plt.title('Detrended Fluctuation Analysis')
+        ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label='_no_legend_')
+    ax_fluctuation.plot([],
+                        label=(r"$\alpha$ = {:.3f}, q={:.1f}").format(polyfit[0], q[0][0]),
+                        c=colors[0])
+    ax_fluctuation.plot([],
+                        label=(r"$\alpha$ = {:.3f}, q={:.1f}").format(polyfit[0], q[-1][0]),
+                        c=colors[-1])
 
+    # Plot the singularity spectrum
+    _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)
+    # Plot tau against q
+    _scaling_exponents_plot(q, tau, ax=ax_tau)
+    # Plot hq against q
+    _hurst_exponents_plot(q, hq, ax=ax_hq)
+
+    ax_fluctuation.set_xlabel(r"$\log_{2}$(Window)")
+    ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
+    ax_fluctuation.legend(loc="lower right")
+    fig.suptitle('Multifractal Detrended Fluctuation Analysis')
+
+    return None
+
+
+def _fractal_dfa_plot(windows, fluctuations, multifractal, q):
+
+    polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
+    fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
+    plt.loglog(windows, fluctuations, "bo", c='#90A4AE')
+    plt.loglog(windows, fluctfit, "r", c='#E91E63',
+               label=r"$\alpha$ = {:.3f}".format(polyfit[0][0]))
+    plt.legend(loc="lower right")
+    plt.title('Detrended Fluctuation Analysis')
 
     return None
 

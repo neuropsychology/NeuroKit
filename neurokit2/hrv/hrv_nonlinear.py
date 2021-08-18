@@ -453,7 +453,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     # For multifractal
     mdfa_alpha1 = fractal_dfa(rri,
                               multifractal=True,
-                              q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                              q=np.arange(-5, 6),
                               windows=short_window, **kwargs)
     out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
     out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
@@ -476,7 +476,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
         # For multifractal
         mdfa_alpha2 = fractal_dfa(rri,
                                   multifractal=True,
-                                  q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                                  q=np.arange(-5, 6),
                                   windows=long_window, **kwargs)
         out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
         out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
