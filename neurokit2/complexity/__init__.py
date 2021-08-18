@@ -3,26 +3,22 @@ import functools
 
 from .complexity_delay import complexity_delay
 from .complexity_dimension import complexity_dimension
-
 # Utils
 from .complexity_embedding import complexity_embedding
 from .complexity_optimize import complexity_optimize
 from .complexity_r import complexity_r
 from .complexity_simulate import complexity_simulate
-from .transition_matrix import transition_matrix, transition_matrix_simulate
-
-# Entropy
-from .entropy_shannon import entropy_shannon
-from .fractal_correlation import fractal_correlation
 from .entropy_approximate import entropy_approximate
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_sample import entropy_sample
-
+# Entropy
+from .entropy_shannon import entropy_shannon
+from .fractal_correlation import fractal_correlation
 # Fractal
 from .fractal_dfa import fractal_dfa
 from .fractal_mandelbrot import fractal_mandelbrot
-
+from .transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Aliases
 complexity_se = entropy_shannon
