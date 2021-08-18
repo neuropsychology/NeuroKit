@@ -14,7 +14,7 @@ from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
-def hrv_nonlinear(peaks, sampling_rate=1000, dfa_windows=[(4, 11), (12, None)], show=False, **kwargs):
+def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
      See references for details.
@@ -131,7 +131,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_windows=[(4, 11), (12, None)], 
 
             - **RCMSE**: The refined composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
 
-            - **CD**: The correlation dimension of the HR signal, calculated by `fractal_correlation()`.
+            - **CD**: The Correlation Dimension of the HR signal, calculated by `fractal_correlation()`.
 
             - **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal corresponding
             to short-term correlations, calculated by `fractal_dfa()`.
@@ -239,7 +239,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_windows=[(4, 11), (12, None)], 
     out = _hrv_nonlinear_poincare_hra(rri, out)
 
     # DFA
-    out = _hrv_dfa(peaks, rri, out, dfa_windows=dfa_windows, **kwargs)
+    out = _hrv_dfa(peaks, rri, out, **kwargs)
 
     # Entropy
     r = 0.2 * np.std(rri, ddof=1)
@@ -423,8 +423,12 @@ def _hrv_nonlinear_fragmentation(rri, out):
 # =============================================================================
 # DFA
 # =============================================================================
-def _hrv_dfa(peaks, rri, out, dfa_windows=[(4, 11), (12, None)], n_windows="default", **kwargs):
+def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
 
+    if 'dfa_windows' in kwargs:
+        dfa_windows = kwargs['dfa_windows']
+    else:
+        dfa_windows = [(4, 11), (12, None)]
     # Determine max beats
     if dfa_windows[1][1] is None:
         max_beats = len(peaks) / 10
@@ -449,7 +453,7 @@ def _hrv_dfa(peaks, rri, out, dfa_windows=[(4, 11), (12, None)], n_windows="defa
     # For multifractal
     mdfa_alpha1 = fractal_dfa(rri,
                               multifractal=True,
-                              q = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                              q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
                               windows=short_window, **kwargs)
     out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
     out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
@@ -457,7 +461,7 @@ def _hrv_dfa(peaks, rri, out, dfa_windows=[(4, 11), (12, None)], n_windows="defa
     out["DFA_alpha1_DimMean"] = mdfa_alpha1['DimMean']
     mdfa_alpha2 = fractal_dfa(rri,
                               multifractal=True,
-                              q = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                              q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
                               windows=long_window, **kwargs)
     out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
     out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
