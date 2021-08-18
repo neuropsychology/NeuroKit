@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,7 +10,7 @@ from ..complexity import (entropy_approximate, entropy_multiscale,
                           entropy_sample)
 from ..complexity.fractal_correlation import fractal_correlation
 from ..complexity.fractal_dfa import fractal_dfa
-from ..misc import find_consecutive
+from ..misc import find_consecutive, NeuroKitWarning
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
@@ -429,6 +430,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
         dfa_windows = kwargs['dfa_windows']
     else:
         dfa_windows = [(4, 11), (12, None)]
+
     # Determine max beats
     if dfa_windows[1][1] is None:
         max_beats = len(peaks) / 10
@@ -448,8 +450,6 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
 
     # For monofractal
     out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)['slopes'][0]
-    out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)['slopes'][0]
-
     # For multifractal
     mdfa_alpha1 = fractal_dfa(rri,
                               multifractal=True,
@@ -459,14 +459,29 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
     out["DFA_alpha1_DimRange"] = mdfa_alpha1['DimRange']
     out["DFA_alpha1_DimMean"] = mdfa_alpha1['DimMean']
-    mdfa_alpha2 = fractal_dfa(rri,
-                              multifractal=True,
-                              q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
-                              windows=long_window, **kwargs)
-    out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
-    out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
-    out["DFA_alpha2_DimRange"] = mdfa_alpha2['DimRange']
-    out["DFA_alpha2_DimMean"] = mdfa_alpha2['DimMean']
+
+    # sanatize max_beats
+    if max_beats < dfa_windows[1][0] + 1:
+        warn(
+                "DFA_alpha2 related indices will not be calculated. "
+                "The maximum duration of the windows provided for the long-term correlation is smaller "
+                "than the minimum duration of windows. Refer to the `windows` argument in `nk.fractal_dfa()` "
+                "for more information.",
+                category=NeuroKitWarning
+            )
+        return out
+    else:
+        # For monofractal
+        out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)['slopes'][0]
+        # For multifractal
+        mdfa_alpha2 = fractal_dfa(rri,
+                                  multifractal=True,
+                                  q=[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5],
+                                  windows=long_window, **kwargs)
+        out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
+        out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
+        out["DFA_alpha2_DimRange"] = mdfa_alpha2['DimRange']
+        out["DFA_alpha2_DimMean"] = mdfa_alpha2['DimMean']
 
     return out
 
