@@ -6,7 +6,7 @@ import pandas as pd
 import scipy.stats
 
 from ..complexity import entropy_approximate, entropy_sample, entropy_multiscale
-from ..complexity.fractal_dfa import fractal_dfa, _fractal_dfa_findwindows
+from ..complexity.fractal_dfa import fractal_dfa
 from ..complexity.fractal_correlation import fractal_correlation
 from ..misc import find_consecutive
 from ..signal import signal_zerocrossings
@@ -223,7 +223,6 @@ def hrv_nonlinear(peaks, sampling_rate=1000, dfa_windows=[(4, 11), (12, None)], 
     out["MSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False)
     out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)
     out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)
-
     out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
 
     if show:
@@ -238,7 +237,10 @@ def _hrv_dfa(peaks, rri, out, dfa_windows=[(4, 11), (12, None)], n_windows="defa
     # Determine max beats
     if dfa_windows[1][1] is None:
         max_beats = len(peaks) / 10
+    else:
+        max_beats = dfa_windows[1][1]
 
+    # No. of windows to compute for short and long term
     if n_windows == "default":
         n_windows_short = int(dfa_windows[0][1] - dfa_windows[0][0] + 1)
         n_windows_long = int(max_beats - dfa_windows[1][0] + 1)
