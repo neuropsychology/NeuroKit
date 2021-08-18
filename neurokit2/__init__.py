@@ -42,15 +42,17 @@ __email__ = "dom.makowski@gmail.com"
 # Citation
 __bibtex__ = r"""
 @article{Makowski2021neurokit,
-    author={Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
-    title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
-    journal={Behavior Research Methods},
-    year={2021},
-    month={Feb},
-    day={02},
-    issn={1554-3528},
-    doi={10.3758/s13428-020-01516-y},
-    url={https://doi.org/10.3758/s13428-020-01516-y}
+    author = {Dominique Makowski and Tam Pham and Zen J. Lau and Jan C. Brammer and Fran{\c{c}}ois Lespinasse and Hung Pham and Christopher Schölzel and S. H. Annabel Chen},
+    title = {{NeuroKit}2: A Python toolbox for neurophysiological signal processing},
+    journal = {Behavior Research Methods},
+    volume = {53},
+    number = {4},
+    pages = {1689--1696},
+    publisher = {Springer Science and Business Media {LLC}},
+    doi = {10.3758/s13428-020-01516-y},
+    url = {https://doi.org/10.3758%2Fs13428-020-01516-y},
+    year = 2021,
+    month = {feb}
 }
 """
 
@@ -58,11 +60,9 @@ __cite__ = (
     """
 You can cite NeuroKit2 as follows:
 
-- Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lesspinasse, F., Pham, H.,
-  Schölzel, C., & S H Chen, A. (2020). NeuroKit2: A Python Toolbox for Neurophysiological
-  Signal Processing. Retrieved """
-    + datetime.date.today().strftime("%B %d, %Y")
-    + """, from https://github.com/neuropsychology/NeuroKit
+- Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
+Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y
 
 
 Full bibtex reference:
