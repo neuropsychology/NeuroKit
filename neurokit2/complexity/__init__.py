@@ -19,7 +19,6 @@ from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_mandelbrot import fractal_mandelbrot
 from .transition_matrix import transition_matrix, transition_matrix_simulate
-from .fractal_dimension import fractal_dimension
 
 # Aliases
 complexity_se = entropy_shannon
@@ -60,7 +59,6 @@ __all__ = [
     "entropy_multiscale",
     "fractal_dfa",
     "fractal_correlation",
-    "fractal_dimension",
     "fractal_mandelbrot",
     "complexity_se",
     "complexity_apen",
