@@ -8,6 +8,7 @@ from .complexity_embedding import complexity_embedding
 from .complexity_optimize import complexity_optimize
 from .complexity_r import complexity_r
 from .complexity_simulate import complexity_simulate
+from .complexity_lempelziv import complexity_lempelziv
 from .entropy_approximate import entropy_approximate
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
@@ -54,6 +55,7 @@ __all__ = [
     "complexity_optimize",
     "complexity_simulate",
     "complexity_r",
+    "complexity_lempelziv",
     "entropy_shannon",
     "entropy_approximate",
     "entropy_sample",
