@@ -18,7 +18,8 @@ from .fractal_correlation import fractal_correlation
 # Fractal
 from .fractal_dfa import fractal_dfa
 from .fractal_mandelbrot import fractal_mandelbrot
-from .fractal_dimension import fractal_dimension
+from .fractal_higuchi import fractal_higuchi
+from .fractal_katz import fractal_katz
 from .transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Aliases
@@ -60,7 +61,8 @@ __all__ = [
     "entropy_multiscale",
     "fractal_dfa",
     "fractal_correlation",
-    "fractal_dimension",
+    "fractal_higuchi",
+    "fractal_katz",
     "fractal_mandelbrot",
     "complexity_se",
     "complexity_apen",
