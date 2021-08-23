@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
+
+from ..misc import NeuroKitWarning
 
 
 def fractal_higuchi(signal, kmax="default", show=True):
@@ -163,7 +167,6 @@ def _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60):
     HFD values are plotted against a range of kmax and the point at which the values plateau is
     considered the saturation point and subsequently selected as the kmax value.
     """
-
     k_range = np.arange(k_first, k_end + 1)
     slope_values = []
     for i in k_range:
@@ -171,8 +174,17 @@ def _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60):
         slope_values.append(slope)
 
     # Obtain saturation point of slope
-    grad = np.diff(slope_values) / np.diff(k_range)
-    optimal_k = np.where(grad == np.min(grad))[0][0]
+    optimal_k = [i for i, x in enumerate(slope_values >= 0.85 * np.max(slope_values)) if x][0] + 1
+    # If no plateau
+    if optimal_k <= 2:
+        warn(
+            "The detected kmax value is 2 or less. The change in HFD values across kmax values is dependent "
+            " on the fractal source data and there may be no plateau in this case."
+            " Consider choosing a manual kmax value.",
+            category=NeuroKitWarning
+        )
+        grad = np.diff(slope_values) / np.diff(k_range)
+        optimal_k = np.where(grad == np.max(grad[2:]))[0][0]
 
     return optimal_k, k_range, slope_values
 
@@ -189,7 +201,12 @@ def _fractal_higuchi_optimal_k_plot(k_range, slope_values, optimal_k, ax=None):
     ax.set_xlabel("$k_{max}$ values")
     ax.set_ylabel("Higuchi Fractal Dimension (HFD) values")
 
-    ax.plot(k_range, slope_values, color="#2196F3")
+    ax.plot(k_range, slope_values, color="#2196F3", zorder=1)
+    colors = plt.cm.PuBu(np.linspace(0, 1, len(k_range)))
+    
+    for i, j in enumerate(k_range):
+        ax.scatter(k_range[i], slope_values[i], color=colors[i],
+                   marker='o', zorder=2)
     ax.axvline(x=optimal_k, color="#E91E63", label="Optimal $k_{max}$: " + str(optimal_k))
     ax.legend(loc="upper right")
 
