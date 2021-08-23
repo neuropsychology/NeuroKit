@@ -36,7 +36,8 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 
     References
     ----------
-    - Lempel, A., & Ziv, J. (1976). On the complexity of finite sequences. IEEE Transactions on information theory, 22(1), 75-81.
+    - Lempel, A., & Ziv, J. (1976). On the complexity of finite sequences. IEEE Transactions on information theory,
+    22(1), 75-81.
 
     - Nagarajan, R. (2002). Quantifying physiological data with Lempel-Ziv complexity-certain issues.
     IEEE Transactions on Biomedical Engineering, 49(11), 1371–1373. doi:10.1109/tbme.2002.804582 
@@ -44,8 +45,8 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     - Kaspar, F., & Schuster, H. G. (1987). Easily calculable measure for the complexity of spatiotemporal patterns.
     Physical Review A, 36(2), 842.
     
-    - Zhang, Y., Hao, J., Zhou, C., & Chang, K. (2009). Normalized Lempel-Ziv complexity and its application in bio-sequence
-    analysis. Journal of mathematical chemistry, 46(4), 1203-1212.
+    - Zhang, Y., Hao, J., Zhou, C., & Chang, K. (2009). Normalized Lempel-Ziv complexity and
+    its application in bio-sequence analysis. Journal of mathematical chemistry, 46(4), 1203-1212.
 
     - https://en.wikipedia.org/wiki/Lempel-Ziv_complexity
     """
