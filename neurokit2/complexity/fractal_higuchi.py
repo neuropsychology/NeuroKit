@@ -34,9 +34,11 @@ def fractal_higuchi(signal, kmax="default", show=True):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=10)
+    >>> signal = nk.data('bio_eventrelated_100hz')['ECG']
     >>>
     >>> hfd = nk.fractal_higuchi(signal, kmax=5)
+    >>> hfd #doctest: +SKIP
+    >>> hfd = nk.fractal_higuchi(signal, kmax="default")
     >>> hfd #doctest: +SKIP
 
     References
@@ -50,7 +52,16 @@ def fractal_higuchi(signal, kmax="default", show=True):
 
     # Obtain optimal k
     if kmax == "default":
-        k_max = _fractal_higuchi_optimal_k(k_first=2, k_end=60)
+        k_max, k_range, slope_values = _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60)
+    else:
+        k_max = kmax
+
+    # Make sure kmax >= 2
+    if k_max <= 2:
+        raise ValueError(
+            "NeuroKit error: fractal_higuchi(): The optimal `kmax` detected as less than or equal to 2. "
+            "Please manually input a `kmax` value of more than 2."
+        )
 
     # Compute slope
     slope, intercept, k_values, average_values = _fractal_higuchi_slope(signal, k_max)
@@ -70,7 +81,7 @@ def fractal_higuchi(signal, kmax="default", show=True):
             ax_slope = fig.add_subplot(spec[0, 0])
             _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept, ax=ax_slope)
             ax_kmax = fig.add_subplot(spec[1, 0])
-            _fractal_higuchi_optimal_k_plot(k_range, slope_values, optimal_k, ax=ax_kmax)
+            _fractal_higuchi_optimal_k_plot(k_range, slope_values, k_max, ax=ax_kmax)
 
     return slope
 
@@ -120,9 +131,20 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
     ax.set_xlabel(r"$ln$(1/k)")
     colors = plt.cm.plasma(np.linspace(0, 1, len(k_values)))
 
-    for i in range(0, len(k_values)):
-        ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
-               marker='o', zorder=2, label="k = {}".format(i))
+    # Label all values unless len(k_values) > 10 then label only min and max k_max
+    if len(k_values) < 10:
+        for i in range(0, len(k_values)):
+            ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
+                   marker='o', zorder=2, label="k = {}".format(i))
+    else:
+        for i in range(0, len(k_values)):
+            ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
+                   marker='o', zorder=2, label="_no_legend_")
+        ax.plot([], label="k = {}".format(np.min(k_values)),
+                c=colors[0])
+        ax.plot([], label="k = {}".format(np.max(k_values)),
+                c=colors[-1])
+
     fit_values = [slope * i + -intercept for i in -np.log(k_values)]
     ax.plot(-np.log(k_values), fit_values, color="#FF9800", zorder=1)
     ax.legend(loc="lower right")
@@ -134,7 +156,7 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
 # Compute kmax
 # =============================================================================
 
-def _fractal_higuchi_optimal_k(k_first=2, k_end=60):
+def _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60):
     """
     Optimize the kmax parameter.
     
@@ -145,14 +167,14 @@ def _fractal_higuchi_optimal_k(k_first=2, k_end=60):
     k_range = np.arange(k_first, k_end + 1)
     slope_values = []
     for i in k_range:
-        slope = _fractal_higuchi_slope(signal, kmax=i)
+        slope, _, _, _ = _fractal_higuchi_slope(signal, kmax=i)
         slope_values.append(slope)
 
     # Obtain saturation point of slope
     grad = np.diff(slope_values) / np.diff(k_range)
     optimal_k = np.where(grad == np.min(grad))[0][0]
 
-    return optimal_k
+    return optimal_k, k_range, slope_values
 
 
 def _fractal_higuchi_optimal_k_plot(k_range, slope_values, optimal_k, ax=None):
