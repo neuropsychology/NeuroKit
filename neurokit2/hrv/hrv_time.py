@@ -117,9 +117,45 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["pNN20"] = nn20 / len(rri) * 100
 
     # Geometrical domain
-    bar_y, bar_x = np.histogram(rri, bins="auto")
-    out["TINN"] = np.max(bar_x) - np.min(bar_x)  # Triangular Interpolation of the NN Interval Histogram
-    out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
+    if "binsize" in kwargs:
+        binsize = kwargs["binsize"]
+    else:
+        binsize = (1 / 128) * 1000
+    bins = np.arange(0, np.max(rri) + binsize, binsize)
+    bar_y, bar_x = np.histogram(rri, bins=bins)
+    # HRV Triangular Index
+    out["HTI"] = len(rri) / np.max(bar_y)
+
+    # Triangular Interpolation of the NN Interval Histogram
+    # set pre-defined conditions
+    min_error = 2 ** 14
+    X = bar_x[np.argmax(bar_y)]  # bin where Y is max
+    Y = np.max(bar_y)  # max value of Y
+    n = bar_x[np.where(bar_x - np.min(rri) > 0)[0][0]]  # starting search of N
+    m = X + binsize  # starting search value of M
+    N = 0
+    M = 0
+    # start to find best values of M and N where least square is minimized
+    while n < X:
+        while m < np.max(rri):
+            n_start = np.where(bar_x == n)[0][0]
+            n_end = np.where(bar_x == X)[0][0]
+            qn = np.polyval(np.polyfit([n, X], [0, Y], deg=1), bar_x[n_start:n_end + 1])
+            m_start = np.where(bar_x == X)[0][0]
+            m_end = np.where(bar_x == m)[0][0]
+            qm = np.polyval(np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start:m_end + 1])
+            q = np.zeros(len(bar_x))
+            q[n_start:n_end + 1] = qn
+            q[m_start:m_end + 1] = qm
+            # least squares error
+            error = np.sum((bar_y[n_start:m_end + 1] - q[n_start:m_end + 1]) ** 2)
+            if error < min_error:
+                N = n
+                M = m
+                min_error = error
+            m += binsize
+        n += binsize
+    out["TINN"] = M - N
 
     if show:
         _hrv_time_show(rri, **kwargs)
