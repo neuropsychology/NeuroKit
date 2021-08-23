@@ -35,11 +35,12 @@ def mne_data(what="raw", path=None):
     old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
 
     if what in ["raw", "filt-0-40_raw"]:
-        try:
-            path = mne.datasets.sample.data_path()
-        except ValueError:
-            raise ValueError("NeuroKit error: the mne sample data folder does not exist. ",
-                             "Please specify a path to download the mne datasets.")
+        if path is None:
+            try:
+                path = mne.datasets.sample.data_path()
+            except ValueError:
+                raise ValueError("NeuroKit error: the mne sample data folder does not exist. ",
+                                 "Please specify a path to download the mne datasets.")
         path += '/MEG/sample/sample_audvis_' + what + '.fif'
         data = mne.io.read_raw_fif(path, preload=True)
         data = data.pick_types(meg=False, eeg=True)
