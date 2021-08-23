@@ -18,7 +18,7 @@ New Features
 Fixes
 +++++++++++++
 
-* None
+* Add path argument in `mne_data()` and throw warning to download mne datasets if data folder is not present
 
 
 0.1.3
