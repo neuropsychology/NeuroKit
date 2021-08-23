@@ -4,7 +4,7 @@ import numpy as np
 def intervals_to_peaks(intervals):
     """Convenience function to convert intervals to peaks,
     such as from R-R intervals to R-peaks of an ECG signal.
-    
+
     This can be useful if you do not have raw peak indices and have only
     interval data such as breath-to-breath (BBI) or rpeak-to-rpeak (RRI) intervals.
 
