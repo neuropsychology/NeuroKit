@@ -70,7 +70,11 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     Returns
     ----------
     dfa : dict
-        If multifractal is False, the dictionary contains
+        If `multifractal` is False, the dictionary contains q value, a series of windows, fluctuations of each window and the
+        slopes value of the log2(windows) versus log2(fluctuations) plot. If `multifractal` is True, the dictionary
+        additionally contains the parameters of the singularity spectrum (scaling exponents, singularity dimension, singularity
+        strength; see `singularity_spectrum()` for more information).
+
 
     Examples
     ----------
@@ -148,12 +152,12 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     if show is True:
         if multifractal is True:
             _fractal_mdfa_plot(windows=windows,
-                              fluctuations=fluctuations,
-                              multifractal=multifractal,
-                              q=q,
-                              tau=out['tau'],
-                              hq=out['hq'],
-                              Dq=out['Dq'])
+                               fluctuations=fluctuations,
+                               multifractal=multifractal,
+                               q=q,
+                               tau=out['tau'],
+                               hq=out['hq'],
+                               Dq=out['Dq'])
         else:
             _fractal_dfa_plot(windows=windows,
                               fluctuations=fluctuations,
@@ -471,7 +475,7 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
     ax_hq = fig.add_subplot(spec[1, 1])
 
     n = len(q)
-    colors = plt.cm.plasma(np.linspace(0,1,n))
+    colors = plt.cm.plasma(np.linspace(0, 1, n))
 
     # Plot the fluctuation plot
     # Plot the points
