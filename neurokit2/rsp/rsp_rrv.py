@@ -231,9 +231,9 @@ def _rsp_rrv_nonlinear(bbi):
         out["DFA_alpha1"] = fractal_dfa(bbi, windows=np.arange(4, 17), multifractal=False)['slopes'][0]
         # For multifractal
         mdfa_alpha1 = fractal_dfa(bbi,
-                                multifractal=True,
-                                q=np.arange(-5, 6),
-                                windows=np.arange(4, 17))
+                                  multifractal=True,
+                                  q=np.arange(-5, 6),
+                                  windows=np.arange(4, 17))
 
         out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
         out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
@@ -243,9 +243,9 @@ def _rsp_rrv_nonlinear(bbi):
         out["DFA_alpha2"] = fractal_dfa(bbi, windows=np.arange(16, 65), multifractal=False)['slopes'][0]
         # For multifractal
         mdfa_alpha2 = fractal_dfa(bbi,
-                                multifractal=True,
-                                q=np.arange(-5, 6),
-                                windows=np.arange(16, 65))
+                                  multifractal=True,
+                                  q=np.arange(-5, 6),
+                                  windows=np.arange(16, 65))
 
         out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
         out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']

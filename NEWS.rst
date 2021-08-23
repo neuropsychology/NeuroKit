@@ -8,17 +8,20 @@ News
 Breaking Changes
 +++++++++++++++++
 
-* None
+* `fractal_df()` now returns a dictionary of windows, fluctuations and the slope value (see documentation for more information. If `multifractal` is True, the dictionary additionally contains the parameters of the singularity spectrum (see `singularity_spectrum()` for more information)
 
 New Features
 +++++++++++++
 
 * Add convenience function `intervals_to_peaks()` useful for RRI or BBI conversion to peak indices
+* `hrv_nonlinear()` and `rrv_rsp()` now return the parameters of singularity spectrum for multifractal DFA analysis
 
 Fixes
 +++++++++++++
 
 * Add path argument in `mne_data()` and throw warning to download mne datasets if data folder is not present
+* The implementation of `TTIN` in `hrv_time()` is amended to its correct formulation.
+* The default binsize used for RRI histogram in the computation of geometric HRV indices is set to 1 / 128 seconds
 
 
 0.1.3
@@ -51,7 +54,7 @@ New Features
 +++++++++++++
 
 * Additional features for `nk.rsp_intervalrelated()`: average inspiratory and expiratory durations, inspiratory-to-expiratory (I/E) time ratio
-* Add multiscale entropy measures (MSE, CMSE, RCMSE) and fractal methods (Detrended Fluctuation Analysis, Correlation Dimension) into `nk.hrv_nonlinear()` 
+* Add multiscale entropy measures (MSE, CMSE, RCMSE) and fractal methods (Detrended Fluctuation Analysis, Correlation Dimension) into `nk.hrv_nonlinear()`
 * Allow for data resampling in `nk.read_bitalino()`
 * Add `bio_resting_8min_200hz` into database for reading with `nk.data()`
 * Reading of url links in `nk.data()`
