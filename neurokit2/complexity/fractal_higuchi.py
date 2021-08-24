@@ -138,8 +138,10 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
     # Label all values unless len(k_values) > 10 then label only min and max k_max
     if len(k_values) < 10:
         for i in range(0, len(k_values)):
-            ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
-                       marker='o', zorder=2, label="k = {}".format(i))
+            ax.scatter(
+                -np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
+                marker='o', zorder=2, label="k = {}".format(i)
+                )
     else:
         for i in range(0, len(k_values)):
             ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
