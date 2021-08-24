@@ -99,7 +99,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     out = {}  # Initialize empty container for results
 
-    # Deviation-baed
+    # Deviation-based
     out["MeanNN"] = np.nanmean(rri)
     out["SDNN"] = np.nanstd(rri, ddof=1)
     for i in [1, 2, 5]:
