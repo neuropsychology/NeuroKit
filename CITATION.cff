@@ -28,7 +28,7 @@ preferred-citation:
     - family-names: "Brammer"
       given-names: "Jan C."
     - family-names: "Lespinasse"
-      given-names: "Fran{\c{c}}ois"
+      given-names: "François"
     - family-names: "Pham"
       given-names: "Hung"
     - family-names: "Schölzel"
@@ -36,7 +36,7 @@ preferred-citation:
     - family-names: "Chen"
       given-names: "S. H. Annabel"
   doi: "10.3758/s13428-020-01516-y"
-  journal: "Journal Title"
+  journal: "Behavior Research Methods"
   month: 2
   start: 1689 # First page number
   end: 1696 # Last page number
