@@ -169,14 +169,15 @@ def _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60):
     """
     k_range = np.arange(k_first, k_end + 1)
     slope_values = []
-    for i in k_range:
-        slope, _, _, _ = _fractal_higuchi_slope(signal, kmax=i)
+    for _, k in enumerate(k_range):
+        slope, _, _, _ = _fractal_higuchi_slope(signal, kmax=k)
         slope_values.append(slope)
 
     # Obtain saturation point of slope
-    optimal_k = [i for i, x in enumerate(slope_values >= 0.85 * np.max(slope_values)) if x][0] + 1
+    optimal_k = [i for i, x in enumerate(slope_values >= 0.85 * np.max(slope_values)) if x][0]
+    kmax = k_range[optimal_k]
     # If no plateau
-    if optimal_k <= 2:
+    if kmax <= 2:
         warn(
             "The detected kmax value is 2 or less. The change in HFD values across kmax values is dependent "
             " on the fractal source data and there may be no plateau in this case."
@@ -184,9 +185,10 @@ def _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60):
             category=NeuroKitWarning
         )
         grad = np.diff(slope_values) / np.diff(k_range)
-        optimal_k = np.where(grad == np.max(grad[2:]))[0][0]
+        optimal_k = np.where(grad == np.max(grad))[0][0]
+        kmax = k_range[optimal_k]
 
-    return optimal_k, k_range, slope_values
+    return kmax, k_range, slope_values
 
 
 def _fractal_higuchi_optimal_k_plot(k_range, slope_values, optimal_k, ax=None):
