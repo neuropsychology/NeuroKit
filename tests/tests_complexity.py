@@ -19,14 +19,22 @@ SO THAT we can easily import them. Thus, we directly copied their content in thi
 def test_complexity_sanity():
 
     signal = np.cos(np.linspace(start=0, stop=30, num=1000))
+    mdfa_q = [-5, -3, -1, 1, 3, 5]
 
     # Entropy
     assert np.allclose(nk.entropy_fuzzy(signal), nk.entropy_sample(signal, fuzzy=True), atol=0.000001)
 
     # Fractal
-    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20])), 2.1009048365682133, atol=0.000001)
-    assert np.allclose(nk.fractal_dfa(signal), 1.957966586191164, atol=0.000001)
-    assert np.allclose(nk.fractal_dfa(signal, multifractal=True), 1.957966586191164, atol=0.000001)
+    fractal_dfa = nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]))
+    assert fractal_dfa['fluctuations'].shape == (4, 1)
+    assert np.allclose(fractal_dfa["slopes"][0], 2.10090484, atol=0.000001)
+
+    fractal_mdfa = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
+    assert fractal_mdfa['fluctuations'].shape == (70, len(mdfa_q))
+    assert np.allclose(fractal_mdfa["DimMean"], 0.6412650812085934, atol=0.000001)
+    assert np.allclose(fractal_mdfa["DimRange"], 1.1105927013188868, atol=0.000001)
+    assert np.allclose(fractal_mdfa["ExpMean"], 2.350615727142904, atol=0.000001)
+    assert np.allclose(fractal_mdfa["ExpRange"], 0.9937858280904406, atol=0.000001)
 
     assert np.allclose(nk.fractal_correlation(signal), 0.7884473170763334, atol=0.000001)
     assert np.allclose(nk.fractal_correlation(signal, r="nolds"), nolds.corr_dim(signal, 2), atol=0.0001)
@@ -140,10 +148,10 @@ def test_complexity_vs_Python():
         nk.entropy_fuzzy(signal, dimension=2, r=0.2, delay=1) - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0
     )
 
-    # DFA
-    assert nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20])) != nolds.dfa(
-        signal, nvals=[4, 8, 12, 20], fit_exp="poly"
-    )
+#    # DFA
+#    assert np.allclose(nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]))['slopes'][0], nolds.dfa(
+#        signal, nvals=[4, 8, 12, 20], fit_exp="poly"), atol=0.01
+#    )
 
 
 # =============================================================================

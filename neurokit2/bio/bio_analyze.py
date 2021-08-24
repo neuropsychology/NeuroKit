@@ -82,7 +82,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     3     3   Neutral          ...  ...           ...
     4     4  Negative          ...  ...           ...
 
-    [4 rows x 42 columns]
+    ...
     >>>
     >>> # Example 2: Interval-related analysis
     >>> # Download data
@@ -93,10 +93,10 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     >>>
     >>> # Analyze
     >>> nk.bio_analyze(df, sampling_rate=100) #doctest: +ELLIPSIS
-       ECG_Rate_Mean  HRV_RMSSD  ...  RSA_Gates_Mean_log  RSA_Gates_SD
+       ECG_Rate_Mean  HRV_MeanNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD
     0            ...        ...  ...            ...               ...
 
-    [1 rows x 150 columns]
+    [1 rows x 184 columns]
     """
     features = pd.DataFrame()
     method = method.lower()

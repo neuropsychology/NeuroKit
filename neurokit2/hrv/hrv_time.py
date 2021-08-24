@@ -29,11 +29,17 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     -------
     DataFrame
         Contains time domain HRV metrics:
+        - **MeanNN**: The mean of the RR intervals.
+        - **SDNN**: The standard deviation of the RR intervals.
+        -**SDANN1**, **SDANN2**, **SDANN5**: The standard deviation of average RR intervals extracted from n-minute segments of
+        time series data (1, 2 and 5 by default). Note that these indices require a minimal duration of signal to be computed
+        (3, 6 and 15 minutes respectively) and will be silently skipped if the data provided is too short.
+        -**SDNNI1**, **SDNNI2**, **SDNNI5**: The mean of the standard deviations of RR intervals extracted from n-minute
+        segments of time series data (1, 2 and 5 by default). Note that these indices require a minimal duration of signal to
+        be computed (3, 6 and 15 minutes respectively) and will be silently skipped if the data provided is too short.
         - **RMSSD**: The square root of the mean of the sum of successive differences between
         adjacent RR intervals. It is equivalent (although on another scale) to SD1, and
         therefore it is redundant to report correlations with both (Ciccone, 2017).
-        - **MeanNN**: The mean of the RR intervals.
-        - **SDNN**: The standard deviation of the RR intervals.
         - **SDSD**: The standard deviation of the successive differences between RR intervals.
         - **CVNN**: The standard deviation of the RR intervals (SDNN) divided by the mean of the RR
         intervals (MeanNN).
@@ -93,11 +99,15 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     out = {}  # Initialize empty container for results
 
-    # Mean based
-    out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
-
+    # Deviation-based
     out["MeanNN"] = np.nanmean(rri)
     out["SDNN"] = np.nanstd(rri, ddof=1)
+    for i in [1, 2, 5]:
+        out["SDANN" + str(i)] = _sdann(rri, sampling_rate, window=i)
+        out["SDNNI" + str(i)] = _sdnni(rri, sampling_rate, window=i)
+
+    # Difference-based
+    out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
     # Normalized
@@ -117,9 +127,16 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["pNN20"] = nn20 / len(rri) * 100
 
     # Geometrical domain
-    bar_y, bar_x = np.histogram(rri, bins="auto")
-    out["TINN"] = np.max(bar_x) - np.min(bar_x)  # Triangular Interpolation of the NN Interval Histogram
-    out["HTI"] = len(rri) / np.max(bar_y)  # HRV Triangular Index
+    if "binsize" in kwargs:
+        binsize = kwargs["binsize"]
+    else:
+        binsize = (1 / 128) * 1000
+    bins = np.arange(0, np.max(rri) + binsize, binsize)
+    bar_y, bar_x = np.histogram(rri, bins=bins)
+    # HRV Triangular Index
+    out["HTI"] = len(rri) / np.max(bar_y)
+    # Triangular Interpolation of the NN Interval Histogram
+    out["TINN"] = _hrv_TINN(rri, bar_x, bar_y, binsize)
 
     if show:
         _hrv_time_show(rri, **kwargs)
@@ -127,6 +144,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
+# =============================================================================
+# Utilities
+# =============================================================================
 
 def _hrv_time_show(rri, **kwargs):
 
@@ -135,3 +155,66 @@ def _hrv_time_show(rri, **kwargs):
     fig.suptitle("Distribution of R-R intervals")
 
     return fig
+
+def _sdann(rri, sampling_rate, window=1):
+
+    window_size = window * 60 * 1000  # Convert window in min to ms
+    n_windows = int(np.round(np.cumsum(rri)[-1] / window_size))
+    if n_windows < 3:
+        return np.nan
+    rri_cumsum = np.cumsum(rri)
+    avg_rri = []
+    for i in range(n_windows):
+        start = i * window_size
+        start_idx = np.where(rri_cumsum >= start)[0][0]
+        end_idx = np.where(rri_cumsum < start + window_size)[0][-1]
+        avg_rri.append(np.mean(rri[start_idx:end_idx]))
+    sdann = np.nanstd(avg_rri, ddof=1)
+    return sdann
+
+def _sdnni(rri, sampling_rate, window=1):
+
+    window_size = window * 60 * 1000  # Convert window in min to ms
+    n_windows = int(np.round(np.cumsum(rri)[-1] / window_size))
+    if n_windows < 3:
+        return np.nan
+    rri_cumsum = np.cumsum(rri)
+    sdnn_ = []
+    for i in range(n_windows):
+        start = i * window_size
+        start_idx = np.where(rri_cumsum >= start)[0][0]
+        end_idx = np.where(rri_cumsum < start + window_size)[0][-1]
+        sdnn_.append(np.nanstd(rri[start_idx:end_idx], ddof=1))
+    sdnni = np.nanmean(sdnn_)
+    return sdnni
+
+def _hrv_TINN(rri, bar_x, bar_y, binsize):
+    # set pre-defined conditions
+    min_error = 2 ** 14
+    X = bar_x[np.argmax(bar_y)]  # bin where Y is max
+    Y = np.max(bar_y)  # max value of Y
+    n = bar_x[np.where(bar_x - np.min(rri) > 0)[0][0]]  # starting search of N
+    m = X + binsize  # starting search value of M
+    N = 0
+    M = 0
+    # start to find best values of M and N where least square is minimized
+    while n < X:
+        while m < np.max(rri):
+            n_start = np.where(bar_x == n)[0][0]
+            n_end = np.where(bar_x == X)[0][0]
+            qn = np.polyval(np.polyfit([n, X], [0, Y], deg=1), bar_x[n_start:n_end + 1])
+            m_start = np.where(bar_x == X)[0][0]
+            m_end = np.where(bar_x == m)[0][0]
+            qm = np.polyval(np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start:m_end + 1])
+            q = np.zeros(len(bar_x))
+            q[n_start:n_end + 1] = qn
+            q[m_start:m_end + 1] = qm
+            # least squares error
+            error = np.sum((bar_y[n_start:m_end + 1] - q[n_start:m_end + 1]) ** 2)
+            if error < min_error:
+                N = n
+                M = m
+                min_error = error
+            m += binsize
+        n += binsize
+    return M - N

@@ -23,7 +23,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         Defaults to 1000.
     method : string
         The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pamtompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012',
+        'pantompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012',
         'kalidas2017', 'martinez2003', 'rodrigues2021' or 'promac'.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the algorithm.
@@ -158,7 +158,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     elif method in ["promac", "all"]:
         rpeaks = _ecg_findpeaks_promac(ecg_cleaned, sampling_rate=sampling_rate, threshold=0.33, show=show)
     else:
-        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit'" "or 'pamtompkins'.")
+        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit'" "or 'pantompkins'.")
 
     # Prepare output.
     info = {"ECG_R_Peaks": rpeaks}

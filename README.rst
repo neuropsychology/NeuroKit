@@ -23,8 +23,7 @@
 
 **The Python Toolbox for Neurophysiological Signal Processing**
 
-This package is the continuation of `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
-It's a user-friendly package providing easy access to advanced biosignal processing routines.
+**NeuroKit2** is a user-friendly package providing easy access to advanced biosignal processing routines.
 Researchers and clinicians without extensive knowledge of programming or biomedical signal processing
 can **analyze physiological data with only two lines of code**.
 
@@ -84,6 +83,8 @@ NeuroKit2 is the most `welcoming <https://github.com/neuropsychology/NeuroKit#po
 - `Understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/contributing/understanding.html>`_
 - `Contributing guide <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html>`_
 - `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/contributing/first_contribution.html>`_
+
+Also, if you have developped new signal processing methods or algorithms and you want to **increase its usage, popularity and citations**, get in touch with us to eventually add it to NeuroKit. A great opportunity for the users as well as the original developpers! 
 
 
 Documentation
@@ -173,20 +174,22 @@ The **NeuroKit2** paper can be found `here <https://doi.org/10.3758/s13428-020-0
 
     - Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
     Schölzel, C., & Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
-    Behavior Research Methods. https://doi.org/10.3758/s13428-020-01516-y
+    Behavior Research Methods, 53(4), 1689–1696. https://doi.org/10.3758/s13428-020-01516-y
 
     Full bibtex reference:
 
     @article{Makowski2021neurokit,
-        author={Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran{\c{c}}ois and Pham, Hung and Sch{\"o}lzel, Christopher and Chen, S. H. Annabel},
-        title={NeuroKit2: A Python toolbox for neurophysiological signal processing},
-        journal={Behavior Research Methods},
-        year={2021},
-        month={Feb},
-        day={02},
-        issn={1554-3528},
-        doi={10.3758/s13428-020-01516-y},
-        url={https://doi.org/10.3758/s13428-020-01516-y}
+        author = {Dominique Makowski and Tam Pham and Zen J. Lau and Jan C. Brammer and Fran{\c{c}}ois Lespinasse and Hung Pham and Christopher Schölzel and S. H. Annabel Chen},
+        title = {{NeuroKit}2: A Python toolbox for neurophysiological signal processing},
+        journal = {Behavior Research Methods},
+        volume = {53},
+        number = {4},
+        pages = {1689--1696},
+        publisher = {Springer Science and Business Media {LLC}},
+        doi = {10.3758/s13428-020-01516-y},
+        url = {https://doi.org/10.3758%2Fs13428-020-01516-y},
+        year = 2021,
+        month = {feb}
     }
 
 
@@ -398,16 +401,15 @@ variability metrics) and peak characteristics.
 
 Heart Rate Variability (HRV)
 ----------------------------
-.. image:: https://img.shields.io/badge/DOI-hrv-red
+.. image:: https://img.shields.io/badge/Tutorial-HRV-green
         :target: https://www.mdpi.com/1424-8220/21/12/3998
 
-If you are looking for:
+Check-out our **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** `paper <https://doi.org/10.3390/s21123998>`_ for:
 
 - a comprehensive review of the most up-to-date HRV indices
 - a discussion of their significance in psychological research and practices
 - a step-by-step guide for HRV analysis using **NeuroKit2**
 
-the **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial** `paper <https://doi.org/10.3390/s21123998>`_ is a good place to start.
 
 .. code-block:: tex
 
@@ -417,24 +419,8 @@ the **Heart Rate Variability in Psychology: A Review of HRV Indices and an Analy
     Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial.
     Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 
-    Full bibtex reference:
 
-    @article{Pham_2021,
-        author={Pham, Tam and Lau, Zen Juen and Chen, S. H. Annabel and Makowski, Dominique},
-        title={Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial},
-        volume={21},
-        ISSN={1424-8220},
-        url={http://dx.doi.org/10.3390/s21123998},
-        DOI={10.3390/s21123998},
-        number={12},
-        journal={Sensors},
-        publisher={MDPI AG},
-        year={2021},
-        month={Jun},
-        pages={3998}
-    }
-
-- **Compute HRV indices**
+- **Compute HRV indices using Python**
 
   - **Time domain**: RMSSD, MeanNN, SDNN, SDSD, CVNN etc.
   - **Frequency domain**: Spectral power density in various frequency bands (Ultra low/ULF, Very low/VLF, Low/LF, High/HF, Very high/VHF), Ratio of LF to HF power, Normalized LF (LFn) and HF (HFn), Log transformed HF (LnHF).

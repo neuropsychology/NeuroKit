@@ -17,7 +17,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : string
-        The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default), 'pamtompkins1985',
+        The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default), 'pantompkins1985',
         'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012' or 'kalidas2017'.
     correct_artifacts : bool
         Whether or not to identify artifacts as defined by Jukka A. Lipponen & Mika P. Tarvainen (2019):

@@ -55,7 +55,7 @@ def test_hrv_frequency():
 
 def test_hrv():
 
-    ecg = nk.ecg_simulate(duration=60, sampling_rate=1000, heart_rate=110, random_state=42)
+    ecg = nk.ecg_simulate(duration=120, sampling_rate=1000, heart_rate=110, random_state=42)
 
     _, peaks = nk.ecg_process(ecg, sampling_rate=1000)
 
@@ -73,7 +73,11 @@ def test_hrv():
                'HRV_C2a', 'HRV_SD2d', 'HRV_SD2a',
                'HRV_Cd', 'HRV_Ca', 'HRV_SDNNd',
                'HRV_SDNNa', 'HRV_ApEn', 'HRV_SampEn', 'HRV_MSE', 'HRV_CMSE',
-               'HRV_RCMSE', 'HRV_DFA', 'HRV_CorrDim']
+               'HRV_RCMSE', 'HRV_CD', 'HRV_DFA_alpha1', 'HRV_DFA_alpha1_ExpRange',
+               'HRV_DFA_alpha1_ExpMean', 'HRV_DFA_alpha1_DimRange',
+               'HRV_DFA_alpha1_DimMean', 'HRV_DFA_alpha2',
+               'HRV_DFA_alpha2_ExpRange', 'HRV_DFA_alpha2_ExpMean',
+               'HRV_DFA_alpha2_DimRange', 'HRV_DFA_alpha2_DimMean']
 
     assert all(elem in np.array(ecg_hrv.columns.values, dtype=object) for elem
                in columns)
