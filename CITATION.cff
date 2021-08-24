@@ -11,7 +11,7 @@ authors:
 - family-names: "Brammer"
   given-names: "Jan C."
 title: "NeuroKit2: The Python Toolbox for Neurophysiological Signal Processing"
-version: 0.1.4
+version: 0.1.5
 doi: 10.3758/s13428-020-01516-y
 date-released: 2021-02-02
 url: "https://github.com/neuropsychology/NeuroKit"
