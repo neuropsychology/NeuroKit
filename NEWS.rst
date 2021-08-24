@@ -19,6 +19,7 @@ New Features
 Fixes
 +++++++++++++
 
+* Add path argument in `mne_data()` and throw warning to download mne datasets if data folder is not present
 * The implementation of `TTIN` in `hrv_time()` is amended to its correct formulation.
 * The default binsize used for RRI histogram in the computation of geometric HRV indices is set to 1 / 128 seconds
 
