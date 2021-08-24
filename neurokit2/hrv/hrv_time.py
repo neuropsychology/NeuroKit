@@ -31,10 +31,12 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         Contains time domain HRV metrics:
         - **MeanNN**: The mean of the RR intervals.
         - **SDNN**: The standard deviation of the RR intervals.
-        - **SDANNx**: The standard deviation of average RR intervals extracted from x-minute segments of time series data.
-        Currently, returning this index for window of 1, 2 and 5 minutes.
-        - **SDNNIx**: The mean of the standard deviations of RR intervals per x-minute segments of time series data.
-        Currently, returning this index for window of 1, 2 and 5 minutes.
+        -**SDANN1**, **SDANN2**, **SDANN5**: The standard deviation of average RR intervals extracted from n-minute segments of
+        time series data (1, 2 and 5 by default). Note that these indices require a minimal duration of signal to be computed
+        (3, 6 and 15 minutes respectively) and will be silently skipped if the data provided is too short.
+        -**SDNNI1**, **SDNNI2**, **SDNNI5**: The mean of the standard deviations of RR intervals extracted from n-minute
+        segments of time series data (1, 2 and 5 by default). Note that these indices require a minimal duration of signal to
+        be computed (3, 6 and 15 minutes respectively) and will be silently skipped if the data provided is too short.
         - **RMSSD**: The square root of the mean of the sum of successive differences between
         adjacent RR intervals. It is equivalent (although on another scale) to SD1, and
         therefore it is redundant to report correlations with both (Ciccone, 2017).
@@ -100,12 +102,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     # Deviation-baed
     out["MeanNN"] = np.nanmean(rri)
     out["SDNN"] = np.nanstd(rri, ddof=1)
-    out["SDANN1"] = _sdann(rri, sampling_rate, window=1)
-    out["SDANN2"] = _sdann(rri, sampling_rate, window=2)
-    out["SDANN5"] = _sdann(rri, sampling_rate, window=5)
-    out["SDNNI1"] = _sdnni(rri, sampling_rate, window=1)
-    out["SDNNI2"] = _sdnni(rri, sampling_rate, window=2)
-    out["SDNNI5"] = _sdnni(rri, sampling_rate, window=5)
+    for i in [1, 2, 5]:
+        out["SDANN" + str(i)] = _sdann(rri, sampling_rate, window=i)
+        out["SDNNI" + str(i)] = _sdnni(rri, sampling_rate, window=i)
 
     # Difference-based
     out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
