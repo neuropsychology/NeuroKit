@@ -284,6 +284,5 @@ def test_ecg_intervalrelated():
                               sampling_rate=100, epochs_end=150)
     features_dict = nk.ecg_intervalrelated(epochs, sampling_rate=100)
 
-    assert all(elem in columns for elem
-               in np.array(features_dict.columns.values, dtype=str))
+    assert (elem in columns for elem in np.array(features_dict.columns.values, dtype=str))
     assert features_dict.shape[0] == 2  # Number of rows
