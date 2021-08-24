@@ -40,11 +40,11 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     22(1), 75-81.
 
     - Nagarajan, R. (2002). Quantifying physiological data with Lempel-Ziv complexity-certain issues.
-    IEEE Transactions on Biomedical Engineering, 49(11), 1371–1373. doi:10.1109/tbme.2002.804582 
+    IEEE Transactions on Biomedical Engineering, 49(11), 1371–1373. doi:10.1109/tbme.2002.804582.
 
     - Kaspar, F., & Schuster, H. G. (1987). Easily calculable measure for the complexity of spatiotemporal patterns.
     Physical Review A, 36(2), 842.
-    
+
     - Zhang, Y., Hao, J., Zhou, C., & Chang, K. (2009). Normalized Lempel-Ziv complexity and
     its application in bio-sequence analysis. Journal of mathematical chemistry, 46(4), 1203-1212.
 
@@ -60,7 +60,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     pointer = 0
     current_prefix_len = 1
     current_substring_len = 1
-    final_substring_len = 1    
+    final_substring_len = 1
 
     # iterate over sequence
     while current_prefix_len + current_substring_len <= n:
@@ -77,15 +77,15 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
                 final_substring_len = 1
             else:
                 current_substring_len = 1
-    
+
     if current_substring_len != 1:
         complexity += 1
-    
+
     if normalize is True:
         complexity = _complexity_lempelziv_normalize(p_seq, complexity)
 
     return complexity
-            
+
 
 def _complexity_lempelziv_binarize(signal, threshold="median"):
 
@@ -107,7 +107,7 @@ def _complexity_lempelziv_binarize(signal, threshold="median"):
     return p_seq
 
 def _complexity_lempelziv_normalize(sequence, complexity):
-    
+
     n = len(sequence)
     upper_bound = n / np.log2(n)
 

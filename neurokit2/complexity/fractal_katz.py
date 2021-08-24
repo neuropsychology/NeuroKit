@@ -21,7 +21,7 @@ def fractal_katz(signal):
     -------
     float
         Katz's fractal dimension.
-        
+
     Examples
     ----------
     >>> import neurokit2 as nk

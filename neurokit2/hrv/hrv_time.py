@@ -218,4 +218,3 @@ def _hrv_TINN(rri, bar_x, bar_y, binsize):
             m += binsize
         n += binsize
     return M - N
-

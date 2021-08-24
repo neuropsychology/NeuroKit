@@ -15,6 +15,9 @@ New Features
 
 * Add convenience function `intervals_to_peaks()` useful for RRI or BBI conversion to peak indices
 * `hrv_nonlinear()` and `rrv_rsp()` now return the parameters of singularity spectrum for multifractal DFA analysis
+* Add new complexity measures in `fractal_higuchi()`, `fractal_katz()` and `fractal_lempelziv()`
+* Add new time-domain measures in `hrv_time()`: `SDANN` and `SDNNI`
+* Add new non-linear measures in `hrv_nonlinear()`: `ShanEn`, `FuzzyEn`, `HFD`, `KFD` and `LZC`
 
 Fixes
 +++++++++++++
