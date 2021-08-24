@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import (entropy_approximate, entropy_multiscale,
-                          entropy_sample)
-from ..complexity.fractal_correlation import fractal_correlation
-from ..complexity.fractal_dfa import fractal_dfa
-from ..misc import find_consecutive, NeuroKitWarning
+from ..complexity import (complexity_lempelziv, entropy_approximate,
+                          entropy_fuzzy, entropy_multiscale, entropy_sample,
+                          entropy_shannon, fractal_correlation, fractal_dfa,
+                          fractal_higuchi, fractal_katz)
+from ..misc import NeuroKitWarning, find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
@@ -126,6 +127,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
             - **SampEn**: The sample entropy measure of HRV, calculated by `entropy_sample()`.
 
+            - **ShanEn**: The Shannon entropy measure of HRV, calculated by `entropy_shannon()`.
+
+            - **FuzzyEn**: The fuzzy entropy measure of HRV, calculated by `entropy_fuzzy()`.
+
             - **MSE**: The multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
 
             - **CMSE**: The composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
@@ -133,6 +138,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
             - **RCMSE**: The refined composite multiscale entropy measure of HRV, calculated by `entropy_multiscale()`.
 
             - **CD**: The Correlation Dimension of the HR signal, calculated by `fractal_correlation()`.
+
+            - **HFD**: The Higuchi's Fractal Dimension of the HR signal, calculated by `fractal_higuchi()`.
+            kmax is set to "default".
+
+            - **KFD**: The Katz's Fractal Dimension of the HR signal, calculated by `fractal_katz()`.
+
+            - **LZC**: The Lempel-Ziv complexity of the HR signal, calculated by `fractal_lempelziv()`.
 
             - **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal corresponding
             to short-term correlations, calculated by `fractal_dfa()`.
@@ -242,14 +254,20 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     # DFA
     out = _hrv_dfa(peaks, rri, out, **kwargs)
 
-    # Entropy
+    # Complexity
     r = 0.2 * np.std(rri, ddof=1)
     out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=r)
     out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=r)
+    out["ShanEn"] = entropy_shannon(rri)
+    out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, r=r)
     out["MSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False)
     out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)
     out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)
+
     out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
+    out["HFD"] = fractal_higuchi(rri, **kwargs)
+    out["KFD"] = fractal_katz(rri)
+    out["LZC"] = complexity_lempelziv(rri, **kwargs)
 
     if show:
         _hrv_nonlinear_show(rri, out)
