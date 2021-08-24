@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
 
-import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 
 from ..misc import NeuroKitWarning
 
 
-def fractal_higuchi(signal, kmax="default", show=True):
+def fractal_higuchi(signal, kmax="default", show=False):
     """
     Computes Higuchi's Fractal Dimension (HFD) by reconstructing k-max number of new
     data sets. For each reconstructed data set, curve length is computed and plotted
@@ -40,12 +40,12 @@ def fractal_higuchi(signal, kmax="default", show=True):
     >>>
     >>> signal = nk.data('bio_eventrelated_100hz')['ECG']
     >>>
-    >>> hfd = nk.fractal_higuchi(signal, kmax=5)
+    >>> hfd = nk.fractal_higuchi(signal, kmax=5, show=True)
     >>> hfd #doctest: +SKIP
-    >>> hfd = nk.fractal_higuchi(signal, kmax="default")
+    >>> hfd = nk.fractal_higuchi(signal, kmax="default", show=True)
     >>> hfd #doctest: +SKIP
 
-    References
+    Reference
     ----------
     - Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
     Physica D: Nonlinear Phenomena, 31(2), 277-283.
@@ -163,7 +163,7 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
 def _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60):
     """
     Optimize the kmax parameter.
-    
+
     HFD values are plotted against a range of kmax and the point at which the values plateau is
     considered the saturation point and subsequently selected as the kmax value.
     """
@@ -203,7 +203,7 @@ def _fractal_higuchi_optimal_k_plot(k_range, slope_values, optimal_k, ax=None):
 
     ax.plot(k_range, slope_values, color="#2196F3", zorder=1)
     colors = plt.cm.PuBu(np.linspace(0, 1, len(k_range)))
-    
+
     for i, j in enumerate(k_range):
         ax.scatter(k_range[i], slope_values[i], color=colors[i],
                    marker='o', zorder=2)
