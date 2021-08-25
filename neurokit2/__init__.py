@@ -3,11 +3,13 @@ import datetime
 import platform
 
 import matplotlib
+
 # Dependencies
 import numpy as np
 import pandas as pd
 import scipy
 import sklearn
+
 # Export functions
 from .signal import *
 from .stats import *
