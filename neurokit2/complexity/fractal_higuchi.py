@@ -179,14 +179,11 @@ def _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60):
     # If no plateau
     if kmax <= 2:
         warn(
-            "The detected kmax value is 2 or less. The change in HFD values across kmax values is dependent "
-            " on the fractal source data and there may be no plateau in this case."
-            " Consider choosing a manual kmax value.",
+            "The optimal kmax value detected is 2 or less. There may be no plateau in this case. "
+            "You can inspect the plot by set `show=True`. HFD is returned for kmax value of 20.",
             category=NeuroKitWarning
         )
-        grad = np.diff(slope_values) / np.diff(k_range)
-        optimal_k = np.where(grad == np.max(grad))[0][0]
-        kmax = k_range[optimal_k]
+        kmax = 20
 
     return kmax, k_range, slope_values
 
