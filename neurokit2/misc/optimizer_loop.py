@@ -1,7 +1,7 @@
 import pandas as pd
 from ..stats import mad
 from ..complexity import complexity_optimize
-from ..complexity.fractal_higuichi import _fractal_higuchi_optimal_k
+from ..complexity.fractal_higuchi import _fractal_higuchi_optimal_k
 
 
 def optimizer_loop(signal, func=complexity_optimize, **kwargs):
