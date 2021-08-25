@@ -11,6 +11,7 @@ from .warnings import NeuroKitWarning
 from .check_type import check_type
 from .find_outliers import find_outliers
 from .intervals_to_peaks import intervals_to_peaks
+from .optimizer_loop import optimizer_loop
 
 
 __all__ = [
@@ -24,5 +25,6 @@ __all__ = [
     "NeuroKitWarning",
     "check_type",
     "find_outliers",
-    "intervals_to_peaks"
+    "intervals_to_peaks",
+    "optimizer_loop"
 ]
