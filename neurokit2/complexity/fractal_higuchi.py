@@ -54,11 +54,14 @@ def fractal_higuchi(signal, kmax="default", show=False):
     In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE. https://ieeexplore.ieee.org/document/7168285
     """
 
+    # Sanitize maximum value of k
+    k_end = 60
+    k_end = _cleanse_k(signal, kmax, k_end)
     # Obtain optimal k
     if kmax == "default":
-        k_max, k_range, slope_values = _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60)
+        k_max, k_range, slope_values = _fractal_higuchi_optimal_k(signal, k_start=2, k_end=k_end)
     else:
-        k_max = kmax
+        k_max = k_end
 
     # Make sure kmax >= 2
     if k_max <= 2:
@@ -159,15 +162,29 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
 # =============================================================================
 # Compute kmax
 # =============================================================================
+def _cleanse_k(signal, kmax, k_end):
 
-def _fractal_higuchi_optimal_k(signal, k_first=2, k_end=60):
+    N = len(signal)
+    # upper limit for k value
+    max_k = int(np.floor(N / 2))  # so that normalizing factor is positive
+
+    if isinstance(kmax, int):
+        k_end = kmax.copy()
+
+    if max_k < k_end:
+        return max_k
+    else:
+        return k_end
+
+
+def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
     """
     Optimize the kmax parameter.
 
     HFD values are plotted against a range of kmax and the point at which the values plateau is
     considered the saturation point and subsequently selected as the kmax value.
     """
-    k_range = np.arange(k_first, k_end + 1)
+    k_range = np.arange(k_start, k_end + 1)
     slope_values = []
     for _, k in enumerate(k_range):
         slope, _, _, _ = _fractal_higuchi_slope(signal, kmax=k)
