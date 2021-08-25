@@ -1,10 +1,9 @@
 import pandas as pd
 from ..stats import mad
-from ..complexity import complexity_optimize
-from ..complexity.fractal_higuchi import _fractal_higuchi_optimal_k
 
 
-def optimizer_loop(signal, func=complexity_optimize, **kwargs):
+
+def optimizer_loop(signal, func=None, **kwargs):
     """To loop through a dictionary of signals and identify an optimal parameter.
 
     Parameters
@@ -50,9 +49,8 @@ def optimizer_loop(signal, func=complexity_optimize, **kwargs):
     >>    rri = np.diff(rpeaks) / sampling_rate * 1000
     >>    all_rri[str(participant)] = rri
 
-    >> nk.optimizer_loop(all_rri, func=complexity_optimize, maxnum=90)
+    >> nk.optimizer_loop(all_rri, func=nk.complexity_optimize, maxnum=90)
     """
-
     metrics = {}
     for _, (name, sig) in enumerate(signal.items()):
         metrics[str(name)] = func(sig, **kwargs)
