@@ -169,7 +169,7 @@ def _cleanse_k(signal, kmax, k_end):
     max_k = int(np.floor(N / 2))  # so that normalizing factor is positive
 
     if isinstance(kmax, int):
-        k_end = kmax.copy()
+        k_end = kmax
 
     if max_k < k_end:
         return max_k
