@@ -32,7 +32,7 @@ from .complexity import *
 
 
 # Info
-__version__ = "0.1.5"
+__version__ = "0.1.4.1"
 
 
 # Maintainer info
