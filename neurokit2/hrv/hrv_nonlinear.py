@@ -463,9 +463,8 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
         n_windows_short = n_windows[0]
         n_windows_long = n_windows[1]
 
+    # Compute DFA alpha1
     short_window = np.linspace(dfa_windows[0][0], dfa_windows[0][1], n_windows_short).astype(int)
-    long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
-
     # For monofractal
     out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)['slopes'][0]
     # For multifractal
@@ -478,6 +477,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     out["DFA_alpha1_DimRange"] = mdfa_alpha1['DimRange']
     out["DFA_alpha1_DimMean"] = mdfa_alpha1['DimMean']
 
+    # Compute DFA alpha2
     # sanatize max_beats
     if max_beats < dfa_windows[1][0] + 1:
         warn(
@@ -489,6 +489,7 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
             )
         return out
     else:
+        long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
         # For monofractal
         out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)['slopes'][0]
         # For multifractal
