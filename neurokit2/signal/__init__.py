@@ -1,5 +1,4 @@
 """Submodule for NeuroKit."""
-
 from .signal_autocor import signal_autocor
 from .signal_binarize import signal_binarize
 from .signal_changepoints import signal_changepoints
