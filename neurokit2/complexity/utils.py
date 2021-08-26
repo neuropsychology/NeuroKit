@@ -5,7 +5,7 @@ import sklearn.neighbors
 
 from ..stats import mad
 from .complexity_embedding import complexity_embedding
-from .complexity_optimize import complexity_optimize
+from .complexity_optimize import _complexity_optimize
 from .fractal_higuchi import _fractal_higuchi_optimal_k
 
 
@@ -259,7 +259,7 @@ def _optimizer_loop(signal, func=None, **kwargs):
     if func == "complexity_optimize":
         metrics = {}
         for _, (name, sig) in enumerate(signal.items()):
-            metrics[str(name)] = complexity_optimize(sig, **kwargs)
+            metrics[str(name)] = _complexity_optimize(sig, **kwargs)
     elif func == "fractal_higuchi":
         metrics = {}
         for _, (name, sig) in enumerate(signal.items()):

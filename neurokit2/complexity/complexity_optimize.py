@@ -33,7 +33,7 @@ def complexity_optimize(
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series, dict]
-        The signal (i.e., a time series) in the form of a vector of values. If the signal proovided
+        The signal (i.e., a time series) in the form of a vector of values. If the signal provided
         is a dictionary of signals, an optimizer will be looped through all signals to identify the
         optimal parameters. See `utils._optimizer_loop()` for more information.
     delay_max : int
@@ -96,43 +96,143 @@ def complexity_optimize(
         out = _optimizer_loop(signal, func="complexity_optimize", **kwargs)
         return out
     else:
-        out = {}
-
-        # Optimize delay
-        tau_sequence, metric, metric_values, out["delay"] = _complexity_delay(
-            signal, delay_max=delay_max, method=delay_method
-        )
-
-        # Optimize dimension
-        dimension_seq, optimize_indices, out["dimension"] = _complexity_dimension(
-            signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method, **kwargs
-        )
-
-        # Optimize r
-        r_method = r_method.lower()
-        if r_method in ["traditional"]:
-            out["r"] = 0.2 * np.std(signal, ddof=1)
-        if r_method in ["maxapen", "optimize"]:
-            r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"])
-
-        if show is True:
-            if r_method in ["traditional"]:
-                raise ValueError("NeuroKit error: complexity_optimize():" "show is not available for current r_method")
-            if r_method in ["maxapen", "optimize"]:
-                _complexity_plot(
-                    signal,
-                    out,
-                    tau_sequence,
-                    metric,
-                    metric_values,
-                    dimension_seq,
-                    optimize_indices,
-                    r_range,
-                    ApEn,
-                    dimension_method=dimension_method,
+        out = _complexity_optimize(
+                signal,
+                delay_max=delay_max,
+                delay_method=delay_method,
+                dimension_max=dimension_max,
+                dimension_method=dimension_method,
+                r_method=r_method,
+                show=show,
+                **kwargs
                 )
-
         return out
+
+
+# =============================================================================
+# Internals
+# ==============================================================================
+
+def _complexity_optimize(
+    signal,
+    delay_max=100,
+    delay_method="fraser1986",
+    dimension_max=20,
+    dimension_method="afnn",
+    r_method="maxApEn",
+    show=False,
+    **kwargs
+):
+
+    out = {}
+
+    # Optimize delay
+    tau_sequence, metric, metric_values, out["delay"] = _complexity_delay(
+        signal, delay_max=delay_max, method=delay_method
+    )
+
+    # Optimize dimension
+    dimension_seq, optimize_indices, out["dimension"] = _complexity_dimension(
+        signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method, **kwargs
+    )
+
+    # Optimize r
+    r_method = r_method.lower()
+    if r_method in ["traditional"]:
+        out["r"] = 0.2 * np.std(signal, ddof=1)
+    if r_method in ["maxapen", "optimize"]:
+        r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"])
+
+    if show is True:
+        if r_method in ["traditional"]:
+            raise ValueError("NeuroKit error: complexity_optimize():" "show is not available for current r_method")
+        if r_method in ["maxapen", "optimize"]:
+            _complexity_plot(
+                signal,
+                out,
+                tau_sequence,
+                metric,
+                metric_values,
+                dimension_seq,
+                optimize_indices,
+                r_range,
+                ApEn,
+                dimension_method=dimension_method,
+            )
+
+    return out
+
+
+def _complexity_delay(signal, delay_max=100, method="fraser1986"):
+
+    # Initalize vectors
+    if isinstance(delay_max, int):
+        tau_sequence = np.arange(1, delay_max)
+    else:
+        tau_sequence = np.array(delay_max)
+
+    # Get metric
+    # Method
+    method = method.lower()
+    if method in ["fraser", "fraser1986", "tdmi"]:
+        metric = "Mutual Information"
+        algorithm = "first local minimum"
+    elif method in ["theiler", "theiler1990"]:
+        metric = "Autocorrelation"
+        algorithm = "first 1/e crossing"
+    elif method in ["casdagli", "casdagli1991"]:
+        metric = "Autocorrelation"
+        algorithm = "first zero crossing"
+    elif method in ["rosenstein", "rosenstein1993", "adfd"]:
+        metric = "Displacement"
+        algorithm = "closest to 40% of the slope"
+    else:
+        raise ValueError("NeuroKit error: complexity_delay(): 'method' not recognized.")
+    metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
+    # Get optimal tau
+    optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
+    tau = tau_sequence[optimal]
+
+    return tau_sequence, metric, metric_values, tau
+
+
+def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10.0, A=2.0, **kwargs):
+
+    # Initalize vectors
+    if isinstance(dimension_max, int):
+        dimension_seq = np.arange(1, dimension_max + 1)
+    else:
+        dimension_seq = np.array(dimension_max)
+
+    # Method
+    method = method.lower()
+    if method in ["afnn"]:
+        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=False, **kwargs)
+        E1 = E[1:] / E[:-1]
+        E2 = Es[1:] / Es[:-1]
+        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
+        optimize_indices = [E1, E2]
+        return dimension_seq, optimize_indices, min_dimension
+
+    if method in ["fnn"]:
+        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs)
+        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
+        optimize_indices = [f1, f2, f3]
+        return dimension_seq, optimize_indices, min_dimension
+    else:
+        raise ValueError("NeuroKit error: complexity_dimension(): 'method' not recognized.")
+
+
+def _complexity_r(signal, delay=None, dimension=None):
+
+    modulator = np.arange(0.02, 0.8, 0.02)
+    r_range = modulator * np.std(signal, ddof=1)
+    ApEn = np.zeros_like(r_range)
+    for i, r in enumerate(r_range):
+        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])
+    r = r_range[np.argmax(ApEn)]
+
+    return r_range, ApEn, r
 
 
 # =============================================================================
@@ -211,83 +311,6 @@ def _complexity_plot(
     _optimize_r_plot(out["r"], r_range, ApEn, ax=ax_r)
 
     return fig
-
-
-# =============================================================================
-# Internals
-# ==============================================================================
-
-def _complexity_delay(signal, delay_max=100, method="fraser1986"):
-
-    # Initalize vectors
-    if isinstance(delay_max, int):
-        tau_sequence = np.arange(1, delay_max)
-    else:
-        tau_sequence = np.array(delay_max)
-
-    # Get metric
-    # Method
-    method = method.lower()
-    if method in ["fraser", "fraser1986", "tdmi"]:
-        metric = "Mutual Information"
-        algorithm = "first local minimum"
-    elif method in ["theiler", "theiler1990"]:
-        metric = "Autocorrelation"
-        algorithm = "first 1/e crossing"
-    elif method in ["casdagli", "casdagli1991"]:
-        metric = "Autocorrelation"
-        algorithm = "first zero crossing"
-    elif method in ["rosenstein", "rosenstein1993", "adfd"]:
-        metric = "Displacement"
-        algorithm = "closest to 40% of the slope"
-    else:
-        raise ValueError("NeuroKit error: complexity_delay(): 'method' not recognized.")
-    metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
-    # Get optimal tau
-    optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
-    tau = tau_sequence[optimal]
-
-    return tau_sequence, metric, metric_values, tau
-
-
-def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10.0, A=2.0, **kwargs):
-
-    # Initalize vectors
-    if isinstance(dimension_max, int):
-        dimension_seq = np.arange(1, dimension_max + 1)
-    else:
-        dimension_seq = np.array(dimension_max)
-
-    # Method
-    method = method.lower()
-    if method in ["afnn"]:
-        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=False, **kwargs)
-        E1 = E[1:] / E[:-1]
-        E2 = Es[1:] / Es[:-1]
-        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
-        optimize_indices = [E1, E2]
-        return dimension_seq, optimize_indices, min_dimension
-
-    if method in ["fnn"]:
-        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs)
-        min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
-        optimize_indices = [f1, f2, f3]
-        return dimension_seq, optimize_indices, min_dimension
-    else:
-        raise ValueError("NeuroKit error: complexity_dimension(): 'method' not recognized.")
-
-
-def _complexity_r(signal, delay=None, dimension=None):
-
-    modulator = np.arange(0.02, 0.8, 0.02)
-    r_range = modulator * np.std(signal, ddof=1)
-    ApEn = np.zeros_like(r_range)
-    for i, r in enumerate(r_range):
-        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])
-    r = r_range[np.argmax(ApEn)]
-
-    return r_range, ApEn, r
-
 
 # =============================================================================
 # Methods
