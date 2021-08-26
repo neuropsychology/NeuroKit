@@ -13,7 +13,6 @@ from .entropy_approximate import entropy_approximate
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_sample import entropy_sample
-from .optimizer_loop import optimizer_loop
 
 # Entropy
 from .entropy_shannon import entropy_shannon
@@ -85,6 +84,5 @@ __all__ = [
     "complexity_d2",
     "complexity_plot",
     "transition_matrix",
-    "transition_matrix_simulate",
-    "optimizer_loop"
+    "transition_matrix_simulate"
 ]
