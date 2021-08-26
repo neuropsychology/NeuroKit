@@ -1,7 +1,9 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 import neurokit2 as nk
 
+print("NeuroKit version: " + str(nk.__version__))
 # Load True R-peaks location
 datafiles = [pd.read_csv("../../data/gudb/Rpeaks.csv"),
              pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv"),
