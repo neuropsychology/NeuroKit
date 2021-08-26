@@ -5,11 +5,15 @@ import numpy as np
 import pandas as pd
 import scipy.spatial
 
-from .complexity_delay import _embedding_delay_metric, _embedding_delay_plot, _embedding_delay_select
-from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn, _embedding_dimension_plot
+from .complexity_delay import (_embedding_delay_metric, _embedding_delay_plot,
+                               _embedding_delay_select)
+from .complexity_dimension import (_embedding_dimension_afn,
+                                   _embedding_dimension_ffn,
+                                   _embedding_dimension_plot)
 from .complexity_embedding import complexity_embedding
 from .complexity_r import _optimize_r_plot
 from .entropy_approximate import entropy_approximate
+from .utils import _optimizer_loop
 
 
 def complexity_optimize(
@@ -28,8 +32,10 @@ def complexity_optimize(
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
+    signal : Union[list, np.array, pd.Series, dict]
+        The signal (i.e., a time series) in the form of a vector of values. If the signal proovided
+        is a dictionary of signals, an optimizer will be looped through all signals to identify the
+        optimal parameters. See `utils._optimizer_loop()` for more information.
     delay_max : int
         See :func:`~neurokit2.complexity_delay`.
     delay_method : str
@@ -86,43 +92,47 @@ def complexity_optimize(
 
     """
 
-    out = {}
+    if isinstance(signal, dict):
+        out = _optimizer_loop(signal, func="complexity_optimize", **kwargs)
+        return out
+    else:
+        out = {}
 
-    # Optimize delay
-    tau_sequence, metric, metric_values, out["delay"] = _complexity_delay(
-        signal, delay_max=delay_max, method=delay_method
-    )
+        # Optimize delay
+        tau_sequence, metric, metric_values, out["delay"] = _complexity_delay(
+            signal, delay_max=delay_max, method=delay_method
+        )
 
-    # Optimize dimension
-    dimension_seq, optimize_indices, out["dimension"] = _complexity_dimension(
-        signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method, **kwargs
-    )
+        # Optimize dimension
+        dimension_seq, optimize_indices, out["dimension"] = _complexity_dimension(
+            signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method, **kwargs
+        )
 
-    # Optimize r
-    r_method = r_method.lower()
-    if r_method in ["traditional"]:
-        out["r"] = 0.2 * np.std(signal, ddof=1)
-    if r_method in ["maxapen", "optimize"]:
-        r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"])
-
-    if show is True:
+        # Optimize r
+        r_method = r_method.lower()
         if r_method in ["traditional"]:
-            raise ValueError("NeuroKit error: complexity_optimize():" "show is not available for current r_method")
+            out["r"] = 0.2 * np.std(signal, ddof=1)
         if r_method in ["maxapen", "optimize"]:
-            _complexity_plot(
-                signal,
-                out,
-                tau_sequence,
-                metric,
-                metric_values,
-                dimension_seq,
-                optimize_indices,
-                r_range,
-                ApEn,
-                dimension_method=dimension_method,
-            )
+            r_range, ApEn, out["r"] = _complexity_r(signal, delay=out["delay"], dimension=out["dimension"])
 
-    return out
+        if show is True:
+            if r_method in ["traditional"]:
+                raise ValueError("NeuroKit error: complexity_optimize():" "show is not available for current r_method")
+            if r_method in ["maxapen", "optimize"]:
+                _complexity_plot(
+                    signal,
+                    out,
+                    tau_sequence,
+                    metric,
+                    metric_values,
+                    dimension_seq,
+                    optimize_indices,
+                    r_range,
+                    ApEn,
+                    dimension_method=dimension_method,
+                )
+
+        return out
 
 
 # =============================================================================
