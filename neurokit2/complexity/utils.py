@@ -9,7 +9,9 @@ from .complexity_embedding import complexity_embedding
 # =============================================================================
 
 
-def _phi(signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False):
+def _phi(
+    signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False
+):
     """Common internal for `entropy_approximate` and `entropy_sample`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
@@ -22,7 +24,9 @@ def _phi(signal, delay=1, dimension=2, r="default", distance="chebyshev", approx
         signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy
     )
 
-    embedded2, count2 = _get_embedded(signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy)
+    embedded2, count2 = _get_embedded(
+        signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy
+    )
 
     if approximate is True:
         phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))
@@ -47,7 +51,9 @@ def _phi_divide(phi):
 # =============================================================================
 
 
-def _get_embedded(signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False):
+def _get_embedded(
+    signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False
+):
     """Examples
     ----------
     >>> import neurokit2 as nk
@@ -198,9 +204,9 @@ def _get_coarsegrained(signal, scale=2, force=False):
     return np.mean(x, axis=1)
 
 
-#def optimizer_loop(signal, func=None, **kwargs):
+# def optimizer_loop(signal, func=None, **kwargs):
 #    """To loop through a dictionary of signals and identify an optimal parameter.
-#
+
 #    Parameters
 #    ----------
 #    signal : dict
@@ -210,7 +216,7 @@ def _get_coarsegrained(signal, scale=2, force=False):
 #        `_fractal_higuchi_optimal_k`
 #    **kwargs : key-word arguments
 #        For `complexity_optimize`, `maxnum` can be specified to identify the nearest neighbors.
-#
+
 #    Returns
 #    -------
 #    out : dict
@@ -219,7 +225,7 @@ def _get_coarsegrained(signal, scale=2, force=False):
 #        of one optimal value for each parameter (i.e. one value per parameter for all signals).
 #        The selected optimal value for each parameter corresponds to its median absolute deviation
 #        value.
-#
+
 #    Examples
 #    ---------
 #    >>> import neurokit2 as nk
@@ -230,10 +236,10 @@ def _get_coarsegrained(signal, scale=2, force=False):
 #    >> for participant in list_participants:
 #    >>    path = participant + "/RestingState/" + participant
 #    >>    bio, sampling_rate = nk.read_acqknowledge(path + "_RS" + ".acq",sampling_rate=sampling_rate)
-#
+
 #    >>    # Select columns
 #    >>    bio = bio[['ECG A, X, ECG2-R', 'Digital input']]
-#
+
 #    >>    # New column in df for participant ID
 #    >>    bio['Participant'] = np.full(len(bio), participant)
 #    >>    events = nk.events_find(bio["Digital input"], threshold_keep="below")["onset"]
@@ -243,13 +249,13 @@ def _get_coarsegrained(signal, scale=2, force=False):
 #    >>    rpeaks = np.where(rpeaks == 1)[0]
 #    >>    rri = np.diff(rpeaks) / sampling_rate * 1000
 #    >>    all_rri[str(participant)] = rri
-#
+
 #    >> nk.optimizer_loop(all_rri, func=nk.complexity_optimize, maxnum=90)
 #    """
 #    metrics = {}
 #    for _, (name, sig) in enumerate(signal.items()):
 #        metrics[str(name)] = func(sig, **kwargs)
-#
+
 #    df = pd.DataFrame(metrics).T
 #    optimize = {}
 #    for _, metric in enumerate(df.columns):
@@ -258,5 +264,5 @@ def _get_coarsegrained(signal, scale=2, force=False):
 #            'All_Values': df,
 #            'Optimal_Value': optimize
 #            }
-#
+
 #    return out
