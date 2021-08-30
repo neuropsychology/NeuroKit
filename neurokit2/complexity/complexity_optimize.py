@@ -273,7 +273,7 @@ def _complexity_r(signal, delay=None, dimension=None):
     r_range = modulator * np.std(signal, ddof=1)
     ApEn = np.zeros_like(r_range)
     for i, r in enumerate(r_range):
-        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])
+        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])["ApEn"]
     r = r_range[np.argmax(ApEn)]
 
     return r_range, ApEn, r
