@@ -219,9 +219,9 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     qrs_onsets, qrs_offsets = _dwt_delineate_qrs_bounds(
         rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate
     )
-    ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(ppeaks, dwtmatr, sampling_rate=analysis_sampling_rate)
+    ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(ppeaks, rpeaks, dwtmatr, sampling_rate=analysis_sampling_rate)
     tonsets, toffsets = _dwt_delineate_tp_onsets_offsets(
-        tpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, onset_weight=0.6, duration=0.6
+        tpeaks, rpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, onset_weight=0.6, duration=0.6
     )
 
     return dict(
@@ -242,7 +242,7 @@ def _dwt_compensate_degree(sampling_rate):
     return int(np.log2(sampling_rate / 250))
 
 def _dwt_sanitize_duration(duration, rpeaks, sampling_rate):
-    average_rate = np.median(nk.signal_rate(peaks=rpeaks, sampling_rate=sr))
+    average_rate = np.median(signal_rate(peaks=rpeaks, sampling_rate=sampling_rate))
     return np.round(duration * (60 / average_rate), 3)
 
 def _dwt_delineate_tp_peaks(
@@ -379,6 +379,7 @@ def _dwt_delineate_tp_peaks(
 
 def _dwt_delineate_tp_onsets_offsets(
     peaks,
+    rpeaks,
     dwtmatr,
     sampling_rate=250,
     duration_onset=0.3,
