@@ -221,7 +221,7 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     )
     ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(ppeaks, rpeaks, dwtmatr, sampling_rate=analysis_sampling_rate)
     tonsets, toffsets = _dwt_delineate_tp_onsets_offsets(
-        tpeaks, rpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, onset_weight=0.6, duration=0.6
+        tpeaks, rpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, onset_weight=0.6, duration_onset=0.6
     )
 
     return dict(
