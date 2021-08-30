@@ -256,18 +256,18 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     # Complexity
     r = 0.2 * np.std(rri, ddof=1)
-    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=r)
-    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=r)
-    out["ShanEn"] = entropy_shannon(rri)
-    out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, r=r)
-    out["MSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False)
-    out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)
-    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)
+    out.update(entropy_approximate(rri, delay=1, dimension=2, r=r))
+    out.update(entropy_sample(rri, delay=1, dimension=2, r=r))
+    out.update(entropy_shannon(rri))
+    out.update(entropy_fuzzy(rri, delay=1, dimension=2, r=r))
+    out.update(entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False))
+    out.update(entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False))
+    out.update(entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True))
 
-    out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
-    out["HFD"] = fractal_higuchi(rri, **kwargs)
-    out["KFD"] = fractal_katz(rri)
-    out["LZC"] = complexity_lempelziv(rri, **kwargs)
+    out.update(fractal_correlation(rri, delay=1, dimension=2, **kwargs))
+    out.update(fractal_higuchi(rri, **kwargs))
+    out.update(fractal_katz(rri))
+    out.update(complexity_lempelziv(rri, **kwargs))
 
     if show:
         _hrv_nonlinear_show(rri, out)

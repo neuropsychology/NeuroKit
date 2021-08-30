@@ -223,8 +223,8 @@ def _rsp_rrv_nonlinear(bbi):
     #    out["CSI_Modified"] = L ** 2 / T
 
     # Entropy
-    out["ApEn"] = entropy_approximate(bbi, dimension=2)
-    out["SampEn"] = entropy_sample(bbi, dimension=2, r=0.2 * np.std(bbi, ddof=1))
+    out.update(entropy_approximate(bbi, dimension=2))
+    out.update(entropy_sample(bbi, dimension=2, r=0.2 * np.std(bbi, ddof=1)))
 
     # DFA
     if len(bbi) / 10 > 16:

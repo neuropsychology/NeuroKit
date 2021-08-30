@@ -109,10 +109,10 @@ def entropy_multiscale(
         **kwargs
     )
 
-    if composite:
-        key = 'CMSE'
-    elif refined:
+    if refined:
         key = 'RCMSE'
+    elif composite:
+        key = 'CMSE'
     else:
         key = 'MSE'
 
@@ -169,7 +169,7 @@ def _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs):
     if len(y) < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
         return np.nan
 
-    return entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
+    return entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)["SampEn"]
 
 
 def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
@@ -179,7 +179,7 @@ def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
 
     mse_y = np.full(len(y), np.nan)
     for i in np.arange(len(y)):
-        mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)
+        mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)["SampEn"]
 
     return np.mean(mse_y)
 
