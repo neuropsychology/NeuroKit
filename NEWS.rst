@@ -10,7 +10,7 @@ Fixes
 +++++++++++++
 * Adjust `kmax` parameter in `fractal_higuchi()` according to signal length as having `kmax` more than half of signal length leads to division by zero error
 * Ensure that sanitization of input in `_hrv_dfa()` is done before windows for `DFA_alpha2` is computed
-* `np.seterr` is added to `fractal_dfa()` to avoid returning division by zero warning which is an unexpected behaviour
+* `np.seterr` is added to `fractal_dfa()` to avoid returning division by zero warning which is an expected behaviour
 
 
 0.1.4
