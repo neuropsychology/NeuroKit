@@ -13,6 +13,7 @@ from .entropy_approximate import entropy_approximate
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_sample import entropy_sample
+
 # Entropy
 from .entropy_shannon import entropy_shannon
 from .fractal_correlation import fractal_correlation

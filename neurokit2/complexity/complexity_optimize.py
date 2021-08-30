@@ -20,6 +20,7 @@ def complexity_optimize(
     dimension_method="afnn",
     r_method="maxApEn",
     show=False,
+    **kwargs
 ):
     """Find optimal complexity parameters.
 
@@ -48,6 +49,8 @@ def complexity_optimize(
         Optimal dimension.
     optimal_delay : int
         Optimal time delay.
+    optimal_tolerance : int
+        Optimal tolerance
 
     See Also
     ------------
@@ -92,7 +95,7 @@ def complexity_optimize(
 
     # Optimize dimension
     dimension_seq, optimize_indices, out["dimension"] = _complexity_dimension(
-        signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method
+        signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method, **kwargs
     )
 
     # Optimize r
@@ -202,7 +205,8 @@ def _complexity_plot(
 
 # =============================================================================
 # Internals
-# =============================================================================
+# ==============================================================================
+
 def _complexity_delay(signal, delay_max=100, method="fraser1986"):
 
     # Initalize vectors
@@ -236,7 +240,7 @@ def _complexity_delay(signal, delay_max=100, method="fraser1986"):
     return tau_sequence, metric, metric_values, tau
 
 
-def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10.0, A=2.0):
+def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10.0, A=2.0, **kwargs):
 
     # Initalize vectors
     if isinstance(dimension_max, int):
@@ -247,7 +251,7 @@ def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10
     # Method
     method = method.lower()
     if method in ["afnn"]:
-        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=False)
+        E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, show=False, **kwargs)
         E1 = E[1:] / E[:-1]
         E2 = Es[1:] / Es[:-1]
         min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
@@ -255,7 +259,7 @@ def _complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", R=10
         return dimension_seq, optimize_indices, min_dimension
 
     if method in ["fnn"]:
-        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A)
+        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs)
         min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
         optimize_indices = [f1, f2, f3]
         return dimension_seq, optimize_indices, min_dimension

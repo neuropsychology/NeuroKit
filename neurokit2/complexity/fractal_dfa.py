@@ -365,7 +365,9 @@ def _slopes(windows, fluctuations, q):
     slopes = np.zeros(len(q))
     # Find slopes of each q-power
     for i in range(len(q)):
+        old_setting = np.seterr(divide="ignore", invalid="ignore")
         slopes[i] = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)[0]
+        np.seterr(**old_setting)
 
     return slopes
 
@@ -446,8 +448,11 @@ def _fractal_dfa_fluctuation(segments, trends, multifractal=False, q=2):
         var = np.var(detrended, axis=1)
         # obtain the fluctuation function, which is a function of the windows
         # and of q
+        # ignore division by 0 warning
+        old_setting = np.seterr(divide="ignore", invalid="ignore")
         fluctuation = \
             np.float_power(np.mean(np.float_power(var, q / 2), axis=1), 1 / q.T)
+        np.seterr(**old_setting)
 
     else:
         # Compute Root Mean Square (RMS)

@@ -2,36 +2,37 @@
 import datetime
 import platform
 
+import matplotlib
+
 # Dependencies
 import numpy as np
 import pandas as pd
 import scipy
 import sklearn
-import matplotlib
 
 # Export functions
+from .signal import *
+from .stats import *
+from .misc import *
 from .benchmark import *
-from .bio import *
-from .complexity import *
+from .epochs import *
+from .events import *
 from .data import *
 from .ecg import *
 from .eda import *
 from .eeg import *
 from .emg import *
 from .eog import *
-from .epochs import *
-from .events import *
-from .hrv import *
-from .misc import *
 from .ppg import *
 from .rsp import *
-from .signal import *
-from .stats import *
+from .hrv import *
 from .microstates import *
+from .bio import *
+from .complexity import *
 
 
 # Info
-__version__ = "0.1.4"
+__version__ = "0.1.4.1"
 
 
 # Maintainer info
