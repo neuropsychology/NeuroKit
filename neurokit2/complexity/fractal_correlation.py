@@ -89,7 +89,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     if show is True:
         _fractal_correlation_plot(r_vals, corr, d2)
 
-    return d2[0]
+    return {'CD': d2[0]}
 
 
 # =============================================================================

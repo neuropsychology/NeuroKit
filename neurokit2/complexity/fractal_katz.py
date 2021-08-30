@@ -49,4 +49,4 @@ def fractal_katz(signal):
 
     kfd = np.log10(length/a) / (np.log10(d/a))
 
-    return kfd
+    return {'KFD': kfd}

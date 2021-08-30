@@ -90,7 +90,8 @@ def fractal_higuchi(signal, kmax="default", show=False):
             ax_kmax = fig.add_subplot(spec[1, 0])
             _fractal_higuchi_optimal_k_plot(k_range, slope_values, k_max, ax=ax_kmax)
 
-    return slope
+    return {'HFD': slope,
+            'k_max': k_max}
 
 
 # =============================================================================

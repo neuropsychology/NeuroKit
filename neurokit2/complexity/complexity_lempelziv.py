@@ -84,7 +84,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     if normalize is True:
         complexity = _complexity_lempelziv_normalize(p_seq, complexity)
 
-    return complexity
+    return {'LZC': complexity}
 
 
 def _complexity_lempelziv_binarize(signal, threshold="median"):

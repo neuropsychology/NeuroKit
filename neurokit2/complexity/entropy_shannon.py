@@ -67,4 +67,4 @@ def entropy_shannon(signal):
         shannon_entropy += freq * np.log2(freq)
     shannon_entropy = -shannon_entropy
 
-    return shannon_entropy
+    return {'ShanEn': shannon_entropy}

@@ -104,6 +104,4 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
             else:
                 vector_similarity[i] = np.log(correction)
 
-        apen = -np.mean(vector_similarity)
-
-    return apen
+    return {'ApEn': -np.mean(vector_similarity)}

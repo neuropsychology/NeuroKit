@@ -96,7 +96,8 @@ def entropy_multiscale(
       anesthesia during surgery. Entropy, 14(6), 978-992.
 
     """
-    return _entropy_multiscale(
+
+    value = _entropy_multiscale(
         signal,
         scale=scale,
         dimension=dimension,
@@ -107,6 +108,18 @@ def entropy_multiscale(
         show=show,
         **kwargs
     )
+
+    if composite:
+        key = 'CMSE'
+    elif refined:
+        key = 'RCMSE'
+    else:
+        key = 'MSE'
+
+    if fuzzy:
+        key = 'Fuzzy' + key
+
+    return {key: value}
 
 
 # =============================================================================
