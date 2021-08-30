@@ -5,8 +5,8 @@ import pandas as pd
 import scipy.signal
 
 from ..epochs import epochs_create, epochs_to_df
-from ..signal import (signal_findpeaks, signal_formatpeaks, signal_resample,
-                      signal_smooth, signal_zerocrossings)
+from ..signal import (signal_findpeaks, signal_formatpeaks, signal_rate,
+                      signal_resample, signal_smooth, signal_zerocrossings)
 from ..stats import standardize
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
@@ -241,6 +241,9 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
 def _dwt_compensate_degree(sampling_rate):
     return int(np.log2(sampling_rate / 250))
 
+def _dwt_sanitize_duration(duration, rpeaks, sampling_rate):
+    average_rate = np.median(nk.signal_rate(peaks=rpeaks, sampling_rate=sr))
+    return np.round(duration * (60 / average_rate), 3)
 
 def _dwt_delineate_tp_peaks(
     ecg,
@@ -272,7 +275,7 @@ def _dwt_delineate_tp_peaks(
     p2r_duration : int
         Approximate duration from P peaks to R peaks in seconds.
     rt_duration : int
-        Approximate duration from R peaks to T peaks in secons.
+        Approximate duration from R peaks to T peaks in seconds.
     degree_tpeak : int
         Wavelet transform of scales 2**3.
     degree_tpeak : int
@@ -284,6 +287,9 @@ def _dwt_delineate_tp_peaks(
     """
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
     degree_add = _dwt_compensate_degree(sampling_rate)
+    # sanitize search duration by HR
+    p2r_duration = _dwt_sanitize_duration(p2r_duration, rpeaks, sampling_rate)
+    rt_duration = _dwt_sanitize_duration(rt_duration, rpeaks, sampling_rate)
 
     tpeaks = []
     for rpeak_ in rpeaks:
@@ -375,19 +381,22 @@ def _dwt_delineate_tp_onsets_offsets(
     peaks,
     dwtmatr,
     sampling_rate=250,
-    duration=0.3,
+    duration_onset=0.3,
     duration_offset=0.3,
     onset_weight=0.4,
     offset_weight=0.4,
     degree_onset=2,
     degree_offset=2,
 ):
+    # sanitize search duration by HR
+    duration_onset = _dwt_sanitize_duration(duration_onset, rpeaks, sampling_rate)
+    duration_offset = _dwt_sanitize_duration(duration_offset, rpeaks, sampling_rate)
     degree = _dwt_compensate_degree(sampling_rate)
     onsets = []
     offsets = []
     for i in range(len(peaks)):  # pylint: disable=C0200
         # look for onsets
-        srch_idx_start = peaks[i] - int(duration * sampling_rate)
+        srch_idx_start = peaks[i] - int(duration_onset * sampling_rate)
         srch_idx_end = peaks[i]
         if srch_idx_start is np.nan or srch_idx_end is np.nan:
             onsets.append(np.nan)
