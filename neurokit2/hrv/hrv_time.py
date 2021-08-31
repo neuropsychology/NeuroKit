@@ -107,7 +107,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         out["SDNNI" + str(i)] = _sdnni(rri, sampling_rate, window=i)
 
     # Difference-based
-    out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
+    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri ** 2))
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
     # Normalized
