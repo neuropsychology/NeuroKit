@@ -5,11 +5,12 @@ import pandas as pd
 import scipy.signal
 
 from ..epochs import epochs_create, epochs_to_df
-from ..signal import (signal_findpeaks, signal_formatpeaks, signal_rate,
-                      signal_resample, signal_smooth, signal_zerocrossings)
+from ..signal import (signal_findpeaks, signal_formatpeaks, signal_resample,
+                      signal_smooth, signal_zerocrossings, signal_rate)
 from ..stats import standardize
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
+from ..events import events_plot
 
 
 def ecg_delineate(
@@ -219,9 +220,9 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
     qrs_onsets, qrs_offsets = _dwt_delineate_qrs_bounds(
         rpeaks_resampled, dwtmatr, ppeaks, tpeaks, sampling_rate=analysis_sampling_rate
     )
-    ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(ppeaks, rpeaks, dwtmatr, sampling_rate=analysis_sampling_rate)
+    ponsets, poffsets = _dwt_delineate_tp_onsets_offsets(ppeaks, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate)
     tonsets, toffsets = _dwt_delineate_tp_onsets_offsets(
-        tpeaks, rpeaks, dwtmatr, sampling_rate=analysis_sampling_rate, onset_weight=0.6, duration_onset=0.6
+        tpeaks, rpeaks_resampled, dwtmatr, sampling_rate=analysis_sampling_rate, onset_weight=0.6, duration_onset=0.6
     )
 
     return dict(
@@ -237,13 +238,15 @@ def _dwt_ecg_delineator(ecg, rpeaks, sampling_rate, analysis_sampling_rate=2000)
         ECG_T_Offsets=_dwt_resample_points(toffsets, analysis_sampling_rate, desired_sampling_rate=sampling_rate),
     )
 
-
-def _dwt_compensate_degree(sampling_rate):
-    return int(np.log2(sampling_rate / 250))
-
-def _dwt_sanitize_duration(duration, rpeaks, sampling_rate):
+def _dwt_adjust_parameters(rpeaks, sampling_rate, duration=None, target=None):
     average_rate = np.median(signal_rate(peaks=rpeaks, sampling_rate=sampling_rate))
-    return np.round(duration * (60 / average_rate), 3)
+    if target == "degree":
+        # adjust defree of dwt by sampling_rate and HR
+        scale_factor = (sampling_rate / 250) / (average_rate / 60)
+        return int(np.log2(scale_factor))
+    elif target == "duration":
+        # adjust duration of search by HR
+        return np.round(duration * (60 / average_rate), 3)
 
 def _dwt_delineate_tp_peaks(
     ecg,
@@ -275,7 +278,7 @@ def _dwt_delineate_tp_peaks(
     p2r_duration : int
         Approximate duration from P peaks to R peaks in seconds.
     rt_duration : int
-        Approximate duration from R peaks to T peaks in seconds.
+        Approximate duration from R peaks to T peaks in secons.
     degree_tpeak : int
         Wavelet transform of scales 2**3.
     degree_tpeak : int
@@ -286,10 +289,12 @@ def _dwt_delineate_tp_peaks(
         Epsilon of RMS value of wavelet transform. Appendix (A.4).
     """
     srch_bndry = int(0.5 * qrs_width * sampling_rate)
-    degree_add = _dwt_compensate_degree(sampling_rate)
+    degree_add = _dwt_adjust_parameters(rpeaks, sampling_rate, target='degree')
     # sanitize search duration by HR
-    p2r_duration = _dwt_sanitize_duration(p2r_duration, rpeaks, sampling_rate)
-    rt_duration = _dwt_sanitize_duration(rt_duration, rpeaks, sampling_rate)
+    p2r_duration = _dwt_adjust_parameters(rpeaks, sampling_rate,
+                                          duration=p2r_duration, target='duration')
+    rt_duration = _dwt_adjust_parameters(rpeaks, sampling_rate,
+                                         duration=rt_duration, target='duration')
 
     tpeaks = []
     for rpeak_ in rpeaks:
@@ -390,9 +395,11 @@ def _dwt_delineate_tp_onsets_offsets(
     degree_offset=2,
 ):
     # sanitize search duration by HR
-    duration_onset = _dwt_sanitize_duration(duration_onset, rpeaks, sampling_rate)
-    duration_offset = _dwt_sanitize_duration(duration_offset, rpeaks, sampling_rate)
-    degree = _dwt_compensate_degree(sampling_rate)
+    duration_onset = _dwt_adjust_parameters(rpeaks, sampling_rate,
+                                            duration=duration_onset, target='duration')
+    duration_offset = _dwt_adjust_parameters(rpeaks, sampling_rate,
+                                             duration=duration_offset, target='duration')
+    degree = _dwt_adjust_parameters(rpeaks, sampling_rate, target='degree')
     onsets = []
     offsets = []
     for i in range(len(peaks)):  # pylint: disable=C0200
@@ -448,7 +455,7 @@ def _dwt_delineate_tp_onsets_offsets(
 
 
 def _dwt_delineate_qrs_bounds(rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250):
-    degree = int(np.log2(sampling_rate / 250))
+    degree = _dwt_adjust_parameters(rpeaks, sampling_rate, target='degree')
     onsets = []
     for i in range(len(rpeaks)):  # pylint: disable=C0200
         # look for onsets
@@ -469,11 +476,12 @@ def _dwt_delineate_qrs_bounds(rpeaks, dwtmatr, ppeaks, tpeaks, sampling_rate=250
         candidate_onsets = np.where(-dwt_local[: onset_slope_peaks[-1]] < epsilon_onset)[0]
         onsets.append(candidate_onsets[-1] + srch_idx_start)
 
-        # # only for debugging
-        # events_plot(candidate_onsets, -dwt_local)
-        # plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
-        # plt.legend()
-        # plt.show()
+        # only for debugging
+#        import neurokit as nk
+#        events_plot(candidate_onsets, -dwt_local)
+#        plt.plot(ecg[srch_idx_start: srch_idx_end], '--', label='ecg')
+#        plt.legend()
+#        plt.show()
 
     offsets = []
     for i in range(len(rpeaks)):  # pylint: disable=C0200
