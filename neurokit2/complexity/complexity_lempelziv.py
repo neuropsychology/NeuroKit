@@ -22,8 +22,11 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 
     Returns
     ----------
-    float
+    lzc : float
         Lempel Ziv Complexity.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute Lempel Ziv Complexity.
 
     Examples
     ----------
@@ -31,7 +34,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=10)
     >>>
-    >>> lzc = nk.complexity_lempelziv(signal, threshold="median")
+    >>> lzc, parameters = nk.complexity_lempelziv(signal, threshold="median")
     >>> lzc #doctest: +SKIP
 
     References
@@ -84,7 +87,10 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     if normalize is True:
         complexity = _complexity_lempelziv_normalize(p_seq, complexity)
 
-    return {'LZC': complexity}
+    parameters = {'threshold': threshold,
+                  'normalize': normalize}
+
+    return complexity, parameters
 
 
 def _complexity_lempelziv_binarize(signal, threshold="median"):

@@ -50,10 +50,13 @@ def entropy_multiscale(
 
     Returns
     ----------
-    float
+    mse : float
         The point-estimate of multiscale entropy (MSE) as a float value corresponding to the area under
         the MSE values curvee, which is essentially the sum of sample entropy values over the range of
         scale factors.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute multiscale entropy.
 
     See Also
     --------
@@ -64,11 +67,11 @@ def entropy_multiscale(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy1 = nk.entropy_multiscale(signal, show=True)
+    >>> entropy1, parameters = nk.entropy_multiscale(signal, show=True)
     >>> entropy1 #doctest: +SKIP
-    >>> entropy2 = nk.entropy_multiscale(signal, show=True, composite=True)
+    >>> entropy2, parameters = nk.entropy_multiscale(signal, show=True, composite=True)
     >>> entropy2 #doctest: +SKIP
-    >>> entropy3 = nk.entropy_multiscale(signal, show=True, refined=True)
+    >>> entropy3, parameters = nk.entropy_multiscale(signal, show=True, refined=True)
     >>> entropy3 #doctest: +SKIP
 
 
@@ -97,7 +100,7 @@ def entropy_multiscale(
 
     """
 
-    value = _entropy_multiscale(
+    mse = _entropy_multiscale(
         signal,
         scale=scale,
         dimension=dimension,
@@ -119,7 +122,12 @@ def entropy_multiscale(
     if fuzzy:
         key = 'Fuzzy' + key
 
-    return {key: value}
+    parameters = {'tolerance': _get_r(signal, r=r),
+                  'embedding_dimension': dimension,
+                  'scale': _get_scale(signal, scale=scale, dimension=dimension),
+                  'version': key}
+
+    return mse, parameters
 
 
 # =============================================================================
@@ -169,7 +177,7 @@ def _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs):
     if len(y) < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
         return np.nan
 
-    return entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)["SampEn"]
+    return entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)[0]
 
 
 def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
@@ -179,7 +187,7 @@ def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
 
     mse_y = np.full(len(y), np.nan)
     for i in np.arange(len(y)):
-        mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)["SampEn"]
+        mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)[0]
 
     return np.mean(mse_y)
 
