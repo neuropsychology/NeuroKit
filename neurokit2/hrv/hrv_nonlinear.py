@@ -256,18 +256,18 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     # Complexity
     r = 0.2 * np.std(rri, ddof=1)
-    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=r)
-    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=r)
-    out["ShanEn"] = entropy_shannon(rri)
-    out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, r=r)
-    out["MSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False)
-    out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)
-    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)
+    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=r)[0]
+    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=r)[0]
+    out["ShanEn"] = entropy_shannon(rri)[0]
+    out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, r=r)[0]
+    out["MSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False)[0]
+    out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)[0]
+    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)[0]
 
-    out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)
-    out["HFD"] = fractal_higuchi(rri, **kwargs)
-    out["KFD"] = fractal_katz(rri)
-    out["LZC"] = complexity_lempelziv(rri, **kwargs)
+    out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)[0]
+    out["HFD"] = fractal_higuchi(rri, **kwargs)[0]
+    out["KFD"] = fractal_katz(rri)[0]
+    out["LZC"] = complexity_lempelziv(rri, **kwargs)[0]
 
     if show:
         _hrv_nonlinear_show(rri, out)
@@ -466,12 +466,12 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     # Compute DFA alpha1
     short_window = np.linspace(dfa_windows[0][0], dfa_windows[0][1], n_windows_short).astype(int)
     # For monofractal
-    out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)['slopes'][0]
+    out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)[0]
     # For multifractal
     mdfa_alpha1 = fractal_dfa(rri,
                               multifractal=True,
                               q=np.arange(-5, 6),
-                              windows=short_window, **kwargs)
+                              windows=short_window, **kwargs)[1]
     out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
     out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
     out["DFA_alpha1_DimRange"] = mdfa_alpha1['DimRange']
@@ -491,12 +491,12 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     else:
         long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
         # For monofractal
-        out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)['slopes'][0]
+        out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)[0]
         # For multifractal
         mdfa_alpha2 = fractal_dfa(rri,
                                   multifractal=True,
                                   q=np.arange(-5, 6),
-                                  windows=long_window, **kwargs)
+                                  windows=long_window, **kwargs)[1]
         out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
         out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
         out["DFA_alpha2_DimRange"] = mdfa_alpha2['DimRange']

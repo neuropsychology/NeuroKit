@@ -45,18 +45,20 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
     Returns
     ----------
-    float
+    apen : float
         The approximate entropy as float value.
-
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute approximate entropy.
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy1 = nk.entropy_approximate(signal)
+    >>> entropy1, parameters = nk.entropy_approximate(signal)
     >>> entropy1 #doctest: +SKIP
-    >>> entropy2 = nk.entropy_approximate(signal, corrected=True)
+    >>> entropy2, parameters = nk.entropy_approximate(signal, corrected=True)
     >>> entropy2 #doctest: +SKIP
 
 
@@ -106,4 +108,9 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
         apen = -np.mean(vector_similarity)
 
-    return apen
+    parameters = {'tolerance': r,
+                  'embedding_dimension': dimension,
+                  'tau': delay,
+                  'corrected': corrected}
+
+    return apen, parameters

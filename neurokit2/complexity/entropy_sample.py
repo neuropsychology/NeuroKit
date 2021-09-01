@@ -34,19 +34,28 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
 
     Returns
     ----------
-    float
+    sampen : float
         The sample entropy as float value.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute sample entropy.
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy = nk.entropy_sample(signal)
+    >>> entropy, parameters = nk.entropy_sample(signal)
     >>> entropy #doctest: +SKIP
 
     """
     r = _get_r(signal, r=r, dimension=dimension)
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, **kwargs)
 
-    return _phi_divide(phi)
+    sampen = _phi_divide(phi)
+
+    parameters = {'tolerance': r,
+                  'embedding_dimension': dimension,
+                  'tau': delay}
+
+    return sampen, parameters

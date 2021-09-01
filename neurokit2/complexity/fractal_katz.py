@@ -19,8 +19,11 @@ def fractal_katz(signal):
 
     Returns
     -------
-    float
+    kfd : float
         Katz's fractal dimension.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute Katz's fractal dimension (empty for now).
 
     Examples
     ----------
@@ -49,4 +52,6 @@ def fractal_katz(signal):
 
     kfd = np.log10(length/a) / (np.log10(d/a))
 
-    return kfd
+    parameters = {}
+
+    return kfd, parameters
