@@ -24,22 +24,22 @@ def test_complexity_sanity():
     mdfa_q = [-5, -3, -1, 1, 3, 5]
 
     # Entropy
-    assert np.allclose(nk.entropy_fuzzy(signal)["FuzzyEn"], nk.entropy_sample(signal, fuzzy=True)["SampEn"], atol=0.000001)
+    assert np.allclose(nk.entropy_fuzzy(signal)[0], nk.entropy_sample(signal, fuzzy=True)[0], atol=0.000001)
 
     # Fractal
-    fractal_dfa = nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]))
-    assert fractal_dfa['fluctuations'].shape == (4, 1)
-    assert np.allclose(fractal_dfa["slopes"][0], 2.10090484, atol=0.000001)
+    fractal_dfa, parameters = nk.fractal_dfa(signal, windows=np.array([4, 8, 12, 20]))
+    assert parameters['fluctuations'].shape == (4, 1)
+    assert np.allclose(fractal_dfa, 2.10090484, atol=0.000001)
 
-    fractal_mdfa = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
-    assert fractal_mdfa['fluctuations'].shape == (70, len(mdfa_q))
-    assert np.allclose(fractal_mdfa["DimMean"], 0.6412650812085934, atol=0.000001)
-    assert np.allclose(fractal_mdfa["DimRange"], 1.1105927013188868, atol=0.000001)
-    assert np.allclose(fractal_mdfa["ExpMean"], 2.350615727142904, atol=0.000001)
-    assert np.allclose(fractal_mdfa["ExpRange"], 0.9937858280904406, atol=0.000001)
+    fractal_mdfa, parameters = nk.fractal_dfa(signal, multifractal=True, q=mdfa_q)
+    assert parameters['fluctuations'].shape == (70, len(mdfa_q))
+    assert np.allclose(parameters["DimMean"], 0.6412650812085934, atol=0.000001)
+    assert np.allclose(parameters["DimRange"], 1.1105927013188868, atol=0.000001)
+    assert np.allclose(parameters["ExpMean"], 2.350615727142904, atol=0.000001)
+    assert np.allclose(parameters["ExpRange"], 0.9937858280904406, atol=0.000001)
 
-    assert np.allclose(nk.fractal_correlation(signal)["CD"], 0.7884473170763334, atol=0.000001)
-    assert np.allclose(nk.fractal_correlation(signal, r="nolds")["CD"], nolds.corr_dim(signal, 2), atol=0.0001)
+    assert np.allclose(nk.fractal_correlation(signal)[0], 0.7884473170763334, atol=0.000001)
+    assert np.allclose(nk.fractal_correlation(signal, r="nolds")[0], nolds.corr_dim(signal, 2), atol=0.0001)
 
 
 # =============================================================================
@@ -158,7 +158,7 @@ def test_complexity_vs_Python():
             p_seq[index] = 0
         else:
             p_seq[index] = 1
-    p_seq = p_seq.astype(int)
+    p_seq = p_seq.astype(int).astype(str)
     p_seq = "".join(p_seq)
     
     assert np.allclose(
