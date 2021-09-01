@@ -32,6 +32,7 @@ test_requirements = requirements + [
     "bioread",
     "mne",
     "pyentrp",
+    "antropy",
     "nolds",
     "biosppy==0.6.1",
     "cvxopt",
