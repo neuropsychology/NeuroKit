@@ -2,6 +2,25 @@ News
 =====
 
 
+0.1.5
+-------------------
+
+Breaking Changes
++++++++++++++++++
+
+* `complexity_lempelziv()`, `fractal_higuchi()`, `fractal_katz()`, `fractal_correlation()`, `fractal_dfa()`, `entropy_multiscale()`, `entropy_shannon()`, `entropy_approximate()`, `entropy_fuzzy()`, `entropy_sample()` now return a tuple consisting of the complexity index, and a dictionary comprising of the different parameters specific to the measure. For `fractal_katz()` and `entropy_shannon()`, the parameters dictionary is empty.
+
+
+New Features
++++++++++++++
+
+* None
+
+Fixes
++++++++++++++
+
+* None
+
 
 0.1.4.1
 -------------------
