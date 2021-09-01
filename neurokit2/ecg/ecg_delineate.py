@@ -10,7 +10,6 @@ from ..signal import (signal_findpeaks, signal_formatpeaks, signal_resample,
 from ..stats import standardize
 from .ecg_peaks import ecg_peaks
 from .ecg_segment import ecg_segment
-from ..events import events_plot
 
 
 def ecg_delineate(
