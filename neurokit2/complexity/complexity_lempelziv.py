@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
 
 def complexity_lempelziv(signal, threshold="median", normalize=True):
@@ -36,6 +37,10 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     >>>
     >>> lzc, parameters = nk.complexity_lempelziv(signal, threshold="median")
     >>> lzc #doctest: +SKIP
+    >>>
+    >>> eeg = nk.mne_to_df(nk.mne_data("filt-0-40_raw"))
+    >>> data = eeg[['EEG 001', 'EEG 002', 'EEG 003']]
+    >>> lzc, parameters = nk.complexity_lempelziv(data, threshold="median")
 
     References
     ----------
@@ -53,6 +58,36 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 
     - https://en.wikipedia.org/wiki/Lempel-Ziv_complexity
     """
+
+    # sanitize input
+    if signal.ndim > 1:
+        # n-dimensional    
+        if isinstance(signal, pd.DataFrame):
+            colnames = list(signal.columns)
+        elif isinstance(signal, np.ndarray):
+            # signal.shape has to be in (len(channels), len(samples)) format
+            colnames = np.arange(1, signal.shape[0] + 1).astype(str)  # manually generate colnames
+        out = {}
+        lzc_values = []
+        for i, colname in enumerate(signal):
+            channel = np.array(signal[colname])
+            lzc = _complexity_lempelziv(channel, threshold=threshold, normalize=normalize)
+            out.update({colname : lzc})
+            lzc_values.append(lzc)
+        out['Mean'] = np.mean(lzc_values)
+        out['SD'] = np.std(lzc_values)
+
+    else:
+        # if one signal time series        
+        out = _complexity_lempelziv(signal, threshold=threshold, normalize=normalize)
+
+    parameters = {'threshold': threshold,
+                  'normalize': normalize}
+
+    return out, parameters
+
+
+def _complexity_lempelziv(signal, threshold="median", normalize=True):
 
     # convert signal into binary sequence
     p_seq = _complexity_lempelziv_binarize(signal, threshold=threshold)
@@ -87,10 +122,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     if normalize is True:
         complexity = _complexity_lempelziv_normalize(p_seq, complexity)
 
-    parameters = {'threshold': threshold,
-                  'normalize': normalize}
-
-    return complexity, parameters
+    return complexity
 
 
 def _complexity_lempelziv_binarize(signal, threshold="median"):
