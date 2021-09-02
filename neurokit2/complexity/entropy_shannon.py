@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
 
 def entropy_shannon(signal):
@@ -21,10 +22,12 @@ def entropy_shannon(signal):
     Returns
     ----------
     shanen : float
-        The Shannon entropy as float value.
+        The Shannon entropy of the single time series, or the mean ShEn
+        across the channels of an n-dimensional time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Shannon entropy (empty for now).
+        to compute Shannon entropy (empty for now) and the individual ShEn values of each
+        channel if an n-dimensional time series is passed.
 
     See Also
     --------
@@ -48,6 +51,36 @@ def entropy_shannon(signal):
     - `nolds` <https://github.com/CSchoel/nolds>`_
 
     """
+    # prepare parameters
+    parameters = {}
+
+    # sanitize input
+    if signal.ndim > 1:
+        # n-dimensional
+        if not isinstance(signal, (pd.DataFrame, np.ndarray)):
+            raise ValueError(
+            "NeuroKit error: entropy_shannon(): your n-dimensional data has to be in the",
+            " form of a pandas DataFrame or a numpy ndarray.")
+        if isinstance(signal, np.ndarray):
+            # signal.shape has to be in (len(channels), len(samples)) format
+            signal = pd.DataFrame(signal).transpose()
+
+        shen_values = []
+        for i, colname in enumerate(signal):
+            channel = np.array(signal[colname])
+            shen = _entropy_shannon(channel)
+            shen_values.append(shen)
+        parameters['values'] = shen_values
+        out = np.mean(shen_values)
+
+    else:
+        # if one signal time series        
+        out = _entropy_shannon(signal)
+
+    return out, parameters
+
+def _entropy_shannon(signal):
+
     # Check if string
     if not isinstance(signal, str):
         signal = list(signal)
@@ -70,6 +103,4 @@ def entropy_shannon(signal):
         shannon_entropy += freq * np.log2(freq)
     shannon_entropy = -shannon_entropy
 
-    parameters = {}
-
-    return shannon_entropy, parameters
+    return shannon_entropy

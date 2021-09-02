@@ -26,11 +26,12 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     Returns
     ----------
     lzc : float
-        Lempel Ziv Complexity (LZC) of a single time series, or the mean LZC
+        Lempel Ziv Complexity (LZC) of the single time series, or the mean LZC
         across the channels of an n-dimensional time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Lempel Ziv Complexity.
+        to compute Lempel Ziv Complexity, as well as individual LZC values of each
+        channel if an n-dimensional time series is passed.
 
     Examples
     ----------
@@ -67,21 +68,22 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 
     # sanitize input
     if signal.ndim > 1:
-        # n-dimensional    
-        if isinstance(signal, pd.DataFrame):
-            colnames = list(signal.columns)
-        elif isinstance(signal, np.ndarray):
+        # n-dimensional
+        if not isinstance(signal, (pd.DataFrame, np.ndarray)):
+            raise ValueError(
+            "NeuroKit error: complexity_lempelziv(): your n-dimensional data has to be in the form of a pandas DataFrame or a numpy ndarray.")
+        if isinstance(signal, np.ndarray):
             # signal.shape has to be in (len(channels), len(samples)) format
-            colnames = np.arange(1, signal.shape[0] + 1).astype(str)  # manually generate colnames
+            signal = pd.DataFrame(signal).transpose()
+
         lzc_values = []
         for i, colname in enumerate(signal):
             channel = np.array(signal[colname])
             lzc = _complexity_lempelziv(channel, threshold=threshold, normalize=normalize)
             lzc_values.append(lzc)
-        parameters['channels'] = colnames
-        parameters['LZC_values'] = lzc_values 
-        parameters['LZC_SD'] = np.std(lzc_values)
+        parameters['values'] = lzc_values 
         out = np.mean(lzc_values)
+
     else:
         # if one signal time series        
         out = _complexity_lempelziv(signal, threshold=threshold, normalize=normalize)
