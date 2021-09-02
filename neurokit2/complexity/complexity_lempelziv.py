@@ -12,8 +12,10 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
+    signal : Union[list, np.array, pd.Series, np.ndarray, pd.DataFrame]
+        The signal (i.e., a time series) in the form of a vector of values or in
+        the form of an n-dimensional array (with a shape of len(channels) x len(samples))
+        or dataframe.
     threshold : str
         Method for partitioning the signal into a binary sequence.
         Current options are "median" (default) or "mean", where each data point is assigned 0
@@ -24,7 +26,8 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     Returns
     ----------
     lzc : float
-        Lempel Ziv Complexity.
+        Lempel Ziv Complexity (LZC) of a single time series, or the mean LZC
+        across the channels of an n-dimensional time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
         to compute Lempel Ziv Complexity.
@@ -58,6 +61,9 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 
     - https://en.wikipedia.org/wiki/Lempel-Ziv_complexity
     """
+    # prepare parameters
+    parameters = {'threshold': threshold,
+                  'normalize': normalize}
 
     # sanitize input
     if signal.ndim > 1:
@@ -67,22 +73,18 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
         elif isinstance(signal, np.ndarray):
             # signal.shape has to be in (len(channels), len(samples)) format
             colnames = np.arange(1, signal.shape[0] + 1).astype(str)  # manually generate colnames
-        out = {}
         lzc_values = []
         for i, colname in enumerate(signal):
             channel = np.array(signal[colname])
             lzc = _complexity_lempelziv(channel, threshold=threshold, normalize=normalize)
-            out.update({colname : lzc})
             lzc_values.append(lzc)
-        out['Mean'] = np.mean(lzc_values)
-        out['SD'] = np.std(lzc_values)
-
+        parameters['channels'] = colnames
+        parameters['LZC_values'] = lzc_values 
+        parameters['LZC_SD'] = np.std(lzc_values)
+        out = np.mean(lzc_values)
     else:
         # if one signal time series        
         out = _complexity_lempelziv(signal, threshold=threshold, normalize=normalize)
-
-    parameters = {'threshold': threshold,
-                  'normalize': normalize}
 
     return out, parameters
 
