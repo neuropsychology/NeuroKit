@@ -110,7 +110,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
     else:
         # if one signal time series
-        apen, parameters["tolerance"] = _entropy_approximate(channel, delay=delay,
+        out, parameters["tolerance"] = _entropy_approximate(signal, delay=delay,
                                                              dimension=dimension, r=r,
                                                              corrected=corrected, **kwargs)
 

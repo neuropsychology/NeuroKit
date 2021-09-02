@@ -85,7 +85,7 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
 
     else:
         # if one signal time series
-        fuzzyen, parameters['tolerance'] = _entropy_fuzzy(channel, delay=delay, dimension=dimension,
+        out, parameters['tolerance'] = _entropy_fuzzy(signal, delay=delay, dimension=dimension,
                                                           r=r, **kwargs)
 
     return out, parameters
