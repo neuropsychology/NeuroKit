@@ -19,7 +19,7 @@ New Features
 Fixes
 +++++++++++++
 
-* None
+* Ensure detected offset in `emg_activation()` is not beyond signal length
 
 
 0.1.4.1
