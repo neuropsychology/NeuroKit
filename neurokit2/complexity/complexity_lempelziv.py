@@ -71,7 +71,8 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
         # n-dimensional
         if not isinstance(signal, (pd.DataFrame, np.ndarray)):
             raise ValueError(
-            "NeuroKit error: complexity_lempelziv(): your n-dimensional data has to be in the form of a pandas DataFrame or a numpy ndarray.")
+            "NeuroKit error: complexity_lempelziv(): your n-dimensional data has to ",
+            "be in the form of a pandas DataFrame or a numpy ndarray.")
         if isinstance(signal, np.ndarray):
             # signal.shape has to be in (len(channels), len(samples)) format
             signal = pd.DataFrame(signal).transpose()

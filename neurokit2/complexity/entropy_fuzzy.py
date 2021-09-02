@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import numpy as np
+import pandas as pd
 
 from .utils import _get_r, _phi, _phi_divide
 
@@ -12,8 +14,10 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
+    signal : Union[list, np.array, pd.Series, np.ndarray, pd.DataFrame]
+        The signal (i.e., a time series) in the form of a vector of values or in
+        the form of an n-dimensional array (with a shape of len(channels) x len(samples))
+        or dataframe.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
@@ -31,10 +35,12 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     Returns
     ----------
     fuzzyen : float
-        The fuzzy entropy as float value.
+        The fuzzy entropy of the single time series or the mean FuzzyEn
+        across the channels of an n-dimensional time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
-        to compute fuzzy entropy.
+        to compute fuzzy entropy and the individual FuzzyEn values of each
+        channel if an n-dimensional time series is passed.
 
     See Also
     --------
@@ -49,13 +55,47 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     >>> entropy #doctest: +SKIP
 
     """
+
+    # Prepare parameters
+    parameters = {'embedding_dimension': dimension,
+                  'tau': delay}
+
+    # sanitize input
+    if signal.ndim > 1:
+        # n-dimensional
+        if not isinstance(signal, (pd.DataFrame, np.ndarray)):
+            raise ValueError(
+            "NeuroKit error: entropy_fuzzy(): your n-dimensional data has to be in the",
+            " form of a pandas DataFrame or a numpy ndarray.")
+        if isinstance(signal, np.ndarray):
+            # signal.shape has to be in (len(channels), len(samples)) format
+            signal = pd.DataFrame(signal).transpose()
+
+        fuzzyen_values = []
+        tolerance_values = []
+        for i, colname in enumerate(signal):
+            channel = np.array(signal[colname])
+            fuzzyen, tolerance = _entropy_fuzzy(channel, delay=delay, dimension=dimension,
+                                                r=r, **kwargs)
+            fuzzyen_values.append(fuzzyen)
+            tolerance_values.append(tolerance)
+        parameters['values'] = fuzzyen_values
+        parameters['tolerance'] = tolerance_values
+        out = np.mean(fuzzyen_values)
+
+    else:
+        # if one signal time series
+        fuzzyen, parameters['tolerance'] = _entropy_fuzzy(channel, delay=delay, dimension=dimension,
+                                                          r=r, **kwargs)
+
+    return out, parameters
+
+
+def _entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
+
     r = _get_r(signal, r=r, dimension=dimension)
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, fuzzy=True, **kwargs)
 
     fuzzyen =  _phi_divide(phi)
 
-    parameters = {'tolerance': r,
-                  'embedding_dimension': dimension,
-                  'tau': delay}
-
-    return fuzzyen, parameters
+    return fuzzyen, r

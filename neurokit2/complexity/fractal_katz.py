@@ -23,7 +23,8 @@ def fractal_katz(signal):
     Returns
     -------
     kfd : float
-        Katz's fractal dimension of the single time series, or the mean KFD across the channels of an n-dimensional time series.
+        Katz's fractal dimension of the single time series, or the mean KFD across the
+        channels of an n-dimensional time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
         to compute Katz's fractal dimension and the individual KFD values of each

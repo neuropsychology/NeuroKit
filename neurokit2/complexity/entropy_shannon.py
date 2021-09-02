@@ -26,7 +26,7 @@ def entropy_shannon(signal):
         across the channels of an n-dimensional time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Shannon entropy (empty for now) and the individual ShEn values of each
+        to compute Shannon entropy and the individual ShEn values of each
         channel if an n-dimensional time series is passed.
 
     See Also
@@ -78,6 +78,7 @@ def entropy_shannon(signal):
         out = _entropy_shannon(signal)
 
     return out, parameters
+
 
 def _entropy_shannon(signal):
 
