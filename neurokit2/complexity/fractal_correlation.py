@@ -17,8 +17,10 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
+    signal : Union[list, np.array, pd.Series, np.ndarray, pd.DataFrame]
+        The signal (i.e., a time series) in the form of a vector of values or in
+        the form of an n-dimensional array (with a shape of len(channels) x len(samples))
+        or dataframe.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
@@ -37,10 +39,12 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     Returns
     ----------
     cd : float
-        The correlation dimension.
+        The correlation dimension of the single time series or the mean ApEn
+        across the channels of an n-dimensional time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
-        to compute the correlation dimension.
+        to compute the correlation dimension and the individual CD values of each
+        channel if an n-dimensional time series is passed.
 
     Examples
     ----------
@@ -79,7 +83,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     parameters = {'embedding_dimension': dimension,
                   'tau': delay}
 
-    # sanitize input
+    # Sanitize (formatting done in _fractal_correlation)
     if signal.ndim > 1:
         # n-dimensional
         if not isinstance(signal, (pd.DataFrame, np.ndarray)):
@@ -90,47 +94,65 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
             # signal.shape has to be in (len(channels), len(samples)) format
             signal = pd.DataFrame(signal).transpose()
 
-        cd_values = []
-        rval_values = []
-        for i, colname in enumerate(signal):
-            channel = np.array(signal[colname])
-            # compute
-            cd, r_vals = _fractal_correlation(channel, delay=delay, dimension=dimension, r=r, show=False)
-            cd_values.append(cd)
-            rval_values.append(r_vals)
-        parameters['values'] = cd_values
-        parameters['radiuses'] = rval_values
-        out = np.mean(cd_values)
+    out, parameters['radiuses'] = _fractal_correlation(signal, delay=delay,
+                                                       dimension=dimension, r=r, show=show)
 
-    else:
-        # if one signal time series
-        out, parameters['radiuses'] = _fractal_correlation(signal, delay=delay,
-                                                           dimension=dimension, r=r, show=show)
+    if not isinstance(out, (float, int)):
+        parameters['values'] = out
+        out = np.mean(out)  # for n-dim signal
 
     return out, parameters
 
 
-def _fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
+def _fractal_correlation(signal, delay=1, dimension=2, r=64, show=True):
 
-    embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
-    dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
+    if signal.ndim > 1:
+        # n-dimensional
+        corr = []
+        r_vals = []
+        cd = []
+        for index, colname in enumerate(signal):
+            channel = np.array(signal[colname])
+            embedded = complexity_embedding(channel, delay=delay, dimension=dimension)
+            dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
+            r_val = _fractal_correlation_get_r(r, channel, dist)            
+            r_val, c = _fractal_correlation_nolds(channel, r_val, dist)
+            r_vals.append(r_val)
+            corr.append(c)
+        
+            # Compute trend
+            if len(corr) == 0:
+                cd.append(np.nan)
+            else:
+                fit = np.polyfit(np.log2(r_val), np.log2(c), 1)
+                cd.append(fit)
 
-    r_vals = _fractal_correlation_get_r(r, signal, dist)
-    
-    r_vals, corr = _fractal_correlation_nolds(signal, r_vals, dist)
-    # Corr_Dim method: https://github.com/jcvasquezc/Corr_Dim
-    # r_vals, corr = _fractal_correlation_Corr_Dim(embedded, r_vals, dist)
+        if show is True:
+            _fractal_correlation_plot(r_vals, corr, cd, signal)
 
-    # Compute trend
-    if len(corr) == 0:
-        return np.nan
+        return [i[0] for i in cd], r_vals
+
     else:
-        cd = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
+        # if one signal time series    
+        embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
+        dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
+        r_vals = _fractal_correlation_get_r(r, signal, dist)
+    
+        r_vals, corr = _fractal_correlation_nolds(signal, r_vals, dist)
+        # Corr_Dim method: https://github.com/jcvasquezc/Corr_Dim
+        # r_vals, corr = _fractal_correlation_Corr_Dim(embedded, r_vals, dist)
 
-    if show is True:
-        _fractal_correlation_plot(r_vals, corr, cd)
+        # Compute trend
+        if len(corr) == 0:
+            return np.nan
+        else:
+            cd = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
 
-    return cd[0], r_vals
+        if show is True:
+            _fractal_correlation_plot(r_vals, corr, cd, signal)
+
+        return cd[0], r_vals
+
 
 # =============================================================================
 # Methods
@@ -209,12 +231,26 @@ def _fractal_correlation_get_r(r, signal, dist):
     return r_vals
 
 
-def _fractal_correlation_plot(r_vals, corr, d2):
-    fit = 2 ** np.polyval(d2, np.log2(r_vals))
-    plt.loglog(r_vals, corr, "bo")
-    plt.loglog(r_vals, fit, "r", label=r"$D2$ = %0.3f" % d2[0])
-    plt.title("Correlation Dimension")
+def _fractal_correlation_plot(r_vals, corr, d2, signal):
+
+    # Initiate plot
+    fig = plt.figure(constrained_layout=False)
+    fig.suptitle("Correlation Dimension")
     plt.xlabel(r"$\log_{2}$(r)")
     plt.ylabel(r"$\log_{2}$(c)")
-    plt.legend()
-    plt.show()
+        
+    if signal.ndim > 1:
+        # Plot overlay for n-dim signal
+        colors = plt.cm.tab20b(np.linspace(0, 1, len(r_vals)))
+        for r, c, d, index in zip(r_vals, corr, d2, range(len(d2))):
+            fit = 2 ** np.polyval(d, np.log2(r))
+            plt.loglog(r, c, "bo", color=colors[index])
+            plt.loglog(r, fit, "r", label="{}".format(signal.columns[index]) + r" $D2$ = %0.3f" % d[0], color=colors[index])
+            plt.legend(loc="lower right")
+    else:
+        fit = 2 ** np.polyval(d2, np.log2(r_vals))
+        plt.loglog(r_vals, corr, "bo")
+        plt.loglog(r_vals, fit, "r", label=r"$D2$ = %0.3f" % d2[0])
+        plt.legend(loc="lower right")
+
+    return fig

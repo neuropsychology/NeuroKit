@@ -155,10 +155,10 @@ def _entropy_multiscale(
         # n-dimensional
         out = []
         for index, colname in enumerate(signal):
+            channel = np.array(signal[colname])
             # Initalize mse vector
             mse = np.full(len(scale_factors), np.nan)
             for i, tau in enumerate(scale_factors):
-                channel = np.array(signal[colname])
                 # Regular MSE
                 if refined is False and composite is False:
                     mse[i] = _entropy_multiscale_mse(channel, tau, dimension, r, fuzzy, **kwargs)
