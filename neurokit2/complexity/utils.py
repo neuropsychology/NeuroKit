@@ -111,7 +111,7 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # =============================================================================
 # Get R
 # =============================================================================
-def _get_r(signal, r="default", dimension=2):
+def _get_r(signal, r="default", dimension=2, show=True):
     """Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make
     it take into account the number of dimensions. Additionally, a constant is introduced.
 
@@ -121,11 +121,43 @@ def _get_r(signal, r="default", dimension=2):
     https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
 
     """
-    if isinstance(r, str) or (r is None):
+    def _default_r(signal, dimension):
         constant = 0.11604738531196232
         r = constant * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
+        return r
 
-    return r
+    # r = "default"
+    if isinstance(r, str) or (r is None):
+        # Get different r values per channel and find mean
+        if signal.ndim > 1:
+            r_list = []
+            for i, col in enumerate(signal):
+                value = _default_r(signal[col], dimension=dimension)
+                r_list.append(value)
+            optimal_r = np.mean(r_list)
+
+            if show:
+                fig = plt.figure(constrained_layout=False)
+                fig.suptitle('Sanitized tolerance r across channels')
+                colors = plt.cm.plasma(np.linspace(0, 1, len(r_list)))
+                plt.plot(np.arange(1, len(r_list) + 1), np.array(r_list), color="#FF9800")
+                plt.ylabel(r"Tolerance $r$")
+                plt.xlabel("Channels")
+                plt.xticks(np.arange(1, len(r_list) + 1), labels=list(signal.columns))
+                for i, val in enumerate(r_list):
+                    plt.scatter(i+1, val, color=colors[i],
+                                marker='o', zorder=2, label=signal.columns[i])                
+                    plt.legend(loc="lower right")
+                plt.axhline(optimal_r, color="black", ls='--')
+                plt.text(len(r_list)-1, optimal_r, r'Mean $r$ = {:.3g}'.format(optimal_r), ha='center', va='bottom')
+
+        else:
+            # one r for single time series
+            optimal_r = _default_r(signal, dimension=dimension)
+    else:
+        optimal_r = r
+
+    return optimal_r
 
 
 # =============================================================================
