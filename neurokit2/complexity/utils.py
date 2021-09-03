@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import matplotlib.pyplot as plt
 import sklearn.neighbors
 
 from .complexity_embedding import complexity_embedding
@@ -111,7 +112,7 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # =============================================================================
 # Get R
 # =============================================================================
-def _get_r(signal, r="default", dimension=2, show=True):
+def _get_r(signal, r="default", dimension=2, show=False):
     """Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make
     it take into account the number of dimensions. Additionally, a constant is introduced.
 
@@ -146,7 +147,7 @@ def _get_r(signal, r="default", dimension=2, show=True):
                 plt.xticks(np.arange(1, len(r_list) + 1), labels=list(signal.columns))
                 for i, val in enumerate(r_list):
                     plt.scatter(i+1, val, color=colors[i],
-                                marker='o', zorder=2, label=signal.columns[i])                
+                                marker='o', zorder=3, label=signal.columns[i])                
                     plt.legend(loc="lower right")
                 plt.axhline(optimal_r, color="black", ls='--')
                 plt.text(len(r_list)-1, optimal_r, r'Mean $r$ = {:.3g}'.format(optimal_r), ha='center', va='bottom')
