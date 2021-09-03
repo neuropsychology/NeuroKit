@@ -72,21 +72,21 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
             signal = pd.DataFrame(signal).transpose()
 
         fuzzyen_values = []
-        tolerance_values = []
         for i, colname in enumerate(signal):
             channel = np.array(signal[colname])
             fuzzyen, tolerance = _entropy_fuzzy(channel, delay=delay, dimension=dimension,
                                                 r=r, **kwargs)
             fuzzyen_values.append(fuzzyen)
-            tolerance_values.append(tolerance)
         parameters['values'] = fuzzyen_values
-        parameters['tolerance'] = tolerance_values
+        parameters['tolerance'] = tolerance
         out = np.mean(fuzzyen_values)
 
     else:
         # if one signal time series
+        if isinstance(signal, (pd.Series)):
+            signal = np.array(signal)
         out, parameters['tolerance'] = _entropy_fuzzy(signal, delay=delay, dimension=dimension,
-                                                          r=r, **kwargs)
+                                                      r=r, **kwargs)
 
     return out, parameters
 

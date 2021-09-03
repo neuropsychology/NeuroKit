@@ -97,29 +97,28 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
             signal = pd.DataFrame(signal).transpose()
 
         apen_values = []
-        tolerance_values = []
         for i, colname in enumerate(signal):
             channel = np.array(signal[colname])
             apen, tolerance = _entropy_approximate(channel, delay=delay, dimension=dimension,
                                                    r=r, corrected=corrected, **kwargs)
             apen_values.append(apen)
-            tolerance_values.append(tolerance)
         parameters['values'] = apen_values
-        parameters['tolerance'] = tolerance_values
+        parameters['tolerance'] = tolerance
         out = np.mean(apen_values)
 
     else:
         # if one signal time series
-        out, parameters["tolerance"] = _entropy_approximate(signal, delay=delay,
-                                                             dimension=dimension, r=r,
-                                                             corrected=corrected, **kwargs)
+        if isinstance(signal, (pd.Series)):
+            signal = np.array(signal)
+        out, parameters['tolerance'] = _entropy_approximate(signal, delay=delay, dimension=dimension, r=r,
+                                                            corrected=corrected, **kwargs)
 
     return out, parameters
 
 
 def _entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
 
-    r = _get_r(signal, r=r)
+    r = _get_r(signal, r=r, dimension=dimension)
 
     if corrected is False:
         # Get phi

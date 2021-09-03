@@ -71,21 +71,19 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
             signal = pd.DataFrame(signal).transpose()
 
         sampen_values = []
-        tolerance_values = []
         for i, colname in enumerate(signal):
             channel = np.array(signal[colname])
-            sampen, tolerance = _entropy_sample(channel, delay=delay, dimension=dimension,
-                                                r=r, **kwargs)
+            sampen, tolerance = _entropy_sample(channel, delay=delay, dimension=dimension, r=r, **kwargs)
             sampen_values.append(sampen)
-            tolerance_values.append(tolerance)
         parameters['values'] = sampen_values
-        parameters['tolerance'] = tolerance_values
+        parameters['tolerance'] = tolerance
         out = np.mean(sampen_values)
 
     else:
         # if one signal time series
-        out, parameters["tolerance"] = _entropy_sample(signal, delay=delay, dimension=dimension,
-                                                       r=r, **kwargs)
+        if isinstance(signal, (pd.Series)):
+            signal = np.array(signal)
+        out, parameters['tolerance'] = _entropy_sample(signal, delay=delay, dimension=dimension, r=r, **kwargs)
 
     return out, parameters
 
