@@ -39,6 +39,19 @@ def _hrv_sanitize_input(peaks=None):
     else:
         peaks = _hrv_sanitize_peaks(peaks)
 
+    if isinstance(peaks, tuple):
+        if any(np.diff(peaks[0]) < 0):  # not continuously increasing
+            raise ValueError("NeuroKit error: _hrv_sanitize_input(): " +
+                             "The peak indices passed were detected as non-consecutive. You might have passed RR "  +
+                             "intervals instead of peaks. If so, convert RRIs into peaks using " +
+                             "nk.intervals_to_peaks().")
+    else:
+        if any(np.diff(peaks) < 0):
+            raise ValueError("NeuroKit error: _hrv_sanitize_input(): " +
+                             "The peak indices passed were detected as non-consecutive. You might have passed RR "  +
+                             "intervals instead of peaks. If so, convert RRIs into peaks using " +
+                             "nk.intervals_to_peaks().")
+
     return peaks
 
 
