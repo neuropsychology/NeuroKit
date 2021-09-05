@@ -193,7 +193,10 @@ def _hrv_TINN(rri, bar_x, bar_y, binsize):
     min_error = 2 ** 14
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
-    n = bar_x[np.where(bar_x - np.min(rri) > 0)[0][0]]  # starting search of N
+    idx_where = np.where(bar_x - np.min(rri) > 0)[0]
+    if len(idx_where) == 0:
+        return np.nan
+    n = bar_x[idx_where[0]]  # starting search of N
     m = X + binsize  # starting search value of M
     N = 0
     M = 0
