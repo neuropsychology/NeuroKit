@@ -6,8 +6,9 @@ import pandas as pd
 def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
     """Extract extrema in a respiration (RSP) signal.
 
-    Low-level function used by `rsp_peaks()` to identify inhalation peaks and exhalation troughs in
-    a preprocessed respiration signal using different sets of parameters. See `rsp_peaks()` for details.
+    Low-level function used by `rsp_peaks()` to identify inhalation and exhalation onsets (troughs and peaks
+    respectively) in a preprocessed respiration signal using different sets of parameters.
+    See `rsp_peaks()` for details.
 
     Parameters
     ----------
@@ -28,7 +29,7 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
     -------
     info : dict
         A dictionary containing additional information, in this case the samples at which inhalation
-        peaks and exhalation troughs occur, accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively.
+        onsets and exhalation onsets occur, accessible with the keys "RSP_Troughs" and "RSP_Peaks", respectively.
 
     See Also
     --------

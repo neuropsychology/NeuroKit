@@ -35,8 +35,8 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         columns:
         - *"RSP_Raw"*: the raw signal.
         - *"RSP_Clean"*: the cleaned signal.
-        - *"RSP_Peaks"*: the inhalation peaks marked as "1" in a list of zeros.
-        - *"RSP_Troughs"*: the exhalation troughs marked as "1" in a list of zeros.
+        - *"RSP_Peaks"*: the respiratory peaks (exhalation onsets) marked as "1" in a list of zeros.
+        - *"RSP_Troughs"*: the respiratory troughs (inhalation onsets) marked as "1" in a list of zeros.
         - *"RSP_Rate"*: breathing rate interpolated between inhalation peaks.
         - *"RSP_Amplitude"*: breathing amplitude interpolated between inhalation peaks.
         - *"RSP_Phase"*: breathing phase, marked by "1" for inspiration and "0" for expiration.
