@@ -20,6 +20,7 @@ Fixes
 +++++++++++++
 
 * Ensure detected offset in `emg_activation()` is not beyond signal length
+* Raise ValueError in `_hrv_sanitize_input()` if RRIs are detected instead of peaks
 
 
 0.1.4.1
