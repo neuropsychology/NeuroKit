@@ -7,7 +7,7 @@ from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
                                          _eventrelated_rate,
                                          _eventrelated_sanitizeinput,
                                          _eventrelated_sanitizeoutput)
-from ..misc import NeuroKitWarning
+from ..misc import NeuroKitWarning, find_closest
 
 
 def rsp_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
@@ -40,6 +40,7 @@ def rsp_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
         - *"RSP_Rate_SD"*: the standard deviation of the respiratory rate after stimulus onset.
         - *"RSP_Rate_Max_Time"*: the time at which maximum respiratory rate occurs.
         - *"RSP_Rate_Min_Time"*: the time at which minimum respiratory rate occurs.
+        - *"RSP_Amplitude_Baseline"*: the respiratory amplitude at stimulus onset.
         - *"RSP_Amplitude_Max"*: the change in maximum respiratory amplitude from before stimulus onset.
         - *"RSP_Amplitude_Min"*: the change in minimum respiratory amplitude from before stimulus onset.
         - *"RSP_Amplitude_Mean"*: the change in mean respiratory amplitude from before stimulus onset.
@@ -122,6 +123,8 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
         return output
 
     # Get baseline
+    zero = find_closest(0, epoch.index.values, return_index=True)  # Find index closest to 0
+
     if np.min(epoch.index.values) <= 0:
         baseline = epoch["RSP_Amplitude"][epoch.index <= 0].values
         signal = epoch["RSP_Amplitude"][epoch.index > 0].values
@@ -130,6 +133,7 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
         signal = epoch["RSP_Amplitude"][epoch.index > np.min(epoch.index)].values
 
     # Max / Min / Mean
+    output["RSP_Amplitude_Baseline"] = epoch["RSP_Amplitude"].iloc[zero]
     output["RSP_Amplitude_Max"] = np.max(signal) - np.mean(baseline)
     output["RSP_Amplitude_Min"] = np.min(signal) - np.mean(baseline)
     output["RSP_Amplitude_Mean"] = np.mean(signal) - np.mean(baseline)
