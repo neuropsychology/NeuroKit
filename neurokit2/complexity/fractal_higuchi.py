@@ -31,8 +31,11 @@ def fractal_higuchi(signal, kmax="default", show=False):
 
     Returns
     ----------
-    slope
+    slope : float
         Higuchi's fractal dimension.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute Higuchi's fractal dimension.
 
     Examples
     ----------
@@ -40,9 +43,9 @@ def fractal_higuchi(signal, kmax="default", show=False):
     >>>
     >>> signal = nk.data('bio_eventrelated_100hz')['ECG']
     >>>
-    >>> hfd = nk.fractal_higuchi(signal, kmax=5, show=True)
+    >>> hfd, parameters = nk.fractal_higuchi(signal, kmax=5, show=True)
     >>> hfd #doctest: +SKIP
-    >>> hfd = nk.fractal_higuchi(signal, kmax="default", show=True)
+    >>> hfd, parameters = nk.fractal_higuchi(signal, kmax="default", show=True)
     >>> hfd #doctest: +SKIP
 
     Reference
@@ -90,7 +93,9 @@ def fractal_higuchi(signal, kmax="default", show=False):
             ax_kmax = fig.add_subplot(spec[1, 0])
             _fractal_higuchi_optimal_k_plot(k_range, slope_values, k_max, ax=ax_kmax)
 
-    return slope
+    parameters = {'kmax': k_max}
+
+    return slope, parameters
 
 
 # =============================================================================

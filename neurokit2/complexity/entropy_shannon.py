@@ -20,8 +20,11 @@ def entropy_shannon(signal):
 
     Returns
     ----------
-    float
+    shanen : float
         The Shannon entropy as float value.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute Shannon entropy (empty for now).
 
     See Also
     --------
@@ -32,7 +35,7 @@ def entropy_shannon(signal):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy = nk.entropy_shannon(signal)
+    >>> entropy, parameters = nk.entropy_shannon(signal)
     >>> entropy #doctest: +SKIP
 
 
@@ -67,4 +70,6 @@ def entropy_shannon(signal):
         shannon_entropy += freq * np.log2(freq)
     shannon_entropy = -shannon_entropy
 
-    return shannon_entropy
+    parameters = {}
+
+    return shannon_entropy, parameters

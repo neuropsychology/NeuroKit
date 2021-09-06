@@ -9,7 +9,8 @@ from .complexity_embedding import complexity_embedding
 def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     """Correlation Dimension.
 
-    Python implementation of the Correlation Dimension D2 of a signal.
+    Python implementation of the Correlation Dimension CD (sometimes
+    referred to as D2) of a signal.
 
     This function can be called either via ``fractal_correlation()`` or ``complexity_d2()``.
 
@@ -34,8 +35,11 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
 
     Returns
     ----------
-    D2 : float
-        The correlation dimension D2.
+    cd : float
+        The correlation dimension.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute the correlation dimension.
 
     Examples
     ----------
@@ -43,16 +47,16 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> fractal1 = nk.fractal_correlation(signal, r="nolds", show=True)
+    >>> fractal1, parameters = nk.fractal_correlation(signal, r="nolds", show=True)
     >>> fractal1 #doctest: +SKIP
-    >>> fractal2 = nk.fractal_correlation(signal, r=32, show=True)
+    >>> fractal2, parameters = nk.fractal_correlation(signal, r=32, show=True)
     >>> fractal2 #doctest: +SKIP
     >>>
     >>> signal = nk.rsp_simulate(duration=120, sampling_rate=50)
     >>>
-    >>> fractal3 = nk.fractal_correlation(signal, r="nolds", show=True)
+    >>> fractal3, parameters = nk.fractal_correlation(signal, r="nolds", show=True)
     >>> fractal3 #doctest: +SKIP
-    >>> fractal4 = nk.fractal_correlation(signal, r=32, show=True)
+    >>> fractal4, parameters = nk.fractal_correlation(signal, r=32, show=True)
     >>> fractal4 #doctest: +SKIP
 
 
@@ -84,12 +88,16 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     if len(corr) == 0:
         return np.nan
     else:
-        d2 = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
+        cd = np.polyfit(np.log2(r_vals), np.log2(corr), 1)
 
     if show is True:
-        _fractal_correlation_plot(r_vals, corr, d2)
+        _fractal_correlation_plot(r_vals, corr, cd)
 
-    return d2[0]
+    parameters = {'embedding_dimension': dimension,
+                  'tau': delay,
+                  'radiuses': r_vals}
+
+    return cd[0], parameters
 
 
 # =============================================================================
