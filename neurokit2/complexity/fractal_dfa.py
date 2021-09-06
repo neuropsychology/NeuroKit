@@ -306,10 +306,10 @@ def singularity_spectrum(windows, fluctuations, q, slopes):
     Dq = q[:, 0] * hq - tau
 
     # Calculate the singularity
-    ExpRange = np.max(hq) - np.min(hq)
-    ExpMean = np.mean(hq)
-    DimRange = np.max(Dq) - np.min(Dq)
-    DimMean = np.mean(Dq)
+    ExpRange = np.nanmax(hq) - np.nanmin(hq)
+    ExpMean = np.nanmean(hq)
+    DimRange = np.nanmax(Dq) - np.nanmin(Dq)
+    DimMean = np.nanmean(Dq)
     out = {'tau': tau,
            'hq': hq,
            'Dq': Dq,
@@ -373,6 +373,7 @@ def _slopes(windows, fluctuations, q):
     slopes = np.zeros(len(q))
     # Find slopes of each q-power
     for i in range(len(q)):
+        # if fluctiations is zero, log2 wil encounter zero division
         old_setting = np.seterr(divide="ignore", invalid="ignore")
         slopes[i] = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)[0]
         np.seterr(**old_setting)

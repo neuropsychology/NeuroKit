@@ -196,7 +196,11 @@ def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
         slope_values.append(slope)
 
     # Obtain saturation point of slope
-    optimal_k = [i for i, x in enumerate(slope_values >= 0.85 * np.max(slope_values)) if x][0]
+    # first step: set optimal where slope is max
+    optimal_k = np.argmax(slope_values)
+    if optimal_k > 0.7 * len(k_range):
+        # second step: set optimal where slope is approaching the max
+        optimal_k = [i for i, x in enumerate(slope_values >= 0.95 * np.max(slope_values)) if x][0]
     kmax = k_range[optimal_k]
     # If no plateau
     if kmax <= 2:

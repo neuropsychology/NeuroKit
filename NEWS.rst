@@ -14,13 +14,14 @@ Breaking Changes
 New Features
 +++++++++++++
 
-* None
+* Updates logic to find `kmax` in `fractal_higuchi()`
 
 Fixes
 +++++++++++++
 
 * Ensure detected offset in `emg_activation()` is not beyond signal length
 * Raise ValueError in `_hrv_sanitize_input()` if RRIs are detected instead of peaks
+* Ensure that multifractal DFA indices returned by `fractal_mdfa()` is not Nan when array of slopes contains Nan (due to zero fluctuations)
 
 
 0.1.4.1
