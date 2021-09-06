@@ -142,7 +142,7 @@ def _signal_fixpeaks_neurokit(
     """Neurokit method."""
 
     peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
-    peaks_clean = _interpolate_big(peaks, sampling_rate, interval_max, relative_interval_max, robust)
+    peaks_clean = _interpolate_big(peaks_clean, sampling_rate, interval_max, relative_interval_max, robust)
 
     return peaks_clean
 
