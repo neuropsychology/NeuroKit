@@ -124,19 +124,14 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
 
     # Get baseline
     zero = find_closest(0, epoch.index.values, return_index=True)  # Find index closest to 0
-
-    if np.min(epoch.index.values) <= 0:
-        baseline = epoch["RSP_Amplitude"][epoch.index <= 0].values
-        signal = epoch["RSP_Amplitude"][epoch.index > 0].values
-    else:
-        baseline = epoch["RSP_Amplitude"][np.min(epoch.index.values) : np.min(epoch.index.values)].values
-        signal = epoch["RSP_Amplitude"][epoch.index > np.min(epoch.index)].values
+    baseline = epoch["RSP_Amplitude"].iloc[zero]
+    signal = epoch["RSP_Amplitude"].values[zero + 1 : :]
 
     # Max / Min / Mean
-    output["RSP_Amplitude_Baseline"] = epoch["RSP_Amplitude"].iloc[zero]
-    output["RSP_Amplitude_Max"] = np.max(signal) - np.mean(baseline)
-    output["RSP_Amplitude_Min"] = np.min(signal) - np.mean(baseline)
-    output["RSP_Amplitude_Mean"] = np.mean(signal) - np.mean(baseline)
+    output["RSP_Amplitude_Baseline"] = baseline
+    output["RSP_Amplitude_Max"] = np.max(signal) - baseline
+    output["RSP_Amplitude_Min"] = np.min(signal) - baseline
+    output["RSP_Amplitude_Mean"] = np.mean(signal) - baseline
     output["RSP_Amplitude_SD"] = np.std(signal)
 
     return output
