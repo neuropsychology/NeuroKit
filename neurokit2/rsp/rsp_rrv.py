@@ -22,7 +22,7 @@ def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True)
         Array containing the respiratory rate, produced by `signal_rate()`.
     troughs : dict
         The samples at which the inhalation onsets occur.
-        Dict returned by `rsp_peaks()` (Accessible with the key, "RSP_Troughs" ). Defaults to None.
+        Dict returned by `rsp_peaks()` (Accessible with the key, "RSP_Troughs"). Defaults to None.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool
@@ -275,10 +275,10 @@ def _rsp_rrv_formatinput(rsp_rate, troughs, sampling_rate=1000):
             if len(cols) == 0:
                 raise ValueError(
                     "NeuroKit error: _rsp_rrv_formatinput(): Wrong input, "
-                    "we couldn't extract rsp_rate and troughs indices."
+                    "we couldn't extract rsp_rate and peaks indices."
                 )
             else:
-                rsp_rate = signal_rate(troughs, sampling_rate=sampling_rate, desired_length=len(df))
+                rsp_rate = signal_rate(df[cols], sampling_rate=sampling_rate, desired_length=len(df))
         else:
             rsp_rate = df[cols[0]].values
 
