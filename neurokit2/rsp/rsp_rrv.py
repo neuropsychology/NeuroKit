@@ -13,15 +13,16 @@ from ..signal.signal_formatpeaks import _signal_formatpeaks_sanitize
 from ..stats import mad
 
 
-def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
+def rsp_rrv(rsp_rate, troughs=None, sampling_rate=1000, show=False, silent=True):
     """Computes time domain and frequency domain features for Respiratory Rate Variability (RRV) analysis.
 
     Parameters
     ----------
     rsp_rate : array
         Array containing the respiratory rate, produced by `signal_rate()`.
-    peaks : dict
-        The samples at which the inhalation peaks occur. Dict returned by `rsp_peaks()`. Defaults to None.
+    troughs : dict
+        The samples at which the inhalation onsets occur.
+        Dict returned by `rsp_peaks()` (Accessible with the key, "RSP_Troughs"). Defaults to None.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     show : bool
@@ -119,10 +120,10 @@ def rsp_rrv(rsp_rate, peaks=None, sampling_rate=1000, show=False, silent=True):
 
     """
     # Sanitize input
-    rsp_rate, peaks = _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate)
+    rsp_rate, troughs = _rsp_rrv_formatinput(rsp_rate, troughs, sampling_rate)
 
     # Get raw and interpolated R-R intervals
-    bbi = np.diff(peaks) / sampling_rate * 1000
+    bbi = np.diff(troughs) / sampling_rate * 1000
     rsp_period = 60 * sampling_rate / rsp_rate
 
     # Get indices
@@ -260,11 +261,11 @@ def _rsp_rrv_nonlinear(bbi):
 # =============================================================================
 
 
-def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
+def _rsp_rrv_formatinput(rsp_rate, troughs, sampling_rate=1000):
 
     if isinstance(rsp_rate, tuple):
         rsp_rate = rsp_rate[0]
-        peaks = None
+        troughs = None
 
     if isinstance(rsp_rate, pd.DataFrame):
         df = rsp_rate.copy()
@@ -277,23 +278,23 @@ def _rsp_rrv_formatinput(rsp_rate, peaks, sampling_rate=1000):
                     "we couldn't extract rsp_rate and peaks indices."
                 )
             else:
-                rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(df))
+                rsp_rate = signal_rate(df[cols], sampling_rate=sampling_rate, desired_length=len(df))
         else:
             rsp_rate = df[cols[0]].values
 
-    if peaks is None:
+    if troughs is None:
         try:
-            peaks = _signal_formatpeaks_sanitize(df, key="RSP_Peaks")
+            troughs = _signal_formatpeaks_sanitize(df, key="RSP_Troughs")
         except NameError:
             raise ValueError(
                 "NeuroKit error: _rsp_rrv_formatinput(): "
                 "Wrong input, we couldn't extract "
-                "respiratory peaks indices."
+                "respiratory troughs indices."
             )
     else:
-        peaks = _signal_formatpeaks_sanitize(peaks, key="RSP_Peaks")
+        troughs = _signal_formatpeaks_sanitize(troughs, key="RSP_Troughs")
 
-    return rsp_rate, peaks
+    return rsp_rate, troughs
 
 
 def _rsp_rrv_plot(bbi):
