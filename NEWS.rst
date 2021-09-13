@@ -15,6 +15,7 @@ New Features
 +++++++++++++
 
 * Updates logic to find `kmax` in `fractal_higuchi()`
+* Add RSP_Amplitude_Baseline in event-related analysis
 
 Fixes
 +++++++++++++
@@ -22,6 +23,10 @@ Fixes
 * Ensure detected offset in `emg_activation()` is not beyond signal length
 * Raise ValueError in `_hrv_sanitize_input()` if RRIs are detected instead of peaks
 * Ensure that multifractal DFA indices returned by `fractal_mdfa()` is not Nan when array of slopes contains Nan (due to zero fluctuations)
+* Documentation of respiration from peak/trough terminology to inhale/exhale onsets
+* Change labelling in `rsp_plot()` from "inhalation peaks" and "exhalation troughs" to "peaks (exhalation onsets)" and "troughs (inhalation onsets)" respectively.
+* Change RSP_Amplitude_Mean/Min/Max parameters to be corrected based on value closest to t=0 in event-related analysis, rather than using all pre-zero values.
+* Have `rsp_rrv()` compute breath-to-breath intervals based on trough indices (inhalation onsets) rather than peak indices.
 
 
 0.1.4.1
