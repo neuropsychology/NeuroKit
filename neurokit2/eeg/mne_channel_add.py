@@ -97,7 +97,8 @@ def mne_channel_add(
     channel = mne.io.RawArray([channel], info)
 
     # Add channel
-    raw = raw.copy().add_channels([channel], force_update_info=True)
+    raw = raw.copy()
+    raw.add_channels([channel], force_update_info=True) # In-place
 
     # Restore old verbosity level
     mne.set_log_level(old_verbosity_level)
