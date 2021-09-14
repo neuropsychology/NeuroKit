@@ -3,7 +3,9 @@ import numpy as np
 import pandas as pd
 
 
-def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_index_raw=0, sync_index_channel=0):
+def mne_channel_add(
+    raw, channel, channel_type=None, channel_name=None, sync_index_raw=0, sync_index_channel=0
+):
     """Add channel as array to MNE.
 
     Add a channel to a mne's Raw m/eeg file. It will basically synchronize the channel to the eeg data
@@ -58,7 +60,7 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
         import mne
     except ImportError:
         raise ImportError(
-            "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
+            "NeuroKit error: eeg_channel_add(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
         )
 
@@ -73,13 +75,15 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
 
     # Compute the distance between the two signals
     diff = sync_index_channel - sync_index_raw
+
+    # Pre-empt the channel with nans if shorter or crop if longer
     if diff > 0:
         channel = list(channel)[diff : len(channel)]
         channel = channel + [np.nan] * diff
     if diff < 0:
         channel = [np.nan] * abs(diff) + list(channel)
 
-    # Adjust to raw size
+    # Extend the channel with nans if shorter or crop if longer
     if len(channel) < len(raw):
         channel = list(channel) + [np.nan] * (len(raw) - len(channel))
     else:
@@ -88,11 +92,14 @@ def mne_channel_add(raw, channel, channel_type=None, channel_name=None, sync_ind
 
     old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
 
+    # Create RawArray
     info = mne.create_info([channel_name], raw.info["sfreq"], ch_types=channel_type)
     channel = mne.io.RawArray([channel], info)
 
-    raw.add_channels([channel], force_update_info=True)
+    # Add channel
+    raw = raw.copy().add_channels([channel], force_update_info=True)
 
+    # Restore old verbosity level
     mne.set_log_level(old_verbosity_level)
 
     return raw
