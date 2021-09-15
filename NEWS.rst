@@ -26,7 +26,8 @@ Fixes
 * Documentation of respiration from peak/trough terminology to inhale/exhale onsets
 * Change labelling in `rsp_plot()` from "inhalation peaks" and "exhalation troughs" to "peaks (exhalation onsets)" and "troughs (inhalation onsets)" respectively.
 * Change RSP_Amplitude_Mean/Min/Max parameters to be corrected based on value closest to t=0 in event-related analysis, rather than using all pre-zero values.
-* Have `rsp_rrv()` compute breath-to-breath intervals based on trough indices (inhalation onsets) rather than peak indices.
+* Have `rsp_rrv()` compute breath-to-breath intervals based on trough indices (inhalation onsets) rather than peak indices
+* Compute `rsp_rate()` based on trough indices (rather than peak indices) in 'periods' method
 
 
 0.1.4.1
