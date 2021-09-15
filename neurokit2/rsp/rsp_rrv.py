@@ -271,11 +271,11 @@ def _rsp_rrv_formatinput(rsp_rate, troughs, sampling_rate=1000):
         df = rsp_rate.copy()
         cols = [col for col in df.columns if "RSP_Rate" in col]
         if len(cols) == 0:
-            cols = [col for col in df.columns if "RSP_Peaks" in col]
+            cols = [col for col in df.columns if "RSP_Troughs" in col]
             if len(cols) == 0:
                 raise ValueError(
                     "NeuroKit error: _rsp_rrv_formatinput(): Wrong input, "
-                    "we couldn't extract rsp_rate and peaks indices."
+                    "we couldn't extract rsp_rate and respiratory troughs indices."
                 )
             else:
                 rsp_rate = signal_rate(df[cols], sampling_rate=sampling_rate, desired_length=len(df))

@@ -6,15 +6,18 @@ from ..signal import (signal_resample, signal_rate, signal_interpolate,
 from .rsp_peaks import rsp_peaks
 
 
-def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1, method="peak", peak_method="khodadad2018", interpolation_method="monotone_cubic"):
-    """Find respiration rate by cross-correlation method.
+def rsp_rate(rsp_cleaned, troughs=None, sampling_rate=1000, window=10, hop_size=1, method="period", period_method="khodadad2018", interpolation_method="monotone_cubic"):
+
+    """Find respiration rate.
+
     Parameters
     ----------
     rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by `rsp_clean()`.
-    peaks : Union[list, np.array, pd.Series, pd.DataFrame]
-        The respiration peaks as returned by `rsp_peaks()`. If None (default), respiration peaks
-        will be automatically identified from the `rsp_clean` signal.
+    troughs : Union[list, np.array, pd.Series, pd.DataFrame]
+        The respiration troughs (inhalation onsets) as returned by `rsp_peaks()`.
+        If None (default), inhalation onsets will be automatically identified from the
+        `rsp_clean` signal.
     sampling_rate : int
         The sampling frequency of 'rsp_cleaned' (in Hz, i.e., samples/second).
     window : int
@@ -22,14 +25,15 @@ def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1,
     hop_size : int
         The number of samples between each successive window. Default to 1 sample.
     method : str
-        Method can be either "peak" or "xcorr". In "peak" method, rsp_rate is calculated from the
-        periods between respiration peaks. In "xcorr" method, cross-correlations between the changes
-        in respiration with a bank of sinusoids of different frequencies are caclulated to indentify
-        the principal frequency of oscillation.
-    peak_method : str
-        Method to identify respiration peaks. Can be one of "khodadad2018" (default) or "biosppy".
+        Method can either be "period" or "xcorr". In "period" method, respiratory rate is calculated from the
+        periods between successive inspirations (i.e., inhalation onsets/troughs).
+        In "xcorr" method, cross-correlations between the changes in respiration with a bank of
+        sinusoids of different frequencies are caclulated to indentify the principal frequency of oscillation.
+    period_method : str
+        Method to identify successive respiratory inspirations, only relevant if method is "period".
+        Can be one of "khodadad2018" (default) or "biosppy".
     interpolation_method : str
-        Method used to interpolate the rate between peaks. See `signal_interpolate()`. 'monotone_cubic'
+        Method used to interpolate the rate between inhalation onsets. See `signal_interpolate()`. 'monotone_cubic'
         is chosen as the default interpolation method since it ensures monotone interpolation between
         data points (i.e., it prevents physiologically implausible "overshoots" or "undershoots" in the
         y-direction). In contrast, the widely used cubic spline interpolation does not ensure
@@ -45,16 +49,16 @@ def rsp_rate(rsp_cleaned, peaks=None, sampling_rate=1000, window=10, hop_size=1,
     >>> import neurokit2 as nk
     >>> rsp_signal = nk.data("rsp_200hz.txt").iloc[:,0]
     >>> sampling_rate=200
-    >>> rsp_cleaned = nk.rsp_clean(rsp_signal)
-    >>> rsp_rate_peak = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="peaks")
+    >>> rsp_cleaned = nk.rsp_clean(rsp_signal, sampling_rate=sampling_rate)
+    >>> rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="period")
     >>> rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="xcorr")
     """
 
-    if method.lower() in ["peak", "peaks", "signal_rate"]:
-        if peaks is None:
-            peaks, _ = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
-        rsp_rate = signal_rate(peaks, sampling_rate=sampling_rate, desired_length=len(rsp_cleaned),
-                               interpolation_method=interpolation_method)
+    if method.lower() in ["period", "peak", "peaks", "trough", "troughs", "signal_rate"]:
+        if troughs is None:
+            _, troughs = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=period_method)
+        rsp_rate = signal_rate(troughs["RSP_Troughs"], sampling_rate=sampling_rate,
+                               desired_length=len(rsp_cleaned), interpolation_method=interpolation_method)
 
     elif method.lower() in ["cross-correlation", "xcorr"]:
         rsp_rate = _rsp_rate_xcorr(rsp_cleaned, sampling_rate=sampling_rate,
