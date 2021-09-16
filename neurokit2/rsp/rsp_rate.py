@@ -6,7 +6,7 @@ from ..signal import (signal_resample, signal_rate, signal_interpolate,
 from .rsp_peaks import rsp_peaks
 
 
-def rsp_rate(rsp_cleaned, troughs=None, sampling_rate=1000, window=10, hop_size=1, method="period", period_method="khodadad2018", interpolation_method="monotone_cubic"):
+def rsp_rate(rsp_cleaned, troughs=None, sampling_rate=1000, window=10, hop_size=1, method="trough", period_method="khodadad2018", interpolation_method="monotone_cubic"):
 
     """Find respiration rate.
 
@@ -25,12 +25,12 @@ def rsp_rate(rsp_cleaned, troughs=None, sampling_rate=1000, window=10, hop_size=
     hop_size : int
         The number of samples between each successive window. Default to 1 sample.
     method : str
-        Method can either be "period" or "xcorr". In "period" method, respiratory rate is calculated from the
+        Method can either be "trough" or "xcorr". In "trough" method, respiratory rate is calculated from the
         periods between successive inspirations (i.e., inhalation onsets/troughs).
         In "xcorr" method, cross-correlations between the changes in respiration with a bank of
         sinusoids of different frequencies are caclulated to indentify the principal frequency of oscillation.
-    period_method : str
-        Method to identify successive respiratory inspirations, only relevant if method is "period".
+    peak_method : str
+        Method to identify successive respiratory inspirations, only relevant if method is "trough".
         Can be one of "khodadad2018" (default) or "biosppy".
     interpolation_method : str
         Method used to interpolate the rate between inhalation onsets. See `signal_interpolate()`. 'monotone_cubic'
@@ -50,13 +50,13 @@ def rsp_rate(rsp_cleaned, troughs=None, sampling_rate=1000, window=10, hop_size=
     >>> rsp_signal = nk.data("rsp_200hz.txt").iloc[:,0]
     >>> sampling_rate=200
     >>> rsp_cleaned = nk.rsp_clean(rsp_signal, sampling_rate=sampling_rate)
-    >>> rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="period")
+    >>> rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="trough")
     >>> rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="xcorr")
     """
 
     if method.lower() in ["period", "peak", "peaks", "trough", "troughs", "signal_rate"]:
         if troughs is None:
-            _, troughs = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=period_method)
+            _, troughs = rsp_peaks(rsp_cleaned, sampling_rate=sampling_rate, method=peak_method)
         rsp_rate = signal_rate(troughs["RSP_Troughs"], sampling_rate=sampling_rate,
                                desired_length=len(rsp_cleaned), interpolation_method=interpolation_method)
 
@@ -68,7 +68,7 @@ def rsp_rate(rsp_cleaned, troughs=None, sampling_rate=1000, window=10, hop_size=
     else:
         raise ValueError(
                 "NeuroKit error: rsp_rate(): 'method' should be"
-                " one of 'peak', or 'cross-correlation'."
+                " one of 'trough', or 'cross-correlation'."
                 )
 
     return rsp_rate
