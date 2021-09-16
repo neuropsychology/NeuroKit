@@ -6,7 +6,7 @@ from ..signal import (signal_resample, signal_rate, signal_interpolate,
 from .rsp_peaks import rsp_peaks
 
 
-def rsp_rate(rsp_cleaned, troughs=None, sampling_rate=1000, window=10, hop_size=1, method="trough", period_method="khodadad2018", interpolation_method="monotone_cubic"):
+def rsp_rate(rsp_cleaned, troughs=None, sampling_rate=1000, window=10, hop_size=1, method="trough", peak_method="khodadad2018", interpolation_method="monotone_cubic"):
 
     """Find respiration rate.
 
