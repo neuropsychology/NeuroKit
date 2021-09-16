@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+import numpy as np
 
 
-def mne_channel_extract(raw, what, name=None):
+def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
     """Channel array extraction from MNE.
 
     Select one or several channels by name and returns them in a dataframe.
@@ -19,6 +20,10 @@ def mne_channel_extract(raw, what, name=None):
     name : str or list
         Useful only when extracting one channel. Can also take a list of names for renaming multiple channels,
         Otherwise, defaults to None.
+    add_firstsamples : bool
+        Defaults to False. Returns first few samples of NaN rows of data corresponding to the offset between
+        the start of the system and the start of the recording if True.        
+        See https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp.
 
     Returns
     ----------
@@ -64,4 +69,20 @@ def mne_channel_extract(raw, what, name=None):
         channels.what = what[0]
         if name is not None:
             channels = channels.rename(name)
+    
+    # Add first_samp
+    if add_firstsamples:
+
+        add_na = np.repeat(np.nan, raw.first_samp)
+        if isinstance(channels, pd.Series):
+            new_channels = pd.concat([pd.Series(add_na), channels], axis=0)
+            new_channels.name = channels.name
+
+        elif isinstance(channels, pd.DataFrame):
+            new_channels = pd.DataFrame()
+            for name in channels.columns.values:
+                new_channels[name] = pd.concat([pd.Series(add_na), channels[name]], axis=0)
+
+        channels = new_channels.copy()
+
     return channels
