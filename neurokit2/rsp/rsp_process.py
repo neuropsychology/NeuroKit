@@ -74,7 +74,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     # Get additional parameters
     phase = rsp_phase(peak_signal, desired_length=len(rsp_signal))
     amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
-    rate = signal_rate(peak_signal, sampling_rate=sampling_rate, desired_length=len(rsp_signal))
+    rate = signal_rate(info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal))
 
     # Prepare output
     signals = pd.DataFrame(

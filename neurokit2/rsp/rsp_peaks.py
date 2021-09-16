@@ -8,8 +8,9 @@ from .rsp_fixpeaks import rsp_fixpeaks
 def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
     """Identify extrema in a respiration (RSP) signal.
 
-    This function `rsp_findpeaks()` and `rsp_fixpeaks` to identify and process inhalation peaks and
-    exhalation troughs in a preprocessed respiration signal using different sets of parameters, such as:
+    This function `rsp_findpeaks()` and `rsp_fixpeaks` to identify and process peaks (exhalation onsets)
+    and troughs (inhalation onsets) in a preprocessed respiration signal using
+    different sets of parameters, such as:
 
     - `Khodadad et al. (2018)
     <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
