@@ -20,9 +20,10 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
     name : str or list
         Useful only when extracting one channel. Can also take a list of names for renaming multiple channels,
         Otherwise, defaults to None.
-    add_firstsamples : bool
-        Defaults to False. Returns first few samples of NaN rows of data corresponding to the offset between
-        the start of the system and the start of the recording if True.        
+    add_firstsamples : bool or float or int
+        Defaults to False. Fills first few samples with NaN rows of data (if True) or with
+        the specified float or integer values, with the number of rows corresponding to the offset between
+        the start of the system and the start of the recording.        
         See https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp.
 
     Returns
@@ -71,17 +72,20 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
             channels = channels.rename(name)
     
     # Add first_samp
-    if add_firstsamples:
+    if add_firstsamples is not False:
+        if add_firstsamples:  # fill with na
+            fill = np.repeat(np.nan, raw.first_samp)
+        elif isinstance(add_firstsamples, (int, float)):  # fill with value
+            fill = np.repeat(add_firstsamples, raw.first_samp)
 
-        add_na = np.repeat(np.nan, raw.first_samp)
         if isinstance(channels, pd.Series):
-            new_channels = pd.concat([pd.Series(add_na), channels], axis=0)
+            new_channels = pd.concat([pd.Series(fill), channels], axis=0)
             new_channels.name = channels.name
 
         elif isinstance(channels, pd.DataFrame):
             new_channels = pd.DataFrame()
             for name in channels.columns.values:
-                new_channels[name] = pd.concat([pd.Series(add_na), channels[name]], axis=0)
+                new_channels[name] = pd.concat([pd.Series(fill), channels[name]], axis=0)
 
         channels = new_channels.copy()
 
