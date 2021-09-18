@@ -26,7 +26,8 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
         Taking this into account can be useful when extracting channels from the Raw object to detect events indices
         that are passed back to MNE again. When `add_firstsamples` is set to `True`, the offset will be explicitly
         added at the beginning of the signal and filled with NaNs. If `add_firstsamples` is a float or an integer,
-        the offset will filled with these values instead.
+        the offset will filled with these values instead. If it is set to `"backfill"`, will prepend with the first
+        real value.
 
     Returns
     ----------
@@ -75,8 +76,12 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
             channels = channels.rename(name)
 
     # Add first_samp
-    if isinstance(add_firstsamples, bool) and add_firstsamples is True:  # fill with na
+    if isinstance(add_firstsamples, bool) and add_firstsamples is True:  # Fill with na
         add_firstsamples = np.nan
+    if isinstance(add_firstsamples, str):  # Back fill
+        add_firstsamples = channels.iloc[0]
+        if isinstance(channels, pd.DataFrame):
+            add_firstsamples = dict(add_firstsamples)
 
     if add_firstsamples is not False:
         if isinstance(channels, pd.Series):
