@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
 import numpy as np
+import pandas as pd
+
 
 def mne_to_df(eeg):
     """Convert mne Raw or Epochs object to dataframe or dict of dataframes.
@@ -23,11 +24,6 @@ def mne_to_df(eeg):
     >>> eeg = nk.mne_data("filt-0-40_raw")
     >>> eeg = nk.eeg_rereference(eeg, 'average')
     >>>
-    >>> gfp = nk.eeg_gfp(eeg)
-    >>> gfp_z = nk.eeg_gfp(eeg, normalize=True)
-    >>> gfp_zr = nk.eeg_gfp(eeg, normalize=True, robust=True)
-    >>> gfp_s = nk.eeg_gfp(eeg, smooth=0.05)
-    >>> nk.signal_plot([gfp[0:500], gfp_z[0:500], gfp_zr[0:500], gfp_s[0:500]], standardize=True)
 
     """
     # Try loading mne
@@ -44,12 +40,12 @@ def mne_to_df(eeg):
         data = _mne_to_df_epochs(eeg)
 
     # If raw object
-    elif isinstance(eeg, mne.io.Raw):
+    elif isinstance(eeg, (mne.io.Raw, mne.io.RawArray)):
         data = _mne_to_df_raw(eeg)
 
     # If array or dataframe, skip and return
     elif isinstance(eeg, (pd.DataFrame, np.ndarray)):
-        return data
+        return eeg
 
     # it might be an evoked object
     else:
