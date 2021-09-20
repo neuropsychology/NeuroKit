@@ -2,12 +2,13 @@
 import numpy as np
 import pandas as pd
 import scipy.stats
+import matplotlib.pyplot as plt
 
 from ..signal import signal_zerocrossings
 from ..stats import hdi, mad, standardize
 
 
-def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99):
+def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False):
     """Find bad channels.
 
     Parameters
@@ -23,6 +24,8 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99):
         value of a variable to be considered an outlier. For instance, .975 becomes
         ``scipy.stats.norm.ppf(.975) ~= 1.96``. The default value (.99) means that all observations
         beyond 2.33 SD from the mean will be classified as outliers.
+    show : bool
+        Visualize individual EEG channels with highlighted bad channels. Defaults to False
 
     Returns
     -------
@@ -37,7 +40,7 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99):
     >>> import neurokit2 as nk
     >>>
     >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> bads, info = nk.eeg_badchannels(eeg)
+    >>> bads, info = nk.eeg_badchannels(eeg, show=True)
 
     """
     if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
@@ -82,4 +85,42 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99):
     )
     bads = ch_names[np.where(results["Bad"] >= bad_threshold)[0]]
 
+    if show:
+        _plot_eeg_badchannels(eeg, bads, ch_names)
+
     return list(bads), results
+
+
+def _plot_eeg_badchannels(eeg, bads, ch_names):
+
+    # Prepare plot
+    fig, ax = plt.subplots()
+    fig.suptitle('Individual EEG channels')
+    ax.set_ylabel("Voltage (V)")
+    ax.set_xlabel("Samples")
+
+    bads_list = []
+    for bad in bads:
+        channel_index = np.where(ch_names == bad)[0]
+        bads_list.append(channel_index[0])
+
+    # Prepare colors for plotting
+    colors_good = plt.cm.Greys(np.linspace(0, 1, len(eeg)))
+    colors_bad = plt.cm.autumn(np.linspace(0, 1, len(bads)))
+
+    # Plot good channels
+    for i in range(len(eeg)):
+        channel = eeg[i, :]
+
+        if i not in bads_list:
+            ax.plot(np.arange(1, len(channel)+1), channel, c=colors_good[i])
+
+    # Plot bad channels
+    for i in bads_list:
+        channel = eeg[i, :]
+        for color in colors_bad:
+            ax.plot(np.arange(1, len(channel)+1), channel, c=color, label=ch_names[i])
+
+    ax.legend(loc="upper right")
+    
+    return fig
