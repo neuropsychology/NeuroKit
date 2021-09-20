@@ -40,7 +40,7 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False)
     >>> import neurokit2 as nk
     >>>
     >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> bads, info = nk.eeg_badchannels(eeg, show=True)
+    >>> bads, info = nk.eeg_badchannels(eeg, distance_threshold=0.95, show=False)
 
     """
     if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
@@ -110,17 +110,15 @@ def _plot_eeg_badchannels(eeg, bads, ch_names):
 
     # Plot good channels
     for i in range(len(eeg)):
-        channel = eeg[i, :]
-
         if i not in bads_list:
+            channel = eeg[i, :]
             ax.plot(np.arange(1, len(channel)+1), channel, c=colors_good[i])
 
     # Plot bad channels
-    for i in bads_list:
-        channel = eeg[i, :]
-        for color in colors_bad:
-            ax.plot(np.arange(1, len(channel)+1), channel, c=color, label=ch_names[i])
+    for i, bad in enumerate(bads_list):
+        channel = eeg[bad, :]
+        ax.plot(np.arange(1, len(channel)+1), channel, c=colors_bad[i], label=ch_names[i])
 
     ax.legend(loc="upper right")
-    
+
     return fig

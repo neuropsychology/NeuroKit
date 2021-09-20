@@ -22,7 +22,8 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
         Otherwise, defaults to None.
     add_firstsamples : bool
         Defaults to `False`. Mne's objects store the value of a delay between
-        the start of the system and the start of the recording (see https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp).
+        the start of the system and the start of the recording
+        (see https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp).
         Taking this into account can be useful when extracting channels from the Raw object to detect events indices
         that are passed back to MNE again. When `add_firstsamples` is set to `True`, the offset will be explicitly
         added at the beginning of the signal and filled with NaNs. If `add_firstsamples` is a float or an integer,
