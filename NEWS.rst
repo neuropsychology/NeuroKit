@@ -16,6 +16,11 @@ New Features
 
 * Updates logic to find `kmax` in `fractal_higuchi()`
 * Add RSP_Amplitude_Baseline in event-related analysis
+* Add argument `add_firstsamples` in `mne_channel_extract()` to account for first sample attribute in mne raw objects
+* Allow plotting of `mne.Epochs` in `epochs_plot()`
+* Add `mne_crop()` to crop `mne` Raw objects with additional flexibility to specify first and last elements
+* Plotting function in `eeg_badchannels()` to visualize overlay of individual EEG channels and highlighting of bad ones
+* Add `eog_peaks()` as wrapper for `eog_findpeaks()`
 
 Fixes
 +++++++++++++
