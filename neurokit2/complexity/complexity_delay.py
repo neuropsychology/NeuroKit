@@ -118,10 +118,20 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     if show is True:
         _embedding_delay_plot(
-            signal, metric_values=metric_values, tau_sequence=tau_sequence, tau=optimal, metric=metric
+            signal,
+            metric_values=metric_values,
+            tau_sequence=tau_sequence,
+            tau=optimal,
+            metric=metric,
         )
 
-    return optimal
+    # Return optimal tau and info dict
+    return optimal, {
+        "Values": tau_sequence,
+        "Scores": metric_values,
+        "Algorithm": algorithm,
+        "Metric": metric,
+    }
 
 
 # =============================================================================
@@ -130,7 +140,9 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
 def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
     if algorithm == "first local minimum":
-        optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"][0]
+        optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)[
+            "Peaks"
+        ][0]
     elif algorithm == "first 1/e crossing":
         metric_values = metric_values - 1 / np.exp(1)
         optimal = signal_zerocrossings(metric_values)[0]
@@ -156,13 +168,17 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
         for i, current_tau in enumerate(tau_sequence):
             embedded = complexity_embedding(signal, delay=current_tau, dimension=2)
             if metric == "Mutual Information":
-                values[i] = mutual_information(embedded[:, 0], embedded[:, 1], normalized=True, method="shannon")
+                values[i] = mutual_information(
+                    embedded[:, 0], embedded[:, 1], normalized=True, method="shannon"
+                )
             if metric == "Displacement":
                 dimension = 2
 
                 # Reconstruct with zero time delay.
                 tau0 = embedded[:, 0].repeat(dimension).reshape(len(embedded), dimension)
-                dist = np.asarray([scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)])
+                dist = np.asarray(
+                    [scipy.spatial.distance.euclidean(i, j) for i, j in zip(embedded, tau0)]
+                )
                 values[i] = np.mean(dist)
 
     return values
@@ -172,13 +188,22 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 # Internals
 # =============================================================================
 def _embedding_delay_plot(
-    signal, metric_values, tau_sequence, tau=1, metric="Mutual Information", ax0=None, ax1=None, plot="2D"
+    signal,
+    metric_values,
+    tau_sequence,
+    tau=1,
+    metric="Mutual Information",
+    ax0=None,
+    ax1=None,
+    plot="2D",
 ):
 
     # Prepare figure
     if ax0 is None and ax1 is None:
         fig = plt.figure(constrained_layout=False)
-        spec = matplotlib.gridspec.GridSpec(ncols=1, nrows=2, height_ratios=[1, 3], width_ratios=[2])
+        spec = matplotlib.gridspec.GridSpec(
+            ncols=1, nrows=2, height_ratios=[1, 3], width_ratios=[2]
+        )
         ax0 = fig.add_subplot(spec[0])
         if plot == "2D":
             ax1 = fig.add_subplot(spec[1])
