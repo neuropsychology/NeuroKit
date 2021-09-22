@@ -24,7 +24,7 @@ def complexity_dimension(
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order')
         to test.
     method : str
-        Method can either be afnn (average false nearest neighbour) or fnn (false nearest neighbour).
+        Method can either be 'afnn' (average false nearest neighbour) or 'fnn' (false nearest neighbour).
     show : bool
         Visualize the result.
     R : float
