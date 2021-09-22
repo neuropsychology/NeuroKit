@@ -131,6 +131,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
         "Scores": metric_values,
         "Algorithm": algorithm,
         "Metric": metric,
+        "Method": method
     }
 
 

@@ -6,7 +6,9 @@ import scipy.spatial
 from .complexity_embedding import complexity_embedding
 
 
-def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs):
+def complexity_dimension(
+    signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs
+):
     """Estimate optimal Dimension (m) for time-delay embedding.
 
     Parameters
@@ -75,23 +77,37 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
         min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
         if show is True:
             _embedding_dimension_plot(
-                method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, E1=E1, E2=E2
+                method=method,
+                dimension_seq=dimension_seq,
+                min_dimension=min_dimension,
+                E1=E1,
+                E2=E2,
             )
 
+        info = {"Method": method, "Values": dimension_seq, "E1": E1, "E2": E2}
+
     elif method in ["fnn"]:
-        f1, f2, f3 = _embedding_dimension_ffn(signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs)
+        f1, f2, f3 = _embedding_dimension_ffn(
+            signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs
+        )
 
         min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
 
         if show is True:
             _embedding_dimension_plot(
-                method=method, dimension_seq=dimension_seq, min_dimension=min_dimension, f1=f1, f2=f2, f3=f3
+                method=method,
+                dimension_seq=dimension_seq,
+                min_dimension=min_dimension,
+                f1=f1,
+                f2=f2,
+                f3=f3,
             )
+        info = {"Method": method, "Values": dimension_seq, "f1": f1, "f2": f2, "f3": f3}
 
     else:
         raise ValueError("NeuroKit error: complexity_dimension(): 'method' " "not recognized.")
 
-    return min_dimension
+    return min_dimension, info
 
 
 # =============================================================================
@@ -112,14 +128,19 @@ def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
 
     """
     values = np.asarray(
-        [_embedding_dimension_afn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]
+        [
+            _embedding_dimension_afn_d(signal, dimension, delay, **kwargs)
+            for dimension in dimension_seq
+        ]
     ).T
     E, Es = values[0, :], values[1, :]
 
     return E, Es
 
 
-def _embedding_dimension_afn_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs):
+def _embedding_dimension_afn_d(
+    signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None, **kwargs
+):
     """Return E(d) and E^*(d) for a single d.
 
     Returns E(d) and E^*(d) for the AFN method for a single d.
@@ -174,14 +195,19 @@ def _embedding_dimension_ffn(signal, dimension_seq, delay=1, **kwargs):
 
     """
     values = np.asarray(
-        [_embedding_dimension_ffn_d(signal, dimension, delay, **kwargs) for dimension in dimension_seq]
+        [
+            _embedding_dimension_ffn_d(signal, dimension, delay, **kwargs)
+            for dimension in dimension_seq
+        ]
     ).T
     f1, f2, f3 = values[0, :], values[1, :], values[2, :]
 
     return f1, f2, f3
 
 
-def _embedding_dimension_ffn_d(signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None):
+def _embedding_dimension_ffn_d(
+    signal, dimension, delay=1, R=10.0, A=2.0, metric="euclidean", window=10, maxnum=None
+):
     """Return fraction of false nearest neighbors for a single d."""
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
@@ -285,7 +311,9 @@ def _embedding_dimension_neighbors(
     elif metric == "euclidean":
         p = 2
     else:
-        raise ValueError('Unknown metric. Should be one of "cityblock", ' '"euclidean", or "chebyshev".')
+        raise ValueError(
+            'Unknown metric. Should be one of "cityblock", ' '"euclidean", or "chebyshev".'
+        )
 
     tree = scipy.spatial.cKDTree(y)  # pylint: disable=E1102
     n = len(y)
@@ -316,7 +344,8 @@ def _embedding_dimension_neighbors(
 
             if k == (maxnum + 1):
                 raise Exception(
-                    "Could not find any near neighbor with a nonzero distance." "Try increasing the value of maxnum."
+                    "Could not find any near neighbor with a nonzero distance."
+                    "Try increasing the value of maxnum."
                 )
 
     indices, values = np.squeeze(indices), np.squeeze(dists)
