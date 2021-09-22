@@ -560,7 +560,6 @@ def _fractal_dfa_plot(windows, fluctuations, multifractal, q):
 
     if isinstance(fluctuations, dict):
         colors = plt.cm.Reds(np.linspace(0.5, 1, len(fluctuations)))
-        colors2 = plt.cm.PuBu(np.linspace(0, 1, len(fluctuations)))
         for i, col in enumerate(fluctuations):
             polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[col]), 1)
             fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
