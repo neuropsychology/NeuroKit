@@ -205,13 +205,23 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     # Plot if show is True.
     if show is True:
         if multifractal is True:
-            _fractal_mdfa_plot(windows=windows,
-                               fluctuations=fluctuations,
-                               multifractal=multifractal,
-                               q=q,
-                               tau=parameters['tau'],
-                               hq=parameters['hq'],
-                               Dq=parameters['Dq'])
+            if signal.ndim > 1:
+                for i, col in enumerate(fluctuations):
+                    _fractal_mdfa_plot(windows=windows,
+                                       fluctuations=fluctuations[col],
+                                       multifractal=multifractal,
+                                       q=q,
+                                       tau=parameters[col + '_singularity']['tau'],
+                                       hq=parameters[col + '_singularity']['hq'],
+                                       Dq=parameters[col + '_singularity']['Dq'])
+            else:
+                _fractal_mdfa_plot(windows=windows,
+                                   fluctuations=fluctuations,
+                                   multifractal=multifractal,
+                                   q=q,
+                                   tau=parameters['tau'],
+                                   hq=parameters['hq'],
+                                   Dq=parameters['Dq'])
         else:
             _fractal_dfa_plot(windows=windows,
                               fluctuations=fluctuations,
