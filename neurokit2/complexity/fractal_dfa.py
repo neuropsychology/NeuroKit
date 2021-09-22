@@ -4,8 +4,10 @@ from warnings import warn
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from ..misc import NeuroKitWarning, expspace
+from .utils import _sanitize_multichannel
 
 
 def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
@@ -89,9 +91,9 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     >>> import numpy as np
     >>>
     >>> signal = nk.signal_simulate(duration=10, noise=0.05)
-    >>> dfa1, parameters = nk.fractal_dfa(signal, show=True)
+    >>> dfa1, parameters1 = nk.fractal_dfa(signal, show=True)
     >>> dfa1 #doctest: +SKIP
-    >>> dfa2, parameters = nk.fractal_mfdfa(signal, q=np.arange(-5, 6), show=True)
+    >>> dfa2, parameters2 = nk.fractal_mfdfa(signal, q=np.arange(-5, 6), show=True)
     >>> dfa2 #doctest: +SKIP
 
 
@@ -118,36 +120,67 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
 
     """
     # Sanity checks
+    if signal.ndim > 1:
+        # n-dimensional
+        signal = _sanitize_multichannel(signal)
+
     n = len(signal)
     windows = _fractal_dfa_findwindows(n, windows)
     _fractal_dfa_findwindows_warning(windows, n)  # Return warning for too short windows
 
-    # Preprocessing
-    if integrate is True:
-        signal = np.cumsum(signal - np.mean(signal))  # Get signal profile
-
     # Sanitize fractal power (cannot be close to 0)
     q = _cleanse_q(q, multifractal=multifractal)
 
-    # obtain the windows and fluctuations
-    windows, fluctuations = _fractal_dfa(signal=signal,
-                                         windows=windows,
-                                         overlap=overlap,
-                                         integrate=integrate,
-                                         order=order,
-                                         multifractal=multifractal,
-                                         q=q
-                                         )
+    # Preprocessing
+    if integrate is True:
+        # Get signal profile
+        if signal.ndim > 1:
+            # n-dimensional
+            signals = {}
+            for i, col in enumerate(signal):
+                signals[col] = np.cumsum(signal[col] - np.mean(signal[col]))
+            signals = pd.DataFrame(signals)
+        else:
+            # if one single time series
+            signal = np.cumsum(signal - np.mean(signal))
 
-    if len(fluctuations) == 0:
-        return np.nan
+    # obtain the windows, fluctuations, and slopes
+    if signal.ndim > 1:
+        # n-dimensional
+        fluctuations = {}
+        slopes = []
+        for i, col in enumerate(signals):
+            windows, f = _fractal_dfa(signal=signals[col], windows=windows, overlap=overlap,
+                                integrate=integrate, order=order, multifractal=multifractal,
+                                q=q)
+            if len(f) == 0:
+                fluctuations[col] = np.nan
+            else:
+                fluctuations[col] = f
+            # Get slopes
+            s = _slopes(windows, f, q)
+            if len(s) == 1:
+                s = s[0]
+            slopes.append(s)            
+    else:
+        # if one single time series
+        windows, fluctuations = _fractal_dfa(signal=signal, windows=windows, overlap=overlap,
+                                             integrate=integrate, order=order, multifractal=multifractal,
+                                             q=q)
+        if len(fluctuations) == 0:
+            return np.nan
+        # Get slopes
+        slopes = _slopes(windows, fluctuations, q)
+        if len(slopes) == 1:
+            slopes = slopes[0]
 
-    slopes = _slopes(windows, fluctuations, q)
-    if len(slopes) == 1:
-        slopes = slopes[0]
+    # Prepare output
     parameters = {'q' : q[:, 0],
                   'windows' : windows,
                   'fluctuations' : fluctuations}
+    if signal.ndim > 1:
+        parameters['values'] = slopes
+        slopes = np.mean(slopes)
 
     if multifractal is True:
         singularity = singularity_spectrum(windows=windows,
@@ -525,11 +558,22 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
 
 def _fractal_dfa_plot(windows, fluctuations, multifractal, q):
 
-    polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
-    fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
-    plt.loglog(windows, fluctuations, "bo", c='#90A4AE')
-    plt.loglog(windows, fluctfit, "r", c='#E91E63',
-               label=r"$\alpha$ = {:.3f}".format(polyfit[0][0]))
+    if isinstance(fluctuations, dict):
+        colors = plt.cm.Reds(np.linspace(0.5, 1, len(fluctuations)))
+        colors2 = plt.cm.PuBu(np.linspace(0, 1, len(fluctuations)))
+        for i, col in enumerate(fluctuations):
+            polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[col]), 1)
+            fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
+            plt.loglog(windows, fluctuations[col], "bo", zorder=1, c='#90A4AE')
+            plt.loglog(windows, fluctfit, "r", zorder=2, c=colors[i],
+                       label=list(fluctuations.keys())[i] + r" $\alpha$ = {:.3f}".format(polyfit[0][0]))
+    else:
+        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations), 1)
+        fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
+        plt.loglog(windows, fluctuations, "bo", c='#90A4AE')
+        plt.loglog(windows, fluctfit, "r", c='#E91E63',
+                   label=r"$\alpha$ = {:.3f}".format(polyfit[0][0]))
+
     plt.legend(loc="lower right")
     plt.title('Detrended Fluctuation Analysis')
 
