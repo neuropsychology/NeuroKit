@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.animation
 import matplotlib.pyplot as plt
 import numpy as np
+
+from ..misc import NeuroKitWarning
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False):
@@ -80,6 +84,12 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     N = len(signal)
 
     # Sanity checks
+    if isinstance(delay, float):
+        warn("`delay` must be an integer. Running `int(delay)`", category=NeuroKitWarning)
+        delay = int(delay)
+    if isinstance(dimension, float):
+        warn("`dimension` must be an integer. Running `int(dimension)`", category=NeuroKitWarning)
+        dimension = int(dimension)
     if dimension * delay > N:
         raise ValueError(
             "NeuroKit error: complexity_embedding(): dimension * delay should be lower than",
@@ -130,11 +140,15 @@ def _embedding_plot_2D(embedded):
 
 
 def _embedding_plot_3D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False)
+    return _plot_3D_colored(
+        x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False
+    )
 
 
 def _embedding_plot_4D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False)
+    return _plot_3D_colored(
+        x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False
+    )
 
 
 # =============================================================================
