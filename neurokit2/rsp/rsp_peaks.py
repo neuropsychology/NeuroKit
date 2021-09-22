@@ -8,8 +8,9 @@ from .rsp_fixpeaks import rsp_fixpeaks
 def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
     """Identify extrema in a respiration (RSP) signal.
 
-    This function `rsp_findpeaks()` and `rsp_fixpeaks` to identify and process inhalation peaks and
-    exhalation troughs in a preprocessed respiration signal using different sets of parameters, such as:
+    This function `rsp_findpeaks()` and `rsp_fixpeaks` to identify and process peaks (exhalation onsets)
+    and troughs (inhalation onsets) in a preprocessed respiration signal using
+    different sets of parameters, such as:
 
     - `Khodadad et al. (2018)
     <https://iopscience.iop.org/article/10.1088/1361-6579/aad7e6/meta>`_
@@ -35,12 +36,12 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
     Returns
     -------
     info : dict
-        A dictionary containing additional information, in this case the samples at which inhalation
-        peaks and exhalation troughs occur, accessible with the keys "RSP_Peaks", and "RSP_Troughs", respectively,
-        as well as the signals' sampling rate.
+        A dictionary containing additional information, in this case the samples at which peaks (exhalation onsets)
+        and troughs (inhalation onsets) occur, accessible with the keys "RSP_Peaks", and "RSP_Troughs",
+        respectively, as well as the signals' sampling rate.
     peak_signal : DataFrame
-        A DataFrame of same length as the input signal in which occurences of inhalation peaks and
-        exhalation troughs are marked as "1" in lists of zeros with the same length as `rsp_cleaned`.
+        A DataFrame of same length as the input signal in which occurences of peaks (exhalation onsets)
+        and troughs (inhalation onsets) are marked as "1" in lists of zeros with the same length as `rsp_cleaned`.
         Accessible with the keys "RSP_Peaks" and "RSP_Troughs" respectively.
 
 

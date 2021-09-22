@@ -204,7 +204,7 @@ def test_rsp_rrv():
                                       random_state=42)
         short_cleaned90 = nk.rsp_clean(short_rsp90, sampling_rate=1000)
         _, short_peaks90 = nk.rsp_peaks(short_cleaned90)
-        short_rsp_rate90 = nk.signal_rate(short_peaks90, desired_length=len(short_rsp90))
+        short_rsp_rate90 = nk.signal_rate(short_peaks90["RSP_Troughs"], desired_length=len(short_rsp90))
 
         nk.rsp_rrv(short_rsp_rate90, short_peaks90)
 

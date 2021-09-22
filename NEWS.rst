@@ -14,12 +14,25 @@ Breaking Changes
 New Features
 +++++++++++++
 
-* None
+* Updates logic to find `kmax` in `fractal_higuchi()`
+* Add RSP_Amplitude_Baseline in event-related analysis
+* Add argument `add_firstsamples` in `mne_channel_extract()` to account for first sample attribute in mne raw objects
+* Allow plotting of `mne.Epochs` in `epochs_plot()`
+* Add `mne_crop()` to crop `mne` Raw objects with additional flexibility to specify first and last elements
+* Plotting function in `eeg_badchannels()` to visualize overlay of individual EEG channels and highlighting of bad ones
+* Add `eog_peaks()` as wrapper for `eog_findpeaks()`
 
 Fixes
 +++++++++++++
 
-* None
+* Ensure detected offset in `emg_activation()` is not beyond signal length
+* Raise ValueError in `_hrv_sanitize_input()` if RRIs are detected instead of peaks
+* Ensure that multifractal DFA indices returned by `fractal_mdfa()` is not Nan when array of slopes contains Nan (due to zero fluctuations)
+* Documentation of respiration from peak/trough terminology to inhale/exhale onsets
+* Change labelling in `rsp_plot()` from "inhalation peaks" and "exhalation troughs" to "peaks (exhalation onsets)" and "troughs (inhalation onsets)" respectively.
+* Change RSP_Amplitude_Mean/Min/Max parameters to be corrected based on value closest to t=0 in event-related analysis, rather than using all pre-zero values.
+* Have `rsp_rrv()` compute breath-to-breath intervals based on trough indices (inhalation onsets) rather than peak indices
+* Compute `rsp_rate()` based on trough indices (rather than peak indices) in 'periods' method
 
 
 0.1.4.1

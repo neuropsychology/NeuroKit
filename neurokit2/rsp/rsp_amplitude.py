@@ -16,10 +16,12 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
     rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by `rsp_clean()`.
     peaks : list or array or DataFrame or Series or dict
-        The samples at which the inhalation peaks occur. If a dict or a DataFrame is passed, it is
+        The samples at which the respiration peaks (exhalation onsets) occur.
+        If a dict or a DataFrame is passed, it is
         assumed that these containers were obtained with `rsp_findpeaks()`.
     troughs : list or array or DataFrame or Series or dict
-        The samples at which the inhalation troughs occur. If a dict or a DataFrame is passed, it is
+        The samples at which the respiration troughs (inhalation onsets) occur.
+        If a dict or a DataFrame is passed, it is
         assumed that these containers were obtained with `rsp_findpeaks()`.
     interpolation_method : str
         Method used to interpolate the amplitude between peaks. See `signal_interpolate()`. 'monotone_cubic' is chosen
@@ -44,9 +46,9 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
     >>>
     >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
     >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> info, signals = nk.rsp_peaks(cleaned)
+    >>> peak_signals, info = nk.rsp_peaks(cleaned)
     >>>
-    >>> amplitude = nk.rsp_amplitude(cleaned, signals)
+    >>> amplitude = nk.rsp_amplitude(cleaned, peak_signals)
     >>> fig = nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
     >>> fig #doctest: +SKIP
 
