@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ..misc import NeuroKitWarning
+from .utils import _sanitize_multichannel
 
 
 def fractal_higuchi(signal, kmax="default", show=False):
@@ -69,6 +70,7 @@ def fractal_higuchi(signal, kmax="default", show=False):
     if kmax == "default":
         if signal.ndim > 1:
             # n-dimensional
+            signal = _sanitize_multichannel(signal)
             k_max = []
             slope_values = []
             for index, colname in enumerate(signal):

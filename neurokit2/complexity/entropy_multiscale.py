@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from .entropy_sample import entropy_sample
-from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide
+from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide, _sanitize_multichannel
 
 
 def entropy_multiscale(
@@ -123,13 +123,7 @@ def entropy_multiscale(
     # Sanitize (formatting is done in _entropy_multiscale)
     if signal.ndim > 1:
         # n-dimensional
-        if not isinstance(signal, (pd.DataFrame, np.ndarray)):
-            raise ValueError(
-            "NeuroKit error: entropy_multiscale(): your n-dimensional data has to be in the",
-            " form of a pandas DataFrame or a numpy ndarray.")
-        if isinstance(signal, np.ndarray):
-            # signal.shape has to be in (len(channels), len(samples)) format
-            signal = pd.DataFrame(signal).transpose()
+        signal = _sanitize_multichannel(signal)
 
     out, parameters['tolerance'] = _entropy_multiscale(signal, scale=scale, dimension=dimension,
                                                        r=r, composite=composite, fuzzy=fuzzy,

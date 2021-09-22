@@ -2,6 +2,8 @@
 import numpy as np
 import pandas as pd
 
+from .utils import _sanitize_multichannel
+
 
 def entropy_shannon(signal):
     """Shannon entropy (SE)
@@ -57,13 +59,7 @@ def entropy_shannon(signal):
     # sanitize input
     if signal.ndim > 1:
         # n-dimensional
-        if not isinstance(signal, (pd.DataFrame, np.ndarray)):
-            raise ValueError(
-            "NeuroKit error: entropy_shannon(): your n-dimensional data has to be in the",
-            " form of a pandas DataFrame or a numpy ndarray.")
-        if isinstance(signal, np.ndarray):
-            # signal.shape has to be in (len(channels), len(samples)) format
-            signal = pd.DataFrame(signal).transpose()
+        signal = _sanitize_multichannel(signal)
 
         shen_values = []
         for i, colname in enumerate(signal):

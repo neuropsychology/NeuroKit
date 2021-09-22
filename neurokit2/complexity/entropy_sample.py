@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 
-from .utils import _get_r, _phi, _phi_divide
+from .utils import _get_r, _phi, _phi_divide, _sanitize_multichannel
 
 
 def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
@@ -62,13 +62,7 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
     # sanitize input
     if signal.ndim > 1:
         # n-dimensional
-        if not isinstance(signal, (pd.DataFrame, np.ndarray)):
-            raise ValueError(
-            "NeuroKit error: entropy_sample(): your n-dimensional data has to be in the",
-            " form of a pandas DataFrame or a numpy ndarray.")
-        if isinstance(signal, np.ndarray):
-            # signal.shape has to be in (len(channels), len(samples)) format
-            signal = pd.DataFrame(signal).transpose()
+        signal = _sanitize_multichannel(signal)
 
         sampen_values = []
         for i, colname in enumerate(signal):

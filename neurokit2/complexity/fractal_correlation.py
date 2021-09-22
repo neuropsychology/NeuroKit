@@ -5,6 +5,7 @@ import pandas as pd
 import sklearn.metrics.pairwise
 
 from .complexity_embedding import complexity_embedding
+from .utils import _sanitize_multichannel
 
 
 def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
@@ -86,13 +87,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     # Sanitize (formatting done in _fractal_correlation)
     if signal.ndim > 1:
         # n-dimensional
-        if not isinstance(signal, (pd.DataFrame, np.ndarray)):
-            raise ValueError(
-            "NeuroKit error: fractal_correlation(): your n-dimensional data has to be in the",
-            " form of a pandas DataFrame or a numpy ndarray.")
-        if isinstance(signal, np.ndarray):
-            # signal.shape has to be in (len(channels), len(samples)) format
-            signal = pd.DataFrame(signal).transpose()
+        signal = _sanitize_multichannel(signal)
 
     out, parameters['radiuses'] = _fractal_correlation(signal, delay=delay,
                                                        dimension=dimension, r=r, show=show)
