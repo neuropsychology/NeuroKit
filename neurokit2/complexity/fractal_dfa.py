@@ -161,7 +161,7 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
             s = _slopes(windows, f, q)
             if len(s) == 1:
                 s = s[0]
-            slopes.append(s)            
+            slopes.append(s)
     else:
         # if one single time series
         windows, fluctuations = _fractal_dfa(signal=signal, windows=windows, overlap=overlap,
@@ -178,16 +178,29 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     parameters = {'q' : q[:, 0],
                   'windows' : windows,
                   'fluctuations' : fluctuations}
-    if signal.ndim > 1:
-        parameters['values'] = slopes
-        slopes = np.mean(slopes)
 
     if multifractal is True:
-        singularity = singularity_spectrum(windows=windows,
-                                           fluctuations=fluctuations,
-                                           q=q,
-                                           slopes=slopes)
+        if signal.ndim > 1:
+            # n-dimensional            
+            singularity = {}
+            for i, col in enumerate(fluctuations):
+                singularity[col + '_singularity'] = singularity_spectrum(windows=windows,
+                                                                         fluctuations=fluctuations[col],
+                                                                         q=q, slopes=slopes[i])
+                # s = {col + '_' + str(key): val for key, val in s.items()}
+                # singularity.update(s)
+        else:
+            # if single time series
+            singularity = singularity_spectrum(windows=windows,
+                                               fluctuations=fluctuations,
+                                               q=q,
+                                               slopes=slopes)
         parameters.update(singularity)
+    else:
+        # return individual slope values of each channel for monofractal
+        if signal.ndim > 1:
+            parameters['values'] = slopes
+            slopes = np.mean(slopes)
 
     # Plot if show is True.
     if show is True:
