@@ -150,8 +150,8 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
         slopes = []
         for i, col in enumerate(signals):
             windows, f = _fractal_dfa(signal=signals[col], windows=windows, overlap=overlap,
-                                integrate=integrate, order=order, multifractal=multifractal,
-                                q=q)
+                                      integrate=integrate, order=order, multifractal=multifractal,
+                                      q=q)
             if len(f) == 0:
                 fluctuations[col] = np.nan
             else:
@@ -164,8 +164,8 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     else:
         # if one single time series
         windows, fluctuations = _fractal_dfa(signal=signal, windows=windows, overlap=overlap,
-                                             integrate=integrate, order=order, multifractal=multifractal,
-                                             q=q)
+                                             integrate=integrate, order=order,
+                                             multifractal=multifractal, q=q)
         if len(fluctuations) == 0:
             return np.nan
         # Get slopes
@@ -179,21 +179,11 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
                   'fluctuations' : fluctuations}
 
     if multifractal is True:
-        if signal.ndim > 1:
-            # n-dimensional            
-            singularity = {}
-            for i, col in enumerate(fluctuations):
-                singularity[col + '_singularity'] = singularity_spectrum(windows=windows,
-                                                                         fluctuations=fluctuations[col],
-                                                                         q=q, slopes=slopes[i])
-                # s = {col + '_' + str(key): val for key, val in s.items()}
-                # singularity.update(s)
-        else:
-            # if single time series
-            singularity = singularity_spectrum(windows=windows,
-                                               fluctuations=fluctuations,
-                                               q=q,
-                                               slopes=slopes)
+        # formatting of multichannel output in singularity_spectrum itself
+        singularity = singularity_spectrum(windows=windows,
+                                           fluctuations=fluctuations,
+                                           q=q,
+                                           slopes=slopes)
         parameters.update(singularity)
     else:
         # return individual slope values of each channel for monofractal
@@ -204,23 +194,13 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     # Plot if show is True.
     if show is True:
         if multifractal is True:
-            if signal.ndim > 1:
-                for i, col in enumerate(fluctuations):
-                    _fractal_mdfa_plot(windows=windows,
-                                       fluctuations=fluctuations[col],
-                                       multifractal=multifractal,
-                                       q=q,
-                                       tau=parameters[col + '_singularity']['tau'],
-                                       hq=parameters[col + '_singularity']['hq'],
-                                       Dq=parameters[col + '_singularity']['Dq'])
-            else:
-                _fractal_mdfa_plot(windows=windows,
-                                   fluctuations=fluctuations,
-                                   multifractal=multifractal,
-                                   q=q,
-                                   tau=parameters['tau'],
-                                   hq=parameters['hq'],
-                                   Dq=parameters['Dq'])
+            _fractal_mdfa_plot(windows=windows,
+                               fluctuations=fluctuations,
+                               multifractal=multifractal,
+                               q=q,
+                               tau=parameters['tau'],
+                               hq=parameters['hq'],
+                               Dq=parameters['Dq'])
         else:
             _fractal_dfa_plot(windows=windows,
                               fluctuations=fluctuations,
@@ -351,20 +331,42 @@ def singularity_spectrum(windows, fluctuations, q, slopes):
     `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
     """
 
-    # Calculate τ
-    tau = q[:, 0] * slopes - 1
+    # multichannel
+    if isinstance(fluctuations, dict):
+        tau = {}
+        hq = {}
+        Dq = {}
+        ExpRange = {}
+        ExpMean = {}
+        DimRange = {}
+        DimMean = {}
+        for i, key in enumerate(fluctuations):
+            tau[key] = q[:, 0] * slopes[i] - 1
+            hq[key] = np.gradient(tau[key]) / np.gradient(q[:, 0])
+            Dq[key] = q[:, 0] * hq[key] - tau[key]
+            ExpRange[key] = np.nanmax(hq[key]) - np.nanmin(hq[key])
+            ExpMean[key] = np.nanmean(hq[key])
+            DimRange[key] = np.nanmax(Dq[key]) - np.nanmin(Dq[key])
+            DimMean[key] = np.nanmean(Dq[key])
 
-    # Calculate hq or α, which needs tau
-    hq = np.gradient(tau) / np.gradient(q[:, 0])
+    # single time series            
+    else:
+        # Calculate τ
+        tau = q[:, 0] * slopes - 1
+    
+        # Calculate hq or α, which needs tau
+        hq = np.gradient(tau) / np.gradient(q[:, 0])
+    
+        # Calculate Dq or f(α), which needs tau and q
+        Dq = q[:, 0] * hq - tau
+    
+        # Calculate the singularity
+        ExpRange = np.nanmax(hq) - np.nanmin(hq)
+        ExpMean = np.nanmean(hq)
+        DimRange = np.nanmax(Dq) - np.nanmin(Dq)
+        DimMean = np.nanmean(Dq)
 
-    # Calculate Dq or f(α), which needs tau and q
-    Dq = q[:, 0] * hq - tau
-
-    # Calculate the singularity
-    ExpRange = np.nanmax(hq) - np.nanmin(hq)
-    ExpMean = np.nanmean(hq)
-    DimRange = np.nanmax(Dq) - np.nanmin(Dq)
-    DimMean = np.nanmean(Dq)
+    # Prepare output
     out = {'tau': tau,
            'hq': hq,
            'Dq': Dq,
@@ -547,24 +549,43 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
     colors = plt.cm.plasma(np.linspace(0, 1, n))
 
     # Plot the fluctuation plot
-    # Plot the points
-    for i in range(len(q)):
-        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
-        ax_fluctuation.loglog(windows, fluctuations, "bo", c='#d2dade', markersize=5, base=2)
-    # Plot the polyfit line
-    for i in range(len(q)):
-        polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
-        fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
-        ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label='_no_legend_')
-    ax_fluctuation.plot([],
-                        label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]),
-                        c=colors[0])
-    ax_fluctuation.plot([],
-                        label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]),
-                        c=colors[-1])
+    if isinstance(fluctuations, dict):  # dict passed means multichannel series
+        alphas = np.linspace(0.1, 1, len(fluctuations))
+        for index, key in enumerate(fluctuations):
+            # Plot points
+            for i in range(len(q)):
+                polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[key][:, i]), 1)
+                ax_fluctuation.loglog(windows, fluctuations[key], "bo", c='#d2dade', markersize=5, base=2, zorder=1)
+            # Plot the polyfit line
+            for i in range(len(q)):
+                polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[key][:, i]), 1)
+                fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
+                ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label='_no_legend_', zorder=2)
+            ax_fluctuation.plot([],
+                                label=str(key) + (r" $\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]),
+                                c=colors[0], alpha=alphas[index])
+            ax_fluctuation.plot([],
+                                label=str(key) + (r" $\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]),
+                                c=colors[-1], alpha=alphas[index])
+    else:
+        # Plot the points
+        for i in range(len(q)):
+            polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
+            ax_fluctuation.loglog(windows, fluctuations, "bo", c='#d2dade', markersize=5, base=2)
+        # Plot the polyfit line
+        for i in range(len(q)):
+            polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
+            fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
+            ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label='_no_legend_')
+        ax_fluctuation.plot([],
+                            label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]),
+                            c=colors[0])
+        ax_fluctuation.plot([],
+                            label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]),
+                            c=colors[-1])
 
     # Plot the singularity spectrum
-    _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)
+    _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)    
     # Plot tau against q
     _scaling_exponents_plot(q, tau, ax=ax_tau)
     # Plot hq against q
@@ -572,8 +593,8 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
 
     ax_fluctuation.set_xlabel(r"$\log_{2}$(Window)")
     ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
-    ax_fluctuation.legend(loc="lower right")
     fig.suptitle('Multifractal Detrended Fluctuation Analysis')
+    ax_fluctuation.legend(loc="lower right")
 
     return None
 
@@ -624,12 +645,18 @@ def _singularity_spectrum_plot(hq, Dq, ax=None):
     `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
 
     """
-
-    ax.plot(hq, Dq, 'o-', c='#FFC107')
-
-#    ax.set_title("Singularity Spectrum")
+    ax.set_title("Singularity Spectrum")
     ax.set_ylabel(r'Singularity dimension ($D_q$)')
     ax.set_xlabel(r'Singularity exponent ($h_q$)')
+    
+    alphas = np.linspace(0.1, 1, len(hq))
+
+    if isinstance(hq, dict):  # multichannel if dict passed
+        for i, key in enumerate(hq):
+            ax.plot(hq[key], Dq[key], 'o-', c='#FFC107', alpha=alphas[i], label=key)
+            ax.legend(loc="lower right")
+    else:
+        ax.plot(hq, Dq, 'o-', c='#FFC107')
 
     return None
 
@@ -654,11 +681,18 @@ def _scaling_exponents_plot(q, tau, ax=None):
 
     """
 
-    ax.plot(q, tau, 'o-', c='#E91E63')
-
 #    ax.set_title("Scaling Exponents")
     ax.set_ylabel(r'Scaling exponents ($τ_q$)')
     ax.set_xlabel(r'Multifractal parameter ($q$)')
+
+    alphas = np.linspace(0.1, 1, len(tau))
+
+    if isinstance(tau, dict):  # multichannel if dict passed
+        for i, key in enumerate(tau):
+            ax.plot(q, tau[key], 'o-', c='#E91E63', alpha=alphas[i], label=key)
+            ax.legend(loc="lower right")
+    else:
+        ax.plot(q, tau, 'o-', c='#E91E63')
 
     return None
 
@@ -684,10 +718,17 @@ def _hurst_exponents_plot(q, hq, ax=None):
 
     """
 
-    ax.plot(q, hq, 'o-', c='#2196F3')
-
 #    ax.set_title("Generalised Hurst Exponents")
     ax.set_ylabel(r'Generalized Hurst Exponents ($h_q$)')
     ax.set_xlabel(r'Multifractal parameter ($q$)')
+
+    alphas = np.linspace(0.1, 1, len(hq))
+
+    if isinstance(hq, dict):  # multichannel if dict passed
+        for i, key in enumerate(hq):
+            ax.plot(q, hq[key], 'o-', c='#2196F3', alpha=alphas[i], label=key)
+            ax.legend(loc="lower right")
+    else:
+        ax.plot(q, hq, 'o-', c='#2196F3')
 
     return None
