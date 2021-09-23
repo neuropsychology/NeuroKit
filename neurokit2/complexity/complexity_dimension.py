@@ -36,8 +36,11 @@ def complexity_dimension(
 
     Returns
     -------
-    int
+    delay : int
         Optimal dimension.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute the optimal dimension.
 
     See Also
     ------------
@@ -49,9 +52,9 @@ def complexity_dimension(
     >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> delay = nk.complexity_delay(signal, delay_max=500)
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=500)
     >>>
-    >>> values = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
+    >>> values, parameters = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
 
     References
     -----------

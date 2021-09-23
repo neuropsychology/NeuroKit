@@ -78,7 +78,7 @@ def _get_embedded(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay = nk.complexity_delay(signal)
+    >>> delay, _ = nk.complexity_delay(signal)
     >>>
     >>> embbeded, count = _get_embedded(signal, delay, r=0.2 * np.std(signal, ddof=1), dimension=2,
     ...                                 distance='chebyshev', approximate=False)

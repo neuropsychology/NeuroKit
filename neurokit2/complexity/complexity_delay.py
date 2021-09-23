@@ -46,8 +46,11 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     Returns
     -------
-    int
+    delay : int
         Optimal time delay.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute optimal time-delay embedding.
 
     See Also
     ---------
@@ -61,17 +64,17 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
     >>> nk.signal_plot(signal)
     >>>
-    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="fraser1986")
-    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
-    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
-    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="fraser1986")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150), sampling_rate=150, desired_length=len(ecg))
     >>> nk.signal_plot(signal)
     >>>
-    >>> delay = nk.complexity_delay(signal, delay_max=1000, show=True)
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True)
 
     References
     ------------

@@ -38,8 +38,8 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay = nk.complexity_delay(signal)
-    >>> dimension = nk.complexity_dimension(signal, delay=delay)
+    >>> delay, _ = nk.complexity_delay(signal)
+    >>> dimension, _ = nk.complexity_dimension(signal, delay=delay)
     >>> r = nk.complexity_r(signal, delay, dimension)
     >>> r #doctest: +SKIP
 

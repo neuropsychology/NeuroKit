@@ -72,8 +72,10 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     Returns
     ----------
     dfa : float or np.array
-        One DFA value if `multifractal` is False, and an array of DFA values if
-        `multifractal` is True.
+        If `multifractal` is False, one DFA value is returned for a single time series
+        and the mean DFA value computed across the channels is returned for an n-dimensional
+        time series. If `multifractal` is True, array(s) of DFA values is returned per
+        time series.
     parameters : dict
         A dictionary containing additional information regarding the parameters used
         to compute DFA. If `multifractal` is False, the dictionary contains q value, a
@@ -82,8 +84,6 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
         `multifractal` is True, the dictionary additionally contains the
         parameters of the singularity spectrum (scaling exponents, singularity dimension,
         singularity strength; see `singularity_spectrum()` for more information).
-
-
 
     Examples
     ----------
@@ -95,7 +95,6 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     >>> dfa1 #doctest: +SKIP
     >>> dfa2, parameters2 = nk.fractal_mfdfa(signal, q=np.arange(-5, 6), show=True)
     >>> dfa2 #doctest: +SKIP
-
 
     References
     -----------
@@ -558,10 +557,10 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
         fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
         ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label='_no_legend_')
     ax_fluctuation.plot([],
-                        label=(r"$\alpha$ = {:.3f}, q={:.1f}").format(polyfit[0], q[0][0]),
+                        label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]),
                         c=colors[0])
     ax_fluctuation.plot([],
-                        label=(r"$\alpha$ = {:.3f}, q={:.1f}").format(polyfit[0], q[-1][0]),
+                        label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]),
                         c=colors[-1])
 
     # Plot the singularity spectrum
