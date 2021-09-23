@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib
 import matplotlib.collections
 import matplotlib.pyplot as plt
@@ -7,7 +9,7 @@ import scipy.signal
 import scipy.spatial
 import scipy.stats
 
-from ..misc import find_closest
+from ..misc import NeuroKitWarning, find_closest
 from ..signal import signal_autocor, signal_findpeaks, signal_zerocrossings
 from ..stats import mutual_information
 from .complexity_embedding import complexity_embedding
@@ -117,6 +119,13 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
 
     # Get optimal tau
     optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
+    if np.isnan(optimal):
+        warn(
+                "No optimal time delay is found. Nan is returned."
+                " Consider using a higher `delay_max`.",
+                category=NeuroKitWarning
+            )
+        return optimal
     optimal = tau_sequence[optimal]
 
     if show is True:
@@ -144,18 +153,21 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
 def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
     if algorithm == "first local minimum":
-        optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)[
-            "Peaks"
-        ][0]
+        optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"]
     elif algorithm == "first 1/e crossing":
         metric_values = metric_values - 1 / np.exp(1)
-        optimal = signal_zerocrossings(metric_values)[0]
+        optimal = signal_zerocrossings(metric_values)
     elif algorithm == "first zero crossing":
-        optimal = signal_zerocrossings(metric_values)[0]
+        optimal = signal_zerocrossings(metric_values)
     elif algorithm == "closest to 40% of the slope":
         slope = np.diff(metric_values) * len(metric_values)
         slope_in_deg = np.rad2deg(np.arctan(slope))
-        optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0][0]
+        optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0]
+
+    if len(optimal) != 0:
+        optimal = optimal[0]
+    else:
+        optimal = np.nan
     return optimal
 
 

@@ -5,8 +5,11 @@ import numpy as np
 import pandas as pd
 import scipy.spatial
 
-from .complexity_delay import _embedding_delay_metric, _embedding_delay_plot, _embedding_delay_select
-from .complexity_dimension import _embedding_dimension_afn, _embedding_dimension_ffn, _embedding_dimension_plot
+from .complexity_delay import (_embedding_delay_metric, _embedding_delay_plot,
+                               _embedding_delay_select)
+from .complexity_dimension import (_embedding_dimension_afn,
+                                   _embedding_dimension_ffn,
+                                   _embedding_dimension_plot)
 from .complexity_embedding import complexity_embedding
 from .complexity_r import _optimize_r_plot
 from .entropy_approximate import entropy_approximate
@@ -235,7 +238,13 @@ def _complexity_delay(signal, delay_max=100, method="fraser1986"):
     metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
     # Get optimal tau
     optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
-    tau = tau_sequence[optimal]
+    if ~np.isnan(optimal):
+        tau = tau_sequence[optimal]
+    else:
+        raise ValueError(
+                            "NeuroKit error: No optimal time delay is found."
+                            " Consider using a higher `delay_max`."
+                        )
 
     return tau_sequence, metric, metric_values, tau
 
