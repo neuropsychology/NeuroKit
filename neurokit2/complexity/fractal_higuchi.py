@@ -294,13 +294,14 @@ def _fractal_higuchi_optimal_k_plot(k_range, slope_values, optimal_k, signal, ax
     # Loop if n-dimensional signal
     if signal.ndim > 1:
         color_channels = plt.cm.Purples(np.linspace(0.5, 1, signal.shape[1]))
+        k_mean = int(np.mean(optimal_k))
         for k, slope, index in zip(optimal_k, slope_values, range(0, signal.shape[1])):
-            ax.plot(k_range, slope, color=color_channels[index], zorder=1, label=signal.columns[index])
+            ax.plot(k_range, slope, color=color_channels[index], zorder=1, label=str(signal.columns[index]) + " $k_{max}$: " + str(k))
             for i, j in enumerate(k_range):
                 ax.scatter(k_range[i], slope[i], color=colors[i],
                            marker='o', zorder=2)
         ax.axvline(x=np.mean(optimal_k).astype(int), color="#E91E63",
-                   label="Mean Optimal $k_{max}$: " + str(k))
+                   label="Mean Optimal $k_{max}$: " + str(k_mean))
         ax.legend(loc="upper right")
     else:
         # if single time series
