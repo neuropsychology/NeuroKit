@@ -78,6 +78,9 @@ def complexity_dimension(
         # To find where E1 saturates, set a threshold of difference
         # threshold = 0.1 * (np.max(E1) - np.min(E1))
         min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
+
+        # To standardize the length of dimension_seq with E1 and E2
+        dimension_seq = dimension_seq[:-1]
         if show is True:
             _embedding_dimension_plot(
                 method=method,
@@ -246,8 +249,8 @@ def _embedding_dimension_plot(
     ax.set_xlabel("Embedding dimension $d$")
     ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
     if method in ["afnn"]:
-        ax.plot(dimension_seq[:-1], E1, "bo-", label="$E_1(d)$", color="#FF5722")
-        ax.plot(dimension_seq[:-1], E2, "go-", label="$E_2(d)$", color="#f44336")
+        ax.plot(dimension_seq, E1, "bo-", label="$E_1(d)$", color="#FF5722")
+        ax.plot(dimension_seq, E2, "go-", label="$E_2(d)$", color="#f44336")
 
     if method in ["fnn"]:
         ax.plot(dimension_seq, 100 * f1, "bo--", label="Test I", color="#FF5722")
