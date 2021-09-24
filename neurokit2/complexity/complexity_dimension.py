@@ -71,6 +71,8 @@ def complexity_dimension(
     # Method
     method = method.lower()
     if method in ["afnn"]:
+        # Append value (as it gets cropped afterwards anyway)
+        dimension_seq = np.append(dimension_seq, [dimension_seq[-1] + 1])
         E, Es = _embedding_dimension_afn(signal, dimension_seq=dimension_seq, delay=delay, **kwargs)
         E1 = E[1:] / E[:-1]
         E2 = Es[1:] / Es[:-1]
