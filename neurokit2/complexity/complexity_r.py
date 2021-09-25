@@ -53,9 +53,11 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     method = method.lower()
     if method in ["traditional", "sd"]:
         r = 0.2 * np.std(signal, ddof=1)
+        info = {"Method": method}
     elif method in ["maxapen", "optimize"]:
-        r = _optimize_r(signal, delay=delay, dimension=dimension, show=show)
-    return r, {"Method": method}
+        r, info = _optimize_r(signal, delay=delay, dimension=dimension, show=show)
+        info.update({"Method": method})
+    return r, info
 
 
 # =============================================================================
@@ -80,7 +82,7 @@ def _optimize_r(signal, delay=None, dimension=None, show=False):
     if show is True:
         _optimize_r_plot(r, r_range, ApEn, ax=None)
 
-    return r
+    return r, {"Values": r_range, "Scores": ApEn}
 
 
 def _optimize_r_plot(r, r_range, ApEn, ax=None):
