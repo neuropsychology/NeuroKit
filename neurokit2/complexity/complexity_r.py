@@ -22,8 +22,7 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     method : str
-        If 'maxApEn', rmax where ApEn is max will be returned. If 'traditional', r = 0.2 * standard
-        deviation of the signal will be returned.
+        If 'maxApEn', rmax where ApEn is max will be returned. If 'sd' (as in Standard Deviation), r = 0.2 * standard deviation of the signal will be returned.
     show : bool
         If true and method is 'maxApEn', will plot the ApEn values for each value of r.
 
@@ -40,7 +39,7 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> delay, _ = nk.complexity_delay(signal)
     >>> dimension, _ = nk.complexity_dimension(signal, delay=delay)
-    >>> r = nk.complexity_r(signal, delay, dimension)
+    >>> r, info = nk.complexity_r(signal, delay, dimension)
     >>> r #doctest: +SKIP
 
 
@@ -52,11 +51,11 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     """
     # Method
     method = method.lower()
-    if method in ["traditional"]:
+    if method in ["traditional", "sd"]:
         r = 0.2 * np.std(signal, ddof=1)
     elif method in ["maxapen", "optimize"]:
         r = _optimize_r(signal, delay=delay, dimension=dimension, show=show)
-    return r
+    return r, {"Method": method}
 
 
 # =============================================================================
