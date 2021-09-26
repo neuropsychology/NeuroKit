@@ -2,7 +2,6 @@
 import numpy as np
 import pandas as pd
 import scipy.stats
-from pandas._libs.tslibs import BaseOffset
 
 from .utils import _sanitize_multichannel
 
