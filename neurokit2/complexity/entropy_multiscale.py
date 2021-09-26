@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from .entropy_sample import entropy_sample
 from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide, _sanitize_multichannel
@@ -57,7 +58,7 @@ def entropy_multiscale(
         area under the MSE values curvee, which is essentially the sum of sample entropy values over
         the range of scale factors, or the mean MSE across the channels of an n-dimensional time
         series.
-    parameters : dict
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute multiscale entropy and the individual MSE values of each
         channel if an n-dimensional time series is passed.
@@ -115,34 +116,36 @@ def entropy_multiscale(
     if fuzzy:
         key = 'Fuzzy' + key
 
-    parameters = {'embedding_dimension': dimension,
-                  'version': key,
-                  'scale': _get_scale(signal, scale=scale, dimension=dimension)}
+    info = {'Dimension': dimension,
+            'Type': key,
+            'Scale': _get_scale(signal, scale=scale, dimension=dimension)}
 
-    # Sanitize (formatting is done in _entropy_multiscale)
-    if signal.ndim > 1:
+    # Sanitize input (formatting is done in _entropy_multiscale)
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
+        # Get tolerance
+        info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+        info["Values"] = _entropy_multiscale(signal, r=info["Tolerance"], scale_factors=info["Scale"],
+                                             dimension=dimension, composite=composite, fuzzy=fuzzy,
+                                             refined=refined, show=show, **kwargs)
+        out = np.mean(info["Values"])
+    else:
+        # one single time series
+        info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+        out = _entropy_multiscale(signal, r=info["Tolerance"], scale_factors=info["Scale"],
+                                  dimension=dimension, composite=composite, fuzzy=fuzzy,
+                                  refined=refined, show=show, **kwargs)
 
-    out, parameters['tolerance'] = _entropy_multiscale(signal, scale=scale, dimension=dimension,
-                                                       r=r, composite=composite, fuzzy=fuzzy,
-                                                       refined=refined, show=show, **kwargs)
-    if not isinstance(out, (float, int)):
-        parameters['values'] = out
-        out = np.mean(out)  # for n-dim signal
-
-    return out, parameters
+    return out, info
 
 
 # =============================================================================
 # Internal
 # =============================================================================
 def _entropy_multiscale(
-    signal, scale="default", dimension=2, r="default", composite=False, fuzzy=False, refined=False, show=False, **kwargs
+    signal, r, scale_factors, dimension=2, composite=False, fuzzy=False, refined=False, show=False, **kwargs
 ):
-
-    r = _get_r(signal, r=r, dimension=dimension)
-    scale_factors = _get_scale(signal, scale=scale, dimension=dimension)
 
     if signal.ndim > 1:
         # n-dimensional
@@ -209,7 +212,7 @@ def _entropy_multiscale(
     if show is True:
         _entropy_multiscale_plot(signal, scale_factors, out)
 
-    return mse, r
+    return mse
 
 
 def _entropy_multiscale_plot(signal, scale_factors, mse_values):

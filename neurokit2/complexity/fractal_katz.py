@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
 from .utils import _sanitize_multichannel
 
@@ -26,7 +27,7 @@ def fractal_katz(signal):
     kfd : float
         Katz's fractal dimension of the single time series, or the mean KFD across the
         channels of an n-dimensional time series.
-    parameters : dict
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Katz's fractal dimension and the individual KFD values of each
         channel if an n-dimensional time series is passed.
@@ -48,26 +49,21 @@ def fractal_katz(signal):
     """
 
     # prepare parameters
-    parameters = {}
+    info = {}
 
-    # sanitize input
-    if signal.ndim > 1:
+    # Sanitize input
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
-
-        katz_values = []
+        info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
         for i, colname in enumerate(signal):
-            channel = np.array(signal[colname])
-            katz = _fractal_katz(channel)
-            katz_values.append(katz)
-        parameters['values'] = katz_values
-        out = np.mean(katz_values)
-
+            info["Values"][i] = _fractal_katz(signal[colname])
+        out = np.mean(info["Values"])
     else:
-        # if one signal time series        
+        # if one signal time series
         out = _fractal_katz(signal)
 
-    return out, parameters
+    return out, info
 
 
 def _fractal_katz(signal):

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
 from .utils import _sanitize_multichannel
 
@@ -29,7 +30,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     lzc : float
         Lempel Ziv Complexity (LZC) of the single time series, or the mean LZC
         across the channels of an n-dimensional time series.
-    parameters : dict
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Lempel Ziv Complexity, as well as individual LZC values of each
         channel if an n-dimensional time series is passed.
@@ -64,28 +65,26 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     - https://en.wikipedia.org/wiki/Lempel-Ziv_complexity
     """
     # prepare parameters
-    parameters = {'threshold': threshold,
-                  'normalize': normalize}
+    info = {'Threshold': threshold,
+            'Normalize': normalize}
 
-    # sanitize input
-    if signal.ndim > 1:
+    # Sanitize input
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
-
-        lzc_values = []
+        info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
         for i, colname in enumerate(signal):
-            channel = np.array(signal[colname])
-            lzc = _complexity_lempelziv(channel, threshold=threshold, normalize=normalize)
-            lzc_values.append(lzc)
-        parameters['values'] = lzc_values 
-        out = np.mean(lzc_values)
-
+            info["Values"][i] = _complexity_lempelziv(np.array(signal[colname]), threshold=threshold, normalize=normalize)
+        out = np.mean(info["Values"])
     else:
-        # if one signal time series        
+        # if one signal time series
         out = _complexity_lempelziv(signal, threshold=threshold, normalize=normalize)
 
-    return out, parameters
+    return out, info
 
+# =============================================================================
+# Utilities
+# =============================================================================
 
 def _complexity_lempelziv(signal, threshold="median", normalize=True):
 

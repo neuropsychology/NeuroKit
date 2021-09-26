@@ -4,6 +4,7 @@ from warnings import warn
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from ..misc import NeuroKitWarning
 from .utils import _sanitize_multichannel
@@ -37,7 +38,7 @@ def fractal_higuchi(signal, kmax="default", show=False):
     slope : float
         Higuchi's fractal dimension of the single time series or the mean HFD
         across the channels of an n-dimensional time series.
-    parameters : dict
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Higuchi's fractal dimension and the individual HFD values of each
         channel if an n-dimensional time series is passed.
@@ -68,35 +69,31 @@ def fractal_higuchi(signal, kmax="default", show=False):
 
     # Obtain optimal k if default
     if kmax == "default":
-        if signal.ndim > 1:
+        if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
             # n-dimensional
             signal = _sanitize_multichannel(signal)
             k_max = []
             slope_values = []
             for index, colname in enumerate(signal):
                 k, k_range, slope = _fractal_higuchi_optimal_k(signal[colname], k_start=2, k_end=k_end)
+                _fractal_higuchi_optimal_k_warning(k)  # raise warning if k <= 2
                 k_max.append(k)
                 slope_values.append(slope)
+            info = {'kmax': int(np.mean(k_max))}
         else:
             # one single time series
             k_max, k_range, slope_values = _fractal_higuchi_optimal_k(signal, k_start=2, k_end=k_end)
-    else:
-        # no optimizing
-        k_max = k_end
+            _fractal_higuchi_optimal_k_warning(k_max)
+            info = {'kmax': k_max}
 
-    # Make sure kmax >= 2
-    if np.mean(k_max) <= 2:
-        raise ValueError(
-            "NeuroKit error: fractal_higuchi(): The optimal `kmax` detected as less than or equal to 2. "
-            "Please manually input a `kmax` value of more than 2."
-        )
+    # no optimizing
+    else:
+        _fractal_higuchi_optimal_k_warning(k_end)
+        k_max = k_end
+        info = {'kmax': k_max}
 
     # Compute slope
-    if signal.ndim > 1 and kmax == 'default':
-        # pass average value of kmax if optimized in n-dimensional series
-        slope, intercept, k_values, average_values = _fractal_higuchi_slope(signal, int(np.mean(k_max)))
-    else:
-        slope, intercept, k_values, average_values = _fractal_higuchi_slope(signal, k_max)
+    slope, intercept, k_values, average_values = _fractal_higuchi_slope(signal, info['kmax'])
 
     # Plot
     if show:
@@ -115,9 +112,7 @@ def fractal_higuchi(signal, kmax="default", show=False):
             ax_kmax = fig.add_subplot(spec[1, 0])
             _fractal_higuchi_optimal_k_plot(k_range, slope_values, k_max, signal, ax=ax_kmax)
 
-    parameters = {'kmax': k_max}
-
-    return slope, parameters
+    return slope, info
 
 
 # =============================================================================
@@ -210,6 +205,12 @@ def _cleanse_k(signal, kmax, k_end):
     else:
         return k_end
 
+def _fractal_higuchi_optimal_k_warning(k_max):
+    if k_max <= 2:
+        raise ValueError(
+            "NeuroKit error: fractal_higuchi(): The optimal `kmax` detected as less than or equal to 2. "
+            "Please manually input a `kmax` value of more than 2."
+        )
 
 def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
     """

@@ -37,7 +37,7 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     fuzzyen : float
         The fuzzy entropy of the single time series or the mean FuzzyEn
         across the channels of an n-dimensional time series.
-    parameters : dict
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute fuzzy entropy and the individual FuzzyEn values of each
         channel if an n-dimensional time series is passed.
@@ -57,39 +57,33 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     """
 
     # Prepare parameters
-    parameters = {'embedding_dimension': dimension,
-                  'tau': delay}
+    info = {'Dimension': dimension,
+            'Tau': delay}
 
-    # sanitize input
-    if signal.ndim > 1:
+    # Sanitize input
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
-
-        fuzzyen_values = []
+        # Get tolerance
+        info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+        info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
         for i, colname in enumerate(signal):
-            channel = np.array(signal[colname])
-            fuzzyen, tolerance = _entropy_fuzzy(channel, delay=delay, dimension=dimension,
-                                                r=r, **kwargs)
-            fuzzyen_values.append(fuzzyen)
-        parameters['values'] = fuzzyen_values
-        parameters['tolerance'] = tolerance
-        out = np.mean(fuzzyen_values)
-
+            info["Values"][i] = _entropy_fuzzy(signal[colname], r=info["Tolerance"],
+                                               delay=delay, dimension=dimension, **kwargs)
+        out = np.mean(info["Values"])
     else:
-        # if one signal time series
-        if isinstance(signal, (pd.Series)):
-            signal = np.array(signal)
-        out, parameters['tolerance'] = _entropy_fuzzy(signal, delay=delay, dimension=dimension,
-                                                      r=r, **kwargs)
+        # one single time series
+        info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+        out = _entropy_fuzzy(signal, r=info["Tolerance"], delay=delay, dimension=dimension,
+                             **kwargs)
 
-    return out, parameters
+    return out, info
 
 
-def _entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
+def _entropy_fuzzy(signal, r, delay=1, dimension=2, **kwargs):
 
-    r = _get_r(signal, r=r, dimension=dimension)
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, fuzzy=True, **kwargs)
 
     fuzzyen =  _phi_divide(phi)
 
-    return fuzzyen, r
+    return fuzzyen

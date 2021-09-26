@@ -31,7 +31,7 @@ def entropy_shannon(signal, base=2):
     shanen : float
         The Shannon entropy of the single time series, or the mean ShEn
         across the channels of an n-dimensional time series.
-    parameters : dict
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Shannon entropy and the individual ShEn values of each
         channel if an n-dimensional time series is passed.

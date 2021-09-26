@@ -51,7 +51,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     apen : float
         The approximate entropy of the single time series or the mean ApEn
         across the channels of an n-dimensional time series.
-    parameters : dict
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute approximate entropy and the individual ApEn values of each
         channel if an n-dimensional time series is passed.
@@ -81,38 +81,32 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     """
 
     # Prepare parameters
-    parameters = {'embedding_dimension': dimension,
-                  'tau': delay,
-                  'corrected': corrected}
+    info = {'Dimension': dimension,
+            'Tau': delay,
+            'Corrected': corrected}
 
-    # sanitize input
-    if signal.ndim > 1:
+    # Sanitize input
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
-
-        apen_values = []
+        # Get tolerance
+        info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+        info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
         for i, colname in enumerate(signal):
-            channel = np.array(signal[colname])
-            apen, tolerance = _entropy_approximate(channel, delay=delay, dimension=dimension,
-                                                   r=r, corrected=corrected, **kwargs)
-            apen_values.append(apen)
-        parameters['values'] = apen_values
-        parameters['tolerance'] = tolerance
-        out = np.mean(apen_values)
-
+            info["Values"][i] = _entropy_approximate(signal[colname], r=info["Tolerance"],
+                                                     delay=delay, dimension=dimension,
+                                                     corrected=corrected, **kwargs)
+        out = np.mean(info["Values"])
     else:
-        # if one signal time series
-        if isinstance(signal, (pd.Series)):
-            signal = np.array(signal)
-        out, parameters['tolerance'] = _entropy_approximate(signal, delay=delay, dimension=dimension, r=r,
-                                                            corrected=corrected, **kwargs)
+        # one single time series
+        info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+        out = _entropy_approximate(signal, r=info["Tolerance"], delay=delay, dimension=dimension,
+                                   corrected=corrected, **kwargs)
 
-    return out, parameters
+    return out, info
 
 
-def _entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
-
-    r = _get_r(signal, r=r, dimension=dimension)
+def _entropy_approximate(signal, r, delay=1, dimension=2, corrected=False, **kwargs):
 
     if corrected is False:
         # Get phi
@@ -146,4 +140,4 @@ def _entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fa
 
         apen = -np.mean(vector_similarity)
 
-    return apen, r
+    return apen

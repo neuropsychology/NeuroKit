@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import sklearn.metrics.pairwise
 
 from .complexity_embedding import complexity_embedding
@@ -41,7 +42,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     cd : float
         The correlation dimension of the single time series or the mean ApEn
         across the channels of an n-dimensional time series.
-    parameters : dict
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute the correlation dimension and the individual CD values of each
         channel if an n-dimensional time series is passed.
@@ -80,22 +81,20 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
 
     """
     # Prepare parameters
-    parameters = {'embedding_dimension': dimension,
-                  'tau': delay}
+    info = {'Dimension': dimension,
+            'Tau': delay}
 
-    # Sanitize (formatting done in _fractal_correlation)
-    if signal.ndim > 1:
+    # Sanitize input (formatting is done in _entropy_multiscale)
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
+        info["Values"], info["Radiuses"] = _fractal_correlation(signal, delay=delay, dimension=dimension, r=r, show=show)
+        out = np.mean(info["Values"])
+    else:
+        # one single time series
+        out, info["Radiuses"] = _fractal_correlation(signal, delay=delay, dimension=dimension, r=r, show=show)
 
-    out, parameters['radiuses'] = _fractal_correlation(signal, delay=delay,
-                                                       dimension=dimension, r=r, show=show)
-
-    if not isinstance(out, (float, int)):
-        parameters['values'] = out
-        out = np.mean(out)  # for n-dim signal
-
-    return out, parameters
+    return out, info
 
 
 def _fractal_correlation(signal, delay=1, dimension=2, r=64, show=True):

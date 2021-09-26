@@ -118,8 +118,8 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     - `Youtube introduction <https://www.youtube.com/watch?v=o0LndP2OlUI>`_
 
     """
-    # Sanity checks
-    if signal.ndim > 1:
+    # Sanitize input
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
 
