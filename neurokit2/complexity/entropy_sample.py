@@ -56,8 +56,7 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
 
     """
     # Prepare parameters
-    info = {'Dimension': dimension,
-            'Tau': delay}
+    info = {"Dimension": dimension, "Delay": delay}
 
     # Sanitize input
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
@@ -67,13 +66,16 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
         info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
         info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
         for i, colname in enumerate(signal):
-            info["Values"][i] = _entropy_sample(signal[colname], r=info["Tolerance"],
-                                                delay=delay, dimension=dimension, **kwargs)
+            info["Values"][i] = _entropy_sample(
+                signal[colname], r=info["Tolerance"], delay=delay, dimension=dimension, **kwargs
+            )
         out = np.mean(info["Values"])
     else:
         # one single time series
         info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
-        out = _entropy_sample(signal, r=info["Tolerance"], delay=delay, dimension=dimension, **kwargs)
+        out = _entropy_sample(
+            signal, r=info["Tolerance"], delay=delay, dimension=dimension, **kwargs
+        )
 
     return out, info
 

@@ -81,9 +81,7 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     """
 
     # Prepare parameters
-    info = {'Dimension': dimension,
-            'Tau': delay,
-            'Corrected': corrected}
+    info = {"Dimension": dimension, "Delay": delay, "Corrected": corrected}
 
     # Sanitize input
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
@@ -93,15 +91,26 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
         info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
         info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
         for i, colname in enumerate(signal):
-            info["Values"][i] = _entropy_approximate(signal[colname], r=info["Tolerance"],
-                                                     delay=delay, dimension=dimension,
-                                                     corrected=corrected, **kwargs)
+            info["Values"][i] = _entropy_approximate(
+                signal[colname],
+                r=info["Tolerance"],
+                delay=delay,
+                dimension=dimension,
+                corrected=corrected,
+                **kwargs
+            )
         out = np.mean(info["Values"])
     else:
         # one single time series
         info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
-        out = _entropy_approximate(signal, r=info["Tolerance"], delay=delay, dimension=dimension,
-                                   corrected=corrected, **kwargs)
+        out = _entropy_approximate(
+            signal,
+            r=info["Tolerance"],
+            delay=delay,
+            dimension=dimension,
+            corrected=corrected,
+            **kwargs
+        )
 
     return out, info
 
@@ -117,10 +126,22 @@ def _entropy_approximate(signal, r, delay=1, dimension=2, corrected=False, **kwa
     if corrected is True:
 
         __, count1 = _get_embedded(
-            signal, delay=delay, dimension=dimension, r=r, distance="chebyshev", approximate=True, **kwargs
+            signal,
+            delay=delay,
+            dimension=dimension,
+            r=r,
+            distance="chebyshev",
+            approximate=True,
+            **kwargs
         )
         __, count2 = _get_embedded(
-            signal, delay=delay, dimension=dimension + 1, r=r, distance="chebyshev", approximate=True, **kwargs
+            signal,
+            delay=delay,
+            dimension=dimension + 1,
+            r=r,
+            distance="chebyshev",
+            approximate=True,
+            **kwargs
         )
 
         # Limit the number of vectors to N - (dimension + 1) * delay
