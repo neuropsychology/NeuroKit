@@ -118,7 +118,7 @@ def complexity_optimize(
                 tau_sequence,
                 metric,
                 metric_values,
-                dimension_seq,
+                dimension_seq[:-1],
                 optimize_indices,
                 r_range,
                 ApEn,
