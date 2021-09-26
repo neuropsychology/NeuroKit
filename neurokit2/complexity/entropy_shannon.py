@@ -65,7 +65,7 @@ def entropy_shannon(signal, base=2):
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
-        info["Values"] = np.full(len(signal), np.nan)  # Initialize empty vector of values
+        info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
         for i, colname in enumerate(signal):
             info["Values"][i] = _entropy_shannon(signal[colname])
         out = np.mean(info["Values"])
