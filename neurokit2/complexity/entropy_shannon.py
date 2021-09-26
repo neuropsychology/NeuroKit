@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
+import scipy.stats
+from pandas._libs.tslibs import BaseOffset
 
 from .utils import _sanitize_multichannel
 
 
-def entropy_shannon(signal):
+def entropy_shannon(signal, base=2):
     """Shannon entropy (SE)
 
     Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state,
@@ -18,6 +21,9 @@ def entropy_shannon(signal):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+    base: float
+        The logarithmic base to use, defaults to 2. Note that ``scipy.stats.entropy``
+        uses ``np.e`` as default (the natural logarithm).
 
 
     Returns
@@ -38,7 +44,7 @@ def entropy_shannon(signal):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
+    >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.1)
     >>> entropy, parameters = nk.entropy_shannon(signal)
     >>> entropy #doctest: +SKIP
 
@@ -52,11 +58,11 @@ def entropy_shannon(signal):
     - `nolds` <https://github.com/CSchoel/nolds>`_
 
     """
-    # prepare parameters
-    parameters = {}
+    # Initialize info dict
+    info = {"Base": base}
 
-    # sanitize input
-    if signal.ndim > 1:
+    # Sanitize input
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
 
@@ -65,38 +71,20 @@ def entropy_shannon(signal):
             channel = np.array(signal[colname])
             shen = _entropy_shannon(channel)
             shen_values.append(shen)
-        parameters['values'] = shen_values
+        info["Values"] = shen_values
         out = np.mean(shen_values)
 
     else:
-        # if one signal time series        
+        # if one signal time series
         out = _entropy_shannon(signal)
 
-    return out, parameters
+    return out, info
 
 
-def _entropy_shannon(signal):
+def _entropy_shannon(signal, base=2):
 
     # Check if string
     if not isinstance(signal, str):
         signal = list(signal)
 
-    signal = np.array(signal)
-
-    # Create a frequency data
-    data_set = list(set(signal))
-    freq_list = []
-    for entry in data_set:
-        counter = 0.0
-        for i in signal:
-            if i == entry:
-                counter += 1
-        freq_list.append(float(counter) / len(signal))
-
-    # Shannon entropy
-    shannon_entropy = 0.0
-    for freq in freq_list:
-        shannon_entropy += freq * np.log2(freq)
-    shannon_entropy = -shannon_entropy
-
-    return shannon_entropy
+    return scipy.stats.entropy(pd.Series(signal).value_counts(), base=base)
