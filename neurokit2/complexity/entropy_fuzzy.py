@@ -58,7 +58,7 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
 
     # Prepare parameters
     info = {'Dimension': dimension,
-            'Tau': delay}
+            'Delay': delay}
 
     # Sanitize input
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:

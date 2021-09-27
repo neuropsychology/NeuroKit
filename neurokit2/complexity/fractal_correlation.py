@@ -82,7 +82,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     """
     # Prepare parameters
     info = {'Dimension': dimension,
-            'Tau': delay}
+            'Delay': delay}
 
     # Sanitize input (formatting is done in _entropy_multiscale)
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
