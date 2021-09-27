@@ -208,7 +208,7 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information",
         # averages = np.zeros(len(tau_sequence))
         values = np.zeros(len(tau_sequence))
         for i, t in enumerate(tau_sequence):
-            average = 0
+            # average = 0
             change = 0
             for m in dimensions:
                 # # find average of dependence statistic
