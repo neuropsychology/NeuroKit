@@ -15,7 +15,7 @@ from ..stats import mutual_information
 from .complexity_embedding import complexity_embedding
 
 
-def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
+def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **kwargs):
     """Estimate optimal Time Delay (tau) for time-delay embedding.
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of
@@ -35,6 +35,11 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     - Rosenstein (1993) suggests to the point close to 40% of the slope of the average displacement
       from the diagonal (ADFD).
 
+    - Kim (1999) suggests estimating Tau using the correlation integral, called the C-C method,
+      which has shown to agree with those obtained using the Mutual Information. This method
+      makes use of a statistic within the reconstructed phase space, rather than analyzing the temporal
+      evolution of the time series.
+
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
@@ -42,9 +47,12 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     delay_max : int
         The maximum time delay (Tau or lag) to test.
     method : str
-        Correlation method. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993'.
+        Correlation method. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993',
+        or 'kim1999'.
     show : bool
         If true, will plot the mutual information values for each value of tau.
+    **kwargs
+        Additional arguments to be passed for C-C method. 
 
     Returns
     -------
@@ -90,6 +98,8 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a
       geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
 
+    - Kim, H., Eykholt, R., & Salas, J. D. (1999). Nonlinear dynamics, delay times, and embedding windows.
+      Physica D: Nonlinear Phenomena, 127(1-2), 48-60.
     """
     # Initalize vectors
     if isinstance(delay_max, int):
@@ -111,14 +121,20 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False):
     elif method in ["rosenstein", "rosenstein1993", "adfd"]:
         metric = "Displacement"
         algorithm = "closest to 40% of the slope"
+    elif method in ["kim1999", "cc"]:
+        metric = "Correlation Integral"
+        algorithm = "first local minimum"
     else:
         raise ValueError("NeuroKit error: complexity_delay(): 'method' not recognized.")
 
-    # Get metric
-    metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
+    if method not in ["kim1999", "cc"]:
+        # Get metric
+        metric_values = _embedding_delay_metric(signal, tau_sequence, metric=metric)
+        # Get optimal tau
+        optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
+    else:
+        optimal, metric_values = _embedding_delay_cc(signal, tau_sequence, **kwargs)
 
-    # Get optimal tau
-    optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
     if np.isnan(optimal):
         warn(
                 "No optimal time delay is found. Nan is returned."
@@ -199,9 +215,101 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information"):
 
     return values
 
+def _embedding_delay_cc(signal, tau_sequence, dimensions=[2, 3, 4, 5], r_vals=[0.5, 1.0, 1.5, 2.0]):
+
+    r_vals = [i * np.std(signal) for i in r_vals]
+
+    # initiate empty list for storing
+    averages = np.zeros(len(tau_sequence))
+    changes = np.zeros(len(tau_sequence))
+
+    for i, t in enumerate(tau_sequence):
+        average = 0
+        change = 0
+        for m in dimensions:            
+            # find average of dependence statistic
+            for r in r_vals:
+                s = _embedding_delay_cc_statistic(signal, delay=t, dimension=m, r=r)
+                average += s
+
+            # find average of statistic deviations
+            deviation = _embedding_delay_cc_deviation(signal, delay=t, dimension=m, r_vals=r_vals)
+            change += deviation
+        averages[i] = average / 16
+        changes[i] = change / 4
+
+    zerox = delays[signal_zerocrossings(averages)[0]]
+    minima = delays[np.argmin(changes)]
+    optimal = np.min(zerox, minima)
+
+    # # compute delay window and get m
+    # s_cor = change_all + np.abs(average_all)
+    # time_window = np.argmin(s_cor)
+    # m = int((time_window / optimal_tau) - 1)
+
+    # Return just averages (i.e., S(m, r, t)) as the metric values first
+
+    return optimal, averages
+
 
 # =============================================================================
-# Internals
+# Internals for C-C method, Kim et al. (1999)
+# =============================================================================
+
+def _embedding_delay_cc_integral(signal, dimension=3, delay=10, r=0.02):
+    """
+    Correlation integral is a cumulative distribution function, which denotes
+    the probability of distance between any pairs of points in phase space
+    not greater than the specified `r`.
+    """
+
+    embedded = complexity_embedding(signal, delay=delay, dimension=dimension, show=False)
+
+    # number of embedded points
+    M = embedded.shape[0]
+
+    h_sum = 0
+    # optimize double for loop
+    for i in itertools.combinations(range(0, M), r=2):  # compare all unique pairwise vectors
+        diff = np.linalg.norm(embedded[i[0]] - embedded[i[1]], ord=np.inf)  # sup-norm
+        h = np.heaviside(r - diff, 1)
+        h_sum += h
+        
+    # find average
+    integral = (2 / (M * (M - 1))) * h_sum
+
+    return integral
+
+def _embedding_delay_cc_statistic(signal, dimension=3, delay=10, r=0.02):
+    """The dependence statistic as the serial correlation of a nonlinear time series.
+    """
+
+    # create disjoint time series
+    series = [signal[i-1::delay] for i in range(1, delay+1)]
+
+    statistic = 0
+    for sub_series in series:
+        diff = _embedding_delay_cc_integral(sub_series, M=False, dimension=dimension, delay=delay, r=r) -
+        ((_embedding_delay_cc_integral(signal, M=False, dimension=1, delay=delay, r=r)) ** dimension)
+        statistic += diff
+
+    return statistic / delay
+
+def _embedding_delay_cc_deviation(signal, delay=10, dimension=3, r_vals=[0.5, 1.0, 1.5, 2.0]):
+    """A measure of the variation of the dependence statistic with r using
+    several representative values of r.
+    """
+
+    deviations = np.full(len(r_vals), np.nan)  # Initialize empty vector
+    for i, r in enumerate(r_vals):
+        deviations[i] = _embedding_delay_cc_statistic(signal, delay=delay, dimension=dimension, r=r)
+
+    return np.max(deviations) - np.min(deviations)
+
+
+
+# =============================================================================
+# Plotting internals
 # =============================================================================
 def _embedding_delay_plot(
     signal,
