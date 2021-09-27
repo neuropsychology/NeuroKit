@@ -52,7 +52,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
         Correlation method. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993',
         or 'kim1999'.
     show : bool
-        If true, will plot the mutual information values for each value of tau.
+        If true, will plot the metric values for each value of tau.
     **kwargs
         Additional arguments to be passed for C-C method. 
 
@@ -80,6 +80,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=5, show=True, method="kim1999")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
@@ -125,7 +126,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
         algorithm = "closest to 40% of the slope"
     elif method in ["kim1999", "cc"]:
         metric = "Correlation Integral"
-        algorithm = "global minimum"
+        algorithm = "first local minimum"
     else:
         raise ValueError("NeuroKit error: complexity_delay(): 'method' not recognized.")
 
@@ -178,8 +179,6 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
         slope = np.diff(metric_values) * len(metric_values)
         slope_in_deg = np.rad2deg(np.arctan(slope))
         optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0]
-    elif algorithm == "global minimum":
-        optimal = tau_sequence[np.argmin(metric_values)]
 
     if not isinstance(optimal, (np.integer, float)):
         if len(optimal) != 0:
@@ -193,7 +192,10 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information",
                             dimensions=[2, 3, 4, 5], r_vals=[0.5, 1.0, 1.5, 2.0]):
     """
-    Iterating through dimensions and r values only relevant if metric is Correlation Integral.
+    Iterating through dimensions and r values is relevant only if metric used is Correlation Integral.
+    For this method, either first zero crossing of the statistic averages or the first local
+    minimum of deviations to obtain optimal tau. This implementation takes the latter since in practice,
+    they are both in close proximity.
     """
 
     if metric == "Autocorrelation":
@@ -203,23 +205,22 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information",
     elif metric == "Correlation Integral":
         r_vals = [i * np.std(signal) for i in r_vals]
         # initiate empty list for storing
-        averages = np.zeros(len(tau_sequence))
-        changes = np.zeros(len(tau_sequence))
+        # averages = np.zeros(len(tau_sequence))
+        values = np.zeros(len(tau_sequence))
         for i, t in enumerate(tau_sequence):
             average = 0
             change = 0
             for m in dimensions:
-                # find average of dependence statistic
-                for r in r_vals:
-                    s = _embedding_delay_cc_statistic(signal, delay=t, dimension=m, r=r)
-                    average += s
+                # # find average of dependence statistic
+                # for r in r_vals:
+                #     s = _embedding_delay_cc_statistic(signal, delay=t, dimension=m, r=r)
+                #     average += s
 
                 # find average of statistic deviations across r_vals
                 deviation = _embedding_delay_cc_deviation(signal, delay=t, dimension=m, r_vals=r_vals)
                 change += deviation
-            averages[i] = average / 16
-            changes[i] = change / 4
-        values = changes + np.abs(averages)
+            # averages[i] = average / 16
+            values[i] = change / 4
 
     else:
         values = np.zeros(len(tau_sequence))
