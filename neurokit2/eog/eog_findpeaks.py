@@ -13,7 +13,8 @@ from .eog_simulate import _eog_simulate_blink
 def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     """Locate EOG eye blinks.
 
-    Locate EOG eye blinks.
+    Low-level function used by `eog_peaks()` to identify blinks in an EOG signal using a different
+    set of algorithms. See `eog_peaks()` for details.
 
     Parameters
     ----------
@@ -39,7 +40,7 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 
     See Also
     --------
-    eog_clean
+    eog_peaks
 
     Examples
     --------
@@ -78,15 +79,6 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     >>> # fig5 = nk.events_plot(jammes2008, eog_cleaned)
     >>> # fig5
 
-
-    References
-    ----------
-    - Agarwal, M., & Sivakumar, R. (2019). Blink: A Fully Automated Unsupervised Algorithm for
-    Eye-Blink Detection in EEG Signals. In 2019 57th Annual Allerton Conference on Communication,
-    Control, and Computing (Allerton) (pp. 1113-1121). IEEE.
-    - Kleifges, K., Bigdely-Shamlo, N., Kerick, S. E., & Robbins, K. A. (2017). BLINKER: automated
-    extraction of ocular indices from EEG enabling large-scale analysis. Frontiers in neuroscience, 11, 12.
-
     """
     # Sanitize input
     eog_cleaned = as_vector(veog_cleaned)
@@ -104,7 +96,10 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
     #    elif method in ["jammes2008", "jammes"]:
     #        peaks = _eog_findpeaks_jammes2008(eog_cleaned, sampling_rate=sampling_rate)
     else:
-        raise ValueError("NeuroKit error: eog_peaks(): 'method' should be " "one of 'mne', 'brainstorm' or 'blinker'.")
+        raise ValueError(
+            "NeuroKit error: eog_peaks(): 'method' should be "
+            "one of 'mne', 'brainstorm' or 'blinker'."
+        )
 
     return peaks
 
@@ -115,17 +110,23 @@ def eog_findpeaks(veog_cleaned, sampling_rate=None, method="mne", **kwargs):
 def _eog_findpeaks_neurokit(eog_cleaned, sampling_rate=1000, threshold=0.33, show=True):
     """In-house EOG blink detection."""
     peaks = signal_findpeaks(eog_cleaned, relative_height_min=1.25)["Peaks"]
-    peaks = signal_fixpeaks(peaks=peaks, sampling_rate=sampling_rate, interval_min=0.2, method="neurokit")
+    peaks = signal_fixpeaks(
+        peaks=peaks, sampling_rate=sampling_rate, interval_min=0.2, method="neurokit"
+    )
     peaks = _eog_findpeaks_neurokit_filterblinks(
         eog_cleaned, peaks, sampling_rate=sampling_rate, threshold=threshold, show=show
     )
     return peaks
 
 
-def _eog_findpeaks_neurokit_filterblinks(eog_cleaned, peaks, sampling_rate=1000, threshold=0.5, show=False):
+def _eog_findpeaks_neurokit_filterblinks(
+    eog_cleaned, peaks, sampling_rate=1000, threshold=0.5, show=False
+):
     """Compare each detected event to blink template and reject it if too different."""
     # Get epoch around each blink
-    events = epochs_create(eog_cleaned, peaks, sampling_rate=sampling_rate, epochs_start=-0.4, epochs_end=0.6)
+    events = epochs_create(
+        eog_cleaned, peaks, sampling_rate=sampling_rate, epochs_start=-0.4, epochs_end=0.6
+    )
     events = epochs_to_array(events)  # Convert to 2D array
 
     # Generate Blink-template
@@ -260,7 +261,9 @@ def _eog_findpeaks_blinker(eog_cleaned, sampling_rate=1000):
 
     candidates = np.array(potential_blinks)[np.append(0, indexes)[blinks]]
 
-    _, peaks, _, _, _, _ = _eog_features_delineate(eog_cleaned, candidates, sampling_rate=sampling_rate)
+    _, peaks, _, _, _, _ = _eog_features_delineate(
+        eog_cleaned, candidates, sampling_rate=sampling_rate
+    )
 
     # Blink peak markers
     peaks = np.array(peaks)

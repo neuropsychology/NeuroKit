@@ -35,8 +35,8 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
         columns:
         - *"RSP_Raw"*: the raw signal.
         - *"RSP_Clean"*: the cleaned signal.
-        - *"RSP_Peaks"*: the inhalation peaks marked as "1" in a list of zeros.
-        - *"RSP_Troughs"*: the exhalation troughs marked as "1" in a list of zeros.
+        - *"RSP_Peaks"*: the respiratory peaks (exhalation onsets) marked as "1" in a list of zeros.
+        - *"RSP_Troughs"*: the respiratory troughs (inhalation onsets) marked as "1" in a list of zeros.
         - *"RSP_Rate"*: breathing rate interpolated between inhalation peaks.
         - *"RSP_Amplitude"*: breathing amplitude interpolated between inhalation peaks.
         - *"RSP_Phase"*: breathing phase, marked by "1" for inspiration and "0" for expiration.
@@ -74,7 +74,7 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     # Get additional parameters
     phase = rsp_phase(peak_signal, desired_length=len(rsp_signal))
     amplitude = rsp_amplitude(rsp_cleaned, peak_signal)
-    rate = signal_rate(peak_signal, sampling_rate=sampling_rate, desired_length=len(rsp_signal))
+    rate = signal_rate(info["RSP_Troughs"], sampling_rate=sampling_rate, desired_length=len(rsp_signal))
 
     # Prepare output
     signals = pd.DataFrame(

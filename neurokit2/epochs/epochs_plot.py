@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from .epochs_to_df import epochs_to_df
 
 
-def epochs_plot(epochs, legend=True, show=True):
+def epochs_plot(epochs, legend=True, show=True, **kwargs):
     """Plot epochs.
 
     Parameters
@@ -47,7 +47,25 @@ def epochs_plot(epochs, legend=True, show=True):
     >>> fig2 #doctest: +SKIP
 
     """
-    data = epochs_to_df(epochs)
+    # sanitize epochs
+    if isinstance(epochs, dict):
+        data = epochs_to_df(epochs)
+
+    elif isinstance(epochs, object):
+        # Try loading mne
+        try:
+            import mne
+        except ImportError:
+            raise ImportError(
+                "NeuroKit error: epochs_plot(): the 'mne' module is required for this function to run. ",
+                "Please install it first (`pip install mne`).",
+            )
+
+        if not isinstance(epochs, mne.Epochs):
+            raise ValueError(
+            "NeuroKit error: epochs_plot(): Please make sure your epochs object passed is `mne.Epochs` object. ")
+
+        data = _epochs_mne_sanitize(epochs, **kwargs)
 
     cols = data.columns.values
     cols = [x for x in cols if x not in ["Time", "Condition", "Label", "Index"]]
@@ -64,6 +82,35 @@ def epochs_plot(epochs, legend=True, show=True):
 
     else:
         return data
+
+
+def _epochs_mne_sanitize(epochs, what):
+    """Channel array extraction from MNE for plotting.
+    
+    'what'
+
+    Select one or several channels by name and returns them in a dataframe.
+
+    Parameters
+    ----------
+    epochs : object
+        Epochs corresponding to `mne.Epochs` object.
+    what : str or list
+        The name(s) of the `mne.Epochs` channel to be plotted.
+    """
+
+    data = epochs.to_data_frame()
+    data = data.rename(columns={"time": "Time", "condition": "Condition",
+                                "epoch": "Label"})
+    data['Time'] = data['Time'] / 1000  # ms to seconds
+    
+    if isinstance(what, str):
+        data = data[[x for x in data.columns.values if x in ["Time", "Condition", "Label", what]]]
+    # Select a few specified channels
+    elif isinstance(what, list):    
+        data = data[[x for x in data.columns.values if x in ["Time", "Condition", "Label"] + what]]
+
+    return data
 
 
 def _epochs_plot(data, ax, col, legend):

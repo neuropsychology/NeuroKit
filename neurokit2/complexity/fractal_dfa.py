@@ -69,11 +69,18 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
 
     Returns
     ----------
-    dfa : dict
-        If `multifractal` is False, the dictionary contains q value, a series of windows, fluctuations of each window and the
-        slopes value of the log2(windows) versus log2(fluctuations) plot. If `multifractal` is True, the dictionary
-        additionally contains the parameters of the singularity spectrum (scaling exponents, singularity dimension, singularity
-        strength; see `singularity_spectrum()` for more information).
+    dfa : float or np.array
+        One DFA value if `multifractal` is False, and an array of DFA values if
+        `multifractal` is True.
+    parameters : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute DFA. If `multifractal` is False, the dictionary contains q value, a
+        series of windows, fluctuations of each window and the
+        slopes value of the log2(windows) versus log2(fluctuations) plot. If
+        `multifractal` is True, the dictionary additionally contains the
+        parameters of the singularity spectrum (scaling exponents, singularity dimension,
+        singularity strength; see `singularity_spectrum()` for more information).
+
 
 
     Examples
@@ -82,9 +89,9 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
     >>> import numpy as np
     >>>
     >>> signal = nk.signal_simulate(duration=10, noise=0.05)
-    >>> dfa1 = nk.fractal_dfa(signal, show=True)
+    >>> dfa1, parameters = nk.fractal_dfa(signal, show=True)
     >>> dfa1 #doctest: +SKIP
-    >>> dfa2 = nk.fractal_mfdfa(signal, q=np.arange(-5, 6), show=True)
+    >>> dfa2, parameters = nk.fractal_mfdfa(signal, q=np.arange(-5, 6), show=True)
     >>> dfa2 #doctest: +SKIP
 
 
@@ -136,17 +143,18 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
         return np.nan
 
     slopes = _slopes(windows, fluctuations, q)
-    out = {'q' : q[:, 0],
-           'windows' : windows,
-           'fluctuations' : fluctuations,
-           'slopes' : slopes}
+    if len(slopes) == 1:
+        slopes = slopes[0]
+    parameters = {'q' : q[:, 0],
+                  'windows' : windows,
+                  'fluctuations' : fluctuations}
 
     if multifractal is True:
         singularity = singularity_spectrum(windows=windows,
                                            fluctuations=fluctuations,
                                            q=q,
                                            slopes=slopes)
-        out.update(singularity)
+        parameters.update(singularity)
 
     # Plot if show is True.
     if show is True:
@@ -155,16 +163,16 @@ def fractal_dfa(signal, windows="default", overlap=True, integrate=True,
                                fluctuations=fluctuations,
                                multifractal=multifractal,
                                q=q,
-                               tau=out['tau'],
-                               hq=out['hq'],
-                               Dq=out['Dq'])
+                               tau=parameters['tau'],
+                               hq=parameters['hq'],
+                               Dq=parameters['Dq'])
         else:
             _fractal_dfa_plot(windows=windows,
                               fluctuations=fluctuations,
                               multifractal=multifractal,
                               q=q)
 
-    return out
+    return slopes, parameters
 
 # =============================================================================
 # Utilities
@@ -298,10 +306,10 @@ def singularity_spectrum(windows, fluctuations, q, slopes):
     Dq = q[:, 0] * hq - tau
 
     # Calculate the singularity
-    ExpRange = np.max(hq) - np.min(hq)
-    ExpMean = np.mean(hq)
-    DimRange = np.max(Dq) - np.min(Dq)
-    DimMean = np.mean(Dq)
+    ExpRange = np.nanmax(hq) - np.nanmin(hq)
+    ExpMean = np.nanmean(hq)
+    DimRange = np.nanmax(Dq) - np.nanmin(Dq)
+    DimMean = np.nanmean(Dq)
     out = {'tau': tau,
            'hq': hq,
            'Dq': Dq,
@@ -365,6 +373,7 @@ def _slopes(windows, fluctuations, q):
     slopes = np.zeros(len(q))
     # Find slopes of each q-power
     for i in range(len(q)):
+        # if fluctiations is zero, log2 wil encounter zero division
         old_setting = np.seterr(divide="ignore", invalid="ignore")
         slopes[i] = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)[0]
         np.seterr(**old_setting)
