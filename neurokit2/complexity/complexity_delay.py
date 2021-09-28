@@ -80,7 +80,6 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=5, show=True, method="kim1999")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
