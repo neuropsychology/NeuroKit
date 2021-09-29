@@ -168,7 +168,20 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
 def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
     if algorithm == "first local minimum":
-        optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"]
+
+        # take last value if continuously decreasing with no inflections
+        if all(np.diff(metric_values) < 0):
+            optimal = len(metric_values)-1
+        # take first value if continuously increasing with no inflections
+        elif all(np.diff(metric_values) > 0): 
+            optimal = 0
+        # if immediately decreasing with plateau at the end
+        elif np.diff(metric_values)[0] < 0:
+            optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"]
+        # take first value if immediately increasing (but with later decrease)
+        elif np.diff(metric_values)[0] > 0:
+            optimal = 0
+
     elif algorithm == "first 1/e crossing":
         metric_values = metric_values - 1 / np.exp(1)
         optimal = signal_zerocrossings(metric_values)
