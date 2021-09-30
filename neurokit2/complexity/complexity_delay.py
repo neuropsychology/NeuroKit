@@ -176,8 +176,18 @@ def complexity_delay(
 # =============================================================================
 def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
-    if algorithm in ["minimum", "min"]:
-        optimal = np.argmin(metric_values)
+    if algorithm in ["first local minimum (corrected)"]:
+        # if immediately increasing, assume it is the first is the closest
+        if np.diff(metric_values)[0] > 0:
+            optimal = 0
+        # take last value if continuously decreasing with no inflections
+        elif all(np.diff(metric_values) < 0):
+            optimal = len(metric_values) - 1
+        else:
+            # Find reversed peaks
+            optimal = signal_findpeaks(
+                -1 * metric_values, relative_height_min=0.1, relative_max=True
+            )["Peaks"]
     elif algorithm == "first local minimum":
         # Find reversed peaks
         optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)[
