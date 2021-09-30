@@ -16,7 +16,9 @@ from ..stats import mutual_information
 from .complexity_embedding import complexity_embedding
 
 
-def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **kwargs):
+def complexity_delay(
+    signal, delay_max=100, method="fraser1986", algorithm=None, show=False, **kwargs
+):
     """Estimate optimal Time Delay (tau) for time-delay embedding.
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of
@@ -49,8 +51,10 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
     delay_max : int
         The maximum time delay (Tau or lag) to test.
     method : str
-        Correlation method. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993',
+        The method that defines what to compute for each tested value of Tau. Can be one of 'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993',
         or 'kim1999'.
+    algorithm : str
+        The method used to find the optimal value of Tau given the values computed by the method. If `None` (default), will select the algorithm according to the method. Modify only if you know what you are doing.
     show : bool
         If true, will plot the metric values for each value of tau.
     **kwargs
@@ -113,19 +117,24 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
     method = method.lower()
     if method in ["fraser", "fraser1986", "tdmi"]:
         metric = "Mutual Information"
-        algorithm = "first local minimum"
+        if algorithm is None:
+            algorithm = "first local minimum"
     elif method in ["theiler", "theiler1990"]:
         metric = "Autocorrelation"
-        algorithm = "first 1/e crossing"
+        if algorithm is None:
+            algorithm = "first 1/e crossing"
     elif method in ["casdagli", "casdagli1991"]:
         metric = "Autocorrelation"
-        algorithm = "first zero crossing"
+        if algorithm is None:
+            algorithm = "first zero crossing"
     elif method in ["rosenstein", "rosenstein1993", "adfd"]:
         metric = "Displacement"
-        algorithm = "closest to 40% of the slope"
+        if algorithm is None:
+            algorithm = "closest to 40% of the slope"
     elif method in ["kim1999", "cc"]:
         metric = "Correlation Integral"
-        algorithm = "first local minimum"
+        if algorithm is None:
+            algorithm = "first local minimum"
     else:
         raise ValueError("NeuroKit error: complexity_delay(): 'method' not recognized.")
 
@@ -167,23 +176,13 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
 # =============================================================================
 def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
-    if algorithm == "first local minimum":
-
-        # take last value if continuously decreasing with no inflections
-        if all(np.diff(metric_values) < 0):
-            optimal = len(metric_values) - 1
-        # take first value if continuously increasing with no inflections
-        elif all(np.diff(metric_values) > 0):
-            optimal = 0
-        # if immediately decreasing with plateau at the end
-        elif np.diff(metric_values)[0] < 0:
-            optimal = signal_findpeaks(
-                -1 * metric_values, relative_height_min=0.1, relative_max=True
-            )["Peaks"]
-        # take first value if immediately increasing (but with later decrease)
-        elif np.diff(metric_values)[0] > 0:
-            optimal = 0
-
+    if algorithm == "minimum":
+        optimal = np.argmin(metric_values)
+    elif algorithm == "first local minimum":
+        # Find reversed peaks
+        optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)[
+            "Peaks"
+        ]
     elif algorithm == "first 1/e crossing":
         metric_values = metric_values - 1 / np.exp(1)
         optimal = signal_zerocrossings(metric_values)
