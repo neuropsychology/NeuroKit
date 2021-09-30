@@ -10,7 +10,7 @@ def write_csv(data, filename, parts=None, **kwargs):
     data : list
         List of dictionaries.
     filename : str
-        Name of the CSV file.
+        Name of the CSV file (without the extension).
     parts : int
         Number of parts to split the data into.
 
@@ -22,7 +22,7 @@ def write_csv(data, filename, parts=None, **kwargs):
     if isinstance(parts, int):
         # Add column to identify parts
         data["__Part__"] = np.repeat(range(parts), np.ceil(len(data) / parts))[0 : len(data)]
-        for j, g in data.groupby("__Part__"):
-            g.drop(["__Part__"], axis=1).to_csv(filename, **kwargs)
+        for i, part in data.groupby("__Part__"):
+            part.drop(["__Part__"], axis=1).to_csv(filename + f"_{i + 1}.csv", **kwargs)
     else:
         data.to_csv(filename, **kwargs)
