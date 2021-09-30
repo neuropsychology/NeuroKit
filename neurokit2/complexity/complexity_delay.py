@@ -176,7 +176,7 @@ def complexity_delay(
 # =============================================================================
 def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
-    if algorithm == "minimum":
+    if algorithm in ["minimum", "min"]:
         optimal = np.argmin(metric_values)
     elif algorithm == "first local minimum":
         # Find reversed peaks
