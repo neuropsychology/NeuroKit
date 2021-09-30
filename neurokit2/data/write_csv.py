@@ -23,6 +23,6 @@ def write_csv(data, filename, parts=None, **kwargs):
         # Add column to identify parts
         data["__Part__"] = np.repeat(range(parts), np.ceil(len(data) / parts))[0 : len(data)]
         for i, part in data.groupby("__Part__"):
-            part.drop(["__Part__"], axis=1).to_csv(filename + f"_{i + 1}.csv", **kwargs)
+            part.drop(["__Part__"], axis=1).to_csv(filename + f"_part{i + 1}.csv", **kwargs)
     else:
         data.to_csv(filename, **kwargs)
