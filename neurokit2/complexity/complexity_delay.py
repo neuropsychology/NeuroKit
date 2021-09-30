@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import itertools
 from warnings import warn
 
 import matplotlib
@@ -8,7 +9,6 @@ import numpy as np
 import scipy.signal
 import scipy.spatial
 import scipy.stats
-import itertools
 
 from ..misc import NeuroKitWarning, find_closest
 from ..signal import signal_autocor, signal_findpeaks, signal_zerocrossings
@@ -54,7 +54,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
     show : bool
         If true, will plot the metric values for each value of tau.
     **kwargs
-        Additional arguments to be passed for C-C method. 
+        Additional arguments to be passed for C-C method.
 
     Returns
     -------
@@ -136,10 +136,10 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
     optimal = _embedding_delay_select(metric_values, algorithm=algorithm)
     if np.isnan(optimal):
         warn(
-                "No optimal time delay is found. Nan is returned."
-                " Consider using a higher `delay_max`.",
-                category=NeuroKitWarning
-            )
+            "No optimal time delay is found. Nan is returned."
+            " Consider using a higher `delay_max`.",
+            category=NeuroKitWarning,
+        )
         return optimal
     optimal = tau_sequence[optimal]
 
@@ -158,7 +158,7 @@ def complexity_delay(signal, delay_max=100, method="fraser1986", show=False, **k
         "Scores": metric_values,
         "Algorithm": algorithm,
         "Metric": metric,
-        "Method": method
+        "Method": method,
     }
 
 
@@ -171,13 +171,15 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
 
         # take last value if continuously decreasing with no inflections
         if all(np.diff(metric_values) < 0):
-            optimal = len(metric_values)-1
+            optimal = len(metric_values) - 1
         # take first value if continuously increasing with no inflections
-        elif all(np.diff(metric_values) > 0): 
+        elif all(np.diff(metric_values) > 0):
             optimal = 0
         # if immediately decreasing with plateau at the end
         elif np.diff(metric_values)[0] < 0:
-            optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)["Peaks"]
+            optimal = signal_findpeaks(
+                -1 * metric_values, relative_height_min=0.1, relative_max=True
+            )["Peaks"]
         # take first value if immediately increasing (but with later decrease)
         elif np.diff(metric_values)[0] > 0:
             optimal = 0
@@ -192,7 +194,7 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
         slope_in_deg = np.rad2deg(np.arctan(slope))
         optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0]
 
-    if not isinstance(optimal, (np.integer, float)):
+    if not isinstance(optimal, (int, float, np.integer)):
         if len(optimal) != 0:
             optimal = optimal[0]
         else:
@@ -201,8 +203,13 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
     return optimal
 
 
-def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information",
-                            dimensions=[2, 3, 4, 5], r_vals=[0.5, 1.0, 1.5, 2.0]):
+def _embedding_delay_metric(
+    signal,
+    tau_sequence,
+    metric="Mutual Information",
+    dimensions=[2, 3, 4, 5],
+    r_vals=[0.5, 1.0, 1.5, 2.0],
+):
     """
     Iterating through dimensions and r values is relevant only if metric used is Correlation Integral.
     For this method, either first zero crossing of the statistic averages or the first local
@@ -229,7 +236,9 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information",
                 #     average += s
 
                 # find average of statistic deviations across r_vals
-                deviation = _embedding_delay_cc_deviation(signal, delay=t, dimension=m, r_vals=r_vals)
+                deviation = _embedding_delay_cc_deviation(
+                    signal, delay=t, dimension=m, r_vals=r_vals
+                )
                 change += deviation
             # averages[i] = average / 16
             values[i] = change / 4
@@ -261,6 +270,7 @@ def _embedding_delay_metric(signal, tau_sequence, metric="Mutual Information",
 # Internals for C-C method, Kim et al. (1999)
 # =============================================================================
 
+
 def _embedding_delay_cc_integral(signal, dimension=3, delay=10, r=0.02):
     """
     Correlation integral is a cumulative distribution function, which denotes
@@ -279,26 +289,28 @@ def _embedding_delay_cc_integral(signal, dimension=3, delay=10, r=0.02):
         diff = np.linalg.norm(embedded[i[0]] - embedded[i[1]], ord=np.inf)  # sup-norm
         h = np.heaviside(r - diff, 1)
         h_sum += h
-        
+
     # find average
     integral = (2 / (M * (M - 1))) * h_sum
 
     return integral
 
+
 def _embedding_delay_cc_statistic(signal, dimension=3, delay=10, r=0.02):
-    """The dependence statistic as the serial correlation of a nonlinear time series.
-    """
+    """The dependence statistic as the serial correlation of a nonlinear time series."""
 
     # create disjoint time series
-    series = [signal[i-1::delay] for i in range(1, delay+1)]
+    series = [signal[i - 1 :: delay] for i in range(1, delay + 1)]
 
     statistic = 0
     for sub_series in series:
-        diff = _embedding_delay_cc_integral(sub_series, dimension=dimension, delay=delay,
-                                            r=r) - ((_embedding_delay_cc_integral(signal, dimension=1, delay=delay, r=r)) ** dimension)
+        diff = _embedding_delay_cc_integral(sub_series, dimension=dimension, delay=delay, r=r) - (
+            (_embedding_delay_cc_integral(signal, dimension=1, delay=delay, r=r)) ** dimension
+        )
         statistic += diff
 
     return statistic / delay
+
 
 def _embedding_delay_cc_deviation(signal, delay=10, dimension=3, r_vals=[0.5, 1.0, 1.5, 2.0]):
     """A measure of the variation of the dependence statistic with r using
@@ -310,7 +322,6 @@ def _embedding_delay_cc_deviation(signal, delay=10, dimension=3, r_vals=[0.5, 1.
         deviations[i] = _embedding_delay_cc_statistic(signal, delay=delay, dimension=dimension, r=r)
 
     return np.max(deviations) - np.min(deviations)
-
 
 
 # =============================================================================
