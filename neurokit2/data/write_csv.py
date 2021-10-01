@@ -3,7 +3,15 @@ import numpy as np
 
 def write_csv(data, filename, parts=None, **kwargs):
     """
-    Write data to multiple csv files.
+    Write data to multiple csv files. You can then re-create them as follows:
+
+    .. highlight:: python
+    .. code-block:: python
+        # iterate through 6-parts and concatenate the pieces
+        pd.concat(
+                [pd.read_csv(f"data_part{i}.csv") for i in range(1, 7)],
+                axis=0,
+            )
 
     Parameters
     ----------
