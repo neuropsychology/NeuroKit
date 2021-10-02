@@ -33,7 +33,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     r : str or int or list
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         ranging from 2.5% to 50% of the distance range. Methods implemented in other packages can be
-        used via setting ``r='nolds'`` or ``r='Corr_Dim'``.
+        used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
     show : bool
         Plot of correlation dimension if True. Defaults to False.
 
@@ -81,18 +81,21 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
 
     """
     # Prepare parameters
-    info = {'Dimension': dimension,
-            'Delay': delay}
+    info = {"Dimension": dimension, "Delay": delay}
 
     # Sanitize input (formatting is done in _entropy_multiscale)
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         # n-dimensional
         signal = _sanitize_multichannel(signal)
-        info["Values"], info["Radiuses"] = _fractal_correlation(signal, delay=delay, dimension=dimension, r=r, show=show)
+        info["Values"], info["Radiuses"] = _fractal_correlation(
+            signal, delay=delay, dimension=dimension, r=r, show=show
+        )
         out = np.mean(info["Values"])
     else:
         # one single time series
-        out, info["Radiuses"] = _fractal_correlation(signal, delay=delay, dimension=dimension, r=r, show=show)
+        out, info["Radiuses"] = _fractal_correlation(
+            signal, delay=delay, dimension=dimension, r=r, show=show
+        )
 
     return out, info
 
@@ -108,11 +111,11 @@ def _fractal_correlation(signal, delay=1, dimension=2, r=64, show=True):
             channel = np.array(signal[colname])
             embedded = complexity_embedding(channel, delay=delay, dimension=dimension)
             dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
-            r_val = _fractal_correlation_get_r(r, channel, dist)            
+            r_val = _fractal_correlation_get_r(r, channel, dist)
             r_val, c = _fractal_correlation_nolds(channel, r_val, dist)
             r_vals.append(r_val)
             corr.append(c)
-        
+
             # Compute trend
             if len(corr) == 0:
                 cd.append(np.nan)
@@ -126,11 +129,11 @@ def _fractal_correlation(signal, delay=1, dimension=2, r=64, show=True):
         return [i[0] for i in cd], r_vals
 
     else:
-        # if one signal time series    
+        # if one signal time series
         embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
         dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
         r_vals = _fractal_correlation_get_r(r, signal, dist)
-    
+
         r_vals, corr = _fractal_correlation_nolds(signal, r_vals, dist)
         # Corr_Dim method: https://github.com/jcvasquezc/Corr_Dim
         # r_vals, corr = _fractal_correlation_Corr_Dim(embedded, r_vals, dist)
@@ -231,14 +234,20 @@ def _fractal_correlation_plot(r_vals, corr, d2, signal):
     fig.suptitle("Correlation Dimension")
     plt.xlabel(r"$\log_{2}$(r)")
     plt.ylabel(r"$\log_{2}$(c)")
-        
+
     if signal.ndim > 1:
         # Plot overlay for n-dim signal
         colors = plt.cm.tab20b(np.linspace(0, 1, len(r_vals)))
         for r, c, d, index in zip(r_vals, corr, d2, range(len(d2))):
             fit = 2 ** np.polyval(d, np.log2(r))
             plt.loglog(r, c, "bo", color=colors[index])
-            plt.loglog(r, fit, "r", label="{}".format(signal.columns[index]) + r" $D2$ = %0.3f" % d[0], color=colors[index])
+            plt.loglog(
+                r,
+                fit,
+                "r",
+                label="{}".format(signal.columns[index]) + r" $D2$ = %0.3f" % d[0],
+                color=colors[index],
+            )
             plt.legend(loc="lower right")
     else:
         fit = 2 ** np.polyval(d2, np.log2(r_vals))

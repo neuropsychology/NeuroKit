@@ -4,6 +4,7 @@ import numpy as np
 import scipy.spatial
 
 from .complexity_embedding import complexity_embedding
+from .fractal_correlation import fractal_correlation
 
 
 def complexity_dimension(
@@ -52,9 +53,13 @@ def complexity_dimension(
     >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
+    >>> # Find optimal delay
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=500)
     >>>
-    >>> values, parameters = nk.complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
+    >>> # Find optimal dimension
+    >>> optimal_dimension, info = nk.complexity_dimension(signal, delay=delay, dimension_max=20, method='afnn', show=True)
+    >>> optimal_dimension, info = nk.complexity_dimension(signal, delay=delay, dimension_max=20, method='fnn', show=True)
+
 
     References
     -----------
@@ -62,7 +67,7 @@ def complexity_dimension(
       time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.
 
     """
-    # Initalize vectors
+    # Initialize vectors
     if isinstance(dimension_max, int):
         dimension_seq = np.arange(1, dimension_max + 1)
     else:
@@ -83,6 +88,10 @@ def complexity_dimension(
 
         # To standardize the length of dimension_seq with E1 and E2
         dimension_seq = dimension_seq[:-1]
+
+        # Store information
+        info = {"Method": method, "Values": dimension_seq, "E1": E1, "E2": E2}
+
         if show is True:
             _embedding_dimension_plot(
                 method=method,
@@ -92,14 +101,15 @@ def complexity_dimension(
                 E2=E2,
             )
 
-        info = {"Method": method, "Values": dimension_seq, "E1": E1, "E2": E2}
-
     elif method in ["fnn"]:
         f1, f2, f3 = _embedding_dimension_ffn(
             signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs
         )
 
         min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
+
+        # Store information
+        info = {"Method": method, "Values": dimension_seq, "f1": f1, "f2": f2, "f3": f3}
 
         if show is True:
             _embedding_dimension_plot(
@@ -110,7 +120,23 @@ def complexity_dimension(
                 f2=f2,
                 f3=f3,
             )
-        info = {"Method": method, "Values": dimension_seq, "f1": f1, "f2": f2, "f3": f3}
+
+    elif method in ["correlation", "cd"]:
+        CDs = _embedding_dimension_correlation(signal, dimension_seq, delay=delay, **kwargs)
+
+        # Find elbow (TODO: replace by better method of elbow localization)
+        min_dimension = dimension_seq[np.where(CDs >= 0.66 * np.max(CDs))[0][0]]
+
+        # Store information
+        info = {"Method": method, "Values": dimension_seq, "CD": CDs}
+
+        if show is True:
+            _embedding_dimension_plot(
+                method=method,
+                dimension_seq=dimension_seq,
+                min_dimension=min_dimension,
+                CD=CDs,
+            )
 
     else:
         raise ValueError("NeuroKit error: complexity_dimension(): 'method' " "not recognized.")
@@ -121,6 +147,21 @@ def complexity_dimension(
 # =============================================================================
 # Methods
 # =============================================================================
+def _embedding_dimension_correlation(signal, dimension_seq, delay=1, **kwargs):
+    """Return the Correlation Dimension (CD) for a all d in dimension_seq.
+
+    From https://www.researchgate.net/post/How-can-we-find-out-which-value-of-embedding-dimensions-is-more-accurate
+
+    In the early days, the method of choice was to calculate the correlation dimension in various embeddings and look for a saturation in its value as the embedding dimension increases. However, a saturation will always occur when you no longer have enough data to adequately fill your high-dimensional space. More recently the method of choice has been false nearest neighbors, although that suffers from the same problem when the neighborhood does not contain sufficiently many points. As a rule of thumb, you might demand that each dimension have at least ten points.
+
+    """
+    CDs = np.zeros(len(dimension_seq))
+    for i, d in enumerate(dimension_seq):
+        CDs[i] = fractal_correlation(signal, dimension=d, delay=delay, **kwargs)[0]
+
+    return CDs
+
+
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
     """Return E(d) and E^*(d) for a all d in dimension_seq.
 
@@ -240,7 +281,16 @@ def _embedding_dimension_ffn_d(
 # Internals
 # =============================================================================
 def _embedding_dimension_plot(
-    method, dimension_seq, min_dimension, E1=None, E2=None, f1=None, f2=None, f3=None, ax=None
+    method,
+    dimension_seq,
+    min_dimension,
+    E1=None,
+    E2=None,
+    f1=None,
+    f2=None,
+    f3=None,
+    CD=None,
+    ax=None,
 ):
 
     if ax is None:
@@ -249,15 +299,20 @@ def _embedding_dimension_plot(
         fig = None
     ax.set_title("Optimization of Dimension (d)")
     ax.set_xlabel("Embedding dimension $d$")
-    ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
-    if method in ["afnn"]:
-        ax.plot(dimension_seq, E1, "bo-", label="$E_1(d)$", color="#FF5722")
-        ax.plot(dimension_seq, E2, "go-", label="$E_2(d)$", color="#f44336")
 
-    if method in ["fnn"]:
-        ax.plot(dimension_seq, 100 * f1, "bo--", label="Test I", color="#FF5722")
-        ax.plot(dimension_seq, 100 * f2, "g^--", label="Test II", color="#f44336")
-        ax.plot(dimension_seq, 100 * f3, "rs-", label="Test I + II", color="#852b01")
+    if method in ["correlation", "cd"]:
+        ax.set_ylabel("Correlation Dimension (CD)")
+        ax.plot(dimension_seq, CD, "o-", label="$CD$", color="#852b01")
+    else:
+        ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
+        if method in ["afnn"]:
+            ax.plot(dimension_seq, E1, "o-", label="$E_1(d)$", color="#FF5722")
+            ax.plot(dimension_seq, E2, "o-", label="$E_2(d)$", color="#f44336")
+
+        if method in ["fnn"]:
+            ax.plot(dimension_seq, 100 * f1, "o--", label="Test I", color="#FF5722")
+            ax.plot(dimension_seq, 100 * f2, "^--", label="Test II", color="#f44336")
+            ax.plot(dimension_seq, 100 * f3, "s-", label="Test I + II", color="#852b01")
 
     ax.axvline(x=min_dimension, color="#E91E63", label="Optimal dimension: " + str(min_dimension))
     ax.legend(loc="upper right")

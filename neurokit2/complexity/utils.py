@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
 import sklearn.neighbors
 
 from .complexity_embedding import complexity_embedding
@@ -10,18 +10,21 @@ from .complexity_embedding import complexity_embedding
 # Format n-dimensional input
 # =============================================================================
 
+
 def _sanitize_multichannel(signal):
 
     # n-dimensional
     if not isinstance(signal, (pd.DataFrame, np.ndarray)):
         raise ValueError(
-        "NeuroKit error: _sanitize_multichannel(): your n-dimensional data has to ",
-        "be in the form of a pandas DataFrame or a numpy ndarray.")
+            "NeuroKit error: _sanitize_multichannel(): your n-dimensional data has to ",
+            "be in the form of a pandas DataFrame or a numpy ndarray.",
+        )
     if isinstance(signal, np.ndarray):
         # signal.shape has to be in (len(channels), len(samples)) format
         signal = pd.DataFrame(signal).transpose()
 
     return signal
+
 
 # =============================================================================
 # Phi
@@ -78,9 +81,8 @@ def _get_embedded(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay, _ = nk.complexity_delay(signal)
     >>>
-    >>> embbeded, count = _get_embedded(signal, delay, r=0.2 * np.std(signal, ddof=1), dimension=2,
+    >>> embbeded, count = _get_embedded(signal, delay=8, r=0.2 * np.std(signal, ddof=1), dimension=2,
     ...                                 distance='chebyshev', approximate=False)
     """
     # Sanity checks
@@ -140,6 +142,7 @@ def _get_r(signal, r="default", dimension=2, show=False):
     https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
 
     """
+
     def _default_r(signal, dimension):
         constant = 0.11604738531196232
         r = constant * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
@@ -157,18 +160,25 @@ def _get_r(signal, r="default", dimension=2, show=False):
 
             if show:
                 fig = plt.figure(constrained_layout=False)
-                fig.suptitle('Sanitized tolerance r across channels')
+                fig.suptitle("Sanitized tolerance r across channels")
                 colors = plt.cm.plasma(np.linspace(0, 1, len(r_list)))
                 plt.plot(np.arange(1, len(r_list) + 1), np.array(r_list), color="#FF9800")
                 plt.ylabel(r"Tolerance $r$")
                 plt.xlabel("Channels")
                 plt.xticks(np.arange(1, len(r_list) + 1), labels=list(signal.columns))
                 for i, val in enumerate(r_list):
-                    plt.scatter(i+1, val, color=colors[i],
-                                marker='o', zorder=3, label=signal.columns[i])                
+                    plt.scatter(
+                        i + 1, val, color=colors[i], marker="o", zorder=3, label=signal.columns[i]
+                    )
                     plt.legend(loc="lower right")
-                plt.axhline(optimal_r, color="black", ls='--')
-                plt.text(len(r_list)-1, optimal_r, r'Mean $r$ = {:.3g}'.format(optimal_r), ha='center', va='bottom')
+                plt.axhline(optimal_r, color="black", ls="--")
+                plt.text(
+                    len(r_list) - 1,
+                    optimal_r,
+                    r"Mean $r$ = {:.3g}".format(optimal_r),
+                    ha="center",
+                    va="bottom",
+                )
 
         else:
             # one r for single time series
