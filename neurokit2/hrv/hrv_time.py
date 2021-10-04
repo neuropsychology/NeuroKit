@@ -47,7 +47,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         mean of the RR intervals (MeanNN).
         - **MedianNN**: The median of the absolute values of the successive differences between RR intervals.
         - **MadNN**: The median absolute deviation of the RR intervals.
-        - **HCVNN**: The median absolute deviation of the RR intervals (MadNN) divided by the median
+        - **MCVNN**: The median absolute deviation of the RR intervals (MadNN) divided by the median
         of the absolute differences of their successive differences (MedianNN).
         - **IQRNN**: The interquartile range (IQR) of the RR intervals.
         - **pNN50**: The proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
