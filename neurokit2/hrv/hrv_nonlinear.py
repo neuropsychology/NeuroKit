@@ -119,7 +119,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
             - **PSS**: Percentage of short segments.
 
-            - **PAS**: Percentage of NN intervals in alternation segments.
+            - **PAS**: IPercentage of NN intervals in alternation segments.
 
         - **Indices of Complexity**:
 

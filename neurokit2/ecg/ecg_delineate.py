@@ -45,7 +45,6 @@ def ecg_delineate(
         information.
     show_type: str
         The type of delineated waves information showed in the plot.
-        Can be "peaks", "bounds_R", "bounds_T", "bounds_P" or "all".
     check : bool
         Defaults to False. If True, replaces the delineated features with np.nan if its standardized distance
         from R-peaks is more than 3.
