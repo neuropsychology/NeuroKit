@@ -21,7 +21,7 @@ New Features
 * Add `mne_crop()` to crop `mne` Raw objects with additional flexibility to specify first and last elements
 * Plotting function in `eeg_badchannels()` to visualize overlay of individual EEG channels and highlighting of bad ones
 * Add `eog_peaks()` as wrapper for `eog_findpeaks()`
-* Allow `ecg_delineate() to account for different heart rate
+* Allow `ecg_delineate()` to account for different heart rate
 
 Fixes
 +++++++++++++
