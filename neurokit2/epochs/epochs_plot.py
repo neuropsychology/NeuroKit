@@ -86,9 +86,6 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
 
 def _epochs_mne_sanitize(epochs, what):
     """Channel array extraction from MNE for plotting.
-    
-    'what'
-
     Select one or several channels by name and returns them in a dataframe.
 
     Parameters
@@ -103,11 +100,11 @@ def _epochs_mne_sanitize(epochs, what):
     data = data.rename(columns={"time": "Time", "condition": "Condition",
                                 "epoch": "Label"})
     data['Time'] = data['Time'] / 1000  # ms to seconds
-    
+
     if isinstance(what, str):
         data = data[[x for x in data.columns.values if x in ["Time", "Condition", "Label", what]]]
     # Select a few specified channels
-    elif isinstance(what, list):    
+    elif isinstance(what, list):
         data = data[[x for x in data.columns.values if x in ["Time", "Condition", "Label"] + what]]
 
     return data

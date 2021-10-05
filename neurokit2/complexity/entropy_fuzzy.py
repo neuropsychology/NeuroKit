@@ -52,7 +52,7 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     r = _get_r(signal, r=r, dimension=dimension)
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, fuzzy=True, **kwargs)
 
-    fuzzyen =  _phi_divide(phi)
+    fuzzyen = _phi_divide(phi)
 
     parameters = {'tolerance': r,
                   'embedding_dimension': dimension,

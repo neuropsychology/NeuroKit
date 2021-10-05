@@ -375,10 +375,10 @@ def _emg_activation_activations(activity, duration_min=0.05):
     baseline = events_find(activity == 0, threshold=0.5, threshold_keep="above", duration_min=duration_min)
     baseline["offset"] = baseline["onset"] + baseline["duration"]
 
-    # Cross-comparison 
-    valid = np.isin(activations["onset"], baseline["offset"]) 
+    # Cross-comparison
+    valid = np.isin(activations["onset"], baseline["offset"])
     onsets = activations["onset"][valid]
-    offsets = activations["offset"][valid] 
+    offsets = activations["offset"][valid]
 
     # make sure offset indices are within length of signal
     offsets = offsets[offsets < len(activity)]
