@@ -9,7 +9,7 @@ from .find_groups import find_groups
 from .find_outliers import find_outliers
 from .intervals_to_peaks import intervals_to_peaks
 from .listify import listify
-from .parallel_processing import parallel_processing
+from .parallel_run import parallel_run
 from .replace import replace
 from .type_converters import as_vector
 
@@ -25,5 +25,5 @@ __all__ = [
     "check_type",
     "find_outliers",
     "intervals_to_peaks",
-    "parallel_processing",
+    "parallel_run",
 ]

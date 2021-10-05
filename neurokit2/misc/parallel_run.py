@@ -1,4 +1,4 @@
-def parallel_processing(function, arguments_list, n_jobs=-2, **kwargs):
+def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
     """Parallel processing utility function (requires the ```joblib`` package).
 
     Parameters
@@ -29,7 +29,7 @@ def parallel_processing(function, arguments_list, n_jobs=-2, **kwargs):
     >>>
     >>> arguments_list = [{"x": 1}, {"x": 2}, {"x": 3}]
     >>>
-    >>> nk.parallel_processing(my_function, arguments_list)
+    >>> nk.parallel_run(my_function, arguments_list)
 
     """
     # Try loading mne
@@ -37,7 +37,7 @@ def parallel_processing(function, arguments_list, n_jobs=-2, **kwargs):
         import joblib
     except ImportError:
         raise ImportError(
-            "NeuroKit error: parallel_processing(): the 'joblib' module is required for this function to run. ",
+            "NeuroKit error: parallel_run(): the 'joblib' module is required for this function to run. ",
             "Please install it first (`pip install joblib`).",
         )
 
