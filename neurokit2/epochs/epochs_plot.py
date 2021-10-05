@@ -63,7 +63,7 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
 
         if not isinstance(epochs, mne.Epochs):
             raise ValueError(
-            "NeuroKit error: epochs_plot(): Please make sure your epochs object passed is `mne.Epochs` object. ")
+                "NeuroKit error: epochs_plot(): Please make sure your epochs object passed is `mne.Epochs` object. ")
 
         data = _epochs_mne_sanitize(epochs, **kwargs)
 
