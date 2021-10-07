@@ -55,7 +55,15 @@ def complexity_k(signal, k_max="default", show=False):
     # -------------
     slope_values = np.zeros(len(k_range))
 
+    # Step 3
     average_values = _complexity_k_average_values(signal, k_range)
+
+    # Slope of best-fit line through points
+    # k_values = np.arange(1, kmax + 1)
+    # TAMZEN: is it normal here to recreate a range from 1 to k_max? instead of using k_range??
+    # slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
+
+    return slope, intercept, k_values, average_values
 
 
 # =============================================================================
@@ -66,7 +74,9 @@ def complexity_k(signal, k_max="default", show=False):
 def _complexity_k_average_values(signal, k_range):
     average_values = np.zeros(len(k_range))
     # Compute length of the curve, Lm(k)
-    for i, k in enumerate(range(1, len(k_range) + 1)):
+    for i, k in enumerate(
+        range(1, len(k_range) + 1)
+    ):  # TAMZEN: is it normal here to recreate a range from 1 to k_max? instead of using k_range??
         sets = []
         for m in range(1, k + 1):
             n_max = int(np.floor((len(signal) - m) / k))
