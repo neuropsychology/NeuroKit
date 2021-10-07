@@ -73,6 +73,7 @@ __all__ = [
     "complexity_se",
     "complexity_apen",
     "complexity_capen",
+    "complexity_k",
     "complexity_sampen",
     "complexity_fuzzyen",
     "complexity_mse",

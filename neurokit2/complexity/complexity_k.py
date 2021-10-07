@@ -25,7 +25,9 @@ def complexity_k(signal, k_max="default", show=False):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=1, frequency=[3, 6], noise = 0.2)
+    >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
+    >>>
+    >>> k_max, info = nk.complexity_k(signal)
 
     Reference
     ----------
@@ -51,7 +53,33 @@ def complexity_k(signal, k_max="default", show=False):
             category=NeuroKitWarning,
         )
 
-    # return slope, intercept, k_values, average_values
+    # Compute the slope for each kmax value
+    # --------------------------------------
+    slopes = np.zeros(len(k_range))
+    for i, k in enumerate(k_range):
+        slopes[i] = _complexity_k_slope(signal, k)
+
+    # Find plateau (the saturation point of slope)
+    # --------------------------------------------
+    # Find slopes that are approaching the max
+    k_indices = np.where(slopes >= 0.95 * np.max(slopes))[0]
+    # drop indices for k <= 2 (which is the minimum value)
+    k_indices = k_indices[k_range[k_indices] > 2]
+
+    if len(k_indices) == 0:
+        warn(
+            "The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return k = 2.",
+            category=NeuroKitWarning,
+        )
+        k_optimal = 2
+    else:
+        k_optimal = k_range[k_indices[0]]
+
+    # Return optimal tau and info dict
+    return k_optimal, {
+        "Values": k_range,
+        "Scores": slopes,
+    }
 
 
 # =============================================================================
@@ -60,7 +88,7 @@ def complexity_k(signal, k_max="default", show=False):
 
 
 def _complexity_k_slope(signal, k):
-    k_values = np.arange(1, len(k) + 1)
+    k_values = np.arange(1, k + 1)
     average_values = _complexity_k_average_values(signal, k_values)
 
     # Slope of best-fit line through points
@@ -70,16 +98,17 @@ def _complexity_k_slope(signal, k):
 
 def _complexity_k_average_values(signal, k_values):
     """Step 3 of Vega & Noel (2015)"""
+    n = len(signal)
     average_values = np.zeros(len(k_values))
+
     # Compute length of the curve, Lm(k)
     for i, k in enumerate(k_values):
-        sets = []
-        for m in range(1, k + 1):
-            n_max = int(np.floor((len(signal) - m) / k))
-            normalization = (len(signal) - 1) / (n_max * k)
+        sets = np.zeros(k)
+        for j, m in enumerate(range(1, k + 1)):
+            n_max = int(np.floor((n - m) / k))
+            normalization = (n - 1) / (n_max * k)
             Lm_k = np.sum(np.abs(np.diff(signal[m - 1 :: k], n=1))) * normalization
-            Lm_k = Lm_k / k
-            sets.append(Lm_k)
+            sets[j] = Lm_k / k
         # Compute average value over k sets of Lm(k)
         L_k = np.sum(sets) / k
         average_values[i] = L_k
