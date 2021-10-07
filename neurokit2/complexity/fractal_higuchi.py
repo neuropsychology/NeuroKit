@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 
 from ..misc import NeuroKitWarning
+from .complexity_k import complexity_k
 from .utils import _sanitize_multichannel
 
 
@@ -75,25 +76,29 @@ def fractal_higuchi(signal, kmax="default", show=False):
             k_max = []
             slope_values = []
             for index, colname in enumerate(signal):
-                k, k_range, slope = _fractal_higuchi_optimal_k(signal[colname], k_start=2, k_end=k_end)
+                k, k_range, slope = _fractal_higuchi_optimal_k(
+                    signal[colname], k_start=2, k_end=k_end
+                )
                 _fractal_higuchi_optimal_k_warning(k)  # raise warning if k <= 2
                 k_max.append(k)
                 slope_values.append(slope)
-            info = {'kmax': int(np.mean(k_max))}
+            info = {"kmax": int(np.mean(k_max))}
         else:
             # one single time series
-            k_max, k_range, slope_values = _fractal_higuchi_optimal_k(signal, k_start=2, k_end=k_end)
+            k_max, k_range, slope_values = _fractal_higuchi_optimal_k(
+                signal, k_start=2, k_end=k_end
+            )
             _fractal_higuchi_optimal_k_warning(k_max)
-            info = {'kmax': k_max}
+            info = {"kmax": k_max}
 
     # no optimizing
     else:
         _fractal_higuchi_optimal_k_warning(k_end)
         k_max = k_end
-        info = {'kmax': k_max}
+        info = {"kmax": k_max}
 
     # Compute slope
-    slope, intercept, k_values, average_values = _fractal_higuchi_slope(signal, info['kmax'])
+    slope, intercept, k_values, average_values = _fractal_higuchi_slope(signal, info["kmax"])
 
     # Plot
     if show:
@@ -103,10 +108,8 @@ def fractal_higuchi(signal, kmax="default", show=False):
         # show both slope plot and kmax optimizing plot
         else:
             fig = plt.figure(constrained_layout=False)
-            fig.suptitle('Higuchi Fractal Dimension (HFD)')
-            spec = matplotlib.gridspec.GridSpec(
-                    ncols=1, nrows=2
-                )
+            fig.suptitle("Higuchi Fractal Dimension (HFD)")
+            spec = matplotlib.gridspec.GridSpec(ncols=1, nrows=2)
             ax_slope = fig.add_subplot(spec[0, 0])
             _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept, ax=ax_slope)
             ax_kmax = fig.add_subplot(spec[1, 0])
@@ -134,7 +137,7 @@ def _fractal_higuchi_slope(signal, kmax):
         for m in range(1, k + 1):
             n_max = int(np.floor((N - m) / k))
             normalization = (N - 1) / (n_max * k)
-            Lm_k = np.sum(np.abs(np.diff(signal[m-1::k], n=1))) * normalization
+            Lm_k = np.sum(np.abs(np.diff(signal[m - 1 :: k], n=1))) * normalization
             Lm_k = Lm_k / k
             sets.append(Lm_k)
         # Compute average value over k sets of Lm(k)
@@ -143,7 +146,7 @@ def _fractal_higuchi_slope(signal, kmax):
 
     # Slope of best-fit line through points
     k_values = np.arange(1, kmax + 1)
-    slope, intercept = - np.polyfit(np.log(k_values), np.log(average_values), 1)
+    slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
 
     return slope, intercept, k_values, average_values
 
@@ -152,7 +155,7 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
 
     if ax is None:
         fig, ax = plt.subplots()
-        fig.suptitle('Higuchi Fractal Dimension (HFD)')
+        fig.suptitle("Higuchi Fractal Dimension (HFD)")
     else:
         fig = None
 
@@ -161,8 +164,9 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
         kmax = int(np.mean(kmax))
     kmax_val = str(kmax)
     slope_val = str(np.round(slope, 2))
-    ax.set_title("Least-squares linear best-fit curve for $k_{max}$ = " + kmax_val +
-                 ", slope = " + slope_val)
+    ax.set_title(
+        "Least-squares linear best-fit curve for $k_{max}$ = " + kmax_val + ", slope = " + slope_val
+    )
     ax.set_ylabel(r"$ln$(L(k))")
     ax.set_xlabel(r"$ln$(1/k)")
     colors = plt.cm.plasma(np.linspace(0, 1, len(k_values)))
@@ -170,16 +174,26 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
     # Label all values unless len(k_values) > 10 then label only min and max k_max
     if len(k_values) < 10:
         for i in range(0, len(k_values)):
-            ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
-                   marker='o', zorder=2, label="k = {}".format(i+1))
+            ax.scatter(
+                -np.log(k_values[i]),
+                np.log(average_values[i]),
+                color=colors[i],
+                marker="o",
+                zorder=2,
+                label="k = {}".format(i + 1),
+            )
     else:
         for i in range(0, len(k_values)):
-            ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
-                   marker='o', zorder=2, label="_no_legend_")
-        ax.plot([], label="k = {}".format(np.min(k_values)),
-                c=colors[0])
-        ax.plot([], label="k = {}".format(np.max(k_values)),
-                c=colors[-1])
+            ax.scatter(
+                -np.log(k_values[i]),
+                np.log(average_values[i]),
+                color=colors[i],
+                marker="o",
+                zorder=2,
+                label="_no_legend_",
+            )
+        ax.plot([], label="k = {}".format(np.min(k_values)), c=colors[0])
+        ax.plot([], label="k = {}".format(np.max(k_values)), c=colors[-1])
 
     fit_values = [slope * i + -intercept for i in -np.log(k_values)]
     ax.plot(-np.log(k_values), fit_values, color="#FF9800", zorder=1)
@@ -205,12 +219,14 @@ def _cleanse_k(signal, kmax, k_end):
     else:
         return k_end
 
+
 def _fractal_higuchi_optimal_k_warning(k_max):
     if k_max <= 2:
         raise ValueError(
             "NeuroKit error: fractal_higuchi(): The optimal `kmax` detected as less than or equal to 2. "
             "Please manually input a `kmax` value of more than 2."
         )
+
 
 def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
     """
@@ -239,7 +255,9 @@ def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
             optimal_k = np.argmax(slope_values)
             if optimal_k > 0.7 * len(k_range):
                 # second step: set optimal where slope is approaching the max
-                optimal_k = [i for i, x in enumerate(slope_values >= 0.95 * np.max(slope_values)) if x][0]
+                optimal_k = [
+                    i for i, x in enumerate(slope_values >= 0.95 * np.max(slope_values)) if x
+                ][0]
             kmax.append(k_range[optimal_k])
 
     else:
@@ -253,7 +271,9 @@ def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
         optimal_k = np.argmax(slope_values)
         if optimal_k > 0.7 * len(k_range):
             # second step: set optimal where slope is approaching the max
-            optimal_k = [i for i, x in enumerate(slope_values >= 0.95 * np.max(slope_values)) if x][0]
+            optimal_k = [i for i, x in enumerate(slope_values >= 0.95 * np.max(slope_values)) if x][
+                0
+            ]
         kmax = k_range[optimal_k]
 
         # If no plateau
@@ -262,7 +282,7 @@ def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
                 warn(
                     "The optimal kmax value detected is 2 or less. There may be no plateau in this case. "
                     "You can inspect the plot by set `show=True`. HFD is returned for kmax value of 20.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
                 kmax = 20
         elif isinstance(kmax, list):  # if lists of kmax (from n-dim signal)
@@ -270,7 +290,7 @@ def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
                 warn(
                     "The optimal kmax value detected is 2 or less. There may be no plateau in this case. "
                     "You can inspect the plot by set `show=True`. HFD is returned for kmax value of 20.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
                 below_indices = np.where(np.array(kmax) <= 16)[0]
                 for i in below_indices:
@@ -297,19 +317,26 @@ def _fractal_higuchi_optimal_k_plot(k_range, slope_values, optimal_k, signal, ax
         color_channels = plt.cm.Purples(np.linspace(0.5, 1, signal.shape[1]))
         k_mean = int(np.mean(optimal_k))
         for k, slope, index in zip(optimal_k, slope_values, range(0, signal.shape[1])):
-            ax.plot(k_range, slope, color=color_channels[index], zorder=1, label=str(signal.columns[index]) + " $k_{max}$: " + str(k))
+            ax.plot(
+                k_range,
+                slope,
+                color=color_channels[index],
+                zorder=1,
+                label=str(signal.columns[index]) + " $k_{max}$: " + str(k),
+            )
             for i, j in enumerate(k_range):
-                ax.scatter(k_range[i], slope[i], color=colors[i],
-                           marker='o', zorder=2)
-        ax.axvline(x=np.mean(optimal_k).astype(int), color="#E91E63",
-                   label="Mean Optimal $k_{max}$: " + str(k_mean))
+                ax.scatter(k_range[i], slope[i], color=colors[i], marker="o", zorder=2)
+        ax.axvline(
+            x=np.mean(optimal_k).astype(int),
+            color="#E91E63",
+            label="Mean Optimal $k_{max}$: " + str(k_mean),
+        )
         ax.legend(loc="upper right")
     else:
         # if single time series
-        ax.plot(k_range, slope_values, color="#2196F3", zorder=1)    
+        ax.plot(k_range, slope_values, color="#2196F3", zorder=1)
         for i, j in enumerate(k_range):
-            ax.scatter(k_range[i], slope_values[i], color=colors[i],
-                       marker='o', zorder=2)
+            ax.scatter(k_range[i], slope_values[i], color=colors[i], marker="o", zorder=2)
         ax.axvline(x=optimal_k, color="#E91E63", label="Optimal $k_{max}$: " + str(optimal_k))
         ax.legend(loc="upper right")
 
