@@ -9,8 +9,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     """
     Computes Lempel Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
     symbolic sequences for new patterns, increasing the complexity count every time a new sequence is detected.
-    Regular signals have a lower number of distinct patterns and thus have low LZC whereas irregular signals are
-    characterized by a high lZC.
+    Regular signals have a lower number of distinct patterns and thus have low LZC whereas irregular signals are characterized by a high LZC.
 
     Parameters
     ----------
@@ -21,7 +20,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     threshold : str
         Method for partitioning the signal into a binary sequence.
         Current options are "median" (default) or "mean", where each data point is assigned 0
-        if lower than the median or mean of signal respecitvely, and 1 if higher.
+        if lower than the median or mean of signal respectively, and 1 if higher.
     normalize : bool
         Defaults to True, to obtain a complexity measure independent of sequence length.
 
