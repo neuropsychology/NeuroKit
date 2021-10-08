@@ -57,7 +57,7 @@ def complexity_k(signal, k_max="default", show=False):
 
     if isinstance(k_max, int):
         k_range = np.arange(2, k_max + 1)
-    elif isinstance(k_max, [list, np.ndarray, pd.Series]):
+    elif isinstance(k_max, (list, np.ndarray, pd.Series)):
         k_range = np.array(k_max)
     else:
         warn(
