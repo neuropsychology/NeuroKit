@@ -2,8 +2,6 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from .utils import _sanitize_multichannel
-
 
 def entropy_shannon(signal, base=2):
     """Shannon entropy (SE)
