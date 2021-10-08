@@ -58,7 +58,7 @@ def complexity_k(signal, k_max="default", show=False):
     slopes = np.zeros(len(k_range))
     intercepts = np.zeros(len(k_range))
     for i, k in enumerate(k_range):
-        slopes[i], intercepts[i] = _complexity_k_slope(signal, k)
+        slopes[i], intercepts[i], _, _ = _complexity_k_slope(signal, k)
 
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
@@ -68,8 +68,9 @@ def complexity_k(signal, k_max="default", show=False):
     k_indices = k_indices[k_range[k_indices] > 2]
 
     if len(k_indices) == 0:
+        k_optimal = np.max(k_range)
         warn(
-            "The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return k = 2.",
+            f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return k = {k_optimal} (the max).",
             category=NeuroKitWarning,
         )
         k_optimal = 2
@@ -91,7 +92,7 @@ def _complexity_k_slope(signal, k):
 
     # Slope of best-fit line through points
     slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
-    return slope, intercept
+    return slope, intercept, k_values, average_values
 
 
 def _complexity_k_average_values(signal, k_values):
