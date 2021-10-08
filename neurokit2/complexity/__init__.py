@@ -1,14 +1,7 @@
 """Submodule for NeuroKit."""
 import functools
 
-# Functions
-from .complexity_delay import complexity_delay
-from .complexity_dimension import complexity_dimension
-from .complexity_embedding import complexity_embedding
-from .complexity_k import complexity_k
 from .complexity_lempelziv import complexity_lempelziv
-from .complexity_optimize import complexity_optimize
-from .complexity_r import complexity_r
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
 from .entropy_cumulative_residual import entropy_cumulative_residual
@@ -22,6 +15,12 @@ from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_katz import fractal_katz
 from .fractal_mandelbrot import fractal_mandelbrot
+from .optim_complexity_delay import complexity_delay
+from .optim_complexity_dimension import complexity_dimension
+from .optim_complexity_embedding import complexity_embedding
+from .optim_complexity_k import complexity_k
+from .optim_complexity_optimize import complexity_optimize
+from .optim_complexity_r import complexity_r
 from .transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Aliases

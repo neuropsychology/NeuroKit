@@ -13,7 +13,7 @@ import scipy.stats
 from ..misc import NeuroKitWarning, find_closest
 from ..signal import signal_autocor, signal_findpeaks, signal_zerocrossings
 from ..stats import mutual_information
-from .complexity_embedding import complexity_embedding
+from .optim_complexity_embedding import complexity_embedding
 
 
 def complexity_delay(

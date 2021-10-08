@@ -35,7 +35,18 @@ def entropy_cumulative_residual(signal):
     >>> cren
 
     """
-    valscount = pd.Series(signal).value_counts(sort = True)
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    # Check if string ('ABBA'), and convert each character to list (['A', 'B', 'B', 'A'])
+    if not isinstance(signal, str):
+        signal = list(signal)
+
+    # Get probability of each event
+    valscount = pd.Series(signal).value_counts(sort=True)
     events, probs = valscount.index.values, valscount.values / valscount.sum()
 
     cdf = {a: p for a, p in zip(events, np.cumsum(probs))}

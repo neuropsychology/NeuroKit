@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from ..misc import NeuroKitWarning
-from .complexity_k import _complexity_k_slope, complexity_k, _complexity_k_plot
+from .optim_complexity_k import _complexity_k_plot, _complexity_k_slope, complexity_k
 
 
 def fractal_higuchi(signal, k_max="default", show=False):
@@ -73,14 +73,12 @@ def fractal_higuchi(signal, k_max="default", show=False):
     # Plot
     if show:
         fig = plt.figure(constrained_layout=False)
-        fig.suptitle('Higuchi Fractal Dimension (HFD)')
-        spec = matplotlib.gridspec.GridSpec(
-                ncols=1, nrows=2
-            )
+        fig.suptitle("Higuchi Fractal Dimension (HFD)")
+        spec = matplotlib.gridspec.GridSpec(ncols=1, nrows=2)
         ax_slope = fig.add_subplot(spec[0, 0])
         _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept, ax=ax_slope)
         ax_kmax = fig.add_subplot(spec[1, 0])
-        _complexity_k_plot(info['Values'], info['Scores'], k_max, ax=ax_kmax)
+        _complexity_k_plot(info["Values"], info["Scores"], k_max, ax=ax_kmax)
 
     return slope, {
         "k_max": k_max,
@@ -104,7 +102,10 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
         fig = None
 
     ax.set_title(
-        "Least-squares linear best-fit curve for $k_{max}$ = " + str(kmax) + ", slope = " + str(np.round(slope, 2))
+        "Least-squares linear best-fit curve for $k_{max}$ = "
+        + str(kmax)
+        + ", slope = "
+        + str(np.round(slope, 2))
     )
     ax.set_ylabel(r"$ln$(L(k))")
     ax.set_xlabel(r"$ln$(1/k)")
