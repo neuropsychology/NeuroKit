@@ -31,7 +31,7 @@ def entropy_shannon(signal, base=2):
 
     See Also
     --------
-    entropy_differential, entropy_approximate, entropy_sample, entropy_fuzzy
+    entropy_differential, entropy_cumulative_residual, entropy_approximate, entropy_sample, entropy_fuzzy
 
     Examples
     ----------
