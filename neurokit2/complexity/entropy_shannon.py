@@ -4,12 +4,12 @@ import scipy.stats
 
 
 def entropy_shannon(signal, base=2):
-    """Shannon entropy (SE)
+    """Shannon entropy (SE or ShanEn)
 
     Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state,
     or equivalently, of its average information content. Shannon entropy (SE) is one of the first and
-    most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy
-    quantifies the amount of information in a variable.
+    most basic measure of entropy and a foundational concept of information theory. Shannon's entropy
+    quantifies the amount of information in a variable. Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy (see ``entropy_differential()``).
 
     This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 
@@ -24,22 +24,22 @@ def entropy_shannon(signal, base=2):
     Returns
     --------
     shanen : float
-        The Shannon entropy of the single time series.
+        The Shannon entropy of the signal.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Shannon entropy.
 
     See Also
     --------
-    entropy_approximate, entropy_sample, entropy_fuzzy
+    entropy_differential, entropy_approximate, entropy_sample, entropy_fuzzy
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.1)
-    >>> entropy, parameters = nk.entropy_shannon(signal)
-    >>> entropy #doctest: +SKIP
+    >>> shanen, info = nk.entropy_shannon(signal)
+    >>> shanen #doctest: +SKIP
 
 
     References
