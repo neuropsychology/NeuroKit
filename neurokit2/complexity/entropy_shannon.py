@@ -1,11 +1,7 @@
-# -*- coding: utf-8 -*-
-from warnings import warn
-
 import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..misc import NeuroKitWarning
 from .utils import _sanitize_multichannel
 
 
@@ -61,9 +57,8 @@ def entropy_shannon(signal, base=2):
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        warn(
-            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.",
-            category=NeuroKitWarning,
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
     # Check if string ('ABBA'), and convert each character to list (['A', 'B', 'B', 'A'])
