@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 from ..misc import NeuroKitWarning
-from .complexity_k import _complexity_k_slope, complexity_k
+from .complexity_k import _complexity_k_slope, complexity_k, _complexity_k_plot
 from .utils import _sanitize_multichannel
 
 
@@ -46,7 +46,7 @@ def fractal_higuchi(signal, k_max="default", show=False):
     >>>
     >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
     >>>
-    >>> hfd, info = nk.fractal_higuchi(signal, k_max=10, show=True)
+    >>> hfd, info = nk.fractal_higuchi(signal, k_max='default', show=True)
     >>> hfd #doctest: +SKIP
 
     Reference
@@ -66,14 +66,22 @@ def fractal_higuchi(signal, k_max="default", show=False):
 
     # Get k_max
     if isinstance(k_max, (int, str, list, np.ndarray, pd.Series)):
-        k_max, _ = complexity_k(signal, k_max=k_max, show=False)
+        k_max, info = complexity_k(signal, k_max=k_max, show=False)
 
     # Compute slope
     slope, intercept, k_values, average_values = _complexity_k_slope(signal, k_max)
 
     # Plot
     if show:
-        _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept, ax=None)
+        fig = plt.figure(constrained_layout=False)
+        fig.suptitle('Higuchi Fractal Dimension (HFD)')
+        spec = matplotlib.gridspec.GridSpec(
+                ncols=1, nrows=2
+            )
+        ax_slope = fig.add_subplot(spec[0, 0])
+        _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept, ax=ax_slope)
+        ax_kmax = fig.add_subplot(spec[1, 0])
+        _complexity_k_plot(info['Values'], info['Scores'], k_max, ax=ax_kmax)
 
     return slope, {
         "k_max": k_max,
