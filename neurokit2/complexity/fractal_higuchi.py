@@ -67,7 +67,7 @@ def fractal_higuchi(signal, k_max="default", show=False):
     if isinstance(k_max, (str, list, np.ndarray, pd.Series)):
         # optimizing needed
         k_max, info = complexity_k(signal, k_max=k_max, show=False)
-        idx = info["Values"][info["Values"] == k_max][0]
+        idx = np.where(info["Values"] == k_max)[0][0]
         slope = info["Scores"][idx]
         intercept = info["Intercepts"][idx]
         average_values = info["Average_Values"][idx]
