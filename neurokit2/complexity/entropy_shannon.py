@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 import scipy.stats
 
+from ..misc import NeuroKitWarning
 from .utils import _sanitize_multichannel
 
 
@@ -28,8 +31,7 @@ def entropy_shannon(signal, base=2):
     Returns
     ----------
     shanen : float
-        The Shannon entropy of the single time series, or the mean ShEn
-        across the channels of an n-dimensional time series.
+        The Shannon entropy of the single time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Shannon entropy and the individual ShEn values of each
@@ -57,29 +59,17 @@ def entropy_shannon(signal, base=2):
     - `nolds` <https://github.com/CSchoel/nolds>`_
 
     """
-    # Initialize info dict
-    info = {"Base": base}
-
-    # Sanitize input
+    # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        # n-dimensional
-        signal = _sanitize_multichannel(signal)
-        info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
-        for i, colname in enumerate(signal):
-            info["Values"][i] = _entropy_shannon(signal[colname])
-        out = np.mean(info["Values"])
+        warn(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet.",
+            category=NeuroKitWarning,
+        )
 
-    else:
-        # if one signal time series
-        out = _entropy_shannon(signal)
-
-    return out, info
-
-
-def _entropy_shannon(signal, base=2):
-
-    # Check if string
+    # Check if string ('ABBA'), and convert each character to list (['A', 'B', 'B', 'A'])
     if not isinstance(signal, str):
         signal = list(signal)
 
-    return scipy.stats.entropy(pd.Series(signal).value_counts(), base=base)
+    shanen = scipy.stats.entropy(pd.Series(signal).value_counts(), base=base)
+
+    return shanen, {"Base": base}
