@@ -1,10 +1,9 @@
 """Submodule for NeuroKit."""
 import functools
 
+# Functions
 from .complexity_delay import complexity_delay
 from .complexity_dimension import complexity_dimension
-
-# Utils
 from .complexity_embedding import complexity_embedding
 from .complexity_k import complexity_k
 from .complexity_lempelziv import complexity_lempelziv
@@ -12,15 +11,12 @@ from .complexity_optimize import complexity_optimize
 from .complexity_r import complexity_r
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
+from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_sample import entropy_sample
-
-# Entropy
 from .entropy_shannon import entropy_shannon
 from .fractal_correlation import fractal_correlation
-
-# Fractal
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_katz import fractal_katz
@@ -29,6 +25,7 @@ from .transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Aliases
 complexity_se = entropy_shannon
+complexity_diffen = entropy_differential
 
 complexity_apen = entropy_approximate
 complexity_capen = functools.partial(entropy_approximate, corrected=True)
@@ -42,7 +39,6 @@ complexity_cmse = functools.partial(entropy_multiscale, composite=True)
 complexity_fuzzycmse = functools.partial(entropy_multiscale, composite=True, fuzzy=True)
 complexity_rcmse = functools.partial(entropy_multiscale, refined=True)
 complexity_fuzzyrcmse = functools.partial(entropy_multiscale, refined=True, fuzzy=True)
-
 
 complexity_dfa = fractal_dfa
 fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
@@ -61,6 +57,7 @@ __all__ = [
     "complexity_r",
     "complexity_lempelziv",
     "entropy_shannon",
+    "entropy_differential",
     "entropy_approximate",
     "entropy_sample",
     "entropy_fuzzy",
@@ -73,6 +70,7 @@ __all__ = [
     "complexity_se",
     "complexity_apen",
     "complexity_capen",
+    "complexity_diffen",
     "complexity_k",
     "complexity_sampen",
     "complexity_fuzzyen",
