@@ -78,8 +78,6 @@ def fractal_higuchi(signal, k_max="default", show=False):
 
     # Plot
     if show:
-        fig = plt.figure(constrained_layout=False)
-        fig.suptitle("Higuchi Fractal Dimension (HFD)")
         _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept)
 
     return slope, {
