@@ -23,15 +23,13 @@ def entropy_shannon(signal, base=2):
         The logarithmic base to use, defaults to 2. Note that ``scipy.stats.entropy``
         uses ``np.e`` as default (the natural logarithm).
 
-
     Returns
-    ----------
+    --------
     shanen : float
         The Shannon entropy of the single time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Shannon entropy and the individual ShEn values of each
-        channel if an n-dimensional time series is passed.
+        to compute Shannon entropy.
 
     See Also
     --------

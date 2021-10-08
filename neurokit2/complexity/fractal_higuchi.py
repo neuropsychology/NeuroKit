@@ -23,10 +23,8 @@ def fractal_higuchi(signal, k_max="default", show=False):
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series, np.ndarray, pd.DataFrame]
-        The signal (i.e., a time series) in the form of a vector of values or in
-        the form of an n-dimensional array (with a shape of len(channels) x len(samples))
-        or dataframe.
+    signal : Union[list, np.array, pd.Series]
+        The signal (i.e., a time series) in the form of a vector of values.
     k_max : str or int
         Maximum number of interval times (should be greater than or equal to 2).
         If "default", then the optimal kmax is computed based on the point at which HFD values plateau
@@ -37,12 +35,10 @@ def fractal_higuchi(signal, k_max="default", show=False):
     Returns
     ----------
     slope : float
-        Higuchi's fractal dimension of the single time series or the mean HFD
-        across the channels of an n-dimensional time series.
+        Higuchi's fractal dimension of the single time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Higuchi's fractal dimension and the individual HFD values of each
-        channel if an n-dimensional time series is passed.
+        to compute Higuchi's fractal dimension.
 
     Examples
     ----------
@@ -62,8 +58,14 @@ def fractal_higuchi(signal, k_max="default", show=False):
     In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE. https://ieeexplore.ieee.org/document/7168285
     """
 
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
     # Get k_max
-    if isinstance(k_max, [str, list, np.ndarray, pd.Series]):
+    if isinstance(k_max, (int, str, list, np.ndarray, pd.Series)):
         k_max, _ = complexity_k(signal, k_max=k_max, show=False)
 
     # Compute slope
@@ -94,13 +96,8 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
     else:
         fig = None
 
-    # if multiple optimal k values passed (from n-dimensional time series), get mean optimal k
-    if isinstance(kmax, list):
-        kmax = int(np.mean(kmax))
-    kmax_val = str(kmax)
-    slope_val = str(np.round(slope, 2))
     ax.set_title(
-        "Least-squares linear best-fit curve for $k_{max}$ = " + kmax_val + ", slope = " + slope_val
+        "Least-squares linear best-fit curve for $k_{max}$ = " + str(kmax) + ", slope = " + str(np.round(slope, 2))
     )
     ax.set_ylabel(r"$ln$(L(k))")
     ax.set_xlabel(r"$ln$(1/k)")

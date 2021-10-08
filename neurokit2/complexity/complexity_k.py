@@ -1,8 +1,8 @@
 from warnings import warn
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-
 from ..misc import NeuroKitWarning
 
 
@@ -12,14 +12,24 @@ def complexity_k(signal, k_max="default", show=False):
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series, np.ndarray, pd.DataFrame]
-        The signal (i.e., a time series) in the form of a vector of values or in
-        the form of an n-dimensional array (with a shape of len(channels) x len(samples))
-        or dataframe.
+    signal : Union[list, np.array, pd.Series]
+        The signal (i.e., a time series) in the form of a vector of values.
     k_max : Union[int, str, list], optional
         Maximum number of interval times (should be greater than or equal to 3) to be tested. If 'default', it selects the maximum possible value corresponding to half the length of the signal.
     show : bool
         Visualise the slope of the curve for the selected kmax value.
+
+    Returns
+    --------
+    k : float
+        The optimal kmax of the time series.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute optimal kmax.
+
+    See Also
+    --------
+    fractal_higuchi
 
     Examples
     ----------
@@ -28,6 +38,7 @@ def complexity_k(signal, k_max="default", show=False):
     >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
     >>>
     >>> k_max, info = nk.complexity_k(signal)
+    >>> k_max #doctest: +SKIP
 
     Reference
     ----------
@@ -77,6 +88,10 @@ def complexity_k(signal, k_max="default", show=False):
     else:
         k_optimal = k_range[k_indices[0]]
 
+    # Plot
+    if show:
+        _complexity_k_plot(k_range, slopes, k_optimal, ax=None)
+
     # Return optimal tau and info dict
     return k_optimal, {"Values": k_range, "Scores": slopes, "Intercepts": intercepts}
 
@@ -112,3 +127,26 @@ def _complexity_k_average_values(signal, k_values):
         L_k = np.sum(sets) / k
         average_values[i] = L_k
     return average_values
+
+
+def _complexity_k_plot(k_range, slope_values, k_optimal, ax=None):
+
+    # Prepare plot
+    if ax is None:
+        fig, ax = plt.subplots()
+    else:
+        fig = None
+
+    ax.set_title("Optimization of $k_{max}$ parameter")
+    ax.set_xlabel("$k_{max}$ values")
+    ax.set_ylabel("Higuchi Fractal Dimension (HFD) values")
+    colors = plt.cm.PuBu(np.linspace(0, 1, len(k_range)))
+
+    # if single time series
+    ax.plot(k_range, slope_values, color="#2196F3", zorder=1)
+    for i, j in enumerate(k_range):
+        ax.scatter(k_range[i], slope_values[i], color=colors[i], marker="o", zorder=2)
+    ax.axvline(x=k_optimal, color="#E91E63", label="Optimal $k_{max}$: " + str(k_optimal))
+    ax.legend(loc="upper right")
+
+    return fig
