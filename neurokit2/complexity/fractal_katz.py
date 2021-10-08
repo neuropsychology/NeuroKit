@@ -2,8 +2,6 @@
 import numpy as np
 import pandas as pd
 
-from .utils import _sanitize_multichannel
-
 
 def fractal_katz(signal):
 
@@ -17,20 +15,16 @@ def fractal_katz(signal):
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series, np.ndarray, pd.DataFrame]
-        The signal (i.e., a time series) in the form of a vector of values or in
-        the form of an n-dimensional array (with a shape of len(channels) x len(samples))
-        or dataframe.
+    signal : Union[list, np.array, pd.Series]
+        The signal (i.e., a time series) in the form of a vector of values.
 
     Returns
     -------
     kfd : float
-        Katz's fractal dimension of the single time series, or the mean KFD across the
-        channels of an n-dimensional time series.
+        Katz's fractal dimension of the single time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Katz's fractal dimension and the individual KFD values of each
-        channel if an n-dimensional time series is passed.
+        to compute Katz's fractal dimension.
 
     Examples
     ----------
@@ -48,20 +42,17 @@ def fractal_katz(signal):
 
     """
 
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
     # prepare parameters
     info = {}
 
-    # Sanitize input
-    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        # n-dimensional
-        signal = _sanitize_multichannel(signal)
-        info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
-        for i, colname in enumerate(signal):
-            info["Values"][i] = _fractal_katz(signal[colname])
-        out = np.mean(info["Values"])
-    else:
-        # if one signal time series
-        out = _fractal_katz(signal)
+    # if one signal time series
+    out = _fractal_katz(signal)
 
     return out, info
 

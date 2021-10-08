@@ -8,7 +8,6 @@ import pandas as pd
 
 from ..misc import NeuroKitWarning
 from .complexity_k import _complexity_k_slope, complexity_k, _complexity_k_plot
-from .utils import _sanitize_multichannel
 
 
 def fractal_higuchi(signal, k_max="default", show=False):

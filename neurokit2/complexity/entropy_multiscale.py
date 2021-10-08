@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from .entropy_sample import entropy_sample
-from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide, _sanitize_multichannel
+from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide
 
 
 def entropy_multiscale(
@@ -22,9 +22,8 @@ def entropy_multiscale(
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series, np.ndarray, pd.DataFrame]
-        The signal (i.e., a time series) in the form of a vector of values or in
-        the form of an n-dimensional array (with a shape of len(channels) x len(samples))
+    signal : Union[list, np.array, pd.Series]
+        The signal (i.e., a time series) in the form of a vector of values.
         or dataframe.
     scale : str or int or list
         A list of scale factors used for coarse graining the time series. If 'default', will use
@@ -55,13 +54,12 @@ def entropy_multiscale(
     ----------
     mse : float
         The point-estimate of multiscale entropy (MSE) of the single time series corresponding to the
-        area under the MSE values curvee, which is essentially the sum of sample entropy values over
-        the range of scale factors, or the mean MSE across the channels of an n-dimensional time
+        area under the MSE values curve, which is essentially the sum of sample entropy values over
+        the range of scale factors.
         series.
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute multiscale entropy and the individual MSE values of each
-        channel if an n-dimensional time series is passed.
+        to compute multiscale entropy.
 
     See Also
     --------
@@ -104,6 +102,11 @@ def entropy_multiscale(
       anesthesia during surgery. Entropy, 14(6), 978-992.
 
     """
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
 
     # Prepare parameters
     if refined:
@@ -120,22 +123,10 @@ def entropy_multiscale(
             'Type': key,
             'Scale': _get_scale(signal, scale=scale, dimension=dimension)}
 
-    # Sanitize input (formatting is done in _entropy_multiscale)
-    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        # n-dimensional
-        signal = _sanitize_multichannel(signal)
-        # Get tolerance
-        info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
-        info["Values"] = _entropy_multiscale(signal, r=info["Tolerance"], scale_factors=info["Scale"],
-                                             dimension=dimension, composite=composite, fuzzy=fuzzy,
-                                             refined=refined, show=show, **kwargs)
-        out = np.mean(info["Values"])
-    else:
-        # one single time series
-        info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
-        out = _entropy_multiscale(signal, r=info["Tolerance"], scale_factors=info["Scale"],
-                                  dimension=dimension, composite=composite, fuzzy=fuzzy,
-                                  refined=refined, show=show, **kwargs)
+    info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+    out = _entropy_multiscale(signal, r=info["Tolerance"], scale_factors=info["Scale"],
+                              dimension=dimension, composite=composite, fuzzy=fuzzy,
+                              refined=refined, show=show, **kwargs)
 
     return out, info
 
@@ -147,89 +138,47 @@ def _entropy_multiscale(
     signal, r, scale_factors, dimension=2, composite=False, fuzzy=False, refined=False, show=False, **kwargs
 ):
 
-    if signal.ndim > 1:
-        # n-dimensional
-        out = []
-        for index, colname in enumerate(signal):
-            channel = np.array(signal[colname])
-            # Initalize mse vector
-            mse = np.full(len(scale_factors), np.nan)
-            for i, tau in enumerate(scale_factors):
-                # Regular MSE
-                if refined is False and composite is False:
-                    mse[i] = _entropy_multiscale_mse(channel, tau, dimension, r, fuzzy, **kwargs)
+    # Initalize mse vector
+    mse = np.full(len(scale_factors), np.nan)
+    for i, tau in enumerate(scale_factors):
 
-                # Composite MSE
-                elif refined is False and composite is True:
-                    mse[i] = _entropy_multiscale_cmse(channel, tau, dimension, r, fuzzy, **kwargs)
+        # Regular MSE
+        if refined is False and composite is False:
+            mse[i] = _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs)
 
-                # Refined Composite MSE
-                else:
-                    mse[i] = _entropy_multiscale_rcmse(channel, tau, dimension, r, fuzzy, **kwargs)
-            out.append(mse)
+        # Composite MSE
+        elif refined is False and composite is True:
+            mse[i] = _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs)
 
-        mse = []
-        for values in out:
-            # Remove inf, nan and 0
-            values = values[~np.isnan(values)]
-            values = values[values != np.inf]
-            values = values[values != -np.inf]
+        # Refined Composite MSE
+        else:
+            mse[i] = _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs)
 
-            # The MSE index is quantified as the area under the curve (AUC),
-            # which is like the sum normalized by the number of values. It's similar to the mean.
-            mse.append(np.trapz(values) / len(values))
+    out = mse.copy()
 
-    else:
-        # if one signal time series
-        # Initalize mse vector
-        mse = np.full(len(scale_factors), np.nan)
-        for i, tau in enumerate(scale_factors):
-    
-            # Regular MSE
-            if refined is False and composite is False:
-                mse[i] = _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs)
-    
-            # Composite MSE
-            elif refined is False and composite is True:
-                mse[i] = _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs)
-    
-            # Refined Composite MSE
-            else:
-                mse[i] = _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs)
+    # Remove inf, nan and 0
+    mse = mse[~np.isnan(mse)]
+    mse = mse[mse != np.inf]
+    mse = mse[mse != -np.inf]
 
-        out = mse.copy()
-
-        # Remove inf, nan and 0
-        mse = mse[~np.isnan(mse)]
-        mse = mse[mse != np.inf]
-        mse = mse[mse != -np.inf]
-
-        # The MSE index is quantified as the area under the curve (AUC),
-        # which is like the sum normalized by the number of values. It's similar to the mean.
-        mse = np.trapz(mse) / len(mse)
+    # The MSE index is quantified as the area under the curve (AUC),
+    # which is like the sum normalized by the number of values. It's similar to the mean.
+    mse = np.trapz(mse) / len(mse)
 
     # Plot overlay
     if show is True:
-        _entropy_multiscale_plot(signal, scale_factors, out)
+        _entropy_multiscale_plot(scale_factors, out)
 
     return mse
 
 
-def _entropy_multiscale_plot(signal, scale_factors, mse_values):
+def _entropy_multiscale_plot(scale_factors, mse_values):
 
     fig = plt.figure(constrained_layout=False)
     fig.suptitle('Entropy values across scale factors')
     plt.ylabel("Entropy values")
     plt.xlabel("Scale")
-
-    if signal.ndim > 1:
-        # Plot overlay for n-dim signal
-        colors = plt.cm.plasma(np.linspace(0, 1, len(mse_values)))  # mse_values is list of arrays
-        for i, val in enumerate(mse_values):
-            plt.plot(scale_factors, mse_values[i], color=colors[i], label=signal.columns[i])
-            plt.legend(loc="lower right")
-    else:
-        plt.plot(scale_factors, mse_values, color="#FF9800")  # mse_values is one array
+    plt.plot(scale_factors, mse_values, color="#FF9800")  # mse_values is one array
 
     return fig
 

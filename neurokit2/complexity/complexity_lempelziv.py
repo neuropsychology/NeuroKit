@@ -2,8 +2,6 @@
 import numpy as np
 import pandas as pd
 
-from .utils import _sanitize_multichannel
-
 
 def complexity_lempelziv(signal, threshold="median", normalize=True):
     """
@@ -13,10 +11,8 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series, np.ndarray, pd.DataFrame]
-        The signal (i.e., a time series) in the form of a vector of values or in
-        the form of an n-dimensional array (with a shape of len(channels) x len(samples))
-        or dataframe.
+    signal : Union[list, np.array, pd.Series]
+        The signal (i.e., a time series) in the form of a vector of values.
     threshold : str
         Method for partitioning the signal into a binary sequence.
         Current options are "median" (default) or "mean", where each data point is assigned 0
@@ -27,12 +23,10 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     Returns
     ----------
     lzc : float
-        Lempel Ziv Complexity (LZC) of the single time series, or the mean LZC
-        across the channels of an n-dimensional time series.
+        Lempel Ziv Complexity (LZC) of the single time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Lempel Ziv Complexity, as well as individual LZC values of each
-        channel if an n-dimensional time series is passed.
+        to compute Lempel Ziv Complexity.
 
     Examples
     ----------
@@ -63,21 +57,18 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 
     - https://en.wikipedia.org/wiki/Lempel-Ziv_complexity
     """
+
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
     # prepare parameters
     info = {'Threshold': threshold,
             'Normalize': normalize}
 
-    # Sanitize input
-    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
-        # n-dimensional
-        signal = _sanitize_multichannel(signal)
-        info["Values"] = np.full(signal.shape[1], np.nan)  # Initialize empty vector of values
-        for i, colname in enumerate(signal):
-            info["Values"][i] = _complexity_lempelziv(np.array(signal[colname]), threshold=threshold, normalize=normalize)
-        out = np.mean(info["Values"])
-    else:
-        # if one signal time series
-        out = _complexity_lempelziv(signal, threshold=threshold, normalize=normalize)
+    out = _complexity_lempelziv(signal, threshold=threshold, normalize=normalize)
 
     return out, info
 
