@@ -64,11 +64,13 @@ def fractal_higuchi(signal, k_max="default", show=False):
         )
 
     # Get k_max
-    if isinstance(k_max, (int, str, list, np.ndarray, pd.Series)):
+    if isinstance(k_max, (str, list, np.ndarray, pd.Series)):
+        # optimizing needed
         k_max, info = complexity_k(signal, k_max=k_max, show=False)
-
-    # Compute slope
-    slope, intercept, k_values, average_values = _complexity_k_slope(signal, k_max)
+        slope, intercept, k_values, average_values = info["slope"], info["intercept"], info["k_values"], info["average_values"]
+    else:
+        # if integer passed, no optimizing needed
+        slope, intercept, k_values, average_values = _complexity_k_slope(signal, k_max)
 
     # Plot
     if show:

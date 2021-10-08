@@ -69,8 +69,10 @@ def complexity_k(signal, k_max="default", show=False):
     # --------------------------------------
     slopes = np.zeros(len(k_range))
     intercepts = np.zeros(len(k_range))
+    average_values = []
     for i, k in enumerate(k_range):
-        slopes[i], intercepts[i], _, _ = _complexity_k_slope(signal, k)
+        slopes[i], intercepts[i], _, average = _complexity_k_slope(signal, k)
+        average_values.append(average)
 
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
@@ -92,8 +94,19 @@ def complexity_k(signal, k_max="default", show=False):
     if show:
         _complexity_k_plot(k_range, slopes, k_optimal, ax=None)
 
+    # Get average values, intercept and slope for k_optimal point
+    idx, average_values = [(index, values) for index, values in enumerate(average_values) if len(values) == k_optimal][0]
+
     # Return optimal tau and info dict
-    return k_optimal, {"Values": k_range, "Scores": slopes, "Intercepts": intercepts}
+    return k_optimal, {
+        "Values": k_range,
+        "Scores": slopes,
+        "Intercepts": intercepts,
+        "k_values": np.arange(1, k_optimal + 1),  # k values to iterate over up till k_optimal
+        "average_values": average_values,
+        "slope": slopes[idx],
+        "intercept": intercepts[idx]
+        }
 
 
 # =============================================================================
