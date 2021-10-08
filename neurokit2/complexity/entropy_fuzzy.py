@@ -73,6 +73,6 @@ def _entropy_fuzzy(signal, r, delay=1, dimension=2, **kwargs):
 
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, fuzzy=True, **kwargs)
 
-    fuzzyen =  _phi_divide(phi)
+    fuzzyen = _phi_divide(phi)
 
     return fuzzyen

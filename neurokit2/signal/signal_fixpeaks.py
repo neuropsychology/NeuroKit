@@ -199,10 +199,11 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
     drrs[0] = np.mean(drrs[1:])
     # Normalize by threshold.
     th1 = _compute_threshold(drrs, alpha, window_width)
-    drrs /= th1
-
     # ignore division by 0 warning
-    np.seterr(divide="ignore", invalid="ignore")
+    old_setting = np.seterr(divide="ignore", invalid="ignore")
+    drrs /= th1
+    # return old setting
+    np.seterr(**old_setting)
 
     # Cast dRRs to subspace s12.
     # Pad drrs with one element.
