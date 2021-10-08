@@ -56,8 +56,9 @@ def complexity_k(signal, k_max="default", show=False):
     # Compute the slope for each kmax value
     # --------------------------------------
     slopes = np.zeros(len(k_range))
+    intercepts = np.zeros(len(k_range))
     for i, k in enumerate(k_range):
-        slopes[i] = _complexity_k_slope(signal, k)
+        slopes[i], intercepts[i] = _complexity_k_slope(signal, k)
 
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
@@ -76,10 +77,7 @@ def complexity_k(signal, k_max="default", show=False):
         k_optimal = k_range[k_indices[0]]
 
     # Return optimal tau and info dict
-    return k_optimal, {
-        "Values": k_range,
-        "Scores": slopes,
-    }
+    return k_optimal, {"Values": k_range, "Scores": slopes, "Intercepts": intercepts}
 
 
 # =============================================================================
@@ -93,7 +91,7 @@ def _complexity_k_slope(signal, k):
 
     # Slope of best-fit line through points
     slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
-    return slope
+    return slope, intercept
 
 
 def _complexity_k_average_values(signal, k_values):
