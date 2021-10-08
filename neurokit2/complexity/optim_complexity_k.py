@@ -36,9 +36,9 @@ def complexity_k(signal, k_max="default", show=False):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
+    >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[5, 6], noise=0.5)
     >>>
-    >>> k_max, info = nk.complexity_k(signal, show=True)
+    >>> k_max, info = nk.complexity_k(signal, k_max='default', show=True)
     >>> k_max #doctest: +SKIP
 
     Reference
@@ -76,9 +76,13 @@ def complexity_k(signal, k_max="default", show=False):
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
     # Find slopes that are approaching the max
-    k_indices = np.where(slopes >= 0.95 * np.max(slopes))[0]
+    # k_indices = np.where(slopes >= 0.95 * np.max(slopes))[0]
+    k_indices = np.where(slopes >= np.percentile(slopes, 90))[0]
     # drop indices for k <= 2 (which is the minimum value)
     k_indices = k_indices[k_range[k_indices] > 2]
+    # drop indices for decreasing slope segments
+    decreasing = np.where(np.diff(slopes) < 0)[0]
+    k_indices = np.array([i for i in k_indices if i not in decreasing])
 
     if len(k_indices) == 0:
         k_optimal = np.max(k_range)
