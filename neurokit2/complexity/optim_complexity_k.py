@@ -3,6 +3,7 @@ from warnings import warn
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+
 from ..misc import NeuroKitWarning
 
 
@@ -37,7 +38,7 @@ def complexity_k(signal, k_max="default", show=False):
     >>>
     >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
     >>>
-    >>> k_max, info = nk.complexity_k(signal)
+    >>> k_max, info = nk.complexity_k(signal, show=True)
     >>> k_max #doctest: +SKIP
 
     Reference
