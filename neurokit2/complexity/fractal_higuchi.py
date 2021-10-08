@@ -11,7 +11,7 @@ from .complexity_k import complexity_k
 from .utils import _sanitize_multichannel
 
 
-def fractal_higuchi(signal, kmax="default", show=False):
+def fractal_higuchi(signal, k_max="default", show=False):
     """
     Computes Higuchi's Fractal Dimension (HFD) by reconstructing k-max number of new
     data sets. For each reconstructed data set, curve length is computed and plotted
@@ -19,7 +19,7 @@ def fractal_higuchi(signal, kmax="default", show=False):
     from fitting a least-squares method.
 
     Values should fall between 1 and 2. For more information about k parameter selection, see
-    the papers referenced below.
+    the ``complexity_k()`` optimization function.
 
     Parameters
     ----------
@@ -27,12 +27,12 @@ def fractal_higuchi(signal, kmax="default", show=False):
         The signal (i.e., a time series) in the form of a vector of values or in
         the form of an n-dimensional array (with a shape of len(channels) x len(samples))
         or dataframe.
-    kmax : str or int
+    k_max : str or int
         Maximum number of interval times (should be greater than or equal to 2).
         If "default", then the optimal kmax is computed based on the point at which HFD values plateau
-        for a range of kmax values.
+        for a range of kmax values (see ``complexity_k()`` optimization function).
     show : bool
-        Visualise the slope of the curve for the selected kmax value.
+        Visualise the slope of the curve for the selected k_max value.
 
     Returns
     ----------

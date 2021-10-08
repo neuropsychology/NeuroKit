@@ -8,7 +8,7 @@ from ..misc import NeuroKitWarning
 
 def complexity_k(signal, k_max="default", show=False):
     """
-    The optimal kmax is computed based on the point at which HFD values plateau for a range of kmax values.
+    The optimal kmax is computed based on the point at which HFD values plateau for a range of kmax values (see Vega, 2015).
 
     Parameters
     ----------
@@ -17,7 +17,7 @@ def complexity_k(signal, k_max="default", show=False):
         the form of an n-dimensional array (with a shape of len(channels) x len(samples))
         or dataframe.
     k_max : Union[int, str, list], optional
-        Maximum number of interval times (should be greater than or equal to 3) to be tested.
+        Maximum number of interval times (should be greater than or equal to 3) to be tested. If 'default', it selects the maximum possible value corresponding to half the length of the signal.
     show : bool
         Visualise the slope of the curve for the selected kmax value.
 
@@ -67,11 +67,12 @@ def complexity_k(signal, k_max="default", show=False):
     k_indices = k_indices[k_range[k_indices] > 2]
 
     if len(k_indices) == 0:
+        k_optimal = np.max(k_range)
         warn(
-            "The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return k = 2.",
+            f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return k = {k_optimal} (the max).",
             category=NeuroKitWarning,
         )
-        k_optimal = 2
+
     else:
         k_optimal = k_range[k_indices[0]]
 
