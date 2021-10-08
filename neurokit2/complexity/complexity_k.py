@@ -70,7 +70,7 @@ def complexity_k(signal, k_max="default", show=False):
     if len(k_indices) == 0:
         k_optimal = np.max(k_range)
         warn(
-            f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return k = {k_optimal} (the max).",
+            f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return optimal k_max = {k_optimal} (the max).",
             category=NeuroKitWarning,
         )
         k_optimal = 2
