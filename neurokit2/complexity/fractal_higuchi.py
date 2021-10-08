@@ -67,7 +67,11 @@ def fractal_higuchi(signal, k_max="default", show=False):
     if isinstance(k_max, (str, list, np.ndarray, pd.Series)):
         # optimizing needed
         k_max, info = complexity_k(signal, k_max=k_max, show=False)
-        slope, intercept, k_values, average_values = info["slope"], info["intercept"], info["k_values"], info["average_values"]
+        idx = info["Values"][info["Values"] == k_max][0]
+        slope = info["Scores"][idx]
+        intercept = info["Intercepts"][idx]
+        average_values = info["Average_Values"][idx]
+        k_values = np.arange(1, k_max + 1)
     else:
         # if integer passed, no optimizing needed
         slope, intercept, k_values, average_values = _complexity_k_slope(signal, k_max)
@@ -76,17 +80,13 @@ def fractal_higuchi(signal, k_max="default", show=False):
     if show:
         fig = plt.figure(constrained_layout=False)
         fig.suptitle("Higuchi Fractal Dimension (HFD)")
-        spec = matplotlib.gridspec.GridSpec(ncols=1, nrows=2)
-        ax_slope = fig.add_subplot(spec[0, 0])
-        _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept, ax=ax_slope)
-        ax_kmax = fig.add_subplot(spec[1, 0])
-        _complexity_k_plot(info["Values"], info["Scores"], k_max, ax=ax_kmax)
+        _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept)
 
     return slope, {
         "k_max": k_max,
-        "k_values": k_values,
-        "average_values": average_values,
-        "intercept": intercept,
+        "Values": k_values,
+        "Scores": average_values,
+        "Intercept": intercept,
     }
 
 
