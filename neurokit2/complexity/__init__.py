@@ -11,6 +11,7 @@ from .complexity_optimize import complexity_optimize
 from .complexity_r import complexity_r
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
+from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
@@ -26,6 +27,7 @@ from .transition_matrix import transition_matrix, transition_matrix_simulate
 # Aliases
 complexity_se = entropy_shannon
 complexity_diffen = entropy_differential
+complexity_cren = entropy_cumulative_residual
 
 complexity_apen = entropy_approximate
 complexity_capen = functools.partial(entropy_approximate, corrected=True)
@@ -58,6 +60,7 @@ __all__ = [
     "complexity_lempelziv",
     "entropy_shannon",
     "entropy_differential",
+    "entropy_cumulative_residual",
     "entropy_approximate",
     "entropy_sample",
     "entropy_fuzzy",
@@ -70,6 +73,7 @@ __all__ = [
     "complexity_se",
     "complexity_apen",
     "complexity_capen",
+    "complexity_cren",
     "complexity_diffen",
     "complexity_k",
     "complexity_sampen",
