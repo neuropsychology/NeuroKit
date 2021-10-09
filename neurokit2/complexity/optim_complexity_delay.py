@@ -19,7 +19,7 @@ from .optim_complexity_embedding import complexity_embedding
 def complexity_delay(
     signal, delay_max=100, method="fraser1986", algorithm=None, show=False, **kwargs
 ):
-    """Estimate optimal Time Delay (tau) for time-delay embedding.
+    """Automated selection of the optimal Time Delay (tau) for time-delay embedding.
 
     The time delay (Tau) is one of the two critical parameters involved in the construction of
     the time-delay embedding of a signal.

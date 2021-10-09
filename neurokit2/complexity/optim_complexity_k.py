@@ -8,7 +8,7 @@ from ..misc import NeuroKitWarning
 
 
 def complexity_k(signal, k_max="max", show=False):
-    """Automated solution for selecting the k_max parameter for Higuchi Fractal Dimension (HFD).
+    """Automated selection of the optimal k_max parameter for Higuchi Fractal Dimension (HFD).
 
     The optimal kmax is computed based on the point at which HFD values plateau for a range of kmax values (see Vega, 2015).
 

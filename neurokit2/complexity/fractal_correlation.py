@@ -28,7 +28,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : str or int or list
+    r : Union[str, int, list]
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         ranging from 2.5% to 50% of the distance range. Methods implemented in other packages can be
         used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.

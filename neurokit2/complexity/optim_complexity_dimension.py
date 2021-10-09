@@ -10,7 +10,7 @@ from .optim_complexity_embedding import complexity_embedding
 def complexity_dimension(
     signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs
 ):
-    """Estimate optimal Dimension (m) for time-delay embedding.
+    """Automated selection of the optimal Dimension (m) for time-delay embedding.
 
     Parameters
     ----------

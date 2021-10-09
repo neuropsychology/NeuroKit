@@ -7,23 +7,26 @@ from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
 
 
-def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=False):
-    """Estimate optimal tolerance (similarity threshold)
+def complexity_r(signal, method="maxApEn", delay=None, dimension=None, show=False):
+    """Automated selection of the optimal tolerance (r) parameter for entropy measures
+
+    The r parameter has a critical impact and is a major source of inconsistencies in the literature.
+
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to
-        have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to
-        find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
-    dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     method : str
         If 'maxApEn', rmax where ApEn is max will be returned. If 'sd' (as in Standard Deviation),
         r = 0.2 * standard deviation of the signal will be returned.
+    delay : int
+        Only used if ``method='maxApEn'``. Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to
+        have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to
+        find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+    dimension : int
+        Only used if ``method='maxApEn'``. Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
+        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     show : bool
         If true and method is 'maxApEn', will plot the ApEn values for each value of r.
 
@@ -52,7 +55,7 @@ def complexity_r(signal, delay=None, dimension=None, method="maxApEn", show=Fals
     """
     # Method
     method = method.lower()
-    if method in ["traditional", "sd"]:
+    if method in ["traditional", "sd", "std"]:
         r = 0.2 * np.std(signal, ddof=1)
         info = {"Method": method}
     elif method in ["maxapen", "optimize"]:
