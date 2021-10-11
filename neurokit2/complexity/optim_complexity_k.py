@@ -78,12 +78,24 @@ def complexity_k(signal, k_max="max", show=False):
     # --------------------------------------------
     # Find slopes that are approaching the max
     # k_indices = np.where(slopes >= 0.95 * np.max(slopes))[0]
-    k_indices = np.where(slopes >= np.percentile(slopes, 90))[0]
-    # drop indices for k <= 2 (which is the minimum value)
-    k_indices = k_indices[k_range[k_indices] > 2]
-    # drop indices for decreasing slope segments
-    decreasing = np.where(np.diff(slopes) < 0)[0]
-    k_indices = np.array([i for i in k_indices if i not in decreasing])
+    # k_indices = np.where(slopes >= np.percentile(slopes, 90))[0]
+    # # drop indices for k <= 2 (which is the minimum value)
+    # k_indices = k_indices[k_range[k_indices] > 2]
+    # # drop indices for decreasing slope segments
+    # decreasing = np.where(np.diff(slopes) < 0)[0]
+    # k_indices = np.array([i for i in k_indices if i not in decreasing])
+
+    # find indices in increasing segments
+    increasing_segments = np.where(np.diff(slopes) > 0)[0]
+    slope_increasing = slopes[increasing_segments]
+
+    # find indices where positive gradients are becoming less positive
+    slope_change = np.diff(np.diff(slopes))
+    gradients = np.where(slope_change < 0)[0]
+    indices = np.intersect1d(increasing_segments, gradients)
+
+    # get indices
+    k_indices = np.where(slopes >= np.percentile(slopes[indices], 50))[0]    
 
     if len(k_indices) == 0:
         k_optimal = np.max(k_range)
