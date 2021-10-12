@@ -7,7 +7,7 @@ import pandas as pd
 from ..misc import NeuroKitWarning
 
 
-def complexity_k(signal, k_max="max", show=False):
+def complexity_k(signal, k_max="max", show=False, **kwargs):
     """Automated selection of the optimal k_max parameter for Higuchi Fractal Dimension (HFD).
 
     The optimal kmax is computed based on the point at which HFD values plateau for a range of kmax values (see Vega, 2015).
@@ -72,7 +72,7 @@ def complexity_k(signal, k_max="max", show=False):
     intercepts = np.zeros(len(k_range))
     average_values = list(np.zeros(len(k_range)))
     for i, k in enumerate(k_range):
-        slopes[i], intercepts[i], _, average_values[i] = _complexity_k_slope(signal, k)
+        slopes[i], intercepts[i], _, average_values[i] = _complexity_k_slope(signal, k, **kwargs)
 
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
@@ -95,7 +95,7 @@ def complexity_k(signal, k_max="max", show=False):
     indices = np.intersect1d(increasing_segments, gradients)
 
     # get indices
-    k_indices = np.where(slopes >= np.percentile(slopes[indices], 50))[0]    
+    k_indices = np.where(slopes >= np.percentile(slopes[indices], 50))[0]
 
     if len(k_indices) == 0:
         k_optimal = np.max(k_range)
@@ -124,8 +124,11 @@ def complexity_k(signal, k_max="max", show=False):
 # =============================================================================
 
 
-def _complexity_k_slope(signal, k):
-    k_values = np.arange(1, k + 1)
+def _complexity_k_slope(signal, k, k_number="range"):
+    if k_number == "range":
+        k_values = np.arange(1, k + 1)
+    else:
+        k_values = np.unique(np.linspace(1, k + 1, k_number).astype(int))
     average_values = _complexity_k_average_values(signal, k_values)
 
     # Slope of best-fit line through points
@@ -140,8 +143,8 @@ def _complexity_k_average_values(signal, k_values):
 
     # Compute length of the curve, Lm(k)
     for i, k in enumerate(k_values):
-        sets = np.zeros(k)
-        for j, m in enumerate(range(1, k + 1)):
+        sets = np.zeros(len(k_values))
+        for j, m in enumerate(k_values):
             n_max = int(np.floor((n - m) / k))
             normalization = (n - 1) / (n_max * k)
             Lm_k = np.sum(np.abs(np.diff(signal[m - 1 :: k], n=1))) * normalization
