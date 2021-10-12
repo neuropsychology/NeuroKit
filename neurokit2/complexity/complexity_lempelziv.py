@@ -36,10 +36,6 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     >>>
     >>> lzc, parameters = nk.complexity_lempelziv(signal, threshold="median")
     >>> lzc #doctest: +SKIP
-    >>>
-    >>> eeg = nk.mne_to_df(nk.mne_data("filt-0-40_raw"))
-    >>> data = eeg[['EEG 001', 'EEG 002', 'EEG 003']]
-    >>> lzc, parameters = nk.complexity_lempelziv(data, threshold="median")
 
     References
     ----------
@@ -65,16 +61,17 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
         )
 
     # prepare parameters
-    info = {'Threshold': threshold,
-            'Normalize': normalize}
+    info = {"Threshold": threshold, "Normalize": normalize}
 
     out = _complexity_lempelziv(signal, threshold=threshold, normalize=normalize)
 
     return out, info
 
+
 # =============================================================================
 # Utilities
 # =============================================================================
+
 
 def _complexity_lempelziv(signal, threshold="median", normalize=True):
 
@@ -91,7 +88,10 @@ def _complexity_lempelziv(signal, threshold="median", normalize=True):
 
     # iterate over sequence
     while current_prefix_len + current_substring_len <= n:
-        if (p_seq[pointer + current_substring_len - 1] == p_seq[current_prefix_len + current_substring_len - 1]):
+        if (
+            p_seq[pointer + current_substring_len - 1]
+            == p_seq[current_prefix_len + current_substring_len - 1]
+        ):
             current_substring_len += 1
         else:
             final_substring_len = max(current_substring_len, final_substring_len)
@@ -132,6 +132,7 @@ def _complexity_lempelziv_binarize(signal, threshold="median"):
     p_seq = p_seq.astype(int)
 
     return p_seq
+
 
 def _complexity_lempelziv_normalize(sequence, complexity):
 
