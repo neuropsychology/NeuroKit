@@ -37,7 +37,7 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[5, 6], noise=0.5)
+    >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
     >>> k_max, info = nk.complexity_k(signal, k_max='default', show=True)
     >>> k_max #doctest: +SKIP
 
@@ -116,6 +116,8 @@ def _complexity_k_slope(signal, kmax, k_number="max"):
 
 
 def _complexity_k_Lk(k, dict_with_signal={}):
+    # Passing dict instead of array is so that it doesn't vectorize over the signal
+    # but treats it as one object
     signal = dict_with_signal["signal"]
     n = len(signal)
     k_subrange = np.arange(1, k + 1)
