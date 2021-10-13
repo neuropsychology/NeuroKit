@@ -7,6 +7,7 @@ from .find_closest import find_closest
 from .find_consecutive import find_consecutive
 from .find_groups import find_groups
 from .find_outliers import find_outliers
+from .find_plateau import find_plateau
 from .intervals_to_peaks import intervals_to_peaks
 from .listify import listify
 from .parallel_run import parallel_run
@@ -26,4 +27,5 @@ __all__ = [
     "find_outliers",
     "intervals_to_peaks",
     "parallel_run",
+    "find_plateau",
 ]
