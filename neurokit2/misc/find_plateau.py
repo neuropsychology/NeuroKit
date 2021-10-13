@@ -21,7 +21,7 @@ def find_plateau(values, show=True):
         indices = [i for i in indices if i not in peaks]
 
     # find greatest change in slopes amongst filtered indices
-    largest = np.argsort(slope_change)[:int(0.2 * len(slope_change))]  # get top 10%
+    largest = np.argsort(slope_change)[:int(0.1 * len(slope_change))]  # get top 10%
     optimal = [i for i in largest if i in indices]
 
     # find indices above certain threshold
