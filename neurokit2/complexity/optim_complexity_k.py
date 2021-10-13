@@ -85,15 +85,6 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
             category=NeuroKitWarning,
         )
 
-    # if len(k_indices) == 0:
-    #     k_optimal = np.max(k_range)
-    #     warn(
-    #         f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return optimal k_max = {k_optimal} (the max).",
-    #         category=NeuroKitWarning,
-    #     )
-    # else:
-    #     k_optimal = k_range[k_indices[0]]
-
     # Plot
     if show:
         _complexity_k_plot(k_range, slopes, k_optimal, ax=None)
@@ -112,27 +103,31 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
 # =============================================================================
 
 
-def _complexity_k_slope(signal, k, k_number="range"):
-    if k_number == "range":
+def _complexity_k_slope(signal, k, k_number="max"):
+    if k_number == "max":
         k_values = np.arange(1, k + 1)
     else:
         k_values = np.unique(np.linspace(1, k + 1, k_number).astype(int))
-    average_values = _complexity_k_average_values(signal, k_values)
+    average_values = _complexity_k_average_values(signal, k_values, k_number=k_number)
 
     # Slope of best-fit line through points
     slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
     return slope, intercept, k_values, average_values
 
 
-def _complexity_k_average_values(signal, k_values):
+def _complexity_k_average_values(signal, k_values, k_number="max"):
     """Step 3 of Vega & Noel (2015)"""
     n = len(signal)
     average_values = np.zeros(len(k_values))
 
     # Compute length of the curve, Lm(k)
     for i, k in enumerate(k_values):
-        sets = np.zeros(k)
-        for j, m in enumerate(range(1, k + 1)):
+        if k_number == "max":
+            k_subrange = np.arange(1, k + 1)
+        else:
+            k_subrange = np.unique(np.linspace(1, k + 1, k_number).astype(int))
+        sets = np.zeros(len(k_subrange))
+        for j, m in enumerate(k_subrange):
             n_max = int(np.floor((n - m) / k))
             normalization = (n - 1) / (n_max * k)
             Lm_k = np.sum(np.abs(np.diff(signal[m - 1 :: k], n=1))) * normalization
