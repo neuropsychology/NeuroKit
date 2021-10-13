@@ -29,7 +29,7 @@ def find_plateau(values, show=True):
     # optimal = np.intersect1d(indices, threshold)
 
     if len(optimal) >= 1:
-        plateau = np.where(values == np.max(values[optimal]))[0]
+        plateau = np.where(values == np.max(values[optimal]))[0][0]
         if show:
             events_plot([plateau], values)
     else:
