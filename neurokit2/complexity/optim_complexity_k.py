@@ -108,7 +108,7 @@ def _complexity_k_slope(signal, kmax, k_number="max"):
         k_values = np.arange(1, kmax + 1)
     else:
         k_values = np.unique(np.linspace(1, kmax + 1, k_number).astype(int))
-    average_values = _complexity_k_average_values(signal, k_values, k_number=k_number)
+    average_values = _complexity_k_average_values(signal, k_values)
 
     # Slope of best-fit line through points
     slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
@@ -124,12 +124,19 @@ def _complexity_k_average_values(signal, k_values):
     # Compute length of the curve, Lm(k)
     for i, k in enumerate(k_values):
         k_subrange = np.arange(1, k + 1)
-        sets = np.zeros(len(k_subrange))
-        for j, m in enumerate(k_subrange):
-            n_max = int(np.floor((n - m) / k))
-            normalization = (n - 1) / (n_max * k)
-            Lm_k = np.sum(np.abs(np.diff(signal[m - 1 :: k], n=1))) * normalization
-            sets[j] = Lm_k / k
+
+        normalization = (n - 1) / (np.floor((n - k_subrange) / k).astype(int) * k)
+
+        idx = np.tile(np.arange(0, len(signal), k), (k, 1)).astype(float)
+        idx += np.tile(np.arange(0, k), (idx.shape[1], 1)).T
+        mask = idx >= len(signal)
+        idx[mask] = 0
+
+        sig_values = signal[idx.astype(int)].astype(float)
+        sig_values[mask] = np.nan
+
+        sets = (np.nansum(np.abs(np.diff(sig_values)), axis=1) * normalization) / k
+
         # Compute average value over k sets of Lm(k)
         L_k = np.sum(sets) / k
         average_values[i] = L_k
