@@ -103,18 +103,6 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
 # =============================================================================
 
 
-def _complexity_k_slope(signal, kmax, k_number="max"):
-    if k_number == "max":
-        k_values = np.arange(1, kmax + 1)
-    else:
-        k_values = np.unique(np.linspace(1, kmax + 1, k_number).astype(int))
-    average_values = _complexity_k_average_values(signal, k_values)
-
-    # Slope of best-fit line through points
-    slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
-    return slope, intercept, k_values, average_values
-
-
 def _complexity_k_Lk(k, dict_with_signal={}):
     # Passing dict instead of array is so that it doesn't vectorize over the signal
     # but treats it as one object
@@ -138,11 +126,20 @@ def _complexity_k_Lk(k, dict_with_signal={}):
     return np.sum(sets) / k
 
 
-def _complexity_k_average_values(signal, k_values):
+def _complexity_k_slope(signal, kmax, k_number="max"):
+    if k_number == "max":
+        k_values = np.arange(1, kmax + 1)
+    else:
+        k_values = np.unique(np.linspace(1, kmax + 1, k_number).astype(int))
+
     """Step 3 of Vega & Noel (2015)"""
     vectorized_Lk = np.vectorize(_complexity_k_Lk)
     # Compute length of the curve, Lm(k)
-    return vectorized_Lk(k_values, {"signal": signal})
+    average_values = vectorized_Lk(k_values, {"signal": signal})
+
+    # Slope of best-fit line through points
+    slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
+    return slope, intercept, k_values, average_values
 
 
 def _complexity_k_plot(k_range, slope_values, k_optimal, ax=None):
