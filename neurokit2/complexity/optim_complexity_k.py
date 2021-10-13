@@ -108,9 +108,9 @@ def _complexity_k_Lk(k, dict_with_signal={}):
     # but treats it as one object
     signal = dict_with_signal["signal"]
     n = len(signal)
-    k_subrange = np.arange(1, k + 1)
 
-    normalization = (n - 1) / (np.floor((n - k_subrange) / k).astype(int) * k)
+    # Step 1: construct k number of new time series for range of k_values from 1 to kmax
+    k_subrange = np.arange(1, k + 1)  # where m = 1, 2... k
 
     idx = np.tile(np.arange(0, len(signal), k), (k, 1)).astype(float)
     idx += np.tile(np.arange(0, k), (idx.shape[1], 1)).T
@@ -120,9 +120,11 @@ def _complexity_k_Lk(k, dict_with_signal={}):
     sig_values = signal[idx.astype(int)].astype(float)
     sig_values[mask] = np.nan
 
+    # Step 2: Calculate length Lm(k) of each curve
+    normalization = (n - 1) / (np.floor((n - k_subrange) / k).astype(int) * k)
     sets = (np.nansum(np.abs(np.diff(sig_values)), axis=1) * normalization) / k
 
-    # Compute average value over k sets of Lm(k)
+    # Step 3: Compute average value over k sets of Lm(k)
     return np.sum(sets) / k
 
 
@@ -134,10 +136,11 @@ def _complexity_k_slope(signal, kmax, k_number="max"):
 
     """Step 3 of Vega & Noel (2015)"""
     vectorized_Lk = np.vectorize(_complexity_k_Lk)
+
     # Compute length of the curve, Lm(k)
     average_values = vectorized_Lk(k_values, {"signal": signal})
 
-    # Slope of best-fit line through points
+    # Slope of best-fit line through points (slope equal to FD)
     slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
     return slope, intercept, k_values, average_values
 
