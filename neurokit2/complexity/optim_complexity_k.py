@@ -78,7 +78,7 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
     try:
         optimal_point = find_plateau(slopes, show=False)
         k_optimal = k_range[optimal_point]
-    except ValueError:  # if can't find plateau
+    except ValueError or k_optimal <= 2:  # if can't find plateau
         k_optimal = np.max(k_range)
         warn(
             f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return optimal k_max = {k_optimal} (the max).",
