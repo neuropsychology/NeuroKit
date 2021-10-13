@@ -122,10 +122,11 @@ def _complexity_k_average_values(signal, k_values, k_number="max"):
 
     # Compute length of the curve, Lm(k)
     for i, k in enumerate(k_values):
-        if k_number == "max":
-            k_subrange = np.arange(1, k + 1)
-        else:
-            k_subrange = np.unique(np.linspace(1, k + 1, k_number).astype(int))
+        k_subrange = np.arange(1, k + 1)
+        # if k_number == "max":
+        #     k_subrange = np.arange(1, k + 1)
+        # else:
+        #     k_subrange = np.unique(np.linspace(1, k + 1, k_number).astype(int))
         sets = np.zeros(len(k_subrange))
         for j, m in enumerate(k_subrange):
             n_max = int(np.floor((n - m) / k))
