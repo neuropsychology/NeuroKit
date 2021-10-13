@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import scipy.signal
 
 from ..events.events_plot import events_plot
-from ..signal import signal_findpeaks
 
 
 def find_plateau(values, show=True):
@@ -16,7 +16,7 @@ def find_plateau(values, show=True):
     indices = np.intersect1d(increasing_segments, gradients)
 
     # exclude inverse peaks
-    peaks = signal_findpeaks(-1 * values)["Peaks"]
+    peaks = scipy.signal.find_peaks(-1 * values)[0]
     if len(peaks) > 0:
         indices = [i for i in indices if i not in peaks]
 
