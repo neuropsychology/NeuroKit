@@ -37,7 +37,7 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[5, 6], noise=0.5)
+    >>> signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency=[5, 6], noise=0.5)
     >>> k_max, info = nk.complexity_k(signal, k_max='default', show=True)
     >>> k_max #doctest: +SKIP
 
@@ -115,32 +115,32 @@ def _complexity_k_slope(signal, kmax, k_number="max"):
     return slope, intercept, k_values, average_values
 
 
+def _complexity_k_Lk(k, dict_with_signal={}):
+    signal = dict_with_signal["signal"]
+    n = len(signal)
+    k_subrange = np.arange(1, k + 1)
+
+    normalization = (n - 1) / (np.floor((n - k_subrange) / k).astype(int) * k)
+
+    idx = np.tile(np.arange(0, len(signal), k), (k, 1)).astype(float)
+    idx += np.tile(np.arange(0, k), (idx.shape[1], 1)).T
+    mask = idx >= len(signal)
+    idx[mask] = 0
+
+    sig_values = signal[idx.astype(int)].astype(float)
+    sig_values[mask] = np.nan
+
+    sets = (np.nansum(np.abs(np.diff(sig_values)), axis=1) * normalization) / k
+
+    # Compute average value over k sets of Lm(k)
+    return np.sum(sets) / k
+
+
 def _complexity_k_average_values(signal, k_values):
     """Step 3 of Vega & Noel (2015)"""
-    n = len(signal)
-    # L_k for each k
-    average_values = np.zeros(len(k_values))
-
+    vectorized_Lk = np.vectorize(_complexity_k_Lk)
     # Compute length of the curve, Lm(k)
-    for i, k in enumerate(k_values):
-        k_subrange = np.arange(1, k + 1)
-
-        normalization = (n - 1) / (np.floor((n - k_subrange) / k).astype(int) * k)
-
-        idx = np.tile(np.arange(0, len(signal), k), (k, 1)).astype(float)
-        idx += np.tile(np.arange(0, k), (idx.shape[1], 1)).T
-        mask = idx >= len(signal)
-        idx[mask] = 0
-
-        sig_values = signal[idx.astype(int)].astype(float)
-        sig_values[mask] = np.nan
-
-        sets = (np.nansum(np.abs(np.diff(sig_values)), axis=1) * normalization) / k
-
-        # Compute average value over k sets of Lm(k)
-        L_k = np.sum(sets) / k
-        average_values[i] = L_k
-    return average_values
+    return vectorized_Lk(k_values, {"signal": signal})
 
 
 def _complexity_k_plot(k_range, slope_values, k_optimal, ax=None):
