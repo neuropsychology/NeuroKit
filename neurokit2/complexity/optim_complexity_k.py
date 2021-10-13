@@ -115,7 +115,7 @@ def _complexity_k_slope(signal, k, k_number="max"):
     return slope, intercept, k_values, average_values
 
 
-def _complexity_k_average_values(signal, k_values, k_number="max"):
+def _complexity_k_average_values(signal, k_values):
     """Step 3 of Vega & Noel (2015)"""
     n = len(signal)
     average_values = np.zeros(len(k_values))
