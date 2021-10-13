@@ -56,9 +56,9 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
         k_max = int(np.floor(len(signal) / 2))  # so that normalizing factor is positive
 
     if isinstance(k_max, int):
-        k_range = np.arange(2, k_max + 1)
+        kmax_range = np.arange(2, k_max + 1)
     elif isinstance(k_max, (list, np.ndarray, pd.Series)):
-        k_range = np.array(k_max)
+        kmax_range = np.array(k_max)
     else:
         warn(
             "k_max should be an int or a list of values of kmax to be tested.",
@@ -67,31 +67,31 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
 
     # Compute the slope for each kmax value
     # --------------------------------------
-    slopes = np.zeros(len(k_range))
-    intercepts = np.zeros(len(k_range))
-    average_values = list(np.zeros(len(k_range)))
-    for i, k in enumerate(k_range):
-        slopes[i], intercepts[i], _, average_values[i] = _complexity_k_slope(signal, k, **kwargs)
+    slopes = np.zeros(len(kmax_range))
+    intercepts = np.zeros(len(kmax_range))
+    average_values = list(np.zeros(len(kmax_range)))
+    for i, kmax in enumerate(kmax_range):
+        slopes[i], intercepts[i], _, average_values[i] = _complexity_k_slope(signal, kmax, **kwargs)
 
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
     try:
         optimal_point = find_plateau(slopes, show=False)
-        k_optimal = k_range[optimal_point]
-    except ValueError or k_optimal <= 2:  # if can't find plateau
-        k_optimal = np.max(k_range)
+        kmax_optimal = kmax_range[optimal_point]
+    except ValueError or kmax_optimal <= 2:  # if can't find plateau
+        kmax_optimal = np.max(kmax_range)
         warn(
-            f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return optimal k_max = {k_optimal} (the max).",
+            f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return optimal k_max = {kmax_optimal} (the max).",
             category=NeuroKitWarning,
         )
 
     # Plot
     if show:
-        _complexity_k_plot(k_range, slopes, k_optimal, ax=None)
+        _complexity_k_plot(kmax_range, slopes, kmax_optimal, ax=None)
 
     # Return optimal tau and info dict
-    return k_optimal, {
-        "Values": k_range,
+    return kmax_optimal, {
+        "Values": kmax_range,
         "Scores": slopes,
         "Intercepts": intercepts,
         "Average_Values": average_values,
@@ -103,11 +103,11 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
 # =============================================================================
 
 
-def _complexity_k_slope(signal, k, k_number="max"):
+def _complexity_k_slope(signal, kmax, k_number="max"):
     if k_number == "max":
-        k_values = np.arange(1, k + 1)
+        k_values = np.arange(1, kmax + 1)
     else:
-        k_values = np.unique(np.linspace(1, k + 1, k_number).astype(int))
+        k_values = np.unique(np.linspace(1, kmax + 1, k_number).astype(int))
     average_values = _complexity_k_average_values(signal, k_values, k_number=k_number)
 
     # Slope of best-fit line through points
@@ -118,6 +118,7 @@ def _complexity_k_slope(signal, k, k_number="max"):
 def _complexity_k_average_values(signal, k_values):
     """Step 3 of Vega & Noel (2015)"""
     n = len(signal)
+    # L_k for each k
     average_values = np.zeros(len(k_values))
 
     # Compute length of the curve, Lm(k)
