@@ -67,11 +67,10 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
 
     # Compute the slope for each kmax value
     # --------------------------------------
-    slopes = np.zeros(len(kmax_range))
-    intercepts = np.zeros(len(kmax_range))
-    average_values = list(np.zeros(len(kmax_range)))
-    for i, kmax in enumerate(kmax_range):
-        slopes[i], intercepts[i], _, average_values[i] = _complexity_k_slope(signal, kmax, **kwargs)
+    vectorized_k_slope = np.vectorize(_complexity_k_slope, excluded=[1])
+    slopes, intercepts, info = vectorized_k_slope(kmax_range, signal)
+    k_values = [d["k_values"] for d in info]
+    average_values = [d["average_values"] for d in info]
 
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
@@ -103,10 +102,7 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
 # =============================================================================
 
 
-def _complexity_k_Lk(k, dict_with_signal={}):
-    # Passing dict instead of array is so that it doesn't vectorize over the signal
-    # but treats it as one object
-    signal = dict_with_signal["signal"]
+def _complexity_k_Lk(k, signal):
     n = len(signal)
 
     # Step 1: construct k number of new time series for range of k_values from 1 to kmax
@@ -128,21 +124,21 @@ def _complexity_k_Lk(k, dict_with_signal={}):
     return np.sum(sets) / k
 
 
-def _complexity_k_slope(signal, kmax, k_number="max"):
+def _complexity_k_slope(kmax, signal, k_number="max"):
     if k_number == "max":
         k_values = np.arange(1, kmax + 1)
     else:
         k_values = np.unique(np.linspace(1, kmax + 1, k_number).astype(int))
 
     """Step 3 of Vega & Noel (2015)"""
-    vectorized_Lk = np.vectorize(_complexity_k_Lk)
+    vectorized_Lk = np.vectorize(_complexity_k_Lk, excluded=[1])
 
     # Compute length of the curve, Lm(k)
-    average_values = vectorized_Lk(k_values, {"signal": signal})
+    average_values = vectorized_Lk(k_values, signal)
 
     # Slope of best-fit line through points (slope equal to FD)
     slope, intercept = -np.polyfit(np.log(k_values), np.log(average_values), 1)
-    return slope, intercept, k_values, average_values
+    return slope, intercept, {"k_values": k_values, "average_values": average_values}
 
 
 def _complexity_k_plot(k_range, slope_values, k_optimal, ax=None):

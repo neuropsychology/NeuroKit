@@ -73,8 +73,10 @@ def fractal_higuchi(signal, k_max="default", show=False):
         average_values = info["Average_Values"][idx]
         k_values = np.arange(1, k_max + 1)
     else:
-        # if integer passed, no optimizing needed
-        slope, intercept, k_values, average_values = _complexity_k_slope(signal, k_max)
+        # Compute higushi
+        slope, intercept, info = _complexity_k_slope(k_max, signal)
+        k_values = info["k_values"]
+        average_values = info["average_values"]
 
     # Plot
     if show:
