@@ -33,7 +33,6 @@ def find_plateau(values, show=True):
         if show:
             events_plot([plateau], values)
     else:
-        raise ValueError("NeuroKit error: find_plateau(): Plateau can't be found. Try inspecting manually.")
+        plateau = None
 
     return plateau
-

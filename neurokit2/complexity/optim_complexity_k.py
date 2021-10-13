@@ -75,10 +75,10 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
 
     # Find plateau (the saturation point of slope)
     # --------------------------------------------
-    try:
-        optimal_point = find_plateau(slopes, show=False)
+    optimal_point = find_plateau(slopes, show=False)
+    if optimal_point is not None:
         kmax_optimal = kmax_range[optimal_point]
-    except ValueError or kmax_optimal <= 2:  # if can't find plateau
+    else:
         kmax_optimal = np.max(kmax_range)
         warn(
             f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return optimal k_max = {kmax_optimal} (the max).",
