@@ -29,11 +29,11 @@ def mne_to_df(eeg):
     # Try loading mne
     try:
         import mne
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
-        )
+        ) from e
 
     # If epoch object
     if isinstance(eeg, mne.Epochs):
