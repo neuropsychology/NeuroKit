@@ -151,18 +151,11 @@ def test_complexity_vs_Python():
     )
 
     # Lempel Ziv Complexity
-    threshold = np.median(signal) # binarize first
-    p_seq = signal.copy()
-    for index, value in enumerate(signal):
-        if value < threshold:
-            p_seq[index] = 0
-        else:
-            p_seq[index] = 1
-    p_seq = p_seq.astype(int).astype(str)
-    p_seq = "".join(p_seq)
-    
+    threshold = np.nanmedian(signal)
+    binary = np.zeros(len(signal))
+    binary[signal > threshold] = 1
     assert np.allclose(
-        nk.complexity_lempelziv(signal, threshold="median", normalize=True)[0] - antropy.lziv_complexity(p_seq, normalize=True), 0
+        nk.complexity_lempelziv(signal, method="median", normalize=True)[0] - antropy.lziv_complexity(binary, normalize=True), 0
     )
 
     # Katz
