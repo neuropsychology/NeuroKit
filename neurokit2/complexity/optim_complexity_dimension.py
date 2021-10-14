@@ -7,10 +7,12 @@ from .complexity_embedding import complexity_embedding
 from .fractal_correlation import fractal_correlation
 
 
-def complexity_dimension(
-    signal, delay=1, dimension_max=20, method="afnn", show=False, R=10.0, A=2.0, **kwargs
-):
+def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, **kwargs):
     """Automated selection of the optimal Dimension (m) for time-delay embedding.
+
+    From `this thread <https://www.researchgate.net/post/How-can-we-find-out-which-value-of-embedding-dimensions-is-more-accurate>`_:
+
+    "In the early days, the method of choice was to calculate the correlation dimension in various embeddings and look for a saturation in its value as the embedding dimension increases. However, a saturation will always occur when you no longer have enough data to adequately fill your high-dimensional space. More recently the method of choice has been false nearest neighbors, although that suffers from the same problem when the neighborhood does not contain sufficiently many points. As a rule of thumb, you might demand that each dimension have at least ten points."
 
     Parameters
     ----------
@@ -25,15 +27,11 @@ def complexity_dimension(
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order')
         to test.
     method : str
-        Method can either be 'afnn' (average false nearest neighbour) or 'fnn' (false nearest neighbour).
+        Method can either be 'afnn' (average false nearest neighbour), 'fnn' (false nearest neighbour), or 'correlation' (correlation dimension).
     show : bool
         Visualize the result.
-    R : float
-        Relative tolerance (for fnn method).
-    A : float
-        Absolute tolerance (for fnn method)
     **kwargs
-        Other arguments.
+        Other arguments, such as ``R=10.0``, ``A=2.0`` (relative and absolute tolerance, only for 'fnn' method).
 
     Returns
     -------
@@ -103,7 +101,7 @@ def complexity_dimension(
 
     elif method in ["fnn"]:
         f1, f2, f3 = _embedding_dimension_ffn(
-            signal, dimension_seq=dimension_seq, delay=delay, R=R, A=A, **kwargs
+            signal, dimension_seq=dimension_seq, delay=delay, **kwargs
         )
 
         min_dimension = [i for i, x in enumerate(f3 <= 1.85 * np.min(f3[np.nonzero(f3)])) if x][0]
@@ -148,13 +146,7 @@ def complexity_dimension(
 # Methods
 # =============================================================================
 def _embedding_dimension_correlation(signal, dimension_seq, delay=1, **kwargs):
-    """Return the Correlation Dimension (CD) for a all d in dimension_seq.
-
-    From https://www.researchgate.net/post/How-can-we-find-out-which-value-of-embedding-dimensions-is-more-accurate
-
-    In the early days, the method of choice was to calculate the correlation dimension in various embeddings and look for a saturation in its value as the embedding dimension increases. However, a saturation will always occur when you no longer have enough data to adequately fill your high-dimensional space. More recently the method of choice has been false nearest neighbors, although that suffers from the same problem when the neighborhood does not contain sufficiently many points. As a rule of thumb, you might demand that each dimension have at least ten points.
-
-    """
+    """Return the Correlation Dimension (CD) for a all d in dimension_seq."""
     CDs = np.zeros(len(dimension_seq))
     for i, d in enumerate(dimension_seq):
         CDs[i] = fractal_correlation(signal, dimension=d, delay=delay, **kwargs)[0]
@@ -165,7 +157,7 @@ def _embedding_dimension_correlation(signal, dimension_seq, delay=1, **kwargs):
 def _embedding_dimension_afn(signal, dimension_seq, delay=1, **kwargs):
     """Return E(d) and E^*(d) for a all d in dimension_seq.
 
-    E(d) and E^*(d) will be used to calculate E1(d) and E2(d)
+    E(d) and E^*(d) will be used to calculate E1(d) and E2(d).
 
     El(d) = E(d + 1)/E(d). E1(d) stops changing when d is greater than some value d0  if the time
     series comes from an attractor. Then d0 + 1 is the minimum embedding dimension we look for.
@@ -215,37 +207,22 @@ def _embedding_dimension_afn_d(
     return E, Es
 
 
-def _embedding_dimension_ffn(signal, dimension_seq, delay=1, **kwargs):
+def _embedding_dimension_ffn(signal, dimension_seq, delay=1, R=10.0, A=2.0, **kwargs):
     """Compute the fraction of false nearest neighbors.
 
     The false nearest neighbors (FNN) method described by Kennel et al.
     (1992) to calculate the minimum embedding dimension required to embed a scalar time series.
 
-    Parameters
-    ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
-    dimension_seq : int
-        The embedding dimension.
-    delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag').
-    **kwargs
-        Other arguments.
+    Returns 3 vectors:
 
-    Returns
-    -------
-    f1 : array
-        Fraction of neighbors classified as false by Test I.
-    f2 : array
-        Fraction of neighbors classified as false by Test II.
-    f3 : array
-        Fraction of neighbors classified as false by either Test I
-        or Test II.
+    - f1 : Fraction of neighbors classified as false by Test I.
+    - f2 : Fraction of neighbors classified as false by Test II.
+    - f3 : Fraction of neighbors classified as false by either Test I or Test II.
 
     """
     values = np.asarray(
         [
-            _embedding_dimension_ffn_d(signal, dimension, delay, **kwargs)
+            _embedding_dimension_ffn_d(signal, dimension, delay, R=R, A=A, **kwargs)
             for dimension in dimension_seq
         ]
     ).T
@@ -323,8 +300,7 @@ def _embedding_dimension_plot(
 def _embedding_dimension_neighbors(
     signal, dimension_max=20, delay=1, metric="chebyshev", window=0, maxnum=None, show=False
 ):
-    """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given
-    array using SciPy's KDTree search.
+    """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given array using SciPy's KDTree search.
 
     Parameters
     ----------
@@ -358,6 +334,14 @@ def _embedding_dimension_neighbors(
         Array containing indices of near neighbors.
     dist : array
         Array containing near neighbor distances.
+
+    Examples
+    ---------
+    >>> import neurokit2 as nk
+    >>>
+    >>> # Artifical example
+    >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
+    >>> delay = 225; dimension_max = 10; metric = 'chebyshev'; maxnum=None; window=0
 
     """
 
@@ -394,10 +378,12 @@ def _embedding_dimension_neighbors(
 
     for i, x in enumerate(y):
         for k in range(2, maxnum + 2):
-            # querry for k number of nearest neighbours
+
+            # Query for k number of nearest neighbors
             dist, index = tree.query(x, k=k, p=p)
-            # remove points that are closer than min temporal separation
-            # remove self reference (d > 0)
+
+            # Remove points that are closer than min temporal separation
+            # and self reference (d > 0)
             valid = (np.abs(index - i) > window) & (dist > 0)
 
             if np.count_nonzero(valid):
