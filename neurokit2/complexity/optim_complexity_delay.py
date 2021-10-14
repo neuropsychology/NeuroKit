@@ -12,8 +12,8 @@ import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
 from ..signal import signal_autocor, signal_findpeaks, signal_zerocrossings
-from ..stats import mutual_information
 from .complexity_embedding import complexity_embedding
+from .information_mutual import mutual_information
 
 
 def complexity_delay(
@@ -293,14 +293,18 @@ def _embedding_delay_cc_integral_sum(signal, dimension=3, delay=10, r=0.02):
     M = embedded.shape[0]
 
     # Prepare indices for comparing all unique pairwise vectors
-    combinations =  list(itertools.combinations(range(0, M), r=2))
+    combinations = list(itertools.combinations(range(0, M), r=2))
     first_index, second_index = np.transpose(combinations)[0], np.transpose(combinations)[1]
 
-    vectorized_integral = np.vectorize(_embedding_delay_cc_integral, excluded=['embedded', 'r'])
-    integral = np.sum(vectorized_integral(first_index=first_index, second_index=second_index,
-                                          embedded=embedded, r=r))
+    vectorized_integral = np.vectorize(_embedding_delay_cc_integral, excluded=["embedded", "r"])
+    integral = np.sum(
+        vectorized_integral(
+            first_index=first_index, second_index=second_index, embedded=embedded, r=r
+        )
+    )
 
     return integral
+
 
 def _embedding_delay_cc_integral(first_index, second_index, embedded, r=0.02):
     M = embedded.shape[0]  # Number of embedded points
@@ -319,9 +323,9 @@ def _embedding_delay_cc_statistic(signal, dimension=3, delay=10, r=0.02):
 
     statistic = 0
     for sub_series in series:
-        diff = _embedding_delay_cc_integral_sum(sub_series, dimension=dimension, delay=delay, r=r) - (
-            (_embedding_delay_cc_integral_sum(signal, dimension=1, delay=delay, r=r)) ** dimension
-        )
+        diff = _embedding_delay_cc_integral_sum(
+            sub_series, dimension=dimension, delay=delay, r=r
+        ) - ((_embedding_delay_cc_integral_sum(signal, dimension=1, delay=delay, r=r)) ** dimension)
         statistic += diff
 
     return statistic / delay

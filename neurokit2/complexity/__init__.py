@@ -16,6 +16,7 @@ from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_katz import fractal_katz
 from .fractal_mandelbrot import fractal_mandelbrot
+from .information_mutual import mutual_information
 from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
 from .optim_complexity_k import complexity_k
@@ -57,18 +58,9 @@ __all__ = [
     "complexity_simulate",
     "complexity_r",
     "complexity_lempelziv",
-    "entropy_shannon",
-    "entropy_differential",
-    "entropy_cumulative_residual",
-    "entropy_approximate",
-    "entropy_sample",
-    "entropy_fuzzy",
-    "entropy_multiscale",
-    "fractal_dfa",
-    "fractal_correlation",
-    "fractal_higuchi",
-    "fractal_katz",
-    "fractal_mandelbrot",
+    "complexity_mfdfa",
+    "complexity_d2",
+    "complexity_plot",
     "complexity_se",
     "complexity_apen",
     "complexity_capen",
@@ -84,10 +76,20 @@ __all__ = [
     "complexity_rcmse",
     "complexity_fuzzyrcmse",
     "complexity_dfa",
+    "entropy_shannon",
+    "entropy_differential",
+    "entropy_cumulative_residual",
+    "entropy_approximate",
+    "entropy_sample",
+    "entropy_fuzzy",
+    "entropy_multiscale",
+    "fractal_dfa",
+    "fractal_correlation",
+    "fractal_higuchi",
+    "fractal_katz",
+    "fractal_mandelbrot",
     "fractal_mfdfa",
-    "complexity_mfdfa",
-    "complexity_d2",
-    "complexity_plot",
+    "mutual_information",
     "transition_matrix",
     "transition_matrix_simulate",
 ]
