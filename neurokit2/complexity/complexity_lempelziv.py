@@ -2,8 +2,10 @@
 import numpy as np
 import pandas as pd
 
+from ..signal.signal_binarize import _signal_binarize_threshold
 
-def complexity_lempelziv(signal, threshold="median", normalize=True):
+
+def complexity_lempelziv(signal, method="median", normalize=True):
     """
     Computes Lempel Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
     symbolic sequences for new patterns, increasing the complexity count every time a new sequence is detected.
@@ -14,7 +16,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    threshold : str
+    method : str
         Method for partitioning the signal into a binary sequence.
         Current options are "median" (default) or "mean", where each data point is assigned 0
         if lower than the median or mean of signal respectively, and 1 if higher.
@@ -35,7 +37,7 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=10)
     >>>
-    >>> lzc, parameters = nk.complexity_lempelziv(signal, threshold="median")
+    >>> lzc, info = nk.complexity_lempelziv(signal, method="median")
     >>> lzc #doctest: +SKIP
 
     References
@@ -61,12 +63,13 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # prepare parameters
-    info = {"Threshold": threshold, "Normalize": normalize}
+    # Convert signal into binary sequence
+    binary_sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method)
 
-    out = _complexity_lempelziv(signal, threshold=threshold, normalize=normalize)
+    # Compute LZC
+    out = _complexity_lempelziv(binary_sequence, method=method, normalize=normalize)
 
-    return out, info
+    return out, {"Method": method, "Normalize": normalize}
 
 
 # =============================================================================
@@ -74,14 +77,11 @@ def complexity_lempelziv(signal, threshold="median", normalize=True):
 # =============================================================================
 
 
-def _complexity_lempelziv(signal, threshold="median", normalize=True):
-
-    # convert signal into binary sequence
-    p_seq = _complexity_lempelziv_binarize(signal, threshold=threshold)
+def _complexity_lempelziv(sequence, method="median", normalize=True):
 
     # pre-set variables
     complexity = 1
-    n = len(p_seq)
+    n = len(sequence)
     pointer = 0
     current_prefix_len = 1
     current_substring_len = 1
@@ -90,8 +90,8 @@ def _complexity_lempelziv(signal, threshold="median", normalize=True):
     # iterate over sequence
     while current_prefix_len + current_substring_len <= n:
         if (
-            p_seq[pointer + current_substring_len - 1]
-            == p_seq[current_prefix_len + current_substring_len - 1]
+            sequence[pointer + current_substring_len - 1]
+            == sequence[current_prefix_len + current_substring_len - 1]
         ):
             current_substring_len += 1
         else:
@@ -110,29 +110,9 @@ def _complexity_lempelziv(signal, threshold="median", normalize=True):
         complexity += 1
 
     if normalize is True:
-        complexity = _complexity_lempelziv_normalize(p_seq, complexity)
+        complexity = _complexity_lempelziv_normalize(sequence, complexity)
 
     return complexity
-
-
-def _complexity_lempelziv_binarize(signal, threshold="median"):
-
-    # method to convert signal by
-    if threshold == "median":
-        threshold = np.median(signal)
-    elif threshold == "mean":
-        threshold = np.mean(signal)
-
-    p_seq = signal.copy()
-    # convert
-    for index, value in enumerate(signal):
-        if value < threshold:
-            p_seq[index] = 0
-        else:
-            p_seq[index] = 1
-    p_seq = p_seq.astype(int)
-
-    return p_seq
 
 
 def _complexity_lempelziv_normalize(sequence, complexity):
