@@ -6,9 +6,9 @@ import sklearn.neighbors
 
 
 def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=True):
-    """Computes the (normalized) mutual information (MI) between two vectors from a joint histogram. The mutual
-    information of two variables is a measure of the mutual dependence between them. More specifically, it quantifies
-    the "amount of information" obtained about one variable by observing the other variable.
+    """Mutual Information (MI)
+
+    Computes the (normalized) mutual information (MI) between two vectors from a joint histogram. The mutual information of two variables is a measure of the mutual dependence between them. More specifically, it quantifies the "amount of information" obtained about one variable by observing the other variable.
 
     Parameters
     ----------
@@ -29,6 +29,10 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
     -------
     float
         The computed similariy measure.
+
+    See Also
+    --------
+    fisher_information
 
     Examples
     ---------

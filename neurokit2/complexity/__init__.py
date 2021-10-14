@@ -16,6 +16,7 @@ from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_katz import fractal_katz
 from .fractal_mandelbrot import fractal_mandelbrot
+from .information_fisher import fisher_information
 from .information_mutual import mutual_information
 from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
@@ -83,6 +84,7 @@ __all__ = [
     "entropy_sample",
     "entropy_fuzzy",
     "entropy_multiscale",
+    "fisher_information",
     "fractal_dfa",
     "fractal_correlation",
     "fractal_higuchi",
