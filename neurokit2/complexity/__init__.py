@@ -18,6 +18,7 @@ from .fractal_higuchi import fractal_higuchi
 from .fractal_katz import fractal_katz
 from .fractal_mandelbrot import fractal_mandelbrot
 from .fractal_petrosian import fractal_petrosian
+from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 from .information_mutual import mutual_information
 from .optim_complexity_delay import complexity_delay
@@ -93,6 +94,7 @@ __all__ = [
     "fractal_higuchi",
     "fractal_katz",
     "fractal_petrosian",
+    "fractal_sevcik",
     "fractal_mandelbrot",
     "fractal_mfdfa",
     "mutual_information",
