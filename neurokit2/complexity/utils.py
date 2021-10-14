@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import sklearn.neighbors
 
-from .optim_complexity_embedding import complexity_embedding
+from .complexity_embedding import complexity_embedding
 
 # =============================================================================
 # Format n-dimensional input

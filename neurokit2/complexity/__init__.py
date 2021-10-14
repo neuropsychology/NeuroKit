@@ -1,6 +1,7 @@
 """Submodule for NeuroKit."""
 import functools
 
+from .complexity_embedding import complexity_embedding
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
@@ -17,7 +18,6 @@ from .fractal_katz import fractal_katz
 from .fractal_mandelbrot import fractal_mandelbrot
 from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
-from .optim_complexity_embedding import complexity_embedding
 from .optim_complexity_k import complexity_k
 from .optim_complexity_optimize import complexity_optimize
 from .optim_complexity_r import complexity_r

@@ -9,7 +9,7 @@ from ..misc import NeuroKitWarning
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False):
-    """Automated selection of the optimal Time-delay embedding of a signal
+    """Time-delay embedding of a signal
 
     A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide
     a complete description of the system at some point in time. The set of all possible states is called

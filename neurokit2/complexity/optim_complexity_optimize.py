@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import scipy.spatial
 
+from .complexity_embedding import complexity_embedding
 from .entropy_approximate import entropy_approximate
 from .optim_complexity_delay import (
     _embedding_delay_metric,
@@ -16,7 +17,6 @@ from .optim_complexity_dimension import (
     _embedding_dimension_ffn,
     _embedding_dimension_plot,
 )
-from .optim_complexity_embedding import complexity_embedding
 from .optim_complexity_r import _optimize_r_plot
 
 
