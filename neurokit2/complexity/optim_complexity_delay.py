@@ -85,6 +85,7 @@ def complexity_delay(
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=10, show=True, method="kim1999")
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
@@ -246,9 +247,8 @@ def _embedding_delay_metric(
                 #     average += s
 
                 # find average of statistic deviations across r_vals
-                deviation = _embedding_delay_cc_deviation(
-                    signal, delay=t, dimension=m, r_vals=r_vals
-                )
+                deviation = _embedding_delay_cc_deviation_max(signal, delay=t,
+                                                              dimension=m, r_vals=r_vals)
                 change += deviation
             # averages[i] = average / 16
             values[i] = change / 4
@@ -327,16 +327,18 @@ def _embedding_delay_cc_statistic(signal, dimension=3, delay=10, r=0.02):
     return statistic / delay
 
 
-def _embedding_delay_cc_deviation(signal, delay=10, dimension=3, r_vals=[0.5, 1.0, 1.5, 2.0]):
+def _embedding_delay_cc_deviation_max(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3):
     """A measure of the variation of the dependence statistic with r using
     several representative values of r.
     """
-
-    deviations = np.full(len(r_vals), np.nan)  # Initialize empty vector
-    for i, r in enumerate(r_vals):
-        deviations[i] = _embedding_delay_cc_statistic(signal, delay=delay, dimension=dimension, r=r)
-
+    vectorized_deviation = np.vectorize(_embedding_delay_cc_deviation, excluded=['signal', 'delay', 'dimension'])
+    deviations = vectorized_deviation(signal=signal, r_vals=r_vals, delay=delay, dimension=dimension)
+    
     return np.max(deviations) - np.min(deviations)
+
+def _embedding_delay_cc_deviation(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3):
+    return _embedding_delay_cc_statistic(signal, delay=delay, dimension=dimension, r=r_vals)
+
 
 
 # =============================================================================
