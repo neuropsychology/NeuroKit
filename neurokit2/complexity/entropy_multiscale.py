@@ -4,11 +4,26 @@ import numpy as np
 import pandas as pd
 
 from .entropy_sample import entropy_sample
-from .utils import _get_coarsegrained, _get_coarsegrained_rolling, _get_r, _get_scale, _phi, _phi_divide
+from .utils import (
+    _get_coarsegrained,
+    _get_coarsegrained_rolling,
+    _get_r,
+    _get_scale,
+    _phi,
+    _phi_divide,
+)
 
 
 def entropy_multiscale(
-    signal, scale="default", dimension=2, r="default", composite=False, refined=False, fuzzy=False, show=False, **kwargs
+    signal,
+    scale="default",
+    dimension=2,
+    r="default",
+    composite=False,
+    refined=False,
+    fuzzy=False,
+    show=False,
+    **kwargs
 ):
     """Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version.
 
@@ -70,11 +85,11 @@ def entropy_multiscale(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy1, parameters = nk.entropy_multiscale(signal, show=True)
+    >>> entropy1, info = nk.entropy_multiscale(signal, show=True)
     >>> entropy1 #doctest: +SKIP
-    >>> entropy2, parameters = nk.entropy_multiscale(signal, show=True, composite=True)
+    >>> entropy2, info = nk.entropy_multiscale(signal, show=True, composite=True)
     >>> entropy2 #doctest: +SKIP
-    >>> entropy3, parameters = nk.entropy_multiscale(signal, show=True, refined=True)
+    >>> entropy3, info = nk.entropy_multiscale(signal, show=True, refined=True)
     >>> entropy3 #doctest: +SKIP
 
 
@@ -110,23 +125,33 @@ def entropy_multiscale(
 
     # Prepare parameters
     if refined:
-        key = 'RCMSE'
+        key = "RCMSE"
     elif composite:
-        key = 'CMSE'
+        key = "CMSE"
     else:
-        key = 'MSE'
+        key = "MSE"
 
     if fuzzy:
-        key = 'Fuzzy' + key
+        key = "Fuzzy" + key
 
-    info = {'Dimension': dimension,
-            'Type': key,
-            'Scale': _get_scale(signal, scale=scale, dimension=dimension)}
+    info = {
+        "Dimension": dimension,
+        "Type": key,
+        "Scale": _get_scale(signal, scale=scale, dimension=dimension),
+    }
 
     info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
-    out = _entropy_multiscale(signal, r=info["Tolerance"], scale_factors=info["Scale"],
-                              dimension=dimension, composite=composite, fuzzy=fuzzy,
-                              refined=refined, show=show, **kwargs)
+    out, info["MSE_Values"] = _entropy_multiscale(
+        signal,
+        r=info["Tolerance"],
+        scale_factors=info["Scale"],
+        dimension=dimension,
+        composite=composite,
+        fuzzy=fuzzy,
+        refined=refined,
+        show=show,
+        **kwargs
+    )
 
     return out, info
 
@@ -135,29 +160,35 @@ def entropy_multiscale(
 # Internal
 # =============================================================================
 def _entropy_multiscale(
-    signal, r, scale_factors, dimension=2, composite=False, fuzzy=False, refined=False, show=False, **kwargs
+    signal,
+    r,
+    scale_factors,
+    dimension=2,
+    composite=False,
+    fuzzy=False,
+    refined=False,
+    show=False,
+    **kwargs
 ):
 
     # Initalize mse vector
-    mse = np.full(len(scale_factors), np.nan)
+    mse_vals = np.full(len(scale_factors), np.nan)
     for i, tau in enumerate(scale_factors):
 
         # Regular MSE
         if refined is False and composite is False:
-            mse[i] = _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs)
+            mse_vals[i] = _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs)
 
         # Composite MSE
         elif refined is False and composite is True:
-            mse[i] = _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs)
+            mse_vals[i] = _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs)
 
         # Refined Composite MSE
         else:
-            mse[i] = _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs)
-
-    out = mse.copy()
+            mse_vals[i] = _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs)
 
     # Remove inf, nan and 0
-    mse = mse[~np.isnan(mse)]
+    mse = mse_vals.copy()[~np.isnan(mse_vals)]
     mse = mse[mse != np.inf]
     mse = mse[mse != -np.inf]
 
@@ -167,20 +198,21 @@ def _entropy_multiscale(
 
     # Plot overlay
     if show is True:
-        _entropy_multiscale_plot(scale_factors, out)
+        _entropy_multiscale_plot(scale_factors, mse_vals)
 
-    return mse
+    return mse, mse_vals
 
 
 def _entropy_multiscale_plot(scale_factors, mse_values):
 
     fig = plt.figure(constrained_layout=False)
-    fig.suptitle('Entropy values across scale factors')
+    fig.suptitle("Entropy values across scale factors")
     plt.ylabel("Entropy values")
     plt.xlabel("Scale")
     plt.plot(scale_factors, mse_values, color="#FF9800")  # mse_values is one array
 
     return fig
+
 
 # =============================================================================
 # Methods
@@ -200,7 +232,9 @@ def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
 
     mse_y = np.full(len(y), np.nan)
     for i in np.arange(len(y)):
-        mse_y[i] = entropy_sample(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)[0]
+        mse_y[i] = entropy_sample(
+            y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs
+        )[0]
 
     return np.mean(mse_y)
 
@@ -213,7 +247,9 @@ def _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs):
     # Get phi for all kth coarse-grained time series
     phi_ = np.full([len(y), 2], np.nan)
     for i in np.arange(len(y)):
-        phi_[i] = _phi(y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, approximate=False, **kwargs)
+        phi_[i] = _phi(
+            y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, approximate=False, **kwargs
+        )
 
     # Average all phi of the same dimension, then divide, then log
     return _phi_divide([np.mean(phi_[:, 0]), np.mean(phi_[:, 1])])
