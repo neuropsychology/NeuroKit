@@ -281,27 +281,32 @@ def _embedding_delay_metric(
 # =============================================================================
 
 
-def _embedding_delay_cc_integral(signal, dimension=3, delay=10, r=0.02):
+def _embedding_delay_cc_integral_sum(signal, dimension=3, delay=10, r=0.02):
     """
     Correlation integral is a cumulative distribution function, which denotes
     the probability of distance between any pairs of points in phase space
     not greater than the specified `r`.
     """
 
+    # Embed signal
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension, show=False)
-
-    # number of embedded points
     M = embedded.shape[0]
 
-    h_sum = 0
-    # optimize double for loop
-    for i in itertools.combinations(range(0, M), r=2):  # compare all unique pairwise vectors
-        diff = np.linalg.norm(embedded[i[0]] - embedded[i[1]], ord=np.inf)  # sup-norm
-        h = np.heaviside(r - diff, 1)
-        h_sum += h
+    # Prepare indices for comparing all unique pairwise vectors
+    combinations =  list(itertools.combinations(range(0, M), r=2))
+    first_index, second_index = np.transpose(combinations)[0], np.transpose(combinations)[1]
 
-    # find average
-    integral = (2 / (M * (M - 1))) * h_sum
+    vectorized_integral = np.vectorize(_embedding_delay_cc_integral, excluded=['embedded', 'r'])
+    integral = np.sum(vectorized_integral(first_index=first_index, second_index=second_index,
+                                          embedded=embedded, r=r))
+
+    return integral
+
+def _embedding_delay_cc_integral(first_index, second_index, embedded, r=0.02):
+    M = embedded.shape[0]  # Number of embedded points
+    diff = np.linalg.norm(embedded[first_index] - embedded[second_index], ord=np.inf)  # sup-norm
+    h = np.heaviside(r - diff, 1)
+    integral = (2 / (M * (M - 1))) * h  # find average
 
     return integral
 
@@ -314,8 +319,8 @@ def _embedding_delay_cc_statistic(signal, dimension=3, delay=10, r=0.02):
 
     statistic = 0
     for sub_series in series:
-        diff = _embedding_delay_cc_integral(sub_series, dimension=dimension, delay=delay, r=r) - (
-            (_embedding_delay_cc_integral(signal, dimension=1, delay=delay, r=r)) ** dimension
+        diff = _embedding_delay_cc_integral_sum(sub_series, dimension=dimension, delay=delay, r=r) - (
+            (_embedding_delay_cc_integral_sum(signal, dimension=1, delay=delay, r=r)) ** dimension
         )
         statistic += diff
 
