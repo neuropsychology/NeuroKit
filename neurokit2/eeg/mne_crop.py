@@ -11,11 +11,11 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
     # Try loading mne
     try:
         import mne
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: eeg_channel_add(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
-        )
+        ) from e
 
     # Convert time to samples
     if smin is None or smax is None:
@@ -24,13 +24,12 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
             tmax = max_time
 
         if tmin > tmax:
-            raise ValueError("tmin (%s) must be less than tmax (%s)" % (tmin, tmax))
+            raise ValueError(f"tmin ({tmin}) must be less than tmax ({tmax})")
         if tmin < 0.0:
-            raise ValueError("tmin (%s) must be >= 0" % (tmin,))
+            raise ValueError(f"tmin ({tmin}) must be >= 0")
         elif tmax > max_time:
             raise ValueError(
-                "tmax (%s) must be less than or equal to the max "
-                "time (%0.4f sec)" % (tmax, max_time)
+                f"tmax ({tmax}) must be less than or equal to the max time ({max_time} sec)."
             )
 
         # Convert time to first and last samples
@@ -46,9 +45,7 @@ def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
         smax += 1
 
     # Re-create the Raw object (note that mne does smin : smin + 1)
-    raw = mne.io.RawArray(
-        raw._data[:, int(smin) : int(smax)].copy(), raw.info, verbose="WARNING"
-    )
+    raw = mne.io.RawArray(raw._data[:, int(smin) : int(smax)].copy(), raw.info, verbose="WARNING")
 
     return raw
 
@@ -73,16 +70,13 @@ def _time_mask(times, tmin=None, tmax=None, sfreq=None, raise_error=True, includ
     else:
         assert include_tmax  # can only be used when sfreq is known
     if raise_error and tmin > tmax:
-        raise ValueError(
-            "tmin (%s) must be less than or equal to tmax (%s)" % (orig_tmin, orig_tmax)
-        )
+        raise ValueError(f"tmin ({orig_tmin}) must be less than or equal to tmax ({orig_tmax})")
     mask = times >= tmin
     mask &= times <= tmax
     if raise_error and not mask.any():
         extra = "" if include_tmax else "when include_tmax=False "
         raise ValueError(
-            "No samples remain when using tmin=%s and tmax=%s %s"
-            "(original time bounds are [%s, %s])"
-            % (orig_tmin, orig_tmax, extra, times[0], times[-1])
+            f"No samples remain when using tmin={orig_tmin} and tmax={orig_tmax} {extra}"
+            "(original time bounds are [{times[0]}, {times[-1]}])"
         )
     return mask
