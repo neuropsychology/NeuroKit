@@ -569,8 +569,6 @@ def _singularity_spectrum_plot(hq, Dq, ax=None):
     ax.set_ylabel(r"Singularity dimension ($D_q$)")
     ax.set_xlabel(r"Singularity exponent ($h_q$)")
 
-    alphas = np.linspace(0.1, 1, len(hq))
-
     ax.plot(hq, Dq, "o-", c="#FFC107")
 
     return None
@@ -599,8 +597,6 @@ def _scaling_exponents_plot(q, tau, ax=None):
     #    ax.set_title("Scaling Exponents")
     ax.set_ylabel(r"Scaling exponents ($τ_q$)")
     ax.set_xlabel(r"Multifractal parameter ($q$)")
-
-    alphas = np.linspace(0.1, 1, len(tau))
 
     ax.plot(q, tau, "o-", c="#E91E63")
 
@@ -631,8 +627,6 @@ def _hurst_exponents_plot(q, hq, ax=None):
     #    ax.set_title("Generalised Hurst Exponents")
     ax.set_ylabel(r"Generalized Hurst Exponents ($h_q$)")
     ax.set_xlabel(r"Multifractal parameter ($q$)")
-
-    alphas = np.linspace(0.1, 1, len(hq))
 
     ax.plot(q, hq, "o-", c="#2196F3")
 

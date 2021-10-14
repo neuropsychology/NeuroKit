@@ -6,7 +6,8 @@ def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
     function : function
         A callable function.
     arguments_list : list
-        A list of dictionaries. The function will iterate through this list and pass each dictionary inside as ``**kwargs`` to the main function.
+        A list of dictionaries. The function will iterate through this list and pass each dictionary
+        inside as ``**kwargs`` to the main function.
     n_jobs : int
         Number of cores to use. ``-2`` means all but 1. See ``joblib.Parallel()``.
     **kwargs

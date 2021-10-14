@@ -9,9 +9,12 @@ def entropy_shannon(signal, base=2):
     Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state,
     or equivalently, of its average information content. Shannon entropy (SE) is one of the first and
     most basic measure of entropy and a foundational concept of information theory. Shannon's entropy
-    quantifies the amount of information in a variable. Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy (see ``entropy_differential()``).
+    quantifies the amount of information in a variable. Shannon attempted to extend Shannon entropy in
+    what has become known as Differential Entropy (see ``entropy_differential()``).
 
-    Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B", "B", "A"]), it does not do well with continuous signals. One option is to binarize (i.e., cut) the signal into a number of bins using ``pd.cut(signal, bins=100, labels=False)``.
+    Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B", "B", "A"]), it does
+    not do well with continuous signals. One option is to binarize (i.e., cut) the signal into a number of
+    bins using ``pd.cut(signal, bins=100, labels=False)``.
 
     This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 

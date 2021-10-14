@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-from warnings import warn
-
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import NeuroKitWarning
-from .optim_complexity_k import _complexity_k_plot, _complexity_k_slope, complexity_k
+from .optim_complexity_k import _complexity_k_slope, complexity_k
 
 
 def fractal_higuchi(signal, k_max="default", show=False):

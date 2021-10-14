@@ -10,9 +10,14 @@ from .fractal_correlation import fractal_correlation
 def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=False, **kwargs):
     """Automated selection of the optimal Dimension (m) for time-delay embedding.
 
-    From `this thread <https://www.researchgate.net/post/How-can-we-find-out-which-value-of-embedding-dimensions-is-more-accurate>`_:
+    From this 
+    `thread <https://www.researchgate.net/post/How-can-we-find-out-which-value-of-embedding-dimensions-is-more-accurate>`_:
 
-    "In the early days, the method of choice was to calculate the correlation dimension in various embeddings and look for a saturation in its value as the embedding dimension increases. However, a saturation will always occur when you no longer have enough data to adequately fill your high-dimensional space. More recently the method of choice has been false nearest neighbors, although that suffers from the same problem when the neighborhood does not contain sufficiently many points. As a rule of thumb, you might demand that each dimension have at least ten points."
+    "In the early days, the method of choice was to calculate the correlation dimension in various embeddings and
+    look for a saturation in its value as the embedding dimension increases. However, a saturation will always occur
+    when you no longer have enough data to adequately fill your high-dimensional space. More recently the method of choice
+    has been false nearest neighbors, although that suffers from the same problem when the neighborhood does not contain
+    sufficiently many points. As a rule of thumb, you might demand that each dimension have at least ten points."
 
     Parameters
     ----------
@@ -27,7 +32,8 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
         The maximum embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order')
         to test.
     method : str
-        Method can either be 'afnn' (average false nearest neighbour), 'fnn' (false nearest neighbour), or 'correlation' (correlation dimension).
+        Method can either be 'afnn' (average false nearest neighbour), 'fnn' (false nearest neighbour),
+        or 'correlation' (correlation dimension).
     show : bool
         Visualize the result.
     **kwargs
@@ -300,7 +306,8 @@ def _embedding_dimension_plot(
 def _embedding_dimension_neighbors(
     signal, dimension_max=20, delay=1, metric="chebyshev", window=0, maxnum=None, show=False
 ):
-    """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the given array using SciPy's KDTree search.
+    """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the
+    given array using SciPy's KDTree search.
 
     Parameters
     ----------

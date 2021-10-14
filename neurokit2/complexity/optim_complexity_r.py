@@ -20,13 +20,15 @@ def complexity_r(signal, method="maxApEn", delay=None, dimension=None, show=Fals
         If 'maxApEn', rmax where ApEn is max will be returned. If 'sd' (as in Standard Deviation),
         r = 0.2 * standard deviation of the signal will be returned.
     delay : int
-        Only used if ``method='maxApEn'``. Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common to
-        have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to
-        find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Only used if ``method='maxApEn'``. Time delay (often denoted 'Tau', sometimes referred to as 'lag').
+        In practice, it is common to have a fixed time lag (corresponding for instance to the
+        sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic
+        heuristics (see ``delay_optimal()``).
     dimension : int
-        Only used if ``method='maxApEn'``. Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        Only used if ``method='maxApEn'``. Embedding dimension (often denoted 'm' or 'd',
+        sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs
+        of lagged data. If 2, the embedding returns an array with two columns corresponding
+        to the original signal and its delayed (by Tau) version.
     show : bool
         If true and method is 'maxApEn', will plot the ApEn values for each value of r.
 
