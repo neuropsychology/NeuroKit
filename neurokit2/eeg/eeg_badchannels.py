@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats
-import matplotlib.pyplot as plt
 
 from ..signal import signal_zerocrossings
 from ..stats import hdi, mad, standardize
@@ -46,11 +46,11 @@ def eeg_badchannels(eeg, bad_threshold=0.5, distance_threshold=0.99, show=False)
     if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
         try:
             import mne
-        except ImportError:
+        except ImportError as e:
             raise ImportError(
                 "NeuroKit error: eeg_badchannels(): the 'mne' module is required for this function"
                 " to run. Please install it first (`pip install mne`).",
-            )
+            ) from e
         selection = mne.pick_types(eeg.info, eeg=True)
         ch_names = np.array(eeg.ch_names)[selection]
         eeg, _ = eeg[selection]
@@ -95,7 +95,7 @@ def _plot_eeg_badchannels(eeg, bads, ch_names):
 
     # Prepare plot
     fig, ax = plt.subplots()
-    fig.suptitle('Individual EEG channels')
+    fig.suptitle("Individual EEG channels")
     ax.set_ylabel("Voltage (V)")
     ax.set_xlabel("Samples")
 
@@ -112,12 +112,12 @@ def _plot_eeg_badchannels(eeg, bads, ch_names):
     for i in range(len(eeg)):
         if i not in bads_list:
             channel = eeg[i, :]
-            ax.plot(np.arange(1, len(channel)+1), channel, c=colors_good[i])
+            ax.plot(np.arange(1, len(channel) + 1), channel, c=colors_good[i])
 
     # Plot bad channels
     for i, bad in enumerate(bads_list):
         channel = eeg[bad, :]
-        ax.plot(np.arange(1, len(channel)+1), channel, c=colors_bad[i], label=ch_names[i])
+        ax.plot(np.arange(1, len(channel) + 1), channel, c=colors_bad[i], label=ch_names[i])
 
     ax.legend(loc="upper right")
 
