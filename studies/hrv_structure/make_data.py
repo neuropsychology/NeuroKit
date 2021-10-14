@@ -7,8 +7,10 @@ print("NeuroKit version: " + str(nk.__version__))
 # Load True R-peaks location
 datafiles = [pd.read_csv("../../data/gudb/Rpeaks.csv"),
              pd.read_csv("../../data/mit_arrhythmia/Rpeaks.csv"),
+             pd.read_csv("../../data/fantasia/Rpeaks.csv"),
              pd.read_csv("../../data/mit_normal/Rpeaks.csv"),
-             pd.read_csv("../../data/fantasia/Rpeaks.csv")]
+             pd.read_csv("../../data/mit_long-term/Rpeaks.csv")]
+
 
 # Get results
 all_results = pd.DataFrame()

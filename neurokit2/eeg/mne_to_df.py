@@ -29,11 +29,11 @@ def mne_to_df(eeg):
     # Try loading mne
     try:
         import mne
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
-        )
+        ) from e
 
     # If epoch object
     if isinstance(eeg, mne.Epochs):
@@ -81,11 +81,11 @@ def mne_to_dict(eeg):
     # Try loading mne
     try:
         import mne
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
-        )
+        ) from e
 
     # If epoch object
     if isinstance(eeg, mne.Epochs):
@@ -113,11 +113,11 @@ def _mne_to_dict_epochs(eeg):
     # Try loading mne
     try:
         import mne
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
-        )
+        ) from e
 
     data = {}
 
@@ -171,11 +171,11 @@ def _mne_to_dict_evoked(eeg):
     # Try loading mne
     try:
         import mne
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
-        )
+        ) from e
 
     if not isinstance(eeg, list):
         eeg = [eeg]

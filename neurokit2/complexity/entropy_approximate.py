@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
 from .utils import _get_embedded, _get_r, _phi
 
@@ -46,8 +47,8 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     Returns
     ----------
     apen : float
-        The approximate entropy as float value.
-    parameters : dict
+        The approximate entropy of the single time series.
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute approximate entropy.
 
@@ -74,7 +75,30 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
       interval time series during regular walking. Entropy, 19(10), 568.
 
     """
-    r = _get_r(signal, r=r)
+
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    # Prepare parameters
+    info = {"Dimension": dimension, "Delay": delay, "Corrected": corrected}
+
+    info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+    out = _entropy_approximate(
+        signal,
+        r=info["Tolerance"],
+        delay=delay,
+        dimension=dimension,
+        corrected=corrected,
+        **kwargs
+    )
+
+    return out, info
+
+
+def _entropy_approximate(signal, r, delay=1, dimension=2, corrected=False, **kwargs):
 
     if corrected is False:
         # Get phi
@@ -85,10 +109,22 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     if corrected is True:
 
         __, count1 = _get_embedded(
-            signal, delay=delay, dimension=dimension, r=r, distance="chebyshev", approximate=True, **kwargs
+            signal,
+            delay=delay,
+            dimension=dimension,
+            r=r,
+            distance="chebyshev",
+            approximate=True,
+            **kwargs
         )
         __, count2 = _get_embedded(
-            signal, delay=delay, dimension=dimension + 1, r=r, distance="chebyshev", approximate=True, **kwargs
+            signal,
+            delay=delay,
+            dimension=dimension + 1,
+            r=r,
+            distance="chebyshev",
+            approximate=True,
+            **kwargs
         )
 
         # Limit the number of vectors to N - (dimension + 1) * delay
@@ -108,9 +144,4 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
         apen = -np.mean(vector_similarity)
 
-    parameters = {'tolerance': r,
-                  'embedding_dimension': dimension,
-                  'tau': delay,
-                  'corrected': corrected}
-
-    return apen, parameters
+    return apen

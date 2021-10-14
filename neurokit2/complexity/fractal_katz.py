@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
 
 def fractal_katz(signal):
@@ -20,10 +21,10 @@ def fractal_katz(signal):
     Returns
     -------
     kfd : float
-        Katz's fractal dimension.
-    parameters : dict
+        Katz's fractal dimension of the single time series.
+    info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Katz's fractal dimension (empty for now).
+        to compute Katz's fractal dimension.
 
     Examples
     ----------
@@ -31,7 +32,7 @@ def fractal_katz(signal):
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=10)
     >>>
-    >>> kfd = nk.fractal_katz(signal)
+    >>> kfd, parameters = nk.fractal_katz(signal)
     >>> kfd #doctest: +SKIP
 
     References
@@ -40,6 +41,24 @@ def fractal_katz(signal):
     Computers in Biology and Medicine, 18(3), 145–156. doi:10.1016/0010-4825(88)90041-8.
 
     """
+
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    # prepare parameters
+    info = {}
+
+    # if one signal time series
+    out = _fractal_katz(signal)
+
+    return out, info
+
+
+def _fractal_katz(signal):
+
     # Define total length of curve
     dists = np.abs(np.diff(signal))
     length = np.sum(dists)
@@ -52,6 +71,4 @@ def fractal_katz(signal):
 
     kfd = np.log10(length/a) / (np.log10(d/a))
 
-    parameters = {}
-
-    return kfd, parameters
+    return kfd

@@ -9,11 +9,16 @@ Breaking Changes
 +++++++++++++++++
 
 * `complexity_lempelziv()`, `fractal_higuchi()`, `fractal_katz()`, `fractal_correlation()`, `fractal_dfa()`, `entropy_multiscale()`, `entropy_shannon()`, `entropy_approximate()`, `entropy_fuzzy()`, `entropy_sample()` now return a tuple consisting of the complexity index, and a dictionary comprising of the different parameters specific to the measure. For `fractal_katz()` and `entropy_shannon()`, the parameters dictionary is empty.
-
+* Restructure `complexity` submodules with optimization files starting with `optim_*`, such as `optim_complexity_delay()`, `optim_complexity_dimension()`, `optim_complexity_k()`, `optim_complexity_optimize()`, and `optim_complexity_r()`.
+* `mutual_information()` moved from `stats` module to `complexity` module.
 
 New Features
 +++++++++++++
 
+* Added `parallel_run()` in `misc` as a parallel processing utility function.
+* Added `find_plateau()` in `misc` to find the point of plateau in an array of values.
+* Added `write_csv()` in `data` to facilitate saving dataframes into multiple parts.
+* Added more complexity-related functions, `entropy_cumulative_residual()`, `entropy_differential()`, `entropy_svd()`, `fractal_petrosian()`, and `information_fisher()`.
 * Updates logic to find `kmax` in `fractal_higuchi()`
 * Add RSP_Amplitude_Baseline in event-related analysis
 * Add argument `add_firstsamples` in `mne_channel_extract()` to account for first sample attribute in mne raw objects

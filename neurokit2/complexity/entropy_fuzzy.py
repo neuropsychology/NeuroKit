@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import numpy as np
+import pandas as pd
 
 from .utils import _get_r, _phi, _phi_divide
 
@@ -31,8 +33,8 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     Returns
     ----------
     fuzzyen : float
-        The fuzzy entropy as float value.
-    parameters : dict
+        The fuzzy entropy of the single time series.
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute fuzzy entropy.
 
@@ -49,13 +51,28 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     >>> entropy #doctest: +SKIP
 
     """
-    r = _get_r(signal, r=r, dimension=dimension)
+
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    # Prepare parameters
+    info = {'Dimension': dimension,
+            'Delay': delay}
+
+    info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+    out = _entropy_fuzzy(signal, r=info["Tolerance"], delay=delay, dimension=dimension,
+                         **kwargs)
+
+    return out, info
+
+
+def _entropy_fuzzy(signal, r, delay=1, dimension=2, **kwargs):
+
     phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, fuzzy=True, **kwargs)
 
     fuzzyen = _phi_divide(phi)
 
-    parameters = {'tolerance': r,
-                  'embedding_dimension': dimension,
-                  'tau': delay}
-
-    return fuzzyen, parameters
+    return fuzzyen

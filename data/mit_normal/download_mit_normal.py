@@ -43,7 +43,7 @@ for participant, file in enumerate(data_files):
     anno["Database"] = "MIT-Normal"
 
     # Select only 1h of recording (otherwise it's too big)
-    data = data[460800:460800*2].reset_index(drop=True)
+    data = data[460800:460800*3].reset_index(drop=True)
     anno = anno[(anno["Rpeaks"] > 460800) & (anno["Rpeaks"] <= 460800*2)].reset_index(drop=True)
     anno["Rpeaks"] = anno["Rpeaks"] - 460800
 

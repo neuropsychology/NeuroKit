@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 import sklearn.metrics.pairwise
 
 from .complexity_embedding import complexity_embedding
@@ -26,18 +27,18 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : str or int or list
+    r : Union[str, int, list]
         The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
         ranging from 2.5% to 50% of the distance range. Methods implemented in other packages can be
-        used via setting ``r='nolds'`` or ``r='Corr_Dim'``.
+        used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
     show : bool
         Plot of correlation dimension if True. Defaults to False.
 
     Returns
     ----------
     cd : float
-        The correlation dimension.
-    parameters : dict
+        The correlation dimension of the single time series.
+    info : dict
         A dictionary containing additional information regarding the parameters used
         to compute the correlation dimension.
 
@@ -47,16 +48,16 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> fractal1, parameters = nk.fractal_correlation(signal, r="nolds", show=True)
+    >>> fractal1, info = nk.fractal_correlation(signal, r="nolds", show=True)
     >>> fractal1 #doctest: +SKIP
-    >>> fractal2, parameters = nk.fractal_correlation(signal, r=32, show=True)
+    >>> fractal2, info = nk.fractal_correlation(signal, r=32, show=True)
     >>> fractal2 #doctest: +SKIP
     >>>
     >>> signal = nk.rsp_simulate(duration=120, sampling_rate=50)
     >>>
-    >>> fractal3, parameters = nk.fractal_correlation(signal, r="nolds", show=True)
+    >>> fractal3, info = nk.fractal_correlation(signal, r="nolds", show=True)
     >>> fractal3 #doctest: +SKIP
-    >>> fractal4, parameters = nk.fractal_correlation(signal, r=32, show=True)
+    >>> fractal4, info = nk.fractal_correlation(signal, r=32, show=True)
     >>> fractal4 #doctest: +SKIP
 
 
@@ -74,13 +75,29 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     - `Corr_Dim <https://github.com/jcvasquezc/Corr_Dim>`_
 
     """
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    # Prepare parameters
+    info = {"Dimension": dimension, "Delay": delay}
+
+    out, info["Radiuses"] = _fractal_correlation(
+        signal, delay=delay, dimension=dimension, r=r, show=show
+    )
+
+    return out, info
+
+
+def _fractal_correlation(signal, delay=1, dimension=2, r=64, show=True):
+
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     dist = sklearn.metrics.pairwise.euclidean_distances(embedded)
-
     r_vals = _fractal_correlation_get_r(r, signal, dist)
 
-    r_vals, corr = _fractal_correlation(signal, r_vals, dist)
-
+    r_vals, corr = _fractal_correlation_nolds(signal, r_vals, dist)
     # Corr_Dim method: https://github.com/jcvasquezc/Corr_Dim
     # r_vals, corr = _fractal_correlation_Corr_Dim(embedded, r_vals, dist)
 
@@ -93,17 +110,13 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     if show is True:
         _fractal_correlation_plot(r_vals, corr, cd)
 
-    parameters = {'embedding_dimension': dimension,
-                  'tau': delay,
-                  'radiuses': r_vals}
-
-    return cd[0], parameters
+    return cd[0], r_vals
 
 
 # =============================================================================
 # Methods
 # =============================================================================
-def _fractal_correlation(signal, r_vals, dist):
+def _fractal_correlation_nolds(signal, r_vals, dist):
     """References
     -----------
     - `nolds <https://github.com/CSchoel/nolds/blob/master/nolds/measures.py>`_
@@ -178,11 +191,16 @@ def _fractal_correlation_get_r(r, signal, dist):
 
 
 def _fractal_correlation_plot(r_vals, corr, d2):
+
+    # Initiate plot
+    fig = plt.figure(constrained_layout=False)
+    fig.suptitle("Correlation Dimension")
+    plt.xlabel(r"$\log_{2}$(r)")
+    plt.ylabel(r"$\log_{2}$(c)")
+
     fit = 2 ** np.polyval(d2, np.log2(r_vals))
     plt.loglog(r_vals, corr, "bo")
     plt.loglog(r_vals, fit, "r", label=r"$D2$ = %0.3f" % d2[0])
-    plt.title("Correlation Dimension")
-    plt.xlabel(r"$\log_{2}$(r)")
-    plt.ylabel(r"$\log_{2}$(c)")
-    plt.legend()
-    plt.show()
+    plt.legend(loc="lower right")
+
+    return fig
