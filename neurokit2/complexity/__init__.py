@@ -3,6 +3,7 @@ import functools
 
 from .complexity_embedding import complexity_embedding
 from .complexity_hjorth import complexity_hjorth
+from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
@@ -62,6 +63,7 @@ __all__ = [
     "complexity_optimize",
     "complexity_simulate",
     "complexity_hjorth",
+    "complexity_hurst",
     "complexity_r",
     "complexity_lempelziv",
     "complexity_mfdfa",

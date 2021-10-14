@@ -88,6 +88,10 @@ def fractal_dfa(
         parameters of the singularity spectrum (scaling exponents, singularity dimension,
         singularity strength; see `singularity_spectrum()` for more information).
 
+    See Also
+    --------
+    complexity_hurst
+
     Examples
     ----------
     >>> import neurokit2 as nk
@@ -129,7 +133,6 @@ def fractal_dfa(
 
     n = len(signal)
     windows = _fractal_dfa_findwindows(n, windows)
-    _fractal_dfa_findwindows_warning(windows, n)  # Return warning for too short windows
 
     # Sanitize fractal power (cannot be close to 0)
     q = _cleanse_q(q, multifractal=multifractal)
@@ -410,25 +413,21 @@ def _fractal_dfa_findwindows(n, windows="default"):
         )  # see https://github.com/neuropsychology/NeuroKit/issues/206
         windows = np.unique(windows)  # keep only unique
 
-    return windows
-
-
-def _fractal_dfa_findwindows_warning(windows, n):
-
+    # Sanity checks (return warning for too short windows)
     # Check windows
     if len(windows) < 2:
-        raise ValueError("NeuroKit error: fractal_dfa(): more than one window is needed.")
+        raise ValueError("NeuroKit error: more than one window is needed. Increase 'windows'.")
 
     if np.min(windows) < 2:
         raise ValueError(
-            "NeuroKit error: fractal_dfa(): there must be at least 2 data " "points in each window"
+            "NeuroKit error: there must be at least 2 data points in each window. Decrease 'windows'."
         )
     if np.max(windows) >= n:
         raise ValueError(
-            "NeuroKit error: fractal_dfa(): the window cannot contain more data"
-            " points than the"
-            "time series."
+            "NeuroKit error: the window cannot contain more data points than the time series. Decrease 'windows'."
         )
+
+    return windows
 
 
 def _fractal_dfa_getwindow(signal, n, window, overlap=True):
