@@ -10,7 +10,8 @@ def entropy_cumulative_residual(signal):
     The cumulative residual entropy is an alternative to the Shannon
     differential entropy with several advantageous properties, such as non-negativity.
 
-    The implementation is based on `dit` <https://github.com/dit/dit/blob/master/dit/other/cumulative_residual_entropy.py>_.
+    The implementation is based on
+    `dit` <https://github.com/dit/dit/blob/master/dit/other/cumulative_residual_entropy.py>_.
 
     This function can be called either via ``entropy_cumulative_residual()`` or ``complexity_cren()``.
 
@@ -32,7 +33,7 @@ def entropy_cumulative_residual(signal):
     >>>
     >>> signal = [1, 2, 3, 4, 5, 6]
     >>> cren, info = nk.entropy_cumulative_residual(signal)
-    >>> cren
+    >>> cren #doctest: +SKIP
 
     """
     # Sanity checks

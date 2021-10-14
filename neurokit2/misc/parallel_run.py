@@ -30,7 +30,7 @@ def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
     >>>
     >>> arguments_list = [{"x": 1}, {"x": 2}, {"x": 3}]
     >>>
-    >>> nk.parallel_run(my_function, arguments_list)
+    >>> nk.parallel_run(my_function, arguments_list) #doctest: +SKIP
 
     """
     # Try loading mne

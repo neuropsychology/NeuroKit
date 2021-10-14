@@ -66,17 +66,17 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
     >>>
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=2, show=True)
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=3, show=True)
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=4, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=2, show=True) #doctest: +SKIP
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=3, show=True) #doctest: +SKIP
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=4, show=True) #doctest: +SKIP
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*4, sampling_rate=200)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200, desired_length=len(ecg))
     >>>
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=2, show=True)
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=3, show=True)
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=4, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=2, show=True) #doctest: +SKIP
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=3, show=True) #doctest: +SKIP
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=4, show=True) #doctest: +SKIP
 
     References
     -----------

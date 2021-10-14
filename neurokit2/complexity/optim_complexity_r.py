@@ -45,7 +45,7 @@ def complexity_r(signal, method="maxApEn", delay=None, dimension=None, show=Fals
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> delay, _ = nk.complexity_delay(signal)
     >>> dimension, _ = nk.complexity_dimension(signal, delay=delay)
-    >>> r, info = nk.complexity_r(signal, delay, dimension)
+    >>> r, info = nk.complexity_r(signal, delay=delay, dimension=dimension)
     >>> r #doctest: +SKIP
 
 
