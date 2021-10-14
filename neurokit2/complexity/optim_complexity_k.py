@@ -81,8 +81,8 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
     else:
         kmax_optimal = np.max(kmax_range)
         warn(
-            f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect " +
-            "the plot by set `show=True`. We will return optimal k_max = {kmax_optimal} (the max).",
+            "The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect " +
+            f"the plot by set `show=True`. We will return optimal k_max = {kmax_optimal} (the max).",
             category=NeuroKitWarning,
         )
 
