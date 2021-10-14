@@ -18,7 +18,7 @@ New Features
 * Added `parallel_run()` in `misc` as a parallel processing utility function.
 * Added `find_plateau()` in `misc` to find the point of plateau in an array of values.
 * Added `write_csv()` in `data` to facilitate saving dataframes into multiple parts.
-* Added `entropy_cumulative_residual()` and `entropy_differential()` in the `complexity` module.
+* Added more complexity-related functions, `entropy_cumulative_residual()`, `entropy_differential()`, `entropy_svd()`, `fractal_petrosian()`, and `information_fisher()`.
 * Updates logic to find `kmax` in `fractal_higuchi()`
 * Add RSP_Amplitude_Baseline in event-related analysis
 * Add argument `add_firstsamples` in `mne_channel_extract()` to account for first sample attribute in mne raw objects
