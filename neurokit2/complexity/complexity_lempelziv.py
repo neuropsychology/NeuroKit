@@ -64,7 +64,7 @@ def complexity_lempelziv(signal, method="median", normalize=True):
         )
 
     # Convert signal into binary sequence
-    binary_sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method)
+    binary_sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method).astype(int)
 
     # Compute LZC
     out = _complexity_lempelziv(binary_sequence, method=method, normalize=normalize)
