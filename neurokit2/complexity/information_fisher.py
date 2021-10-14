@@ -7,7 +7,9 @@ from .complexity_embedding import complexity_embedding
 def fisher_information(signal, delay=1, dimension=2):
     """Fisher Information (FI)
 
-    The Fisher information was introduced by R. A. Fisher in 1925, as a measure of "intrinsic accuracy" in statistical estimation theory. As the Shannon entropy, it can be employed as a quality of an efficient measurement procedure, used to estimate a system's disorder.
+    The Fisher information was introduced by R. A. Fisher in 1925, as a measure of "intrinsic accuracy"
+    in statistical estimation theory. As the Shannon entropy, it can be employed as a quality of an
+    efficient measurement procedure, used to estimate a system's disorder.
 
     See Also
     --------

@@ -7,7 +7,10 @@ from ..signal.signal_binarize import _signal_binarize_threshold
 def fractal_petrosian(signal, method="C"):
     """Petrosian fractal dimension (PFD)
 
-    Petrosian proposed a fast method to estimate the fractal dimension of a finite sequence, which converts the data to binary sequence before estimating the fractal dimension from time series. Several variations of the algorithm exist (e.g., 'A', 'B', 'C' or 'D'), primarily differing in the way the binary sequence is created.
+    Petrosian proposed a fast method to estimate the fractal dimension of a finite sequence, which
+    converts the data to binary sequence before estimating the fractal dimension from time series.
+    Several variations of the algorithm exist (e.g., 'A', 'B', 'C' or 'D'), primarily differing in
+    the way the binary sequence is created.
 
     See Also
     --------
