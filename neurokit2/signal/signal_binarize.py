@@ -61,7 +61,9 @@ def _signal_binarize(signal, method="threshold", threshold="auto"):
     elif method == "mixture":
         binary = _signal_binarize_mixture(signal, threshold=threshold)
     else:
-        raise ValueError("NeuroKit error: signal_binarize(): 'method' should be one of 'threshold' or 'mixture'.")
+        raise ValueError(
+            "NeuroKit error: signal_binarize(): 'method' should be one of 'threshold' or 'mixture'."
+        )
     return binary
 
 
@@ -72,7 +74,11 @@ def _signal_binarize(signal, method="threshold", threshold="auto"):
 
 def _signal_binarize_threshold(signal, threshold="auto"):
     if threshold == "auto":
-        threshold = np.mean([np.max(signal), np.min(signal)])
+        threshold = np.mean([np.nanmax(signal), np.nanmin(signal)])
+    if threshold == "mean":
+        threshold = np.nanmean(signal)
+    if threshold == "median":
+        threshold = np.nanmedian(signal)
 
     binary = np.zeros(len(signal))
     binary[signal > threshold] = 1
