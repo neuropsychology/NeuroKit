@@ -245,46 +245,6 @@ def _embedding_dimension_ffn_d(
 # =============================================================================
 # Internals
 # =============================================================================
-def _embedding_dimension_plot(
-    method,
-    dimension_seq,
-    min_dimension,
-    E1=None,
-    E2=None,
-    f1=None,
-    f2=None,
-    f3=None,
-    CD=None,
-    ax=None,
-):
-
-    if ax is None:
-        fig, ax = plt.subplots()
-    else:
-        fig = None
-    ax.set_title("Optimization of Dimension (d)")
-    ax.set_xlabel("Embedding dimension $d$")
-
-    if method in ["correlation", "cd"]:
-        ax.set_ylabel("Correlation Dimension (CD)")
-        ax.plot(dimension_seq, CD, "o-", label="$CD$", color="#852b01")
-    else:
-        ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
-        if method in ["afnn"]:
-            ax.plot(dimension_seq, E1, "o-", label="$E_1(d)$", color="#FF5722")
-            ax.plot(dimension_seq, E2, "o-", label="$E_2(d)$", color="#f44336")
-
-        if method in ["fnn"]:
-            ax.plot(dimension_seq, 100 * f1, "o--", label="Test I", color="#FF5722")
-            ax.plot(dimension_seq, 100 * f2, "^--", label="Test II", color="#f44336")
-            ax.plot(dimension_seq, 100 * f3, "s-", label="Test I + II", color="#852b01")
-
-    ax.axvline(x=min_dimension, color="#E91E63", label="Optimal dimension: " + str(min_dimension))
-    ax.legend(loc="upper right")
-
-    return fig
-
-
 def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", window=10, maxnum=None):
     # We need to reduce the number of points in dimension d by tau
     # so that after reconstruction, there'll be equal number of points
@@ -296,23 +256,20 @@ def _embedding_dimension_d(signal, dimension, delay=1, metric="chebyshev", windo
     index, dist = _embedding_dimension_neighbors(y1, metric=metric, window=window, maxnum=maxnum)
 
     # Compute the near-neighbor distances in d + 1 dimension
-    d = np.asarray([scipy.spatial.distance.chebyshev(i, j) for i, j in zip(y2, y2[index])])
+    # TODO: is there a way to make this faster?
+    d = [scipy.spatial.distance.chebyshev(i, j) for i, j in zip(y2, y2[index])]
 
-    return d, dist, index, y2
+    return np.asarray(d), dist, index, y2
 
 
-def _embedding_dimension_neighbors(
-    signal, dimension_max=20, delay=1, metric="chebyshev", window=0, maxnum=None, show=False
-):
+def _embedding_dimension_neighbors(y, metric="chebyshev", window=0, maxnum=None, show=False):
     """Find nearest neighbors of all points in the given array. Finds the nearest neighbors of all points in the
     given array using SciPy's KDTree search.
 
     Parameters
     ----------
-    signal : ndarray or array or list or Series
-        embedded signal: N-dimensional array containing time-delayed vectors, or
-        signal: 1-D array (e.g.time series) of signal in the form of a vector of values.
-        If signal is input, embedded signal will be created using the input dimension and delay.
+    y : ndarray
+        embedded signal: N-dimensional array containing time-delayed vectors.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
@@ -340,24 +297,7 @@ def _embedding_dimension_neighbors(
     dist : array
         Array containing near neighbor distances.
 
-    Examples
-    ---------
-    >>> import neurokit2 as nk
-    >>> import scipy.spatial
-    >>>
-    >>> # Artifical example
-    >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> metric = 'chebyshev'; maxnum=None; window=0; p = np.inf
-    >>> y = nk.complexity_embedding(signal, delay=225, dimension=10)
-
     """
-
-    # Sanity checks
-    if len(signal.shape) == 1:
-        y = complexity_embedding(signal, delay=delay, dimension=dimension_max)
-    else:
-        y = signal
-
     if metric == "chebyshev":
         p = np.inf
     elif metric == "cityblock":
@@ -402,3 +342,48 @@ def _embedding_dimension_neighbors(
         plt.plot(indices, distances)
 
     return indices, distances
+
+
+# =============================================================================
+# Plotting
+# =============================================================================
+
+
+def _embedding_dimension_plot(
+    method,
+    dimension_seq,
+    min_dimension,
+    E1=None,
+    E2=None,
+    f1=None,
+    f2=None,
+    f3=None,
+    CD=None,
+    ax=None,
+):
+
+    if ax is None:
+        fig, ax = plt.subplots()
+    else:
+        fig = None
+    ax.set_title("Optimization of Dimension (d)")
+    ax.set_xlabel("Embedding dimension $d$")
+
+    if method in ["correlation", "cd"]:
+        ax.set_ylabel("Correlation Dimension (CD)")
+        ax.plot(dimension_seq, CD, "o-", label="$CD$", color="#852b01")
+    else:
+        ax.set_ylabel("$E_1(d)$ and $E_2(d)$")
+        if method in ["afnn"]:
+            ax.plot(dimension_seq, E1, "o-", label="$E_1(d)$", color="#FF5722")
+            ax.plot(dimension_seq, E2, "o-", label="$E_2(d)$", color="#f44336")
+
+        if method in ["fnn"]:
+            ax.plot(dimension_seq, 100 * f1, "o--", label="Test I", color="#FF5722")
+            ax.plot(dimension_seq, 100 * f2, "^--", label="Test II", color="#f44336")
+            ax.plot(dimension_seq, 100 * f3, "s-", label="Test I + II", color="#852b01")
+
+    ax.axvline(x=min_dimension, color="#E91E63", label="Optimal dimension: " + str(min_dimension))
+    ax.legend(loc="upper right")
+
+    return fig
