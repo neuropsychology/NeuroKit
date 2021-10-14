@@ -345,10 +345,12 @@ def _embedding_dimension_neighbors(
     Examples
     ---------
     >>> import neurokit2 as nk
+    >>> import scipy.spatial
     >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> delay = 225; dimension_max = 10; metric = 'chebyshev'; maxnum=None; window=0
+    >>> metric = 'chebyshev'; maxnum=None; window=0; p = np.inf
+    >>> y = nk.complexity_embedding(signal, delay=225, dimension=10)
 
     """
 
@@ -380,33 +382,25 @@ def _embedding_dimension_neighbors(
     if maxnum >= n:
         raise ValueError("maxnum is bigger than array length.")
 
-    dists = np.empty(n)
-    indices = np.empty(n, dtype=int)
+    # Query for k numbers of nearest neighbors
+    distances, indices = tree.query(y, k=range(1, maxnum + 2), p=p)
 
-    for i, x in enumerate(y):
-        for k in range(2, maxnum + 2):
+    # Substract the first point
+    valid = indices - np.tile(np.arange(n), (indices.shape[1], 1)).T
 
-            # Query for k number of nearest neighbors
-            dist, index = tree.query(x, k=k, p=p)
+    # Remove points that are closer than min temporal separation
+    valid = np.abs(valid) > window
 
-            # Remove points that are closer than min temporal separation
-            # and self reference (d > 0)
-            valid = (np.abs(index - i) > window) & (dist > 0)
+    # Remove also self reference (d > 0)
+    valid = valid & (distances > 0)
 
-            if np.count_nonzero(valid):
-                dists[i] = dist[valid][0]
-                indices[i] = index[valid][0]
-                break
+    # Get indices to keep
+    valid = (np.arange(len(distances)), np.argmax(valid, axis=1))
 
-            if k == (maxnum + 1):
-                raise Exception(
-                    "Could not find any near neighbor with a nonzero distance."
-                    "Try increasing the value of maxnum."
-                )
-
-    indices, values = np.squeeze(indices), np.squeeze(dists)
+    distances = distances[valid]
+    indices = indices[(valid)]
 
     if show is True:
-        plt.plot(indices, values)
+        plt.plot(indices, distances)
 
-    return indices, values
+    return indices, distances
