@@ -4,14 +4,14 @@ import pandas as pd
 from .complexity_embedding import complexity_embedding
 
 
-def fisher_information(signal, delay=1, dimension=2):
-    """Fisher Information (FI)
+def entropy_svd(signal, delay=1, dimension=2):
+    """Singular Value Decomposition (SVD) Entropy
 
-    The Fisher information was introduced by R. A. Fisher in 1925, as a measure of "intrinsic accuracy" in statistical estimation theory. As the Shannon entropy, it can be employed as a quality of an efficient measurement procedure, used to estimate a system's disorder.
+    SVD entropy is an indicator of how many eigenvectors are needed for an adequate explanation of the data set.
 
     See Also
     --------
-    mutual_information, entropy_svd
+    information_fisher
 
     Parameters
     ----------
@@ -32,7 +32,7 @@ def fisher_information(signal, delay=1, dimension=2):
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> fi, info = nk.fisher_information(signal, delay=10, dimension=3)
+    >>> svden, info = nk.entropy_svd(signal, delay=10, dimension=3)
 
     """
     # Sanity checks
@@ -44,6 +44,5 @@ def fisher_information(signal, delay=1, dimension=2):
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     W = np.linalg.svd(embedded, compute_uv=False)
     W /= np.sum(W)  # normalize singular values
-    FI_v = (W[1:] - W[:-1]) ** 2 / W[:-1]
 
-    return np.sum(FI_v), {"Dimension": dimension, "Delay": delay, "Values": FI_v}
+    return -1 * sum(W * np.log2(W)), {"Dimension": dimension, "Delay": delay}

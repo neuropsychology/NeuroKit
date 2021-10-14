@@ -11,6 +11,7 @@ from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
+from .entropy_svd import entropy_svd
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
@@ -82,6 +83,7 @@ __all__ = [
     "entropy_cumulative_residual",
     "entropy_approximate",
     "entropy_sample",
+    "entropy_svd",
     "entropy_fuzzy",
     "entropy_multiscale",
     "fisher_information",
