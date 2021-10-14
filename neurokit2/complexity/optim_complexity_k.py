@@ -17,7 +17,8 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     k_max : Union[int, str, list], optional
-        Maximum number of interval times (should be greater than or equal to 3) to be tested. If 'max', it selects the maximum possible value corresponding to half the length of the signal.
+        Maximum number of interval times (should be greater than or equal to 3) to be tested. If 'max',
+        it selects the maximum possible value corresponding to half the length of the signal.
     show : bool
         Visualise the slope of the curve for the selected kmax value.
 
@@ -69,7 +70,7 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
     # --------------------------------------
     vectorized_k_slope = np.vectorize(_complexity_k_slope, excluded=[1])
     slopes, intercepts, info = vectorized_k_slope(kmax_range, signal)
-    k_values = [d["k_values"] for d in info]
+    # k_values = [d["k_values"] for d in info]
     average_values = [d["average_values"] for d in info]
 
     # Find plateau (the saturation point of slope)
@@ -80,7 +81,8 @@ def complexity_k(signal, k_max="max", show=False, **kwargs):
     else:
         kmax_optimal = np.max(kmax_range)
         warn(
-            f"The optimal kmax value detected is 2 or less. There may be no plateau in this case. You can inspect the plot by set `show=True`. We will return optimal k_max = {kmax_optimal} (the max).",
+            "The optimal kmax value detected is 2 or less. There may be no plateau in this case. " + 
+            f"You can inspect the plot by set `show=True`. We will return optimal k_max = {kmax_optimal} (the max).",
             category=NeuroKitWarning,
         )
 

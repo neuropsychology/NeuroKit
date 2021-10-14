@@ -61,7 +61,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     >>>
     >>> # Basic example
     >>> signal = [1, 2, 3, 2.5, 2.0, 1.5]
-    >>> nk.complexity_embedding(signal, delay = 2, dimension = 2)
+    >>> embedded = nk.complexity_embedding(signal, delay = 2, dimension = 2, show=True) #doctest: +SKIP
     >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
