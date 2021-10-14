@@ -21,7 +21,11 @@ def fractal_petrosian(signal, method="C"):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        Can be 'A', 'B', 'C' or 'D'. Method 'A' binarizes the signal by higher vs. lower values as compated to the signal's mean. Method 'B' uses values that are within the mean +/- 1 SD band vs. values that are outside this band. Method 'C' computes the difference between consecutive samples and binarizes depending on their sign. Method 'D' forms separates consecutive samples that exceed 1 signal's SD from the others smaller changes.
+        Can be 'A', 'B', 'C' or 'D'. Method 'A' binarizes the signal by higher vs. lower values as
+        compated to the signal's mean. Method 'B' uses values that are within the mean +/- 1 SD band
+        vs. values that are outside this band. Method 'C' computes the difference between consecutive
+        samples and binarizes depending on their sign. Method 'D' forms separates consecutive samples
+        that exceed 1 signal's SD from the others smaller changes.
 
     Examples
     ----------
@@ -36,8 +40,11 @@ def fractal_petrosian(signal, method="C"):
 
     References
     ----------
-    - Kumar, D. K., Arjunan, S. P., & Aliahmad, B. (2017). Fractals: applications in biological Signalling and image processing. CRC Press.
-    - Goh, C., Hamadicharef, B., Henderson, G., & Ifeachor, E. (2005, June). Comparison of fractal dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
+    - Kumar, D. K., Arjunan, S. P., & Aliahmad, B. (2017). Fractals: applications in biological
+    Signalling and image processing. CRC Press.
+    - Goh, C., Hamadicharef, B., Henderson, G., & Ifeachor, E. (2005, June). Comparison of fractal
+    dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International
+    Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
 
     """
     # Sanity checks
