@@ -86,7 +86,7 @@ def fractal_dfa(
         slopes value of the log2(windows) versus log2(fluctuations) plot. If
         `multifractal` is True, the dictionary additionally contains the
         parameters of the singularity spectrum (scaling exponents, singularity dimension,
-        singularity strength; see `singularity_spectrum()` for more information).
+        singularity strength; see `_singularity_spectrum()` for more information).
 
     See Also
     --------
@@ -164,7 +164,7 @@ def fractal_dfa(
     parameters = {"q": q[:, 0], "windows": windows, "fluctuations": fluctuations}
 
     if multifractal is True:
-        singularity = singularity_spectrum(
+        singularity = _singularity_spectrum(
             windows=windows, fluctuations=fluctuations, q=q, slopes=slopes
         )
         parameters.update(singularity)
@@ -252,7 +252,7 @@ def _fractal_dfa(
 # altered to fit NK to the best of its extent.
 
 
-def singularity_spectrum(windows, fluctuations, q, slopes):
+def _singularity_spectrum(windows, fluctuations, q, slopes):
     """Extract the slopes of the fluctuation function to futher obtain the
     singularity strength `α` (or Hölder exponents) and singularity spectrum
     `f(α)` (or fractal dimension). This is iconically shaped as an inverse
@@ -406,11 +406,9 @@ def _fractal_dfa_findwindows(n, windows="default"):
     if windows is None or isinstance(windows, str):
         windows = int(n / 10)
 
-    # Default windows sequence
+    # See https://github.com/neuropsychology/NeuroKit/issues/206
     if isinstance(windows, int):
-        windows = expspace(
-            10, int(n / 10), windows, base=2
-        )  # see https://github.com/neuropsychology/NeuroKit/issues/206
+        windows = expspace(10, int(n / 10), windows, base=2)
         windows = np.unique(windows)  # keep only unique
 
     # Sanity checks (return warning for too short windows)
@@ -548,10 +546,10 @@ def _singularity_spectrum_plot(hq, Dq, ax=None):
     Parameters
     ----------
     hq: np.array
-        Singularity strength `hq` as calculated with `singularity_spectrum()`.
+        Singularity strength `hq` as calculated with `_singularity_spectrum()`.
 
     Dq: np.array
-        Singularity spectrum `Dq` as calculated with `singularity_spectrum()`.
+        Singularity spectrum `Dq` as calculated with `_singularity_spectrum()`.
 
     Returns
     -------
