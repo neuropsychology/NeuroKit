@@ -119,7 +119,7 @@ def expected_rs(n):
     else:
         middle = 1.0 / np.sqrt(n * np.pi * 0.5)
 
-    return front * middle * back
+    return middle * back
 
 
 def _complexity_hurst_rs(signal, window):
@@ -161,6 +161,8 @@ def _complexity_hurst_generalized(signal, q=2):
     via the qth-order moments of the distribution of the increments.
     
     Different exponents `q` are associated with different characterizations of the multi-scaling complexity of the signal.
+    In contrast to the popular R/S statistics approach, it does not deal with max and min functions, and thus less sensitive
+    to outliers.
 
     From https://github.com/PTRRupprecht/GenHurst"""
 
