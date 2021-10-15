@@ -500,14 +500,16 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
     # Plot the polyfit line
     for i in range(len(q)):
         polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
+        if i == 0:
+            ax_fluctuation.plot(
+                [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]), c=colors[0]
+            )
+        elif i == (len(q) - 1):
+            ax_fluctuation.plot(
+                [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]), c=colors[-1]
+            )        
         fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
         ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label="_no_legend_")
-    ax_fluctuation.plot(
-        [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]), c=colors[0]
-    )
-    ax_fluctuation.plot(
-        [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]), c=colors[-1]
-    )
 
     # Plot the singularity spectrum
     _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)
