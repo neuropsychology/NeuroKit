@@ -246,8 +246,9 @@ def _embedding_delay_metric(
                 #     average += s
 
                 # find average of statistic deviations across r_vals
-                deviation = _embedding_delay_cc_deviation_max(signal, delay=t,
-                                                              dimension=m, r_vals=r_vals)
+                deviation = _embedding_delay_cc_deviation_max(
+                    signal, delay=t, dimension=m, r_vals=r_vals
+                )
                 change += deviation
             # averages[i] = average / 16
             values[i] = change / 4
@@ -334,14 +335,23 @@ def _embedding_delay_cc_deviation_max(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay
     """A measure of the variation of the dependence statistic with r using
     several representative values of r.
     """
-    vectorized_deviation = np.vectorize(_embedding_delay_cc_deviation, excluded=['signal', 'delay', 'dimension'])
-    deviations = vectorized_deviation(signal=signal, r_vals=r_vals, delay=delay, dimension=dimension)
-    
+    vectorized_deviation = np.vectorize(
+        _embedding_delay_cc_deviation, excluded=["signal", "delay", "dimension"]
+    )
+    deviations = vectorized_deviation(
+        signal=signal, r_vals=r_vals, delay=delay, dimension=dimension
+    )
+
     return np.max(deviations) - np.min(deviations)
+
 
 def _embedding_delay_cc_deviation(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3):
     return _embedding_delay_cc_statistic(signal, delay=delay, dimension=dimension, r=r_vals)
 
+
+# =============================================================================
+# Internals for C-C method, Kim et al. (1999)
+# =============================================================================
 
 
 # =============================================================================
