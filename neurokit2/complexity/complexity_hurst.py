@@ -51,6 +51,8 @@ def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False
     ----------
     - Brandi, G., & Di Matteo, T. (2021). On the statistics of scaling exponents and the Multiscaling Value at Risk.
     The European Journal of Finance, 1-22.
+    - Annis, A. A., & Lloyd, E. H. (1976). The expected value of the adjusted rescaled Hurst range of independent
+    normal summands. Biometrika, 63(1), 111-116.
     - https://github.com/CSchoel/nolds
 
     """
@@ -105,15 +107,18 @@ def expected_rs(n):
     """
     Calculates the expected (R/S)_n for white noise for a given n.
     This is used as a correction factor in the function hurst_rs. It uses the
-    formula of Anis-Lloyd-Peters (see [h_3]_).
+    formula of Anis-Lloyd-Peters.
+
+    https://en.wikipedia.org/wiki/Hurst_exponent#cite_note-:2-17
     """
-    front = (n - 0.5) / n
+    # front = (n - 0.5) / n
     i = np.arange(1, n)
     back = np.sum(np.sqrt((n - i) / i))
     if n <= 340:
         middle = scipy.special.gamma((n - 1) * 0.5) / np.sqrt(np.pi) / scipy.special.gamma(n * 0.5)
     else:
         middle = 1.0 / np.sqrt(n * np.pi * 0.5)
+
     return front * middle * back
 
 
@@ -151,7 +156,13 @@ def _complexity_hurst_rs(signal, window):
 
 
 def _complexity_hurst_generalized(signal, q=2):
-    """From https://github.com/PTRRupprecht/GenHurst"""
+    """
+    The Generalized Hurst exponent method is assesses directly the scaling properties of the time series
+    via the qth-order moments of the distribution of the increments.
+    
+    Different exponents `q` are associated with different characterizations of the multi-scaling complexity of the signal.
+
+    From https://github.com/PTRRupprecht/GenHurst"""
 
     n = len(signal)
     H = np.zeros((len(range(5, 20)), 1))
@@ -168,6 +179,7 @@ def _complexity_hurst_generalized(signal, q=2):
             N = len(dV) + 1
             X = np.arange(1, N + 1, dtype=np.float64)
             Y = VV
+            
             mx = np.sum(X) / N
             SSxx = np.sum(X ** 2) - N * mx ** 2
             my = np.sum(Y) / N
