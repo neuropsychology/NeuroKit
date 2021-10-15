@@ -2,10 +2,11 @@ import numpy as np
 import pandas as pd
 
 from .complexity_embedding import complexity_embedding
+from .utils import _get_coarsegrained, _get_scale
 
 
-def entropy_permutation(signal, dimension=3, delay=1, corrected=True):
-    """Permutation Entropy (PEn).
+def entropy_permutation(signal, dimension=3, delay=1, corrected=True, scale=None):
+    """Permutation Entropy (PEn) and Multiscale Permutation Entropy.
 
     Permutation Entropy (PE or PEn) is a robust measure of the complexity of a dynamic system by
     capturing the order relations between values of a time series and extracting a probability
@@ -45,9 +46,50 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
+    >>>
+    >>> # Permutation Entropy
     >>> pen, info = nk.entropy_permutation(signal, dimension=3, delay=1, corrected=False)
+    >>> pen
+    >>> # Multiscale Permutation Entropy
+    >>> pen, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
 
     """
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    info = {"Corrected": corrected, "Scale": None}
+
+    # Multiscale
+    if scale is not None:
+        info["Scale"] = _get_scale(signal, scale=scale, dimension=dimension)
+        info["Values"] = np.full(len(info["Scale"]), np.nan)
+        for i, tau in enumerate(info["Scale"]):
+            y = _get_coarsegrained(signal, tau)
+            info["Values"][i] = _entropy_permutation(
+                y, delay=1, dimension=dimension, corrected=corrected
+            )
+        # Remove inf, nan and 0
+        vals = info["Values"].copy()[~np.isnan(info["Values"])]
+        vals = vals[vals != np.inf]
+        vals = vals[vals != -np.inf]
+
+        # The MSE index is quantified as the area under the curve (AUC),
+        # which is like the sum normalized by the number of values. It's similar to the mean.
+        pe = np.trapz(vals) / len(vals)
+
+    # Regular
+    else:
+        pe = _entropy_permutation(signal, dimension=dimension, delay=delay, corrected=corrected)
+    return pe, info
+
+
+# =============================================================================
+# Internal
+# =============================================================================
+def _entropy_permutation(signal, dimension=3, delay=1, corrected=True):
     # Embed x and sort the order of permutations
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension).argsort(
         kind="quicksort"
@@ -62,4 +104,4 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True):
     pe = -np.multiply(p, np.log2(p)).sum()
     if corrected:
         pe /= np.log2(np.math.factorial(dimension))
-    return pe, {"Corrected": corrected}
+    return pe
