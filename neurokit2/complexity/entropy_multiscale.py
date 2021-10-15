@@ -141,7 +141,7 @@ def entropy_multiscale(
     }
 
     info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
-    out, info["MSE_Values"] = _entropy_multiscale(
+    out, info["Values"] = _entropy_multiscale(
         signal,
         r=info["Tolerance"],
         scale_factors=info["Scale"],
