@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import scipy.special
+import matplotlib.pyplot as plt
 
 from .fractal_dfa import _fractal_dfa_findwindows
 
@@ -16,6 +17,10 @@ def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False
     Hurst exponent especially interesting for the analysis of stock data. It typically ranges from 0 to 1, with 0.5
     corresponding to a Brownian motion. If H < 0.5, the time-series covers less "distance" than a random walk (the memory
     of the signal decays faster than at random), and vice versa.
+    
+    The R/S approach first splits the time series into non-overlapping subseries of length n. R and S (sigma) are then
+    calculated for each subseries and the mean is taken over all subseries yielding (R/S)_n. This process is repeated for
+    several lengths n. The final exponent is then derived from fitting a straight line to the plot of log((R/S)_n) vs log(n).
 
     Parameters
     ----------
@@ -39,13 +44,14 @@ def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> h, info = nk.complexity_hurst(signal, corrected=True)
+    >>> h, info = nk.complexity_hurst(signal, corrected=True, show=True)
     >>> h
     >>> h, info = nk.complexity_hurst(signal, show=True)
 
     References
     ----------
-    - Brandi, G., & Di Matteo, T. (2021). On the statistics of scaling exponents and the Multiscaling Value at Risk. The European Journal of Finance, 1-22.
+    - Brandi, G., & Di Matteo, T. (2021). On the statistics of scaling exponents and the Multiscaling Value at Risk.
+    The European Journal of Finance, 1-22.
     - https://github.com/CSchoel/nolds
 
     """
@@ -79,11 +85,14 @@ def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False
     n_vals = np.log10(n_vals)
 
     # fit a line to the logarithm of the obtained (R/S) values
-    poly = np.polyfit(n_vals, rs_vals, 1)
+    poly = np.polyfit(np.log(n_vals), np.log(rs_vals), 1)
     h = poly[0]  # Get the slope
 
     if corrected:
         h = poly[0] + 0.5
+
+    if show:
+        _complexity_hurst_plot(poly, n_vals, rs_vals, corrected=corrected, ax=None)
 
     return h, {"Values": n_vals, "Scores": rs_vals, "Corrected": corrected, "Intercept": poly[1]}
 
@@ -180,3 +189,34 @@ def _complexity_hurst_generalized(signal, q=2):
     mH = np.mean(H) / q
 
     return mH
+
+
+def _complexity_hurst_plot(poly, n_vals, rs_vals, corrected=False, ax=None):
+
+    if ax is None:  # ax option in case more plots need to be added later
+        fig, ax = plt.subplots()
+        fig.suptitle("Hurst Exponent from Rescaled Range Analysis")
+    else:
+        fig = None
+
+    ax.set_ylabel(r"$log$((R/S)_n)")
+    ax.set_xlabel(r"$log$(n)")
+
+    # Plot log((R/S)_n) vs log(n)
+    ax.scatter(
+        np.log(n_vals),
+        np.log(rs_vals),
+        marker="o",
+        zorder=1,
+        label="_no_legend_",
+    )
+
+    fit_values = [poly[0] * i + poly[1] for i in np.log(n_vals)]
+    if corrected:
+        h = poly[0] + 0.5
+    else:
+        h = poly[0]
+    ax.plot(np.log(n_vals), fit_values, color="#E91E63", zorder=2, linewidth=3, label="h = {}".format(round(h, 2)))
+    ax.legend(loc="lower right")
+
+    return fig
