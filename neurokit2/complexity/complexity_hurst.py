@@ -143,7 +143,7 @@ def _complexity_hurst_rs(signal, window):
 
 
 def _complexity_hurst_generalized(signal, q=2):
-    """From https://github.com/PTRRupprecht/GenHurst/blob/master/genhurst.py"""
+    """From https://github.com/PTRRupprecht/GenHurst"""
 
     n = len(signal)
     H = np.zeros((len(range(5, 20)), 1))
