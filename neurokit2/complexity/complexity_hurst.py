@@ -44,9 +44,8 @@ def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> h, info = nk.complexity_hurst(signal, corrected=True, show=True)
-    >>> h
-    >>> h, info = nk.complexity_hurst(signal, show=True)
+    >>> h, info = nk.complexity_hurst(signal, corrected=True)
+    >>> h  #doctest: +SKIP
 
     References
     ----------
@@ -85,7 +84,7 @@ def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False
     n_vals = np.log10(n_vals)
 
     # fit a line to the logarithm of the obtained (R/S) values
-    poly = np.polyfit(np.log(n_vals), np.log(rs_vals), 1)
+    poly = np.polyfit(n_vals, rs_vals, 1)
     h = poly[0]  # Get the slope
 
     if corrected:
@@ -204,19 +203,19 @@ def _complexity_hurst_plot(poly, n_vals, rs_vals, corrected=False, ax=None):
 
     # Plot log((R/S)_n) vs log(n)
     ax.scatter(
-        np.log(n_vals),
-        np.log(rs_vals),
+        n_vals,
+        rs_vals,
         marker="o",
         zorder=1,
         label="_no_legend_",
     )
 
-    fit_values = [poly[0] * i + poly[1] for i in np.log(n_vals)]
+    fit_values = [poly[0] * i + poly[1] for i in n_vals]
     if corrected:
-        h = poly[0] + 0.5
+        label = "corrected h = {}".format(round(poly[0] + 0.5, 2))
     else:
-        h = poly[0]
-    ax.plot(np.log(n_vals), fit_values, color="#E91E63", zorder=2, linewidth=3, label="h = {}".format(round(h, 2)))
+        label = "h = {}".format(round(poly[0], 2))
+    ax.plot(n_vals, fit_values, color="#E91E63", zorder=2, linewidth=3, label=label)
     ax.legend(loc="lower right")
 
     return fig
