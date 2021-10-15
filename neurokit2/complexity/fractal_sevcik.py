@@ -57,6 +57,8 @@ def fractal_sevcik(signal):
 
     # 4. Compute the fractal dimension (approximation)
     sfd = 1 + np.log(L) / np.log(2 * (n - 1))
-    # Some papers (e.g., Wang et al. 2017) suggest using sfd = 1 + (np.log(L) + np.log(2)) / np.log(2 * (n - 1))
+    # Some papers (e.g., Wang et al. 2017) suggest adding np.log(2) to the numerator:
+    # sfd = 1 + (np.log(L) + np.log(2)) / np.log(2 * (n - 1))
+    # But it's unclear why. Sticking to the original formula for now.
 
     return sfd, {}
