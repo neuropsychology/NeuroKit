@@ -74,7 +74,8 @@ def entropy_multiscale(
         series.
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute multiscale entropy.
+        to compute multiscale entropy. The entropy values corresponding to each 'Scale'
+        factor are stored under the 'Values' key.
 
     See Also
     --------
