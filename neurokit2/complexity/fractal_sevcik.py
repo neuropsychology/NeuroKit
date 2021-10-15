@@ -54,5 +54,6 @@ def fractal_sevcik(signal):
     L = np.sum(np.sqrt(np.diff(y_) ** 2 + np.diff(x_) ** 2))
 
     # 4. Compute the fractal dimension
-    sfd = 1 + np.log(L) / np.log(2 * (n - 1))
+    sfd = 1 + (np.log(L) + np.log(2)) / np.log(2 * (n - 1))
+
     return sfd, {}

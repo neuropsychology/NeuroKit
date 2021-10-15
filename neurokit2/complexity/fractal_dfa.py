@@ -507,7 +507,7 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
         elif i == (len(q) - 1):
             ax_fluctuation.plot(
                 [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]), c=colors[-1]
-            )        
+            )
         fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
         ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label="_no_legend_")
 
