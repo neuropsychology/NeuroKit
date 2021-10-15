@@ -41,7 +41,7 @@ def _complexity_lyapunov_r(
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=3, sampling_rate=200, frequency=[12, 15], noise=0.5)
+    >>> signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
     >>> delay = 1; dimension = 2; complexity_embedding = nk.complexity_embedding; NeuroKitWarning=RuntimeWarning
 
     """

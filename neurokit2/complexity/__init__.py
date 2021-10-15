@@ -11,6 +11,7 @@ from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
+from .entropy_permutation import entropy_permutation
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
 from .entropy_svd import entropy_svd
@@ -92,6 +93,7 @@ __all__ = [
     "entropy_svd",
     "entropy_fuzzy",
     "entropy_multiscale",
+    "entropy_permutation",
     "fisher_information",
     "fractal_dfa",
     "fractal_correlation",
