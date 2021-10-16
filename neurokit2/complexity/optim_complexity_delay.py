@@ -228,7 +228,7 @@ def _embedding_delay_metric(
     """
 
     if metric == "Autocorrelation":
-        values = signal_autocor(signal)
+        values, _ = signal_autocor(signal)
         values = values[: len(tau_sequence)]  # upper limit
 
     elif metric == "Correlation Integral":
