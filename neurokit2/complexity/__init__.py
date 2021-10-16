@@ -5,6 +5,7 @@ from .complexity_embedding import complexity_embedding
 from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
+from .complexity_rqa import complexity_rqa
 from .complexity_rr import complexity_rr
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
@@ -89,6 +90,7 @@ __all__ = [
     "complexity_fuzzyrcmse",
     "complexity_dfa",
     "complexity_rr",
+    "complexity_rqa",
     "entropy_shannon",
     "entropy_differential",
     "entropy_cumulative_residual",
