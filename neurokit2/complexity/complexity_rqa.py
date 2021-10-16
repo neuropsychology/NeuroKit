@@ -128,6 +128,12 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", show=False):
     # Reccurence Plot
     rp = pyrqa.computation.RPComputation.create(settings, verbose=False).run()
     if show is True:
-        plt.imshow(rp.recurrence_matrix_reverse_normalized, cmap="Greys")
+        try:
+            plt.imshow(rp.recurrence_matrix_reverse_normalized, cmap="Greys")
+        except MemoryError as e:
+            raise MemoryError(
+                "NeuroKit error: complexity_rqa(): the recurrence plot is too large to display. ",
+                "You can recover the matrix from the parameters and try to display parts of it.",
+            ) from e
 
-    return results, {"RQA": rqa, "RP": rp}
+    return results, {"RQA": rqa, "RP": rp, "Recurrence_Matrix": rp.recurrence_matrix_reverse}
