@@ -45,8 +45,10 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
 
     Returns
     -------
-    PEn : float
+    PE : float
         Permutation Entropy
+    info : dict
+        A dictionary containing additional information regarding the parameters used.
 
     References
     ----------
@@ -70,14 +72,14 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
     >>>
     >>> # Permutation Entropy
-    >>> pen, info = nk.entropy_permutation(signal, dimension=3, delay=1, corrected=False)
-    >>> pen
+    >>> pe, info = nk.entropy_permutation(signal, dimension=3, delay=1, corrected=False)
+    >>> pe
     >>> # Multiscale Permutation Entropy
-    >>> mspen, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
-    >>> mspen
+    >>> mspe, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
+    >>> mspe
     >>> # Weighted Permutation Entropy
-    >>> wpen, info = nk.entropy_permutation(signal, dimension=3, weighted=True)
-    >>> wpen
+    >>> wpe, info = nk.entropy_permutation(signal, dimension=3, weighted=True)
+    >>> wpe
 
     """
     # Sanity checks
