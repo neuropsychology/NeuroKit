@@ -12,6 +12,7 @@ from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
+from .entropy_range import entropy_range
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
 from .entropy_svd import entropy_svd
@@ -53,7 +54,7 @@ complexity_dfa = fractal_dfa
 fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
 complexity_mfdfa = fractal_mfdfa
 
-complexity_d2 = fractal_correlation
+complexity_cd = fractal_correlation
 
 complexity_plot = functools.partial(complexity_optimize, show=True)
 
@@ -68,7 +69,7 @@ __all__ = [
     "complexity_r",
     "complexity_lempelziv",
     "complexity_mfdfa",
-    "complexity_d2",
+    "complexity_cd",
     "complexity_plot",
     "complexity_se",
     "complexity_apen",
@@ -94,6 +95,7 @@ __all__ = [
     "entropy_fuzzy",
     "entropy_multiscale",
     "entropy_permutation",
+    "entropy_range",
     "fisher_information",
     "fractal_dfa",
     "fractal_correlation",

@@ -13,7 +13,7 @@ def fractal_correlation(signal, delay=1, dimension=2, r=64, show=False):
     Python implementation of the Correlation Dimension CD (sometimes
     referred to as D2) of a signal.
 
-    This function can be called either via ``fractal_correlation()`` or ``complexity_d2()``.
+    This function can be called either via ``fractal_correlation()`` or ``complexity_cd()``.
 
     Parameters
     ----------
