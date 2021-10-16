@@ -5,13 +5,23 @@ from .complexity_embedding import complexity_embedding
 from .utils import _get_coarsegrained, _get_scale
 
 
-def entropy_permutation(signal, dimension=3, delay=1, corrected=True, scale=None):
-    """Permutation Entropy (PEn) and Multiscale Permutation Entropy.
+def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=False, scale=None):
+    """Permutation Entropy (PE), and its Weighted (WPE) and/or Multiscale Variants (MSPE).
 
-    Permutation Entropy (PE or PEn) is a robust measure of the complexity of a dynamic system by
+    Permutation Entropy (PE) is a robust measure of the complexity of a dynamic system by
     capturing the order relations between values of a time series and extracting a probability
-    distribution of the ordinal patterns (see Henry and Judge, 2019). This implementation is based on
-    `pyEntropy <https://github.com/nikdon/pyEntropy>`_.
+    distribution of the ordinal patterns (see Henry and Judge, 2019). Using ordinal descriptors is
+    helpful as it adds immunity to large artifacts occurring with low frequencies. PE is applicable
+    for regular, chaotic, noisy, or real-world time series and has been employed in the context of
+    EEG, ECG, and stock market time series.
+
+    However, the main shortcoming of traditional PE is that no information besides the order structure
+    is retained when extracting the ordinal patterns, which leads to several possible issues
+    (Fadlallah et al., 2013). The Weighted PE was developped to address these limitations by incorporating
+    significant information from the time series when retrieving the ordinal patterns.
+
+
+    This implementation is based on `pyEntropy <https://github.com/nikdon/pyEntropy>`_.
 
     Parameters
     ----------
@@ -37,8 +47,12 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, scale=None
     References
     ----------
     - https://github.com/nikdon/pyEntropy
-    - Zanin, M., Zunino, L., Rosso, O. A., & Papo, D. (2012). Permutation entropy and its main biomedical and econophysics applications: a review. Entropy, 14(8), 1553-1577.
-    - Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time series. Physical review letters, 88(17), 174102.
+    - Fadlallah, B., Chen, B., Keil, A., & Principe, J. (2013). Weighted-permutation entropy: A complexity
+    measure for time series incorporating amplitude information. Physical Review E, 87(2), 022911.
+    - Zanin, M., Zunino, L., Rosso, O. A., & Papo, D. (2012). Permutation entropy and its main biomedical
+    and econophysics applications: a review. Entropy, 14(8), 1553-1577.
+    - Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time series.
+    Physical review letters, 88(17), 174102.
 
 
     Examples
@@ -51,7 +65,11 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, scale=None
     >>> pen, info = nk.entropy_permutation(signal, dimension=3, delay=1, corrected=False)
     >>> pen
     >>> # Multiscale Permutation Entropy
-    >>> pen, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
+    >>> mspen, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
+    >>> mspen
+    >>> # Weighted Permutation Entropy
+    >>> wpen, info = nk.entropy_permutation(signal, dimension=2, weighted=True)
+    >>> wpen
 
     """
     # Sanity checks
@@ -60,7 +78,7 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, scale=None
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    info = {"Corrected": corrected, "Scale": None}
+    info = {"Corrected": corrected, "Weighted": weighted, "Scale": None}
 
     # Multiscale
     if scale is not None:
@@ -69,7 +87,11 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, scale=None
         for i, tau in enumerate(info["Scale"]):
             y = _get_coarsegrained(signal, tau)
             info["Values"][i] = _entropy_permutation(
-                y, delay=1, dimension=dimension, corrected=corrected
+                y,
+                delay=1,
+                dimension=dimension,
+                corrected=corrected,
+                weighted=weighted,
             )
         # Remove inf, nan and 0
         vals = info["Values"].copy()[~np.isnan(info["Values"])]
@@ -82,26 +104,50 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, scale=None
 
     # Regular
     else:
-        pe = _entropy_permutation(signal, dimension=dimension, delay=delay, corrected=corrected)
+        pe = _entropy_permutation(
+            signal,
+            dimension=dimension,
+            delay=delay,
+            corrected=corrected,
+            weighted=weighted,
+        )
     return pe, info
 
 
 # =============================================================================
 # Internal
 # =============================================================================
-def _entropy_permutation(signal, dimension=3, delay=1, corrected=True):
-    # Embed x and sort the order of permutations
-    embedded = complexity_embedding(signal, delay=delay, dimension=dimension).argsort(
-        kind="quicksort"
-    )
-    # Associate unique integer to each permutations
-    multiplier = np.power(dimension, np.arange(dimension))
-    values = (np.multiply(embedded, multiplier)).sum(1)
-    # Return the counts
-    _, c = np.unique(values, return_counts=True)
-    # Use np.true_divide for Python 2 compatibility
-    p = np.true_divide(c, c.sum())
-    pe = -np.multiply(p, np.log2(p)).sum()
+def _entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=False):
+    # Time-delay embedding
+    embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
+
+    if weighted is True:
+        weights = np.var(embedded, axis=1)
+
+    # Sort the order of permutations
+    embedded = embedded.argsort(kind="quicksort")
+
+    # Weighted permutation entropy
+    if weighted is True:
+        motifs, c = np.unique(embedded, return_counts=True, axis=0)
+        pw = np.zeros(len(motifs))
+        for i, j in zip(weights, embedded):
+            idx = int(np.where((j == motifs).sum(1) == dimension)[0])
+            pw[idx] += i
+
+        pw /= weights.sum()
+        pe = -np.dot(pw, np.log2(pw))
+
+    # Normal permutation entropy
+    else:
+        # Associate unique integer to each permutations
+        multiplier = np.power(dimension, np.arange(dimension))
+        values = (np.multiply(embedded, multiplier)).sum(1)
+
+        # Return the counts
+        _, c = np.unique(values, return_counts=True)
+        p = c / c.sum()
+        pe = -np.multiply(p, np.log2(p)).sum()
     if corrected:
         pe /= np.log2(np.math.factorial(dimension))
     return pe
