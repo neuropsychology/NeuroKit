@@ -41,21 +41,24 @@ def signal_autocor(signal, lag=None, method="correlation", show=False):
 
     """
     n = len(signal)
-    # Standardize
-    signal = (np.asarray(signal) - np.nanmean(signal)) / np.nanstd(signal)
+    # Demean
+    signal = np.asarray(signal) - np.nanmean(signal)
 
     if method.lower() == "correlation":
-        r = np.correlate(signal, signal, mode="full")
-        r = r[n - 1 :]  # Min time lag is 0
+        acov = np.correlate(signal, signal, mode="full")
+        acov = acov[n - 1 :]  # Min time lag is 0
     elif method.lower() == "fft":
         a = np.concatenate((signal, np.zeros(n - 1)))  # added zeros to your signal
         A = np.fft.fft(a)
         S = np.conj(A) * A
         c_fourier = np.fft.ifft(S)
-        r = c_fourier[: (c_fourier.size // 2) + 1].real
+        acov = c_fourier[: (c_fourier.size // 2) + 1].real
 
     # Normalize
-    r = r / r[0]
+    acov = acov / (n * np.ones(2 * n - 1)[n - 1 :])
+
+    # Normalize
+    r = acov / acov[0]
 
     # Confidence interval
     varacf = 1.0 / n
@@ -79,4 +82,4 @@ def signal_autocor(signal, lag=None, method="correlation", show=False):
         else:
             r = r[lag]
 
-    return r, {"CI_low": ci_low, "CI_high": ci_high, "Method": method}
+    return r, {"CI_low": ci_low, "CI_high": ci_high, "Method": method, "ACov": acov}
