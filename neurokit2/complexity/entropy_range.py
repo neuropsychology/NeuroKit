@@ -25,6 +25,8 @@ def entropy_range(signal, dimension=3, delay=1, r="default", method="mSampEn"):
     -------
     RangeEn : float
         Range Entropy
+    info : dict
+        A dictionary containing additional information regarding the parameters used.
 
     References
     ----------

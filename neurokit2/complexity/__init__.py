@@ -15,6 +15,7 @@ from .entropy_permutation import entropy_permutation
 from .entropy_range import entropy_range
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
+from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
@@ -91,6 +92,7 @@ __all__ = [
     "entropy_cumulative_residual",
     "entropy_approximate",
     "entropy_sample",
+    "entropy_spectral",
     "entropy_svd",
     "entropy_fuzzy",
     "entropy_multiscale",
