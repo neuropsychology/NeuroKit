@@ -79,7 +79,7 @@ def entropy_multiscale(
 
     See Also
     --------
-    entropy_shannon, entropy_approximate, entropy_sample, entropy_fuzzy
+    entropy_shannon, entropy_approximate, entropy_sample, entropy_fuzzy, entropy_permutation
 
     Examples
     ----------

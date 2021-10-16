@@ -38,6 +38,10 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     corrected : bool
         If True, divide by log2(factorial(m)) to normalize the entropy
         between 0 and 1. Otherwise, return the permutation entropy in bit.
+    weighted : bool
+        If True, compute the weighted permutation entropy (WPE).
+    scale : None | str | list
+        If not ``None``, compute multiscale permutation entropy (MSPE). Can be a list of scale factors, or ``"default"`` or ``"max"``. See ``entropy_multiscale()`` for details.
 
     Returns
     -------
@@ -54,6 +58,10 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     - Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time series.
     Physical review letters, 88(17), 174102.
 
+    See Also
+    --------
+    entropy_multiscale
+
 
     Examples
     ----------
@@ -68,7 +76,7 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     >>> mspen, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
     >>> mspen
     >>> # Weighted Permutation Entropy
-    >>> wpen, info = nk.entropy_permutation(signal, dimension=2, weighted=True)
+    >>> wpen, info = nk.entropy_permutation(signal, dimension=3, weighted=True)
     >>> wpen
 
     """
