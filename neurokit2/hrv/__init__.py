@@ -2,8 +2,8 @@
 from .hrv import hrv
 from .hrv_frequency import hrv_frequency
 from .hrv_nonlinear import hrv_nonlinear
+from .hrv_rqa import hrv_rqa
 from .hrv_rsa import hrv_rsa
 from .hrv_time import hrv_time
 
-
-__all__ = ["hrv_time", "hrv_frequency", "hrv_nonlinear", "hrv_rsa", "hrv"]
+__all__ = ["hrv_time", "hrv_frequency", "hrv_nonlinear", "hrv_rsa", "hrv_rqa", "hrv"]
