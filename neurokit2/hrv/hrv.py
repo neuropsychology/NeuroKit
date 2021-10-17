@@ -6,8 +6,8 @@ import pandas as pd
 from ..stats import summary_plot
 from .hrv_frequency import _hrv_frequency_show, hrv_frequency
 from .hrv_nonlinear import _hrv_nonlinear_show, hrv_nonlinear
-from .hrv_time import hrv_time
 from .hrv_rsa import hrv_rsa
+from .hrv_time import hrv_time
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
@@ -127,7 +127,9 @@ def _hrv_plot(peaks, out, sampling_rate=1000, **kwargs):
 
     ax_psd = fig.add_subplot(spec[1, :-1])
 
-    spec_within = gs.GridSpecFromSubplotSpec(4, 4, subplot_spec=spec[:, -1], wspace=0.025, hspace=0.05)
+    spec_within = gs.GridSpecFromSubplotSpec(
+        4, 4, subplot_spec=spec[:, -1], wspace=0.025, hspace=0.05
+    )
     ax_poincare = fig.add_subplot(spec_within[1:4, 0:3])
     ax_marg_x = fig.add_subplot(spec_within[0, 0:3])
     ax_marg_x.set_title("Poincaré Plot")
@@ -135,7 +137,7 @@ def _hrv_plot(peaks, out, sampling_rate=1000, **kwargs):
 
     # Distribution of RR intervals
     peaks = _hrv_sanitize_input(peaks)
-    rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
     ax_distrib = summary_plot(rri, ax=ax_distrib, **kwargs)
 
     # Poincare plot

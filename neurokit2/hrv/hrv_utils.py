@@ -10,7 +10,7 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, **kwargs):
     rri = np.diff(peaks) / sampling_rate * 1000
 
     if interpolate is False:
-        return rri
+        sampling_rate = None
 
     else:
 
@@ -27,7 +27,7 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, **kwargs):
             x_new=np.arange(desired_length),
             **kwargs
         )
-        return rri, sampling_rate
+    return rri, sampling_rate
 
 
 def _hrv_sanitize_input(peaks=None):
@@ -42,16 +42,20 @@ def _hrv_sanitize_input(peaks=None):
     if peaks is not None:
         if isinstance(peaks, tuple):
             if any(np.diff(peaks[0]) < 0):  # not continuously increasing
-                raise ValueError("NeuroKit error: _hrv_sanitize_input(): " +
-                                 "The peak indices passed were detected as non-consecutive. You might have passed RR " +
-                                 "intervals instead of peaks. If so, convert RRIs into peaks using " +
-                                 "nk.intervals_to_peaks().")
+                raise ValueError(
+                    "NeuroKit error: _hrv_sanitize_input(): "
+                    + "The peak indices passed were detected as non-consecutive. You might have passed RR "
+                    + "intervals instead of peaks. If so, convert RRIs into peaks using "
+                    + "nk.intervals_to_peaks()."
+                )
         else:
             if any(np.diff(peaks) < 0):
-                raise ValueError("NeuroKit error: _hrv_sanitize_input(): " +
-                                 "The peak indices passed were detected as non-consecutive. You might have passed RR " +
-                                 "intervals instead of peaks. If so, convert RRIs into peaks using " +
-                                 "nk.intervals_to_peaks().")
+                raise ValueError(
+                    "NeuroKit error: _hrv_sanitize_input(): "
+                    + "The peak indices passed were detected as non-consecutive. You might have passed RR "
+                    + "intervals instead of peaks. If so, convert RRIs into peaks using "
+                    + "nk.intervals_to_peaks()."
+                )
 
     return peaks
 
@@ -63,7 +67,7 @@ def _hrv_sanitize_tuple(peaks):
 
     # Get sampling rate
     info = [i for i in peaks if isinstance(i, dict)]
-    sampling_rate = info[0]['sampling_rate']
+    sampling_rate = info[0]["sampling_rate"]
 
     # Get peaks
     if isinstance(peaks[0], (dict, pd.DataFrame)):
@@ -86,8 +90,8 @@ def _hrv_sanitize_dict_or_df(peaks):
     # Get columns
     if isinstance(peaks, dict):
         cols = np.array(list(peaks.keys()))
-        if 'sampling_rate' in cols:
-            sampling_rate = peaks['sampling_rate']
+        if "sampling_rate" in cols:
+            sampling_rate = peaks["sampling_rate"]
         else:
             sampling_rate = None
     elif isinstance(peaks, pd.DataFrame):
