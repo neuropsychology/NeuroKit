@@ -24,7 +24,9 @@ def complexity_rr(signal):
     >>> import neurokit2 as nk
     >>>
     >>> signal = [1, 2, 3, 4, 5]
-    >>> nk.complexity_rr(signal)
+    >>> rr, _ = nk.complexity_rr(signal)
+    >>> rr
+
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
@@ -36,4 +38,4 @@ def complexity_rr(signal):
     acov = acov["ACov"][0:2]  # Extract cov at lag 0 and 1
 
     # RR formula
-    return 2 * (1 - acov[1] / acov[0])
+    return 2 * (1 - acov[1] / acov[0]), {"ACov": acov["ACov"]}

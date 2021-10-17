@@ -55,6 +55,7 @@ def hrv_rqa(
     References
     ----------
     - Zimatore, G., Falcioni, L., Gallotta, M. C., Bonavolontà, V., Campanella, M., De Spirito, M., ... & Baldari, C. (2021). Recurrence quantification analysis of heart rate variability to detect both ventilatory thresholds. PloS one, 16(10), e0249504.
+    - Ding, H., Crozier, S., & Wilson, S. (2008). Optimization of Euclidean distance threshold in the application of recurrence quantification analysis to heart rate variability studies. Chaos, Solitons & Fractals, 38(5), 1457-1467.
 
     Examples
     --------

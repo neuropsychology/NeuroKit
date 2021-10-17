@@ -35,7 +35,7 @@ def complexity_lempelziv(signal, method="median", normalize=True):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=10)
+    >>> signal = nk.signal_simulate(duration=10, frequency=5, noise=10)
     >>>
     >>> lzc, info = nk.complexity_lempelziv(signal, method="median")
     >>> lzc #doctest: +SKIP
@@ -79,45 +79,38 @@ def complexity_lempelziv(signal, method="median", normalize=True):
 
 def _complexity_lempelziv(sequence, normalize=True):
 
-    # pre-set variables
-    complexity = 1
+    # Convert to string (faster)
+    string = "".join(list(sequence.astype(str)))
+
+    # Initialize variables
     n = len(sequence)
-    pointer = 0
-    current_prefix_len = 1
-    current_substring_len = 1
-    final_substring_len = 1
+    u, v, w = 0, 1, 1
+    v_max = 1
+    complexity = 1
 
-    # iterate over sequence
-    while current_prefix_len + current_substring_len <= n:
-        if (
-            sequence[pointer + current_substring_len - 1]
-            == sequence[current_prefix_len + current_substring_len - 1]
-        ):
-            current_substring_len += 1
-        else:
-            final_substring_len = max(current_substring_len, final_substring_len)
-            pointer += 1
-            if pointer == current_prefix_len:
+    while True:
+        if string[u + v - 1] == string[w + v - 1]:
+            v += 1
+            if w + v >= n:
                 complexity += 1
-                current_prefix_len = current_prefix_len + final_substring_len
-                current_substring_len = 1
-                pointer = 0
-                final_substring_len = 1
+                break
+        else:
+            if v > v_max:
+                v_max = v
+            u += 1
+            if u == w:
+                complexity += 1
+                w += v_max
+                if w > n:
+                    break
+                else:
+                    u = 0
+                    v = 1
+                    v_max = 1
             else:
-                current_substring_len = 1
-
-    if current_substring_len != 1:
-        complexity += 1
+                v = 1
 
     if normalize is True:
-        complexity = _complexity_lempelziv_normalize(sequence, complexity)
+        complexity /= n / np.log2(n)
 
     return complexity
-
-
-def _complexity_lempelziv_normalize(sequence, complexity):
-
-    n = len(sequence)
-    upper_bound = n / np.log2(n)
-
-    return complexity / upper_bound
