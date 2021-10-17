@@ -38,4 +38,4 @@ def complexity_rr(signal):
     acov = acov["ACov"][0:2]  # Extract cov at lag 0 and 1
 
     # RR formula
-    return 2 * (1 - acov[1] / acov[0]), {"ACov": acov["ACov"]}
+    return 2 * (1 - acov[1] / acov[0]), {"ACov": acov}
