@@ -113,11 +113,7 @@ def _get_embedded(
 # =============================================================================
 def _get_count(embedded, r, distance="chebyshev"):
 
-    if distance == "chebyshev":
-        kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
-        count = kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
-
-    elif distance == "range":
+    if distance == "range":
         # internal function for distrange
         def distrange(x, y):
             numerator = np.max(np.abs(x - y), axis=1) - np.min(np.abs(x - y), axis=1)
@@ -129,6 +125,11 @@ def _get_count(embedded, r, distance="chebyshev"):
         count = np.zeros(len(embedded))
         for i in range(len(embedded)):
             count[i] = np.sum(distrange(embedded, embedded[i]) < r)
+
+    else:  # chebyshev and other sklearn methods
+        kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
+        count = kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
+
 
     return count
 
