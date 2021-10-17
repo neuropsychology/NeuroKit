@@ -5,7 +5,7 @@ import pandas as pd
 from .optim_complexity_r import complexity_r
 
 
-def complexity_rqa(signal, dimension=3, delay=1, r="default", show=False):
+def complexity_rqa(signal, dimension=3, delay=1, r="default", linelength=2, show=False):
     """Recurrence quantification analysis (RQA)
 
     A recurrence plot is based on a phase-space (time-delay embedding) representation of a signal, and is a 2D depiction  of when a system revisits a state that is has been in the past.
@@ -22,9 +22,9 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", show=False):
 
     - Recurrence rate (RR): Proportion of points that are labelled as recurrences. Depends on the
     radius r.
-    - Determinism (DET)
+    - Determinism (DET): Proportion of recurrence points which form diagonal lines. Indicates autocorrelation.
     - Divergence (DIV)
-    - Laminarity (LAM)
+    - Laminarity (LAM): Proportion of recurrence points which form vertical lines. Indicates the amount of laminar phases (intermittency).
     - Trapping Time (TT)
     - Ratio determinism / recurrence rate (DET_RR)
     - Ratio laminarity / determinism (LAM_DET)
@@ -51,7 +51,11 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", show=False):
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     r : float
-        Tolerance (similarity threshold). The radius used for detecting neighbours. A rule of thumb is to set r so that the percentage of points classified as recurrences (``info['RecurrenceRate']``) is about 2-5%.
+        Tolerance (similarity threshold). The radius used for detecting neighbours. A rule of thumb is to
+        set r so that the percentage of points classified as recurrences (``info['RecurrenceRate']``) is
+        about 2-5%.
+    linelength : int
+        Minimum length of a diagonal and vertical lines. Default to 2.
 
     Examples
     ----------
@@ -105,6 +109,11 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", show=False):
 
     # RQA features
     rqa = pyrqa.computation.RQAComputation.create(settings, verbose=False).run()
+
+    # Minimum line lengths
+    rqa.min_diagonal_line_length = linelength
+    rqa.min_vertical_line_length = linelength
+    rqa.min_white_vertical_line_length = linelength
 
     results = {
         "RecurrenceRate": rqa.recurrence_rate,

@@ -7,10 +7,18 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import (complexity_lempelziv, entropy_approximate,
-                          entropy_fuzzy, entropy_multiscale, entropy_sample,
-                          entropy_shannon, fractal_correlation, fractal_dfa,
-                          fractal_higuchi, fractal_katz)
+from ..complexity import (
+    complexity_lempelziv,
+    entropy_approximate,
+    entropy_fuzzy,
+    entropy_multiscale,
+    entropy_sample,
+    entropy_shannon,
+    fractal_correlation,
+    fractal_dfa,
+    fractal_higuchi,
+    fractal_katz,
+)
 from ..misc import NeuroKitWarning, find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
@@ -19,7 +27,7 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
-     See references for details.
+    See `Pham et al. (2021) <https://www.mdpi.com/1424-8220/21/12/3998>`_ and `Lau et al. (2021) <https://psyarxiv.com/f8k3x/>`_.
 
     Parameters
     ----------
@@ -196,6 +204,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     References
     ----------
+    - Pham, T., Lau, Z. J., Chen, S. H., & Makowski, D. (2021). Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
+
     - Yan, C., Li, P., Ji, L., Yao, L., Karmakar, C., & Liu, C. (2017). Area asymmetry of heart
     rate variability signal. Biomedical engineering online, 16(1), 112.
 
@@ -444,8 +454,8 @@ def _hrv_nonlinear_fragmentation(rri, out):
 # =============================================================================
 def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
 
-    if 'dfa_windows' in kwargs:
-        dfa_windows = kwargs['dfa_windows']
+    if "dfa_windows" in kwargs:
+        dfa_windows = kwargs["dfa_windows"]
     else:
         dfa_windows = [(4, 11), (12, None)]
 
@@ -468,41 +478,40 @@ def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
     # For monofractal
     out["DFA_alpha1"] = fractal_dfa(rri, multifractal=False, windows=short_window, **kwargs)[0]
     # For multifractal
-    mdfa_alpha1 = fractal_dfa(rri,
-                              multifractal=True,
-                              q=np.arange(-5, 6),
-                              windows=short_window, **kwargs)[1]
-    out["DFA_alpha1_ExpRange"] = mdfa_alpha1['ExpRange']
-    out["DFA_alpha1_ExpMean"] = mdfa_alpha1['ExpMean']
-    out["DFA_alpha1_DimRange"] = mdfa_alpha1['DimRange']
-    out["DFA_alpha1_DimMean"] = mdfa_alpha1['DimMean']
+    mdfa_alpha1 = fractal_dfa(
+        rri, multifractal=True, q=np.arange(-5, 6), windows=short_window, **kwargs
+    )[1]
+    out["DFA_alpha1_ExpRange"] = mdfa_alpha1["ExpRange"]
+    out["DFA_alpha1_ExpMean"] = mdfa_alpha1["ExpMean"]
+    out["DFA_alpha1_DimRange"] = mdfa_alpha1["DimRange"]
+    out["DFA_alpha1_DimMean"] = mdfa_alpha1["DimMean"]
 
     # Compute DFA alpha2
     # sanatize max_beats
     if max_beats < dfa_windows[1][0] + 1:
         warn(
-                "DFA_alpha2 related indices will not be calculated. "
-                "The maximum duration of the windows provided for the long-term correlation is smaller "
-                "than the minimum duration of windows. Refer to the `windows` argument in `nk.fractal_dfa()` "
-                "for more information.",
-                category=NeuroKitWarning
-            )
+            "DFA_alpha2 related indices will not be calculated. "
+            "The maximum duration of the windows provided for the long-term correlation is smaller "
+            "than the minimum duration of windows. Refer to the `windows` argument in `nk.fractal_dfa()` "
+            "for more information.",
+            category=NeuroKitWarning,
+        )
         return out
     else:
         long_window = np.linspace(dfa_windows[1][0], int(max_beats), n_windows_long).astype(int)
         # For monofractal
         out["DFA_alpha2"] = fractal_dfa(rri, multifractal=False, windows=long_window, **kwargs)[0]
         # For multifractal
-        mdfa_alpha2 = fractal_dfa(rri,
-                                  multifractal=True,
-                                  q=np.arange(-5, 6),
-                                  windows=long_window, **kwargs)[1]
-        out["DFA_alpha2_ExpRange"] = mdfa_alpha2['ExpRange']
-        out["DFA_alpha2_ExpMean"] = mdfa_alpha2['ExpMean']
-        out["DFA_alpha2_DimRange"] = mdfa_alpha2['DimRange']
-        out["DFA_alpha2_DimMean"] = mdfa_alpha2['DimMean']
+        mdfa_alpha2 = fractal_dfa(
+            rri, multifractal=True, q=np.arange(-5, 6), windows=long_window, **kwargs
+        )[1]
+        out["DFA_alpha2_ExpRange"] = mdfa_alpha2["ExpRange"]
+        out["DFA_alpha2_ExpMean"] = mdfa_alpha2["ExpMean"]
+        out["DFA_alpha2_DimRange"] = mdfa_alpha2["DimRange"]
+        out["DFA_alpha2_DimMean"] = mdfa_alpha2["DimMean"]
 
     return out
+
 
 # =============================================================================
 # Plot
@@ -555,7 +564,9 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     ax.imshow(np.rot90(f), extent=[ax1_min, ax1_max, ax2_min, ax2_max], aspect="auto")
 
     # Marginal densities
-    ax_marg_x.hist(ax1, bins=int(len(ax1) / 10), density=True, alpha=1, color="#ccdff0", edgecolor="none")
+    ax_marg_x.hist(
+        ax1, bins=int(len(ax1) / 10), density=True, alpha=1, color="#ccdff0", edgecolor="none"
+    )
     ax_marg_y.hist(
         ax2,
         bins=int(len(ax2) / 10),
@@ -574,7 +585,9 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     kde2 = scipy.stats.gaussian_kde(ax2)
     x2_plot = np.linspace(ax2_min, ax2_max, len(ax2))
     x2_dens = kde2.evaluate(x2_plot)
-    ax_marg_y.fill_betweenx(x2_plot, x2_dens, facecolor="none", edgecolor="#1b6aaf", linewidth=2, alpha=0.8, zorder=2)
+    ax_marg_y.fill_betweenx(
+        x2_plot, x2_dens, facecolor="none", edgecolor="#1b6aaf", linewidth=2, alpha=0.8, zorder=2
+    )
 
     # Turn off marginal axes labels
     ax_marg_x.axis("off")
@@ -585,7 +598,9 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     width = 2 * sd2 + 1
     height = 2 * sd1 + 1
     xy = (mean_heart_period, mean_heart_period)
-    ellipse = matplotlib.patches.Ellipse(xy=xy, width=width, height=height, angle=angle, linewidth=2, fill=False)
+    ellipse = matplotlib.patches.Ellipse(
+        xy=xy, width=width, height=height, angle=angle, linewidth=2, fill=False
+    )
     ellipse.set_alpha(0.5)
     ellipse.set_facecolor("#2196F3")
     ax.add_patch(ellipse)
