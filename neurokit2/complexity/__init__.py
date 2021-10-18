@@ -72,6 +72,7 @@ __all__ = [
     "complexity_hurst",
     "complexity_r",
     "complexity_lempelziv",
+    "complexity_lyapunov",
     "complexity_mfdfa",
     "complexity_cd",
     "complexity_plot",
