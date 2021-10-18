@@ -7,6 +7,7 @@ from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_rqa import complexity_rqa
 from .complexity_rr import complexity_rr
+from .complexity_lyapunov import complexity_lyapunov
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
 from .entropy_cumulative_residual import entropy_cumulative_residual

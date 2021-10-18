@@ -10,17 +10,12 @@ from .complexity_embedding import complexity_embedding
 from ..signal import signal_autocor
 
 
-def _complexity_lyapunov_r(
+def complexity_lyapunov(
     signal,
     delay=1,
     dimension=2,
-    tau=1,
-    min_neighbors=20,
-    fit="RANSAC",
-    debug_plot=False,
-    debug_data=False,
-    plot_file=None,
-    fit_offset=0,
+    trajectory_len=20,
+    min_tsep=None,
     **kwargs,
 ):
     """Lyapunov Exponents (LE) describe the rate of exponential separation (convergence or divergence)
@@ -46,12 +41,15 @@ def _complexity_lyapunov_r(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
+    >>>
     >>> delay = 1; dimension = 2; complexity_embedding = nk.complexity_embedding; NeuroKitWarning=RuntimeWarning
 
     """
-    
-    # convert data to float to avoid overflow errors in rowwise_euclidean
-    signal = np.asarray(signal, dtype=float)
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
 
     # Parameters
     n = len(signal)
@@ -64,75 +62,52 @@ def _complexity_lyapunov_r(
     _complexity_lyapunov_checklength(n, delay, dimension, min_tsep, trajectory_len)
 
     # Delay embedding
+    if delay is None:
+        delay = _complexity_lyapunov_delay(signal)
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     m = len(embedded)
 
     # construct matrix with pairwise distances between vectors in orbit
     dists = sklearn.metrics.pairwise.euclidean_distances(embedded)
 
-    # # we do not want to consider vectors as neighbor that are less than min_tsep
-    # # time steps together => mask the distances min_tsep to the right and left of
-    # # each index by setting them to infinity (will never be considered as nearest
-    # # neighbors)
-    # for i in range(m):
-    #     dists[i, max(0, i - min_tsep) : i + min_tsep + 1] = np.inf
-    # # check that we have enough data points to continue
-    # ntraj = m - trajectory_len + 1
-    # min_traj = min_tsep * 2 + 2  # in each row min_tsep + 1 disances are inf
-    # if ntraj <= 0:
-    #     msg = (
-    #         "Not enough data points. Need {} additional data points to follow "
-    #         + "a complete trajectory."
-    #     )
-    #     raise ValueError(msg.format(-ntraj + 1))
-    # if ntraj < min_traj:
-    #     # not enough data points => there are rows where all values are inf
-    #     assert np.any(np.all(np.isinf(dists[:ntraj, :ntraj]), axis=1))
-    #     msg = (
-    #         "Not enough data points. At least {} trajectories are required "
-    #         + "to find a valid neighbor for each orbit vector with min_tsep={} "
-    #         + "but only {} could be created."
-    #     )
-    #     raise ValueError(msg.format(min_traj, min_tsep, ntraj))
-    # assert np.all(np.any(np.isfinite(dists[:ntraj, :ntraj]), axis=1))
-    # # find nearest neighbors (exclude last columns, because these vectors cannot
-    # # be followed in time for trajectory_len steps)
-    # nb_idx = np.argmin(dists[:ntraj, :ntraj], axis=1)
+    # Find points w/ temporal separation greater than 1 mean period
+    # if min_tsep is None:
+    #     # Temporal sep > mean period (computed as reciprocal of mean frequency of the power spectrum)        
+    #     min_tsep = 1 / nk.signal_psd(signal, sampling_rate=100, method="fft")['Frequency'].mean()
+    # min_tsep = int(min_tsep * sampling_rate)
 
-    # # build divergence trajectory by averaging distances along the trajectory
-    # # over all neighbor pairs
-    # div_traj = np.zeros(trajectory_len, dtype=float)
-    # for k in range(trajectory_len):
-    #     # calculate mean trajectory distance at step k
-    #     indices = (np.arange(ntraj) + k, nb_idx + k)
-    #     div_traj_k = dists[indices]
-    #     # filter entries where distance is zero (would lead to -inf after log)
-    #     nonzero = np.where(div_traj_k != 0)
-    #     if len(nonzero[0]) == 0:
-    #         # if all entries where zero, we have to use -inf
-    #         div_traj[k] = -np.inf
-    #     else:
-    #         div_traj[k] = np.mean(np.log(div_traj_k[nonzero]))
-    # # filter -inf entries from mean trajectory
-    # ks = np.arange(trajectory_len)
-    # finite = np.where(np.isfinite(div_traj))
-    # ks = ks[finite]
-    # div_traj = div_traj[finite]
-    # if len(ks) < 1:
-    #     # if all points or all but one point in the trajectory is -inf, we cannot
-    #     # fit a line through the remaining points => return -inf as exponent
-    #     poly = [-np.inf, 0]
-    # else:
-    #     # normal line fitting
-    #     poly = poly_fit(ks[fit_offset:], div_traj[fit_offset:], 1, fit=fit)
-    # if debug_plot:
-    #     plot_reg(ks[fit_offset:], div_traj[fit_offset:], poly, "k", "log(d(k))", fname=plot_file)
-    # le = poly[0] / tau
-    # if debug_data:
-    #     return (le, (ks, div_traj, poly))
-    # else:
-    #     return le
+    min_dist = np.zeros(m)
+    min_dist_indices = np.zeros(m)
+    for i in range(m):
+        dists[i, max(0, i - min_tsep) : i + min_tsep + 1] = np.inf
+        # Get distance of each vector and its nearest neighbour vector
+        min_dist[i] = np.min(dists[i])
 
+    # Find indices of nearest neighbours
+    ntraj = m - trajectory_len + 1
+    min_dist_indices = np.argmin(dists[:ntraj, :ntraj], axis=1)  # exclude last few indices
+    min_dist_indices = min_dist_indices.astype(int)
+
+    # Follow trajectories of neighbour pairs for trajectory_len data points
+    trajectories = np.zeros(trajectory_len)
+    dj_i = dists[(np.arange(ntraj), min_dist_indices)]  # initial distances of neighbors
+
+    for k in range(trajectory_len):
+        dj_ik = dists[(np.arange(ntraj) + k, min_dist_indices + k)]
+        divergence = dj_ik / dj_i
+        dist_nonzero = np.where(divergence != 0)[0]
+        if len(dist_nonzero) == 0:
+            trajectories[k] = -np.inf
+        else:
+            # Get average distances of neighbour pairs along the trajectory
+            trajectories[k] = np.mean(np.log(divergence[dist_nonzero]))
+        
+    divergence_rate = trajectories[np.isfinite(trajectories)]
+
+    # LLE obtained by least-squares fit to average line
+    slope, _ = np.polyfit(np.arange(1, len(divergence_rate) + 1), divergence_rate, 1)
+
+    return slope
 
 # =============================================================================
 # Utilities
