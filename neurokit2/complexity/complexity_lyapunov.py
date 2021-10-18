@@ -9,6 +9,7 @@ from ..misc import NeuroKitWarning
 from .complexity_embedding import complexity_embedding
 from ..signal import signal_autocor
 
+
 def _complexity_lyapunov_r(
     signal,
     delay=1,
@@ -48,6 +49,7 @@ def _complexity_lyapunov_r(
     >>> delay = 1; dimension = 2; complexity_embedding = nk.complexity_embedding; NeuroKitWarning=RuntimeWarning
 
     """
+    
     # convert data to float to avoid overflow errors in rowwise_euclidean
     signal = np.asarray(signal, dtype=float)
 
@@ -146,7 +148,7 @@ def _complexity_lyapunov_delay(signal):
     # not sure if this is better to be in `optim_complexity_delay` or if this is specific
     # only for lyapunov
     threshold = 1 - 1 / np.e
-    delay = np.where(signal_autocor(signal)[0] < threshold)[0][0]
+    delay = np.where(signal_autocor(signal, method='fft')[0] < threshold)[0][0]
 
     return delay
 
