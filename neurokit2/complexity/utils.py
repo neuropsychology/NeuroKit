@@ -86,10 +86,10 @@ def _get_embedded(
     ...                                 distance='chebyshev', approximate=False)
     """
     # Sanity checks
-    if distance not in sklearn.neighbors.KDTree.valid_metrics:
+    if distance not in sklearn.neighbors.KDTree.valid_metrics + ['range']:
         raise ValueError(
             "NeuroKit error: _get_embedded(): The given metric (%s) is not valid."
-            "The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics)
+            "The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics +  ['range'])
         )
 
     # Get embedded
