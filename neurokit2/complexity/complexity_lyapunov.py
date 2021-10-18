@@ -7,7 +7,7 @@ import sklearn.metrics.pairwise
 
 from ..misc import NeuroKitWarning
 from .complexity_embedding import complexity_embedding
-
+from ..signal import signal_autocor
 
 def _complexity_lyapunov_r(
     signal,
@@ -22,7 +22,10 @@ def _complexity_lyapunov_r(
     fit_offset=0,
     **kwargs,
 ):
-    """Lyapunov Exponent
+    """Lyapunov Exponents (LE) describe the rate of exponential separation (convergence or divergence)
+    of nearby trajectories of a dynamical system. A system can have multiple LEs, equal to the number
+    of the dimensionality of the phase space, and the largest LE value, `L1` is often used to determine
+    the overall predictability of the dynamical system.
 
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
@@ -132,6 +135,22 @@ def _complexity_lyapunov_r(
 # =============================================================================
 # Utilities
 # =============================================================================
+def _complexity_lyapunov_delay(signal):
+    """Compute optimal lag as the point where the autocorrelation function drops
+    to (1 − 1 / e) of its initial value, according to Rosenstein et al. (1993).
+    
+    Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993).
+    A practical method for calculating largest Lyapunov exponents from small data sets.
+    Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
+    """
+    # not sure if this is better to be in `optim_complexity_delay` or if this is specific
+    # only for lyapunov
+    threshold = 1 - 1 / np.e
+    delay = np.where(signal_autocor(signal)[0] < threshold)[0][0]
+
+    return delay
+
+
 def _complexity_lyapunov_separation(signal, min_tsep="default"):
     """Minimum temporal separation between two neighbors.
 
