@@ -23,6 +23,16 @@ def complexity_lyapunov(
     of the dimensionality of the phase space, and the largest LE value, `L1` is often used to determine
     the overall predictability of the dynamical system.
 
+    Different algorithms:
+
+    - Rosenstein et al.'s (1993) algorithm was designed for calculating LLEs from small datasets.
+      The time series is first reconstructed using a delay-embedding method, and the closest neighbour
+      of each vector is computed using the euclidean distance. These two neighbouring points are then
+      tracked along their distance trajectories for a number of data points. The slope of the line
+      using a least-squares fit of the mean log trajectory of the distances gives the final LLE.
+
+    Parameters
+    ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int, None
@@ -88,9 +98,6 @@ def complexity_lyapunov(
 
     # construct matrix with pairwise distances between vectors in orbit
     dists = sklearn.metrics.pairwise.euclidean_distances(embedded)
-
-    min_dist = np.zeros(m)
-    min_dist_indices = np.zeros(m)
     for i in range(m):
         # Exclude indices within min_tsep
         dists[i, max(0, i - min_tsep) : i + min_tsep + 1] = np.inf
@@ -110,7 +117,7 @@ def complexity_lyapunov(
         else:
             # Get average distances of neighbour pairs along the trajectory
             trajectories[k] = np.mean(np.log(divergence[dist_nonzero]))
-        
+
     divergence_rate = trajectories[np.isfinite(trajectories)]
 
     # LLE obtained by least-squares fit to average line
@@ -128,6 +135,14 @@ def _complexity_lyapunov_delay(signal):
     """
     # not sure if this is better to be in `optim_complexity_delay` or if this is specific
     # only for lyapunov
+
+    # From `nolds`
+    # f = np.fft.rfft(data, n * 2 - 1)
+    # acorr = np.fft.irfft(f * np.conj(f))
+    # acorr = np.roll(acorr, n - 1)
+    # eps = acorr[n - 1] * (1 - 1.0 / np.e)
+    # lag = 1
+
     threshold = 1 - 1 / np.e
     delay = np.where(signal_autocor(signal, method='fft')[0] < threshold)[0][0]
 
