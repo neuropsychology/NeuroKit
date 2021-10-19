@@ -14,8 +14,11 @@ def complexity_lyapunov(
     signal,
     delay=1,
     dimension=2,
+    method='rosenstein1993',
     len_trajectory=20,
     min_tsep=None,
+    matrix_dim=4,
+    min_neighbors="default",
     **kwargs,
 ):
     """Lyapunov Exponents (LE) describe the rate of exponential separation (convergence or divergence)
@@ -31,6 +34,10 @@ def complexity_lyapunov(
       tracked along their distance trajectories for a number of data points. The slope of the line
       using a least-squares fit of the mean log trajectory of the distances gives the final LLE.
 
+    - Eckmann et al. (1996) computes LEs by first reconstructing the time series using a
+      delay-embedding method, and obtains the tangent that maps to the reconstructed dynamics using
+      a least-squares fit, where the LEs are deduced from the tangent maps.
+
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
@@ -39,24 +46,35 @@ def complexity_lyapunov(
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
         to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
-        If None, the delay is set to distance where the autocorrelation function drops below 1 - 1/e times
-        its original value.
+        If None for 'rosenstein1993', the delay is set to distance where the
+        autocorrelation function drops below 1 - 1/e times its original value.
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        If method is 'eckmann1996', large values for dimension are recommended.
+    method : str
+        The method that defines the algorithm for computing LE. Can be one of 'rosenstein1993' or
+        'eckmann1996'.
     len_trajectory : int
-        The number of data points in which neighbouring trajectories are followed.
-    min_tsep : int, bool
+        The number of data points in which neighbouring trajectories are followed. Only relevant if
+        method is 'rosenstein1993'.
+    min_tsep : int, None
         Minimum temporal separation between two neighbors. If None (default), `min_tsep` is set to the mean
         period of the signal obtained by computing the mean frequency using the fast fourier transform.
+    matrix_dim : int
+        Correponds to the number of LEs to return for 'eckmann1996'.
+    min_neighbors : int, str
+        Minimum number of neighbors for 'eckmann1996'. If "default", min(2 * matrix_dim, matrix_dim + 4)
+        is used.
     **kwargs : optional
         Other arguments.
 
     Returns
     --------
     l1 : float
-        An estimate of the largest Lyapunov exponent (LLE).
+        An estimate of the largest Lyapunov exponent (LLE) if method is 'rosenstein1993', and
+        an array of LEs if 'eckmann1996'.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute LLE.
@@ -75,26 +93,54 @@ def complexity_lyapunov(
     for calculating largest Lyapunov exponents from small data sets.
     Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
 
+    - Eckmann, J. P., Kamphorst, S. O., Ruelle, D., & Ciliberto, S. (1986). Liapunov
+    exponents from time series. Physical Review A, 34(6), 4971.
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError(
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
-    n = len(signal)
+
+    # If default min_tsep
+    if min_tsep is None:
+        min_tsep = _complexity_lyapunov_separation(signal, **kwargs)
+
+    # Method
+    method = method.lower()
+    if method in ["rosenstein", "rosenstein1993"]:
+        le, parameters = _complexity_lyapunov_rosenstein(signal, delay, dimension,
+                                                         min_tsep, len_trajectory,
+                                                         **kwargs)
+    elif method in ["eckmann", "eckmann1996"]:
+        le, parameters = _complexity_lyapunov_eckmann(signal, delay, dimension, min_tsep,
+                                                      matrix_dim, min_neighbors)
+
+    # Store params
+    info = {"Dimension": dimension, "Delay": delay,
+            "Minimum Separation": min_tsep, "Method": method}
+    info.update(parameters)
+
+    return le, info
+
+# =============================================================================
+# Methods
+# =============================================================================
+
+def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, min_tsep=None,
+                                    len_trajectory=20, **kwargs):
 
     # If default min_tsep (kwargs: min_tsep="default")
     min_tsep = _complexity_lyapunov_separation(signal, **kwargs)
 
     # Check that sufficient data points are available
-    _complexity_lyapunov_checklength(n, delay, dimension, min_tsep, len_trajectory)
+    _complexity_lyapunov_checklength(len(signal), delay, dimension, min_tsep, len_trajectory)
 
     # Delay embedding
     if delay is None:
         delay = _complexity_lyapunov_delay(signal)
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     m = len(embedded)
-    info = {"Dimension": dimension, "Delay": delay, "Minimum Separation": min_tsep}
 
     # construct matrix with pairwise distances between vectors in orbit
     dists = sklearn.metrics.pairwise.euclidean_distances(embedded)
@@ -123,11 +169,90 @@ def complexity_lyapunov(
     # LLE obtained by least-squares fit to average line
     slope, _ = np.polyfit(np.arange(1, len(divergence_rate) + 1), divergence_rate, 1)
 
-    return slope, info
+    parameters = {"Trajectory Length": len_trajectory}
+
+    return slope, parameters
+
+
+def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, min_tsep=None,
+                                 matrix_dim=4, min_neighbors="default"):
+    """
+    From https://github.com/CSchoel/nolds
+    """
+    # Prepare parameters
+    if min_neighbors == "default":
+        min_neighbors = min(2 * matrix_dim, matrix_dim + 4)
+    m = (dimension - 1) // (matrix_dim - 1)
+
+    # Storing of LEs
+    lexp = np.zeros(matrix_dim)
+    lexp_counts = np.zeros(matrix_dim)
+    old_Q = np.identity(matrix_dim)
+
+    # Reconstruction using time-delay method
+    embedded = complexity_embedding(signal[:-m], delay=delay, dimension=dimension)  
+    distances = sklearn.metrics.pairwise_distances(embedded, metric='chebyshev')
+
+    for i in range(len(embedded)):
+        # exclude difference of vector to itself and those too close in time
+        distances[i, max(0, i - min_tsep) : i + min_tsep + 1] = np.inf
+
+        # index of furthest nearest neighbour
+        neighbour_furthest = np.argsort(distances[i])[min_neighbors-1]
+
+        # get neighbors within the radius
+        r = distances[i][neighbour_furthest]
+        neighbors = np.where(distances[i] <= r)[0]  # should have length = min_neighbours
+
+        # Find matrix T_i (matrix_dim * matrix_dim) that sends points from neighbourhood of x(i) to x(i+1)
+        vec_beta = signal[neighbors + matrix_dim * m] - signal[i + matrix_dim * m]
+        matrix = np.array([signal[j : j + dimension : m] for j in neighbors])  # x(j)
+        matrix -= signal[i : i + dimension : m]  # x(j) - x(i)
+
+        # form matrix T_i
+        t_i = np.zeros((matrix_dim, matrix_dim))
+        t_i[:-1, 1:] = np.identity(matrix_dim - 1)
+        t_i[-1] = np.linalg.lstsq(matrix, vec_beta, rcond=-1)[0]  # least squares solution
+
+        # QR-decomposition of T * old_Q
+        mat_Q, mat_R = np.linalg.qr(np.dot(t_i, old_Q))
+
+        # force diagonal of R to be positive
+        sign_diag = np.sign(np.diag(mat_R))
+        sign_diag[np.where(sign_diag == 0)] = 1
+        sign_diag = np.diag(sign_diag)
+        mat_Q = np.dot(mat_Q, sign_diag)
+        mat_R = np.dot(sign_diag, mat_R)
+
+        old_Q = mat_Q
+        # successively build sum for Lyapunov exponents
+        diag_R = np.diag(mat_R)
+        # filter zeros in mat_R (would lead to -infs)
+        positive_elements = np.where(diag_R > 0)
+        lexp_i = np.zeros(len(diag_R))
+        lexp_i[positive_elements] = np.log(diag_R[positive_elements])
+        lexp_i[np.where(diag_R == 0)] = np.inf
+  
+        lexp[positive_elements] += lexp_i[positive_elements]
+        lexp_counts[positive_elements] += 1
+
+    # normalize exponents over number of individual mat_Rs
+    idx = np.where(lexp_counts > 0)
+    lexp[idx] /= lexp_counts[idx]
+    lexp[np.where(lexp_counts == 0)] = np.inf
+    # normalize with respect to tau
+    lexp /= delay
+    # take m into account
+    lexp /= m
+
+    parameters = {"Minimum Neighbors": min_neighbors}
+
+    return lexp, parameters
 
 # =============================================================================
 # Utilities
 # =============================================================================
+
 def _complexity_lyapunov_delay(signal):
     """Compute optimal lag as the point where the autocorrelation function drops
     to (1 − 1 / e) of its initial value, according to Rosenstein et al. (1993).
