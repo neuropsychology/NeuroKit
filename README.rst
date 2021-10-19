@@ -84,7 +84,7 @@ NeuroKit2 is the most `welcoming <https://github.com/neuropsychology/NeuroKit#po
 - `Contributing guide <https://neurokit2.readthedocs.io/en/latest/contributing/contributing.html>`_
 - `Ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/contributing/first_contribution.html>`_
 
-Also, if you have developped new signal processing methods or algorithms and you want to **increase its usage, popularity and citations**, get in touch with us to eventually add it to NeuroKit. A great opportunity for the users as well as the original developpers! 
+Also, if you have developped new signal processing methods or algorithms and you want to **increase its usage, popularity and citations**, get in touch with us to eventually add it to NeuroKit. A great opportunity for the users as well as the original developpers!
 
 
 Documentation
@@ -609,6 +609,14 @@ NeuroKit2 is one of the most welcoming package for new contributors and users, a
         :target: https://pypi.python.org/pypi/neurokit2
 
 
+Used at
+-------
+
+.. image:: https://cdn.freelogovectors.net/wp-content/uploads/2019/02/ntu_logo_nanyang_technological_university.png
+   :height: 200
+
+.. image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
+   :height: 200
 
 Notes
 -------
