@@ -612,9 +612,13 @@ NeuroKit2 is one of the most welcoming package for new contributors and users, a
 Used at
 -------
 
-.. image:: https://cdn.freelogovectors.net/wp-content/uploads/2019/02/ntu_logo_nanyang_technological_university.png
+|pic1| |pic2| |pic3|
+
+.. |pic1| image:: https://cdn.freelogovectors.net/wp-content/uploads/2019/02/ntu_logo_nanyang_technological_university.png
    :height: 50
-.. image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
+.. |pic2| image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
+   :height: 50
+.. |pic3| image:: https://study-eu.s3.amazonaws.com/uploads/university/universit--de-paris-logo.svg
    :height: 50
 
 Notes
