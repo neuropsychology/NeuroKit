@@ -612,14 +612,19 @@ NeuroKit2 is one of the most welcoming package for new contributors and users, a
 Used at
 -------
 
-|pic1| |pic2| |pic3|
+|ntu| |univ_duke| |univ_paris| |ntu_taiwan| |univ_pittsburh|
 
-.. |pic1| image:: https://cdn.freelogovectors.net/wp-content/uploads/2019/02/ntu_logo_nanyang_technological_university.png
-   :height: 50
-.. |pic2| image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
-   :height: 50
-.. |pic3| image:: https://study-eu.s3.amazonaws.com/uploads/university/universit--de-paris-logo.svg
-   :height: 50
+.. |ntu| image:: https://cdn.freelogovectors.net/wp-content/uploads/2019/02/ntu_logo_nanyang_technological_university.png
+   :height: 70
+.. |univ_duke| image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
+   :height: 70
+.. |univ_paris| image:: https://study-eu.s3.amazonaws.com/uploads/university/universit--de-paris-logo.svg
+   :height: 70
+.. |ntu_taiwan| image:: https://cdn.freelogovectors.net/wp-content/uploads/2021/04/national-taiwan-university-logo-freelogovectors.net_.png
+   :height: 70
+.. |univ_pittsburh| image:: https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/University_of_Pittsburgh_seal.svg/1200px-University_of_Pittsburgh_seal.svg.png
+   :height: 70
+
 
 Notes
 -------
