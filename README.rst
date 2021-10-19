@@ -613,9 +613,9 @@ Used at
 -------
 
 .. image:: https://cdn.freelogovectors.net/wp-content/uploads/2019/02/ntu_logo_nanyang_technological_university.png
-   :height: 100
+   :height: 50
 .. image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
-   :height: 100
+   :height: 50
 
 Notes
 -------
