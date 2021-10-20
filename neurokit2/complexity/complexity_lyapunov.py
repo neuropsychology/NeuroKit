@@ -270,15 +270,8 @@ def _complexity_lyapunov_delay(signal):
     # not sure if this is better to be in `optim_complexity_delay` or if this is specific
     # only for lyapunov
 
-    # From `nolds`
-    # f = np.fft.rfft(data, n * 2 - 1)
-    # acorr = np.fft.irfft(f * np.conj(f))
-    # acorr = np.roll(acorr, n - 1)
-    # eps = acorr[n - 1] * (1 - 1.0 / np.e)
-    # lag = 1
-
-    threshold = 1 - 1 / np.e
-    delay = np.where(signal_autocor(signal, method='fft')[0] < threshold)[0][0]
+    acorr = signal_autocor(signal, method='fft')[0]
+    delay = np.where(acorr < np.max(acorr) * (1 - 1.0 / np.e))[0][0]
 
     return delay
 
