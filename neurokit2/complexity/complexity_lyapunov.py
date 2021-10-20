@@ -133,13 +133,15 @@ def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, min_tsep=None,
     # If default min_tsep (kwargs: min_tsep="default")
     min_tsep = _complexity_lyapunov_separation(signal, **kwargs)
 
+    # Delay embedding
+    if delay is None:
+        delay = _complexity_lyapunov_delay(signal)
+
     # Check that sufficient data points are available
     _complexity_lyapunov_checklength(len(signal), delay, dimension, min_tsep,
                                      len_trajectory, method='rosenstein1993')
 
-    # Delay embedding
-    if delay is None:
-        delay = _complexity_lyapunov_delay(signal)
+    # Embed
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
     m = len(embedded)
 
@@ -296,12 +298,13 @@ def _complexity_lyapunov_separation(signal, min_tsep="default"):
     mf = np.mean(mf[1:]) / np.sum(np.abs(f[1:]))
     min_tsep = int(np.ceil(1.0 / mf))
     if min_tsep > max_tsep_factor * n:
+        set_min = int(max_tsep_factor * n)
         warn(
             f"Signal has a mean frequency too low for min_tsep={min_tsep}, " + 
-            f"setting min_tsep={int(max_tsep_factor * n)}",
+            f"setting min_tsep={set_min}",
             category=NeuroKitWarning,
         )
-        min_tsep = int(max_tsep_factor * n)
+        min_tsep = set_min
     return min_tsep
 
 
