@@ -134,7 +134,8 @@ def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, min_tsep=None,
     min_tsep = _complexity_lyapunov_separation(signal, **kwargs)
 
     # Check that sufficient data points are available
-    _complexity_lyapunov_checklength(len(signal), delay, dimension, min_tsep, len_trajectory)
+    _complexity_lyapunov_checklength(len(signal), delay, dimension, min_tsep,
+                                     len_trajectory, method='rosenstein1993')
 
     # Delay embedding
     if delay is None:
@@ -177,12 +178,19 @@ def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, min_tsep=None,
 def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, min_tsep=None,
                                  matrix_dim=4, min_neighbors="default"):
     """
+    TODO: check implementation
+
     From https://github.com/CSchoel/nolds
     """
     # Prepare parameters
     if min_neighbors == "default":
         min_neighbors = min(2 * matrix_dim, matrix_dim + 4)
     m = (dimension - 1) // (matrix_dim - 1)
+
+    # Check that sufficient data points are available
+    _complexity_lyapunov_checklength(len(signal), delay, dimension, min_tsep,
+                                     method='eckmann1996', matrix_dim=matrix_dim,
+                                     min_neighbors=min_neighbors)
 
     # Storing of LEs
     lexp = np.zeros(matrix_dim)
@@ -257,6 +265,7 @@ def _complexity_lyapunov_delay(signal):
     """Compute optimal lag as the point where the autocorrelation function drops
     to (1 − 1 / e) of its initial value, according to Rosenstein et al. (1993).
     
+    TODO: check discrepancy
     """
     # not sure if this is better to be in `optim_complexity_delay` or if this is specific
     # only for lyapunov
@@ -304,22 +313,42 @@ def _complexity_lyapunov_separation(signal, min_tsep="default"):
 
 
 def _complexity_lyapunov_checklength(
-    n, delay=1, dimension=2, min_tsep="default", len_trajectory=20
+    n, delay=1, dimension=2, min_tsep="default", len_trajectory=20,
+    method='rosenstein1993', matrix_dim=4, min_neighbors="default"
 ):
     """
     Helper function that calculates the minimum number of data points required.
     """
-    # minimum length required to find single orbit vector
-    min_len = (dimension - 1) * delay + 1
-    # we need len_trajectory orbit vectors to follow a complete trajectory
-    min_len += len_trajectory - 1
-    # we need min_tsep * 2 + 1 orbit vectors to find neighbors for each
-    min_len += min_tsep * 2 + 1
+    if method in ["rosenstein", "rosenstein1993"]:
+        # minimum length required to find single orbit vector
+        min_len = (dimension - 1) * delay + 1
+        # we need len_trajectory orbit vectors to follow a complete trajectory
+        min_len += len_trajectory - 1
+        # we need min_tsep * 2 + 1 orbit vectors to find neighbors for each
+        min_len += min_tsep * 2 + 1
+        # Sanity check
+        if n < min_len:
+            warn(
+                f"for dimension={dimension}, delay={delay}, min_tsep={min_tsep} and " +
+                f"len_trajectory={len_trajectory}, you need at least {min_len} datapoints in your time series.",
+                category=NeuroKitWarning,
+            )
 
-    # Sanity check
-    if n < min_len:
-        warn(
-            f"for dimension={dimension}, delay={delay}, min_tsep={min_tsep} and " +
-            f"len_trajectory={len_trajectory}, you need at least {min_len} datapoints in your time series",
-            category=NeuroKitWarning,
-        )
+    elif method in ["eckmann", "eckmann1996"]:
+        m = (dimension - 1) // (matrix_dim - 1)
+        # minimum length required to find single orbit vector
+        min_len = dimension
+        # we need to follow each starting point of an orbit vector for m more steps
+        min_len += m
+        # we need min_tsep * 2 + 1 orbit vectors to find neighbors for each
+        min_len += min_tsep * 2
+        # we need at least min_nb neighbors for each orbit vector
+        min_len += min_neighbors
+        # Sanity check
+        if n < min_len:
+            warn(
+                f"for dimension={dimension}, delay={delay}, min_tsep={min_tsep}, " +
+                f"matrix_dim={matrix_dim} and min_neighbors={min_neighbors}, " +
+                f"you need at least {min_len} datapoints in your time series.",
+                category=NeuroKitWarning,
+            )
