@@ -7,6 +7,7 @@ import sklearn.metrics.pairwise
 
 from ..misc import NeuroKitWarning
 from .complexity_embedding import complexity_embedding
+from .optim_complexity_delay import complexity_delay
 from ..signal import signal_autocor
 
 
@@ -135,7 +136,7 @@ def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, min_tsep=None,
 
     # Delay embedding
     if delay is None:
-        delay = _complexity_lyapunov_delay(signal)
+        delay = complexity_delay(signal, method='rosenstein1993', show=False)
 
     # Check that sufficient data points are available
     _complexity_lyapunov_checklength(len(signal), delay, dimension, min_tsep,
@@ -262,21 +263,6 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, min_tsep=None,
 # =============================================================================
 # Utilities
 # =============================================================================
-
-def _complexity_lyapunov_delay(signal):
-    """Compute optimal lag as the point where the autocorrelation function drops
-    to (1 − 1 / e) of its initial value, according to Rosenstein et al. (1993).
-    
-    TODO: check discrepancy
-    """
-    # not sure if this is better to be in `optim_complexity_delay` or if this is specific
-    # only for lyapunov
-
-    acorr = signal_autocor(signal, demean=False, method='fft')[0]
-    delay = np.where(acorr < np.max(acorr) * (1 - 1.0 / np.e))[0][0]
-
-    return delay
-
 
 def _complexity_lyapunov_separation(signal, min_tsep="default"):
     """Minimum temporal separation between two neighbors.
