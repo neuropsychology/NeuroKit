@@ -272,7 +272,7 @@ def _complexity_lyapunov_delay(signal):
     # not sure if this is better to be in `optim_complexity_delay` or if this is specific
     # only for lyapunov
 
-    acorr = signal_autocor(signal, method='fft')[0]
+    acorr = signal_autocor(signal, demean=False, method='fft')[0]
     delay = np.where(acorr < np.max(acorr) * (1 - 1.0 / np.e))[0][0]
 
     return delay

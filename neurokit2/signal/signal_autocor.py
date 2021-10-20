@@ -3,7 +3,7 @@ import scipy.stats
 from matplotlib import pyplot as plt
 
 
-def signal_autocor(signal, lag=None, method="correlation", show=False):
+def signal_autocor(signal, lag=None, demean=True, method="correlation", show=False):
     """Autocorrelation (ACF)
 
     Compute the autocorrelation of a signal.
@@ -14,6 +14,8 @@ def signal_autocor(signal, lag=None, method="correlation", show=False):
         Vector of values.
     lag : int
         Time lag. If specified, one value of autocorrelation between signal with its lag self will be returned.
+    demean : bool
+        If True, the mean of the signal will be subtracted from the signal before ACF computation.
     method : str
         Can be 'correlation' (using ``np.correlate``) or 'fft' (using FFT).
     show : bool
@@ -41,8 +43,10 @@ def signal_autocor(signal, lag=None, method="correlation", show=False):
 
     """
     n = len(signal)
+
     # Demean
-    signal = np.asarray(signal) - np.nanmean(signal)
+    if demean:
+        signal = np.asarray(signal) - np.nanmean(signal)
 
     if method.lower() == "correlation":
         acov = np.correlate(signal, signal, mode="full")
@@ -53,9 +57,6 @@ def signal_autocor(signal, lag=None, method="correlation", show=False):
         S = np.conj(A) * A
         c_fourier = np.fft.ifft(S)
         acov = c_fourier[: (c_fourier.size // 2) + 1].real
-
-    # Normalize
-    acov = acov / (n * np.ones(2 * n - 1)[n - 1 :])
 
     # Normalize
     r = acov / acov[0]
