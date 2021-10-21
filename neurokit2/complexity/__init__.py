@@ -25,6 +25,7 @@ from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
 from .fractal_katz import fractal_katz
 from .fractal_mandelbrot import fractal_mandelbrot
+from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
 from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
@@ -113,6 +114,7 @@ __all__ = [
     "fractal_sevcik",
     "fractal_mandelbrot",
     "fractal_mfdfa",
+    "fractal_nld",
     "mutual_information",
     "transition_matrix",
     "transition_matrix_simulate",
