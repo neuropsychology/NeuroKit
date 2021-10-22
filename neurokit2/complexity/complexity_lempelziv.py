@@ -22,8 +22,9 @@ def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="d
     Permutation Lempel-Ziv Complexity (PLZC) combines permutation and LZC. A finite sequence of symbols
     is first generated (numbers of types of symbols = `dimension!`) and LZC is computed over the symbol series.
 
-    Multiscale Permutation Lempel-Ziv Complexity (MPLZC) first performs a coarse-graining procedure to the original
-    time series by constructing the coarse-grained time series in non-overlapping windows of increasing length (scale)
+    Multiscale Permutation Lempel-Ziv Complexity (MPLZC) combines permutation LZC and multiscale approach.
+    It first performs a coarse-graining procedure to the original time series by constructing the
+    coarse-grained time series in non-overlapping windows of increasing length (scale)
     where the number of data points are averaged. PLZC is then computed for each scaled series.
 
     Parameters
@@ -83,7 +84,7 @@ def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="d
     >>> plzc #doctest: +SKIP
     >>>
     >>> # MPLZC
-    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=2, multiscale=True, show=True)
+    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=2, multiscale=True, show=False)
     >>> mplzc #doctest: +SKIP
 
     References
@@ -219,7 +220,7 @@ def _complexity_lempelziv_count(sequence, normalize=True, permutation=False, dim
             if u == w:
                 complexity += 1
                 w += v_max
-                if w > n:
+                if w >= n:
                     break
                 else:
                     u = 0
