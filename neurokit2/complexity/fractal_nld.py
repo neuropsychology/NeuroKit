@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from ..stats import standardize
 from ..misc import NeuroKitWarning
@@ -36,7 +37,8 @@ def fractal_nld(epochs, what='ECG', window=None):
     fd : DataFrame
         A dataframe containing the fractal dimension across epochs.
     info : dict
-        A dictionary containing additional information regarding the parameters used to compute the fractal dimension.
+        A dictionary containing additional information regarding the parameters used to compute the fractal dimension,
+        and the mean and standard deviation of the fractal dimensions.
 
     Examples
     ----------
@@ -52,7 +54,8 @@ def fractal_nld(epochs, what='ECG', window=None):
     >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_start=-0.5, epochs_end=0.2)
     >>>
     >>> # Compute FD
-    >>> nld, _ = nk.fractal_nld(epochs, what='ECG', window=None)
+    >>> fd, info = nk.fractal_nld(epochs, what='ECG', window=None)
+    >>> fd #doctest: +SKIP
 
     References
     ----------
@@ -87,7 +90,7 @@ def fractal_nld(epochs, what='ECG', window=None):
 
     fd = pd.DataFrame.from_dict(fd_windows, orient="index")
 
-    return fd, {'Window': window}
+    return fd, {'Window': window, 'Mean': np.nanmean(fd['FD']), 'SD': np.nanstd(fd['FD'])}
 
 
 def _fractal_nld(epoch, window=None):
