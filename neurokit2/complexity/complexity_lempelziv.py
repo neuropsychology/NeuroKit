@@ -64,7 +64,8 @@ def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="d
     Returns
     ----------
     lzc : float
-        Lempel Ziv Complexity (LZC).
+        Lempel Ziv Complexity (LZC). Returns the mean value of PLZC over scale factors
+        if multiscale permutation LZC (MPLZC) is computed.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute LZC.
@@ -146,15 +147,17 @@ def _complexity_lempelziv(signal, delay=1, dimension=2, method="median",
         # apply coarsegraining procedure
         scale_factors = _get_scale(signal, scale="default", dimension=dimension)
         # Permutation for each scaled series
-        complexity = np.zeros(len(scale_factors))
+        lzc = np.zeros(len(scale_factors))
         for i, tau in enumerate(scale_factors):    
             y = _get_coarsegrained(signal, scale=tau, force=False)
             sequence = _complexity_lempelziv_permutation(y, delay=delay, dimension=dimension)
-            complexity[i] = _complexity_lempelziv_count(sequence, normalize=normalize, permutation=True,
-                                                        dimension=dimension)
-        info = {"Dimension": dimension, "Delay": delay}
+            lzc[i] = _complexity_lempelziv_count(sequence, normalize=normalize, permutation=True,
+                                                 dimension=dimension)
+        info = {"Dimension": dimension, "Delay": delay, "Scale": scale_factors,
+                "Values": lzc, "SD": np.std(lzc)}
+        complexity = np.mean(lzc)
         if show:
-            _complexity_lempelziv_multiscale_plot(scale_factors, complexity)
+            _complexity_lempelziv_multiscale_plot(scale_factors, lzc)
 
     elif permutation:
         # PLZC
@@ -176,7 +179,7 @@ def _complexity_lempelziv(signal, delay=1, dimension=2, method="median",
 def _complexity_lempelziv_multiscale_plot(scale_factors, lzc_values):
 
     fig = plt.figure(constrained_layout=False)
-    fig.suptitle("Permutation LZC (MPLZC) values across scale factors")
+    fig.suptitle("Permutation LZC (PLZC) values across scale factors")
     plt.ylabel("PLZC values")
     plt.xlabel("Scale")
     plt.plot(scale_factors, lzc_values, color="#FF9800")
