@@ -4,17 +4,26 @@ import pandas as pd
 
 from ..signal.signal_binarize import _signal_binarize_threshold
 from .complexity_embedding import complexity_embedding
+from .utils import (
+    _get_coarsegrained,
+    _get_scale
+)
 
 
-def complexity_lempelziv(signal, method="median", permutation=False, delay=1, dimension=2, normalize=True):
+def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="default",
+                         permutation=False, multiscale=False, normalize=True):
     """
     Computes Lempel-Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
     symbolic sequences for new patterns, increasing the complexity count every time a new sequence is detected.
     Regular signals have a lower number of distinct patterns and thus have low LZC whereas irregular
     signals are characterized by a high LZC.
-    
-    Permutation Lempel-Zic Complexity (PLZC) combines permutation and LZC. A finite sequence of symbols
+
+    Permutation Lempel-Ziv Complexity (PLZC) combines permutation and LZC. A finite sequence of symbols
     is first generated (numbers of types of symbols = `dimension!`) and LZC is computed over the symbol series.
+
+    Multiscale Permutation Lempel-Ziv Complexity (MPLZC) first performs a coarse-graining procedure to the original
+    time series by constructing the coarse-grained time series in non-overlapping windows of increasing length (scale)
+    where the number of data points are averaged. PLZC is then computed for each scaled series.
 
     Parameters
     ----------
@@ -25,8 +34,6 @@ def complexity_lempelziv(signal, method="median", permutation=False, delay=1, di
         Current options are "median" (default) or "mean", where each data point is assigned 0
         if lower than the median or mean of signal respectively, and 1 if higher.
         Only relevant if `permutation = False`.
-    permutation : bool
-        If True, returns Permutation Lempel-Ziv Complexity (PLZC).
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
@@ -37,16 +44,26 @@ def complexity_lempelziv(signal, method="median", permutation=False, delay=1, di
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
         Only relevant if `permutation = True`.
+    scale : str or int or list
+        A list of scale factors used for coarse graining the time series. If 'default', will use
+        ``range(len(signal) / (dimension + 10))`` (see discussion
+        `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_).
+        If 'max', will use all scales until half the length of the signal. If an integer, will create
+        a range until the specified int. Only relevant if `multiscale = True`.
+    permutation : bool
+        If True, returns Permutation Lempel-Ziv Complexity (PLZC).
+    multiscale : bool
+        Returns the multiscale permutation LZC (MPLZC; Borowska et al., 2021)
     normalize : bool
         Defaults to True, to obtain a complexity measure independent of sequence length.
 
     Returns
     ----------
     lzc : float
-        Lempel Ziv Complexity (LZC) or PLZC of the single time series.
+        Lempel Ziv Complexity (LZC).
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute LZC or PLZC.
+        to compute LZC.
 
     Examples
     ----------
@@ -54,8 +71,16 @@ def complexity_lempelziv(signal, method="median", permutation=False, delay=1, di
     >>>
     >>> signal = nk.signal_simulate(duration=10, frequency=5, noise=10)
     >>>
-    >>> lzc, info = nk.complexity_lempelziv(signal, method="median", permutation=True)
+    >>> # LZC
+    >>> lzc, info = nk.complexity_lempelziv(signal, method="median")
     >>> lzc #doctest: +SKIP
+    >>>
+    >>> # PLZC
+    >>> plzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=2, permutation=True)
+    >>> plzc #doctest: +SKIP
+    >>>
+    >>> # MPLZC
+    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=2, multiscale=True)
 
     References
     ----------
@@ -83,51 +108,73 @@ def complexity_lempelziv(signal, method="median", permutation=False, delay=1, di
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    parameters = {"Normalize": normalize}
-
-    if permutation is False:
-        # Convert signal into binary sequence
-        sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method).astype(int)
-        parameters["Type"] = "LZC"
-        parameters["Method"] = method
+    # Prepare parameters
+    if multiscale:
+        key = "MPLZC"
+    elif permutation:
+        key = "PLZC"
     else:
-        # Convert into symbols
-        sequence, info = _complexity_lempelziv_permutation(signal, delay=delay, dimension=dimension)
-        parameters["Type"] = "PLZC"
-        parameters.update(info)
+        key = "LZC"
 
-    # Compute LZC
-    n = len(sequence)
-    complexity = _complexity_lempelziv(sequence)
+    parameters = {"Normalize": normalize, "Type": key}
+    lzc, info = _complexity_lempelziv(signal, delay=delay, dimension=dimension, method=method,
+                                      normalize=normalize, permutation=permutation, multiscale=multiscale,
+                                      scale_factors=scale)
+    parameters.update(info)
 
-    if normalize is True:
-        if permutation is False:
-            out = (complexity * np.log2(n)) / n
-        else:
-            out = (complexity * np.log(n) / np.log(np.math.factorial(dimension))) / n
-
-    return out, parameters
+    return lzc, parameters
 
 
 # =============================================================================
 # Utilities
 # =============================================================================
 
-def _complexity_lempelziv_permutation(signal, delay=1, dimension=3):
-    
+def _complexity_lempelziv(signal, delay=1, dimension=2, method="median",
+                          normalize=True, permutation=False, multiscale=False,
+                          scale_factors="default"):
+
+    if multiscale:
+        # MPLZC
+        # apply coarsegraining procedure
+        scale_factors = _get_scale(signal, scale="default", dimension=dimension)
+        # Permutation for each scaled series
+        complexity = np.zeros(len(scale_factors))
+        for i, tau in enumerate(scale_factors):    
+            y = _get_coarsegrained(signal, scale=tau, force=False)
+            sequence = _complexity_lempelziv_permutation(y, delay=delay, dimension=dimension)
+            complexity[i] = _complexity_lempelziv_count(sequence, normalize=normalize, permutation=True,
+                                                        dimension=dimension)
+        info = {"Dimension": dimension, "Delay": delay}
+    elif permutation:        
+        # PLZC
+        sequence = _complexity_lempelziv_permutation(signal, delay=delay,
+                                                     dimension=dimension)
+        complexity = _complexity_lempelziv_count(sequence, normalize=normalize,
+                                                 permutation=True, dimension=dimension)
+        info = {"Dimension": dimension, "Delay": delay}
+    else:
+        # for normal LZC        
+        sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method).astype(int)
+        complexity = _complexity_lempelziv_count(sequence, normalize=normalize, permutation=False)
+        info = {"Method": method}
+
+    return complexity, info
+
+
+def _complexity_lempelziv_permutation(signal, delay=1, dimension=2):
+    """Permutation on the signal (i.e., converting to ordinal pattern).
+    """
     # Time-delay embedding
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
-
     # Sort the order of permutations
     embedded = embedded.argsort(kind="quicksort")
-    
-    symbols = np.unique(embedded, return_inverse=True, axis=0)[1]
-    info = {"Dimension": dimension, "Delay": delay}
+    sequence = np.unique(embedded, return_inverse=True, axis=0)[1]
 
-    return symbols, info
+    return sequence
 
-def _complexity_lempelziv(sequence):
 
+def _complexity_lempelziv_count(sequence, normalize=True, permutation=False, dimension=2):
+    """Computes LZC counts from symbolic sequences"""
     # Convert to string (faster)
     string = "".join(list(sequence.astype(str)))
 
@@ -159,4 +206,10 @@ def _complexity_lempelziv(sequence):
             else:
                 v = 1
 
-    return complexity
+    if normalize is True:
+        if permutation is False:
+            out = (complexity * np.log2(n)) / n
+        else:
+            out = (complexity * np.log(n) / np.log(np.math.factorial(dimension))) / n
+
+    return out
