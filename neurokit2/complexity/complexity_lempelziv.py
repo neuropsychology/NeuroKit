@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 
 from ..signal.signal_binarize import _signal_binarize_threshold
 from .complexity_embedding import complexity_embedding
@@ -11,7 +12,7 @@ from .utils import (
 
 
 def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="default",
-                         permutation=False, multiscale=False, normalize=True):
+                         permutation=False, multiscale=False, normalize=True, show=False):
     """
     Computes Lempel-Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
     symbolic sequences for new patterns, increasing the complexity count every time a new sequence is detected.
@@ -51,11 +52,13 @@ def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="d
         If 'max', will use all scales until half the length of the signal. If an integer, will create
         a range until the specified int. Only relevant if `multiscale = True`.
     permutation : bool
-        If True, returns Permutation Lempel-Ziv Complexity (PLZC).
+        If True, returns Permutation Lempel-Ziv Complexity (PLZC; Bai et al., 2015).
     multiscale : bool
-        Returns the multiscale permutation LZC (MPLZC; Borowska et al., 2021)
+        Returns the multiscale permutation LZC (MPLZC; Borowska et al., 2021).
     normalize : bool
         Defaults to True, to obtain a complexity measure independent of sequence length.
+    show : bool
+        Show the MPLZC values for each scale factor if `multiscale = True`.
 
     Returns
     ----------
@@ -80,7 +83,8 @@ def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="d
     >>> plzc #doctest: +SKIP
     >>>
     >>> # MPLZC
-    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=2, multiscale=True)
+    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=2, multiscale=True, show=True)
+    >>> mplzc #doctest: +SKIP
 
     References
     ----------
@@ -100,6 +104,9 @@ def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="d
 
     - Bai, Y., Liang, Z., & Li, X. (2015). A permutation Lempel-Ziv complexity measure for EEG analysis.
     Biomedical Signal Processing and Control, 19, 102-114.
+    
+    - Borowska, M. (2021). Multiscale Permutation Lempel–Ziv Complexity Measure for Biomedical Signal Analysis:
+    Interpretation and Application to Focal EEG Signals. Entropy, 23(7), 832.
     """
 
     # Sanity checks
@@ -119,7 +126,7 @@ def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="d
     parameters = {"Normalize": normalize, "Type": key}
     lzc, info = _complexity_lempelziv(signal, delay=delay, dimension=dimension, method=method,
                                       normalize=normalize, permutation=permutation, multiscale=multiscale,
-                                      scale_factors=scale)
+                                      scale_factors=scale, show=show)
     parameters.update(info)
 
     return lzc, parameters
@@ -131,7 +138,7 @@ def complexity_lempelziv(signal, method="median", delay=1, dimension=2, scale="d
 
 def _complexity_lempelziv(signal, delay=1, dimension=2, method="median",
                           normalize=True, permutation=False, multiscale=False,
-                          scale_factors="default"):
+                          scale_factors="default", show=False):
 
     if multiscale:
         # MPLZC
@@ -145,13 +152,17 @@ def _complexity_lempelziv(signal, delay=1, dimension=2, method="median",
             complexity[i] = _complexity_lempelziv_count(sequence, normalize=normalize, permutation=True,
                                                         dimension=dimension)
         info = {"Dimension": dimension, "Delay": delay}
-    elif permutation:        
+        if show:
+            _complexity_lempelziv_multiscale_plot(scale_factors, complexity)
+
+    elif permutation:
         # PLZC
         sequence = _complexity_lempelziv_permutation(signal, delay=delay,
                                                      dimension=dimension)
         complexity = _complexity_lempelziv_count(sequence, normalize=normalize,
                                                  permutation=True, dimension=dimension)
         info = {"Dimension": dimension, "Delay": delay}
+
     else:
         # for normal LZC        
         sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method).astype(int)
@@ -159,6 +170,17 @@ def _complexity_lempelziv(signal, delay=1, dimension=2, method="median",
         info = {"Method": method}
 
     return complexity, info
+
+
+def _complexity_lempelziv_multiscale_plot(scale_factors, lzc_values):
+
+    fig = plt.figure(constrained_layout=False)
+    fig.suptitle("Permutation LZC (MPLZC) values across scale factors")
+    plt.ylabel("PLZC values")
+    plt.xlabel("Scale")
+    plt.plot(scale_factors, lzc_values, color="#FF9800")
+
+    return fig
 
 
 def _complexity_lempelziv_permutation(signal, delay=1, dimension=2):
