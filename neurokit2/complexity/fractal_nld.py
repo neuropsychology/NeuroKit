@@ -4,13 +4,12 @@ import pandas as pd
 
 from ..stats import standardize
 from ..misc import NeuroKitWarning
-from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
 
 
 def fractal_nld(signal, n_epochs=100, window=None):
     """Fractal dimension of signal epochs via Normalized Length Density (NLD).
 
-    This method was developed for measuring signal complexity on very short epochs durations (i.e., N < 100),
+    This method was developed for measuring signal complexity on very short epochs durations (< 30 samples),
     for when continuous signal FD changes (or 'running' FD) are of interest.
 
     For methods such as Higuchi's FD, the standard deviation of the window FD increases sharply when the epoch becomes shorter.
@@ -62,9 +61,9 @@ def fractal_nld(signal, n_epochs=100, window=None):
         raise ValueError(
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
+        
+    # Split signal into epochs
     epochs = np.array_split(signal, n_epochs)
-
-    # Warning
     lengths = list(np.unique([len(i) for i in epochs]))
     if len(lengths) != 1:
         warn(
@@ -103,6 +102,12 @@ def _fractal_nld(epoch, window=None):
     nld_0 = 0.097178
 
     # Compute fd
-    fd = a * (nld - nld_0) ** k
-
-    return fd
+    with np.errstate(all='raise'):
+        try:
+            fd = a * (nld - nld_0) ** k
+            return fd
+        except FloatingPointError:
+            warn(
+                f"Epoch length may be too short for FD estimation. Returning NaN for values.",
+                category=NeuroKitWarning,
+            )
