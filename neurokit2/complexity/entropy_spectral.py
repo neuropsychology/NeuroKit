@@ -4,7 +4,7 @@ import pandas as pd
 from ..signal import signal_psd
 
 
-def entropy_spectral(signal, sampling_rate, **kwargs):
+def entropy_spectral(signal, sampling_rate=1000, **kwargs):
     """Spectral Entropy (SpEn)
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the frequency domain as a probability distribution, and calculates the Shannon entropy of it.
@@ -15,6 +15,8 @@ def entropy_spectral(signal, sampling_rate, **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
+    **kwargs
+        Other arguments to be passed to ``signal_psd()`` (such as 'method').
 
     Returns
     -------
@@ -22,12 +24,10 @@ def entropy_spectral(signal, sampling_rate, **kwargs):
         Spectral Entropy
     info : dict
         A dictionary containing additional information regarding the parameters used.
-    **kwargs
-        Other arguments to be passed to ``signal_psd()`` (such as 'method').
 
     See Also
     --------
-    entropy_shannon, signal_psd
+    entropy_shannon, entropy_wiener, signal_psd
 
     Examples
     ----------
