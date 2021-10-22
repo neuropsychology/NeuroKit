@@ -1,58 +1,111 @@
 import numpy as np
-import pandas as pd
+
+from ..stats import standardize
+from ..misc import NeuroKitWarning
+from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
 
 
-def fractal_nld(signal):
-    """Fractal dimension via Normalized Length Density (NLD)
+def fractal_nld(epochs, what='ECG', window=None):
+    """Fractal dimension of a signal epoch via Normalized Length Density (NLD).
 
-    This method was developped for very short epochs durations. TODO: add more 
-    information about that.
+    This method was developed for measuring signal complexity on very short epochs durations (i.e., N < 100),
+    for when continuous signal FD changes (or 'running' FD) are of interest.
+
+    For methods such as Higuchi's FD, the standard deviation of the window FD increases sharply when the epoch becomes shorter.
+    This NLD method results in lower standard deviation especially for shorter epochs,
+    though at the expense of lower accuracy in average window FD.
 
     See Also
     --------
-    fractal_higushi
+    fractal_higuchi
 
     Parameters
     ----------
-    signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
+    epochs : Union[dict, pd.DataFrame]
+        A dict containing one DataFrame per event/trial,
+        usually obtained via `epochs_create()`, or a DataFrame
+        containing all epochs, usually obtained via `epochs_to_df()`.
+    what : str
+        The signal to extract from the epochs.
+    window : int, None
+        If not None, performs a rolling window standardization, i.e., apply a standardization on a window of the
+        specified number of samples that rolls along the main axis of the signal.
+
+    Returns
+    --------
+    fd : DataFrame
+        A dataframe containing the fractal dimension across epochs.
+    info : dict
+        A dictionary containing additional information regarding the parameters used to compute the fractal dimension.
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
+    >>> # Get data
+    >>> data = nk.data("bio_eventrelated_100hz")
+    >>> # Find events
+    >>> events = nk.events_find(data["Photosensor"],
+    ...                         threshold_keep='below',
+    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+    >>> # Create epochs
+    >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_start=-0.5, epochs_end=0.2)
     >>>
-    >>> nld, _ = nk.fractal_nld(signal)
+    >>> # Compute FD
+    >>> nld, _ = nk.fractal_nld(epochs, what='ECG', window=None)
 
     References
     ----------
-    - Kalauzi, A., Bojić, T., & Rakić, L. (2009). Extracting complexity waveforms from one-dimensional signals. Nonlinear biomedical physics, 3(1), 1-11.
-
+    - Kalauzi, A., Bojić, T., & Rakić, L. (2009). Extracting complexity waveforms from one-dimensional signals.
+    Nonlinear biomedical physics, 3(1), 1-11.
+    - https://github.com/tfburns/MATLAB-functions-for-complexity-measures-of-one-dimensional-signals/blob/master/nld.m
     """
+
     # Sanity checks
-    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+    epochs = _eventrelated_sanitizeinput(epochs, what=what, silent=False)
+
+    # Sanitize input
+    if what is None:
         raise ValueError(
-            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+            "Please specify the signal (column name, e.g., 'ECG') that you want to compute FD over.",
+            category=NeuroKitWarning
         )
+        return output
 
-    # Based on https://github.com/tfburns/MATLAB-functions-for-complexity-measures-of-one-dimensional-signals/blob/master/nld.m
-    # See also https://www.researchgate.net/publication/26743594_Extracting_complexity_waveforms_from_one-dimensional_signals
-    n = len(signal)
+    fd_windows = {}
+    for index in epochs:
+        fd_windows[index] = {}  # Initialize empty container
 
-    # amplitude normalization (could use integral or window normalization techniques instead)
-    signal = (np.array(signal) - np.mean(signal)) / np.std(signal, ddof=1)
+        # Add label info
+        fd_windows[index]['Epoch'] = epochs[index]['Label'].iloc[0]
 
-    # calculate NLDi
-    nld = np.concatenate([[0], np.diff(signal)])
+        # Add label info
+        fd_windows[index]['Sample_Start'] = epochs[index]['Index'].iloc[0]
 
-    # Use complete algorithm and sum NLDi's
-    nld = (1 / n) * np.nansum(nld)
+        # Compute FD
+        fd_windows[index]['FD'] = _fractal_nld(epochs[index][what], window=window)
 
-    # Use the power model for NLD to FD conversion
-    # a = 1.9079
-    # NLDz = 0.097178
-    # k = 0.18383
-    # a*((NLD-NLDz).^k)
-    fd = 1.9079 * np.power(np.array(nld - 0.097178, dtype=complex), 0.18383)
-    return fd.real, {}
+    fd = pd.DataFrame.from_dict(fd_windows, orient="index")
+
+    return fd, {'Window': window}
+
+
+def _fractal_nld(epoch, window=None):
+
+    n = len(epoch)
+
+    # amplitude normalization
+    epoch = standardize(np.array(epoch), window=window)
+
+    # calculate normalized length density
+    nld = np.sum(np.abs(np.diff(epoch))) / n
+
+    # Power model optimal parameters based on analysis of EEG signals (from Kalauzi et al. 2009)
+    a = 1.8399
+    k = 0.3523
+    nld_0 = 0.097178
+
+    # Compute fd
+    fd = a * (nld - nld_0) ** k
+
+    return fd
