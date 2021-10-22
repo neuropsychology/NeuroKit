@@ -1,3 +1,4 @@
+from warnings import warn
 import numpy as np
 import pandas as pd
 
@@ -6,8 +7,8 @@ from ..misc import NeuroKitWarning
 from ..epochs.eventrelated_utils import _eventrelated_sanitizeinput
 
 
-def fractal_nld(epochs, what='ECG', window=None):
-    """Fractal dimension of a signal epoch via Normalized Length Density (NLD).
+def fractal_nld(signal, n_epochs=100, window=None):
+    """Fractal dimension of signal epochs via Normalized Length Density (NLD).
 
     This method was developed for measuring signal complexity on very short epochs durations (i.e., N < 100),
     for when continuous signal FD changes (or 'running' FD) are of interest.
@@ -22,15 +23,13 @@ def fractal_nld(epochs, what='ECG', window=None):
 
     Parameters
     ----------
-    epochs : Union[dict, pd.DataFrame]
-        A dict containing one DataFrame per event/trial,
-        usually obtained via `epochs_create()`, or a DataFrame
-        containing all epochs, usually obtained via `epochs_to_df()`.
-    what : str
-        The signal to extract from the epochs.
+    signal : Union[list, np.array, pd.Series]
+        The signal (i.e., a time series) in the form of a vector of values.
+    n_epochs : int
+        The number of epochs over which the window fractal dimension is computed over.
     window : int, None
         If not None, performs a rolling window standardization, i.e., apply a standardization on a window of the
-        specified number of samples that rolls along the main axis of the signal.
+        specified number of samples that rolls along the main axis of the signal (see ``standardize()`` function).
 
     Returns
     --------
@@ -45,16 +44,10 @@ def fractal_nld(epochs, what='ECG', window=None):
     >>> import neurokit2 as nk
     >>>
     >>> # Get data
-    >>> data = nk.data("bio_eventrelated_100hz")
-    >>> # Find events
-    >>> events = nk.events_find(data["Photosensor"],
-    ...                         threshold_keep='below',
-    ...                         event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
-    >>> # Create epochs
-    >>> epochs = nk.epochs_create(data, events, sampling_rate=100, epochs_start=-0.5, epochs_end=0.2)
+    >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
     >>> # Compute FD
-    >>> fd, info = nk.fractal_nld(epochs, what='ECG', window=None)
+    >>> fd, info = nk.fractal_nld(signal, n_epochs=100, window=None)
     >>> fd #doctest: +SKIP
 
     References
@@ -65,32 +58,33 @@ def fractal_nld(epochs, what='ECG', window=None):
     """
 
     # Sanity checks
-    epochs = _eventrelated_sanitizeinput(epochs, what=what, silent=False)
-
-    # Sanitize input
-    if what is None:
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError(
-            "Please specify the signal (column name, e.g., 'ECG') that you want to compute FD over.",
-            category=NeuroKitWarning
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
-        return output
+    epochs = np.array_split(signal, n_epochs)
+
+    # Warning
+    lengths = list(np.unique([len(i) for i in epochs]))
+    if len(lengths) != 1:
+        warn(
+            f"Computing FD over epochs with unequal lengths {lengths}.",
+            category=NeuroKitWarning,
+        )
 
     fd_windows = {}
-    for index in epochs:
-        fd_windows[index] = {}  # Initialize empty container
+    for i, epoch in enumerate(epochs):
+        fd_windows[i] = {}  # Initialize empty container
 
         # Add label info
-        fd_windows[index]['Epoch'] = epochs[index]['Label'].iloc[0]
-
-        # Add label info
-        fd_windows[index]['Sample_Start'] = epochs[index]['Index'].iloc[0]
+        fd_windows[i]['Length'] = len(epoch)
 
         # Compute FD
-        fd_windows[index]['FD'] = _fractal_nld(epochs[index][what], window=window)
+        fd_windows[i]['FD'] = _fractal_nld(epoch, window=window)
 
     fd = pd.DataFrame.from_dict(fd_windows, orient="index")
 
-    return fd, {'Window': window, 'Mean': np.nanmean(fd['FD']), 'SD': np.nanstd(fd['FD'])}
+    return fd, {'Mean': np.nanmean(fd['FD']), 'SD': np.nanstd(fd['FD']), 'Epochs': n_epochs}
 
 
 def _fractal_nld(epoch, window=None):
@@ -98,7 +92,7 @@ def _fractal_nld(epoch, window=None):
     n = len(epoch)
 
     # amplitude normalization
-    epoch = standardize(np.array(epoch), window=window)
+    epoch = standardize(epoch, window=window)
 
     # calculate normalized length density
     nld = np.sum(np.abs(np.diff(epoch))) / n
