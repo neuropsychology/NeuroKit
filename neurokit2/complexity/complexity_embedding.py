@@ -173,7 +173,7 @@ def _plot_3D_colored(x, y, z, color=None, rotate=False):
 
     # Plot
     fig = plt.figure()
-    ax = fig.gca(projection="3d")
+    ax = plt.axes(projection="3d")
 
     for i in range(len(x) - 1):
         seg = segments[i]
