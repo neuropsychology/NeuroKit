@@ -3,14 +3,18 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_binarize import _signal_binarize_threshold
+from .complexity_embedding import complexity_embedding
 
 
-def complexity_lempelziv(signal, method="median", normalize=True):
+def complexity_lempelziv(signal, method="median", permutation=False, delay=1, dimension=2, normalize=True):
     """
-    Computes Lempel Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
+    Computes Lempel-Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
     symbolic sequences for new patterns, increasing the complexity count every time a new sequence is detected.
     Regular signals have a lower number of distinct patterns and thus have low LZC whereas irregular
     signals are characterized by a high LZC.
+    
+    Permutation Lempel-Zic Complexity (PLZC) combines permutation and LZC. A finite sequence of symbols
+    is first generated (numbers of types of symbols = `dimension!`) and LZC is computed over the symbol series.
 
     Parameters
     ----------
@@ -20,16 +24,29 @@ def complexity_lempelziv(signal, method="median", normalize=True):
         Method for partitioning the signal into a binary sequence.
         Current options are "median" (default) or "mean", where each data point is assigned 0
         if lower than the median or mean of signal respectively, and 1 if higher.
+        Only relevant if `permutation = False`.
+    permutation : bool
+        If True, returns Permutation Lempel-Ziv Complexity (PLZC).
+    delay : int
+        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
+        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
+        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Only relevant if `permutation = True`.
+    dimension : int
+        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
+        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        Only relevant if `permutation = True`.
     normalize : bool
         Defaults to True, to obtain a complexity measure independent of sequence length.
 
     Returns
     ----------
     lzc : float
-        Lempel Ziv Complexity (LZC) of the single time series.
+        Lempel Ziv Complexity (LZC) or PLZC of the single time series.
     info : dict
         A dictionary containing additional information regarding the parameters used
-        to compute Lempel Ziv Complexity.
+        to compute LZC or PLZC.
 
     Examples
     ----------
@@ -37,7 +54,7 @@ def complexity_lempelziv(signal, method="median", normalize=True):
     >>>
     >>> signal = nk.signal_simulate(duration=10, frequency=5, noise=10)
     >>>
-    >>> lzc, info = nk.complexity_lempelziv(signal, method="median")
+    >>> lzc, info = nk.complexity_lempelziv(signal, method="median", permutation=True)
     >>> lzc #doctest: +SKIP
 
     References
@@ -55,6 +72,9 @@ def complexity_lempelziv(signal, method="median", normalize=True):
     its application in bio-sequence analysis. Journal of mathematical chemistry, 46(4), 1203-1212.
 
     - https://en.wikipedia.org/wiki/Lempel-Ziv_complexity
+
+    - Bai, Y., Liang, Z., & Li, X. (2015). A permutation Lempel-Ziv complexity measure for EEG analysis.
+    Biomedical Signal Processing and Control, 19, 102-114.
     """
 
     # Sanity checks
@@ -63,21 +83,50 @@ def complexity_lempelziv(signal, method="median", normalize=True):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # Convert signal into binary sequence
-    binary_sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method).astype(int)
+    parameters = {"Normalize": normalize}
+
+    if permutation is False:
+        # Convert signal into binary sequence
+        sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method).astype(int)
+        parameters["Type"] = "LZC"
+        parameters["Method"] = method
+    else:
+        # Convert into symbols
+        sequence, info = _complexity_lempelziv_permutation(signal, delay=delay, dimension=dimension)
+        parameters["Type"] = "PLZC"
+        parameters.update(info)
 
     # Compute LZC
-    out = _complexity_lempelziv(binary_sequence, normalize=normalize)
+    n = len(sequence)
+    complexity = _complexity_lempelziv(sequence)
 
-    return out, {"Method": method, "Normalize": normalize}
+    if normalize is True:
+        if permutation is False:
+            out = (complexity * np.log2(n)) / n
+        else:
+            out = (complexity * np.log(n) / np.log(np.math.factorial(dimension))) / n
+
+    return out, parameters
 
 
 # =============================================================================
 # Utilities
 # =============================================================================
 
+def _complexity_lempelziv_permutation(signal, delay=1, dimension=3):
+    
+    # Time-delay embedding
+    embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
 
-def _complexity_lempelziv(sequence, normalize=True):
+    # Sort the order of permutations
+    embedded = embedded.argsort(kind="quicksort")
+    
+    symbols = np.unique(embedded, return_inverse=True, axis=0)[1]
+    info = {"Dimension": dimension, "Delay": delay}
+
+    return symbols, info
+
+def _complexity_lempelziv(sequence):
 
     # Convert to string (faster)
     string = "".join(list(sequence.astype(str)))
@@ -109,8 +158,5 @@ def _complexity_lempelziv(sequence, normalize=True):
                     v_max = 1
             else:
                 v = 1
-
-    if normalize is True:
-        complexity /= n / np.log2(n)
 
     return complexity
