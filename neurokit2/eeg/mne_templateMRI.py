@@ -13,7 +13,7 @@ def mne_templateMRI(verbose=True):
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> src, bem = nk.eeg_templateMRI()
+    >>> src, bem = nk.mne_templateMRI()
     """
 
     # Try loading pooch (needed by mne)
