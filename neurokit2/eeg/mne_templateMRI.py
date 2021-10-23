@@ -1,7 +1,7 @@
 import os
 
 
-def mne_templateMRI(verbose=True):
+def mne_templateMRI(verbose="WARNING"):
     """
     This function is a helper that returns the path of the MRI template for adults (the ``src`` and the
     ``bem``) that is made available through ``MNE``. It downloads the data if need be. These templates can be used for EEG source reconstruction
@@ -13,7 +13,7 @@ def mne_templateMRI(verbose=True):
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> src, bem = nk.mne_templateMRI()
+    >>> src, bem = nk.mne_templateMRI() # doctest: +SKIP
     """
 
     # Try loading pooch (needed by mne)
@@ -36,7 +36,6 @@ def mne_templateMRI(verbose=True):
 
     # Download fsaverage files
     fs_dir = mne.datasets.fetch_fsaverage(verbose=verbose)
-    subjects_dir = os.path.dirname(fs_dir)
 
     # The files live in:
     src = os.path.join(fs_dir, "bem", "fsaverage-ico-5-src.fif")
