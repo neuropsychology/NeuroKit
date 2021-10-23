@@ -8,6 +8,7 @@ from .mne_channel_add import mne_channel_add
 from .mne_channel_extract import mne_channel_extract
 from .mne_crop import mne_crop
 from .mne_data import mne_data
+from .mne_templateMRI import mne_templateMRI
 from .mne_to_df import mne_to_df, mne_to_dict
 
 __all__ = [
@@ -17,6 +18,7 @@ __all__ = [
     "mne_crop",
     "mne_to_df",
     "mne_to_dict",
+    "mne_templateMRI",
     "eeg_rereference",
     "eeg_gfp",
     "eeg_diss",

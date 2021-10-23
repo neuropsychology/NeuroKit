@@ -2,11 +2,13 @@ import numpy as np
 
 
 def mne_crop(raw, tmin=0.0, tmax=None, include_tmax=True, smin=None, smax=None):
-    """Crop mne.Raw objects.
-    Similar to `raw.crop()` but with a few critical differences:
+    """Crop mne.Raw objects
+
+    This function is similar to `raw.crop()` (same arguments), but with a few critical differences:
     - It recreates a whole new Raw object, and as such drops all information pertaining to the original data
-    (https://github.com/mne-tools/mne-python/issues/9759).
-    - There is the possibility of specifying directly the first and last samples.
+    (which MNE keeps, see https://github.com/mne-tools/mne-python/issues/9759).
+    - There is the possibility of specifying directly the first and last samples (instead of in time unit).
+
     """
     # Try loading mne
     try:
