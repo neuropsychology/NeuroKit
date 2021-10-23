@@ -15,6 +15,9 @@ Breaking Changes
 New Features
 +++++++++++++
 
+* Added `mne_templateMRI()` as a helper to get MNE's template MRI.
+* Added `eeg_source()` as a helper to perform source reconstruction.
+* Added `eeg_source_extract()` to extract the activity from a brain region.
 * Added `parallel_run()` in `misc` as a parallel processing utility function.
 * Added `find_plateau()` in `misc` to find the point of plateau in an array of values.
 * Added `write_csv()` in `data` to facilitate saving dataframes into multiple parts.
