@@ -18,7 +18,8 @@ def eeg_source(raw, src, bem, method="sLORETA", show=False, verbose="WARNING", *
     verbose : str
         Verbosity level for MNE.
     **kwargs
-        Other arguments to be passed to ``mne.make_forward_solution()`` and ``mne.minimum_norm.make_inverse_operator()`` and ``mne.minimum_norm.apply_inverse_raw()``.
+        Other arguments to be passed to ``mne.make_forward_solution()`` and ``mne.minimum_norm.make_inverse_operator()``
+        and ``mne.minimum_norm.apply_inverse_raw()``.
 
     See Also
     --------

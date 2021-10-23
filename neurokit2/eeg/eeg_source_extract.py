@@ -1,5 +1,3 @@
-import os
-
 import pandas as pd
 
 
@@ -60,9 +58,9 @@ def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING
     )
 
     # Filter empty ones
-    labels = [l for l in labels if len(l) > 0]
+    labels = [lab for lab in labels if len(lab) > 0]
     # Filter Unknown ones
-    labels = [l for l in labels if "?" not in l.name]
+    labels = [lab for lab in labels if "?" not in lab.name]
 
     tcs = stc.extract_label_time_course(
         labels,
@@ -71,4 +69,4 @@ def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING
         **kwargs,
     )
 
-    return pd.DataFrame(tcs.T, columns=[l.name for l in labels])
+    return pd.DataFrame(tcs.T, columns=[lab.name for lab in labels])

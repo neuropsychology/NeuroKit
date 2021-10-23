@@ -4,8 +4,8 @@ import os
 def mne_templateMRI(verbose="WARNING"):
     """
     This function is a helper that returns the path of the MRI template for adults (the ``src`` and the
-    ``bem``) that is made available through ``MNE``. It downloads the data if need be. These templates can be used for EEG source reconstruction
-    when no individual MRI is available.
+    ``bem``) that is made available through ``MNE``. It downloads the data if need be. These templates
+    can be used for EEG source reconstruction when no individual MRI is available.
 
     See https://mne.tools/stable/auto_tutorials/forward/35_eeg_no_mri.html
 
@@ -20,17 +20,7 @@ def mne_templateMRI(verbose="WARNING"):
     >>>
     >>> src, bem = nk.mne_templateMRI() # doctest: +SKIP
     """
-
-    # Try loading pooch (needed by mne)
-    try:
-        import pooch
-    except ImportError as e:
-        raise ImportError(
-            "The 'pooch' module is required for this function to run. ",
-            "Please install it first (`pip install pooch`).",
-        ) from e
-
-    # Try loading mne
+    # Try loading mne (requires also the 'pooch' package)
     try:
         import mne
     except ImportError as e:
