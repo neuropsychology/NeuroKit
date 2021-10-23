@@ -41,13 +41,7 @@ def fractal_psdslope(signal, sampling_rate=1000, **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    signal = np.array([3, 3, 5, 7, 1, 3, 5, 3, 5, 6, 1, 3, 5, 3])
-    sampling_rate = 100
-
     # Translated from https://github.com/FredHasselman/casnet/blob/master/R/fd.R
-
-    N = len(signal)
-
     # Detrend
     signal = signal_detrend(signal)
 
