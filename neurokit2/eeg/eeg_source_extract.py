@@ -28,6 +28,8 @@ def eeg_source_extract(stc, src, segmentation="PALS_B12_Lobes", verbose="WARNING
         An SourceSpaces object as obtained by ``eeg_source()``.
     segmentation : str
         See above.
+    verbose : str
+        Verbosity level for MNE.
     **kwargs
         Other arguments to be passed to ``mne.extract_label_time_course()``.
 

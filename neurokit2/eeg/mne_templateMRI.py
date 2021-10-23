@@ -9,6 +9,11 @@ def mne_templateMRI(verbose="WARNING"):
 
     See https://mne.tools/stable/auto_tutorials/forward/35_eeg_no_mri.html
 
+    Parameters
+    ----------
+    verbose : str
+        Verbosity level for MNE.
+
     Examples
     ---------
     >>> import neurokit2 as nk
