@@ -5,9 +5,9 @@ from .complexity_embedding import complexity_embedding
 from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
+from .complexity_lyapunov import complexity_lyapunov
 from .complexity_rqa import complexity_rqa
 from .complexity_rr import complexity_rr
-from .complexity_lyapunov import complexity_lyapunov
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
 from .entropy_cumulative_residual import entropy_cumulative_residual
@@ -27,6 +27,7 @@ from .fractal_katz import fractal_katz
 from .fractal_mandelbrot import fractal_mandelbrot
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
+from .fractal_psdslope import fractal_psdslope
 from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 from .information_mutual import mutual_information
@@ -115,6 +116,7 @@ __all__ = [
     "fractal_mandelbrot",
     "fractal_mfdfa",
     "fractal_nld",
+    "fractal_psdslope",
     "mutual_information",
     "transition_matrix",
     "transition_matrix_simulate",
