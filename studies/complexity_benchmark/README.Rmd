@@ -1,0 +1,129 @@
+---
+output: 
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, complexity]
+vignette: >
+  %\VignetteIndexEntry{README}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+csl: utils/apa.csl
+---
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# options and parameters
+options(digits=3)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  dpi=450,
+  fig.path = "../../studies/complexity_benchmark/figures/"
+)
+
+# Setup python - you need to change the path to your python distribution
+# library(reticulate)
+# reticulate::py_discover_config()
+# use_python("C:/Program Files/Python39/python.exe")
+# py_run_string("import sys")
+# py_run_string("sys.path.append('C:/Dropbox/RealityBendingLab/Pyllusion/')")
+# py_run_string("sys.path.append('C:/Dropbox/RECHERCHE/N/NeuroKit/')")
+# py_run_string("sys.path.append('C:/Dropbox/RECHERCHE/N/mne-python/')")
+```
+
+
+
+
+# Benchmarking of Complexity Measures
+
+*This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation) [@Makowski2021neurokit].
+
+**We'd like to improve this study, but unfortunately we currently don't have the time. If you want to help to make it happen, please contact us!**
+
+## Introduction
+
+The goal for NeuroKit is to provide the most comprehensive, accurate and fastest base Python implementations of complexity indices (fractal dimension, entropy, etc.).
+
+## Make data
+
+```{python, eval=FALSE}
+import neurokit2 as nk
+import pandas as pd
+import numpy as np
+from timeit import default_timer as timer
+
+
+# Utility function
+def time_function(i, x, fun=nk.fractal_petrosian, index="FD_Petrosian", method="nk_fractal_petrosian"):
+  t0 = timer()
+  rez, _ = fun(x)
+  t1 = timer() - t0
+  dat = {
+    "Duration" : [t1],
+    "Result" : [rez],
+    "Length" : [len(x)],
+    "Index" : [index],
+    "Method" : [method],
+    "Iteration" : [i],
+  }
+  return pd.DataFrame.from_dict(dat)
+
+# Iterations
+data = []
+for n in np.power(10, range(2, 6)):
+  print(n)
+  x = nk.signal_simulate(duration=1, sampling_rate=n, frequency=[5, 10], noise=0.5)
+  for i in range(100):
+    data.append(time_function(i, x, nk.complexity_rr, index="RR", method="nk_complexity_rr"))
+    data.append(time_function(i, x, nk.complexity_hjorth, index="Hjorth", method="nk_complexity_hjorth"))
+    data.append(time_function(i, x, nk.fisher_information, index="Fisher", method="nk_fisher_information"))
+    data.append(time_function(i, x, nk.entropy_shannon, index="ShanEn", method="nk_entropy_shannon"))
+    data.append(time_function(i, x, nk.entropy_cumulative_residual, index="CREn", method="nk_entropy_cumulative_residual"))
+    data.append(time_function(i, x, nk.entropy_differential, index="DiffEn", method="nk_entropy_differential"))
+    data.append(time_function(i, x, nk.entropy_svd, index="SVDen", method="nk_entropy_svd"))
+    data.append(time_function(i, x, nk.entropy_spectral, index="SpEn", method="nk_entropy_spectral"))
+    data.append(time_function(i, x, nk.fractal_katz, index="Katz", method="nk_fractal_katz"))
+    data.append(time_function(i, x, nk.fractal_sevcik, index="Sevcik", method="nk_fractal_sevcik"))
+    data.append(time_function(i, x, nk.fractal_petrosian, index="FD_Petrosian", method="nk_fractal_petrosian"))
+
+pd.concat(data).to_csv("data.csv", index=False)
+```
+
+## Benchmark
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(easystats)
+
+df <- read.csv("data.csv") |>
+  mutate(Length = as.factor(Length))
+
+order <- arrange(summarize(group_by(df, Method), Duration = mean(Duration)), Duration)
+order 
+
+df <- mutate(df, Method = fct_relevel(Method, order$Method))
+
+dfsummary <- df |>
+  group_by(Method, Length) |>
+  summarize(Duration = median(Duration))
+
+n <- length(unique(df$Method))
+
+df |> 
+  ggplot(aes(x = Length, y = Duration)) +
+  geom_line(data=dfsummary, aes(group = 1)) +
+  geom_violin(aes(fill = Length)) +
+  facet_wrap(~Method) +
+  scale_y_log10() +
+  scale_fill_viridis_d(guide = "none") +
+  theme_modern() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+
+
+
+## References
