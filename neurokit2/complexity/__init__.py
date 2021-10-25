@@ -15,6 +15,7 @@ from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
+from .entropy_coalition import entropy_coalition
 from .entropy_range import entropy_range
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
@@ -100,6 +101,7 @@ __all__ = [
     "entropy_differential",
     "entropy_cumulative_residual",
     "entropy_approximate",
+    "entropy_coalition",
     "entropy_sample",
     "entropy_spectral",
     "entropy_svd",

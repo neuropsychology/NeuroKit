@@ -19,9 +19,9 @@ def _sanitize_multichannel(signal):
             "NeuroKit error: _sanitize_multichannel(): your n-dimensional data has to ",
             "be in the form of a pandas DataFrame or a numpy ndarray.",
         )
-    if isinstance(signal, np.ndarray):
-        # signal.shape has to be in (len(channels), len(samples)) format
-        signal = pd.DataFrame(signal).transpose()
+    else:
+        # return signal in (len(channels), len(samples)) format
+        signal = np.array(signal).transpose()
 
     return signal
 
