@@ -29,6 +29,7 @@ from .fractal_mandelbrot import fractal_mandelbrot
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
 from .fractal_psdslope import fractal_psdslope
+from .fractal_sda import fractal_sda
 from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 from .information_mutual import mutual_information
@@ -119,6 +120,7 @@ __all__ = [
     "fractal_mfdfa",
     "fractal_nld",
     "fractal_psdslope",
+    "fractal_sda",
     "mutual_information",
     "transition_matrix",
     "transition_matrix_simulate",
