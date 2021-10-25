@@ -6,7 +6,7 @@ from ..signal.signal_timefrequency import signal_timefrequency
 
 
 def entropy_wiener(signal, sampling_rate=1000, **kwargs):
-    """Wiener Entropy (WE, also known as Spectral Flatness).
+    """Wiener Entropy (WE, also known as Spectral Flatness)
 
     The Wiener entropy (also known as Spectral Flatness, or tonality coefficient in sound processing) is a measure to
     quantify how noise-like a signal is and is typically applied to characterize an audio spectrum.
