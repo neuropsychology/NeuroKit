@@ -55,6 +55,8 @@ def fractal_psdslope(signal, sampling_rate=1000, **kwargs):
     psd["Frequency_Norm"] = psd["Frequency"] / sampling_rate
     psd["Size"] = psd["Frequency"]
     psd["Bulk"] = 2 * psd["Power"]
+
+    # TODO: add log-log plot
     # plot(x=log2(psd$freq), y=log2(psd$spec*2),pch=".")
 
     # First check the global slope for anti-persistent noise (GT +0.20)
