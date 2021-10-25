@@ -11,7 +11,7 @@ def entropy_coalition(signal, method="amplitude"):
     """
     Amplitude Coalition Entropy (ACE) reflects the entropy over time of the constitution of the set of
     most active channels (Shanahan, 2010), and is similar to Lempel-Ziv complexity, in the sense that it quantifies
-    variability in space and time of the activity. ACE is normalized by dividing the raw  by the value
+    variability in space and time of the activity. ACE is normalized by dividing the raw by the value
     obtained for the same binary input but randomly shuffled. The implementation used here is that of Schartner
     et al.'s (2015), which modified Shanahan's (2010) original version of coalition entropy so that it is
     applicable to real EEG data.
@@ -22,6 +22,21 @@ def entropy_coalition(signal, method="amplitude"):
     over time of the constitution of the set of channels in synchrony (rather than active).
     The overall SCE is the mean value of SCE across channels.
 
+    Parameters
+    ----------
+    data : DataFrame
+        The DataFrame containing all the respective signals (n_samples x n_channels).
+    method : str
+        Method for computing the coalition entropy.
+
+    Returns
+    ----------
+    ce : float
+         The coalition entropy.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute coalition entropy.
+
     References
     ----------
     - Shanahan, M. (2010). Metastable chimera states in community-structured oscillator networks.
@@ -30,8 +45,6 @@ def entropy_coalition(signal, method="amplitude"):
     - Schartner, M., Seth, A., Noirhomme, Q., Boly, M., Bruno, M. A., Laureys, S., & Barrett, A. (2015).
     Complexity of multi-dimensional spontaneous EEG decreases during propofol induced general anaesthesia.
     PloS one, 10(8), e0133532.
-
-    TODO: Check implementation
     
     Examples
     --------
@@ -39,7 +52,7 @@ def entropy_coalition(signal, method="amplitude"):
     >>>
     >>> # Get data
     >>> raw = nk.mne_data("raw")
-    >>> signal = nk.mne_to_df(raw)[["EEG 001", "EEG 002", "EEG 003"]].iloc[0:5000]
+    >>> signal = nk.mne_to_df(raw)[["EEG 001", "EEG 002", "EEG 003"]]
     >>>
     >>> # ACE
     >>> ace, info = nk.entropy_coalition(signal, method="amplitude")
@@ -138,10 +151,7 @@ def _entropy_coalition_synchrony_phase(phase1, phase2):
 
 def _entropy_coalition_map(binary_sequence):
     """Map each binary column of binary matrix psi onto an integer"""
-    if binary_sequence.ndim > 1:
-        n_channels, n_samples = binary_sequence.shape[0], binary_sequence.shape[1]
-    else:
-        n_channels, n_samples = 1, binary_sequence.shape[0]
+    n_channels, n_samples = binary_sequence.shape[0], binary_sequence.shape[1]
 
     mapped = np.zeros(n_samples)
     for t in range(n_samples):
