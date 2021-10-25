@@ -39,23 +39,30 @@ def entropy_coalition(signal, method="amplitude"):
     >>>
     >>> # Get data
     >>> raw = nk.mne_data("raw")
-    >>> signal = nk.mne_to_df(raw)[["EEG 001", "EEG 002"]].iloc[0:5000]
+    >>> signal = nk.mne_to_df(raw)[["EEG 001", "EEG 002", "EEG 003"]].iloc[0:5000]
     >>>
     >>> # ACE
     >>> ace, info = nk.entropy_coalition(signal, method="amplitude")
     >>> ace #doctest: +SKIP
+    >>>
+    >>> # SCE
+    >>> sce, info = nk.entropy_coalition(signal, method="synchrony")
+    >>> sce #doctest: +SKIP
    """
     # Sanity checks
     signal = _sanitize_multichannel(signal)
+
+    # Detrend and normalize
+    signal = np.array([signal_detrend(i - np.mean(i)) for i in signal])
 
     # Method
     method = method.lower()
     if method in ["ACE", "amplitude"]:
         info = {"Method": "ACE"}
         entropy = _entropy_coalition_amplitude(signal)
-    elif method in ["SCE", "sychrony"]:
+    elif method in ["SCE", "synchrony"]:
         info = {"Method": "SCE"}
-        entropy = _entropy_coalition_synchrony(signal)
+        entropy, info["Values"] = _entropy_coalition_synchrony(signal)
 
     return entropy, info
 
@@ -65,15 +72,37 @@ def entropy_coalition(signal, method="amplitude"):
 
 def _entropy_coalition_synchrony(signal):
 
-    return "TEST"
+    n_channels, n_samples = np.shape(signal)
+
+    # Get binary matrices of synchrony for each series
+    transformed = np.angle(scipy.signal.hilbert(signal))
+    matrix = np.zeros((n_channels, n_channels-1, n_samples))  # store array of synchrony series for each channel
+
+    for i in range(n_channels):
+        l = 0
+        for j in range(n_channels):
+            if i != j:
+                matrix[i, l] = _entropy_coalition_synchrony_phase(transformed[i], transformed[j])
+                l += 1
+
+    # Create random binary matrix for normalization
+    y = np.random.rand(n_channels - 1, n_samples)
+    random_binarized = np.array([_signal_binarize_threshold(i, threshold=0.5) for i in y])
+    norm = entropy_shannon(_entropy_coalition_map(random_binarized))[0]
+
+    # Compute shannon entropy
+    entropy = np.zeros(n_channels)
+    for i in range(n_channels):
+        c = _entropy_coalition_map(matrix[i])
+        entropy[i] = entropy_shannon(c)[0]
+
+    return np.mean(entropy)/norm, entropy/norm
+
 
 def _entropy_coalition_amplitude(signal):
 
-    # Detrend and normalize
-    detrended = np.array([signal_detrend(i - np.mean(i)) for i in signal])
-
     # Hilbert transform to determine the amplitude envelope
-    env = np.array([np.abs(scipy.signal.hilbert(i)) for i in detrended])
+    env = np.array([np.abs(scipy.signal.hilbert(i)) for i in signal])
 
     # Binarize (similar to LZC), mean of absolute of signal as threshold
     binarized = np.array([_signal_binarize_threshold(i, threshold="mean") for i in env])
@@ -95,11 +124,28 @@ def _entropy_coalition_amplitude(signal):
 # Utilities
 # =============================================================================
 
+
+def _entropy_coalition_synchrony_phase(phase1, phase2):
+    """Compute synchrony of two series of phases"""
+    diff = np.abs(phase1 - phase2)
+    d2 = np.zeros(len(diff))
+    for i in range(len(d2)):
+        if diff[i] > np.pi:
+            diff[i] = 2 * np.pi - diff[i]
+        if diff[i] < 0.8:
+            d2[i] = 1
+    return d2
+
 def _entropy_coalition_map(binary_sequence):
-    # Map each binary column of binary matrix psi onto an integer
-    mapped = np.zeros(binary_sequence.shape[1])
-    for t in range(binary_sequence.shape[1]):
-         for j in range(binary_sequence.shape[0]):
+    """Map each binary column of binary matrix psi onto an integer"""
+    if binary_sequence.ndim > 1:
+        n_channels, n_samples = binary_sequence.shape[0], binary_sequence.shape[1]
+    else:
+        n_channels, n_samples = 1, binary_sequence.shape[0]
+
+    mapped = np.zeros(n_samples)
+    for t in range(n_samples):
+         for j in range(n_channels):
              mapped[t] += binary_sequence[j, t] * (2**j)
 
     return mapped
