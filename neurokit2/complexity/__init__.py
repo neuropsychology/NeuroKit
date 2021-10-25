@@ -21,6 +21,7 @@ from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
+from .entropy_wiener import entropy_wiener
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
@@ -107,6 +108,7 @@ __all__ = [
     "entropy_svd",
     "entropy_fuzzy",
     "entropy_multiscale",
+    "entropy_wiener",
     "entropy_permutation",
     "entropy_range",
     "fisher_information",
