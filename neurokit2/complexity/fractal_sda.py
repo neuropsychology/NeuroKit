@@ -99,7 +99,7 @@ def fractal_sda(signal, robust=False, show=True):
     return 1 - slope, {"SD": sds, "Scale": scales}
 
 
-def _fractal_dfa_plot(sds, scales, slope, intercept, ax=None):
+def _fractal_sda_plot(sds, scales, slope, intercept, ax=None):
 
     if ax is None:
         fig, ax = plt.subplots()
