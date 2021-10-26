@@ -110,7 +110,7 @@ def fractal_sda(signal, scales=None, robust=False, show=True):
         _fractal_sda_plot(sds, scales, slope, intercept, ax=None)
 
     # FD = 1 - slope
-    return 1 - slope, {"SD": sds, "Scale": scales}
+    return 1 - slope, {"Slope": slope, "SD": sds, "Scale": scales}
 
 
 def _fractal_sda_plot(sds, scales, slope, intercept, ax=None):

@@ -65,7 +65,7 @@ def fractal_psdslope(signal, sampling_rate=1000, method="hasselman2013", show=Tr
     if method in ["hasselman", "hasselman2013"]:
         fd = _fractal_psdslope_hasselman(psd, sampling_rate, show=show)
 
-    return fd, {"Sampling_Rate": sampling_rate, "PSD": psd, "Method": method}
+    return fd, {"Slope": slope, "Sampling_Rate": sampling_rate, "PSD": psd, "Method": method}
 
 # =============================================================================
 # Methods
