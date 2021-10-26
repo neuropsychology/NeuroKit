@@ -7,7 +7,7 @@ from ..signal import signal_detrend
 from ..stats import standardize
 
 
-def fractal_sda(signal, robust=False, show=True):
+def fractal_sda(signal, scales=None, robust=False, show=True):
     """Standardised Dispersion Analysis (SDA)
     
     SDA is part of a family of dispersion techniques used to compute fractal dimension.
@@ -23,12 +23,25 @@ def fractal_sda(signal, robust=False, show=True):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+    scales : list
+        The scales at which the signal is binned for evaluating the dispersions. If not None, it should be
+        a list of integer powers of 2 (e.g., scales = [1, 2, 4, 8, 16...]) including 1 (meaning that the data
+        points are treated individually).
     robust : bool
         If True, centering is done by substracting the median from the variables and dividing it by
         the median absolute deviation (MAD). If False, variables are standardized by substracting the
         mean and dividing it by the standard deviation (SD).
     show : bool
         If True, returns the log-log plot of standardized dispersion versus bin size.
+
+    Returns
+    ----------
+    sda : float
+        Estimate of the fractal dimension using the conversion formula of
+        SDA (Hasselman, 2013).
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute SDA.
 
     References
     ----------
@@ -69,15 +82,12 @@ def fractal_sda(signal, robust=False, show=True):
         raise ValueError(
             "NeuroKit error: fractal_sda(): At least 1024 data points of signal are required."
             )
-    else:
-        scale_resolution = 30
 
-    # Set scales
-    scale_min = 2
-    scale_max = int(np.floor(np.log2(n / 2)))
-    scales = np.arange(scale_min, scale_max, (scale_max - scale_min) / scale_resolution)
-    scales = np.append(scales, [scale_max])
-    scales = np.unique(np.power(2, scales).astype(int))
+    # Set scales to be an integer power of 2
+    if scales is None:
+        scale_min = 1
+        scale_max = int(np.floor(np.log2(n / 2)))
+        scales = np.append(1, 2 ** np.arange(scale_min, scale_max + 1)) # include binsize = 1 too
 
     # sanitize scales
     scales = scales[scales <= n / 2]
@@ -88,12 +98,16 @@ def fractal_sda(signal, robust=False, show=True):
         max_n = int(len(signal) / scale) * scale
         splits = np.split(signal[0:max_n], scale)
         # compute sd of the sampling distribution of means (mean of each bin)
-        sds[i] = np.std([np.mean(split) for split in splits])
+        if scale == 1:
+            sds[i] = np.std(splits)
+            # sd of original standardized time series is 1
+        else:
+            sds[i] = np.std([np.mean(split) for split in splits])
 
     # Get slope
     slope, intercept = np.polyfit(np.log10(scales), np.log10(sds), 1)
     if show:
-        _fractal_dfa_plot(sds, scales, slope, intercept, ax=None)
+        _fractal_sda_plot(sds, scales, slope, intercept, ax=None)
 
     # FD = 1 - slope
     return 1 - slope, {"SD": sds, "Scale": scales}
