@@ -5,7 +5,7 @@ import pandas as pd
 from ..signal import signal_detrend, signal_psd
 
 
-def fractal_psdslope(signal, sampling_rate=1000, show=True, **kwargs):
+def fractal_psdslope(signal, sampling_rate=1000, method="hasselman2013", show=True, **kwargs):
     """Fractal dimension via Power Spectral Density (PSD) slope
 
     Power Spectral Density slope (PSDslope) analysis first transforms the time series into the
@@ -32,7 +32,7 @@ def fractal_psdslope(signal, sampling_rate=1000, show=True, **kwargs):
     >>>
     >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
     >>>
-    >>> psdslope, info = nk.fractal_psdslope(signal, sampling_rate=200)
+    >>> psdslope, info = nk.fractal_psdslope(signal, sampling_rate=200, show=True)
     >>> psdslope
 
     References
@@ -56,16 +56,26 @@ def fractal_psdslope(signal, sampling_rate=1000, show=True, **kwargs):
     # Standardise using N instead of N-1
     signal = (signal - np.nanmean(signal)) / np.nanstd(signal)
 
-    # Get PSD
+    # Get psd
     psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, **kwargs)
     psd = psd[psd["Frequency"] > 0]
 
+    # Sanitize method name
+    method = method.lower()
+    if method in ["hasselman", "hasselman2013"]:
+        fd = _fractal_psdslope_hasselman(psd, sampling_rate, show=show)
+
+    return fd, {"Sampling_Rate": sampling_rate, "PSD": psd, "Method": method}
+
+# =============================================================================
+# Methods
+# =============================================================================
+
+def _fractal_psdslope_hasselman(psd, sampling_rate, show=True):
+    
     psd["Frequency_Norm"] = psd["Frequency"] / sampling_rate
     psd["Size"] = psd["Frequency"]
     psd["Bulk"] = 2 * psd["Power"]
-    
-    # TODO: add log-log plot
-    # plot(x=log2(psd$freq), y=log2(psd$spec*2),pch=".")
 
     # First check the global slope for anti-persistent noise (GT +0.20)
     # If so, fit the line starting from the highest frequency
@@ -77,16 +87,13 @@ def fractal_psdslope(signal, sampling_rate=1000, show=True, **kwargs):
     # Convert from periodogram based self-affinity parameter estimate (`sa`) to an informed estimate of the (fractal) dimension (FD). See Hassleman (2013).
     fd = 3 / 2 + ((14 / 33) * np.tanh(slope * np.log(1 + np.sqrt(2))))
 
-    # Plot
     if show:
         _fractal_psdslope_plot(psd["Size"], psd["Bulk"], slope, intercept, fd, ax=None)
 
-    return fd, {"Sampling_Rate": sampling_rate, "PSD": psd}
-
+    return fd
 
 def _fractal_psdslope_plot(frequency, psd, slope, intercept, fd, ax=None):
 
-    ax = None
     if ax is None:
         fig, ax = plt.subplots()
         fig.suptitle("Power Spectral Density (PSD) slope analysis" +
@@ -98,7 +105,6 @@ def _fractal_psdslope_plot(frequency, psd, slope, intercept, fd, ax=None):
 
     ax.set_ylabel(r"$ln$(PSD)")
     ax.set_xlabel(r"$ln$(Frequency)")
-
     ax.scatter(np.log10(frequency), np.log10(psd),
                marker="o", zorder=2)
 
