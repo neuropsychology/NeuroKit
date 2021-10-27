@@ -4,7 +4,7 @@ import pandas as pd
 from ..signal import signal_autocor
 
 
-def complexity_rr(signal):
+def complexity_rr(signal, **kwargs):
     """Relative Roughness (RR)
 
     Relative Roughness is a ratio of local variance (autocovariance at lag-1) to global variance
@@ -15,11 +15,12 @@ def complexity_rr(signal):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+    **kwargs : optional
+        Other arguments to be passed to ``nk.signal_autocor()``.
 
     References
     ----------
-    - Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness: an index for testing the
-    suitability of the monofractal model. Frontiers in Physiology, 3, 208.
+    - Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness: an index for testing the suitability of the monofractal model. Frontiers in Physiology, 3, 208.
 
     Returns
     --------
@@ -44,7 +45,7 @@ def complexity_rr(signal):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    _, acov = signal_autocor(signal)  # Retrieve the dict
+    _, acov = signal_autocor(signal, **kwargs)  # Retrieve the dict
     acov = acov["ACov"][0:2]  # Extract cov at lag 0 and 1
 
     # RR formula

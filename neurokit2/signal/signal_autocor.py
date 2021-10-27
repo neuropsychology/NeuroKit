@@ -3,7 +3,7 @@ import scipy.stats
 from matplotlib import pyplot as plt
 
 
-def signal_autocor(signal, lag=None, demean=True, method="correlation", show=False):
+def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
     """Autocorrelation (ACF)
 
     Compute the autocorrelation of a signal.
@@ -17,7 +17,7 @@ def signal_autocor(signal, lag=None, demean=True, method="correlation", show=Fal
     demean : bool
         If True, the mean of the signal will be subtracted from the signal before ACF computation.
     method : str
-        Can be 'correlation' (using ``np.correlate``) or 'fft' (using FFT).
+        Can be 'correlation' (using ``np.correlate``) or 'fft' (using FFT). FFT is the default as it is relatively faster.
     show : bool
         If True, plot the autocorrelation at all values of lag.
 
@@ -38,7 +38,8 @@ def signal_autocor(signal, lag=None, demean=True, method="correlation", show=Fal
     >>> r, info = nk.signal_autocor(signal, show=True)
     >>> r #doctest: +SKIP
     >>>
-    >>> signal = [3, 5, 1, 3, 1, 6, 3, 1]
+    >>> signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
+    >>> r, info = nk.signal_autocor(signal, lag=2, show=True)
     >>> r, info = nk.signal_autocor(signal, lag=2, method='fft', show=True)
 
     """
@@ -57,6 +58,8 @@ def signal_autocor(signal, lag=None, demean=True, method="correlation", show=Fal
         S = np.conj(A) * A
         c_fourier = np.fft.ifft(S)
         acov = c_fourier[: (c_fourier.size // 2) + 1].real
+    else:
+        raise ValueError("Method must be 'correlation' or 'fft'.")
 
     # Normalize
     r = acov / acov[0]

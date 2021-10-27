@@ -3,7 +3,9 @@ import matplotlib.pyplot as plt
 from .optim_complexity_tolerance import complexity_tolerance
 
 
-def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength=2, show=False):
+def complexity_rqa(
+    signal, dimension=3, delay=1, tolerance="default", linelength=2, show=False, **kwargs
+):
     """Recurrence quantification analysis (RQA)
 
     A recurrence plot is based on a phase-space (time-delay embedding) representation of a signal, and
@@ -58,6 +60,8 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
         recurrences (``info['RecurrenceRate']``) is about 2-5%.
     linelength : int
         Minimum length of a diagonal and vertical lines. Default to 2.
+    **kwargs : optional
+        Other arguments (currently not used).
 
     Returns
     ----------
