@@ -9,6 +9,8 @@ def entropy_spectral(signal, sampling_rate=1000, **kwargs):
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the frequency domain as
     a probability distribution, and calculates the Shannon entropy of it.
+    A power spectrum with one or two dominant frequencies possesses a relatively low spectral entropy,
+    and a broadbanded spectrum has a higher value.
 
     Parameters
     ----------
@@ -39,9 +41,12 @@ def entropy_spectral(signal, sampling_rate=1000, **kwargs):
     >>> # Spectral Entropy
     >>> SpEn, info = nk.entropy_spectral(signal, sampling_rate=200)
     >>> SpEn #doctest: +SKIP
-    >>>
-    >>> SpEn, info = nk.entropy_spectral(signal, sampling_rate=200, method='fft')
-    >>> SpEn #doctest: +SKIP
+
+    References
+    ----------
+    - Crepeau, J. C., & Isaacson, L. K. (1991). Spectral Entropy Measurements of Coherent Structures in an
+    Evolving Shear Layer. Journal of Non-Equilibrium Thermodynamics, 16(2). doi:10.1515/jnet.1991.16.2.137 
+
 
     """
     # Sanity checks
@@ -51,7 +56,8 @@ def entropy_spectral(signal, sampling_rate=1000, **kwargs):
         )
 
     # Power-spectrum density (PSD)
-    psd = signal_psd(signal, sampling_rate=sampling_rate, **kwargs)
+    psd = nk.signal_psd(signal, sampling_rate=sampling_rate, method='fft')
+    psd["Power"] /= np.sum(psd["Power"])  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
     psd = psd[psd["Power"] > 0]
 
     # Compute Shannon entropy
