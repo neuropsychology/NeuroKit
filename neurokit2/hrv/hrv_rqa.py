@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-
 import numpy as np
-import pandas as pd
 import scipy.spatial
 
 from ..complexity import complexity_rqa
@@ -21,9 +19,12 @@ def hrv_rqa(
 ):
     """Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV).
 
-    RQA is a type of complexity analysis for non-linear systems (related to entropy and fractal dimensions). See the ``complexity_rqa()`` function for more information.
+    RQA is a type of complexity analysis for non-linear systems (related to entropy and fractal dimensions).
+    See the ``complexity_rqa()`` function for more information.
 
-    This function is not run routinely as part of ``hrv_nonlinear()`` or ``hrv()`` because its main function, ``complexity_rqa()``, relies on the ``PyRQA`` package, which is not trivial to install. You will need to successfully install it first before being able to run ``hrv_rqa()``.
+    This function is not run routinely as part of ``hrv_nonlinear()`` or ``hrv()`` because its
+    main function, ``complexity_rqa()``, relies on the ``PyRQA`` package, which is not trivial to install.
+    You will need to successfully install it first before being able to run ``hrv_rqa()``.
 
     Parameters
     ----------
@@ -39,7 +40,8 @@ def hrv_rqa(
     dimension : int
         See ``complexity_rqa()`` for more information.
     r : float
-        See ``complexity_rqa()`` for more information. If 'zimatore2021', will be set to half of the mean pairwise distance between points.
+        See ``complexity_rqa()`` for more information. If 'zimatore2021', will be set to half of the
+        mean pairwise distance between points.
     linelength : int
         See ``complexity_rqa()`` for more information.
     show : bool
@@ -54,8 +56,12 @@ def hrv_rqa(
 
     References
     ----------
-    - Zimatore, G., Falcioni, L., Gallotta, M. C., Bonavolontà, V., Campanella, M., De Spirito, M., ... & Baldari, C. (2021). Recurrence quantification analysis of heart rate variability to detect both ventilatory thresholds. PloS one, 16(10), e0249504.
-    - Ding, H., Crozier, S., & Wilson, S. (2008). Optimization of Euclidean distance threshold in the application of recurrence quantification analysis to heart rate variability studies. Chaos, Solitons & Fractals, 38(5), 1457-1467.
+    - Zimatore, G., Falcioni, L., Gallotta, M. C., Bonavolontà, V., Campanella, M.,
+    De Spirito, M., ... & Baldari, C. (2021). Recurrence quantification analysis of heart rate variability
+    to detect both ventilatory thresholds. PloS one, 16(10), e0249504.
+    - Ding, H., Crozier, S., & Wilson, S. (2008). Optimization of Euclidean distance threshold in the
+    application of recurrence quantification analysis to heart rate variability studies. Chaos,
+    Solitons & Fractals, 38(5), 1457-1467.
 
     Examples
     --------

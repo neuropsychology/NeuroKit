@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import scipy.signal
 
 from ..signal.signal_timefrequency import signal_timefrequency
 

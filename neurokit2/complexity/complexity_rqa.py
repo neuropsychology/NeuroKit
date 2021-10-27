@@ -1,6 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 
 from .optim_complexity_r import complexity_r
 
@@ -8,7 +6,8 @@ from .optim_complexity_r import complexity_r
 def complexity_rqa(signal, dimension=3, delay=1, r="default", linelength=2, show=False):
     """Recurrence quantification analysis (RQA)
 
-    A recurrence plot is based on a phase-space (time-delay embedding) representation of a signal, and is a 2D depiction  of when a system revisits a state that is has been in the past.
+    A recurrence plot is based on a phase-space (time-delay embedding) representation of a signal, and
+    is a 2D depiction of when a system revisits a state that is has been in the past.
 
     Recurrence quantification analysis (RQA) is a method of complexity analysis
     for the investigation of dynamical systems. It quantifies the number and duration
@@ -16,15 +15,18 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", linelength=2, show
 
     This implementation currently relies on the ``PyRQA``, which itself relies on the ``pyopencl``.
     The latter can be a bit of a hassle to install (you might need, as a first step, to download the
-    pre-compiled `wheels <https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl>`_ of the package and pip install it directly before pip-installing PyRQA).
+    pre-compiled `wheels <https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl>`_ of the package and pip
+    install it directly before pip-installing PyRQA).
 
     Features include:
 
     - Recurrence rate (RR): Proportion of points that are labelled as recurrences. Depends on the
     radius r.
-    - Determinism (DET): Proportion of recurrence points which form diagonal lines. Indicates autocorrelation.
+    - Determinism (DET): Proportion of recurrence points which form diagonal lines.
+    Indicates autocorrelation.
     - Divergence (DIV)
-    - Laminarity (LAM): Proportion of recurrence points which form vertical lines. Indicates the amount of laminar phases (intermittency).
+    - Laminarity (LAM): Proportion of recurrence points which form vertical lines.
+    Indicates the amount of laminar phases (intermittency).
     - Trapping Time (TT)
     - Ratio determinism / recurrence rate (DET_RR)
     - Ratio laminarity / determinism (LAM_DET)
@@ -72,8 +74,8 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", linelength=2, show
 
     References
     ----------
-    - Rawald, T., Sips, M., Marwan, N., & Dransch, D. (2014). Fast computation of recurrences in long time series. In Translational Recurrences (pp. 17-29). Springer, Cham.
-
+    - Rawald, T., Sips, M., Marwan, N., & Dransch, D. (2014). Fast computation of recurrences
+    in long time series. In Translational Recurrences (pp. 17-29). Springer, Cham.
 
     """
     # Try loading mne

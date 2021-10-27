@@ -17,7 +17,8 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
     this will reveal itself in log-log coordinates as a linear relationship. The slope of the best fitting line
     is taken as an estimate of the fractal scaling exponent and can be converted to an estimate of the fractal dimension.
     A slope of 0 is consistent with white noise, and a slope of less than 0 but greater than –1,
-    is consistent with pink noise i.e., 1/f noise.
+    is consistent with pink noise i.e., 1/f noise. Spectral slopes as steep as −2 indicate fractional Brownian motion,
+    the epitome of random walk processes.
 
     Parameters
     ----------
@@ -28,10 +29,12 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
     method : str
         Method to estimate the fractal dimension from the slope,
         can be 'voss1988' (default) or 'hasselman2013'.
-    frequency_range: bool, list
+    frequency_range: bool, list, str
         The frequency range e.g., `frequency_range=[2, 30]` to which to fit the spectral slope,
         as inverse power-law scaling relation may break down at either the highest or lowest frequencies, or both.
-        Defaults to None, which means the minimum and maximum frequency will be used (see ``signal_psd()``).
+        Can also be 'lowest25' which excludes the upper 75% of the spectral estimates (PSD less sensitive to
+        high-frequency disturbances, Eke et al., 2002). Defaults to None, which means the minimum and maximum
+        frequency will be used (see ``signal_psd()``).
     show : bool
         If True, returns the log-log plot of PSD versus frequency.
     **kwargs
@@ -51,8 +54,8 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
     >>>
     >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
     >>>
-    >>> psdslope, info = nk.fractal_psdslope(signal, sampling_rate=200, show=True)
-    >>> psdslope
+    >>> psdslope, info = nk.fractal_psdslope(signal, sampling_rate=200, show=False)
+    >>> psdslope #doctest: +SKIP
 
     References
     ----------
@@ -63,6 +66,9 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
 
     - Voss, R. F. (1988). Fractals in nature: From characterization to simulation.
     The Science of Fractal Images, 21–70.
+    
+    - Eke, A., Hermán, P., Kocsis, L., and Kozak, L. R. (2002). Fractal characterization of complexity in
+    temporal physiological signals. Physiol. Meas. 23, 1–38.
     """
 
     # Sanity checks
@@ -80,17 +86,20 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
 
     # Get psd with fourier transform
     if frequency_range is None:
-        psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft', show=False, **kwargs)
-    else:
+        frequency_range = [0, np.inf]
+    if isinstance(frequency_range, list):
         psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft',
                          min_frequency=frequency_range[0], max_frequency=frequency_range[1], show=False, **kwargs)
+    elif frequency_range == "lowest25":
+        psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft', show=False, **kwargs)
+        psd = psd[psd["Frequency"] < psd.quantile(0.25)[0]]
     psd = psd[psd["Frequency"] > 0]
 
     # First check the global slope for anti-persistent noise (GT +0.20)
     # If so, fit the line starting from the highest frequency
     slope, intercept = np.polyfit(np.log10(psd["Frequency"]), np.log10(psd["Power"]), 1)
 
-    if slope > 0.2:  # not sure about this?
+    if slope > 0.2:
         slope, intercept = np.polyfit(np.log10(np.flip(psd["Frequency"])), np.log10(np.flip(psd["Power"])), 1)
 
     # Sanitize method name
@@ -104,7 +113,7 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
     if show:
         _fractal_psdslope_plot(psd["Frequency"], psd["Power"], slope, intercept, fd, ax=None)
 
-    return fd, {"Slope": slope, "Sampling_Rate": sampling_rate, "Method": method}
+    return fd, {"Slope": slope, "Sampling_Rate": sampling_rate, "Method": method, "Frequencies": frequency_range}
 
 
 def _fractal_psdslope_plot(frequency, psd, slope, intercept, fd, ax=None):

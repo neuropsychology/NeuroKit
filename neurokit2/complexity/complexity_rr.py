@@ -7,7 +7,9 @@ from ..signal import signal_autocor
 def complexity_rr(signal):
     """Relative Roughness (RR)
 
-    Relative Roughness is a ratio of local variance (autocovariance at lag-1) to global variance (autocovariance at lag-0) that can be used to classify different 'noises' (see `Hasselman, 2019 <https://complexity-methods.github.io/book/relative-roughness.html>`_).
+    Relative Roughness is a ratio of local variance (autocovariance at lag-1) to global variance
+    (autocovariance at lag-0) that can be used to classify different 'noises'
+    (see `Hasselman, 2019 <https://complexity-methods.github.io/book/relative-roughness.html>`_).
 
     Parameters
     ----------

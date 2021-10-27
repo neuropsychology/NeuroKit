@@ -7,7 +7,8 @@ from ..signal import signal_psd
 def entropy_spectral(signal, sampling_rate=1000, **kwargs):
     """Spectral Entropy (SpEn)
 
-    Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the frequency domain as a probability distribution, and calculates the Shannon entropy of it.
+    Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the frequency domain as
+    a probability distribution, and calculates the Shannon entropy of it.
 
     Parameters
     ----------

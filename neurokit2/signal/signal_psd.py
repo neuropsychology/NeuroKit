@@ -32,7 +32,8 @@ def signal_psd(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     method : str
-        Either 'welch' (default), 'fft', 'multitapers' (requires the 'mne' package), 'lombscargle' (requires the 'astropy' package) or 'burg'.
+        Either 'welch' (default), 'fft', 'multitapers' (requires the 'mne' package), 'lombscargle'
+        (requires the 'astropy' package) or 'burg'.
     show : bool
         If True, will return a plot. If False, will return the density values that can be plotted externally.
     normalize : bool
