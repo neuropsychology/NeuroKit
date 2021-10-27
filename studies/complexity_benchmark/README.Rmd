@@ -80,8 +80,13 @@ for n in np.power(10, range(2, 6)):
   for i in range(100):
     data.append(time_function(i, x, nk.complexity_hjorth, index="Hjorth", method="nk_complexity_hjorth"))
     data.append(time_function(i, x, complexity_hurst, index="Hurst", method="nk_complexity_hurst"))
+    data.append(time_function(i, x, complexity_lempelziv, index="LZC", method="nk_complexity_lempelziv_lzc"))
+    data.append(time_function(i, x, complexity_lempelziv, index="PLZC", method="nk_complexity_lempelziv_plzc"))
+    data.append(time_function(i, x, complexity_lempelziv, index="MPLZC", method="nk_complexity_lempelziv_mplzc"))
     
-    
+
+        
+        
     data.append(time_function(i, x, nk.complexity_rr, index="RR", method="nk_complexity_rr"))
     
     data.append(time_function(i, x, nk.fisher_information, index="Fisher", method="nk_fisher_information"))
