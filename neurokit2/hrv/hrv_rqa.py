@@ -67,8 +67,7 @@ def hrv_rqa(
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>>
     >>> # Compute HRV indices
-    >>> hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
-    >>> hrv_rqa #doctest: +SKIP
+    >>> # hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
 
     References
     ----------
