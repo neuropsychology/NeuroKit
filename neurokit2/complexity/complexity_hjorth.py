@@ -36,9 +36,7 @@ def complexity_hjorth(signal):
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
     >>> complexity, info = nk.complexity_hjorth(signal)
-    >>> complexity  # That's the 'complexity' parameter
-    >>> info["Mobility"]
-    >>> info["Activity"]
+    >>> complexity #doctest: +SKIP
 
     References
     ----------

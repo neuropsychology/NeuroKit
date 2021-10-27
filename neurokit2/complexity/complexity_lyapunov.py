@@ -16,7 +16,7 @@ def complexity_lyapunov(
     dimension=2,
     method='rosenstein1993',
     len_trajectory=20,
-    min_tsep=None,
+    tolerance=None,
     matrix_dim=4,
     min_neighbors="default",
     **kwargs,
@@ -59,9 +59,10 @@ def complexity_lyapunov(
     len_trajectory : int
         The number of data points in which neighbouring trajectories are followed. Only relevant if
         method is 'rosenstein1993'.
-    min_tsep : int, None
-        Minimum temporal separation between two neighbors. If None (default), `min_tsep` is set to the mean
-        period of the signal obtained by computing the mean frequency using the fast fourier transform.
+    tolerance : int, None
+        Minimum temporal separation for two points to be considered as neighbours.
+        If None (default), `tolerance` is set to the mean period of the signal obtained by computing
+        the mean frequency using the fast fourier transform.
     matrix_dim : int
         Correponds to the number of LEs to return for 'eckmann1996'.
     min_neighbors : int, str
@@ -102,23 +103,23 @@ def complexity_lyapunov(
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # If default min_tsep
-    if min_tsep is None:
-        min_tsep = _complexity_lyapunov_separation(signal, **kwargs)
+    # If default tolerance
+    if tolerance is None:
+        tolerance = _complexity_lyapunov_separation(signal, **kwargs)
 
     # Method
     method = method.lower()
     if method in ["rosenstein", "rosenstein1993"]:
         le, parameters = _complexity_lyapunov_rosenstein(signal, delay, dimension,
-                                                         min_tsep, len_trajectory,
+                                                         tolerance, len_trajectory,
                                                          **kwargs)
     elif method in ["eckmann", "eckmann1996"]:
-        le, parameters = _complexity_lyapunov_eckmann(signal, delay, dimension, min_tsep,
+        le, parameters = _complexity_lyapunov_eckmann(signal, delay, dimension, tolerance,
                                                       matrix_dim, min_neighbors)
 
     # Store params
     info = {"Dimension": dimension, "Delay": delay,
-            "Minimum Separation": min_tsep, "Method": method}
+            "Minimum Separation": tolerance, "Method": method}
     info.update(parameters)
 
     return le, info
@@ -127,18 +128,18 @@ def complexity_lyapunov(
 # Methods
 # =============================================================================
 
-def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, min_tsep=None,
+def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, tolerance=None,
                                     len_trajectory=20, **kwargs):
 
-    # If default min_tsep (kwargs: min_tsep="default")
-    min_tsep = _complexity_lyapunov_separation(signal, **kwargs)
+    # If default tolerance (kwargs: tolerance="default")
+    tolerance = _complexity_lyapunov_separation(signal, **kwargs)
 
     # Delay embedding
     if delay is None:
         delay = complexity_delay(signal, method='rosenstein1993', show=False)
 
     # Check that sufficient data points are available
-    _complexity_lyapunov_checklength(len(signal), delay, dimension, min_tsep,
+    _complexity_lyapunov_checklength(len(signal), delay, dimension, tolerance,
                                      len_trajectory, method='rosenstein1993')
 
     # Embed
@@ -148,8 +149,8 @@ def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, min_tsep=None,
     # construct matrix with pairwise distances between vectors in orbit
     dists = sklearn.metrics.pairwise.euclidean_distances(embedded)
     for i in range(m):
-        # Exclude indices within min_tsep
-        dists[i, max(0, i - min_tsep) : i + min_tsep + 1] = np.inf
+        # Exclude indices within tolerance
+        dists[i, max(0, i - tolerance) : i + tolerance + 1] = np.inf
 
     # Find indices of nearest neighbours
     ntraj = m - len_trajectory + 1
@@ -177,7 +178,7 @@ def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, min_tsep=None,
     return slope, parameters
 
 
-def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, min_tsep=None,
+def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, tolerance=None,
                                  matrix_dim=4, min_neighbors="default"):
     """
     TODO: check implementation
@@ -190,7 +191,7 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, min_tsep=None,
     m = (dimension - 1) // (matrix_dim - 1)
 
     # Check that sufficient data points are available
-    _complexity_lyapunov_checklength(len(signal), delay, dimension, min_tsep,
+    _complexity_lyapunov_checklength(len(signal), delay, dimension, tolerance,
                                      method='eckmann1996', matrix_dim=matrix_dim,
                                      min_neighbors=min_neighbors)
 
@@ -205,7 +206,7 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, min_tsep=None,
 
     for i in range(len(embedded)):
         # exclude difference of vector to itself and those too close in time
-        distances[i, max(0, i - min_tsep) : i + min_tsep + 1] = np.inf
+        distances[i, max(0, i - tolerance) : i + tolerance + 1] = np.inf
 
         # index of furthest nearest neighbour
         neighbour_furthest = np.argsort(distances[i])[min_neighbors-1]
@@ -263,38 +264,38 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, min_tsep=None,
 # Utilities
 # =============================================================================
 
-def _complexity_lyapunov_separation(signal, min_tsep="default"):
+def _complexity_lyapunov_separation(signal, tolerance="default"):
     """Minimum temporal separation between two neighbors.
 
     If 'default', finds a suitable value by calculating the mean period of the data.
 
     https://github.com/CSchoel/nolds
     """
-    if isinstance(min_tsep, (int, float)):
-        return min_tsep
+    if isinstance(tolerance, (int, float)):
+        return tolerance
 
     n = len(signal)
     max_tsep_factor = 0.25
 
-    # min_tsep need the fft
+    # tolerance need the fft
     f = np.fft.rfft(signal, n * 2 - 1)
-    # calculate min_tsep as mean period (= 1 / mean frequency)
+    # calculate tolerance as mean period (= 1 / mean frequency)
     mf = np.fft.rfftfreq(n * 2 - 1) * np.abs(f)
     mf = np.mean(mf[1:]) / np.sum(np.abs(f[1:]))
-    min_tsep = int(np.ceil(1.0 / mf))
-    if min_tsep > max_tsep_factor * n:
+    tolerance = int(np.ceil(1.0 / mf))
+    if tolerance > max_tsep_factor * n:
         set_min = int(max_tsep_factor * n)
         warn(
-            f"Signal has a mean frequency too low for min_tsep={min_tsep}, " + 
-            f"setting min_tsep={set_min}",
+            f"Signal has a mean frequency too low for tolerance={tolerance}, " + 
+            f"setting tolerance={set_min}",
             category=NeuroKitWarning,
         )
-        min_tsep = set_min
-    return min_tsep
+        tolerance = set_min
+    return tolerance
 
 
 def _complexity_lyapunov_checklength(
-    n, delay=1, dimension=2, min_tsep="default", len_trajectory=20,
+    n, delay=1, dimension=2, tolerance="default", len_trajectory=20,
     method='rosenstein1993', matrix_dim=4, min_neighbors="default"
 ):
     """
@@ -305,12 +306,12 @@ def _complexity_lyapunov_checklength(
         min_len = (dimension - 1) * delay + 1
         # we need len_trajectory orbit vectors to follow a complete trajectory
         min_len += len_trajectory - 1
-        # we need min_tsep * 2 + 1 orbit vectors to find neighbors for each
-        min_len += min_tsep * 2 + 1
+        # we need tolerance * 2 + 1 orbit vectors to find neighbors for each
+        min_len += tolerance * 2 + 1
         # Sanity check
         if n < min_len:
             warn(
-                f"for dimension={dimension}, delay={delay}, min_tsep={min_tsep} and " +
+                f"for dimension={dimension}, delay={delay}, tolerance={tolerance} and " +
                 f"len_trajectory={len_trajectory}, you need at least {min_len} datapoints in your time series.",
                 category=NeuroKitWarning,
             )
@@ -321,14 +322,14 @@ def _complexity_lyapunov_checklength(
         min_len = dimension
         # we need to follow each starting point of an orbit vector for m more steps
         min_len += m
-        # we need min_tsep * 2 + 1 orbit vectors to find neighbors for each
-        min_len += min_tsep * 2
+        # we need tolerance * 2 + 1 orbit vectors to find neighbors for each
+        min_len += tolerance * 2
         # we need at least min_nb neighbors for each orbit vector
         min_len += min_neighbors
         # Sanity check
         if n < min_len:
             warn(
-                f"for dimension={dimension}, delay={delay}, min_tsep={min_tsep}, " +
+                f"for dimension={dimension}, delay={delay}, tolerance={tolerance}, " +
                 f"matrix_dim={matrix_dim} and min_neighbors={min_neighbors}, " +
                 f"you need at least {min_len} datapoints in your time series.",
                 category=NeuroKitWarning,

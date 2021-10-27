@@ -171,7 +171,7 @@ def _get_tolerance(signal, tolerance="default", dimension=2, show=False):
         if signal.ndim > 1:
             r_list = []
             for i, col in enumerate(signal):
-                value = _default_r(signal[col], dimension=dimension)
+                value = _default_tolerance(signal[col], dimension=dimension)
                 r_list.append(value)
             optimal_r = np.mean(r_list)
 

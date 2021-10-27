@@ -27,7 +27,7 @@ def complexity_rr(signal):
     >>>
     >>> signal = [1, 2, 3, 4, 5]
     >>> rr, _ = nk.complexity_rr(signal)
-    >>> rr
+    >>> rr  #doctest: +SKIP
 
     """
     # Sanity checks

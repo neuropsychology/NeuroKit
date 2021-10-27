@@ -94,7 +94,7 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
         ) from e
 
     # Get neighbourhood
-    if r == "default":
+    if tolerance == "default":
         r, _ = complexity_tolerance(signal, method="sd", delay=None, dimension=None, show=False)
     r = pyrqa.neighbourhood.FixedRadius(r)
 
