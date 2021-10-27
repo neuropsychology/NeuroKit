@@ -48,6 +48,28 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     info : dict
         A dictionary containing additional information regarding the parameters used.
 
+    See Also
+    --------
+    entropy_multiscale
+
+    Examples
+    ----------
+    >>> import neurokit2 as nk
+    >>>
+    >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
+    >>>
+    >>> # Permutation Entropy
+    >>> pe, info = nk.entropy_permutation(signal, dimension=3, delay=1, corrected=False)
+    >>> pe #doctest: +SKIP
+    >>>
+    >>> # Multiscale Permutation Entropy
+    >>> mspe, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
+    >>> mspe #doctest: +SKIP
+    >>>
+    >>> # Weighted Permutation Entropy
+    >>> wpe, info = nk.entropy_permutation(signal, dimension=3, weighted=True)
+    >>> wpe #doctest: +SKIP
+
     References
     ----------
     - https://github.com/nikdon/pyEntropy
@@ -58,27 +80,6 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     biomedical and econophysics applications: a review. Entropy, 14(8), 1553-1577.
     - Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time
     series. Physical review letters, 88(17), 174102.
-
-    See Also
-    --------
-    entropy_multiscale
-
-
-    Examples
-    ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
-    >>>
-    >>> # Permutation Entropy
-    >>> pe, info = nk.entropy_permutation(signal, dimension=3, delay=1, corrected=False)
-    >>> pe
-    >>> # Multiscale Permutation Entropy
-    >>> mspe, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
-    >>> mspe
-    >>> # Weighted Permutation Entropy
-    >>> wpe, info = nk.entropy_permutation(signal, dimension=3, weighted=True)
-    >>> wpe
 
     """
     # Sanity checks

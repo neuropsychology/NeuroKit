@@ -58,6 +58,7 @@ def hrv_rqa(
     Examples
     --------
     >>> import neurokit2 as nk
+    >>> import pyrqa
     >>>
     >>> # Download data
     >>> data = nk.data("bio_resting_5min_100hz")

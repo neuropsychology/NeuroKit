@@ -38,10 +38,10 @@ def entropy_spectral(signal, sampling_rate=1000, **kwargs):
     >>>
     >>> # Spectral Entropy
     >>> SpEn, info = nk.entropy_spectral(signal, sampling_rate=200)
-    >>> SpEn
+    >>> SpEn #doctest: +SKIP
     >>>
     >>> SpEn, info = nk.entropy_spectral(signal, sampling_rate=200, method='fft')
-    >>> SpEn
+    >>> SpEn #doctest: +SKIP
 
     """
     # Sanity checks
