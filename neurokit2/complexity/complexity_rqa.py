@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 
-from .optim_complexity_r import complexity_r
+from .optim_complexity_tolerance import complexity_tolerance
 
 
-def complexity_rqa(signal, dimension=3, delay=1, r="default", linelength=2, show=False):
+def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength=2, show=False):
     """Recurrence quantification analysis (RQA)
 
     A recurrence plot is based on a phase-space (time-delay embedding) representation of a signal, and
@@ -52,10 +52,10 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", linelength=2, show
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : float
-        Tolerance (similarity threshold). The radius used for detecting neighbours. A rule of thumb is to
-        set r so that the percentage of points classified as recurrences (``info['RecurrenceRate']``) is
-        about 2-5%.
+    tolerance : float
+        Tolerance (similarity threshold, often denoted as 'r'). The radius used for detecting neighbours.
+        A rule of thumb is to set r so that the percentage of points classified as
+        recurrences (``info['RecurrenceRate']``) is about 2-5%.
     linelength : int
         Minimum length of a diagonal and vertical lines. Default to 2.
 
@@ -70,7 +70,7 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", linelength=2, show
     >>> results #doctest: +SKIP
     >>>
     >>> # Larger radius
-    >>> results, info = nk.complexity_rqa(signal, r=1, show=True) #doctest: +SKIP
+    >>> results, info = nk.complexity_rqa(signal, tolerance=1, show=True) #doctest: +SKIP
 
     References
     ----------
@@ -95,7 +95,7 @@ def complexity_rqa(signal, dimension=3, delay=1, r="default", linelength=2, show
 
     # Get neighbourhood
     if r == "default":
-        r, _ = complexity_r(signal, method="sd", delay=None, dimension=None, show=False)
+        r, _ = complexity_tolerance(signal, method="sd", delay=None, dimension=None, show=False)
     r = pyrqa.neighbourhood.FixedRadius(r)
 
     # Convert signal to time series

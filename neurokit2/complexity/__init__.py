@@ -38,7 +38,7 @@ from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
 from .optim_complexity_k import complexity_k
 from .optim_complexity_optimize import complexity_optimize
-from .optim_complexity_r import complexity_r
+from .optim_complexity_tolerance import complexity_tolerance
 from .transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Aliases
@@ -75,7 +75,7 @@ __all__ = [
     "complexity_simulate",
     "complexity_hjorth",
     "complexity_hurst",
-    "complexity_r",
+    "complexity_tolerance",
     "complexity_lempelziv",
     "complexity_lyapunov",
     "complexity_mfdfa",

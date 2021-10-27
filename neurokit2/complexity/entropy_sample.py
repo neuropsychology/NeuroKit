@@ -2,10 +2,10 @@
 import numpy as np
 import pandas as pd
 
-from .utils import _get_r, _phi, _phi_divide
+from .utils import _get_tolerance, _phi, _phi_divide
 
 
-def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
+def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
     """Sample Entropy (SampEn)
 
     Python implementation of the sample entropy (SampEn) of a signal.
@@ -24,9 +24,9 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : float
-        Tolerance (i.e., filtering level - max absolute difference between segments). If 'default',
-        will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
+    tolerance : float
+        Tolerance (often denoted as 'r', i.e., filtering level - max absolute difference between segments).
+        If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
     **kwargs : optional
         Other arguments.
 
@@ -60,17 +60,17 @@ def entropy_sample(signal, delay=1, dimension=2, r="default", **kwargs):
     # Prepare parameters
     info = {"Dimension": dimension, "Delay": delay}
 
-    info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
     out = _entropy_sample(
-        signal, r=info["Tolerance"], delay=delay, dimension=dimension, **kwargs
+        signal, tolerance=info["Tolerance"], delay=delay, dimension=dimension, **kwargs
     )
 
     return out, info
 
 
-def _entropy_sample(signal, r, delay=1, dimension=2, **kwargs):
+def _entropy_sample(signal, tolerance, delay=1, dimension=2, **kwargs):
 
-    phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, **kwargs)
+    phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance, approximate=False, **kwargs)
     sampen = _phi_divide(phi)
 
     return sampen

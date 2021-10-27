@@ -7,7 +7,7 @@ from .entropy_sample import entropy_sample
 from .utils import (
     _get_coarsegrained,
     _get_coarsegrained_rolling,
-    _get_r,
+    _get_tolerance,
     _get_scale,
     _phi,
     _phi_divide,
@@ -18,7 +18,7 @@ def entropy_multiscale(
     signal,
     scale="default",
     dimension=2,
-    r="default",
+    tolerance="default",
     composite=False,
     refined=False,
     fuzzy=False,
@@ -50,9 +50,9 @@ def entropy_multiscale(
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : float
-        Tolerance (i.e., filtering level - max absolute difference between segments). If 'default',
-        will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
+    tolerance : float
+        Tolerance (often denoted as 'r', i.e., filtering level - max absolute difference between segments).
+        If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
     composite : bool
         Returns the composite multiscale entropy (CMSE), more accurate than MSE.
     refined : bool
@@ -141,10 +141,10 @@ def entropy_multiscale(
         "Scale": _get_scale(signal, scale=scale, dimension=dimension),
     }
 
-    info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
     out, info["Values"] = _entropy_multiscale(
         signal,
-        r=info["Tolerance"],
+        tolerance=info["Tolerance"],
         scale_factors=info["Scale"],
         dimension=dimension,
         composite=composite,
@@ -162,7 +162,7 @@ def entropy_multiscale(
 # =============================================================================
 def _entropy_multiscale(
     signal,
-    r,
+    tolerance,
     scale_factors,
     dimension=2,
     composite=False,
@@ -178,15 +178,15 @@ def _entropy_multiscale(
 
         # Regular MSE
         if refined is False and composite is False:
-            mse_vals[i] = _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs)
+            mse_vals[i] = _entropy_multiscale_mse(signal, tau, dimension, tolerance, fuzzy, **kwargs)
 
         # Composite MSE
         elif refined is False and composite is True:
-            mse_vals[i] = _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs)
+            mse_vals[i] = _entropy_multiscale_cmse(signal, tau, dimension, tolerance, fuzzy, **kwargs)
 
         # Refined Composite MSE
         else:
-            mse_vals[i] = _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs)
+            mse_vals[i] = _entropy_multiscale_rcmse(signal, tau, dimension, tolerance, fuzzy, **kwargs)
 
     # Remove inf, nan and 0
     mse = mse_vals.copy()[~np.isnan(mse_vals)]
@@ -218,15 +218,15 @@ def _entropy_multiscale_plot(scale_factors, mse_values):
 # =============================================================================
 # Methods
 # =============================================================================
-def _entropy_multiscale_mse(signal, tau, dimension, r, fuzzy, **kwargs):
+def _entropy_multiscale_mse(signal, tau, dimension, tolerance, fuzzy, **kwargs):
     y = _get_coarsegrained(signal, tau)
     if len(y) < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
         return np.nan
 
-    return entropy_sample(y, delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs)[0]
+    return entropy_sample(y, delay=1, dimension=dimension, tolerance=tolerance, fuzzy=fuzzy, **kwargs)[0]
 
 
-def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
+def _entropy_multiscale_cmse(signal, tau, dimension, tolerance, fuzzy, **kwargs):
     y = _get_coarsegrained_rolling(signal, tau)
     if y.size < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
         return np.nan
@@ -234,13 +234,13 @@ def _entropy_multiscale_cmse(signal, tau, dimension, r, fuzzy, **kwargs):
     mse_y = np.full(len(y), np.nan)
     for i in np.arange(len(y)):
         mse_y[i] = entropy_sample(
-            y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, **kwargs
+            y[i, :], delay=1, dimension=dimension, tolerance=tolerance, fuzzy=fuzzy, **kwargs
         )[0]
 
     return np.mean(mse_y)
 
 
-def _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs):
+def _entropy_multiscale_rcmse(signal, tau, dimension, tolerance, fuzzy, **kwargs):
     y = _get_coarsegrained_rolling(signal, tau)
     if y.size < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
         return np.nan
@@ -249,7 +249,7 @@ def _entropy_multiscale_rcmse(signal, tau, dimension, r, fuzzy, **kwargs):
     phi_ = np.full([len(y), 2], np.nan)
     for i in np.arange(len(y)):
         phi_[i] = _phi(
-            y[i, :], delay=1, dimension=dimension, r=r, fuzzy=fuzzy, approximate=False, **kwargs
+            y[i, :], delay=1, dimension=dimension, tolerance=tolerance, fuzzy=fuzzy, approximate=False, **kwargs
         )
 
     # Average all phi of the same dimension, then divide, then log

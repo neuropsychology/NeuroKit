@@ -7,10 +7,10 @@ from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
 
 
-def complexity_r(signal, method="maxApEn", delay=None, dimension=None, show=False):
+def complexity_tolerance(signal, method="maxApEn", delay=None, dimension=None, show=False):
     """Automated selection of the optimal tolerance (r) parameter for entropy measures
 
-    The r parameter has a critical impact and is a major source of inconsistencies in the literature.
+    The tolerance parameter has a critical impact and is a major source of inconsistencies in the literature.
 
     Parameters
     ----------
@@ -45,7 +45,7 @@ def complexity_r(signal, method="maxApEn", delay=None, dimension=None, show=Fals
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>> delay, _ = nk.complexity_delay(signal)
     >>> dimension, _ = nk.complexity_dimension(signal, delay=delay)
-    >>> r, info = nk.complexity_r(signal, delay=delay, dimension=dimension)
+    >>> r, info = nk.complexity_tolerance(signal, delay=delay, dimension=dimension)
     >>> r #doctest: +SKIP
 
 
@@ -61,7 +61,7 @@ def complexity_r(signal, method="maxApEn", delay=None, dimension=None, show=Fals
         r = 0.2 * np.std(signal, ddof=1)
         info = {"Method": method}
     elif method in ["maxapen", "optimize"]:
-        r, info = _optimize_r(signal, delay=delay, dimension=dimension, show=show)
+        r, info = _optimize_tolerance(signal, delay=delay, dimension=dimension, show=show)
         info.update({"Method": method})
     return r, info
 
@@ -69,7 +69,7 @@ def complexity_r(signal, method="maxApEn", delay=None, dimension=None, show=Fals
 # =============================================================================
 # Internals
 # =============================================================================
-def _optimize_r(signal, delay=None, dimension=None, show=False):
+def _optimize_tolerance(signal, delay=None, dimension=None, show=False):
 
     if not delay:
         delay = complexity_delay(signal, delay_max=100, method="fraser1986")
@@ -86,12 +86,12 @@ def _optimize_r(signal, delay=None, dimension=None, show=False):
     r = r_range[np.argmax(ApEn)]
 
     if show is True:
-        _optimize_r_plot(r, r_range, ApEn, ax=None)
+        _optimize_tolerance_plot(r, r_range, ApEn, ax=None)
 
     return r, {"Values": r_range, "Scores": ApEn}
 
 
-def _optimize_r_plot(r, r_range, ApEn, ax=None):
+def _optimize_tolerance_plot(r, r_range, ApEn, ax=None):
 
     if ax is None:
         fig, ax = plt.subplots()

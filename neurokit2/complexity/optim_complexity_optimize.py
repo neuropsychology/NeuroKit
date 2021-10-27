@@ -17,7 +17,7 @@ from .optim_complexity_dimension import (
     _embedding_dimension_ffn,
     _embedding_dimension_plot,
 )
-from .optim_complexity_r import _optimize_r_plot
+from .optim_complexity_tolerance import _optimize_tolerance_plot
 
 
 def complexity_optimize(
@@ -26,7 +26,7 @@ def complexity_optimize(
     delay_method="fraser1986",
     dimension_max=20,
     dimension_method="afnn",
-    r_method="maxApEn",
+    tolerance_method="maxApEn",
     show=False,
     **kwargs
 ):
@@ -46,8 +46,8 @@ def complexity_optimize(
         See :func:`~neurokit2.complexity_dimension`.
     dimension_method : str
         See :func:`~neurokit2.complexity_dimension`.
-    r_method : str
-        See :func:`~neurokit2.complexity_r`.
+    tolerance_method : str
+        See :func:`~neurokit2.complexity_tolerance`.
     show : bool
         Defaults to False.
 
@@ -62,7 +62,7 @@ def complexity_optimize(
 
     See Also
     ------------
-    complexity_dimension, complexity_delay, complexity_r
+    complexity_dimension, complexity_delay, complexity_tolerance
 
     Examples
     ---------
@@ -97,31 +97,31 @@ def complexity_optimize(
     out = {}
 
     # Optimize delay
-    tau_sequence, metric, metric_values, out["delay"] = _complexity_delay(
+    tau_sequence, metric, metric_values, out["Delay"] = _complexity_delay(
         signal, delay_max=delay_max, method=delay_method
     )
 
     # Optimize dimension
-    dimension_seq, optimize_indices, out["dimension"] = _complexity_dimension(
-        signal, delay=out["delay"], dimension_max=dimension_max, method=dimension_method, **kwargs
+    dimension_seq, optimize_indices, out["Dimension"] = _complexity_dimension(
+        signal, delay=out["Delay"], dimension_max=dimension_max, method=dimension_method, **kwargs
     )
 
     # Optimize r
-    r_method = r_method.lower()
-    if r_method in ["traditional"]:
-        out["r"] = 0.2 * np.std(signal, ddof=1)
-    if r_method in ["maxapen", "optimize"]:
-        r_range, ApEn, out["r"] = _complexity_r(
-            signal, delay=out["delay"], dimension=out["dimension"]
+    tolerance_method = tolerance_method.lower()
+    if tolerance_method in ["traditional"]:
+        out["Tolerance"] = 0.2 * np.std(signal, ddof=1)
+    if tolerance_method in ["maxapen", "optimize"]:
+        r_range, ApEn, out["Tolerance"] = _complexity_tolerance(
+            signal, delay=out["Delay"], dimension=out["Dimension"]
         )
 
     if show is True:
-        if r_method in ["traditional"]:
+        if tolerance_method in ["traditional"]:
             raise ValueError(
                 "NeuroKit error: complexity_optimize():"
-                "show is not available for current r_method"
+                "show is not available for current tolerance_method"
             )
-        if r_method in ["maxapen", "optimize"]:
+        if tolerance_method in ["maxapen", "optimize"]:
             _complexity_plot(
                 signal,
                 out,
@@ -166,7 +166,7 @@ def _complexity_plot(
     ax_dim = fig.add_subplot(spec[1, :-1])
     ax_r = fig.add_subplot(spec[2, :-1])
 
-    if out["dimension"] > 2:
+    if out["Dimension"] > 2:
         plot_type = "3D"
         ax_attractor = fig.add_subplot(spec[:, -1], projection="3d")
     else:
@@ -182,7 +182,7 @@ def _complexity_plot(
         signal,
         metric_values=metric_values,
         tau_sequence=tau_sequence,
-        tau=out["delay"],
+        tau=out["Delay"],
         metric=metric,
         ax0=ax_tau,
         ax1=ax_attractor,
@@ -194,7 +194,7 @@ def _complexity_plot(
         _embedding_dimension_plot(
             method=dimension_method,
             dimension_seq=dimension_seq,
-            min_dimension=out["dimension"],
+            min_dimension=out["Dimension"],
             E1=optimize_indices[0],
             E2=optimize_indices[1],
             ax=ax_dim,
@@ -203,7 +203,7 @@ def _complexity_plot(
         _embedding_dimension_plot(
             method=dimension_method,
             dimension_seq=dimension_seq,
-            min_dimension=out["dimension"],
+            min_dimension=out["Dimension"],
             f1=optimize_indices[0],
             f2=optimize_indices[1],
             f3=optimize_indices[2],
@@ -211,7 +211,7 @@ def _complexity_plot(
         )
 
     # Plot r optimization
-    _optimize_r_plot(out["r"], r_range, ApEn, ax=ax_r)
+    _optimize_tolerance_plot(out["Tolerance"], r_range, ApEn, ax=ax_r)
 
     return fig
 
@@ -293,13 +293,13 @@ def _complexity_dimension(
         raise ValueError("NeuroKit error: complexity_dimension(): 'method' not recognized.")
 
 
-def _complexity_r(signal, delay=None, dimension=None):
+def _complexity_tolerance(signal, delay=None, dimension=None):
 
     modulator = np.arange(0.02, 0.8, 0.02)
     r_range = modulator * np.std(signal, ddof=1)
     ApEn = np.zeros_like(r_range)
     for i, r in enumerate(r_range):
-        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])[0]
+        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, tolerance=r_range[i])[0]
     r = r_range[np.argmax(ApEn)]
 
     return r_range, ApEn, r

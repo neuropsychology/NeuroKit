@@ -26,9 +26,14 @@ def complexity_lempelziv(
     is detected. Regular signals have a lower number of distinct patterns and thus have low LZC
     whereas irregular signals are characterized by a high LZC.
 
-    Permutation Lempel-Ziv Complexity (PLZC) combines permutation and LZC. A finite sequence of symbols is first generated (numbers of types of symbols = `dimension!`) and LZC is computed over the symbol series.
+    Permutation Lempel-Ziv Complexity (PLZC) combines permutation and LZC.
+    A finite sequence of symbols is first generated (numbers of types of symbols = `dimension!`)
+    and LZC is computed over the symbol series.
 
-    Multiscale Permutation Lempel-Ziv Complexity (MPLZC) combines permutation LZC and multiscale approach. It first performs a coarse-graining procedure to the original time series by constructing the coarse-grained time series in non-overlapping windows of increasing length (scale) where the number of data points are averaged. PLZC is then computed for each scaled series.
+    Multiscale Permutation Lempel-Ziv Complexity (MPLZC) combines permutation LZC and multiscale approach.
+    It first performs a coarse-graining procedure to the original time series by constructing the coarse-grained
+    time series in non-overlapping windows of increasing length (scale) where the number of data points are
+    averaged. PLZC is then computed for each scaled series.
 
     Parameters
     ----------

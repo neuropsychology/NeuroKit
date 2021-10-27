@@ -2,10 +2,10 @@
 import numpy as np
 import pandas as pd
 
-from .utils import _get_embedded, _get_r, _phi
+from .utils import _get_embedded, _get_tolerance, _phi
 
 
-def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
+def entropy_approximate(signal, delay=1, dimension=2, tolerance="default", corrected=False, **kwargs):
     """Approximate entropy (ApEn)
 
     Python implementations of the approximate entropy (ApEn) and its corrected version (cApEn).
@@ -31,10 +31,10 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : float
-        Tolerance (similarity threshold). It corresponds to the filtering level - max absolute difference
-        between segments. If 'default', will be set to 0.2 times the standard deviation of the signal
-        (for dimension = 2).
+    tolerance : float
+        Tolerance (similarity threshold, often denoted as 'r'). It corresponds to the filtering level
+        - max absolute difference between segments. If 'default', will be set to 0.2 times the
+        standard deviation of the signal (for dimension = 2).
     corrected : bool
         If true, will compute corrected ApEn (cApEn), see Porta (2007).
     **kwargs
@@ -85,10 +85,10 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     # Prepare parameters
     info = {"Dimension": dimension, "Delay": delay, "Corrected": corrected}
 
-    info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
     out = _entropy_approximate(
         signal,
-        r=info["Tolerance"],
+        tolerance=info["Tolerance"],
         delay=delay,
         dimension=dimension,
         corrected=corrected,
@@ -98,11 +98,12 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
     return out, info
 
 
-def _entropy_approximate(signal, r, delay=1, dimension=2, corrected=False, **kwargs):
+def _entropy_approximate(signal, tolerance, delay=1, dimension=2, corrected=False, **kwargs):
 
     if corrected is False:
         # Get phi
-        phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=True, **kwargs)
+        phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance,
+                   approximate=True, **kwargs)
 
         apen = np.abs(np.subtract(phi[0], phi[1]))
 
@@ -112,7 +113,7 @@ def _entropy_approximate(signal, r, delay=1, dimension=2, corrected=False, **kwa
             signal,
             delay=delay,
             dimension=dimension,
-            r=r,
+            tolerance=tolerance,
             distance="chebyshev",
             approximate=True,
             **kwargs
@@ -121,7 +122,7 @@ def _entropy_approximate(signal, r, delay=1, dimension=2, corrected=False, **kwa
             signal,
             delay=delay,
             dimension=dimension + 1,
-            r=r,
+            tolerance=tolerance,
             distance="chebyshev",
             approximate=True,
             **kwargs

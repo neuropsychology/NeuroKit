@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 
-from .utils import _get_r, _phi, _phi_divide
+from .utils import _get_tolerance, _phi, _phi_divide
 
 
-def entropy_range(signal, dimension=3, delay=1, r="default", method="mSampEn", **kwargs):
+def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSampEn", **kwargs):
     """Range Entropy (RangeEn)
 
     Introduced by `Omidvarnia et al. (2018) <https://www.mdpi.com/1099-4300/20/12/962/htm>`_.
@@ -25,10 +25,9 @@ def entropy_range(signal, dimension=3, delay=1, r="default", method="mSampEn", *
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : float
-        Tolerance (similarity threshold). It corresponds to the filtering level - max absolute difference
-        between segments. If 'default', will be set to 0.2 times the standard deviation of the signal
-        (for dimension = 2).
+    tolerance : float
+        Tolerance (often denoted as 'r', i.e., filtering level - max absolute difference between segments).
+        If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
     method : str
         The entropy measure to use, 'mSampEn' (sample entropy, default) or 'mApEn' (approximate entropy).
     **kwargs
@@ -71,10 +70,10 @@ def entropy_range(signal, dimension=3, delay=1, r="default", method="mSampEn", *
     # Prepare parameters
     info = {"Dimension": dimension, "Delay": delay, "Method": method}
 
-    info["Tolerance"] = _get_r(signal, r=r, dimension=dimension)
+    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
     out = _entropy_range(
         signal,
-        r=info["Tolerance"],
+        tolerance=info["Tolerance"],
         delay=delay,
         dimension=dimension,
         method=method,
@@ -84,15 +83,15 @@ def entropy_range(signal, dimension=3, delay=1, r="default", method="mSampEn", *
     return out, info
 
 
-def _entropy_range(signal, r, delay=1, dimension=2, method="mSampEn", **kwargs):
+def _entropy_range(signal, tolerance, delay=1, dimension=2, method="mSampEn", **kwargs):
 
     if method == "mApEn":
-        phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=True,
+        phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance, approximate=True,
                    distance="range", **kwargs)
         rangeen = np.abs(np.subtract(phi[0], phi[1]))
 
     elif method == "mSampEn":
-        phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False,
+        phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance, approximate=False,
                    distance="range", **kwargs)
         rangeen = _phi_divide(phi)
 
