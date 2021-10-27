@@ -92,11 +92,11 @@ def _entropy_coalition_synchrony(signal):
     matrix = np.zeros((n_channels, n_channels-1, n_samples))  # store array of synchrony series for each channel
 
     for i in range(n_channels):
-        l = 0
+        index = 0
         for j in range(n_channels):
             if i != j:
-                matrix[i, l] = _entropy_coalition_synchrony_phase(transformed[i], transformed[j])
-                l += 1
+                matrix[i, index] = _entropy_coalition_synchrony_phase(transformed[i], transformed[j])
+                index += 1
 
     # Create random binary matrix for normalization
     y = np.random.rand(n_channels - 1, n_samples)
@@ -125,7 +125,8 @@ def _entropy_coalition_amplitude(signal):
 
     # Shuffle
     np.random.seed(30)  # set random seed to get reproducible results
-    new_binarized = [np.random.shuffle(seq) for seq in binarized]
+    for seq in binarized:
+        np.random.shuffle(seq)
 
     # Shuffled result as normalization
     e2 = entropy_shannon(_entropy_coalition_map(binarized))[0]

@@ -27,7 +27,8 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
-    See `Pham et al. (2021) <https://www.mdpi.com/1424-8220/21/12/3998>`_ and `Lau et al. (2021) <https://psyarxiv.com/f8k3x/>`_.
+    See `Pham et al. (2021) <https://www.mdpi.com/1424-8220/21/12/3998>`_ and
+    `Lau et al. (2021) <https://psyarxiv.com/f8k3x/>`_.
 
     Parameters
     ----------
@@ -204,7 +205,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     References
     ----------
-    - Pham, T., Lau, Z. J., Chen, S. H., & Makowski, D. (2021). Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
+    - Pham, T., Lau, Z. J., Chen, S. H., & Makowski, D. (2021). Heart Rate Variability in Psychology:
+    A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
 
     - Yan, C., Li, P., Ji, L., Yao, L., Karmakar, C., & Liu, C. (2017). Area asymmetry of heart
     rate variability signal. Biomedical engineering online, 16(1), 112.
