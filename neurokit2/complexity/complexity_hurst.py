@@ -1,26 +1,28 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.special
-import matplotlib.pyplot as plt
 
 from .fractal_dfa import _fractal_dfa_findwindows
 
 
-def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False):
+def complexity_hurst(signal, windows="default", corrected=False, show=False):
     """Hurst Exponent (H)
 
-    This function estimates the Hurst exponent via the standard rescaled range (R/S) approach, but other methods exist,
-    such as Detrended Fluctuation Analysis (DFA, see ``fractal_dfa()``).
+    This function estimates the Hurst exponent via the standard rescaled range (R/S) approach, but
+    other methods exist, such as Detrended Fluctuation Analysis (DFA, see ``fractal_dfa()``).
 
-    The Hurst exponent is a measure for the "long-term memory" of a signal. It can be used to determine whether the time
-    series is more, less, or equally likely to increase if it has increased in previous steps. This property makes the
-    Hurst exponent especially interesting for the analysis of stock data. It typically ranges from 0 to 1, with 0.5
-    corresponding to a Brownian motion. If H < 0.5, the time-series covers less "distance" than a random walk (the memory
-    of the signal decays faster than at random), and vice versa.
-    
-    The R/S approach first splits the time series into non-overlapping subseries of length n. R and S (sigma) are then
-    calculated for each subseries and the mean is taken over all subseries yielding (R/S)_n. This process is repeated for
-    several lengths n. The final exponent is then derived from fitting a straight line to the plot of log((R/S)_n) vs log(n).
+    The Hurst exponent is a measure for the "long-term memory" of a signal. It can be used to
+    determine whether the time series is more, less, or equally likely to increase if it has
+    increased in previous steps. This property makes the Hurst exponent especially interesting for
+    the analysis of stock data. It typically ranges from 0 to 1, with 0.5 corresponding to a
+    Brownian motion. If H < 0.5, the time-series covers less "distance" than a random walk (the
+    memory of the signal decays faster than at random), and vice versa.
+
+    The R/S approach first splits the time series into non-overlapping subseries of length n. R and
+    S (sigma) are then calculated for each subseries and the mean is taken over all subseries
+    yielding (R/S)_n. This process is repeated for several lengths n. The final exponent is then
+    derived from fitting a straight line to the plot of log((R/S)_n) vs log(n).
 
     Parameters
     ----------
@@ -33,6 +35,8 @@ def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False
     corrected : boolean
         if True, the Anis-Lloyd-Peters correction factor will be applied to the
         output according to the expected value for the individual (R/S) values.
+    show : bool
+        If True, returns a plot.
 
     See Also
     --------
@@ -44,15 +48,15 @@ def complexity_hurst(signal, windows="default", corrected=False, q=2, show=False
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> h, info = nk.complexity_hurst(signal, corrected=True)
+    >>> h, info = nk.complexity_hurst(signal, corrected=True, show=True)
     >>> h  #doctest: +SKIP
 
     References
     ----------
-    - Brandi, G., & Di Matteo, T. (2021). On the statistics of scaling exponents and the Multiscaling Value at Risk.
-    The European Journal of Finance, 1-22.
-    - Annis, A. A., & Lloyd, E. H. (1976). The expected value of the adjusted rescaled Hurst range of independent
-    normal summands. Biometrika, 63(1), 111-116.
+    - Brandi, G., & Di Matteo, T. (2021). On the statistics of scaling exponents and the
+    Multiscaling Value at Risk. The European Journal of Finance, 1-22.
+    - Annis, A. A., & Lloyd, E. H. (1976). The expected value of the adjusted rescaled Hurst range
+    of independent normal summands. Biometrika, 63(1), 111-116.
     - https://github.com/CSchoel/nolds
 
     """
@@ -155,60 +159,11 @@ def _complexity_hurst_rs(signal, window):
     return np.mean(r / s)
 
 
-def _complexity_hurst_generalized(signal, q=2):
-    """
-    The Generalized Hurst exponent method is assesses directly the scaling properties of the time series
-    via the qth-order moments of the distribution of the increments.
-    
-    Different exponents `q` are associated with different characterizations of the multi-scaling complexity of the signal.
-    In contrast to the popular R/S statistics approach, it does not deal with max and min functions, and thus less sensitive
-    to outliers.
-
-    From https://github.com/PTRRupprecht/GenHurst"""
-
-    n = len(signal)
-    H = np.zeros((len(range(5, 20)), 1))
-    k = 0
-
-    for Tmax in range(5, 20):
-
-        x = np.arange(1, Tmax + 1, 1)
-        mcord = np.zeros((Tmax, 1))
-
-        for tt in range(1, Tmax + 1):
-            dV = signal[np.arange(tt, n, tt)] - signal[np.arange(tt, n, tt) - tt]
-            VV = signal[np.arange(tt, n + tt, tt) - tt]
-            N = len(dV) + 1
-            X = np.arange(1, N + 1, dtype=np.float64)
-            Y = VV
-            
-            mx = np.sum(X) / N
-            SSxx = np.sum(X ** 2) - N * mx ** 2
-            my = np.sum(Y) / N
-            SSxy = np.sum(np.multiply(X, Y)) - N * mx * my
-            cc1 = SSxy / SSxx
-            cc2 = my - cc1 * mx
-            ddVd = dV - cc1
-            VVVd = VV - np.multiply(cc1, np.arange(1, N + 1, dtype=np.float64)) - cc2
-            mcord[tt - 1] = np.mean(np.abs(ddVd) ** q) / np.mean(np.abs(VVVd) ** q)
-
-        mx = np.mean(np.log10(x))
-        SSxx = np.sum(np.log10(x) ** 2) - Tmax * mx ** 2
-        my = np.mean(np.log10(mcord))
-        SSxy = np.sum(np.multiply(np.log10(x), np.transpose(np.log10(mcord)))) - Tmax * mx * my
-        H[k] = SSxy / SSxx
-        k = k + 1
-
-    mH = np.mean(H) / q
-
-    return mH
-
-
 def _complexity_hurst_plot(poly, n_vals, rs_vals, corrected=False, ax=None):
 
     if ax is None:  # ax option in case more plots need to be added later
         fig, ax = plt.subplots()
-        fig.suptitle("Hurst Exponent from Rescaled Range Analysis")
+        fig.suptitle("Hurst Exponent via Rescaled Range (R/S) Analysis")
     else:
         fig = None
 
@@ -233,3 +188,56 @@ def _complexity_hurst_plot(poly, n_vals, rs_vals, corrected=False, ax=None):
     ax.legend(loc="lower right")
 
     return fig
+
+
+# =============================================================================
+# Generalized Hurst Exponent
+# =============================================================================
+def _complexity_hurst_generalized(signal, q=2):
+    """TO BE DONE.
+
+    The Generalized Hurst exponent method is assesses directly the scaling properties of the time series
+    via the qth-order moments of the distribution of the increments.
+
+    Different exponents `q` are associated with different characterizations of the multi-scaling complexity of the signal.
+    In contrast to the popular R/S statistics approach, it does not deal with max and min functions, and thus less sensitive
+    to outliers.
+
+    From https://github.com/PTRRupprecht/GenHurst"""
+
+    n = len(signal)
+    H = np.zeros((len(range(5, 20)), 1))
+    k = 0
+
+    for Tmax in range(5, 20):
+
+        x = np.arange(1, Tmax + 1, 1)
+        mcord = np.zeros((Tmax, 1))
+
+        for tt in range(1, Tmax + 1):
+            dV = signal[np.arange(tt, n, tt)] - signal[np.arange(tt, n, tt) - tt]
+            VV = signal[np.arange(tt, n + tt, tt) - tt]
+            N = len(dV) + 1
+            X = np.arange(1, N + 1, dtype=np.float64)
+            Y = VV
+
+            mx = np.sum(X) / N
+            SSxx = np.sum(X ** 2) - N * mx ** 2
+            my = np.sum(Y) / N
+            SSxy = np.sum(np.multiply(X, Y)) - N * mx * my
+            cc1 = SSxy / SSxx
+            cc2 = my - cc1 * mx
+            ddVd = dV - cc1
+            VVVd = VV - np.multiply(cc1, np.arange(1, N + 1, dtype=np.float64)) - cc2
+            mcord[tt - 1] = np.mean(np.abs(ddVd) ** q) / np.mean(np.abs(VVVd) ** q)
+
+        mx = np.mean(np.log10(x))
+        SSxx = np.sum(np.log10(x) ** 2) - Tmax * mx ** 2
+        my = np.mean(np.log10(mcord))
+        SSxy = np.sum(np.multiply(np.log10(x), np.transpose(np.log10(mcord)))) - Tmax * mx * my
+        H[k] = SSxy / SSxx
+        k = k + 1
+
+    mH = np.mean(H) / q
+
+    return mH
