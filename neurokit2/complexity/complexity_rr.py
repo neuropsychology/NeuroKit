@@ -21,6 +21,14 @@ def complexity_rr(signal):
     - Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness: an index for testing the
     suitability of the monofractal model. Frontiers in Physiology, 3, 208.
 
+    Returns
+    --------
+    rr : float
+        The RR value.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute RR.
+
     Examples
     --------
     >>> import neurokit2 as nk

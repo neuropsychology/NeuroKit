@@ -19,7 +19,6 @@ def complexity_hjorth(signal):
     derivative of the signal divided by the variance of the signal.
     - The **activity** parameter is simply the variance of the signal.
 
-
     See Also
     --------
     fractal_petrosian
@@ -28,6 +27,14 @@ def complexity_hjorth(signal):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+
+    Returns
+    -------
+    hjorth : float
+         Hjorth's Complexity.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute Hjorth's Complexity.
 
     Examples
     ----------

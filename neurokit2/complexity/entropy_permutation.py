@@ -37,7 +37,7 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
         return the permutation entropy in bit.
     weighted : bool
         If True, compute the weighted permutation entropy (WPE).
-    scale : None | str | list
+    scale : Union[list, str, list]
         If not ``None``, compute multiscale permutation entropy (MSPE). Can be a list of scale factors,
         or ``"default"`` or ``"max"``. See ``entropy_multiscale()`` for details.
 

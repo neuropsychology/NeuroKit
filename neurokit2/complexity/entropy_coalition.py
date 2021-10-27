@@ -24,7 +24,7 @@ def entropy_coalition(signal, method="amplitude"):
 
     Parameters
     ----------
-    data : DataFrame
+    signal : DataFrame
         The DataFrame containing all the respective signals (n_samples x n_channels).
     method : str
         Method for computing the coalition entropy.

@@ -59,6 +59,13 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
     linelength : int
         Minimum length of a diagonal and vertical lines. Default to 2.
 
+    Returns
+    ----------
+    rqa : DataFrame
+         The RQA results.
+    info : dict
+        A dictionary containing additional information regarding the parameters used to compute RQA.
+
     Examples
     ----------
     >>> import neurokit2 as nk

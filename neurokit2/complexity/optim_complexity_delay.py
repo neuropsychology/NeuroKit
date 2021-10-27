@@ -61,7 +61,7 @@ def complexity_delay(
         will select the algorithm according to the method. Modify only if you know what you are doing.
     show : bool
         If true, will plot the metric values for each value of tau.
-    **kwargs
+    **kwargs : optional
         Additional arguments to be passed for C-C method.
 
     Returns

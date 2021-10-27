@@ -12,10 +12,9 @@ def hrv_rqa(
     sampling_rate=1000,
     dimension=7,
     delay=1,
-    r="zimatore2021",
+    tolerance="zimatore2021",
     linelength=4,
-    show=False,
-    **kwargs
+    show=False
 ):
     """Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV).
 
@@ -39,29 +38,22 @@ def hrv_rqa(
         See ``complexity_rqa()`` for more information.
     dimension : int
         See ``complexity_rqa()`` for more information.
-    r : float
+    tolerance : float
         See ``complexity_rqa()`` for more information. If 'zimatore2021', will be set to half of the
         mean pairwise distance between points.
     linelength : int
         See ``complexity_rqa()`` for more information.
     show : bool
         See ``complexity_rqa()`` for more information.
-    **kwargs : optional
-        Other arguments to be passed.
-
 
     See Also
     --------
     complexity_rqa, hrv_nonlinear
 
-    References
+    Returns
     ----------
-    - Zimatore, G., Falcioni, L., Gallotta, M. C., Bonavolontà, V., Campanella, M.,
-    De Spirito, M., ... & Baldari, C. (2021). Recurrence quantification analysis of heart rate variability
-    to detect both ventilatory thresholds. PloS one, 16(10), e0249504.
-    - Ding, H., Crozier, S., & Wilson, S. (2008). Optimization of Euclidean distance threshold in the
-    application of recurrence quantification analysis to heart rate variability studies. Chaos,
-    Solitons & Fractals, 38(5), 1457-1467.
+    rqa : float
+         The RQA.
 
     Examples
     --------
@@ -74,7 +66,17 @@ def hrv_rqa(
     >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
     >>>
     >>> # Compute HRV indices
-    >>> hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True) #doctest: +SKIP
+    >>> hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
+    >>> hrv_rqa #doctest: +SKIP
+
+    References
+    ----------
+    - Zimatore, G., Falcioni, L., Gallotta, M. C., Bonavolontà, V., Campanella, M.,
+    De Spirito, M., ... & Baldari, C. (2021). Recurrence quantification analysis of heart rate variability
+    to detect both ventilatory thresholds. PloS one, 16(10), e0249504.
+    - Ding, H., Crozier, S., & Wilson, S. (2008). Optimization of Euclidean distance threshold in the
+    application of recurrence quantification analysis to heart rate variability studies. Chaos,
+    Solitons & Fractals, 38(5), 1457-1467.
 
     """
     # Sanitize input
@@ -89,16 +91,16 @@ def hrv_rqa(
     rri = signal_detrend(rri, method="polynomial", order=1)
 
     # Radius (50% of mean distance between all pairs of points in time)
-    if r == "zimatore2021":
+    if tolerance == "zimatore2021":
         dists = scipy.spatial.distance.pdist(np.array([rri, rri]).T, "euclidean")
-        r = 0.5 * np.mean(dists)
+        tolerance = 0.5 * np.mean(dists)
 
     # Run the RQA
-    rqa, info = complexity_rqa(
+    rqa, _ = complexity_rqa(
         rri,
         dimension=dimension,
         delay=delay,
-        r=r,
+        tolerance=tolerance,
         linelength=linelength,
         show=show,
     )
