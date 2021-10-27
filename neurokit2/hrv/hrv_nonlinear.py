@@ -267,14 +267,14 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out = _hrv_dfa(peaks, rri, out, **kwargs)
 
     # Complexity
-    r = 0.2 * np.std(rri, ddof=1)
-    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, r=r)[0]
-    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, r=r)[0]
+    tolerance = 0.2 * np.std(rri, ddof=1)
+    out["ApEn"] = entropy_approximate(rri, delay=1, dimension=2, tolerance=tolerance)[0]
+    out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, tolerance=tolerance)[0]
     out["ShanEn"] = entropy_shannon(rri)[0]
-    out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, r=r)[0]
-    out["MSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=False, refined=False)[0]
-    out["CMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=False)[0]
-    out["RCMSE"] = entropy_multiscale(rri, dimension=2, r=r, composite=True, refined=True)[0]
+    out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, tolerance=tolerance)[0]
+    out["MSE"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, composite=False, refined=False)[0]
+    out["CMSE"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, composite=True, refined=False)[0]
+    out["RCMSE"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, composite=True, refined=True)[0]
 
     out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)[0]
     out["HFD"] = fractal_higuchi(rri, **kwargs)[0]
