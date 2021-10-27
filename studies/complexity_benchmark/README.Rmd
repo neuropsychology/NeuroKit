@@ -58,9 +58,9 @@ from timeit import default_timer as timer
 
 
 # Utility function
-def time_function(i, x, fun=nk.fractal_petrosian, index="FD_Petrosian", method="nk_fractal_petrosian"):
+def time_function(i, x, fun=nk.fractal_petrosian, index="FD_Petrosian", method="nk_fractal_petrosian", **kwargs):
   t0 = timer()
-  rez, _ = fun(x)
+  rez, _ = fun(x, **kwargs)
   t1 = timer() - t0
   dat = {
     "Duration" : [t1],
@@ -78,8 +78,12 @@ for n in np.power(10, range(2, 6)):
   print(n)
   x = nk.signal_simulate(duration=1, sampling_rate=n, frequency=[5, 10], noise=0.5)
   for i in range(100):
-    data.append(time_function(i, x, nk.complexity_rr, index="RR", method="nk_complexity_rr"))
     data.append(time_function(i, x, nk.complexity_hjorth, index="Hjorth", method="nk_complexity_hjorth"))
+    data.append(time_function(i, x, complexity_hurst, index="Hurst", method="nk_complexity_hurst"))
+    
+    
+    data.append(time_function(i, x, nk.complexity_rr, index="RR", method="nk_complexity_rr"))
+    
     data.append(time_function(i, x, nk.fisher_information, index="Fisher", method="nk_fisher_information"))
     data.append(time_function(i, x, nk.entropy_shannon, index="ShanEn", method="nk_entropy_shannon"))
     data.append(time_function(i, x, nk.entropy_cumulative_residual, index="CREn", method="nk_entropy_cumulative_residual"))

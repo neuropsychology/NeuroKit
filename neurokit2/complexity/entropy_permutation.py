@@ -15,13 +15,10 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     for regular, chaotic, noisy, or real-world time series and has been employed in the context of
     EEG, ECG, and stock market time series.
 
-    However, the main shortcoming of traditional PE is that no information besides the order structure
-    is retained when extracting the ordinal patterns, which leads to several possible issues
-    (Fadlallah et al., 2013). The Weighted PE was developped to address these limitations by incorporating
-    significant information from the time series when retrieving the ordinal patterns.
-
-
-    This implementation is based on `pyEntropy <https://github.com/nikdon/pyEntropy>`_.
+    However, the main shortcoming of traditional PE is that no information besides the order
+    structure is retained when extracting the ordinal patterns, which leads to several possible
+    issues (Fadlallah et al., 2013). The Weighted PE was developped to address these limitations by
+    incorporating significant information from the time series when retrieving the ordinal patterns.
 
     Parameters
     ----------
@@ -36,8 +33,8 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     corrected : bool
-        If True, divide by log2(factorial(m)) to normalize the entropy
-        between 0 and 1. Otherwise, return the permutation entropy in bit.
+        If True, divide by log2(factorial(m)) to normalize the entropy between 0 and 1. Otherwise,
+        return the permutation entropy in bit.
     weighted : bool
         If True, compute the weighted permutation entropy (WPE).
     scale : None | str | list
@@ -53,12 +50,13 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     References
     ----------
     - https://github.com/nikdon/pyEntropy
-    - Fadlallah, B., Chen, B., Keil, A., & Principe, J. (2013). Weighted-permutation entropy: A complexity
-    measure for time series incorporating amplitude information. Physical Review E, 87(2), 022911.
-    - Zanin, M., Zunino, L., Rosso, O. A., & Papo, D. (2012). Permutation entropy and its main biomedical
-    and econophysics applications: a review. Entropy, 14(8), 1553-1577.
-    - Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time series.
-    Physical review letters, 88(17), 174102.
+    - Fadlallah, B., Chen, B., Keil, A., & Principe, J. (2013). Weighted-permutation entropy: A
+    complexity measure for time series incorporating amplitude information. Physical Review E, 87(2)
+    , 022911.
+    - Zanin, M., Zunino, L., Rosso, O. A., & Papo, D. (2012). Permutation entropy and its main
+    biomedical and econophysics applications: a review. Entropy, 14(8), 1553-1577.
+    - Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time
+    series. Physical review letters, 88(17), 174102.
 
     See Also
     --------
@@ -108,7 +106,7 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
         vals = vals[vals != np.inf]
         vals = vals[vals != -np.inf]
 
-        # The MSE index is quantified as the area under the curve (AUC),
+        # The index is quantified as the area under the curve (AUC),
         # which is like the sum normalized by the number of values. It's similar to the mean.
         pe = np.trapz(vals) / len(vals)
 
@@ -137,7 +135,7 @@ def _entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=
     # Sort the order of permutations
     embedded = embedded.argsort(kind="quicksort")
 
-    # Weighted permutation entropy
+    # Weighted permutation entropy ----------------------------------------------
     if weighted is True:
         motifs, c = np.unique(embedded, return_counts=True, axis=0)
         pw = np.zeros(len(motifs))
@@ -148,7 +146,7 @@ def _entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=
         pw /= weights.sum()
         pe = -np.dot(pw, np.log2(pw))
 
-    # Normal permutation entropy
+    # Normal permutation entropy ------------------------------------------------
     else:
         # Associate unique integer to each permutations
         multiplier = np.power(dimension, np.arange(dimension))
@@ -158,6 +156,7 @@ def _entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=
         _, c = np.unique(values, return_counts=True)
         p = c / c.sum()
         pe = -np.multiply(p, np.log2(p)).sum()
+
     if corrected:
         pe /= np.log2(np.math.factorial(dimension))
     return pe
