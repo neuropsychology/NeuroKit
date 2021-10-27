@@ -68,9 +68,17 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
     return out, info
 
 
-def _entropy_sample(signal, tolerance, delay=1, dimension=2, **kwargs):
+def _entropy_sample(signal, tolerance, delay=1, dimension=2, fuzzy=False, distance="chebyshev"):
 
-    phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance, approximate=False, **kwargs)
+    phi = _phi(
+        signal,
+        delay=delay,
+        dimension=dimension,
+        tolerance=tolerance,
+        approximate=False,
+        distance=distance,
+        fuzzy=fuzzy,
+    )
     sampen = _phi_divide(phi)
 
     return sampen
