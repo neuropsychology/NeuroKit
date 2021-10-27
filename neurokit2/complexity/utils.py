@@ -7,26 +7,6 @@ import sklearn.neighbors
 from .complexity_embedding import complexity_embedding
 
 # =============================================================================
-# Format n-dimensional input
-# =============================================================================
-
-
-def _sanitize_multichannel(signal):
-
-    # n-dimensional
-    if not isinstance(signal, (pd.DataFrame, np.ndarray)):
-        raise ValueError(
-            "NeuroKit error: _sanitize_multichannel(): your n-dimensional data has to ",
-            "be in the form of a pandas DataFrame or a numpy ndarray.",
-        )
-    else:
-        # return signal in (len(channels), len(samples)) format
-        signal = np.array(signal).transpose()
-
-    return signal
-
-
-# =============================================================================
 # Phi
 # =============================================================================
 
