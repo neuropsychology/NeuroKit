@@ -15,9 +15,8 @@ def fractal_sda(signal, scales=None, robust=False, show=True):
     is calculated. The relationship between the SD and the bin size can be an indication
     of the presence of power-laws. For instance, if the SD systematically increases or
     decreases with larger bin sizes, this means the fluctuations depend on the size of the bins.
-    The dispersion measurements are in units of the standard error of the mean.
-
-    See `Hasselman (2019) <https://complexity-methods.github.io/book/standardised-dispersion-analysis-sda.html>`_.
+    The dispersion measurements are in units of the standard error of the mean. An FD of 1.5
+    indicates random data series, while values approaching 1.20 indicate 1/f scaling.
 
     Parameters
     ----------
@@ -45,6 +44,8 @@ def fractal_sda(signal, scales=None, robust=False, show=True):
 
     References
     ----------
+    - https://complexity-methods.github.io/book/standardised-dispersion-analysis-sda.html
+
     - Hasselman, F. (2013). When the blind curve is finite: dimension estimation and model inference based
     on empirical waveforms. Frontiers in Physiology, 4, 75. https://doi.org/10.3389/fphys.2013.00075
 
@@ -127,8 +128,8 @@ def _fractal_sda_plot(sds, scales, slope, intercept, ax=None):
             + str(np.round(slope, 2))
         )
 
-    ax.set_ylabel(r"$log10$(Standardized Dispersion)")
-    ax.set_xlabel(r"$log10$(Bin Size)")
+    ax.set_ylabel(r"$\log_{10}$(Standardized Dispersion)")
+    ax.set_xlabel(r"$\log_{10}$(Bin Size)")
 
     ax.scatter(np.log10(scales), np.log10(sds),
                marker="o", zorder=2)
