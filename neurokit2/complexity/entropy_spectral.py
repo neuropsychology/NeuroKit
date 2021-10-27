@@ -1,10 +1,10 @@
 import numpy as np
 import pandas as pd
 
-from ..signal.signal_psd import _signal_psd_fft
+from ..signal.signal_psd import signal_psd
 
 
-def entropy_spectral(signal, sampling_rate=1000, normalize=True):
+def entropy_spectral(signal, sampling_rate=1000, normalize=True, **kwargs):
     """Spectral Entropy (SpEn)
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the frequency domain as
@@ -21,7 +21,9 @@ def entropy_spectral(signal, sampling_rate=1000, normalize=True):
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
     normalize : bool
-        If True, divide by log2(len(psd)) to normalize the spectral entropy between 0 and 1.
+        If True, divide by ``log2(len(signal)/2)`` to normalize the spectral entropy between 0 and 1.
+    **kwargs : optional
+        Keyword arguments to be passed to `signal_psd()`.
 
     Returns
     -------
@@ -58,7 +60,7 @@ def entropy_spectral(signal, sampling_rate=1000, normalize=True):
         )
 
     # Power-spectrum density (PSD)
-    _, psd = _signal_psd_fft(signal, sampling_rate=sampling_rate)
+    psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft', **kwargs)["Power"]
     psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
     psd = psd[psd > 0]
 
