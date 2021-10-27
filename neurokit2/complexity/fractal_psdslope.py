@@ -99,8 +99,8 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
     # If so, fit the line starting from the highest frequency
     slope, intercept = np.polyfit(np.log10(psd["Frequency"]), np.log10(psd["Power"]), 1)
 
-    if slope > 0.2:
-        slope, intercept = np.polyfit(np.log10(np.flip(psd["Frequency"])), np.log10(np.flip(psd["Power"])), 1)
+    # if slope > 0.2:
+    #     slope, intercept = np.polyfit(np.log10(np.flip(psd["Frequency"])), np.log10(np.flip(psd["Power"])), 1)
 
     # Sanitize method name
     method = method.lower()
