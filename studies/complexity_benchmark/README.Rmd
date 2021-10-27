@@ -62,8 +62,7 @@ The goal for NeuroKit is to provide the most comprehensive, accurate and fastest
 library(tidyverse)
 library(easystats)
 
-df <- read.csv("data.csv") |>
-  mutate(Length = as.factor(Length))
+df <- read.csv("data.csv") 
 
 order <- df |> 
   group_by(Method) |> 
@@ -92,6 +91,14 @@ ggplot(dfsummary, aes(x = Method, y = Duration)) +
 ```{r message=FALSE, warning=FALSE}
 df |> 
   ggplot(aes(x = Length, y = Duration)) +
+  geom_hline(yintercept = c(0.001), linetype = "dotted") +
+  geom_line(data=dfsummary, aes(group = Method, color = Method)) +
+  # geom_violin(aes(fill = Length, color = Method)) +
+  scale_y_log10() 
+
+df |> 
+  ggplot(aes(x = Length, y = Duration)) +
+  geom_hline(yintercept = c(0.01), linetype = "dotted") +
   geom_line(data=dfsummary, aes(group = 1)) +
   geom_violin(aes(fill = Length)) +
   facet_wrap(~Method) +

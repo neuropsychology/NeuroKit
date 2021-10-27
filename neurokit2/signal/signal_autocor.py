@@ -17,7 +17,7 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
     demean : bool
         If True, the mean of the signal will be subtracted from the signal before ACF computation.
     method : str
-        Can be 'correlation' (using ``np.correlate``) or 'fft' (using FFT). FFT is the default as it is relatively faster.
+        Can be 'correlation' (using ``np.correlate``) or 'fft' (using FFT, default).
     show : bool
         If True, plot the autocorrelation at all values of lag.
 
@@ -35,11 +35,10 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
     >>> import neurokit2 as nk
     >>>
     >>> signal = [1, 2, 3, 4, 5]
-    >>> r, info = nk.signal_autocor(signal, show=True)
+    >>> r, info = nk.signal_autocor(signal, show=True, method='correlate')
     >>> r #doctest: +SKIP
     >>>
     >>> signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
-    >>> r, info = nk.signal_autocor(signal, lag=2, show=True)
     >>> r, info = nk.signal_autocor(signal, lag=2, method='fft', show=True)
 
     """
@@ -49,10 +48,12 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
     if demean:
         signal = np.asarray(signal) - np.nanmean(signal)
 
-    if method.lower() == "correlation":
+    # Run autocor
+    method = method.lower()
+    if method in ["cor", "correlation", "correlate"]:
         acov = np.correlate(signal, signal, mode="full")
         acov = acov[n - 1 :]  # Min time lag is 0
-    elif method.lower() == "fft":
+    elif method == "fft":
         a = np.concatenate((signal, np.zeros(n - 1)))  # added zeros to your signal
         A = np.fft.fft(a)
         S = np.conj(A) * A
