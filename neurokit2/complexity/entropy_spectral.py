@@ -1,16 +1,18 @@
 import numpy as np
 import pandas as pd
 
-from ..signal import signal_psd
+from ..signal.signal_psd import _signal_psd_fft
 
 
-def entropy_spectral(signal, sampling_rate=1000, **kwargs):
+def entropy_spectral(signal, sampling_rate=1000, normalize=True):
     """Spectral Entropy (SpEn)
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the frequency domain as
     a probability distribution, and calculates the Shannon entropy of it.
-    A power spectrum with one or two dominant frequencies possesses a relatively low spectral entropy,
-    and a broadbanded spectrum has a higher value.
+
+    A signal with a single frequency component (i.e., pure sinusoid) produces the smallest entropy.
+    On the other hand, a signal with all frequency components of equal power value (white
+    noise) produces the greatest entropy.
 
     Parameters
     ----------
@@ -18,8 +20,8 @@ def entropy_spectral(signal, sampling_rate=1000, **kwargs):
         The signal (i.e., a time series) in the form of a vector of values.
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second).
-    **kwargs
-        Other arguments to be passed to ``signal_psd()`` (such as 'method').
+    normalize : bool
+        If True, divide by log2(len(psd)) to normalize the spectral entropy between 0 and 1.
 
     Returns
     -------
@@ -56,14 +58,14 @@ def entropy_spectral(signal, sampling_rate=1000, **kwargs):
         )
 
     # Power-spectrum density (PSD)
-    psd = nk.signal_psd(signal, sampling_rate=sampling_rate, method='fft')
-    psd["Power"] /= np.sum(psd["Power"])  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
-    psd = psd[psd["Power"] > 0]
+    _, psd = _signal_psd_fft(signal, sampling_rate=sampling_rate)
+    psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
+    psd = psd[psd > 0]
 
     # Compute Shannon entropy
-    se = -np.sum(psd["Power"] * np.log2(psd["Power"]))
+    se = -np.sum(psd * np.log2(psd))
 
-    # Normalize by the number of samples
-    # se /= np.log2(len(psd))  # TODO: Not sure what's the rationale of that
+    if normalize:
+        se /= np.log2(len(psd))  # between 0 and 1
 
-    return se, {"Sampling_Rate": sampling_rate, "PSD": psd}
+    return se, {"Sampling_Rate": sampling_rate, "PSD": psd, "Normalize": normalize}
