@@ -81,7 +81,7 @@ def _optimize_tolerance(signal, delay=None, dimension=None, show=False):
 
     ApEn = np.zeros_like(r_range)
     for i, r in enumerate(r_range):
-        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, r=r_range[i])[0]
+        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, tolerance=r_range[i])[0]
 
     r = r_range[np.argmax(ApEn)]
 
