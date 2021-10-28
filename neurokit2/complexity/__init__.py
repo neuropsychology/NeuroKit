@@ -69,7 +69,7 @@ complexity_mfdfa = fractal_mfdfa
 
 complexity_lzc = complexity_lempelziv
 complexity_plzc = functools.partial(complexity_lzc, permutation=True)
-complexity_mlzc = functools.partial(complexity_lzc, multiscale=True)
+complexity_mplzc = functools.partial(complexity_lzc, multiscale=True)
 
 complexity_cd = fractal_correlation
 
@@ -87,7 +87,7 @@ __all__ = [
     "complexity_lempelziv",
     "complexity_lzc",
     "complexity_plzc",
-    "complexity_mlzc",
+    "complexity_mplzc",
     "complexity_lyapunov",
     "complexity_mfdfa",
     "complexity_cd",

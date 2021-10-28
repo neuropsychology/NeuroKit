@@ -53,8 +53,8 @@ def run_methods(i, x, delay=1, dimension=2):
         time_function(
             x,
             nk.complexity_mlzc,
-            index="MLZC",
-            name="nk_complexity_mlzc",
+            index="MPLZC",
+            name="nk_complexity_mplzc",
             delay=delay,
             dimension=dimension,
         )
