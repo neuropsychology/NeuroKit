@@ -18,7 +18,6 @@ def complexity_lyapunov(
     method='rosenstein1993',
     len_trajectory=20,
     tolerance=None,
-    sampling_rate=1000,
     matrix_dim=4,
     min_neighbors="default",
     **kwargs,
@@ -65,10 +64,6 @@ def complexity_lyapunov(
         Minimum temporal separation for two points to be considered as neighbours, in samples.
         If None (default), `tolerance` is set to the mean period of the signal obtained by computing
         the mean frequency using the fast fourier transform.
-    sampling_rate : int
-        The sampling frequency of the signal (in Hz, i.e., samples/second) for when
-        minimum temporal separation of neighbours is automatically computed (`tolerance=None`).
-        Defaults to 1000.
     matrix_dim : int
         Correponds to the number of LEs to return for 'eckmann1996'.
     min_neighbors : int, str
@@ -92,7 +87,7 @@ def complexity_lyapunov(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
-    >>> l1, info = nk.complexity_lyapunov(signal, delay=1, dimension=2, tolerance=None, sampling_rate=100)
+    >>> l1, info = nk.complexity_lyapunov(signal, delay=1, dimension=2, tolerance=None)
     >>> l1 #doctest: +SKIP
 
     Reference
@@ -271,7 +266,7 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, tolerance=None,
 # Utilities
 # =============================================================================
 
-def _complexity_lyapunov_separation(signal, sampling_rate=1000, tolerance="default", **kwargs):
+def _complexity_lyapunov_separation(signal, tolerance="default", **kwargs):
     """Minimum temporal separation between two neighbors.
 
     If 'default', finds a suitable value by calculating the mean period of the data,
@@ -282,10 +277,10 @@ def _complexity_lyapunov_separation(signal, sampling_rate=1000, tolerance="defau
     if isinstance(tolerance, (int, float)):
         return tolerance
 
-    psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft', **kwargs)
+    psd = signal_psd(signal, sampling_rate=1000, method='fft', **kwargs)
     mean_freq = np.sum(psd["Power"] * psd["Frequency"]) / np.sum(psd["Power"])
     mean_period = 1 / mean_freq  # seconds per cycle
-    tolerance = int(np.ceil(mean_period * sampling_rate))
+    tolerance = int(np.ceil(mean_period * 1000))
 
     # n = len(signal)
     # max_tsep_factor = 0.25

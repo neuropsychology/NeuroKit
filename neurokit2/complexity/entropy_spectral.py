@@ -4,7 +4,7 @@ import pandas as pd
 from ..signal.signal_psd import signal_psd
 
 
-def entropy_spectral(signal, sampling_rate=1000, normalize=True, **kwargs):
+def entropy_spectral(signal, normalize=True, **kwargs):
     """Spectral Entropy (SpEn)
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the frequency domain as
@@ -18,8 +18,6 @@ def entropy_spectral(signal, sampling_rate=1000, normalize=True, **kwargs):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    sampling_rate : int
-        The sampling frequency of the signal (in Hz, i.e., samples/second).
     normalize : bool
         If True, divide by ``log2(len(signal)/2)`` to normalize the spectral entropy between 0 and 1.
     **kwargs : optional
@@ -60,7 +58,7 @@ def entropy_spectral(signal, sampling_rate=1000, normalize=True, **kwargs):
         )
 
     # Power-spectrum density (PSD)
-    psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft', **kwargs)["Power"]
+    psd = nk.signal_psd(signal, sampling_rate=1000, method='fft')["Power"]
     psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
     psd = psd[psd > 0]
 
@@ -70,4 +68,4 @@ def entropy_spectral(signal, sampling_rate=1000, normalize=True, **kwargs):
     if normalize:
         se /= np.log2(len(psd))  # between 0 and 1
 
-    return se, {"Sampling_Rate": sampling_rate, "PSD": psd, "Normalize": normalize}
+    return se, {"PSD": psd, "Normalize": normalize}
