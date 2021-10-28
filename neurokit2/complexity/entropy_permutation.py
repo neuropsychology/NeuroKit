@@ -20,6 +20,9 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     issues (Fadlallah et al., 2013). The Weighted PE was developped to address these limitations by
     incorporating significant information from the time series when retrieving the ordinal patterns.
 
+    This function can be called either via ``entropy_permutation()`` or ``complexity_pe()``.
+    Moreover, variants can be directly accessed via ``complexity_wpe()`` and ``complexity_mpe()``.
+
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]

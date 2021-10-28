@@ -10,12 +10,12 @@ from .complexity_rqa import complexity_rqa
 from .complexity_rr import complexity_rr
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
+from .entropy_coalition import entropy_coalition
 from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
-from .entropy_coalition import entropy_coalition
 from .entropy_range import entropy_range
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
@@ -59,6 +59,10 @@ complexity_fuzzycmse = functools.partial(entropy_multiscale, composite=True, fuz
 complexity_rcmse = functools.partial(entropy_multiscale, refined=True)
 complexity_fuzzyrcmse = functools.partial(entropy_multiscale, refined=True, fuzzy=True)
 
+complexity_pe = entropy_permutation
+complexity_wpe = functools.partial(entropy_permutation, weighted=True)
+complexity_mpe = functools.partial(entropy_permutation, scale="default")
+
 complexity_dfa = fractal_dfa
 fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
 complexity_mfdfa = fractal_mfdfa
@@ -95,6 +99,9 @@ __all__ = [
     "complexity_fuzzycmse",
     "complexity_rcmse",
     "complexity_fuzzyrcmse",
+    "complexity_pe",
+    "complexity_wpe",
+    "complexity_mpe",
     "complexity_dfa",
     "complexity_rr",
     "complexity_rqa",

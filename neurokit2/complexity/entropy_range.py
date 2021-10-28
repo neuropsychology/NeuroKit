@@ -7,11 +7,14 @@ from .utils import _get_tolerance, _phi, _phi_divide
 def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSampEn", **kwargs):
     """Range Entropy (RangeEn)
 
-    Introduced by `Omidvarnia et al. (2018) <https://www.mdpi.com/1099-4300/20/12/962/htm>`_.
+    Introduced by `Omidvarnia et al. (2018) <https://www.mdpi.com/1099-4300/20/12/962/htm>`_,
+    RangeEn refers to a modified forms of ApEn or SampEn.
+
     Both ApEn and SampEn compute the logarithmic likelihood that runs of patterns that are close
     remain close on the next incremental comparisons, of which this closeness is estimated by the
     Chebyshev distance. Range Entropy adapts the quantification of this closeness by using instead a
-    normlized distance, resulting in modified forms of ApEn and SampEn, 'mApEn' and 'mSampEn' respectively.
+    normalized distance, resulting in modified forms of ApEn and SampEn, 'mApEn' and 'mSampEn'
+    respectively.
 
     Parameters
     ----------
@@ -56,9 +59,13 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSa
     >>>
     >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
     >>>
-    >>> # Range Entropy
-    >>> rangeen, info = nk.entropy_range(signal, dimension=3, delay=1, method="mSampEn")
-    >>> rangeen  #doctest: +SKIP
+    >>> # Range Entropy (mSampEn)
+    >>> rangeen_msapen, info = nk.entropy_range(signal, dimension=3, delay=1, method="mSampEn")
+    >>> rangeen_msapen  #doctest: +SKIP
+    >>>
+    >>> # Range Entropy (mApEn)
+    >>> rangeen_mapen, info = nk.entropy_range(signal, dimension=3, delay=1, method="mApEn")
+    >>> rangeen_mapen  #doctest: +SKIP
 
     """
     # Sanity checks
@@ -83,16 +90,31 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSa
     return out, info
 
 
-def _entropy_range(signal, tolerance, delay=1, dimension=2, method="mSampEn", **kwargs):
+def _entropy_range(signal, tolerance, delay=1, dimension=2, method="mSampEn", fuzzy=False):
 
-    if method == "mApEn":
-        phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance, approximate=True,
-                   distance="range", **kwargs)
+    method = method.lower()
+    if method == "mapen":
+        phi = _phi(
+            signal,
+            delay=delay,
+            dimension=dimension,
+            tolerance=tolerance,
+            approximate=True,
+            distance="range",
+            fuzzy=fuzzy,
+        )
         rangeen = np.abs(np.subtract(phi[0], phi[1]))
 
-    elif method == "mSampEn":
-        phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance, approximate=False,
-                   distance="range", **kwargs)
+    elif method == "msampen":
+        phi = _phi(
+            signal,
+            delay=delay,
+            dimension=dimension,
+            tolerance=tolerance,
+            approximate=False,
+            distance="range",
+            fuzzy=fuzzy,
+        )
         rangeen = _phi_divide(phi)
 
     return rangeen
