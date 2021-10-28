@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import numpy as np
 import pandas as pd
 
 from .utils import _get_tolerance, _phi, _phi_divide
+from ..misc import NeuroKitWarning
 
 
 def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
@@ -80,5 +83,14 @@ def _entropy_sample(signal, tolerance, delay=1, dimension=2, fuzzy=False, distan
         fuzzy=fuzzy,
     )
     sampen = _phi_divide(phi)
+
+    # Warning for undefined
+    if sampen == np.inf:
+        r = np.round(tolerance, 2)
+        warn(
+            "Undefined conditional probabilities for entropy were detected. " +
+            f"Try manually increasing tolerance levels (current tolerance={r}).",
+            category=NeuroKitWarning,
+        )
 
     return sampen

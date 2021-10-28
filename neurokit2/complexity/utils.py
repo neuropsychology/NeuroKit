@@ -30,19 +30,8 @@ def _phi(
     )
 
     if approximate is True:
-    # Warning for undefined
-        if any(count1 == 0) or any(count2 == 0):
-            r = _get_tolerance(signal, tolerance=tolerance, dimension=dimension, show=False)
-            warn(
-                "Undefined conditional probabilities for entropy were detected. " +
-                f"Try manually increasing tolerance levels (current tolerance={r}).",
-                category=NeuroKitWarning,
-            )
-            phi = np.inf
-        else:
-            phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))
-            phi[1] = np.mean(np.log(count2 / embedded2.shape[0]))
-
+        phi[0] = np.mean(np.log(count1 / embedded1.shape[0]))
+        phi[1] = np.mean(np.log(count2 / embedded2.shape[0]))
     else:
         phi[0] = np.mean((count1 - 1) / (embedded1.shape[0] - 1))
         phi[1] = np.mean((count2 - 1) / (embedded2.shape[0] - 1))
@@ -52,19 +41,9 @@ def _phi(
 
 def _phi_divide(phi):
     if phi[0] == 0:
-        # warn(
-        #     "Undefined conditional probabilities for entropy were detected. " +
-        #     f"Try manually increasing tolerance levels (current tolerance={r}).",
-        #     category=NeuroKitWarning,
-        # )
         return -np.inf
     division = np.divide(phi[1], phi[0])
     if division == 0:
-        # warn(
-        #     "Undefined conditional probabilities for entropy were detected. " +
-        #     f"Try manually increasing tolerance levels (current tolerance={r}).",
-        #     category=NeuroKitWarning,
-        # )
         return np.inf
     return -np.log(division)
 
