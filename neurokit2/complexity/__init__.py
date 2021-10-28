@@ -21,7 +21,6 @@ from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
-from .entropy_wiener import entropy_wiener
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
@@ -39,6 +38,7 @@ from .optim_complexity_dimension import complexity_dimension
 from .optim_complexity_k import complexity_k
 from .optim_complexity_optimize import complexity_optimize
 from .optim_complexity_tolerance import complexity_tolerance
+from .TODO_entropy_wiener import entropy_wiener
 from .transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Aliases

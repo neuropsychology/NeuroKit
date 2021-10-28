@@ -43,9 +43,9 @@ def entropy_wiener(signal, sampling_rate=1000, **kwargs):
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(100, sampling_rate=100, frequency=10.0)
-    >>> signal += 2 * nk.signal_simulate(100, sampling_rate=100, frequency=3.0)
+    >>> signal = nk.signal_simulate(100, sampling_rate=100, frequency=[3, 10])
     >>> we, info = nk.entropy_wiener(signal, sampling_rate=100)
+    >>> we
 
     References
     ----------
@@ -61,9 +61,10 @@ def entropy_wiener(signal, sampling_rate=1000, **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-
     # Get magnitude spectrogram
-    _, _, stft = signal_timefrequency(signal, sampling_rate=sampling_rate, method="stft", **kwargs)
+    _, _, stft = signal_timefrequency(
+        signal, sampling_rate=sampling_rate, method="stft", show=False, **kwargs
+    )
     # https://github.com/librosa/librosa/blob/eb603e7a91598d1e72d3cdeada0ade21a33f9c0c/librosa/core/spectrum.py#L42
 
     power = 2
