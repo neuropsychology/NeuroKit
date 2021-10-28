@@ -17,7 +17,6 @@ def complexity_lyapunov(
     dimension=2,
     method='rosenstein1993',
     len_trajectory=20,
-    tolerance=None,
     matrix_dim=4,
     min_neighbors="default",
     **kwargs,
@@ -60,10 +59,6 @@ def complexity_lyapunov(
     len_trajectory : int
         The number of data points in which neighbouring trajectories are followed. Only relevant if
         method is 'rosenstein1993'.
-    tolerance : int, None
-        Minimum temporal separation for two points to be considered as neighbours, in samples.
-        If None (default), `tolerance` is set to the mean period of the signal obtained by computing
-        the mean frequency using the fast fourier transform.
     matrix_dim : int
         Correponds to the number of LEs to return for 'eckmann1996'.
     min_neighbors : int, str
@@ -87,7 +82,7 @@ def complexity_lyapunov(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
-    >>> l1, info = nk.complexity_lyapunov(signal, delay=1, dimension=2, tolerance=None)
+    >>> l1, info = nk.complexity_lyapunov(signal, delay=1, dimension=2)
     >>> l1 #doctest: +SKIP
 
     Reference
@@ -106,8 +101,7 @@ def complexity_lyapunov(
         )
 
     # If default tolerance
-    if tolerance is None:
-        tolerance = _complexity_lyapunov_separation(signal, **kwargs)
+    tolerance = _complexity_lyapunov_separation(signal, **kwargs)  # rosenstein's method
 
     # Method
     method = method.lower()
