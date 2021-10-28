@@ -57,8 +57,8 @@ def entropy_spectral(signal, normalize=True, **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # Power-spectrum density (PSD)
-    psd = nk.signal_psd(signal, sampling_rate=1000, method='fft')["Power"]
+    # Power-spectrum density (PSD) (actual sampling rate does not matter)
+    psd = signal_psd(signal, sampling_rate=1000, method='fft')["Power"]
     psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
     psd = psd[psd > 0]
 

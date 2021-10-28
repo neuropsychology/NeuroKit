@@ -272,6 +272,7 @@ def _complexity_lyapunov_separation(signal, tolerance="default", **kwargs):
         return tolerance
 
     psd = signal_psd(signal, sampling_rate=1000, method='fft', **kwargs)
+    # actual sampling rate does not matter
     mean_freq = np.sum(psd["Power"] * psd["Frequency"]) / np.sum(psd["Power"])
     mean_period = 1 / mean_freq  # seconds per cycle
     tolerance = int(np.ceil(mean_period * 1000))
