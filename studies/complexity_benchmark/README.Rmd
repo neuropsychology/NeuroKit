@@ -78,32 +78,27 @@ dfsummary <- df |>
 
 
 ggplot(dfsummary, aes(x = Method, y = Duration)) + 
-  geom_hline(yintercept = c(0.01), linetype = "dotted") +
+  geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = "dotted") +
   geom_line(aes(alpha = Length, group = Length)) +
   geom_point(aes(color = Length)) + 
   theme_modern() +
-  scale_y_log10() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  guides(alpha = "none") +
+  labs(y = "Time to compute", x = NULL, color = "Signal length")
 ```
 
 ### Sensitivity to signal length
 
 ```{r message=FALSE, warning=FALSE}
 df |> 
-  ggplot(aes(x = Length, y = Duration)) +
-  geom_hline(yintercept = c(0.001), linetype = "dotted") +
-  geom_line(data=dfsummary, aes(group = Method, color = Method)) +
-  # geom_violin(aes(fill = Length, color = Method)) +
-  scale_y_log10() 
-
-df |> 
-  ggplot(aes(x = Length, y = Duration)) +
+  ggplot(aes(x = as.factor(Length), y = Duration)) +
   geom_hline(yintercept = c(0.01), linetype = "dotted") +
   geom_line(data=dfsummary, aes(group = 1)) +
   geom_violin(aes(fill = Length)) +
   facet_wrap(~Method) +
   scale_y_log10() +
-  scale_fill_viridis_d(guide = "none") +
+  scale_fill_viridis_c(guide = "none") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```

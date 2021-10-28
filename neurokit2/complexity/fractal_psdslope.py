@@ -5,7 +5,9 @@ import pandas as pd
 from ..signal import signal_detrend, signal_psd
 
 
-def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="voss1988", show=True, **kwargs):
+def fractal_psdslope(
+    signal, sampling_rate=1000, frequency_range=None, method="voss1988", show=True, **kwargs
+):
     """Fractal dimension via Power Spectral Density (PSD) slope
 
     Fractal exponent can be computed from Power Spectral Density slope (PSDslope) analysis in
@@ -66,7 +68,7 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
 
     - Voss, R. F. (1988). Fractals in nature: From characterization to simulation.
     The Science of Fractal Images, 21–70.
-    
+
     - Eke, A., Hermán, P., Kocsis, L., and Kozak, L. R. (2002). Fractal characterization of complexity in
     temporal physiological signals. Physiol. Meas. 23, 1–38.
     """
@@ -88,17 +90,26 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
     if frequency_range is None:
         frequency_range = [0, np.inf]
     if isinstance(frequency_range, list):
-        psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft',
-                         min_frequency=frequency_range[0], max_frequency=frequency_range[1], show=False, **kwargs)
+        psd = signal_psd(
+            signal,
+            sampling_rate=sampling_rate,
+            method="fft",
+            min_frequency=frequency_range[0],
+            max_frequency=frequency_range[1],
+            show=False,
+            **kwargs
+        )
     elif frequency_range == "lowest25":
-        psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft', show=False, **kwargs)
+        psd = signal_psd(signal, sampling_rate=sampling_rate, method="fft", show=False, **kwargs)
         psd = psd[psd["Frequency"] < psd.quantile(0.25)[0]]
     psd = psd[psd["Frequency"] > 0]
 
-    # First check the global slope for anti-persistent noise (GT +0.20)
-    # If so, fit the line starting from the highest frequency
+    # Get slope
     slope, intercept = np.polyfit(np.log10(psd["Frequency"]), np.log10(psd["Power"]), 1)
 
+    # "Check the global slope for anti-persistent noise (GT +0.20) and fit the line starting from
+    # the highest frequency" in FredHasselman/casnet.
+    # Not sure about that, commenting it out for now.
     # if slope > 0.2:
     #     slope, intercept = np.polyfit(np.log10(np.flip(psd["Frequency"])), np.log10(np.flip(psd["Power"])), 1)
 
@@ -113,28 +124,39 @@ def fractal_psdslope(signal, sampling_rate=1000, frequency_range=None, method="v
     if show:
         _fractal_psdslope_plot(psd["Frequency"], psd["Power"], slope, intercept, fd, ax=None)
 
-    return fd, {"Slope": slope, "Sampling_Rate": sampling_rate, "Method": method, "Frequencies": frequency_range}
+    return fd, {
+        "Slope": slope,
+        "Sampling_Rate": sampling_rate,
+        "Method": method,
+        "Frequencies": frequency_range,
+    }
 
 
 def _fractal_psdslope_plot(frequency, psd, slope, intercept, fd, ax=None):
 
     if ax is None:
         fig, ax = plt.subplots()
-        fig.suptitle("Power Spectral Density (PSD) slope analysis" +
-                     ", slope = " + str(np.round(slope, 2)))
+        fig.suptitle(
+            "Power Spectral Density (PSD) slope analysis" + ", slope = " + str(np.round(slope, 2))
+        )
     else:
         fig = None
-        ax.set_title("Power Spectral Density (PSD) slope analysis" +
-                     ", slope = " + str(np.round(slope, 2)))
+        ax.set_title(
+            "Power Spectral Density (PSD) slope analysis" + ", slope = " + str(np.round(slope, 2))
+        )
 
     ax.set_ylabel(r"$\log_{10}$(Power)")
     ax.set_xlabel(r"$\log_{10}$(Frequency)")
-    ax.scatter(np.log10(frequency), np.log10(psd),
-               marker="o", zorder=2)
+    ax.scatter(np.log10(frequency), np.log10(psd), marker="o", zorder=2)
 
     fit_values = [slope * i + intercept for i in np.log10(frequency)]
-    ax.plot(np.log10(frequency), fit_values, color="#FF9800", zorder=1,
-            label="Fractal Dimension = " + str(np.round(fd, 2)))
+    ax.plot(
+        np.log10(frequency),
+        fit_values,
+        color="#FF9800",
+        zorder=1,
+        label="Fractal Dimension = " + str(np.round(fd, 2)),
+    )
     ax.legend(loc="lower right")
 
     return fig

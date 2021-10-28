@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import NeuroKitWarning
 from ..signal import signal_detrend
-from ..stats import standardize
 
 
-def fractal_sda(signal, scales=None, robust=False, show=True):
+def fractal_sda(signal, scales=None, show=True):
     """Standardised Dispersion Analysis (SDA)
-    
+
     SDA is part of a family of dispersion techniques used to compute fractal dimension.
     The standardised time series is divided in bins of different sizes and their standard deviation (SD)
     is calculated. The relationship between the SD and the bin size can be an indication
@@ -26,10 +28,6 @@ def fractal_sda(signal, scales=None, robust=False, show=True):
         The scales at which the signal is binned for evaluating the dispersions. If not None, it should be
         a list of integer powers of 2 (e.g., scales = [1, 2, 4, 8, 16...]) including 1 (meaning that the data
         points are treated individually).
-    robust : bool
-        If True, centering is done by substracting the median from the variables and dividing it by
-        the median absolute deviation (MAD). If False, variables are standardized by substracting the
-        mean and dividing it by the standard deviation (SD).
     show : bool
         If True, returns the log-log plot of standardized dispersion versus bin size.
 
@@ -70,25 +68,23 @@ def fractal_sda(signal, scales=None, robust=False, show=True):
     # Detrend signal
     signal = signal_detrend(signal)
 
-    # Standardize
-    if not robust:
-        # compute SD using population formula N instead of usual bias corrected N-1
-        signal = (signal - np.nanmean(signal)) / np.nanstd(signal)
-    else:
-        signal = standardize(signal, robust=True)
+    # compute SD using population formula N instead of usual bias corrected N-1
+    signal = (signal - np.nanmean(signal)) / np.nanstd(signal)
 
     n = len(signal)
     # Must be at least 2 bins of size 512
     if n < 1024:
-        raise ValueError(
-            "NeuroKit error: fractal_sda(): At least 1024 data points of signal are required."
-            )
+        warn(
+            "At least 1024 data points of signal are required for SDA. Returning NaN.",
+            category=NeuroKitWarning,
+        )
+        return np.nan, {}
 
     # Set scales to be an integer power of 2
     if scales is None:
         scale_min = 1
         scale_max = int(np.floor(np.log2(n / 2)))
-        scales = np.append(1, 2 ** np.arange(scale_min, scale_max + 1)) # include binsize = 1 too
+        scales = np.append(1, 2 ** np.arange(scale_min, scale_max + 1))  # include binsize = 1 too
 
     # sanitize scales
     scales = scales[scales <= n / 2]
@@ -118,8 +114,11 @@ def _fractal_sda_plot(sds, scales, slope, intercept, ax=None):
 
     if ax is None:
         fig, ax = plt.subplots()
-        fig.suptitle("Standardized Dispersion as a function of Sample-Bin size" +
-                     ", slope = " + str(np.round(slope, 2)))
+        fig.suptitle(
+            "Standardized Dispersion as a function of Sample-Bin size"
+            + ", slope = "
+            + str(np.round(slope, 2))
+        )
     else:
         fig = None
         ax.set_title(
@@ -131,12 +130,16 @@ def _fractal_sda_plot(sds, scales, slope, intercept, ax=None):
     ax.set_ylabel(r"$\log_{10}$(Standardized Dispersion)")
     ax.set_xlabel(r"$\log_{10}$(Bin Size)")
 
-    ax.scatter(np.log10(scales), np.log10(sds),
-               marker="o", zorder=2)
+    ax.scatter(np.log10(scales), np.log10(sds), marker="o", zorder=2)
 
     fit_values = [slope * i + intercept for i in np.log10(scales)]
-    ax.plot(np.log10(scales), fit_values, color="#FF9800", zorder=1,
-            label="Fractal Dimension = " + str(np.round(1 - slope, 2)))
+    ax.plot(
+        np.log10(scales),
+        fit_values,
+        color="#FF9800",
+        zorder=1,
+        label="Fractal Dimension = " + str(np.round(1 - slope, 2)),
+    )
     ax.legend(loc="lower right")
 
     return fig
