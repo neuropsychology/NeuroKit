@@ -67,6 +67,10 @@ complexity_dfa = fractal_dfa
 fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
 complexity_mfdfa = fractal_mfdfa
 
+complexity_lzc = complexity_lempelziv
+complexity_plzc = functools.partial(complexity_lzc, permutation=True)
+complexity_mlzc = functools.partial(complexity_lzc, multiscale=True)
+
 complexity_cd = fractal_correlation
 
 complexity_plot = functools.partial(complexity_optimize, show=True)
@@ -81,6 +85,9 @@ __all__ = [
     "complexity_hurst",
     "complexity_tolerance",
     "complexity_lempelziv",
+    "complexity_lzc",
+    "complexity_plzc",
+    "complexity_mlzc",
     "complexity_lyapunov",
     "complexity_mfdfa",
     "complexity_cd",

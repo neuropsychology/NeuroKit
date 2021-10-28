@@ -32,9 +32,9 @@ def run_methods(i, x, delay=1, dimension=2):
     data.append(
         time_function(
             x,
-            nk.complexity_lempelziv,
+            nk.complexity_lzc,
             index="LZC",
-            name="nk_complexity_lempelziv_lzc",
+            name="nk_complexity_lzc",
             delay=delay,
             dimension=dimension,
         )
@@ -42,9 +42,19 @@ def run_methods(i, x, delay=1, dimension=2):
     data.append(
         time_function(
             x,
-            nk.complexity_lempelziv,
+            nk.complexity_plzc,
             index="PLZC",
-            name="nk_complexity_lempelziv_plzc",
+            name="nk_complexity_plzc",
+            delay=delay,
+            dimension=dimension,
+        )
+    )
+    data.append(
+        time_function(
+            x,
+            nk.complexity_mlzc,
+            index="MLZC",
+            name="nk_complexity_mlzc",
             delay=delay,
             dimension=dimension,
         )
