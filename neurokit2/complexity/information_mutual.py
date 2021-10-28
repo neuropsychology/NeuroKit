@@ -31,7 +31,7 @@ def mutual_information(x, y, method="varoquaux", bins=256, sigma=1, normalized=T
     Returns
     -------
     float
-        The computed similariy measure.
+        The computed similarity measure.
 
     See Also
     --------

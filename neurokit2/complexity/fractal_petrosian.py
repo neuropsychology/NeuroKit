@@ -27,6 +27,14 @@ def fractal_petrosian(signal, method="C"):
         samples and binarizes depending on their sign. Method 'D' forms separates consecutive samples
         that exceed 1 signal's SD from the others smaller changes.
 
+    Returns
+    -------
+    pfd : float
+        The petrosian fractal dimension (PFD).
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute PFD.
+
     Examples
     ----------
     >>> import neurokit2 as nk

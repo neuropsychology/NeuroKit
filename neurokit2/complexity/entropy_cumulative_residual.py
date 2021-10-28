@@ -50,7 +50,7 @@ def entropy_cumulative_residual(signal):
     valscount = pd.Series(signal).value_counts(sort=True)
     events, probs = valscount.index.values, valscount.values / valscount.sum()
 
-    cdf = {a: p for a, p in zip(events, np.cumsum(probs))}
+    cdf = {a: _ for a, _ in zip(events, np.cumsum(probs))}
     terms = np.zeros(len(events))
     for i, (a, b) in enumerate(_entropy_cumulative_residual_pairwise(events)):
         pgx = cdf[a]

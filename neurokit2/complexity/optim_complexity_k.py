@@ -7,7 +7,7 @@ import pandas as pd
 from ..misc import NeuroKitWarning, find_plateau
 
 
-def complexity_k(signal, k_max="max", show=False, **kwargs):
+def complexity_k(signal, k_max="max", show=False):
     """Automated selection of the optimal k_max parameter for Higuchi Fractal Dimension (HFD).
 
     The optimal kmax is computed based on the point at which HFD values plateau for a range of kmax values (see Vega, 2015).

@@ -10,14 +10,22 @@ def fractal_sevcik(signal):
     The Sevcik algorithm was proposed to calculate the fractal dimension of waveforms by Sevcik (1998). This method could be
     used to quickly measure the complexity and randomness of a signal.
 
-    See Also
-    --------
-    fractal_petrosian
-
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
+
+    Returns
+    ---------
+    sfd : float
+        The sevcik fractal dimension.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute SFD.
+
+    See Also
+    --------
+    fractal_petrosian
 
     Examples
     ----------

@@ -28,6 +28,14 @@ def fisher_information(signal, delay=1, dimension=2):
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
 
+    Returns
+    -------
+    fi : float
+        The computed fisher information measure.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute fisher information.
+
     Examples
     ----------
     >>> import neurokit2 as nk

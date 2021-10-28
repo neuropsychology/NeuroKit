@@ -58,6 +58,8 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
         recurrences (``info['RecurrenceRate']``) is about 2-5%.
     linelength : int
         Minimum length of a diagonal and vertical lines. Default to 2.
+    show : bool
+        Visualise plot of RQA.
 
     Returns
     ----------

@@ -58,7 +58,7 @@ def entropy_spectral(signal, normalize=True, **kwargs):
         )
 
     # Power-spectrum density (PSD) (actual sampling rate does not matter)
-    psd = signal_psd(signal, sampling_rate=1000, method='fft')["Power"]
+    psd = signal_psd(signal, sampling_rate=1000, method='fft', **kwargs)["Power"]
     psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
     psd = psd[psd > 0]
 
