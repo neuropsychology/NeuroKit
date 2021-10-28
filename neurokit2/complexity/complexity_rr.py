@@ -20,7 +20,9 @@ def complexity_rr(signal, **kwargs):
 
     References
     ----------
-    - Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness: an index for testing the suitability of the monofractal model. Frontiers in Physiology, 3, 208.
+    - Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness:
+    an index for testing the suitability of the monofractal model.
+    Frontiers in Physiology, 3, 208.
 
     Returns
     --------

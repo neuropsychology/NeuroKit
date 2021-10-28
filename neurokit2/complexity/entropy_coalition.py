@@ -41,8 +41,9 @@ def entropy_coalition(signal, method="amplitude"):
     ----------
     - Shanahan, M. (2010). Metastable chimera states in community-structured oscillator networks.
     Chaos: An Interdisciplinary Journal of Nonlinear Science, 20(1), 013108.
-    - Schartner, M., Seth, A., Noirhomme, Q., Boly, M., Bruno, M. A., Laureys, S., & Barrett, A. (2015). Complexity of multi-dimensional spontaneous EEG decreases during propofol induced
-    general anaesthesia. PloS one, 10(8), e0133532.
+    - Schartner, M., Seth, A., Noirhomme, Q., Boly, M., Bruno, M. A., Laureys, S., &
+    Barrett, A. (2015). Complexity of multi-dimensional spontaneous EEG decreases
+    during propofol induced general anaesthesia. PloS one, 10(8), e0133532.
 
     Examples
     --------
