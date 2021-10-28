@@ -8,6 +8,7 @@ import sklearn.metrics.pairwise
 from ..misc import NeuroKitWarning
 from .complexity_embedding import complexity_embedding
 from .optim_complexity_delay import complexity_delay
+from ..signal.signal_psd import signal_psd
 
 
 def complexity_lyapunov(
@@ -17,6 +18,7 @@ def complexity_lyapunov(
     method='rosenstein1993',
     len_trajectory=20,
     tolerance=None,
+    sampling_rate=1000,
     matrix_dim=4,
     min_neighbors="default",
     **kwargs,
@@ -60,16 +62,21 @@ def complexity_lyapunov(
         The number of data points in which neighbouring trajectories are followed. Only relevant if
         method is 'rosenstein1993'.
     tolerance : int, None
-        Minimum temporal separation for two points to be considered as neighbours.
+        Minimum temporal separation for two points to be considered as neighbours, in samples.
         If None (default), `tolerance` is set to the mean period of the signal obtained by computing
         the mean frequency using the fast fourier transform.
+    sampling_rate : int
+        The sampling frequency of the signal (in Hz, i.e., samples/second) for when
+        minimum temporal separation of neighbours is automatically computed (`tolerance=None`).
+        Defaults to 1000.
     matrix_dim : int
         Correponds to the number of LEs to return for 'eckmann1996'.
     min_neighbors : int, str
         Minimum number of neighbors for 'eckmann1996'. If "default", min(2 * matrix_dim, matrix_dim + 4)
         is used.
     **kwargs : optional
-        Other arguments.
+        Other arguments to be passed to ``signal_psd()`` for calculating the minimum temporal
+        separation of two neighbours.
 
     Returns
     --------
@@ -85,7 +92,7 @@ def complexity_lyapunov(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
-    >>> l1, _ = nk.complexity_lyapunov(signal, delay=1, dimension=2)
+    >>> l1, info = nk.complexity_lyapunov(signal, delay=1, dimension=2, tolerance=None, sampling_rate=100)
     >>> l1 #doctest: +SKIP
 
     Reference
@@ -264,33 +271,40 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, tolerance=None,
 # Utilities
 # =============================================================================
 
-def _complexity_lyapunov_separation(signal, tolerance="default"):
+def _complexity_lyapunov_separation(signal, sampling_rate=1000, tolerance="default", **kwargs):
     """Minimum temporal separation between two neighbors.
 
-    If 'default', finds a suitable value by calculating the mean period of the data.
+    If 'default', finds a suitable value by calculating the mean period of the data,
+    obtained by the reciprocal of the mean frequency of the power spectrum.
 
     https://github.com/CSchoel/nolds
     """
     if isinstance(tolerance, (int, float)):
         return tolerance
 
-    n = len(signal)
-    max_tsep_factor = 0.25
+    psd = signal_psd(signal, sampling_rate=sampling_rate, method='fft', **kwargs)
+    w = psd["Power"] / np.sum(psd["Power"])
+    mean_freq = np.sum(psd["Frequency"] * w) / np.sum(w)  # weighted mean
+    mean_period = 1 / mean_freq  # seconds per cycle
+    tolerance = int(np.ceil(mean_period * sampling_rate))
 
-    # tolerance need the fft
-    f = np.fft.rfft(signal, n * 2 - 1)
-    # calculate tolerance as mean period (= 1 / mean frequency)
-    mf = np.fft.rfftfreq(n * 2 - 1) * np.abs(f)
-    mf = np.mean(mf[1:]) / np.sum(np.abs(f[1:]))
-    tolerance = int(np.ceil(1.0 / mf))
-    if tolerance > max_tsep_factor * n:
-        set_min = int(max_tsep_factor * n)
-        warn(
-            f"Signal has a mean frequency too low for tolerance={tolerance}, " + 
-            f"setting tolerance={set_min}",
-            category=NeuroKitWarning,
-        )
-        tolerance = set_min
+    # n = len(signal)
+    # max_tsep_factor = 0.25
+
+    # # tolerance need the fft
+    # f = np.fft.rfft(signal, n * 2 - 1)
+    # # calculate tolerance as mean period (= 1 / mean frequency)
+    # mf = np.fft.rfftfreq(n * 2 - 1) * np.abs(f)
+    # mf = np.mean(mf[1:]) / np.sum(np.abs(f[1:]))
+    # tolerance = int(np.ceil(1.0 / mf))
+    # if tolerance > max_tsep_factor * n:
+    #     set_min = int(max_tsep_factor * n)
+    #     warn(
+    #         f"Signal has a mean frequency too low for tolerance={tolerance}, " + 
+    #         f"setting tolerance={set_min}",
+    #         category=NeuroKitWarning,
+    #     )
+    #     tolerance = set_min
     return tolerance
 
 
