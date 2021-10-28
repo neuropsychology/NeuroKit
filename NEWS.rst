@@ -19,6 +19,9 @@ New Features
 +++++++++++++
 
 * Added various complexity indices: `complexity_hjorth()`, `complexity_hurst()`, `complexity_lyapunov()`, `complexity_rqa()`, `complexity_rr()`, `entropy_coalition()`, `entropy_permutation()`, `entropy_range()`, `entropy_spectral()`, `fractal_nld()`, `fractal_psdslope()`, `fractal_sda()`, `fractal_sevcik()`
+* Added `mne_templateMRI()` as a helper to get MNE's template MRI.
+* Added `eeg_source()` as a helper to perform source reconstruction.
+* Added `eeg_source_extract()` to extract the activity from a brain region.
 * Added `parallel_run()` in `misc` as a parallel processing utility function.
 * Added `find_plateau()` in `misc` to find the point of plateau in an array of values.
 * Added `write_csv()` in `data` to facilitate saving dataframes into multiple parts.
