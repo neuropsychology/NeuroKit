@@ -45,7 +45,7 @@ def entropy_wiener(signal, sampling_rate=1000, **kwargs):
     >>>
     >>> signal = nk.signal_simulate(100, sampling_rate=100, frequency=[3, 10])
     >>> we, info = nk.entropy_wiener(signal, sampling_rate=100)
-    >>> we
+    >>> we #doctest: +SKIP
 
     References
     ----------

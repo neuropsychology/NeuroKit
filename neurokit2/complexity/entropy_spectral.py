@@ -41,7 +41,7 @@ def entropy_spectral(signal, normalize=True, **kwargs):
     >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
     >>>
     >>> # Spectral Entropy
-    >>> SpEn, info = nk.entropy_spectral(signal, sampling_rate=200)
+    >>> SpEn, info = nk.entropy_spectral(signal)
     >>> SpEn #doctest: +SKIP
 
     References
