@@ -16,7 +16,8 @@ def complexity(signal, which=["fast"], delay=1, dimension=2):
 
     This convenience function can be used to run a large number of complexity metrics.
 
-    The categorization by "computation time" is based on our preliminary `benchmarking study <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_.
+    The categorization by "computation time" is based on our preliminary `benchmarking study
+    <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_.
 
     Parameters
     ----------
@@ -38,7 +39,8 @@ def complexity(signal, which=["fast"], delay=1, dimension=2):
 
     See Also
     --------
-    entropy_permutation, entropy_differential, entropy_svd, fractal_katz, fractal_petrosian, fractal_sevcik, fisher_information, complexity_hjorth
+    entropy_permutation, entropy_differential, entropy_svd, fractal_katz, fractal_petrosian,
+    fractal_sevcik, fisher_information, complexity_hjorth
 
     Examples
     ----------
