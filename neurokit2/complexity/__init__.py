@@ -1,6 +1,7 @@
 """Submodule for NeuroKit."""
 import functools
 
+from .complexity import complexity
 from .complexity_embedding import complexity_embedding
 from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
@@ -76,6 +77,7 @@ complexity_cd = fractal_correlation
 complexity_plot = functools.partial(complexity_optimize, show=True)
 
 __all__ = [
+    "complexity",
     "complexity_embedding",
     "complexity_delay",
     "complexity_dimension",

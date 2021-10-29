@@ -18,94 +18,61 @@ dimension, entropy, etc.).
 ## Make data
 
 ``` python
-import neurokit2 as nk
-import pandas as pd
-import numpy as np
-from timeit import default_timer as timer
-
-
-# Utility function
-def time_function(i, x, fun=nk.fractal_petrosian, index="FD_Petrosian", method="nk_fractal_petrosian"):
-  t0 = timer()
-  rez, _ = fun(x)
-  t1 = timer() - t0
-  dat = {
-    "Duration" : [t1],
-    "Result" : [rez],
-    "Length" : [len(x)],
-    "Index" : [index],
-    "Method" : [method],
-    "Iteration" : [i],
-  }
-  return pd.DataFrame.from_dict(dat)
-
-# Iterations
-data = []
-for n in np.power(10, range(2, 6)):
-  print(n)
-  x = nk.signal_simulate(duration=1, sampling_rate=n, frequency=[5, 10], noise=0.5)
-  for i in range(100):
-    data.append(time_function(i, x, nk.complexity_rr, index="RR", method="nk_complexity_rr"))
-    data.append(time_function(i, x, nk.complexity_hjorth, index="Hjorth", method="nk_complexity_hjorth"))
-    data.append(time_function(i, x, nk.fisher_information, index="Fisher", method="nk_fisher_information"))
-    data.append(time_function(i, x, nk.entropy_shannon, index="ShanEn", method="nk_entropy_shannon"))
-    data.append(time_function(i, x, nk.entropy_cumulative_residual, index="CREn", method="nk_entropy_cumulative_residual"))
-    data.append(time_function(i, x, nk.entropy_differential, index="DiffEn", method="nk_entropy_differential"))
-    data.append(time_function(i, x, nk.entropy_svd, index="SVDen", method="nk_entropy_svd"))
-    data.append(time_function(i, x, nk.entropy_spectral, index="SpEn", method="nk_entropy_spectral"))
-    data.append(time_function(i, x, nk.fractal_katz, index="Katz", method="nk_fractal_katz"))
-    data.append(time_function(i, x, nk.fractal_sevcik, index="Sevcik", method="nk_fractal_sevcik"))
-    data.append(time_function(i, x, nk.fractal_petrosian, index="FD_Petrosian", method="nk_fractal_petrosian"))
-
-pd.concat(data).to_csv("data.csv", index=False)
+# See make_data.py
 ```
 
 ## Benchmark
+
+### Average Duration
 
 ``` r
 library(tidyverse)
 library(easystats)
 
-df <- read.csv("data.csv") |>
-  mutate(Length = as.factor(Length))
+df <- read.csv("data.csv") 
 
-order <- arrange(summarize(group_by(df, Method), Duration = mean(Duration)), Duration)
-order 
-## # A tibble: 11 x 2
-##    Method                          Duration
-##    <chr>                              <dbl>
-##  1 nk_fractal_petrosian           0.0000722
-##  2 nk_fractal_katz                0.000201 
-##  3 nk_complexity_hjorth           0.000288 
-##  4 nk_entropy_svd                 0.000352 
-##  5 nk_fisher_information          0.000363 
-##  6 nk_fractal_sevcik              0.000384 
-##  7 nk_entropy_differential        0.00314  
-##  8 nk_entropy_spectral            0.00342  
-##  9 nk_entropy_shannon             0.00575  
-## 10 nk_entropy_cumulative_residual 0.0484   
-## 11 nk_complexity_rr               0.466
+order <- df |> 
+  group_by(Method) |> 
+  summarize(Duration = median(Duration)) |> 
+  arrange(Duration) |> 
+  mutate(Method = factor(Method, levels = Method))
 
-df <- mutate(df, Method = fct_relevel(Method, order$Method))
+df <- mutate(df, Method = fct_relevel(Method, as.character(order$Method)))
 
 dfsummary <- df |>
   group_by(Method, Length) |>
   summarize(Duration = median(Duration))
 
-n <- length(unique(df$Method))
 
+ggplot(dfsummary, aes(x = Method, y = Duration)) + 
+  geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = "dotted") +
+  geom_line(aes(alpha = Length, group = Length)) +
+  geom_point(aes(color = Length)) + 
+  theme_modern() +
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1)) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  guides(alpha = "none") +
+  labs(y = "Time to compute", x = NULL, color = "Signal length")
+```
+
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-3-1.png)<!-- -->
+
+### Sensitivity to signal length
+
+``` r
 df |> 
-  ggplot(aes(x = Length, y = Duration)) +
+  ggplot(aes(x = as.factor(Length), y = Duration)) +
+  geom_hline(yintercept = c(0.01), linetype = "dotted") +
   geom_line(data=dfsummary, aes(group = 1)) +
   geom_violin(aes(fill = Length)) +
   facet_wrap(~Method) +
   scale_y_log10() +
-  scale_fill_viridis_d(guide = "none") +
+  scale_fill_viridis_c(guide = "none") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
 
-![](../../studies/complexity_benchmark/figures/unnamed-chunk-3-1.png)<!-- -->
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-4-1.png)<!-- -->
 
 ## References
 

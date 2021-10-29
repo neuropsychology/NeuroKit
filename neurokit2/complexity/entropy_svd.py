@@ -7,8 +7,8 @@ from .complexity_embedding import complexity_embedding
 def entropy_svd(signal, delay=1, dimension=2):
     """Singular Value Decomposition (SVD) Entropy
 
-    SVD entropy can be intuitively seen as an indicator of how many eigenvectors are needed for
-    an adequate explanation of the dataset. In other words, it measures feature-richness: the
+    SVD entropy (SVDEn) can be intuitively seen as an indicator of how many eigenvectors are needed
+    for an adequate explanation of the dataset. In other words, it measures feature-richness: the
     higher the SVD entropy, the more orthogonal vectors are required to adequately explain the
     dataset.
 
