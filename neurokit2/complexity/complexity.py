@@ -49,7 +49,7 @@ def complexity(signal, which=["fast"], delay=1, dimension=2):
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
     >>> df, info = nk.complexity(signal, which = "fast")
-    >>> df
+    >>> df #doctest: +SKIP
 
     """
     # Sanity checks
