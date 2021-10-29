@@ -94,7 +94,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         peaks, sampling_rate = peaks[0], peaks[1]
 
     # Compute R-R intervals (also referred to as NN) in milliseconds
-    rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
     diff_rri = np.diff(rri)
 
     out = {}  # Initialize empty container for results

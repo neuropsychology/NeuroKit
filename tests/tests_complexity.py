@@ -39,7 +39,7 @@ def test_complexity_sanity():
     assert np.allclose(parameters["ExpRange"], 0.9937858280904406, atol=0.000001)
 
     assert np.allclose(nk.fractal_correlation(signal)[0], 0.7884473170763334, atol=0.000001)
-    assert np.allclose(nk.fractal_correlation(signal, r="nolds")[0], nolds.corr_dim(signal, 2), atol=0.0001)
+    assert np.allclose(nk.fractal_correlation(signal, radius="nolds")[0], nolds.corr_dim(signal, 2), atol=0.0001)
 
 
 # =============================================================================
@@ -84,18 +84,18 @@ def test_complexity_vs_R():
     r = 0.2 * np.std(signal, ddof=1)
 
     # ApEn
-    apen = nk.entropy_approximate(signal, dimension=2, r=r)[0]
+    apen = nk.entropy_approximate(signal, dimension=2, tolerance=r)[0]
     assert np.allclose(apen, 0.04383386, atol=0.0001)
-    apen = nk.entropy_approximate(signal, dimension=3, delay=2, r=1)[0]
+    apen = nk.entropy_approximate(signal, dimension=3, delay=2, tolerance=1)[0]
     assert np.allclose(apen, 0.0004269369, atol=0.0001)
-    apen = nk.entropy_approximate(signal[0:200], dimension=2, delay=1, r=r)[0]
+    apen = nk.entropy_approximate(signal[0:200], dimension=2, delay=1, tolerance=r)[0]
     assert np.allclose(apen, 0.03632554, atol=0.0001)
 
     # SampEn
-    sampen = nk.entropy_sample(signal[0:300], dimension=2, r=r)[0]
-    assert np.allclose(sampen, nk.entropy_sample(signal[0:300], dimension=2, r=r, distance="infinity")[0], atol=0.001)
+    sampen = nk.entropy_sample(signal[0:300], dimension=2, tolerance=r)[0]
+    assert np.allclose(sampen, nk.entropy_sample(signal[0:300], dimension=2, tolerance=r, distance="infinity")[0], atol=0.001)
     assert np.allclose(sampen, 0.03784376, atol=0.001)
-    sampen = nk.entropy_sample(signal[0:300], dimension=3, delay=2, r=r)[0]
+    sampen = nk.entropy_sample(signal[0:300], dimension=3, delay=2, tolerance=r)[0]
     assert np.allclose(sampen, 0.09185509, atol=0.01)
 
 
@@ -117,27 +117,27 @@ def test_complexity_vs_Python():
     # Approximate
     assert np.allclose(nk.entropy_approximate(signal)[0], 0.17364897858477146)
     assert np.allclose(
-        nk.entropy_approximate(signal, dimension=2, r=0.2 * np.std(signal, ddof=1))[0] - entropy_app_entropy(signal, 2), 0
+        nk.entropy_approximate(signal, dimension=2, tolerance=0.2 * np.std(signal, ddof=1))[0] - entropy_app_entropy(signal, 2), 0
     )
 
-    assert nk.entropy_approximate(signal, dimension=2, r=0.2 * np.std(signal, ddof=1))[0] != pyeeg_ap_entropy(
+    assert nk.entropy_approximate(signal, dimension=2, tolerance=0.2 * np.std(signal, ddof=1))[0] != pyeeg_ap_entropy(
         signal, 2, 0.2 * np.std(signal, ddof=1)
     )
 
     # Sample
     assert np.allclose(
-        nk.entropy_sample(signal, dimension=2, r=0.2 * np.std(signal, ddof=1))[0] - entropy_sample_entropy(signal, 2), 0
+        nk.entropy_sample(signal, dimension=2, tolerance=0.2 * np.std(signal, ddof=1))[0] - entropy_sample_entropy(signal, 2), 0
     )
-    assert np.allclose(nk.entropy_sample(signal, dimension=2, r=0.2)[0] - nolds.sampen(signal, 2, 0.2), 0)
-    assert np.allclose(nk.entropy_sample(signal, dimension=2, r=0.2)[0] - entro_py_sampen(signal, 2, 0.2, scale=False), 0)
-    assert np.allclose(nk.entropy_sample(signal, dimension=2, r=0.2)[0] - pyeeg_samp_entropy(signal, 2, 0.2), 0)
+    assert np.allclose(nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0] - nolds.sampen(signal, 2, 0.2), 0)
+    assert np.allclose(nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0] - entro_py_sampen(signal, 2, 0.2, scale=False), 0)
+    assert np.allclose(nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0] - pyeeg_samp_entropy(signal, 2, 0.2), 0)
 
     #    import sampen
     #    sampen.sampen2(signal[0:300], mm=2, r=r)
 
-    assert nk.entropy_sample(signal, dimension=2, r=0.2)[0] != pyentrp.sample_entropy(signal, 2, 0.2)[1]
+    assert nk.entropy_sample(signal, dimension=2, tolerance=0.2)[0] != pyentrp.sample_entropy(signal, 2, 0.2)[1]
     assert (
-        nk.entropy_sample(signal, dimension=2, r=0.2 * np.sqrt(np.var(signal)))[0]
+        nk.entropy_sample(signal, dimension=2, tolerance=0.2 * np.sqrt(np.var(signal)))[0]
         != MultiscaleEntropy_sample_entropy(signal, 2, 0.2)[0.2][2]
     )
 
@@ -147,7 +147,7 @@ def test_complexity_vs_Python():
 
     # Fuzzy
     assert np.allclose(
-        nk.entropy_fuzzy(signal, dimension=2, r=0.2, delay=1)[0] - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0
+        nk.entropy_fuzzy(signal, dimension=2, tolerance=0.2, delay=1)[0] - entro_py_fuzzyen(signal, 2, 0.2, 1, scale=False), 0
     )
 
     # Lempel Ziv Complexity

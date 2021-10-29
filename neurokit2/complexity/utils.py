@@ -1,40 +1,18 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 import sklearn.neighbors
 
 from .complexity_embedding import complexity_embedding
 
 # =============================================================================
-# Format n-dimensional input
-# =============================================================================
-
-
-def _sanitize_multichannel(signal):
-
-    # n-dimensional
-    if not isinstance(signal, (pd.DataFrame, np.ndarray)):
-        raise ValueError(
-            "NeuroKit error: _sanitize_multichannel(): your n-dimensional data has to ",
-            "be in the form of a pandas DataFrame or a numpy ndarray.",
-        )
-    if isinstance(signal, np.ndarray):
-        # signal.shape has to be in (len(channels), len(samples)) format
-        signal = pd.DataFrame(signal).transpose()
-
-    return signal
-
-
-# =============================================================================
 # Phi
 # =============================================================================
 
-
 def _phi(
-    signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False
+    signal, delay=1, dimension=2, tolerance="default", distance="chebyshev", approximate=True, fuzzy=False
 ):
-    """Common internal for `entropy_approximate` and `entropy_sample`.
+    """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
 
@@ -43,11 +21,11 @@ def _phi(
     phi = np.zeros(2)
 
     embedded1, count1 = _get_embedded(
-        signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy
+        signal, delay, dimension, tolerance, distance=distance, approximate=approximate, fuzzy=fuzzy
     )
 
     embedded2, count2 = _get_embedded(
-        signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy
+        signal, delay, dimension + 1, tolerance, distance=distance, approximate=True, fuzzy=fuzzy
     )
 
     if approximate is True:
@@ -56,6 +34,7 @@ def _phi(
     else:
         phi[0] = np.mean((count1 - 1) / (embedded1.shape[0] - 1))
         phi[1] = np.mean((count2 - 1) / (embedded2.shape[0] - 1))
+
     return phi
 
 
@@ -74,7 +53,7 @@ def _phi_divide(phi):
 
 
 def _get_embedded(
-    signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False
+    signal, delay=1, dimension=2, tolerance="default", distance="chebyshev", approximate=True, fuzzy=False
 ):
     """Examples
     ----------
@@ -82,14 +61,14 @@ def _get_embedded(
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> embbeded, count = _get_embedded(signal, delay=8, r=0.2 * np.std(signal, ddof=1), dimension=2,
+    >>> embbeded, count = _get_embedded(signal, delay=8, tolerance=0.2 * np.std(signal, ddof=1), dimension=2,
     ...                                 distance='chebyshev', approximate=False)
     """
     # Sanity checks
-    if distance not in sklearn.neighbors.KDTree.valid_metrics:
+    if distance not in sklearn.neighbors.KDTree.valid_metrics + ['range']:
         raise ValueError(
             "NeuroKit error: _get_embedded(): The given metric (%s) is not valid."
-            "The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics)
+            "The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics +  ['range'])
         )
 
     # Get embedded
@@ -99,11 +78,11 @@ def _get_embedded(
 
     if fuzzy is False:
         # Get neighbors count
-        count = _get_count(embedded, r=r, distance=distance)
+        count = _get_count(embedded, tolerance=tolerance, distance=distance)
     else:
         # FuzzyEn: Remove the local baselines of vectors
         embedded -= np.mean(embedded, axis=1, keepdims=True)
-        count = _get_count_fuzzy(embedded, r=r, distance=distance, n=1)
+        count = _get_count_fuzzy(embedded, tolerance=tolerance, distance=distance, n=1)
 
     return embedded, count
 
@@ -111,20 +90,37 @@ def _get_embedded(
 # =============================================================================
 # Get Count
 # =============================================================================
-def _get_count(embedded, r, distance="chebyshev"):
-    kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
-    # Return the count
-    return kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
+def _get_count(embedded, tolerance, distance="chebyshev"):
+
+    if distance == "range":
+        # internal function for distrange
+        def distrange(x, y):
+            numerator = np.max(np.abs(x - y), axis=1) - np.min(np.abs(x - y), axis=1)
+            denominator = np.max(np.abs(x - y), axis=1) + np.min(np.abs(x - y), axis=1)
+            # so we don't have to do np.seterr(divide='ignore')
+            valid_indices = np.where(denominator != 0)
+            return np.divide(numerator[valid_indices], denominator[denominator != 0])
+
+        count = np.zeros(len(embedded))
+        for i in range(len(embedded)):
+            count[i] = np.sum(distrange(embedded, embedded[i]) < tolerance)
+
+    else:  # chebyshev and other sklearn methods
+        kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
+        count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
 
 
-def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
+    return count
+
+
+def _get_count_fuzzy(embedded, tolerance, distance="chebyshev", n=1):
     dist = sklearn.neighbors.DistanceMetric.get_metric(distance)
     dist = dist.pairwise(embedded)
 
     if n > 1:
-        sim = np.exp(-(dist ** n) / r)
+        sim = np.exp(-(dist ** n) / tolerance)
     else:
-        sim = np.exp(-dist / r)
+        sim = np.exp(-dist / tolerance)
     # Return the count
     return np.sum(sim, axis=0)
 
@@ -132,29 +128,29 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # =============================================================================
 # Get R
 # =============================================================================
-def _get_r(signal, r="default", dimension=2, show=False):
+def _get_tolerance(signal, tolerance="default", dimension=2, show=False):
     """Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make
     it take into account the number of dimensions. Additionally, a constant is introduced.
 
-    so that for dimension=2, r = 0.2 * np.std(signal, ddof=1), which is the traditional default value.
+    so that for dimension=2, tolerance = 0.2 * np.std(signal, ddof=1), which is the traditional default value.
 
     See nolds for more info:
     https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
 
     """
 
-    def _default_r(signal, dimension):
+    def _default_tolerance(signal, dimension):
         constant = 0.11604738531196232
         r = constant * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
         return r
 
     # r = "default"
-    if isinstance(r, str) or (r is None):
+    if isinstance(tolerance, str) or (tolerance is None):
         # Get different r values per channel and find mean
         if signal.ndim > 1:
             r_list = []
             for i, col in enumerate(signal):
-                value = _default_r(signal[col], dimension=dimension)
+                value = _default_tolerance(signal[col], dimension=dimension)
                 r_list.append(value)
             optimal_r = np.mean(r_list)
 
@@ -182,9 +178,9 @@ def _get_r(signal, r="default", dimension=2, show=False):
 
         else:
             # one r for single time series
-            optimal_r = _default_r(signal, dimension=dimension)
+            optimal_r = _default_tolerance(signal, dimension=dimension)
     else:
-        optimal_r = r
+        optimal_r = tolerance
 
     return optimal_r
 

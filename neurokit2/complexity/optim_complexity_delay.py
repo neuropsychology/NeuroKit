@@ -35,7 +35,10 @@ def complexity_delay(
 
     - Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation.
 
-    - Rosenstein (1993) suggests to the point close to 40% of the slope of the average displacement
+    - Rosenstein (1993) suggests to approximate the point where the autocorrelation function drops
+      to (1 − 1 / e) of its maximum value.
+
+    - Rosenstein (1994) suggests to the point close to 40% of the slope of the average displacement
       from the diagonal (ADFD).
 
     - Kim (1999) suggests estimating Tau using the correlation integral, called the C-C method,
@@ -52,13 +55,13 @@ def complexity_delay(
         The maximum time delay (Tau or lag) to test.
     method : str
         The method that defines what to compute for each tested value of Tau. Can be one of 'fraser1986',
-        'theiler1990', 'casdagli1991', 'rosenstein1993', or 'kim1999'.
+        'theiler1990', 'casdagli1991', 'rosenstein1993', 'rosenstein1994', or 'kim1999'.
     algorithm : str
         The method used to find the optimal value of Tau given the values computed by the method. If `None` (default),
         will select the algorithm according to the method. Modify only if you know what you are doing.
     show : bool
         If true, will plot the metric values for each value of tau.
-    **kwargs
+    **kwargs : optional
         Additional arguments to be passed for C-C method.
 
     Returns
@@ -84,6 +87,7 @@ def complexity_delay(
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="fraser1986")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1994")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
     >>>
     >>> # Realistic example
@@ -101,6 +105,9 @@ def complexity_delay(
 
     - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time
       series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
+
+    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method for calculating
+      largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
 
     - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a
       geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
@@ -128,10 +135,14 @@ def complexity_delay(
         metric = "Autocorrelation"
         if algorithm is None:
             algorithm = "first zero crossing"
-    elif method in ["rosenstein", "rosenstein1993", "adfd"]:
+    elif method in ["rosenstein", "rosenstein1994", "adfd"]:
         metric = "Displacement"
         if algorithm is None:
             algorithm = "closest to 40% of the slope"
+    elif method in ["rosenstein1993"]:
+        metric = "Autocorrelation (FFT)"
+        if algorithm is None:
+            algorithm = "first drop below 1-(1/e) of maximum"
     elif method in ["kim1999", "cc"]:
         metric = "Correlation Integral"
         if algorithm is None:
@@ -203,6 +214,8 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
         slope = np.diff(metric_values) * len(metric_values)
         slope_in_deg = np.rad2deg(np.arctan(slope))
         optimal = np.where(slope_in_deg == find_closest(40, slope_in_deg))[0]
+    elif algorithm == "first drop below 1-(1/e) of maximum":
+        optimal = np.where(metric_values < np.max(metric_values) * (1 - 1.0 / np.e))[0][0]
 
     if not isinstance(optimal, (int, float, np.integer)):
         if len(optimal) != 0:
@@ -228,8 +241,12 @@ def _embedding_delay_metric(
     """
 
     if metric == "Autocorrelation":
-        values = signal_autocor(signal)
+        values, _ = signal_autocor(signal)
         values = values[: len(tau_sequence)]  # upper limit
+
+    elif metric == "Autocorrelation (FFT)":
+        values, _ = signal_autocor(signal, demean=False, method='fft')
+        values = values[: len(tau_sequence)]
 
     elif metric == "Correlation Integral":
         r_vals = [i * np.std(signal) for i in r_vals]
@@ -246,8 +263,9 @@ def _embedding_delay_metric(
                 #     average += s
 
                 # find average of statistic deviations across r_vals
-                deviation = _embedding_delay_cc_deviation_max(signal, delay=t,
-                                                              dimension=m, r_vals=r_vals)
+                deviation = _embedding_delay_cc_deviation_max(
+                    signal, delay=t, dimension=m, r_vals=r_vals
+                )
                 change += deviation
             # averages[i] = average / 16
             values[i] = change / 4
@@ -334,14 +352,18 @@ def _embedding_delay_cc_deviation_max(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay
     """A measure of the variation of the dependence statistic with r using
     several representative values of r.
     """
-    vectorized_deviation = np.vectorize(_embedding_delay_cc_deviation, excluded=['signal', 'delay', 'dimension'])
-    deviations = vectorized_deviation(signal=signal, r_vals=r_vals, delay=delay, dimension=dimension)
-    
+    vectorized_deviation = np.vectorize(
+        _embedding_delay_cc_deviation, excluded=["signal", "delay", "dimension"]
+    )
+    deviations = vectorized_deviation(
+        signal=signal, r_vals=r_vals, delay=delay, dimension=dimension
+    )
+
     return np.max(deviations) - np.min(deviations)
+
 
 def _embedding_delay_cc_deviation(signal, r_vals=[0.5, 1.0, 1.5, 2.0], delay=10, dimension=3):
     return _embedding_delay_cc_statistic(signal, delay=delay, dimension=dimension, r=r_vals)
-
 
 
 # =============================================================================

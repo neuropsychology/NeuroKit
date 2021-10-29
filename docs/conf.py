@@ -33,7 +33,8 @@ sys.path.insert(0, os.path.abspath('../'))
 MOCK_MODULES = ['scipy', 'scipy.signal', 'scipy.ndimage', 'scipy.stats', 'scipy.misc', 'scipy.interpolate', 'scipy.sparse', 'scipy.linalg',
                 'scipy.spatial', 'scipy.special', 'scipy.integrate', 'scipy.cluster', 'scipy.optimize', "scikit-learn",
                 'sklearn', 'sklearn.neighbors', 'sklearn.mixture', 'sklearn.datasets', 'sklearn.metrics', 'sklearn.metrics.pairwise', 'sklearn.decomposition',
-                'sklearn.cluster', 'sklearn.cross_validation', 'mne', 'bioread', 'cvxopt', 'pywt']
+                'sklearn.cluster', 'sklearn.cross_validation', 'mne', 'bioread', 'cvxopt', 'pywt',
+                "pyrqa", "pyrqa.analysis_type", "pyrqa.computation", "pyrqa.image_generator", "pyrqa.metric", "pyrqa.neighbourhood", "pyrqa.settings", "pyrqa.time_series"]
 
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.Mock()

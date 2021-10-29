@@ -7,8 +7,8 @@ from .complexity_embedding import complexity_embedding
 def entropy_svd(signal, delay=1, dimension=2):
     """Singular Value Decomposition (SVD) Entropy
 
-    SVD entropy can be intuitively seen as an indicator of how many eigenvectors are needed for
-    an adequate explanation of the dataset. In other words, it measures feature-richness: the
+    SVD entropy (SVDEn) can be intuitively seen as an indicator of how many eigenvectors are needed
+    for an adequate explanation of the dataset. In other words, it measures feature-richness: the
     higher the SVD entropy, the more orthogonal vectors are required to adequately explain the
     dataset.
 
@@ -28,6 +28,14 @@ def entropy_svd(signal, delay=1, dimension=2):
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+
+    Returns
+    ----------
+    svd : float
+        The singular value decomposition (SVD).
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute SVD.
 
     Examples
     ----------

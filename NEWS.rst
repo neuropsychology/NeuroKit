@@ -8,13 +8,17 @@ News
 Breaking Changes
 +++++++++++++++++
 
+* Argument `r` changed to `radius` in `fractal_correlation()`
+* Argument `r` changed to `tolerance` in entropy and complexity utility functions
+* Argument `r_method` changed to `tolerance_method` in `complexity_optimize()`
 * `complexity_lempelziv()`, `fractal_higuchi()`, `fractal_katz()`, `fractal_correlation()`, `fractal_dfa()`, `entropy_multiscale()`, `entropy_shannon()`, `entropy_approximate()`, `entropy_fuzzy()`, `entropy_sample()` now return a tuple consisting of the complexity index, and a dictionary comprising of the different parameters specific to the measure. For `fractal_katz()` and `entropy_shannon()`, the parameters dictionary is empty.
-* Restructure `complexity` submodules with optimization files starting with `optim_*`, such as `optim_complexity_delay()`, `optim_complexity_dimension()`, `optim_complexity_k()`, `optim_complexity_optimize()`, and `optim_complexity_r()`.
+* Restructure `complexity` submodules with optimization files starting with `optim_*`, such as `optim_complexity_delay()`, `optim_complexity_dimension()`, `optim_complexity_k()`, `optim_complexity_optimize()`, and `optim_complexity_tolerance()`.
 * `mutual_information()` moved from `stats` module to `complexity` module.
 
 New Features
 +++++++++++++
 
+* Added various complexity indices: `complexity_hjorth()`, `complexity_hurst()`, `complexity_lyapunov()`, `complexity_rqa()`, `complexity_rr()`, `entropy_coalition()`, `entropy_permutation()`, `entropy_range()`, `entropy_spectral()`, `fractal_nld()`, `fractal_psdslope()`, `fractal_sda()`, `fractal_sevcik()`
 * Added `mne_templateMRI()` as a helper to get MNE's template MRI.
 * Added `eeg_source()` as a helper to perform source reconstruction.
 * Added `eeg_source_extract()` to extract the activity from a brain region.
@@ -30,6 +34,7 @@ New Features
 * Plotting function in `eeg_badchannels()` to visualize overlay of individual EEG channels and highlighting of bad ones
 * Add `eog_peaks()` as wrapper for `eog_findpeaks()`
 * Allow `ecg_delineate()` to account for different heart rate
+
 
 Fixes
 +++++++++++++

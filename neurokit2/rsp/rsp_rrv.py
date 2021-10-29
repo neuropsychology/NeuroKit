@@ -239,7 +239,7 @@ def _rsp_rrv_nonlinear(bbi):
 
     # Entropy
     out["ApEn"] = entropy_approximate(bbi, dimension=2)[0]
-    out["SampEn"] = entropy_sample(bbi, dimension=2, r=0.2 * np.std(bbi, ddof=1))[0]
+    out["SampEn"] = entropy_sample(bbi, dimension=2, tolerance=0.2 * np.std(bbi, ddof=1))[0]
 
     # DFA
     if len(bbi) / 10 > 16:

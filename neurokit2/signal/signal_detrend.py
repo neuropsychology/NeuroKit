@@ -35,7 +35,7 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
         frequency band to remove multiplied by the sampling rate (for instance, ``1.5*1000`` will remove
         frequencies below 1.5Hz for a signal sampled at 1000Hz).
     stepsize : float
-        Only used if `method` is 'locreg'. Simialrly to 'window', 'stepsize' should also be multiplied
+        Only used if `method` is 'locreg'. Similarly to 'window', 'stepsize' should also be multiplied
         by the sampling rate.
 
 

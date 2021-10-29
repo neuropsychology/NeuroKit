@@ -86,7 +86,11 @@ def fractal_dfa(
         slopes value of the log2(windows) versus log2(fluctuations) plot. If
         `multifractal` is True, the dictionary additionally contains the
         parameters of the singularity spectrum (scaling exponents, singularity dimension,
-        singularity strength; see `singularity_spectrum()` for more information).
+        singularity strength; see `_singularity_spectrum()` for more information).
+
+    See Also
+    --------
+    complexity_hurst
 
     Examples
     ----------
@@ -129,7 +133,6 @@ def fractal_dfa(
 
     n = len(signal)
     windows = _fractal_dfa_findwindows(n, windows)
-    _fractal_dfa_findwindows_warning(windows, n)  # Return warning for too short windows
 
     # Sanitize fractal power (cannot be close to 0)
     q = _cleanse_q(q, multifractal=multifractal)
@@ -161,7 +164,7 @@ def fractal_dfa(
     parameters = {"q": q[:, 0], "windows": windows, "fluctuations": fluctuations}
 
     if multifractal is True:
-        singularity = singularity_spectrum(
+        singularity = _singularity_spectrum(
             windows=windows, fluctuations=fluctuations, q=q, slopes=slopes
         )
         parameters.update(singularity)
@@ -249,7 +252,7 @@ def _fractal_dfa(
 # altered to fit NK to the best of its extent.
 
 
-def singularity_spectrum(windows, fluctuations, q, slopes):
+def _singularity_spectrum(windows, fluctuations, q, slopes):
     """Extract the slopes of the fluctuation function to futher obtain the
     singularity strength `α` (or Hölder exponents) and singularity spectrum
     `f(α)` (or fractal dimension). This is iconically shaped as an inverse
@@ -403,32 +406,26 @@ def _fractal_dfa_findwindows(n, windows="default"):
     if windows is None or isinstance(windows, str):
         windows = int(n / 10)
 
-    # Default windows sequence
+    # See https://github.com/neuropsychology/NeuroKit/issues/206
     if isinstance(windows, int):
-        windows = expspace(
-            10, int(n / 10), windows, base=2
-        )  # see https://github.com/neuropsychology/NeuroKit/issues/206
+        windows = expspace(10, int(n / 10), windows, base=2)
         windows = np.unique(windows)  # keep only unique
 
-    return windows
-
-
-def _fractal_dfa_findwindows_warning(windows, n):
-
+    # Sanity checks (return warning for too short windows)
     # Check windows
     if len(windows) < 2:
-        raise ValueError("NeuroKit error: fractal_dfa(): more than one window is needed.")
+        raise ValueError("NeuroKit error: more than one window is needed. Increase 'windows'.")
 
     if np.min(windows) < 2:
         raise ValueError(
-            "NeuroKit error: fractal_dfa(): there must be at least 2 data " "points in each window"
+            "NeuroKit error: there must be at least 2 data points in each window. Decrease 'windows'."
         )
     if np.max(windows) >= n:
         raise ValueError(
-            "NeuroKit error: fractal_dfa(): the window cannot contain more data"
-            " points than the"
-            "time series."
+            "NeuroKit error: the window cannot contain more data points than the time series. Decrease 'windows'."
         )
+
+    return windows
 
 
 def _fractal_dfa_getwindow(signal, n, window, overlap=True):
@@ -503,14 +500,16 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
     # Plot the polyfit line
     for i in range(len(q)):
         polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
+        if i == 0:
+            ax_fluctuation.plot(
+                [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]), c=colors[0]
+            )
+        elif i == (len(q) - 1):
+            ax_fluctuation.plot(
+                [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]), c=colors[-1]
+            )
         fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
         ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label="_no_legend_")
-    ax_fluctuation.plot(
-        [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]), c=colors[0]
-    )
-    ax_fluctuation.plot(
-        [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]), c=colors[-1]
-    )
 
     # Plot the singularity spectrum
     _singularity_spectrum_plot(hq, Dq, ax=ax_spectrum)
@@ -549,10 +548,10 @@ def _singularity_spectrum_plot(hq, Dq, ax=None):
     Parameters
     ----------
     hq: np.array
-        Singularity strength `hq` as calculated with `singularity_spectrum()`.
+        Singularity strength `hq` as calculated with `_singularity_spectrum()`.
 
     Dq: np.array
-        Singularity spectrum `Dq` as calculated with `singularity_spectrum()`.
+        Singularity spectrum `Dq` as calculated with `_singularity_spectrum()`.
 
     Returns
     -------
