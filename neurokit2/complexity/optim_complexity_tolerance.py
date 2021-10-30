@@ -7,46 +7,60 @@ from .optim_complexity_delay import complexity_delay
 from .optim_complexity_dimension import complexity_dimension
 
 
-def complexity_tolerance(signal, method="maxApEn", delay=None, dimension=None, show=False):
+def complexity_tolerance(
+    signal, method="maxApEn", r_range=None, delay=None, dimension=None, show=False
+):
     """Automated selection of the optimal tolerance (r) parameter for entropy measures
 
-    The tolerance parameter has a critical impact and is a major source of inconsistencies in the literature.
+    The tolerance r is essentially a threshold value by which to consider two points as similar. This parameter has a critical impact and is a major source of inconsistencies in the literature.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        If 'maxApEn', rmax where ApEn is max will be returned. If 'sd' (as in Standard Deviation),
+        If 'maxApEn', different values of tolerance will be tested and the one where ApEn is
+        maximized will be selected and returned. If 'sd' (as in Standard Deviation),
         r = 0.2 * standard deviation of the signal will be returned.
+    r_range : Union[list, int]
+        Only used if ``method='maxApEn'``. The range of tolerance values to test. If an integer, will be set to ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)``. If ``None``, will be set to ``40``. You can set a lower number for faster results.
     delay : int
-        Only used if ``method='maxApEn'``. Time delay (often denoted 'Tau', sometimes referred to as 'lag').
-        In practice, it is common to have a fixed time lag (corresponding for instance to the
-        sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic
-        heuristics (see ``delay_optimal()``).
+        Only used if ``method='maxApEn'``. See ``entropy_approximate()``.
     dimension : int
-        Only used if ``method='maxApEn'``. Embedding dimension (often denoted 'm' or 'd',
-        sometimes referred to as 'order'). Typically 2 or 3. It corresponds to the number of compared runs
-        of lagged data. If 2, the embedding returns an array with two columns corresponding
-        to the original signal and its delayed (by Tau) version.
+        Only used if ``method='maxApEn'``. See ``entropy_approximate()``.
     show : bool
         If true and method is 'maxApEn', will plot the ApEn values for each value of r.
+
+    See Also
+    --------
+    entropy_approximate, complexity_delay, complexity_dimension
 
     Returns
     ----------
     float
-        The optimal r as a similarity threshold. It corresponds to the filtering level - max absolute
-        difference between segments.
+        The optimal tolerance value.
+    dict
+        A dictionary with the values of r and the corresponding ApEn values (when method='maxApEn').
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay, _ = nk.complexity_delay(signal)
-    >>> dimension, _ = nk.complexity_dimension(signal, delay=delay)
-    >>> r, info = nk.complexity_tolerance(signal, delay=delay, dimension=dimension)
+    >>>
+    >>> # Fast
+    >>> r, info = nk.complexity_tolerance(signal, method = 'SD')
+    >>> r
+    0.07072836242007384
+    >>>
+    >>> # Slow
+    >>> r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn', show=True)
     >>> r #doctest: +SKIP
+    0.014145672484014769
+    >>>
+    >>> # Narrower range
+    >>> r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn', r_range=np.linspace(0.002, 0.1, 30), show=True)
+    >>>
 
 
     References
@@ -61,7 +75,11 @@ def complexity_tolerance(signal, method="maxApEn", delay=None, dimension=None, s
         r = 0.2 * np.std(signal, ddof=1)
         info = {"Method": method}
     elif method in ["maxapen", "optimize"]:
-        r, info = _optimize_tolerance(signal, delay=delay, dimension=dimension, show=show)
+        r, info = _optimize_tolerance_maxapen(
+            signal, r_range=r_range, delay=delay, dimension=dimension, show=show
+        )
+        if show is True:
+            _optimize_tolerance_plot(r, info["Values"], info["Scores"])
         info.update({"Method": method})
     return r, info
 
@@ -69,26 +87,24 @@ def complexity_tolerance(signal, method="maxApEn", delay=None, dimension=None, s
 # =============================================================================
 # Internals
 # =============================================================================
-def _optimize_tolerance(signal, delay=None, dimension=None, show=False):
+def _optimize_tolerance_maxapen(signal, r_range=None, delay=None, dimension=None, show=False):
 
-    if not delay:
-        delay = complexity_delay(signal, delay_max=100, method="fraser1986")
-    if not dimension:
-        dimension = complexity_dimension(signal, delay=delay, dimension_max=20, show=True)
+    # Optimize missing parameters
+    if delay is None or dimension is None:
+        raise ValueError("If method='maxApEn', both delay and dimension must be specified.")
 
-    modulator = np.arange(0.02, 0.8, 0.02)
-    r_range = modulator * np.std(signal, ddof=1)
+    if r_range is None:
+        r_range = 40
+    if isinstance(r_range, int):
+        r_range = np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)
 
     ApEn = np.zeros_like(r_range)
     for i, r in enumerate(r_range):
-        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, tolerance=r_range[i])[0]
+        ApEn[i], _ = entropy_approximate(
+            signal, delay=delay, dimension=dimension, tolerance=r_range[i]
+        )
 
-    r = r_range[np.argmax(ApEn)]
-
-    if show is True:
-        _optimize_tolerance_plot(r, r_range, ApEn, ax=None)
-
-    return r, {"Values": r_range, "Scores": ApEn}
+    return r_range[np.argmax(ApEn)], {"Values": r_range, "Scores": ApEn}
 
 
 def _optimize_tolerance_plot(r, r_range, ApEn, ax=None):
@@ -100,7 +116,7 @@ def _optimize_tolerance_plot(r, r_range, ApEn, ax=None):
     ax.set_title("Optimization of Tolerence Threshold (r)")
     ax.set_xlabel("Tolerence threshold $r$")
     ax.set_ylabel("Approximate Entropy $ApEn$")
-    ax.plot(r_range, ApEn, "bo-", label="$ApEn$", color="#80059c")
+    ax.plot(r_range, ApEn, "o-", label="$ApEn$", color="#80059c")
     ax.axvline(x=r, color="#E91E63", label="Optimal r: " + str(np.round(r, 3)))
     ax.legend(loc="upper right")
 

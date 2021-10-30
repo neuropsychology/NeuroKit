@@ -89,11 +89,11 @@ def complexity_lempelziv(
     >>> lzc #doctest: +SKIP
     >>>
     >>> # PLZC
-    >>> plzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=2, permutation=True)
+    >>> plzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=3, permutation=True)
     >>> plzc #doctest: +SKIP
     >>>
     >>> # MPLZC
-    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=7, dimension=3, multiscale=True, show=True)
+    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=3, multiscale=True, show=True)
     >>> mplzc #doctest: +SKIP
 
     References
