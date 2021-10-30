@@ -82,7 +82,7 @@ def complexity_lempelziv(
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=10, frequency=5, noise=10)
+    >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
     >>>
     >>> # LZC
     >>> lzc, info = nk.complexity_lempelziv(signal, method="median")
@@ -93,7 +93,7 @@ def complexity_lempelziv(
     >>> plzc #doctest: +SKIP
     >>>
     >>> # MPLZC
-    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=2, multiscale=True, show=True)
+    >>> mplzc, info = nk.complexity_lempelziv(signal, delay=7, dimension=3, multiscale=True, show=True)
     >>> mplzc #doctest: +SKIP
 
     References
@@ -119,15 +119,15 @@ def complexity_lempelziv(
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # Prepare parameters
+    # Prepare info dict
     if multiscale:
-        key = "MPLZC"
+        info = {"Normalize": normalize, "type": "MPLZC"}
     elif permutation:
-        key = "PLZC"
+        info = {"Normalize": normalize, "type": "PLZC"}
     else:
-        key = "LZC"
+        info = {"Normalize": normalize, "type": "LZC"}
 
-    parameters = {"Normalize": normalize, "Type": key}
+    # Run
     lzc, info = _complexity_lempelziv(
         signal,
         delay=delay,
@@ -139,9 +139,9 @@ def complexity_lempelziv(
         scale_factors=scale,
         show=show,
     )
-    parameters.update(info)
+    info.update(info)
 
-    return lzc, parameters
+    return lzc, info
 
 
 # =============================================================================

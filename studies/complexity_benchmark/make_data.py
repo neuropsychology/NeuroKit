@@ -52,7 +52,7 @@ def run_methods(i, x, delay=1, dimension=2):
     data.append(
         time_function(
             x,
-            nk.complexity_mlzc,
+            nk.complexity_mplzc,
             index="MPLZC",
             name="nk_complexity_mplzc",
             delay=delay,
@@ -69,102 +69,102 @@ def run_methods(i, x, delay=1, dimension=2):
             dimension=dimension,
         )
     )
-    data.append(
-        time_function(
-            x,
-            nk.complexity_rqa,
-            index="RQA",
-            name="nk_complexity_rqa",
-            delay=delay,
-            dimension=dimension,
-        )
-    )
-    data.append(time_function(x, nk.complexity_rr, index="RR", name="nk_complexity_rr"))
-    data.append(
-        time_function(
-            x,
-            nk.entropy_approximate,
-            index="ApEn",
-            name="nk_entropy_approximate",
-            delay=delay,
-            dimension=dimension,
-        )
-    )
-    data.append(
-        time_function(
-            x,
-            nk.entropy_cumulative_residual,
-            index="CREn",
-            name="nk_entropy_cumulative_residual",
-        )
-    )
-    data.append(
-        time_function(x, nk.entropy_differential, index="DiffEn", name="nk_entropy_differential")
-    )
-    data.append(
-        time_function(
-            x,
-            nk.entropy_fuzzy,
-            index="FuzzyEn",
-            name="nk_entropy_fuzzy",
-            delay=delay,
-            dimension=dimension,
-        )
-    )
-    data.append(
-        time_function(
-            x,
-            nk.complexity_mse,
-            index="MSE",
-            name="nk_complexity_mse",
-            dimension=dimension,
-        )
-    )
-    data.append(
-        time_function(
-            x,
-            nk.complexity_cmse,
-            index="CMSE",
-            name="nk_complexity_cmse",
-            dimension=dimension,
-        )
-    )
-    data.append(
-        time_function(
-            x,
-            nk.complexity_rcmse,
-            index="RCMSE",
-            name="nk_complexity_rcmse",
-            dimension=dimension,
-        )
-    )
-    data.append(
-        time_function(
-            x,
-            nk.complexity_fuzzymse,
-            index="FuzzyMSE",
-            name="nk_complexity_fuzzymse",
-            dimension=dimension,
-        )
-    )
-    data.append(
-        time_function(
-            x,
-            nk.complexity_fuzzycmse,
-            index="FuzzyCMSE",
-            name="nk_complexity_fuzzycmse",
-            dimension=dimension,
-        )
-    )
-    data.append(
-        time_function(
-            x,
-            nk.complexity_fuzzyrcmse,
-            index="FuzzyRCMSE",
-            name="nk_complexity_fuzzyrcmse",
-            dimension=dimension,
-        )
-    )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.complexity_rqa,
+    #         index="RQA",
+    #         name="nk_complexity_rqa",
+    #         delay=delay,
+    #         dimension=dimension,
+    #     )
+    # )
+    # data.append(time_function(x, nk.complexity_rr, index="RR", name="nk_complexity_rr"))
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.entropy_approximate,
+    #         index="ApEn",
+    #         name="nk_entropy_approximate",
+    #         delay=delay,
+    #         dimension=dimension,
+    #     )
+    # )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.entropy_cumulative_residual,
+    #         index="CREn",
+    #         name="nk_entropy_cumulative_residual",
+    #     )
+    # )
+    # data.append(
+    #     time_function(x, nk.entropy_differential, index="DiffEn", name="nk_entropy_differential")
+    # )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.entropy_fuzzy,
+    #         index="FuzzyEn",
+    #         name="nk_entropy_fuzzy",
+    #         delay=delay,
+    #         dimension=dimension,
+    #     )
+    # )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.complexity_mse,
+    #         index="MSE",
+    #         name="nk_complexity_mse",
+    #         dimension=dimension,
+    #     )
+    # )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.complexity_cmse,
+    #         index="CMSE",
+    #         name="nk_complexity_cmse",
+    #         dimension=dimension,
+    #     )
+    # )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.complexity_rcmse,
+    #         index="RCMSE",
+    #         name="nk_complexity_rcmse",
+    #         dimension=dimension,
+    #     )
+    # )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.complexity_fuzzymse,
+    #         index="FuzzyMSE",
+    #         name="nk_complexity_fuzzymse",
+    #         dimension=dimension,
+    #     )
+    # )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.complexity_fuzzycmse,
+    #         index="FuzzyCMSE",
+    #         name="nk_complexity_fuzzycmse",
+    #         dimension=dimension,
+    #     )
+    # )
+    # data.append(
+    #     time_function(
+    #         x,
+    #         nk.complexity_fuzzyrcmse,
+    #         index="FuzzyRCMSE",
+    #         name="nk_complexity_fuzzyrcmse",
+    #         dimension=dimension,
+    #     )
+    # )
     data.append(
         time_function(
             x,
@@ -265,7 +265,7 @@ def run_methods(i, x, delay=1, dimension=2):
 data = []
 for n in nk.expspace(100, 10 ** 4, 10).astype(int):
     print(n)
-    x = nk.signal_simulate(duration=2, sampling_rate=n, frequency=[5, 10], noise=0.5)
+    x = nk.signal_simulate(duration=3, sampling_rate=n, frequency=[5, 10], noise=0.5)
     delay = int(n / 100)
     dimension = 3
     tolerance = 0.2
