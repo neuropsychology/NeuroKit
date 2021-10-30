@@ -9,8 +9,15 @@ from .complexity_embedding import complexity_embedding
 # Phi
 # =============================================================================
 
+
 def _phi(
-    signal, delay=1, dimension=2, tolerance="default", distance="chebyshev", approximate=True, fuzzy=False
+    signal,
+    delay=1,
+    dimension=2,
+    tolerance="default",
+    distance="chebyshev",
+    approximate=True,
+    fuzzy=False,
 ):
     """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`.
 
@@ -53,7 +60,13 @@ def _phi_divide(phi):
 
 
 def _get_embedded(
-    signal, delay=1, dimension=2, tolerance="default", distance="chebyshev", approximate=True, fuzzy=False
+    signal,
+    delay=1,
+    dimension=2,
+    tolerance="default",
+    distance="chebyshev",
+    approximate=True,
+    fuzzy=False,
 ):
     """Examples
     ----------
@@ -65,10 +78,11 @@ def _get_embedded(
     ...                                 distance='chebyshev', approximate=False)
     """
     # Sanity checks
-    if distance not in sklearn.neighbors.KDTree.valid_metrics + ['range']:
+    if distance not in sklearn.neighbors.KDTree.valid_metrics + ["range"]:
         raise ValueError(
             "NeuroKit error: _get_embedded(): The given metric (%s) is not valid."
-            "The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics +  ['range'])
+            "The valid metric names are: %s"
+            % (distance, sklearn.neighbors.KDTree.valid_metrics + ["range"])
         )
 
     # Get embedded
@@ -108,7 +122,6 @@ def _get_count(embedded, tolerance, distance="chebyshev"):
     else:  # chebyshev and other sklearn methods
         kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
         count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
-
 
     return count
 

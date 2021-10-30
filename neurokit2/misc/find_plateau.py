@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import scipy.signal
 import matplotlib.gridspec as gs
 import matplotlib.pyplot as plt
+import numpy as np
+import scipy.signal
 
 from ..events.events_plot import events_plot
 
@@ -51,7 +51,7 @@ def find_plateau(values, show=True):
         indices = [i for i in indices if i not in peaks]
 
     # find greatest change in slopes amongst filtered indices
-    largest = np.argsort(slope_change)[:int(0.1 * len(slope_change))]  # get top 10%
+    largest = np.argsort(slope_change)[: int(0.1 * len(slope_change))]  # get top 10%
     optimal = [i for i in largest if i in indices]
 
     if len(optimal) >= 1:
@@ -78,22 +78,22 @@ def _find_plateau_plot(values, increasing_segments, indices, optimal, plateau):
 
     # Plot
     ax1.plot(values)
-    ax1.set_title('Points of increasing segments')
+    ax1.set_title("Points of increasing segments")
     for i in increasing_segments:
-        ax1.axvline(x=i, color='red', linestyle='--')
+        ax1.axvline(x=i, color="red", linestyle="--")
 
     ax2.plot(values)
-    ax2.set_title('Points of decelerating positive gradients')
+    ax2.set_title("Points of decelerating positive gradients")
     for i in indices:
-        ax2.axvline(x=i, color='blue', linestyle='--')
+        ax2.axvline(x=i, color="blue", linestyle="--")
 
     ax3.plot(values)
-    ax3.set_title('Points of greatest slope changes')
+    ax3.set_title("Points of greatest slope changes")
     for i in optimal:
-        ax3.axvline(x=i, color='purple', linestyle='--')
+        ax3.axvline(x=i, color="purple", linestyle="--")
 
     ax4.plot(values)
-    ax4.set_title('Optimal Point')
-    ax4.axvline(x=plateau, color='orange', linestyle='--')
+    ax4.set_title("Optimal Point")
+    ax4.axvline(x=plateau, color="orange", linestyle="--")
 
     return fig

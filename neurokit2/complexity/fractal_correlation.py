@@ -14,7 +14,7 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False):
     phase space trajectory, distances between all points in the trajectory are calculated. The 'correlation
     sum' is the computed, which is the probability of finding two vectors which are separated by
     a distance not larger than a specified radius. The final correlation dimension is then
-    approximated by a log-log graph of correlation sum vs. a sequence of radiuses. 
+    approximated by a log-log graph of correlation sum vs. a sequence of radiuses.
 
     Python implementation of the Correlation Dimension CD (sometimes referred to as D2) of a signal.
     This function can be called either via ``fractal_correlation()`` or ``complexity_cd()``.

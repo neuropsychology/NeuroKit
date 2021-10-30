@@ -6,25 +6,27 @@ import pandas as pd
 import sklearn.metrics.pairwise
 
 from ..misc import NeuroKitWarning
+from ..signal.signal_psd import signal_psd
 from .complexity_embedding import complexity_embedding
 from .optim_complexity_delay import complexity_delay
-from ..signal.signal_psd import signal_psd
 
 
 def complexity_lyapunov(
     signal,
     delay=1,
     dimension=2,
-    method='rosenstein1993',
+    method="rosenstein1993",
     len_trajectory=20,
     matrix_dim=4,
     min_neighbors="default",
     **kwargs,
 ):
-    """Lyapunov Exponents (LE) describe the rate of exponential separation (convergence or divergence)
-    of nearby trajectories of a dynamical system. A system can have multiple LEs, equal to the number
-    of the dimensionality of the phase space, and the largest LE value, `L1` is often used to determine
-    the overall predictability of the dynamical system.
+    """Lyapunov Exponents (LE)
+
+    Lyapunov exponents describe the rate of exponential separation (convergence or divergence) of
+    nearby trajectories of a dynamical system. A system can have multiple LEs, equal to the number
+    of the dimensionality of the phase space, and the largest LE value, `L1` is often used to
+    determine the overall predictability of the dynamical system.
 
     Different algorithms:
 
@@ -106,37 +108,46 @@ def complexity_lyapunov(
     # Method
     method = method.lower()
     if method in ["rosenstein", "rosenstein1993"]:
-        le, parameters = _complexity_lyapunov_rosenstein(signal, delay, dimension,
-                                                         tolerance, len_trajectory,
-                                                         **kwargs)
+        le, parameters = _complexity_lyapunov_rosenstein(
+            signal, delay, dimension, tolerance, len_trajectory, **kwargs
+        )
     elif method in ["eckmann", "eckmann1996"]:
-        le, parameters = _complexity_lyapunov_eckmann(signal, delay, dimension, tolerance,
-                                                      matrix_dim, min_neighbors)
+        le, parameters = _complexity_lyapunov_eckmann(
+            signal, delay, dimension, tolerance, matrix_dim, min_neighbors
+        )
 
     # Store params
-    info = {"Dimension": dimension, "Delay": delay,
-            "Minimum Separation": tolerance, "Method": method}
+    info = {
+        "Dimension": dimension,
+        "Delay": delay,
+        "Minimum Separation": tolerance,
+        "Method": method,
+    }
     info.update(parameters)
 
     return le, info
+
 
 # =============================================================================
 # Methods
 # =============================================================================
 
-def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, tolerance=None,
-                                    len_trajectory=20, **kwargs):
+
+def _complexity_lyapunov_rosenstein(
+    signal, delay=1, dimension=2, tolerance=None, len_trajectory=20, **kwargs
+):
 
     # If default tolerance (kwargs: tolerance="default")
     tolerance = _complexity_lyapunov_separation(signal, **kwargs)
 
     # Delay embedding
     if delay is None:
-        delay = complexity_delay(signal, method='rosenstein1993', show=False)
+        delay = complexity_delay(signal, method="rosenstein1993", show=False)
 
     # Check that sufficient data points are available
-    _complexity_lyapunov_checklength(len(signal), delay, dimension, tolerance,
-                                     len_trajectory, method='rosenstein1993')
+    _complexity_lyapunov_checklength(
+        len(signal), delay, dimension, tolerance, len_trajectory, method="rosenstein1993"
+    )
 
     # Embed
     embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
@@ -174,8 +185,9 @@ def _complexity_lyapunov_rosenstein(signal, delay=1, dimension=2, tolerance=None
     return slope, parameters
 
 
-def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, tolerance=None,
-                                 matrix_dim=4, min_neighbors="default"):
+def _complexity_lyapunov_eckmann(
+    signal, delay=1, dimension=2, tolerance=None, matrix_dim=4, min_neighbors="default"
+):
     """
     TODO: check implementation
 
@@ -187,9 +199,15 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, tolerance=None,
     m = (dimension - 1) // (matrix_dim - 1)
 
     # Check that sufficient data points are available
-    _complexity_lyapunov_checklength(len(signal), delay, dimension, tolerance,
-                                     method='eckmann1996', matrix_dim=matrix_dim,
-                                     min_neighbors=min_neighbors)
+    _complexity_lyapunov_checklength(
+        len(signal),
+        delay,
+        dimension,
+        tolerance,
+        method="eckmann1996",
+        matrix_dim=matrix_dim,
+        min_neighbors=min_neighbors,
+    )
 
     # Storing of LEs
     lexp = np.zeros(matrix_dim)
@@ -197,15 +215,15 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, tolerance=None,
     old_Q = np.identity(matrix_dim)
 
     # Reconstruction using time-delay method
-    embedded = complexity_embedding(signal[:-m], delay=delay, dimension=dimension)  
-    distances = sklearn.metrics.pairwise_distances(embedded, metric='chebyshev')
+    embedded = complexity_embedding(signal[:-m], delay=delay, dimension=dimension)
+    distances = sklearn.metrics.pairwise_distances(embedded, metric="chebyshev")
 
     for i in range(len(embedded)):
         # exclude difference of vector to itself and those too close in time
         distances[i, max(0, i - tolerance) : i + tolerance + 1] = np.inf
 
         # index of furthest nearest neighbour
-        neighbour_furthest = np.argsort(distances[i])[min_neighbors-1]
+        neighbour_furthest = np.argsort(distances[i])[min_neighbors - 1]
 
         # get neighbors within the radius
         r = distances[i][neighbour_furthest]
@@ -239,7 +257,7 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, tolerance=None,
         lexp_i = np.zeros(len(diag_R))
         lexp_i[positive_elements] = np.log(diag_R[positive_elements])
         lexp_i[np.where(diag_R == 0)] = np.inf
-  
+
         lexp[positive_elements] += lexp_i[positive_elements]
         lexp_counts[positive_elements] += 1
 
@@ -256,9 +274,11 @@ def _complexity_lyapunov_eckmann(signal, delay=1, dimension=2, tolerance=None,
 
     return lexp, parameters
 
+
 # =============================================================================
 # Utilities
 # =============================================================================
+
 
 def _complexity_lyapunov_separation(signal, tolerance="default", **kwargs):
     """Minimum temporal separation between two neighbors.
@@ -271,7 +291,7 @@ def _complexity_lyapunov_separation(signal, tolerance="default", **kwargs):
     if isinstance(tolerance, (int, float)):
         return tolerance
 
-    psd = signal_psd(signal, sampling_rate=1000, method='fft', **kwargs)
+    psd = signal_psd(signal, sampling_rate=1000, method="fft", **kwargs)
     # actual sampling rate does not matter
     mean_freq = np.sum(psd["Power"] * psd["Frequency"]) / np.sum(psd["Power"])
     mean_period = 1 / mean_freq  # seconds per cycle
@@ -289,7 +309,7 @@ def _complexity_lyapunov_separation(signal, tolerance="default", **kwargs):
     # if tolerance > max_tsep_factor * n:
     #     set_min = int(max_tsep_factor * n)
     #     warn(
-    #         f"Signal has a mean frequency too low for tolerance={tolerance}, " + 
+    #         f"Signal has a mean frequency too low for tolerance={tolerance}, " +
     #         f"setting tolerance={set_min}",
     #         category=NeuroKitWarning,
     #     )
@@ -298,8 +318,14 @@ def _complexity_lyapunov_separation(signal, tolerance="default", **kwargs):
 
 
 def _complexity_lyapunov_checklength(
-    n, delay=1, dimension=2, tolerance="default", len_trajectory=20,
-    method='rosenstein1993', matrix_dim=4, min_neighbors="default"
+    n,
+    delay=1,
+    dimension=2,
+    tolerance="default",
+    len_trajectory=20,
+    method="rosenstein1993",
+    matrix_dim=4,
+    min_neighbors="default",
 ):
     """
     Helper function that calculates the minimum number of data points required.
@@ -314,8 +340,8 @@ def _complexity_lyapunov_checklength(
         # Sanity check
         if n < min_len:
             warn(
-                f"for dimension={dimension}, delay={delay}, tolerance={tolerance} and " +
-                f"len_trajectory={len_trajectory}, you need at least {min_len} datapoints in your time series.",
+                f"for dimension={dimension}, delay={delay}, tolerance={tolerance} and "
+                + f"len_trajectory={len_trajectory}, you need at least {min_len} datapoints in your time series.",
                 category=NeuroKitWarning,
             )
 
@@ -332,8 +358,8 @@ def _complexity_lyapunov_checklength(
         # Sanity check
         if n < min_len:
             warn(
-                f"for dimension={dimension}, delay={delay}, tolerance={tolerance}, " +
-                f"matrix_dim={matrix_dim} and min_neighbors={min_neighbors}, " +
-                f"you need at least {min_len} datapoints in your time series.",
+                f"for dimension={dimension}, delay={delay}, tolerance={tolerance}, "
+                + f"matrix_dim={matrix_dim} and min_neighbors={min_neighbors}, "
+                + f"you need at least {min_len} datapoints in your time series.",
                 category=NeuroKitWarning,
             )

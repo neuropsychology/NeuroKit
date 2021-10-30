@@ -7,8 +7,8 @@ from ..signal.signal_psd import signal_psd
 def entropy_spectral(signal, normalize=True, **kwargs):
     """Spectral Entropy (SpEn)
 
-    Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the frequency domain as
-    a probability distribution, and calculates the Shannon entropy of it.
+    Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the
+    frequency domain as a probability distribution, and calculates the Shannon entropy of it.
 
     A signal with a single frequency component (i.e., pure sinusoid) produces the smallest entropy.
     On the other hand, a signal with all frequency components of equal power value (white
@@ -19,7 +19,8 @@ def entropy_spectral(signal, normalize=True, **kwargs):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     normalize : bool
-        If True, divide by ``log2(len(signal)/2)`` to normalize the spectral entropy between 0 and 1.
+        If True, divide by ``log2(len(signal)/2)`` to normalize the spectral entropy between 0 and
+        1.
     **kwargs : optional
         Keyword arguments to be passed to `signal_psd()`.
 
@@ -46,8 +47,10 @@ def entropy_spectral(signal, normalize=True, **kwargs):
 
     References
     ----------
-    - Crepeau, J. C., & Isaacson, L. K. (1991). Spectral Entropy Measurements of Coherent Structures in an
-    Evolving Shear Layer. Journal of Non-Equilibrium Thermodynamics, 16(2). doi:10.1515/jnet.1991.16.2.137 
+    - Crepeau, J. C., & Isaacson, L. K. (1991). Spectral Entropy Measurements of Coherent
+    Structures in an
+    Evolving Shear Layer. Journal of Non-Equilibrium Thermodynamics, 16(2). doi:10.1515/jnet.1991.
+    16.2.137
 
 
     """
@@ -58,7 +61,7 @@ def entropy_spectral(signal, normalize=True, **kwargs):
         )
 
     # Power-spectrum density (PSD) (actual sampling rate does not matter)
-    psd = signal_psd(signal, sampling_rate=1000, method='fft', **kwargs)["Power"]
+    psd = signal_psd(signal, sampling_rate=1000, method="fft", **kwargs)["Power"]
     psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
     psd = psd[psd > 0]
 
