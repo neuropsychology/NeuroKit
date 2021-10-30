@@ -103,7 +103,7 @@ def complexity_lyapunov(
         )
 
     # If default tolerance
-    tolerance = _complexity_lyapunov_separation(signal, **kwargs)  # rosenstein's method
+    tolerance = _complexity_lyapunov_tolerance(signal, **kwargs)  # rosenstein's method
 
     # Method
     method = method.lower()
@@ -280,8 +280,8 @@ def _complexity_lyapunov_eckmann(
 # =============================================================================
 
 
-def _complexity_lyapunov_separation(signal, tolerance="default", **kwargs):
-    """Minimum temporal separation between two neighbors.
+def _complexity_lyapunov_tolerance(signal, tolerance="default", **kwargs):
+    """Minimum temporal separation (tolerance) between two neighbors.
 
     If 'default', finds a suitable value by calculating the mean period of the data,
     obtained by the reciprocal of the mean frequency of the power spectrum.
