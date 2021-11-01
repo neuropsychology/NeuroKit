@@ -5,7 +5,6 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import matplotlib.cm
 import neurokit2 as nk
-import PyEMD
 
 # setup matplotlib with Agg to run on server
 matplotlib.use('Agg')
