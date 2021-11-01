@@ -48,12 +48,13 @@ def complexity_lempelziv(
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
         to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
-        Only relevant if `permutation = True`.
+        Only relevant if `permutation = True`. If `multiscale = True`, a delay of 1 (see Borowska, 2021)
+        is used for coarsegraining.
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-        Only relevant if `permutation = True`.
+        Only relevant if `permutation = True` or `multiscale = True`.
     scale : str or int or list
         A list of scale factors used for coarse graining the time series. If 'default', will use
         ``range(len(signal) / (dimension + 10))`` (see discussion
@@ -169,7 +170,7 @@ def _complexity_lempelziv(
         lzc = np.zeros(len(scale_factors))
         for i, tau in enumerate(scale_factors):
             y = _get_coarsegrained(signal, scale=tau, force=False)
-            sequence = _complexity_lempelziv_permutation(y, delay=delay, dimension=dimension)
+            sequence = _complexity_lempelziv_permutation(y, delay=1, dimension=dimension)
             lzc[i] = _complexity_lempelziv_count(
                 sequence, normalize=normalize, permutation=True, dimension=dimension
             )
