@@ -10,7 +10,8 @@ def complexity_tolerance(
 ):
     """Automated selection of the optimal tolerance (r) parameter for entropy measures
 
-    The tolerance r is essentially a threshold value by which to consider two points as similar. This parameter has a critical impact and is a major source of inconsistencies in the literature.
+    The tolerance r is essentially a threshold value by which to consider two points as similar.
+    This parameter has a critical impact and is a major source of inconsistencies in the literature.
 
     Parameters
     ----------
@@ -21,7 +22,9 @@ def complexity_tolerance(
         maximized will be selected and returned. If 'sd' (as in Standard Deviation),
         r = 0.2 * standard deviation of the signal will be returned.
     r_range : Union[list, int]
-        Only used if ``method='maxApEn'``. The range of tolerance values to test. If an integer, will be set to ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)``. If ``None``, will be set to ``40``. You can set a lower number for faster results.
+        Only used if ``method='maxApEn'``. The range of tolerance values to test.
+        If an integer, will be set to ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)``.
+        If ``None``, will be set to ``40``. You can set a lower number for faster results.
     delay : int
         Only used if ``method='maxApEn'``. See ``entropy_approximate()``.
     dimension : int
@@ -57,7 +60,8 @@ def complexity_tolerance(
     0.014145672484014769
     >>>
     >>> # Narrower range
-    >>> r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn', r_range=np.linspace(0.002, 0.1, 30), show=True)
+    >>> r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn',
+    ...                                   r_range=np.linspace(0.002, 0.1, 30), show=True)
     >>>
 
 
