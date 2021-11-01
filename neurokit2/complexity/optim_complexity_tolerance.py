@@ -3,8 +3,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from .entropy_approximate import entropy_approximate
-from .optim_complexity_delay import complexity_delay
-from .optim_complexity_dimension import complexity_dimension
 
 
 def complexity_tolerance(

@@ -138,7 +138,7 @@ def _complexity_lyapunov_rosenstein(
 ):
 
     # If default tolerance (kwargs: tolerance="default")
-    tolerance = _complexity_lyapunov_separation(signal, **kwargs)
+    tolerance = _complexity_lyapunov_tolerance(signal, **kwargs)
 
     # Delay embedding
     if delay is None:
