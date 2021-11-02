@@ -43,8 +43,11 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSa
     Returns
     -------
     RangeEn : float
-        Range Entropy. If undefined conditional probabilities are detected, ``np.inf`` will
-        be returned. Increasing tolerance levels might help avoid this.
+        Range Entropy. If undefined conditional probabilities are detected (logarithm
+        of sum of conditional probabilities is ``ln(0)``), ``np.inf`` will
+        be returned, meaning it fails to retrieve 'accurate' regularity information.
+        This tends to happen for short data segments, increasing tolerance
+        levels might help avoid this.
     info : dict
         A dictionary containing additional information regarding the parameters used.
 

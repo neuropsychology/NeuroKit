@@ -8,7 +8,11 @@ from .utils import _get_tolerance, _phi, _phi_divide
 def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
     """Sample Entropy (SampEn)
 
-    Python implementation of the sample entropy (SampEn) of a signal.
+    Python implementation of the sample entropy (SampEn) of a signal. SampEn is a modification
+    of ApEn used for assessing complexity of physiological time series signals. Mathematically,
+    it is the negative natural logarithm of the conditional probability that two subseries
+    similar for ``m`` points remain similar for ``m + 1``, where self-matches are
+    not included in calculating the probability.
 
     This function can be called either via ``entropy_sample()`` or ``complexity_sampen()``.
 
@@ -38,8 +42,11 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
     ----------
     sampen : float
         The sample entropy of the single time series.
-        If undefined conditional probabilities are detected, ``np.inf`` will
-        be returned. Increasing tolerance levels might help avoid this.
+        If undefined conditional probabilities are detected (logarithm
+        of sum of conditional probabilities is ``ln(0)``), ``np.inf`` will
+        be returned, meaning it fails to retrieve 'accurate' regularity information.
+        This tends to happen for short data segments, increasing tolerance
+        levels might help avoid this.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute sample entropy.
