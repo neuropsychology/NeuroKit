@@ -1,10 +1,7 @@
-from warnings import warn
-
 import numpy as np
 import pandas as pd
 
 from .utils import _get_tolerance, _phi, _phi_divide
-from ..misc import NeuroKitWarning
 
 
 def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSampEn", **kwargs):
@@ -46,7 +43,8 @@ def entropy_range(signal, dimension=3, delay=1, tolerance="default", method="mSa
     Returns
     -------
     RangeEn : float
-        Range Entropy
+        Range Entropy. If undefined conditional probabilities are detected, ``np.inf`` will
+        be returned. Increasing tolerance levels might help avoid this.
     info : dict
         A dictionary containing additional information regarding the parameters used.
 
@@ -119,14 +117,5 @@ def _entropy_range(signal, tolerance, delay=1, dimension=2, method="mSampEn", fu
             fuzzy=fuzzy,
         )
         rangeen = _phi_divide(phi)
-
-    # Warning for undefined
-    if rangeen == np.inf:
-        r = np.round(tolerance, 2)
-        warn(
-            "Undefined conditional probabilities for entropy were detected. " +
-            f"Try manually increasing tolerance levels (current tolerance={r}).",
-            category=NeuroKitWarning,
-        )
 
     return rangeen
