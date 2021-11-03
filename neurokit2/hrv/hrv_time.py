@@ -127,7 +127,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["pNN20"] = nn20 / len(rri) * 100
 
     # Geometrical domain
-    if "binsize" in kwargs:
+    if "binsize" in kwargs.keys():
         binsize = kwargs["binsize"]
     else:
         binsize = (1 / 128) * 1000
@@ -144,9 +144,11 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
+
 # =============================================================================
 # Utilities
 # =============================================================================
+
 
 def _hrv_time_show(rri, **kwargs):
 
@@ -155,6 +157,7 @@ def _hrv_time_show(rri, **kwargs):
     fig.suptitle("Distribution of R-R intervals")
 
     return fig
+
 
 def _sdann(rri, sampling_rate, window=1):
 
@@ -172,6 +175,7 @@ def _sdann(rri, sampling_rate, window=1):
     sdann = np.nanstd(avg_rri, ddof=1)
     return sdann
 
+
 def _sdnni(rri, sampling_rate, window=1):
 
     window_size = window * 60 * 1000  # Convert window in min to ms
@@ -187,6 +191,7 @@ def _sdnni(rri, sampling_rate, window=1):
         sdnn_.append(np.nanstd(rri[start_idx:end_idx], ddof=1))
     sdnni = np.nanmean(sdnn_)
     return sdnni
+
 
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
@@ -205,15 +210,15 @@ def _hrv_TINN(rri, bar_x, bar_y, binsize):
         while m < np.max(rri):
             n_start = np.where(bar_x == n)[0][0]
             n_end = np.where(bar_x == X)[0][0]
-            qn = np.polyval(np.polyfit([n, X], [0, Y], deg=1), bar_x[n_start:n_end + 1])
+            qn = np.polyval(np.polyfit([n, X], [0, Y], deg=1), bar_x[n_start : n_end + 1])
             m_start = np.where(bar_x == X)[0][0]
             m_end = np.where(bar_x == m)[0][0]
-            qm = np.polyval(np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start:m_end + 1])
+            qm = np.polyval(np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start : m_end + 1])
             q = np.zeros(len(bar_x))
-            q[n_start:n_end + 1] = qn
-            q[m_start:m_end + 1] = qm
+            q[n_start : n_end + 1] = qn
+            q[m_start : m_end + 1] = qm
             # least squares error
-            error = np.sum((bar_y[n_start:m_end + 1] - q[n_start:m_end + 1]) ** 2)
+            error = np.sum((bar_y[n_start : m_end + 1] - q[n_start : m_end + 1]) ** 2)
             if error < min_error:
                 N = n
                 M = m
