@@ -62,7 +62,7 @@ complexity_fuzzyrcmse = functools.partial(entropy_multiscale, refined=True, fuzz
 
 complexity_pe = entropy_permutation
 complexity_wpe = functools.partial(entropy_permutation, weighted=True)
-complexity_mpe = functools.partial(entropy_permutation, scale="default")
+complexity_mspe = functools.partial(entropy_permutation, scale="default")
 
 complexity_dfa = fractal_dfa
 fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)
@@ -110,7 +110,7 @@ __all__ = [
     "complexity_fuzzyrcmse",
     "complexity_pe",
     "complexity_wpe",
-    "complexity_mpe",
+    "complexity_mspe",
     "complexity_dfa",
     "complexity_rr",
     "complexity_rqa",

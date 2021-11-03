@@ -10,10 +10,10 @@ from .utils import _get_coarsegrained, _get_scale
 
 def complexity_lempelziv(
     signal,
-    method="median",
     delay=1,
     dimension=2,
     scale="default",
+    method="median",
     permutation=False,
     multiscale=False,
     normalize=True,
@@ -39,11 +39,6 @@ def complexity_lempelziv(
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    method : str
-        Method for partitioning the signal into a binary sequence.
-        Current options are "median" (default) or "mean", where each data point is assigned 0
-        if lower than the median or mean of signal respectively, and 1 if higher.
-        Only relevant if `permutation = False`.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
@@ -61,6 +56,11 @@ def complexity_lempelziv(
         `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_).
         If 'max', will use all scales until half the length of the signal. If an integer, will create
         a range until the specified int. Only relevant if `multiscale = True`.
+    method : str
+        Method for partitioning the signal into a binary sequence.
+        Current options are "median" (default) or "mean", where each data point is assigned 0
+        if lower than the median or mean of signal respectively, and 1 if higher.
+        Only relevant if `permutation = False`.
     permutation : bool
         If True, returns Permutation Lempel-Ziv Complexity (PLZC; Bai et al., 2015).
     multiscale : bool

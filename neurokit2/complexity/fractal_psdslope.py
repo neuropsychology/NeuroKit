@@ -6,7 +6,7 @@ from ..signal import signal_detrend, signal_psd
 
 
 def fractal_psdslope(
-    signal, sampling_rate=1000, frequency_range=None, method="voss1988", show=True, **kwargs
+    signal, sampling_rate=1000, frequency_range=None, method="voss1988", show=False, **kwargs
 ):
     """Fractal dimension via Power Spectral Density (PSD) slope
 

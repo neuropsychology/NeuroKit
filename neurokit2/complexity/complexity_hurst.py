@@ -6,7 +6,7 @@ import scipy.special
 from .fractal_dfa import _fractal_dfa_findwindows
 
 
-def complexity_hurst(signal, windows="default", corrected=False, show=False):
+def complexity_hurst(signal, windows="default", corrected=True, show=False):
     """Hurst Exponent (H)
 
     This function estimates the Hurst exponent via the standard rescaled range (R/S) approach, but

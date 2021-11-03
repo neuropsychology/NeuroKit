@@ -21,7 +21,7 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     incorporating significant information from the time series when retrieving the ordinal patterns.
 
     This function can be called either via ``entropy_permutation()`` or ``complexity_pe()``.
-    Moreover, variants can be directly accessed via ``complexity_wpe()`` and ``complexity_mpe()``.
+    Moreover, variants can be directly accessed via ``complexity_wpe()`` and ``complexity_mspe()``.
 
     Parameters
     ----------

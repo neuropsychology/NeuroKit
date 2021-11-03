@@ -9,7 +9,7 @@ from ..misc import NeuroKitWarning
 from ..signal import signal_detrend
 
 
-def fractal_sda(signal, scales=None, show=True):
+def fractal_sda(signal, scales=None, show=False):
     """Standardised Dispersion Analysis (SDA)
 
     SDA is part of a family of dispersion techniques used to compute fractal dimension.
