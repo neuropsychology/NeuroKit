@@ -4,15 +4,20 @@ import pandas as pd
 from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
+from .complexity_lyapunov import complexity_lyapunov
 from .complexity_rr import complexity_rr
 from .entropy_approximate import entropy_approximate
 from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
+from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
+from .entropy_range import entropy_range
 from .entropy_sample import entropy_sample
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
+from .fractal_correlation import fractal_correlation
+from .fractal_dfa import fractal_dfa
 from .fractal_katz import fractal_katz
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
@@ -59,7 +64,7 @@ def complexity(signal, which=["fast", "medium", "slow"], delay=1, dimension=2, t
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
+    >>> signal = nk.signal_simulate(duration=2, frequency=[5, 10])
     >>>
     >>> df, info = nk.complexity(signal, which = ["fast", "medium"])
     >>> df #doctest: +SKIP
@@ -102,7 +107,8 @@ def complexity(signal, which=["fast", "medium", "slow"], delay=1, dimension=2, t
 
         # Fractal Dimension
         df["NLD"], info["NLD"] = fractal_nld(signal)
-        df["SDA"], info["SDA"] = fractal_sda(signal)
+        if len(signal) >= 1024:
+            df["SDA"], info["SDA"] = fractal_sda(signal)
         df["PSDslope"], info["PSDslope"] = fractal_psdslope(signal)  # SR?
 
         # Entropy
@@ -130,6 +136,37 @@ def complexity(signal, which=["fast", "medium", "slow"], delay=1, dimension=2, t
             signal, dimension=dimension, delay=delay, permutation=True
         )
 
-        # PSDSLOPE LZC PLZC
+        if "slow" in which:
 
-    return pd.DataFrame.from_dict(df, orient="index").T, info
+            # Fractal Dimension
+            df["CD"], info["CD"] = fractal_correlation(signal, delay=delay, dimension=dimension)
+
+            # Entropy
+            df["FuzzyEn"], info["FuzzyEn"] = entropy_fuzzy(
+                signal, dimension=dimension, delay=delay, tolerance=tolerance
+            )
+            df["FuzzyMSE"], info["FuzzyMSE"] = entropy_multiscale(
+                signal, dimension=dimension, tolerance=tolerance, fuzzy=True
+            )
+            df["FuzzyRCMSE"], info["FuzzyRCMSE"] = entropy_multiscale(
+                signal, dimension=dimension, tolerance=tolerance, refined=True, fuzzy=True
+            )
+            df["RCMSE"], info["RCMSE"] = entropy_multiscale(
+                signal, dimension=dimension, tolerance=tolerance, refined=True
+            )
+            df["RangeEn"], info["RangeEn"] = entropy_range(
+                signal, dimension=dimension, delay=delay, tolerance=tolerance
+            )
+
+            # Other
+            df["DFA"], info["DFA"] = fractal_dfa(signal)
+            df["MFDFA"], info["MFDFA"] = fractal_dfa(
+                signal, multifractal=True, q=[-5, -3, -1, 0, 1, 3, 5]
+            )
+            df["L1"], info["L1"] = complexity_lyapunov(signal, dimension=dimension, delay=delay)
+
+    # Prepare output
+    df = pd.DataFrame.from_dict(df, orient="index").T  # Convert to dataframe
+    df = df.reindex(sorted(df.columns), axis=1)  # Reorder alphabetically
+
+    return df, info

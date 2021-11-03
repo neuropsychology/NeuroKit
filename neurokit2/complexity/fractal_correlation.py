@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import sklearn.metrics.pairwise
 
+from ..misc import expspace
 from .complexity_embedding import complexity_embedding
 
 
@@ -32,9 +33,8 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False):
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     radius : Union[str, int, list]
-        The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
-        ranging from 2.5% to 50% of the distance range. Methods implemented in other packages can be
-        used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
+        The sequence of radiuses to test. If an integer is passed, will get an exponential sequence of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in
+        other packages can be used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
     show : bool
         Plot of correlation dimension if True. Defaults to False.
 
@@ -189,7 +189,7 @@ def _fractal_correlation_get_r(radius, signal, dist):
     if isinstance(radius, int):
         dist_range = np.max(dist) - np.min(dist)
         r_min, r_max = (np.min(dist) + 0.025 * dist_range), (np.min(dist) + 0.5 * dist_range)
-        r_vals = np.exp2(np.linspace(np.log2(r_min), np.log2(r_max), radius, endpoint=True))
+        r_vals = expspace(r_min, r_max, radius, base=2, type=float)
 
     return r_vals
 

@@ -21,11 +21,11 @@ def complexity_lyapunov(
     min_neighbors="default",
     **kwargs,
 ):
-    """Lyapunov Exponents (LE)
+    """(Largest) Lyapunov Exponent (L1)
 
-    Lyapunov exponents describe the rate of exponential separation (convergence or divergence) of
-    nearby trajectories of a dynamical system. A system can have multiple LEs, equal to the number
-    of the dimensionality of the phase space, and the largest LE value, `L1` is often used to
+    Lyapunov exponents (LE) describe the rate of exponential separation (convergence or divergence)
+    of nearby trajectories of a dynamical system. A system can have multiple LEs, equal to the
+    number of the dimensionality of the phase space, and the largest LE value, `L1` is often used to
     determine the overall predictability of the dynamical system.
 
     Different algorithms:

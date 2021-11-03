@@ -1,10 +1,11 @@
 import numpy as np
 
 
-def expspace(start, stop, num=50, base=1):
+def expspace(start, stop, num=50, type=int, base=1):
     """Exponential range.
 
-    Creates a list of integer values of a given length from start to stop, spread by an exponential function.
+    Creates a list of integer values (by default) of a given length from start to stop, spread by
+    an exponential function.
 
     Parameters
     ----------
@@ -32,9 +33,12 @@ def expspace(start, stop, num=50, base=1):
     if base == 1:
         seq = np.exp(np.linspace(np.log(start), np.log(stop), num, endpoint=True))
     else:
-        seq = np.exp2(np.linspace(np.log2(start), np.log2(stop), num, endpoint=True))  # pylint: disable=E1111
+        seq = np.exp2(
+            np.linspace(np.log2(start), np.log2(stop), num, endpoint=True)
+        )  # pylint: disable=E1111
 
     # Round and convert to int
-    seq = np.round(seq).astype(int)
+    if type == int:
+        seq = np.round(seq).astype(int)
 
     return seq
