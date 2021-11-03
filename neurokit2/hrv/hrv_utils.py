@@ -14,9 +14,8 @@ def _hrv_get_rri(peaks=None, sampling_rate=1000, interpolate=False, **kwargs):
 
     else:
 
-        # Minimum sampling rate for interpolation
-        if sampling_rate < 10:
-            sampling_rate = 10
+        # Sanitize minimum sampling rate for interpolation to 10 Hz
+        sampling_rate = max(sampling_rate, 10)
 
         # Compute length of interpolated heart period signal at requested sampling rate.
         desired_length = int(np.rint(peaks[-1]))
