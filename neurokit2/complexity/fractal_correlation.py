@@ -12,10 +12,10 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False):
     """Correlation Dimension.
 
     The time series is first reconstructed using a delay-embedding method. In the reconstructed
-    phase space trajectory, distances between all points in the trajectory are calculated. The 'correlation
-    sum' is the computed, which is the probability of finding two vectors which are separated by
-    a distance not larger than a specified radius. The final correlation dimension is then
-    approximated by a log-log graph of correlation sum vs. a sequence of radiuses.
+    phase space trajectory, distances between all points in the trajectory are calculated. The
+    'correlation sum' is the computed, which is the probability of finding two vectors which are
+    separated by a distance not larger than a specified radius. The final correlation dimension is
+    then approximated by a log-log graph of correlation sum vs. a sequence of radiuses.
 
     Python implementation of the Correlation Dimension CD (sometimes referred to as D2) of a signal.
     This function can be called either via ``fractal_correlation()`` or ``complexity_cd()``.
@@ -26,14 +26,16 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False):
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
-        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
+        or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
+        returns an array with two columns corresponding to the original signal and its delayed (by
+        Tau) version.
     radius : Union[str, int, list]
-        The sequence of radiuses to test. If an integer is passed, will get an exponential sequence of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in
+        The sequence of radiuses to test. If an integer is passed, will get an exponential sequence
+        of length ``radius`` ranging from 2.5% to 50% of the distance range. Methods implemented in
         other packages can be used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
     show : bool
         Plot of correlation dimension if True. Defaults to False.
