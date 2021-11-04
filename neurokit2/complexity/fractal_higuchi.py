@@ -6,7 +6,7 @@ import pandas as pd
 from .optim_complexity_k import _complexity_k_slope, complexity_k
 
 
-def fractal_higuchi(signal, k_max="default", show=False):
+def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
     """
     Computes Higuchi's Fractal Dimension (HFD) by reconstructing k-max number of new
     data sets. For each reconstructed data set, curve length is computed and plotted
@@ -26,6 +26,8 @@ def fractal_higuchi(signal, k_max="default", show=False):
         for a range of kmax values (see ``complexity_k()`` optimization function).
     show : bool
         Visualise the slope of the curve for the selected k_max value.
+    **kwargs : optional
+        Currently not used.
 
     Returns
     ----------

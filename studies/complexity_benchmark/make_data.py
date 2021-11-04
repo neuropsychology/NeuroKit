@@ -169,7 +169,7 @@ def run_methods(i, x, delay=1, dimension=2):
         time_function(
             x,
             nk.complexity_pe,
-            index="PE",
+            index="PEn",
             name="nk_complexity_pe",
             delay=delay,
             dimension=dimension,
@@ -179,7 +179,7 @@ def run_methods(i, x, delay=1, dimension=2):
         time_function(
             x,
             nk.complexity_wpe,
-            index="WPE",
+            index="WPEn",
             name="nk_complexity_wpe",
             delay=delay,
             dimension=dimension,
@@ -189,7 +189,7 @@ def run_methods(i, x, delay=1, dimension=2):
         time_function(
             x,
             nk.complexity_mpe,
-            index="MPE",
+            index="MPEn",
             name="nk_complexity_mpe",
             delay=delay,
             dimension=dimension,
@@ -242,7 +242,7 @@ def run_methods(i, x, delay=1, dimension=2):
     )
     data.append(time_function(x, nk.fractal_dfa, index="DFA", name="nk_fractal_dfa"))
     data.append(time_function(x, nk.fractal_mfdfa, index="MFDFA", name="nk_fractal_mfdfa"))
-    # data.append(time_function(x, nk.fractal_higuchi, index="HFD", name="nk_fractal_higuchi"))
+    # data.append(time_function(x, nk.fractal_higuchi, index="HFD", name="nk_fractal_higuchi", k_max = 20))
     data.append(time_function(x, nk.fractal_katz, index="Katz", name="nk_fractal_katz"))
     data.append(time_function(x, nk.fractal_nld, index="NLD", name="nk_fractal_nld"))
     data.append(

@@ -18,6 +18,7 @@ def fractal_dfa(
     multifractal=False,
     q=2,
     show=False,
+    **kwargs,
 ):
     """(Multifractal) Detrended Fluctuation Analysis (DFA or MFDFA).
 
@@ -41,11 +42,9 @@ def fractal_dfa(
         will set it to a logarithmic scale (so that each window scale has the
         same weight) with a minimum of 4 and maximum of a tenth of the length
         (to have more than 10 windows to calculate the average fluctuation).
-
     overlap : bool
         Defaults to True, where the windows will have a 50% overlap
         with each other, otherwise non-overlapping windows will be used.
-
     integrate : bool
         It is common practice to convert the signal to a random walk (i.e.,
         detrend and integrate, which corresponds to the signal 'profile'). Note
@@ -54,14 +53,11 @@ def fractal_dfa(
         strongly anticorrelated signals, this transformation should be applied
         two times (i.e., provide `np.cumsum(signal - np.mean(signal))` instead
         of `signal`).
-
     order : int
        The order of the polynomial trend for detrending, 1 for the linear trend.
-
     multifractal : bool
         If true, compute Multifractal Detrended Fluctuation Analysis (MFDFA), in
         which case the argument `q` is taken into account.
-
     q : list or np.array
         The sequence of fractal exponents when `multifractal=True`. Must be a
         sequence between `-10` and `10` (note that zero will be removed, since
@@ -71,9 +67,10 @@ def fractal_dfa(
         the contribution of fractal components with larger amplitude and
         negative q moments amplify the contribution of fractal with smaller
         amplitude (Kantelhardt et al., 2002).
-
     show : bool
         Visualise the trend between the window size and the fluctuations.
+    **kwargs : optional
+        Currently not used.
 
     Returns
     ----------
@@ -502,11 +499,15 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
         polyfit = np.polyfit(np.log2(windows), np.log2(fluctuations[:, i]), 1)
         if i == 0:
             ax_fluctuation.plot(
-                [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]), c=colors[0]
+                [],
+                label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[0][0]),
+                c=colors[0],
             )
         elif i == (len(q) - 1):
             ax_fluctuation.plot(
-                [], label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]), c=colors[-1]
+                [],
+                label=(r"$\alpha$ = {:.3f}, q = {:.1f}").format(polyfit[0], q[-1][0]),
+                c=colors[-1],
             )
         fluctfit = 2 ** np.polyval(polyfit, np.log2(windows))
         ax_fluctuation.loglog(windows, fluctfit, "r", c=colors[i], base=2, label="_no_legend_")

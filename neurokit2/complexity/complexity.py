@@ -14,10 +14,12 @@ from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
 from .entropy_range import entropy_range
 from .entropy_sample import entropy_sample
+from .entropy_shannon import entropy_shannon
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
+from .fractal_higuchi import fractal_higuchi
 from .fractal_katz import fractal_katz
 from .fractal_nld import fractal_nld
 from .fractal_petrosian import fractal_petrosian
@@ -27,12 +29,16 @@ from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 
 
-def complexity(signal, which=["fast", "medium", "slow"], delay=1, dimension=2, tolerance="default"):
-    """Complexity Analysis
+def complexity(
+    signal, which=["fast", "medium", "slow"], delay=1, dimension=2, tolerance="default", **kwargs
+):
+    """Comprehensive Complexity Analysis
 
-    This convenience function can be used to run a large number of complexity metrics. Does not
-    include Recurrence Quantification Analysis (RQA, ``nk.complexity_rqa()``) which currently requires an additional
-    dependency.
+    This convenience function can be used to run a large number of complexity metrics. For more
+    control, please run each function separately.
+
+    Note that it does not include Recurrence Quantification Analysis (RQA, ``nk.complexity_rqa()``)
+    which currently requires an additional dependency.
 
     The categorization by "computation time" is based on our preliminary `benchmarking study
     <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_.
@@ -47,6 +53,8 @@ def complexity(signal, which=["fast", "medium", "slow"], delay=1, dimension=2, t
         See for example :func:`entropy_permutation`.
     dimension : int
         See for example :func:`entropy_permutation`.
+    **kwargs : optional
+        Other arguments to be passed to the functions.
 
     Returns
     --------
@@ -66,7 +74,13 @@ def complexity(signal, which=["fast", "medium", "slow"], delay=1, dimension=2, t
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=[5, 10])
     >>>
+    >>> # Fast metrics
     >>> df, info = nk.complexity(signal, which = ["fast", "medium"])
+    >>> df #doctest: +SKIP
+    >>>
+    >>> # Slow
+    >>> # With specific parameters for Higuchi and MFDFA
+    >>> df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 2))
     >>> df #doctest: +SKIP
 
     """
@@ -95,6 +109,7 @@ def complexity(signal, which=["fast", "medium", "slow"], delay=1, dimension=2, t
         # Entropy
         df["DiffEn"], info["DiffEn"] = entropy_differential(signal)
         df["PEn"], info["PEn"] = entropy_permutation(signal, dimension=dimension, delay=delay)
+        df["ShanEn"], info["ShanEn"] = entropy_shannon(signal)
         df["SpEn"], info["SpEn"] = entropy_spectral(signal)
         df["SVDEn"], info["SVDEn"] = entropy_svd(signal, delay=delay, dimension=dimension)
 
@@ -136,34 +151,37 @@ def complexity(signal, which=["fast", "medium", "slow"], delay=1, dimension=2, t
             signal, dimension=dimension, delay=delay, permutation=True
         )
 
-        if "slow" in which:
+    if "slow" in which:
 
-            # Fractal Dimension
-            df["CD"], info["CD"] = fractal_correlation(signal, delay=delay, dimension=dimension)
+        # Fractal Dimension
+        df["CD"], info["CD"] = fractal_correlation(signal, delay=delay, dimension=dimension)
+        df["HFD"], info["HFD"] = fractal_higuchi(signal, **kwargs)
 
-            # Entropy
-            df["FuzzyEn"], info["FuzzyEn"] = entropy_fuzzy(
-                signal, dimension=dimension, delay=delay, tolerance=tolerance
-            )
-            df["FuzzyMSE"], info["FuzzyMSE"] = entropy_multiscale(
-                signal, dimension=dimension, tolerance=tolerance, fuzzy=True
-            )
-            df["FuzzyRCMSE"], info["FuzzyRCMSE"] = entropy_multiscale(
-                signal, dimension=dimension, tolerance=tolerance, refined=True, fuzzy=True
-            )
-            df["RCMSE"], info["RCMSE"] = entropy_multiscale(
-                signal, dimension=dimension, tolerance=tolerance, refined=True
-            )
-            df["RangeEn"], info["RangeEn"] = entropy_range(
-                signal, dimension=dimension, delay=delay, tolerance=tolerance
-            )
+        # Entropy
+        df["FuzzyEn"], info["FuzzyEn"] = entropy_fuzzy(
+            signal, dimension=dimension, delay=delay, tolerance=tolerance
+        )
+        df["FuzzyMSE"], info["FuzzyMSE"] = entropy_multiscale(
+            signal, dimension=dimension, tolerance=tolerance, fuzzy=True
+        )
+        df["FuzzyRCMSE"], info["FuzzyRCMSE"] = entropy_multiscale(
+            signal, dimension=dimension, tolerance=tolerance, refined=True, fuzzy=True
+        )
+        df["RCMSE"], info["RCMSE"] = entropy_multiscale(
+            signal, dimension=dimension, tolerance=tolerance, refined=True
+        )
+        df["RangeEn"], info["RangeEn"] = entropy_range(
+            signal, dimension=dimension, delay=delay, tolerance=tolerance
+        )
 
-            # Other
-            df["DFA"], info["DFA"] = fractal_dfa(signal)
-            df["MFDFA"], info["MFDFA"] = fractal_dfa(
-                signal, multifractal=True, q=[-5, -3, -1, 0, 1, 3, 5]
-            )
-            df["L1"], info["L1"] = complexity_lyapunov(signal, dimension=dimension, delay=delay)
+        # Other
+        df["DFA"], info["DFA"] = fractal_dfa(signal)
+        _, info["MFDFA"] = fractal_dfa(signal, multifractal=True, **kwargs)
+        df["MFDFA_ExpRange"] = info["MFDFA"]["ExpRange"]
+        df["MFDFA_ExpMean"] = info["MFDFA"]["ExpMean"]
+        df["MFDFA_DimRange"] = info["MFDFA"]["DimRange"]
+        df["MFDFA_DimMean"] = info["MFDFA"]["DimMean"]
+        df["L1"], info["L1"] = complexity_lyapunov(signal, dimension=dimension, delay=delay)
 
     # Prepare output
     df = pd.DataFrame.from_dict(df, orient="index").T  # Convert to dataframe
