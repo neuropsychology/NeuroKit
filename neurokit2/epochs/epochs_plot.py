@@ -5,7 +5,9 @@ from .epochs_to_df import epochs_to_df
 
 
 def epochs_plot(epochs, legend=True, show=True, **kwargs):
-    """Plot epochs.
+    """Epochs visualization
+
+    Plot epochs.
 
     Parameters
     ----------
@@ -55,15 +57,16 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
         # Try loading mne
         try:
             import mne
-        except ImportError:
+        except ImportError as e:
             raise ImportError(
                 "NeuroKit error: epochs_plot(): the 'mne' module is required for this function to run. ",
                 "Please install it first (`pip install mne`).",
-            )
+            ) from e
 
         if not isinstance(epochs, mne.Epochs):
             raise ValueError(
-                "NeuroKit error: epochs_plot(): Please make sure your epochs object passed is `mne.Epochs` object. ")
+                "NeuroKit error: epochs_plot(): Please make sure your epochs object passed is `mne.Epochs` object. "
+            )
 
         data = _epochs_mne_sanitize(epochs, **kwargs)
 
@@ -80,26 +83,17 @@ def epochs_plot(epochs, legend=True, show=True, **kwargs):
                 _epochs_plot(data, ax=ax[i], col=col, legend=legend)
         return fig
 
-    else:
-        return data
+    return data
 
 
 def _epochs_mne_sanitize(epochs, what):
     """Channel array extraction from MNE for plotting.
     Select one or several channels by name and returns them in a dataframe.
-
-    Parameters
-    ----------
-    epochs : object
-        Epochs corresponding to `mne.Epochs` object.
-    what : str or list
-        The name(s) of the `mne.Epochs` channel to be plotted.
     """
 
     data = epochs.to_data_frame()
-    data = data.rename(columns={"time": "Time", "condition": "Condition",
-                                "epoch": "Label"})
-    data['Time'] = data['Time'] / 1000  # ms to seconds
+    data = data.rename(columns={"time": "Time", "condition": "Condition", "epoch": "Label"})
+    data["Time"] = data["Time"] / 1000  # ms to seconds
 
     if isinstance(what, str):
         data = data[[x for x in data.columns.values if x in ["Time", "Condition", "Label", what]]]
@@ -128,4 +122,6 @@ def _epochs_plot(data, ax, col, legend):
 
         # TODO: Custom legend
     else:
-        data.pivot(index="Time", columns="Label", values=col).plot(ax=ax, label=col, title=col, legend=legend)
+        data.pivot(index="Time", columns="Label", values=col).plot(
+            ax=ax, label=col, title=col, legend=legend
+        )
