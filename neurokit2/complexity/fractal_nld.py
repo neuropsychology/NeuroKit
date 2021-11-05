@@ -1,7 +1,9 @@
+from warnings import warn
 import numpy as np
 import pandas as pd
 
 from ..stats import standardize
+from ..misc import NeuroKitWarning
 
 
 def fractal_nld(signal, window=30):
@@ -60,7 +62,6 @@ def fractal_nld(signal, window=30):
     # Split signal into epochs
     n_epochs = len(signal) // window
     epochs = np.array_split(signal, n_epochs)
-    epochs.append(signal[-window:])  # Add last (smaller) epoch
 
     fds = [_fractal_nld(i) for i in epochs]
 
@@ -81,6 +82,12 @@ def _fractal_nld(epoch):
     a = 1.8399
     k = 0.3523
     nld_0 = 0.097178
+
+    if (nld - nld_0) < 0:
+        warn(
+            f"Normalized Length Density of some epochs (reflected as `np.nan`in `Values`) may be too short.",
+            category=NeuroKitWarning,
+        )
 
     # Compute fd
     return a * (nld - nld_0) ** k
