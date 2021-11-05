@@ -239,6 +239,7 @@ def _embedding_dimension_ffn_d(
     d, dist, index, y2 = _embedding_dimension_d(signal, dimension, delay, metric, window, maxnum)
 
     # Find all potential false neighbors using Kennel et al.'s tests.
+    dist[dist == 0] = np.nan  # assign nan to avoid divide by zero error in next line
     f1 = np.abs(y2[:, -1] - y2[index, -1]) / dist > R
     f2 = d / np.std(signal) > A
     f3 = f1 | f2
