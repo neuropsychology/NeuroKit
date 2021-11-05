@@ -199,11 +199,12 @@ def _embedding_dimension_afn_d(
     # Its average is E(d)
     if any(d == 0) or any(dist == 0):
         E = np.nan
+        Es = np.nan
     else:
         E = np.mean(d / dist)
+        # Calculate E^*(d)
+        Es = np.mean(np.abs(y2[:, -1] - y2[index, -1]))
 
-    # Calculate E^*(d)
-    Es = np.mean(np.abs(y2[:, -1] - y2[index, -1]))
     return E, Es
 
 
