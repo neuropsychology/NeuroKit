@@ -88,7 +88,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
 
         # To find where E1 saturates, set a threshold of difference
         # threshold = 0.1 * (np.max(E1) - np.min(E1))
-        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.max(E1)) if x][0] + 1
+        min_dimension = [i for i, x in enumerate(E1 >= 0.85 * np.nanmax(E1)) if x][0] + 1
 
         # To standardize the length of dimension_seq with E1 and E2
         dimension_seq = dimension_seq[:-1]
@@ -197,7 +197,10 @@ def _embedding_dimension_afn_d(
 
     # Compute the ratio of near-neighbor distances in d + 1 over d dimension
     # Its average is E(d)
-    E = np.mean(d / dist)
+    if any(d == 0) or any(dist == 0):
+        E = np.nan
+    else:
+        E = np.mean(d / dist)
 
     # Calculate E^*(d)
     Es = np.mean(np.abs(y2[:, -1] - y2[index, -1]))
