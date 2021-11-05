@@ -242,7 +242,9 @@ def run_methods(i, x, delay=1, dimension=2):
     )
     data.append(time_function(x, nk.fractal_dfa, index="DFA", name="nk_fractal_dfa"))
     data.append(time_function(x, nk.fractal_mfdfa, index="MFDFA", name="nk_fractal_mfdfa"))
-    # data.append(time_function(x, nk.fractal_higuchi, index="HFD", name="nk_fractal_higuchi", k_max = 20))
+    data.append(
+        time_function(x, nk.fractal_higuchi, index="HFD", name="nk_fractal_higuchi", k_max=10)
+    )
     data.append(time_function(x, nk.fractal_katz, index="Katz", name="nk_fractal_katz"))
     data.append(time_function(x, nk.fractal_nld, index="NLD", name="nk_fractal_nld"))
     data.append(
@@ -263,7 +265,7 @@ def run_methods(i, x, delay=1, dimension=2):
 
 # Iterations
 data = []
-for n in nk.expspace(100, 10 ** 4, 10).astype(int):
+for n in nk.expspace(100, 10 ** 4, 10):
     print(n)
     x = nk.signal_simulate(duration=3, sampling_rate=n, frequency=[5, 10], noise=0.5)
     delay = int(n / 100)
@@ -280,5 +282,5 @@ for n in nk.expspace(100, 10 ** 4, 10).astype(int):
     )
     data.append(pd.concat(out))
 
-    pd.concat(data).to_csv("data.csv", index=False)
+    pd.concat(data).to_csv("data_ComputationTime.csv", index=False)
 print("DONE.")
