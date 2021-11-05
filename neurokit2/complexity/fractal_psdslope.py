@@ -6,7 +6,7 @@ from ..signal import signal_detrend, signal_psd
 
 
 def fractal_psdslope(
-    signal, sampling_rate=1000, frequency_range=None, method="voss1988", show=False, **kwargs
+    signal, frequency_range=None, method="voss1988", show=False, **kwargs
 ):
     """Fractal dimension via Power Spectral Density (PSD) slope
 
@@ -26,8 +26,6 @@ def fractal_psdslope(
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    sampling_rate : int
-        The sampling frequency of the signal (in Hz, i.e., samples/second).
     method : str
         Method to estimate the fractal dimension from the slope,
         can be 'voss1988' (default) or 'hasselman2013'.
@@ -56,7 +54,7 @@ def fractal_psdslope(
     >>>
     >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
     >>>
-    >>> psdslope, info = nk.fractal_psdslope(signal, sampling_rate=200, show=False)
+    >>> psdslope, info = nk.fractal_psdslope(signal, show=False)
     >>> psdslope #doctest: +SKIP
 
     References
@@ -90,9 +88,10 @@ def fractal_psdslope(
     if frequency_range is None:
         frequency_range = [0, np.inf]
     if isinstance(frequency_range, list):
+        # actual sampling rate does not matter, set to 1000
         psd = signal_psd(
             signal,
-            sampling_rate=sampling_rate,
+            sampling_rate=1000,
             method="fft",
             min_frequency=frequency_range[0],
             max_frequency=frequency_range[1],
@@ -100,7 +99,7 @@ def fractal_psdslope(
             **kwargs
         )
     elif frequency_range == "lowest25":
-        psd = signal_psd(signal, sampling_rate=sampling_rate, method="fft", show=False, **kwargs)
+        psd = signal_psd(signal, sampling_rate=1000, method="fft", show=False, **kwargs)
         psd = psd[psd["Frequency"] < psd.quantile(0.25)[0]]
     psd = psd[psd["Frequency"] > 0]
 
@@ -126,7 +125,6 @@ def fractal_psdslope(
 
     return fd, {
         "Slope": slope,
-        "Sampling_Rate": sampling_rate,
         "Method": method,
         "Frequencies": frequency_range,
     }
