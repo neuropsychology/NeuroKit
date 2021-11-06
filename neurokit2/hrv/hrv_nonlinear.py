@@ -7,18 +7,10 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from ..complexity import (
-    complexity_lempelziv,
-    entropy_approximate,
-    entropy_fuzzy,
-    entropy_multiscale,
-    entropy_sample,
-    entropy_shannon,
-    fractal_correlation,
-    fractal_dfa,
-    fractal_higuchi,
-    fractal_katz,
-)
+from ..complexity import (complexity_lempelziv, entropy_approximate,
+                          entropy_fuzzy, entropy_multiscale, entropy_sample,
+                          entropy_shannon, fractal_correlation, fractal_dfa,
+                          fractal_higuchi, fractal_katz)
 from ..misc import NeuroKitWarning, find_consecutive
 from ..signal import signal_zerocrossings
 from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
@@ -39,16 +31,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
-    dfa_windows : list
-        A list of tuples containing the number of heartbeats to compute the DFA short term scaling
-        exponent, α1 and the long term scaling exponent, α2, respectively.
-        Defaults to [[4, 11], [12, None]], where
-        α1 is estimated from 4 to 11 heartbeats and α2 is estimated from a larger number of heartbeats,
-        i.e., 11 beats and above, based on Acharya et al. (2002).
     show : bool, optional
         If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the
         next successive one. The ellipse centers around the average RR interval. By default False.
-    **kwargs : optional
+    **kwargs
         Other arguments to be passed into `fractal_dfa()` and `fractal_correlation()`.
 
 
@@ -272,9 +258,15 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, tolerance=tolerance)[0]
     out["ShanEn"] = entropy_shannon(rri)[0]
     out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, tolerance=tolerance)[0]
-    out["MSE"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, composite=False, refined=False)[0]
-    out["CMSE"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, composite=True, refined=False)[0]
-    out["RCMSE"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, composite=True, refined=True)[0]
+    out["MSE"] = entropy_multiscale(
+        rri, dimension=2, tolerance=tolerance, composite=False, refined=False
+    )[0]
+    out["CMSE"] = entropy_multiscale(
+        rri, dimension=2, tolerance=tolerance, composite=True, refined=False
+    )[0]
+    out["RCMSE"] = entropy_multiscale(
+        rri, dimension=2, tolerance=tolerance, composite=True, refined=True
+    )[0]
 
     out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)[0]
     out["HFD"] = fractal_higuchi(rri, **kwargs)[0]
