@@ -5,9 +5,7 @@ import pandas as pd
 from ..signal import signal_detrend, signal_psd
 
 
-def fractal_psdslope(
-    signal, frequency_range=None, method="voss1988", show=False, **kwargs
-):
+def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
     """Fractal dimension via Power Spectral Density (PSD) slope
 
     Fractal exponent can be computed from Power Spectral Density slope (PSDslope) analysis in
@@ -29,12 +27,6 @@ def fractal_psdslope(
     method : str
         Method to estimate the fractal dimension from the slope,
         can be 'voss1988' (default) or 'hasselman2013'.
-    frequency_range: bool, list, str
-        The frequency range e.g., `frequency_range=[2, 30]` to which to fit the spectral slope,
-        as inverse power-law scaling relation may break down at either the highest or lowest frequencies, or both.
-        Can also be 'lowest25' which excludes the upper 75% of the spectral estimates (PSD less sensitive to
-        high-frequency disturbances, Eke et al., 2002). Defaults to None, which means the minimum and maximum
-        frequency will be used (see ``signal_psd()``).
     show : bool
         If True, returns the log-log plot of PSD versus frequency.
     **kwargs
@@ -85,22 +77,8 @@ def fractal_psdslope(
     signal = (signal - np.nanmean(signal)) / np.nanstd(signal)
 
     # Get psd with fourier transform
-    if frequency_range is None:
-        frequency_range = [0, np.inf]
-    if isinstance(frequency_range, list):
-        # actual sampling rate does not matter, set to 1000
-        psd = signal_psd(
-            signal,
-            sampling_rate=1000,
-            method="fft",
-            min_frequency=frequency_range[0],
-            max_frequency=frequency_range[1],
-            show=False,
-            **kwargs
-        )
-    elif frequency_range == "lowest25":
-        psd = signal_psd(signal, sampling_rate=1000, method="fft", show=False, **kwargs)
-        psd = psd[psd["Frequency"] < psd.quantile(0.25)[0]]
+    psd = signal_psd(signal, sampling_rate=1000, method="fft", show=False, **kwargs)
+    psd = psd[psd["Frequency"] < psd.quantile(0.25)[0]]
     psd = psd[psd["Frequency"] > 0]
 
     # Get slope
