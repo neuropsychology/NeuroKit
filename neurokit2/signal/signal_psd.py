@@ -21,6 +21,7 @@ def signal_psd(
     order=16,
     order_criteria="KIC",
     order_corrected=True,
+    silent=True,
     **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
@@ -57,6 +58,8 @@ def signal_psd(
     order_corrected : bool
         Should the order criteria (AIC or KIC) be corrected? If unsure which method to use to choose
         the order, rely on the default (i.e., the corrected KIC).
+    silent : bool
+        If False, warnings will be printed. Default to True.
     **kwargs : optional
         Keyword arguments to be passed to `scipy.signal.welch()`.
 
@@ -136,12 +139,13 @@ def signal_psd(
 
         # in case duration of recording is not sufficient
         if nperseg > len(signal) / 2:
-            warn(
-                "The duration of recording is too short to support a"
-                " sufficiently long window for high frequency resolution."
-                " Consider using a longer recording or increasing the `min_frequency`",
-                category=NeuroKitWarning,
-            )
+            if silent is False:
+                warn(
+                    "The duration of recording is too short to support a"
+                    " sufficiently long window for high frequency resolution."
+                    " Consider using a longer recording or increasing the `min_frequency`",
+                    category=NeuroKitWarning,
+                )
             nperseg = int(len(signal) / 2)
 
         # Welch (Scipy)
