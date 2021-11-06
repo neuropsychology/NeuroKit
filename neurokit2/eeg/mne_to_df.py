@@ -22,7 +22,7 @@ def mne_to_df(eeg):
     >>> import neurokit2 as nk
     >>>
     >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> eeg = nk.eeg_rereference(eeg, 'average')
+    >>> mne_to_df(eeg) # doctest: +SKIP
     >>>
 
     """
