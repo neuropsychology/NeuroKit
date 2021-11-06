@@ -47,8 +47,8 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
     >>>
     >>> # Visualize
     >>> nk.signal_plot([violet, blue, white, pink, brown],
-    ...               standardize=True,
-    ...               labels=["Violet", "Blue", "White", "Pink", "Brown"])
+    ...                standardize=True,
+    ...                labels=["Violet", "Blue", "White", "Pink", "Brown"])
     >>>
     >>> # Visualize spectrum
     >>> psd_violet = nk.signal_psd(violet, sampling_rate=200, method="fft")
@@ -57,12 +57,12 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
     >>> psd_pink = nk.signal_psd(pink, sampling_rate=200, method="fft")
     >>> psd_brown = nk.signal_psd(brown, sampling_rate=200, method="fft")
     >>>
-    >>> plt.loglog(psd_violet["Frequency"], psd_violet["Power"], c="violet")
-    >>> plt.loglog(psd_blue["Frequency"], psd_blue["Power"], c="blue")
-    >>> plt.loglog(psd_white["Frequency"], psd_white["Power"], c="grey")
-    >>> plt.loglog(psd_pink["Frequency"], psd_pink["Power"], c="pink")
-    >>> plt.loglog(psd_brown["Frequency"], psd_brown["Power"], c="brown")
-    >>> plt.show()
+    >>> plt.loglog(psd_violet["Frequency"], psd_violet["Power"], c="violet") #doctest: +SKIP
+    >>> plt.loglog(psd_blue["Frequency"], psd_blue["Power"], c="blue") #doctest: +SKIP
+    >>> plt.loglog(psd_white["Frequency"], psd_white["Power"], c="grey") #doctest: +SKIP
+    >>> plt.loglog(psd_pink["Frequency"], psd_pink["Power"], c="pink") #doctest: +SKIP
+    >>> plt.loglog(psd_brown["Frequency"], psd_brown["Power"], c="brown") #doctest: +SKIP
+    >>> plt.show() #doctest: +SKIP
 
     """
 
