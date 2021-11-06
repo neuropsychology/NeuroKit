@@ -124,7 +124,7 @@ def complexity(
         df["NLD"], info["NLD"] = fractal_nld(signal)
         if len(signal) >= 1024:
             df["SDA"], info["SDA"] = fractal_sda(signal)
-        df["PSDslope"], info["PSDslope"] = fractal_psdslope(signal)  # SR?
+        df["PSDslope"], info["PSDslope"] = fractal_psdslope(signal)
 
         # Entropy
         df["ApEn"], info["ApEn"] = entropy_approximate(
