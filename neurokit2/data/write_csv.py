@@ -2,8 +2,9 @@ import numpy as np
 
 
 def write_csv(data, filename, parts=None, **kwargs):
-    """
-    Write data to multiple csv files. You can then re-create them as follows:
+    """Write data to multiple csv files.
+
+    Split the data into multiple CSV files. You can then re-create them as follows:
 
     .. highlight:: python
     .. code-block:: python

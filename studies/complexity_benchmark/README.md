@@ -1,5 +1,5 @@
 
-# Benchmarking of Complexity Measures
+# Benchmarking and Analysis of Complexity Measures
 
 *This study can be referenced by* [*citing the
 package*](https://github.com/neuropsychology/NeuroKit#citation)
@@ -15,7 +15,9 @@ The goal for NeuroKit is to provide the most comprehensive, accurate and
 fastest base Python implementations of complexity indices (fractal
 dimension, entropy, etc.).
 
-## Make data
+## Computation Time
+
+### Make data
 
 ``` python
 # See make_data.py
@@ -23,13 +25,13 @@ dimension, entropy, etc.).
 
 ## Benchmark
 
-### Average Duration
+#### Average Duration
 
 ``` r
 library(tidyverse)
 library(easystats)
 
-df <- read.csv("data.csv") 
+df <- read.csv("data_ComputationTime.csv") 
 
 order <- df |> 
   group_by(Method) |> 
@@ -57,7 +59,7 @@ ggplot(dfsummary, aes(x = Method, y = Duration)) +
 
 ![](../../studies/complexity_benchmark/figures/unnamed-chunk-3-1.png)<!-- -->
 
-### Sensitivity to signal length
+#### Sensitivity to signal length
 
 ``` r
 df |> 
@@ -73,6 +75,29 @@ df |>
 ```
 
 ![](../../studies/complexity_benchmark/figures/unnamed-chunk-4-1.png)<!-- -->
+
+## Structure
+
+#### Average Duration
+
+``` r
+library(tidyverse)
+library(easystats)
+
+df <- read.csv("data_Correlations.csv") 
+
+cor <- df |> 
+  select(-Noise, -Intensity) |> 
+  correlation::correlation()
+
+cor |> 
+  summary(redundant=TRUE) |> 
+  cor_sort() |> 
+  plot(show_text=FALSE) +
+  theme(axis.text.x = element_text(angle=45, hjust = 1))
+```
+
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-5-1.png)<!-- -->
 
 ## References
 

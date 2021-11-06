@@ -38,7 +38,7 @@ knitr::opts_chunk$set(
 
 
 
-# Benchmarking of Complexity Measures
+# Benchmarking and Analysis of Complexity Measures
 
 *This study can be referenced by* [*citing the package*](https://github.com/neuropsychology/NeuroKit#citation) [@Makowski2021neurokit].
 
@@ -48,7 +48,9 @@ knitr::opts_chunk$set(
 
 The goal for NeuroKit is to provide the most comprehensive, accurate and fastest base Python implementations of complexity indices (fractal dimension, entropy, etc.).
 
-## Make data
+## Computation Time
+
+### Make data
 
 ```{python, eval=FALSE}
 # See make_data.py
@@ -56,13 +58,13 @@ The goal for NeuroKit is to provide the most comprehensive, accurate and fastest
 
 ## Benchmark
 
-### Average Duration
+#### Average Duration
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(easystats)
 
-df <- read.csv("data.csv") 
+df <- read.csv("data_ComputationTime.csv") 
 
 order <- df |> 
   group_by(Method) |> 
@@ -88,7 +90,7 @@ ggplot(dfsummary, aes(x = Method, y = Duration)) +
   labs(y = "Time to compute", x = NULL, color = "Signal length")
 ```
 
-### Sensitivity to signal length
+#### Sensitivity to signal length
 
 ```{r message=FALSE, warning=FALSE}
 df |> 
@@ -103,6 +105,25 @@ df |>
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 ```
 
+## Structure
 
+#### Average Duration
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(easystats)
+
+df <- read.csv("data_Correlations.csv") 
+
+cor <- df |> 
+  select(-Noise, -Intensity) |> 
+  correlation::correlation()
+
+cor |> 
+  summary(redundant=TRUE) |> 
+  cor_sort() |> 
+  plot(show_text=FALSE) +
+  theme(axis.text.x = element_text(angle=45, hjust = 1))
+```
 
 ## References

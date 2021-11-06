@@ -8,7 +8,7 @@ from ..misc import expspace
 from .complexity_embedding import complexity_embedding
 
 
-def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False):
+def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **kwargs):
     """Correlation Dimension.
 
     The time series is first reconstructed using a delay-embedding method. In the reconstructed
@@ -39,6 +39,8 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False):
         other packages can be used via setting ``r='nolds'``, ``r='Corr_Dim'`` or ``r='boon2008'``.
     show : bool
         Plot of correlation dimension if True. Defaults to False.
+    **kwargs
+        Other arguments to be passed (unused for now).
 
     Returns
     ----------
