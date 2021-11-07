@@ -101,11 +101,7 @@ def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
     if show:
         _fractal_psdslope_plot(psd["Frequency"], psd["Power"], slope, intercept, fd, ax=None)
 
-    return fd, {
-        "Slope": slope,
-        "Method": method,
-        "Frequencies": frequency_range,
-    }
+    return fd, {"Slope": slope, "Method": method}
 
 
 def _fractal_psdslope_plot(frequency, psd, slope, intercept, fd, ax=None):
