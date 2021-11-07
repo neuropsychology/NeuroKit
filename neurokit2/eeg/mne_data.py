@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 def mne_data(what="raw", path=None):
     """Utility function to easily access MNE datasets
 
@@ -21,6 +22,7 @@ def mne_data(what="raw", path=None):
     >>> import neurokit2 as nk
     >>>
     >>> raw = nk.mne_data(what="raw")
+    >>> raw = nk.mne_data(what="epochs")
 
     """
     # Try loading mne
@@ -34,16 +36,38 @@ def mne_data(what="raw", path=None):
 
     old_verbosity_level = mne.set_log_level(verbose="WARNING", return_old_level=True)
 
+    # Find path of mne data
+    if path is None:
+        try:
+            path = mne.datasets.sample.data_path()
+        except ValueError:
+            raise ValueError(
+                "NeuroKit error: the mne sample data folder does not exist. ",
+                "Please specify a path to download the mne datasets.",
+            )
+
+    # Raw
     if what in ["raw", "filt-0-40_raw"]:
-        if path is None:
-            try:
-                path = mne.datasets.sample.data_path()
-            except ValueError:
-                raise ValueError("NeuroKit error: the mne sample data folder does not exist. ",
-                                 "Please specify a path to download the mne datasets.")
-        path += '/MEG/sample/sample_audvis_' + what + '.fif'
+        path += "/MEG/sample/sample_audvis_" + what + ".fif"
         data = mne.io.read_raw_fif(path, preload=True)
         data = data.pick_types(meg=False, eeg=True)
+
+    # Epochs
+    elif what in ["epochs", "evoked"]:
+        raw = mne.io.read_raw_fif(path + "/MEG/sample/sample_audvis_filt-0-40_raw.fif").pick_types(
+            meg=False, eeg=True
+        )
+
+        events = mne.read_events(path + "/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif")
+        event_id = {"audio/left": 1, "audio/right": 2, "visual/left": 3, "visual/right": 4}
+
+        data = mne.Epochs(raw, events, event_id, tmin=-0.2, tmax=0.5, baseline=(None, 0))
+
+        if what in ["evoked"]:
+            data = [data[name].average() for name in ("audio", "visual")]
+
+    else:
+        raise ValueError("NeuroKit error: mne_data(): the 'what' argument not recognized.")
 
     mne.set_log_level(old_verbosity_level)
     return data
