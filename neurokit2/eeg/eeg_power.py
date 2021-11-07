@@ -2,12 +2,16 @@
 import numpy as np
 import pandas as pd
 
+from ..signal import signal_power
 from .mne_to_df import mne_to_df
 
 
-def eeg_power(eeg, sampling_rate=None, frequency_band=["gamma", "beta", "alpha", "theta", "delta"]):
+def eeg_power(
+    eeg, sampling_rate=None, frequency_band=["Gamma", "Beta", "Alpha", "Theta", "Delta"], **kwargs
+):
     """EEG Power in Different Frequency Bands
 
+    From fastest to slowest:
     - Gamma (30-40 Hz)
     - Beta (13-30 Hz)
     - Alpha (8-13 Hz)
@@ -31,10 +35,9 @@ def eeg_power(eeg, sampling_rate=None, frequency_band=["gamma", "beta", "alpha",
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw")
-    >>> eeg = eeg.get_data()[:, 0:500]  # Get the 500 first data points
-    >>>
-    >>> frequency_band=["gamma", (1, 4), "Alpha"]
+    >>> # Raw objects
+    >>> eeg = nk.mne_data("raw")
+    >>> by_channel = nk.eeg_power(eeg)
 
     References
     ----------
@@ -61,16 +64,34 @@ def eeg_power(eeg, sampling_rate=None, frequency_band=["gamma", "beta", "alpha",
                 frequency_band[i] = (1, 4)
             else:
                 raise ValueError(f"Unknown frequency band: '{f_name}'")
-        if isinstance(f, tuple):
-            bands[i] = "Freq_" + str(f[0]) + "_" + str(f[1])
+        elif isinstance(f, tuple):
+            bands[i] = f"Hz_{f[0]}_{f[1]}"
         else:
             raise ValueError("'frequency_band' must be a list of tuples (or strings).")
 
     # Sanitize input
-    # If MNE object
-    if isinstance(eeg, (pd.DataFrame, np.ndarray)) is False:
+    if isinstance(eeg, np.ndarray):
+        eeg = pd.DataFrame(eeg.T)  # input should be (channels, times)
+
+    # Probably an mne object
+    if isinstance(eeg, pd.DataFrame) is False:
         sampling_rate = eeg.info["sfreq"]
         eeg = mne_to_df(eeg)
-        eeg.values.dim()
+        eeg = eeg.drop(columns=["Time"])
 
-    pass
+    data = []
+    for channel in eeg.columns:
+        rez = signal_power(
+            eeg[channel].values,
+            sampling_rate=sampling_rate,
+            frequency_band=frequency_band,
+            **kwargs,
+        )
+        data.append(rez)
+
+    data = pd.concat(data, axis=0)
+    data.columns = bands
+    data = data.insert(0, "Channel", eeg.columns)
+    data = data.reset_index(drop=True)
+
+    return data
