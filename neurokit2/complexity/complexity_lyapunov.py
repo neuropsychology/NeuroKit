@@ -21,11 +21,11 @@ def complexity_lyapunov(
     min_neighbors="default",
     **kwargs,
 ):
-    """(Largest) Lyapunov Exponent (L1)
+    """(Largest) Lyapunov Exponent (LLE)
 
     Lyapunov exponents (LE) describe the rate of exponential separation (convergence or divergence)
     of nearby trajectories of a dynamical system. A system can have multiple LEs, equal to the
-    number of the dimensionality of the phase space, and the largest LE value, `L1` is often used to
+    number of the dimensionality of the phase space, and the largest LE value, `LLE` is often used to
     determine the overall predictability of the dynamical system.
 
     Different algorithms:
@@ -72,7 +72,7 @@ def complexity_lyapunov(
 
     Returns
     --------
-    l1 : float
+    lle : float
         An estimate of the largest Lyapunov exponent (LLE) if method is 'rosenstein1993', and
         an array of LEs if 'eckmann1996'.
     info : dict
@@ -84,8 +84,8 @@ def complexity_lyapunov(
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=3, sampling_rate=100, frequency=[5, 8], noise=0.5)
-    >>> l1, info = nk.complexity_lyapunov(signal, delay=1, dimension=2)
-    >>> l1 #doctest: +SKIP
+    >>> lle, info = nk.complexity_lyapunov(signal, delay=1, dimension=2)
+    >>> lle #doctest: +SKIP
 
     Reference
     ----------

@@ -181,7 +181,7 @@ def complexity(
         df["MFDFA_ExpMean"] = info["MFDFA"]["ExpMean"]
         df["MFDFA_DimRange"] = info["MFDFA"]["DimRange"]
         df["MFDFA_DimMean"] = info["MFDFA"]["DimMean"]
-        df["L1"], info["L1"] = complexity_lyapunov(signal, dimension=dimension, delay=delay)
+        df["LLE"], info["LLE"] = complexity_lyapunov(signal, dimension=dimension, delay=delay)
 
     # Prepare output
     df = pd.DataFrame.from_dict(df, orient="index").T  # Convert to dataframe
