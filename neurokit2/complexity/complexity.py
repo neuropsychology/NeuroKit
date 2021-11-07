@@ -146,8 +146,8 @@ def complexity(
 
         # Other
         df["Hurst"], info["Hurst"] = complexity_hurst(signal)
-        df["LPZ"], info["LPZ"] = complexity_lempelziv(signal, dimension=dimension, delay=delay)
-        df["PLPZ"], info["PLPZ"] = complexity_lempelziv(
+        df["LZC"], info["LZC"] = complexity_lempelziv(signal, dimension=dimension, delay=delay)
+        df["PLZC"], info["PLZC"] = complexity_lempelziv(
             signal, dimension=dimension, delay=delay, permutation=True
         )
 
