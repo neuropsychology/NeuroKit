@@ -7,7 +7,15 @@ import pandas as pd
 from .signal_psd import signal_psd
 
 
-def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, show=False, normalize=True, **kwargs):
+def signal_power(
+    signal,
+    frequency_band,
+    sampling_rate=1000,
+    continuous=False,
+    show=False,
+    normalize=True,
+    **kwargs,
+):
     """Compute the power of a signal in a given frequency band.
 
     Parameters
@@ -44,7 +52,8 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     >>> import numpy as np
     >>>
     >>> # Instant power
-    >>> signal = nk.signal_simulate(duration=60, frequency=10) + 3*nk.signal_simulate(duration=60, frequency=20)
+    >>> signal = nk.signal_simulate(duration=60, frequency=[10, 15, 20],
+    ...                             amplitude = [1, 2, 3], noise = 2)
     >>> power_plot = nk.signal_power(signal, frequency_band=[(8, 12), (18, 22)], method="welch", show=True)
     >>> power_plot #doctest: +SKIP
     >>>
@@ -65,7 +74,14 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
     """
 
     if continuous is False:
-        out = _signal_power_instant(signal, frequency_band, sampling_rate=sampling_rate, show=show, normalize=normalize, **kwargs)
+        out = _signal_power_instant(
+            signal,
+            frequency_band,
+            sampling_rate=sampling_rate,
+            show=show,
+            normalize=normalize,
+            **kwargs,
+        )
     else:
         out = _signal_power_continuous(signal, frequency_band, sampling_rate=sampling_rate)
 
@@ -79,42 +95,49 @@ def signal_power(signal, frequency_band, sampling_rate=1000, continuous=False, s
 # =============================================================================
 
 
-def _signal_power_instant(signal, frequency_band, sampling_rate=1000, show=False, normalize=True, order_criteria="KIC", **kwargs):
-    for i in range(len(frequency_band)):  # pylint: disable=C0200
-        min_frequency = frequency_band[i][0]
-        if min_frequency == 0:
-            min_frequency = 0.001  # sanitize lowest frequency
-        # Check if signal length is sufficient to capture
-        # at least 2 cycles of min_frequency
-        window_length = int((2 / min_frequency) * sampling_rate)
-        if window_length <= len(signal) / 2:
-            break
-    psd = signal_psd(signal, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, normalize=normalize, order_criteria=order_criteria, **kwargs)
+def _signal_power_instant(
+    signal,
+    frequency_band,
+    sampling_rate=1000,
+    show=False,
+    normalize=True,
+    order_criteria="KIC",
+    **kwargs,
+):
+    # Get PSD
+    psd = signal_psd(
+        signal,
+        sampling_rate=sampling_rate,
+        show=False,
+        normalize=normalize,
+        order_criteria=order_criteria,
+        **kwargs,
+    )
+
+    # Sanitize frequency band
+    if isinstance(frequency_band[0], (int, float)):
+        frequency_band = [frequency_band]  # put in list to iterate on
+
+    #  Get min-max frequency
+    min_freq = min([band[0] for band in frequency_band])
+    max_freq = max([band[1] for band in frequency_band])
+    psd = psd[(psd["Frequency"] >= min_freq) & (psd["Frequency"] <= max_freq)]
 
     out = {}
-    if isinstance(frequency_band[0], (list, tuple)):
-        for band in frequency_band:
-            out.update(_signal_power_instant_get(psd, band))
-    else:
-        out.update(_signal_power_instant_get(psd, frequency_band))
+    for band in frequency_band:
+        power = _signal_power_instant_compute(psd, band)
+        out[f"Hz_{band[0]}_{band[1]}"] = power
 
     if show:
-        _signal_power_instant_plot(psd, out, frequency_band, ax=None)
+        _signal_power_instant_plot(psd, out, frequency_band)
     return out
 
 
-def _signal_power_instant_get(psd, frequency_band):
-
-    indices = np.logical_and(
-        psd["Frequency"] >= frequency_band[0], psd["Frequency"] < frequency_band[1]
-    ).values  # pylint: disable=no-member
-
-    out = {}
-    out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = np.trapz(
-        y=psd["Power"][indices], x=psd["Frequency"][indices]
-    )
-    out = {key: np.nan if value == 0.0 else value for key, value in out.items()}
-    return out
+def _signal_power_instant_compute(psd, band):
+    """Also used in other instances"""
+    where = (psd["Frequency"] >= band[0]) & (psd["Frequency"] < band[1])
+    power = np.trapz(y=psd["Power"][where], x=psd["Frequency"][where])
+    return 0 if power == np.nan else power
 
 
 def _signal_power_instant_plot(psd, out, frequency_band, ax=None):
@@ -140,10 +163,16 @@ def _signal_power_instant_plot(psd, out, frequency_band, ax=None):
     # Get indexes for different frequency band
     frequency_band_index = []
     for band in frequency_band:
-        indexes = np.logical_and(psd["Frequency"] >= band[0], psd["Frequency"] < band[1])  # pylint: disable=E1111
+        indexes = np.logical_and(
+            psd["Frequency"] >= band[0], psd["Frequency"] < band[1]
+        )  # pylint: disable=E1111
         frequency_band_index.append(np.array(indexes))
 
-    label_list = list(out.keys())
+    labels = list(out.keys())
+    # Reformat labels if of the pattern "Hz_X_Y"
+    if len(labels[0].split("_")) == 3:
+        labels = [i.split("_") for i in labels]
+        labels = [f"{i[1]}-{i[2]} Hz" for i in labels]
 
     # Get cmap
     cmap = matplotlib.cm.get_cmap("Set1")
@@ -168,7 +197,7 @@ def _signal_power_instant_plot(psd, out, frequency_band, ax=None):
 
     ax.fill_between(freq, 0, power, color="lightgrey")
 
-    for band_index, label, i in zip(frequency_band_index, label_list, colors):
+    for band_index, label, i in zip(frequency_band_index, labels, colors):
         ax.fill_between(freq[band_index], 0, power[band_index], label=label, color=i)
         ax.legend(prop={"size": 10}, loc="best")
 
