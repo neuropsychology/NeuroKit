@@ -23,7 +23,7 @@ dimension, entropy, etc.).
 # See make_data.py
 ```
 
-## Benchmark
+### Benchmark
 
 #### Average Duration
 
@@ -78,26 +78,38 @@ df |>
 
 ## Structure
 
-#### Average Duration
+### Correlation
 
 ``` r
 library(tidyverse)
 library(easystats)
 
 df <- read.csv("data_Correlations.csv") 
+data <- select(df,-Noise, -Intensity)
 
-cor <- df |> 
-  select(-Noise, -Intensity) |> 
-  correlation::correlation()
+cor <- correlation::correlation(data)
 
 cor |> 
   summary(redundant=TRUE) |> 
   cor_sort() |> 
   plot(show_text=FALSE) +
+  ggtitle("Correlation Matrix of Complexity Indices") +
   theme(axis.text.x = element_text(angle=45, hjust = 1))
 ```
 
 ![](../../studies/complexity_benchmark/figures/unnamed-chunk-5-1.png)<!-- -->
+
+### Hierarchical CLustering
+
+``` r
+rez <- parameters::cluster_analysis(as.data.frame(t(data)), n=4, method="hclust", hclust_method="ward.D2")
+# plot(rez)
+
+attributes(rez)$model |> 
+  plot(hang = -1)
+```
+
+![](../../studies/complexity_benchmark/figures/unnamed-chunk-6-1.png)<!-- -->
 
 ## References
 
