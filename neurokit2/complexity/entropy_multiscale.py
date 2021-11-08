@@ -4,14 +4,8 @@ import numpy as np
 import pandas as pd
 
 from .entropy_sample import entropy_sample
-from .utils import (
-    _get_coarsegrained,
-    _get_coarsegrained_rolling,
-    _get_scale,
-    _get_tolerance,
-    _phi,
-    _phi_divide,
-)
+from .utils import (_get_coarsegrained, _get_coarsegrained_rolling, _get_scale,
+                    _get_tolerance, _phi, _phi_divide)
 
 
 def entropy_multiscale(
@@ -249,6 +243,15 @@ def _entropy_multiscale_cmse(signal, tau, dimension, tolerance, fuzzy, **kwargs)
         mse_y[i] = entropy_sample(
             y[i, :], delay=1, dimension=dimension, tolerance=tolerance, fuzzy=fuzzy, **kwargs
         )[0]
+
+    if len(np.where((mse_y == np.inf) | (mse_y == -np.inf) | (mse_y == np.nan))[0]) == len(mse_y):
+        # return nan if all are infinity/nan values
+        return np.nan
+    else:
+        # Remove inf, nan and 0
+        mse_y = mse_y[~np.isnan(mse_y)]
+        mse_y = mse_y[mse_y != np.inf]
+        mse_y = mse_y[mse_y != -np.inf]
 
     return np.mean(mse_y)
 
