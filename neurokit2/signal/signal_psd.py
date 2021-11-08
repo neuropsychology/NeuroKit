@@ -157,7 +157,7 @@ def signal_psd(
                 signal,
                 sampling_rate=sampling_rate,
                 nperseg=nperseg,
-                window_type=window_type
+                window_type=window_type,
                 **kwargs
             )
 
