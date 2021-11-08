@@ -513,7 +513,7 @@ def _fractal_mdfa_plot(windows, fluctuations, multifractal, q, tau, hq, Dq):
 
     ax_fluctuation.set_xlabel(r"$\log_{2}$(Window)")
     ax_fluctuation.set_ylabel(r"$\log_{2}$(Fluctuation)")
-    fig.suptitle("Multifractal Detrended Fluctuation Analysis")
+    fig.suptitle("Multifractal Detrended Fluctuation Analysis (MFDFA)")
     ax_fluctuation.legend(loc="lower right")
 
     return None
@@ -555,7 +555,7 @@ def _singularity_spectrum_plot(hq, Dq, ax=None):
     `MFDFA <https://github.com/LRydin/MFDFA/>`_ and ported here by the same.
 
     """
-    ax.set_title("Singularity Spectrum")
+    # ax.set_title("Singularity Spectrum")
     ax.set_ylabel(r"Singularity dimension ($D_q$)")
     ax.set_xlabel(r"Singularity exponent ($h_q$)")
 
