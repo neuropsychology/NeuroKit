@@ -14,13 +14,14 @@ def signal_psd(
     method="welch",
     show=False,
     normalize=True,
-    min_frequency=0,
+    min_frequency="default",
     max_frequency=np.inf,
     window=None,
     window_type="hann",
     order=16,
     order_criteria="KIC",
     order_corrected=True,
+    silent=True,
     **kwargs
 ):
     """Compute the Power Spectral Density (PSD).
@@ -39,8 +40,9 @@ def signal_psd(
     normalize : bool
         Normalization of power by maximum PSD value. Default to True.
         Normalization allows comparison between different PSD methods.
-    min_frequency : float
-        The minimum frequency.
+    min_frequency : str, float
+        The minimum frequency. If "default", min_frequency is chosen based on the sampling rate and length of signal to
+        optimize the frequency resolution.
     max_frequency : float
         The maximum frequency.
     window : int
@@ -57,8 +59,10 @@ def signal_psd(
     order_corrected : bool
         Should the order criteria (AIC or KIC) be corrected? If unsure which method to use to choose
         the order, rely on the default (i.e., the corrected KIC).
-    **kwargs
-        Keyword arguments to be passed to ``scipy.signal.welch()``.
+    silent : bool
+        If False, warnings will be printed. Default to True.
+    **kwargs : optional
+        Keyword arguments to be passed to `scipy.signal.welch()`.
 
     See Also
     --------
@@ -94,22 +98,25 @@ def signal_psd(
     # Sanitize method name
     method = method.lower()
 
+    # Sanitize min_frequency
+    N = len(signal)
+    if min_frequency == "default":
+        min_frequency = (2 * sampling_rate) / (N / 2)  # for high frequency resolution
+
     # MNE
-    if method in ["multitapers", "mne"]:
+    if method in ["multitaper", "multitapers", "mne"]:
         frequency, power = _signal_psd_multitaper(
             signal,
             sampling_rate=sampling_rate,
             min_frequency=min_frequency,
-            max_frequency=max_frequency,
-            normalize=normalize,
+            max_frequency=max_frequency
         )
 
     # FFT (Numpy)
     elif method in ["fft"]:
         frequency, power = _signal_psd_fft(
             signal,
-            sampling_rate=sampling_rate,
-            normalize=normalize,
+            sampling_rate=sampling_rate
         )
 
     # Lombscargle (AtroPy)
@@ -118,15 +125,14 @@ def signal_psd(
             signal,
             sampling_rate=sampling_rate,
             min_frequency=min_frequency,
-            max_frequency=max_frequency,
-            normalize=normalize,
+            max_frequency=max_frequency
         )
 
     # Method that are using a window
     else:
         # Define window length
         if min_frequency == 0:
-            min_frequency = 0.001  # sanitize lowest frequency
+            min_frequency = 0.001  # sanitize min_frequency
 
         if window is not None:
             nperseg = int(window * sampling_rate)
@@ -135,14 +141,15 @@ def signal_psd(
             nperseg = int((2 / min_frequency) * sampling_rate)
 
         # in case duration of recording is not sufficient
-        if nperseg > len(signal) / 2:
-            warn(
-                "The duration of recording is too short to support a"
-                " sufficiently long window for high frequency resolution."
-                " Consider using a longer recording or increasing the `min_frequency`",
-                category=NeuroKitWarning,
-            )
-            nperseg = int(len(signal) / 2)
+        if nperseg > N / 2:
+            if silent is False:
+                warn(
+                    "The duration of recording is too short to support a"
+                    " sufficiently long window for high frequency resolution."
+                    " Consider using a longer recording or increasing the `min_frequency`",
+                    category=NeuroKitWarning,
+                )
+            nperseg = int(N / 2)
 
         # Welch (Scipy)
         if method.lower() in ["welch"]:
@@ -151,7 +158,6 @@ def signal_psd(
                 sampling_rate=sampling_rate,
                 nperseg=nperseg,
                 window_type=window_type,
-                normalize=normalize,
                 **kwargs
             )
 
@@ -164,9 +170,12 @@ def signal_psd(
                 criteria=order_criteria,
                 corrected=order_corrected,
                 side="one-sided",
-                normalize=normalize,
                 nperseg=nperseg,
             )
+
+    # Normalize
+    if normalize is True:
+        power /= np.max(power)
 
     # Store results
     data = pd.DataFrame({"Frequency": frequency, "Power": power})
@@ -191,11 +200,9 @@ def signal_psd(
 # =============================================================================
 
 
-def _signal_psd_fft(signal, sampling_rate=1000, normalize=True):
+def _signal_psd_fft(signal, sampling_rate=1000):
     # Power-spectrum density (PSD)
     power = np.abs(np.fft.rfft(signal)) ** 2
-    if normalize is True:
-        power /= np.max(power)  # psd as a pdf (normalised to one)
     frequency = np.linspace(0, sampling_rate / 2, len(power))
     return frequency, power
 
@@ -206,28 +213,27 @@ def _signal_psd_fft(signal, sampling_rate=1000, normalize=True):
 
 
 def _signal_psd_multitaper(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalize=True
+    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf
 ):
     try:
         import mne
-
-        power, frequency = mne.time_frequency.psd_array_multitaper(
-            signal,
-            sfreq=sampling_rate,
-            fmin=min_frequency,
-            fmax=max_frequency,
-            adaptive=True,
-            normalization="full",
-            verbose=False,
-        )
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: signal_psd(): the 'mne'",
             " module is required for the 'mne' method to run.",
             " Please install it first (`pip install mne`).",
-        )
-    if normalize is True:
-        power /= np.max(power)
+        ) from e
+
+    power, frequency = mne.time_frequency.psd_array_multitaper(
+        signal,
+        sfreq=sampling_rate,
+        fmin=min_frequency,
+        fmax=max_frequency,
+        adaptive=True,
+        normalization="full",
+        verbose=False,
+    )
+
     return frequency, power
 
 
@@ -237,7 +243,7 @@ def _signal_psd_multitaper(
 
 
 def _signal_psd_welch(
-    signal, sampling_rate=1000, nperseg=None, window_type="hann", normalize=True, **kwargs
+    signal, sampling_rate=1000, nperseg=None, window_type="hann", **kwargs
 ):
     if nperseg is not None:
         nfft = int(nperseg * 2)
@@ -256,8 +262,6 @@ def _signal_psd_welch(
         **kwargs
     )
 
-    if normalize is True:
-        power /= np.max(power)
     return frequency, power
 
 
@@ -267,7 +271,7 @@ def _signal_psd_welch(
 
 
 def _signal_psd_lomb(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf, normalize=True
+    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf
 ):
 
     try:
@@ -286,8 +290,6 @@ def _signal_psd_lomb(
             " module is required for the 'lomb' method to run.",
             " Please install it first (`pip install astropy`).",
         )
-    if normalize is True:
-        power /= np.max(power)
 
     return frequency, power
 
@@ -304,7 +306,6 @@ def _signal_psd_burg(
     criteria="KIC",
     corrected=True,
     side="one-sided",
-    normalize=True,
     nperseg=None,
 ):
 
@@ -334,8 +335,6 @@ def _signal_psd_burg(
     #            w = w[1:]  # exclude first point (extra)
 
     frequency = (w * sampling_rate) / (2 * np.pi)
-    if normalize is True:
-        power /= np.max(power)
 
     return frequency, power
 
@@ -343,14 +342,13 @@ def _signal_psd_burg(
 def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True):
 
     # Sanitize order and signal
+    N = len(signal)
     if order <= 0.0:
         raise ValueError("Order must be > 0")
-    if order > len(signal):
+    if order > N:
         raise ValueError("Order must be less than length signal minus 2")
     if not isinstance(signal, np.ndarray):
         signal = np.array(signal)
-
-    N = len(signal)
 
     # Initialisation
     # rho is variance of driving white noise process (prediction error)

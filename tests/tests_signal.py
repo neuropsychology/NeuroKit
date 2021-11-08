@@ -310,10 +310,6 @@ def test_signal_psd(recwarn):
 
     assert list(out.columns) == ["Frequency", "Power"]
 
-    assert len(recwarn) == 1
-    assert recwarn.pop(nk.misc.NeuroKitWarning)
-
-
 def test_signal_distort():
     signal = nk.signal_simulate(duration=10, frequency=0.5, sampling_rate=10)
 

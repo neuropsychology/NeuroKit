@@ -21,7 +21,7 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
         Useful only when extracting one channel. Can also take a list of names for renaming multiple channels,
         Otherwise, defaults to None.
     add_firstsamples : bool
-        Defaults to `False`. Mne's objects store the value of a delay between
+        Defaults to `False`. MNE's objects store the value of a delay between
         the start of the system and the start of the recording
         (see https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp).
         Taking this into account can be useful when extracting channels from the Raw object to detect events indices
@@ -40,8 +40,7 @@ def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
     >>> import neurokit2 as nk
     >>> import mne
     >>>
-    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() +
-    ...                           '/MEG/sample/sample_audvis_raw.fif', preload=True) #doctest: +SKIP
+    >>> raw = nk.mne_data("raw")
     >>>
     >>> raw_channel = nk.mne_channel_extract(raw, what=["EEG 060", "EEG 055"], name=['060', '055']) # doctest: +SKIP
     >>> eeg_channels = nk.mne_channel_extract(raw, "EEG") # doctest: +SKIP

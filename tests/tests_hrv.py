@@ -41,16 +41,10 @@ def test_hrv_frequency():
     hrv2 = nk.hrv_frequency(peaks2, sampling_rate=500)
 
     assert np.allclose(hrv1["HRV_HF"] - hrv2["HRV_HF"], 0, atol=1.5)
-    assert np.isnan(hrv1["HRV_LF"][0])
-    assert np.isnan(hrv2["HRV_LF"][0])
+    assert np.isnan(hrv1["HRV_ULF"][0])
     assert np.isnan(hrv1["HRV_VLF"][0])
-    assert np.isnan(hrv2["HRV_LF"][0])
-
-    # Test warning on too short duration
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"The duration of recording is too short.*"):
-        ecg3 = nk.ecg_simulate(duration=10, sampling_rate=2000, heart_rate=70, random_state=42)
-        _, peaks3 = nk.ecg_process(ecg3, sampling_rate=2000)
-        nk.hrv_frequency(peaks3, sampling_rate=2000, silent=False)
+    assert np.isnan(hrv2["HRV_ULF"][0])
+    assert np.isnan(hrv2["HRV_VLF"][0])
 
 
 def test_hrv():
