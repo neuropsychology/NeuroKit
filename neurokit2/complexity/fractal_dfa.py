@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
-from warnings import warn
-
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import NeuroKitWarning, expspace
+from ..misc import expspace
 
 
 def fractal_dfa(
