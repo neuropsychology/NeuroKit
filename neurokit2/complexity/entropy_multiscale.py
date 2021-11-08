@@ -195,8 +195,7 @@ def _entropy_multiscale(
 
     # Remove inf, nan and 0
     mse = mse_vals.copy()[~np.isnan(mse_vals)]
-    mse = mse[mse != np.inf]
-    mse = mse[mse != -np.inf]
+    mse = mse[(mse != np.inf) & (mse != -np.inf)]
 
     # The MSE index is quantified as the area under the curve (AUC),
     # which is like the sum normalized by the number of values. It's similar to the mean.
@@ -249,9 +248,7 @@ def _entropy_multiscale_cmse(signal, tau, dimension, tolerance, fuzzy, **kwargs)
         return np.nan
     else:
         # Remove inf, nan and 0
-        mse_y = mse_y[~np.isnan(mse_y)]
-        mse_y = mse_y[mse_y != np.inf]
-        mse_y = mse_y[mse_y != -np.inf]
+        mse_y = mse_y[(mse_y != np.inf) & (mse_y != -np.inf) & ~np.isnan(mse_y)]
 
         return np.mean(mse_y)
 
