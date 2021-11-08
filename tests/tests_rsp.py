@@ -195,18 +195,9 @@ def test_rsp_rrv():
     # assert np.array(rsp90_rrv["RRV_TINN"]) < np.array(rsp110_rrv["RRV_TINN"])
     # assert np.array(rsp90_rrv["RRV_HTI"]) > np.array(rsp110_rrv["RRV_HTI"])
     assert np.array(rsp90_rrv["RRV_HF"]) < np.array(rsp110_rrv["RRV_HF"])
-    assert np.isnan(rsp90_rrv["RRV_LF"][0])
-    assert np.isnan(rsp110_rrv["RRV_LF"][0])
+    assert np.isnan(rsp90_rrv["RRV_VLF"][0])
+    assert np.isnan(rsp110_rrv["RRV_VLF"][0])
 
-    # Test warning on too short duration
-    with pytest.warns(nk.misc.NeuroKitWarning, match=r"The duration of recording is too short.*"):
-        short_rsp90 = nk.rsp_simulate(duration=10, sampling_rate=1000, respiratory_rate=90,
-                                      random_state=42)
-        short_cleaned90 = nk.rsp_clean(short_rsp90, sampling_rate=1000)
-        _, short_peaks90 = nk.rsp_peaks(short_cleaned90)
-        short_rsp_rate90 = nk.signal_rate(short_peaks90["RSP_Troughs"], desired_length=len(short_rsp90))
-
-        nk.rsp_rrv(short_rsp_rate90, short_peaks90)
 
 #    assert all(elem in ['RRV_SDBB','RRV_RMSSD', 'RRV_SDSD'
 #                        'RRV_VLF', 'RRV_LF', 'RRV_HF', 'RRV_LFHF',

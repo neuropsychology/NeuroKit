@@ -104,6 +104,14 @@ def _signal_power_instant(
     order_criteria="KIC",
     **kwargs,
 ):
+    # Sanitize frequency band
+    if isinstance(frequency_band[0], (int, float)):
+        frequency_band = [frequency_band]  # put in list to iterate on
+
+    #  Get min-max frequency
+    min_freq = min([band[0] for band in frequency_band])
+    max_freq = max([band[1] for band in frequency_band])
+
     # Get PSD
     psd = signal_psd(
         signal,
@@ -114,13 +122,6 @@ def _signal_power_instant(
         **kwargs,
     )
 
-    # Sanitize frequency band
-    if isinstance(frequency_band[0], (int, float)):
-        frequency_band = [frequency_band]  # put in list to iterate on
-
-    #  Get min-max frequency
-    min_freq = min([band[0] for band in frequency_band])
-    max_freq = max([band[1] for band in frequency_band])
     psd = psd[(psd["Frequency"] >= min_freq) & (psd["Frequency"] <= max_freq)]
 
     out = {}
@@ -137,7 +138,7 @@ def _signal_power_instant_compute(psd, band):
     """Also used in other instances"""
     where = (psd["Frequency"] >= band[0]) & (psd["Frequency"] < band[1])
     power = np.trapz(y=psd["Power"][where], x=psd["Frequency"][where])
-    return 0 if power == np.nan else power
+    return np.nan if power == 0.0 else power
 
 
 def _signal_power_instant_plot(psd, out, frequency_band, ax=None):
