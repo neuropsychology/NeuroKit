@@ -253,7 +253,7 @@ def _entropy_multiscale_cmse(signal, tau, dimension, tolerance, fuzzy, **kwargs)
         mse_y = mse_y[mse_y != np.inf]
         mse_y = mse_y[mse_y != -np.inf]
 
-    return np.mean(mse_y)
+        return np.mean(mse_y)
 
 
 def _entropy_multiscale_rcmse(signal, tau, dimension, tolerance, fuzzy, **kwargs):
