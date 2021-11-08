@@ -2,11 +2,19 @@
 import numpy as np
 import pandas as pd
 
-from ..stats import standardize, mad
 from ..signal import signal_filter
+from ..stats import mad, standardize
 
 
-def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, robust=False, standardize_eeg=False):
+def eeg_gfp(
+    eeg,
+    sampling_rate=None,
+    method="l1",
+    normalize=False,
+    smooth=0,
+    robust=False,
+    standardize_eeg=False,
+):
     """Global Field Power (GFP)
 
     Global Field Power (GFP) constitutes a reference-independent measure of response strength.
@@ -21,16 +29,16 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if
         smoothing is requested.
-    normalize : bool
-        Normalize (divide each data point by the maximum value of the data) across time prior to GFP extraction.
     method : str
         Can be either 'l1' or 'l2' to use the L1 or L2 norm.
+    normalize : bool
+        Normalize GFP.
     smooth : float
         Can be either None or a float. If a float, will use this value, multiplied by the
         sampling rate.
     robust : bool
-        If True, the GFP extraction (the data standardization if requested) will be done using the
-        median/MAD instead of the mean/SD.
+        If True, the GFP extraction (and the data standardization if requested) will be done using
+        the median/MAD instead of the mean/SD.
     standardize_eeg : bool
         Standardize (z-score) the data across time prior to GFP extraction using ``nk.standardize()``.
 
@@ -99,11 +107,12 @@ def eeg_gfp(eeg, sampling_rate=None, normalize=False, method="l1", smooth=0, rob
 # Utilities
 # =============================================================================
 def _eeg_gfp_smoothing(gfp, sampling_rate=None, window_size=0.02):
-    """Smooth the Global Field Power Curve
-    """
+    """Smooth the Global Field Power Curve"""
     if sampling_rate is None:
-        raise ValueError("NeuroKit error: eeg_gfp(): You requested to smooth the GFP, for which ",
-                         "we need to know the sampling_rate. Please provide it as an argument.")
+        raise ValueError(
+            "NeuroKit error: eeg_gfp(): You requested to smooth the GFP, for which ",
+            "we need to know the sampling_rate. Please provide it as an argument.",
+        )
     window = int(window_size * sampling_rate)
     if window > 2:
         gfp = signal_filter(gfp, method="savgol", order=2, window_size=window)
@@ -115,12 +124,14 @@ def _eeg_gfp_smoothing(gfp, sampling_rate=None, window_size=0.02):
 # Methods
 # =============================================================================
 
+
 def _eeg_gfp_L1(eeg, robust=False):
     if robust is False:
         gfp = np.sum(np.abs(eeg - np.mean(eeg, axis=0)), axis=0) / len(eeg)
     else:
         gfp = np.sum(np.abs(eeg - np.median(eeg, axis=0)), axis=0) / len(eeg)
     return gfp
+
 
 def _eeg_gfp_L2(eeg, robust=False):
     if robust is False:

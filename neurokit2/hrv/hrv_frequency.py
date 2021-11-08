@@ -124,7 +124,9 @@ def hrv_frequency(
         peaks, sampling_rate = peaks[0], peaks[1]
 
     # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 1000 Hz by default)
-    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs)
+    rri, sampling_rate = _hrv_get_rri(
+        peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs
+    )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
     power = signal_power(
@@ -151,7 +153,7 @@ def hrv_frequency(
                     "The duration of recording is too short to allow"
                     " reliable computation of signal power in frequency band " + frequency + "."
                     " Its power is returned as zero.",
-                    category=NeuroKitWarning
+                    category=NeuroKitWarning,
                 )
 
     # Normalized
@@ -167,7 +169,14 @@ def hrv_frequency(
 
     # Plot
     if show:
-        _hrv_frequency_show(rri, out_bands, sampling_rate=sampling_rate, psd_method=psd_method, order_criteria=order_criteria, normalize=normalize)
+        _hrv_frequency_show(
+            rri,
+            out_bands,
+            sampling_rate=sampling_rate,
+            psd_method=psd_method,
+            order_criteria=order_criteria,
+            normalize=normalize,
+        )
     return out
 
 
@@ -202,6 +211,15 @@ def _hrv_frequency_show(
         if window_length <= len(rri) / 2:
             break
 
-    psd = signal_psd(rri, sampling_rate=sampling_rate, show=False, min_frequency=min_frequency, method=psd_method, max_frequency=0.5, order_criteria=order_criteria, normalize=normalize)
+    psd = signal_psd(
+        rri,
+        sampling_rate=sampling_rate,
+        show=False,
+        min_frequency=min_frequency,
+        method=psd_method,
+        max_frequency=0.5,
+        order_criteria=order_criteria,
+        normalize=normalize,
+    )
 
     _signal_power_instant_plot(psd, out_bands, frequency_band, ax=ax)

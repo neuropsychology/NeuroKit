@@ -3,6 +3,7 @@
 from .eeg_badchannels import eeg_badchannels
 from .eeg_diss import eeg_diss
 from .eeg_gfp import eeg_gfp
+from .eeg_power import eeg_power
 from .eeg_rereference import eeg_rereference
 from .eeg_source import eeg_source
 from .eeg_source_extract import eeg_source_extract
@@ -23,6 +24,7 @@ __all__ = [
     "mne_templateMRI",
     "eeg_source",
     "eeg_source_extract",
+    "eeg_power",
     "eeg_rereference",
     "eeg_gfp",
     "eeg_diss",
