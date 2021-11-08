@@ -17,8 +17,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install https://github.com/DominiqueMakowski/popularipy/zipball/master
-        pip install mne[data]
+        python -m pip install https://github.com/DominiqueMakowski/popularipy/zipball/master
+        python -m pip install mne[data]
         cd $GITHUB_WORKSPACE && pip install .[test]
 
     - name: Run README_examples.py
