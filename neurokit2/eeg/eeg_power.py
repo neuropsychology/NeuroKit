@@ -11,12 +11,18 @@ def eeg_power(
 ):
     """EEG Power in Different Frequency Bands
 
-    From fastest to slowest:
-    - Gamma (30-40 Hz)
-    - Beta (13-30 Hz)
-    - Alpha (8-13 Hz)
-    - Theta (4-8 Hz)
-    - Delta (1-4 Hz)
+    See our `walkthrough <https://neurokit2.readthedocs.io/en/latest/examples/eeg_power.html>`_ for details.
+
+    - **Gamma** (30-80 Hz)
+    - **Beta** (13-30 Hz)
+      - **Beta 1** (13–16 Hz)
+      - **Beta 2** (16–20 Hz)
+      - **Beta 3** (20–30 Hz)
+    - **SMR** (13-15 Hz)
+    - **Alpha** (8-13 Hz)
+    - **Mu** (9-11 Hz)
+    - **Theta** (4-8 Hz)
+    - **Delta** (1-4 Hz)
 
     Parameters
     ----------
@@ -54,11 +60,21 @@ def eeg_power(
         if isinstance(f, str):
             f_name = f.lower()
             if f_name == "gamma":
-                frequency_band[i] = (30, 40)
+                frequency_band[i] = (30, 80)
             elif f_name == "beta":
                 frequency_band[i] = (13, 30)
+            elif f_name == "beta1":
+                frequency_band[i] = (13, 16)
+            elif f_name == "beta2":
+                frequency_band[i] = (16, 20)
+            elif f_name == "beta3":
+                frequency_band[i] = (20, 30)
+            elif f_name == "smr":
+                frequency_band[i] = (13, 15)
             elif f_name == "alpha":
                 frequency_band[i] = (8, 13)
+            elif f_name == "mu":
+                frequency_band[i] = (9, 11)
             elif f_name == "theta":
                 frequency_band[i] = (4, 8)
             elif f_name == "delta":
