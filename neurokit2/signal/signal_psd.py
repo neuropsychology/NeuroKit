@@ -104,7 +104,7 @@ def signal_psd(
         min_frequency = (2 * sampling_rate) / (N / 2)  # for high frequency resolution
 
     # MNE
-    if method in ["multitapers", "mne"]:
+    if method in ["multitaper", "multitapers", "mne"]:
         frequency, power = _signal_psd_multitaper(
             signal,
             sampling_rate=sampling_rate,
@@ -220,22 +220,23 @@ def _signal_psd_multitaper(
 ):
     try:
         import mne
-
-        power, frequency = mne.time_frequency.psd_array_multitaper(
-            signal,
-            sfreq=sampling_rate,
-            fmin=min_frequency,
-            fmax=max_frequency,
-            adaptive=True,
-            normalization="full",
-            verbose=False,
-        )
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: signal_psd(): the 'mne'",
             " module is required for the 'mne' method to run.",
             " Please install it first (`pip install mne`).",
-        )
+        ) from e
+
+    power, frequency = mne.time_frequency.psd_array_multitaper(
+        signal,
+        sfreq=sampling_rate,
+        fmin=min_frequency,
+        fmax=max_frequency,
+        adaptive=True,
+        normalization="full",
+        verbose=False,
+    )
+
     if normalize is True:
         power /= np.max(power)
     return frequency, power
