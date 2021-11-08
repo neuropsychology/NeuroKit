@@ -38,6 +38,7 @@ def eeg_power(
     >>> # Raw objects
     >>> eeg = nk.mne_data("raw")
     >>> by_channel = nk.eeg_power(eeg)
+    >>> by_channel #doctest: +SKIP
 
     References
     ----------
@@ -91,7 +92,7 @@ def eeg_power(
 
     data = pd.concat(data, axis=0)
     data.columns = bands
-    data = data.insert(0, "Channel", eeg.columns)
-    data = data.reset_index(drop=True)
+    data.insert(0, "Channel", eeg.columns)
+    data.reset_index(drop=True, inplace=True)
 
     return data
