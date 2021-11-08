@@ -98,6 +98,11 @@ def signal_psd(
     # Sanitize method name
     method = method.lower()
 
+    # Sanitize min_frequency
+    N = len(signal)
+    if min_frequency == "default":
+        min_frequency = (2 * sampling_rate) / (N / 2)  # for high frequency resolution
+
     # MNE
     if method in ["multitapers", "mne"]:
         frequency, power = _signal_psd_multitaper(
@@ -129,10 +134,7 @@ def signal_psd(
     # Method that are using a window
     else:
         # Define window length
-        N = len(signal)
-        if min_frequency == "default":
-            min_frequency = (2 * sampling_rate) / (N / 2)
-        elif min_frequency == 0:
+        if min_frequency == 0:
             min_frequency = 0.001  # sanitize min_frequency
 
         if window is not None:
