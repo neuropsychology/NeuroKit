@@ -104,8 +104,7 @@ def _eda_sympathetic_posada(eda_signal, frequency_band=[0.045, 0.25], show=True,
         sampling_rate=2,
         nperseg=nperseg,
         window_type="blackman",
-        noverlap=overlap,
-        normalize=False,
+        noverlap=overlap
     )
     psd = pd.DataFrame({"Frequency": frequency, "Power": power})
 
