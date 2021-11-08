@@ -31,6 +31,7 @@ test_requirements = requirements + [
     "coverage",
     "bioread",
     "mne",
+    "mne[data]",
     "pyentrp",
     "antropy",
     "nolds",
