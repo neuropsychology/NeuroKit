@@ -24,7 +24,8 @@ def complexity_lempelziv(
     Computes Lempel-Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
     symbolic sequences for new patterns, increasing the complexity count every time a new sequence
     is detected. Regular signals have a lower number of distinct patterns and thus have low LZC
-    whereas irregular signals are characterized by a high LZC. While often being interpreted as a complexity measure, LZC was originally proposed to reflect randomness (Lempel and Ziv, 1976).
+    whereas irregular signals are characterized by a high LZC. While often being interpreted as a
+    complexity measure, LZC was originally proposed to reflect randomness (Lempel and Ziv, 1976).
 
     Permutation Lempel-Ziv Complexity (PLZC) combines permutation and LZC.
     A finite sequence of symbols is first generated (numbers of types of symbols = `dimension!`)
