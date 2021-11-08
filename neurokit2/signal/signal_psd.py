@@ -49,7 +49,7 @@ def signal_psd(
         calculated to capture at least 2 cycles of min_frequency. If the length of recording does not
         allow the formal, window will be default to half of the length of recording.
     window_type : str
-        Desired window to use. Defaults to 'hann'. See `scipy.signal.get_window()` for list of windows.
+        Desired window to use. Defaults to 'hann'. See ``scipy.signal.get_window()`` for list of windows.
     order : int
         The order of autoregression (only used for autoregressive (AR) methods such as 'burg').
     order_criteria : str

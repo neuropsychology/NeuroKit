@@ -90,8 +90,8 @@ def _signal_to_image(signal, rounding=3, show=False):
     >>> signal = nk.signal_simulate()
     >>> nk.signal_plot(signal)
     >>>
-    >>> signal_to_image(signal, rounding=2, show=True)
-    >>> signal_to_image(signal, rounding=1, show=True)
+    >>> # signal_to_image(signal, rounding=2, show=True)
+    >>> # signal_to_image(signal, rounding=1, show=True)
     """
     x = np.round(signal, rounding)
     y_vals = np.unique(x)
