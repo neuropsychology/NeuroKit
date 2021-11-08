@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from ..signal import signal_power
-from .mne_to_df import mne_to_df
+from .utils import _sanitize_eeg
 
 
 def eeg_power(
@@ -31,11 +31,15 @@ def eeg_power(
     sampling_rate : int
         The sampling frequency of the signal (in Hz, i.e., samples/second). Only necessary if
         smoothing is requested.
+    frequency_band : list
+        A list of frequency bands (or tuples of frequencies).
+    **kwargs
+        Other arguments to be passed to ``nk.signal_power()``.
 
     Returns
     -------
-    gfp : array
-        The global field power of each sample point in the data.
+    pd.DataFrame
+        The power in different frequency bands for each channel.
 
     Examples
     ---------
@@ -45,6 +49,10 @@ def eeg_power(
     >>> eeg = nk.mne_data("raw")
     >>> by_channel = nk.eeg_power(eeg)
     >>> by_channel #doctest: +SKIP
+    >>>
+    >>> average = by_channel.mean(numeric_only=True, axis=0)
+    >>> average["Gamma"]
+    0.005154868723667882
 
     References
     ----------
@@ -55,7 +63,35 @@ def eeg_power(
     """
 
     # Sanitize names and values
-    bands = frequency_band.copy()  # This will used for the names
+    frequency_band, band_names = _eeg_power_sanitize(frequency_band)
+
+    # Sanitize input
+    eeg, sampling_rate, _ = _sanitize_eeg(eeg, sampling_rate=sampling_rate)
+
+    # Iterate through channels
+    data = []
+    for channel in eeg.columns:
+        rez = signal_power(
+            eeg[channel].values,
+            sampling_rate=sampling_rate,
+            frequency_band=frequency_band,
+            **kwargs,
+        )
+        data.append(rez)
+
+    data = pd.concat(data, axis=0)
+    data.columns = band_names
+    data.insert(0, "Channel", eeg.columns)
+    data.reset_index(drop=True, inplace=True)
+
+    return data
+
+
+# =============================================================================
+# Utilities
+# =============================================================================
+def _eeg_power_sanitize(frequency_band=["Gamma", "Beta", "Alpha", "Theta", "Delta"]):
+    band_names = frequency_band.copy()  # This will used for the names
     for i, f in enumerate(frequency_band):
         if isinstance(f, str):
             f_name = f.lower()
@@ -82,33 +118,7 @@ def eeg_power(
             else:
                 raise ValueError(f"Unknown frequency band: '{f_name}'")
         elif isinstance(f, tuple):
-            bands[i] = f"Hz_{f[0]}_{f[1]}"
+            band_names[i] = f"Hz_{f[0]}_{f[1]}"
         else:
             raise ValueError("'frequency_band' must be a list of tuples (or strings).")
-
-    # Sanitize input
-    if isinstance(eeg, np.ndarray):
-        eeg = pd.DataFrame(eeg.T)  # input should be (channels, times)
-
-    # Probably an mne object
-    if isinstance(eeg, pd.DataFrame) is False:
-        sampling_rate = eeg.info["sfreq"]
-        eeg = mne_to_df(eeg)
-        eeg = eeg.drop(columns=["Time"])
-
-    data = []
-    for channel in eeg.columns:
-        rez = signal_power(
-            eeg[channel].values,
-            sampling_rate=sampling_rate,
-            frequency_band=frequency_band,
-            **kwargs,
-        )
-        data.append(rez)
-
-    data = pd.concat(data, axis=0)
-    data.columns = bands
-    data.insert(0, "Channel", eeg.columns)
-    data.reset_index(drop=True, inplace=True)
-
-    return data
+    return frequency_band, band_names
