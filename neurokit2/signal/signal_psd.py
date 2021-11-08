@@ -14,7 +14,7 @@ def signal_psd(
     method="welch",
     show=False,
     normalize=True,
-    min_frequency=0,
+    min_frequency="default",
     max_frequency=np.inf,
     window=None,
     window_type="hann",
@@ -40,8 +40,9 @@ def signal_psd(
     normalize : bool
         Normalization of power by maximum PSD value. Default to True.
         Normalization allows comparison between different PSD methods.
-    min_frequency : float
-        The minimum frequency.
+    min_frequency : str, float
+        The minimum frequency. If "default", min_frequency is chosen based on the sampling rate and length of signal to
+        optimize the frequency resolution.
     max_frequency : float
         The maximum frequency.
     window : int
@@ -128,8 +129,11 @@ def signal_psd(
     # Method that are using a window
     else:
         # Define window length
-        if min_frequency == 0:
-            min_frequency = 0.001  # sanitize lowest frequency
+        N = len(signal)
+        if min_frequency == "default":
+            min_frequency = (2 * sampling_rate) / (N / 2)
+        elif min_frequency == 0:
+            min_frequency = 0.001  # sanitize min_frequency
 
         if window is not None:
             nperseg = int(window * sampling_rate)
@@ -138,7 +142,7 @@ def signal_psd(
             nperseg = int((2 / min_frequency) * sampling_rate)
 
         # in case duration of recording is not sufficient
-        if nperseg > len(signal) / 2:
+        if nperseg > N / 2:
             if silent is False:
                 warn(
                     "The duration of recording is too short to support a"
@@ -146,7 +150,7 @@ def signal_psd(
                     " Consider using a longer recording or increasing the `min_frequency`",
                     category=NeuroKitWarning,
                 )
-            nperseg = int(len(signal) / 2)
+            nperseg = int(N / 2)
 
         # Welch (Scipy)
         if method.lower() in ["welch"]:
@@ -347,14 +351,13 @@ def _signal_psd_burg(
 def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True):
 
     # Sanitize order and signal
+    N = len(signal)
     if order <= 0.0:
         raise ValueError("Order must be > 0")
-    if order > len(signal):
+    if order > N:
         raise ValueError("Order must be less than length signal minus 2")
     if not isinstance(signal, np.ndarray):
         signal = np.array(signal)
-
-    N = len(signal)
 
     # Initialisation
     # rho is variance of driving white noise process (prediction error)
