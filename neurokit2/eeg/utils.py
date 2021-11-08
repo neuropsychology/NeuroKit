@@ -28,13 +28,6 @@ def _sanitize_eeg(eeg, sampling_rate=None, time=None):
 
     # Probably an mne object
     else:
-        try:
-            import mne
-        except ImportError as e:
-            raise ImportError(
-                "NeuroKit error: eeg_badchannels(): the 'mne' module is required for this function"
-                " to run. Please install it first (`pip install mne`).",
-            ) from e
         sampling_rate = eeg.info["sfreq"]
         eeg = mne_to_df(eeg)
         time = eeg["Time"].values
