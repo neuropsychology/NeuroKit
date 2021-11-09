@@ -163,6 +163,9 @@ def fractal_dfa(
         )
         parameters.update(singularity)
 
+
+
+
     # Plot if show is True.
     if show is True:
         if multifractal is True:
@@ -340,7 +343,7 @@ def _sanitize_q(q=2, multifractal=False):
     # TODO: Add log calculator for q ≈ 0
 
     # Enforce DFA in case 'multifractal = False' but 'q' is not 2
-    if q == "default":
+    if isinstance(q, str):
         if multifractal is False:
             q = 2
         else:
