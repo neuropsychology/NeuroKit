@@ -100,7 +100,7 @@ def signal_psd(
 
     # Sanitize min_frequency
     N = len(signal)
-    if min_frequency == "default":
+    if isinstance(min_frequency, str):
         min_frequency = (2 * sampling_rate) / (N / 2)  # for high frequency resolution
 
     # MNE
