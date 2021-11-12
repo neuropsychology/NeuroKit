@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import pandas as pd
 
-from .utils import _get_embedded, _get_r, _phi
+from .utils import _get_embedded, _get_tolerance, _phi
 
 
-def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=False, **kwargs):
+def entropy_approximate(signal, delay=1, dimension=2, tolerance="default", corrected=False, **kwargs):
     """Approximate entropy (ApEn)
 
     Python implementations of the approximate entropy (ApEn) and its corrected version (cApEn).
@@ -30,10 +31,10 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : float
-        Tolerance (similarity threshold). It corresponds to the filtering level - max absolute difference
-        between segments. If 'default', will be set to 0.2 times the standard deviation of the signal
-        (for dimension = 2).
+    tolerance : float
+        Tolerance (similarity threshold, often denoted as 'r'). It corresponds to the filtering level
+        - max absolute difference between segments. If 'default', will be set to 0.2 times the
+        standard deviation of the signal (for dimension = 2).
     corrected : bool
         If true, will compute corrected ApEn (cApEn), see Porta (2007).
     **kwargs
@@ -45,18 +46,20 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
 
     Returns
     ----------
-    float
-        The approximate entropy as float value.
-
+    apen : float
+        The approximate entropy of the single time series.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute approximate entropy.
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy1 = nk.entropy_approximate(signal)
+    >>> entropy1, parameters = nk.entropy_approximate(signal)
     >>> entropy1 #doctest: +SKIP
-    >>> entropy2 = nk.entropy_approximate(signal, corrected=True)
+    >>> entropy2, parameters = nk.entropy_approximate(signal, corrected=True)
     >>> entropy2 #doctest: +SKIP
 
 
@@ -72,21 +75,57 @@ def entropy_approximate(signal, delay=1, dimension=2, r="default", corrected=Fal
       interval time series during regular walking. Entropy, 19(10), 568.
 
     """
-    r = _get_r(signal, r=r)
+
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    # Prepare parameters
+    info = {"Dimension": dimension, "Delay": delay, "Corrected": corrected}
+
+    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
+    out = _entropy_approximate(
+        signal,
+        tolerance=info["Tolerance"],
+        delay=delay,
+        dimension=dimension,
+        corrected=corrected,
+        **kwargs
+    )
+
+    return out, info
+
+
+def _entropy_approximate(signal, tolerance, delay=1, dimension=2, corrected=False, **kwargs):
 
     if corrected is False:
         # Get phi
-        phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=True, **kwargs)
+        phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance,
+                   approximate=True, **kwargs)
 
         apen = np.abs(np.subtract(phi[0], phi[1]))
 
     if corrected is True:
 
         __, count1 = _get_embedded(
-            signal, delay=delay, dimension=dimension, r=r, distance="chebyshev", approximate=True, **kwargs
+            signal,
+            delay=delay,
+            dimension=dimension,
+            tolerance=tolerance,
+            distance="chebyshev",
+            approximate=True,
+            **kwargs
         )
         __, count2 = _get_embedded(
-            signal, delay=delay, dimension=dimension + 1, r=r, distance="chebyshev", approximate=True, **kwargs
+            signal,
+            delay=delay,
+            dimension=dimension + 1,
+            tolerance=tolerance,
+            distance="chebyshev",
+            approximate=True,
+            **kwargs
         )
 
         # Limit the number of vectors to N - (dimension + 1) * delay

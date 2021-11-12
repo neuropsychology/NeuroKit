@@ -2,6 +2,52 @@ News
 =====
 
 
+0.1.5
+-------------------
+
+Breaking Changes
++++++++++++++++++
+
+* Argument `r` changed to `radius` in `fractal_correlation()`
+* Argument `r` changed to `tolerance` in entropy and complexity utility functions
+* Argument `r_method` changed to `tolerance_method` in `complexity_optimize()`
+* `complexity_lempelziv()`, `fractal_higuchi()`, `fractal_katz()`, `fractal_correlation()`, `fractal_dfa()`, `entropy_multiscale()`, `entropy_shannon()`, `entropy_approximate()`, `entropy_fuzzy()`, `entropy_sample()` now return a tuple consisting of the complexity index, and a dictionary comprising of the different parameters specific to the measure. For `fractal_katz()` and `entropy_shannon()`, the parameters dictionary is empty.
+* Restructure `complexity` submodules with optimization files starting with `optim_*`, such as `optim_complexity_delay()`, `optim_complexity_dimension()`, `optim_complexity_k()`, `optim_complexity_optimize()`, and `optim_complexity_tolerance()`.
+* `mutual_information()` moved from `stats` module to `complexity` module.
+
+New Features
++++++++++++++
+
+* Added various complexity indices: `complexity_hjorth()`, `complexity_hurst()`, `complexity_lyapunov()`, `complexity_rqa()`, `complexity_rr()`, `entropy_coalition()`, `entropy_permutation()`, `entropy_range()`, `entropy_spectral()`, `fractal_nld()`, `fractal_psdslope()`, `fractal_sda()`, `fractal_sevcik()`
+* Added `mne_templateMRI()` as a helper to get MNE's template MRI.
+* Added `eeg_source()` as a helper to perform source reconstruction.
+* Added `eeg_source_extract()` to extract the activity from a brain region.
+* Added `parallel_run()` in `misc` as a parallel processing utility function.
+* Added `find_plateau()` in `misc` to find the point of plateau in an array of values.
+* Added `write_csv()` in `data` to facilitate saving dataframes into multiple parts.
+* Added more complexity-related functions, `entropy_cumulative_residual()`, `entropy_differential()`, `entropy_svd()`, `fractal_petrosian()`, and `information_fisher()`.
+* Updates logic to find `kmax` in `fractal_higuchi()`
+* Add RSP_Amplitude_Baseline in event-related analysis
+* Add argument `add_firstsamples` in `mne_channel_extract()` to account for first sample attribute in mne raw objects
+* Allow plotting of `mne.Epochs` in `epochs_plot()`
+* Add `mne_crop()` to crop `mne` Raw objects with additional flexibility to specify first and last elements
+* Plotting function in `eeg_badchannels()` to visualize overlay of individual EEG channels and highlighting of bad ones
+* Add `eog_peaks()` as wrapper for `eog_findpeaks()`
+* Allow `ecg_delineate()` to account for different heart rate
+
+
+Fixes
++++++++++++++
+
+* Ensure detected offset in `emg_activation()` is not beyond signal length
+* Raise ValueError in `_hrv_sanitize_input()` if RRIs are detected instead of peaks
+* Ensure that multifractal DFA indices returned by `fractal_mdfa()` is not Nan when array of slopes contains Nan (due to zero fluctuations)
+* Documentation of respiration from peak/trough terminology to inhale/exhale onsets
+* Change labelling in `rsp_plot()` from "inhalation peaks" and "exhalation troughs" to "peaks (exhalation onsets)" and "troughs (inhalation onsets)" respectively.
+* Change RSP_Amplitude_Mean/Min/Max parameters to be corrected based on value closest to t=0 in event-related analysis, rather than using all pre-zero values.
+* Have `rsp_rrv()` compute breath-to-breath intervals based on trough indices (inhalation onsets) rather than peak indices
+* Compute `rsp_rate()` based on trough indices (rather than peak indices) in 'periods' method
+
 
 0.1.4.1
 -------------------

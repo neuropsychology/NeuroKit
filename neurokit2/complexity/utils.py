@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import matplotlib.pyplot as plt
 import numpy as np
 import sklearn.neighbors
 
@@ -10,9 +11,15 @@ from .complexity_embedding import complexity_embedding
 
 
 def _phi(
-    signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False
+    signal,
+    delay=1,
+    dimension=2,
+    tolerance="default",
+    distance="chebyshev",
+    approximate=True,
+    fuzzy=False,
 ):
-    """Common internal for `entropy_approximate` and `entropy_sample`.
+    """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`.
 
     Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
 
@@ -21,11 +28,11 @@ def _phi(
     phi = np.zeros(2)
 
     embedded1, count1 = _get_embedded(
-        signal, delay, dimension, r, distance=distance, approximate=approximate, fuzzy=fuzzy
+        signal, delay, dimension, tolerance, distance=distance, approximate=approximate, fuzzy=fuzzy
     )
 
     embedded2, count2 = _get_embedded(
-        signal, delay, dimension + 1, r, distance=distance, approximate=True, fuzzy=fuzzy
+        signal, delay, dimension + 1, tolerance, distance=distance, approximate=True, fuzzy=fuzzy
     )
 
     if approximate is True:
@@ -34,6 +41,7 @@ def _phi(
     else:
         phi[0] = np.mean((count1 - 1) / (embedded1.shape[0] - 1))
         phi[1] = np.mean((count2 - 1) / (embedded2.shape[0] - 1))
+
     return phi
 
 
@@ -52,23 +60,29 @@ def _phi_divide(phi):
 
 
 def _get_embedded(
-    signal, delay=1, dimension=2, r="default", distance="chebyshev", approximate=True, fuzzy=False
+    signal,
+    delay=1,
+    dimension=2,
+    tolerance="default",
+    distance="chebyshev",
+    approximate=True,
+    fuzzy=False,
 ):
     """Examples
     ----------
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> delay = nk.complexity_delay(signal)
     >>>
-    >>> embbeded, count = _get_embedded(signal, delay, r=0.2 * np.std(signal, ddof=1), dimension=2,
+    >>> embbeded, count = _get_embedded(signal, delay=8, tolerance=0.2 * np.std(signal, ddof=1), dimension=2,
     ...                                 distance='chebyshev', approximate=False)
     """
     # Sanity checks
-    if distance not in sklearn.neighbors.KDTree.valid_metrics:
+    if distance not in sklearn.neighbors.KDTree.valid_metrics + ["range"]:
         raise ValueError(
             "NeuroKit error: _get_embedded(): The given metric (%s) is not valid."
-            "The valid metric names are: %s" % (distance, sklearn.neighbors.KDTree.valid_metrics)
+            "The valid metric names are: %s"
+            % (distance, sklearn.neighbors.KDTree.valid_metrics + ["range"])
         )
 
     # Get embedded
@@ -78,11 +92,11 @@ def _get_embedded(
 
     if fuzzy is False:
         # Get neighbors count
-        count = _get_count(embedded, r=r, distance=distance)
+        count = _get_count(embedded, tolerance=tolerance, distance=distance)
     else:
         # FuzzyEn: Remove the local baselines of vectors
         embedded -= np.mean(embedded, axis=1, keepdims=True)
-        count = _get_count_fuzzy(embedded, r=r, distance=distance, n=1)
+        count = _get_count_fuzzy(embedded, tolerance=tolerance, distance=distance, n=1)
 
     return embedded, count
 
@@ -90,20 +104,36 @@ def _get_embedded(
 # =============================================================================
 # Get Count
 # =============================================================================
-def _get_count(embedded, r, distance="chebyshev"):
-    kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
-    # Return the count
-    return kdtree.query_radius(embedded, r, count_only=True).astype(np.float64)
+def _get_count(embedded, tolerance, distance="chebyshev"):
+
+    if distance == "range":
+        # internal function for distrange
+        def distrange(x, y):
+            numerator = np.max(np.abs(x - y), axis=1) - np.min(np.abs(x - y), axis=1)
+            denominator = np.max(np.abs(x - y), axis=1) + np.min(np.abs(x - y), axis=1)
+            # so we don't have to do np.seterr(divide='ignore')
+            valid_indices = np.where(denominator != 0)
+            return np.divide(numerator[valid_indices], denominator[denominator != 0])
+
+        count = np.zeros(len(embedded))
+        for i in range(len(embedded)):
+            count[i] = np.sum(distrange(embedded, embedded[i]) < tolerance)
+
+    else:  # chebyshev and other sklearn methods
+        kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
+        count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
+
+    return count
 
 
-def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
+def _get_count_fuzzy(embedded, tolerance, distance="chebyshev", n=1):
     dist = sklearn.neighbors.DistanceMetric.get_metric(distance)
     dist = dist.pairwise(embedded)
 
     if n > 1:
-        sim = np.exp(-(dist ** n) / r)
+        sim = np.exp(-(dist ** n) / tolerance)
     else:
-        sim = np.exp(-dist / r)
+        sim = np.exp(-dist / tolerance)
     # Return the count
     return np.sum(sim, axis=0)
 
@@ -111,21 +141,61 @@ def _get_count_fuzzy(embedded, r, distance="chebyshev", n=1):
 # =============================================================================
 # Get R
 # =============================================================================
-def _get_r(signal, r="default", dimension=2):
+def _get_tolerance(signal, tolerance="default", dimension=2, show=False):
     """Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make
     it take into account the number of dimensions. Additionally, a constant is introduced.
 
-    so that for dimension=2, r = 0.2 * np.std(signal, ddof=1), which is the traditional default value.
+    so that for dimension=2, tolerance = 0.2 * np.std(signal, ddof=1), which is the traditional default value.
 
     See nolds for more info:
     https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
 
     """
-    if isinstance(r, str) or (r is None):
+
+    def _default_tolerance(signal, dimension):
         constant = 0.11604738531196232
         r = constant * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
+        return r
 
-    return r
+    # r = "default"
+    if isinstance(tolerance, str) or (tolerance is None):
+        # Get different r values per channel and find mean
+        if signal.ndim > 1:
+            r_list = []
+            for i, col in enumerate(signal):
+                value = _default_tolerance(signal[col], dimension=dimension)
+                r_list.append(value)
+            optimal_r = np.mean(r_list)
+
+            if show:
+                fig = plt.figure(constrained_layout=False)
+                fig.suptitle("Sanitized tolerance r across channels")
+                colors = plt.cm.plasma(np.linspace(0, 1, len(r_list)))
+                plt.plot(np.arange(1, len(r_list) + 1), np.array(r_list), color="#FF9800")
+                plt.ylabel(r"Tolerance $r$")
+                plt.xlabel("Channels")
+                plt.xticks(np.arange(1, len(r_list) + 1), labels=list(signal.columns))
+                for i, val in enumerate(r_list):
+                    plt.scatter(
+                        i + 1, val, color=colors[i], marker="o", zorder=3, label=signal.columns[i]
+                    )
+                    plt.legend(loc="lower right")
+                plt.axhline(optimal_r, color="black", ls="--")
+                plt.text(
+                    len(r_list) - 1,
+                    optimal_r,
+                    r"Mean $r$ = {:.3g}".format(optimal_r),
+                    ha="center",
+                    va="bottom",
+                )
+
+        else:
+            # one r for single time series
+            optimal_r = _default_tolerance(signal, dimension=dimension)
+    else:
+        optimal_r = tolerance
+
+    return optimal_r
 
 
 # =============================================================================
@@ -202,67 +272,3 @@ def _get_coarsegrained(signal, scale=2, force=False):
     x = np.reshape(signal[0 : j * scale], (j, scale))
     # Return the coarsed time series
     return np.mean(x, axis=1)
-
-
-# def optimizer_loop(signal, func=None, **kwargs):
-#    """To loop through a dictionary of signals and identify an optimal parameter.
-
-#    Parameters
-#    ----------
-#    signal : dict
-#        A dictionary of signals (i.e., time series) in the form of an array of values.
-#    func : function
-#        A function used to optimize the parameters. The function can be `complexity_optimize` or
-#        `_fractal_higuchi_optimal_k`
-#    **kwargs : key-word arguments
-#        For `complexity_optimize`, `maxnum` can be specified to identify the nearest neighbors.
-
-#    Returns
-#    -------
-#    out : dict
-#        A dictionary consists of a dataframe with optimal values of all parameters corresponding to
-#        the respective signals (i.e. one row per signal, one column per parameter) and a dictionary
-#        of one optimal value for each parameter (i.e. one value per parameter for all signals).
-#        The selected optimal value for each parameter corresponds to its median absolute deviation
-#        value.
-
-#    Examples
-#    ---------
-#    >>> import neurokit2 as nk
-#    >>>
-#    >> list_participants = os.listdir()[:5]
-#    >> all_rri = {}
-#    >> sampling_rate=100
-#    >> for participant in list_participants:
-#    >>    path = participant + "/RestingState/" + participant
-#    >>    bio, sampling_rate = nk.read_acqknowledge(path + "_RS" + ".acq",sampling_rate=sampling_rate)
-
-#    >>    # Select columns
-#    >>    bio = bio[['ECG A, X, ECG2-R', 'Digital input']]
-
-#    >>    # New column in df for participant ID
-#    >>    bio['Participant'] = np.full(len(bio), participant)
-#    >>    events = nk.events_find(bio["Digital input"], threshold_keep="below")["onset"]
-#    >>    df = bio.iloc[events[0]:events[0] + 8 * 60 * sampling_rate]
-#    >>    peaks, info = nk.ecg_peaks(df["ECG A, X, ECG2-R"], sampling_rate=sampling_rate)
-#    >>    rpeaks = peaks["ECG_R_Peaks"].values
-#    >>    rpeaks = np.where(rpeaks == 1)[0]
-#    >>    rri = np.diff(rpeaks) / sampling_rate * 1000
-#    >>    all_rri[str(participant)] = rri
-
-#    >> nk.optimizer_loop(all_rri, func=nk.complexity_optimize, maxnum=90)
-#    """
-#    metrics = {}
-#    for _, (name, sig) in enumerate(signal.items()):
-#        metrics[str(name)] = func(sig, **kwargs)
-
-#    df = pd.DataFrame(metrics).T
-#    optimize = {}
-#    for _, metric in enumerate(df.columns):
-#        optimize[str(metric)] = mad(df[metric])
-#    out = {
-#            'All_Values': df,
-#            'Optimal_Value': optimize
-#            }
-
-#    return out

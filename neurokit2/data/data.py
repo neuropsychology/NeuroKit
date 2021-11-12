@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import json
 import os
+
 import pandas as pd
 import sklearn.datasets
-import json
 
 
 def data(dataset="bio_eventrelated_100hz"):
@@ -43,8 +44,7 @@ def data(dataset="bio_eventrelated_100hz"):
         return pd.DataFrame(data.data, columns=data["feature_names"])
 
     if dataset in ["eeg", "eeg.txt"]:
-        df = pd.read_csv(path + "eeg.txt")
-        return df.values[:, 0]
+        return pd.read_csv(path + "eeg.txt").values[:, 0]
 
     # Add extension
     if dataset in ["bio_resting_8min_200hz"]:
@@ -52,10 +52,10 @@ def data(dataset="bio_eventrelated_100hz"):
 
     # Specific case for json file
     if dataset.endswith(".json"):
-        if 'https' not in dataset:
-            data = pd.read_json(path + dataset, orient='index')
+        if "https" not in dataset:
+            data = pd.read_json(path + dataset, orient="index")
         else:
-            data = pd.read_json(dataset, orient='index')
+            data = pd.read_json(dataset, orient="index")
         df = {}
         for participant, row in data.iterrows():
             for _, data_string in row.items():
@@ -68,12 +68,12 @@ def data(dataset="bio_eventrelated_100hz"):
     # General case
     file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable
     if ext == "":
-        if dataset not in ['rsp_200hz']:
+        if dataset not in ["rsp_200hz"]:
             df = pd.read_csv(path + dataset + ".csv")
         else:
             df = pd.read_csv(path + dataset + ".txt")
     else:
-        if 'https' not in dataset:
+        if "https" not in dataset:
             df = pd.read_csv(path + dataset)
         else:
             df = pd.read_csv(dataset)

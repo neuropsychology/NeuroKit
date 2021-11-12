@@ -380,6 +380,9 @@ def _emg_activation_activations(activity, duration_min=0.05):
     onsets = activations["onset"][valid]
     offsets = activations["offset"][valid]
 
+    # make sure offset indices are within length of signal
+    offsets = offsets[offsets < len(activity)]
+
     new_activity = np.array([])
     for x, y in zip(onsets, offsets):
         activated = np.arange(x, y)

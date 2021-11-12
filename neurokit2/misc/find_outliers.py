@@ -1,10 +1,13 @@
 import numpy as np
 import scipy
+
 from ..stats import standardize
 
+
 def find_outliers(data, exclude=0.05, side="both"):
-    """
-    Identify outliers (abnormal values).
+    """Identify outliers (abnormal values)
+
+    Extreme values identification.
 
     Parameters
     ----------
@@ -25,6 +28,8 @@ def find_outliers(data, exclude=0.05, side="both"):
     ----------
     >>> import neurokit2 as nk
     >>> outliers = nk.find_outliers([1, 2, 1, 5, 666, 4, 1 ,3, 5])
+    >>> outliers
+    array([False, False, False, False,  True, False, False, False, False])
     """
 
     z = np.array(standardize(data))
@@ -37,5 +42,4 @@ def find_outliers(data, exclude=0.05, side="both"):
     else:
         raise ValueError("side must be 'both', 'left' or 'right'.")
 
-    outliers = np.array(outliers)
-    return outliers
+    return np.array(outliers)

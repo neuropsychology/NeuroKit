@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-from warnings import warn
-
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
-from ..misc import NeuroKitWarning
+from .optim_complexity_k import _complexity_k_slope, complexity_k
 
 
-def fractal_higuchi(signal, kmax="default", show=False):
+def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
     """
     Computes Higuchi's Fractal Dimension (HFD) by reconstructing k-max number of new
     data sets. For each reconstructed data set, curve length is computed and plotted
@@ -16,33 +14,36 @@ def fractal_higuchi(signal, kmax="default", show=False):
     from fitting a least-squares method.
 
     Values should fall between 1 and 2. For more information about k parameter selection, see
-    the papers referenced below.
+    the ``complexity_k()`` optimization function.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    kmax : str or int
+    k_max : str or int
         Maximum number of interval times (should be greater than or equal to 2).
         If "default", then the optimal kmax is computed based on the point at which HFD values plateau
-        for a range of kmax values.
+        for a range of kmax values (see ``complexity_k()`` optimization function).
     show : bool
-        Visualise the slope of the curve for the selected kmax value.
+        Visualise the slope of the curve for the selected k_max value.
+    **kwargs : optional
+        Currently not used.
 
     Returns
     ----------
-    slope
-        Higuchi's fractal dimension.
+    slope : float
+        Higuchi's fractal dimension of the single time series.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute Higuchi's fractal dimension.
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.data('bio_eventrelated_100hz')['ECG']
+    >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
     >>>
-    >>> hfd = nk.fractal_higuchi(signal, kmax=5, show=True)
-    >>> hfd #doctest: +SKIP
-    >>> hfd = nk.fractal_higuchi(signal, kmax="default", show=True)
+    >>> hfd, info = nk.fractal_higuchi(signal, k_max='default', show=True)
     >>> hfd #doctest: +SKIP
 
     Reference
@@ -54,43 +55,37 @@ def fractal_higuchi(signal, kmax="default", show=False):
     In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE. https://ieeexplore.ieee.org/document/7168285
     """
 
-    # Sanitize maximum value of k
-    k_end = 60
-    k_end = _cleanse_k(signal, kmax, k_end)
-    # Obtain optimal k
-    if kmax == "default":
-        k_max, k_range, slope_values = _fractal_higuchi_optimal_k(signal, k_start=2, k_end=k_end)
-    else:
-        k_max = k_end
-
-    # Make sure kmax >= 2
-    if k_max <= 2:
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError(
-            "NeuroKit error: fractal_higuchi(): The optimal `kmax` detected as less than or equal to 2. "
-            "Please manually input a `kmax` value of more than 2."
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # Compute slope
-    slope, intercept, k_values, average_values = _fractal_higuchi_slope(signal, k_max)
+    # Get k_max
+    if isinstance(k_max, (str, list, np.ndarray, pd.Series)):
+        # optimizing needed
+        k_max, info = complexity_k(signal, k_max=k_max, show=False)
+        idx = np.where(info["Values"] == k_max)[0][0]
+        slope = info["Scores"][idx]
+        intercept = info["Intercepts"][idx]
+        average_values = info["Average_Values"][idx]
+        k_values = np.arange(1, k_max + 1)
+    else:
+        # Compute higushi
+        slope, intercept, info = _complexity_k_slope(k_max, signal)
+        k_values = info["k_values"]
+        average_values = info["average_values"]
 
     # Plot
     if show:
-        # show only slope plot if kmax not automated
-        if kmax != "default":
-            _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept, ax=None)
-        # show both slope plot and kmax optimizing plot
-        else:
-            fig = plt.figure(constrained_layout=False)
-            fig.suptitle('Higuchi Fractal Dimension (HFD)')
-            spec = matplotlib.gridspec.GridSpec(
-                    ncols=1, nrows=2
-                )
-            ax_slope = fig.add_subplot(spec[0, 0])
-            _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept, ax=ax_slope)
-            ax_kmax = fig.add_subplot(spec[1, 0])
-            _fractal_higuchi_optimal_k_plot(k_range, slope_values, k_max, ax=ax_kmax)
+        _fractal_higuchi_plot(k_values, average_values, k_max, slope, intercept)
 
-    return slope
+    return slope, {
+        "k_max": k_max,
+        "Values": k_values,
+        "Scores": average_values,
+        "Intercept": intercept,
+    }
 
 
 # =============================================================================
@@ -98,42 +93,20 @@ def fractal_higuchi(signal, kmax="default", show=False):
 # =============================================================================
 
 
-def _fractal_higuchi_slope(signal, kmax):
-
-    N = signal.size
-    average_values = []
-    # Compute length of the curve, Lm(k)
-    for k in range(1, kmax + 1):
-        sets = []
-        for m in range(1, k + 1):
-            n_max = int(np.floor((N - m) / k))
-            normalization = (N - 1) / (n_max * k)
-            Lm_k = np.sum(np.abs(np.diff(signal[m-1::k], n=1))) * normalization
-            Lm_k = Lm_k / k
-            sets.append(Lm_k)
-        # Compute average value over k sets of Lm(k)
-        L_k = np.sum(sets) / k
-        average_values.append(L_k)
-
-    # Slope of best-fit line through points
-    k_values = np.arange(1, kmax + 1)
-    slope, intercept = - np.polyfit(np.log(k_values), np.log(average_values), 1)
-
-    return slope, intercept, k_values, average_values
-
-
 def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=None):
 
     if ax is None:
         fig, ax = plt.subplots()
-        fig.suptitle('Higuchi Fractal Dimension (HFD)')
+        fig.suptitle("Higuchi Fractal Dimension (HFD)")
     else:
         fig = None
 
-    kmax_val = str(kmax)
-    slope_val = str(np.round(slope, 2))
-    ax.set_title("Least-squares linear best-fit curve for $k_{max}$ = " + kmax_val +
-                 ", slope = " + slope_val)
+    ax.set_title(
+        "Least-squares linear best-fit curve for $k_{max}$ = "
+        + str(kmax)
+        + ", slope = "
+        + str(np.round(slope, 2))
+    )
     ax.set_ylabel(r"$ln$(L(k))")
     ax.set_xlabel(r"$ln$(1/k)")
     colors = plt.cm.plasma(np.linspace(0, 1, len(k_values)))
@@ -141,89 +114,29 @@ def _fractal_higuchi_plot(k_values, average_values, kmax, slope, intercept, ax=N
     # Label all values unless len(k_values) > 10 then label only min and max k_max
     if len(k_values) < 10:
         for i in range(0, len(k_values)):
-            ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
-                   marker='o', zorder=2, label="k = {}".format(i+1))
+            ax.scatter(
+                -np.log(k_values[i]),
+                np.log(average_values[i]),
+                color=colors[i],
+                marker="o",
+                zorder=2,
+                label="k = {}".format(i + 1),
+            )
     else:
         for i in range(0, len(k_values)):
-            ax.scatter(-np.log(k_values[i]), np.log(average_values[i]), color=colors[i],
-                   marker='o', zorder=2, label="_no_legend_")
-        ax.plot([], label="k = {}".format(np.min(k_values)),
-                c=colors[0])
-        ax.plot([], label="k = {}".format(np.max(k_values)),
-                c=colors[-1])
+            ax.scatter(
+                -np.log(k_values[i]),
+                np.log(average_values[i]),
+                color=colors[i],
+                marker="o",
+                zorder=2,
+                label="_no_legend_",
+            )
+        ax.plot([], label="k = {}".format(np.min(k_values)), c=colors[0])
+        ax.plot([], label="k = {}".format(np.max(k_values)), c=colors[-1])
 
     fit_values = [slope * i + -intercept for i in -np.log(k_values)]
     ax.plot(-np.log(k_values), fit_values, color="#FF9800", zorder=1)
     ax.legend(loc="lower right")
-
-    return fig
-
-
-# =============================================================================
-# Compute kmax
-# =============================================================================
-def _cleanse_k(signal, kmax, k_end):
-
-    N = len(signal)
-    # upper limit for k value
-    max_k = int(np.floor(N / 2))  # so that normalizing factor is positive
-
-    if isinstance(kmax, int):
-        k_end = kmax
-
-    if max_k < k_end:
-        return max_k
-    else:
-        return k_end
-
-
-def _fractal_higuchi_optimal_k(signal, k_start=2, k_end=60):
-    """
-    Optimize the kmax parameter.
-
-    HFD values are plotted against a range of kmax and the point at which the values plateau is
-    considered the saturation point and subsequently selected as the kmax value.
-    """
-    k_range = np.arange(k_start, k_end + 1)
-    slope_values = []
-    for _, k in enumerate(k_range):
-        slope, _, _, _ = _fractal_higuchi_slope(signal, kmax=k)
-        slope_values.append(slope)
-
-    # Obtain saturation point of slope
-    optimal_k = [i for i, x in enumerate(slope_values >= 0.85 * np.max(slope_values)) if x][0]
-    kmax = k_range[optimal_k]
-    # If no plateau
-    if kmax <= 2:
-        warn(
-            "The optimal kmax value detected is 2 or less. There may be no plateau in this case. "
-            "You can inspect the plot by set `show=True`. HFD is returned for kmax value of 20.",
-            category=NeuroKitWarning
-        )
-        kmax = 20
-
-    return kmax, k_range, slope_values
-
-
-def _fractal_higuchi_optimal_k_plot(k_range, slope_values, optimal_k, ax=None):
-
-    if ax is None:
-        fig, ax = plt.subplots()
-    else:
-        fig = None
-
-    # Plot
-    ax.set_title("Optimization of $k_{max}$ parameter")
-    ax.set_xlabel("$k_{max}$ values")
-    ax.set_ylabel("Higuchi Fractal Dimension (HFD) values")
-
-    ax.plot(k_range, slope_values, color="#2196F3", zorder=1)
-    colors = plt.cm.PuBu(np.linspace(0, 1, len(k_range)))
-
-    for i, j in enumerate(k_range):
-        ax.scatter(k_range[i], slope_values[i], color=colors[i],
-                   marker='o', zorder=2)
-    ax.axvline(x=optimal_k, color="#E91E63", label="Optimal $k_{max}$: " + str(optimal_k))
-    ax.legend(loc="upper right")
 
     return fig

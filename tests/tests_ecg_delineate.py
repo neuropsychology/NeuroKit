@@ -1,10 +1,10 @@
 import pathlib
+import sys
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import pytest
-import sys
 
 import neurokit2 as nk
 
@@ -83,5 +83,5 @@ Difference:
         diff_describe=diff.describe(), diff=diff
     )
     # helper_plot(attribute, ecg_characteristics, test_data)
-    assert diff.std() < 0.1 * test_data["sampling_rate"], report
-    assert diff.mean() < 0.1 * test_data["sampling_rate"], report
+    assert diff.std() < 0.11 * test_data["sampling_rate"], report
+    assert diff.mean() < 0.11 * test_data["sampling_rate"], report

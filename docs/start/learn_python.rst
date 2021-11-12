@@ -14,22 +14,22 @@ This tutorial will provide you with all you need to know to dive into the wonder
 Setup
 ---------------
 
-The first thing you will need is to **install Python** on your computer (we have a `tutorial for that <https://neurokit2.readthedocs.io/en/latest/installation.html>`_). In fact, this includes **two things**, installing Python (the *language*), and an *environment* to be able to use it. For this tutorial, we will assume you have something that looks like `Spyder <https://www.spyder-ide.org/>`_ (called an IDE). But you can use `jupyter notebooks <https://jupyter.org/>`_, or `anything else <https://www.guru99.com/python-ide-code-editor.html>`_, it doesn't really matter.
+The first thing you will need is to **install Python** on your computer (we have a `tutorial for that <https://neurokit2.readthedocs.io/en/latest/installation.html>`_). In fact, this includes **two things**, installing Python (the *language*), and an *environment* to be able to use it. For this tutorial, we will assume you have something that looks like `Spyder <https://www.spyder-ide.org/>`_ (called an IDE). But you can use `jupyter notebooks <https://jupyter.org/>`_, `VS Code <https://code.visualstudio.com/>`_ or `anything else <https://www.guru99.com/python-ide-code-editor.html>`_, it doesn't really matter.
 
 There is one important concept to understand here: the difference between the **CONSOLE** and the **EDITOR**. The editor is like a *cooking table* where you prepare your ingredients to make a dish, whereas the console is like the *oven*, you only open it to put the dish in it and get the result. 
 
-Most of the code that you will write, you will write it in the editor. It's basically a text editor (such as notepad), except that it automatically highlights the code. Importantly, you can directly *execute* a line of code (which is equivalent to copy it and paste it the *console*).
+The process of writing code usually happens in the editor, which is basically a text editor (such as notepad), except that it automatically highlights the code (making it easy to see functions, numbers, etc.). Importantly, you can directly *execute* a line of code (which is equivalent to copy it and paste it the *console*).
 
-For instance, try writing :code:`1+1` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press :code:`F9` (or :code:`CTRL + ENTER`), it will **execute it**.
+For instance, try writing :code:`1+1` somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press :code:`F9` (or :code:`CTRL + ENTER`), it will **execute it** (on Spyder, but the shortcut for running a line might be different in other IDEs).
 
 
 .. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_1.jpg
 
 
-As a result, you should see in the console the order that you gave and, below, its **output** (which is :code:`2`). 
+As a result, you should see in the console the order that you gave and, below, its **output** (which is: :code:`2`). 
 
 
-Now that the distinction between where we write the code and where the output appears is clear, take some time to explore the settings and turn the editor background to **BLACK**. *Why?* Because it's more comfortable for the eyes, but most importantly, because it's cool 😎.
+Now that the distinction between where we write the code and where the output appears is clear, take some time to explore the settings and turn the editor background to **DARK**. *Why?* Because it's more comfortable for the eyes, but most importantly, because it's cool 😎.
 
 
 .. image:: https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_2.png
@@ -46,7 +46,7 @@ Variables
 The most important concept of programming is **variables**, which is a fancy name for something that you already know. Do you remember, from your mathematics classes, the famous *x*, this placeholder for any value? Well, *x* was a variable, i.e., the name refering to some other thing.
 
 .. hint::
-   Despite to what I just said, a variable in programming is not equivalent to a variable in statistics, in which it refers to some specific data (for instance, *age* is variable and contains multiple observations). In programming, a variable is simply the name that we give to some entity, that could be anything.
+   Despite to what I just said, a variable in programming is not equivalent to a variable in statistics, in which it refers to some specific data (for instance, *age* is a variable and contains multiple observations). In programming, a variable is simply the name that we give to some entity, that could be anything.
 
 
 We can *assign* a value to a *variable* using the :code:`=` sign, for instance:

@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
+from warnings import warn
+
 import matplotlib.animation
 import matplotlib.pyplot as plt
 import numpy as np
 
+from ..misc import NeuroKitWarning
+
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False):
-    """Time-delay embedding of a time series (a signal)
+    """Time-delay embedding of a signal
 
     A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide
     a complete description of the system at some point in time. The set of all possible states is called
@@ -55,20 +59,24 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     ---------
     >>> import neurokit2 as nk
     >>>
+    >>> # Basic example
+    >>> signal = [1, 2, 3, 2.5, 2.0, 1.5]
+    >>> embedded = nk.complexity_embedding(signal, delay = 2, dimension = 2, show=True) #doctest: +SKIP
+    >>>
     >>> # Artifical example
     >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
     >>>
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=2, show=True)
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=3, show=True)
-    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=4, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=2, show=True) #doctest: +SKIP
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=3, show=True) #doctest: +SKIP
+    >>> embedded = nk.complexity_embedding(signal, delay=50, dimension=4, show=True) #doctest: +SKIP
     >>>
     >>> # Realistic example
     >>> ecg = nk.ecg_simulate(duration=60*4, sampling_rate=200)
     >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200)[0], sampling_rate=200, desired_length=len(ecg))
     >>>
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=2, show=True)
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=3, show=True)
-    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=4, show=True)
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=2, show=True) #doctest: +SKIP
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=3, show=True) #doctest: +SKIP
+    >>> embedded = nk.complexity_embedding(signal, delay=250, dimension=4, show=True) #doctest: +SKIP
 
     References
     -----------
@@ -80,6 +88,12 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     N = len(signal)
 
     # Sanity checks
+    if isinstance(delay, float):
+        warn("`delay` must be an integer. Running `int(delay)`", category=NeuroKitWarning)
+        delay = int(delay)
+    if isinstance(dimension, float):
+        warn("`dimension` must be an integer. Running `int(dimension)`", category=NeuroKitWarning)
+        dimension = int(dimension)
     if dimension * delay > N:
         raise ValueError(
             "NeuroKit error: complexity_embedding(): dimension * delay should be lower than",
@@ -130,11 +144,15 @@ def _embedding_plot_2D(embedded):
 
 
 def _embedding_plot_3D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False)
+    return _plot_3D_colored(
+        x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False
+    )
 
 
 def _embedding_plot_4D(embedded):
-    return _plot_3D_colored(x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False)
+    return _plot_3D_colored(
+        x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False
+    )
 
 
 # =============================================================================
@@ -155,7 +173,7 @@ def _plot_3D_colored(x, y, z, color=None, rotate=False):
 
     # Plot
     fig = plt.figure()
-    ax = fig.gca(projection="3d")
+    ax = plt.axes(projection="3d")
 
     for i in range(len(x) - 1):
         seg = segments[i]

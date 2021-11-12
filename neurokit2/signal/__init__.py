@@ -12,6 +12,7 @@ from .signal_flatline import signal_flatline
 from .signal_formatpeaks import signal_formatpeaks
 from .signal_interpolate import signal_interpolate
 from .signal_merge import signal_merge
+from .signal_noise import signal_noise
 from .signal_period import signal_period
 from .signal_phase import signal_phase
 from .signal_plot import signal_plot
@@ -43,6 +44,7 @@ __all__ = [
     "signal_formatpeaks",
     "signal_rate",
     "signal_merge",
+    "signal_noise",
     "signal_period",
     "signal_plot",
     "signal_phase",
@@ -54,5 +56,5 @@ __all__ = [
     "signal_recompose",
     "signal_timefrequency",
     "signal_sanitize",
-    "signal_flatline"
+    "signal_flatline",
 ]

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import numpy as np
 import pandas as pd
 
 
-def mne_channel_extract(raw, what, name=None):
+def mne_channel_extract(raw, what, name=None, add_firstsamples=False):
     """Channel array extraction from MNE.
 
     Select one or several channels by name and returns them in a dataframe.
@@ -19,6 +20,15 @@ def mne_channel_extract(raw, what, name=None):
     name : str or list
         Useful only when extracting one channel. Can also take a list of names for renaming multiple channels,
         Otherwise, defaults to None.
+    add_firstsamples : bool
+        Defaults to `False`. MNE's objects store the value of a delay between
+        the start of the system and the start of the recording
+        (see https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.first_samp).
+        Taking this into account can be useful when extracting channels from the Raw object to detect events indices
+        that are passed back to MNE again. When `add_firstsamples` is set to `True`, the offset will be explicitly
+        added at the beginning of the signal and filled with NaNs. If `add_firstsamples` is a float or an integer,
+        the offset will filled with these values instead. If it is set to `"backfill"`, will prepend with the first
+        real value.
 
     Returns
     ----------
@@ -30,12 +40,12 @@ def mne_channel_extract(raw, what, name=None):
     >>> import neurokit2 as nk
     >>> import mne
     >>>
-    >>> raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() +
-    ...                           '/MEG/sample/sample_audvis_raw.fif', preload=True) #doctest: +SKIP
+    >>> raw = nk.mne_data("raw")
     >>>
     >>> raw_channel = nk.mne_channel_extract(raw, what=["EEG 060", "EEG 055"], name=['060', '055']) # doctest: +SKIP
     >>> eeg_channels = nk.mne_channel_extract(raw, "EEG") # doctest: +SKIP
     >>> eog_channels = nk.mne_channel_extract(raw, what='EOG', name='EOG') # doctest: +SKIP
+    >>> eog_channels = nk.mne_channel_extract(raw, what='EOG', add_firstsamples = 0) # doctest: +SKIP
 
     """
     channels_all = raw.copy().info["ch_names"]
@@ -64,4 +74,23 @@ def mne_channel_extract(raw, what, name=None):
         channels.what = what[0]
         if name is not None:
             channels = channels.rename(name)
+
+    # Add first_samp
+    if isinstance(add_firstsamples, bool) and add_firstsamples is True:  # Fill with na
+        add_firstsamples = np.nan
+    if isinstance(add_firstsamples, str):  # Back fill
+        add_firstsamples = channels.iloc[0]
+        if isinstance(channels, pd.DataFrame):
+            add_firstsamples = dict(add_firstsamples)
+
+    if add_firstsamples is not False:
+        if isinstance(channels, pd.Series):
+            fill = pd.Series(add_firstsamples, index=range(-raw.first_samp, 0))
+            channels = pd.concat([fill, channels], axis=0)
+        elif isinstance(channels, pd.DataFrame):
+            fill = pd.DataFrame(
+                add_firstsamples, index=range(-raw.first_samp, 0), columns=channels.columns
+            )
+            channels = pd.concat([fill, channels], axis=0)
+
     return channels

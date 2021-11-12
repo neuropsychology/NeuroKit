@@ -94,7 +94,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         peaks, sampling_rate = peaks[0], peaks[1]
 
     # Compute R-R intervals (also referred to as NN) in milliseconds
-    rri = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
+    rri, _ = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=False)
     diff_rri = np.diff(rri)
 
     out = {}  # Initialize empty container for results
@@ -103,11 +103,11 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["MeanNN"] = np.nanmean(rri)
     out["SDNN"] = np.nanstd(rri, ddof=1)
     for i in [1, 2, 5]:
-        out["SDANN" + str(i)] = _sdann(rri, sampling_rate, window=i)
-        out["SDNNI" + str(i)] = _sdnni(rri, sampling_rate, window=i)
+        out["SDANN" + str(i)] = _sdann(rri, window=i)
+        out["SDNNI" + str(i)] = _sdnni(rri, window=i)
 
     # Difference-based
-    out["RMSSD"] = np.sqrt(np.mean(diff_rri ** 2))
+    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri ** 2))
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
     # Normalized
@@ -127,7 +127,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["pNN20"] = nn20 / len(rri) * 100
 
     # Geometrical domain
-    if "binsize" in kwargs:
+    if "binsize" in kwargs.keys():
         binsize = kwargs["binsize"]
     else:
         binsize = (1 / 128) * 1000
@@ -144,9 +144,11 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("HRV_")
     return out
 
+
 # =============================================================================
 # Utilities
 # =============================================================================
+
 
 def _hrv_time_show(rri, **kwargs):
 
@@ -156,7 +158,8 @@ def _hrv_time_show(rri, **kwargs):
 
     return fig
 
-def _sdann(rri, sampling_rate, window=1):
+
+def _sdann(rri, window=1):
 
     window_size = window * 60 * 1000  # Convert window in min to ms
     n_windows = int(np.round(np.cumsum(rri)[-1] / window_size))
@@ -172,7 +175,8 @@ def _sdann(rri, sampling_rate, window=1):
     sdann = np.nanstd(avg_rri, ddof=1)
     return sdann
 
-def _sdnni(rri, sampling_rate, window=1):
+
+def _sdnni(rri, window=1):
 
     window_size = window * 60 * 1000  # Convert window in min to ms
     n_windows = int(np.round(np.cumsum(rri)[-1] / window_size))
@@ -188,12 +192,16 @@ def _sdnni(rri, sampling_rate, window=1):
     sdnni = np.nanmean(sdnn_)
     return sdnni
 
+
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
     min_error = 2 ** 14
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
-    n = bar_x[np.where(bar_x - np.min(rri) > 0)[0][0]]  # starting search of N
+    idx_where = np.where(bar_x - np.min(rri) > 0)[0]
+    if len(idx_where) == 0:
+        return np.nan
+    n = bar_x[idx_where[0]]  # starting search of N
     m = X + binsize  # starting search value of M
     N = 0
     M = 0
@@ -202,15 +210,15 @@ def _hrv_TINN(rri, bar_x, bar_y, binsize):
         while m < np.max(rri):
             n_start = np.where(bar_x == n)[0][0]
             n_end = np.where(bar_x == X)[0][0]
-            qn = np.polyval(np.polyfit([n, X], [0, Y], deg=1), bar_x[n_start:n_end + 1])
+            qn = np.polyval(np.polyfit([n, X], [0, Y], deg=1), bar_x[n_start : n_end + 1])
             m_start = np.where(bar_x == X)[0][0]
             m_end = np.where(bar_x == m)[0][0]
-            qm = np.polyval(np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start:m_end + 1])
+            qm = np.polyval(np.polyfit([X, m], [Y, 0], deg=1), bar_x[m_start : m_end + 1])
             q = np.zeros(len(bar_x))
-            q[n_start:n_end + 1] = qn
-            q[m_start:m_end + 1] = qm
+            q[n_start : n_end + 1] = qn
+            q[m_start : m_end + 1] = qm
             # least squares error
-            error = np.sum((bar_y[n_start:m_end + 1] - q[n_start:m_end + 1]) ** 2)
+            error = np.sum((bar_y[n_start : m_end + 1] - q[n_start : m_end + 1]) ** 2)
             if error < min_error:
                 N = n
                 M = m

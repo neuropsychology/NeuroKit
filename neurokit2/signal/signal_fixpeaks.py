@@ -142,7 +142,7 @@ def _signal_fixpeaks_neurokit(
     """Neurokit method."""
 
     peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
-    peaks_clean = _interpolate_big(peaks, sampling_rate, interval_max, relative_interval_max, robust)
+    peaks_clean = _interpolate_big(peaks_clean, sampling_rate, interval_max, relative_interval_max, robust)
 
     return peaks_clean
 
@@ -199,10 +199,11 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
     drrs[0] = np.mean(drrs[1:])
     # Normalize by threshold.
     th1 = _compute_threshold(drrs, alpha, window_width)
-    drrs /= th1
-
     # ignore division by 0 warning
-    np.seterr(divide="ignore", invalid="ignore")
+    old_setting = np.seterr(divide="ignore", invalid="ignore")
+    drrs /= th1
+    # return old setting
+    np.seterr(**old_setting)
 
     # Cast dRRs to subspace s12.
     # Pad drrs with one element.
@@ -530,7 +531,7 @@ def _interpolate_big(peaks, sampling_rate=1000, interval_max=None, relative_inte
         if relative_interval_max is not None:
             interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
             interval = standardize(interval, robust=robust)
-            peaks, continue_loop = _interpolate_missing(peaks, interval, interval_max, sampling_rate)
+            peaks, continue_loop = _interpolate_missing(peaks, interval, relative_interval_max, sampling_rate)
 
     return peaks
 

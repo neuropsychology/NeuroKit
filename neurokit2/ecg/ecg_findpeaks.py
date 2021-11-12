@@ -120,10 +120,10 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     if isinstance(ecg_cleaned, pd.DataFrame):
         try:
             ecg_cleaned = ecg_cleaned["ECG_Clean"]
-        except NameError:
+        except (NameError, KeyError):
             try:
                 ecg_cleaned = ecg_cleaned["ECG_Raw"]
-            except NameError:
+            except (NameError, KeyError):
                 ecg_cleaned = ecg_cleaned["ECG"]
 
     # Sanitize input

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import numpy as np
+import pandas as pd
 
-from .utils import _get_r, _phi, _phi_divide
+from .utils import _get_tolerance, _phi, _phi_divide
 
 
-def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
+def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="default", **kwargs):
     """Fuzzy entropy (FuzzyEn)
 
     Python implementations of the fuzzy entropy (FuzzyEn) of a signal.
@@ -22,16 +24,19 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
         2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
-    r : float
-        Tolerance (i.e., filtering level - max absolute difference between segments). If 'default',
-        will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
+    tolerance : float
+        Tolerance (often denoted as 'r', i.e., filtering level - max absolute difference between segments).
+        If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
     **kwargs
         Other arguments.
 
     Returns
     ----------
-    float
-        The fuzzy entropy as float value.
+    fuzzyen : float
+        The fuzzy entropy of the single time series.
+    info : dict
+        A dictionary containing additional information regarding the parameters used
+        to compute fuzzy entropy.
 
     See Also
     --------
@@ -42,11 +47,32 @@ def entropy_fuzzy(signal, delay=1, dimension=2, r="default", **kwargs):
     >>> import neurokit2 as nk
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy = nk.entropy_fuzzy(signal)
+    >>> entropy, parameters = nk.entropy_fuzzy(signal)
     >>> entropy #doctest: +SKIP
 
     """
-    r = _get_r(signal, r=r, dimension=dimension)
-    phi = _phi(signal, delay=delay, dimension=dimension, r=r, approximate=False, fuzzy=True, **kwargs)
 
-    return _phi_divide(phi)
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
+    # Prepare parameters
+    info = {'Dimension': dimension,
+            'Delay': delay}
+
+    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
+    out = _entropy_fuzzy(signal, tolerance=info["Tolerance"], delay=delay, dimension=dimension,
+                         **kwargs)
+
+    return out, info
+
+
+def _entropy_fuzzy(signal, tolerance, delay=1, dimension=2, **kwargs):
+
+    phi = _phi(signal, delay=delay, dimension=dimension, tolerance=tolerance, approximate=False, fuzzy=True, **kwargs)
+
+    fuzzyen = _phi_divide(phi)
+
+    return fuzzyen
