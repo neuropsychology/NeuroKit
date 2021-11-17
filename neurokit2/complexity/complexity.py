@@ -30,7 +30,7 @@ from .information_fisher import fisher_information
 
 
 def complexity(
-    signal, which=["fast", "medium", "slow"], delay=1, dimension=2, tolerance="default", **kwargs
+    signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="default", **kwargs
 ):
     """Comprehensive Complexity Analysis
 
