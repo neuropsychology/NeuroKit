@@ -64,19 +64,41 @@ The goal for NeuroKit is to provide the most comprehensive, accurate and fastest
 library(tidyverse)
 library(easystats)
 
-df <- read.csv("data_ComputationTime.csv") 
+df <- read.csv("data_ComputationTime.csv") |> 
+  mutate(Method = factor(Method))
+
+
 
 order <- df |> 
   group_by(Method) |> 
   summarize(Duration = median(Duration)) |> 
   arrange(Duration) |> 
   mutate(Method = factor(Method, levels = Method))
+# order2 <- mgcv::gam(Duration ~ s(Length, by = Method), data = df) |> 
+#   modelbased::estimate_means(at = c("Method", "Length = 10000")) |> 
+#   arrange(Mean) |> 
+#   mutate(Method = factor(Method, levels = Method),
+#          Duration = Mean) 
+
+order |> 
+  ggplot(aes(x = Method, y = Duration)) +
+  geom_point() +
+  theme_modern() +
+  scale_y_log10() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 
 df <- mutate(df, Method = fct_relevel(Method, as.character(order$Method)))
+```
 
+
+#### Visualization
+```{r message=FALSE, warning=FALSE}
 dfsummary <- df |>
   group_by(Method, Length) |>
-  summarize(Duration = median(Duration))
+  summarize(CI_low = median(Duration) - sd(Duration),
+            CI_high = median(Duration) + sd(Duration),
+            Duration = median(Duration))
+dfsummary$CI_low[dfsummary$CI_low < 0] <- 0
 
 
 ggplot(dfsummary, aes(x = Method, y = Duration)) + 
@@ -95,11 +117,11 @@ ggplot(dfsummary, aes(x = Method, y = Duration)) +
 ```{r message=FALSE, warning=FALSE}
 df |> 
   ggplot(aes(x = as.factor(Length), y = Duration)) +
-  geom_hline(yintercept = c(0.01), linetype = "dotted") +
+  geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = "dotted") +
   geom_line(data=dfsummary, aes(group = 1)) +
   geom_violin(aes(fill = Length)) +
   facet_wrap(~Method) +
-  scale_y_log10() +
+  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1)) +
   scale_fill_viridis_c(guide = "none") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
