@@ -202,9 +202,17 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
             )["Peaks"]
     elif algorithm == "first local minimum":
         # Find reversed peaks
-        optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)[
-            "Peaks"
-        ]
+        try:
+            optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)[
+                "Peaks"
+            ]
+        except ValueError:
+            warn(
+                "First local minimum detection failed. Try setting " +
+                "`algorithm = 'first local minimum (corrected)'` or using another method.",
+                category=NeuroKitWarning,
+            )
+
     elif algorithm == "first 1/e crossing":
         metric_values = metric_values - 1 / np.exp(1)
         optimal = signal_zerocrossings(metric_values)
