@@ -160,13 +160,13 @@ def epochs_create(
         epochs[label] = epoch
 
     # Sanitize dtype of individual columns
-    for i in epochs:
+    for i in epochs.items():
 
         for colname, column in epochs[i].select_dtypes(include=['object']).iteritems():
 
             # Check whether columns are indices or label/condition
             values = column.unique().tolist()
-            zero_or_one = False if False in [x in [0, 1] for x in values] else True
+            zero_or_one = not (False in [x in [0, 1] for x in values])
 
             if zero_or_one:
                 # Force to int64

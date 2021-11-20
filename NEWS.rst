@@ -2,6 +2,25 @@ News
 =====
 
 
+0.1.6
+-------------------
+
+Breaking Changes
++++++++++++++++++
+
+* Argument `type` changed to `format` in `expspace()`
+
+
+New Features
++++++++++++++
+
+Fixes
++++++++++++++
+
+
+
+
+
 0.1.5
 -------------------
 
