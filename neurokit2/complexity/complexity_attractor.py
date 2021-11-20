@@ -3,44 +3,60 @@ import numpy as np
 import scipy
 
 
-def complexity_attractor(embedded=None, alpha=0.8, color="last_dim", shadows=True, **kwargs):
+def complexity_attractor(embedded="lorenz", alpha="time", color="last_dim", shadows=True, **kwargs):
     """
     Attractor graph
 
 
     Parameters
     ----------
-    embedded : Union[Np,e, np.ndarray]
-        Output of ``complexity_embedding()``. If ``None``, a Lorenz attractor will be returned
+    embedded : Union[str, np.ndarray]
+        Output of ``complexity_embedding()``. If ``"lorenz"``, a Lorenz attractor will be returned
         (useful for illustration purposes).
-    alpha : float
-        Transparency of the lines.
+    alpha : Union[str, float]
+        Transparency of the lines. If ``"time"``, the lines will be transparent as a function of time (slow).
     color : str
         Color of the plot. If ``"last_dim"``, the last dimension (max 4th) of the embedded data
         will be used when the dimensions are higher than 2. Useful to visualize the depth (for
-        3-dimensions embedding), or the fourth dimension.
+        3-dimensions embedding), or the fourth dimension, but it is slow.
     shadows : bool
         If ``True``, 2D projections will be added to the sides of the 3D attractor.
     **kwargs
-        Additional keyword arguments are passed to the Lorenz system simulator, such as ``length``
-        (default = 1000), ``sigma`` (default = 10), ``beta`` (default = 8/3), ``rho`` (default = 28).
+        Additional keyword arguments are passed to the color palette (e.g., ``name="plasma"``), or to the Lorenz system simulator, such as ``duration``
+        (default = 100), ``sampling_rate`` (default = 10), ``sigma`` (default = 10), ``beta`` (default = 8/3), ``rho`` (default = 28).
 
     Examples
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> # Lorenz attractor
-    >>> embedded = nk.complexity_attractor(color = "red", alpha=0.2)
+    >>> # Lorenz attractors
+    >>> nk.complexity_attractor(color = "last_dim", alpha=0.9, sampling_rate=5)
+    >>> # Fast result)
+    >>> nk.complexity_attractor(color = "red", alpha=0.9, sampling_rate=10)
+    >>>
+    >>> # Simulate Signal
+    >>> signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency = [0.1, 5, 7, 10])
+    >>>
+    >>> # 2D Attractor
+    >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 2)
+    >>> # Fast (fixed alpha and color)
+    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1)
+    >>> # Slow
+    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time")
+    >>>
+    >>> # 3D Attractor
+    >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 3)
+    >>> # Fast (fixed alpha and color)
+    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1)
+    >>> # Slow
+    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time")
+
     """
-    if embedded is None:
-        embedded = _attractor_lorenz(**kwargs)
+    if isinstance(embedded, str):
+        if embedded == "lorenz":
+            embedded = _attractor_lorenz(**kwargs)
 
-    # 2D
-    if embedded.shape[1] == 2:
-        if color == "last_dim":
-            color = "black"
-        return plt.plot(embedded[:, 0], embedded[:, 1], color=color, alpha=alpha)
-
+    # Parameters -----------------------------
     # Color
     if color == "last_dim":
         # Get data
@@ -48,55 +64,36 @@ def complexity_attractor(embedded=None, alpha=0.8, color="last_dim", shadows=Tru
         color = embedded[:, last_dim]
 
         # Create color palette
-        cmap = plt.get_cmap("plasma")
+        cmap = plt.get_cmap(**kwargs)
         colors = cmap(plt.Normalize(color.min(), color.max())(color))
     else:
-        colors = [color] * (len(embedded[:, 0]) - 1)
+        colors = [color] * len(embedded[:, 0])
 
-    # Create a set of line segments
-    points = np.array([embedded[:, 0], embedded[:, 1], embedded[:, 2]]).T.reshape(-1, 1, 3)
-    segments = np.concatenate([points[:-1], points[1:]], axis=1)
+    # Alpha
+    if alpha == "time":
+        alpha = np.linspace(0.01, 1, len(embedded[:, 0]))
+    else:
+        alpha = [alpha] * len(embedded[:, 0])
 
-    # Plot
+    # Plot ------------------------------------
     fig = plt.figure()
-    ax = plt.axes(projection="3d")
-
-    for i in range(len(embedded[:, 0]) - 1):
-        seg = segments[i]
-
-        # Plot 2D shadows
-        if shadows is True:
-            ax.plot(
-                seg[:, 0],
-                seg[:, 2],
-                zs=np.max(embedded[:, 1]),
-                zdir="y",
-                color="grey",
-                alpha=0.3,
-                zorder=i,
-            )
-            ax.plot(
-                seg[:, 1],
-                seg[:, 2],
-                zs=np.min(embedded[:, 0]),
-                zdir="x",
-                color="grey",
-                alpha=0.3,
-                zorder=i * 2,
-            )
-            ax.plot(
-                seg[:, 0],
-                seg[:, 1],
-                zs=np.min(embedded[:, 2]),
-                zdir="z",
-                color="grey",
-                alpha=0.3,
-                zorder=i + 3,
-            )
-
-        # Plot 3D
-        (l,) = ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i], alpha=alpha, zorder=i * 4)
-        l.set_solid_capstyle("round")
+    # 2D
+    if embedded.shape[1] == 2:
+        ax = plt.axes(projection=None)
+        # Fast
+        if len(np.unique(colors)) == 1 and len(np.unique(alpha)) == 1:
+            ax.plot(embedded[:, 0], embedded[:, 1], color=colors[0], alpha=alpha[0])
+        # Slow (color and/or alpha)
+        else:
+            ax = _attractor_2D(ax, embedded, colors, alpha)
+    # 3D
+    else:
+        ax = plt.axes(projection="3d")
+        # Fast
+        if len(np.unique(colors)) == 1 and len(np.unique(alpha)) == 1:
+            ax = _attractor_3D_fast(ax, embedded, embedded, 0, colors, alpha, shadows)
+        else:
+            ax = _attractor_3D(ax, embedded, colors, alpha, shadows)
 
     # Rotation animation
     # def rotate(angle):
@@ -110,9 +107,86 @@ def complexity_attractor(embedded=None, alpha=0.8, color="last_dim", shadows=Tru
 
 
 # =============================================================================
-# utilities
+# 2D Attractors
 # =============================================================================
-def _attractor_lorenz(length=1000, sigma=10.0, beta=8.0 / 3, rho=28.0):
+def _attractor_2D(ax, embedded, colors, alpha=0.8):
+    # Create a set of line segments
+    points = np.array([embedded[:, 0], embedded[:, 1]]).T.reshape(-1, 1, 2)
+    segments = np.concatenate([points[:-1], points[1:]], axis=1)
+
+    for i in range(len(segments)):
+        seg = segments[i]
+
+        # Plot 3D
+        ax.plot(
+            segments[i][:, 0],
+            segments[i][:, 1],
+            color=colors[i],
+            alpha=alpha[i],
+            solid_capstyle="round",
+        )
+    return ax
+
+
+# =============================================================================
+# Slow plots
+# =============================================================================
+
+
+def _attractor_3D_fast(ax, embedded, seg, i, colors, alpha, shadows):
+
+    # Plot 2D shadows
+    if shadows is True:
+        ax.plot(
+            seg[:, 0],
+            seg[:, 2],
+            zs=np.max(embedded[:, 1]),
+            zdir="y",
+            color="lightgrey",
+            alpha=alpha[i],
+            zorder=1 * i,
+            solid_capstyle="round",
+        )
+        ax.plot(
+            seg[:, 1],
+            seg[:, 2],
+            zs=np.min(embedded[:, 0]),
+            zdir="x",
+            color="lightgrey",
+            alpha=alpha[i],
+            zorder=2 * i,
+            solid_capstyle="round",
+        )
+        ax.plot(
+            seg[:, 0],
+            seg[:, 1],
+            zs=np.min(embedded[:, 2]),
+            zdir="z",
+            color="lightgrey",
+            alpha=alpha[i],
+            zorder=3 * i,
+            solid_capstyle="round",
+        )
+
+    ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i], alpha=alpha[i], zorder=4 * i)
+    return ax
+
+
+def _attractor_3D(ax, embedded, colors, alpha=0.8, shadows=True):
+    # Create a set of line segments
+    points = np.array([embedded[:, 0], embedded[:, 1], embedded[:, 2]]).T.reshape(-1, 1, 3)
+    segments = np.concatenate([points[:-1], points[1:]], axis=1)
+
+    for i in range(len(segments)):
+        ax = _attractor_3D_fast(ax, embedded, segments[i], i, colors, alpha, shadows)
+
+    return ax
+
+
+# =============================================================================
+# Utilities
+# =============================================================================
+def _attractor_lorenz(duration=10, sampling_rate=10, sigma=10.0, beta=8.0 / 3, rho=28.0):
     def lorentz_deriv(coord, t0, sigma=10.0, beta=8.0 / 3, rho=28.0):
         """Compute the time-derivative of a Lorenz system."""
         return [
@@ -122,5 +196,5 @@ def _attractor_lorenz(length=1000, sigma=10.0, beta=8.0 / 3, rho=28.0):
         ]
 
     x0 = [1, 1, 1]  # starting vector
-    t = np.linspace(0, 100, length)  # one thousand time steps
+    t = np.linspace(0, duration * 10, int(duration * 10 * sampling_rate))  # one thousand time steps
     return scipy.integrate.odeint(lorentz_deriv, x0, t)

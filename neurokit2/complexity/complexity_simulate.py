@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
+from .complexity_attractor import _attractor_lorenz
 
-def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurst_exponent=0.5, **kwargs):
+
+def complexity_simulate(
+    duration=10, sampling_rate=1000, method="ornstein", hurst_exponent=0.5, **kwargs
+):
     """Simulate chaotic time series.
 
     Generates time series using the discrete approximation of the
@@ -18,8 +22,8 @@ def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurs
     duration : int
         The desired length in samples.
     method : str
-        The method. can be 'hurst' for a (fractional) Ornstein–Uhlenbeck process or 'mackeyglass' to
-        use the Mackey-Glass equation.
+        The method. can be 'hurst' for a (fractional) Ornstein–Uhlenbeck process, 'lorenz' for the
+        first dimension of a Lorenz system or 'mackeyglass' to use the Mackey-Glass equation.
     hurst_exponent : float
         Defaults to 0.5.
     **kwargs
@@ -35,6 +39,8 @@ def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurs
     >>> import neurokit2 as nk
     >>>
     >>> signal1 = nk.complexity_simulate(duration=30, sampling_rate=100, method="ornstein")
+    >>> nk.complexity_attractor(nk.complexity_embedding(signal1, delay = 10))
+    >>>
     >>> signal2 = nk.complexity_simulate(duration=30, sampling_rate=100, method="mackeyglass")
     >>> nk.signal_plot([signal1, signal2])
 
@@ -45,12 +51,18 @@ def complexity_simulate(duration=10, sampling_rate=1000, method="ornstein", hurs
 
     """
     method = method.lower()
-    if method in ["fractal", "fractional", "husrt", "ornsteinuhlenbeck", "ornstein"]:
+    if method in ["fractal", "fractional", "hurst", "ornsteinuhlenbeck", "ornstein"]:
         signal = _complexity_simulate_ornstein(
             duration=duration, sampling_rate=sampling_rate, hurst_exponent=hurst_exponent, **kwargs
         )
+    elif method in ["lorenz"]:
+        # x-dimension of Lorenz system
+        signal = _attractor_lorenz(length=sampling_rate * duration, **kwargs)[:, 0]
+
     else:
-        signal = _complexity_simulate_mackeyglass(duration=duration, sampling_rate=sampling_rate, **kwargs)
+        signal = _complexity_simulate_mackeyglass(
+            duration=duration, sampling_rate=sampling_rate, **kwargs
+        )
     return signal
 
 
@@ -109,11 +121,15 @@ def _complexity_simulate_mackeyglass(
     B = a * tau / (2 * n + b * tau)
 
     for i in range(n - 1, grids - 1):
-        x[i + 1] = A * x[i] + B * (x[i - n] / (1 + x[i - n] ** c) + x[i - n + 1] / (1 + x[i - n + 1] ** c))
+        x[i + 1] = A * x[i] + B * (
+            x[i - n] / (1 + x[i - n] ** c) + x[i - n + 1] / (1 + x[i - n + 1] ** c)
+        )
     return x[n * discard :: sampling_rate]
 
 
-def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, sigma=0.1, hurst_exponent=0.7):
+def _complexity_simulate_ornstein(
+    duration=10, sampling_rate=1000, theta=0.3, sigma=0.1, hurst_exponent=0.7
+):
     """This is based on https://github.com/LRydin/MFDFA.
 
     Parameters
@@ -139,7 +155,9 @@ def _complexity_simulate_ornstein(duration=10, sampling_rate=1000, theta=0.3, si
     length = duration * sampling_rate
 
     # The fractional Gaussian noise
-    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(size=length, hurst_exponent=hurst_exponent)
+    dB = (duration ** hurst_exponent) * _complexity_simulate_fractionalnoise(
+        size=length, hurst_exponent=hurst_exponent
+    )
 
     # Initialise the array y
     y = np.zeros([length])

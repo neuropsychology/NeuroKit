@@ -8,7 +8,7 @@ News
 Breaking Changes
 +++++++++++++++++
 
-* Argument `type` changed to `format` in `expspace()`
+* Argument `type` changed to `out` in `expspace()`
 
 
 New Features

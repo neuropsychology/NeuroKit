@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def expspace(start, stop, num=50, format=int, base=1):
+def expspace(start, stop, num=50, out=int, base=1):
     """Exponential range.
 
     Creates a list of integer values (by default) of a given length from start to stop, spread by
@@ -15,7 +15,7 @@ def expspace(start, stop, num=50, format=int, base=1):
         Maximum range values.
     num : int
         Number of samples to generate. Default is 50. Must be non-negative.
-    format : type
+    out : type
         Type of the returned values. Default is int.
     base : float
         If 1, will use ``np.exp()``, if 2 will use ``np.exp2()``.
@@ -40,7 +40,7 @@ def expspace(start, stop, num=50, format=int, base=1):
         )  # pylint: disable=E1111
 
     # Round and convert to int
-    if format == int:
+    if out == int:
         seq = np.round(seq).astype(int)
 
     return seq
