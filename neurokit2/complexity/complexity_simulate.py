@@ -38,11 +38,14 @@ def complexity_simulate(
     ------------
     >>> import neurokit2 as nk
     >>>
-    >>> signal1 = nk.complexity_simulate(duration=30, sampling_rate=100, method="ornstein")
-    >>> nk.complexity_attractor(nk.complexity_embedding(signal1, delay = 10))
+    >>> signal = nk.complexity_simulate(duration=10, sampling_rate=100, method="lorenz")
+    >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="blue")
     >>>
-    >>> signal2 = nk.complexity_simulate(duration=30, sampling_rate=100, method="mackeyglass")
-    >>> nk.signal_plot([signal1, signal2])
+    >>> signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="ornstein")
+    >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="red")
+    >>>
+    >>> signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="mackeyglass")
+    >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="green")
 
     Returns
     -------
@@ -57,7 +60,7 @@ def complexity_simulate(
         )
     elif method in ["lorenz"]:
         # x-dimension of Lorenz system
-        signal = _attractor_lorenz(length=sampling_rate * duration, **kwargs)[:, 0]
+        signal = _attractor_lorenz(sampling_rate=sampling_rate, duration=duration, **kwargs)[:, 0]
 
     else:
         signal = _complexity_simulate_mackeyglass(

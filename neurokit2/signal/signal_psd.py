@@ -22,7 +22,7 @@ def signal_psd(
     order_criteria="KIC",
     order_corrected=True,
     silent=True,
-    **kwargs
+    **kwargs,
 ):
     """Compute the Power Spectral Density (PSD).
 
@@ -109,15 +109,12 @@ def signal_psd(
             signal,
             sampling_rate=sampling_rate,
             min_frequency=min_frequency,
-            max_frequency=max_frequency
+            max_frequency=max_frequency,
         )
 
     # FFT (Numpy)
     elif method in ["fft"]:
-        frequency, power = _signal_psd_fft(
-            signal,
-            sampling_rate=sampling_rate
-        )
+        frequency, power = _signal_psd_fft(signal, sampling_rate=sampling_rate)
 
     # Lombscargle (AtroPy)
     elif method.lower() in ["lombscargle", "lomb"]:
@@ -125,7 +122,7 @@ def signal_psd(
             signal,
             sampling_rate=sampling_rate,
             min_frequency=min_frequency,
-            max_frequency=max_frequency
+            max_frequency=max_frequency,
         )
 
     # Method that are using a window
@@ -158,7 +155,7 @@ def signal_psd(
                 sampling_rate=sampling_rate,
                 nperseg=nperseg,
                 window_type=window_type,
-                **kwargs
+                **kwargs,
             )
 
         # BURG
@@ -212,9 +209,7 @@ def _signal_psd_fft(signal, sampling_rate=1000):
 # =============================================================================
 
 
-def _signal_psd_multitaper(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf
-):
+def _signal_psd_multitaper(signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf):
     try:
         import mne
     except ImportError as e:
@@ -242,9 +237,7 @@ def _signal_psd_multitaper(
 # =============================================================================
 
 
-def _signal_psd_welch(
-    signal, sampling_rate=1000, nperseg=None, window_type="hann", **kwargs
-):
+def _signal_psd_welch(signal, sampling_rate=1000, nperseg=None, window_type="hann", **kwargs):
     if nperseg is not None:
         nfft = int(nperseg * 2)
     else:
@@ -259,7 +252,7 @@ def _signal_psd_welch(
         average="mean",
         nperseg=nperseg,
         window=window_type,
-        **kwargs
+        **kwargs,
     )
 
     return frequency, power
@@ -270,9 +263,7 @@ def _signal_psd_welch(
 # =============================================================================
 
 
-def _signal_psd_lomb(
-    signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf
-):
+def _signal_psd_lomb(signal, sampling_rate=1000, min_frequency=0, max_frequency=np.inf):
 
     try:
         import astropy.timeseries
@@ -284,12 +275,12 @@ def _signal_psd_lomb(
             minimum_frequency=min_frequency, maximum_frequency=max_frequency
         )
 
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: signal_psd(): the 'astropy'",
             " module is required for the 'lomb' method to run.",
             " Please install it first (`pip install astropy`).",
-        )
+        ) from e
 
     return frequency, power
 
@@ -391,7 +382,7 @@ def _signal_arma_burg(signal, order=16, criteria="KIC", corrected=True):
         rho = new_rho
         if rho <= 0:
             raise ValueError(
-                "Found a negative value (expected positive strictly) %s." "Decrease the order" % rho
+                f"Found a negative value (expected positive strictly) {rho}. Decrease the order."
             )
 
         ar = np.resize(ar, ar.size + 1)

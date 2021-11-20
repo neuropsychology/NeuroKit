@@ -90,7 +90,7 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
 
     # If the signal length is even, frequencies +/- 0.5 are equal
     # so the coefficient must be real.
-    if not (n % 2):
+    if not n % 2:
         si[..., -1] = 0
 
     # Regardless of signal length, the DC component must be real
