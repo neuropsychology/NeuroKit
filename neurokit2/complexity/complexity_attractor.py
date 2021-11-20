@@ -14,7 +14,8 @@ def complexity_attractor(embedded="lorenz", alpha="time", color="last_dim", shad
         Output of ``complexity_embedding()``. If ``"lorenz"``, a Lorenz attractor will be returned
         (useful for illustration purposes).
     alpha : Union[str, float]
-        Transparency of the lines. If ``"time"``, the lines will be transparent as a function of time (slow).
+        Transparency of the lines. If ``"time"``, the lines will be transparent as a function of
+        time (slow).
     color : str
         Color of the plot. If ``"last_dim"``, the last dimension (max 4th) of the embedded data
         will be used when the dimensions are higher than 2. Useful to visualize the depth (for
@@ -22,17 +23,18 @@ def complexity_attractor(embedded="lorenz", alpha="time", color="last_dim", shad
     shadows : bool
         If ``True``, 2D projections will be added to the sides of the 3D attractor.
     **kwargs
-        Additional keyword arguments are passed to the color palette (e.g., ``name="plasma"``), or to the Lorenz system simulator, such as ``duration``
-        (default = 100), ``sampling_rate`` (default = 10), ``sigma`` (default = 10), ``beta`` (default = 8/3), ``rho`` (default = 28).
+        Additional keyword arguments are passed to the color palette (e.g., ``name="plasma"``), or
+        to the Lorenz system simulator, such as ``duration`` (default = 100), ``sampling_rate``
+        (default = 10), ``sigma`` (default = 10), ``beta`` (default = 8/3), ``rho`` (default = 28).
 
     Examples
     ---------
     >>> import neurokit2 as nk
     >>>
     >>> # Lorenz attractors
-    >>> nk.complexity_attractor(color = "last_dim", alpha=0.9, sampling_rate=5)
-    >>> # Fast result)
-    >>> nk.complexity_attractor(color = "red", alpha=0.9, sampling_rate=10)
+    >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=5)
+    >>> # Fast result
+    >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=10)
     >>>
     >>> # Simulate Signal
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency = [0.1, 5, 7, 10])
@@ -50,6 +52,17 @@ def complexity_attractor(embedded="lorenz", alpha="time", color="last_dim", shad
     >>> nk.complexity_attractor(embedded, color = "red", alpha = 1)
     >>> # Slow
     >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time")
+    >>>
+    >>> # Animated rotation
+    >>> import matplotlib.animation as animation
+    >>> fig = nk.complexity_attractor(embedded, color = "black", alpha = 0.5, shadows=False)
+    >>> ax = fig.get_axes()[0]
+    >>> def rotate(angle):
+    >>>     ax.view_init(azim=angle)
+    >>> # anim = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 361, 10), interval=10)
+    >>> # import IPython
+    >>> # IPython.display.HTML(anim.to_jshtml())
+
 
     """
     if isinstance(embedded, str):
@@ -64,7 +77,8 @@ def complexity_attractor(embedded="lorenz", alpha="time", color="last_dim", shad
         color = embedded[:, last_dim]
 
         # Create color palette
-        cmap = plt.get_cmap(**kwargs)
+        palette = kwargs["name"] if "name" in kwargs else "plasma"
+        cmap = plt.get_cmap(palette)
         colors = cmap(plt.Normalize(color.min(), color.max())(color))
     else:
         colors = [color] * len(embedded[:, 0])
@@ -95,14 +109,6 @@ def complexity_attractor(embedded="lorenz", alpha="time", color="last_dim", shad
         else:
             ax = _attractor_3D(ax, embedded, colors, alpha, shadows)
 
-    # Rotation animation
-    # def rotate(angle):
-    #     ax.view_init(azim=angle)
-
-    # fig = matplotlib.animation.FuncAnimation(
-    #     fig, rotate, frames=np.arange(0, 361, 1), interval=10, cache_frame_data=False
-    # )
-
     return fig
 
 
@@ -115,9 +121,6 @@ def _attractor_2D(ax, embedded, colors, alpha=0.8):
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
 
     for i in range(len(segments)):
-        seg = segments[i]
-
-        # Plot 3D
         ax.plot(
             segments[i][:, 0],
             segments[i][:, 1],
