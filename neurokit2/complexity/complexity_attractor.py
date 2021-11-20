@@ -147,7 +147,7 @@ def _attractor_3D_fast(ax, embedded, seg, i, colors, alpha, shadows):
             zdir="y",
             color="lightgrey",
             alpha=alpha[i],
-            zorder=1 * i,
+            zorder=i + 1,
             solid_capstyle="round",
         )
         ax.plot(
@@ -157,7 +157,7 @@ def _attractor_3D_fast(ax, embedded, seg, i, colors, alpha, shadows):
             zdir="x",
             color="lightgrey",
             alpha=alpha[i],
-            zorder=2 * i,
+            zorder=i + 1 + len(embedded),
             solid_capstyle="round",
         )
         ax.plot(
@@ -167,11 +167,18 @@ def _attractor_3D_fast(ax, embedded, seg, i, colors, alpha, shadows):
             zdir="z",
             color="lightgrey",
             alpha=alpha[i],
-            zorder=3 * i,
+            zorder=i + 1 + len(embedded) * 2,
             solid_capstyle="round",
         )
 
-    ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i], alpha=alpha[i], zorder=4 * i)
+    ax.plot(
+        seg[:, 0],
+        seg[:, 1],
+        seg[:, 2],
+        color=colors[i],
+        alpha=alpha[i],
+        zorder=i + 1 + len(embedded) * 3,
+    )
     return ax
 
 
