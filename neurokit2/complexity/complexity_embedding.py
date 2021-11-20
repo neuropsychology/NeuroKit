@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
 
-import matplotlib.animation
-import matplotlib.pyplot as plt
 import numpy as np
 
 from ..misc import NeuroKitWarning

@@ -1,4 +1,3 @@
-import matplotlib.animation
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy
@@ -12,15 +11,19 @@ def complexity_attractor(embedded=None, alpha=0.8, color="last_dim", shadows=Tru
     Parameters
     ----------
     embedded : None or ndarray
-        Output of ``complexity_embedding()``. If ``None``, a Lorenz attractor will be returned (useful for illustration purposes).
+        Output of ``complexity_embedding()``. If ``None``, a Lorenz attractor will be returned
+        (useful for illustration purposes).
     alpha : float
         Transparency of the lines.
     color : str
-        Color of the plot. If ``"last_dim"``, the last dimension (max 4th) of the embedded data will be used when the dimensions are higher than 2. Useful to visualize the depth (for 3-dimensions embedding), or the fourth dimension.
+        Color of the plot. If ``"last_dim"``, the last dimension (max 4th) of the embedded data
+        will be used when the dimensions are higher than 2. Useful to visualize the depth (for
+        3-dimensions embedding), or the fourth dimension.
     shadows : bool
         If ``True``, 2D projections will be added to the sides of the 3D attractor.
     **kwargs
-        Additional keyword arguments are passed to the Lorenz system simulator, such as ``length`` (default = 1000), ``sigma`` (default = 10), ``beta`` (default = 8/3), ``rho`` (default = 28).
+        Additional keyword arguments are passed to the Lorenz system simulator, such as ``length``
+        (default = 1000), ``sigma`` (default = 10), ``beta`` (default = 8/3), ``rho`` (default = 28).
 
     Examples
     ---------
