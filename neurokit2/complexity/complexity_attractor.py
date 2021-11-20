@@ -10,7 +10,7 @@ def complexity_attractor(embedded=None, alpha=0.8, color="last_dim", shadows=Tru
 
     Parameters
     ----------
-    embedded : None or ndarray
+    embedded : Union[Np,e, np.ndarray]
         Output of ``complexity_embedding()``. If ``None``, a Lorenz attractor will be returned
         (useful for illustration purposes).
     alpha : float
