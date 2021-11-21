@@ -11,7 +11,7 @@ import scipy.spatial
 import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
-from ..signal import signal_autocor, signal_findpeaks, signal_zerocrossings
+from ..signal import signal_autocor, signal_findpeaks, signal_psd, signal_zerocrossings
 from .complexity_embedding import complexity_embedding
 from .information_mutual import mutual_information
 
@@ -27,25 +27,27 @@ def complexity_delay(
     Several authors suggested different methods to guide the choice of Tau:
 
     - Fraser and Swinney (1986) suggest using the first local minimum of the mutual information
-      between the delayed and non-delayed time series, effectively identifying a value of tau for which
-      they share the least information.
-
+    between the delayed and non-delayed time series, effectively identifying a value of tau for
+    which they share the least information.
     - Theiler (1990) suggested to select Tau where the autocorrelation between the signal and its
-      lagged version at Tau first crosses the value 1/e.
-
+    lagged version at Tau first crosses the value 1/e.
     - Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation.
-
     - Rosenstein (1993) suggests to approximate the point where the autocorrelation function drops
-      to (1 − 1 / e) of its maximum value.
-
+    to (1 − 1 / e) of its maximum value.
     - Rosenstein (1994) suggests to the point close to 40% of the slope of the average displacement
-      from the diagonal (ADFD).
-
+    from the diagonal (ADFD).
     - Kim (1999) suggests estimating Tau using the correlation integral, called the C-C method,
-      which has shown to agree with those obtained using the Mutual Information. This method
-      makes use of a statistic within the reconstructed phase space, rather than analyzing the temporal
-      evolution of the time series. However, computation times are significantly long for this method
-      due to the need to compare every unique pair of pairwise vectors within the embedded signal per delay.
+    which has shown to agree with those obtained using the Mutual Information. This method
+    makes use of a statistic within the reconstructed phase space, rather than analyzing the
+    temporal evolution of the time series. However, computation times are significantly long for
+    this method due to the need to compare every unique pair of pairwise vectors within the
+    embedded signal per delay.
+    - Lyle (2021) describes the 'Symmetric Projection Attractor Reconstruction' (SPAR), where 1/3
+    of the the dominant frequency (i.e., of the length of the average "cycle") can be a suitable
+    value for approximately periodic data, and makes the attractor sensitive to morphological
+    changes. See also `Aston's talk
+    <https://youtu.be/GGrOJtcTcHA?t=730>`_. This
+    method is also the fastest but might not be suitable for aperiodic signals. The 'algorithm' argument (default to 'fft') and will be passed as the 'method' argument of ``signal_psd()``.
 
     Parameters
     ----------
@@ -54,11 +56,12 @@ def complexity_delay(
     delay_max : int
         The maximum time delay (Tau or lag) to test.
     method : str
-        The method that defines what to compute for each tested value of Tau. Can be one of 'fraser1986',
-        'theiler1990', 'casdagli1991', 'rosenstein1993', 'rosenstein1994', or 'kim1999'.
+        The method that defines what to compute for each tested value of Tau. Can be one of
+        'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993', 'rosenstein1994', 'kim1999', or 'dominantfreq'.
     algorithm : str
-        The method used to find the optimal value of Tau given the values computed by the method. If `None` (default),
-        will select the algorithm according to the method. Modify only if you know what you are doing.
+        The method used to find the optimal value of Tau given the values computed by the method.
+        If `None` (default), will select the algorithm according to the method. Modify only if you
+        know what you are doing.
     show : bool
         If true, will plot the metric values for each value of tau.
     **kwargs : optional
@@ -87,33 +90,34 @@ def complexity_delay(
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="fraser1986")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1994")
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1994")
+    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="lyle2021")
     >>>
     >>> # Realistic example
-    >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=150)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=150), sampling_rate=150, desired_length=len(ecg))
+    >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=200)
+    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200), sampling_rate=200, desired_length=len(ecg))
     >>> nk.signal_plot(signal)
     >>>
     >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True)
 
     References
     ------------
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based method
-      for determining the optimal embedding parameters of a signal. In 2003 IEEE International Conference
-      on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
-
+    - Lyle, J. V., Nandi, M., & Aston, P. J. (2021). Symmetric Projection Attractor Reconstruction: Sex Differences in the ECG. Frontiers in cardiovascular medicine, 1034.
+    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based
+    method for determining the optimal embedding parameters of a signal. In 2003 IEEE International
+    Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6,
+    pp. VI-29). IEEE.
     - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time
-      series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
-
+    series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
     - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method for calculating
-      largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena, 65(1-2), 117-134.
-
+    largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena, 65(1-2),
+    117-134.
     - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a
-      geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
+    geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
+    - Kim, H., Eykholt, R., & Salas, J. D. (1999). Nonlinear dynamics, delay times, and embedding
+    windows. Physica D: Nonlinear Phenomena, 127(1-2), 48-60.
 
-    - Kim, H., Eykholt, R., & Salas, J. D. (1999). Nonlinear dynamics, delay times, and embedding windows.
-      Physica D: Nonlinear Phenomena, 127(1-2), 48-60.
     """
     # Initalize vectors
     if isinstance(delay_max, int):
@@ -147,6 +151,8 @@ def complexity_delay(
         metric = "Correlation Integral"
         if algorithm is None:
             algorithm = "first local minimum"
+    elif method in ["aston2020", "lyle2021", "spar"]:
+        return _embedding_delay_spar(signal, algorithm=algorithm, show=show, **kwargs)
     else:
         raise ValueError("NeuroKit error: complexity_delay(): 'method' not recognized.")
 
@@ -203,13 +209,13 @@ def _embedding_delay_select(metric_values, algorithm="first local minimum"):
     elif algorithm == "first local minimum":
         # Find reversed peaks
         try:
-            optimal = signal_findpeaks(-1 * metric_values, relative_height_min=0.1, relative_max=True)[
-                "Peaks"
-            ]
+            optimal = signal_findpeaks(
+                -1 * metric_values, relative_height_min=0.1, relative_max=True
+            )["Peaks"]
         except ValueError:
             warn(
-                "First local minimum detection failed. Try setting " +
-                "`algorithm = 'first local minimum (corrected)'` or using another method.",
+                "First local minimum detection failed. Try setting "
+                + "`algorithm = 'first local minimum (corrected)'` or using another method.",
                 category=NeuroKitWarning,
             )
 
@@ -253,7 +259,7 @@ def _embedding_delay_metric(
         values = values[: len(tau_sequence)]  # upper limit
 
     elif metric == "Autocorrelation (FFT)":
-        values, _ = signal_autocor(signal, demean=False, method='fft')
+        values, _ = signal_autocor(signal, demean=False, method="fft")
         values = values[: len(tau_sequence)]
 
     elif metric == "Correlation Integral":
@@ -299,6 +305,30 @@ def _embedding_delay_metric(
                 values[i] = np.mean(dist)
 
     return values
+
+
+def _embedding_delay_spar(signal, algorithm=None, show=False, **kwargs):
+    if algorithm is None:
+        algorithm = "fft"
+    # Compute power in freqency domain
+    psd = signal_psd(signal, sampling_rate=1000, method=algorithm, show=False, **kwargs)
+    power = psd["Power"].values
+    freqs = 1000 / psd["Frequency"].values  # Convert to samples
+
+    # Get the 1/3 max frequency (in samples) (https://youtu.be/GGrOJtcTcHA?t=730)
+    idx = np.argmax(power)
+    optimal = int(freqs[idx] / 3)
+
+    if show is True:
+        idxs = freqs <= optimal * 6
+        _embedding_delay_plot(
+            signal,
+            metric_values=power[idxs],
+            tau_sequence=freqs[idxs],
+            tau=optimal,
+            metric="Power",
+        )
+    return optimal, {"Algorithm": algorithm, "Method": "SPAR"}
 
 
 # =============================================================================
