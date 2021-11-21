@@ -4,7 +4,7 @@ from warnings import warn
 import numpy as np
 
 from ..misc import NeuroKitWarning
-from .complexity_attractor import complexity_attractor
+from .complexity_attractor import _attractor_equation, complexity_attractor
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
@@ -33,7 +33,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values. Can also be a string, such as ``"lorenz"`` (Lorenz attractor), ``"rossler"`` (Rössler attractor), or ``"clifford"`` (Clifford attractor) to obtain a pre-defined attractor.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
@@ -86,6 +86,10 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
       on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
 
     """
+    # If string
+    if isinstance(signal, str):
+        return _attractor_equation(signal, **kwargs)
+
     N = len(signal)
 
     # Sanity checks
