@@ -1,10 +1,11 @@
+import matplotlib.pyplot as plt
 import numpy as np
 
 from .complexity_embedding import complexity_embedding
 from .optim_complexity_tolerance import complexity_tolerance
 
 
-def complexity_recurrence(signal, delay=1, dimension=10, tolerance="default", show=False):
+def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", show=False):
     """Recurrence matrix (Python implementation)
 
     Fast pure Python implementation of recurrence matrix (tested against pyrqa).
@@ -25,12 +26,27 @@ def complexity_recurrence(signal, delay=1, dimension=10, tolerance="default", sh
     tolerance : float
         Tolerance (similarity threshold, often denoted as 'r'). The radius used for detecting
         neighbours (states considered as recurrent). A rule of thumb is to set 'r' so that the
-         percentage of points classified as recurrences is about 2-5%.
+        percentage of points classified as recurrences is about 2-5%.
+    show : bool
+        Visualise plot of RQA.
 
     Returns
     -------
     np.ndarray
         The recurrence matrix.
+
+    Examples
+    ----------
+    >>> import neurokit2 as nk
+    >>>
+    >>> signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
+    >>>
+    >>> # Default r
+    >>> results, info = nk.complexity_recurrence(signal, show=True) #doctest: +SKIP
+    >>> results #doctest: +SKIP
+    >>>
+    >>> # Larger radius
+    >>> results, info = nk.complexity_rqa(signal, tolerance=1, show=True) #doctest: +SKIP
 
     References
     ----------
@@ -58,7 +74,7 @@ def complexity_recurrence(signal, delay=1, dimension=10, tolerance="default", sh
             x[i, ii, :] = emb[i, :]
             y[i, ii, :] = emb[ii, :]
 
-    # Compute distance between x and y
+    # Compute Euclidean distance between x and y
     d = np.sqrt(np.sum(np.square(np.diff([y, x], axis=0)[0]), axis=-1))
     # Initialize the recurrence matrix filled with 0s
     rc = np.zeros((len(emb), len(emb)))
@@ -67,5 +83,17 @@ def complexity_recurrence(signal, delay=1, dimension=10, tolerance="default", sh
     # Copy lower triangle to upper
     upper_triangle = np.triu_indices(len(rc), 0)
     rc[upper_triangle] = rc.T[upper_triangle]
-    # Flip the matrix
-    return np.flip(rc, axis=0)
+    # Flip the matrix to match traditional RQA representation
+    rc = np.flip(rc, axis=0)
+
+    # Plotting
+    if show is True:
+        try:
+            plt.imshow(rc, cmap="Greys")
+        except MemoryError as e:
+            raise MemoryError(
+                "NeuroKit error: complexity_rqa(): the recurrence plot is too large to display. ",
+                "You can recover the matrix from the parameters and try to display parts of it.",
+            ) from e
+
+    return rc
