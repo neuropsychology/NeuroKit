@@ -33,6 +33,10 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
     show : bool
         Visualise recurrence matrix.
 
+    See Also
+    --------
+    complexity_embedding, complexity_tolerance
+
     Returns
     -------
     np.ndarray
@@ -52,6 +56,10 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
     >>>
     >>> # Larger radius
     >>> rc, d = nk.complexity_recurrence(signal, tolerance=0.5, show=True) #doctest: +SKIP
+    >>>
+    >>> # Optimization of tolerance via recurrence matrix
+    >>> nk.complexity_tolerance(signal, delay=1, dimension=3, method="recurrence", show=True)
+
 
     References
     ----------
@@ -76,15 +84,15 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
     d = np.flip(d, axis=0)
 
     # Initialize the recurrence matrix filled with 0s
-    rc = np.zeros((len(d), len(d)))
+    recmat = np.zeros((len(d), len(d)))
     # If lower than tolerance, then 1
-    rc[d <= tolerance] = 1
+    recmat[d <= tolerance] = 1
 
     # Plotting
     if show is True:
         try:
             fig, axes = plt.subplots(ncols=2)
-            im1 = axes[0].imshow(rc, cmap="Greys")
+            im1 = axes[0].imshow(recmat, cmap="Greys")
             axes[0].set_title("Recurrence Matrix")
             im2 = axes[1].imshow(d)
             axes[1].set_title("Distance")
@@ -96,4 +104,4 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
                 "You can recover the matrix from the parameters and try to display parts of it.",
             ) from e
 
-    return rc, d
+    return recmat, d

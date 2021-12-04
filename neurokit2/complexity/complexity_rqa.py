@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
 from .optim_complexity_tolerance import complexity_tolerance
 
@@ -159,3 +160,12 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
             ) from e
 
     return results, {"RQA": rqa, "RP": rp, "Recurrence_Matrix": rp.recurrence_matrix_reverse}
+
+
+
+# def _complexity_rqa_rr(recmat):
+#     """Compute recurrence rate (imported in complexity_rqa)"""
+#     # Indices of the lower triangular (without the diagonal)
+#     idx = np.tril_indices(len(recmat), k=-1)
+#     # Compute percentage
+#     return recmat[idx].sum() / len(recmat[idx])
