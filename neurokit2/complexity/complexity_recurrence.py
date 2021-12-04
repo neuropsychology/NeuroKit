@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.spatial
 
 from .complexity_embedding import complexity_embedding
 from .optim_complexity_tolerance import complexity_tolerance
@@ -8,7 +9,9 @@ from .optim_complexity_tolerance import complexity_tolerance
 def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", show=False):
     """Recurrence matrix (Python implementation)
 
-    Fast pure Python implementation of recurrence matrix (tested against pyrqa).
+    Fast Python implementation of recurrence matrix (tested against pyRQA). Returns a tuple
+    with the recurrence matrix (made of 0s and 1s) and the distance matrix (the non-binarized
+    version of the former).
 
     Parameters
     ----------
@@ -34,19 +37,21 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
     -------
     np.ndarray
         The recurrence matrix.
+    np.ndarray
+        The distance matrix.
 
     Examples
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
+    >>> signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.01)
     >>>
     >>> # Default r
-    >>> results, info = nk.complexity_recurrence(signal, show=True) #doctest: +SKIP
-    >>> results #doctest: +SKIP
+    >>> rc, _ = nk.complexity_recurrence(signal, show=True) #doctest: +SKIP
+    >>> rc #doctest: +SKIP
     >>>
     >>> # Larger radius
-    >>> results, info = nk.complexity_rqa(signal, tolerance=1, show=True) #doctest: +SKIP
+    >>> rc, d = nk.complexity_recurrence(signal, tolerance=0.5, show=True) #doctest: +SKIP
 
     References
     ----------
@@ -60,40 +65,35 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
         tolerance, _ = complexity_tolerance(
             signal, method="sd", delay=None, dimension=None, show=False
         )
+
     # Time-delay embedding
-    emb = complexity_embedding(signal, delay=1, dimension=10)
+    emb = complexity_embedding(signal, delay=delay, dimension=dimension)
 
-    # Initialize the 3D matrices
-    x = np.zeros((len(emb), len(emb), dimension))
-    y = np.zeros((len(emb), len(emb), dimension))
+    # Compute distance matrix
+    d = scipy.spatial.distance.cdist(emb, emb, metric="euclidean")
 
-    # Iterate over the lower triangle only
-    # TODO: this could probably be done faster via some form of vectorization
-    for i in range(len(emb)):
-        for ii in range(i + 1):
-            x[i, ii, :] = emb[i, :]
-            y[i, ii, :] = emb[ii, :]
+    # Flip the matrix to match traditional RQA representation
+    d = np.flip(d, axis=0)
 
-    # Compute Euclidean distance between x and y
-    d = np.sqrt(np.sum(np.square(np.diff([y, x], axis=0)[0]), axis=-1))
     # Initialize the recurrence matrix filled with 0s
-    rc = np.zeros((len(emb), len(emb)))
+    rc = np.zeros((len(d), len(d)))
     # If lower than tolerance, then 1
     rc[d <= tolerance] = 1
-    # Copy lower triangle to upper
-    upper_triangle = np.triu_indices(len(rc), 0)
-    rc[upper_triangle] = rc.T[upper_triangle]
-    # Flip the matrix to match traditional RQA representation
-    rc = np.flip(rc, axis=0)
 
     # Plotting
     if show is True:
         try:
-            plt.imshow(rc, cmap="Greys")
+            fig, axes = plt.subplots(ncols=2)
+            im1 = axes[0].imshow(rc, cmap="Greys")
+            axes[0].set_title("Recurrence Matrix")
+            im2 = axes[1].imshow(d)
+            axes[1].set_title("Distance")
+            cbar = fig.colorbar(im2, ax=axes[1], fraction=0.046, pad=0.04)
+            cbar.ax.plot([0, 1], [tolerance] * 2, color="r")
         except MemoryError as e:
             raise MemoryError(
                 "NeuroKit error: complexity_rqa(): the recurrence plot is too large to display. ",
                 "You can recover the matrix from the parameters and try to display parts of it.",
             ) from e
 
-    return rc
+    return rc, d
