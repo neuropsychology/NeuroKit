@@ -28,7 +28,7 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
         neighbours (states considered as recurrent). A rule of thumb is to set 'r' so that the
         percentage of points classified as recurrences is about 2-5%.
     show : bool
-        Visualise plot of RQA.
+        Visualise recurrence matrix.
 
     Returns
     -------

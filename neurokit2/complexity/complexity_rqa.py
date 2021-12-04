@@ -59,7 +59,7 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
     linelength : int
         Minimum length of a diagonal and vertical lines. Default to 2.
     show : bool
-        Visualise plot of RQA.
+        Visualise recurrence matrix.
 
     Returns
     ----------
