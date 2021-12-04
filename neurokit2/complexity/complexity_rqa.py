@@ -104,8 +104,10 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
 
     # Get neighbourhood
     if tolerance == "default":
-        r, _ = complexity_tolerance(signal, method="sd", delay=None, dimension=None, show=False)
-    r = pyrqa.neighbourhood.FixedRadius(r)
+        tolerance, _ = complexity_tolerance(
+            signal, method="sd", delay=None, dimension=None, show=False
+        )
+    r = pyrqa.neighbourhood.FixedRadius(tolerance)
 
     # Convert signal to time series
     signal = pyrqa.time_series.TimeSeries(signal, embedding_dimension=dimension, time_delay=delay)
