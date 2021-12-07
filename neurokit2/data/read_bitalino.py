@@ -52,14 +52,33 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
 
         metadata = json.loads(f.readline()[1:])  # read second line
 
-    metadata = metadata[
-        list(metadata.keys())[0]
-    ]  # convert json header to dict (only select first device / MAC address)
-    channels = np.arange(len(metadata["channels"])) + 5  # analog channels start from column 5
+    if len(list(metadata.keys())) == 1:
+        # If only one device
+        metadata = metadata[
+            list(metadata.keys())[0]
+        ]  # convert json header to dict (only select first device / MAC address)
+        channels = np.arange(len(metadata["channels"])) + 5  # analog channels start from column 5
 
-    # Get desired frequency and produce output accordingly
-    data = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
+        data = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
 
+        # Add column names
+        data.columns = metadata["sensor"]
+
+    else:
+        # Read from multiple devices
+        devices = list(metadata.keys())
+        data = pd.DataFrame([])
+        for index, name in enumerate(devices):
+
+            channels = np.arange(len(metadata[name]["channels"])) + 5  + (5 * index) + (2 * index)
+            # analog channels start from column 5 for each device
+
+            df = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
+            df.columns = [i + '_' + metadata[name]['device name'] for i in metadata[name]['sensor']]
+
+            data = pd.concat([data, df], axis=1)
+
+    # Set sampling rate
     if sampling_rate == "max":
         sampling_rate = metadata["sampling rate"]
     else:
@@ -74,7 +93,5 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
             signal = pd.Series(signal)
             signals = pd.concat([signals, signal], axis=1)
         data = signals.copy()
-
-    data.columns = metadata["sensor"]
 
     return data, sampling_rate
