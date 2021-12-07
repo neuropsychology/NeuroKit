@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+import os
 
 import numpy as np
 import pandas as pd
@@ -7,7 +8,7 @@ import pandas as pd
 from ..signal import signal_resample
 
 
-def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"):
+def read_bitalino(filename, sampling_rate="max", resample_method="interpolation", events_annotation=False, events_annotation_directory=None):
     """Read and format a  OpenSignals file (e.g., from BITalino) into a pandas' dataframe.
 
     The function outputs both the dataframe and the sampling rate (retrieved from the
@@ -24,6 +25,10 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
         along with the data.
     resample_method : str
         Method of resampling (see `signal_resample()`).
+    events_annotation : bool
+        Defaults to False. If True, will read signal annotation events.
+    events_annotation_directory : str
+        If None (default), reads signal annotation events from the same location where the acquired file is stored. If not, specify the predefined OpenSignals (r)evolution folder directory of where the 'EventsAnnotation.txt' file is stored.
 
     Returns
     ----------
@@ -31,6 +36,8 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
         The BITalino file as a pandas dataframe.
     sampling rate: int
         The sampling rate at which the data is sampled.
+    events : dictionary
+        Returns dictionary of event annotations for each channel within each device. Only returned if `events_annotation` is True.
 
     See Also
     --------
@@ -61,15 +68,18 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
 
         data = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
 
-        # Add column names
-        data.columns = metadata["sensor"]
+        # Event annotation
+
 
         # Adjust sampling rate
         if sampling_rate == "max":
             sampling_rate = metadata["sampling rate"]
         else:
             # resample
-            data, sampling_rate = _read_bitalino_resample(data, metadata["sampling rate"], sampling_rate, resample_method=resample_method)
+            data, sampling_rate = _read_bitalino_resample(data, original_sampling_rate=metadata["sampling rate"], resampling_rate=sampling_rate, resample_method=resample_method)
+
+        # Add column names
+        data.columns = metadata["sensor"]
 
     else:
         # Read from multiple devices
@@ -81,6 +91,7 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
             # analog channels start from column 5 for each device
 
             df = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
+
             df.columns = [i + '_' + metadata[name]['device name'] for i in metadata[name]['sensor']]
 
             data = pd.concat([data, df], axis=1)
@@ -90,9 +101,17 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
             sampling_rate = metadata[name]["sampling rate"]
         else:
             # resample
-            data, sampling_rate = _read_bitalino_resample(data, metadata[name]["sampling rate"], sampling_rate, resample_method=resample_method)
+            colnames = list(data.columns)
+            data, sampling_rate = _read_bitalino_resample(data, original_sampling_rate=metadata[name]["sampling rate"], resampling_rate=sampling_rate, resample_method=resample_method)
+            data.columns = colnames
 
-    return data, sampling_rate
+    # Event annotation
+    if events_annotation:
+        events = _read_bitalino_events_annotation(directory=None)
+    else:
+        events = None
+
+    return data, sampling_rate, events
 
 
 def _read_bitalino_resample(data, original_sampling_rate, resampling_rate, resample_method="interpolation"):
@@ -109,4 +128,41 @@ def _read_bitalino_resample(data, original_sampling_rate, resampling_rate, resam
         signals = pd.concat([signals, signal], axis=1)
     data = signals.copy()
 
-    return data, sampling_rate
+    return data, resampling_rate
+
+
+def _read_bitalino_events_annotation(events_annotation_directory=None):
+     """Read events that are annotated during BITalino signal acquisition."""
+
+    # Get working directory of data file (assume events stored together in same folder)
+    folder = os.listdir(events_annotation_directory)
+    events_file = [i for i in os.listdir() if '_EventsAnnotation.txt' in i][0]
+
+    # read metadata
+    with open(events_file, "r") as f:
+
+        if "OpenSignals" not in f.readline():  # read first line
+            raise ValueError(
+                "NeuroKit error: read_bitalino(): Events text file is not in OpenSignals format."
+            )
+
+        eventdata = json.loads(f.readline()[1:])  # read second line
+
+    df = pd.read_csv(events_file, sep="\t", header=None, comment="#").dropna(axis=1)
+    df.columns = eventdata['columns']['labels']
+
+    # Initialize data
+    metaevents = {}
+    for device in np.unique(df["MAC"]):
+        metaevents[device] = {}
+        device_data = df[df["MAC"] == device]
+        for channel in np.unique(df["CHANNEL"]):
+            metaevents[device][channel] = {"start": [], "stop": []}
+
+            # Append data
+            start = device_data[device_data["CHANNEL"] == channel]["START"]
+            stop = device_data[device_data["CHANNEL"] == channel]["END"]
+            metaevents[device][channel]["start"].append(list(start))
+            metaevents[device][channel]["stop"].append(list(stop))
+
+return metaevents
