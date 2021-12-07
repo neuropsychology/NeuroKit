@@ -64,6 +64,13 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
         # Add column names
         data.columns = metadata["sensor"]
 
+        # Adjust sampling rate
+        if sampling_rate == "max":
+            sampling_rate = metadata["sampling rate"]
+        else:
+            # resample
+            data, sampling_rate = _read_bitalino_resample(data, metadata["sampling rate"], sampling_rate, resample_method=resample_method)
+
     else:
         # Read from multiple devices
         devices = list(metadata.keys())
@@ -78,20 +85,28 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
 
             data = pd.concat([data, df], axis=1)
 
-    # Set sampling rate
-    if sampling_rate == "max":
-        sampling_rate = metadata["sampling rate"]
-    else:
-        signals = pd.DataFrame()
-        for i in data:
-            signal = signal_resample(
-                data[i],
-                sampling_rate=metadata["sampling rate"],
-                desired_sampling_rate=sampling_rate,
-                method=resample_method,
-            )
-            signal = pd.Series(signal)
-            signals = pd.concat([signals, signal], axis=1)
-        data = signals.copy()
+        # Adjust sampling rate
+        if sampling_rate == "max":
+            sampling_rate = metadata[name]["sampling rate"]
+        else:
+            # resample
+            data, sampling_rate = _read_bitalino_resample(data, metadata[name]["sampling rate"], sampling_rate, resample_method=resample_method)
+
+    return data, sampling_rate
+
+
+def _read_bitalino_resample(data, original_sampling_rate, resampling_rate, resample_method="interpolation"):
+
+    signals = pd.DataFrame()
+    for i in data:
+        signal = signal_resample(
+            data[i],
+            sampling_rate=original_sampling_rate,
+            desired_sampling_rate=resampling_rate,
+            method=resample_method,
+        )
+        signal = pd.Series(signal)
+        signals = pd.concat([signals, signal], axis=1)
+    data = signals.copy()
 
     return data, sampling_rate
