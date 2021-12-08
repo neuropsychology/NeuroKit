@@ -178,7 +178,12 @@ def _read_bitalino_events_annotation(events_annotation_directory=None, channel_n
 
     # Get working directory of data file (assume events stored together in same folder)
     folder = os.listdir(events_annotation_directory)
-    events_file = [i for i in os.listdir() if '_EventsAnnotation.txt' in i][0]
+    if len([i for i in folder if '_EventsAnnotation.txt' in i]) == 0:
+        raise ValueError(
+            "NeuroKit error: _read_bitalino_events_annotation(): No events annotation file found in the working directory. Please specify `events_annotation_directory` argument to where the events annotation text file is stored."
+        )
+    else:
+        events_file = [i for i in folder if '_EventsAnnotation.txt' in i][0]
 
     # read metadata
     with open(events_file, "r") as f:
