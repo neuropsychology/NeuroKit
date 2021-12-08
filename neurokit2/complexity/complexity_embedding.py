@@ -33,7 +33,9 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values. Can also be a string, such as ``"lorenz"`` (Lorenz attractor), ``"rossler"`` (Rössler attractor), or ``"clifford"`` (Clifford attractor) to obtain a pre-defined attractor.
+        The signal (i.e., a time series) in the form of a vector of values. Can also be a string, such as
+        ``"lorenz"`` (Lorenz attractor), ``"rossler"`` (Rössler attractor), or ``"clifford"`` (Clifford attractor)
+        to obtain a pre-defined attractor.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or

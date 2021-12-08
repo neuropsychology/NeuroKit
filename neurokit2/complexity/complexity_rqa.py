@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 from .optim_complexity_tolerance import complexity_tolerance
 

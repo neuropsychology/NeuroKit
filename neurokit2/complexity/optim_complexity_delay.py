@@ -11,7 +11,8 @@ import scipy.spatial
 import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
-from ..signal import signal_autocor, signal_findpeaks, signal_psd, signal_zerocrossings
+from ..signal import (signal_autocor, signal_findpeaks, signal_psd,
+                      signal_zerocrossings)
 from .complexity_embedding import complexity_embedding
 from .information_mutual import mutual_information
 
@@ -47,7 +48,8 @@ def complexity_delay(
     value for approximately periodic data, and makes the attractor sensitive to morphological
     changes. See also `Aston's talk
     <https://youtu.be/GGrOJtcTcHA?t=730>`_. This
-    method is also the fastest but might not be suitable for aperiodic signals. The 'algorithm' argument (default to 'fft') and will be passed as the 'method' argument of ``signal_psd()``.
+    method is also the fastest but might not be suitable for aperiodic signals.
+    The 'algorithm' argument (default to 'fft') and will be passed as the 'method' argument of ``signal_psd()``.
 
     Parameters
     ----------
@@ -103,7 +105,8 @@ def complexity_delay(
 
     References
     ------------
-    - Lyle, J. V., Nandi, M., & Aston, P. J. (2021). Symmetric Projection Attractor Reconstruction: Sex Differences in the ECG. Frontiers in cardiovascular medicine, 1034.
+    - Lyle, J. V., Nandi, M., & Aston, P. J. (2021). Symmetric Projection Attractor Reconstruction:
+    Sex Differences in the ECG. Frontiers in cardiovascular medicine, 1034.
     - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based
     method for determining the optimal embedding parameters of a signal. In 2003 IEEE International
     Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6,

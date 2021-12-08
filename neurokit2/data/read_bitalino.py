@@ -28,7 +28,8 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
     events_annotation : bool
         Defaults to False. If True, will read signal annotation events.
     events_annotation_directory : str
-        If None (default), reads signal annotation events from the same location where the acquired file is stored. If not, specify the predefined OpenSignals (r)evolution folder directory of where the 'EventsAnnotation.txt' file is stored.
+        If None (default), reads signal annotation events from the same location where the acquired file is stored. If not,
+        specify the predefined OpenSignals (r)evolution folder directory of where the 'EventsAnnotation.txt' file is stored.
 
     Returns
     ----------
@@ -36,7 +37,8 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
         The BITalino file as a pandas dataframe if one device was read, or a dictionary
         of pandas dataframes (one dataframe per device) if multiple devices are read.
     info : dict
-        The metadata information containing the sensors, corresponding channel names, sampling rate, and the events annotation timings if `events_annotation` is True.
+        The metadata information containing the sensors, corresponding channel names, sampling rate, and the
+        events annotation timings if `events_annotation` is True.
 
     See Also
     --------
@@ -99,7 +101,7 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
                     stop[stop_times] = 1
                     data[chname + "_" + event + "_start"] = start.astype(int)
                     data[chname + "_" + event + "_stop"] = stop.astype(int)
-            info['events annotation'] = metaevents
+            info['events annotation'] = events
 
     else:
         # Read from multiple devices
@@ -174,13 +176,15 @@ def _read_bitalino_resample(data, original_sampling_rate, resampling_rate, resam
 
 def _read_bitalino_events_annotation(events_annotation_directory=None, channel_names=None):
     """Read events that are annotated during BITalino signal acquisition.
-    Returns a dictionary containing the start and stop times (in seconds) in each channel detected per unique event (label) within each device."""
+    Returns a dictionary containing the start and stop times (in seconds) in each channel detected per unique event
+    (label) within each device."""
 
     # Get working directory of data file (assume events stored together in same folder)
     folder = os.listdir(events_annotation_directory)
     if len([i for i in folder if '_EventsAnnotation.txt' in i]) == 0:
         raise ValueError(
-            "NeuroKit error: _read_bitalino_events_annotation(): No events annotation file found in the working directory. Please specify `events_annotation_directory` argument to where the events annotation text file is stored."
+            "NeuroKit error: _read_bitalino_events_annotation(): No events annotation file found in the working directory. " +
+            "Please specify `events_annotation_directory` argument to where the events annotation text file is stored."
         )
     else:
         events_file = [i for i in folder if '_EventsAnnotation.txt' in i][0]
