@@ -193,7 +193,7 @@ def _fractal_correlation_get_r(radius, signal, dist):
     if isinstance(radius, int):
         dist_range = np.max(dist) - np.min(dist)
         r_min, r_max = (np.min(dist) + 0.025 * dist_range), (np.min(dist) + 0.5 * dist_range)
-        r_vals = expspace(r_min, r_max, radius, base=2, type=float)
+        r_vals = expspace(r_min, r_max, radius, base=2)
 
     return r_vals
 

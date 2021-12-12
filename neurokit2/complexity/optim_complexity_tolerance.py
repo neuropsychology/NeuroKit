@@ -23,7 +23,8 @@ def complexity_tolerance(
     method : str
         If 'maxApEn', different values of tolerance will be tested and the one where ApEn is
         maximized will be selected and returned. If 'sd' (as in Standard Deviation),
-        r = 0.2 * standard deviation of the signal will be returned. If 'recurrence', the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will be returned.
+        r = 0.2 * standard deviation of the signal will be returned. If 'recurrence', the tolerance that
+        yields a recurrence rate (see ``RQA``) close to 5% will be returned.
     r_range : Union[list, int]
         Only used if ``method='maxApEn'``. The range of tolerance values to test.
         If an integer, will be set to ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)``.

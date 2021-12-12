@@ -92,11 +92,11 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
     if show is True:
         try:
             fig, axes = plt.subplots(ncols=2)
-            im1 = axes[0].imshow(recmat, cmap="Greys")
+            axes[0].imshow(recmat, cmap="Greys")
             axes[0].set_title("Recurrence Matrix")
-            im2 = axes[1].imshow(d)
+            im = axes[1].imshow(d)
             axes[1].set_title("Distance")
-            cbar = fig.colorbar(im2, ax=axes[1], fraction=0.046, pad=0.04)
+            cbar = fig.colorbar(im, ax=axes[1], fraction=0.046, pad=0.04)
             cbar.ax.plot([0, 1], [tolerance] * 2, color="r")
         except MemoryError as e:
             raise MemoryError(
