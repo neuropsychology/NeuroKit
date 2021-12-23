@@ -307,7 +307,7 @@ Electromyography (EMG)
     signal, info = nk.emg_process(emg, sampling_rate=250)
 
     # Visualise the processing
-    nk.emg_plot(signals, sampling_rate=250)
+    nk.emg_plot(signal, sampling_rate=250)
 
 
 .. image:: https://raw.github.com/neuropsychology/NeuroKit/master/docs/readme/README_emg.png
