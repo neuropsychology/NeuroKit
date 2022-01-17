@@ -4,7 +4,7 @@ from ..signal import signal_fixpeaks, signal_formatpeaks
 from .ecg_findpeaks import ecg_findpeaks
 
 
-def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifacts=False):
+def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifacts=False, **kwargs):
     """Find R-peaks in an ECG signal.
 
     Find R-peaks in an ECG signal using the specified method.
@@ -68,7 +68,7 @@ def ecg_peaks(ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifa
       for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
 
     """
-    rpeaks = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate, method=method)
+    rpeaks = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate, method=method, **kwargs)
 
     if correct_artifacts:
         _, rpeaks = signal_fixpeaks(rpeaks, sampling_rate=sampling_rate, iterative=True, method="Kubios")

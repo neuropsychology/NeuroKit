@@ -8,7 +8,7 @@ import scipy.stats
 from ..signal import signal_findpeaks, signal_plot, signal_sanitize, signal_smooth, signal_zerocrossings
 
 
-def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
+def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
     """Find R-peaks in an ECG signal.
 
     Low-level function used by `ecg_peaks()` to identify R-peaks in an ECG signal using a different
@@ -131,34 +131,11 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     method = method.lower()  # remove capitalised letters
     # Run peak detection algorithm
-    if method in ["nk", "nk2", "neurokit", "neurokit2"]:
-        rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned, sampling_rate, show=show)
-    elif method in ["pantompkins", "pantompkins1985"]:
-        rpeaks = _ecg_findpeaks_pantompkins(ecg_cleaned, sampling_rate)
-    elif method in ["nabian", "nabian2018"]:
-        rpeaks = _ecg_findpeaks_nabian2018(ecg_cleaned, sampling_rate)
-    elif method in ["gamboa2008", "gamboa"]:
-        rpeaks = _ecg_findpeaks_gamboa(ecg_cleaned, sampling_rate)
-    elif method in ["ssf", "slopesumfunction", "zong", "zong2003"]:
-        rpeaks = _ecg_findpeaks_ssf(ecg_cleaned, sampling_rate)
-    elif method in ["hamilton", "hamilton2002"]:
-        rpeaks = _ecg_findpeaks_hamilton(ecg_cleaned, sampling_rate)
-    elif method in ["christov", "christov2004"]:
-        rpeaks = _ecg_findpeaks_christov(ecg_cleaned, sampling_rate)
-    elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
-        rpeaks = _ecg_findpeaks_engzee(ecg_cleaned, sampling_rate)
-    elif method in ["elgendi", "elgendi2010"]:
-        rpeaks = _ecg_findpeaks_elgendi(ecg_cleaned, sampling_rate)
-    elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
-        rpeaks = _ecg_findpeaks_kalidas(ecg_cleaned, sampling_rate)
-    elif method in ["martinez2003", "martinez"]:
-        rpeaks = _ecg_findpeaks_WT(ecg_cleaned, sampling_rate)
-    elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
-        rpeaks = _ecg_findpeaks_rodrigues(ecg_cleaned, sampling_rate)
-    elif method in ["promac", "all"]:
-        rpeaks = _ecg_findpeaks_promac(ecg_cleaned, sampling_rate=sampling_rate, threshold=0.33, show=show)
+    if method in all_methods.keys():
+        rpeaks = all_methods[method](ecg_cleaned, sampling_rate=sampling_rate, show=show, **kwargs)
     else:
-        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit'" "or 'pantompkins'.")
+        raise ValueError(f"NeuroKit error: ecg_findpeaks(): 'method' not implemented. " \
+                         f"Should be one from the list: {all_methods.keys()}")
 
     # Prepare output.
     info = {"ECG_R_Peaks": rpeaks}
@@ -169,18 +146,64 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 # =============================================================================
 # Probabilistic Methods-Agreement via Convolution (ProMAC)
 # =============================================================================
-def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False, **kwargs):
+def _ecg_findpeaks_promac(
+    signal,
+    sampling_rate=1000,
+    show=False,
+    promac_methods=['neurokit','gamboa','ssf','engzee','elgendi','kalidas','martinez','rodrigues'],
+    threshold=0.33,
+    gaussian_sd=100,
+    **kwargs
+):
+    """Probabilistic Methods-Agreement via Convolution (ProMAC).
 
+    ProMAC combines the result of several R-peak detectors in a probabilistic way. For a given peak
+    detector, the binary signal representing the peak locations is convolved with a Gaussian
+    distribution, resulting in a propabilistic representation of each peak location. This procedure
+    is repeated for all selected 'promac_methods' and the resulting signals are accumulated. Finally,
+    a threshold is used to accept or reject the peak locations.
+
+    See this discussion for more information on the origins of the method:
+    https://github.com/neuropsychology/NeuroKit/issues/222
+
+    Parameters
+    ----------
+    signal : Union[list, np.array, pd.Series]
+        The (cleaned) ECG channel, e.g. as returned by `ecg_clean()`.
+    sampling_rate : int
+        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
+        Defaults to 1000.
+    show : bool
+        If True, will return a plot to visualizing the thresholds used in the algorithm.
+        Useful for debugging.
+    promac_methods : list of string
+        The algorithms to be used for R-peak detection. See the list of acceptable algorithms for
+        the 'ecg_peaks' function.
+    threshold : float
+        The tolerance for peak acceptance. This value is a percentage of the signal's maximum
+        value. Only peaks found above this tolerance will be finally considered as actual peaks.
+    gaussian_sd : int
+        The standard deviation of the Gaussian distribution used to represent the peak location
+        probability. This value should be in millisencods and is usually taken as the size of
+        QRS complexes.
+
+    Returns
+    -------
+    rpeaks : list of int
+        A list of array positions at which R-peaks occur.
+    """
     x = np.zeros(len(signal))
+    promac_methods = [method.lower() for method in promac_methods]  # remove capitalised letters
+    error_list = list()  # Stores the failed methods
 
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_neurokit, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_gamboa, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_ssf, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_engzee, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_elgendi, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_kalidas, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_WT, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_rodrigues, **kwargs)
+    for method in promac_methods:
+        try:
+            x = _ecg_findpeaks_promac_addconvolve(signal, sampling_rate, x, all_methods[method],
+                                                  gaussian_sd=gaussian_sd, **kwargs)
+        except KeyError:
+            error_list.append(f"Method '{method}' is not valid.")
+        except Exception as error:
+            error_list.append(f"{method} error: {error}")
 
     # Rescale
     x = x / np.max(x)
@@ -195,24 +218,28 @@ def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False
         signal_plot([signal, convoluted], standardize=True)
         [plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks]  # pylint: disable=W0106
 
+    # I am not sure if mandatory print the best option
+    if error_list:  # empty?
+        print(error_list)
+
     return peaks
 
 
-def _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, fun, **kwargs):
+# _ecg_findpeaks_promac_addmethod + _ecg_findpeaks_promac_convolve
+# Joining them makes parameters exposition more consistent
+def _ecg_findpeaks_promac_addconvolve(signal, sampling_rate, x, fun, gaussian_sd=100, **kwargs):
     peaks = fun(signal, sampling_rate=sampling_rate, **kwargs)
-    x += _ecg_findpeaks_promac_convolve(signal, peaks, sampling_rate=sampling_rate)
-    return x
 
+    mask = np.zeros(len(signal))
+    mask[peaks] = 1
 
-def _ecg_findpeaks_promac_convolve(signal, peaks, sampling_rate=1000):
-    x = np.zeros(len(signal))
-    x[peaks] = 1
-
-    # Because a typical QRS is roughly defined within about 100ms
-    sd = sampling_rate / 10
+    # SD is defined as a typical QRS size, which for adults if 100ms
+    sd = sampling_rate * gaussian_sd / 1000
     shape = scipy.stats.norm.pdf(np.linspace(-sd * 4, sd * 4, num=int(sd * 8)), loc=0, scale=sd)
 
-    return np.convolve(x, shape, "same")  # Return convolved
+    x += np.convolve(mask, shape, "same")
+
+    return x
 
 
 # =============================================================================
@@ -1095,3 +1122,27 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
             NPKI = 0.125 * peak_value + 0.875 * NPKI
 
     return signal_peaks
+
+
+# Global dict mapping the method's name to its function
+all_methods = {
+    "nk":_ecg_findpeaks_neurokit, "nk2":_ecg_findpeaks_neurokit,
+    "neurokit":_ecg_findpeaks_neurokit, "neurokit2":_ecg_findpeaks_neurokit,
+    "pantompkins":_ecg_findpeaks_pantompkins, "pantompkins1985":_ecg_findpeaks_pantompkins,
+    "nabian":_ecg_findpeaks_nabian2018, "nabian2018":_ecg_findpeaks_nabian2018,
+    "gamboa2008":_ecg_findpeaks_gamboa, "gamboa":_ecg_findpeaks_gamboa,
+    "ssf":_ecg_findpeaks_ssf, "slopesumfunction":_ecg_findpeaks_ssf,
+    "zong":_ecg_findpeaks_ssf, "zong2003":_ecg_findpeaks_ssf,
+    "hamilton":_ecg_findpeaks_hamilton, "hamilton2002":_ecg_findpeaks_hamilton,
+    "christov":_ecg_findpeaks_christov, "christov2004":_ecg_findpeaks_christov,
+    "engzee":_ecg_findpeaks_engzee, "engzee2012":_ecg_findpeaks_engzee,
+    "engzeemod":_ecg_findpeaks_engzee, "engzeemod2012":_ecg_findpeaks_engzee,
+    "elgendi":_ecg_findpeaks_elgendi, "elgendi2010":_ecg_findpeaks_elgendi,
+    "kalidas2017":_ecg_findpeaks_kalidas, "swt":_ecg_findpeaks_kalidas,
+    "kalidas":_ecg_findpeaks_kalidas, "kalidastamil":_ecg_findpeaks_kalidas,
+    "kalidastamil2017":_ecg_findpeaks_kalidas,
+    "martinez2003":_ecg_findpeaks_WT, "martinez":_ecg_findpeaks_WT,
+    "rodrigues2020":_ecg_findpeaks_rodrigues, "rodrigues2021":_ecg_findpeaks_rodrigues,
+    "rodrigues":_ecg_findpeaks_rodrigues, "asi":_ecg_findpeaks_rodrigues,
+    "promac":_ecg_findpeaks_promac, "all":_ecg_findpeaks_promac
+}
