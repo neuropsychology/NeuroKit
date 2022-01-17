@@ -134,8 +134,10 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     if method in all_methods.keys():
         rpeaks = all_methods[method](ecg_cleaned, sampling_rate=sampling_rate, show=show, **kwargs)
     else:
-        raise ValueError(f"NeuroKit error: ecg_findpeaks(): 'method' not implemented. " \
-                         f"Should be one from the list: {all_methods.keys()}")
+        raise ValueError(
+            f"NeuroKit error: ecg_findpeaks(): 'method' not implemented. "
+            f"Should be one from the list: {all_methods.keys()}"
+        )
 
     # Prepare output.
     info = {"ECG_R_Peaks": rpeaks}
@@ -150,10 +152,10 @@ def _ecg_findpeaks_promac(
     signal,
     sampling_rate=1000,
     show=False,
-    promac_methods=['neurokit','gamboa','ssf','engzee','elgendi','kalidas','martinez','rodrigues'],
+    promac_methods=["neurokit", "gamboa", "ssf", "engzee", "elgendi", "kalidas", "martinez", "rodrigues"],
     threshold=0.33,
     gaussian_sd=100,
-    **kwargs
+    **kwargs,
 ):
     """Probabilistic Methods-Agreement via Convolution (ProMAC).
 
@@ -191,15 +193,17 @@ def _ecg_findpeaks_promac(
     -------
     rpeaks : list of int
         A list of array positions at which R-peaks occur.
+
     """
     x = np.zeros(len(signal))
     promac_methods = [method.lower() for method in promac_methods]  # remove capitalised letters
-    error_list = list()  # Stores the failed methods
+    error_list = []  # Stores the failed methods
 
     for method in promac_methods:
         try:
-            x = _ecg_findpeaks_promac_addconvolve(signal, sampling_rate, x, all_methods[method],
-                                                  gaussian_sd=gaussian_sd, **kwargs)
+            x = _ecg_findpeaks_promac_addconvolve(
+                signal, sampling_rate, x, all_methods[method], gaussian_sd=gaussian_sd, **kwargs
+            )
         except KeyError:
             error_list.append(f"Method '{method}' is not valid.")
         except Exception as error:
@@ -1126,23 +1130,41 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
 
 # Global dict mapping the method's name to its function
 all_methods = {
-    "nk":_ecg_findpeaks_neurokit, "nk2":_ecg_findpeaks_neurokit,
-    "neurokit":_ecg_findpeaks_neurokit, "neurokit2":_ecg_findpeaks_neurokit,
-    "pantompkins":_ecg_findpeaks_pantompkins, "pantompkins1985":_ecg_findpeaks_pantompkins,
-    "nabian":_ecg_findpeaks_nabian2018, "nabian2018":_ecg_findpeaks_nabian2018,
-    "gamboa2008":_ecg_findpeaks_gamboa, "gamboa":_ecg_findpeaks_gamboa,
-    "ssf":_ecg_findpeaks_ssf, "slopesumfunction":_ecg_findpeaks_ssf,
-    "zong":_ecg_findpeaks_ssf, "zong2003":_ecg_findpeaks_ssf,
-    "hamilton":_ecg_findpeaks_hamilton, "hamilton2002":_ecg_findpeaks_hamilton,
-    "christov":_ecg_findpeaks_christov, "christov2004":_ecg_findpeaks_christov,
-    "engzee":_ecg_findpeaks_engzee, "engzee2012":_ecg_findpeaks_engzee,
-    "engzeemod":_ecg_findpeaks_engzee, "engzeemod2012":_ecg_findpeaks_engzee,
-    "elgendi":_ecg_findpeaks_elgendi, "elgendi2010":_ecg_findpeaks_elgendi,
-    "kalidas2017":_ecg_findpeaks_kalidas, "swt":_ecg_findpeaks_kalidas,
-    "kalidas":_ecg_findpeaks_kalidas, "kalidastamil":_ecg_findpeaks_kalidas,
-    "kalidastamil2017":_ecg_findpeaks_kalidas,
-    "martinez2003":_ecg_findpeaks_WT, "martinez":_ecg_findpeaks_WT,
-    "rodrigues2020":_ecg_findpeaks_rodrigues, "rodrigues2021":_ecg_findpeaks_rodrigues,
-    "rodrigues":_ecg_findpeaks_rodrigues, "asi":_ecg_findpeaks_rodrigues,
-    "promac":_ecg_findpeaks_promac, "all":_ecg_findpeaks_promac
+    "nk": _ecg_findpeaks_neurokit,
+    "nk2": _ecg_findpeaks_neurokit,
+    "neurokit": _ecg_findpeaks_neurokit,
+    "neurokit2": _ecg_findpeaks_neurokit,
+    "pantompkins": _ecg_findpeaks_pantompkins,
+    "pantompkins1985": _ecg_findpeaks_pantompkins,
+    "nabian": _ecg_findpeaks_nabian2018,
+    "nabian2018": _ecg_findpeaks_nabian2018,
+    "gamboa2008": _ecg_findpeaks_gamboa,
+    "gamboa": _ecg_findpeaks_gamboa,
+    "ssf": _ecg_findpeaks_ssf,
+    "slopesumfunction": _ecg_findpeaks_ssf,
+    "zong": _ecg_findpeaks_ssf,
+    "zong2003": _ecg_findpeaks_ssf,
+    "hamilton": _ecg_findpeaks_hamilton,
+    "hamilton2002": _ecg_findpeaks_hamilton,
+    "christov": _ecg_findpeaks_christov,
+    "christov2004": _ecg_findpeaks_christov,
+    "engzee": _ecg_findpeaks_engzee,
+    "engzee2012": _ecg_findpeaks_engzee,
+    "engzeemod": _ecg_findpeaks_engzee,
+    "engzeemod2012": _ecg_findpeaks_engzee,
+    "elgendi": _ecg_findpeaks_elgendi,
+    "elgendi2010": _ecg_findpeaks_elgendi,
+    "kalidas2017": _ecg_findpeaks_kalidas,
+    "swt": _ecg_findpeaks_kalidas,
+    "kalidas": _ecg_findpeaks_kalidas,
+    "kalidastamil": _ecg_findpeaks_kalidas,
+    "kalidastamil2017": _ecg_findpeaks_kalidas,
+    "martinez2003": _ecg_findpeaks_WT,
+    "martinez": _ecg_findpeaks_WT,
+    "rodrigues2020": _ecg_findpeaks_rodrigues,
+    "rodrigues2021": _ecg_findpeaks_rodrigues,
+    "rodrigues": _ecg_findpeaks_rodrigues,
+    "asi": _ecg_findpeaks_rodrigues,
+    "promac": _ecg_findpeaks_promac,
+    "all": _ecg_findpeaks_promac,
 }
