@@ -34,7 +34,7 @@ test_requirements = requirements + [
     "pytest",
     "coverage",
     "bioread",
-    "mne[data]",
+    "mne",
     "pyentrp",
     "antropy",
     "nolds",
