@@ -124,9 +124,11 @@ def _ecg_clean_missing(ecg_signal):
 def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
 
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5)
+    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate,
+                          lowcut=0.5, method="butterworth", order=5)
 
-    clean = signal_filter(signal=clean, sampling_rate=sampling_rate, method="powerline", powerline=50)
+    clean = signal_filter(signal=clean, sampling_rate=sampling_rate,
+                          method="powerline", powerline=50)
     return clean
 
 
