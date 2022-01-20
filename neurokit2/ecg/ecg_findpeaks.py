@@ -811,11 +811,11 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
 
     squared = swt_ecg * swt_ecg
 
-    f1 = 0.01 / sampling_rate
-    f2 = 10 / sampling_rate
+    f1 = 0.01 / (0.5 * sampling_rate)
+    f2 = 10 / (0.5 * sampling_rate)
 
-    b, a = scipy.signal.butter(3, [f1 * 2, f2 * 2], btype="bandpass")
-    filtered_squared = scipy.signal.lfilter(b, a, squared)
+    sos = scipy.signal.butter(3, [f1, f2], btype="bandpass", output="sos")
+    filtered_squared = scipy.signal.sosfilt(sos, squared)
 
     # Drop padding to avoid detecting peaks inside it (#456)
     filtered_squared = filtered_squared[:signal_length]
