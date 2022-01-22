@@ -107,21 +107,51 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     # Sanitize input
     ecg_cleaned = signal_sanitize(ecg_cleaned)
-
     method = method.lower()  # remove capitalised letters
+
     # Run peak detection algorithm
-    if method in all_methods.keys():
-        rpeaks = all_methods[method](ecg_cleaned, sampling_rate=sampling_rate, show=show, **kwargs)
-    else:
-        raise ValueError(
-            f"NeuroKit error: ecg_findpeaks(): 'method' not implemented. "
-            f"Should be one from the list: {all_methods.keys()}"
-        )
+    try:
+        func = _ecg_findpeaks_findmethod(method)
+        rpeaks = func(ecg_cleaned, sampling_rate=sampling_rate, **kwargs)
+    except ValueError as error:
+        raise error
 
     # Prepare output.
     info = {"ECG_R_Peaks": rpeaks}
 
     return info
+
+
+# Returns the peak detector function by name
+def _ecg_findpeaks_findmethod(method):
+    if method in ["nk", "nk2", "neurokit", "neurokit2"]:
+        return _ecg_findpeaks_neurokit
+    elif method in ["pantompkins", "pantompkins1985"]:
+        return _ecg_findpeaks_pantompkins
+    elif method in ["nabian", "nabian2018"]:
+        return _ecg_findpeaks_nabian2018
+    elif method in ["gamboa2008", "gamboa"]:
+        return _ecg_findpeaks_gamboa
+    elif method in ["ssf", "slopesumfunction", "zong", "zong2003"]:
+        return _ecg_findpeaks_ssf
+    elif method in ["hamilton", "hamilton2002"]:
+        return _ecg_findpeaks_hamilton
+    elif method in ["christov", "christov2004"]:
+        return _ecg_findpeaks_christov
+    elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
+        return _ecg_findpeaks_engzee
+    elif method in ["elgendi", "elgendi2010"]:
+        return _ecg_findpeaks_elgendi
+    elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
+        return _ecg_findpeaks_kalidas
+    elif method in ["martinez2003", "martinez"]:
+        return _ecg_findpeaks_WT
+    elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
+        return _ecg_findpeaks_rodrigues
+    elif method in ["promac", "all"]:
+        return _ecg_findpeaks_promac
+    else:
+        raise ValueError(f"NeuroKit error: ecg_findpeaks(): '{method}' not implemented.")
 
 
 # =============================================================================
@@ -180,10 +210,11 @@ def _ecg_findpeaks_promac(
 
     for method in promac_methods:
         try:
+            func = _ecg_findpeaks_findmethod(method)
             x = _ecg_findpeaks_promac_addconvolve(
-                signal, sampling_rate, x, all_methods[method], gaussian_sd=gaussian_sd, **kwargs
+                signal, sampling_rate, x, func, gaussian_sd=gaussian_sd, **kwargs
             )
-        except KeyError:
+        except ValueError:
             error_list.append(f"Method '{method}' is not valid.")
         except Exception as error:
             error_list.append(f"{method} error: {error}")
@@ -1106,44 +1137,3 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
 
     return signal_peaks
 
-
-# Global dict mapping the method's name to its function
-all_methods = {
-    "nk": _ecg_findpeaks_neurokit,
-    "nk2": _ecg_findpeaks_neurokit,
-    "neurokit": _ecg_findpeaks_neurokit,
-    "neurokit2": _ecg_findpeaks_neurokit,
-    "pantompkins": _ecg_findpeaks_pantompkins,
-    "pantompkins1985": _ecg_findpeaks_pantompkins,
-    "nabian": _ecg_findpeaks_nabian2018,
-    "nabian2018": _ecg_findpeaks_nabian2018,
-    "gamboa2008": _ecg_findpeaks_gamboa,
-    "gamboa": _ecg_findpeaks_gamboa,
-    "ssf": _ecg_findpeaks_ssf,
-    "slopesumfunction": _ecg_findpeaks_ssf,
-    "zong": _ecg_findpeaks_ssf,
-    "zong2003": _ecg_findpeaks_ssf,
-    "hamilton": _ecg_findpeaks_hamilton,
-    "hamilton2002": _ecg_findpeaks_hamilton,
-    "christov": _ecg_findpeaks_christov,
-    "christov2004": _ecg_findpeaks_christov,
-    "engzee": _ecg_findpeaks_engzee,
-    "engzee2012": _ecg_findpeaks_engzee,
-    "engzeemod": _ecg_findpeaks_engzee,
-    "engzeemod2012": _ecg_findpeaks_engzee,
-    "elgendi": _ecg_findpeaks_elgendi,
-    "elgendi2010": _ecg_findpeaks_elgendi,
-    "kalidas2017": _ecg_findpeaks_kalidas,
-    "swt": _ecg_findpeaks_kalidas,
-    "kalidas": _ecg_findpeaks_kalidas,
-    "kalidastamil": _ecg_findpeaks_kalidas,
-    "kalidastamil2017": _ecg_findpeaks_kalidas,
-    "martinez2003": _ecg_findpeaks_WT,
-    "martinez": _ecg_findpeaks_WT,
-    "rodrigues2020": _ecg_findpeaks_rodrigues,
-    "rodrigues2021": _ecg_findpeaks_rodrigues,
-    "rodrigues": _ecg_findpeaks_rodrigues,
-    "asi": _ecg_findpeaks_rodrigues,
-    "promac": _ecg_findpeaks_promac,
-    "all": _ecg_findpeaks_promac,
-}
