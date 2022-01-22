@@ -22,12 +22,13 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : string
-        The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pantompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012',
-        'kalidas2017', 'martinez2003', 'rodrigues2021' or 'promac'.
+        The algorithm to be used for R-peak detection. For a list of acceptable methods,
+        please refer to the documentation of `ecg_peaks`.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the algorithm.
         Useful for debugging.
+    **kwargs
+        Additional keyword arguments, usually specific for each `method`.
 
     Returns
     -------
@@ -37,7 +38,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     See Also
     --------
-    ecg_clean, signal_fixpeaks, ecg_peaks, ecg_rate, ecg_process, ecg_plot
+    ecg_peaks, ecg_clean, signal_fixpeaks, ecg_rate, ecg_process, ecg_plot
 
     Examples
     --------
@@ -91,29 +92,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     References
     --------------
-    - Rodrigues, Tiago & Samoutphonh, Sirisack & Plácido da Silva, Hugo & Fred, Ana. (2021).
-      A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices.
-
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
-      PhD ThesisUniversidade.
-
-    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003). An open-source algorithm to
-      detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
-
-    - Hamilton, P. (2002, September). Open source ECG analysis. In Computers in cardiology (pp. 101-104). IEEE.
-
-    - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on
-      biomedical engineering, (3), 230-236.
-
-    - Engelse, W. A. H., & Zeelenberg, C. (1979). A single scan algorithm for QRS detection and feature
-      extraction IEEE Comput Cardiol. Long Beach: IEEE Computer Society.
-
-    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012). Real Time
-      Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
-
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).
-      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
-      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11. doi:10.1109/jtehm.2018.2878000
+    Please, see the list of references in the documentation of `ecg_peaks`.
 
     """
     # Try retrieving right column
