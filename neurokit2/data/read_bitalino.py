@@ -8,7 +8,13 @@ import pandas as pd
 from ..signal import signal_resample
 
 
-def read_bitalino(filename, sampling_rate="max", resample_method="interpolation", events_annotation=False, events_annotation_directory=None):
+def read_bitalino(
+    filename,
+    sampling_rate="max",
+    resample_method="interpolation",
+    events_annotation=False,
+    events_annotation_directory=None,
+):
     """Read and format a  OpenSignals file (e.g., from BITalino) into a pandas' dataframe.
 
     The function outputs both the dataframe and the sampling rate (retrieved from the
@@ -48,7 +54,7 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
     --------
     >>> import neurokit2 as nk
     >>>
-    >>> #data, sampling_rate = nk.read_bitalino("data.txt")
+    >>> # data, sampling_rate = nk.read_bitalino("data.txt")
     """
     info = {}  # Initialize empty dict for storing
 
@@ -63,101 +69,160 @@ def read_bitalino(filename, sampling_rate="max", resample_method="interpolation"
         metadata = json.loads(f.readline()[1:])  # read second line
 
     if len(list(metadata.keys())) == 1:
-        # If only one device
-        metadata = metadata[
-            list(metadata.keys())[0]
-        ]  # convert json header to dict (only select first device / MAC address)
-        channels = np.arange(len(metadata["channels"])) + 5  # analog channels start from column 5
+        return _read_bitalino_onedevice(
+            filename,
+            metadata,
+            sampling_rate,
+            resample_method,
+            events_annotation,
+            events_annotation_directory,
+        )
 
-        data = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
-        data.columns = metadata["sensor"]
-        info['sensors'] = metadata["sensor"]
-        info['channel_names'] = metadata['label']
+    else:
+        return _read_bitalino_multipledevice(
+            filename,
+            metadata,
+            sampling_rate,
+            resample_method,
+            events_annotation,
+            events_annotation_directory,
+        )
+
+
+# =============================================================================
+# Convenience functions
+# =============================================================================
+def _read_bitalino_onedevice(
+    filename,
+    metadata,
+    sampling_rate="max",
+    resample_method="interpolation",
+    events_annotation=False,
+    events_annotation_directory=None,
+):
+    info = {}  # Initialize empty dict for storing
+
+    # If only one device
+    metadata = metadata[
+        list(metadata.keys())[0]
+    ]  # convert json header to dict (only select first device / MAC address)
+    channels = np.arange(len(metadata["channels"])) + 5  # analog channels start from column 5
+
+    data = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
+    data.columns = metadata["sensor"]
+    info["sensors"] = metadata["sensor"]
+    info["channel_names"] = metadata["label"]
+
+    # Adjust sampling rate
+    if sampling_rate == "max":
+        sampling_rate = metadata["sampling rate"]
+    else:
+        # resample
+        colnames = list(data.columns)
+        data, sampling_rate = _read_bitalino_resample(
+            data,
+            original_sampling_rate=metadata["sampling rate"],
+            sampling_rate=sampling_rate,
+            resample_method=resample_method,
+        )
+        data.columns = colnames
+    info["sampling_rate"] = sampling_rate
+
+    # Add manual events annotation
+    if events_annotation:
+        events = _read_bitalino_events_annotation(
+            events_annotation_directory, info["channel_names"]
+        )
+
+        for event in events.keys():
+            for chname in events[event].keys():
+                # Initiate event columns in dataframe
+                start = np.zeros(len(data))
+                stop = np.zeros(len(data))
+
+                # Convert timings to samples
+                start_times = [int(i * sampling_rate) for i in events[event][chname]["start"]]
+                stop_times = [int(i * sampling_rate) for i in events[event][chname]["stop"]]
+                start[start_times] = 1
+                stop[stop_times] = 1
+                data[chname + "_" + event + "_start"] = start.astype(int)
+                data[chname + "_" + event + "_stop"] = stop.astype(int)
+        info["events annotation"] = events
+
+    return data, info
+
+
+def _read_bitalino_multipledevice(
+    filename,
+    metadata,
+    sampling_rate="max",
+    resample_method="interpolation",
+    events_annotation=False,
+    events_annotation_directory=None,
+):
+    info = {}  # Initialize empty dict for storing
+
+    # Read from multiple devices
+    devices = list(metadata.keys())
+    data = {}
+    for index, name in enumerate(devices):
+
+        info[name] = {}
+        channels = np.arange(len(metadata[name]["channels"])) + 5 + (5 * index) + (2 * index)
+        # analog channels start from column 5 for each device
+
+        df = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
+        df.columns = metadata[name]["sensor"]
+        info[name]["sensors"] = metadata[name]["sensor"]
+        info[name]["channel_names"] = metadata[name]["label"]
 
         # Adjust sampling rate
         if sampling_rate == "max":
-            sampling_rate = metadata["sampling rate"]
+            sampling_rate = metadata[name]["sampling rate"]
         else:
             # resample
-            colnames = list(data.columns)
-            data, sampling_rate = _read_bitalino_resample(data, original_sampling_rate=metadata["sampling rate"], resampling_rate=sampling_rate, resample_method=resample_method)
-            data.columns = colnames
-        info['sampling_rate'] = sampling_rate
+            colnames = list(df.columns)
+            df, sampling_rate = _read_bitalino_resample(
+                df,
+                original_sampling_rate=metadata[name]["sampling rate"],
+                resampling_rate=sampling_rate,
+                resample_method=resample_method,
+            )
+            df.columns = colnames
+        info[name]["sampling_rate"] = sampling_rate
 
         # Add manual events annotation
         if events_annotation:
-            events = _read_bitalino_events_annotation(events_annotation_directory, info['channel_names'])
+            metaevents = _read_bitalino_events_annotation(
+                events_annotation_directory, info[name]["channel_names"]
+            )
+            events = metaevents[name.replace(":", "")]
 
             for event in events.keys():
                 for chname in events[event].keys():
                     # Initiate event columns in dataframe
-                    start = np.zeros(len(data))
-                    stop = np.zeros(len(data))
+                    start = np.zeros(len(df))
+                    stop = np.zeros(len(df))
 
                     # Convert timings to samples
-                    start_times = [int(i * sampling_rate) for i in events[event][chname]['start']]
-                    stop_times = [int(i * sampling_rate) for i in events[event][chname]['stop']]
+                    start_times = [int(i * sampling_rate) for i in events[event][chname]["start"]]
+                    stop_times = [int(i * sampling_rate) for i in events[event][chname]["stop"]]
                     start[start_times] = 1
                     stop[stop_times] = 1
-                    data[chname + "_" + event + "_start"] = start.astype(int)
-                    data[chname + "_" + event + "_stop"] = stop.astype(int)
-            info['events annotation'] = events
+                    df[chname + "_" + event + "_start"] = start.astype(int)
+                    df[chname + "_" + event + "_stop"] = stop.astype(int)
+            info[name]["events annotation"] = events
 
-    else:
-        # Read from multiple devices
-        devices = list(metadata.keys())
-        data = {}
-        for index, name in enumerate(devices):
-
-            info[name] = {}
-            channels = np.arange(len(metadata[name]["channels"])) + 5  + (5 * index) + (2 * index)
-            # analog channels start from column 5 for each device
-
-            df = pd.read_csv(filename, sep="\t", usecols=channels, header=None, comment="#")
-            df.columns = metadata[name]["sensor"]
-            info[name]['sensors'] = metadata[name]["sensor"]
-            info[name]['channel_names'] = metadata[name]['label']
-
-            # Adjust sampling rate
-            if sampling_rate == "max":
-                sampling_rate = metadata[name]["sampling rate"]
-            else:
-                # resample
-                colnames = list(df.columns)
-                df, sampling_rate = _read_bitalino_resample(df, original_sampling_rate=metadata[name]["sampling rate"], resampling_rate=sampling_rate, resample_method=resample_method)
-                df.columns = colnames
-            info[name]['sampling_rate'] = sampling_rate
-
-            # Add manual events annotation
-            if events_annotation:
-                metaevents = _read_bitalino_events_annotation(events_annotation_directory, info[name]['channel_names'])
-                events = metaevents[name.replace(":", "")]
-
-                for event in events.keys():
-                    for chname in events[event].keys():
-                        # Initiate event columns in dataframe
-                        start = np.zeros(len(df))
-                        stop = np.zeros(len(df))
-
-                        # Convert timings to samples
-                        start_times = [int(i * sampling_rate) for i in events[event][chname]['start']]
-                        stop_times = [int(i * sampling_rate) for i in events[event][chname]['stop']]
-                        start[start_times] = 1
-                        stop[stop_times] = 1
-                        df[chname + "_" + event + "_start"] = start.astype(int)
-                        df[chname + "_" + event + "_stop"] = stop.astype(int)
-                info[name]['events annotation'] = events
-
-        data[name] = df  # dict of dataframes for each device
-
+    data[name] = df  # dict of dataframes for each device
     return data, info
 
 
 # =============================================================================
 # Internals
 # =============================================================================
-
-def _read_bitalino_resample(data, original_sampling_rate, resampling_rate, resample_method="interpolation"):
+def _read_bitalino_resample(
+    data, original_sampling_rate, resampling_rate, resample_method="interpolation"
+):
 
     signals = pd.DataFrame()
     for i in data:
@@ -181,13 +246,13 @@ def _read_bitalino_events_annotation(events_annotation_directory=None, channel_n
 
     # Get working directory of data file (assume events stored together in same folder)
     folder = os.listdir(events_annotation_directory)
-    if len([i for i in folder if '_EventsAnnotation.txt' in i]) == 0:
+    if len([i for i in folder if "_EventsAnnotation.txt" in i]) == 0:
         raise ValueError(
-            "NeuroKit error: _read_bitalino_events_annotation(): No events annotation file found in the working directory. " +
-            "Please specify `events_annotation_directory` argument to where the events annotation text file is stored."
+            "NeuroKit error: _read_bitalino_events_annotation(): No events annotation file found in the working directory. "
+            + "Please specify `events_annotation_directory` argument to where the events annotation text file is stored."
         )
     else:
-        events_file = [i for i in folder if '_EventsAnnotation.txt' in i][0]
+        events_file = [i for i in folder if "_EventsAnnotation.txt" in i][0]
 
     # read metadata
     with open(events_file, "r") as f:
@@ -200,16 +265,16 @@ def _read_bitalino_events_annotation(events_annotation_directory=None, channel_n
         eventdata = json.loads(f.readline()[1:])  # read second line
 
     df = pd.read_csv(events_file, sep="\t", header=None, comment="#").dropna(axis=1)
-    df.columns = eventdata['columns']['labels']
+    df.columns = eventdata["columns"]["labels"]
 
-    df = df[df['CHANNEL'].isin(channel_names)]  # read only from recorded channels
+    df = df[df["CHANNEL"].isin(channel_names)]  # read only from recorded channels
 
     # Initialize data
     metaevents = {}
     for device in np.unique(df["MAC"]):
         metaevents[device] = {}
         for key in np.unique(df["ID"]):
-            key = 'label' + str(key)
+            key = "label" + str(key)
             metaevents[device][key] = {}
 
             device_data = df[df["MAC"] == device]
