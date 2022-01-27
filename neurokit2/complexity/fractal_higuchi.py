@@ -7,8 +7,7 @@ from .optim_complexity_k import _complexity_k_slope, complexity_k
 
 
 def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
-    """
-    Computes Higuchi's Fractal Dimension (HFD) by reconstructing k-max number of new
+    """Computes Higuchi's Fractal Dimension (HFD) by reconstructing k-max number of new
     data sets. For each reconstructed data set, curve length is computed and plotted
     against its corresponding k value on a log-log scale. HFD equates to the slope obtained
     from fitting a least-squares method.

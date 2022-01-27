@@ -6,8 +6,7 @@ import scipy
 def complexity_attractor(
     embedded="lorenz", alpha="time", color="last_dim", shadows=True, linewidth=1, **kwargs
 ):
-    """
-    Attractor graph
+    """Attractor graph
 
 
     Parameters
@@ -24,6 +23,8 @@ def complexity_attractor(
         3-dimensions embedding), or the fourth dimension, but it is slow.
     shadows : bool
         If ``True``, 2D projections will be added to the sides of the 3D attractor.
+    linewidth: float
+        Set the line width in points.
     **kwargs
         Additional keyword arguments are passed to the color palette (e.g., ``name="plasma"``), or
         to the Lorenz system simulator, such as ``duration`` (default = 100), ``sampling_rate``

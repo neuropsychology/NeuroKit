@@ -228,11 +228,11 @@ def _bio_analyze_slicewindow(data, window_lengths, signal='ECG'):
         start = window_lengths[signal][0]
         end = window_lengths[signal][1]
         epochs = {}
-        for i, label in enumerate(data):
+        for _, label in enumerate(data):
             # Slice window
             epoch = data[label].loc[(data[label].index > start) & (data[label].index < end)]
             epochs[label] = epoch
-            epochs
+
     return epochs
 
 

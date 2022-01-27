@@ -250,8 +250,7 @@ def _embedding_delay_metric(
     dimensions=[2, 3, 4, 5],
     r_vals=[0.5, 1.0, 1.5, 2.0],
 ):
-    """
-    Iterating through dimensions and r values is relevant only if metric used is Correlation Integral.
+    """Iterating through dimensions and r values is relevant only if metric used is Correlation Integral.
     For this method, either first zero crossing of the statistic averages or the first local
     minimum of deviations to obtain optimal tau. This implementation takes the latter since in practice,
     they are both in close proximity.
@@ -340,8 +339,7 @@ def _embedding_delay_spar(signal, algorithm=None, show=False, **kwargs):
 
 
 def _embedding_delay_cc_integral_sum(signal, dimension=3, delay=10, r=0.02):
-    """
-    Correlation integral is a cumulative distribution function, which denotes
+    """Correlation integral is a cumulative distribution function, which denotes
     the probability of distance between any pairs of points in phase space
     not greater than the specified `r`.
     """

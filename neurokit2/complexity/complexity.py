@@ -53,8 +53,8 @@ def complexity(
         See for example :func:`entropy_permutation`.
     dimension : int
         See for example :func:`entropy_permutation`.
-    **kwargs : optional
-        Other arguments to be passed to the functions.
+    tolerance : float
+        See for example :func:`entropy_permutation`.
 
     Returns
     --------

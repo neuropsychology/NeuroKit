@@ -7,7 +7,7 @@ def eeg_source(raw, src, bem, method="sLORETA", show=False, verbose="WARNING", *
     ----------
     raw : mne.io.Raw
         Raw EEG data.
-    scr : mne.SourceSpace
+    src : mne.SourceSpace
         Source space. See ``mne_templateMRI()`` to obtain it from an MRI template.
     bem : mne.Bem
         BEM model. See ``mne_templateMRI()`` to obtain it from an MRI template.

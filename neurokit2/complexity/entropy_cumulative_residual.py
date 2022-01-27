@@ -65,6 +65,6 @@ def entropy_cumulative_residual(signal):
 def _entropy_cumulative_residual_pairwise(events):
     pairs = itertools.tee(events, 2)
     pairs = list(zip(*pairs))
-    for i, p in enumerate(pairs[:-1]):
+    for i, _ in enumerate(pairs[:-1]):
         pairs[i] = (pairs[i][0], pairs[i + 1][0])
     return pairs[:-1]
