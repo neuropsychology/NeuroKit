@@ -56,7 +56,6 @@ def read_bitalino(
     >>>
     >>> # data, sampling_rate = nk.read_bitalino("data.txt")
     """
-    info = {}  # Initialize empty dict for storing
 
     # read metadata
     with open(filename, "r") as f:

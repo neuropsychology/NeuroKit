@@ -64,7 +64,7 @@ def complexity_tolerance(
     >>>
     >>> # Slow
     >>> r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn', show=True)
-    >>> r #doctest: +SKIP
+    >>> r
     0.014145672484014769
     >>>
     >>> # Narrower range
@@ -86,7 +86,7 @@ def complexity_tolerance(
         info = {"Method": "20% SD"}
     elif method in ["maxapen", "optimize"]:
         r, info = _optimize_tolerance_maxapen(
-            signal, r_range=r_range, delay=delay, dimension=dimension, show=show
+            signal, r_range=r_range, delay=delay, dimension=dimension
         )
         info.update({"Method": "Max ApEn"})
     elif method in ["recurrence", "rqa"]:

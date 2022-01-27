@@ -51,14 +51,17 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
     >>> signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.01)
     >>>
     >>> # Default r
-    >>> rc, _ = nk.complexity_recurrence(signal, show=True) #doctest: +SKIP
-    >>> rc #doctest: +SKIP
+    >>> rc, _ = nk.complexity_recurrence(signal, show=True) #doctest: +ELLIPSIS
+    <Figure ...>
     >>>
     >>> # Larger radius
-    >>> rc, d = nk.complexity_recurrence(signal, tolerance=0.5, show=True) #doctest: +SKIP
+    >>> rc, d = nk.complexity_recurrence(signal, tolerance=0.5, show=True) #doctest: +ELLIPSIS
+    <Figure ...>
     >>>
     >>> # Optimization of tolerance via recurrence matrix
-    >>> nk.complexity_tolerance(signal, delay=1, dimension=3, method="recurrence", show=True)
+    >>> rc, d = nk.complexity_tolerance(signal, delay=1, dimension=3, method="recurrence", show=True) #doctest: +ELLIPSIS
+    <Figure ...>
+
 
 
     References
