@@ -50,8 +50,12 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         - **HCVNN**: The median absolute deviation of the RR intervals (MadNN) divided by the median
         of the absolute differences of their successive differences (MedianNN).
         - **IQRNN**: The interquartile range (IQR) of the RR intervals.
+        - **Prc20NN**: The 20th percentile of the RR intervals.
+        - **Prc80NN**: The 80th percentile of the RR intervals.
         - **pNN50**: The proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
         - **pNN20**: The proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
+        - **MinNN**: The minimum of the RR intervals.
+        - **MaxNN**: The maximum of the RR intervals.
         - **TINN**: A geometrical parameter of the HRV, or more specifically, the baseline width of
         the RR intervals distribution obtained by triangular interpolation, where the error of least
         squares determines the triangle. It is an approximation of the RR interval distribution.
