@@ -119,12 +119,16 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["MadNN"] = mad(rri)
     out["MCVNN"] = out["MadNN"] / out["MedianNN"]  # Normalized
     out["IQRNN"] = scipy.stats.iqr(rri)
+    out["Prc20NN"] = np.nanpercentile(rri, q=20)
+    out["Prc80NN"] = np.nanpercentile(rri, q=80)
 
     # Extreme-based
     nn50 = np.sum(np.abs(diff_rri) > 50)
     nn20 = np.sum(np.abs(diff_rri) > 20)
     out["pNN50"] = nn50 / len(rri) * 100
     out["pNN20"] = nn20 / len(rri) * 100
+    out["MinNN"] = np.nanmin(rri)
+    out["MaxNN"] = np.nanmax(rri)
 
     # Geometrical domain
     if "binsize" in kwargs.keys():
