@@ -131,6 +131,7 @@ def epochs_create(
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
     buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns)
+    # TODO: FutureWarning: The frame.append method is deprecated.
     data = data.append(buffer, ignore_index=True, sort=False)
     data = buffer.append(data, ignore_index=True, sort=False)
 
