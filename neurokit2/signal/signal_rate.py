@@ -3,7 +3,7 @@ from .signal_period import signal_period
 
 
 def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"):
-    """Calculate signal rate from a series of peaks.
+    """Calculate signal rate (per minute) from a series of peaks.
 
     This function can also be called either via ``ecg_rate()``, ```ppg_rate()`` or ``rsp_rate()``
     (aliases provided for consistency).
@@ -33,7 +33,7 @@ def signal_rate(peaks, sampling_rate=1000, desired_length=None, interpolation_me
     Returns
     -------
     array
-        A vector containing the rate.
+        A vector containing the rate (peaks per minute).
 
     See Also
     --------

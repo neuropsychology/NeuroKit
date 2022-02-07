@@ -2,11 +2,13 @@
 import functools
 
 from .complexity import complexity
+from .complexity_attractor import complexity_attractor
 from .complexity_embedding import complexity_embedding
 from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
+from .complexity_recurrence import complexity_recurrence
 from .complexity_rqa import complexity_rqa
 from .complexity_rr import complexity_rr
 from .complexity_simulate import complexity_simulate
@@ -78,7 +80,9 @@ complexity_plot = functools.partial(complexity_optimize, show=True)
 
 __all__ = [
     "complexity",
+    "complexity_attractor",
     "complexity_embedding",
+    "complexity_recurrence",
     "complexity_delay",
     "complexity_dimension",
     "complexity_optimize",

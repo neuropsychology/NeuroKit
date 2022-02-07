@@ -36,11 +36,11 @@ def parallel_run(function, arguments_list, n_jobs=-2, **kwargs):
     # Try loading mne
     try:
         import joblib
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: parallel_run(): the 'joblib' module is required for this function to run. ",
             "Please install it first (`pip install joblib`).",
-        )
+        ) from e
 
     parallel = joblib.Parallel(n_jobs=n_jobs, **kwargs)
     funs = (joblib.delayed(function)(**arguments) for arguments in arguments_list)

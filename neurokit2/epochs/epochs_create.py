@@ -104,7 +104,9 @@ def epochs_create(
     if isinstance(events, int):
         events = np.linspace(0, len(data), events + 2)[1:-1]
     if isinstance(events, dict) is False:
-        events = _events_find_label({"onset": events}, event_labels=event_labels, event_conditions=event_conditions)
+        events = _events_find_label(
+            {"onset": events}, event_labels=event_labels, event_conditions=event_conditions
+        )
 
     event_onsets = list(events["onset"])
     event_labels = list(events["label"])
@@ -115,7 +117,11 @@ def epochs_create(
     if epochs_end == "from_events":
         epochs_end = [i / sampling_rate for i in events["duration"]]
     parameters = listify(
-        onset=event_onsets, label=event_labels, condition=event_conditions, start=epochs_start, end=epochs_end
+        onset=event_onsets,
+        label=event_labels,
+        condition=event_conditions,
+        start=epochs_start,
+        end=epochs_end,
     )
 
     # Find the maximum numbers of samples in an epoch
@@ -162,16 +168,16 @@ def epochs_create(
     # Sanitize dtype of individual columns
     for i in epochs:
 
-        for colname, column in epochs[i].select_dtypes(include=['object']).iteritems():
+        for colname, column in epochs[i].select_dtypes(include=["object"]).iteritems():
 
             # Check whether columns are indices or label/condition
             values = column.unique().tolist()
-            zero_or_one = False if False in [x in [0, 1] for x in values] else True
+            zero_or_one = not (False in [x in [0, 1] for x in values])
 
             if zero_or_one:
                 # Force to int64
-                epochs[i][colname] = epochs[i][colname].astype('int64')
+                epochs[i][colname] = epochs[i][colname].astype("int64")
             else:
-                epochs[i][colname] = epochs[i][colname].astype('string')
+                epochs[i][colname] = epochs[i][colname].astype("string")
 
     return epochs

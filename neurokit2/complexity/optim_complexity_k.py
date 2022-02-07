@@ -132,7 +132,7 @@ def _complexity_k_slope(kmax, signal, k_number="max"):
     else:
         k_values = np.unique(np.linspace(1, kmax + 1, k_number).astype(int))
 
-    """Step 3 of Vega & Noel (2015)"""
+    # Step 3 of Vega & Noel (2015)
     vectorized_Lk = np.vectorize(_complexity_k_Lk, excluded=[1])
 
     # Compute length of the curve, Lm(k)
@@ -163,7 +163,7 @@ def _complexity_k_plot(k_range, slope_values, k_optimal, ax=None):
 
     # if single time series
     ax.plot(k_range, slope_values, color="#2196F3", zorder=1)
-    for i, j in enumerate(k_range):
+    for i, _ in enumerate(k_range):
         ax.scatter(k_range[i], slope_values[i], color=colors[i], marker="o", zorder=2)
     ax.axvline(x=k_optimal, color="#E91E63", label="Optimal $k_{max}$: " + str(k_optimal))
     ax.legend(loc="upper right")

@@ -59,7 +59,7 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
     linelength : int
         Minimum length of a diagonal and vertical lines. Default to 2.
     show : bool
-        Visualise plot of RQA.
+        Visualise recurrence matrix.
 
     Returns
     ----------
@@ -104,8 +104,10 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
 
     # Get neighbourhood
     if tolerance == "default":
-        r, _ = complexity_tolerance(signal, method="sd", delay=None, dimension=None, show=False)
-    r = pyrqa.neighbourhood.FixedRadius(r)
+        tolerance, _ = complexity_tolerance(
+            signal, method="sd", delay=None, dimension=None, show=False
+        )
+    r = pyrqa.neighbourhood.FixedRadius(tolerance)
 
     # Convert signal to time series
     signal = pyrqa.time_series.TimeSeries(signal, embedding_dimension=dimension, time_delay=delay)
@@ -157,3 +159,12 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
             ) from e
 
     return results, {"RQA": rqa, "RP": rp, "Recurrence_Matrix": rp.recurrence_matrix_reverse}
+
+
+
+# def _complexity_rqa_rr(recmat):
+#     """Compute recurrence rate (imported in complexity_rqa)"""
+#     # Indices of the lower triangular (without the diagonal)
+#     idx = np.tril_indices(len(recmat), k=-1)
+#     # Compute percentage
+#     return recmat[idx].sum() / len(recmat[idx])

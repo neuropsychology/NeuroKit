@@ -30,7 +30,7 @@ def signal_sanitize(signal):
     """
 
     # Series check for non-default index
-    if type(signal) is pd.Series and type(signal.index) != pd.RangeIndex:
+    if isinstance(signal, pd.Series) and not isinstance(signal.index, pd.RangeIndex):
         return signal.reset_index(drop=True)
 
     return signal
