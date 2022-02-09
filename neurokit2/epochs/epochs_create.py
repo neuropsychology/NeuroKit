@@ -130,7 +130,11 @@ def epochs_create(
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
-    buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns).astype(data.dtypes)
+    # This ugly fix is to avoid edgecase in which dtype=int64 but required input dtype is "Int64".
+    # types = data.dtypes
+    # print(data.dtypes.to_dict())
+    # types[types == np.dtype("int64")] = np.dtype("Int64")
+    buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns).astype(dtype=types)
     data = pd.concat([buffer, data, buffer], ignore_index=True, sort=False)
 
     # Adjust the Onset of the events for the buffer
