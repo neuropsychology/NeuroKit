@@ -130,7 +130,7 @@ def epochs_create(
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
-    buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns)
+    buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns).astype(data.dtypes)
     data = pd.concat([buffer, data, buffer], ignore_index=True, sort=False)
 
     # Adjust the Onset of the events for the buffer
