@@ -130,7 +130,7 @@ def epochs_create(
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
-    types = data.dtypes.values if len(data.dtypes) > 0 else data.dtypes  # Convert types to vector
+    types = data.dtypes.values if len(data.dtypes) > 1 else data.dtypes  # Convert types to vector
     buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns).astype(dtype=types)
     data = pd.concat([buffer, data, buffer], ignore_index=True, sort=False)
 
