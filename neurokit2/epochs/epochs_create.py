@@ -130,10 +130,7 @@ def epochs_create(
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
-    # This ugly fix is to avoid edgecase in which dtype=int64 but required input dtype is "Int64".
-    # types = data.dtypes
-    # print(data.dtypes.to_dict())
-    # types[types == np.dtype("int64")] = np.dtype("Int64")
+    types = data.dtypes.values if len(data.dtypes) > 0 else data.dtypes  # Convert types to vector
     buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns).astype(dtype=types)
     data = pd.concat([buffer, data, buffer], ignore_index=True, sort=False)
 
