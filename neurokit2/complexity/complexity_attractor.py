@@ -35,7 +35,7 @@ def complexity_attractor(
     >>> import neurokit2 as nk
     >>>
     >>> # Lorenz attractors
-    >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=500)
+    >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=500) #doctest: +ELLIPSIS
     <Figure ...
     >>>
     >>> # Fast result (fixed alpha and color)
@@ -49,6 +49,7 @@ def complexity_attractor(
     >>>
     >>> # 2D Attractor
     >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 2)
+    >>>
     >>> # Fast (fixed alpha and color)
     >>> nk.complexity_attractor(embedded, color = "red", alpha = 1)
     >>>
