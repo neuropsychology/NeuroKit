@@ -58,7 +58,7 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     >>>
     >>> fractal1, info = nk.fractal_correlation(signal, radius="nolds", show=True)
     >>> fractal1
-    0.8316222643667605
+    0.8316222643667599
     >>>
     >>> fractal2, info = nk.fractal_correlation(signal, radius=32, show=True)
     >>> fractal2
