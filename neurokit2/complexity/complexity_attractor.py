@@ -39,7 +39,8 @@ def complexity_attractor(
     <Figure ...
     >>>
     >>> # Fast result (fixed alpha and color)
-    >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2)
+    >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2) #doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # Rössler attractors
     >>> nk.complexity_attractor("rossler", color = "blue", alpha=1, sampling_rate=5000)

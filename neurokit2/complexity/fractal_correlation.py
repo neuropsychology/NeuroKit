@@ -56,22 +56,23 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> fractal1, info = nk.fractal_correlation(signal, radius="nolds", show=True) # doctest: +ELLIPSIS
-    >>> fractal1
+    >>> fractal1, info = nk.fractal_correlation(signal, radius="nolds", show=True)
+    >>> fractal1 # doctest: +ELLIPSIS
     0.8316...
     >>>
-    >>> fractal2, info = nk.fractal_correlation(signal, radius=32, show=True) # doctest: +ELLIPSIS
-    >>> fractal2
+    >>> fractal2, info = nk.fractal_correlation(signal, radius=32, show=True)
+    >>> fractal2 # doctest: +ELLIPSIS
     0.7888...
     >>>
     >>> signal = nk.rsp_simulate(duration=120, sampling_rate=50)
     >>>
-    >>> fractal3, info = nk.fractal_correlation(signal, radius="nolds", show=True) # doctest: +ELLIPSIS
-    >>> fractal3
+    >>> fractal3, info = nk.fractal_correlation(signal, radius="nolds", show=True)
+    >>> fractal3 # doctest: +ELLIPSIS
     0.9...
     >>>
     >>> fractal4, info = nk.fractal_correlation(signal, radius=32, show=True)
-    >>> fractal4
+    >>> fractal4 # doctest: +ELLIPSIS
+    0.877
     >>>
 
 

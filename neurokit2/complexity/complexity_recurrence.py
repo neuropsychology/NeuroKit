@@ -57,8 +57,7 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
     >>> rc, d = nk.complexity_recurrence(signal, tolerance=0.5, show=True)
     >>>
     >>> # Optimization of tolerance via recurrence matrix
-    >>> rc, d = nk.complexity_tolerance(signal, delay=1, dimension=3, method="recurrence", show=True) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> rc, d = nk.complexity_tolerance(signal, delay=1, dimension=3, method="recurrence", show=True)
 
 
 
