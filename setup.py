@@ -41,6 +41,7 @@ test_requirements = requirements + [
     "biosppy==0.6.1",
     "cvxopt",
     "PyWavelets",
+    "pooch",
     "EMD-signal",
     "astropy",
 ]
