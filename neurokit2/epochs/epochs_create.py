@@ -130,9 +130,18 @@ def epochs_create(
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
-    types = data.dtypes.values if len(data.dtypes) > 1 else data.dtypes  # Convert types to vector
-    buffer = pd.DataFrame(index=range(length_buffer), columns=data.columns).astype(dtype=types)
+    # First createa buffer of the same dtype as data and fill with it 0s
+    buffer = pd.DataFrame(0, index=range(length_buffer), columns=data.columns).astype(
+        dtype=data.dtypes
+    )
+    # Only then, we convert the non-integers to nans (because regular numpy's ints cannot be nan)
+    buffer.select_dtypes(exclude="int64").replace({0.0: np.nan}, inplace=True)
+    # Now we can combine the buffer with the data
     data = pd.concat([buffer, data, buffer], ignore_index=True, sort=False)
+
+    if "Signal" in data.columns:
+        if str(data["Signal"].dtype) == "string":
+            print("wtf")
 
     # Adjust the Onset of the events for the buffer
     parameters["onset"] = [i + length_buffer for i in parameters["onset"]]
