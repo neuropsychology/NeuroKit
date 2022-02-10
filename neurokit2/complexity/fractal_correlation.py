@@ -62,6 +62,7 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     >>>
     >>> fractal2, info = nk.fractal_correlation(signal, radius=32, show=True)
     >>> fractal2
+    0.7888184653379124
     >>>
     >>> signal = nk.rsp_simulate(duration=120, sampling_rate=50)
     >>>

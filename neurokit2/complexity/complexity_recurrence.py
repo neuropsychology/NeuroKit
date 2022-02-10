@@ -51,8 +51,7 @@ def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", sho
     >>> signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.01)
     >>>
     >>> # Default r
-    >>> rc, _ = nk.complexity_recurrence(signal, show=True) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> rc, _ = nk.complexity_recurrence(signal, show=True)
     >>>
     >>> # Larger radius
     >>> rc, d = nk.complexity_recurrence(signal, tolerance=0.5, show=True) #doctest: +ELLIPSIS

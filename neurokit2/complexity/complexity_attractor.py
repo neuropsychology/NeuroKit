@@ -36,6 +36,7 @@ def complexity_attractor(
     >>>
     >>> # Lorenz attractors
     >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=500)
+    <Figure ...
     >>>
     >>> # Fast result (fixed alpha and color)
     >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2)
