@@ -5,7 +5,8 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import signal_findpeaks, signal_plot, signal_sanitize, signal_smooth, signal_zerocrossings
+from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
+                      signal_smooth, signal_zerocrossings)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
@@ -161,7 +162,16 @@ def _ecg_findpeaks_promac(
     signal,
     sampling_rate=1000,
     show=False,
-    promac_methods=["neurokit", "gamboa", "ssf", "engzee", "elgendi", "kalidas", "martinez", "rodrigues"],
+    promac_methods=[
+        "neurokit",
+        "gamboa",
+        "ssf",
+        "engzee",
+        "elgendi",
+        "kalidas",
+        "martinez",
+        "rodrigues",
+    ],
     threshold=0.33,
     gaussian_sd=100,
     **kwargs,
@@ -230,7 +240,9 @@ def _ecg_findpeaks_promac(
 
     if show is True:
         signal_plot([signal, convoluted], standardize=True)
-        [plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks]  # pylint: disable=W0106
+        [
+            plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks
+        ]  # pylint: disable=W0106
 
     # I am not sure if mandatory print the best option
     if error_list:  # empty?
@@ -426,7 +438,9 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
 
     for i in range(len(ma)):  # pylint: disable=C0200,R1702
 
-        if i > 0 and i < len(ma) - 1 and ma[i - 1] < ma[i] and ma[i + 1] < ma[i]:  # pylint: disable=R1716
+        if (
+            i > 0 and i < len(ma) - 1 and ma[i - 1] < ma[i] and ma[i + 1] < ma[i]
+        ):  # pylint: disable=R1716
             peak = i
             peaks.append(peak)
             if ma[peak] > th and (peak - QRS[-1]) > 0.3 * sampling_rate:
@@ -440,7 +454,10 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
                 if RR_ave != 0.0 and QRS[-1] - QRS[-2] > 1.5 * RR_ave:
                     missed_peaks = peaks[idx[-2] + 1 : idx[-1]]
                     for missed_peak in missed_peaks:
-                        if missed_peak - peaks[idx[-2]] > int(0.360 * sampling_rate) and ma[missed_peak] > 0.5 * th:
+                        if (
+                            missed_peak - peaks[idx[-2]] > int(0.360 * sampling_rate)
+                            and ma[missed_peak] > 0.5 * th
+                        ):
                             QRS.append(missed_peak)
                             QRS.sort()
                             break
@@ -802,12 +819,19 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
 
         if counter > neg_threshold:
             unfiltered_section = signal[thi_list[-1] - int(0.01 * sampling_rate) : i]
-            r_peaks.append(engzee_fake_delay + np.argmax(unfiltered_section) + thi_list[-1] - int(0.01 * sampling_rate))
+            r_peaks.append(
+                engzee_fake_delay
+                + np.argmax(unfiltered_section)
+                + thi_list[-1]
+                - int(0.01 * sampling_rate)
+            )
             counter = 0
             thi = False
             thf = False
 
-    r_peaks.pop(0)  # removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold
+    r_peaks.pop(
+        0
+    )  # removing the 1st detection as it 1st needs the QRS complex amplitude for the threshold
     r_peaks = np.array(r_peaks, dtype="int")
     return r_peaks
 
@@ -1120,7 +1144,8 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
                 if peak - last_peak > RR_missed:
                     missed_peaks = peaks[last_index + 1 : index]
                     missed_peaks = missed_peaks[
-                        (missed_peaks > last_peak + min_missed_distance) & (missed_peaks < peak - min_missed_distance)
+                        (missed_peaks > last_peak + min_missed_distance)
+                        & (missed_peaks < peak - min_missed_distance)
                     ]
                     threshold_I2 = 0.5 * threshold_I1
                     missed_peaks = missed_peaks[detection[missed_peaks] > threshold_I2]
@@ -1136,4 +1161,3 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
             NPKI = 0.125 * peak_value + 0.875 * NPKI
 
     return signal_peaks
-
