@@ -455,7 +455,7 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
                     missed_peaks = peaks[idx[-2] + 1 : idx[-1]]
                     for missed_peak in missed_peaks:
                         if (
-                            missed_peak - peaks[idx[-2]] > int(0.360 * sampling_rate)
+                            missed_peak - peaks[idx[-2]] > int(0.36 * sampling_rate)
                             and ma[missed_peak] > 0.5 * th
                         ):
                             QRS.append(missed_peak)
