@@ -35,15 +35,16 @@ def complexity_attractor(
     >>> import neurokit2 as nk
     >>>
     >>> # Lorenz attractors
-    >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=500) #doctest: +ELLIPSIS
+    >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=500) # doctest: +ELLIPSIS
     <Figure ...
     >>>
     >>> # Fast result (fixed alpha and color)
-    >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2) #doctest: +ELLIPSIS
+    >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2) # doctest: +ELLIPSIS
     <Figure ...
     >>>
     >>> # Rössler attractors
-    >>> nk.complexity_attractor("rossler", color = "blue", alpha=1, sampling_rate=5000)
+    >>> nk.complexity_attractor("rossler", color = "blue", alpha=1, sampling_rate=5000) # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # Simulate Signal
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency = [0.1, 5, 7, 10])
