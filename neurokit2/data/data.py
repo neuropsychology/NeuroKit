@@ -3,7 +3,7 @@ import json
 import os
 
 import pandas as pd
-import sklearn.datasets
+from sklearn import datasets as sklearn_datasets
 
 
 def data(dataset="bio_eventrelated_100hz"):
@@ -40,7 +40,7 @@ def data(dataset="bio_eventrelated_100hz"):
 
     # Specific requests
     if dataset == "iris":
-        data = sklearn.datasets.load_iris()
+        data = sklearn_datasets.load_iris()
         return pd.DataFrame(data.data, columns=data["feature_names"])
 
     if dataset in ["eeg", "eeg.txt"]:

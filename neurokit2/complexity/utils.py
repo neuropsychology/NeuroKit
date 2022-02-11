@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import matplotlib.pyplot as plt
 import numpy as np
+import sklearn.metrics
 import sklearn.neighbors
 
 from .complexity_embedding import complexity_embedding
@@ -127,7 +128,11 @@ def _get_count(embedded, tolerance, distance="chebyshev"):
 
 
 def _get_count_fuzzy(embedded, tolerance, distance="chebyshev", n=1):
-    dist = sklearn.neighbors.DistanceMetric.get_metric(distance)
+    # TODO: remove this compatibility patch once sklearn > 1.2 is out
+    if sklearn.__version__ < "1.0":
+        dist = sklearn.neighbors.DistanceMetric.get_metric(distance)
+    else:
+        dist = sklearn.metrics.DistanceMetric.get_metric(distance)
     dist = dist.pairwise(embedded)
 
     if n > 1:

@@ -56,22 +56,17 @@ def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **k
     >>>
     >>> signal = nk.signal_simulate(duration=2, frequency=5)
     >>>
-    >>> fractal1, info = nk.fractal_correlation(signal, radius="nolds", show=True)
-    >>> fractal1
-    0.8316222643667605
+    >>> fractal1, info = nk.fractal_correlation(signal, radius=32, show=True)
+    >>> fractal1 # doctest: +ELLIPSIS
+    0.7888...
     >>>
-    >>> fractal2, info = nk.fractal_correlation(signal, radius=32, show=True)
-    >>> fractal2
+    >>> fractal2, info = nk.fractal_correlation(signal, radius="nolds", show=True)
+    >>> fractal2 # doctest: +ELLIPSIS
+    0.8316...
     >>>
-    >>> signal = nk.rsp_simulate(duration=120, sampling_rate=50)
-    >>>
-    >>> fractal3, info = nk.fractal_correlation(signal, radius="nolds", show=True)
-    >>> fractal3
-    0.9535008400086612
-    >>>
-    >>> fractal4, info = nk.fractal_correlation(signal, radius=32, show=True)
-    >>> fractal4
-    >>>
+    >>> fractal3, info = nk.fractal_correlation(signal, radius='boon2008', show=True)
+    >>> fractal3 # doctest: +ELLIPSIS
+    0.7501...
 
 
     References
@@ -198,7 +193,7 @@ def _fractal_correlation_get_r(radius, signal, dist):
     if isinstance(radius, int):
         dist_range = np.max(dist) - np.min(dist)
         r_min, r_max = (np.min(dist) + 0.025 * dist_range), (np.min(dist) + 0.5 * dist_range)
-        r_vals = expspace(r_min, r_max, radius, base=2)
+        r_vals = expspace(r_min, r_max, radius, base=2, out="float")
 
     return r_vals
 

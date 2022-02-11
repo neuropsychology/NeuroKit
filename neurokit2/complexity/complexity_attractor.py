@@ -35,44 +35,49 @@ def complexity_attractor(
     >>> import neurokit2 as nk
     >>>
     >>> # Lorenz attractors
-    >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=500) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=500) # doctest: +ELLIPSIS
+    <Figure ...
+    >>>
     >>> # Fast result (fixed alpha and color)
-    >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2) # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # Rössler attractors
-    >>> nk.complexity_attractor("rossler", color = "blue", alpha=1, sampling_rate=5000) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.complexity_attractor("rossler", color = "blue", alpha=1, sampling_rate=5000) # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # Simulate Signal
     >>> signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency = [0.1, 5, 7, 10])
     >>>
     >>> # 2D Attractor
     >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 2)
+    >>>
     >>> # Fast (fixed alpha and color)
-    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1) # doctest: +ELLIPSIS
+    <Figure ...
+    >>>
     >>> # Slow
-    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time") #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time") # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # 3D Attractor
     >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 3)
+    >>>
     >>> # Fast (fixed alpha and color)
-    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1) #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1) # doctest: +ELLIPSIS
+    <Figure ...
+    >>>
     >>> # Slow
-    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time") #doctest: +ELLIPSIS
-    <Figure ...>
+    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time") # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # Animated rotation
     >>> import matplotlib.animation as animation
-    >>> fig = nk.complexity_attractor(embedded, color = "black", alpha = 0.5, shadows=False) #doctest: +ELLIPSIS
-    <Figure ...>
-    >>> ax = fig.get_axes()[0]
-    >>> def rotate(angle):
-    >>>     ax.view_init(azim=angle)
+    >>> fig = nk.complexity_attractor(embedded, color = "black", alpha = 0.5, shadows=False)
+    >>>
+    >>> # ax = fig.get_axes()[0]
+    >>> # def rotate(angle):
+    >>> #     ax.view_init(azim=angle)
     >>> # anim = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 361, 10), interval=10)
     >>> # import IPython
     >>> # IPython.display.HTML(anim.to_jshtml())
@@ -258,10 +263,10 @@ def _attractor_clifford(duration=1, sampling_rate=1000, a=-1.4, b=1.6, c=1.0, d=
     >>>
     >>> emb = nk.complexity_embedding("clifford", sampling_rate=100000)
     >>> plt.plot(emb[:, 0], emb[:, 1], '.', alpha=0.2, markersize=0.5) #doctest: +ELLIPSIS
-    <Figure ...>
+    [...
     >>> emb = nk.complexity_embedding("clifford", sampling_rate=100000, a=1.9, b=1.0, c=1.9, d=-1.1)
     >>> plt.plot(emb[:, 0], emb[:, 1], '.', alpha=0.2, markersize=0.5) #doctest: +ELLIPSIS
-    <Figure ...>
+    [...
 
     """
 
