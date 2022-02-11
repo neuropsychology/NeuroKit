@@ -8,7 +8,7 @@ import scipy.stats
 from ..signal import signal_findpeaks, signal_plot, signal_sanitize, signal_smooth, signal_zerocrossings
 
 
-def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False):
+def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
     """Find R-peaks in an ECG signal.
 
     Low-level function used by `ecg_peaks()` to identify R-peaks in an ECG signal using a different
@@ -22,12 +22,13 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
         The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
         Defaults to 1000.
     method : string
-        The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default),
-        'pantompkins1985', 'hamilton2002', 'christov2004', 'gamboa2008', 'elgendi2010', 'engzeemod2012',
-        'kalidas2017', 'martinez2003', 'rodrigues2021' or 'promac'.
+        The algorithm to be used for R-peak detection. For a list of acceptable methods,
+        please refer to the documentation of `ecg_peaks`.
     show : bool
         If True, will return a plot to visualizing the thresholds used in the algorithm.
         Useful for debugging.
+    **kwargs
+        Additional keyword arguments, usually specific for each `method`.
 
     Returns
     -------
@@ -37,7 +38,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     See Also
     --------
-    ecg_clean, signal_fixpeaks, ecg_peaks, ecg_rate, ecg_process, ecg_plot
+    ecg_peaks, ecg_clean, signal_fixpeaks, ecg_rate, ecg_process, ecg_plot
 
     Examples
     --------
@@ -91,29 +92,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     References
     --------------
-    - Rodrigues, Tiago & Samoutphonh, Sirisack & Plácido da Silva, Hugo & Fred, Ana. (2021).
-      A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices.
-
-    - Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
-      PhD ThesisUniversidade.
-
-    - Zong, W., Heldt, T., Moody, G. B., & Mark, R. G. (2003). An open-source algorithm to
-      detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
-
-    - Hamilton, P. (2002, September). Open source ECG analysis. In Computers in cardiology (pp. 101-104). IEEE.
-
-    - Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on
-      biomedical engineering, (3), 230-236.
-
-    - Engelse, W. A. H., & Zeelenberg, C. (1979). A single scan algorithm for QRS detection and feature
-      extraction IEEE Comput Cardiol. Long Beach: IEEE Computer Society.
-
-    - Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012). Real Time
-      Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp. 49-54).
-
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).
-      An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
-      IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11. doi:10.1109/jtehm.2018.2878000
+    Please, see the list of references in the documentation of `ecg_peaks`.
 
     """
     # Try retrieving right column
@@ -128,37 +107,14 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     # Sanitize input
     ecg_cleaned = signal_sanitize(ecg_cleaned)
-
     method = method.lower()  # remove capitalised letters
+
     # Run peak detection algorithm
-    if method in ["nk", "nk2", "neurokit", "neurokit2"]:
-        rpeaks = _ecg_findpeaks_neurokit(ecg_cleaned, sampling_rate, show=show)
-    elif method in ["pantompkins", "pantompkins1985"]:
-        rpeaks = _ecg_findpeaks_pantompkins(ecg_cleaned, sampling_rate)
-    elif method in ["nabian", "nabian2018"]:
-        rpeaks = _ecg_findpeaks_nabian2018(ecg_cleaned, sampling_rate)
-    elif method in ["gamboa2008", "gamboa"]:
-        rpeaks = _ecg_findpeaks_gamboa(ecg_cleaned, sampling_rate)
-    elif method in ["ssf", "slopesumfunction", "zong", "zong2003"]:
-        rpeaks = _ecg_findpeaks_ssf(ecg_cleaned, sampling_rate)
-    elif method in ["hamilton", "hamilton2002"]:
-        rpeaks = _ecg_findpeaks_hamilton(ecg_cleaned, sampling_rate)
-    elif method in ["christov", "christov2004"]:
-        rpeaks = _ecg_findpeaks_christov(ecg_cleaned, sampling_rate)
-    elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
-        rpeaks = _ecg_findpeaks_engzee(ecg_cleaned, sampling_rate)
-    elif method in ["elgendi", "elgendi2010"]:
-        rpeaks = _ecg_findpeaks_elgendi(ecg_cleaned, sampling_rate)
-    elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
-        rpeaks = _ecg_findpeaks_kalidas(ecg_cleaned, sampling_rate)
-    elif method in ["martinez2003", "martinez"]:
-        rpeaks = _ecg_findpeaks_WT(ecg_cleaned, sampling_rate)
-    elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
-        rpeaks = _ecg_findpeaks_rodrigues(ecg_cleaned, sampling_rate)
-    elif method in ["promac", "all"]:
-        rpeaks = _ecg_findpeaks_promac(ecg_cleaned, sampling_rate=sampling_rate, threshold=0.33, show=show)
-    else:
-        raise ValueError("NeuroKit error: ecg_findpeaks(): 'method' should be one of 'neurokit'" "or 'pantompkins'.")
+    try:
+        func = _ecg_findpeaks_findmethod(method)
+        rpeaks = func(ecg_cleaned, sampling_rate=sampling_rate, **kwargs)
+    except ValueError as error:
+        raise error
 
     # Prepare output.
     info = {"ECG_R_Peaks": rpeaks}
@@ -166,21 +122,102 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     return info
 
 
+# Returns the peak detector function by name
+def _ecg_findpeaks_findmethod(method):
+    if method in ["nk", "nk2", "neurokit", "neurokit2"]:
+        return _ecg_findpeaks_neurokit
+    elif method in ["pantompkins", "pantompkins1985"]:
+        return _ecg_findpeaks_pantompkins
+    elif method in ["nabian", "nabian2018"]:
+        return _ecg_findpeaks_nabian2018
+    elif method in ["gamboa2008", "gamboa"]:
+        return _ecg_findpeaks_gamboa
+    elif method in ["ssf", "slopesumfunction", "zong", "zong2003"]:
+        return _ecg_findpeaks_ssf
+    elif method in ["hamilton", "hamilton2002"]:
+        return _ecg_findpeaks_hamilton
+    elif method in ["christov", "christov2004"]:
+        return _ecg_findpeaks_christov
+    elif method in ["engzee", "engzee2012", "engzeemod", "engzeemod2012"]:
+        return _ecg_findpeaks_engzee
+    elif method in ["elgendi", "elgendi2010"]:
+        return _ecg_findpeaks_elgendi
+    elif method in ["kalidas2017", "swt", "kalidas", "kalidastamil", "kalidastamil2017"]:
+        return _ecg_findpeaks_kalidas
+    elif method in ["martinez2003", "martinez"]:
+        return _ecg_findpeaks_WT
+    elif method in ["rodrigues2020", "rodrigues2021", "rodrigues", "asi"]:
+        return _ecg_findpeaks_rodrigues
+    elif method in ["promac", "all"]:
+        return _ecg_findpeaks_promac
+    else:
+        raise ValueError(f"NeuroKit error: ecg_findpeaks(): '{method}' not implemented.")
+
+
 # =============================================================================
 # Probabilistic Methods-Agreement via Convolution (ProMAC)
 # =============================================================================
-def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False, **kwargs):
+def _ecg_findpeaks_promac(
+    signal,
+    sampling_rate=1000,
+    show=False,
+    promac_methods=["neurokit", "gamboa", "ssf", "engzee", "elgendi", "kalidas", "martinez", "rodrigues"],
+    threshold=0.33,
+    gaussian_sd=100,
+    **kwargs,
+):
+    """Probabilistic Methods-Agreement via Convolution (ProMAC).
 
+    ProMAC combines the result of several R-peak detectors in a probabilistic way. For a given peak
+    detector, the binary signal representing the peak locations is convolved with a Gaussian
+    distribution, resulting in a propabilistic representation of each peak location. This procedure
+    is repeated for all selected 'promac_methods' and the resulting signals are accumulated. Finally,
+    a threshold is used to accept or reject the peak locations.
+
+    See this discussion for more information on the origins of the method:
+    https://github.com/neuropsychology/NeuroKit/issues/222
+
+    Parameters
+    ----------
+    signal : Union[list, np.array, pd.Series]
+        The (cleaned) ECG channel, e.g. as returned by `ecg_clean()`.
+    sampling_rate : int
+        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
+        Defaults to 1000.
+    show : bool
+        If True, will return a plot to visualizing the thresholds used in the algorithm.
+        Useful for debugging.
+    promac_methods : list of string
+        The algorithms to be used for R-peak detection. See the list of acceptable algorithms for
+        the 'ecg_peaks' function.
+    threshold : float
+        The tolerance for peak acceptance. This value is a percentage of the signal's maximum
+        value. Only peaks found above this tolerance will be finally considered as actual peaks.
+    gaussian_sd : int
+        The standard deviation of the Gaussian distribution used to represent the peak location
+        probability. This value should be in millisencods and is usually taken as the size of
+        QRS complexes.
+
+    Returns
+    -------
+    rpeaks : list of int
+        A list of array positions at which R-peaks occur.
+
+    """
     x = np.zeros(len(signal))
+    promac_methods = [method.lower() for method in promac_methods]  # remove capitalised letters
+    error_list = []  # Stores the failed methods
 
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_neurokit, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_gamboa, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_ssf, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_engzee, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_elgendi, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_kalidas, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_WT, **kwargs)
-    x = _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, _ecg_findpeaks_rodrigues, **kwargs)
+    for method in promac_methods:
+        try:
+            func = _ecg_findpeaks_findmethod(method)
+            x = _ecg_findpeaks_promac_addconvolve(
+                signal, sampling_rate, x, func, gaussian_sd=gaussian_sd, **kwargs
+            )
+        except ValueError:
+            error_list.append(f"Method '{method}' is not valid.")
+        except Exception as error:
+            error_list.append(f"{method} error: {error}")
 
     # Rescale
     x = x / np.max(x)
@@ -195,24 +232,28 @@ def _ecg_findpeaks_promac(signal, sampling_rate=1000, threshold=0.33, show=False
         signal_plot([signal, convoluted], standardize=True)
         [plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks]  # pylint: disable=W0106
 
+    # I am not sure if mandatory print the best option
+    if error_list:  # empty?
+        print(error_list)
+
     return peaks
 
 
-def _ecg_findpeaks_promac_addmethod(signal, sampling_rate, x, fun, **kwargs):
+# _ecg_findpeaks_promac_addmethod + _ecg_findpeaks_promac_convolve
+# Joining them makes parameters exposition more consistent
+def _ecg_findpeaks_promac_addconvolve(signal, sampling_rate, x, fun, gaussian_sd=100, **kwargs):
     peaks = fun(signal, sampling_rate=sampling_rate, **kwargs)
-    x += _ecg_findpeaks_promac_convolve(signal, peaks, sampling_rate=sampling_rate)
-    return x
 
+    mask = np.zeros(len(signal))
+    mask[peaks] = 1
 
-def _ecg_findpeaks_promac_convolve(signal, peaks, sampling_rate=1000):
-    x = np.zeros(len(signal))
-    x[peaks] = 1
-
-    # Because a typical QRS is roughly defined within about 100ms
-    sd = sampling_rate / 10
+    # SD is defined as a typical QRS size, which for adults if 100ms
+    sd = sampling_rate * gaussian_sd / 1000
     shape = scipy.stats.norm.pdf(np.linspace(-sd * 4, sd * 4, num=int(sd * 8)), loc=0, scale=sd)
 
-    return np.convolve(x, shape, "same")  # Return convolved
+    x += np.convolve(mask, shape, "same")
+
+    return x
 
 
 # =============================================================================
@@ -1095,3 +1136,4 @@ def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
             NPKI = 0.125 * peak_value + 0.875 * NPKI
 
     return signal_peaks
+
