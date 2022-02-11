@@ -53,19 +53,23 @@ def complexity_attractor(
     >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 2)
     >>>
     >>> # Fast (fixed alpha and color)
-    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1)
+    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1) # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # Slow
-    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time")
+    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time") # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # 3D Attractor
     >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 3)
     >>>
     >>> # Fast (fixed alpha and color)
-    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1)
+    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1) # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # Slow
-    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time")
+    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time") # doctest: +ELLIPSIS
+    <Figure ...
     >>>
     >>> # Animated rotation
     >>> import matplotlib.animation as animation
