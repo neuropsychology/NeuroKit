@@ -75,9 +75,9 @@ def complexity_attractor(
     >>> import matplotlib.animation as animation
     >>> fig = nk.complexity_attractor(embedded, color = "black", alpha = 0.5, shadows=False)
     >>>
-    >>> ax = fig.get_axes()[0]
-    >>> def rotate(angle):
-    >>>     ax.view_init(azim=angle)
+    >>> # ax = fig.get_axes()[0]
+    >>> # def rotate(angle):
+    >>> #     ax.view_init(azim=angle)
     >>> # anim = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 361, 10), interval=10)
     >>> # import IPython
     >>> # IPython.display.HTML(anim.to_jshtml())
