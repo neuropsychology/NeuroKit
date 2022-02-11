@@ -5,8 +5,13 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
-                      signal_smooth, signal_zerocrossings)
+from ..signal import (
+    signal_findpeaks,
+    signal_plot,
+    signal_sanitize,
+    signal_smooth,
+    signal_zerocrossings,
+)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
@@ -113,7 +118,7 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     # Run peak detection algorithm
     try:
         func = _ecg_findpeaks_findmethod(method)
-        rpeaks = func(ecg_cleaned, sampling_rate=sampling_rate, **kwargs)
+        rpeaks = func(ecg_cleaned, sampling_rate=sampling_rate, show=show, **kwargs)
     except ValueError as error:
         raise error
 
