@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 
-from ..misc import as_vector, NeuroKitWarning
+from ..misc import NeuroKitWarning, as_vector
 from ..signal import signal_filter
 
 
@@ -69,7 +69,7 @@ def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit"):
         warn(
             "There are " + str(n_missing) + " missing data points in your signal."
             " Filling missing values by using the forward filling method.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         ecg_signal = _ecg_clean_missing(ecg_signal)
 
@@ -118,17 +118,20 @@ def _ecg_clean_missing(ecg_signal):
 
     return ecg_signal
 
+
 # =============================================================================
 # Neurokit
 # =============================================================================
 def _ecg_clean_nk(ecg_signal, sampling_rate=1000):
 
     # Remove slow drift and dc offset with highpass Butterworth.
-    clean = signal_filter(signal=ecg_signal, sampling_rate=sampling_rate,
-                          lowcut=0.5, method="butterworth", order=5)
+    clean = signal_filter(
+        signal=ecg_signal, sampling_rate=sampling_rate, lowcut=0.5, method="butterworth", order=5
+    )
 
-    clean = signal_filter(signal=clean, sampling_rate=sampling_rate,
-                          method="powerline", powerline=50)
+    clean = signal_filter(
+        signal=clean, sampling_rate=sampling_rate, method="powerline", powerline=50
+    )
     return clean
 
 
@@ -148,7 +151,9 @@ def _ecg_clean_biosppy(ecg_signal, sampling_rate=1000):
 
     #   -> get_filter()
     #     -> _norm_freq()
-    frequency = 2 * np.array(frequency) / sampling_rate  # Normalize frequency to Nyquist Frequency (Fs/2).
+    frequency = (
+        2 * np.array(frequency) / sampling_rate
+    )  # Normalize frequency to Nyquist Frequency (Fs/2).
 
     #     -> get coeffs
     a = np.array([1])
@@ -175,7 +180,7 @@ def _ecg_clean_pantompkins(ecg_signal, sampling_rate=1000):
     zi_coeff = scipy.signal.sosfilt_zi(sos)
     zi = zi_coeff * np.mean(ecg_signal)
 
-    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)  # Return filtered
+    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)[0]  # Return filtered
 
 
 # =============================================================================
@@ -193,11 +198,11 @@ def _ecg_clean_elgendi(ecg_signal, sampling_rate=1000):
     f1 = 8 / (0.5 * sampling_rate)
     f2 = 20 / (0.5 * sampling_rate)
 
-    sos = scipy.signal.butter(2, [f1, f2], btype="bandpass",  output="sos")
+    sos = scipy.signal.butter(2, [f1, f2], btype="bandpass", output="sos")
     zi_coeff = scipy.signal.sosfilt_zi(sos)
     zi = zi_coeff * np.mean(ecg_signal)
 
-    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)  # Return filtered
+    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)[0]  # Return filtered
 
 
 # =============================================================================
@@ -210,11 +215,11 @@ def _ecg_clean_hamilton(ecg_signal, sampling_rate=1000):
     f1 = 8 / (0.5 * sampling_rate)
     f2 = 16 / (0.5 * sampling_rate)
 
-    sos = scipy.signal.butter(1, [f1, f2], btype="bandpass",  output="sos")
+    sos = scipy.signal.butter(1, [f1, f2], btype="bandpass", output="sos")
     zi_coeff = scipy.signal.sosfilt_zi(sos)
     zi = zi_coeff * np.mean(ecg_signal)
 
-    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)  # Return filtered
+    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)[0]  # Return filtered
 
 
 # =============================================================================
@@ -238,4 +243,4 @@ def _ecg_clean_engzee(ecg_signal, sampling_rate=1000):
     zi_coeff = scipy.signal.sosfilt_zi(sos)
     zi = zi_coeff * np.mean(ecg_signal)
 
-    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)  # Return filtered
+    return scipy.signal.sosfilt(sos, ecg_signal, zi=zi)[0]  # Return filtered
