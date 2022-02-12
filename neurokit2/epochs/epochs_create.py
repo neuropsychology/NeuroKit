@@ -140,10 +140,6 @@ def epochs_create(
     # Now we can combine the buffer with the data
     data = pd.concat([buffer, data, buffer], ignore_index=True, sort=False)
 
-    if "Signal" in data.columns:
-        if str(data["Signal"].dtype) == "string":
-            print("wtf")
-
     # Adjust the Onset of the events for the buffer
     parameters["onset"] = [i + length_buffer for i in parameters["onset"]]
 
