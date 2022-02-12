@@ -196,4 +196,4 @@ data/mit_long-term/mit-bih-long-term-ecg-database-1.0.0/RECORDS
 data/mit_long-term/mit-bih-long-term-ecg-database-1.0.0/SHA256SUMS.txt
 data/mit_long-term/ECGs.csv
 data/mit_long-term/ECGs.csv
-
+.DS_Store

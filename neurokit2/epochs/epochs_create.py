@@ -130,6 +130,7 @@ def epochs_create(
 
     # Extend data by the max samples in epochs * NaN (to prevent non-complete data)
     length_buffer = epoch_max_duration
+
     # First createa buffer of the same dtype as data and fill with it 0s
     buffer = pd.DataFrame(0, index=range(length_buffer), columns=data.columns).astype(
         dtype=data.dtypes
