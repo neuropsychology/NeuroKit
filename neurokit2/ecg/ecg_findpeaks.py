@@ -357,7 +357,7 @@ def _ecg_findpeaks_neurokit(
 # =============================================================================
 # Pan & Tompkins (1985)
 # =============================================================================
-def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
+def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
     - Jiapu Pan and Willis J. Tompkins. A Real-Time QRS Detection Algorithm.
@@ -381,7 +381,7 @@ def _ecg_findpeaks_pantompkins(signal, sampling_rate=1000):
 # ===========================================================================
 # Nabian et al. (2018)
 # ===========================================================================
-def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000):
+def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000, **kwargs):
     """R peak detection method by Nabian et al. (2018) inspired by the Pan-Tompkins algorithm.
 
     - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018).
@@ -411,7 +411,7 @@ def _ecg_findpeaks_nabian2018(signal, sampling_rate=1000):
 # =============================================================================
 # Hamilton (2002)
 # =============================================================================
-def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
+def _ecg_findpeaks_hamilton(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
     - Hamilton, Open Source ECG Analysis Software Documentation, E.P.Limited, 2002.
@@ -492,7 +492,7 @@ def _ecg_findpeaks_hamilton(signal, sampling_rate=1000):
 # =============================================================================
 # Slope Sum Function (SSF) - Zong et al. (2003)
 # =============================================================================
-def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, after=0.01):
+def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, after=0.01, **kwargs):
     """From https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L448.
 
@@ -542,7 +542,7 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
 # =============================================================================
 # Christov (2004)
 # =============================================================================
-def _ecg_findpeaks_christov(signal, sampling_rate=1000):
+def _ecg_findpeaks_christov(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
     - Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold,
@@ -674,7 +674,7 @@ def _ecg_findpeaks_christov(signal, sampling_rate=1000):
 # =============================================================================
 # Gamboa (2008)
 # =============================================================================
-def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
+def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002, **kwargs):
     """From https://github.com/PIA-
     Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py#L834.
 
@@ -719,7 +719,7 @@ def _ecg_findpeaks_gamboa(signal, sampling_rate=1000, tol=0.002):
 # =============================================================================
 # Engzee Modified (2012)
 # =============================================================================
-def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
+def _ecg_findpeaks_engzee(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
     - C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.
@@ -844,7 +844,7 @@ def _ecg_findpeaks_engzee(signal, sampling_rate=1000):
 # =============================================================================
 # Stationary Wavelet Transform  (SWT) - Kalidas and Tamil (2017)
 # =============================================================================
-def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
+def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
     - Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform
@@ -899,7 +899,7 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000):
 # =============================================================================
 # Elgendi et al. (2010)
 # =============================================================================
-def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
+def _ecg_findpeaks_elgendi(signal, sampling_rate=1000, **kwargs):
     """From https://github.com/berndporr/py-ecg-detectors/
 
     - Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection.
@@ -944,7 +944,7 @@ def _ecg_findpeaks_elgendi(signal, sampling_rate=1000):
 # Continuous Wavelet Transform (CWT) - Martinez et al. (2003)
 # =============================================================================
 #
-def _ecg_findpeaks_WT(signal, sampling_rate=1000):
+def _ecg_findpeaks_WT(signal, sampling_rate=1000, **kwargs):
     # Try loading pywt
     try:
         import pywt
@@ -1010,7 +1010,7 @@ def _ecg_findpeaks_WT(signal, sampling_rate=1000):
 # =============================================================================
 
 
-def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
+def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000, **kwargs):
     """Segmenter by Tiago Rodrigues, inspired by on Gutierrez-Rivas (2015) and Sadhukhan (2012).
 
     References
@@ -1081,7 +1081,7 @@ def _ecg_findpeaks_rodrigues(signal, sampling_rate=1000):
 # =============================================================================
 
 
-def _ecg_findpeaks_MWA(signal, window_size):
+def _ecg_findpeaks_MWA(signal, window_size, **kwargs):
     """Based on https://github.com/berndporr/py-ecg-detectors/
 
     Optimized for vectorized computation.
@@ -1110,7 +1110,7 @@ def _ecg_findpeaks_MWA(signal, window_size):
     return mwa
 
 
-def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000):
+def _ecg_findpeaks_peakdetect(detection, sampling_rate=1000, **kwargs):
     """Based on https://github.com/berndporr/py-ecg-detectors/
 
     Optimized for vectorized computation.
