@@ -134,15 +134,11 @@ def signal_plot(
             signal[continuous_columns] = nk_standardize(signal[continuous_columns])
 
         if subplots is True:
-            fig, axes = plt.subplots(
-                nrows=len(continuous_columns), ncols=1, sharex=True, **kwargs
-            )
+            _, axes = plt.subplots(nrows=len(continuous_columns), ncols=1, sharex=True, **kwargs)
             for ax, col, color in zip(axes, continuous_columns, colors):
                 ax.plot(signal[col], c=color, **kwargs)
         else:
-            plot = signal[continuous_columns].plot(
-                subplots=False, sharex=True, **kwargs
-            )
+            plot = signal[continuous_columns].plot(subplots=False, sharex=True, **kwargs)
 
         if sampling_rate is None and signal.index.is_integer():
             plt.xlabel("Samples")

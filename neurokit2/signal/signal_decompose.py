@@ -114,7 +114,9 @@ def _signal_decompose_ssa(signal, n_components=None):
     for i in range(d):
         X_elem = sigma[i] * np.outer(u[:, i], vt[i, :])
         X_rev = X_elem[::-1]
-        components[:, i] = [X_rev.diagonal(j).mean() for j in range(-X_rev.shape[0] + 1, X_rev.shape[1])]
+        components[:, i] = [
+            X_rev.diagonal(j).mean() for j in range(-X_rev.shape[0] + 1, X_rev.shape[1])
+        ]
 
     # Return the components
     return components.T
@@ -160,11 +162,11 @@ def _signal_decompose_emd(signal, ensemble=False):
     """
     try:
         import PyEMD
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: _signal_decompose_emd(): the 'PyEMD' module is required for this function to run. ",
             "Please install it first (`pip install EMD-signal`).",
-        )
+        ) from e
 
     if ensemble is False:
         emd = PyEMD.EMD(extrema_detection="parabol")

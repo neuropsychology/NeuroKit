@@ -33,7 +33,7 @@ def distance(X=None, method="mahalanobis"):
     >>> vector #doctest: +SKIP
 
     """
-    if isinstance(X, pd.DataFrame) is False:
+    if not isinstance(X, pd.DataFrame):
         X = pd.DataFrame(X)
 
     method = method.lower()  # remove capitalised letters

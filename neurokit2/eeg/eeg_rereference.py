@@ -6,6 +6,18 @@ import pandas as pd
 def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     """EEG Rereferencing
 
+    This function can be used for arrays as well as MNE objects.
+
+    EEG recordings measure differences in electrical potentials between two points, which means the
+    signal displayed at any channel is in fact the difference in electrical potential to some other
+    recording site. Primarily, this other recording site is the ground electrode, which picks up
+    electrical noise that does not reach the other scalp electrodes. Consequently, the voltage
+    difference between ground and EEG scalp electrodes is also affected by this noise.
+
+    The idea behind re-referencing is to express the voltage at the EEG scalp channels with respect
+    to another, new reference. It can be composed of any recorded channel or an average of several
+    channels.
+
     Parameters
     -----------
     eeg : np.ndarray

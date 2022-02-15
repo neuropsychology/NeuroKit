@@ -188,8 +188,7 @@ def _complexity_lyapunov_rosenstein(
 def _complexity_lyapunov_eckmann(
     signal, delay=1, dimension=2, tolerance=None, matrix_dim=4, min_neighbors="default"
 ):
-    """
-    TODO: check implementation
+    """TODO: check implementation
 
     From https://github.com/CSchoel/nolds
     """
@@ -310,8 +309,7 @@ def _complexity_lyapunov_checklength(
     matrix_dim=4,
     min_neighbors="default",
 ):
-    """
-    Helper function that calculates the minimum number of data points required.
+    """Helper function that calculates the minimum number of data points required.
     """
     if method in ["rosenstein", "rosenstein1993"]:
         # minimum length required to find single orbit vector

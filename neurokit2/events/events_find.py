@@ -91,7 +91,7 @@ def events_find(
     if len(events["onset"]) == 0:
         warn(
             "No events found. Check your event_channel or adjust 'threshold' or 'keep' arguments.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return events
 
@@ -114,8 +114,12 @@ def events_find(
     # Remove based on interval min
     if inter_min > 0:
         inter = np.diff(events["onset"])
-        events["onset"] = np.concatenate([events["onset"][0:1], events["onset"][1::][inter >= inter_min]])
-        events["duration"] = np.concatenate([events["duration"][0:1], events["duration"][1::][inter >= inter_min]])
+        events["onset"] = np.concatenate(
+            [events["onset"][0:1], events["onset"][1::][inter >= inter_min]]
+        )
+        events["duration"] = np.concatenate(
+            [events["duration"][0:1], events["duration"][1::][inter >= inter_min]]
+        )
 
     # Remove first and last n
     if discard_first > 0:
@@ -125,7 +129,9 @@ def events_find(
         events["onset"] = events["onset"][0 : -1 * discard_last]
         events["duration"] = events["duration"][0 : -1 * discard_last]
 
-    events = _events_find_label(events, event_labels=event_labels, event_conditions=event_conditions)
+    events = _events_find_label(
+        events, event_labels=event_labels, event_conditions=event_conditions
+    )
 
     return events
 
@@ -135,13 +141,15 @@ def events_find(
 # =============================================================================
 
 
-def _events_find_label(events, event_labels=None, event_conditions=None, function_name="events_find"):
+def _events_find_label(
+    events, event_labels=None, event_conditions=None, function_name="events_find"
+):
     # Get n events
     n = len(events["onset"])
 
     # Labels
     if event_labels is None:
-        event_labels = (np.arange(n) + 1).astype(np.str)
+        event_labels = (np.arange(n) + 1).astype(str)
 
     if len(list(set(event_labels))) != n:
         raise ValueError(
