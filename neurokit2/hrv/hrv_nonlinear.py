@@ -448,10 +448,12 @@ def _hrv_nonlinear_fragmentation(rri, out):
 # =============================================================================
 def _hrv_dfa(peaks, rri, out, n_windows="default", **kwargs):
 
-    if "dfa_windows" in kwargs:
-        dfa_windows = kwargs["dfa_windows"]
-    else:
-        dfa_windows = [(4, 11), (12, None)]
+   # if "dfa_windows" in kwargs:
+    #    dfa_windows = kwargs["dfa_windows"]
+   # else:
+       # dfa_windows = [(4, 11), (12, None)]
+    #consider using dict.get() mthd directly
+    dfa_windows = kwargs.get('dfa_windows', [(4,11), (12,None)])
 
     # Determine max beats
     if dfa_windows[1][1] is None:

@@ -127,10 +127,13 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     out["pNN20"] = nn20 / len(rri) * 100
 
     # Geometrical domain
-    if "binsize" in kwargs.keys():
-        binsize = kwargs["binsize"]
-    else:
-        binsize = (1 / 128) * 1000
+    #if "binsize" in kwargs.keys():
+        #binsize = kwargs["binsize"]
+    #else:
+        #binsize = (1 / 128) * 1000
+    #consider using dict.get()
+    binsize = kwargs.get("binsize", ((1 / 128) * 1000))
+
     bins = np.arange(0, np.max(rri) + binsize, binsize)
     bar_y, bar_x = np.histogram(rri, bins=bins)
     # HRV Triangular Index
