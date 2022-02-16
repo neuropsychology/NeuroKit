@@ -43,7 +43,7 @@ def microstates_classify(segmentation, microstates):
     new_order = _microstates_sort(microstates)
     microstates = microstates[new_order]
 
-    replacement = {i: j for i, j in enumerate(new_order)}
+    replacement = dict(enumerate(new_order))
     segmentation = replace(segmentation, replacement)
 
     return segmentation, microstates
