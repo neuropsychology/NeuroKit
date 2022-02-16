@@ -78,11 +78,11 @@ def _microstates_plot_topos(microstates, info, ax=None):
 
     try:
         import mne
-    except ImportError:
+    except ImportError as e:
         raise ImportError(
             "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
-        )
+        ) from e    # raise ImportError with the original traceback so that direct cause of error is explicitly known
 
     # Plot
     if ax is None:
