@@ -66,15 +66,15 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
     return fig
 
 
-
-
 def _microstates_plot_topos(microstates, info, ax=None):
     """Plot prototypical microstate maps.
     """
     # Sanity check
     if info is None:
-        raise ValueError("NeuroKit error: microstate_plot(): An MNE-object must be passed to ",
-                         " 'mne_object' in order to plot the topoplots.")
+        raise ValueError(
+            "NeuroKit error: microstate_plot(): An MNE-object must be passed to ",
+            " 'mne_object' in order to plot the topoplots.",
+        )
 
     try:
         import mne
@@ -82,7 +82,7 @@ def _microstates_plot_topos(microstates, info, ax=None):
         raise ImportError(
             "NeuroKit error: eeg_add_channel(): the 'mne' module is required for this function to run. ",
             "Please install it first (`pip install mne`).",
-        ) from e    # raise ImportError with the original traceback so that direct cause of error is explicitly known
+        ) from e  # raise ImportError with the original traceback so that direct cause of error is explicitly known
 
     # Plot
     if ax is None:
@@ -92,7 +92,8 @@ def _microstates_plot_topos(microstates, info, ax=None):
 
     for i, map in enumerate(microstates):
         mne.viz.plot_topomap(map, info, axes=ax[i])
-        ax[i].set_title('%d' % i)
+        # ax[i].set_title('%d' % i)
+        ax[i].set_title(f"{i}")  # replace %formatting with f-string format
 
     return fig
 
@@ -102,8 +103,10 @@ def _microstates_plot_segmentation(segmentation, gfp, info=None, ax=None):
     """
     # Sanity checks
     if gfp is None:
-        raise ValueError("NeuroKit error: microstate_plot(): GFP data must be passed to ",
-                         " 'gfp' in order to plot the segmentation.")
+        raise ValueError(
+            "NeuroKit error: microstate_plot(): GFP data must be passed to ",
+            " 'gfp' in order to plot the segmentation.",
+        )
 
     if info is not None and "sfreq" in info.keys():
         times = np.arange(len(gfp)) / info["sfreq"]
@@ -111,9 +114,9 @@ def _microstates_plot_segmentation(segmentation, gfp, info=None, ax=None):
         times = np.arange(len(gfp))
 
     if len(segmentation) > len(gfp):
-        segmentation = segmentation[0:len(gfp)]
+        segmentation = segmentation[0 : len(gfp)]
     if len(segmentation) < len(gfp):
-        gfp = gfp[0:len(segmentation)]
+        gfp = gfp[0 : len(segmentation)]
 
     # Plot
     if ax is None:
@@ -122,22 +125,22 @@ def _microstates_plot_segmentation(segmentation, gfp, info=None, ax=None):
         fig = None
 
     n_states = len(np.unique(segmentation))
-    cmap = plt.cm.get_cmap('plasma', n_states)
-    ax.plot(times, gfp, color='black', linewidth=1)
+    cmap = plt.cm.get_cmap("plasma", n_states)
+    ax.plot(times, gfp, color="black", linewidth=1)
     for state, color in zip(range(n_states), cmap.colors):
-        ax.fill_between(times, gfp, color=color,
-                        where=(segmentation == state))
+        ax.fill_between(times, gfp, color=color, where=(segmentation == state))
     norm = matplotlib.colors.Normalize(vmin=0, vmax=n_states)
     sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
     sm.set_array([])
     plt.colorbar(sm, ax=ax)
     ax.set_yticks([])
     if info is not None and "sfreq" in info.keys():
-        ax.set_xlabel('Time (s)')
+        ax.set_xlabel("Time (s)")
     else:
-        ax.set_xlabel('Sample')
-    ax.set_ylabel('Global Field Power (GFP)')
-    ax.set_title('Sequence of the %d microstates' % n_states)
+        ax.set_xlabel("Sample")
+    ax.set_ylabel("Global Field Power (GFP)")
+    # ax.set_title('Sequence of the %d microstates' % n_states)
+    ax.set_title(f"Sequence of the {n_states} microstates")  # replace %formatting with f-string
     ax.autoscale(tight=True)
 
     return fig
