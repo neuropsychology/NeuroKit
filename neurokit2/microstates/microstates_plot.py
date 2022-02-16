@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-import numpy as np
 import matplotlib
-import matplotlib.pyplot as plt
 import matplotlib.gridspec
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
@@ -65,7 +65,6 @@ def microstates_plot(microstates, segmentation=None, gfp=None, info=None):
 
     return fig
 
-    pass
 
 
 
