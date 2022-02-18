@@ -7,7 +7,6 @@ import numpy as np
 from ..misc import NeuroKitWarning
 from ..signal import signal_binarize
 
-
 def events_find(
     event_channel,
     threshold="auto",
@@ -105,11 +104,13 @@ def events_find(
 
     # Remove based on index
     if start_at > 0:
-        events["onset"] = events["onset"][events["onset"] >= start_at]
         events["duration"] = events["duration"][events["onset"] >= start_at]
+        events["onset"] = events["onset"][events["onset"] >= start_at]
+
     if end_at is not None:
-        events["onset"] = events["onset"][events["onset"] <= end_at]
         events["duration"] = events["duration"][events["onset"] <= end_at]
+        events["onset"] = events["onset"][events["onset"] <= end_at]
+
 
     # Remove based on interval min
     if inter_min > 0:
