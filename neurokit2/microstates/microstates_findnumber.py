@@ -13,7 +13,7 @@ def microstates_findnumber(eeg, n_max=12, show=False, **kwargs):
 
     Parameters
     ----------
-    seeg : np.ndarray
+    eeg : np.ndarray
         An array (channels, times) of M/EEG data or a Raw or Epochs object from MNE.
     n_max : int
         Maximum number of microstates to try. A higher number leads to a longer process.
