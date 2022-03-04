@@ -92,8 +92,7 @@ def _microstates_plot_topos(microstates, info, ax=None):
 
     for i, map in enumerate(microstates):
         mne.viz.plot_topomap(map, info, axes=ax[i])
-        # ax[i].set_title('%d' % i)
-        ax[i].set_title(f"{i}")  # replace %formatting with f-string format
+        ax[i].set_title(f"{i}")  # use literal string interpolation
 
     return fig
 
@@ -139,8 +138,7 @@ def _microstates_plot_segmentation(segmentation, gfp, info=None, ax=None):
     else:
         ax.set_xlabel("Sample")
     ax.set_ylabel("Global Field Power (GFP)")
-    # ax.set_title('Sequence of the %d microstates' % n_states)
-    ax.set_title(f"Sequence of the {n_states} microstates")  # replace %formatting with f-string
+    ax.set_title(f"Sequence of the {n_states} microstates")  # use literal string interpolation
     ax.autoscale(tight=True)
 
     return fig

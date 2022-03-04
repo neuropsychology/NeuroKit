@@ -230,7 +230,7 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
             "NeuroKit error: signal_power(): the 'mne'",
             "module is required. ",
             "Please install it first (`pip install mne`).",
-        ) from e   #explicitly raise error from ImportError exception
+        ) from e  # explicitly raise error from ImportError exception
 
     out = mne.time_frequency.tfr_array_morlet(
         [[signal]],
@@ -241,6 +241,6 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
     power = np.mean(out[0][0], axis=0)
 
     out = {}
-    #out["{:.2f}-{:.2f}Hz".format(frequency_band[0], frequency_band[1])] = power
-    out[f"{frequency_band[0]:.2f}-{frequency_band[1]:.2f}Hz"] = power #update str.format to f-string
+    out[f"{frequency_band[0]:.2f}-{frequency_band[1]:.2f}Hz"] = power  # use literal string format
     return out
+
