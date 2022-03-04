@@ -60,7 +60,7 @@ def complexity_tolerance(
     >>>
     >>> r, info = nk.complexity_tolerance(signal, delay=1, dimension=10, method = 'recurrence', show=True)
     >>> r
-    0.06298107683978625
+    0.1259621536795725
     >>>
     >>> # Slow
     >>> r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn', show=True)
