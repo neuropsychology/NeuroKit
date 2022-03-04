@@ -127,7 +127,7 @@ def _optimize_tolerance_recurrence(signal, r_range=None, delay=None, dimension=N
     for i, r in enumerate(r_range):
         recurrence_rate[i] = (d[idx] <= r).sum() / n
     # Closest to 0.05 (5%)
-    optimal = r_range[np.abs(r_range - 0.05).argmin()]
+    optimal = r_range[np.abs(recurrence_rate - 0.05).argmin()]
 
     return optimal, {"Values": r_range, "Scores": recurrence_rate}
 
