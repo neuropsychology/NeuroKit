@@ -1,26 +1,28 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[5]:
-
-
-import neurokit2 as nk
-import numpy as np
-import pandas as pd
-import parameters as para
-
-
 # -*- coding: utf-8 -*-
 import math
 
 import numpy as np
+import pandas as pd
 import scipy
 
-from neurokit2.signal import signal_distort, signal_resample
+from ..signal import signal_distort, signal_resample
 
 
-def ecg_simulate_multichannel(duration=10, length=None, sampling_rate=1000, noise=0.01, Anoise=0.01, heart_rate=70, method="ecgsyn", 
-    random_state=None, ti=(-70, -15, 0, 15, 100), ai=(1.2, -5, 30, -7.5, 0.75), bi=(0.25, 0.1, 0.1, 0.1, 0.4), gamma=np.ones((12,5))):
+def ecg_simulate_multichannel(
+    duration=10,
+    length=None,
+    sampling_rate=1000,
+    noise=0.01,
+    Anoise=0.01,
+    heart_rate=70,
+    method="ecgsyn",
+    random_state=None,
+    ti=(-70, -15, 0, 15, 100),
+    ai=(1.2, -5, 30, -7.5, 0.75),
+    bi=(0.25, 0.1, 0.1, 0.1, 0.4),
+    gamma=np.ones((12, 5)),
+    **kwargs,
+):
     """Simulate an ECG/EKG signal.
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either
@@ -77,6 +79,66 @@ def ecg_simulate_multichannel(duration=10, length=None, sampling_rate=1000, nois
     - https://github.com/diarmaidocualain/ecg_simulation
 
     """
+
+    # Parameters =======================================================================
+
+    leads = ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"]
+
+    ## Gamma, a (12,5) matrix to modify the five waves' amplitudes of 12 leads (P, Q, R, S, T)
+    gamma = np.array(
+        [
+            [1, 0.1, 1, 1.2, 1],
+            [2, 0.2, 0.2, 0.2, 3],
+            [1, -0.1, -0.8, -1.1, 2.5],
+            [-1, -0.05, -0.8, -0.5, -1.2],
+            [0.05, 0.05, 1, 1, 1],
+            [1, -0.05, -0.1, -0.1, 3],
+            [-0.5, 0.05, 0.2, 0.5, 1],
+            [0.05, 0.05, 1.3, 2.5, 2],
+            [1, 0.05, 1, 2, 1],
+            [1.2, 0.05, 1, 2, 2],
+            [1.5, 0.1, 0.8, 1, 2],
+            [1.8, 0.05, 0.5, 0.1, 2],
+        ]
+    )
+
+    # heart rate
+    mu_hr_1 = 60  # mean of the heart rate
+    sigma_hr_1 = 7  # variance of the heart rate
+
+    # noise
+    min_noise_1 = 0.01
+    max_noise_1 = 0.1
+
+    # For PQRST five spikes
+    # t, the starting position along the circle of each interval in radius
+    mu_t_1 = np.array((-70, -15, 0, 15, 100))
+    sigma_t_1 = np.ones(5) * 3
+
+    # a, the amplitude of each spike; b, the width of each spike
+    mu_a_1 = np.array((1.2, -5, 30, -7.5, 0.75))
+    mu_b_1 = np.array((0.25, 0.1, 0.1, 0.1, 0.4))
+    sigma_a_1 = np.abs(mu_a_1 / 5)
+    sigma_b_1 = np.abs(mu_b_1 / 5)
+
+    ## Abnormal ECG Parameters
+    # heart rate
+    mu_hr_2 = 60  # mean of the heart rate
+    sigma_hr_2 = 7  # variance of the heart rate
+
+    # noise
+    min_noise_2 = 0.01
+    max_noise_2 = 0.1
+
+    # t, a, b
+    mu_t_2 = np.array((-70, -15, 0, 15, 100))
+    mu_a_2 = np.array((1.2, -4, 25, -6.5, 0.75))
+    mu_b_2 = np.array((0.25, 0.1, 0.1, 0.1, 0.4))
+    sigma_t_2 = np.ones(5) * 3
+    sigma_a_2 = np.abs(mu_a_1 / 5)
+    sigma_b_2 = np.abs(mu_b_1 / 5)
+
+    # ================================================================================
     # Seed the random generator for reproducible results
     np.random.seed(random_state)
 
@@ -98,13 +160,12 @@ def ecg_simulate_multichannel(duration=10, length=None, sampling_rate=1000, nois
             N=approx_number_beats,
             Anoise=Anoise,
             hrmean=heart_rate,
-            hrstd=1,
-            lfhfratio=0.5,
             sfint=sampling_rate,
-            ti=ti,#(-70, -15, 0, 15, 100),
-            ai=ai,#(1.2, -5, 30, -7.5, 0.75),
-            bi=bi,#(0.25, 0.1, 0.1, 0.1, 0.4),
-            gamma=gamma
+            ti=ti,
+            ai=ai,
+            bi=bi,
+            gamma=gamma,
+            **kwargs,
         )
         # Cut to match expected length
         for i in range(len(ecgs)):
@@ -128,12 +189,12 @@ def ecg_simulate_multichannel(duration=10, length=None, sampling_rate=1000, nois
     return ecgs, results
 
 
-
-
 # =============================================================================
 # Daubechies
 # =============================================================================
-def _ecg_simulate_multichannel_daubechies(duration=10, length=None, sampling_rate=1000, heart_rate=70):
+def _ecg_simulate_multichannel_daubechies(
+    duration=10, length=None, sampling_rate=1000, heart_rate=70
+):
     """Generate an artificial (synthetic) ECG signal of a given duration and sampling rate.
 
     It uses a 'Daubechies' wavelet that roughly approximates a single cardiac cycle.
@@ -157,7 +218,10 @@ def _ecg_simulate_multichannel_daubechies(duration=10, length=None, sampling_rat
 
     # Resample
     ecg = signal_resample(
-        ecg, sampling_rate=int(len(ecg) / 10), desired_length=length, desired_sampling_rate=sampling_rate
+        ecg,
+        sampling_rate=int(len(ecg) / 10),
+        desired_length=length,
+        desired_sampling_rate=sampling_rate,
     )
 
     return ecg
@@ -177,44 +241,34 @@ def _ecg_simulate_multichannel_ecgsyn_multichannel(
     ti=(-70, -15, 0, 15, 100),
     ai=(1.2, -5, 30, -7.5, 0.75),
     bi=(0.25, 0.1, 0.1, 0.1, 0.4),
-    gamma=np.ones((12,5))
+    gamma=np.ones((12, 5)),
+    **kwargs,
 ):
-    """This function is a python translation of the matlab script by `McSharry & Clifford (2013)
-
-    <https://physionet.org/content/ecgsyn>`_.
+    """
+    This function is a python translation of the matlab script by `McSharry & Clifford (2013) <https://physionet.org/content/ecgsyn>`_.
 
     Parameters
     ----------
-    % Operation uses the following parameters (default values in []s):
-    % sfecg: ECG sampling frequency [256 Hertz]
-    % N: approximate number of heart beats [256]
-    % Anoise: Additive uniformly distributed measurement noise [0 mV]
-    % hrmean: Mean heart rate [60 beats per minute]
-    % hrstd: Standard deviation of heart rate [1 beat per minute]
-    % lfhfratio: LF/HF ratio [0.5]
-    % sfint: Internal sampling frequency [256 Hertz]
-    % Order of extrema: (P Q R S T)
-    % ti = angles of extrema (in degrees)
-    % ai = z-position of extrema
-    % bi = Gaussian width of peaks
-
-    Returns
-    -------
-    array
-        Vector containing simulated ecg signal.
-
-#    Examples
-#    --------
-#    >>> import matplotlib.pyplot as plt
-#    >>> import neurokit2 as nk
-#    >>>
-#    >>> s = _ecg_simulate_multichannel_ecgsyn_multichannelth()
-#    >>> x = np.linspace(0, len(s)-1, len(s))
-#    >>> num_points = 4000
-#    >>>
-#    >>> num_points = min(num_points, len(s))
-#    >>> plt.plot(x[:num_points], s[:num_points]) #doctest: +SKIP
-#    >>> plt.show() #doctest: +SKIP
+    sfecg:
+        ECG sampling frequency [256 Hertz]
+    N:
+        approximate number of heart beats [256]
+    Anoise:
+        Additive uniformly distributed measurement noise [0 mV]
+    hrmean:
+        Mean heart rate [60 beats per minute]
+    hrstd:
+        Standard deviation of heart rate [1 beat per minute]
+    lfhfratio:
+        LF/HF ratio [0.5]
+    sfint:
+        Internal sampling frequency [256 Hertz]
+    ti
+        angles of extrema (in degrees). Order of extrema is (P Q R S T).
+    ai
+        z-position of extrema.
+    bi
+        Gaussian width of peaks.
 
     """
 
@@ -239,7 +293,11 @@ def _ecg_simulate_multichannel_ecgsyn_multichannel(
     if q != qd:
         raise ValueError(
             "Internal sampling frequency (sfint) must be an integer multiple of the ECG sampling frequency"
-            " (sfecg). Your current choices are: sfecg = " + str(sfecg) + " and sfint = " + str(sfint) + "."
+            " (sfecg). Your current choices are: sfecg = "
+            + str(sfecg)
+            + " and sfint = "
+            + str(sfint)
+            + "."
         )
 
     # Define frequency parameters for rr process
@@ -255,7 +313,9 @@ def _ecg_simulate_multichannel_ecgsyn_multichannel(
     rrmean = 60 / hrmean
     n = 2 ** (np.ceil(np.log2(N * rrmean / trr)))
 
-    rr0 = _ecg_simulate_multichannel_rrprocess(flo, fhi, flostd, fhistd, lfhfratio, hrmean, hrstd, sfrr, n)
+    rr0 = _ecg_simulate_multichannel_rrprocess(
+        flo, fhi, flostd, fhistd, lfhfratio, hrmean, hrstd, sfrr, n
+    )
 
     # Upsample rr time series from 1 Hz to sfint Hz
     rr = signal_resample(rr0, sampling_rate=1, desired_sampling_rate=sfint)
@@ -290,7 +350,12 @@ def _ecg_simulate_multichannel_ecgsyn_multichannel(
         # as passing extra arguments to derivative function is not supported yet in solve_ivp
         # lambda function is used to serve the purpose
         result = scipy.integrate.solve_ivp(
-            lambda t, x: _ecg_simulate_multichannel_derivsecgsyn(t, x, rrn, ti, sfint, gamma[lead]*ai, bi), Tspan, x0, t_eval=t_eval
+            lambda t, x: _ecg_simulate_multichannel_derivsecgsyn(
+                t, x, rrn, ti, sfint, gamma[lead] * ai, bi
+            ),
+            Tspan,
+            x0,
+            t_eval=t_eval,
         )
         results.append(result)
         X0 = result.y
@@ -307,11 +372,11 @@ def _ecg_simulate_multichannel_ecgsyn_multichannel(
 
         # include additive uniformly distributed measurement noise
         eta = np.random.normal(0, 1, len(z))
-        #eta = 2 * np.random.uniform(len(z)) - 1 #AJP: this doesn't make any sense
-        single_lead = z + Anoise * eta#, result  # Return signal
+        # eta = 2 * np.random.uniform(len(z)) - 1 #AJP: this doesn't make any sense
+        single_lead = z + Anoise * eta  # , result  # Return signal
         single_leads.append(single_lead)
     return single_leads, results
-    #return z + Anoise * eta, result  # Return signal
+    # return z + Anoise * eta, result  # Return signal
 
 
 def _ecg_simulate_multichannel_derivsecgsyn(t, x, rr, ti, sfint, ai, bi):
@@ -370,49 +435,3 @@ def _ecg_simulate_multichannel_rrprocess(
     xstd = np.std(x)
     ratio = rrstd / xstd
     return rrmean + x * ratio  # Return RR
-
-
-
-def simulation(normal_N,abnormal_N, save_params = False):
-    normal_data = []
-    normal_params = []
-    print('Creating normal dataset')
-    for i in range(normal_N):
-        ti = np.random.normal(para.mu_t_1, para.sigma_t_1)
-        ai = np.random.normal(para.mu_a_1, para.sigma_a_1)
-        bi = np.random.normal(para.mu_b_1, para.sigma_b_1)
-        hr = np.random.normal(para.mu_hr_1, para.sigma_hr_1)
-        noise = np.random.uniform(low=para.min_noise_1, high=para.max_noise_1)
-        ecgs, _ = ecg_simulate_multichannel(duration=para.duration*2, sampling_rate=para.sampling_rate, noise=noise, Anoise=para.Anoise, heart_rate=hr, gamma=para.gamma, ti=ti, ai=ai, bi=bi)
-        ecgs = np.array(ecgs)
-        start_i = np.random.randint(len(ecgs[0])//4, len(ecgs[0])//2)
-        normal_data.append(ecgs[:,start_i:start_i+para.sampling_rate*para.duration])
-        normal_params.append({'ti':ti, 'ai':ai, 'bi':bi, 'hr':hr, 'noise':noise, 'gamma': para.gamma})
-
-    abnormal_data = []
-    abnormal_params = []
-    print('Creating abnormal dataset')
-    for i in range(abnormal_N):
-        ti = np.random.normal(para.mu_t_2, para.sigma_t_2)
-        ai = np.random.normal(para.mu_a_2, para.sigma_a_2)
-        bi = np.random.normal(para.mu_b_2, para.sigma_b_2)
-        hr = np.random.normal(para.mu_hr_2, para.sigma_hr_2)
-        noise = np.random.uniform(low=para.min_noise_2, high=para.max_noise_2)
-        ecgs, _ = ecg_simulate_multichannel(duration=para.duration*2, sampling_rate=para.sampling_rate, noise=noise, Anoise=para.Anoise, heart_rate=hr, gamma=para.gamma, ti=ti, ai=ai, bi=bi)
-        ecgs = np.array(ecgs)
-        start_i = np.random.randint(len(ecgs[0])//4, len(ecgs[0])//2)
-        abnormal_data.append(ecgs[:,start_i:start_i+para.sampling_rate*para.duration])
-        abnormal_params.append({'ti':ti, 'ai':ai, 'bi':bi, 'hr':hr, 'noise':noise, 'gamma': para.gamma})
-
-    labels = np.array([0]*len(normal_data) + [1]*len(abnormal_data))
-    permutation = np.random.permutation(len(labels))
-    data = np.array(normal_data+abnormal_data)
-    data_params = np.array(normal_params+abnormal_params)
-    labels = labels[permutation]
-    data = data[permutation]
-    data_params = data_params[permutation]
-
-    np.save('sim_ecg_data', data) # save ECG data
-    np.save('sim_ecg_labels', labels) # save label
-    if (save_params):
-        np.save('sim_ecg_params',data_params) # save parameters for each ecg sample (12,2500)

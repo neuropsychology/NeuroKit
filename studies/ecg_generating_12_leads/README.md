@@ -1,14 +1,15 @@
-# Generating Synthetic ECG Data
+# Generating 12-leads Synthetic ECG Data
 
 Each of our ECG data consists of 12 leads, with a duration of 10 seconds and a frequency of 250 Hz. Therefore, each sample is a data matrix of 12 by 2500. In our case, we worked on 2 sets
-of data, one was synthetic, one was real clinical data. Although we cannot share our real clinical data, the simulation code is accessible. 
+of data, one was synthetic, one was real clinical data. Although we cannot share our real clinical data, the simulation code is accessible.
 
 ***Simulation Code***
 
-The simlation part includes two files: **'ecg_simulation.py'** and **'parameters. py'**.
+The simulation part includes two files: [`ecg_simulation.py`](https://github.com/neuropsychology/NeuroKit/studies/ecg_generating_12_leads/ecg_simulation_multichannel.py) and [`parameters.py`](https://github.com/neuropsychology/NeuroKit/studies/ecg_generating_12_leads/parameters.py).
 
 **Instruction**:
- - Install package **neurokit2**
+
+ - Install package **NeuroKit2**
  - Open **sample_code_for_simulation.ipynb** which is a short sample notebook to show the way to output synthetic data.
  - Function **simulation** is all you need.
     1.  Input:\
@@ -21,7 +22,7 @@ The simlation part includes two files: **'ecg_simulation.py'** and **'parameters
         **sim_ecg_params.npy**: depend on **save_params**, file to save parameters for each ecg sample, `shape = (normal_N + abnormal_N, )`.
 The saved data is already **shuffled**.
  - If you want more customized ECG data, please check **parameters. py** file. All the parameters' definitions are in the following table (_1 stands for normal, _2 stands for abnormal):
- 
+
 |                |Parameter                           |Meaning                          |
 |----------------|-------------------------------|-----------------------------|
 |1|sampling_rate          |sampling rate, default 250 Hz          |
@@ -38,12 +39,12 @@ For a better understanding of the above parameters, please read the following.
 [<img src="./3D.png" width="500"/>]
 [<img src="./table.png" width="500"/>](table)
 
- We can see from the above table that each interval in the 3D trajectory can be fixed by 3 parameters: the starting position 
-<img src="https://render.githubusercontent.com/render/math?math=\theta_i/t_i "> along the circle of each interval in radius, The amplitude of each spike a and the width of each wave b. By altering these 3 parameters we can change the shape of the 3D trajectory and thus change the waveform of the resulting ECG. 
+ We can see from the above table that each interval in the 3D trajectory can be fixed by 3 parameters: the starting position
+<img src="https://render.githubusercontent.com/render/math?math=\theta_i/t_i "> along the circle of each interval in radius, The amplitude of each spike a and the width of each wave b. By altering these 3 parameters we can change the shape of the 3D trajectory and thus change the waveform of the resulting ECG.
 
 
 **Prebuilt Synthetic Data**
-Prebuilt synthetic data can be found at the following link 
+Prebuilt synthetic data can be found at the following link
 https://drive.google.com/drive/folders/1iqyAlyHAvNWdOvjEGn8Y6C8kItsdZ_GC?usp=sharing
 
 
