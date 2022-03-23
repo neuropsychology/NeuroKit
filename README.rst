@@ -213,6 +213,8 @@ Physiological Data Preprocessing
 Simulate physiological signals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+You can easily simulate artificial ECG (also `12-Lead multichannel ECGs <https://github.com/neuropsychology/NeuroKit/...>`_), PPG, RSP, EDA, and EMG signals to test your scripts and algorithms.
+
 .. code-block:: python
 
     import numpy as np
@@ -447,73 +449,6 @@ Check-out our **Heart Rate Variability in Psychology: A Review of HRV Indices an
 
 Miscellaneous
 ----------------------------
-
-Generate Synthetic 12-Lead ECGs
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- Delineate the QRS complex of an electrocardiac signal (ECG) including P-peaks, T-peaks, as well as their onsets and offsets.
-
-
-.. code-block:: python
-
-
-    # Import multichannel simulation
-    import ecg_simulation_multichannel as s
-    import numpy as np
-    import matplotlib.pyplot as plt
-    import pandas as pd
-    
-    # Run the simulation
-    '''
-    Function Name: simulation
-    Input: 
-            normal_N: the number of normal ECG data;
-            abnormal_N: the number of abnormal ECG data;
-            save_params: whether save parameters for each ecg sample, default value is False.
-    Output:
-            'sim_ecg_data.npy': output file, an array of shape (normal_N + abnormal_N, 12, sampling_rate*duration);
-            'sim_ecg_labels.npy': file to save labels;
-            'sim_ecg_params.npy': depend on save_params, file to save parameters for each ecg sample.
-    The saved data is already shuffled.
-
-    For more parameters' settings, please check 'parameters.py' file.
-    '''
-    normal_N = 3
-    abnormal_N = 3
-    save_params = False
-    s.simulation(normal_N,abnormal_N,save_params)
-
-    # Plot the waveforms
-    labels = np.load("/location/to/sim_ecg_labels.npy")
-    data = np.load("/location/to/sim_ecg_data.npy")
-    
-    lead_order = ['I', 'II', 'III', 'aVR', 'aVL', 'aVF', 'V1', 'V2', 'V3', 'V4', 'V5', 'V6']
-    # plt.rcParams["figure.figsize"] = [16,9]
-    # fig, axs = plt.subplots(len(lead_order))
-    def ecg_plot(array,labels):
-        for i in range(0,10):
-            plt.rcParams["figure.figsize"] = [16,9]
-            fig, axs = plt.subplots(len(lead_order))
-            a=np.random.randint(len(array))
-            print("Label Value:",labels[a])
-            if array.shape[1:3] == (2500, 12):
-                for i in range(0,12):
-                    axs[i].plot(array[a][:,i])
-                    axs[i].set(ylabel=str(lead_order[i]))
-            elif array.shape[1:3] == (12, 2500):
-                for i in range(0,12):
-                    axs[i].plot(array[a][i,:])
-                    axs[i].set(ylabel=str(lead_order[i]))
-            elif array.shape[1:] == (1,2500,12):
-                for i in range(0,12):
-                    axs[i].plot(array[a][0][:,i])
-                    axs[i].set(ylabel=str(lead_order[i]))
-            else:
-                print("ECG shape not valid: ",array.shape)
-     ecg_plot(data, labels)
-
-.. image:: https://github.com/PierreElias/NeuroKit/blob/master/docs/readme/README_ecg_12_lead.png
-       :target: https://github.com/PierreElias/IntroECG/tree/master/2-Generating%20Synthetic%20ECG%20Data
 
 
 ECG Delineation
