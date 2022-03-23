@@ -321,3 +321,9 @@ def test_signal_distort():
     with pytest.warns(nk.misc.NeuroKitWarning, match=r"Skipping requested noise frequency.*since its period of.*"):
         signal = nk.signal_simulate(duration=1, frequency=1, sampling_rate=10)
         nk.signal_distort(signal, noise_amplitude=1, noise_frequency=0.1, silent=False)
+
+    signal2 = nk.signal_simulate(duration=10, frequency=0.5, sampling_rate=10)
+    ecgs = np.array([signal, signal2])
+    len(signal.shape)
+    ecgs.shape
+    assert list(out.columns) == ["Frequency", "Power"]
