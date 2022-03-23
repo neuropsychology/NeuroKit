@@ -450,7 +450,6 @@ Check-out our **Heart Rate Variability in Psychology: A Review of HRV Indices an
 Miscellaneous
 ----------------------------
 
-
 ECG Delineation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
