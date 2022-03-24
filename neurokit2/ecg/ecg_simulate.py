@@ -69,9 +69,8 @@ def ecg_simulate(
     array([<AxesSubplot:>, <AxesSubplot:>], dtype=object)
     >>>
     >>> # Simulate 12-leads ECG
-    >>> signals, rez = nk.ecg_simulate_multichannel(duration=10)
     >>> ecg12 = nk.ecg_simulate(duration=10, method="multileads")
-    >>> ecg[0:10000].plot()
+    >>> ecg12[0:10000].plot(subplots=True)
 
     See Also
     --------
@@ -102,13 +101,31 @@ def ecg_simulate(
     else:
         approx_number_beats = int(np.round(duration * (heart_rate / 60)))
         if method.lower() in ["multi", "multilead", "multileads", "multichannel"]:
+            # Gamma, a (12,5) matrix to modify the five waves' amplitudes of 12 leads (P, Q, R, S, T)
+            gamma = np.array(
+                [
+                    [1, 0.1, 1, 1.2, 1],
+                    [2, 0.2, 0.2, 0.2, 3],
+                    [1, -0.1, -0.8, -1.1, 2.5],
+                    [-1, -0.05, -0.8, -0.5, -1.2],
+                    [0.05, 0.05, 1, 1, 1],
+                    [1, -0.05, -0.1, -0.1, 3],
+                    [-0.5, 0.05, 0.2, 0.5, 1],
+                    [0.05, 0.05, 1.3, 2.5, 2],
+                    [1, 0.05, 1, 2, 1],
+                    [1.2, 0.05, 1, 2, 2],
+                    [1.5, 0.1, 0.8, 1, 2],
+                    [1.8, 0.05, 0.5, 0.1, 2],
+                ]
+            )
+
             signals, results = _ecg_simulate_ecgsyn(
                 sfecg=sampling_rate,
                 N=approx_number_beats,
                 hrmean=heart_rate,
                 hrstd=heart_rate_std,
                 sfint=sampling_rate,
-                gamma=np.ones((12, 5)),
+                gamma=gamma,
                 **kwargs,
             )
         else:
@@ -143,7 +160,8 @@ def ecg_simulate(
         ecg = signals[0]
     else:
         ecg = pd.DataFrame(
-            np.array(signals).T, columns=["L" + str(i) for i in range(1, len(signals) + 1)]
+            np.array(signals).T,
+            columns=["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V5", "V6"],
         )
 
     # Reset random seed (so it doesn't affect global)
