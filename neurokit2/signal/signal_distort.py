@@ -95,46 +95,6 @@ def signal_distort(
     # Seed the random generator for reproducible results.
     np.random.seed(random_state)
 
-    distorted = _signal_distort(
-        signal,
-        sampling_rate,
-        noise_shape,
-        noise_amplitude,
-        noise_frequency,
-        powerline_amplitude,
-        powerline_frequency,
-        artifacts_amplitude,
-        artifacts_frequency,
-        artifacts_number,
-        linear_drift,
-        silent,
-    )
-
-    # Reset random seed (so it doesn't affect global)
-    np.random.seed(None)
-
-    return distorted
-
-
-# ===========================================================================
-# Function for one vector
-# ===========================================================================
-
-
-def _signal_distort(
-    signal,
-    sampling_rate=1000,
-    noise_shape="laplace",
-    noise_amplitude=0,
-    noise_frequency=100,
-    powerline_amplitude=0,
-    powerline_frequency=50,
-    artifacts_amplitude=0,
-    artifacts_frequency=100,
-    artifacts_number=5,
-    linear_drift=False,
-    silent=False,
-):
     # Make sure that noise_amplitude is a list.
     if isinstance(noise_amplitude, (int, float)):
         noise_amplitude = [noise_amplitude]
@@ -184,6 +144,9 @@ def _signal_distort(
         noise += _signal_linear_drift(signal)
 
     distorted = signal + noise
+
+    # Reset random seed (so it doesn't affect global)
+    np.random.seed(None)
 
     return distorted
 
