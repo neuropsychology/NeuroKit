@@ -16,11 +16,9 @@ from .ecg_quality import ecg_quality
 from .ecg_rsp import ecg_rsp
 from .ecg_segment import ecg_segment
 from .ecg_simulate import ecg_simulate
-from .ecg_simulate_multichannel import ecg_simulate_multichannel
 
 __all__ = [
     "ecg_simulate",
-    "ecg_simulate_multichannel",
     "ecg_clean",
     "ecg_findpeaks",
     "ecg_peaks",
