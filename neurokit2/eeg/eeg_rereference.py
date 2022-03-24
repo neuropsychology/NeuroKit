@@ -51,13 +51,13 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     >>> nk.signal_plot([avg[0, 0:1000], avg_r[0, 0:1000]])
     >>>
     >>> # Compare the rerefering of an array vs. the MNE object
-    >>> data_mne = raw.copy().set_eeg_reference('average', verbose=False)
-    >>> nk.signal_plot([avg[0, 0:1000], data_mne.get_data()[0, 0:1000]])
+    >>> avg_mne = raw.copy().set_eeg_reference('average', verbose=False)
+    >>> nk.signal_plot([avg[0, 0:1000], avg_mne.get_data()[0, 0:1000]])
     >>>
     >>> # Difference between average and LAP
     >>> lap = nk.eeg_rereference(raw, 'lap')
     >>>
-    >>> nk.signal_plot([avg.get_data()[0, 0:1000],
+    >>> nk.signal_plot([avg_mne.get_data()[0, 0:1000],
     ...                 lap.get_data()[0, 0:1000]], standardize=True)
 
     References
