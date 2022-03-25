@@ -108,8 +108,7 @@ def complexity_hurst(signal, windows="default", corrected=True, show=False):
 
 
 def expected_rs(n):
-    """
-    Calculates the expected (R/S)_n for white noise for a given n.
+    """Calculates the expected (R/S)_n for white noise for a given n.
     This is used as a correction factor in the function hurst_rs. It uses the
     formula of Anis-Lloyd-Peters.
 
@@ -127,8 +126,7 @@ def expected_rs(n):
 
 
 def _complexity_hurst_rs(signal, window):
-    """
-    Calculates an individual R/S value in the rescaled range approach for
+    """Calculates an individual R/S value in the rescaled range approach for
     a given window size (the size of the subseries in which data should be split).
     """
     n = len(signal)

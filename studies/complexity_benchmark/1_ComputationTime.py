@@ -188,9 +188,9 @@ def run_methods(i, x, delay=1, dimension=2):
     data.append(
         time_function(
             x,
-            nk.complexity_mpe,
-            index="MPEn",
-            name="nk_complexity_mpe",
+            nk.complexity_mspe,
+            index="MSPEn",
+            name="nk_complexity_mspe",
             delay=delay,
             dimension=dimension,
         )

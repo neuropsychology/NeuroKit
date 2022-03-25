@@ -30,7 +30,7 @@ from .information_fisher import fisher_information
 
 
 def complexity(
-    signal, which=["fast", "medium", "slow"], delay=1, dimension=2, tolerance="default", **kwargs
+    signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="default", **kwargs
 ):
     """Comprehensive Complexity Analysis
 
@@ -53,8 +53,8 @@ def complexity(
         See for example :func:`entropy_permutation`.
     dimension : int
         See for example :func:`entropy_permutation`.
-    **kwargs : optional
-        Other arguments to be passed to the functions.
+    tolerance : float
+        See for example :func:`entropy_permutation`.
 
     Returns
     --------

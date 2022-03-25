@@ -143,7 +143,7 @@ def complexity_dimension(signal, delay=1, dimension_max=20, method="afnn", show=
             )
 
     else:
-        raise ValueError("NeuroKit error: complexity_dimension(): 'method' " "not recognized.")
+        raise ValueError("NeuroKit error: complexity_dimension(): 'method' not recognized.")
 
     return min_dimension, info
 

@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
 
-import matplotlib.animation
-import matplotlib.pyplot as plt
 import numpy as np
 
 from ..misc import NeuroKitWarning
+from .complexity_attractor import _attractor_equation, complexity_attractor
 
 
-def complexity_embedding(signal, delay=1, dimension=3, show=False):
+def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
     """Time-delay embedding of a signal
 
     A dynamical system can be described by a vector of numbers, called its 'state', that aims to provide
@@ -34,7 +33,9 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
-        The signal (i.e., a time series) in the form of a vector of values.
+        The signal (i.e., a time series) in the form of a vector of values. Can also be a string, such as
+        ``"lorenz"`` (Lorenz attractor), ``"rossler"`` (Rössler attractor), or ``"clifford"`` (Clifford attractor)
+        to obtain a pre-defined attractor.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
         to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
@@ -45,6 +46,8 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
         an array with two columns corresponding to the original signal and its delayed (by Tau) version.
     show : bool
         Plot the reconstructed attractor.
+    **kwargs
+        Other arguments to be passed to the plotting of the attractor (see ``complexity_attractor()``).
 
     Returns
     -------
@@ -85,6 +88,10 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
       on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
 
     """
+    # If string
+    if isinstance(signal, str):
+        return _attractor_equation(signal, **kwargs)
+
     N = len(signal)
 
     # Sanity checks
@@ -108,90 +115,6 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False):
     embedded = Y.T
 
     if show is True:
-        _embedding_plot(embedded)
+        complexity_attractor(embedded, **kwargs)
 
     return embedded
-
-
-# =============================================================================
-# Internals
-# =============================================================================
-
-
-def _embedding_plot(embedded):
-    """Plot reconstructed attractor.
-
-    The input for this function must be obtained via `nk.complexity_embedding()`
-
-    """
-    if embedded.shape[1] == 2:
-        figure = _embedding_plot_2D(embedded)
-    elif embedded.shape[1] == 3:
-        figure = _embedding_plot_3D(embedded)
-    else:
-        figure = _embedding_plot_4D(embedded)
-
-    return figure
-
-
-# =============================================================================
-# Internal plots
-# =============================================================================
-
-
-def _embedding_plot_2D(embedded):
-    return plt.plot(embedded[:, 0], embedded[:, 1], color="#3F51B5")
-
-
-def _embedding_plot_3D(embedded):
-    return _plot_3D_colored(
-        x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 2], rotate=False
-    )
-
-
-def _embedding_plot_4D(embedded):
-    return _plot_3D_colored(
-        x=embedded[:, 0], y=embedded[:, 1], z=embedded[:, 2], color=embedded[:, 3], rotate=False
-    )
-
-
-# =============================================================================
-# Plotting
-# =============================================================================
-def _plot_3D_colored(x, y, z, color=None, rotate=False):
-    if color is None:
-        color = z
-
-    # Create a set of line segments
-    points = np.array([x, y, z]).T.reshape(-1, 1, 3)
-    segments = np.concatenate([points[:-1], points[1:]], axis=1)
-
-    # Color
-    norm = plt.Normalize(color.min(), color.max())
-    cmap = plt.get_cmap("plasma")
-    colors = cmap(norm(color))
-
-    # Plot
-    fig = plt.figure()
-    ax = plt.axes(projection="3d")
-
-    for i in range(len(x) - 1):
-        seg = segments[i]
-        (l,) = ax.plot(seg[:, 0], seg[:, 1], seg[:, 2], color=colors[i])
-        l.set_solid_capstyle("round")
-
-    if rotate is True:
-        fig = _plot_3D_colored_rotate(fig, ax)
-
-    return fig
-
-
-def _plot_3D_colored_rotate(fig, ax):
-    def rotate(angle):
-        ax.view_init(azim=angle)
-
-    fig = matplotlib.animation.FuncAnimation(
-        fig, rotate, frames=np.arange(0, 361, 1), interval=10, cache_frame_data=False
-    )
-
-    return fig

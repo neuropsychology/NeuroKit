@@ -8,8 +8,7 @@ from .entropy_shannon import entropy_shannon
 
 
 def entropy_coalition(signal, method="amplitude"):
-    """
-    Amplitude Coalition Entropy (ACE) reflects the entropy over time of the constitution of the set
+    """Amplitude Coalition Entropy (ACE) reflects the entropy over time of the constitution of the set
     of most active channels (Shanahan, 2010), and is similar to Lempel-Ziv complexity, in the sense
     that it quantifies variability in space and time of the activity. ACE is normalized by dividing
     the raw by the value obtained for the same binary input but randomly shuffled. The

@@ -83,8 +83,9 @@ def _ppg_findpeaks_elgendi(
 
     # Ignore the samples with negative amplitudes and square the samples with
     # values larger than zero.
-    signal[signal < 0] = 0
-    sqrd = signal ** 2
+    signal_abs = signal.copy()
+    signal_abs[signal_abs < 0] = 0
+    sqrd = signal_abs ** 2
 
     # Compute the thresholds for peak detection. Call with show=True in order
     # to visualize thresholds.
@@ -141,7 +142,7 @@ def _ppg_findpeaks_elgendi(
     peaks.pop(0)
 
     if show:
-        ax0.scatter(peaks, signal[peaks], c="r")
+        ax0.scatter(peaks, signal_abs[peaks], c="r")
 
     peaks = np.asarray(peaks).astype(int)
     return peaks
