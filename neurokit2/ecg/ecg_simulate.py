@@ -71,6 +71,10 @@ def ecg_simulate(
     >>> # Simulate 12-leads ECG
     >>> ecg12 = nk.ecg_simulate(duration=10, method="multileads")
     >>> ecg12[0:10000].plot(subplots=True)
+    array([<AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>,
+           <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>,
+           <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>],
+          dtype=object)
 
     See Also
     --------
