@@ -6,7 +6,7 @@ import neurokit2 as nk
 ecg12 = nk.ecg_simulate(duration=10, method="multileads")
 
 # Visualize results
-ecg12[0:10000].plot(subplots=True).get_figure().savefig("ECG12_normal.png")
+ecg12[0:10000].plot(subplots=True)
 plt.savefig("ECG12_normal.png")
 
 # Normal parameters (used by default)
