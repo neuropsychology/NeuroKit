@@ -243,4 +243,3 @@ def _signal_power_continuous_get(signal, frequency_band, sampling_rate=1000, pre
     out = {}
     out[f"{frequency_band[0]:.2f}-{frequency_band[1]:.2f}Hz"] = power  # use literal string format
     return out
-
