@@ -39,7 +39,7 @@ def mne_data(what="raw", path=None):
     # Find path of mne data
     if path is None:
         try:
-            path = mne.datasets.sample.data_path()
+            path = str(mne.datasets.sample.data_path())
         except ValueError:
             raise ValueError(
                 "NeuroKit error: the mne sample data folder does not exist. ",

@@ -145,7 +145,15 @@ def signal_distort(
 
     distorted = signal + noise
 
+    # Reset random seed (so it doesn't affect global)
+    np.random.seed(None)
+
     return distorted
+
+
+# ===========================================================================
+# Types of Noise
+# ===========================================================================
 
 
 def _signal_linear_drift(signal):
@@ -201,12 +209,21 @@ def _signal_distort_artifacts(
 
 
 def _signal_distort_powerline(
-    signal, signal_sd=None, sampling_rate=1000, powerline_frequency=50, powerline_amplitude=0.1, silent=False
+    signal,
+    signal_sd=None,
+    sampling_rate=1000,
+    powerline_frequency=50,
+    powerline_amplitude=0.1,
+    silent=False,
 ):
 
     duration = len(signal) / sampling_rate
     powerline_noise = signal_simulate(
-        duration=duration, sampling_rate=sampling_rate, frequency=powerline_frequency, amplitude=1, silent=silent
+        duration=duration,
+        sampling_rate=sampling_rate,
+        frequency=powerline_frequency,
+        amplitude=1,
+        silent=silent,
     )
 
     if signal_sd is not None:
@@ -226,7 +243,9 @@ def _signal_distort_noise_multifrequency(
     silent=False,
 ):
     base_noise = np.zeros(len(signal))
-    params = listify(noise_amplitude=noise_amplitude, noise_frequency=noise_frequency, noise_shape=noise_shape)
+    params = listify(
+        noise_amplitude=noise_amplitude, noise_frequency=noise_frequency, noise_shape=noise_shape
+    )
 
     for i in range(len(params["noise_amplitude"])):
 
@@ -252,7 +271,12 @@ def _signal_distort_noise_multifrequency(
 
 
 def _signal_distort_noise(
-    n_samples, sampling_rate=1000, noise_frequency=100, noise_amplitude=0.1, noise_shape="laplace", silent=False
+    n_samples,
+    sampling_rate=1000,
+    noise_frequency=100,
+    noise_amplitude=0.1,
+    noise_shape="laplace",
+    silent=False,
 ):
 
     _noise = np.zeros(n_samples)
@@ -267,7 +291,7 @@ def _signal_distort_noise(
                 f" the sampling rate of {sampling_rate} Hz. Please increase "
                 f" sampling rate to {noise_frequency * 10} Hz or choose "
                 f" frequencies smaller than or equal to {nyquist} Hz.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
         return _noise
     # Also make sure that at least one period of the frequency can be
@@ -282,7 +306,7 @@ def _signal_distort_noise(
                 f" Please choose noise frequencies larger than "
                 f" {1 / duration} Hz or increase the duration of the "
                 f" signal above {1 / noise_frequency} seconds.",
-                category=NeuroKitWarning
+                category=NeuroKitWarning,
             )
         return _noise
 
@@ -293,7 +317,9 @@ def _signal_distort_noise(
     elif noise_shape == "laplace":
         _noise = np.random.laplace(0, noise_amplitude, noise_duration)
     else:
-        raise ValueError("NeuroKit error: signal_distort(): 'noise_shape' should be one of 'gaussian' or 'laplace'.")
+        raise ValueError(
+            "NeuroKit error: signal_distort(): 'noise_shape' should be one of 'gaussian' or 'laplace'."
+        )
 
     if len(_noise) != n_samples:
         _noise = signal_resample(_noise, desired_length=n_samples, method="interpolation")

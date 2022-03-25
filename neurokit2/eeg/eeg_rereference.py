@@ -41,23 +41,23 @@ def eeg_rereference(eeg, reference="average", robust=False, **kwargs):
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> eeg = nk.mne_data("filt-0-40_raw")
+    >>> raw = nk.mne_data("filt-0-40_raw")
+    >>> eeg = raw.get_data()
     >>>
     >>> # Difference between robust average
     >>> avg = nk.eeg_rereference(eeg, 'average', robust=False)
     >>> avg_r = nk.eeg_rereference(eeg, 'average', robust=True)
     >>>
-    >>> nk.signal_plot([avg.get_data()[0, 0:1000],
-    ...                 avg_r.get_data()[0, 0:1000]])
+    >>> nk.signal_plot([avg[0, 0:1000], avg_r[0, 0:1000]])
     >>>
     >>> # Compare the rerefering of an array vs. the MNE object
-    >>> data_mne = eeg.copy().set_eeg_reference('average', verbose=False).get_data()
-    >>> data_nk = nk.eeg_rereference(eeg.get_data(), 'average')
+    >>> avg_mne = raw.copy().set_eeg_reference('average', verbose=False)
+    >>> nk.signal_plot([avg[0, 0:1000], avg_mne.get_data()[0, 0:1000]])
     >>>
     >>> # Difference between average and LAP
-    >>> lap = nk.eeg_rereference(eeg, 'lap')
+    >>> lap = nk.eeg_rereference(raw, 'lap')
     >>>
-    >>> nk.signal_plot([avg.get_data()[0, 0:1000],
+    >>> nk.signal_plot([avg_mne.get_data()[0, 0:1000],
     ...                 lap.get_data()[0, 0:1000]], standardize=True)
 
     References
@@ -99,8 +99,15 @@ def eeg_rereference_mne(eeg, reference="average", robust=False, **kwargs):
 
     eeg = eeg.copy()
     if reference == "average" and robust is True:
-        eeg._data = eeg_rereference_array(eeg._data, reference=reference, robust=robust)
-        eeg.info["custom_ref_applied"] = True
+        # Assigning "custom_ref_applied" to True throws an error with the
+        # latest MNE. If this error goes away in the future, we might able to
+        # restore this feature.
+        # > eeg._data = eeg_rereference_array(eeg._data, reference=reference, robust=robust)
+        # > eeg.info["custom_ref_applied"] = True
+        raise ValueError(
+            "NeuroKit error: eeg_rereference(): 'robust=True' currently not supported for MNE",
+            " objects.",
+        )
     elif reference in ["lap", "csd"]:
         try:
             import mne

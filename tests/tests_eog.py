@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import mne
 import matplotlib.pyplot as plt
+import mne
+import numpy as np
 import pytest
 
 import neurokit2 as nk
@@ -15,10 +15,12 @@ def test_eog_clean():
     assert eog_cleaned.size == eog_signal.size
 
     # test with mne.io.Raw
-    raw = mne.io.read_raw_fif(mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_raw.fif", preload=True)
+    raw = mne.io.read_raw_fif(
+        mne.datasets.sample.data_path() + "/MEG/sample/sample_audvis_raw.fif", preload=True
+    )
     sampling_rate = raw.info["sfreq"]
 
-    eog_channels = nk.mne_channel_extract(raw, what="EOG", name="EOG")
+    eog_channels = nk.mne_channel_extract(raw, what="EOG", name="EOG").values
     eog_cleaned = nk.eog_clean(eog_channels, sampling_rate, method="agarwal2019")
     assert eog_cleaned.size == eog_channels.size
 
@@ -42,11 +44,13 @@ def test_eog_clean():
 
 def test_eog_findpeaks():
 
-    eog_signal = nk.data('eog_100hz')
+    eog_signal = nk.data("eog_100hz")
     eog_cleaned = nk.eog_clean(eog_signal, sampling_rate=100)
 
     # Test with Neurokit
-    nk_peaks = nk.eog_findpeaks(eog_cleaned, sampling_rate=100, method="neurokit", threshold=0.33, show=False)
+    nk_peaks = nk.eog_findpeaks(
+        eog_cleaned, sampling_rate=100, method="neurokit", threshold=0.33, show=False
+    )
     assert nk_peaks.size == 19
 
     # Test with MNE
@@ -95,21 +99,27 @@ def test_eog_plot():
     np.testing.assert_array_equal(fig.axes[0].get_xticks(), fig.axes[1].get_xticks())
     plt.close(fig)
 
-    with pytest.raises(ValueError, match=r'NeuroKit error: eog_plot.*'):
+    with pytest.raises(ValueError, match=r"NeuroKit error: eog_plot.*"):
         nk.eog_plot(None)
 
 
 def test_eog_eventrelated():
 
-    eog = nk.data('eog_200hz')['vEOG']
+    eog = nk.data("eog_200hz")["vEOG"]
     eog_signals, info = nk.eog_process(eog, sampling_rate=200)
-    epochs = nk.epochs_create(eog_signals, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    epochs = nk.epochs_create(
+        eog_signals, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9
+    )
     eog_eventrelated = nk.eog_eventrelated(epochs)
 
     # Test rate features
-    assert np.alltrue(np.array(eog_eventrelated["EOG_Rate_Min"]) < np.array(eog_eventrelated["EOG_Rate_Mean"]))
+    assert np.alltrue(
+        np.array(eog_eventrelated["EOG_Rate_Min"]) < np.array(eog_eventrelated["EOG_Rate_Mean"])
+    )
 
-    assert np.alltrue(np.array(eog_eventrelated["EOG_Rate_Mean"]) < np.array(eog_eventrelated["EOG_Rate_Max"]))
+    assert np.alltrue(
+        np.array(eog_eventrelated["EOG_Rate_Mean"]) < np.array(eog_eventrelated["EOG_Rate_Max"])
+    )
 
     # Test blink presence
     assert np.alltrue(np.array(eog_eventrelated["EOG_Blinks_Presence"]) == np.array([1, 0, 0]))
@@ -130,23 +140,23 @@ def test_eog_eventrelated():
 
 def test_eog_intervalrelated():
 
-    eog = nk.data('eog_200hz')['vEOG']
+    eog = nk.data("eog_200hz")["vEOG"]
     eog_signals, info = nk.eog_process(eog, sampling_rate=200)
 
-    columns = ['EOG_Peaks_N', 'EOG_Rate_Mean']
+    columns = ["EOG_Peaks_N", "EOG_Rate_Mean"]
 
     # Test with signal dataframe
     features = nk.eog_intervalrelated(eog_signals)
 
-    assert all(elem in np.array(features.columns.values, dtype=str) for elem
-               in columns)
+    assert all(elem in np.array(features.columns.values, dtype=str) for elem in columns)
     assert features.shape[0] == 1  # Number of rows
 
     # Test with dict
-    columns.append('Label')
-    epochs = nk.epochs_create(eog_signals, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9)
+    columns.append("Label")
+    epochs = nk.epochs_create(
+        eog_signals, events=[5000, 10000, 15000], epochs_start=-0.1, epochs_end=1.9
+    )
     epochs_dict = nk.eog_intervalrelated(epochs)
 
-    assert all(elem in columns for elem
-               in np.array(epochs_dict.columns.values, dtype=str))
+    assert all(elem in columns for elem in np.array(epochs_dict.columns.values, dtype=str))
     assert epochs_dict.shape[0] == len(epochs)  # Number of rows
