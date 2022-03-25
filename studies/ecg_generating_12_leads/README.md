@@ -14,7 +14,7 @@ ecg12 = nk.ecg_simulate(duration=10, method="multileads")
 ecg12[0:10000].plot(subplots=True)
 ```
 
-![](ECG12_normal.png)
+![](../../studies/ecg_generating_12_leads/ECG12_normal.png)
 
 ## Abnormal Multi-lead ECG
 
@@ -41,21 +41,21 @@ ecg12 = nk.ecg_simulate(duration=10, method="multileads", ti=ti, ai=ai, bi=bi)
 # Visualize results
 ecg12[0:10000].plot(subplots=True)
 ```
-![](ECG12_abnormal.png)
+![](../../studies/ecg_generating_12_leads/ECG12_abnormal.png)
 
 ## Explanation
 
 
 For a better understanding of the above parameters, please read the following.
 
-![](table.png)
+![](../../studies/ecg_generating_12_leads/table.png)
 
  We can see from the above table that each interval in the 3D trajectory can be fixed by 3 parameters:
  - `ti`: The starting position $\theta_i/t_i$ along the circle of each interval in radius
  - `ai`: The amplitude of each spike a
  - `bi`: The width of each wave b. By altering these 3 parameters we can change the shape of the 3D trajectory and thus change the waveform of the resulting ECG.
 
-![](3D.png)
+![](../../studies/ecg_generating_12_leads/3D.png)
 
 **Prebuilt Synthetic Data**
 Prebuilt synthetic data can be found at the following link
