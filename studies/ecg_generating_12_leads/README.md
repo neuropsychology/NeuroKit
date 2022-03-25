@@ -50,10 +50,11 @@ For a better understanding of the above parameters, please read the following.
 
 ![](../../studies/ecg_generating_12_leads/table.png)
 
- We can see from the above table that each interval in the 3D trajectory can be fixed by 3 parameters:
- - `ti`: The starting position $\theta_i/t_i$ along the circle of each interval in radius
- - `ai`: The amplitude of each spike a
- - `bi`: The width of each wave b. By altering these 3 parameters we can change the shape of the 3D trajectory and thus change the waveform of the resulting ECG.
+We can see from the above table that each interval in the 3D trajectory can be fixed by 3 parameters:
+
+- `ti`: The starting position $\theta_i/t_i$ along the circle of each interval in radius
+- `ai`: The amplitude of each spike a
+- `bi`: The width of each wave b. By altering these 3 parameters we can change the shape of the 3D trajectory and thus change the waveform of the resulting ECG.
 
 ![](../../studies/ecg_generating_12_leads/3D.png)
 
