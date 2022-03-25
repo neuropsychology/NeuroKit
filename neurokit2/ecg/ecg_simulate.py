@@ -22,8 +22,8 @@ def ecg_simulate(
     """Simulate an ECG/EKG signal.
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either
-    the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies wavelets
-    to roughly approximate cardiac cycles.
+    the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies
+    wavelets to roughly approximate cardiac cycles.
 
     Parameters
     ----------
@@ -44,8 +44,10 @@ def ecg_simulate(
         Desired heart rate standard deviation (beats per minute).
     method : str
         The model used to generate the signal. Can be 'simple' for a simulation based on Daubechies
-        wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use the model desbribed `McSharry et al. (2003) <https://physionet.org/content/ecgsyn/>`_. If
-        'multileads', will return a DataFrame containing 12-leads (see `12-leads ECG simulation <https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html>`_).
+        wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use
+        the model desbribed `McSharry et al. (2003) <https://physionet.org/content/ecgsyn/>`_. If
+        'multileads', will return a DataFrame containing 12-leads (see `12-leads ECG simulation
+        <https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html>`_).
     random_state : int
         Seed for the random number generator.
     **kwargs
@@ -84,7 +86,8 @@ def ecg_simulate(
     References
     -----------
     - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for
-    generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50(3), 289-294.
+    generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50
+    (3), 289-294.
     - https://github.com/diarmaidocualain/ecg_simulation
 
     """
@@ -228,7 +231,8 @@ def _ecg_simulate_ecgsyn(
     **kwargs,
 ):
     """
-    This function is a python translation of the matlab script by `McSharry & Clifford (2013) <https://physionet.org/content/ecgsyn>`_.
+    This function is a python translation of the matlab script by `McSharry & Clifford (2013)
+    <https://physionet.org/content/ecgsyn>`_.
 
     Parameters
     ----------
@@ -252,6 +256,8 @@ def _ecg_simulate_ecgsyn(
         z-position of extrema.
     bi
         Gaussian width of peaks.
+    gamma
+        This determines the different leads.
 
     Returns
     -------
@@ -347,7 +353,8 @@ def _ecg_simulate_ecgsyn(
     # Multichannel modification (#625):
     # --------------------------------------------------
     # Loop over the twelve leads modifying ai in the loop to generate each lead's data
-    # Because these are all starting at the same position, it may make sense to grab a random segment within the series to simulate random phase and to forget the initial conditions
+    # Because these are all starting at the same position, it may make sense to grab a random
+    # segment within the series to simulate random phase and to forget the initial conditions
 
     for lead in range(len(gamma)):
         # as passing extra arguments to derivative function is not supported yet in solve_ivp
