@@ -44,8 +44,8 @@ def ecg_simulate(
         Desired heart rate standard deviation (beats per minute).
     method : str
         The model used to generate the signal. Can be 'simple' for a simulation based on Daubechies
-        wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use an
-        advanced model desbribed `McSharry et al. (2003) <https://physionet.org/content/ecgsyn/>`_.
+        wavelets that roughly approximates a single cardiac cycle. If 'ecgsyn' (default), will use the model desbribed `McSharry et al. (2003) <https://physionet.org/content/ecgsyn/>`_. If
+        'multileads', will return a DataFrame containing 12-leads (see `12-leads ECG simulation <https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html>`_).
     random_state : int
         Seed for the random number generator.
     **kwargs
