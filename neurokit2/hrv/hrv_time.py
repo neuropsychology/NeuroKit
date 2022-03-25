@@ -111,7 +111,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         out["SDNNI" + str(i)] = _sdnni(rri, window=i)
 
     # Difference-based
-    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri ** 2))
+    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri**2))
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
     # Normalized
@@ -203,7 +203,7 @@ def _sdnni(rri, window=1):
 
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
-    min_error = 2 ** 14
+    min_error = 2**14
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
     idx_where = np.where(bar_x - np.min(rri) > 0)[0]
