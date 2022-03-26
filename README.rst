@@ -213,7 +213,7 @@ Physiological Data Preprocessing
 Simulate physiological signals
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can easily simulate artificial ECG (also `12-Lead multichannel ECGs <https://github.com/neuropsychology/NeuroKit/...>`_), PPG, RSP, EDA, and EMG signals to test your scripts and algorithms.
+You can easily simulate artificial ECG (also `12-Lead multichannel ECGs <https://neurokit2.readthedocs.io/en/latest/studies/ecg_generating_12_leads.html>`_), PPG, RSP, EDA, and EMG signals to test your scripts and algorithms.
 
 .. code-block:: python
 
