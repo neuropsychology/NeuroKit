@@ -23,6 +23,7 @@ Contributors
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
 * `Leonardo Rydin Gorjão <https://github.com/lrydin>`_ *(OsloMet, Norway)*
 * `Alexander Wong <https://github.com/awwong1>`_ *(University of Alberta, Canada)*
+* `Pierre Elias <https://twitter.com/pierreeliasmd>`_ *(Columbia University, USA)*
 * `Jukka Zitting <https://github.com/jukka>`_
 * `Stavros Avramidis <https://github.com/purpl3F0x>`_
 * `Tiago Rodrigues <https://github.com/TiagoTostas>`_ *(IST, Lisbon)*
