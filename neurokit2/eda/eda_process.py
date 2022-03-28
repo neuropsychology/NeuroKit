@@ -69,10 +69,6 @@ def eda_process(eda_signal, sampling_rate=1000, method="neurokit"):
     # Sanitize input
     eda_signal = signal_sanitize(eda_signal)
 
-    # Series check for non-default index
-    if isinstance(eda_signal, pd.Series) and isinstance(eda_signal.index, pd.RangeIndex):
-        eda_signal = eda_signal.reset_index(drop=True)
-
     # Preprocess
     eda_cleaned = eda_clean(eda_signal, sampling_rate=sampling_rate, method=method)
     eda_decomposed = eda_phasic(eda_cleaned, sampling_rate=sampling_rate)
