@@ -50,12 +50,12 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         - **HCVNN**: The median absolute deviation of the RR intervals (MadNN) divided by the median
         of the absolute differences of their successive differences (MedianNN).
         - **IQRNN**: The interquartile range (IQR) of the RR intervals.
-        - **Prc20NN**: The 20th percentile of the RR intervals.
-        - **Prc80NN**: The 80th percentile of the RR intervals.
+        - **Prc20NN**: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
+        - **Prc80NN**: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).
         - **pNN50**: The proportion of RR intervals greater than 50ms, out of the total number of RR intervals.
         - **pNN20**: The proportion of RR intervals greater than 20ms, out of the total number of RR intervals.
-        - **MinNN**: The minimum of the RR intervals.
-        - **MaxNN**: The maximum of the RR intervals.
+        - **MinNN**: The minimum of the RR intervals (Parent, 2019; Subramaniam, 2022).
+        - **MaxNN**: The maximum of the RR intervals (Parent, 2019; Subramaniam, 2022).
         - **TINN**: A geometrical parameter of the HRV, or more specifically, the baseline width of
         the RR intervals distribution obtained by triangular interpolation, where the error of least
         squares determines the triangle. It is an approximation of the RR interval distribution.
@@ -85,11 +85,28 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
     56(4), 674-678.
 
+    - Han, L., Zhang, Q., Chen, X., Zhan, Q., Yang, T., & Zhao, Z. (2017). Detecting work-related
+    stress with a wearable device. Computers in Industry, 90, 42-49.
+
+    - Hovsepian, K., Al'Absi, M., Ertin, E., Kamarck, T., Nakajima, M., & Kumar, S. (2015). cStress:
+    towards a gold standard for continuous stress assessment in the mobile environment. In
+    Proceedings of the 2015 ACM international joint conference on pervasive and ubiquitous computing
+    (pp. 493-504).
+
+    - Parent, M., Tiwari, A., Albuquerque, I., Gagnon, J. F., Lafond, D., Tremblay, S., & Falk, T. H.
+    (2019). A multimodal approach to improve the robustness of physiological stress prediction during
+    physical activity. In 2019 IEEE International Conference on Systems, Man and Cybernetics (SMC)
+    (pp. 4131-4136). IEEE.
+
     - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
     electrophysiology review, 6(3), 239-244.
 
     - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
     Frontiers in public health, 5, 258.
+
+    - Subramaniam, S. D., & Dass, B. (2022). An Efficient Convolutional Neural Network for Acute Pain
+    Recognition Using HRV Features. In Proceedings of the International e-Conference on Intelligent
+    Systems and Signal Processing (pp. 119-132). Springer, Singapore.
 
     """
     # Sanitize input
@@ -111,7 +128,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         out["SDNNI" + str(i)] = _sdnni(rri, window=i)
 
     # Difference-based
-    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri**2))
+    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri ** 2))
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
     # Normalized
@@ -203,7 +220,7 @@ def _sdnni(rri, window=1):
 
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
-    min_error = 2**14
+    min_error = 2 ** 14
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
     idx_where = np.where(bar_x - np.min(rri) > 0)[0]
