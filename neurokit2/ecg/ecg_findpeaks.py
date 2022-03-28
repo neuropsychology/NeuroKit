@@ -91,8 +91,8 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=500)
     >>> ecg = nk.signal_distort(ecg,
     ...                         sampling_rate=500,
-    ...                         noise_amplitude=0.2, noise_frequency=[25, 50],
-    ...                         artifacts_amplitude=0.2, artifacts_frequency=50)
+    ...                         noise_amplitude=0.05, noise_frequency=[25, 50],
+    ...                         artifacts_amplitude=0.05, artifacts_frequency=50)
     >>> nk.ecg_findpeaks(ecg, sampling_rate=1000, method="promac", show=True) #doctest: +ELLIPSIS
     {'ECG_R_Peaks': array(...)}
 
@@ -244,7 +244,7 @@ def _ecg_findpeaks_promac(
     peaks = signal_findpeaks(x, height_min=threshold)["Peaks"]
 
     if show is True:
-        signal_plot([signal, convoluted], standardize=True)
+        signal_plot(pd.DataFrame({"ECG": signal, "Convoluted": convoluted}), standardize=True)
         [
             plt.axvline(x=peak, color="red", linestyle="--") for peak in peaks
         ]  # pylint: disable=W0106
@@ -512,7 +512,7 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     # diff
     dx = np.diff(signal)
     dx[dx >= 0] = 0
-    dx = dx ** 2
+    dx = dx**2
 
     # detection
     (idx,) = np.nonzero(dx > threshold)
@@ -866,7 +866,7 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
     swt_level = 3
     padding = -1
     for i in range(1000):
-        if (len(signal) + i) % 2 ** swt_level == 0:
+        if (len(signal) + i) % 2**swt_level == 0:
             padding = i
             break
 
