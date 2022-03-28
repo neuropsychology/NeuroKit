@@ -7,88 +7,94 @@ ECG
 -------
 
 .. automodule:: neurokit2.ecg
-   :members: 
+   :members:
 
 PPG
 -------
 
 .. automodule:: neurokit2.ppg
-   :members: 
+   :members:
 
 HRV
 ------------------------
 
 .. automodule:: neurokit2.hrv
-   :members:   
-   
+   :members:
+
 RSP
 -------
 
 .. automodule:: neurokit2.rsp
-   :members: 
+   :members:
 
 EDA
 -------
 
 .. automodule:: neurokit2.eda
-   :members: 
+   :members:
 
 EMG
 -------
 
 .. automodule:: neurokit2.emg
-   :members: 
+   :members:
 
 
 EEG
 -------
 
 .. automodule:: neurokit2.eeg
-   :members: 
+   :members:
+
+Mircrostates
+------------------------
+
+.. automodule:: neurokit2.microstates
+   :members:
 
 
 Signal Processing
 --------------------------
 
 .. automodule:: neurokit2.signal
-   :members: 
+   :members:
 
 Events
 -------
 
 .. automodule:: neurokit2.events
-   :members: 
+   :members:
 
 Data
 ----------
 
 .. automodule:: neurokit2.data
-   :members: 
+   :members:
 
 Epochs
 -----------
 
 .. automodule:: neurokit2.epochs
-   :members: 
+   :members:
 
 Statistics
 -----------
 
 .. automodule:: neurokit2.stats
-   :members: 
-   
+   :members:
+
 Complexity
 -----------
 
 .. automodule:: neurokit2.complexity
-   :members: 
+   :members:
 
 Miscellaneous
 --------------
 
 .. automodule:: neurokit2.bio
-   :members:  
+   :members:
 
 
 .. automodule:: neurokit2.misc
-   :members: 
+   :members:
