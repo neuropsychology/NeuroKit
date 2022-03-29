@@ -124,13 +124,15 @@ def hrv_frequency(
     if isinstance(peaks, tuple):  # Detect actual sampling rate
         peaks, sampling_rate = peaks[0], peaks[1]
 
-    # infer maximum frequency here
-    max_frequency = vhf[1]
-
     # Compute R-R intervals (also referred to as NN) in milliseconds (interpolated at 1000 Hz by default)
-    rri, sampling_rate = _hrv_get_rri(peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs)
+    rri, sampling_rate = _hrv_get_rri(
+        peaks, sampling_rate=sampling_rate, interpolate=True, **kwargs
+    )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
+
+    # Find maximum frequency
+    max_frequency = np.max([np.max(i) for i in frequency_band])
 
     power = signal_power(
         rri,
