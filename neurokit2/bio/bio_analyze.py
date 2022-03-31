@@ -138,9 +138,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
             if "RSP" in window_lengths.keys():  # only for epochs
                 rsp_data = _bio_analyze_slicewindow(rsp_data, window_lengths, signal="RSP")
 
-        rsp_analyzed = rsp_analyze(
-            rsp_data, sampling_rate=sampling_rate, method=method, subepoch_rate=subepoch_rate
-        )
+        rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, rsp_analyzed], axis=1, sort=False)
 
     # EDA
