@@ -53,7 +53,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
     ----------
     >>> import neurokit2 as nk
     >>>
-    >>> # Example 1: Event-related analysis
+    >>> # Example 1: Event-related analysis ==================================================
     >>> # Download data
     >>> data = nk.data("bio_eventrelated_100hz")
     >>>
@@ -78,7 +78,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
     ...
     >>>
-    >>> # Example 2: Interval-related analysis
+    >>> # Example 2: Interval-related analysis =================================================
     >>> # Download data
     >>> data = nk.data("bio_resting_5min_100hz")
     >>>
@@ -163,7 +163,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
         emg_analyzed = emg_analyze(emg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, emg_analyzed], axis=1, sort=False)
 
-    # EMG
+    # PPG
     if len(ppg_cols) != 0:
         ppg_data = data.copy()
 
@@ -187,22 +187,24 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
 
     # RSA
     if len(ecg_rate_col + rsp_phase_col) >= 3:
+        if method == "auto":
+            duration = _bio_analyze_findduration(data, sampling_rate=sampling_rate)
+            if duration >= 10:
+                method = "interval"
+            else:
+                method = "event"
 
         # Event-related
         if method in ["event-related", "event", "epoch"]:
-            rsa = _bio_analyze_rsa_event(data)
+            rsa = _bio_analyze_rsa_event(data.copy())
 
         # Interval-related
         elif method in ["interval-related", "interval", "resting-state"]:
-            rsa = _bio_analyze_rsa_interval(data, sampling_rate=sampling_rate)
+            rsa = _bio_analyze_rsa_interval(data.copy(), sampling_rate=sampling_rate)
 
         # Auto
         else:
-            duration = _bio_analyze_findduration(data, sampling_rate=sampling_rate)
-            if duration >= 10:
-                rsa = _bio_analyze_rsa_interval(data, sampling_rate=sampling_rate)
-            else:
-                rsa = _bio_analyze_rsa_event(data)
+            raise ValueError("Wrong `method` argument.")
 
         features = pd.concat([features, rsa], axis=1, sort=False)
 
@@ -263,17 +265,15 @@ def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     return rsa
 
 
-def _bio_analyze_rsa_event(data, rsa={}):
+def _bio_analyze_rsa_event(data):
     # RSA features for event-related analysis
-
+    rsa = {}
     if isinstance(data, dict):
         for i in data:
-            rsa[i] = {}
-            rsa[i] = _bio_analyze_rsa_epoch(data[i], rsa[i])
+            rsa[i] = _bio_analyze_rsa_epoch(data[i])
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
 
     elif isinstance(data, pd.DataFrame):
-
         # Convert back to dict
         for label, df in data.groupby("Label"):
             rsa[label] = {}
@@ -288,8 +288,9 @@ def _bio_analyze_rsa_event(data, rsa={}):
     return rsa
 
 
-def _bio_analyze_rsa_epoch(epoch, output={}):
+def _bio_analyze_rsa_epoch(epoch):
     # RSA features for event-related analysis: epoching
+    output = {}
 
     # To remove baseline
     if np.min(epoch.index.values) <= 0:
