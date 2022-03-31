@@ -3,14 +3,16 @@ from warnings import warn
 
 import numpy as np
 
-from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
-                                         _eventrelated_rate,
-                                         _eventrelated_sanitizeinput,
-                                         _eventrelated_sanitizeoutput)
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_rate,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 from ..misc import NeuroKitWarning, find_closest
 
 
-def rsp_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
+def rsp_eventrelated(epochs, silent=False):
     """Performs event-related RSP analysis on epochs.
 
     Parameters
@@ -20,12 +22,6 @@ def rsp_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
         or a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
-    subepoch_rate : list
-        A smaller "sub-epoch" within the epoch of an event can be specified.
-        The ECG rate-related features of this "sub-epoch" (e.g., RSP_Rate, RSP_Rate_Max),
-        relative to the baseline (where applicable), will be computed. The first value of the list specifies
-        the start of the sub-epoch and the second specifies the end of the sub-epoch (in seconds),
-        e.g., subepoch_rate = [1, 3] or subepoch_rate = [1, None]. Defaults to [None, None].
 
     Returns
     -------
@@ -90,7 +86,7 @@ def rsp_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
         data[i] = {}  # Initialize empty container
 
         # Rate
-        data[i] = _eventrelated_rate(epochs[i], data[i], var="RSP_Rate", subepoch_rate=subepoch_rate)
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="RSP_Rate")
 
         # Amplitude
         data[i] = _rsp_eventrelated_amplitude(epochs[i], data[i])
@@ -118,7 +114,7 @@ def _rsp_eventrelated_amplitude(epoch, output={}):
         warn(
             "Input does not have an `RSP_Amplitude` column."
             " Will skip all amplitude-related features.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
@@ -144,7 +140,7 @@ def _rsp_eventrelated_inspiration(epoch, output={}):
         warn(
             "Input does not have an `RSP_Phase` column."
             " Will not indicate whether event onset concurs with inspiration.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
