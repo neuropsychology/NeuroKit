@@ -11,12 +11,12 @@ from ..ppg import ppg_analyze
 from ..rsp import rsp_analyze
 
 
-def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constant', subepoch_rate=[None, None]):
-    """Automated analysis of bio signals.
+def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constant"):
+    """Automated analysis of physiological signals.
 
-    Wrapper for other bio analyze functions of
-    electrocardiography signals (ECG), respiration signals (RSP), electrodermal activity (EDA),
-    electromyography signals (EMG) and electrooculography signals (EOG).
+    Wrapper for other bio analyze functions of electrocardiography signals (ECG), respiration
+    signals (RSP), electrodermal activity (EDA), electromyography signals (EMG) and
+    electrooculography signals (EOG).
 
     Parameters
     ----------
@@ -33,15 +33,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
         to 'auto' where the right method will be chosen based on the
         mean duration of the data ('event-related' for duration under 10s).
     window_lengths : dict
-        Defaults to 'constant'. Add a dictionary of epoch start and end times for different
-        types of signals e.g., window_lengths = {'ECG': [0.5, 1.5], 'EDA': [0.5, 3.5]}
-    subepoch_rate : list, dict
-        For event-related analysis,, a smaller "sub-epoch" within the epoch of an event can be specified.
-        The ECG and RSP rate-related features of this "sub-epoch" (e.g., ECG_Rate, ECG_Rate_Max),
-        relative to the baseline (where applicable), will be computed, e.g., subepoch_rate = [1, 3]
-        or subepoch_rate = {'ECG_Rate' = [1, 2], 'RSP_Rate' = [1.5, None]} if different sub-epoch length
-        for different signal is desired. Defaults to [None, None]. The first value of the list specifies
-        the start of the sub-epoch and the second specifies the end of the sub-epoch (in seconds),
+        If 'constant' (default), will use the full epoch for all the signals. Can also
+        be a dictionary with the epoch start and end times for different
+        types of signals, e.g., `window_lengths = {'ECG': [0.5, 1.5], 'EDA': [0.5, 3.5]}`
 
     Returns
     ----------
@@ -129,31 +123,31 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     # ECG
     if len(ecg_cols) != 0:
         ecg_data = data.copy()
-        if window_lengths != 'constant':
-            if 'ECG' in window_lengths.keys():  # only for epochs
-                ecg_data = _bio_analyze_slicewindow(ecg_data, window_lengths, signal='ECG')
+        if window_lengths != "constant":
+            if "ECG" in window_lengths.keys():  # only for epochs
+                ecg_data = _bio_analyze_slicewindow(ecg_data, window_lengths, signal="ECG")
 
-        ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate, method=method, subepoch_rate=subepoch_rate)
+        ecg_analyzed = ecg_analyze(ecg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, ecg_analyzed], axis=1, sort=False)
 
     # RSP
     if len(rsp_cols) != 0:
         rsp_data = data.copy()
 
-        if window_lengths != 'constant':
-            if 'RSP' in window_lengths.keys():  # only for epochs
-                rsp_data = _bio_analyze_slicewindow(rsp_data, window_lengths, signal='RSP')
+        if window_lengths != "constant":
+            if "RSP" in window_lengths.keys():  # only for epochs
+                rsp_data = _bio_analyze_slicewindow(rsp_data, window_lengths, signal="RSP")
 
-        rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate, method=method, subepoch_rate=subepoch_rate)
+        rsp_analyzed = rsp_analyze(rsp_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, rsp_analyzed], axis=1, sort=False)
 
     # EDA
     if len(eda_cols) != 0:
         eda_data = data.copy()
 
-        if window_lengths != 'constant':
-            if 'EDA' in window_lengths.keys():  # only for epochs
-                eda_data = _bio_analyze_slicewindow(eda_data, window_lengths, signal='EDA')
+        if window_lengths != "constant":
+            if "EDA" in window_lengths.keys():  # only for epochs
+                eda_data = _bio_analyze_slicewindow(eda_data, window_lengths, signal="EDA")
 
         eda_analyzed = eda_analyze(eda_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, eda_analyzed], axis=1, sort=False)
@@ -162,9 +156,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     if len(emg_cols) != 0:
         emg_data = data.copy()
 
-        if window_lengths != 'constant':
-            if 'EMG' in window_lengths.keys():  # only for epochs
-                emg_data = _bio_analyze_slicewindow(emg_data, window_lengths, signal='EMG')
+        if window_lengths != "constant":
+            if "EMG" in window_lengths.keys():  # only for epochs
+                emg_data = _bio_analyze_slicewindow(emg_data, window_lengths, signal="EMG")
 
         emg_analyzed = emg_analyze(emg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, emg_analyzed], axis=1, sort=False)
@@ -173,9 +167,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     if len(ppg_cols) != 0:
         ppg_data = data.copy()
 
-        if window_lengths != 'constant':
-            if 'PPG' in window_lengths.keys():  # only for epochs
-                ppg_data = _bio_analyze_slicewindow(ppg_data, window_lengths, signal='PPG')
+        if window_lengths != "constant":
+            if "PPG" in window_lengths.keys():  # only for epochs
+                ppg_data = _bio_analyze_slicewindow(ppg_data, window_lengths, signal="PPG")
 
         ppg_analyzed = ppg_analyze(ppg_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, ppg_analyzed], axis=1, sort=False)
@@ -184,9 +178,9 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
     if len(eog_cols) != 0:
         eog_data = data.copy()
 
-        if window_lengths != 'constant':
-            if 'EOG' in window_lengths.keys():  # only for epochs
-                eog_data = _bio_analyze_slicewindow(eog_data, window_lengths, signal='EOG')
+        if window_lengths != "constant":
+            if "EOG" in window_lengths.keys():  # only for epochs
+                eog_data = _bio_analyze_slicewindow(eog_data, window_lengths, signal="EOG")
 
         eog_analyzed = eog_analyze(eog_data, sampling_rate=sampling_rate, method=method)
         features = pd.concat([features, eog_analyzed], axis=1, sort=False)
@@ -222,7 +216,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths='constan
 # =============================================================================
 # Internals
 # =============================================================================
-def _bio_analyze_slicewindow(data, window_lengths, signal='ECG'):
+def _bio_analyze_slicewindow(data, window_lengths, signal="ECG"):
 
     if signal in window_lengths.keys():
         start = window_lengths[signal][0]
@@ -255,7 +249,6 @@ def _bio_analyze_findduration(data, sampling_rate=1000):
 def _bio_analyze_rsa_interval(data, sampling_rate=1000):
     # RSA features for interval-related analysis
 
-
     if isinstance(data, pd.DataFrame):
         rsa = hrv_rsa(data, sampling_rate=sampling_rate, continuous=False)
         rsa = pd.DataFrame.from_dict(rsa, orient="index").T
@@ -282,9 +275,9 @@ def _bio_analyze_rsa_event(data, rsa={}):
     elif isinstance(data, pd.DataFrame):
 
         # Convert back to dict
-        for label, df in data.groupby('Label'):
+        for label, df in data.groupby("Label"):
             rsa[label] = {}
-            epoch = df.set_index('Time')
+            epoch = df.set_index("Time")
             rsa[label] = _bio_analyze_rsa_epoch(epoch, rsa[label])
         rsa = pd.DataFrame.from_dict(rsa, orient="index")
         # Fix index sorting to combine later with features dataframe

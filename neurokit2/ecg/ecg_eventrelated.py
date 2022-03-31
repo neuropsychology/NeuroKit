@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
 
-from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
-                                         _eventrelated_rate,
-                                         _eventrelated_sanitizeinput,
-                                         _eventrelated_sanitizeoutput)
+from ..epochs.eventrelated_utils import (
+    _eventrelated_addinfo,
+    _eventrelated_rate,
+    _eventrelated_sanitizeinput,
+    _eventrelated_sanitizeoutput,
+)
 from ..misc import NeuroKitWarning
 
 
-def ecg_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
+def ecg_eventrelated(epochs, silent=False):
     """Performs event-related ECG analysis on epochs.
 
     Parameters
@@ -19,12 +21,6 @@ def ecg_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
         containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
-    subepoch_rate : list
-        A smaller "sub-epoch" within the epoch of an event can be specified.
-        The ECG rate-related features of this "sub-epoch" (e.g., ECG_Rate, ECG_Rate_Max),
-        relative to the baseline (where applicable), will be computed. The first value of the list specifies
-        the start of the sub-epoch and the second specifies the end of the sub-epoch (in seconds),
-        e.g., subepoch_rate = [1, 3] or subepoch_rate = [1, None]. Defaults to [None, None].
 
     Returns
     -------
@@ -120,7 +116,7 @@ def ecg_eventrelated(epochs, silent=False, subepoch_rate=[None, None]):
         data[i] = {}  # Initialize empty container
 
         # Rate
-        data[i] = _eventrelated_rate(epochs[i], data[i], var="ECG_Rate", subepoch_rate=subepoch_rate)
+        data[i] = _eventrelated_rate(epochs[i], data[i], var="ECG_Rate")
 
         # Cardiac Phase
         data[i] = _ecg_eventrelated_phase(epochs[i], data[i])
@@ -147,17 +143,21 @@ def _ecg_eventrelated_phase(epoch, output={}):
         warn(
             "Input does not have an `ECG_Phase_Artrial` or `ECG_Phase_Ventricular` column."
             " Will not indicate whether event onset concurs with cardiac phase.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 
     # Indication of atrial systole
     output["ECG_Phase_Atrial"] = epoch["ECG_Phase_Atrial"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Completion_Atrial"] = epoch["ECG_Phase_Completion_Atrial"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Completion_Atrial"] = epoch["ECG_Phase_Completion_Atrial"][
+        epoch.index > 0
+    ].iloc[0]
 
     # Indication of ventricular systole
     output["ECG_Phase_Ventricular"] = epoch["ECG_Phase_Ventricular"][epoch.index > 0].iloc[0]
-    output["ECG_Phase_Completion_Ventricular"] = epoch["ECG_Phase_Completion_Ventricular"][epoch.index > 0].iloc[0]
+    output["ECG_Phase_Completion_Ventricular"] = epoch["ECG_Phase_Completion_Ventricular"][
+        epoch.index > 0
+    ].iloc[0]
 
     return output
 
@@ -170,7 +170,7 @@ def _ecg_eventrelated_quality(epoch, output={}):
         warn(
             "Input does not have an `ECG_Quality` column."
             " Quality of the signal is not computed.",
-            category=NeuroKitWarning
+            category=NeuroKitWarning,
         )
         return output
 

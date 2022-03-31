@@ -5,7 +5,7 @@ from .rsp_eventrelated import rsp_eventrelated
 from .rsp_intervalrelated import rsp_intervalrelated
 
 
-def rsp_analyze(data, sampling_rate=1000, method="auto", subepoch_rate=[None, None]):
+def rsp_analyze(data, sampling_rate=1000, method="auto"):
     """Performs RSP analysis on either epochs (event-related analysis) or on longer periods of data such as resting-
     state data.
 
@@ -22,12 +22,6 @@ def rsp_analyze(data, sampling_rate=1000, method="auto", subepoch_rate=[None, No
         Can be one of 'event-related' for event-related analysis on epochs, or 'interval-related' for
         analysis on longer periods of data. Defaults to 'auto' where the right method will be chosen
         based on the mean duration of the data ('event-related' for duration under 10s).
-    subepoch_rate : list
-        For event-related analysis,, a smaller "sub-epoch" within the epoch of an event can be specified.
-        The ECG rate-related features of this "sub-epoch" (e.g., RSP_Rate, RSP_Rate_Max),
-        relative to the baseline (where applicable), will be computed. The first value of the list specifies
-        the start of the sub-epoch and the second specifies the end of the sub-epoch (in seconds),
-        e.g., subepoch_rate = [1, 3] or subepoch_rate = [1, None]. Defaults to [None, None].
 
     Returns
     -------
@@ -82,7 +76,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto", subepoch_rate=[None, No
                 "NeuroKit error: rsp_analyze(): Wrong input or method, we couldn't extract extract epochs features."
             )
         else:
-            features = rsp_eventrelated(data, subepoch_rate=subepoch_rate)
+            features = rsp_eventrelated(data)
 
     # Interval-related analysis
     elif method in ["interval-related", "interval", "resting-state"]:
@@ -97,7 +91,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto", subepoch_rate=[None, No
             if duration >= 10:
                 features = rsp_intervalrelated(data, sampling_rate)
             else:
-                features = rsp_eventrelated(data, subepoch_rate=subepoch_rate)
+                features = rsp_eventrelated(data)
 
         if isinstance(data, pd.DataFrame):
             if "Label" in data.columns:
@@ -108,6 +102,6 @@ def rsp_analyze(data, sampling_rate=1000, method="auto", subepoch_rate=[None, No
             if duration >= 10:
                 features = rsp_intervalrelated(data, sampling_rate)
             else:
-                features = rsp_eventrelated(data, subepoch_rate=subepoch_rate)
+                features = rsp_eventrelated(data)
 
     return features
