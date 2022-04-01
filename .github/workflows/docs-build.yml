@@ -1,4 +1,4 @@
-name: "Build Documentation"
+name: "📜 Documentation Builder"
 on:
 - pull_request
 
@@ -14,12 +14,12 @@ jobs:
       with:
         docs-folder: "docs_wip/"
         build-command: "sphinx-build -b html . _build"
-    - name: Build and Commit
-      uses: sphinx-notes/pages@v2
-      with:
-        documentation_path: ./docs_wip/
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+    # - name: Build and Commit
+    #   uses: sphinx-notes/pages@v2
+    #   with:
+    #     documentation_path: ./docs_wip/
+    - name: Deploy 🚀
+      uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: gh-pages
+        publish_dir: ./docs_wip/_build
