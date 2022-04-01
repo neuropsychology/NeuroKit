@@ -1,4 +1,4 @@
-name: "Pull Request Docs Check"
+name: "Build Documentation"
 on:
 - pull_request
 
@@ -10,3 +10,4 @@ jobs:
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs_wip/"
+        build-command: "sphinx-build -b html . _build"
