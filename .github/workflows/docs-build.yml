@@ -1,4 +1,4 @@
-name: "📜 Documentation Builder"
+name: "📜 Documentation builder"
 on:
 - pull_request
 
@@ -9,10 +9,12 @@ jobs:
     - uses: actions/checkout@master
       with:
         fetch-depth: 0 # To be able to push refs to destination repo
-    - uses: actions/setup-python@v2
+    - uses: actions/setup-python@v3
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs_wip/"
+        pre-build-command: |
+          python -m pip install sphinx-material
         build-command: "sphinx-build -b html . _build"
     # - name: Build and Commit
     #   uses: sphinx-notes/pages@v2
