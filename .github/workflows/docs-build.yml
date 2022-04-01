@@ -7,7 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
+      with:
+        fetch-depth: 0 # To be able to push refs to destination repo
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs_wip/"
         build-command: "sphinx-build -b html . _build"
+    - name: Build and Commit
+      uses: sphinx-notes/pages@v2
+      with:
+          documentation_path: ./docs_wip/
+    - name: Push changes
+          uses: ad-m/github-push-action@master
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            branch: gh-pages
