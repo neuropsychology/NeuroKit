@@ -427,9 +427,23 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id2">
+    <a class="reference internal nav-link" href="#fractal-petrosian">
      <em>
-      fractal_katz()
+      fractal_petrosian()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-sevcik">
+     <em>
+      fractal_sevcik()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entropy-svd">
+     <em>
+      entropy_svd()
      </em>
     </a>
    </li>
@@ -579,9 +593,23 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#id2">
+    <a class="reference internal nav-link" href="#fractal-petrosian">
      <em>
-      fractal_katz()
+      fractal_petrosian()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-sevcik">
+     <em>
+      fractal_sevcik()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entropy-svd">
+     <em>
+      entropy_svd()
      </em>
     </a>
    </li>
@@ -1583,269 +1611,269 @@ in percentage (from 0 to 1), representing the stage of the current cardiac phase
 <span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_segment</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gh">Out[3]: </span><span class="go"></span>
 <span class="go">{&#39;1&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.039834    387     1</span>
-<span class="go"> -0.361212 -0.037253    388     1</span>
-<span class="go"> -0.360211 -0.035250    389     1</span>
-<span class="go"> -0.359210 -0.033998    390     1</span>
-<span class="go"> -0.358209 -0.033643    391     1</span>
+<span class="go"> -0.362268 -0.011970    386     1</span>
+<span class="go"> -0.361267 -0.015993    387     1</span>
+<span class="go"> -0.360265 -0.019768    388     1</span>
+<span class="go"> -0.359264 -0.023094    389     1</span>
+<span class="go"> -0.358263 -0.025768    390     1</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.059927   1219     1</span>
-<span class="go">  0.471587  0.057257   1220     1</span>
-<span class="go">  0.472588  0.054600   1221     1</span>
-<span class="go">  0.473589  0.052086   1222     1</span>
-<span class="go">  0.474590  0.049841   1223     1</span>
+<span class="go">  0.470664  0.009282   1218     1</span>
+<span class="go">  0.471665  0.009471   1219     1</span>
+<span class="go">  0.472666  0.009070   1220     1</span>
+<span class="go">  0.473667  0.007907   1221     1</span>
+<span class="go">  0.474668  0.005928   1222     1</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;2&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.020536   1125     2</span>
-<span class="go"> -0.361212 -0.019493   1126     2</span>
-<span class="go"> -0.360211 -0.017914   1127     2</span>
-<span class="go"> -0.359210 -0.015972   1128     2</span>
-<span class="go"> -0.358209 -0.013840   1129     2</span>
+<span class="go"> -0.362268 -0.006011   1143     2</span>
+<span class="go"> -0.361267 -0.009629   1144     2</span>
+<span class="go"> -0.360265 -0.013864   1145     2</span>
+<span class="go"> -0.359264 -0.018402   1146     2</span>
+<span class="go"> -0.358263 -0.022929   1147     2</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.070223   1957     2</span>
-<span class="go">  0.471587  0.065099   1958     2</span>
-<span class="go">  0.472588  0.060250   1959     2</span>
-<span class="go">  0.473589  0.055903   1960     2</span>
-<span class="go">  0.474590  0.052287   1961     2</span>
+<span class="go">  0.470664 -0.005335   1975     2</span>
+<span class="go">  0.471665 -0.000427   1976     2</span>
+<span class="go">  0.472666  0.004764   1977     2</span>
+<span class="go">  0.473667  0.009914   1978     2</span>
+<span class="go">  0.474668  0.014701   1979     2</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;3&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213  0.031911   1866     3</span>
-<span class="go"> -0.361212  0.038008   1867     3</span>
-<span class="go"> -0.360211  0.044254   1868     3</span>
-<span class="go"> -0.359210  0.050328   1869     3</span>
-<span class="go"> -0.358209  0.055911   1870     3</span>
+<span class="go"> -0.362268 -0.017253   1899     3</span>
+<span class="go"> -0.361267 -0.014623   1900     3</span>
+<span class="go"> -0.360265 -0.012556   1901     3</span>
+<span class="go"> -0.359264 -0.011233   1902     3</span>
+<span class="go"> -0.358263 -0.010611   1903     3</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.040902   2698     3</span>
-<span class="go">  0.471587 -0.042325   2699     3</span>
-<span class="go">  0.472588 -0.043111   2700     3</span>
-<span class="go">  0.473589 -0.043125   2701     3</span>
-<span class="go">  0.474590 -0.042233   2702     3</span>
+<span class="go">  0.470664 -0.068025   2731     3</span>
+<span class="go">  0.471665 -0.067617   2732     3</span>
+<span class="go">  0.472666 -0.065673   2733     3</span>
+<span class="go">  0.473667 -0.062477   2734     3</span>
+<span class="go">  0.474668 -0.058340   2735     3</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;4&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.031724   2625     4</span>
-<span class="go"> -0.361212 -0.033115   2626     4</span>
-<span class="go"> -0.360211 -0.034303   2627     4</span>
-<span class="go"> -0.359210 -0.035183   2628     4</span>
-<span class="go"> -0.358209 -0.035647   2629     4</span>
+<span class="go"> -0.362268 -0.061567   2647     4</span>
+<span class="go"> -0.361267 -0.065439   2648     4</span>
+<span class="go"> -0.360265 -0.068827   2649     4</span>
+<span class="go"> -0.359264 -0.071475   2650     4</span>
+<span class="go"> -0.358263 -0.073125   2651     4</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.087189   3457     4</span>
-<span class="go">  0.471587 -0.086408   3458     4</span>
-<span class="go">  0.472588 -0.085718   3459     4</span>
-<span class="go">  0.473589 -0.085172   3460     4</span>
-<span class="go">  0.474590 -0.084823   3461     4</span>
+<span class="go">  0.470664 -0.069647   3479     4</span>
+<span class="go">  0.471665 -0.063479   3480     4</span>
+<span class="go">  0.472666 -0.059330   3481     4</span>
+<span class="go">  0.473667 -0.057688   3482     4</span>
+<span class="go">  0.474668 -0.058923   3483     4</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;5&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.096519   3385     5</span>
-<span class="go"> -0.361212 -0.098820   3386     5</span>
-<span class="go"> -0.360211 -0.100885   3387     5</span>
-<span class="go"> -0.359210 -0.102624   3388     5</span>
-<span class="go"> -0.358209 -0.103949   3389     5</span>
+<span class="go"> -0.362268 -0.132483   3393     5</span>
+<span class="go"> -0.361267 -0.131291   3394     5</span>
+<span class="go"> -0.360265 -0.129773   3395     5</span>
+<span class="go"> -0.359264 -0.128032   3396     5</span>
+<span class="go"> -0.358263 -0.126173   3397     5</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.016528   4217     5</span>
-<span class="go">  0.471587 -0.015954   4218     5</span>
-<span class="go">  0.472588 -0.015274   4219     5</span>
-<span class="go">  0.473589 -0.014644   4220     5</span>
-<span class="go">  0.474590 -0.014221   4221     5</span>
+<span class="go">  0.470664 -0.086278   4225     5</span>
+<span class="go">  0.471665 -0.086758   4226     5</span>
+<span class="go">  0.472666 -0.087693   4227     5</span>
+<span class="go">  0.473667 -0.088969   4228     5</span>
+<span class="go">  0.474668 -0.090472   4229     5</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;6&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.022255   4132     6</span>
-<span class="go"> -0.361212 -0.022717   4133     6</span>
-<span class="go"> -0.360211 -0.023952   4134     6</span>
-<span class="go"> -0.359210 -0.025784   4135     6</span>
-<span class="go"> -0.358209 -0.028034   4136     6</span>
+<span class="go"> -0.362268 -0.090195   4140     6</span>
+<span class="go"> -0.361267 -0.090994   4141     6</span>
+<span class="go"> -0.360265 -0.091012   4142     6</span>
+<span class="go"> -0.359264 -0.090156   4143     6</span>
+<span class="go"> -0.358263 -0.088481   4144     6</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.000592   4964     6</span>
-<span class="go">  0.471587  0.002443   4965     6</span>
-<span class="go">  0.472588  0.003620   4966     6</span>
-<span class="go">  0.473589  0.004212   4967     6</span>
-<span class="go">  0.474590  0.004316   4968     6</span>
+<span class="go">  0.470664 -0.031849   4972     6</span>
+<span class="go">  0.471665 -0.029767   4973     6</span>
+<span class="go">  0.472666 -0.027119   4974     6</span>
+<span class="go">  0.473667 -0.024005   4975     6</span>
+<span class="go">  0.474668 -0.020553   4976     6</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;7&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213  0.030339   4870     7</span>
-<span class="go"> -0.361212  0.035168   4871     7</span>
-<span class="go"> -0.360211  0.038908   4872     7</span>
-<span class="go"> -0.359210  0.041224   4873     7</span>
-<span class="go"> -0.358209  0.041885   4874     7</span>
+<span class="go"> -0.362268 -0.026599   4886     7</span>
+<span class="go"> -0.361267 -0.024927   4887     7</span>
+<span class="go"> -0.360265 -0.023795   4888     7</span>
+<span class="go"> -0.359264 -0.023109   4889     7</span>
+<span class="go"> -0.358263 -0.022775   4890     7</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.043823   5702     7</span>
-<span class="go">  0.471587  0.045381   5703     7</span>
-<span class="go">  0.472588  0.047632   5704     7</span>
-<span class="go">  0.473589  0.050498   5705     7</span>
-<span class="go">  0.474590  0.053781   5706     7</span>
+<span class="go">  0.470664  0.008271   5718     7</span>
+<span class="go">  0.471665  0.004319   5719     7</span>
+<span class="go">  0.472666  0.000603   5720     7</span>
+<span class="go">  0.473667 -0.002622   5721     7</span>
+<span class="go">  0.474668 -0.005102   5722     7</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;8&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213  0.008330   5615     8</span>
-<span class="go"> -0.361212  0.008239   5616     8</span>
-<span class="go"> -0.360211  0.008037   5617     8</span>
-<span class="go"> -0.359210  0.007706   5618     8</span>
-<span class="go"> -0.358209  0.007226   5619     8</span>
+<span class="go"> -0.362268 -0.022549   5631     8</span>
+<span class="go"> -0.361267 -0.023267   5632     8</span>
+<span class="go"> -0.360265 -0.023908   5633     8</span>
+<span class="go"> -0.359264 -0.024430   5634     8</span>
+<span class="go"> -0.358263 -0.024827   5635     8</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.016484   6447     8</span>
-<span class="go">  0.471587 -0.014167   6448     8</span>
-<span class="go">  0.472588 -0.011757   6449     8</span>
-<span class="go">  0.473589 -0.009363   6450     8</span>
-<span class="go">  0.474590 -0.007092   6451     8</span>
+<span class="go">  0.470664 -0.030542   6463     8</span>
+<span class="go">  0.471665 -0.025725   6464     8</span>
+<span class="go">  0.472666 -0.021054   6465     8</span>
+<span class="go">  0.473667 -0.016566   6466     8</span>
+<span class="go">  0.474668 -0.012285   6467     8</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;9&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.009747   6369     9</span>
-<span class="go"> -0.361212 -0.011015   6370     9</span>
-<span class="go"> -0.360211 -0.012368   6371     9</span>
-<span class="go"> -0.359210 -0.013676   6372     9</span>
-<span class="go"> -0.358209 -0.014810   6373     9</span>
+<span class="go"> -0.362268 -0.035170   6384     9</span>
+<span class="go"> -0.361267 -0.034735   6385     9</span>
+<span class="go"> -0.360265 -0.035407   6386     9</span>
+<span class="go"> -0.359264 -0.036937   6387     9</span>
+<span class="go"> -0.358263 -0.039076   6388     9</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.040644   7201     9</span>
-<span class="go">  0.471587 -0.040675   7202     9</span>
-<span class="go">  0.472588 -0.040850   7203     9</span>
-<span class="go">  0.473589 -0.041223   7204     9</span>
-<span class="go">  0.474590 -0.041845   7205     9</span>
+<span class="go">  0.470664 -0.108476   7216     9</span>
+<span class="go">  0.471665 -0.111558   7217     9</span>
+<span class="go">  0.472666 -0.114937   7218     9</span>
+<span class="go">  0.473667 -0.118433   7219     9</span>
+<span class="go">  0.474668 -0.121861   7220     9</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;10&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.029285   7125    10</span>
-<span class="go"> -0.361212 -0.029419   7126    10</span>
-<span class="go"> -0.360211 -0.029325   7127    10</span>
-<span class="go"> -0.359210 -0.029047   7128    10</span>
-<span class="go"> -0.358209 -0.028634   7129    10</span>
+<span class="go"> -0.362268 -0.054156   7145    10</span>
+<span class="go"> -0.361267 -0.056002   7146    10</span>
+<span class="go"> -0.360265 -0.059091   7147    10</span>
+<span class="go"> -0.359264 -0.063126   7148    10</span>
+<span class="go"> -0.358263 -0.067811   7149    10</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.074954   7957    10</span>
-<span class="go">  0.471587 -0.075409   7958    10</span>
-<span class="go">  0.472588 -0.075896   7959    10</span>
-<span class="go">  0.473589 -0.076366   7960    10</span>
-<span class="go">  0.474590 -0.076770   7961    10</span>
+<span class="go">  0.470664 -0.128107   7977    10</span>
+<span class="go">  0.471665 -0.128987   7978    10</span>
+<span class="go">  0.472666 -0.129796   7979    10</span>
+<span class="go">  0.473667 -0.130385   7980    10</span>
+<span class="go">  0.474668 -0.130603   7981    10</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;11&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.104698   7876    11</span>
-<span class="go"> -0.361212 -0.104209   7877    11</span>
-<span class="go"> -0.360211 -0.103557   7878    11</span>
-<span class="go"> -0.359210 -0.102755   7879    11</span>
-<span class="go"> -0.358209 -0.101814   7880    11</span>
+<span class="go"> -0.362268 -0.179162   7903    11</span>
+<span class="go"> -0.361267 -0.174871   7904    11</span>
+<span class="go"> -0.360265 -0.171837   7905    11</span>
+<span class="go"> -0.359264 -0.170217   7906    11</span>
+<span class="go"> -0.358263 -0.169839   7907    11</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.003456   8708    11</span>
-<span class="go">  0.471587  0.000785   8709    11</span>
-<span class="go">  0.472588 -0.001668   8710    11</span>
-<span class="go">  0.473589 -0.003745   8711    11</span>
-<span class="go">  0.474590 -0.005291   8712    11</span>
+<span class="go">  0.470664  0.015717   8735    11</span>
+<span class="go">  0.471665  0.016985   8736    11</span>
+<span class="go">  0.472666  0.016287   8737    11</span>
+<span class="go">  0.473667  0.013952   8738    11</span>
+<span class="go">  0.474668  0.010309   8739    11</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;12&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213  0.011500   8627    12</span>
-<span class="go"> -0.361212  0.018147   8628    12</span>
-<span class="go"> -0.360211  0.025425   8629    12</span>
-<span class="go"> -0.359210  0.032858   8630    12</span>
-<span class="go"> -0.358209  0.039969   8631    12</span>
+<span class="go"> -0.362268 -0.048176   8642    12</span>
+<span class="go"> -0.361267 -0.046561   8643    12</span>
+<span class="go"> -0.360265 -0.044838   8644    12</span>
+<span class="go"> -0.359264 -0.043072   8645    12</span>
+<span class="go"> -0.358263 -0.041327   8646    12</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.005340   9459    12</span>
-<span class="go">  0.471587  0.003658   9460    12</span>
-<span class="go">  0.472588  0.002064   9461    12</span>
-<span class="go">  0.473589  0.000622   9462    12</span>
-<span class="go">  0.474590 -0.000606   9463    12</span>
+<span class="go">  0.470664  0.016605   9474    12</span>
+<span class="go">  0.471665  0.014604   9475    12</span>
+<span class="go">  0.472666  0.013061   9476    12</span>
+<span class="go">  0.473667  0.012072   9477    12</span>
+<span class="go">  0.474668  0.011569   9478    12</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;13&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213  0.005929   9380    13</span>
-<span class="go"> -0.361212  0.007776   9381    13</span>
-<span class="go"> -0.360211  0.008883   9382    13</span>
-<span class="go"> -0.359210  0.009167   9383    13</span>
-<span class="go"> -0.358209  0.008546   9384    13</span>
+<span class="go"> -0.362268  0.056137   9379    13</span>
+<span class="go"> -0.361267  0.054407   9380    13</span>
+<span class="go"> -0.360265  0.052054   9381    13</span>
+<span class="go"> -0.359264  0.049233   9382    13</span>
+<span class="go"> -0.358263  0.046102   9383    13</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.058872  10212    13</span>
-<span class="go">  0.471587  0.058916  10213    13</span>
-<span class="go">  0.472588  0.058823  10214    13</span>
-<span class="go">  0.473589  0.058663  10215    13</span>
-<span class="go">  0.474590  0.058504  10216    13</span>
+<span class="go">  0.470664 -0.032323  10211    13</span>
+<span class="go">  0.471665 -0.034075  10212    13</span>
+<span class="go">  0.472666 -0.035311  10213    13</span>
+<span class="go">  0.473667 -0.035905  10214    13</span>
+<span class="go">  0.474668 -0.035732  10215    13</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;14&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213  0.044012  10125    14</span>
-<span class="go"> -0.361212  0.042532  10126    14</span>
-<span class="go"> -0.360211  0.040530  10127    14</span>
-<span class="go"> -0.359210  0.038112  10128    14</span>
-<span class="go"> -0.358209  0.035424  10129    14</span>
+<span class="go"> -0.362268 -0.046187  10131    14</span>
+<span class="go"> -0.361267 -0.049876  10132    14</span>
+<span class="go"> -0.360265 -0.053179  10133    14</span>
+<span class="go"> -0.359264 -0.055829  10134    14</span>
+<span class="go"> -0.358263 -0.057555  10135    14</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.000611  10957    14</span>
-<span class="go">  0.471587 -0.004246  10958    14</span>
-<span class="go">  0.472588 -0.010055  10959    14</span>
-<span class="go">  0.473589 -0.016451  10960    14</span>
-<span class="go">  0.474590 -0.023069  10961    14</span>
+<span class="go">  0.470664 -0.091506  10963    14</span>
+<span class="go">  0.471665 -0.087088  10964    14</span>
+<span class="go">  0.472666 -0.082629  10965    14</span>
+<span class="go">  0.473667 -0.078230  10966    14</span>
+<span class="go">  0.474668 -0.073993  10967    14</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;15&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.027802  10866    15</span>
-<span class="go"> -0.361212 -0.028652  10867    15</span>
-<span class="go"> -0.360211 -0.029960  10868    15</span>
-<span class="go"> -0.359210 -0.031600  10869    15</span>
-<span class="go"> -0.358209 -0.033437  10870    15</span>
+<span class="go"> -0.362268 -0.112426  10899    15</span>
+<span class="go"> -0.361267 -0.110224  10900    15</span>
+<span class="go"> -0.360265 -0.107428  10901    15</span>
+<span class="go"> -0.359264 -0.104261  10902    15</span>
+<span class="go"> -0.358263 -0.100950  10903    15</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.094090  11698    15</span>
-<span class="go">  0.471587 -0.092936  11699    15</span>
-<span class="go">  0.472588 -0.091466  11700    15</span>
-<span class="go">  0.473589 -0.089807  11701    15</span>
-<span class="go">  0.474590 -0.088087  11702    15</span>
+<span class="go">  0.470664 -0.138418  11731    15</span>
+<span class="go">  0.471665 -0.129504  11732    15</span>
+<span class="go">  0.472666 -0.120772  11733    15</span>
+<span class="go">  0.473667 -0.112769  11734    15</span>
+<span class="go">  0.474668 -0.106037  11735    15</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;16&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.132878  11616    16</span>
-<span class="go"> -0.361212 -0.130653  11617    16</span>
-<span class="go"> -0.360211 -0.127089  11618    16</span>
-<span class="go"> -0.359210 -0.122441  11619    16</span>
-<span class="go"> -0.358209 -0.117041  11620    16</span>
+<span class="go"> -0.362268 -0.165681  11657    16</span>
+<span class="go"> -0.361267 -0.164824  11658    16</span>
+<span class="go"> -0.360265 -0.163529  11659    16</span>
+<span class="go"> -0.359264 -0.161937  11660    16</span>
+<span class="go"> -0.358263 -0.160192  11661    16</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.081399  12448    16</span>
-<span class="go">  0.471587 -0.080241  12449    16</span>
-<span class="go">  0.472588 -0.078766  12450    16</span>
-<span class="go">  0.473589 -0.077028  12451    16</span>
-<span class="go">  0.474590 -0.075084  12452    16</span>
+<span class="go">  0.470664 -0.059578  12489    16</span>
+<span class="go">  0.471665 -0.061165  12490    16</span>
+<span class="go">  0.472666 -0.062457  12491    16</span>
+<span class="go">  0.473667 -0.063413  12492    16</span>
+<span class="go">  0.474668 -0.063992  12493    16</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;17&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.085136  12377    17</span>
-<span class="go"> -0.361212 -0.086149  12378    17</span>
-<span class="go"> -0.360211 -0.085786  12379    17</span>
-<span class="go"> -0.359210 -0.084339  12380    17</span>
-<span class="go"> -0.358209 -0.082104  12381    17</span>
+<span class="go"> -0.362268 -0.036821  12395    17</span>
+<span class="go"> -0.361267 -0.039421  12396    17</span>
+<span class="go"> -0.360265 -0.042147  12397    17</span>
+<span class="go"> -0.359264 -0.044951  12398    17</span>
+<span class="go"> -0.358263 -0.047776  12399    17</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587 -0.017270  13209    17</span>
-<span class="go">  0.471587 -0.017152  13210    17</span>
-<span class="go">  0.472588 -0.016849  13211    17</span>
-<span class="go">  0.473589 -0.016347  13212    17</span>
-<span class="go">  0.474590 -0.015632  13213    17</span>
+<span class="go">  0.470664  0.012916  13227    17</span>
+<span class="go">  0.471665  0.013195  13228    17</span>
+<span class="go">  0.472666  0.013368  13229    17</span>
+<span class="go">  0.473667  0.013468  13230    17</span>
+<span class="go">  0.474668  0.013535  13231    17</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;18&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213 -0.023814  13135    18</span>
-<span class="go"> -0.361212 -0.022521  13136    18</span>
-<span class="go"> -0.360211 -0.020915  13137    18</span>
-<span class="go"> -0.359210 -0.019023  13138    18</span>
-<span class="go"> -0.358209 -0.016892  13139    18</span>
+<span class="go"> -0.362268 -0.048215  13128    18</span>
+<span class="go"> -0.361267 -0.049056  13129    18</span>
+<span class="go"> -0.360265 -0.049835  13130    18</span>
+<span class="go"> -0.359264 -0.050487  13131    18</span>
+<span class="go"> -0.358263 -0.050950  13132    18</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.030440  13967    18</span>
-<span class="go">  0.471587  0.030234  13968    18</span>
-<span class="go">  0.472588  0.030059  13969    18</span>
-<span class="go">  0.473589  0.029917  13970    18</span>
-<span class="go">  0.474590  0.029814  13971    18</span>
+<span class="go">  0.470664 -0.022994  13960    18</span>
+<span class="go">  0.471665 -0.021721  13961    18</span>
+<span class="go">  0.472666 -0.019826  13962    18</span>
+<span class="go">  0.473667 -0.017421  13963    18</span>
+<span class="go">  0.474668 -0.014619  13964    18</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns],</span>
 <span class="go"> &#39;19&#39;:              Signal  Index Label</span>
-<span class="go"> -0.362213  0.041794  13876    19</span>
-<span class="go"> -0.361212  0.037715  13877    19</span>
-<span class="go"> -0.360211  0.033784  13878    19</span>
-<span class="go"> -0.359210  0.030120  13879    19</span>
-<span class="go"> -0.358209  0.026781  13880    19</span>
+<span class="go"> -0.362268 -0.014280  13876    19</span>
+<span class="go"> -0.361267 -0.012384  13877    19</span>
+<span class="go"> -0.360265 -0.011044  13878    19</span>
+<span class="go"> -0.359264 -0.010373  13879    19</span>
+<span class="go"> -0.358263 -0.010368  13880    19</span>
 <span class="go"> ...             ...    ...   ...</span>
-<span class="go">  0.470587  0.013187  14708    19</span>
-<span class="go">  0.471587  0.012439  14709    19</span>
-<span class="go">  0.472588  0.011346  14710    19</span>
-<span class="go">  0.473589  0.010012  14711    19</span>
-<span class="go">  0.474590  0.008550  14712    19</span>
+<span class="go">  0.470664 -0.100586  14708    19</span>
+<span class="go">  0.471665 -0.103180  14709    19</span>
+<span class="go">  0.472666 -0.107018  14710    19</span>
+<span class="go">  0.473667 -0.111810  14711    19</span>
+<span class="go">  0.474668 -0.117209  14712    19</span>
 <span class="go"> </span>
 <span class="go"> [837 rows x 3 columns]}</span>
 </pre></div>
@@ -1924,9 +1952,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.639752          0.952823</span>
-<span class="go">2     2        10000  ...                          0.445585          0.990941</span>
-<span class="go">3     3        15000  ...                          0.088710          0.936391</span>
+<span class="go">1     1         5000  ...                          0.720648          0.938768</span>
+<span class="go">2     2        10000  ...                          0.446985          0.970042</span>
+<span class="go">3     3        15000  ...                          0.135699          0.972043</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -2140,7 +2168,7 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_permutation</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_differential</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_svd</span></code>, <a class="reference internal" href="#id0" title="neurokit2.complexity.fractal_katz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_katz</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_petrosian</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_sevcik</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">fisher_information</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_hjorth</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_rqa</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_permutation</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_differential</span></code>, <a class="reference internal" href="#neurokit2.complexity.entropy_svd" title="neurokit2.complexity.entropy_svd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_svd</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.fractal_katz" title="neurokit2.complexity.fractal_katz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_katz</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_petrosian</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.fractal_sevcik" title="neurokit2.complexity.fractal_sevcik"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_sevcik</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">fisher_information</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_hjorth</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_rqa</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <ul class="simple">
@@ -2157,7 +2185,7 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;
 <span class="gp">In [4]: </span><span class="n">df</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">       ApEn      CREn    DiffEn  ...     ShanEn      SpEn     WPEn</span>
-<span class="go">0  0.162527 -0.009219  0.303891  ...  11.271005  0.094806  0.98896</span>
+<span class="go">0  0.162527 -0.020361  0.303891  ...  11.289246  0.094806  0.98896</span>
 
 <span class="go">[1 rows x 23 columns]</span>
 </pre></div>
@@ -2171,7 +2199,7 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;
 <span class="gp">In [6]: </span><span class="n">df</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">         CD       DFA   FuzzyEn  ...  MFDFA_ExpRange     RCMSE   RangeEn</span>
-<span class="go">0  0.830716  1.389359  0.128788  ...        0.348173  0.318944  0.188515</span>
+<span class="go">0  0.830716  1.389359  0.128788  ...        0.348173  0.318944  0.188523</span>
 
 <span class="go">[1 rows x 13 columns]</span>
 </pre></div>
@@ -2181,38 +2209,58 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;
 </ul>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="gp">In [8]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="gp">In [8]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [9]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
 <span class="go"># Create dynamically varying noise</span>
-<span class="gp">In [9]: </span><span class="n">amount_noise</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">In [10]: </span><span class="n">amount_noise</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
-<span class="gp">In [10]: </span><span class="n">amount_noise</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">amount_noise</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+<span class="gp">In [11]: </span><span class="n">amount_noise</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">amount_noise</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
 
-<span class="gp">In [11]: </span><span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">amount_noise</span><span class="p">))</span> <span class="o">*</span> <span class="n">amount_noise</span>
+<span class="gp">In [12]: </span><span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">amount_noise</span><span class="p">))</span> <span class="o">*</span> <span class="n">amount_noise</span>
 
 <span class="go"># Add to simple signal</span>
-<span class="gp">In [12]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">noise</span> <span class="o">+</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="gp">In [13]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">noise</span> <span class="o">+</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
-<span class="gp">In [13]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="gp">In [14]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/p_complexity1.png"><img alt="_images/p_complexity1.png" src="_images/p_complexity1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Create function-wrappers that only return the index value</span>
-<span class="gp">In [14]: </span><span class="n">pfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">In [15]: </span><span class="n">pfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="gp">In [15]: </span><span class="n">kfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">In [16]: </span><span class="n">kfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="gp">In [17]: </span><span class="n">sfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_sevcik</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="gp">In [18]: </span><span class="n">svden</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="gp">In [19]: </span><span class="n">fisher</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">nk</span><span class="o">.</span><span class="n">fisher_information</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># FI is anticorrelated with complexity</span>
 
 <span class="go"># Use them in a rolling window</span>
-<span class="gp">In [16]: </span><span class="n">rolling_kfd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">kfd</span><span class="p">)</span>
+<span class="gp">In [20]: </span><span class="n">rolling_kfd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">kfd</span><span class="p">)</span>
 
-<span class="gp">In [17]: </span><span class="n">rolling_pfd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pfd</span><span class="p">)</span>
+<span class="gp">In [21]: </span><span class="n">rolling_pfd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pfd</span><span class="p">)</span>
 
-<span class="gp">In [18]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span>
+<span class="gp">In [22]: </span><span class="n">rolling_sfd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">sfd</span><span class="p">)</span>
+
+<span class="gp">In [23]: </span><span class="n">rolling_svden</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">svden</span><span class="p">)</span>
+
+<span class="gp">In [24]: </span><span class="n">rolling_fisher</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">fisher</span><span class="p">)</span>
+
+<span class="gp">In [25]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span>
 <span class="gp">   ....: </span>                <span class="n">rolling_kfd</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
-<span class="gp">   ....: </span>                <span class="n">rolling_pfd</span><span class="o">.</span><span class="n">values</span><span class="p">],</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_pfd</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_sfd</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_svden</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_fisher</span><span class="p">],</span>
 <span class="gp">   ....: </span>               <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">,</span>
 <span class="gp">   ....: </span>                         <span class="s2">&quot;Petrosian Fractal Dimension&quot;</span><span class="p">,</span>
-<span class="gp">   ....: </span>                         <span class="s2">&quot;Katz Fractal Dimension&quot;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;Katz Fractal Dimension&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;Sevcik Fractal Dimension&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;SVD Entropy&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;Fisher Information&quot;</span><span class="p">],</span>
 <span class="gp">   ....: </span>               <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
 <span class="gp">   ....: </span>               <span class="n">standardize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 <span class="gp">   ....: </span>
@@ -2287,17 +2335,17 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">2.0592489814521153</span>
+<span class="gh">Out[12]: </span><span class="go">2.0821947185524348</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">KFD</span>
-<span class="gh">Out[14]: </span><span class="go">2.041857476392026</span>
+<span class="gh">Out[14]: </span><span class="go">2.0418574763920256</span>
 
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.7662223063024647</span>
+<span class="gh">Out[16]: </span><span class="go">4.085134755433655</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2308,89 +2356,179 @@ Computers in Biology and Medicine, 18(3), 145-156. doi:10.1016/0010-4825(88)9004
 </dd></dl>
 
 </div>
-<div class="section" id="id2">
-<h3><em>fractal_katz()</em><a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h3>
+<div class="section" id="fractal-petrosian">
+<h3><em>fractal_petrosian()</em><a class="headerlink" href="#fractal-petrosian" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-name descname"><span class="pre">fractal_katz</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Katz’s Fractal Dimension (KFD)</strong></p>
-<p>Computes Katz’s Fractal Dimension (KFD), based on euclidean distances between
-successive points in the signal which are summed and averaged,
-and the maximum distance between the starting and any other point in the sample.</p>
-<p>Here, fractal dimensions range from 1.0 for straight lines, through
-approximately 1.15 for random-walk waveforms, to approaching 1.5 for the most
-convoluted waveforms.</p>
+<dt class="sig sig-object py" id="neurokit2.complexity.fractal_petrosian">
+<span class="sig-name descname"><span class="pre">fractal_petrosian</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'C'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.fractal_petrosian" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Petrosian fractal dimension (PFD)</strong></p>
+<p>Petrosian proposed a fast method to estimate the fractal dimension of a finite sequence, which
+converts the data to binary sequence before estimating the fractal dimension from time series.
+Several variations of the algorithm exist (e.g., ‘A’, ‘B’, ‘C’ or ‘D’), primarily differing in
+the way the binary sequence is created.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">mutual_information</span></code>, <a class="reference internal" href="#neurokit2.complexity.entropy_svd" title="neurokit2.complexity.entropy_svd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_svd</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be ‘A’, ‘B’, ‘C’ or ‘D’. Method ‘A’ binarizes the signal by higher vs. lower values as
+compated to the signal’s mean. Method ‘B’ uses values that are within the mean +/- 1 SD band
+vs. values that are outside this band. Method ‘C’ computes the difference between
+consecutive samples and binarizes depending on their sign. Method ‘D’ forms separates
+consecutive samples that exceed 1 signal’s SD from the others smaller changes.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>pfd</strong> (<em>float</em>) – The petrosian fractal dimension (PFD).</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
+to compute PFD.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">pfd</span>
+<span class="gh">Out[4]: </span><span class="go">1.0245302965822858</span>
+
+<span class="gp">In [5]: </span><span class="n">info</span>
+<span class="gh">Out[5]: </span><span class="go">{&#39;Method&#39;: &#39;A&#39;}</span>
+
+<span class="gp">In [6]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">pfd</span>
+<span class="gh">Out[7]: </span><span class="go">1.02411541221877</span>
+
+<span class="gp">In [8]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">pfd</span>
+<span class="gh">Out[9]: </span><span class="go">1.000499242265518</span>
+
+<span class="gp">In [10]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span><span class="p">)</span>
+
+<span class="gp">In [11]: </span><span class="n">pfd</span>
+<span class="gh">Out[11]: </span><span class="go">1.0</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Kumar, D. K., Arjunan, S. P., &amp; Aliahmad, B. (2017). Fractals: applications in biological
+Signalling and image processing. CRC Press.</p></li>
+<li><p>Goh, C., Hamadicharef, B., Henderson, G., &amp; Ifeachor, E. (2005, June). Comparison of fractal
+dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International
+Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="fractal-sevcik">
+<h3><em>fractal_sevcik()</em><a class="headerlink" href="#fractal-sevcik" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.fractal_sevcik">
+<span class="sig-name descname"><span class="pre">fractal_sevcik</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.fractal_sevcik" title="Permalink to this definition">#</a></dt>
+<dd><p>Sevcik fractal dimension (SFD)</p>
+<p>The Sevcik algorithm was proposed to calculate the fractal dimension of waveforms by Sevcik
+(1998). This method could be used to quickly measure the complexity and randomness of a signal.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
-<li><p><strong>kfd</strong> (<em>float</em>) – Katz’s fractal dimension of the single time series.</p></li>
+<li><p><strong>sfd</strong> (<em>float</em>) – The sevcik fractal dimension.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – An empty dictionary returned for consistency with the other complexity functions.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_petrosian</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">sfd</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_sevcik</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">sfd</span>
+<span class="gh">Out[4]: </span><span class="go">1.3614382329000476</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Sevcik, C. (2010). A procedure to estimate the fractal dimension of waveforms. arXiv preprint
+arXiv:1003.5266.</p></li>
+<li><p>Kumar, D. K., Arjunan, S. P., &amp; Aliahmad, B. (2017). Fractals: applications in biological
+Signalling and image processing. CRC Press.</p></li>
+<li><p>Wang, H., Li, J., Guo, L., Dou, Z., Lin, Y., &amp; Zhou, R. (2017). Fractal complexity-based
+feature extraction algorithm of communication signals. Fractals, 25(04), 1740008.</p></li>
+<li><p>Goh, C., Hamadicharef, B., Henderson, G., &amp; Ifeachor, E. (2005, June). Comparison of fractal
+dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International
+Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).</p></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="entropy-svd">
+<h3><em>entropy_svd()</em><a class="headerlink" href="#entropy-svd" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.entropy_svd">
+<span class="sig-name descname"><span class="pre">entropy_svd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.entropy_svd" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Singular Value Decomposition (SVD) Entropy</strong></p>
+<p>SVD entropy (SVDEn) can be intuitively seen as an indicator of how many eigenvectors are needed
+for an adequate explanation of the dataset. In other words, it measures feature-richness: the
+higher the SVD entropy, the more orthogonal vectors are required to adequately explain the
+space-state. Similarly to Fisher Information (FI), it is based on the Singular Value Decomposition of the time-delay embedded signal.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">information_fisher</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted ‘Tau’, sometimes referred to as ‘lag’). In practice, it is common
+to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
+or to find a suitable value using some algorithmic heuristics. See <code class="docutils literal notranslate"><span class="pre">complexity_delay()</span></code>
+to estimate the optimal value for this parameter.</p></li>
+<li><p><strong>dimension</strong> (<em>int</em>) – Embedding dimension (often denoted ‘m’ or ‘d’, sometimes referred to as ‘order’). Typically
+2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
+returns an array with two columns corresponding to the original signal and its delayed (by
+Tau) version. See <code class="docutils literal notranslate"><span class="pre">complexity_dimension()</span></code> to estimate the optimal value for this
+parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>svd</strong> (<em>float</em>) – The singular value decomposition (SVD).</p></li>
 <li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
-to compute Katz’s fractal dimension.</p></li>
+to compute SVD.</p></li>
 </ul>
 </p>
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<ul class="simple">
-<li><p><strong>Step 1.</strong> Simulate different kinds of signals</p></li>
-</ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [17]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
 
-<span class="gp">In [18]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
-<span class="go"># Simulate straightline</span>
-<span class="gp">In [19]: </span><span class="n">straight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">svden</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
-<span class="go"># Simulate random</span>
-<span class="gp">In [20]: </span><span class="n">random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;randomwalk&quot;</span><span class="p">)</span>
-
-<span class="gp">In [21]: </span><span class="n">random</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">random</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-
-<span class="go"># Simulate simple</span>
-<span class="gp">In [22]: </span><span class="n">simple</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
-
-<span class="go"># Simulate simple</span>
-<span class="gp">In [23]: </span><span class="nb">complex</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-<span class="gp">   ....: </span>                             <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
-<span class="gp">   ....: </span>                             <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
-<span class="gp">   ....: </span>
-
-<span class="gp">In [24]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">straight</span><span class="p">,</span> <span class="n">random</span><span class="p">,</span> <span class="n">simple</span><span class="p">,</span> <span class="nb">complex</span><span class="p">])</span>
+<span class="gp">In [4]: </span><span class="n">svden</span>
+<span class="gh">Out[4]: </span><span class="go">0.5091667337544503</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="_images/p_katz.png"><img alt="_images/p_katz.png" src="_images/p_katz.png" style="width: 640.0px; height: 480.0px;" /></a>
-<ul class="simple">
-<li><p><strong>Step 2.</strong> Compute KFD for each of them</p></li>
-</ul>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [25]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">straight</span><span class="p">)</span>
-
-<span class="gp">In [26]: </span><span class="n">KFD</span>
-<span class="gh">Out[26]: </span><span class="go">1.0</span>
-
-<span class="gp">In [27]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
-
-<span class="gp">In [28]: </span><span class="n">KFD</span>
-<span class="gh">Out[28]: </span><span class="go">2.0878902455046733</span>
-
-<span class="gp">In [29]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
-
-<span class="gp">In [30]: </span><span class="n">KFD</span>
-<span class="gh">Out[30]: </span><span class="go">2.041857476392026</span>
-
-<span class="gp">In [31]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
-
-<span class="gp">In [32]: </span><span class="n">KFD</span>
-<span class="gh">Out[32]: </span><span class="go">3.6278661153797938</span>
-</pre></div>
-</div>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Katz, M. J. (1988). Fractals and the analysis of waveforms.
-Computers in Biology and Medicine, 18(3), 145-156. doi:10.1016/0010-4825(88)90041-8.</p></li>
-</ul>
 </dd></dl>
 
 </div>

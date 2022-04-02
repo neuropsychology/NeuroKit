@@ -76,8 +76,17 @@ Complexity
 ^^^^^^^^^^^^^^^^^
 .. autofunction:: neurokit2.complexity.fractal_katz
 
-*fractal_katz()*
+*fractal_petrosian()*
 ^^^^^^^^^^^^^^^^^
-.. autofunction:: neurokit2.complexity.fractal_katz
+.. autofunction:: neurokit2.complexity.fractal_petrosian
+
+*fractal_sevcik()*
+^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.complexity.fractal_sevcik
+
+*entropy_svd()*
+^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.complexity.entropy_svd
+
 
 
