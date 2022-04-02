@@ -4,8 +4,14 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
-# REQUIREMENTS
+# -- REQUIREMENTS -----------------------------------------------------
 # pip install sphinx-material
+# pip install sphinxemoji
+
+import datetime
+import os
+import re
+import sys
 
 # -- Path setup --------------------------------------------------------------
 
@@ -13,19 +19,36 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
 # sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath("../"))
 
 
 # -- Project information -----------------------------------------------------
+def find_author():
+    """This returns 'The NeuroKit's development team'"""
+    result = re.search(
+        r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__author__"),
+        open("../neurokit2/__init__.py").read(),
+    )
+    return str(result.group(1))
+
 
 project = "NeuroKit2"
-copyright = "2022, Dominique Makowski"
-author = "Dominique Makowski"
+copyright = f"2020–{datetime.datetime.now().year}"
+author = '<a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a>'
 
-# The full version, including alpha/beta/rc tags
-release = "0.1.7"
+# The short X.Y version.
+def find_version():
+    result = re.search(
+        r'{}\s*=\s*[\'"]([^\'"]*)[\'"]'.format("__version__"),
+        open("../neurokit2/__init__.py").read(),
+    )
+    return result.group(1)
+
+
+version = find_version()
+# The full version, including alpha/beta/rc tags.
+release = version
 
 
 # -- General configuration ---------------------------------------------------
@@ -33,7 +56,12 @@ release = "0.1.7"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "sphinxemoji.sphinxemoji",
+    "sphinx.ext.autosectionlabel",
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -43,13 +71,38 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# -- Options for autodoc -------------------------------------------------
+napoleon_google_docstring = False
+napoleon_numpy_docstring = True
+napoleon_use_param = False
+napoleon_use_ivar = False
+napoleon_use_rtype = False
+add_module_names = False  # If true, the current module name will be prepended to all description
+
+# NumPyDoc configuration -----------------------------------------------------
 
 # -- Options for HTML output -------------------------------------------------
 
+html_favicon = "img/icon.ico"
+html_logo = "img/neurokit.png"
+
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-#
-html_theme = "sphinx_material"
+
+html_theme = "sphinx_book_theme"
+
+# https://sphinx-book-theme.readthedocs.io/en/latest/customize/index.html
+html_theme_options = {
+    "repository_url": "https://github.com/neuropsychology/NeuroKit",
+    "repository_branch": "website-overhaul",  # TODO: remove this before merging
+    "use_repository_button": True,
+    "use_issues_button": True,
+    "path_to_docs": "docs_wip/",
+    "use_edit_page_button": True,
+    "logo_only": True,
+    "show_toc_level": 3,
+}
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
