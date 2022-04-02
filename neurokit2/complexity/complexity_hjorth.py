@@ -21,9 +21,12 @@ def complexity_hjorth(signal):
       first derivative of the signal divided by the variance of the signal.
     * The **activity** parameter is simply the variance of the signal.
 
+    Hjorth (1970) illustrated the parameters as follows:
+
     .. figure:: img/hjorth1970.png
        :alt: Figure from Hjorth (1970).
        :target: http://dx.doi.org/10.1016/0013-4694(70)90143-4
+
 
     See Also
     --------
