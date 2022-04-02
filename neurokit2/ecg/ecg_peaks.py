@@ -9,51 +9,53 @@ def ecg_peaks(
 ):
     """Find R-peaks in an ECG signal.
 
-    Find R-peaks in an ECG signal using the specified method. The method accepts unfiltered ECG signals
-    as input, althought it is expected that a filtered (cleaned) ECG will result in better results.
+    Find R-peaks in an ECG signal using the specified method. The method accepts unfiltered ECG
+    signals as input, although it is expected that a filtered (cleaned) ECG will result in better
+    results.
 
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
         The cleaned ECG channel as returned by `ecg_clean()`.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
-        Defaults to 1000.
+        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second). Defaults to 1000.
     method : string
-        The algorithm to be used for R-peak detection. Can be one of 'neurokit' (default), 'pantompkins1985'
-        'nabian2018', 'gamboa2008', 'zong2003', 'hamilton2002', 'christov2004', 'engzeemod2012', 'elgendi2010',
-        'kalidas2017', 'martinez2003', 'rodrigues2021' or 'promac'.
+        The algorithm to be used for R-peak detection. Can be one of ``'neurokit'`` (default),
+        ``'pantompkins1985'``, ``'nabian2018'``, ``'gamboa2008'``, ``'zong2003'``,
+        ``'hamilton2002'``, ``'christov2004'``, ``'engzeemod2012'``, ``'elgendi2010'``,
+        ``'kalidas2017'``, ``'martinez2003'``, ``'rodrigues2021'`` or ``'promac'``.
     correct_artifacts : bool
-        Whether or not to identify artifacts as defined by Jukka A. Lipponen & Mika P. Tarvainen (2019):
-        A robust algorithm for heart rate variability time series artefact correction using novel beat
-        classification, Journal of Medical Engineering & Technology, DOI: 10.1080/03091902.2019.1640306.
+        Whether or not to first identify and fix artifacts as defined by
+        Lipponen & Tarvainen (2019).
     **kwargs
         Additional keyword arguments, usually specific for each method.
 
     Returns
     -------
     signals : DataFrame
-        A DataFrame of same length as the input signal in which occurences of R-peaks marked as "1"
-        in a list of zeros with the same length as `ecg_cleaned`. Accessible with the keys "ECG_R_Peaks".
+        A DataFrame of same length as the input signal in which occurrences of R-peaks marked as
+        ``1`` in a list of zeros with the same length as ``ecg_cleaned``. Accessible with the keys
+        ``"ECG_R_Peaks"``.
     info : dict
-        A dictionary containing additional information, in this case the samples at which R-peaks occur,
-        accessible with the key "ECG_R_Peaks", as well as the signals' sampling rate, accessible with
-        the key "sampling_rate".
+        A dictionary containing additional information, in this case the samples at which R-peaks
+        occur, accessible with the key ``"ECG_R_Peaks"``, as well as the signals' sampling rate,
+        accessible with the key ``"sampling_rate"``.
 
     See Also
     --------
-    ecg_clean, ecg_findpeaks, ecg_process, ecg_plot, signal_rate,
-    signal_fixpeaks
+    ecg_clean, ecg_findpeaks, ecg_process, ecg_plot, signal_rate, signal_fixpeaks
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-    >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> signals, info = nk.ecg_peaks(cleaned, correct_artifacts=True)
-    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +ELLIPSIS
-    <Figure ...>
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
+      signals, info = nk.ecg_peaks(ecg, correct_artifacts=True)
+
+      @savefig p_ecg_peaks.png scale=100%
+      nk.events_plot(info["ECG_R_Peaks"], ecg)
 
     References
     ----------
@@ -76,19 +78,21 @@ def ecg_peaks(
           detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp.
           259-262). IEEE.
     * ``hamilton2002``
-        * Hamilton, P. (2002, September). Open source ECG analysis. In Computers in cardiology (pp. 101-104). IEEE.
+        * Hamilton, P. (2002). Open source ECG analysis. In Computers in cardiology (pp. 101-104).
+          IEEE.
     * ``christov2004``
         * Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive
           threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.
     * ``engzeemod2012``
-        * C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE
-          Comp. in Cardiology, vol. 6, pp. 37-42, 1979
-        * A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, "Real Time Electrocardiogram
-          Segmentation for Finger Based ECG Biometrics", BIOSIGNALS 2012, pp. 49-54, 2012.
+        * Engelse, W. A., & Zeelenberg, C. (1979). A single scan algorithm for QRS-detection and
+          feature extraction. Computers in cardiology, 6(1979), 37-42.
+        * Lourenço, A., Silva, H., Leite, P., Lourenço, R., & Fred, A. L. (2012, February). Real
+          Time Electrocardiogram Segmentation for Finger based ECG Biometrics. In Biosignals (pp.
+          49-54).
     * ``elgendi2010``
-        * Elgendi, Mohamed & Jonkman, Mirjam & De Boer, Friso. (2010). Frequency Bands Effects on
-          QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal
-          Processing (BIOSIGNALS2010). 428-431.
+        * Elgendi, M., Jonkman, M., & De Boer, F. (2010). Frequency Bands Effects on QRS Detection.
+          Biosignals, Proceedings of the Third International Conference on Bio-inspired Systems and
+          Signal Processing, 428-431.
     * ``kalidas2017``
         * Kalidas, V., & Tamil, L. (2017, October). Real-time QRS detector using stationary wavelet
           transform for automated ECG analysis. In 2017 IEEE 17th International Conference on
@@ -107,6 +111,9 @@ def ecg_peaks(
     * ``promac``
         Unpublished. See this discussion for more information on the method:
         https://github.com/neuropsychology/NeuroKit/issues/222
+    * Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart rate variability
+      time series artefact correction using novel beat classification. Journal of medical
+      engineering & technology, 43(3), 173-181.
 
     """
     rpeaks = ecg_findpeaks(ecg_cleaned, sampling_rate=sampling_rate, method=method, **kwargs)
