@@ -3,7 +3,7 @@ Cite us
 
 .. hint::
 
-   You can get cite the sofwtare from within Python by running :code:`nk.cite()`
+   You can cite the software from within Python by running :code:`nk.cite()`
 
 Main publication
 ----------------
