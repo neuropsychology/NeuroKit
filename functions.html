@@ -21,6 +21,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -29,6 +30,8 @@
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
     <script src="_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <link rel="shortcut icon" href="_static/icon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -305,12 +308,17 @@ title="Print to PDF"
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-eventrelated">
+     <em>
+      ecg_eventrelated()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#ecg-analyze">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       ecg_analyze()
-      </span>
-     </code>
+     <em>
+      ecg_analyze()
+     </em>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -349,12 +357,17 @@ title="Print to PDF"
   </a>
   <ul class="visible nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-eventrelated">
+     <em>
+      ecg_eventrelated()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#ecg-analyze">
-     <code class="docutils literal notranslate">
-      <span class="pre">
-       ecg_analyze()
-      </span>
-     </code>
+     <em>
+      ecg_analyze()
+     </em>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -383,13 +396,103 @@ title="Print to PDF"
 <p>You can find here the API documentation of NeuroKit.</p>
 <div class="section" id="ecg">
 <h2>ECG<a class="headerlink" href="#ecg" title="Permalink to this headline">#</a></h2>
+<div class="section" id="ecg-eventrelated">
+<h3><em>ecg_eventrelated()</em><a class="headerlink" href="#ecg-eventrelated" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ecg.ecg_eventrelated">
+<span class="sig-name descname"><span class="pre">ecg_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_eventrelated" title="Permalink to this definition">#</a></dt>
+<dd><p>Performs event-related ECG analysis on epochs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>Union[dict, pd.DataFrame]</em>) – A dict containing one DataFrame per event/trial, usually obtained via <cite>epochs_create()</cite>, or
+a DataFrame containing all epochs, usually obtained via <cite>epochs_to_df()</cite>.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em>) – If True, silence possible warnings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed ECG features for each epoch, with each epoch indicated
+by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features
+consist of the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Max</span></code>: the maximum heart rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Min</span></code>: the minimum heart rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Mean</span></code>: the mean heart rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_SD</span></code>: the standard deviation of the heart rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Max_Time</span></code>: the time at which maximum heart rate occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Min_Time</span></code>: the time at which minimum heart rate occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Phase_Atrial</span></code>: indication of whether the onset of the event concurs with
+respiratory systole (1) or diastole (0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Phase_Ventricular</span></code>: indication of whether the onset of the event concurs with
+respiratory systole (1) or diastole (0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Phase_Atrial_Completion</span></code>: indication of the stage of the current cardiac (atrial)
+phase (0 to 1) at the onset of the event.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Phase_Ventricular_Completion</span></code>: indication of the stage of the current cardiac
+(ventricular) phase (0 to 1) at the onset of the event.</p></li>
+</ul>
+<p>We also include the following <em>experimental</em> features related to the parameters of a
+quadratic model:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Trend_Linear</span></code>: The parameter corresponding to the linear trend.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Trend_Quadratic</span></code>: The parameter corresponding to the curvature.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Trend_R2</span></code>: the quality of the quadratic model. If too low, the parameters
+might not be reliable or meaningful.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example with simulated data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ecg</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">20</span><span class="p">))</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Process the data</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span>
+<span class="gp">... </span>                          <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span> 
+<span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
+<span class="go">1     1          ...  ...                               ...               ...</span>
+<span class="go">2     2          ...  ...                               ...               ...</span>
+<span class="go">3     3          ...  ...                               ...               ...</span>
+</pre></div>
+</div>
+<p>[3 rows x 17 columns]
+&gt;&gt;&gt;
+&gt;&gt;&gt; # Example with real data
+&gt;&gt;&gt; data = nk.data(“bio_eventrelated_100hz”)
+&gt;&gt;&gt;
+&gt;&gt;&gt; # Process the data
+&gt;&gt;&gt; df, info = nk.bio_process(ecg=data[“ECG”], sampling_rate=100)
+&gt;&gt;&gt; events = nk.events_find(data[“Photosensor”],
+…                         threshold_keep=’below’,
+…                         event_conditions=[“Negative”, “Neutral”,
+…                                           “Neutral”, “Negative”])
+&gt;&gt;&gt; epochs = nk.epochs_create(df, events, sampling_rate=100,
+…                           epochs_start=-0.1, epochs_end=1.9)
+&gt;&gt;&gt; nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS</p>
+<blockquote>
+<div><p>Label Condition  …  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</p>
+</div></blockquote>
+<p>1     1  Negative  …                               …               …
+2     2   Neutral  …                               …               …
+3     3   Neutral  …                               …               …
+4     4  Negative  …                               …               …</p>
+<p>[4 rows x 18 columns]</p>
+</dd></dl>
+
+</div>
 <div class="section" id="ecg-analyze">
-<h3><code class="docutils literal notranslate"><span class="pre">ecg_analyze()</span></code><a class="headerlink" href="#ecg-analyze" title="Permalink to this headline">#</a></h3>
+<h3><em>ecg_analyze()</em><a class="headerlink" href="#ecg-analyze" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ecg.ecg_analyze">
 <span class="sig-name descname"><span class="pre">ecg_analyze</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'auto'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_analyze" title="Permalink to this definition">#</a></dt>
-<dd><p>Performs ECG analysis on either epochs (event-related analysis) or on longer periods of data such as resting-
-state data.</p>
+<dd><p>Performs ECG analysis on either epochs (event-related analysis) or on longer periods of data
+such as resting-state data.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -573,94 +676,6 @@ delineator: evaluation on standard databases. IEEE Transactions on biomedical en
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.ecg.ecg_eventrelated">
-<span class="sig-name descname"><span class="pre">ecg_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_eventrelated" title="Permalink to this definition">#</a></dt>
-<dd><p>Performs event-related ECG analysis on epochs.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>epochs</strong> (<em>Union[dict, pd.DataFrame]</em>) – A dict containing one DataFrame per event/trial,
-usually obtained via <cite>epochs_create()</cite>, or a DataFrame
-containing all epochs, usually obtained via <cite>epochs_to_df()</cite>.</p></li>
-<li><p><strong>silent</strong> (<em>bool</em>) – If True, silence possible warnings.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed ECG features for each epoch, with each epoch indicated by
-the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features consist of
-the following:</p>
-<ul class="simple">
-<li><p><em>”ECG_Rate_Max”</em>: the maximum heart rate after stimulus onset.</p></li>
-<li><p><em>”ECG_Rate_Min”</em>: the minimum heart rate after stimulus onset.</p></li>
-<li><p><em>”ECG_Rate_Mean”</em>: the mean heart rate after stimulus onset.</p></li>
-<li><p><em>”ECG_Rate_SD”</em>: the standard deviation of the heart rate after stimulus onset.</p></li>
-<li><p><em>”ECG_Rate_Max_Time”</em>: the time at which maximum heart rate occurs.</p></li>
-<li><p><em>”ECG_Rate_Min_Time”</em>: the time at which minimum heart rate occurs.</p></li>
-<li><p><em>”ECG_Phase_Atrial”</em>: indication of whether the onset of the event concurs with respiratory
-systole (1) or diastole (0).</p></li>
-<li><p><em>”ECG_Phase_Ventricular”</em>: indication of whether the onset of the event concurs with respiratory
-systole (1) or diastole (0).</p></li>
-<li><p><em>”ECG_Phase_Atrial_Completion”</em>: indication of the stage of the current cardiac (atrial) phase
-(0 to 1) at the onset of the event.</p></li>
-<li><p><em>”ECG_Phase_Ventricular_Completion”</em>: indication of the stage of the current cardiac (ventricular)
-phase (0 to 1) at the onset of the event.</p></li>
-</ul>
-<p>We also include the following <em>experimental</em> features related to the parameters of a
-quadratic model:</p>
-<ul class="simple">
-<li><p><em>”ECG_Rate_Trend_Linear”</em>: The parameter corresponding to the linear trend.</p></li>
-<li><p><em>”ECG_Rate_Trend_Quadratic”</em>: The parameter corresponding to the curvature.</p></li>
-<li><p><em>”ECG_Rate_Trend_R2”</em>: the quality of the quadratic model. If too low, the parameters might
-not be reliable or meaningful.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Example with simulated data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ecg</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">20</span><span class="p">))</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Process the data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span>
-<span class="gp">... </span>                          <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span> 
-<span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1          ...  ...                               ...               ...</span>
-<span class="go">2     2          ...  ...                               ...               ...</span>
-<span class="go">3     3          ...  ...                               ...               ...</span>
-</pre></div>
-</div>
-<p>[3 rows x 17 columns]
-&gt;&gt;&gt;
-&gt;&gt;&gt; # Example with real data
-&gt;&gt;&gt; data = nk.data(“bio_eventrelated_100hz”)
-&gt;&gt;&gt;
-&gt;&gt;&gt; # Process the data
-&gt;&gt;&gt; df, info = nk.bio_process(ecg=data[“ECG”], sampling_rate=100)
-&gt;&gt;&gt; events = nk.events_find(data[“Photosensor”],
-…                         threshold_keep=’below’,
-…                         event_conditions=[“Negative”, “Neutral”,
-…                                           “Neutral”, “Negative”])
-&gt;&gt;&gt; epochs = nk.epochs_create(df, events, sampling_rate=100,
-…                           epochs_start=-0.1, epochs_end=1.9)
-&gt;&gt;&gt; nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS</p>
-<blockquote>
-<div><p>Label Condition  …  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</p>
-</div></blockquote>
-<p>1     1  Negative  …                               …               …
-2     2   Neutral  …                               …               …
-3     3   Neutral  …                               …               …
-4     4  Negative  …                               …               …</p>
-<p>[4 rows x 18 columns]</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ecg.ecg_findpeaks">
 <span class="sig-name descname"><span class="pre">ecg_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_findpeaks" title="Permalink to this definition">#</a></dt>
 <dd><p>Find R-peaks in an ECG signal.</p>
@@ -689,7 +704,14 @@ samples at which R-peaks occur, accessible with the key “ECG_R_Peaks”.</p>
 <p><a class="reference internal" href="#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_clean" title="neurokit2.ecg.ecg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code>, <a class="reference internal" href="#neurokit2.ecg.ecg_rate" title="neurokit2.ecg.ecg_rate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_rate</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_plot</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">],</span> <span class="n">cleaned</span><span class="p">)</span> 
+<span class="go">&lt;Figure ...&gt;</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Different methods</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">neurokit</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pantompkins1985</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_findpeaks</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pantompkins1985&quot;</span><span class="p">),</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pantompkins1985&quot;</span><span class="p">)</span>
@@ -747,8 +769,8 @@ separately processed DataFrames.</p></li>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed ECG features. The analyzed features consist of the following:</p>
 <ul class="simple">
-<li><p><em>”ECG_Rate_Mean”</em>: the mean heart rate.</p></li>
-<li><p><em>”ECG_HRV”</em>: the different heart rate variability metrices.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Mean</span></code>: the mean heart rate.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_HRV</span></code>: the different heart rate variability metrices.</p></li>
 </ul>
 <p>See <cite>hrv_summary()</cite> docstrings for details.</p>
 </p>
@@ -773,14 +795,14 @@ separately processed DataFrames.</p></li>
 <span class="go">0      ...</span>
 </pre></div>
 </div>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
 <span class="gp">... </span>                          <span class="n">epochs_end</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span> 
 <span class="go">   Label  ECG_Rate_Mean ...</span>
 <span class="go">1   ...</span>
 </pre></div>
 </div>
-<p>…</p>
 </dd></dl>
 
 <dl class="py function">
@@ -830,84 +852,117 @@ the key “sampling_rate”.</p></li>
 </pre></div>
 </div>
 <p class="rubric">References</p>
-<dl>
-<dt>‘neurokit’</dt><dd><p>Unpublished. See this discussion for more information on the method:
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">neurokit</span></code></dt><dd><p>Unpublished. See this discussion for more information on the method:
 <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/issues/476">https://github.com/neuropsychology/NeuroKit/issues/476</a></p>
 </dd>
-<dt>‘pantompkins1985’</dt><dd><ul class="simple">
-<li><p>Pan, J., &amp; Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions on
-biomedical engineering, (3), 230-236.</p></li>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">pantompkins1985</span></code></dt><dd><ul>
+<li><p>Pan, J., &amp; Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions
+on biomedical engineering, (3), 230-236.</p></li>
 </ul>
-<p>From <a class="reference external" href="https://github.com/berndporr/py-ecg-detectors/">https://github.com/berndporr/py-ecg-detectors/</a></p>
 </dd>
-<dt>‘nabian2018’</dt><dd><ul class="simple">
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">nabian2018</span></code></dt><dd><ul>
 <li><p>Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., Ostadabbas, S. (2018).
 An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data.
 IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11.
 doi:10.1109/jtehm.2018.2878000</p></li>
 </ul>
 </dd>
-<dt>‘gamboa2008’</dt><dd><ul class="simple">
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">gamboa2008</span></code></dt><dd><ul>
 <li><p>Gamboa, H. (2008). Multi-modal behavioral biometrics based on hci and electrophysiology.
-PhD ThesisUniversidade.
-From <a class="reference external" href="https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py">https://github.com/PIA-Group/BioSPPy/blob/e65da30f6379852ecb98f8e2e0c9b4b5175416c3/biosppy/signals/ecg.py</a></p></li>
+PhD ThesisUniversidade.</p></li>
 </ul>
 </dd>
-<dt>‘zong2003’</dt><dd><ul class="simple">
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">zong2003</span></code></dt><dd><ul>
 <li><p>Zong, W., Heldt, T., Moody, G. B., &amp; Mark, R. G. (2003). An open-source algorithm to
-detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp. 259-262). IEEE.
-From BioSPPy.</p></li>
+detect onset of arterial blood pressure pulses. In Computers in Cardiology, 2003 (pp.
+259-262). IEEE.</p></li>
 </ul>
 </dd>
-<dt>‘hamilton2002’</dt><dd><ul class="simple">
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">hamilton2002</span></code></dt><dd><ul>
 <li><p>Hamilton, P. (2002, September). Open source ECG analysis. In Computers in cardiology (pp. 101-104). IEEE.</p></li>
 </ul>
-<p>From <a class="reference external" href="https://github.com/berndporr/py-ecg-detectors/">https://github.com/berndporr/py-ecg-detectors/</a></p>
 </dd>
-<dt>‘christov2004’</dt><dd><ul class="simple">
-<li><p>Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive threshold,
-BioMedical Engineering OnLine 2004, vol. 3:28, 2004.</p></li>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">christov2004</span></code></dt><dd><ul>
+<li><p>Ivaylo I. Christov, Real time electrocardiogram QRS detection using combined adaptive
+threshold, BioMedical Engineering OnLine 2004, vol. 3:28, 2004.</p></li>
 </ul>
-<p>From <a class="reference external" href="https://github.com/berndporr/py-ecg-detectors/">https://github.com/berndporr/py-ecg-detectors/</a></p>
 </dd>
-<dt>‘engzeemod2012’</dt><dd><ul class="simple">
-<li><p>C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE Comp.
-in Cardiology, vol. 6, pp. 37-42, 1979</p></li>
-<li><p>A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, “Real Time Electrocardiogram Segmentation
-for Finger Based ECG Biometrics”, BIOSIGNALS 2012, pp. 49-54, 2012.</p></li>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">engzeemod2012</span></code></dt><dd><ul>
+<li><p>C. Zeelenberg, A single scan algorithm for QRS detection and feature extraction, IEEE
+Comp. in Cardiology, vol. 6, pp. 37-42, 1979</p></li>
+<li><p>A. Lourenco, H. Silva, P. Leite, R. Lourenco and A. Fred, “Real Time Electrocardiogram
+Segmentation for Finger Based ECG Biometrics”, BIOSIGNALS 2012, pp. 49-54, 2012.</p></li>
 </ul>
-<p>From <a class="reference external" href="https://github.com/berndporr/py-ecg-detectors/">https://github.com/berndporr/py-ecg-detectors/</a></p>
 </dd>
-<dt>‘elgendi2010’</dt><dd><ul class="simple">
-<li><p>Elgendi, Mohamed &amp; Jonkman, Mirjam &amp; De Boer, Friso. (2010). Frequency Bands Effects on QRS Detection.
-The 3rd International Conference on Bio-inspired Systems and Signal Processing (BIOSIGNALS2010).
-428-431.</p></li>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">elgendi2010</span></code></dt><dd><ul>
+<li><p>Elgendi, Mohamed &amp; Jonkman, Mirjam &amp; De Boer, Friso. (2010). Frequency Bands Effects on
+QRS Detection. The 3rd International Conference on Bio-inspired Systems and Signal
+Processing (BIOSIGNALS2010). 428-431.</p></li>
 </ul>
-<p>From <a class="reference external" href="https://github.com/berndporr/py-ecg-detectors/">https://github.com/berndporr/py-ecg-detectors/</a></p>
 </dd>
-<dt>‘kalidas2017’</dt><dd><ul class="simple">
-<li><p>Vignesh Kalidas and Lakshman Tamil (2017). Real-time QRS detector using Stationary Wavelet Transform
-for Automated ECG Analysis. In: 2017 IEEE 17th International Conference on Bioinformatics and
-Bioengineering (BIBE). Uses the Pan and Tompkins thresolding.</p></li>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">kalidas2017</span></code></dt><dd><ul>
+<li><p>Kalidas, V., &amp; Tamil, L. (2017, October). Real-time QRS detector using stationary wavelet
+transform for automated ECG analysis. In 2017 IEEE 17th International Conference on
+Bioinformatics and Bioengineering (BIBE) (pp. 457-461). IEEE.</p></li>
 </ul>
-<p>From <a class="reference external" href="https://github.com/berndporr/py-ecg-detectors/">https://github.com/berndporr/py-ecg-detectors/</a></p>
 </dd>
-<dt>‘martinez2003’</dt><dd><p>TO BE DEFINED</p>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">martinez2003</span></code></dt><dd><p><strong>Unknown.</strong> Please help us retrieve the correct source!</p>
 </dd>
-<dt>‘rodrigues2021’</dt><dd><ul class="simple">
-<li><p>Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., &amp; Hernández, A. (2015). Novel real-time
-low-complexity QRS complex detector based on adaptive thresholding. IEEE Sensors Journal,
-15(10), 6036-6043.</p></li>
-<li><p>Sadhukhan, D., &amp; Mitra, M. (2012). R-peak detection algorithm for ECG using double difference
-and RR interval processing. Procedia Technology, 4, 873-877.</p></li>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">rodrigues2021</span></code></dt><dd><ul>
+<li><p>Gutiérrez-Rivas, R., García, J. J., Marnane, W. P., &amp; Hernández, A. (2015). Novel
+real-time low-complexity QRS complex detector based on adaptive thresholding. IEEE
+Sensors Journal, 15(10), 6036-6043.</p></li>
+<li><p>Sadhukhan, D., &amp; Mitra, M. (2012). R-peak detection algorithm for ECG using double
+difference and RR interval processing. Procedia Technology, 4, 873-877.</p></li>
 <li><p>Rodrigues, Tiago &amp; Samoutphonh, Sirisack &amp; Plácido da Silva, Hugo &amp; Fred, Ana. (2021).
-A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable Devices.</p></li>
+A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable
+Devices.</p></li>
 </ul>
 </dd>
-<dt>‘promac’</dt><dd><p>Unpublished. See this discussion for more information on the method:
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">promac</span></code></dt><dd><p>Unpublished. See this discussion for more information on the method:
 <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/issues/222">https://github.com/neuropsychology/NeuroKit/issues/222</a></p>
 </dd>
 </dl>
+</li>
+</ul>
 </dd></dl>
 
 <dl class="py function">
