@@ -14,6 +14,9 @@ Core team
 * `Jan C. Brammer <https://github.com/JanCBrammer>`_ *(Radboud University, Netherlands)*
 * `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 
+.. note::
+   We might sometimes update the authors page categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
+
 
 Contributors
 -------------

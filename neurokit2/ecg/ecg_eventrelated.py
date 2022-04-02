@@ -16,52 +16,40 @@ def ecg_eventrelated(epochs, silent=False):
     Parameters
     ----------
     epochs : Union[dict, pd.DataFrame]
-        A dict containing one DataFrame per event/trial,
-        usually obtained via `epochs_create()`, or a DataFrame
-        containing all epochs, usually obtained via `epochs_to_df()`.
+        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`, or
+        a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
 
     Returns
     -------
     DataFrame
-        A dataframe containing the analyzed ECG features for each epoch, with each epoch indicated by
-        the `Label` column (if not present, by the `Index` column). The analyzed features consist of
-        the following:
+        A dataframe containing the analyzed ECG features for each epoch, with each epoch indicated
+        by the `Label` column (if not present, by the `Index` column). The analyzed features
+        consist of the following:
 
-        - *"ECG_Rate_Max"*: the maximum heart rate after stimulus onset.
-
-        - *"ECG_Rate_Min"*: the minimum heart rate after stimulus onset.
-
-        - *"ECG_Rate_Mean"*: the mean heart rate after stimulus onset.
-
-        - *"ECG_Rate_SD"*: the standard deviation of the heart rate after stimulus onset.
-
-        - *"ECG_Rate_Max_Time"*: the time at which maximum heart rate occurs.
-
-        - *"ECG_Rate_Min_Time"*: the time at which minimum heart rate occurs.
-
-        - *"ECG_Phase_Atrial"*: indication of whether the onset of the event concurs with respiratory
-          systole (1) or diastole (0).
-
-        - *"ECG_Phase_Ventricular"*: indication of whether the onset of the event concurs with respiratory
-          systole (1) or diastole (0).
-
-        - *"ECG_Phase_Atrial_Completion"*: indication of the stage of the current cardiac (atrial) phase
-          (0 to 1) at the onset of the event.
-
-        - *"ECG_Phase_Ventricular_Completion"*: indication of the stage of the current cardiac (ventricular)
+        * ``ECG_Rate_Max``: the maximum heart rate after stimulus onset.
+        * ``ECG_Rate_Min``: the minimum heart rate after stimulus onset.
+        * ``ECG_Rate_Mean``: the mean heart rate after stimulus onset.
+        * ``ECG_Rate_SD``: the standard deviation of the heart rate after stimulus onset.
+        * ``ECG_Rate_Max_Time``: the time at which maximum heart rate occurs.
+        * ``ECG_Rate_Min_Time``: the time at which minimum heart rate occurs.
+        * ``ECG_Phase_Atrial``: indication of whether the onset of the event concurs with
+          respiratory systole (1) or diastole (0).
+        * ``ECG_Phase_Ventricular``: indication of whether the onset of the event concurs with
+          respiratory systole (1) or diastole (0).
+        * ``ECG_Phase_Atrial_Completion``: indication of the stage of the current cardiac (atrial)
           phase (0 to 1) at the onset of the event.
+        * ``ECG_Phase_Ventricular_Completion``: indication of the stage of the current cardiac
+          (ventricular) phase (0 to 1) at the onset of the event.
 
         We also include the following *experimental* features related to the parameters of a
         quadratic model:
 
-        - *"ECG_Rate_Trend_Linear"*: The parameter corresponding to the linear trend.
-
-        - *"ECG_Rate_Trend_Quadratic"*: The parameter corresponding to the curvature.
-
-        - *"ECG_Rate_Trend_R2"*: the quality of the quadratic model. If too low, the parameters might
-          not be reliable or meaningful.
+        * ``ECG_Rate_Trend_Linear``: The parameter corresponding to the linear trend.
+        * ``ECG_Rate_Trend_Quadratic``: The parameter corresponding to the curvature.
+        * ``ECG_Rate_Trend_R2``: the quality of the quadratic model. If too low, the parameters
+          might not be reliable or meaningful.
 
     See Also
     --------

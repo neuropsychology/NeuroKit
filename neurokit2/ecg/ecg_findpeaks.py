@@ -48,17 +48,13 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
 
     Examples
     --------
-    .. plot::
-       :context: close-figs
-
-       >>> import neurokit2 as nk
-       >>>
-       >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-       >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-       >>> info = nk.ecg_findpeaks(cleaned)
-       >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +ELLIPSIS
-       <Figure ...>
-
+    >>> import neurokit2 as nk
+    >>>
+    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
+    >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
+    >>> info = nk.ecg_findpeaks(cleaned)
+    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +ELLIPSIS
+    <Figure ...>
     >>>
     >>> # Different methods
     >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
@@ -512,7 +508,7 @@ def _ecg_findpeaks_ssf(signal, sampling_rate=1000, threshold=20, before=0.03, af
     # diff
     dx = np.diff(signal)
     dx[dx >= 0] = 0
-    dx = dx**2
+    dx = dx ** 2
 
     # detection
     (idx,) = np.nonzero(dx > threshold)
@@ -866,7 +862,7 @@ def _ecg_findpeaks_kalidas(signal, sampling_rate=1000, **kwargs):
     swt_level = 3
     padding = -1
     for i in range(1000):
-        if (len(signal) + i) % 2**swt_level == 0:
+        if (len(signal) + i) % 2 ** swt_level == 0:
             padding = i
             break
 

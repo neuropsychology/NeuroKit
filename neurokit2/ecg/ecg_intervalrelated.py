@@ -22,9 +22,8 @@ def ecg_intervalrelated(data, sampling_rate=1000):
     DataFrame
         A dataframe containing the analyzed ECG features. The analyzed features consist of the following:
 
-        - *"ECG_Rate_Mean"*: the mean heart rate.
-
-        - *"ECG_HRV"*: the different heart rate variability metrices.
+        * ``ECG_Rate_Mean``: the mean heart rate.
+        * ``ECG_HRV``: the different heart rate variability metrices.
 
         See `hrv_summary()` docstrings for details.
 
@@ -47,15 +46,12 @@ def ecg_intervalrelated(data, sampling_rate=1000):
        ECG_Rate_Mean  HRV_MeanNN  ...
     0      ...
 
-    ...
     >>>
     >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100,
     ...                           epochs_end=150)
     >>> nk.ecg_intervalrelated(epochs) #doctest: +ELLIPSIS
        Label  ECG_Rate_Mean ...
     1   ...
-
-    ...
 
     """
     intervals = {}
@@ -79,13 +75,15 @@ def ecg_intervalrelated(data, sampling_rate=1000):
             intervals[index] = {}  # Initialize empty container
 
             # Add label info
-            intervals[index]['Label'] = data[index]['Label'].iloc[0]
+            intervals[index]["Label"] = data[index]["Label"].iloc[0]
 
             # Rate
             intervals[index] = _ecg_intervalrelated_formatinput(data[index], intervals[index])
 
             # HRV
-            intervals[index] = _ecg_intervalrelated_hrv(data[index], sampling_rate, intervals[index])
+            intervals[index] = _ecg_intervalrelated_hrv(
+                data[index], sampling_rate, intervals[index]
+            )
 
         ecg_intervals = pd.DataFrame.from_dict(intervals, orient="index")
 
