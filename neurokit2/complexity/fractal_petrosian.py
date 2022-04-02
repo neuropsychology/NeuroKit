@@ -5,7 +5,7 @@ from ..signal.signal_binarize import _signal_binarize_threshold
 
 
 def fractal_petrosian(signal, method="C"):
-    """Petrosian fractal dimension (PFD)
+    """**Petrosian fractal dimension (PFD)**
 
     Petrosian proposed a fast method to estimate the fractal dimension of a finite sequence, which
     converts the data to binary sequence before estimating the fractal dimension from time series.
@@ -23,9 +23,9 @@ def fractal_petrosian(signal, method="C"):
     method : str
         Can be 'A', 'B', 'C' or 'D'. Method 'A' binarizes the signal by higher vs. lower values as
         compated to the signal's mean. Method 'B' uses values that are within the mean +/- 1 SD band
-        vs. values that are outside this band. Method 'C' computes the difference between consecutive
-        samples and binarizes depending on their sign. Method 'D' forms separates consecutive samples
-        that exceed 1 signal's SD from the others smaller changes.
+        vs. values that are outside this band. Method 'C' computes the difference between
+        consecutive samples and binarizes depending on their sign. Method 'D' forms separates
+        consecutive samples that exceed 1 signal's SD from the others smaller changes.
 
     Returns
     -------
@@ -37,22 +37,29 @@ def fractal_petrosian(signal, method="C"):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> pfd, info = nk.fractal_petrosian(signal, method = "A")
-    >>> pfd, info = nk.fractal_petrosian(signal, method = "B")
-    >>> pfd, info = nk.fractal_petrosian(signal, method = "C")
-    >>> pfd, info = nk.fractal_petrosian(signal, method = "D")
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, frequency=5)
+
+      pfd, info = nk.fractal_petrosian(signal, method = "A")
+      pfd
+      info
+      pfd, info = nk.fractal_petrosian(signal, method = "B")
+      pfd
+      pfd, info = nk.fractal_petrosian(signal, method = "C")
+      pfd
+      pfd, info = nk.fractal_petrosian(signal, method = "D")
+      pfd
 
     References
     ----------
-    - Kumar, D. K., Arjunan, S. P., & Aliahmad, B. (2017). Fractals: applications in biological
-    Signalling and image processing. CRC Press.
-    - Goh, C., Hamadicharef, B., Henderson, G., & Ifeachor, E. (2005, June). Comparison of fractal
-    dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International
-    Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
+    * Kumar, D. K., Arjunan, S. P., & Aliahmad, B. (2017). Fractals: applications in biological
+      Signalling and image processing. CRC Press.
+    * Goh, C., Hamadicharef, B., Henderson, G., & Ifeachor, E. (2005, June). Comparison of fractal
+      dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International
+      Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
 
     """
     # Sanity checks

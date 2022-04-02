@@ -7,8 +7,8 @@ from ..stats import rescale
 def fractal_sevcik(signal):
     """Sevcik fractal dimension (SFD)
 
-    The Sevcik algorithm was proposed to calculate the fractal dimension of waveforms by Sevcik (1998). This method could be
-    used to quickly measure the complexity and randomness of a signal.
+    The Sevcik algorithm was proposed to calculate the fractal dimension of waveforms by Sevcik
+    (1998). This method could be used to quickly measure the complexity and randomness of a signal.
 
     Parameters
     ----------
@@ -20,8 +20,7 @@ def fractal_sevcik(signal):
     sfd : float
         The sevcik fractal dimension.
     info : dict
-        A dictionary containing additional information regarding the parameters used
-        to compute SFD.
+        An empty dictionary returned for consistency with the other complexity functions.
 
     See Also
     --------
@@ -29,22 +28,26 @@ def fractal_sevcik(signal):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> sfd, _ = nk.fractal_sevcik(signal)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, frequency=5)
+
+      sfd, _ = nk.fractal_sevcik(signal)
+      sfd
 
     References
     ----------
-    - Sevcik, C. (2010). A procedure to estimate the fractal dimension of waveforms. arXiv preprint arXiv:1003.5266.
+    - Sevcik, C. (2010). A procedure to estimate the fractal dimension of waveforms. arXiv preprint
+      arXiv:1003.5266.
     - Kumar, D. K., Arjunan, S. P., & Aliahmad, B. (2017). Fractals: applications in biological
-    Signalling and image processing. CRC Press.
+      Signalling and image processing. CRC Press.
     - Wang, H., Li, J., Guo, L., Dou, Z., Lin, Y., & Zhou, R. (2017). Fractal complexity-based
-    feature extraction algorithm of communication signals. Fractals, 25(04), 1740008.
+      feature extraction algorithm of communication signals. Fractals, 25(04), 1740008.
     - Goh, C., Hamadicharef, B., Henderson, G., & Ifeachor, E. (2005, June). Comparison of fractal
-    dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International
-    Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
+      dimension algorithms for the computation of EEG biomarkers for dementia. In 2nd International
+      Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
 
     """
     # Sanity checks

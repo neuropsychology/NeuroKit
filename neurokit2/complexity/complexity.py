@@ -96,6 +96,7 @@ def complexity(
     .. ipython:: python
 
       import numpy as np
+      import pandas as pd
       import neurokit2 as nk
 
       # Create dynamically varying noise
@@ -114,18 +115,31 @@ def complexity(
       # Create function-wrappers that only return the index value
       pfd = lambda x: nk.fractal_petrosian(x)[0]
       kfd = lambda x: nk.fractal_katz(x)[0]
+      sfd = lambda x: nk.fractal_sevcik(x)[0]
+      svden = lambda x: nk.entropy_svd(x)[0]
+      fisher = lambda x: -1 * nk.fisher_information(x)[0]  # FI is anticorrelated with complexity
+
 
       # Use them in a rolling window
       rolling_kfd = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(kfd)
       rolling_pfd = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(pfd)
+      rolling_sfd = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(sfd)
+      rolling_svden = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(svden)
+      rolling_fisher = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(fisher)
 
       @savefig p_complexity2.png scale=100%
       nk.signal_plot([signal,
                       rolling_kfd.values,
-                      rolling_pfd.values],
+                      rolling_pfd.values,
+                      rolling_sfd.values,
+                      rolling_svden.values,
+                      rolling_fisher],
                      labels = ["Signal",
                                "Petrosian Fractal Dimension",
-                               "Katz Fractal Dimension"],
+                               "Katz Fractal Dimension",
+                               "Sevcik Fractal Dimension",
+                               "SVD Entropy",
+                               "Fisher Information"],
                      sampling_rate = 1000,
                      standardize = True)
 
