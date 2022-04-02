@@ -10,8 +10,6 @@ jobs:
       with:
         fetch-depth: 0 # To be able to push refs to destination repo
     - uses: actions/setup-python@v3
-      with:
-        cache: 'pip'
     # - run: |
     #     pip install sphinx-book-theme
     #     pip install sphinxemoji
@@ -21,6 +19,12 @@ jobs:
         pre-build-command: |
           pip install sphinx-book-theme
           pip install sphinxemoji
+          pip install numpy
+          pip install pandas
+          pip install scipy
+          pip install scikit-learn
+          pip install matplotlib
+          pip install mne
         build-command: "sphinx-build -b html . _build"
     # - name: Build and Commit
     #   uses: sphinx-notes/pages@v2
