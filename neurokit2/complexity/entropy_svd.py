@@ -10,7 +10,8 @@ def entropy_svd(signal, delay=1, dimension=2):
     SVD entropy (SVDEn) can be intuitively seen as an indicator of how many eigenvectors are needed
     for an adequate explanation of the dataset. In other words, it measures feature-richness: the
     higher the SVD entropy, the more orthogonal vectors are required to adequately explain the
-    space-state. Similarly to Fisher Information (FI), it is based on the Singular Value Decomposition of the time-delay embedded signal.
+    space-state. Similarly to Fisher Information (FI), it is based on the Singular Value
+    Decomposition of the time-delay embedded signal.
 
     See Also
     --------
