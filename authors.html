@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Authors &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <link rel="shortcut icon" href="_static/icon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Functions" href="functions.html" />
+    <link rel="prev" title="Neurophysiological Data Analysis with NeuroKit2" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="functions.html">
+   Functions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="cite_us.html">
+   Cite us
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fauthors.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/authors.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/authors.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#core-team">
+   Core team
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#contributors">
+   Contributors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-cite">
+   How to Cite
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Authors</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#core-team">
+   Core team
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#contributors">
+   Contributors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#how-to-cite">
+   How to Cite
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="section" id="authors">
+<h1>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">#</a></h1>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Want to be a part of the project? Read how to <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/contributing/index.html">contribute and join us</a>!</p>
+</div>
+<div class="section" id="core-team">
+<h2>Core team<a class="headerlink" href="#core-team" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/DominiqueMakowski">Dominique Makowski</a> <em>(Nanyang Technological University, Singapore)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/Tam-Pham">Tam Pham</a> <em>(Nanyang Technological University, Singapore)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/zen-juen">Zen Juen Lau</a> <em>(Nanyang Technological University, Singapore)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/JanCBrammer">Jan C. Brammer</a> <em>(Radboud University, Netherlands)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/sangfrois">François Lespinasse</a> <em>(Université de Montréal, Canada)</em></p></li>
+</ul>
+</div>
+<div class="section" id="contributors">
+<h2>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/hungpham2511">Hung Pham</a> <em>(Eureka Robotics, Singapore)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/CSchoel">Christopher Schölzel</a> <em>(THM University of Applied Sciences, Germany)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/duylp">Duy Le</a> <em>(Hubble, Singapore)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/lrydin">Leonardo Rydin Gorjão</a> <em>(OsloMet, Norway)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/awwong1">Alexander Wong</a> <em>(University of Alberta, Canada)</em></p></li>
+<li><p><a class="reference external" href="https://twitter.com/pierreeliasmd">Pierre Elias</a> <em>(Columbia University, USA)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/jukka">Jukka Zitting</a></p></li>
+<li><p><a class="reference external" href="https://github.com/purpl3F0x">Stavros Avramidis</a></p></li>
+<li><p><a class="reference external" href="https://github.com/TiagoTostas">Tiago Rodrigues</a> <em>(IST, Lisbon)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/Mitchellb16">Mitchell Bishop</a> <em>(NINDS, USA)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/richrobe">Robert Richer</a> <em>(FAU Erlangen-Nürnberg, Germany)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/rpanderson">Russell Anderson</a> <em>(La Trobe Institute for Molecular Science, Australia)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/elaineteo2000">Elaine Teo</a> <em>(University College London)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/raimonpv">Raimon Padrós</a> <em>(Universitat politècnica de Catalunya, Spain - Massachusetts General Hospital, USA)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/minsooyeo">Minsoo Yeo</a> <em>(Taewoong Medical Co., Ltd., ROK)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/csavur">Celal Savur</a> <em>(Rochester Institute of Technology, USA)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/jrepifano">Jacob Epifano</a> <em>(Rowan University - Children’s Hospital of Philadelphia, USA)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/pfilo8">Patryk Wielopolski</a> <em>(Wrocław University of Science and Technology, Poland)</em></p></li>
+<li><p><a class="reference external" href="https://github.com/danibene">Danielle Benesch</a> <em>(École de technologie supérieure, Canada)</em></p></li>
+</ul>
+<p>Thanks also to <a class="reference external" href="https://github.com/GanshengT">Gansheng Tan</a>, <a class="reference external" href="https://github.com/hcp4715">Chuan-Peng Hu</a>, <a class="reference external" href="https://github.com/ucohen">&#64;ucohen</a>, <a class="reference external" href="https://github.com/gattia">Anthony Gatti</a>, <a class="reference external" href="https://github.com/lamourj">Julien Lamour</a>, <a class="reference external" href="https://github.com/renatosc">&#64;renatosc</a>, <a class="reference external" href="https://github.com/Fegalf">Nicolas Beaudoin-Gagnon</a> and <a class="reference external" href="https://github.com/rubinovitz">&#64;rubinovitz</a> for their contribution in <a class="reference external" href="https://github.com/neuropsychology/NeuroKit.py">NeuroKit 1</a>.</p>
+</div>
+<div class="section" id="how-to-cite">
+<h2>How to Cite<a class="headerlink" href="#how-to-cite" title="Permalink to this headline">#</a></h2>
+<p>Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H.,
+Schölzel, C., &amp; Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
+Behavior Research Methods. <a class="reference external" href="https://doi.org/10.3758/s13428-020-01516-y">https://doi.org/10.3758/s13428-020-01516-y</a></p>
+<p>Full bibtex reference:</p>
+<div class="highlight-tex notranslate"><div class="highlight"><pre><span></span>@article<span class="nb">{</span>Makowski2021neurokit,
+  author = <span class="nb">{</span>Makowski, Dominique and Pham, Tam and Lau, Zen J. and Brammer, Jan C. and Lespinasse, Fran<span class="nb">{</span><span class="k">\c</span><span class="nb">{</span>c<span class="nb">}}</span>ois and Pham, Hung and Sch<span class="nb">{</span><span class="k">\&quot;</span>o<span class="nb">}</span>lzel, Christopher and Chen, S. H. Annabel<span class="nb">}</span>,
+  title=<span class="nb">{</span>NeuroKit2: A Python toolbox for neurophysiological signal processing<span class="nb">}</span>,
+  journal=<span class="nb">{</span>Behavior Research Methods<span class="nb">}</span>,
+  year=<span class="nb">{</span>2021<span class="nb">}</span>,
+  month=<span class="nb">{</span>Feb<span class="nb">}</span>,
+  day=<span class="nb">{</span>02<span class="nb">}</span>,
+  abstract=<span class="nb">{</span>NeuroKit2 is an open-source, community-driven, and user-centered Python package for neurophysiological signal processing. It provides a comprehensive suite of processing routines for a variety of bodily signals (e.g., ECG, PPG, EDA, EMG, RSP). These processing routines include high-level functions that enable data processing in a few lines of code using validated pipelines, which we illustrate in two examples covering the most typical scenarios, such as an event-related paradigm and an interval-related analysis. The package also includes tools for specific processing steps such as rate extraction and filtering methods, offering a trade-off between high-level convenience and fine-tuned control. Its goal is to improve transparency and reproducibility in neurophysiological research, as well as foster exploration and innovation. Its design philosophy is centred on user-experience and accessibility to both novice and advanced users.<span class="nb">}</span>,
+  issn=<span class="nb">{</span>1554-3528<span class="nb">}</span>,
+  doi=<span class="nb">{</span>10.3758/s13428-020-01516-y<span class="nb">}</span>,
+  url=<span class="nb">{</span>https://doi.org/10.3758/s13428-020-01516-y<span class="nb">}</span>
+<span class="nb">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title"><strong>Neurophysiological Data Analysis with NeuroKit2</strong></p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="functions.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Functions</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
