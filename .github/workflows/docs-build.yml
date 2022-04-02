@@ -13,8 +13,8 @@ jobs:
       with:
         cache: 'pip'
     - run: |
-      pip install sphinx-book-theme
-      pip install sphinxemoji
+        pip install sphinx-book-theme
+        pip install sphinxemoji
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs_wip/"
