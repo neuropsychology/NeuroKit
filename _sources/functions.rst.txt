@@ -1,7 +1,7 @@
 Functions
 ==========
 
-This file is empty.
+You can find here the API documentation of NeuroKit.
 
 ECG
 -------
