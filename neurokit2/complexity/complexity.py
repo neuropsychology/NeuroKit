@@ -100,12 +100,12 @@ def complexity(
       import neurokit2 as nk
 
       # Create dynamically varying noise
-      amount_noise = nk.signal_simulate(duration=3, frequency=1)
+      amount_noise = nk.signal_simulate(duration=2, frequency=0.9)
       amount_noise = nk.rescale(amount_noise, [0, 0.5])
       noise = np.random.uniform(0, 2, len(amount_noise)) * amount_noise
 
       # Add to simple signal
-      signal = noise + nk.signal_simulate(duration=3, frequency=5)
+      signal = noise + nk.signal_simulate(duration=2, frequency=5)
 
       @savefig p_complexity1.png scale=100%
       nk.signal_plot(signal, sampling_rate = 1000)
