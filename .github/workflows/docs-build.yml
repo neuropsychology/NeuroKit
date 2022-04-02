@@ -12,15 +12,15 @@ jobs:
     - uses: actions/setup-python@v3
       with:
         cache: 'pip'
-    - run: |
-        pip install sphinx-book-theme
-        pip install sphinxemoji
+    # - run: |
+    #     pip install sphinx-book-theme
+    #     pip install sphinxemoji
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs_wip/"
-        # pre-build-command: |
-        #   python -m pip install sphinx-book-theme
-        #   python -m pip install sphinxemoji
+        pre-build-command: |
+          pip install sphinx-book-theme
+          pip install sphinxemoji
         build-command: "sphinx-build -b html . _build"
     # - name: Build and Commit
     #   uses: sphinx-notes/pages@v2
