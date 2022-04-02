@@ -30,6 +30,8 @@ def fractal_katz(signal):
 
     Examples
     ----------
+    * **Step 1.** Simulate different kinds of signals
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -43,8 +45,7 @@ def fractal_katz(signal):
       random = nk.rescale(random, [-1, 1])
 
       # Simulate simple
-      simple = nk.signal_simulate(duration=2,
-                                  frequency=[5, 10])
+      simple = nk.signal_simulate(duration=2, frequency=[5, 10])
 
       # Simulate simple
       complex = nk.signal_simulate(duration=2,
@@ -53,6 +54,10 @@ def fractal_katz(signal):
 
       @savefig p_katz.png scale=100%
       nk.signal_plot([straight, random, simple, complex])
+
+    * **Step 2.** Compute KFD for each of them
+
+    .. ipython:: python
 
       KFD, _ = nk.fractal_katz(straight)
       KFD
@@ -75,6 +80,12 @@ def fractal_katz(signal):
         raise ValueError(
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
+
+    # Force to array
+    signal = np.array(signal)
+
+    # Drop missing values
+    signal = signal[~np.isnan(signal)]
 
     # prepare parameters
     info = {}

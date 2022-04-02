@@ -91,6 +91,44 @@ def complexity(
       df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 2))
       df
 
+    * **Example 3**: Compute complexity over time
+
+    .. ipython:: python
+
+      import numpy as np
+      import neurokit2 as nk
+
+      # Create dynamically varying noise
+      amount_noise = nk.signal_simulate(duration=3, frequency=1)
+      amount_noise = nk.rescale(amount_noise, [0, 0.5])
+      noise = np.random.uniform(0, 2, len(amount_noise)) * amount_noise
+
+      # Add to simple signal
+      signal = noise + nk.signal_simulate(duration=3, frequency=5)
+
+      @savefig p_complexity1.png scale=100%
+      nk.signal_plot(signal, sampling_rate = 1000)
+
+    .. ipython:: python
+
+      # Create function-wrappers that only return the index value
+      pfd = lambda x: nk.fractal_petrosian(x)[0]
+      kfd = lambda x: nk.fractal_katz(x)[0]
+
+      # Use them in a rolling window
+      rolling_kfd = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(kfd)
+      rolling_pfd = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(pfd)
+
+      @savefig p_complexity2.png scale=100%
+      nk.signal_plot([signal,
+                      rolling_kfd.values,
+                      rolling_pfd.values],
+                     labels = ["Signal",
+                               "Petrosian Fractal Dimension",
+                               "Katz Fractal Dimension"],
+                     sampling_rate = 1000,
+                     standardize = True)
+
     """
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:

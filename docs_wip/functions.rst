@@ -76,4 +76,8 @@ Complexity
 ^^^^^^^^^^^^^^^^^
 .. autofunction:: neurokit2.complexity.fractal_katz
 
+*fractal_katz()*
+^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.complexity.fractal_katz
+
 
