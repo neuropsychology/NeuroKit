@@ -6,8 +6,11 @@ from .ecg_intervalrelated import ecg_intervalrelated
 
 
 def ecg_analyze(data, sampling_rate=1000, method="auto"):
-    """Performs ECG analysis on either epochs (event-related analysis) or on longer periods of data
-    (interval-related analysis), such as resting-state data.
+    """**Automated Analysis ECG**
+
+    Performs ECG analysis by computing relevant features and indices on either epochs
+    (event-related analysis) or on longer periods of data (interval-related analysis), such as
+    resting-state data.
 
     Parameters
     ----------

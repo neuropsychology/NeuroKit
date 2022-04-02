@@ -7,7 +7,7 @@ from .ecg_findpeaks import ecg_findpeaks
 def ecg_peaks(
     ecg_cleaned, sampling_rate=1000, method="neurokit", correct_artifacts=False, **kwargs
 ):
-    """Find R-peaks in an ECG signal.
+    """**Find R-peaks in an ECG signal**
 
     Find R-peaks in an ECG signal using the specified method. The method accepts unfiltered ECG
     signals as input, although it is expected that a filtered (cleaned) ECG will result in better
@@ -43,10 +43,12 @@ def ecg_peaks(
 
     See Also
     --------
-    ecg_clean, ecg_findpeaks, ecg_process, ecg_plot, signal_rate, signal_fixpeaks
+    ecg_clean, ecg_findpeaks, signal_fixpeaks
 
     Examples
     --------
+    * **Example 1**: Find R-peaks using the default method (``'neurokit'``).
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -54,8 +56,85 @@ def ecg_peaks(
       ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
       signals, info = nk.ecg_peaks(ecg, correct_artifacts=True)
 
-      @savefig p_ecg_peaks.png scale=100%
+      @savefig p_ecg_peaks1.png scale=100%
       nk.events_plot(info["ECG_R_Peaks"], ecg)
+
+    * **Example 2**: Compare different methods
+
+    .. ipython:: python
+
+      # neurokit (default)
+      cleaned = nk.ecg_clean(ecg, method="neurokit")
+      _, neurokit = nk.ecg_peaks(cleaned, method="neurokit")
+
+      # pantompkins1985
+      cleaned = nk.ecg_clean(ecg, method="pantompkins1985")
+      _, pantompkins1985 = nk.ecg_peaks(cleaned, method="pantompkins1985")
+
+      # nabian2018
+      _, nabian2018 = nk.ecg_peaks(ecg, method="nabian2018")
+
+      # hamilton2002
+      cleaned = nk.ecg_clean(ecg, method="hamilton2002")
+      _, hamilton2002 = nk.ecg_peaks(cleaned, method="hamilton2002")
+
+      # martinez2003
+      _, martinez2003 = nk.ecg_peaks(ecg, method="martinez2003")
+
+      # christov2004
+      _, christov2004 = nk.ecg_peaks(cleaned, method="christov2004")
+
+      # gamboa2008
+      cleaned = nk.ecg_clean(ecg, method="gamboa2008")
+      _, gamboa2008 = nk.ecg_peaks(cleaned, method="gamboa2008")
+
+      # elgendi2010
+      cleaned = nk.ecg_clean(ecg, method="elgendi2010")
+      _, elgendi2010 = nk.ecg_peaks(cleaned, method="elgendi2010")
+
+      # engzeemod2012
+      cleaned = nk.ecg_clean(ecg, method="engzeemod2012")
+      _, engzeemod2012 = nk.ecg_peaks(cleaned, method="engzeemod2012")
+
+      # kalidas2017
+      cleaned = nk.ecg_clean(ecg, method="kalidas2017")
+      _, kalidas2017 = nk.ecg_peaks(cleaned, method="kalidas2017")
+
+      # rodrigues2021
+      _, rodrigues2021 = nk.ecg_peaks(ecg, method="rodrigues2021")
+
+      # Collect all R-peak lists by iterating through the result dicts
+      rpeaks = [
+          i["ECG_R_Peaks"]
+          for i in [
+              neurokit,
+              pantompkins1985,
+              nabian2018,
+              hamilton2002,
+              martinez2003,
+              christov2004,
+              gamboa2008,
+              elgendi2010,
+              engzeemod2012,
+              kalidas2017,
+              rodrigues2021,
+          ]
+      ]
+      # Visualize results
+      @savefig p_ecg_peaks2.png scale=100%
+      nk.events_plot(rpeaks, ecg)
+
+    * **Example 3**: Method-agreement procedure ('promac')
+
+    .. ipython:: python
+
+      ecg = nk.ecg_simulate(duration=10, sampling_rate=500)
+      ecg = nk.signal_distort(ecg,
+                              sampling_rate=500,
+                              noise_amplitude=0.05, noise_frequency=[25, 50],
+                              artifacts_amplitude=0.05, artifacts_frequency=50)
+      @savefig p_ecg_peaks3.png scale=100%
+      info = nk.ecg_findpeaks(ecg, sampling_rate=1000, method="promac", show=True)
 
     References
     ----------
@@ -109,7 +188,8 @@ def ecg_peaks(
           A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable
           Devices.
     * ``promac``
-        Unpublished. See this discussion for more information on the method:
+        Unpublished. It runs different methods and derives a probability index using convolution.
+        See this discussion for more information on the method:
         https://github.com/neuropsychology/NeuroKit/issues/222
     * Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart rate variability
       time series artefact correction using novel beat classification. Journal of medical

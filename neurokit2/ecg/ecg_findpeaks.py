@@ -5,33 +5,26 @@ import pandas as pd
 import scipy.signal
 import scipy.stats
 
-from ..signal import (
-    signal_findpeaks,
-    signal_plot,
-    signal_sanitize,
-    signal_smooth,
-    signal_zerocrossings,
-)
+from ..signal import (signal_findpeaks, signal_plot, signal_sanitize,
+                      signal_smooth, signal_zerocrossings)
 
 
 def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False, **kwargs):
-    """Find R-peaks in an ECG signal.
+    """**Locate R-peaks**
 
-    Low-level function used by `ecg_peaks()` to identify R-peaks in an ECG signal using a different
-    set of algorithms. See `ecg_peaks()` for details.
+    Low-level function used by ``ecg_peaks()`` to identify R-peaks in an ECG signal using a
+    different set of algorithms. Use the main function and see its documentation for details.
 
     Parameters
     ----------
     ecg_cleaned : Union[list, np.array, pd.Series]
-        The cleaned ECG channel as returned by `ecg_clean()`.
+        See ``ecg_peaks()``.
     sampling_rate : int
-        The sampling frequency of `ecg_signal` (in Hz, i.e., samples/second).
-        Defaults to 1000.
+        See ``ecg_peaks()``.
     method : string
-        The algorithm to be used for R-peak detection. For a list of acceptable methods,
-        please refer to the documentation of `ecg_peaks`.
+        See ``ecg_peaks()``.
     show : bool
-        If True, will return a plot to visualizing the thresholds used in the algorithm.
+        If ``True``, will return a plot to visualizing the thresholds used in the algorithm.
         Useful for debugging.
     **kwargs
         Additional keyword arguments, usually specific for each `method`.
@@ -40,61 +33,11 @@ def ecg_findpeaks(ecg_cleaned, sampling_rate=1000, method="neurokit", show=False
     -------
     info : dict
         A dictionary containing additional information, in this case the
-        samples at which R-peaks occur, accessible with the key "ECG_R_Peaks".
+        samples at which R-peaks occur, accessible with the key ``"ECG_R_Peaks"``.
 
     See Also
     --------
-    ecg_peaks, ecg_clean, signal_fixpeaks, ecg_rate, ecg_process, ecg_plot
-
-    Examples
-    --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=1000)
-    >>> cleaned = nk.ecg_clean(ecg, sampling_rate=1000)
-    >>> info = nk.ecg_findpeaks(cleaned)
-    >>> nk.events_plot(info["ECG_R_Peaks"], cleaned) #doctest: +ELLIPSIS
-    <Figure ...>
-    >>>
-    >>> # Different methods
-    >>> neurokit = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="neurokit"), method="neurokit")
-    >>> pantompkins1985 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="pantompkins1985"), method="pantompkins1985")
-    >>> nabian2018 = nk.ecg_findpeaks(cleaned, method="nabian2018")
-    >>> hamilton2002 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="hamilton2002"), method="hamilton2002")
-    >>> martinez2003 = nk.ecg_findpeaks(cleaned, method="martinez2003")
-    >>> christov2004 = nk.ecg_findpeaks(cleaned, method="christov2004")
-    >>> gamboa2008 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="gamboa2008"), method="gamboa2008")
-    >>> elgendi2010 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="elgendi2010"), method="elgendi2010")
-    >>> engzeemod2012 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="engzeemod2012"), method="engzeemod2012")
-    >>> kalidas2017 = nk.ecg_findpeaks(nk.ecg_clean(ecg, method="kalidas2017"), method="kalidas2017")
-    >>> rodrigues2021 = nk.ecg_findpeaks(cleaned, method="rodrigues2021")
-    >>>
-    >>> # Visualize
-    >>> nk.events_plot([neurokit["ECG_R_Peaks"],
-    ...                       pantompkins1985["ECG_R_Peaks"],
-    ...                       nabian2018["ECG_R_Peaks"],
-    ...                       hamilton2002["ECG_R_Peaks"],
-    ...                       christov2004["ECG_R_Peaks"],
-    ...                       gamboa2008["ECG_R_Peaks"],
-    ...                       elgendi2010["ECG_R_Peaks"],
-    ...                       engzeemod2012["ECG_R_Peaks"],
-    ...                       kalidas2017["ECG_R_Peaks"],
-    ...                       martinez2003["ECG_R_Peaks"],
-    ...                       rodrigues2021["ECG_R_Peaks"]], cleaned) #doctest: +ELLIPSIS
-    <Figure ...>
-    >>>
-    >>> # Method-agreement
-    >>> ecg = nk.ecg_simulate(duration=10, sampling_rate=500)
-    >>> ecg = nk.signal_distort(ecg,
-    ...                         sampling_rate=500,
-    ...                         noise_amplitude=0.05, noise_frequency=[25, 50],
-    ...                         artifacts_amplitude=0.05, artifacts_frequency=50)
-    >>> nk.ecg_findpeaks(ecg, sampling_rate=1000, method="promac", show=True) #doctest: +ELLIPSIS
-    {'ECG_R_Peaks': array(...)}
-
-    References
-    --------------
-    Please, see the list of references in the documentation of `ecg_peaks`.
+    ecg_peaks, signal_fixpeaks
 
     """
     # Try retrieving right column

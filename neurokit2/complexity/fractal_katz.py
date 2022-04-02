@@ -5,7 +5,9 @@ import pandas as pd
 
 def fractal_katz(signal):
 
-    """Computes Katz's Fractal Dimension (KFD), based on euclidean distances between
+    """**Katz's Fractal Dimension (KFD)**
+
+    Computes Katz's Fractal Dimension (KFD), based on euclidean distances between
     successive points in the signal which are summed and averaged,
     and the maximum distance between the starting and any other point in the sample.
 
@@ -28,17 +30,43 @@ def fractal_katz(signal):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=10)
-    >>>
-    >>> kfd, parameters = nk.fractal_katz(signal)
-    >>> kfd #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import numpy as np
+
+      # Simulate straightline
+      straight = np.linspace(-1, 1, 2000)
+
+      # Simulate random
+      random = nk.complexity_simulate(duration=2, method="randomwalk")
+      random = nk.rescale(random, [-1, 1])
+
+      # Simulate simple
+      simple = nk.signal_simulate(duration=2,
+                                  frequency=[5, 10])
+
+      # Simulate simple
+      complex = nk.signal_simulate(duration=2,
+                                   frequency=[1, 3, 6, 12],
+                                   noise = 0.1)
+
+      @savefig p_katz.png scale=100%
+      nk.signal_plot([straight, random, simple, complex])
+
+      KFD, _ = nk.fractal_katz(straight)
+      KFD
+      KFD, _ = nk.fractal_katz(random)
+      KFD
+      KFD, _ = nk.fractal_katz(simple)
+      KFD
+      KFD, _ = nk.fractal_katz(complex)
+      KFD
 
     References
     ----------
     - Katz, M. J. (1988). Fractals and the analysis of waveforms.
-    Computers in Biology and Medicine, 18(3), 145–156. doi:10.1016/0010-4825(88)90041-8.
+      Computers in Biology and Medicine, 18(3), 145-156. doi:10.1016/0010-4825(88)90041-8.
 
     """
 
@@ -69,6 +97,6 @@ def _fractal_katz(signal):
     # Compute farthest distance between starting point and any other point
     d = np.max(np.abs(signal - signal[0]))
 
-    kfd = np.log10(length/a) / (np.log10(d/a))
+    kfd = np.log10(length / a) / (np.log10(d / a))
 
     return kfd

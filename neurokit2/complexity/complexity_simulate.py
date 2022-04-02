@@ -49,10 +49,14 @@ def complexity_simulate(
     >>> signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="mackeyglass")
     >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="green") #doctest: +ELLIPSIS
     <Figure ...>
+    >>>
+    >>> signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="randomwalk")
+    >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="green") #doctest: +ELLIPSIS
+    <Figure ...>
 
     Returns
     -------
-    x : array
+    array
         Array containing the time series.
 
     """
@@ -64,11 +68,12 @@ def complexity_simulate(
     elif method in ["lorenz"]:
         # x-dimension of Lorenz system
         signal = _attractor_lorenz(sampling_rate=sampling_rate, duration=duration, **kwargs)[:, 0]
-
-    else:
+    elif method in ["mackeyglass"]:
         signal = _complexity_simulate_mackeyglass(
             duration=duration, sampling_rate=sampling_rate, **kwargs
         )
+    else:
+        signal = _complexity_simulate_randomwalk(duration * sampling_rate)
     return signal
 
 
@@ -234,3 +239,9 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
     f = np.fft.fft(w).real[:size] * ((1.0 / size) ** hurst_exponent)
 
     return f
+
+
+def _complexity_simulate_randomwalk(size=1000):
+    """Random walk."""
+    steps = np.random.choice(a=[-1, 0, 1], size=size)
+    return np.concatenate([np.zeros(1), steps]).cumsum(0)

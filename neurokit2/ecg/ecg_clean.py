@@ -10,7 +10,9 @@ from ..signal import signal_filter
 
 
 def ecg_clean(ecg_signal, sampling_rate=1000, method="neurokit", **kwargs):
-    """Clean an ECG signal to remove noise and improve peak-detection accuracy. Different cleaning
+    """***ECG Signal Cleaning**
+
+    Clean an ECG signal to remove noise and improve peak-detection accuracy. Different cleaning
     method are implemented.
 
     * ``'neurokit'`` (default): 0.5 Hz high-pass butterworth filter (order = 5), followed by

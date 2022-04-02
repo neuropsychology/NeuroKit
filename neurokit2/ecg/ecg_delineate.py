@@ -27,7 +27,7 @@ def ecg_delineate(
     show_type="peaks",
     check=False,
 ):
-    """Delineate QRS complex.
+    """**Delineate QRS complex**
 
     Function to delineate the QRS complex, i.e., the different waves of the cardiac cycles. A
     typical ECG heartbeat consists of a P wave, a QRS complex and a T wave. The P wave represents
@@ -69,8 +69,10 @@ def ecg_delineate(
         ``"ECG_T_Offsets"``, respectively.
 
         For wavelet methods, in addition to the above information, the dictionary contains the
-        samples at which QRS-onsets and QRS-offsets occur, accessible with the key ``"ECG_P_Peaks"``, ``"ECG_T_Peaks"``, ``"ECG_P_Onsets"``, ``"ECG_P_Offsets"``,
-        ``"ECG_Q_Peaks"``, ``"ECG_S_Peaks"``, ``"ECG_T_Onsets"``, ``"ECG_T_Offsets"``, ``"ECG_R_Onsets"``, ``"ECG_R_Offsets"``, respectively.
+        samples at which QRS-onsets and QRS-offsets occur, accessible with the key
+        ``"ECG_P_Peaks"``, ``"ECG_T_Peaks"``, ``"ECG_P_Onsets"``, ``"ECG_P_Offsets"``,
+        ``"ECG_Q_Peaks"``, ``"ECG_S_Peaks"``, ``"ECG_T_Onsets"``, ``"ECG_T_Offsets"``,
+        ``"ECG_R_Onsets"``, ``"ECG_R_Offsets"``, respectively.
 
     signals : DataFrame
         A DataFrame of same length as the input signal in which occurrences of

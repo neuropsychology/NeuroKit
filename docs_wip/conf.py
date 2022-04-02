@@ -104,7 +104,7 @@ html_theme_options = {
     "path_to_docs": "docs_wip/",
     "use_edit_page_button": True,
     "logo_only": True,
-    "show_toc_level": 3,
+    "show_toc_level": 1,
 }
 
 

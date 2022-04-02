@@ -45,9 +45,9 @@ Contributors
 
 Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <https://github.com/hcp4715>`_, `@ucohen <https://github.com/ucohen>`_, `Anthony Gatti <https://github.com/gattia>`_, `Julien Lamour <https://github.com/lamourj>`_, `@renatosc <https://github.com/renatosc>`_, `Nicolas Beaudoin-Gagnon <https://github.com/Fegalf>`_ and `@rubinovitz <https://github.com/rubinovitz>`_ for their contribution in `NeuroKit 1 <https://github.com/neuropsychology/NeuroKit.py>`_.
 
-How to Cite
--------------
 
-- Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H., Schölzel, C., &
-  Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing.
-  Behavior Research Methods. https://doi.org/10.3758/s13428-020-01516-y
+
+.. hint::
+
+   Information about **how to cite** the software in publications can be found `here <https://neuropsychology.github.io/NeuroKit/cite_us.html>`_.
+

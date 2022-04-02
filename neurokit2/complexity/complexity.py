@@ -32,13 +32,12 @@ from .information_fisher import fisher_information
 def complexity(
     signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="default", **kwargs
 ):
-    """Comprehensive Complexity Analysis
+    """**Automated Complexity and Chaos Analysis**
 
-    This convenience function can be used to run a large number of complexity metrics. For more
-    control, please run each function separately.
-
-    Note that it does not include Recurrence Quantification Analysis (RQA, ``nk.complexity_rqa()``)
-    which currently requires an additional dependency.
+    This function can be used to compute a large number of complexity metrics and features. For more
+    control, you can run each function separately. Note that it does not include Recurrence
+    Quantification Analysis (RQA, ``nk.complexity_rqa()``) which currently requires an additional
+    dependency.
 
     The categorization by "computation time" is based on our preliminary `benchmarking study
     <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_.
@@ -48,7 +47,8 @@ def complexity(
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     which : list
-        What metrics to compute, based on their computation time. Currently, only 'fast' is supported.
+        What metrics to compute, based on their computation time. Can be ``"fast"``, ``"medium"``,
+        or ``"slow"``.
     delay : int
         See for example :func:`entropy_permutation`.
     dimension : int
@@ -70,18 +70,26 @@ def complexity(
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=[5, 10])
-    >>>
-    >>> # Fast metrics
-    >>> df, info = nk.complexity(signal, which = ["fast", "medium"])
-    >>> df #doctest: +SKIP
-    >>>
-    >>> # Slow
-    >>> # With specific parameters for Higuchi and MFDFA
-    >>> df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 2))
-    >>> df #doctest: +SKIP
+    * **Example 1**: Compute fast and medium-fast complexity metrics
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a signal of 3 seconds
+      signal = nk.signal_simulate(duration=3, frequency=[5, 10])
+
+      # Fast metrics
+      df, info = nk.complexity(signal, which = ["fast", "medium"])
+      df
+
+    * **Example 2**: Compute slow complexity metrics
+
+    .. ipython:: python
+
+      # Slow, with specific parameters for Higuchi and MFDFA
+      df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 2))
+      df
 
     """
     # Sanity checks

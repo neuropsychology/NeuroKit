@@ -11,7 +11,9 @@ from ..misc import NeuroKitWarning
 
 
 def ecg_eventrelated(epochs, silent=False):
-    """Performs event-related ECG analysis on epochs.
+    """**Event-related analysis of ECG**
+
+    Performs event-related ECG analysis on epochs containing ECG signals.
 
     Parameters
     ----------

@@ -6,14 +6,33 @@ You can find here the API documentation of NeuroKit.
 ECG
 -------
 
+*ecg_simulate()*
+^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.ecg.ecg_simulate
 
 *ecg_analyze()*
 ^^^^^^^^^^^^^^^^^
 .. autofunction:: neurokit2.ecg.ecg_analyze
 
+*ecg_process()*
+^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.ecg.ecg_process
+
+*ecg_plot()*
+^^^^^^^^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.ecg.ecg_plot
+
 *ecg_clean()*
 ^^^^^^^^^^^^^^^^^
 .. autofunction:: neurokit2.ecg.ecg_clean
+
+*ecg_quality()*
+^^^^^^^^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.ecg.ecg_quality
+
+*ecg_rsp()*
+^^^^^^^^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.ecg.ecg_rsp
 
 *ecg_peaks()*
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -23,6 +42,14 @@ ECG
 ^^^^^^^^^^^^^^^^^
 .. autofunction:: neurokit2.ecg.ecg_delineate
 
+*ecg_phase()*
+^^^^^^^^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.ecg.ecg_phase
+
+*ecg_segment()*
+^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.ecg.ecg_segment
+
 *ecg_eventrelated()*
 ^^^^^^^^^^^^^^^^^^^^
 .. autofunction:: neurokit2.ecg.ecg_eventrelated
@@ -31,14 +58,22 @@ ECG
 ^^^^^^^^^^^^^^^^^^^^^^^^
 .. autofunction:: neurokit2.ecg.ecg_intervalrelated
 
-*ecg_phase()*
-^^^^^^^^^^^^^^^^^^^^^^^^
-.. autofunction:: neurokit2.ecg.ecg_phase
+*Other*
+^^^^^^^^^^^^^
+.. automodule:: neurokit2.ecg
+   :members:
+   :exclude-members: ecg_simulate, ecg_analyze, ecg_process, ecg_plot, ecg_clean, ecg_quality, ecg_rsp, ecg_rsp, ecg_peaks, ecg_delineate, ecg_phase, ecg_segment, ecg_eventrelated, ecg_intervalrelated
 
 
+Complexity
+-----------
 
-.. ``other``
-.. ^^^^^^^^^^^^^
-.. .. automodule:: neurokit2.ecg
-..    :members:
-..    :exclude-members: ecg_analyze, ecg_clean, ecg_delineate, ecg_eventrelated, ecg_intervalrelated
+*complexity()*
+^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.complexity.complexity
+
+*fractal_katz()*
+^^^^^^^^^^^^^^^^^
+.. autofunction:: neurokit2.complexity.fractal_katz
+
+
