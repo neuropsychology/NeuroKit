@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from warnings import warn
 
-from ..epochs.eventrelated_utils import (
-    _eventrelated_addinfo,
-    _eventrelated_rate,
-    _eventrelated_sanitizeinput,
-    _eventrelated_sanitizeoutput,
-)
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
+                                         _eventrelated_rate,
+                                         _eventrelated_sanitizeinput,
+                                         _eventrelated_sanitizeoutput)
 from ..misc import NeuroKitWarning
 
 
@@ -57,41 +55,35 @@ def ecg_eventrelated(epochs, silent=False):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example with simulated data
-    >>> ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
-    >>>
-    >>> # Process the data
-    >>> epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000],
-    ...                           epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS
-      Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
-    1     1          ...  ...                               ...               ...
-    2     2          ...  ...                               ...               ...
-    3     3          ...  ...                               ...               ...
+    # >>> import neurokit2 as nk
+    # >>>
+    # >>> # Example with simulated data
+    # >>> ecg, info = nk.ecg_process(nk.ecg_simulate(duration=20))
+    # >>>
+    # >>> # Process the data
+    # >>> epochs = nk.epochs_create(ecg, events=[5000, 10000, 15000],
+    # ...                           epochs_start=-0.1, epochs_end=1.9)
+    # >>> nk.ecg_eventrelated(epochs) #doctest: +SKIP
+    # >>>
+    # >>> # Example with real data
+    # >>> data = nk.data("bio_eventrelated_100hz")
+    # >>>
+    # >>> # Process the data
+    # >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
+    # >>> events = nk.events_find(data["Photosensor"],
+    # ...                         threshold_keep='below',
+    # ...                         event_conditions=["Negative", "Neutral",
+    # ...                                           "Neutral", "Negative"])
+    # >>> epochs = nk.epochs_create(df, events, sampling_rate=100,
+    # ...                           epochs_start=-0.1, epochs_end=1.9)
+    # >>> nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS
+    #   Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
+    # 1     1  Negative  ...                               ...               ...
+    # 2     2   Neutral  ...                               ...               ...
+    # 3     3   Neutral  ...                               ...               ...
+    # 4     4  Negative  ...                               ...               ...
 
-    [3 rows x 17 columns]
-    >>>
-    >>> # Example with real data
-    >>> data = nk.data("bio_eventrelated_100hz")
-    >>>
-    >>> # Process the data
-    >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"],
-    ...                         threshold_keep='below',
-    ...                         event_conditions=["Negative", "Neutral",
-    ...                                           "Neutral", "Negative"])
-    >>> epochs = nk.epochs_create(df, events, sampling_rate=100,
-    ...                           epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ecg_eventrelated(epochs) #doctest: +ELLIPSIS
-      Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean
-    1     1  Negative  ...                               ...               ...
-    2     2   Neutral  ...                               ...               ...
-    3     3   Neutral  ...                               ...               ...
-    4     4  Negative  ...                               ...               ...
-
-    [4 rows x 18 columns]
+    # [4 rows x 18 columns]
 
     """
     # Sanity checks

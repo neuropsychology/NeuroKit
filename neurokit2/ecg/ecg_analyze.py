@@ -7,7 +7,7 @@ from .ecg_intervalrelated import ecg_intervalrelated
 
 def ecg_analyze(data, sampling_rate=1000, method="auto"):
     """Performs ECG analysis on either epochs (event-related analysis) or on longer periods of data
-    such as resting-state data.
+    (interval-related analysis), such as resting-state data.
 
     Parameters
     ----------
@@ -39,32 +39,51 @@ def ecg_analyze(data, sampling_rate=1000, method="auto"):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Example 1: Download the data for event-related analysis
-    >>> data = nk.data("bio_eventrelated_100hz")
-    >>>
-    >>> # Process the data for event-related analysis
-    >>> df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
-    >>> events = nk.events_find(data["Photosensor"], threshold_keep='below',
-    ...                         event_conditions=["Negative", "Neutral",
-    ...                                           "Neutral", "Negative"])
-    >>> epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
-    >>>
-    >>> # Analyze
-    >>> analyze_epochs = nk.ecg_analyze(epochs, sampling_rate=100)
-    >>> analyze_epochs #doctest: +SKIP
 
-    >>>
-    >>> # Example 2: Download the resting-state data
-    >>> data = nk.data("bio_resting_5min_100hz")
-    >>>
-    >>> # Process the data
-    >>> df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
-    >>>
-    >>> # Analyze
-    >>> analyze_df = nk.ecg_analyze(df, sampling_rate=100)
-    >>> analyze_df #doctest: +SKIP
+    .. ipython:: python
+
+      import matplotlib.pyplot as plt
+      @savefig plot.png width=6in
+      plt.plot([1,2,3], [4,5,6])
+
+    * **Example 1**: Event-related analysis
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download the data
+      data = nk.data("bio_eventrelated_100hz")
+
+      # Process the data for event-related analysis
+      df, info = nk.bio_process(ecg=data["ECG"], sampling_rate=100)
+      events = nk.events_find(data["Photosensor"], threshold_keep='below',
+                              event_conditions=["Negative", "Neutral", "Neutral", "Negative"])
+      epochs = nk.epochs_create(df, events, sampling_rate=100, epochs_start=-0.1, epochs_end=1.9)
+
+      # Analyze
+      analyze_epochs = nk.ecg_analyze(epochs, sampling_rate=100)
+
+      # Get a dataframe with all the results
+      analyze_epochs
+
+    * **Example 2**: Interval-related analysis
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download the resting-state data
+      data = nk.data("bio_resting_5min_100hz")
+
+      # Process the data
+      df, info = nk.ecg_process(data["ECG"], sampling_rate=100)
+
+      # Analyze
+      analyze_df = nk.ecg_analyze(df, sampling_rate=100)
+
+      # Get results
+      analyze_df
 
     """
     method = method.lower()

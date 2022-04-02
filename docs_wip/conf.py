@@ -58,6 +58,9 @@ release = version
 # ones.
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx.ext.doctest",
+    "IPython.sphinxext.ipython_console_highlighting",
+    "IPython.sphinxext.ipython_directive",
     "sphinx.ext.napoleon",
     "sphinxemoji.sphinxemoji",
     "sphinx.ext.autosectionlabel",
