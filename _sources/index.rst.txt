@@ -18,7 +18,7 @@ Welcome to **NeuroKit**'s documentation, where you can find information and lear
    You can information on how to cite this documentation :ref:`here<Cite us>`.
 
 
-You can navigate to the different sections using the left panel. We would recommend checking out the **guides** and **examples**, where you can find tutorials and hands-on walkthroughs.
+You can navigate to the different sections using the left panel. We recommend checking out the **guides** and **examples**, where you can find tutorials and hands-on walkthroughs.
 
 .. toctree::
    :maxdepth: 2

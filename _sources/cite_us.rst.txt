@@ -5,6 +5,8 @@ Cite us
 
    You can get cite the sofwtare from within Python by running :code:`nk.cite()`
 
+Main publication
+----------------
 
 You can cite the **main publication** for *NeuroKit2* as follows:
 
@@ -27,7 +29,10 @@ You can cite the **main publication** for *NeuroKit2* as follows:
         month = {feb}
     }
 
-If you want to additionally **reference the manual** (to refer to the content of this documentation), you can add the following:
+Cite Documentation
+-------------------
+
+If you want to additionally **reference the manual** (to refer to the content of this documentation), you can add the following reference:
 
 
 - Makowski, D. (2021). *Neurophysiological Data Analysis with NeuroKit2*. NeuroKit. https://neuropsychology.github.io/NeuroKit/

@@ -279,12 +279,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main-publication">
+   Main publication
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cite-documentation">
+   Cite Documentation
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -296,6 +325,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main-publication">
+   Main publication
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cite-documentation">
+   Cite Documentation
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -309,6 +356,8 @@ title="Print to PDF"
 <p class="admonition-title">Hint</p>
 <p>You can get cite the sofwtare from within Python by running <code class="code docutils literal notranslate"><span class="pre">nk.cite()</span></code></p>
 </div>
+<div class="section" id="main-publication">
+<h2>Main publication<a class="headerlink" href="#main-publication" title="Permalink to this headline">#</a></h2>
 <p>You can cite the <strong>main publication</strong> for <em>NeuroKit2</em> as follows:</p>
 <ul class="simple">
 <li><p>Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H., Schölzel, C., &amp; Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing. <em>Behavior Research Methods</em>, 53(4), 1689-1696. <a class="reference external" href="https://doi.org/10.3758/s13428-020-01516-y">https://doi.org/10.3758/s13428-020-01516-y</a></p></li>
@@ -331,10 +380,14 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
-<p>If you want to additionally <strong>reference the manual</strong> (to refer to the content of this documentation), you can add the following:</p>
+</div>
+<div class="section" id="cite-documentation">
+<h2>Cite Documentation<a class="headerlink" href="#cite-documentation" title="Permalink to this headline">#</a></h2>
+<p>If you want to additionally <strong>reference the manual</strong> (to refer to the content of this documentation), you can add the following reference:</p>
 <ul class="simple">
 <li><p>Makowski, D. (2021). <em>Neurophysiological Data Analysis with NeuroKit2</em>. NeuroKit. <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/">https://neuropsychology.github.io/NeuroKit/</a></p></li>
 </ul>
+</div>
 </div>
 
 
