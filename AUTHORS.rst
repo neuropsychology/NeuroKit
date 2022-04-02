@@ -21,6 +21,7 @@ Core team
 Contributors
 -------------
 
+* `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
 * `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*
