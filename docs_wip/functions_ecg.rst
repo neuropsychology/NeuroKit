@@ -38,38 +38,38 @@ Preprocessing
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_peaks
 
-*ecg_delineate()*
-"""""""""""""""""
-.. autofunction:: neurokit2.ecg.ecg_delineate
-
-.. *ecg_phase()*
-.. """"""""""""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_phase
-
-.. *ecg_rate()*
-.. """"""""""""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_rate
-
-.. Analysis
-.. ^^^^^^^^
-.. *ecg_eventrelated()*
-.. """"""""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_eventrelated
-
-.. *ecg_intervalrelated()*
-.. """"""""""""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_intervalrelated
-
-
-.. Miscellaneous
-.. ^^^^^^^^^^^^^^^^
-.. *ecg_segment()*
+.. *ecg_delineate()*
 .. """""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_segment
+.. .. autofunction:: neurokit2.ecg.ecg_delineate
 
-.. *Other*
-.. """""""""""""
+*ecg_phase()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_phase
 
-.. .. automodule:: neurokit2.ecg
-..    :members:
-..    :exclude-members: ecg_simulate, ecg_analyze, ecg_process, ecg_plot, ecg_clean, ecg_quality, ecg_rsp, ecg_rsp, ecg_peaks, ecg_delineate, ecg_phase, ecg_rate, ecg_segment, ecg_eventrelated, ecg_intervalrelated
+*ecg_rate()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_rate
+
+Analysis
+^^^^^^^^
+*ecg_eventrelated()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_eventrelated
+
+*ecg_intervalrelated()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_intervalrelated
+
+
+Miscellaneous
+^^^^^^^^^^^^^^^^
+*ecg_segment()*
+"""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_segment
+
+*Other*
+"""""""""""""
+
+.. automodule:: neurokit2.ecg
+   :members:
+   :exclude-members: ecg_simulate, ecg_analyze, ecg_process, ecg_plot, ecg_clean, ecg_quality, ecg_rsp, ecg_rsp, ecg_peaks, ecg_delineate, ecg_phase, ecg_rate, ecg_segment, ecg_eventrelated, ecg_intervalrelated
