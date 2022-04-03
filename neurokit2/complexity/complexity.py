@@ -40,7 +40,11 @@ def complexity(
     dependency.
 
     The categorization by "computation time" is based on our preliminary `benchmarking study
-    <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_.
+    <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_ results:
+
+    .. figure:: ../studies/complexity_benchmark/figures/unnamed-chunk-3-1.png
+       :alt: Complexity Benchmark (Makowski).
+       :target: https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html
 
     Parameters
     ----------
