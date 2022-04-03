@@ -46,10 +46,10 @@ Quick Example
 
 And **boom** 💥 your analysis is done 😎
 
-Installation
--------------
+Download
+--------
 
-You can install NeuroKit2 from `PyPI <https://pypi.org/project/neurokit2/>`_
+You can download NeuroKit2 from `PyPI <https://pypi.org/project/neurokit2/>`_
 
 .. code-block::
 

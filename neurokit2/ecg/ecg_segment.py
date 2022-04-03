@@ -40,7 +40,7 @@ def ecg_segment(ecg_cleaned, rpeaks=None, sampling_rate=1000, show=False):
 
       ecg = nk.ecg_simulate(duration=15, sampling_rate=1000, heart_rate=80, noise = 0.05)
       @savefig p_ecg_segment.png scale=100%
-      nk.ecg_segment(ecg, rpeaks=None, sampling_rate=1000, show=True)
+      qrs_epochs = nk.ecg_segment(ecg, rpeaks=None, sampling_rate=1000, show=True)
 
     """
     # Sanitize inputs

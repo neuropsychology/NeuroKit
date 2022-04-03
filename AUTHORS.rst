@@ -4,24 +4,29 @@ Authors
 .. hint::
    Want to be a part of the project? Read how to `contribute and join us <https://neurokit2.readthedocs.io/en/latest/contributing/index.html>`_!
 
-
-Core team
-----------------
+Maintainers
+-----------
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
+* `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
+
+
+Core contributors
+------------------
+
 * `Tam Pham <https://github.com/Tam-Pham>`_ *(Nanyang Technological University, Singapore)*
 * `Zen Juen Lau <https://github.com/zen-juen>`_ *(Nanyang Technological University, Singapore)*
 * `Jan C. Brammer <https://github.com/JanCBrammer>`_ *(Radboud University, Netherlands)*
 * `François Lespinasse <https://github.com/sangfrois>`_ *(Université de Montréal, Canada)*
 
-.. note::
-   We might sometimes update the authors page categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
-
 
 Contributors
 -------------
 
-* `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
+.. note::
+   We might sometimes update the authors page categories, order of display, etc., and we won't necessarily notify each contributor every time. However, if you are for any reasons unsatisfied with the list, or your position in it, please do let us know!
+
+
 * `Hung Pham <https://github.com/hungpham2511>`_ *(Eureka Robotics, Singapore)*
 * `Christopher Schölzel <https://github.com/CSchoel>`_ *(THM University of Applied Sciences, Germany)*
 * `Duy Le <https://github.com/duylp>`_ *(Hubble, Singapore)*

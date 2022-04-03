@@ -5,10 +5,14 @@ from ..stats import rescale
 
 
 def fractal_sevcik(signal):
-    """Sevcik fractal dimension (SFD)
+    """**Sevcik fractal dimension (SFD)**
 
-    The Sevcik algorithm was proposed to calculate the fractal dimension of waveforms by Sevcik
-    (1998). This method could be used to quickly measure the complexity and randomness of a signal.
+    The SFD algorithm was proposed to calculate the fractal dimension of waveforms by Sevcik
+    (1998). This method can be used to quickly measure the complexity and randomness of a signal.
+
+    .. note:: Some papers (e.g., Wang et al. 2017) suggest adding ``np.log(2)`` to the numerator,
+       but it's unclear why, so we sticked to the original formula for now. But if you have an idea,
+       please let us know!
 
     Parameters
     ----------
@@ -71,5 +75,6 @@ def fractal_sevcik(signal):
     # Some papers (e.g., Wang et al. 2017) suggest adding np.log(2) to the numerator:
     # sfd = 1 + (np.log(L) + np.log(2)) / np.log(2 * (n - 1))
     # But it's unclear why. Sticking to the original formula for now.
+    # If you have an idea, let us know!
 
     return sfd, {}

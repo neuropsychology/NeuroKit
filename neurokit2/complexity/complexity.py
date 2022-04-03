@@ -50,11 +50,11 @@ def complexity(
         What metrics to compute, based on their computation time. Can be ``"fast"``, ``"medium"``,
         or ``"slow"``.
     delay : int
-        See for example :func:`entropy_permutation`.
+        See for example :func:`entropy_sample`.
     dimension : int
-        See for example :func:`entropy_permutation`.
+        See for example :func:`entropy_sample`.
     tolerance : float
-        See for example :func:`entropy_permutation`.
+        See for example :func:`entropy_sample`.
 
     Returns
     --------

@@ -6,7 +6,7 @@ from .utils import _get_coarsegrained, _get_scale
 
 
 def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=False, scale=None):
-    """Permutation Entropy (PE), and its Weighted (WPE) and/or Multiscale Variants (MSPE).
+    """**Permutation Entropy (PE), and its Weighted (WPE) and/or Multiscale Variants (MSPE)**
 
     Permutation Entropy (PE) is a robust measure of the complexity of a dynamic system by
     capturing the order relations between values of a time series and extracting a probability
@@ -29,20 +29,23 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
-        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
+        or to find a suitable value using some algorithmic heuristics. See ``complexity_delay()``
+        to estimate the optimal value for this parameter.
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
+        returns an array with two columns corresponding to the original signal and its delayed (by
+        Tau) version. See ``complexity_dimension()`` to estimate the optimal value for this
+        parameter.
     corrected : bool
         If True, divide by log2(factorial(m)) to normalize the entropy between 0 and 1. Otherwise,
         return the permutation entropy in bit.
     weighted : bool
         If True, compute the weighted permutation entropy (WPE).
     scale : Union[list, str, list]
-        If not ``None``, compute multiscale permutation entropy (MSPE). Can be a list of scale factors,
-        or ``"default"`` or ``"max"``. See ``entropy_multiscale()`` for details.
+        If not ``None``, compute multiscale permutation entropy (MSPE). Can be a list of scale
+        factors, or ``"default"`` or ``"max"``. See ``entropy_multiscale()`` for details.
 
     Returns
     -------
@@ -57,32 +60,33 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
-    >>>
-    >>> # Permutation Entropy
-    >>> pe, info = nk.entropy_permutation(signal, dimension=3, delay=1, corrected=False)
-    >>> pe #doctest: +SKIP
-    >>>
-    >>> # Multiscale Permutation Entropy
-    >>> mspe, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
-    >>> mspe #doctest: +SKIP
-    >>>
-    >>> # Weighted Permutation Entropy
-    >>> wpe, info = nk.entropy_permutation(signal, dimension=3, weighted=True)
-    >>> wpe #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
+
+      # Permutation Entropy
+      pe, info = nk.entropy_permutation(signal, dimension=3, delay=1, corrected=False)
+      pe
+
+      # Multiscale Permutation Entropy
+      mspe, info = nk.entropy_permutation(signal, dimension=3, scale = "default")
+      mspe
+
+      # Weighted Permutation Entropy
+      wpe, info = nk.entropy_permutation(signal, dimension=3, weighted=True)
+      wpe
 
     References
     ----------
-    - https://github.com/nikdon/pyEntropy
-    - Fadlallah, B., Chen, B., Keil, A., & Principe, J. (2013). Weighted-permutation entropy: A
-    complexity measure for time series incorporating amplitude information. Physical Review E, 87(2)
-    , 022911.
-    - Zanin, M., Zunino, L., Rosso, O. A., & Papo, D. (2012). Permutation entropy and its main
-    biomedical and econophysics applications: a review. Entropy, 14(8), 1553-1577.
-    - Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time
-    series. Physical review letters, 88(17), 174102.
+    * Fadlallah, B., Chen, B., Keil, A., & Principe, J. (2013). Weighted-permutation entropy: A
+      complexity measure for time series incorporating amplitude information. Physical Review E, 87
+      (2), 022911.
+    * Zanin, M., Zunino, L., Rosso, O. A., & Papo, D. (2012). Permutation entropy and its main
+      biomedical and econophysics applications: a review. Entropy, 14(8), 1553-1577.
+    * Bandt, C., & Pompe, B. (2002). Permutation entropy: a natural complexity measure for time
+      series. Physical review letters, 88(17), 174102.
 
     """
     # Sanity checks

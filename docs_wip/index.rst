@@ -30,7 +30,9 @@ You can navigate to the different sections using the left panel. We recommend ch
    :caption: Menu
    :titlesonly:
 
+   introduction
    authors
+   installation
    functions
    cite_us
 
