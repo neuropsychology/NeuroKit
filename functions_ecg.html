@@ -390,6 +390,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-eventrelated">
+     <em>
+      ecg_eventrelated()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -469,6 +476,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#ecg-rsp">
      <em>
       ecg_rsp()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-eventrelated">
+     <em>
+      ecg_eventrelated()
      </em>
     </a>
    </li>
@@ -598,7 +612,7 @@ by the <code class="docutils literal notranslate"><span class="pre">Label</span>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code>, <a class="reference internal" href="#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_eventrelated</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_intervalrelated</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code>, <a class="reference internal" href="#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_process</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <a class="reference internal" href="#neurokit2.ecg.ecg_eventrelated" title="neurokit2.ecg.ecg_eventrelated"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_eventrelated</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_intervalrelated</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <ul class="simple">
@@ -1022,6 +1036,116 @@ and photoplethysmogram. Physiological measurement, 37(4), 610.</p></li>
 <li><p>Soni, R., &amp; Muniyandi, M. (2019). Breath rate variability: a novel measure to study the
 meditation effects. International Journal of Yoga, 12(1), 45.</p></li>
 </ul>
+</dd></dl>
+
+</div>
+<div class="section" id="ecg-eventrelated">
+<h3><em>ecg_eventrelated()</em><a class="headerlink" href="#ecg-eventrelated" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ecg.ecg_eventrelated">
+<span class="sig-name descname"><span class="pre">ecg_eventrelated</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epochs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_eventrelated" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Event-related analysis of ECG</strong></p>
+<p>Performs event-related ECG analysis on epochs containing ECG signals.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs</strong> (<em>Union[dict, pd.DataFrame]</em>) – A dict containing one DataFrame per event/trial, usually obtained via <cite>epochs_create()</cite>, or
+a DataFrame containing all epochs, usually obtained via <cite>epochs_to_df()</cite>.</p></li>
+<li><p><strong>silent</strong> (<em>bool</em>) – If True, silence possible warnings.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p><em>DataFrame</em> – A dataframe containing the analyzed ECG features for each epoch, with each epoch indicated
+by the <cite>Label</cite> column (if not present, by the <cite>Index</cite> column). The analyzed features
+consist of the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Max</span></code>: the maximum heart rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Min</span></code>: the minimum heart rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Mean</span></code>: the mean heart rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_SD</span></code>: the standard deviation of the heart rate after stimulus onset.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Max_Time</span></code>: the time at which maximum heart rate occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Min_Time</span></code>: the time at which minimum heart rate occurs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Phase_Atrial</span></code>: indication of whether the onset of the event concurs with
+respiratory systole (1) or diastole (0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Phase_Ventricular</span></code>: indication of whether the onset of the event concurs with
+respiratory systole (1) or diastole (0).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Phase_Atrial_Completion</span></code>: indication of the stage of the current cardiac (atrial)
+phase (0 to 1) at the onset of the event.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Phase_Ventricular_Completion</span></code>: indication of the stage of the current cardiac
+(ventricular) phase (0 to 1) at the onset of the event.</p></li>
+</ul>
+<p>We also include the following <em>experimental</em> features related to the parameters of a
+quadratic model:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Trend_Linear</span></code>: The parameter corresponding to the linear trend.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Trend_Quadratic</span></code>: The parameter corresponding to the curvature.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ECG_Rate_Trend_R2</span></code>: the quality of the quadratic model. If too low, the parameters
+might not be reliable or meaningful.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">events_find</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">epochs_create</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">bio_process</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example 1</strong>: Simulated Data</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate ECG signal</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+
+<span class="go"># Preprocess</span>
+<span class="gp">In [3]: </span><span class="n">ecg</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="go"># Create epochs</span>
+<span class="gp">In [4]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="mi">5000</span><span class="p">,</span> <span class="mi">10000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">],</span>
+<span class="gp">   ...: </span>                          <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="gh">Out[5]: </span><span class="go"></span>
+<span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
+<span class="go">1     1         5000  ...                          0.702429          0.936374</span>
+<span class="go">2     2        10000  ...                          0.388211          0.943355</span>
+<span class="go">3     3        15000  ...                          0.136170          0.945975</span>
+
+<span class="go">[3 rows x 17 columns]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 2</strong>: Real Data</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Download real dataset</span>
+<span class="gp">In [6]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+
+<span class="go"># Process the data</span>
+<span class="gp">In [7]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">events</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_find</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Photosensor&quot;</span><span class="p">],</span>
+<span class="gp">   ...: </span>                        <span class="n">threshold_keep</span><span class="o">=</span><span class="s1">&#39;below&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                        <span class="n">event_conditions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Negative&quot;</span><span class="p">,</span> <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                          <span class="s2">&quot;Neutral&quot;</span><span class="p">,</span> <span class="s2">&quot;Negative&quot;</span><span class="p">])</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [9]: </span><span class="n">epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">epochs_create</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+<span class="gp">   ...: </span>                          <span class="n">epochs_start</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">epochs_end</span><span class="o">=</span><span class="mf">1.9</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
+<span class="gh">Out[10]: </span><span class="go"></span>
+<span class="go">  Label Condition  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
+<span class="go">1     1  Negative  ...                          0.400000          0.821619</span>
+<span class="go">2     2   Neutral  ...                          0.553846          0.907924</span>
+<span class="go">3     3   Neutral  ...                          0.133333          0.825420</span>
+<span class="go">4     4  Negative  ...                          0.575342          0.802749</span>
+
+<span class="go">[4 rows x 18 columns]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>
