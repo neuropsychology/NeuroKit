@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cite us &#8212; NeuroKit2 0.1.8 documentation</title>
+    <title>Installation &#8212; NeuroKit2 0.1.8 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -36,7 +36,8 @@
     <link rel="shortcut icon" href="_static/icon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Complexity" href="functions_complexity.html" />
+    <link rel="next" title="Functions" href="functions.html" />
+    <link rel="prev" title="Authors" href="authors.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -102,8 +103,8 @@
    Authors
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="installation.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Installation
   </a>
  </li>
@@ -129,8 +130,8 @@
    </li>
   </ul>
  </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="cite_us.html">
    Cite us
   </a>
  </li>
@@ -224,7 +225,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fcite_us.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Finstallation.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -241,7 +242,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/cite_us.rst"
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/installation.rst"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -269,7 +270,7 @@ title="Edit this page"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/cite_us.rst.txt"
+        <a href="_sources/installation.rst.txt"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -329,13 +330,30 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#main-publication">
-   Main publication
+  <a class="reference internal nav-link" href="#you-don-t-have-python">
+   You don’t have Python
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#python-vs-code">
+     Python + VS code
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#winpython">
+     Winpython
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#miniconda-or-anaconda">
+     Miniconda or Anaconda
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cite-documentation">
-   Cite Documentation
+  <a class="reference internal nav-link" href="#from-conda">
+   From conda
   </a>
  </li>
 </ul>
@@ -347,7 +365,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Cite us</h1>
+                <h1>Installation</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -358,13 +376,30 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#main-publication">
-   Main publication
+  <a class="reference internal nav-link" href="#you-don-t-have-python">
+   You don’t have Python
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#python-vs-code">
+     Python + VS code
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#winpython">
+     Winpython
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#miniconda-or-anaconda">
+     Miniconda or Anaconda
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#cite-documentation">
-   Cite Documentation
+  <a class="reference internal nav-link" href="#from-conda">
+   From conda
   </a>
  </li>
 </ul>
@@ -377,43 +412,78 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="section" id="cite-us">
-<h1>Cite us<a class="headerlink" href="#cite-us" title="Permalink to this headline">#</a></h1>
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h1>
+<p>Open your terminal and run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install neurokit2</span>
+</pre></div>
+</div>
+<p>Then, at the top of each of your Python script, you have to import the module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+</pre></div>
+</div>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>You can cite the software from within Python by running <code class="code docutils literal notranslate"><span class="pre">nk.cite()</span></code></p>
-</div>
-<div class="section" id="main-publication">
-<h2>Main publication<a class="headerlink" href="#main-publication" title="Permalink to this headline">#</a></h2>
-<p>You can cite the <strong>main publication</strong> for <em>NeuroKit2</em> as follows:</p>
-<ul class="simple">
-<li><p>Makowski, D., Pham, T., Lau, Z. J., Brammer, J. C., Lespinasse, F., Pham, H., Schölzel, C., &amp; Chen, S. A. (2021). NeuroKit2: A Python toolbox for neurophysiological signal processing. <em>Behavior Research Methods</em>, 53(4), 1689-1696. <a class="reference external" href="https://doi.org/10.3758/s13428-020-01516-y">https://doi.org/10.3758/s13428-020-01516-y</a></p></li>
-</ul>
-<div class="literal-block-wrapper docutils container" id="id1">
-<div class="code-block-caption"><span class="caption-text">The bibtex citation information for NeuroKit2</span><a class="headerlink" href="#id1" title="Permalink to this code">#</a></div>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> @article{Makowski2021neurokit,
-     author = {Dominique Makowski and Tam Pham and Zen J. Lau and Jan C. Brammer and Fran{\c{c}}ois Lespinasse and Hung Pham and Christopher Schölzel and S. H. Annabel Chen},
-     title = {{NeuroKit}2: A Python toolbox for neurophysiological signal processing},
-     journal = {Behavior Research Methods},
-     volume = {53},
-     number = {4},
-     pages = {1689--1696},
-     publisher = {Springer Science and Business Media {LLC}},
-     doi = {10.3758/s13428-020-01516-y},
-     url = {https://doi.org/10.3758%2Fs13428-020-01516-y},
-     year = 2021,
-     month = {feb}
- }
+<p>Enjoy living on the edge? You can get the latest <strong>dev</strong> version from GitHub by running:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">pip install https://github.com/neuropsychology/neurokit/zipball/dev</span>
 </pre></div>
 </div>
 </div>
+<div class="section" id="you-don-t-have-python">
+<h2>You don’t have Python<a class="headerlink" href="#you-don-t-have-python" title="Permalink to this headline">#</a></h2>
+<p>You are new to all this, and you’re not even sure if you have Python installed? Don’t worry, we’ll walk you through all of it.</p>
+<div class="section" id="python-vs-code">
+<h3>Python + VS code<a class="headerlink" href="#python-vs-code" title="Permalink to this headline">#</a></h3>
+<p>You will need two things to program in Python, Python itself and an IDE software to edit and work with the Python scripts.</p>
+<ol class="arabic simple">
+<li><p>You can download Python from <a class="reference external" href="https://www.python.org/downloads/">https://www.python.org/downloads/</a></p></li>
+<li><p>For the IDE, we will go with <a class="reference external" href="https://code.visualstudio.com/download">VS Code</a></p></li>
+<li><p>Once VS Code is launched, the next step is to add functionalities to support your development workflow. In particular, it is critical to get the <a class="reference external" href="https://code.visualstudio.com/docs/python/jupyter-support-py">Python Interactive extension</a></p></li>
+<li><p>To start running some code, click <em>New File</em> and <cite>Ctrl+S</cite> to save the file into whichever directory in your computer you want, naming the file with a <cite>.py</cite> extension. Press <cite>Shift+Enter</cite> to send each line of code to an interactive window</p></li>
+</ol>
 </div>
-<div class="section" id="cite-documentation">
-<h2>Cite Documentation<a class="headerlink" href="#cite-documentation" title="Permalink to this headline">#</a></h2>
-<p>If you want to additionally <strong>reference the manual</strong> (to refer to the content of this documentation), you can add the following reference:</p>
-<ul class="simple">
-<li><p>Makowski, D. (2021). <em>Neurophysiological Data Analysis with NeuroKit2</em>. NeuroKit. <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/">https://neuropsychology.github.io/NeuroKit/</a></p></li>
-</ul>
+<div class="section" id="winpython">
+<h3>Winpython<a class="headerlink" href="#winpython" title="Permalink to this headline">#</a></h3>
+<p>Another, perhaps easier option is to download a full distribution. The advantage of Winpython is its portability (i.e., works out of a folder) and default setup (convenient for science). However, it only exists <strong>for Windows</strong>.</p>
+<ol class="arabic simple">
+<li><p>Download a non-zero version of <a class="reference external" href="http://winpython.github.io/">Winpython</a></p></li>
+<li><p>Install it somewhere (the desktop is a good place). It creates a folder called <cite>WPyXX-xxxx</cite></p></li>
+<li><p>In the <cite>WPyXX-xxxx</cite> folder, open <cite>WinPython Command Prompt.exe</cite></p></li>
+<li><p>Now you can proceed to running the PIP command mentioned at the top</p></li>
+</ol>
+</div>
+<div class="section" id="miniconda-or-anaconda">
+<h3>Miniconda or Anaconda<a class="headerlink" href="#miniconda-or-anaconda" title="Permalink to this headline">#</a></h3>
+<p>The difference between the two is straightforward, <em>miniconda</em> is recommended if you don’t have much storage space and you know what you want to install. Similar to Winpython, <em>Anaconda</em> comes with a <em>base</em> environment, meaning you have basic packages pre-installed.
+Here is some <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/install/download.html#anaconda-or-miniconda">more information</a> to help you choose between <em>miniconda</em> and <em>Anaconda</em>.</p>
+<ol class="arabic simple">
+<li><p>Download and install <a class="reference external" href="https://www.anaconda.com/products/individual">Miniconda or Anaconda</a> (make sure the <code class="docutils literal notranslate"><span class="pre">Anaconda3</span></code> directory is similar to this: <code class="docutils literal notranslate"><span class="pre">C:\Users\&lt;username&gt;\anaconda3\</span></code>)</p></li>
+<li><p>Open the <cite>Anaconda Prompt</cite> (search for it on your computer; see <a class="reference external" href="https://www.youtube.com/watch?time_continue=59&amp;v=gk2CgkURkgY">here</a> for Mac users)</p></li>
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">conda</span> <span class="pre">help</span></code> to see your options</p></li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There should be a name in parentheses before your user’s directory, e.g. <code class="docutils literal notranslate"><span class="pre">(base)</span> <span class="pre">C:\Users\&lt;yourusername&gt;</span></code>. That is the name of your computing environment. By default, you have a <code class="docutils literal notranslate"><span class="pre">base</span> <span class="pre">environment</span></code>. We don’t want that, so create an environment.</p>
+</div>
+<ol class="arabic simple">
+<li><p>Run <code class="code docutils literal notranslate"><span class="pre">conda</span> <span class="pre">env</span> <span class="pre">create</span> <span class="pre">&lt;yourenvname&gt;</span></code>; activate it every time you open conda by running <code class="code docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">&lt;yourenvname&gt;</span></code></p></li>
+<li><p>Now you can proceed to <a class="reference internal" href="#from-conda"><span class="std std-ref">the next step</span></a></p></li>
+</ol>
+<img alt="https://raw.github.com/neuropsychology/Neurokit/master/docs/img/tutorial_installation_conda.jpg" src="https://raw.github.com/neuropsychology/Neurokit/master/docs/img/tutorial_installation_conda.jpg" />
+</div>
+</div>
+<div class="section" id="from-conda">
+<h2>From conda<a class="headerlink" href="#from-conda" title="Permalink to this headline">#</a></h2>
+<p>If you have Python installed as part of <cite>Miniconda</cite> or <cite>Anaconda</cite>, please follow these steps:</p>
+<ol class="arabic simple">
+<li><p>As described in <a class="reference internal" href="#miniconda-or-anaconda"><span class="std std-ref">above</span></a>, open the <cite>Anaconda Prompt</cite> and activate your conda environment</p></li>
+<li><p>You can now install NeuroKit2 from <a class="reference external" href="https://anaconda.org/conda-forge/neurokit2">conda-forge</a> by typing</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">conda config --add channels conda-forge</span>
+<span class="go">conda install neurokit2</span>
+</pre></div>
+</div>
+<p><cite>conda</cite> or <cite>pip</cite> are the preferred methods to install NeuroKit2, as they will install the most up-to-date stable release.</p>
 </div>
 </div>
 
@@ -425,12 +495,19 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="functions_complexity.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="authors.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Complexity</p>
+            <p class="prev-next-title">Authors</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="functions.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Functions</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             </footer>
