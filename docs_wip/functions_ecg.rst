@@ -50,8 +50,8 @@ Preprocessing
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_rate
 
-Analysis
-^^^^^^^^^
+.. Analysis
+.. ^^^^^^^^^
 *ecg_eventrelated()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_eventrelated
