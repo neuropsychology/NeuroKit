@@ -42,9 +42,9 @@ Preprocessing
 .. """""""""""""""""
 .. .. autofunction:: neurokit2.ecg.ecg_delineate
 
-*ecg_phase()*
-""""""""""""""""""""""""
-.. autofunction:: neurokit2.ecg.ecg_phase
+.. *ecg_phase()*
+.. """"""""""""""""""""""""
+.. .. autofunction:: neurokit2.ecg.ecg_phase
 
 .. *ecg_rate()*
 .. """"""""""""""""""""""""
