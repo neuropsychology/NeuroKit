@@ -61,11 +61,11 @@ Preprocessing
 .. autofunction:: neurokit2.ecg.ecg_intervalrelated
 
 
-.. Miscellaneous
-.. ^^^^^^^^^^^^^^^^
-.. *ecg_segment()*
-.. """""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_segment
+Miscellaneous
+^^^^^^^^^^^^^^^^
+*ecg_segment()*
+"""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_segment
 
 .. *Other*
 .. """""""""""""

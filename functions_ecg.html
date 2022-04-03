@@ -406,6 +406,20 @@ title="Print to PDF"
    </li>
   </ul>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#miscellaneous">
+   Miscellaneous
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-segment">
+     <em>
+      ecg_segment()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
 </ul>
 
     </nav>
@@ -497,6 +511,20 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#ecg-intervalrelated">
      <em>
       ecg_intervalrelated()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#miscellaneous">
+   Miscellaneous
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-segment">
+     <em>
+      ecg_segment()
      </em>
     </a>
    </li>
@@ -936,7 +964,7 @@ of the signal for “zhao2018 method”.</p>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_segment</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_delineate</span></code></p>
+<p><a class="reference internal" href="#neurokit2.ecg.ecg_segment" title="neurokit2.ecg.ecg_segment"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_segment</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_delineate</span></code></p>
 </div>
 <p class="rubric">References</p>
 <ul class="simple">
@@ -1123,9 +1151,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.783784          0.930185</span>
-<span class="go">2     2        10000  ...                          0.484787          0.922482</span>
-<span class="go">3     3        15000  ...                          0.164300          0.905354</span>
+<span class="go">1     1         5000  ...                          0.630612          0.935296</span>
+<span class="go">2     2        10000  ...                          0.382536          0.978629</span>
+<span class="go">3     3        15000  ...                          0.084711          0.964055</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -1222,6 +1250,45 @@ separately processed DataFrames.</p></li>
 <span class="go">[2 rows x 83 columns]</span>
 </pre></div>
 </div>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="miscellaneous">
+<h2>Miscellaneous<a class="headerlink" href="#miscellaneous" title="Permalink to this headline">#</a></h2>
+<div class="section" id="ecg-segment">
+<h3><em>ecg_segment()</em><a class="headerlink" href="#ecg-segment" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ecg.ecg_segment">
+<span class="sig-name descname"><span class="pre">ecg_segment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_segment" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Segment an ECG signal into single heartbeats</strong></p>
+<p>Segment an ECG signal into single heartbeats. Convenient for visualizing all the heart beats.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ecg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – The cleaned ECG channel as returned by <code class="docutils literal notranslate"><span class="pre">ecg_clean()</span></code>.</p></li>
+<li><p><strong>rpeaks</strong> (<em>dict</em>) – The samples at which the R-peaks occur. Dict returned by <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>. Defaults to None.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <cite>ecg_signal</cite> (in Hz, i.e., samples/second). Defaults to 1000.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot of heartbeats. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>dict</em> – A dict containing DataFrames for all segmented heartbeats.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.ecg.ecg_clean" title="neurokit2.ecg.ecg_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_clean</span></code></a>, <a class="reference internal" href="#neurokit2.ecg.ecg_plot" title="neurokit2.ecg.ecg_plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_plot</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">qrs_epochs</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_segment</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_ecg_segment.png"><img alt="_images/p_ecg_segment.png" src="_images/p_ecg_segment.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </div>
