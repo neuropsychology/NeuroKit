@@ -67,9 +67,9 @@ Miscellaneous
 """""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_segment
 
-.. *Other*
-.. """""""""""""
+*Other*
+"""""""""""""
 
-.. .. automodule:: neurokit2.ecg
-..    :members:
-..    :exclude-members: ecg_simulate, ecg_analyze, ecg_process, ecg_plot, ecg_clean, ecg_quality, ecg_rsp, ecg_rsp, ecg_peaks, ecg_delineate, ecg_phase, ecg_rate, ecg_segment, ecg_eventrelated, ecg_intervalrelated
+.. automodule:: neurokit2.ecg
+   :members:
+   :exclude-members: ecg_simulate, ecg_analyze, ecg_process, ecg_plot, ecg_clean, ecg_quality, ecg_rsp, ecg_rsp, ecg_peaks, ecg_delineate, ecg_phase, ecg_rate, ecg_segment, ecg_eventrelated, ecg_intervalrelated

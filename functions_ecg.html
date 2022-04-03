@@ -418,6 +418,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#module-neurokit2.ecg">
+     <em>
+      Other
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -525,6 +532,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#ecg-segment">
      <em>
       ecg_segment()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#module-neurokit2.ecg">
+     <em>
+      Other
      </em>
     </a>
    </li>
@@ -1151,9 +1165,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.630612          0.935296</span>
-<span class="go">2     2        10000  ...                          0.382536          0.978629</span>
-<span class="go">3     3        15000  ...                          0.084711          0.964055</span>
+<span class="go">1     1         5000  ...                          0.731557          0.972741</span>
+<span class="go">2     2        10000  ...                          0.381339          0.945745</span>
+<span class="go">3     3        15000  ...                          0.166324          0.961517</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -1289,6 +1303,38 @@ separately processed DataFrames.</p></li>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="_images/p_ecg_segment.png"><img alt="_images/p_ecg_segment.png" src="_images/p_ecg_segment.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</div>
+<div class="section" id="module-neurokit2.ecg">
+<span id="other"></span><h3><em>Other</em><a class="headerlink" href="#module-neurokit2.ecg" title="Permalink to this headline">#</a></h3>
+<p>Submodule for NeuroKit.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ecg.ecg_findpeaks">
+<span class="sig-name descname"><span class="pre">ecg_findpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'neurokit'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_findpeaks" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Locate R-peaks</strong></p>
+<p>Low-level function used by <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code> to identify R-peaks in an ECG signal using a
+different set of algorithms. Use the main function and see its documentation for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ecg_cleaned</strong> (<em>Union[list, np.array, pd.Series]</em>) – See <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – See <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>string</em>) – See <code class="docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will return a plot to visualizing the thresholds used in the algorithm.
+Useful for debugging.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments, usually specific for each <cite>method</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the
+samples at which R-peaks occur, accessible with the key <code class="docutils literal notranslate"><span class="pre">&quot;ECG_R_Peaks&quot;</span></code>.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_fixpeaks</span></code></p>
+</div>
 </dd></dl>
 
 </div>
