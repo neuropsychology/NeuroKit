@@ -30,13 +30,13 @@ Preprocessing
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_quality
 
-*ecg_rsp()*
-""""""""""""""""""""""""
-.. autofunction:: neurokit2.ecg.ecg_rsp
+.. *ecg_rsp()*
+.. """"""""""""""""""""""""
+.. .. autofunction:: neurokit2.ecg.ecg_rsp
 
-*ecg_peaks()*
-""""""""""""""""""""""""
-.. autofunction:: neurokit2.ecg.ecg_peaks
+.. *ecg_peaks()*
+.. """"""""""""""""""""""""
+.. .. autofunction:: neurokit2.ecg.ecg_peaks
 
 .. *ecg_delineate()*
 .. """""""""""""""""
