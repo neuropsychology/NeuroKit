@@ -32,7 +32,7 @@ def complexity_optimize(
 ):
     """Find optimal complexity parameters.
 
-    Estimate optimal complexity parameters Dimension (m), Time Delay (tau) and tolerance 'r'.
+    Estimate optimal complexity parameters Dimension (m), Time Delay (tau) and tolerance (r).
 
     Parameters
     ----------
@@ -211,7 +211,7 @@ def _complexity_plot(
         )
 
     # Plot r optimization
-    _optimize_tolerance_plot(out["Tolerance"], r_range, ApEn, ax=ax_r)
+    _optimize_tolerance_plot(out["Tolerance"], {"Values": r_range, "Scores": ApEn}, ax=ax_r)
 
     return fig
 
@@ -299,7 +299,9 @@ def _complexity_tolerance(signal, delay=None, dimension=None):
     r_range = modulator * np.std(signal, ddof=1)
     ApEn = np.zeros_like(r_range)
     for i, r in enumerate(r_range):
-        ApEn[i] = entropy_approximate(signal, delay=delay, dimension=dimension, tolerance=r_range[i])[0]
+        ApEn[i] = entropy_approximate(
+            signal, delay=delay, dimension=dimension, tolerance=r_range[i]
+        )[0]
     r = r_range[np.argmax(ApEn)]
 
     return r_range, ApEn, r
