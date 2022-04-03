@@ -347,6 +347,15 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#optimization">
    Optimization
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-tolerance">
+     <em>
+      complexity_tolerance()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fractal-dimension">
@@ -455,6 +464,15 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#optimization">
    Optimization
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-tolerance">
+     <em>
+      complexity_tolerance()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fractal-dimension">
@@ -681,6 +699,128 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;
 </div>
 <div class="section" id="optimization">
 <h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">#</a></h2>
+<div class="section" id="complexity-tolerance">
+<h3><em>complexity_tolerance()</em><a class="headerlink" href="#complexity-tolerance" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.complexity_tolerance">
+<span class="sig-name descname"><span class="pre">complexity_tolerance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'maxApEn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_tolerance" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Automated selection of tolerance (r)</strong></p>
+<p>Estimate and select the optimal tolerance (r) parameter used by other entropy and other
+complexity algorithms.</p>
+<p>Many complexity algorithms are built on the notion of self-similarity and recurrence, and how
+often a system revisits its past states. Considering two states as identical is straightforward
+for discrete systems (e.g., a sequence of “A”, “B” and “C” states), but for continuous signals,
+we cannot simply look for when the two numbers are exactly the same. Instead, we have to pick a
+threshold by which to consider two points as similar.</p>
+<p>The tolerance <em>r</em> is essentially this threshold value (the numerical difference between two
+similar points that we “tolerate”), and this parameter has a critical impact and is a major
+source of inconsistencies in the literature.</p>
+<p>Different methods have been described to estimate the most appropriate tolerance value:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">'maxApEn'</span></code>: Different values of tolerance will be tested and the one where the approximate
+entropy (ApEn) is maximized will be selected and returned.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'sd'</span></code> (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be
+returned.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'recurrence'</span></code>, the tolerance that yields a recurrence rate (see <code class="docutils literal notranslate"><span class="pre">RQA</span></code>) close to 5% will
+be returned.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be ‘maxApEn’ (default), ‘sd’, or ‘recurrence’.</p></li>
+<li><p><strong>r_range</strong> (<em>Union[list, int]</em>) – The range of tolerance values (or the number of values) to test. Only used if <code class="docutils literal notranslate"><span class="pre">method</span></code> is
+<code class="docutils literal notranslate"><span class="pre">'maxApEn'</span></code> or <code class="docutils literal notranslate"><span class="pre">'recurrence'</span></code>. If <code class="docutils literal notranslate"><span class="pre">None</span></code> (default), the default range will be used;
+<code class="docutils literal notranslate"><span class="pre">np.linspace(0.02,</span> <span class="pre">0.8,</span> <span class="pre">r_range)</span> <span class="pre">*</span> <span class="pre">np.std(signal,</span> <span class="pre">ddof=1)</span></code> for <code class="docutils literal notranslate"><span class="pre">'maxApEn'</span></code>, and <code class="docutils literal notranslate"><span class="pre">np.</span>
+<span class="pre">linspace(0,</span> <span class="pre">np.max(d),</span> <span class="pre">30</span> <span class="pre">+</span> <span class="pre">1)[1:]</span></code> for <code class="docutils literal notranslate"><span class="pre">'recurrence'</span></code>. You can set a lower number for
+faster results.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Only used if <code class="docutils literal notranslate"><span class="pre">method='maxApEn'</span></code>. See <code class="docutils literal notranslate"><span class="pre">entropy_approximate()</span></code>.</p></li>
+<li><p><strong>dimension</strong> (<em>int</em>) – Only used if <code class="docutils literal notranslate"><span class="pre">method='maxApEn'</span></code>. See <code class="docutils literal notranslate"><span class="pre">entropy_approximate()</span></code>.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If true and method is ‘maxApEn’, will plot the ApEn values for each value of r.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_embedding</span></code></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><em>float</em> – The optimal tolerance value.</p></li>
+<li><p><em>dict</em> – A dictionary with the values of r and the corresponding ApEn values (when method=’maxApEn’).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example 1</strong>: The method based on the SD of the signal is fast. The plot shows the d
+distribution of the values making the signal, and the width of the arrow represents the
+chosen <code class="docutils literal notranslate"><span class="pre">r</span></code> parameter.</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate signal</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="go"># Fast method (based on the standard deviation)</span>
+<span class="gp">In [3]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;SD&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">r</span>
+<span class="gh">Out[4]: </span><span class="go">0.07072836242007384</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_complexity_tolerance1.png"><img alt="_images/p_complexity_tolerance1.png" src="_images/p_complexity_tolerance1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 2</strong>: The method based on the recurrence rate will display the rates according to
+different values of tolerance. The horizontal line indicates 5%.</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                  <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;recurrence&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [6]: </span><span class="n">r</span>
+<span class="gh">Out[6]: </span><span class="go">0.1259621536795725</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_complexity_tolerance2.png"><img alt="_images/p_complexity_tolerance2.png" src="_images/p_complexity_tolerance2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 3</strong>: The default method selects the tolerance at which <em>ApEn</em> is maximized.</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Slow method</span>
+<span class="gp">In [7]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                  <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;maxApEn&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [8]: </span><span class="n">r</span>
+<span class="gh">Out[8]: </span><span class="go">0.014145672484014769</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_complexity_tolerance3.png"><img alt="_images/p_complexity_tolerance3.png" src="_images/p_complexity_tolerance3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 4</strong>: The tolerance values that are tested can be modified to get a more precise
+estimate.</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Narrower range</span>
+<span class="gp">In [9]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;maxApEn&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                  <span class="n">r_range</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [10]: </span><span class="n">r</span>
+<span class="gh">Out[10]: </span><span class="go">0.012137931034482758</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_complexity_tolerance4.png"><img alt="_images/p_complexity_tolerance4.png" src="_images/p_complexity_tolerance4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., &amp; Chon, K. H. (2008). Automatic selection of
+the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering,
+55(8), 1966-1972.</p></li>
+</ul>
+</dd></dl>
+
+</div>
 </div>
 <div class="section" id="fractal-dimension">
 <h2>Fractal Dimension<a class="headerlink" href="#fractal-dimension" title="Permalink to this headline">#</a></h2>
@@ -749,7 +889,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.8098657688075397</span>
+<span class="gh">Out[12]: </span><span class="go">1.7646599022429557</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -759,7 +899,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.886891770208363</span>
+<span class="gh">Out[16]: </span><span class="go">3.6377184021517612</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1015,19 +1155,19 @@ factors, or <code class="docutils literal notranslate"><span class="pre">&quot;d
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.5792102670005135</span>
+<span class="gh">Out[4]: </span><span class="go">2.5771982464861254</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8773726312564875</span>
+<span class="gh">Out[6]: </span><span class="go">0.8798306372124941</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.997849157349542</span>
+<span class="gh">Out[8]: </span><span class="go">0.9912807077707891</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>

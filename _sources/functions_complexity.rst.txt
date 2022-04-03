@@ -11,9 +11,10 @@ Main
 
 Optimization
 ^^^^^^^^^^^^^
-.. *complexity_tolerance()*
-.. """"""""""""""""""""""""""
-.. .. autofunction:: neurokit2.complexity.complexity_tolerance
+
+*complexity_tolerance()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_tolerance
 
 Fractal Dimension
 ^^^^^^^^^^^^^^^^^
