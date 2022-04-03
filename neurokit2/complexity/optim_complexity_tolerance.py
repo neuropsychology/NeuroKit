@@ -113,6 +113,7 @@ def complexity_tolerance(
       @savefig p_complexity_tolerance4.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn',
                                         r_range=np.linspace(0.002, 0.1, 30), show=True)
+      r
 
     References
     -----------
