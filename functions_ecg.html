@@ -383,6 +383,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-rsp">
+     <em>
+      ecg_rsp()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -455,6 +462,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#ecg-quality">
      <em>
       ecg_quality()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ecg-rsp">
+     <em>
+      ecg_rsp()
      </em>
     </a>
    </li>
@@ -929,6 +943,85 @@ Physiology, 9, 727.</p></li>
 <span class="gh">Out[6]: </span><span class="go">&#39;Barely acceptable&#39;</span>
 </pre></div>
 </div>
+</dd></dl>
+
+</div>
+<div class="section" id="ecg-rsp">
+<h3><em>ecg_rsp()</em><a class="headerlink" href="#ecg-rsp" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ecg.ecg_rsp">
+<span class="sig-name descname"><span class="pre">ecg_rsp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vangent2019'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_rsp" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>ECG-Derived Respiration (EDR)</strong></p>
+<p>Extract ECG-Derived Respiration (EDR), a proxy of a respiratory signal based on heart rate. *
+Note that this implementation is far from being complete, as the information in the related
+papers prevents me from getting a full understanding of the procedure. <strong>Help is required to
+document, test and validate the function!</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ecg_rate</strong> (<em>array</em>) – The heart rate signal as obtained via <cite>ecg_rate()</cite>.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of the signal that contains the R-peaks (in Hz,
+i.e., samples/second). Defaults to 1000Hz.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be one of <code class="docutils literal notranslate"><span class="pre">'vangent2019'</span></code> (default), <code class="docutils literal notranslate"><span class="pre">'soni2019'</span></code>, <code class="docutils literal notranslate"><span class="pre">'charlton2016'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">'sarkar2015'</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – A Numpy array containing the derived respiratory rate.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example 1:</strong> Compare to real RSP signal</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Get heart rate</span>
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">ecg_rate</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_rate</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">desired_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">))</span>
+
+<span class="go"># Get ECG Derived Respiration (EDR) and add to the data</span>
+<span class="gp">In [5]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_rsp</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="go"># Visualize result</span>
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;EDR&quot;</span><span class="p">]],</span> <span class="n">standardize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_ecg_rsp1.png"><img alt="_images/p_ecg_rsp1.png" src="_images/p_ecg_rsp1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<ul class="simple">
+<li><p><strong>Example 2:</strong> Methods comparison</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;vangent2019&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_rsp</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;vangent2019&quot;</span><span class="p">)</span>
+
+<span class="gp">In [8]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;sarkar2015&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_rsp</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sarkar2015&quot;</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;charlton2016&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_rsp</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;charlton2016&quot;</span><span class="p">)</span>
+
+<span class="gp">In [10]: </span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;soni2019&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_rsp</span><span class="p">(</span><span class="n">ecg_rate</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;soni2019&quot;</span><span class="p">)</span>
+
+<span class="go"># Visualize results</span>
+<span class="gp">In [11]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;RSP&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;vangent2019&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;sarkar2015&quot;</span><span class="p">],</span>
+<span class="gp">   ....: </span>                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;charlton2016&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;soni2019&quot;</span><span class="p">]],</span> <span class="n">standardize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_ecg_rsp2.png"><img alt="_images/p_ecg_rsp2.png" src="_images/p_ecg_rsp2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>van Gent, P., Farah, H., van Nes, N., &amp; van Arem, B. (2019). HeartPy: A novel heart rate
+algorithm for the analysis of noisy signals. Transportation research part F: traffic
+psychology and behaviour, 66, 368-378.</p></li>
+<li><p>Sarkar, S., Bhattacherjee, S., &amp; Pal, S. (2015). Extraction of respiration signal from ECG for
+respiratory rate estimation.</p></li>
+<li><p>Charlton, P. H., Bonnici, T., Tarassenko, L., Clifton, D. A., Beale, R., &amp; Watkinson, P. J.
+(2016). An assessment of algorithms to estimate respiratory rate from the electrocardiogram
+and photoplethysmogram. Physiological measurement, 37(4), 610.</p></li>
+<li><p>Soni, R., &amp; Muniyandi, M. (2019). Breath rate variability: a novel measure to study the
+meditation effects. International Journal of Yoga, 12(1), 45.</p></li>
+</ul>
 </dd></dl>
 
 </div>
