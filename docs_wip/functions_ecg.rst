@@ -52,9 +52,9 @@ Preprocessing
 
 .. Analysis
 .. ^^^^^^^^
-.. *ecg_eventrelated()*
-.. """"""""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_eventrelated
+*ecg_eventrelated()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_eventrelated
 
 .. *ecg_intervalrelated()*
 .. """"""""""""""""""""""""
