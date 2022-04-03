@@ -56,9 +56,9 @@ Preprocessing
 """"""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_eventrelated
 
-.. *ecg_intervalrelated()*
-.. """"""""""""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_intervalrelated
+*ecg_intervalrelated()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_intervalrelated
 
 
 .. Miscellaneous
