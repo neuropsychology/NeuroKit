@@ -5,9 +5,11 @@ from .signal_period import signal_period
 def signal_rate(
     peaks, sampling_rate=1000, desired_length=None, interpolation_method="monotone_cubic"
 ):
-    """**Compute signal rate**
+    """**Signal Rate**
 
-    Calculate signal rate (per minute) from a series of peaks. It is a general function that works for any series of peaks (i.e., not specific to a particular type of signal). It is computed as ``60 / period``, where the period is the time between the peaks (see ``signal_period()``).
+    Calculate signal rate (per minute) from a series of peaks. It is a general function that works
+    for any series of peaks (i.e., not specific to a particular type of signal). It is computed as
+    ``60 / period``, where the period is the time between the peaks (see ``signal_period()``).
 
     .. note:: This function is implemented under ``signal_rate()``, but it also re-exported under
        different names, such as ``ecg_rate()``, ```ppg_rate()``, or ``rsp_rate()``. The aliases
@@ -34,7 +36,8 @@ def signal_rate(
         Method used to interpolate the rate between peaks. See `signal_interpolate()`.
         'monotone_cubic' is chosen as the default interpolation method since it ensures monotone
         interpolation between data points (i.e., it prevents physiologically implausible
-        "overshoots" or "undershoots" in the y-direction). In contrast, the widely used cubic spline interpolation does not ensure monotonicity.
+        "overshoots" or "undershoots" in the y-direction). In contrast, the widely used cubic
+        spline interpolation does not ensure monotonicity.
 
     Returns
     -------
