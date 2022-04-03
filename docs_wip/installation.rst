@@ -10,7 +10,7 @@ Open your terminal and run:
 
     pip install neurokit2
 
-Then, at the top of each of your Python script, you have to import the module:
+Then, at the top of each of your Python script, you should be able to import the module:
 
 .. code-block:: python
 
@@ -19,7 +19,7 @@ Then, at the top of each of your Python script, you have to import the module:
 
 .. Hint::
 
-    Enjoy living on the edge? You can get the latest **dev** version from GitHub by running:
+    Living on the edge? You can get the latest **dev** version from GitHub by running:
 
     .. code-block:: console
 
