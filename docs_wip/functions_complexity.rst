@@ -3,9 +3,9 @@ Complexity
 
 Main
 ^^^^^^^^^^^^^^^^
-*complexity()*
-"""""""""""""""""
-.. autofunction:: neurokit2.complexity.complexity
+.. *complexity()*
+.. """""""""""""""""
+.. .. autofunction:: neurokit2.complexity.complexity
 
 
 Optimization
