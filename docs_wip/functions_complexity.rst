@@ -7,7 +7,6 @@ Main
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity
 
-   complexity_tolerance
 
 Optimization
 ^^^^^^^^^^^^^
