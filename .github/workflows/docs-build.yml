@@ -10,9 +10,6 @@ jobs:
       with:
         fetch-depth: 0 # To be able to push refs to destination repo
     - uses: actions/setup-python@v3
-    # - run: |
-    #     pip install sphinx-book-theme
-    #     pip install sphinxemoji
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs_wip/"
