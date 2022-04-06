@@ -38,9 +38,9 @@ Preprocessing
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_peaks
 
-.. *ecg_delineate()*
-.. """""""""""""""""
-.. .. autofunction:: neurokit2.ecg.ecg_delineate
+*ecg_delineate()*
+"""""""""""""""""
+.. autofunction:: neurokit2.ecg.ecg_delineate
 
 *ecg_phase()*
 """"""""""""""""""""""""
@@ -50,8 +50,8 @@ Preprocessing
 """"""""""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_rate
 
-.. Analysis
-.. ^^^^^^^^^
+Analysis
+^^^^^^^^^
 *ecg_eventrelated()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.ecg.ecg_eventrelated
