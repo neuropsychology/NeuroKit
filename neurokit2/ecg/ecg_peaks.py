@@ -139,8 +139,8 @@ def ecg_peaks(
     References
     ----------
     * ``neurokit``
-        Unpublished. See this discussion for more information on the method:
-        https://github.com/neuropsychology/NeuroKit/issues/476
+        * **Unpublished.** See this discussion for more information on the method:
+          https://github.com/neuropsychology/NeuroKit/issues/476
     * ``pantompkins1985``
         * Pan, J., & Tompkins, W. J. (1985). A real-time QRS detection algorithm. IEEE transactions
           on biomedical engineering, (3), 230-236.
@@ -188,9 +188,9 @@ def ecg_peaks(
           A Low-Complexity R-peak Detection Algorithm with Adaptive Thresholding for Wearable
           Devices.
     * ``promac``
-        Unpublished. It runs different methods and derives a probability index using convolution.
-        See this discussion for more information on the method:
-        https://github.com/neuropsychology/NeuroKit/issues/222
+        * **Unpublished.** It runs different methods and derives a probability index using
+          convolution. See this discussion for more information on the method:
+          https://github.com/neuropsychology/NeuroKit/issues/222
     * Lipponen, J. A., & Tarvainen, M. P. (2019). A robust algorithm for heart rate variability
       time series artefact correction using novel beat classification. Journal of medical
       engineering & technology, 43(3), 173-181.

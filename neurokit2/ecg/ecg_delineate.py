@@ -97,21 +97,12 @@ def ecg_delineate(
       # Delineate cardiac cycle
       signals, waves = nk.ecg_delineate(ecg, rpeaks, sampling_rate=1000)
 
-    * Step 2. Plot P-Peaks
+    * Step 2. Plot P-Peaks and T-Peaks
 
     .. ipython:: python
 
       @savefig p_ecg_delineate1.png scale=100%
-      nk.events_plot(waves["ECG_P_Peaks"], ecg)
-      @suppress
-      plt.close()
-
-    * Step 2. Plot T-Peaks
-
-    .. ipython:: python
-
-      @savefig p_ecg_delineate2.png scale=100%
-      nk.events_plot(waves["ECG_T_Peaks"], ecg)
+      nk.events_plot([waves["ECG_P_Peaks"], waves["ECG_T_Peaks"]], ecg)
       @suppress
       plt.close()
 
