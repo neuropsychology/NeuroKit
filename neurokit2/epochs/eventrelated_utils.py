@@ -111,5 +111,6 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
     _, info = fit_polynomial(signal - baseline, index, order=2)
     output[var + "_Trend_Linear"] = info["coefs"][1]
     output[var + "_Trend_Quadratic"] = info["coefs"][2]
+    output[var + "_Trend_R2"] = info["R2"]
 
     return output

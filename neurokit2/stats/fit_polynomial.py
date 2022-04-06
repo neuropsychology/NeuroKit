@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 import sklearn.linear_model
+import sklearn.metrics
 
 from .fit_error import fit_rmse
 
@@ -64,7 +65,11 @@ def fit_polynomial(y, X=None, order=2, method="raw"):
     else:
         y_predicted, coefs = _fit_polynomial_orthogonal(y, X, order=order)
 
-    return y_predicted, {"order": order, "coefs": coefs}
+    return y_predicted, {
+        "order": order,
+        "coefs": coefs,
+        "R2": sklearn.metrics.r2_score(y, y_predicted),
+    }
 
 
 # =============================================================================
@@ -133,6 +138,7 @@ def _fit_polynomial_orthogonal(y, X, order=2):
     """Fit an orthogonal polynomial regression in Python (equivalent to R's poly())
 
     >>> from sklearn.datasets import load_iris
+    >>> import pandas as pd
     >>> df = load_iris()
     >>> df = pd.DataFrame(data=df.data, columns=df.feature_names)
     >>> y = df.iloc[:, 0].values  # Sepal.Length

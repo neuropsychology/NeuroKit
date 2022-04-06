@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from ..epochs.eventrelated_utils import (
-    _eventrelated_addinfo,
-    _eventrelated_rate,
-    _eventrelated_sanitizeinput,
-    _eventrelated_sanitizeoutput,
-)
+from ..epochs.eventrelated_utils import (_eventrelated_addinfo,
+                                         _eventrelated_rate,
+                                         _eventrelated_sanitizeinput,
+                                         _eventrelated_sanitizeoutput)
 
 
 def ppg_eventrelated(epochs, silent=False):
