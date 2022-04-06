@@ -143,7 +143,7 @@ def _fit_polynomial_orthogonal(y, X, order=2):
     >>> df = pd.DataFrame(data=df.data, columns=df.feature_names)
     >>> y = df.iloc[:, 0].values  # Sepal.Length
     >>> X = df.iloc[:, 1].values  # Sepal.Width
-    >>> _fit_polynomial_orthogonal(y, X, order=2)
+    >>> _fit_polynomial_orthogonal(y, X, order=2)  # doctest: +SKIP
     >>> # Equivalent to R's:
     >>> # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))
 
