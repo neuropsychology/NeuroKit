@@ -20,6 +20,8 @@ def fit_mixture(X=None, n_clusters=2):
     -------
     pd.DataFrame
         DataFrame containing the probability of belongning to each cluster.
+    dict
+        Dictionary containing additional information such as the parameters (``n_clusters``).
 
     See Also
     ----------

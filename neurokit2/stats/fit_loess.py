@@ -24,7 +24,9 @@ def fit_loess(y, X=None, alpha=0.75, order=2):
     Returns
     -------
     array
-        Prediciton of the LOESS algorithm.
+        Prediction of the LOESS algorithm.
+    dict
+        Dictionary containing additional information such as the parameters (``order`` and ``alpha``).
 
     See Also
     ----------
