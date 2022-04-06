@@ -64,15 +64,14 @@ def ecg_simulate(
 
     .. ipython:: python
 
-      import pandas as pd
       import neurokit2 as nk
 
       ecg1 = nk.ecg_simulate(duration=10, method="simple")
       ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")
+
       # Visualize result
       @savefig p_ecg_simulate1.png scale=100%
-      pd.DataFrame({"ECG_Simple": ecg1,
-                    "ECG_Complex": ecg2}).plot(subplots=True)
+      nk.signal_plot([ecg1, ecg2], labels=["simple", "ecgsyn"], subplots=True)
       @suppress
       plt.close()
 
