@@ -60,7 +60,7 @@ def complexity_hjorth(signal):
 
     References
     ----------
-    - Hjorth, B (1970) EEG Analysis Based on Time Domain Properties. Electroencephalogr.
+    * Hjorth, B (1970) EEG Analysis Based on Time Domain Properties. Electroencephalogr.
       Clinical Neurophysiology, 29, 306-310. http://dx.doi.org/10.1016/0013-4694(70)90143-4
 
     """
