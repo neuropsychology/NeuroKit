@@ -82,7 +82,7 @@ def ecg_simulate(
       ecg12 = nk.ecg_simulate(duration=10, method="multileads")
       # Visualize result
       @savefig p_ecg_simulate2.png scale=100%
-      ecg12[0:10000].plot(subplots=True)
+      nk.signal_plot(ecg12, subplots=True)
       @suppress
       plt.close()
 
