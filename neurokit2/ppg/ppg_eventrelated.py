@@ -64,13 +64,7 @@ def ppg_eventrelated(epochs, silent=False):
     >>> # Process the data
     >>> epochs = nk.epochs_create(ppg, events=[5000, 10000, 15000],
     ...                           epochs_start=-0.1, epochs_end=1.9)
-    >>> nk.ppg_eventrelated(epochs) #doctest: +ELLIPSIS
-      Label  Event_Onset  ...  PPG_Rate_Trend_Linear  PPG_Rate_Trend_R2
-    1     1          ...  ...                    ...                ...
-    2     2          ...  ...                    ...                ...
-    3     3          ...  ...                    ...                ...
-
-    [3 rows x 12 columns]
+    >>> nk.ppg_eventrelated(epochs)  # doctest: +SKIP
 
     """
     # Sanity checks

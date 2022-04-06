@@ -5,7 +5,9 @@ import scipy.sparse
 from ..stats import fit_loess, fit_polynomial
 
 
-def signal_detrend(signal, method="polynomial", order=1, regularization=500, alpha=0.75, window=1.5, stepsize=0.02):
+def signal_detrend(
+    signal, method="polynomial", order=1, regularization=500, alpha=0.75, window=1.5, stepsize=0.02
+):
     """Polynomial detrending of signal.
 
     Apply a baseline (order = 0), linear (order = 1), or polynomial (order > 1) detrending to the signal
@@ -91,13 +93,15 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
     <https://ieeexplore.ieee.org/document/979357>`_
 
     """
+    signal = np.array(signal)  # Force vector
+
     method = method.lower()
     if method in ["tarvainen", "tarvainen2002"]:
         detrended = _signal_detrend_tarvainen2002(signal, regularization)
     elif method in ["poly", "polynomial"]:
-        detrended = _signal_detrend_polynomial(signal, order)
+        detrended = signal - fit_polynomial(signal, X=None, order=order)[0]
     elif method in ["loess", "lowess"]:
-        detrended = _signal_detrend_loess(signal, alpha=alpha)
+        detrended = signal - fit_loess(signal, alpha=alpha)[0]
     elif method in ["locdetrend", "runline", "locreg", "locregression"]:
         detrended = _signal_detrend_locreg(signal, window=window, stepsize=stepsize)
     else:
@@ -111,20 +115,6 @@ def signal_detrend(signal, method="polynomial", order=1, regularization=500, alp
 # =============================================================================
 # Internals
 # =============================================================================
-def _signal_detrend_loess(signal, alpha=0.75):
-    detrended = np.array(signal) - fit_loess(signal, alpha=alpha)
-    return detrended
-
-
-def _signal_detrend_polynomial(signal, order=1):
-    # Get polynomial fit
-    trend = fit_polynomial(signal, X=None, order=order)
-
-    # detrend
-    detrended = np.array(signal) - trend
-    return detrended
-
-
 def _signal_detrend_tarvainen2002(signal, regularization=500):
     """Method by Tarvainen et al., 2002.
 
@@ -142,8 +132,7 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     trend = np.squeeze(np.asarray(signal - z_stat))
 
     # detrend
-    detrended = np.array(signal) - trend
-    return detrended
+    return signal - trend
 
 
 def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
@@ -165,7 +154,9 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
             "less than the number of samples. Try using 1.5 * sampling rate."
         )
     if stepsize <= 1:
-        raise ValueError("NeuroKit error: signal_detrend(): 'stepsize' should be more than 1. Increase its value.")
+        raise ValueError(
+            "NeuroKit error: signal_detrend(): 'stepsize' should be more than 1. Increase its value."
+        )
 
     y_line = np.zeros((length, 1))
     norm = np.zeros((length, 1))
@@ -183,16 +174,18 @@ def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):
         y_line[(j * stepsize) : (j * stepsize + window)] = y_line[
             (j * stepsize) : (j * stepsize + window)
         ] + np.reshape(np.multiply(yfit[j, :], wt), (window, 1))
-        norm[(j * stepsize) : (j * stepsize + window)] = norm[(j * stepsize) : (j * stepsize + window)] + np.reshape(
-            wt, (window, 1)
-        )
+        norm[(j * stepsize) : (j * stepsize + window)] = norm[
+            (j * stepsize) : (j * stepsize + window)
+        ] + np.reshape(wt, (window, 1))
 
     above_norm = np.where(norm[:, 0] > 0)
     y_line[above_norm] = y_line[above_norm] / norm[above_norm]
 
     indx = (nwin - 1) * stepsize + window - 1
     npts = length - indx + 1
-    y_line[indx - 1 :] = np.reshape((np.multiply(np.arange(window + 1, window + npts + 1), a) + b), (npts, 1))
+    y_line[indx - 1 :] = np.reshape(
+        (np.multiply(np.arange(window + 1, window + npts + 1), a) + b), (npts, 1)
+    )
 
     detrended = signal - y_line[:, 0]
     return detrended
