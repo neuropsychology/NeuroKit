@@ -118,6 +118,7 @@ def hrv_frequency(
     Rate Variability. Simul. Notes Eur., 27(4), 183-190.
 
     """
+
     # Sanitize input
     peaks = _hrv_sanitize_input(peaks)
     if isinstance(peaks, tuple):  # Detect actual sampling rate
@@ -129,12 +130,16 @@ def hrv_frequency(
     )
 
     frequency_band = [ulf, vlf, lf, hf, vhf]
+
+    # Find maximum frequency
+    max_frequency = np.max([np.max(i) for i in frequency_band])
+
     power = signal_power(
         rri,
         frequency_band=frequency_band,
         sampling_rate=sampling_rate,
         method=psd_method,
-        max_frequency=0.5,
+        max_frequency=max_frequency,
         show=False,
         normalize=normalize,
         order_criteria=order_criteria,
@@ -172,10 +177,16 @@ def hrv_frequency(
         _hrv_frequency_show(
             rri,
             out_bands,
+            ulf=ulf,
+            vlf=vlf,
+            lf=lf,
+            hf=hf,
+            vhf=vhf,
             sampling_rate=sampling_rate,
             psd_method=psd_method,
             order_criteria=order_criteria,
             normalize=normalize,
+            max_frequency=max_frequency,
         )
     return out
 
@@ -192,6 +203,7 @@ def _hrv_frequency_show(
     psd_method="welch",
     order_criteria=None,
     normalize=True,
+    max_frequency=0.5,
     **kwargs
 ):
 
@@ -217,7 +229,7 @@ def _hrv_frequency_show(
         show=False,
         min_frequency=min_frequency,
         method=psd_method,
-        max_frequency=0.5,
+        max_frequency=max_frequency,
         order_criteria=order_criteria,
         normalize=normalize,
     )
