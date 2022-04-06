@@ -10,10 +10,14 @@ Main
 
 Optimization
 ^^^^^^^^^^^^^
+*complexity_delay()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_delay
 
 *complexity_tolerance()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_tolerance
+
 
 Fractal Dimension
 ^^^^^^^^^^^^^^^^^

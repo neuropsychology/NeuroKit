@@ -11,8 +11,7 @@ import scipy.spatial
 import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
-from ..signal import (signal_autocor, signal_findpeaks, signal_psd,
-                      signal_zerocrossings)
+from ..signal import signal_autocor, signal_findpeaks, signal_psd, signal_zerocrossings
 from .complexity_embedding import complexity_embedding
 from .information_mutual import mutual_information
 
@@ -20,36 +19,36 @@ from .information_mutual import mutual_information
 def complexity_delay(
     signal, delay_max=100, method="fraser1986", algorithm=None, show=False, **kwargs
 ):
-    """Automated selection of the optimal Time Delay (tau) for time-delay embedding.
+    """**Automated selection of the optimal Time Delay (Tau)**
 
-    The time delay (Tau) is one of the two critical parameters involved in the construction of
-    the time-delay embedding of a signal.
+    The time delay (Tau :math:`\\tau`) is one of the two critical parameters (the other being the
+    Dimension *m*) involved in the construction of the time-delay embedding of a signal. When :math:`\\tau` is smaller than the optimal theoretical value, consecutive coordinates of the system's state are correlated and the attractor is not sufficiently unfolded. Conversely, when :math:`\\tau` is larger than it should be, successive coordinates are almost independent, resulting in an uncorrelated and unstructured cloud of points.
 
     Several authors suggested different methods to guide the choice of Tau:
 
-    - Fraser and Swinney (1986) suggest using the first local minimum of the mutual information
-    between the delayed and non-delayed time series, effectively identifying a value of tau for
-    which they share the least information.
-    - Theiler (1990) suggested to select Tau where the autocorrelation between the signal and its
-    lagged version at Tau first crosses the value 1/e.
-    - Casdagli (1991) suggests instead taking the first zero-crossing of the autocorrelation.
-    - Rosenstein (1993) suggests to approximate the point where the autocorrelation function drops
-    to (1 − 1 / e) of its maximum value.
-    - Rosenstein (1994) suggests to the point close to 40% of the slope of the average displacement
-    from the diagonal (ADFD).
-    - Kim (1999) suggests estimating Tau using the correlation integral, called the C-C method,
-    which has shown to agree with those obtained using the Mutual Information. This method
-    makes use of a statistic within the reconstructed phase space, rather than analyzing the
-    temporal evolution of the time series. However, computation times are significantly long for
-    this method due to the need to compare every unique pair of pairwise vectors within the
-    embedded signal per delay.
-    - Lyle (2021) describes the 'Symmetric Projection Attractor Reconstruction' (SPAR), where 1/3
-    of the the dominant frequency (i.e., of the length of the average "cycle") can be a suitable
-    value for approximately periodic data, and makes the attractor sensitive to morphological
-    changes. See also `Aston's talk
-    <https://youtu.be/GGrOJtcTcHA?t=730>`_. This
-    method is also the fastest but might not be suitable for aperiodic signals.
-    The 'algorithm' argument (default to 'fft') and will be passed as the 'method' argument of ``signal_psd()``.
+    * **Fraser and Swinney (1986)** suggest using the first local minimum of the mutual information
+      between the delayed and non-delayed time series, effectively identifying a value of Tau for
+      which they share the least information.
+    * **Theiler (1990)** suggested to select Tau where the autocorrelation between the signal and
+      its lagged version at Tau first crosses the value :math:`1/e`.
+    * **Casdagli (1991)** suggests instead taking the first zero-crossing of the autocorrelation.
+    * **Rosenstein (1993)** suggests to approximate the point where the autocorrelation function
+      drops to :math:`(1 - 1/e)` of its maximum value.
+    * **Rosenstein (1994)** suggests to the point close to 40% of the slope of the average
+      displacement from the diagonal (ADFD).
+    * **Kim (1999)** suggests estimating Tau using the correlation integral, called the C-C method,
+      which has shown to agree with those obtained using the Mutual Information. This method
+      makes use of a statistic within the reconstructed phase space, rather than analyzing the
+      temporal evolution of the time series. However, computation times are significantly long for
+      this method due to the need to compare every unique pair of pairwise vectors within the
+      embedded signal per delay.
+    * **Lyle (2021)** describes the "Symmetric Projection Attractor Reconstruction" (SPAR), where
+      :math:`1/3` of the the dominant frequency (i.e., of the length of the average "cycle") can be
+      a suitable value for approximately periodic data, and makes the attractor sensitive to
+      morphological changes. See also `Aston's talk <https://youtu.be/GGrOJtcTcHA?t=730>`_. This
+      method is also the fastest but might not be suitable for aperiodic signals.
+      The ``algorithm`` argument (default to ``"fft"``) and will be passed as the ``method``
+      argument of  ``signal_psd()``.
 
     Parameters
     ----------
@@ -59,7 +58,8 @@ def complexity_delay(
         The maximum time delay (Tau or lag) to test.
     method : str
         The method that defines what to compute for each tested value of Tau. Can be one of
-        'fraser1986', 'theiler1990', 'casdagli1991', 'rosenstein1993', 'rosenstein1994', 'kim1999', or 'dominantfreq'.
+        ``'fraser1986'``, ``'theiler1990'``, ``'casdagli1991'``, ``'rosenstein1993'``,
+        ``'rosenstein1994'``, ``'kim1999'``, or ``'lyle2021'``.
     algorithm : str
         The method used to find the optimal value of Tau given the values computed by the method.
         If `None` (default), will select the algorithm according to the method. Modify only if you
@@ -79,47 +79,109 @@ def complexity_delay(
 
     See Also
     ---------
-    complexity_dimension, complexity_embedding
+    complexity, complexity_dimension, complexity_embedding, complexity_tolerance
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Artifical example
-    >>> signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
-    >>> nk.signal_plot(signal)
-    >>>
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="fraser1986")
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="theiler1990")
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="casdagli1991")
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1993")
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="rosenstein1994")
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True, method="lyle2021")
-    >>>
-    >>> # Realistic example
-    >>> ecg = nk.ecg_simulate(duration=60*6, sampling_rate=200)
-    >>> signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200), sampling_rate=200, desired_length=len(ecg))
-    >>> nk.signal_plot(signal)
-    >>>
-    >>> delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True)
+
+    * **Example 1**: Comparison of different methods for estimating the optimal delay of an simple
+      artificial signal.
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=10, frequency=1, noise=0.01)
+      @savefig p_complexity_delay1.png scale=100%
+      nk.signal_plot(signal)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_delay2.png scale=100%
+      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,
+                                              method="fraser1986")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_delay3.png scale=100%
+      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,
+                                              method="theiler1990")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_delay4.png scale=100%
+      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,
+                                              method="casdagli1991")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_delay5.png scale=100%
+      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,
+                                              method="rosenstein1993")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_delay6.png scale=100%
+      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,
+                                              method="rosenstein1994")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_delay7.png scale=100%
+      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True,
+                                              method="lyle2021")
+      @suppress
+      plt.close()
+
+    * **Example 2**: Using a realistic signal.
+
+    .. ipython:: python
+
+      ecg = nk.ecg_simulate(duration=60*6, sampling_rate=200)
+      signal = nk.ecg_rate(nk.ecg_peaks(ecg, sampling_rate=200),
+                           sampling_rate=200,
+                           desired_length=len(ecg))
+      @savefig p_complexity_delay8.png scale=100%
+      nk.signal_plot(signal)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_delay9.png scale=100%
+      delay, parameters = nk.complexity_delay(signal, delay_max=1000, show=True)
+      @suppress
+      plt.close()
 
     References
     ------------
-    - Lyle, J. V., Nandi, M., & Aston, P. J. (2021). Symmetric Projection Attractor Reconstruction:
-    Sex Differences in the ECG. Frontiers in cardiovascular medicine, 1034.
-    - Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based
-    method for determining the optimal embedding parameters of a signal. In 2003 IEEE International
-    Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.(ICASSP'03). (Vol. 6,
-    pp. VI-29). IEEE.
-    - Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time
-    series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
-    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method for calculating
-    largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena, 65(1-2),
-    117-134.
-    - Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a
-    geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
-    - Kim, H., Eykholt, R., & Salas, J. D. (1999). Nonlinear dynamics, delay times, and embedding
-    windows. Physica D: Nonlinear Phenomena, 127(1-2), 48-60.
+    * Lyle, J. V., Nandi, M., & Aston, P. J. (2021). Symmetric Projection Attractor Reconstruction:
+      Sex Differences in the ECG. Frontiers in cardiovascular medicine, 1034.
+    * Gautama, T., Mandic, D. P., & Van Hulle, M. M. (2003, April). A differential entropy based
+      method for determining the optimal embedding parameters of a signal. In 2003 IEEE
+      International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.
+      (ICASSP'03). (Vol. 6, pp. VI-29). IEEE.
+    * Camplani, M., & Cannas, B. (2009). The role of the embedding dimension and time delay in time
+      series forecasting. IFAC Proceedings Volumes, 42(7), 316-320.
+    * Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1993). A practical method for calculating
+      largest Lyapunov exponents from small data sets. Physica D: Nonlinear Phenomena, 65(1-2),
+      117-134.
+    * Rosenstein, M. T., Collins, J. J., & De Luca, C. J. (1994). Reconstruction expansion as a
+      geometry-based framework for choosing proper delay times. Physica-Section D, 73(1), 82-98.
+    * Kim, H., Eykholt, R., & Salas, J. D. (1999). Nonlinear dynamics, delay times, and embedding
+      windows. Physica D: Nonlinear Phenomena, 127(1-2), 48-60.
 
     """
     # Initalize vectors

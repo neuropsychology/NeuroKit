@@ -14,7 +14,7 @@ def complexity_tolerance(
 ):
     """**Automated selection of tolerance (r)**
 
-    Estimate and select the optimal tolerance (r) parameter used by other entropy and other
+    Estimate and select the optimal tolerance (*r*) parameter used by other entropy and other
     complexity algorithms.
 
     Many complexity algorithms are built on the notion of self-similarity and recurrence, and how
@@ -24,7 +24,7 @@ def complexity_tolerance(
     threshold by which to consider two points as similar.
 
     The tolerance *r* is essentially this threshold value (the numerical difference between two
-    similar points that we "tolerate"), and this parameter has a critical impact and is a major
+    similar points that we "tolerate"). This parameter has a critical impact and is a major
     source of inconsistencies in the literature.
 
     Different methods have been described to estimate the most appropriate tolerance value:
@@ -83,6 +83,8 @@ def complexity_tolerance(
       @savefig p_complexity_tolerance1.png scale=100%
       r, info = nk.complexity_tolerance(signal, method = 'SD', show=True)
       r
+      @suppress
+      plt.close()
 
     * **Example 2**: The method based on the recurrence rate will display the rates according to
       different values of tolerance. The horizontal line indicates 5%.
@@ -93,6 +95,8 @@ def complexity_tolerance(
       r, info = nk.complexity_tolerance(signal, delay=1, dimension=10,
                                         method = 'recurrence', show=True)
       r
+      @suppress
+      plt.close()
 
     * **Example 3**: The default method selects the tolerance at which *ApEn* is maximized.
 
@@ -103,6 +107,8 @@ def complexity_tolerance(
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6,
                                         method = 'maxApEn', show=True)
       r
+      @suppress
+      plt.close()
 
     * **Example 4**: The tolerance values that are tested can be modified to get a more precise
       estimate.
@@ -112,8 +118,10 @@ def complexity_tolerance(
       # Narrower range
       @savefig p_complexity_tolerance4.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn',
-                                        r_range=np.linspace(0.002, 0.1, 30), show=True)
+                                        r_range=np.linspace(0.002, 0.8, 30), show=True)
       r
+      @suppress
+      plt.close()
 
     References
     -----------
