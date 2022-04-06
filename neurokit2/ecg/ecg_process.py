@@ -79,7 +79,6 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
       # Visualize
       @savefig p_ecg_process.png scale=100%
       nk.ecg_plot(signals)
-
       @suppress
       plt.close()
 

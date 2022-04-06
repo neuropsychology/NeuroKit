@@ -46,6 +46,8 @@ def ecg_plot(ecg_signals, rpeaks=None, sampling_rate=None, show_type="default"):
       signals, info = nk.ecg_process(ecg, sampling_rate=1000)
       @savefig p_ecg_plot.png scale=100%
       nk.ecg_plot(signals, sampling_rate=1000, show_type='default')
+      @suppress
+      plt.close()
 
     See Also
     --------

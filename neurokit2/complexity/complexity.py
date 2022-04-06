@@ -113,6 +113,8 @@ def complexity(
 
       @savefig p_complexity1.png scale=100%
       nk.signal_plot(signal, sampling_rate = 1000)
+      @suppress
+      plt.close()
 
     .. ipython:: python
 
@@ -146,6 +148,8 @@ def complexity(
                                "Fisher Information"],
                      sampling_rate = 1000,
                      standardize = True)
+      @suppress
+      plt.close()
 
     """
     # Sanity checks

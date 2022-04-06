@@ -73,6 +73,8 @@ def ecg_simulate(
       @savefig p_ecg_simulate1.png scale=100%
       pd.DataFrame({"ECG_Simple": ecg1,
                     "ECG_Complex": ecg2}).plot(subplots=True)
+      @suppress
+      plt.close()
 
     * **Example 2:** Simulate 12-leads ECG
 
@@ -82,6 +84,8 @@ def ecg_simulate(
       # Visualize result
       @savefig p_ecg_simulate2.png scale=100%
       ecg12[0:10000].plot(subplots=True)
+      @suppress
+      plt.close()
 
     See Also
     --------

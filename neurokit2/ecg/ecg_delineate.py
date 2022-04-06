@@ -103,6 +103,8 @@ def ecg_delineate(
 
       @savefig p_ecg_delineate1.png scale=100%
       nk.events_plot(waves["ECG_P_Peaks"], ecg)
+      @suppress
+      plt.close()
 
     * Step 2. Plot T-Peaks
 
@@ -110,6 +112,8 @@ def ecg_delineate(
 
       @savefig p_ecg_delineate2.png scale=100%
       nk.events_plot(waves["ECG_T_Peaks"], ecg)
+      @suppress
+      plt.close()
 
     References
     --------------
