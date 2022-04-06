@@ -93,13 +93,15 @@ def signal_detrend(
     <https://ieeexplore.ieee.org/document/979357>`_
 
     """
+    signal = np.array(signal)  # Force vector
+
     method = method.lower()
     if method in ["tarvainen", "tarvainen2002"]:
         detrended = _signal_detrend_tarvainen2002(signal, regularization)
     elif method in ["poly", "polynomial"]:
-        detrended = _signal_detrend_polynomial(signal, order)
+        detrended = signal - fit_polynomial(signal, X=None, order=order)[0]
     elif method in ["loess", "lowess"]:
-        detrended = _signal_detrend_loess(signal, alpha=alpha)
+        detrended = signal - fit_loess(signal, alpha=alpha)[0]
     elif method in ["locdetrend", "runline", "locreg", "locregression"]:
         detrended = _signal_detrend_locreg(signal, window=window, stepsize=stepsize)
     else:
@@ -113,20 +115,6 @@ def signal_detrend(
 # =============================================================================
 # Internals
 # =============================================================================
-def _signal_detrend_loess(signal, alpha=0.75):
-    detrended = np.array(signal) - fit_loess(signal, alpha=alpha)[0]
-    return detrended
-
-
-def _signal_detrend_polynomial(signal, order=1):
-    # Get polynomial fit
-    trend = fit_polynomial(signal, X=None, order=order)
-
-    # detrend
-    detrended = np.array(signal) - trend
-    return detrended
-
-
 def _signal_detrend_tarvainen2002(signal, regularization=500):
     """Method by Tarvainen et al., 2002.
 
@@ -144,8 +132,7 @@ def _signal_detrend_tarvainen2002(signal, regularization=500):
     trend = np.squeeze(np.asarray(signal - z_stat))
 
     # detrend
-    detrended = np.array(signal) - trend
-    return detrended
+    return signal - trend
 
 
 def _signal_detrend_locreg(signal, window=1.5, stepsize=0.02):

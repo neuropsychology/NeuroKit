@@ -37,11 +37,13 @@ def fit_polynomial(y, X=None, order=2):
     >>>
     >>> y = np.cos(np.linspace(start=0, stop=10, num=100))
     >>>
-    >>> pd.DataFrame({"y": y, "Poly_0": nk.fit_polynomial(y, order=0),
-    ...               "Poly_1": nk.fit_polynomial(y, order=1),
-    ...               "Poly_2": nk.fit_polynomial(y, order=2),
-    ...               "Poly_3": nk.fit_polynomial(y, order=3), "Poly_5": nk.fit_polynomial(y, order=5),
-    ...               "Poly_auto": nk.fit_polynomial(y, order='auto')}).plot() #doctest: +SKIP
+    >>> pd.DataFrame({"y": y,
+    ...               "Poly_0": nk.fit_polynomial(y, order=0)[0],
+    ...               "Poly_1": nk.fit_polynomial(y, order=1)[0],
+    ...               "Poly_2": nk.fit_polynomial(y, order=2)[0],
+    ...               "Poly_3": nk.fit_polynomial(y, order=3)[0],
+    ...                "Poly_5": nk.fit_polynomial(y, order=5)[0],
+    ...               "Poly_auto": nk.fit_polynomial(y, order='auto')[0]}).plot() #doctest: +SKIP
 
     """
     if X is None:
@@ -54,7 +56,7 @@ def fit_polynomial(y, X=None, order=2):
     # Make prediction
     y_predicted = _fit_polynomial(y, X, order=order)
 
-    return y_predicted
+    return y_predicted, {"order": order}
 
 
 # =============================================================================
