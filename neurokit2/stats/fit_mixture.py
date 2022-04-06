@@ -31,7 +31,7 @@ def fit_mixture(X=None, n_clusters=2):
     >>> import neurokit2 as nk
     >>>
     >>> x = nk.signal_simulate()
-    >>> probs = nk.fit_mixture(x, n_clusters=2)
+    >>> probs, info = nk.fit_mixture(x, n_clusters=2)
     >>> fig = nk.signal_plot([x, probs["Cluster_0"], probs["Cluster_1"]], standardize=True)
     >>> fig #doctest: +SKIP
 
@@ -47,4 +47,4 @@ def fit_mixture(X=None, n_clusters=2):
     predicted = clf.predict_proba(X)
     probabilities = pd.DataFrame(predicted).add_prefix("Cluster_")
 
-    return probabilities
+    return probabilities, {"n_clusters": n_clusters}
