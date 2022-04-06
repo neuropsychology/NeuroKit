@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 
 from ..misc import NeuroKitWarning, find_closest
-from ..stats import fit_r2
+from ..stats.fit_polynomial import _fit_polynomial_orthogonal
 from .epochs_to_df import _df_to_epochs
 
 
@@ -108,11 +108,8 @@ def _eventrelated_rate(epoch, output={}, var="ECG_Rate"):
     # Modelling
     # These are experimental indices corresponding to parameters of a quadratic model
     # Instead of raw values (such as min, max etc.)
-    coefs = np.polyfit(index, signal - baseline, 2)
-    output[var + "_Trend_Quadratic"] = coefs[0]
-    output[var + "_Trend_Linear"] = coefs[1]
-    output[var + "_Trend_R2"] = fit_r2(
-        y=signal - baseline, y_predicted=np.polyval(coefs, index), adjusted=False, n_parameters=3
-    )
+    coefs = _fit_polynomial_orthogonal(signal - baseline, index, order=2)
+    output[var + "_Trend_Linear"] = coefs[0]
+    output[var + "_Trend_Quadratic"] = coefs[1]
 
     return output

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
+import sklearn.linear_model
 
 from .fit_error import fit_rmse
 
@@ -115,3 +116,24 @@ def _fit_polynomial(y, X, order=2):
     # Generating weights and model for polynomial function with a given degree
     y_predicted = np.polyval(np.polyfit(X, y, order), X)
     return y_predicted
+
+
+def _fit_polynomial_orthogonal(y, X, order=2):
+    """Fit an orthogonal polynomial regression in Python (equivalent to R's poly())
+
+    >>> from sklearn.datasets import load_iris
+    >>> df = load_iris()
+    >>> df = pd.DataFrame(data=df.data, columns=df.feature_names)
+    >>> y = df.iloc[:, 0].values  # Sepal.Length
+    >>> X = df.iloc[:, 1].values  # Sepal.Width
+    >>> _fit_polynomial_orthogonal(y, X, order=2)
+    >>> # Equivalent to R's:
+    >>> # coef(lm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris))
+
+
+    """
+    X = np.transpose([X ** k for k in range(order + 1)])
+    X = np.linalg.qr(X)[0][:, 1:]
+    model = sklearn.linear_model.LinearRegression().fit(X, y)
+
+    return model.coef_
