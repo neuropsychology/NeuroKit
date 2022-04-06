@@ -57,6 +57,9 @@ def ecg_phase(ecg_cleaned, rpeaks=None, delineate_info=None, sampling_rate=None)
       @savefig p_ecg_phase.png scale=100%
       nk.signal_plot([ecg, cardiac_phase], standardize=True)
 
+      @suppress
+      plt.close()
+
     """
     # Sanitize inputs
     if rpeaks is None:

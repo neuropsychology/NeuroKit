@@ -80,6 +80,9 @@ def ecg_process(ecg_signal, sampling_rate=1000, method="neurokit"):
       @savefig p_ecg_process.png scale=100%
       nk.ecg_plot(signals)
 
+      @suppress
+      plt.close()
+
     """
     # Sanitize input
     ecg_signal = signal_sanitize(ecg_signal)
