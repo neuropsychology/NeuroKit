@@ -333,6 +333,15 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#main">
    Main
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     <em>
+      complexity()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#optimization">
@@ -441,6 +450,15 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#main">
    Main
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     <em>
+      complexity()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#optimization">
@@ -540,6 +558,143 @@ title="Print to PDF"
 <h1>Complexity<a class="headerlink" href="#complexity" title="Permalink to this headline">#</a></h1>
 <div class="section" id="main">
 <h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<div class="section" id="id1">
+<h3><em>complexity()</em><a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.complexity">
+<span class="sig-name descname"><span class="pre">complexity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['fast',</span> <span class="pre">'medium']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Automated Complexity and Chaos Analysis</strong></p>
+<p>This function can be used to compute a large number of complexity metrics and features. For more
+control, you can run each function separately. Note that it does not include Recurrence
+Quantification Analysis (RQA, <code class="docutils literal notranslate"><span class="pre">nk.complexity_rqa()</span></code>) which currently requires an additional
+dependency.</p>
+<p>The categorization by “computation time” is based on our preliminary <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html">benchmarking study</a> results:</p>
+<div class="figure align-default">
+<a class="reference external image-reference" href="https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html"><img alt="Complexity Benchmark (Makowski)." src="_images/unnamed-chunk-3-1.png" /></a>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>which</strong> (<em>list</em>) – What metrics to compute, based on their computation time. Can be <code class="docutils literal notranslate"><span class="pre">&quot;fast&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;medium&quot;</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;</span></code>.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – See for example <code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_sample()</span></code>.</p></li>
+<li><p><strong>dimension</strong> (<em>int</em>) – See for example <code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_sample()</span></code>.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – See for example <code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_sample()</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>df</strong> (<em>pd.DataFrame</em>) – A dataframe with one row containing the results for each metric as columns.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_permutation" title="neurokit2.complexity.entropy_permutation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_permutation</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_differential</span></code>, <a class="reference internal" href="#neurokit2.complexity.entropy_svd" title="neurokit2.complexity.entropy_svd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_svd</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.fractal_katz" title="neurokit2.complexity.fractal_katz"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_katz</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_petrosian</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.fractal_sevcik" title="neurokit2.complexity.fractal_sevcik"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_sevcik</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.fisher_information" title="neurokit2.complexity.fisher_information"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fisher_information</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_hjorth" title="neurokit2.complexity.complexity_hjorth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_hjorth</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_rqa</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>Example 1</strong>: Compute fast and medium-fast complexity metrics</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Simulate a signal of 3 seconds</span>
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
+
+<span class="go"># Fast metrics</span>
+<span class="gp">In [3]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">which</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;fast&quot;</span><span class="p">,</span> <span class="s2">&quot;medium&quot;</span><span class="p">])</span>
+
+<span class="gp">In [4]: </span><span class="n">df</span>
+<span class="gh">Out[4]: </span><span class="go"></span>
+<span class="go">       ApEn      CREn    DiffEn  ...     ShanEn      SpEn     WPEn</span>
+<span class="go">0  0.162527 -0.009219  0.303891  ...  11.271005  0.094806  0.98896</span>
+
+<span class="go">[1 rows x 23 columns]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 2</strong>: Compute slow complexity metrics</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Slow, with specific parameters for Higuchi and MFDFA</span>
+<span class="gp">In [5]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">which</span> <span class="o">=</span> <span class="s2">&quot;slow&quot;</span><span class="p">,</span> <span class="n">k_max</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="gp">In [6]: </span><span class="n">df</span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">         CD       DFA   FuzzyEn  ...  MFDFA_ExpRange     RCMSE   RangeEn</span>
+<span class="go">0  0.830716  1.389359  0.128788  ...        0.348173  0.318944  0.188515</span>
+
+<span class="go">[1 rows x 13 columns]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>Example 3</strong>: Compute complexity over time</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">In [8]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [9]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Create dynamically varying noise</span>
+<span class="gp">In [10]: </span><span class="n">amount_noise</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+
+<span class="gp">In [11]: </span><span class="n">amount_noise</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rescale</span><span class="p">(</span><span class="n">amount_noise</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])</span>
+
+<span class="gp">In [12]: </span><span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">amount_noise</span><span class="p">))</span> <span class="o">*</span> <span class="n">amount_noise</span>
+
+<span class="go"># Add to simple signal</span>
+<span class="gp">In [13]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">noise</span> <span class="o">+</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="gp">In [14]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_complexity1.png"><img alt="_images/p_complexity1.png" src="_images/p_complexity1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Create function-wrappers that only return the index value</span>
+<span class="gp">In [15]: </span><span class="n">pfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="gp">In [16]: </span><span class="n">kfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="gp">In [17]: </span><span class="n">sfd</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_sevcik</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="gp">In [18]: </span><span class="n">svden</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="gp">In [19]: </span><span class="n">fisher</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">nk</span><span class="o">.</span><span class="n">fisher_information</span><span class="p">(</span><span class="n">x</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># FI is anticorrelated with complexity</span>
+
+<span class="go"># Use them in a rolling window</span>
+<span class="gp">In [20]: </span><span class="n">rolling_kfd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">kfd</span><span class="p">)</span>
+
+<span class="gp">In [21]: </span><span class="n">rolling_pfd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">pfd</span><span class="p">)</span>
+
+<span class="gp">In [22]: </span><span class="n">rolling_sfd</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">sfd</span><span class="p">)</span>
+
+<span class="gp">In [23]: </span><span class="n">rolling_svden</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">svden</span><span class="p">)</span>
+
+<span class="gp">In [24]: </span><span class="n">rolling_fisher</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="n">min_periods</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="n">center</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">fisher</span><span class="p">)</span>
+
+<span class="gp">In [25]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">([</span><span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_kfd</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_pfd</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_sfd</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_svden</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+<span class="gp">   ....: </span>                <span class="n">rolling_fisher</span><span class="p">],</span>
+<span class="gp">   ....: </span>               <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Signal&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;Petrosian Fractal Dimension&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;Katz Fractal Dimension&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;Sevcik Fractal Dimension&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;SVD Entropy&quot;</span><span class="p">,</span>
+<span class="gp">   ....: </span>                         <span class="s2">&quot;Fisher Information&quot;</span><span class="p">],</span>
+<span class="gp">   ....: </span>               <span class="n">sampling_rate</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+<span class="gp">   ....: </span>               <span class="n">standardize</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_complexity2.png"><img alt="_images/p_complexity2.png" src="_images/p_complexity2.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</div>
 </div>
 <div class="section" id="optimization">
 <h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">#</a></h2>
@@ -586,7 +741,7 @@ faster results.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_embedding</span></code></p>
+<p><a class="reference internal" href="#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_embedding</span></code></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -733,7 +888,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.9124934139401328</span>
+<span class="gh">Out[12]: </span><span class="go">1.4975510459166281</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -743,7 +898,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.7673012489823328</span>
+<span class="gh">Out[16]: </span><span class="go">3.950669265905084</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -999,19 +1154,19 @@ factors, or <code class="docutils literal notranslate"><span class="pre">&quot;d
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.573298684718293</span>
+<span class="gh">Out[4]: </span><span class="go">2.578461431498215</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8685004730286138</span>
+<span class="gh">Out[6]: </span><span class="go">0.8878254200773018</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9857378546820055</span>
+<span class="gh">Out[8]: </span><span class="go">0.9935141332495924</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
