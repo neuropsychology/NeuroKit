@@ -720,7 +720,11 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;
 <span class="sig-name descname"><span class="pre">complexity_delay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fraser1986'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_delay" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Automated selection of the optimal Time Delay (Tau)</strong></p>
 <p>The time delay (Tau <span class="math notranslate nohighlight">\(\tau\)</span>) is one of the two critical parameters (the other being the
-Dimension <em>m</em>) involved in the construction of the time-delay embedding of a signal. When <span class="math notranslate nohighlight">\(\tau\)</span> is smaller than the optimal theoretical value, consecutive coordinates of the system’s state are correlated and the attractor is not sufficiently unfolded. Conversely, when <span class="math notranslate nohighlight">\(\tau\)</span> is larger than it should be, successive coordinates are almost independent, resulting in an uncorrelated and unstructured cloud of points.</p>
+Dimension <em>m</em>) involved in the construction of the time-delay embedding of a signal. When
+<span class="math notranslate nohighlight">\(\tau\)</span> is smaller than the optimal theoretical value, consecutive coordinates of the
+system’s state are correlated and the attractor is not sufficiently unfolded. Conversely, when
+<span class="math notranslate nohighlight">\(\tau\)</span> is larger than it should be, successive coordinates are almost independent,
+resulting in an uncorrelated and unstructured cloud of points.</p>
 <p>Several authors suggested different methods to guide the choice of Tau:</p>
 <ul class="simple">
 <li><p><strong>Fraser and Swinney (1986)</strong> suggest using the first local minimum of the mutual information
@@ -1053,7 +1057,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.626507509769809</span>
+<span class="gh">Out[12]: </span><span class="go">2.2683136033328424</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1063,7 +1067,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.952201299081923</span>
+<span class="gh">Out[16]: </span><span class="go">3.835778551311611</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1319,19 +1323,19 @@ factors, or <code class="docutils literal notranslate"><span class="pre">&quot;d
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.573829310584924</span>
+<span class="gh">Out[4]: </span><span class="go">2.5779869085342635</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8722655223323047</span>
+<span class="gh">Out[6]: </span><span class="go">0.8774674973521437</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9877307479142517</span>
+<span class="gh">Out[8]: </span><span class="go">0.9970422750954075</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
