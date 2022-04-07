@@ -121,6 +121,8 @@ def _get_count(embedded, tolerance, distance="chebyshev"):
             count[i] = np.sum(distrange(embedded, embedded[i]) < tolerance)
 
     else:  # chebyshev and other sklearn methods
+        # Perhaps scipy.spatial.KDTree would be faster? Especially since its query() method
+        # has a `workers` argument to use multiple cores? Benchmark or opinion required!
         kdtree = sklearn.neighbors.KDTree(embedded, metric=distance)
         count = kdtree.query_radius(embedded, tolerance, count_only=True).astype(np.float64)
 

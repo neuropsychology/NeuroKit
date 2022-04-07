@@ -612,24 +612,29 @@ NeuroKit2 is one of the most welcoming package for new contributors and users, a
         :target: https://pypi.python.org/pypi/neurokit2
 
 
+Disclaimer
+----------
+*The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*
+
+
+.. used_at_section
 Used at
 -------
 
-|ntu| |univ_duke| |univ_paris| |ntu_taiwan| |univ_pittsburh|
+|ntu| |univ_paris| |univ_duke| |uni_auckland| |uni_pittsburh| |uni_washington|
 
-.. |ntu| image:: https://cdn.freelogovectors.net/wp-content/uploads/2019/02/ntu_logo_nanyang_technological_university.png
+.. |ntu| image:: https://upload.wikimedia.org/wikipedia/en/thumb/c/c6/Nanyang_Technological_University.svg/1024px-Nanyang_Technological_University.svg.png
    :height: 70
 .. |univ_duke| image:: https://www.tutelaprep.com/blog/wp-content/uploads/2019/12/duke.png
    :height: 70
 .. |univ_paris| image:: https://study-eu.s3.amazonaws.com/uploads/university/universit--de-paris-logo.svg
    :height: 70
-.. |ntu_taiwan| image:: https://cdn.freelogovectors.net/wp-content/uploads/2021/04/national-taiwan-university-logo-freelogovectors.net_.png
+.. |uni_auckland| image:: https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/University_of_Auckland.svg/1024px-University_of_Auckland.svg.png
    :height: 70
-.. |univ_pittsburh| image:: https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/University_of_Pittsburgh_seal.svg/1200px-University_of_Pittsburgh_seal.svg.png
+.. |uni_pittsburh| image:: https://upload.wikimedia.org/wikipedia/en/thumb/f/fb/University_of_Pittsburgh_seal.svg/1200px-University_of_Pittsburgh_seal.svg.png
+   :height: 70
+.. |uni_washington| image:: https://upload.wikimedia.org/wikipedia/en/thumb/5/58/University_of_Washington_seal.svg/768px-University_of_Washington_seal.svg.png
    :height: 70
 
 
-Notes
--------
 
-*The authors do not provide any warranty. If this software causes your keyboard to blow up, your brain to liquefy, your toilet to clog or a zombie plague to break loose, the authors CANNOT IN ANY WAY be held responsible.*

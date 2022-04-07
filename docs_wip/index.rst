@@ -37,7 +37,8 @@ You can navigate to the different sections using the left panel. We recommend ch
    cite_us
 
 
-
+.. include::  ../README.rst
+    :start-after: .. used_at_section
 
 .. * :ref:`genindex`
 .. * :ref:`modindex`
