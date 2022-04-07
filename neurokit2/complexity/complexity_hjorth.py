@@ -23,7 +23,7 @@ def complexity_hjorth(signal):
 
     Hjorth (1970) illustrated the parameters as follows:
 
-    .. figure:: img/hjorth1970.png
+    .. figure:: ../img/hjorth1970.png
        :alt: Figure from Hjorth (1970).
        :target: http://dx.doi.org/10.1016/0013-4694(70)90143-4
 
