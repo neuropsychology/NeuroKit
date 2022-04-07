@@ -345,14 +345,21 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#optimization">
-   Optimization
+  <a class="reference internal nav-link" href="#parameters-choice">
+   Parameters Choice
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#complexity-delay">
      <em>
       complexity_delay()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-dimension">
+     <em>
+      complexity_dimension()
      </em>
     </a>
    </li>
@@ -469,14 +476,21 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#optimization">
-   Optimization
+  <a class="reference internal nav-link" href="#parameters-choice">
+   Parameters Choice
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#complexity-delay">
      <em>
       complexity_delay()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-dimension">
+     <em>
+      complexity_dimension()
      </em>
     </a>
    </li>
@@ -593,7 +607,8 @@ dependency.</p>
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
 <li><p><strong>which</strong> (<em>list</em>) – What metrics to compute, based on their computation time. Can be <code class="docutils literal notranslate"><span class="pre">&quot;fast&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;medium&quot;</span></code>,
 or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;</span></code>.</p></li>
-<li><p><strong>delay</strong> (<em>int</em>) – See for example <code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_sample()</span></code>.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted ‘Tau’ <span class="math notranslate nohighlight">\(\tau\)</span>, sometimes referred to as ‘lag’) in samples.
+See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_delay()</span></code></a> to choose the optimal value for this parameter.</p></li>
 <li><p><strong>dimension</strong> (<em>int</em>) – See for example <code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_sample()</span></code>.</p></li>
 <li><p><strong>tolerance</strong> (<em>float</em>) – See for example <code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_sample()</span></code>.</p></li>
 </ul>
@@ -711,21 +726,24 @@ or <code class="docutils literal notranslate"><span class="pre">&quot;slow&quot;
 
 </div>
 </div>
-<div class="section" id="optimization">
-<h2>Optimization<a class="headerlink" href="#optimization" title="Permalink to this headline">#</a></h2>
+<div class="section" id="parameters-choice">
+<h2>Parameters Choice<a class="headerlink" href="#parameters-choice" title="Permalink to this headline">#</a></h2>
 <div class="section" id="complexity-delay">
 <h3><em>complexity_delay()</em><a class="headerlink" href="#complexity-delay" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.complexity.complexity_delay">
 <span class="sig-name descname"><span class="pre">complexity_delay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fraser1986'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">algorithm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_delay" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Automated selection of the optimal Time Delay (Tau)</strong></p>
-<p>The time delay (Tau <span class="math notranslate nohighlight">\(\tau\)</span>) is one of the two critical parameters (the other being the
-Dimension <em>m</em>) involved in the construction of the time-delay embedding of a signal. When
-<span class="math notranslate nohighlight">\(\tau\)</span> is smaller than the optimal theoretical value, consecutive coordinates of the
+<dd><p><strong>Automated selection of the optimal Delay (Tau)</strong></p>
+<p>The time delay (Tau <span class="math notranslate nohighlight">\(\tau\)</span>, also referred to as <em>Lag</em>) is one of the two critical
+parameters (the other being the <a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">Dimension</span></code></a> <em>m</em>) involved in the
+construction of the time-delay embedding of a signal. It corresponds to the delay in samples
+between the original signal and its delayed version(s). In other words, how many samples do we
+consider between a given state of the signal and its closest past state.</p>
+<p>When <span class="math notranslate nohighlight">\(\tau\)</span> is smaller than the optimal theoretical value, consecutive coordinates of the
 system’s state are correlated and the attractor is not sufficiently unfolded. Conversely, when
 <span class="math notranslate nohighlight">\(\tau\)</span> is larger than it should be, successive coordinates are almost independent,
 resulting in an uncorrelated and unstructured cloud of points.</p>
-<p>Several authors suggested different methods to guide the choice of Tau:</p>
+<p>Several authors suggested different methods to guide the choice of the delay:</p>
 <ul class="simple">
 <li><p><strong>Fraser and Swinney (1986)</strong> suggest using the first local minimum of the mutual information
 between the delayed and non-delayed time series, effectively identifying a value of Tau for
@@ -743,6 +761,10 @@ makes use of a statistic within the reconstructed phase space, rather than analy
 temporal evolution of the time series. However, computation times are significantly long for
 this method due to the need to compare every unique pair of pairwise vectors within the
 embedded signal per delay.</p></li>
+<li><p><strong>Gautama (2003)</strong> mentions that in practice, it is common to have a fixed time lag and to
+adjust the embedding dimension accordingly. As this can lead to large <em>m</em> values (and thus to
+embedded data of a large size) and thus, slow processing, they describe an optimisation
+method to jointly determine <em>m</em> and <span class="math notranslate nohighlight">\(\tau\)</span> (see <code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_optimize()</span></code>).</p></li>
 <li><p><strong>Lyle (2021)</strong> describes the “Symmetric Projection Attractor Reconstruction” (SPAR), where
 <span class="math notranslate nohighlight">\(1/3\)</span> of the the dominant frequency (i.e., of the length of the average “cycle”) can be
 a suitable value for approximately periodic data, and makes the attractor sensitive to
@@ -777,7 +799,7 @@ to compute optimal time-delay embedding.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_embedding</span></code>, <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_tolerance</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_embedding</span></code>, <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_tolerance</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <ul class="simple">
@@ -867,6 +889,115 @@ windows. Physica D: Nonlinear Phenomena, 127(1-2), 48-60.</p></li>
 </dd></dl>
 
 </div>
+<div class="section" id="complexity-dimension">
+<h3><em>complexity_dimension()</em><a class="headerlink" href="#complexity-dimension" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.complexity_dimension">
+<span class="sig-name descname"><span class="pre">complexity_dimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'afnn'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_dimension" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Automated selection of the optimal Embedding Dimension (m)</strong></p>
+<p>The Embedding Dimension (<em>m</em>, sometimes referred to as <em>d</em> or <em>order</em>) is the second
+critical parameter (the first being the <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-func docutils literal notranslate"><span class="pre">delay</span></code></a> <span class="math notranslate nohighlight">\(\tau\)</span>)
+involved in the construction of the time-delay embedding of a signal. It corresponds to the
+number of delayed states (versions of the signals lagged by <span class="math notranslate nohighlight">\(\tau\)</span>) that we include in
+the embedding.</p>
+<p>Though one can commonly find values of 2 or 3 used in practice, several authors suggested
+different numerical methods to guide the choice of <em>m</em>:</p>
+<ul class="simple">
+<li><p><strong>Correlation Dimension</strong> (CD): One of the earliest method to estimate the optimal <em>m</em>
+was to calculate the <code class="xref py py-func docutils literal notranslate"><span class="pre">correlation</span> <span class="pre">dimension</span></code> for embeddings of
+various sizes and look for a saturation (i.e., a plateau) in its value as the embedding
+dimension increases. One of the limitation is that a saturation will also occur when there is
+not enough data to adequately fill the high-dimensional space (note that, in general, having
+such large embeddings that it significantly shortens the length of the signal is not
+recommended).</p></li>
+<li><p><strong>FNN</strong> (False Nearest Neighbour): The method, introduced by Kennel et al. (1992), is based
+on the assumption that two points that are near to each other in the sufficient embedding
+dimension should remain close as the dimension increases. The algorithm checks the neighbours
+in increasing embedding dimensions until it finds only a negligible number of false
+neighbours when going from dimension <span class="math notranslate nohighlight">\(m\)</span> to <span class="math notranslate nohighlight">\(m+1\)</span>. This corresponds to the lowest
+embedding dimension, which is presumed to give an unfolded space-state reconstruction. This
+method can fail in noisy signals due to the futile attempt of unfolding the noise (and in
+purely random signals, the amount of false neighbors does not substantially drops as <em>m</em>
+increases).</p></li>
+<li><p><strong>AFN</strong> (Average False Neighbors): This modification by Cao (1997) of the FNN method
+addresses one of its main drawback, the need for a heuristic choice for the tolerance
+thresholds <code class="docutils literal notranslate"><span class="pre">R</span></code>. It uses the maximal Euclidian distance to represent nearest neighbors, and
+averages all ratios of the distance in <span class="math notranslate nohighlight">\(m+1\)</span> to <span class="math notranslate nohighlight">\(m\)</span> dimension and defines E1 as a
+parameter. The optimal dimension corresponds to when E1(d) stops changing (reaches a plateau).</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted Tau <span class="math notranslate nohighlight">\(\tau\)</span>, sometimes referred to as Lag) in samples.
+See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_delay()</span></code></a> to choose the optimal value for this parameter.</p></li>
+<li><p><strong>dimension_max</strong> (<em>int</em>) – The maximum embedding dimension to test.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;afn&quot;</span></code> (Average False Neighbor), <code class="docutils literal notranslate"><span class="pre">&quot;fnn&quot;</span></code> (False Nearest Neighbour), or <code class="docutils literal notranslate"><span class="pre">&quot;cd&quot;</span></code>
+(Correlation Dimension).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Visualize the result.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments, such as <code class="docutils literal notranslate"><span class="pre">R=10.0</span></code> or <code class="docutils literal notranslate"><span class="pre">A=2.0</span></code> (relative and absolute tolerance, only for
+‘fnn’ method).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>delay</strong> (<em>int</em>) – Optimal dimension.</p></li>
+<li><p><strong>parameters</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
+to compute the optimal dimension.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_tolerance</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+
+<span class="go"># Find optimal delay</span>
+<span class="gp">In [3]: </span><span class="n">delay</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_delay</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay_max</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+
+<span class="go"># Find optimal dimension</span>
+<span class="gp">In [4]: </span><span class="n">optimal_dimension</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_dimension</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">dimension_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;afnn&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_complexity_dimension1.png"><img alt="_images/p_complexity_dimension1.png" src="_images/p_complexity_dimension1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">optimal_dimension</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_dimension</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">dimension_max</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">method</span><span class="o">=</span><span class="s1">&#39;fnn&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>                                                  <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/p_complexity_dimension2.png"><img alt="_images/p_complexity_dimension2.png" src="_images/p_complexity_dimension2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Kennel, M. B., Brown, R., &amp; Abarbanel, H. D. (1992). Determining embedding dimension for
+phase-space reconstruction using a geometrical construction. Physical review A, 45(6), 3403.</p></li>
+<li><p>Cao, L. (1997). Practical method for determining the minimum embedding dimension of a scalar
+time series. Physica D: Nonlinear Phenomena, 110(1-2), 43-50.</p></li>
+<li><p>Rhodes, C., &amp; Morari, M. (1997). The false nearest neighbors algorithm: An overview.
+Computers &amp; Chemical Engineering, 21, S1149-S1154.</p></li>
+<li><p>Krakovská, A., Mezeiová, K., &amp; Budáčová, H. (2015). Use of false nearest neighbours for
+selecting variables and embedding parameters for state space reconstruction. Journal of
+Complex Systems, 2015.</p></li>
+<li><p>Gautama, T., Mandic, D. P., &amp; Van Hulle, M. M. (2003, April). A differential entropy based
+method for determining the optimal embedding parameters of a signal. In 2003 IEEE
+International Conference on Acoustics, Speech, and Signal Processing, 2003. Proceedings.
+(ICASSP’03). (Vol. 6, pp. VI-29). IEEE.</p></li>
+</ul>
+</dd></dl>
+
+</div>
 <div class="section" id="complexity-tolerance">
 <h3><em>complexity_tolerance()</em><a class="headerlink" href="#complexity-tolerance" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -910,7 +1041,7 @@ faster results.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_embedding</span></code></p>
+<p><a class="reference internal" href="#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_embedding</span></code></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -1057,7 +1188,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">2.2683136033328424</span>
+<span class="gh">Out[12]: </span><span class="go">2.1368133396610824</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1067,7 +1198,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.835778551311611</span>
+<span class="gh">Out[16]: </span><span class="go">3.8442910705158573</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1224,16 +1355,14 @@ space-state. Similarly to Fisher Information (FI), it is based on the Singular V
 Decomposition of the time-delay embedded signal.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">information_fisher</span></code>, <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">information_fisher</span></code>, <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
-<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted ‘Tau’, sometimes referred to as ‘lag’). In practice, it is common
-to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
-or to find a suitable value using some algorithmic heuristics. See <code class="docutils literal notranslate"><span class="pre">complexity_delay()</span></code>
-to estimate the optimal value for this parameter.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted ‘Tau’ <span class="math notranslate nohighlight">\(\tau\)</span>, sometimes referred to as ‘lag’) in samples.
+See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_delay()</span></code></a> to choose the optimal value for this parameter.</p></li>
 <li><p><strong>dimension</strong> (<em>int</em>) – Embedding dimension (often denoted ‘m’ or ‘d’, sometimes referred to as ‘order’). Typically
 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
 returns an array with two columns corresponding to the original signal and its delayed (by
@@ -1286,10 +1415,8 @@ Moreover, variants can be directly accessed via <code class="docutils literal no
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
-<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted ‘Tau’, sometimes referred to as ‘lag’). In practice, it is common
-to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
-or to find a suitable value using some algorithmic heuristics. See <code class="docutils literal notranslate"><span class="pre">complexity_delay()</span></code>
-to estimate the optimal value for this parameter.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted ‘Tau’ <span class="math notranslate nohighlight">\(\tau\)</span>, sometimes referred to as ‘lag’) in samples.
+See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_delay()</span></code></a> to choose the optimal value for this parameter.</p></li>
 <li><p><strong>dimension</strong> (<em>int</em>) – Embedding dimension (often denoted ‘m’ or ‘d’, sometimes referred to as ‘order’). Typically
 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
 returns an array with two columns corresponding to the original signal and its delayed (by
@@ -1323,19 +1450,19 @@ factors, or <code class="docutils literal notranslate"><span class="pre">&quot;d
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.5779869085342635</span>
+<span class="gh">Out[4]: </span><span class="go">2.58063545067332</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8774674973521437</span>
+<span class="gh">Out[6]: </span><span class="go">0.893524460358705</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9970422750954075</span>
+<span class="gh">Out[8]: </span><span class="go">0.9832849003934937</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1370,16 +1497,14 @@ anti-correalted with other measures of complexity (the more information a system
 about itself, and the more predictable and thus, less complex it is).</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.complexity.entropy_svd" title="neurokit2.complexity.entropy_svd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_svd</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">mutual_information</span></code>, <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_svd" title="neurokit2.complexity.entropy_svd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_svd</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">mutual_information</span></code>, <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
-<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted ‘Tau’, sometimes referred to as ‘lag’). In practice, it is common
-to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003),
-or to find a suitable value using some algorithmic heuristics. See <code class="docutils literal notranslate"><span class="pre">complexity_delay()</span></code>
-to estimate the optimal value for this parameter.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted ‘Tau’ <span class="math notranslate nohighlight">\(\tau\)</span>, sometimes referred to as ‘lag’) in samples.
+See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_delay()</span></code></a> to choose the optimal value for this parameter.</p></li>
 <li><p><strong>dimension</strong> (<em>int</em>) – Embedding dimension (often denoted ‘m’ or ‘d’, sometimes referred to as ‘order’). Typically
 2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
 returns an array with two columns corresponding to the original signal and its delayed (by
