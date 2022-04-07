@@ -26,15 +26,17 @@ Welcome to **NeuroKit**'s documentation, where you can find information and lear
 You can navigate to the different sections using the left panel. We recommend checking out the **guides** and **examples**, where you can find tutorials and hands-on walkthroughs.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Menu
    :titlesonly:
 
    introduction
    authors
    installation
-   functions
+   resources/index
+   functions/index
    cite_us
+   Changelog <https://github.com/neuropsychology/NeuroKit/releases>
 
 
 .. include::  ../README.rst
