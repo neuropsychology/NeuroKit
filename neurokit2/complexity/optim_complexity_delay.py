@@ -22,7 +22,11 @@ def complexity_delay(
     """**Automated selection of the optimal Time Delay (Tau)**
 
     The time delay (Tau :math:`\\tau`) is one of the two critical parameters (the other being the
-    Dimension *m*) involved in the construction of the time-delay embedding of a signal. When :math:`\\tau` is smaller than the optimal theoretical value, consecutive coordinates of the system's state are correlated and the attractor is not sufficiently unfolded. Conversely, when :math:`\\tau` is larger than it should be, successive coordinates are almost independent, resulting in an uncorrelated and unstructured cloud of points.
+    Dimension *m*) involved in the construction of the time-delay embedding of a signal. When
+    :math:`\\tau` is smaller than the optimal theoretical value, consecutive coordinates of the
+    system's state are correlated and the attractor is not sufficiently unfolded. Conversely, when
+    :math:`\\tau` is larger than it should be, successive coordinates are almost independent,
+    resulting in an uncorrelated and unstructured cloud of points.
 
     Several authors suggested different methods to guide the choice of Tau:
 
