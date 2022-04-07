@@ -54,7 +54,8 @@ def complexity(
         What metrics to compute, based on their computation time. Can be ``"fast"``, ``"medium"``,
         or ``"slow"``.
     delay : int
-        See for example :func:`entropy_sample`.
+        Time delay (often denoted 'Tau' :math:`\\tau`, sometimes referred to as 'lag') in samples.
+        See :func:`complexity_delay()` to choose the optimal value for this parameter.
     dimension : int
         See for example :func:`entropy_sample`.
     tolerance : float

@@ -8,11 +8,15 @@ Main
 .. autofunction:: neurokit2.complexity.complexity
 
 
-Optimization
-^^^^^^^^^^^^^
+Parameters Choice
+^^^^^^^^^^^^^^^^^^
 *complexity_delay()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_delay
+
+*complexity_dimension()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_dimension
 
 *complexity_tolerance()*
 """"""""""""""""""""""""""
@@ -21,7 +25,6 @@ Optimization
 
 Fractal Dimension
 ^^^^^^^^^^^^^^^^^
-
 *fractal_katz()*
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_katz
@@ -34,10 +37,9 @@ Fractal Dimension
 """"""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_sevcik
 
+
 Entropy
 ^^^^^^^^^^^^^^^^^
-
-
 *entropy_svd()*
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_svd
@@ -46,10 +48,9 @@ Entropy
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_permutation
 
+
 Other
 ^^^^^^^^^^^^^^^^^
-
-
 *fisher_information()*
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fisher_information

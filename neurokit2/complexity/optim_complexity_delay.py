@@ -19,16 +19,20 @@ from .information_mutual import mutual_information
 def complexity_delay(
     signal, delay_max=100, method="fraser1986", algorithm=None, show=False, **kwargs
 ):
-    """**Automated selection of the optimal Time Delay (Tau)**
+    """**Automated selection of the optimal Delay (Tau)**
 
-    The time delay (Tau :math:`\\tau`) is one of the two critical parameters (the other being the
-    Dimension *m*) involved in the construction of the time-delay embedding of a signal. When
-    :math:`\\tau` is smaller than the optimal theoretical value, consecutive coordinates of the
+    The time delay (Tau :math:`\\tau`, also referred to as *Lag*) is one of the two critical
+    parameters (the other being the :func:`Dimension <complexity_dimension>` *m*) involved in the
+    construction of the time-delay embedding of a signal. It corresponds to the delay in samples
+    between the original signal and its delayed version(s). In other words, how many samples do we
+    consider between a given state of the signal and its closest past state.
+
+    When :math:`\\tau` is smaller than the optimal theoretical value, consecutive coordinates of the
     system's state are correlated and the attractor is not sufficiently unfolded. Conversely, when
     :math:`\\tau` is larger than it should be, successive coordinates are almost independent,
     resulting in an uncorrelated and unstructured cloud of points.
 
-    Several authors suggested different methods to guide the choice of Tau:
+    Several authors suggested different methods to guide the choice of the delay:
 
     * **Fraser and Swinney (1986)** suggest using the first local minimum of the mutual information
       between the delayed and non-delayed time series, effectively identifying a value of Tau for
@@ -46,6 +50,10 @@ def complexity_delay(
       temporal evolution of the time series. However, computation times are significantly long for
       this method due to the need to compare every unique pair of pairwise vectors within the
       embedded signal per delay.
+    * **Gautama (2003)** mentions that in practice, it is common to have a fixed time lag and to
+      adjust the embedding dimension accordingly. As this can lead to large *m* values (and thus to
+      embedded data of a large size) and thus, slow processing, they describe an optimisation
+      method to jointly determine *m* and :math:`\\tau` (see :func:`complexity_optimize`).
     * **Lyle (2021)** describes the "Symmetric Projection Attractor Reconstruction" (SPAR), where
       :math:`1/3` of the the dominant frequency (i.e., of the length of the average "cycle") can be
       a suitable value for approximately periodic data, and makes the attractor sensitive to
