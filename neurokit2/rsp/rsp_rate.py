@@ -55,11 +55,11 @@ def rsp_rate(
     Example
     -------
     >>> import neurokit2 as nk
-    >>> rsp_signal = nk.data("rsp_200hz.txt").iloc[:,0]
-    >>> sampling_rate=200
-    >>> rsp_cleaned = nk.rsp_clean(rsp_signal, sampling_rate=sampling_rate)
-    >>> rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="trough")
-    >>> rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=sampling_rate, method="xcorr")
+    >>> rsp_signal = nk.data("rsp_1000hz")
+    >>>
+    >>> rsp_cleaned = nk.rsp_clean(rsp_signal, sampling_rate=1000)
+    >>> rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method="trough")
+    >>> rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method="xcorr")
     """
 
     if method.lower() in ["period", "peak", "peaks", "trough", "troughs", "signal_rate"]:
