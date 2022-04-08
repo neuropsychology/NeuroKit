@@ -123,6 +123,21 @@
      Learn Python in 10 minutes
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/software.html">
+     What software for physiological signal processing
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1 current active has-children">
@@ -435,8 +450,7 @@ automatically with the package (to avoid increasing its weight), but can be down
 </ul>
 <p><strong>DataFrames</strong>: The following datasets (that will return a <code class="docutils literal notranslate"><span class="pre">pd.DataFrame</span></code>) are available:</p>
 <ul class="simple">
-<li><p><strong>iris</strong>: Convenient access to the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html">Iris dataset</a>
-in a DataFrame, exactly how it is in R.</p></li>
+<li><p><strong>iris</strong>: Convenient access to the Iris dataset in a DataFrame, exactly how it is in R.</p></li>
 <li><p><strong>eogs_200hz</strong>: Returns a DataFrame with <code class="docutils literal notranslate"><span class="pre">hEOG</span></code>, <code class="docutils literal notranslate"><span class="pre">vEOG</span></code>.</p>
 <ul>
 <li><p>Single subject</p></li>
@@ -524,8 +538,9 @@ order was: <code class="docutils literal notranslate"><span class="pre">[&quot;N
 <span class="go">2           4.7          3.2           1.3          0.2  setosa</span>
 <span class="go">3           4.6          3.1           1.5          0.2  setosa</span>
 <span class="go">4           5.0          3.6           1.4          0.2  setosa</span>
-
-<span class="gp">In [12]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;eogs_200hz&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;eogs_200hz&quot;</span><span class="p">)</span>
 
 <span class="gp">In [13]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4000</span><span class="p">],</span> <span class="n">standardize</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>

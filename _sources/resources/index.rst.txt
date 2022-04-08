@@ -7,4 +7,7 @@ Contents:
    :maxdepth: 1
 
    learn_python
+   recording
+   resources
+   software
 
