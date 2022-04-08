@@ -27,8 +27,21 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
-    See `Pham et al. (2021) <https://www.mdpi.com/1424-8220/21/12/3998>`_ and
-    `Lau et al. (2021) <https://psyarxiv.com/f8k3x/>`_.
+    Non-linear indices include features derived from the *Poincaré plot*, as well as other :func:`complexity <complexity>` indices.
+
+    The **Poincaré plot** is a graphical representation of each NN interval plotted against its
+    preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
+    between successive NN intervals. Indices that can be computed are:
+    * **SD1**: Standard deviation perpendicular to the line of identity. Index of short-term and rapid HRV changes.
+    * **SD2**: Standard deivation parallel to the line of identity. Index of long-term HRV changes.
+    * **SD1/SD2**: ratio of *SD1* to *SD2*. Describes the ratio of short term to long term variations in HRV.
+
+    Other indices computed based on the relationship between the short-term and long-term HRV changes are **Cardiac Sympathetic Index (CSI)**, which is a measure of cardiac sympathetic function independent of vagal activity and conversely, the **Cardiac Vagal Index (CVI)**, an index of cardiac parasympathetic function (vagal activity unaffected by sympathetic activity).
+
+    .. hint::
+        We strongly recommend checking our open-access paper `Pham et al. (2021)
+        <https://doi.org/10.3390/s21123998>`_ on HRV indices, as well as `Lau et al. (2021)
+        <https://psyarxiv.com/f8k3x/>`_ on complexity, for more information.
 
     Parameters
     ----------
@@ -200,7 +213,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     References
     ----------
     - Pham, T., Lau, Z. J., Chen, S. H., & Makowski, D. (2021). Heart Rate Variability in Psychology:
-    A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
+    A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998. https://doi.org/10.3390/s21123998
 
     - Yan, C., Li, P., Ji, L., Yao, L., Karmakar, C., & Liu, C. (2017). Area asymmetry of heart
     rate variability signal. Biomedical engineering online, 16(1), 112.
@@ -619,7 +632,7 @@ def _hrv_nonlinear_show(rri, out, ax=None, ax_marg_x=None, ax_marg_y=None):
     rad_cc = (xct ** 2 / (width / 2.0) ** 2) + (yct ** 2 / (height / 2.0) ** 2)
 
     points = np.where(rad_cc > 1)[0]
-    ax.plot(ax1[points], ax2[points], "ro", color="k", alpha=0.5, markersize=4)
+    ax.plot(ax1[points], ax2[points], "o", color="k", alpha=0.5, markersize=4)
 
     # SD1 and SD2 arrow
     sd1_arrow = ax.arrow(

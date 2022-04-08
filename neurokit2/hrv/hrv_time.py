@@ -25,7 +25,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     .. hint::
         We strongly recommend checking our open-access paper `Pham et al. (2021)
-        <https://doi:10.3390/s21123998>`_ on HRV indices for more information.
+        <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
 
     Parameters
     ----------
@@ -95,6 +95,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     References
     ----------
+    * Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021). Heart Rate Variability in
+      Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
+      https://doi.org/10.3390/s21123998
     - Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
     (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
     56(4), 674-678.

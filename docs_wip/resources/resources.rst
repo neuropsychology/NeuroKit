@@ -8,12 +8,12 @@ Additional Resources
 General Neuroimaging
 -----------------------
 
-- `Seven quick tips for analysis scripts in neuroimaging <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007358>`_ (van Vliet, 2020).
+- `Seven quick tips for analysis scripts in neuroimaging <https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1007358>`_
 - `Neuroimaging tutorials and resources <https://.github.io/tutorials-and-resources/>`_
 
 
 
-ECG 
+ECG
 ----
 
 - `Improving Data Quality: ECG <https://support.mindwaretech.com/2017/12/improving-data-quality-ecg/>`_
@@ -22,7 +22,7 @@ ECG
 - `All About HRV Part 4: Respiratory Sinus Arrhythmia <https://support.mindwaretech.com/2017/09/all-about-hrv-part-4-respiratory-sinus-arrhythmia/>`_
 
 
-EDA 
+EDA
 ----
 
 - `Improving Data Quality: EDA <https://support.mindwaretech.com/2017/12/improving-data-quality-eda/>`_
