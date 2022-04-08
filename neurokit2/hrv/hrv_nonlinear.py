@@ -32,9 +32,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     The **Poincaré plot** is a graphical representation of each NN interval plotted against its
     preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
     between successive NN intervals. Indices that can be computed are:
-    * **SD1**: Standard deviation perpendicular to the line of identity. Index of short-term and rapid HRV changes.
-    * **SD2**: Standard deivation parallel to the line of identity. Index of long-term HRV changes.
-    * **SD1/SD2**: ratio of *SD1* to *SD2*. Describes the ratio of short term to long term variations in HRV.
+    * **SD1**: Standard deviation perpendicular to the line of identity. It is an index of
+      short-term RR interval fluctuations, i.e., beat-to-beat variability. It is equivalent
+      (although on another scale) to RMSSD, and therefore it is redundant to report correlations
+      with both.
+    * **SD2**: Standard deviation along the identity line. Index of long-term HRV changes.
+    * **SD1/SD2**: ratio of *SD1* to *SD2*. Describes the ratio of short term to long term
+      variations in HRV.
 
     Other indices computed based on the relationship between the short-term and long-term HRV
     changes are **Cardiac Sympathetic Index (CSI)**, which is a measure of cardiac sympathetic
@@ -65,21 +69,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     Returns
     -------
     DataFrame
-        Contains non-linear HRV metrics:
-
-        - **Characteristics of the Poincaré Plot Geometry**:
-
-            - **SD1**: SD1 is a measure of the spread of RR intervals on the Poincaré plot
-            perpendicular to the line of identity. It is an index of short-term RR interval
-            fluctuations, i.e., beat-to-beat variability. It is equivalent (although on another
-            scale) to RMSSD, and therefore it is redundant to report correlations with both
-            (Ciccone, 2017).
-
-            - **SD2**: SD2 is a measure of the spread of RR intervals on the Poincaré plot along the
-            line of identity. It is an index of long-term RR interval fluctuations.
-
-            - **SD1SD2**: the ratio between short and long term fluctuations of the RR intervals
-            (SD1 divided by SD2).
+        Contains non-linear HRV metrics.
 
             - **S**: Area of ellipse described by SD1 and SD2 (``pi * SD1 * SD2``). It is
             proportional to *SD1SD2*.
