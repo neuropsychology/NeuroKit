@@ -218,12 +218,9 @@ def data(dataset="bio_eventrelated_100hz"):
     file, ext = os.path.splitext(dataset)  # pylint: disable=unused-variable
     if ext == "":
         df = pd.read_csv(path + dataset + ".csv")
-        print(1)
     else:
         if "https" not in dataset:
             df = pd.read_csv(path + dataset)
-            print(3)
         else:
             df = pd.read_csv(dataset)
-            print(4)
     return df
