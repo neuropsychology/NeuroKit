@@ -16,6 +16,7 @@ def data(dataset="bio_eventrelated_100hz"):
     **Signals**: The following signals (that will return an array) are available:
 
     * **ecg_1000hz**: Returns a vector containing ECG signal (``sampling_rate=1000``).
+    * **ecg_3000hz**: Returns a vector containing ECG signal (``sampling_rate=3000``).
     * **rsp_1000hz**: Returns a vector containing RSP signal (``sampling_rate=1000``).
     * **eeg_150hz**: Returns a vector containing EEG signal (``sampling_rate=150``).
     * **eog_100hz**: Returns a vector containing vEOG signal (``sampling_rate=100``).
@@ -172,6 +173,9 @@ def data(dataset="bio_eventrelated_100hz"):
         return pd.read_csv(path + "rsp_1000hz.txt", header=None).values[:, 0]
 
     if dataset in ["ecg", "ecg_1000hz", "ecg_1000hz.csv"]:
+        return pd.read_csv(path + "ecg_1000hz.csv")["ECG"].values
+
+    if dataset in ["ecg_3000hz", "ecg_3000hz.csv"]:
         return pd.read_csv(path + "ecg_1000hz.csv")["ECG"].values
 
     if dataset in ["eog", "veog", "eog_100hz", "eog_100hz.csv"]:

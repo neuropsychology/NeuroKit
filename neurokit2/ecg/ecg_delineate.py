@@ -26,6 +26,7 @@ def ecg_delineate(
     show=False,
     show_type="peaks",
     check=False,
+    **kwargs
 ):
     """**Delineate QRS complex**
 
@@ -58,6 +59,8 @@ def ecg_delineate(
     check : bool
         Defaults to False. If True, replaces the delineated features with ``np.nan`` if its
         standardized distance from R-peaks is more than 3.
+    **kwargs
+        Other optional arguments.
 
     Returns
     -------
@@ -177,6 +180,7 @@ def ecg_delineate(
             signals=signals,
             signal_features_type=show_type,
             sampling_rate=sampling_rate,
+            **kwargs
         )
 
     if check is True:
@@ -1049,7 +1053,13 @@ def _ecg_delineator_peak_T_offset(rpeak, heartbeat, R, T):
 
 
 def _ecg_delineate_plot(
-    ecg_signal, rpeaks=None, signals=None, signal_features_type="all", sampling_rate=1000
+    ecg_signal,
+    rpeaks=None,
+    signals=None,
+    signal_features_type="all",
+    sampling_rate=1000,
+    window_start=-0.35,
+    window_end=0.55,
 ):
 
     """
@@ -1096,7 +1106,11 @@ def _ecg_delineate_plot(
         rpeaks = rpeaks["ECG_R_Peaks"]
     # Segment the signal around the R-peaks
     epochs = epochs_create(
-        data, events=rpeaks, sampling_rate=sampling_rate, epochs_start=-0.35, epochs_end=0.55
+        data,
+        events=rpeaks,
+        sampling_rate=sampling_rate,
+        epochs_start=window_start,
+        epochs_end=window_end,
     )
     data = epochs_to_df(epochs)
     data_cols = data.columns.values

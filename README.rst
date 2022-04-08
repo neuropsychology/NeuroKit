@@ -460,7 +460,7 @@ ECG Delineation
 
 
     # Download data
-    ecg_signal = nk.data(dataset="ecg_3000hz")['ECG']
+    ecg_signal = nk.data(dataset="ecg_3000hz")
 
     # Extract R-peaks locations
     _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=3000)
