@@ -9,5 +9,4 @@ Contents:
    learn_python
    recording
    resources
-   software
 

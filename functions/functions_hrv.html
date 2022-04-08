@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>What software for physiological signal processing &#8212; NeuroKit2 0.1.8 documentation</title>
+    <title>HRV &#8212; NeuroKit2 0.1.8 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -36,8 +36,8 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Functions" href="../functions/index.html" />
-    <link rel="prev" title="Additional Resources" href="resources.html" />
+    <link rel="next" title="Complexity" href="functions_complexity.html" />
+    <link rel="prev" title="ECG" href="functions_ecg.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -108,61 +108,61 @@
    Installation
   </a>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="index.html">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
    Resources
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul class="current">
-   <li class="toctree-l2">
-    <a class="reference internal" href="learn_python.html">
-     Learn Python in 10 minutes
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="recording.html">
-     Recording good quality signals
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="resources.html">
-     Additional Resources
-    </a>
-   </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     What software for physiological signal processing
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../functions/index.html">
-   Functions
-  </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_ecg.html">
+    <a class="reference internal" href="../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Functions
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_ecg.html">
      ECG
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_complexity.html">
-     Complexity
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     HRV
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_data.html">
-     Data
+    <a class="reference internal" href="functions_complexity.html">
+     Complexity
     </a>
    </li>
   </ul>
@@ -267,7 +267,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fresources/software.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/functions_hrv.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -284,7 +284,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/resources/software.rst"
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/functions/functions_hrv.rst"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -312,7 +312,7 @@ title="Edit this page"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../_sources/resources/software.rst.txt"
+        <a href="../_sources/functions/functions_hrv.rst.txt"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -372,39 +372,18 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#software-vs-programming-language-packages">
-   Software
-   <em>
-    vs.
-   </em>
-   programming language (packages)
+  <a class="reference internal nav-link" href="#main">
+   Main
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gui-vs-code">
-   GUI
-   <em>
-    vs.
-   </em>
-   code
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#matlab-vs-python-vs-r-vs-julia">
-   Matlab
-   <em>
-    vs.
-   </em>
-   Python
-   <em>
-    vs.
-   </em>
-   R
-   <em>
-    vs.
-   </em>
-   Julia
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     <em>
+      hrv()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -415,7 +394,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>What software for physiological signal processing</h1>
+                <h1>HRV</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -426,39 +405,18 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#software-vs-programming-language-packages">
-   Software
-   <em>
-    vs.
-   </em>
-   programming language (packages)
+  <a class="reference internal nav-link" href="#main">
+   Main
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#gui-vs-code">
-   GUI
-   <em>
-    vs.
-   </em>
-   code
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#matlab-vs-python-vs-r-vs-julia">
-   Matlab
-   <em>
-    vs.
-   </em>
-   Python
-   <em>
-    vs.
-   </em>
-   R
-   <em>
-    vs.
-   </em>
-   Julia
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id1">
+     <em>
+      hrv()
+     </em>
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -470,85 +428,82 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="section" id="what-software-for-physiological-signal-processing">
-<h1>What software for physiological signal processing<a class="headerlink" href="#what-software-for-physiological-signal-processing" title="Permalink to this headline">#</a></h1>
+  <div class="section" id="hrv">
+<h1>HRV<a class="headerlink" href="#hrv" title="Permalink to this headline">#</a></h1>
+<div class="section" id="main">
+<h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<div class="section" id="id1">
+<h3><em>hrv()</em><a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.hrv.hrv">
+<span class="sig-name descname"><span class="pre">hrv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Heart Rate Variability (HRV)</strong></p>
+<p>This function computes all HRV indices available in NeuroKit. It is essentially a convenience
+function that aggregates results from the <code class="xref py py-func docutils literal notranslate"><span class="pre">time</span> <span class="pre">domain</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">frequency</span>
+<span class="pre">domain</span></code>, and <code class="xref py py-func docutils literal notranslate"><span class="pre">non-linear</span> <span class="pre">domain</span></code>.</p>
 <div class="admonition hint">
 <p class="admonition-title">Hint</p>
-<p>Spotted a typo? Would like to add something or make a correction? Join us by contributing (<a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html">see this tutorial</a>).</p>
+<p>We strongly recommend checking our open-access paper <a class="reference external" href="https://doi.org/10.3390/s21123998">Pham et al. (2021)</a> on HRV indices for more information.</p>
 </div>
-<p>If you’re here, it’s probably that you have (or plan to have) some <strong>physiological data</strong> (<em>aka</em> biosignals, e.g., ECG for cardiac activity, RSP for respiration, EDA for electrodermal activity, EMG for muscle activity etc.), that you plan to <strong>process and analyze these signals</strong> and that <strong>you don’t know where to start</strong>. Whether you are an undergrad, a master or PhD student, a postdoc or a full professor, you’re at the right place.</p>
-<p>So let’s discuss a few things to consider to best decide on your options.</p>
-<div class="section" id="software-vs-programming-language-packages">
-<h2>Software <em>vs.</em> programming language (packages)<a class="headerlink" href="#software-vs-programming-language-packages" title="Permalink to this headline">#</a></h2>
-<p>In this context, a software would be a program that you download, install (through some sort of <cite>.exe</cite> file), and start similarly to most of the other programs installed on our computers.</p>
-<p>They are appealing because of their <strong>(apparent) simplicity and familiarity</strong> of usage: you can click on icons and menus and you can <em>see</em> all the available options, which makes it easy for exploration. In a way, it also feels <em>safe</em>, because you can always close the software, press <em>“do not save the changes”</em>, and start again.</p>
-<p>Unfortunately, when it comes to science, this comes with a set of <strong>limitations</strong>; they are in general quite expensive, are limited to the set of included features (it’s not easy to use one feature from one software, and then another from another one), have a slow pace of updates (and thus often don’t include the most recent and cutting-edge algorithms, but rather well-established ones), and are not open-source (and thus prevent to run fully reproducible analyses).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which R-peaks occur. Can be a list of indices or the output(s) of other
+functions such as <code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code> or
+<code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process.()</span></code></p></li>
+<li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
+least twice as high as the highest frequency in vhf. By default 1000.</p></li>
+<li><p><strong>show</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the plots that are generates for each of the domains.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>DataFrame</em> – Contains HRV indices in a DataFrame. If RSP data was provided (e.g., output of
+<code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code>), RSA indices will also be included.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_rsa</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<p><strong>Example 1</strong>: Only using a list of R-peaks locations</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="go"># Download data</span>
+<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
+
+<span class="go"># Clean signal and Find peaks</span>
+<span class="gp">In [3]: </span><span class="n">ecg_cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_clean</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_cleaned</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">correct_artifacts</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="go"># Compute HRV indices</span>
+<span class="gp">In [5]: </span><span class="n">hrv_indices</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_hrv1.png"><img alt="../_images/p_hrv1.png" src="../_images/p_hrv1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">hrv_indices</span>
+<span class="gh">Out[6]: </span><span class="go"></span>
+<span class="go">   HRV_MeanNN   HRV_SDNN  HRV_SDANN1  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
+<span class="go">0  694.756381  49.036043    7.277185  ...  1.917341  2.722348  0.873124</span>
+
+<span class="go">[1 rows x 81 columns]</span>
+</pre></div>
+</div>
+<p><strong>Example 2</strong>: Compute HRV directly from processed data</p>
+<p class="rubric">References</p>
 <ul class="simple">
-<li><p><strong>Software for biosignals processing</strong></p>
-<ul>
-<li><p><a class="reference external" href="https://www.biopac.com/product/acqknowledge-software/">AcqKnowledge</a>: General physiological analysis software (ECG, PPG, RSP, EDA, EMG, …).</p></li>
-<li><p><a class="reference external" href="https://www.kubios.com/">Kubios</a>: Heart-rate variability (HRV).</p></li>
+<li><p>Pham, T., Lau, Z. J., Chen, S. H. A., &amp; Makowski, D. (2021). Heart Rate Variability in
+Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
+<a class="reference external" href="https://doi.org/10.3390/s21123998">https://doi.org/10.3390/s21123998</a></p></li>
+<li><p>Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
+electrophysiology review, 6(3), 239-244.</p></li>
+<li><p>Shaffer, F., &amp; Ginsberg, J. P. (2017). An overview of heart rate variability metrics and
+norms. Frontiers in public health, 5, 258.</p></li>
 </ul>
-</li>
-</ul>
-<p>Unfortunately, it’s the prefered option for many researchers. <em>Why?</em> For PIs, it’s usually because they are established tools backed by some sort of company behind them, with experts, advertisers and sellers that do their job well. The companies also offer some guaranty in terms of training, updates, issues troubleshooting, etc. For younger researchers starting with physiological data analysis, it’s usually because they don’t have much (or any) <strong>experience with programming languages</strong>. They feel like there is already a lot of things to learn on the theorethical side of physiological signal processing, so they don’t want to add on top of that, <strong>learning a programming language</strong>.</p>
-<p>However, it is important to understand that you don’t necessarily have to <strong>know how to code</strong> to use some of the packages. Moreover, some of them include a GUI (see below), which makes them very easy to use and a great alternative to the software mentioned above.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>TLDR</strong>; Closed proprietary software, even though seemlingly appealing, might not a good investement of time or money.</p>
+</dd></dl>
+
 </div>
-</div>
-<div class="section" id="gui-vs-code">
-<h2>GUI <em>vs.</em> code<a class="headerlink" href="#gui-vs-code" title="Permalink to this headline">#</a></h2>
-<p><em>TODO</em>.</p>
-<ul class="simple">
-<li><p><strong>Packages with a GUI</strong></p>
-<ul>
-<li><p><a class="reference external" href="http://www.ledalab.de/">Ledalab</a>: EDA <em>(Matlab)</em>.</p></li>
-<li><p><a class="reference external" href="https://bachlab.github.io/PsPM/">PsPM</a>: Primarly EDA <em>(Matlab)</em>.</p></li>
-<li><p><a class="reference external" href="https://github.com/JanCBrammer/biopeaks">biopeaks</a>: ECG, PPG <em>(Python)</em>.</p></li>
-<li><p><a class="reference external" href="https://github.com/cbrnr/mnelab">mnelab</a>: EEG <em>(Python)</em>.</p></li>
-</ul>
-</li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p><strong>TLDR</strong>; While GUIs can be good alternatives and a first step to dive into programming language-based tools, coding will provide you with more freedom, incredible power and the best fit possible for your data and issues.</p>
-</div>
-</div>
-<div class="section" id="matlab-vs-python-vs-r-vs-julia">
-<h2>Matlab <em>vs.</em> Python <em>vs.</em> R <em>vs.</em> Julia<a class="headerlink" href="#matlab-vs-python-vs-r-vs-julia" title="Permalink to this headline">#</a></h2>
-<p>What is the best programming language for physiological data analysis?</p>
-<p><strong>Matlab</strong> is the historical main contender. However… <em>TODO</em>.</p>
-<ul class="simple">
-<li><p><strong>Python-based packages</strong></p>
-<ul>
-<li><p><a class="reference external" href="https://github.com/neuropsychology/NeuroKit">NeuroKit2</a>: ECG, PPG, RSP, EDA, EMG.</p></li>
-<li><p><a class="reference external" href="https://github.com/PIA-Group/BioSPPy">BioSPPy</a>: ECG, RSP, EDA, EMG.</p></li>
-<li><p><a class="reference external" href="https://github.com/Gabrock94/Pysiology">PySiology</a>: ECG, EDA, EMG.</p></li>
-<li><p><a class="reference external" href="https://github.com/MPBA/pyphysio">pyphysio</a>: ECG, PPG, EDA.</p></li>
-<li><p><a class="reference external" href="https://github.com/paulvangentcom/heartrate_analysis_python">HeartPy</a>: ECG.</p></li>
-<li><p><a class="reference external" href="https://github.com/rhenanbartels/hrv">hrv</a>: ECG.</p></li>
-<li><p><a class="reference external" href="https://github.com/Aura-healthcare/hrvanalysis">hrv-analysis</a>: ECG.</p></li>
-<li><p><a class="reference external" href="https://github.com/PGomes92/pyhrv">pyhrv</a>: ECG.</p></li>
-<li><p><a class="reference external" href="https://github.com/berndporr/py-ecg-detectors">py-ecg-detectors</a>: ECG.</p></li>
-<li><p><a class="reference external" href="https://github.com/embodied-computation-group/systole">Systole</a>: PPG.</p></li>
-<li><p><a class="reference external" href="https://github.com/MITMediaLabAffectiveComputing/eda-explorer">eda-explorer</a>: EDA.</p></li>
-<li><p><a class="reference external" href="https://github.com/brennon/Pypsy">Pypsy</a>: EDA.</p></li>
-<li><p><a class="reference external" href="https://github.com/mne-tools/mne-python">MNE</a>: EEG.</p></li>
-<li><p><a class="reference external" href="https://github.com/EtienneCmb/tensorpac">tensorpac</a>: EEG.</p></li>
-<li><p><a class="reference external" href="https://github.com/esdalmaijer/PyGaze">PyGaze</a>: Eye-tracking.</p></li>
-<li><p><a class="reference external" href="https://github.com/titoghose/PyTrack">PyTrack</a>: Eye-tracking.</p></li>
-</ul>
-</li>
-<li><p><strong>Matlab-based packages</strong></p>
-<ul>
-<li><p><a class="reference external" href="https://github.com/johnksander/BreatheEasyEDA">BreatheEasyEDA</a>: EDA.</p></li>
-<li><p><a class="reference external" href="https://github.com/mateusjoffily/EDA">EDA</a>: EDA.</p></li>
-<li><p><a class="reference external" href="https://github.com/unfoldtoolbox/unfold">unfold</a>: EEG.</p></li>
-</ul>
-</li>
-</ul>
 </div>
 </div>
 
@@ -560,17 +515,17 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="resources.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="functions_ecg.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Additional Resources</p>
+            <p class="prev-next-title">ECG</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../functions/index.html" title="next page">
+    <a class='right-next' id="next-link" href="functions_complexity.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Functions</p>
+        <p class="prev-next-title">Complexity</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

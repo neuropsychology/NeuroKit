@@ -8,6 +8,8 @@ You can find here the API documentation of NeuroKit, with a description of all t
    :caption: Modules
    :titlesonly:
 
-   functions_ecg
-   functions_complexity
    functions_data
+   functions_ecg
+   functions_hrv
+   functions_complexity
+
