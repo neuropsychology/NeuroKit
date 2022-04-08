@@ -20,6 +20,7 @@ def signal_fixpeaks(
     relative_interval_max=None,
     robust=False,
     method="Kubios",
+    **kwargs,
 ):
     """Correct erroneous peak placements.
 
@@ -38,21 +39,24 @@ def signal_fixpeaks(
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
     interval_min : float
-        The minimum interval between the peaks.
+        Only when ``method = "neurokit"``. The minimum interval between the peaks.
     interval_max : float
-        The maximum interval between the peaks.
+        Only when ``method = "neurokit"``. The maximum interval between the peaks.
     relative_interval_min : float
-        The minimum interval between the peaks as relative to the sample (expressed in
-        standard deviation from the mean).
+        Only when ``method = "neurokit"``. The minimum interval between the peaks as relative to
+        the sample (expressed in standard deviation from the mean).
     relative_interval_max : float
-        The maximum interval between the peaks as relative to the sample (expressed in
-        standard deviation from the mean).
+        Only when ``method = "neurokit"``. The maximum interval between the peaks as relative to
+        the sample (expressed in standard deviation from the mean).
     robust : bool
-        Use a robust method of standardization (see `standardize()`) for the relative thresholds.
+        Only when ``method = "neurokit"``. Use a robust method of standardization (see
+        `standardize()`) for the relative thresholds.
     method : str
         Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
         in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
         ECG or PPG. "neurokit" can be used with peaks in ECG, PPG, or respiratory data.
+    **kwargs
+        Other keyword arguments.
 
     Returns
     -------
@@ -112,7 +116,9 @@ def signal_fixpeaks(
 
     # If method Kubios
     if method.lower() == "kubios":
-        return _signal_fixpeaks_kubios(peaks, sampling_rate=sampling_rate, iterative=iterative, show=show)
+        return _signal_fixpeaks_kubios(
+            peaks, sampling_rate=sampling_rate, iterative=iterative, show=show, **kwargs
+        )
     else:
         # Else method is NeuroKit
         return _signal_fixpeaks_neurokit(
@@ -141,16 +147,18 @@ def _signal_fixpeaks_neurokit(
     """Neurokit method."""
 
     peaks_clean = _remove_small(peaks, sampling_rate, interval_min, relative_interval_min, robust)
-    peaks_clean = _interpolate_big(peaks_clean, sampling_rate, interval_max, relative_interval_max, robust)
+    peaks_clean = _interpolate_big(
+        peaks_clean, sampling_rate, interval_max, relative_interval_max, robust
+    )
 
     return peaks_clean
 
 
-def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False):
+def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False, **kwargs):
     """kubios method."""
 
     # Get corrected peaks and normal-to-normal intervals.
-    artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate)
+    artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate, **kwargs)
     peaks_clean = _correct_artifacts(artifacts, peaks)
 
     if iterative:
@@ -161,7 +169,9 @@ def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=Fals
 
         while True:
 
-            new_artifacts, new_subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate)
+            new_artifacts, new_subspaces = _find_artifacts(
+                peaks_clean, sampling_rate=sampling_rate, **kwargs
+            )
 
             n_artifacts_previous = n_artifacts_current
             n_artifacts_current = sum([len(i) for i in new_artifacts.values()])
@@ -181,7 +191,9 @@ def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=Fals
 # =============================================================================
 # Kubios: Lipponen & Tarvainen (2019).
 # =============================================================================
-def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt_order=11, sampling_rate=1000):
+def _find_artifacts(
+    peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt_order=11, sampling_rate=1000
+):
 
     # Compute period series (make sure it has same numer of elements as peaks);
     # peaks are in samples, convert to seconds.
@@ -303,7 +315,12 @@ def _find_artifacts(peaks, c1=0.13, c2=0.17, alpha=5.2, window_width=91, medfilt
             i += 1
 
     # Prepare output
-    artifacts = {"ectopic": ectopic_idcs, "missed": missed_idcs, "extra": extra_idcs, "longshort": longshort_idcs}
+    artifacts = {
+        "ectopic": ectopic_idcs,
+        "missed": missed_idcs,
+        "extra": extra_idcs,
+        "longshort": longshort_idcs,
+    }
 
     subspaces = {"rr": rr, "drrs": drrs, "mrrs": mrrs, "s12": s12, "s22": s22, "c1": c1, "c2": c2}
 
@@ -372,7 +389,9 @@ def _correct_missed(missed_idcs, peaks):
     # Calculate the position(s) of new beat(s). Make sure to not generate
     # negative indices. prev_peaks and next_peaks must have the same
     # number of elements.
-    valid_idcs = np.logical_and(missed_idcs > 1, missed_idcs < len(corrected_peaks))  # pylint: disable=E1111
+    valid_idcs = np.logical_and(
+        missed_idcs > 1, missed_idcs < len(corrected_peaks)
+    )  # pylint: disable=E1111
     missed_idcs = missed_idcs[valid_idcs]
     prev_peaks = corrected_peaks[[i - 1 for i in missed_idcs]]
     next_peaks = corrected_peaks[missed_idcs]
@@ -448,10 +467,16 @@ def _plot_artifacts_lipponen2019(artifacts, info):
 
     ax0.set_title("Artifact types", fontweight="bold")
     ax0.plot(rr, label="heart period")
-    ax0.scatter(longshort_idcs, rr[longshort_idcs], marker="x", c="m", s=100, zorder=3, label="long/short")
+    ax0.scatter(
+        longshort_idcs, rr[longshort_idcs], marker="x", c="m", s=100, zorder=3, label="long/short"
+    )
     ax0.scatter(ectopic_idcs, rr[ectopic_idcs], marker="x", c="g", s=100, zorder=3, label="ectopic")
-    ax0.scatter(extra_idcs, rr[extra_idcs], marker="x", c="y", s=100, zorder=3, label="false positive")
-    ax0.scatter(missed_idcs, rr[missed_idcs], marker="x", c="r", s=100, zorder=3, label="false negative")
+    ax0.scatter(
+        extra_idcs, rr[extra_idcs], marker="x", c="y", s=100, zorder=3, label="false positive"
+    )
+    ax0.scatter(
+        missed_idcs, rr[missed_idcs], marker="x", c="r", s=100, zorder=3, label="false negative"
+    )
     ax0.legend(loc="upper right")
 
     # Visualize first threshold.
@@ -477,7 +502,9 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax4.set_xlim(-10, 10)
     verts0 = [(-10, 5), (-10, -c1 * -10 + c2), (-1, -c1 * -1 + c2), (-1, 5)]
 
-    poly0 = matplotlib.patches.Polygon(verts0, alpha=0.3, facecolor="r", edgecolor=None, label="ectopic periods")
+    poly0 = matplotlib.patches.Polygon(
+        verts0, alpha=0.3, facecolor="r", edgecolor=None, label="ectopic periods"
+    )
     ax4.add_patch(poly0)
     verts1 = [(1, -c1 * 1 - c2), (1, -5), (10, -5), (10, -c1 * 10 - c2)]
     poly1 = matplotlib.patches.Polygon(verts1, alpha=0.3, facecolor="r", edgecolor=None)
@@ -491,10 +518,14 @@ def _plot_artifacts_lipponen2019(artifacts, info):
     ax3.set_xlim(-10, 10)
     ax3.set_ylim(-10, 10)
     verts2 = [(-10, 10), (-10, 1), (-1, 1), (-1, 10)]
-    poly2 = matplotlib.patches.Polygon(verts2, alpha=0.3, facecolor="r", edgecolor=None, label="short periods")
+    poly2 = matplotlib.patches.Polygon(
+        verts2, alpha=0.3, facecolor="r", edgecolor=None, label="short periods"
+    )
     ax3.add_patch(poly2)
     verts3 = [(1, -1), (1, -10), (10, -10), (10, -1)]
-    poly3 = matplotlib.patches.Polygon(verts3, alpha=0.3, facecolor="y", edgecolor=None, label="long periods")
+    poly3 = matplotlib.patches.Polygon(
+        verts3, alpha=0.3, facecolor="y", edgecolor=None, label="long periods"
+    )
     ax3.add_patch(poly3)
     ax3.legend(loc="upper right")
 
@@ -502,7 +533,9 @@ def _plot_artifacts_lipponen2019(artifacts, info):
 # =============================================================================
 # Neurokit
 # =============================================================================
-def _remove_small(peaks, sampling_rate=1000, interval_min=None, relative_interval_min=None, robust=False):
+def _remove_small(
+    peaks, sampling_rate=1000, interval_min=None, relative_interval_min=None, robust=False
+):
     if interval_min is None and relative_interval_min is None:
         return peaks
 
@@ -517,7 +550,9 @@ def _remove_small(peaks, sampling_rate=1000, interval_min=None, relative_interva
     return peaks
 
 
-def _interpolate_big(peaks, sampling_rate=1000, interval_max=None, relative_interval_max=None, robust=False):
+def _interpolate_big(
+    peaks, sampling_rate=1000, interval_max=None, relative_interval_max=None, robust=False
+):
     if interval_max is None and relative_interval_max is None:
         return peaks
 
@@ -525,12 +560,16 @@ def _interpolate_big(peaks, sampling_rate=1000, interval_max=None, relative_inte
     while continue_loop is True:
         if interval_max is not None:
             interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
-            peaks, continue_loop = _interpolate_missing(peaks, interval, interval_max, sampling_rate)
+            peaks, continue_loop = _interpolate_missing(
+                peaks, interval, interval_max, sampling_rate
+            )
 
         if relative_interval_max is not None:
             interval = signal_period(peaks, sampling_rate=sampling_rate, desired_length=None)
             interval = standardize(interval, robust=robust)
-            peaks, continue_loop = _interpolate_missing(peaks, interval, relative_interval_max, sampling_rate)
+            peaks, continue_loop = _interpolate_missing(
+                peaks, interval, relative_interval_max, sampling_rate
+            )
 
     return peaks
 
@@ -549,7 +588,9 @@ def _interpolate_missing(peaks, interval, interval_max, sampling_rate):
     # Interpolate values
     interval = pd.Series(interval).interpolate().values
     peaks_corrected = _period_to_location(interval, sampling_rate, first_location=peaks[0])
-    peaks = np.insert(peaks, outliers_loc, peaks_corrected[outliers_loc + np.arange(len(outliers_loc))])
+    peaks = np.insert(
+        peaks, outliers_loc, peaks_corrected[outliers_loc + np.arange(len(outliers_loc))]
+    )
     return peaks, True
 
 
