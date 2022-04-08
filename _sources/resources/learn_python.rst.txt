@@ -45,7 +45,7 @@ Variables
 
 The most important concept of programming is **variables**, which is a fancy name for something that you already know. Do you remember, from your mathematics classes, the famous *x*, this placeholder for any value? Well, *x* was a variable, i.e., the name referring to some other thing.
 
-.. hint::
+.. note::
    Despite to what I just said, a variable in programming is not equivalent to a variable in statistics, in which it refers to some specific data (for instance, *age* is a variable and contains multiple observations). In programming, a variable is simply the name that we give to some entity, that could be anything.
 
 

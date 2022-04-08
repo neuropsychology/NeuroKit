@@ -37,7 +37,7 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Cite us" href="../cite_us.html" />
+    <link rel="next" title="Data" href="functions_data.html" />
     <link rel="prev" title="ECG" href="functions_ecg.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -144,6 +144,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Complexity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="functions_data.html">
+     Data
     </a>
    </li>
   </ul>
@@ -1210,7 +1215,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.9064281579736757</span>
+<span class="gh">Out[12]: </span><span class="go">1.8433061908868191</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1220,7 +1225,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.5936794440312427</span>
+<span class="gh">Out[16]: </span><span class="go">3.8489706356399997</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1472,19 +1477,19 @@ factors, or <code class="docutils literal notranslate"><span class="pre">&quot;d
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.571464485029269</span>
+<span class="gh">Out[4]: </span><span class="go">2.573049388023768</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8801330551819933</span>
+<span class="gh">Out[6]: </span><span class="go">0.8720238289742491</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9983351720299866</span>
+<span class="gh">Out[8]: </span><span class="go">0.9957422523961686</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1640,10 +1645,10 @@ Clinical Neurophysiology, 29, 306-310. <a class="reference external" href="http:
             <p class="prev-next-title">ECG</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../cite_us.html" title="next page">
+    <a class='right-next' id="next-link" href="functions_data.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Cite us</p>
+        <p class="prev-next-title">Data</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
