@@ -36,7 +36,10 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **SD2**: Standard deivation parallel to the line of identity. Index of long-term HRV changes.
     * **SD1/SD2**: ratio of *SD1* to *SD2*. Describes the ratio of short term to long term variations in HRV.
 
-    Other indices computed based on the relationship between the short-term and long-term HRV changes are **Cardiac Sympathetic Index (CSI)**, which is a measure of cardiac sympathetic function independent of vagal activity and conversely, the **Cardiac Vagal Index (CVI)**, an index of cardiac parasympathetic function (vagal activity unaffected by sympathetic activity).
+    Other indices computed based on the relationship between the short-term and long-term HRV
+    changes are **Cardiac Sympathetic Index (CSI)**, which is a measure of cardiac sympathetic
+    function independent of vagal activity and conversely, the **Cardiac Vagal Index (CVI)**, an
+    index of cardiac parasympathetic function (vagal activity unaffected by sympathetic activity).
 
     .. hint::
         We strongly recommend checking our open-access paper `Pham et al. (2021)
