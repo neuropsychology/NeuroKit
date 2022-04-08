@@ -441,8 +441,8 @@ title="Print to PDF"
 <p>This function computes all HRV indices available in NeuroKit. It is essentially a convenience
 function that aggregates results from the <code class="xref py py-func docutils literal notranslate"><span class="pre">time</span> <span class="pre">domain</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">frequency</span>
 <span class="pre">domain</span></code>, and <code class="xref py py-func docutils literal notranslate"><span class="pre">non-linear</span> <span class="pre">domain</span></code>.</p>
-<div class="admonition hint">
-<p class="admonition-title">Hint</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
 <p>We strongly recommend checking our open-access paper <a class="reference external" href="https://doi.org/10.3390/s21123998">Pham et al. (2021)</a> on HRV indices for more information.</p>
 </div>
 <dl class="field-list simple">
@@ -450,7 +450,7 @@ function that aggregates results from the <code class="xref py py-func docutils 
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which R-peaks occur. Can be a list of indices or the output(s) of other
 functions such as <code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code> or
-<code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process.()</span></code></p></li>
+<code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></p></li>
 <li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
 least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <li><p><strong>show</strong> (<em>bool, optional</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, returns the plots that are generates for each of the domains.</p></li>
@@ -491,6 +491,21 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 </pre></div>
 </div>
 <p><strong>Example 2</strong>: Compute HRV directly from processed data</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Download data</span>
+<span class="gp">In [7]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
+
+<span class="go"># Process</span>
+<span class="gp">In [8]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+<span class="go"># Get HRV</span>
+<span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">hrv</span><span class="p">(</span><span class="n">signals</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gh">Out[9]: </span><span class="go"></span>
+<span class="go">   HRV_MeanNN   HRV_SDNN  ...  RSA_Gates_Mean_log  RSA_Gates_SD</span>
+<span class="go">0  694.756381  49.036043  ...            2.046078      0.156442</span>
+
+<span class="go">[1 rows x 89 columns]</span>
+</pre></div>
+</div>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Pham, T., Lau, Z. J., Chen, S. H. A., &amp; Makowski, D. (2021). Heart Rate Variability in
