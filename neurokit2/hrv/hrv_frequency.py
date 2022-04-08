@@ -28,9 +28,13 @@ def hrv_frequency(
 ):
     """Computes frequency-domain indices of Heart Rate Variability (HRV).
 
-    Note that a minimum duration of the signal containing the peaks is recommended for some HRV indices
-    to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the recomended
-    minima for HF, LF and LF/HF, respectively. See references for details.
+    Note that a minimum duration of the signal containing the peaks is recommended for some HRV
+    indices to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the
+    recommended minima for HF, LF and LF/HF, respectively.
+
+     .. hint::
+        We strongly recommend checking our open-access paper `Pham et al. (2021)
+        <https://doi:10.3390/s21123998>`_ on HRV indices for more information.
 
     Parameters
     ----------
