@@ -43,13 +43,14 @@ def signal_fixpeaks(
     interval_max : float
         Only when ``method = "neurokit"``. The maximum interval between the peaks.
     relative_interval_min : float
-        Only when ``method = "neurokit"``. The minimum interval between the peaks as relative to the sample (expressed in
-        standard deviation from the mean).
+        Only when ``method = "neurokit"``. The minimum interval between the peaks as relative to
+        the sample (expressed in standard deviation from the mean).
     relative_interval_max : float
-        Only when ``method = "neurokit"``. The maximum interval between the peaks as relative to the sample (expressed in
-        standard deviation from the mean).
+        Only when ``method = "neurokit"``. The maximum interval between the peaks as relative to
+        the sample (expressed in standard deviation from the mean).
     robust : bool
-        Only when ``method = "neurokit"``. Use a robust method of standardization (see `standardize()`) for the relative thresholds.
+        Only when ``method = "neurokit"``. Use a robust method of standardization (see
+        `standardize()`) for the relative thresholds.
     method : str
         Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
         in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
