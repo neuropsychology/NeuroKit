@@ -20,6 +20,7 @@ def signal_fixpeaks(
     relative_interval_max=None,
     robust=False,
     method="Kubios",
+    **kwargs,
 ):
     """Correct erroneous peak placements.
 
@@ -38,21 +39,24 @@ def signal_fixpeaks(
     show : bool
         Whether or not to visualize artifacts and artifact thresholds.
     interval_min : float
-        The minimum interval between the peaks.
+        Only when ``method = "neurokit"``. The minimum interval between the peaks.
     interval_max : float
-        The maximum interval between the peaks.
+        Only when ``method = "neurokit"``. The maximum interval between the peaks.
     relative_interval_min : float
-        The minimum interval between the peaks as relative to the sample (expressed in
-        standard deviation from the mean).
+        Only when ``method = "neurokit"``. The minimum interval between the peaks as relative to
+        the sample (expressed in standard deviation from the mean).
     relative_interval_max : float
-        The maximum interval between the peaks as relative to the sample (expressed in
-        standard deviation from the mean).
+        Only when ``method = "neurokit"``. The maximum interval between the peaks as relative to
+        the sample (expressed in standard deviation from the mean).
     robust : bool
-        Use a robust method of standardization (see `standardize()`) for the relative thresholds.
+        Only when ``method = "neurokit"``. Use a robust method of standardization (see
+        `standardize()`) for the relative thresholds.
     method : str
         Either "Kubios" or "Neurokit". "Kubios" uses the artifact detection and correction described
         in Lipponen, J. A., & Tarvainen, M. P. (2019). Note that "Kubios" is only meant for peaks in
         ECG or PPG. "neurokit" can be used with peaks in ECG, PPG, or respiratory data.
+    **kwargs
+        Other keyword arguments.
 
     Returns
     -------
@@ -113,7 +117,7 @@ def signal_fixpeaks(
     # If method Kubios
     if method.lower() == "kubios":
         return _signal_fixpeaks_kubios(
-            peaks, sampling_rate=sampling_rate, iterative=iterative, show=show
+            peaks, sampling_rate=sampling_rate, iterative=iterative, show=show, **kwargs
         )
     else:
         # Else method is NeuroKit
@@ -150,11 +154,11 @@ def _signal_fixpeaks_neurokit(
     return peaks_clean
 
 
-def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False):
+def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=False, **kwargs):
     """kubios method."""
 
     # Get corrected peaks and normal-to-normal intervals.
-    artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate)
+    artifacts, subspaces = _find_artifacts(peaks, sampling_rate=sampling_rate, **kwargs)
     peaks_clean = _correct_artifacts(artifacts, peaks)
 
     if iterative:
@@ -165,7 +169,9 @@ def _signal_fixpeaks_kubios(peaks, sampling_rate=1000, iterative=True, show=Fals
 
         while True:
 
-            new_artifacts, new_subspaces = _find_artifacts(peaks_clean, sampling_rate=sampling_rate)
+            new_artifacts, new_subspaces = _find_artifacts(
+                peaks_clean, sampling_rate=sampling_rate, **kwargs
+            )
 
             n_artifacts_previous = n_artifacts_current
             n_artifacts_current = sum([len(i) for i in new_artifacts.values()])
