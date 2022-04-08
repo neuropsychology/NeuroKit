@@ -790,7 +790,6 @@ by the <code class="docutils literal notranslate"><span class="pre">Label</span>
 
 <span class="go"># Download the data</span>
 <span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
-<span class="go">1</span>
 
 <span class="go"># Process the data for event-related analysis</span>
 <span class="gp">In [3]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -823,7 +822,6 @@ by the <code class="docutils literal notranslate"><span class="pre">Label</span>
 
 <span class="go"># Download the resting-state data</span>
 <span class="gp">In [9]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
-<span class="go">1</span>
 
 <span class="go"># Process the data</span>
 <span class="gp">In [10]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -1152,7 +1150,6 @@ i.e., samples/second). Defaults to 1000Hz.</p></li>
 
 <span class="go"># Get heart rate</span>
 <span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
-<span class="go">1</span>
 
 <span class="gp">In [3]: </span><span class="n">rpeaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 
@@ -1763,9 +1760,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.651116          0.931236</span>
-<span class="go">2     2        10000  ...                          0.389234          0.968479</span>
-<span class="go">3     3        15000  ...                          0.106557          0.986354</span>
+<span class="go">1     1         5000  ...                          0.743902          0.995069</span>
+<span class="go">2     2        10000  ...                          0.433809          0.964767</span>
+<span class="go">3     3        15000  ...                          0.158111          0.975579</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -1775,7 +1772,6 @@ might not be reliable or meaningful.</p></li>
 </ul>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># Download real dataset</span>
 <span class="gp">In [6]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_eventrelated_100hz&quot;</span><span class="p">)</span>
-<span class="go">1</span>
 
 <span class="go"># Process the data</span>
 <span class="gp">In [7]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">bio_process</span><span class="p">(</span><span class="n">ecg</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
@@ -1840,7 +1836,6 @@ separately processed DataFrames.</p></li>
 
 <span class="go"># Download data</span>
 <span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
-<span class="go">1</span>
 
 <span class="go"># Process the data</span>
 <span class="gp">In [3]: </span><span class="n">df</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_process</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
