@@ -1,8 +1,8 @@
 Recording good quality signals
 ======================================
 
-.. hint::
-   Spotted a typo? Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
+.. important::
+   Would like to add something or make a correction? Join us by contributing (`see this tutorial <https://neurokit2.readthedocs.io/en/latest/tutorials/contributing.html>`_).
 
 Here some useful resources to help you collect good quality signals. Remember, cleaning and processing can only get you this far, and having good signals from the start is the first step to a good analysis.
 

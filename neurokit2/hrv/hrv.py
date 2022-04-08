@@ -18,7 +18,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     function that aggregates results from the :func:`time domain <hrv_time>`, :func:`frequency
     domain <hrv_frequency>`, and :func:`non-linear domain <hrv_nonlinear>`.
 
-    .. hint::
+    .. tip::
         We strongly recommend checking our open-access paper `Pham et al. (2021)
         <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
 
@@ -27,7 +27,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     peaks : dict
         Samples at which R-peaks occur. Can be a list of indices or the output(s) of other
         functions such as :func:`ecg_peaks`, :func:`ppg_peaks`, :func:`ecg_process` or
-        :func:`bio_process.`
+        :func:`bio_process`
     sampling_rate : int, optional
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
@@ -72,6 +72,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
     **Example 2**: Compute HRV directly from processed data
 
     .. ipython:: python
+
       # Download data
       data = nk.data("bio_resting_5min_100hz")
 

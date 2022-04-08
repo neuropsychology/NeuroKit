@@ -32,7 +32,7 @@ def hrv_frequency(
     indices to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the
     recommended minima for HF, LF and LF/HF, respectively.
 
-     .. hint::
+     .. tip::
         We strongly recommend checking our open-access paper `Pham et al. (2021)
         <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
 

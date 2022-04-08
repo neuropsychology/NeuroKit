@@ -120,7 +120,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     are not implemented yet (but soon).
 
 
-    .. hint::
+    .. tip::
         We strongly recommend checking our open-access paper `Pham et al. (2021)
         <https://doi.org/10.3390/s21123998>`_ on HRV indices, as well as `Lau et al. (2021)
         <https://psyarxiv.com/f8k3x/>`_ on complexity, for more information.
