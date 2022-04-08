@@ -1473,7 +1473,7 @@ engineering &amp; technology, 43(3), 173-181.</p></li>
 <h3><em>ecg_delineate()</em><a class="headerlink" href="#ecg-delineate" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.ecg.ecg_delineate">
-<span class="sig-name descname"><span class="pre">ecg_delineate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dwt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'peaks'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_delineate" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">ecg_delineate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ecg_cleaned</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rpeaks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'dwt'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'peaks'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ecg.ecg_delineate" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Delineate QRS complex</strong></p>
 <p>Function to delineate the QRS complex, i.e., the different waves of the cardiac cycles. A
 typical ECG heartbeat consists of a P wave, a QRS complex and a T wave. The P wave represents
@@ -1497,6 +1497,7 @@ or <code class="docutils literal notranslate"><span class="pre">'dwt'</span></co
 Can be <code class="docutils literal notranslate"><span class="pre">&quot;peaks&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bounds_R&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bounds_T&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;bounds_P&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>.</p></li>
 <li><p><strong>check</strong> (<em>bool</em>) – Defaults to False. If True, replaces the delineated features with <code class="docutils literal notranslate"><span class="pre">np.nan</span></code> if its
 standardized distance from R-peaks is more than 3.</p></li>
+<li><p><strong>**kwargs</strong> – Other optional arguments.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1762,9 +1763,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.681250          0.971213</span>
-<span class="go">2     2        10000  ...                          0.457661          0.973317</span>
-<span class="go">3     3        15000  ...                          0.064315          0.882658</span>
+<span class="go">1     1         5000  ...                          0.651116          0.931236</span>
+<span class="go">2     2        10000  ...                          0.389234          0.968479</span>
+<span class="go">3     3        15000  ...                          0.106557          0.986354</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>

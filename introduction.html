@@ -1045,7 +1045,7 @@ Sensors, 21(12), 3998. https://doi:10.3390/s21123998
 <li><p>Delineate the QRS complex of an electrocardiac signal (ECG) including P-peaks, T-peaks, as well as their onsets and offsets.</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Download data</span>
-<span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;ecg_3000hz&quot;</span><span class="p">)[</span><span class="s1">&#39;ECG&#39;</span><span class="p">]</span>
+<span class="n">ecg_signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="s2">&quot;ecg_3000hz&quot;</span><span class="p">)</span>
 
 <span class="c1"># Extract R-peaks locations</span>
 <span class="n">_</span><span class="p">,</span> <span class="n">rpeaks</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg_signal</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">3000</span><span class="p">)</span>
