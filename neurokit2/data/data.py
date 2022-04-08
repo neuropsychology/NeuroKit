@@ -22,8 +22,7 @@ def data(dataset="bio_eventrelated_100hz"):
 
     **DataFrames**: The following datasets (that will return a ``pd.DataFrame``) are available:
 
-    * **iris**: Convenient access to the `Iris dataset <https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_iris.html>`_
-      in a DataFrame, exactly how it is in R.
+    * **iris**: Convenient access to the Iris dataset in a DataFrame, exactly how it is in R.
     * **eogs_200hz**: Returns a DataFrame with ``hEOG``, ``vEOG``.
 
       * Single subject
@@ -116,6 +115,8 @@ def data(dataset="bio_eventrelated_100hz"):
 
       data = nk.data("iris")
       data.head()
+
+    .. ipython:: python
 
       data = nk.data(dataset="eogs_200hz")
       @savefig p_datasets5.png scale=100%
