@@ -27,7 +27,8 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes nonlinear indices of Heart Rate Variability (HRV).
 
-    Non-linear indices include features derived from the *Poincaré plot*, as well as other :func:`complexity <complexity>` indices.
+    Non-linear indices include features derived from the *Poincaré plot*, as well as other
+    :func:`complexity <complexity>` indices.
 
     The **Poincaré plot** is a graphical representation of each NN interval plotted against its
     preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
@@ -134,8 +135,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
         Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
         least twice as high as the highest frequency in vhf. By default 1000.
     show : bool, optional
-        If True, will return a Poincaré plot, a scattergram, which plots each RR interval against the
-        next successive one. The ellipse centers around the average RR interval. By default False.
+        If True, will return a Poincaré plot, a scattergram, which plots each RR interval against
+        the next successive one. The ellipse centers around the average RR interval. By default False.
     **kwargs
         Other arguments to be passed into `fractal_dfa()` and `fractal_correlation()`.
 
@@ -165,42 +166,34 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     References
     ----------
-    - Pham, T., Lau, Z. J., Chen, S. H., & Makowski, D. (2021). Heart Rate Variability in Psychology:
-    A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998. https://doi.org/10.3390/s21123998
-
-    - Yan, C., Li, P., Ji, L., Yao, L., Karmakar, C., & Liu, C. (2017). Area asymmetry of heart
-    rate variability signal. Biomedical engineering online, 16(1), 112.
-
-    - Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
-    (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
-    56(4), 674-678.
-
-    - Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and norms.
-    Frontiers in public health, 5, 258.
-
-    - Costa, M. D., Davis, R. B., & Goldberger, A. L. (2017). Heart rate fragmentation: a new
-    approach to the analysis of cardiac interbeat interval dynamics. Front. Physiol. 8, 255 (2017).
-
-    - Jeppesen, J., Beniczky, S., Johansen, P., Sidenius, P., & Fuglsang-Frederiksen, A. (2014).
-    Using Lorenz plot and Cardiac Sympathetic Index of heart rate variability for detecting seizures
-    for patients with epilepsy. In 2014 36th Annual International Conference of the IEEE Engineering
-    in Medicine and Biology Society (pp. 4563-4566). IEEE.
-
-    - Piskorski, J., & Guzik, P. (2011). Asymmetric properties of long-term and total heart rate
-    variability. Medical & biological engineering & computing, 49(11), 1289-1297.
-
-    - Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
-    electrophysiology review, 6(3), 239-244.
-
-    - Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear
-    Features of Heart Rate Variability?. IEEE Transactions on Biomedical Engineering, 48(11), 1342-1347.
-
-    - Toichi, M., Sugiura, T., Murai, T., & Sengoku, A. (1997). A new method of assessing cardiac
-    autonomic function and its comparison with spectral analysis and coefficient of variation of R–R
-    interval. Journal of the autonomic nervous system, 62(1-2), 79-84.
-
-    - Acharya, R. U., Lim, C. M., & Joseph, P. (2002). Heart rate variability analysis using
-    correlation dimension and detrended fluctuation analysis. Itbm-Rbm, 23(6), 333-339.
+    * Pham, T., Lau, Z. J., Chen, S. H., & Makowski, D. (2021). Heart Rate Variability in
+      Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
+      https:// doi.org/10.3390/s21123998
+    * Yan, C., Li, P., Ji, L., Yao, L., Karmakar, C., & Liu, C. (2017). Area asymmetry of heart
+      rate variability signal. Biomedical engineering online, 16(1), 112.
+    * Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
+      (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
+      56(4), 674-678.
+    * Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and
+      norms. Frontiers in public health, 5, 258.
+    * Costa, M. D., Davis, R. B., & Goldberger, A. L. (2017). Heart rate fragmentation: a new
+      approach to the analysis of cardiac interbeat interval dynamics. Front. Physiol. 8, 255.
+    * Jeppesen, J., Beniczky, S., Johansen, P., Sidenius, P., & Fuglsang-Frederiksen, A. (2014).
+      Using Lorenz plot and Cardiac Sympathetic Index of heart rate variability for detecting
+      seizures for patients with epilepsy. In 2014 36th Annual International Conference of the IEEE
+      Engineering in Medicine and Biology Society (pp. 4563-4566). IEEE.
+    * Piskorski, J., & Guzik, P. (2011). Asymmetric properties of long-term and total heart rate
+      variability. Medical & biological engineering & computing, 49(11), 1289-1297.
+    * Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
+      electrophysiology review, 6(3), 239-244.
+    * Brennan, M. et al. (2001). Do Existing Measures of Poincaré Plot Geometry Reflect Nonlinear
+      Features of Heart Rate Variability?. IEEE Transactions on Biomedical Engineering, 48(11),
+      1342-1347.
+    * Toichi, M., Sugiura, T., Murai, T., & Sengoku, A. (1997). A new method of assessing cardiac
+      autonomic function and its comparison with spectral analysis and coefficient of variation of
+      R-R interval. Journal of the autonomic nervous system, 62(1-2), 79-84.
+    * Acharya, R. U., Lim, C. M., & Joseph, P. (2002). Heart rate variability analysis using
+      correlation dimension and detrended fluctuation analysis. Itbm-Rbm, 23(6), 333-339.
 
     """
     # Sanitize input
