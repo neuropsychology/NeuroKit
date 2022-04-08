@@ -1052,42 +1052,39 @@ def _ecg_delineate_plot(
     ecg_signal, rpeaks=None, signals=None, signal_features_type="all", sampling_rate=1000
 ):
 
-    """#    Examples.
+    """
+    import neurokit2 as nk
+    import numpy as np
+    import pandas as pd
+    import matplotlib.pyplot as plt
 
-    #    --------
-    #    >>> import neurokit2 as nk
-    #    >>> import numpy as np
-    #    >>> import pandas as pd
-    #    >>> import matplotlib.pyplot as plt
-    #
-    #    >>> ecg_signal = np.array(pd.read_csv(
-    #    "https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/ecg_1000hz.csv"))[:, 1]
-    #
-    #    >>> # Extract R-peaks locations
-    #    >>> _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)
-    #
-    #    >>> # Delineate the ECG signal with ecg_delineate()
-    #    >>> signals, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=1000)
-    #
-    #    >>> # Plot the ECG signal with markings on ECG peaks
-    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-    #                            signal_features_type='peaks', sampling_rate=1000)
-    #
-    #    >>> # Plot the ECG signal with markings on boundaries of R peaks
-    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-    #                            signal_features_type='bound_R', sampling_rate=1000)
-    #
-    #    >>> # Plot the ECG signal with markings on boundaries of P peaks
-    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-    #                            signal_features_type='bound_P', sampling_rate=1000)
-    #
-    #    >>> # Plot the ECG signal with markings on boundaries of T peaks
-    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-    #                            signal_features_type='bound_T', sampling_rate=1000)
-    #
-    #    >>> # Plot the ECG signal with markings on all peaks and boundaries
-    #    >>> _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
-    #                            signal_features_type='all', sampling_rate=1000)
+    ecg_signal = nk.data("ecg_100hz")
+
+    # Extract R-peaks locations
+     _, rpeaks = nk.ecg_peaks(ecg_signal, sampling_rate=1000)
+
+    # Delineate the ECG signal with ecg_delineate()
+    signals, waves = nk.ecg_delineate(ecg_signal, rpeaks, sampling_rate=1000)
+
+    # Plot the ECG signal with markings on ECG peaks
+    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                        signal_features_type='peaks', sampling_rate=1000)
+
+    # Plot the ECG signal with markings on boundaries of R peaks
+    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                        signal_features_type='bound_R', sampling_rate=1000)
+
+    # Plot the ECG signal with markings on boundaries of P peaks
+    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                        signal_features_type='bound_P', sampling_rate=1000)
+
+    # Plot the ECG signal with markings on boundaries of T peaks
+    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                        signal_features_type='bound_T', sampling_rate=1000)
+
+    # Plot the ECG signal with markings on all peaks and boundaries
+    _ecg_delineate_plot(ecg_signal, rpeaks=rpeaks, signals=signals,
+                        signal_features_type='all', sampling_rate=1000)
 
     """
 
