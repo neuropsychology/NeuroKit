@@ -5,11 +5,11 @@ from ..signal import signal_autocor
 
 
 def complexity_rr(signal, **kwargs):
-    """Relative Roughness (RR)
+    """**Relative Roughness (RR)**
 
     Relative Roughness is a ratio of local variance (autocovariance at lag-1) to global variance
     (autocovariance at lag-0) that can be used to classify different 'noises'
-    (see `Hasselman, 2019 <https://complexity-methods.github.io/book/relative-roughness.html>`_).
+    (see `Hasselman, 2019 <https://complexity-methods.github.io/book/relative-roughness.html>`_). It can also be used as an index to test for the applicability of fractal analysis (see `Marmelat et al., 2012 <https://doi.org/10.3389/fphys.2012.00208>`_).
 
     Parameters
     ----------
@@ -20,9 +20,9 @@ def complexity_rr(signal, **kwargs):
 
     References
     ----------
-    - Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness:
-    an index for testing the suitability of the monofractal model.
-    Frontiers in Physiology, 3, 208.
+    * Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness:
+      an index for testing the suitability of the monofractal model.
+      Frontiers in Physiology, 3, 208.
 
     Returns
     --------
@@ -34,11 +34,13 @@ def complexity_rr(signal, **kwargs):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = [1, 2, 3, 4, 5]
-    >>> rr, _ = nk.complexity_rr(signal)
-    >>> rr  #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = [1, 2, 3, 4, 5]
+      rr, _ = nk.complexity_rr(signal)
+      rr
 
     """
     # Sanity checks

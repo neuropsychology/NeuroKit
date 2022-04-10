@@ -37,6 +37,13 @@ Fractal Dimension
 """"""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_sevcik
 
+*fractal_nld()*
+""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_nld
+
+*fractal_psdslope()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_psdslope
 
 Entropy
 ^^^^^^^^^^^^^^^^^
@@ -48,6 +55,17 @@ Entropy
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_permutation
 
+*entropy_shannon()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_shannon
+
+*entropy_differential()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_differential
+
+*entropy_spectral()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_spectral
 
 Other
 ^^^^^^^^^^^^^^^^^
@@ -59,5 +77,12 @@ Other
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth
 
+*complexity_rr()*
+""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_rr
+
+*complexity_hurst()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_hurst
 
 

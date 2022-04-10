@@ -8,10 +8,9 @@ from ..stats import standardize
 
 
 def fractal_nld(signal, window=30):
-    """Fractal dimension of signal epochs via Normalized Length Density (NLD).
+    """**Fractal dimension of signal epochs via Normalized Length Density (NLD).**
 
-    This method was developed for measuring signal complexity on very short epochs durations (< 30 samples),
-    for when continuous signal FD changes (or 'running' FD) are of interest.
+    This method was developed for measuring signal complexity on very short epochs durations (< 30 samples), for when continuous signal FD changes (or 'running' FD) are of interest.
 
     For methods such as Higuchi's FD, the standard deviation of the window FD increases sharply when the epoch becomes shorter.
     This NLD method results in lower standard deviation especially for shorter epochs,
@@ -33,25 +32,27 @@ def fractal_nld(signal, window=30):
     fd : DataFrame
         A dataframe containing the fractal dimension across epochs.
     info : dict
-        A dictionary containing additional information regarding the parameters used to compute the fractal dimension,
-        and the mean and standard deviation of the fractal dimensions.
+        A dictionary containing additional information regarding the parameters used to compute the fractal dimension, and the mean and standard deviation of the fractal dimensions.
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get data
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> # Compute FD
-    >>> fd, info = nk.fractal_nld(signal)
-    >>> fd #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a Signal with duration of 2s
+      signal = nk.signal_simulate(duration=2, frequency=5)
+
+      # Compute Fractal Dimension
+      fd, info = nk.fractal_nld(signal)
+      fd
 
     References
     ----------
-    - Kalauzi, A., Bojić, T., & Rakić, L. (2009). Extracting complexity waveforms from one-dimensional signals.
-    Nonlinear biomedical physics, 3(1), 1-11.
-    - https://github.com/tfburns/MATLAB-functions-for-complexity-measures-of-one-dimensional-signals/blob/master/nld.m
+    * Kalauzi, A., Bojić, T., & Rakić, L. (2009). Extracting complexity waveforms from
+      one-dimensional signals. Nonlinear biomedical physics, 3(1), 1-11.
+    * https://github.com/tfburns/MATLAB-functions-for-complexity-measures-of-one-dimensional-signals/blob/master/nld.m
+
     """
 
     # Sanity checks

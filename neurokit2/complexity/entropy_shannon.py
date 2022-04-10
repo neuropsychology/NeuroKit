@@ -4,17 +4,13 @@ import scipy.stats
 
 
 def entropy_shannon(signal, base=2):
-    """Shannon entropy (SE or ShanEn)
+    """**Shannon entropy (SE or ShanEn)**
 
-    Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state,
-    or equivalently, of its average information content. Shannon entropy (SE) is one of the first and
-    most basic measure of entropy and a foundational concept of information theory. Shannon's entropy
-    quantifies the amount of information in a variable. Shannon attempted to extend Shannon entropy in
-    what has become known as Differential Entropy (see ``entropy_differential()``).
+    Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state, or equivalently, of its average information content. Shannon entropy (SE) is one of the first and most basic measure of entropy and a foundational concept of information theory. Shannon's entropy quantifies the amount of information in a variable.
 
-    Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B", "B", "A"]), it does
-    not do well with continuous signals. One option is to binarize (i.e., cut) the signal into a number of
-    bins using ``pd.cut(signal, bins=100, labels=False)``.
+    Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy (see ``entropy_differential()``).
+
+    Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B", "B", "A"]), it does not do well with continuous signals. One option is to binarize (i.e., cut) the signal into a number of bins using ``pd.cut(signal, bins=100, labels=False)``.
 
     This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 
@@ -40,19 +36,24 @@ def entropy_shannon(signal, base=2):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.1)
-    >>> shanen, info = nk.entropy_shannon(signal)
-    >>> shanen #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a Signal with Laplace Noise
+      signal = nk.signal_simulate(duration=2, frequency=5, noise=0.1)
+
+      # Compute Shannon's Entropy
+      shanen, info = nk.entropy_shannon(signal)
+      shanen
 
     References
     -----------
-    - `pyEntropy` <https://github.com/nikdon/pyEntropy>`_
+    * `pyEntropy <https://github.com/nikdon/pyEntropy>`_
 
-    - `EntroPy` <https://github.com/raphaelvallat/entropy>`_
+    * `EntroPy <https://github.com/raphaelvallat/entropy>`_
 
-    - `nolds` <https://github.com/CSchoel/nolds>`_
+    * `nolds <https://github.com/CSchoel/nolds>`_
 
     """
     # Sanity checks

@@ -4,12 +4,11 @@ import scipy.stats
 
 
 def entropy_differential(signal, **kwargs):
-    """Differential entropy (DiffEn)
+    """**Differential entropy (DiffEn)**
 
     Differential entropy (DiffEn; also referred to as continuous entropy) started as a (failed)
     attempt by Shannon to extend Shannon entropy (https://en.wikipedia.org/wiki/Differential_entropy).
-    However, differential entropy presents some issues too, such as that it can be negative even for simple
-    distributions (such as the uniform distribution).
+    However, differential entropy presents some issues too, such as that it can be negative even for simple distributions (such as the uniform distribution).
 
     This function can be called either via ``entropy_differential()`` or ``complexity_diffen()``.
 
@@ -34,17 +33,22 @@ def entropy_differential(signal, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5, noise=0.1)
-    >>> diffen, info = nk.entropy_differential(signal)
-    >>> diffen #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a Signal with Laplace Noise
+      signal = nk.signal_simulate(duration=2, frequency=5, noise=0.1)
+
+      # Compute Differential Entropy
+      diffen, info = nk.entropy_differential(signal)
+      diffen
 
 
     References
     -----------
-    - `scipy.stats.differential_entropy()`
-    <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.differential_entropy.html>`_
+    * `scipy.stats.differential_entropy()
+      <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.differential_entropy.html>`_
 
     """
     # Sanity checks

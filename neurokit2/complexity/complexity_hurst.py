@@ -7,7 +7,7 @@ from .fractal_dfa import _fractal_dfa_findwindows
 
 
 def complexity_hurst(signal, windows="default", corrected=True, show=False):
-    """Hurst Exponent (H)
+    """**Hurst Exponent (H)**
 
     This function estimates the Hurst exponent via the standard rescaled range (R/S) approach, but
     other methods exist, such as Detrended Fluctuation Analysis (DFA, see ``fractal_dfa()``).
@@ -44,20 +44,24 @@ def complexity_hurst(signal, windows="default", corrected=True, show=False):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> h, info = nk.complexity_hurst(signal, corrected=True, show=True)
-    >>> h  #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate Signal with duration of 2s
+      signal = nk.signal_simulate(duration=2, frequency=5)
+
+      # Compute Hurst Exponent
+      h, info = nk.complexity_hurst(signal, corrected=True, show=True)
+      h
 
     References
     ----------
-    - Brandi, G., & Di Matteo, T. (2021). On the statistics of scaling exponents and the
-    Multiscaling Value at Risk. The European Journal of Finance, 1-22.
-    - Annis, A. A., & Lloyd, E. H. (1976). The expected value of the adjusted rescaled Hurst range
-    of independent normal summands. Biometrika, 63(1), 111-116.
-    - https://github.com/CSchoel/nolds
+    * Brandi, G., & Di Matteo, T. (2021). On the statistics of scaling exponents and the
+      Multiscaling Value at Risk. The European Journal of Finance, 1-22.
+    * Annis, A. A., & Lloyd, E. H. (1976). The expected value of the adjusted rescaled Hurst range
+      of independent normal summands. Biometrika, 63(1), 111-116.
+    * https://github.com/CSchoel/nolds
 
     """
     # Sanity checks
@@ -220,7 +224,7 @@ def _complexity_hurst_generalized(signal, q=2):
             Y = VV
 
             mx = np.sum(X) / N
-            SSxx = np.sum(X ** 2) - N * mx ** 2
+            SSxx = np.sum(X**2) - N * mx**2
             my = np.sum(Y) / N
             SSxy = np.sum(np.multiply(X, Y)) - N * mx * my
             cc1 = SSxy / SSxx
@@ -230,7 +234,7 @@ def _complexity_hurst_generalized(signal, q=2):
             mcord[tt - 1] = np.mean(np.abs(ddVd) ** q) / np.mean(np.abs(VVVd) ** q)
 
         mx = np.mean(np.log10(x))
-        SSxx = np.sum(np.log10(x) ** 2) - Tmax * mx ** 2
+        SSxx = np.sum(np.log10(x) ** 2) - Tmax * mx**2
         my = np.mean(np.log10(mcord))
         SSxy = np.sum(np.multiply(np.log10(x), np.transpose(np.log10(mcord)))) - Tmax * mx * my
         H[k] = SSxy / SSxx
