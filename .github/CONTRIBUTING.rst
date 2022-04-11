@@ -8,8 +8,8 @@ This package aims at being beginner-friendly. And if you're not yet familiar wit
 .. tip::
 
     Contributions come in many forms, not necessarily code. It can be answering to issues to help
-    others, creating content (youtube videos, tweets, tiktoks...), tipping in [a bit of money]
-    (https://github.com/sponsors/DominiqueMakowski), or even just sharing ideas about the
+    others, creating content (youtube videos, tweets, tiktoks...), tipping in `a bit of money
+    <https://github.com/sponsors/DominiqueMakowski>`_, or even just sharing ideas about the
     development of the package.
 
 
@@ -263,7 +263,6 @@ In order to test that function, I have to write some code that "runs through" it
         output = domsfunction(1)
         assert output == 4
 
-
 This will go through the function, which default method is `"great"`, therefore adds `3` to the input (here 1), and so the result *should* be 4. And the test makes sure that it is 4. However, we also need to add a second test  to cover the other method of the function (when `method != "great"`), for instance:
 
 .. ipython:: python
@@ -293,7 +292,7 @@ Adding examples and tutorials
 How to write
 ^^^^^^^^^^^^^^
 
-The documentation that is on the `website <https://neurokit2.readthedocs.io/en/latest/>`_ is automatically built by the hosting website, readthedocs, from `reStructured Text (RST) files <https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html>`_ (a syntax similar to markdown) or from `jupyter notebooks (.ipynb) <https://jupyter.org/>`_ Notebooks are preferred if your example contains code and images.
+The documentation that is on the `website <https://neuropsychology.github.io/NeuroKit/>`_ is automatically built by a `GitHub action <https://github.com/neuropsychology/NeuroKit/blob/master/.github/workflows/docs-build.yml>`_, from `reStructured Text (RST) files <https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html>`_ (a syntax similar to markdown) or from `jupyter notebooks (.ipynb) <https://jupyter.org/>`_ Notebooks are preferred if your example contains code and images.
 
 
 
@@ -309,4 +308,50 @@ However, in order for this file to be easily **accessible from the website**, yo
 Do not hesitate to ask for more info by creating an `issue <https://github.com/neuropsychology/NeuroKit/issues>`_!
 
 
+
+Understanding NeuroKit
+======================
+
+**Let's start by reviewing some basic coding principles that might help you get familiar with NeuroKit**
+
+If you are reading this, it could be because you don't feel comfortable enough with Python and NeuroKit *(yet)*, and you impatiently want to get to know it in order to start looking at your data.
+
+**"Tous les chemins mènent à Rome"** *(all roads lead to Rome)*
+
+Let me start by saying that there are multiple ways you'll be able to access the documentation in order to get to know different functions, follow examples and other tutorials. So keep in mind that you will eventually find your own workflow, and that these tricks are shared simply to help you get to know your options.
+
+1. readthedocs
+-------------------
+
+You probably already saw the `README <https://github.com/neuropsychology/NeuroKit/blob/master/README.rst>`_ file that shows up on NeuroKit's Github home page (right after the list of directories). It contains a brief overview of the project, some examples and figures. *But, most importantly, there are the links that will take you to the Documentation*.
+
+The documentation contains a description of the API (or Application Program Interface), like `here <https://neuropsychology.github.io/NeuroKit/functions/index.html>`_. All the info you will see on the webpages is rendered directly from the code, meaning that the website reads the code and generates a HTML page from it. **That's why it's important to structure your code in a standard manner**.
+
+The API is organized by types of signals. You'll find that each function has a **description**, and that most of them refer to peer-reviewed papers or other GitHub repositories. Also, for each function, **parameters** are described in order. Some of them will take many different **options** and all of them should be described as well.
+
+**If the options are not explained, they should be**. It's not your fault you don't understand. That's why we need you to contribute.
+
+Example
+"""""""
+
+In the **ECG section**, the `ecg_peaks function <https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-peaks>`_ takes **4 parameters**. One of them is **method**: each method refers to a peer-reviewed paper that published a peak detection algorithm. You can also see what the function **returns** and what **type of data** has been returned (integers and floating point numbers, strings, etc).  Additionally, you can find **related functions** in the **See also** part.  An small **example** of the function should also be found. You can copy paste it in your Python kernel, or in a Jupyter Notebook, to see what it does.
+
+
+1. The code on Github
+---------------------------
+
+Now that you're familiar with *readthedocs* website, let's go back to the `repo <https://github.com/neuropsychology/NeuroKit>`_. What you have to keep in mind is that *everything you saw in the previous section is* **in the Github repository**. The website pages, the lines that you are currently reading, are stored in the repository, which is then automatically uploaded to the website. Everything is cross-referenced, everything relates to the core which can be found in the repo. If you got here, you probably already know that a repository is like a *tree containing different branches* or directories that eventually lead you to a **script**, in which you can find a **function**.
+
+Example
+""""""""
+
+Ready for inception ? let's find the location of the file you're currently reading. Go under ``docs`` and find it by yourself... it should be straight-forward.
+
+.. Hint:: As you can see, there are several sections (see the Table of Content on the left), and we
+    are in the **resources** section. So you might want to look into the **resources** subfolder...
+    However, a suprise waits for you. The ``contributing.rst`` file actually imports (``includes``)
+    `another file <https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst>`_ located upstream.
+
+
+See! It's super handy because you can visit the scripts without downloading it. Github also renders Jupyter Notebook quite well, so you can not only see the script, but also figures and markdown sections where the coder discusses results.
 
