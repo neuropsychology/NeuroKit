@@ -25,8 +25,7 @@ def fractal_katz(signal):
     kfd : float
         Katz's fractal dimension of the single time series.
     info : dict
-        A dictionary containing additional information regarding the parameters used
-        to compute Katz's fractal dimension.
+        A dictionary containing additional information (currently, but returned nonetheless for consistency with other functions).
 
     Examples
     ----------
@@ -87,13 +86,10 @@ def fractal_katz(signal):
     # Drop missing values
     signal = signal[~np.isnan(signal)]
 
-    # prepare parameters
-    info = {}
-
     # if one signal time series
     out = _fractal_katz(signal)
 
-    return out, info
+    return out, {}
 
 
 def _fractal_katz(signal):

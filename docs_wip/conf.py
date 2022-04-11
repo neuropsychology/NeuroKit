@@ -77,6 +77,7 @@ exclude_patterns = []
 
 # Ignore duplicated sections warning
 suppress_warnings = ["epub.duplicated_toc_entry"]
+nitpicky = True
 
 # -- Options for autodoc -------------------------------------------------
 napoleon_google_docstring = False

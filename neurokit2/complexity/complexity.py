@@ -141,7 +141,7 @@ def complexity(
                       rolling_sfd.values,
                       rolling_svden.values,
                       rolling_fisher],
-                     labels = ["Signal",
+                      labels = ["Signal",
                                "Petrosian Fractal Dimension",
                                "Katz Fractal Dimension",
                                "Sevcik Fractal Dimension",
@@ -190,7 +190,7 @@ def complexity(
     if "medium" in which:
 
         # Fractal Dimension
-        df["NLD"], info["NLD"] = fractal_nld(signal)
+        df["NLD"], info["NLD"] = fractal_nld(signal, corrected=False)
         if len(signal) >= 1024:
             df["SDA"], info["SDA"] = fractal_sda(signal)
         df["PSDslope"], info["PSDslope"] = fractal_psdslope(signal)
