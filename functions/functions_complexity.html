@@ -1333,7 +1333,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.8010748250562638</span>
+<span class="gh">Out[12]: </span><span class="go">1.9215518809060723</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1343,7 +1343,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.6974136603635834</span>
+<span class="gh">Out[16]: </span><span class="go">3.511786882130831</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1509,7 +1509,8 @@ for shorter epochs, though at the expense of lower accuracy in average window FD
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul class="simple">
 <li><p><strong>fd</strong> (<em>DataFrame</em>) – A dataframe containing the fractal dimension across epochs.</p></li>
-<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used to compute the fractal dimension, and the mean and standard deviation of the fractal dimensions.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used to compute the
+fractal dimension, and the mean and standard deviation of the fractal dimensions.</p></li>
 </ul>
 </p>
 </dd>
@@ -1583,7 +1584,7 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.5761123880825485</span>
+<span class="gh">Out[4]: </span><span class="go">2.5142031409489243</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1710,19 +1711,19 @@ factors, or <code class="docutils literal notranslate"><span class="pre">&quot;d
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.5769958221553244</span>
+<span class="gh">Out[4]: </span><span class="go">2.578927069353513</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8829271360411314</span>
+<span class="gh">Out[6]: </span><span class="go">0.8726247937023458</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9984734531744532</span>
+<span class="gh">Out[8]: </span><span class="go">0.9959567204001805</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1838,7 +1839,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.37072114846425797</span>
+<span class="gh">Out[4]: </span><span class="go">0.3672856992692353</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1890,7 +1891,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.8648669586554008</span>
+<span class="gh">Out[4]: </span><span class="go">0.8677781551722376</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
