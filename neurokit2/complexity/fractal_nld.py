@@ -33,7 +33,8 @@ def fractal_nld(signal, window=30):
     fd : DataFrame
         A dataframe containing the fractal dimension across epochs.
     info : dict
-        A dictionary containing additional information regarding the parameters used to compute the fractal dimension, and the mean and standard deviation of the fractal dimensions.
+        A dictionary containing additional information regarding the parameters used to compute the
+        fractal dimension, and the mean and standard deviation of the fractal dimensions.
 
     Examples
     ----------
