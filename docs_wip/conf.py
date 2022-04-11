@@ -77,7 +77,7 @@ exclude_patterns = []
 
 # Ignore duplicated sections warning
 suppress_warnings = ["epub.duplicated_toc_entry"]
-nitpicky = True
+nitpicky = False  # Set to True to get all warnings about crosslinks
 
 # -- Options for autodoc -------------------------------------------------
 napoleon_google_docstring = False

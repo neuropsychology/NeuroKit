@@ -42,7 +42,7 @@ def hrv(peaks, sampling_rate=1000, show=False, **kwargs):
 
     See Also
     --------
-    hrv_time, hrv_frequency, hrv_nonlinear, hrv_rsa, :func:`ecg_peaks`, ppg_peaks,
+    hrv_time, hrv_frequency, hrv_nonlinear, hrv_rsa, .ecg_peaks, ppg_peaks,
 
     Examples
     --------
