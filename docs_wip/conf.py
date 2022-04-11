@@ -75,6 +75,9 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# Ignore duplicated sections warning
+suppress_warnings = ["epub.duplicated_toc_entry"]
+
 # -- Options for autodoc -------------------------------------------------
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True

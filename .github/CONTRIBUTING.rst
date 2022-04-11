@@ -18,7 +18,7 @@ Why contribute to NeuroKit?
 
 Contributing is the best way to learn programming, to meet new people, to grow your professional network, to get known in the game and to have a lot of fun. But **street cred** only is often not enough, and it's particularly important for young academics and students to get some "legit" rewards. We are fully aware of that. As such, **we are committed to crediting and rewarding contributors to the best of our abilities**.
 
-For instance, authors of significant contributions (features, tough bug fixes etc.) will be listed as official `**Contributors** <https://neurokit2.readthedocs.io/en/dev/authors.html>`_ section of our website. Additionally, frequent contributors that also get involved in general maintaining (e.g., participating in issues, fixing stuff, reviewing PRs, writing docs etc.) might be included in as package maintainers, in which case they'll be expected to be more generally involved in the general development direction. Finally, we expect this project (the development of the package *per se* and all of the discussions/experiments that are around it) to result in several **publications** (could be about some features of the package, but also some tutorial papers, validation studies or whatnot). Obviously, people that contributed and allowed for a paper to be written will be included as authors.
+For instance, authors of significant contributions (features, tough bug fixes etc.) will be listed as official `Contributors <https://neurokit2.readthedocs.io/en/dev/authors.html>`_ section of our website. Additionally, frequent contributors that also get involved in general maintaining (e.g,participating in issues, fixing stuff, reviewing PRs, writing docs etc.) might be included in as package maintainers, in which case they'll be expected to be more generally involved in the general development direction. Finally, we expect this project (the development of the package *per se* and all of the discussions/experiments that are around it) to result in several **publications** (could be about some features of the package, but also some tutorial papers, validation studies or whatnot. Obviously, people that contributed and allowed for a paper to be written will be included as authors.
 
 Long story short, we want this project to be helpful to you, whether you're a user, a contributor, or anything else in between :) And as always, do not hesitate to ask us if you have any questions.
 
@@ -28,7 +28,7 @@ NeuroKit's style
 
 .. note::
 
-    If you feel overwhelmed by all the "requirements", and if that drives you away from
+    If you feel overwhelmed by all the "requirements" so that it drives you away from
     contributing, please keep in mind that you can always open a PR with whatever you have, and
     then step by step we will help you making it up-to-standards.
 
@@ -50,12 +50,12 @@ Naming conventions
 
 We like consistency for the names of functions and arguments.
 
-Also, when you create a **new branch**, consider naming it with a pattern corresponding to the content of your additions. For instance, ``fix_this_bug``, ``add_that``, ``dadd_info_on_this``, ``changed_default_arg``, ``make_function_faster``. Likewise, when you make a **pull request** (PR), name it accordingly with the main type between brackets, example:
+Also, when you create a **new branch**, consider naming it with a pattern corresponding to the content of your additions. For instance, ``fix_this_bug``, ``add_that``, ``add_info_on_this``, ``changed_default_arg``, ``make_function_faster``. Likewise, when you make a **pull request** (PR), name it accordingly with the main type between brackets, example:
 
-- ``[Fix]`` bug fix etc
-- ``[Feature] ``new feature or function
-- ``[Docs]`` typos, documentation and new articles
-- ``[Change]`` changes in args, names, functions etc (often breaking changes)
+- ``[Fix]`` bug fix etc.
+- ``[Feature]`` new feature or function.
+- ``[Docs]`` typos, documentation and new articles.
+- ``[Change]`` changes in args, names, functions etc (often breaking changes).
 - ``[Improvement]`` refining of code, efficiency improvements etc.
 
 
