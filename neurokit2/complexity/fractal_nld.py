@@ -29,18 +29,20 @@ def fractal_nld(signal, corrected=False):
     corrected : bool
         If ``True``, will rescale the output value according to the power model estimated by
         Kalauzi et al. (2009) to make it more comparable with "true" FD range, as follows:
-        ``FD = 1.9079*((NLD-0.097178)^0.18383)``. Note that this can result in ``np.nan`` if the result of the difference is negative.
+        ``FD = 1.9079*((NLD-0.097178)^0.18383)``. Note that this can result in ``np.nan`` if the
+        result of the difference is negative.
 
     Returns
     --------
     fd : DataFrame
         A dataframe containing the fractal dimension across epochs.
     info : dict
-        A dictionary containing additional information (currently, but returned nonetheless for consistency with other functions).
+        A dictionary containing additional information (currently, but returned nonetheless for
+        consistency with other functions).
 
     Examples
     ----------
-    **Example 1**
+    **Example 1**: Usage on a short signal
 
     .. ipython:: python
 
@@ -53,7 +55,27 @@ def fractal_nld(signal, corrected=False):
       fd, _ = nk.fractal_nld(signal, corrected=False)
       fd
 
-    **Example 2**: Calculate FD-NLD on sliding windows of size 10s.
+    **Example 2**: Compute FD-NLD on non-overlapping windows
+
+    .. ipython:: python
+
+      import numpy as np
+
+      # Simulate a long signal with duration of 5s
+      signal = nk.signal_simulate(duration=5, frequency=[3, 5, 10], noise=0.1)
+
+      # We want windows of size=100 (0.1s)
+      n_windows = len(signal) // 100  # How many windows
+
+      # Split signal into windows
+      windows = np.array_split(signal, n_windows)
+
+      # Compute FD-NLD on all windows
+      nld = [nk.fractal_nld(i, corrected=False)[0] for i in windows]
+      np.mean(nld)  # Get average
+
+
+    **Example 3**: Calculate FD-NLD on sliding windows
 
     .. ipython:: python
 
