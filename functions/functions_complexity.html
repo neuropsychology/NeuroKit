@@ -1333,7 +1333,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.802651600628314</span>
+<span class="gh">Out[12]: </span><span class="go">1.8010748250562638</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1343,7 +1343,7 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.791314590127724</span>
+<span class="gh">Out[16]: </span><span class="go">3.6974136603635834</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1490,10 +1490,11 @@ Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
 <dt class="sig sig-object py" id="neurokit2.complexity.fractal_nld">
 <span class="sig-name descname"><span class="pre">fractal_nld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.fractal_nld" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Fractal dimension of signal epochs via Normalized Length Density (NLD).</strong></p>
-<p>This method was developed for measuring signal complexity on very short epochs durations (&lt; 30 samples), for when continuous signal FD changes (or ‘running’ FD) are of interest.</p>
-<p>For methods such as Higuchi’s FD, the standard deviation of the window FD increases sharply when the epoch becomes shorter.
-This NLD method results in lower standard deviation especially for shorter epochs,
-though at the expense of lower accuracy in average window FD.</p>
+<p>This method was developed for measuring signal complexity on very short epochs durations (&lt; 30
+samples), for when continuous signal FD changes (or ‘running’ FD) are of interest.</p>
+<p>For methods such as Higuchi’s FD, the standard deviation of the window FD increases sharply
+when the epoch becomes shorter. This NLD method results in lower standard deviation especially
+for shorter epochs, though at the expense of lower accuracy in average window FD.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_higuchi</span></code></p>
@@ -1543,10 +1544,16 @@ one-dimensional signals. Nonlinear biomedical physics, 3(1), 1-11.</p></li>
 <dd><p>** Fractal dimension via Power Spectral Density (PSD) slope**</p>
 <p>Fractal exponent can be computed from Power Spectral Density slope (PSDslope) analysis in
 signals characterized by a frequency power-law dependence.</p>
-<p>It first transforms the time series into the frequency domain, and breaks down the signal into sine and cosine waves of a particular amplitude that together “add-up” to represent the original signal.
-If there is a systematic relationship between the frequencies in the signal and the power of those frequencies, this will reveal itself in log-log coordinates as a linear relationship. The slope of the best fitting line is taken as an estimate of the fractal scaling exponent and can be converted to an estimate of the fractal dimension.</p>
-<p>A slope of 0 is consistent with white noise, and a slope of less than 0 but greater than –1,
-is consistent with pink noise i.e., 1/f noise. Spectral slopes as steep as −2 indicate fractional Brownian motion, the epitome of random walk processes.</p>
+<p>It first transforms the time series into the frequency domain, and breaks down the signal into
+sine and cosine waves of a particular amplitude that together “add-up” to represent the
+original signal.
+If there is a systematic relationship between the frequencies in the signal and the power of
+those frequencies, this will reveal itself in log-log coordinates as a linear relationship. The
+slope of the best fitting line is taken as an estimate of the fractal scaling exponent and can
+be converted to an estimate of the fractal dimension.</p>
+<p>A slope of 0 is consistent with white noise, and a slope of less than 0 but greater than -1,
+is consistent with pink noise i.e., 1/f noise. Spectral slopes as steep as -2 indicate
+fractional Brownian motion, the epitome of random walk processes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1576,7 +1583,7 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.6507918880375745</span>
+<span class="gh">Out[4]: </span><span class="go">2.5761123880825485</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1703,19 +1710,19 @@ factors, or <code class="docutils literal notranslate"><span class="pre">&quot;d
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.578504524933478</span>
+<span class="gh">Out[4]: </span><span class="go">2.5769958221553244</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.876373476381044</span>
+<span class="gh">Out[6]: </span><span class="go">0.8829271360411314</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9805841943854162</span>
+<span class="gh">Out[8]: </span><span class="go">0.9984734531744532</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1737,9 +1744,15 @@ series. Physical review letters, 88(17), 174102.</p></li>
 <dt class="sig sig-object py" id="neurokit2.complexity.entropy_shannon">
 <span class="sig-name descname"><span class="pre">entropy_shannon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.entropy_shannon" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Shannon entropy (SE or ShanEn)</strong></p>
-<p>Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the state, or equivalently, of its average information content. Shannon entropy (SE) is one of the first and most basic measure of entropy and a foundational concept of information theory. Shannon’s entropy quantifies the amount of information in a variable.</p>
-<p>Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy (see <code class="docutils literal notranslate"><span class="pre">entropy_differential()</span></code>).</p>
-<p>Because Shannon entropy was meant for symbolic sequences (discrete events such as [“A”, “B”, “B”, “A”]), it does not do well with continuous signals. One option is to binarize (i.e., cut) the signal into a number of bins using <code class="docutils literal notranslate"><span class="pre">pd.cut(signal,</span> <span class="pre">bins=100,</span> <span class="pre">labels=False)</span></code>.</p>
+<p>Python implementation of Shannon entropy (SE). Entropy is a measure of unpredictability of the
+state, or equivalently, of its average information content. Shannon entropy (SE) is one of the
+first and most basic measure of entropy and a foundational concept of information theory.
+Shannon’s entropy quantifies the amount of information in a variable.</p>
+<p>Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy
+(see <code class="docutils literal notranslate"><span class="pre">entropy_differential()</span></code>).</p>
+<p>Because Shannon entropy was meant for symbolic sequences (discrete events such as [“A”, “B”,
+“B”, “A”]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
+the signal into a number of bins using <code class="docutils literal notranslate"><span class="pre">pd.cut(signal,</span> <span class="pre">bins=100,</span> <span class="pre">labels=False)</span></code>.</p>
 <p>This function can be called either via <code class="docutils literal notranslate"><span class="pre">entropy_shannon()</span></code> or <code class="docutils literal notranslate"><span class="pre">complexity_se()</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1791,8 +1804,9 @@ to compute Shannon entropy.</p></li>
 <span class="sig-name descname"><span class="pre">entropy_differential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.entropy_differential" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Differential entropy (DiffEn)</strong></p>
 <p>Differential entropy (DiffEn; also referred to as continuous entropy) started as a (failed)
-attempt by Shannon to extend Shannon entropy (<a class="reference external" href="https://en.wikipedia.org/wiki/Differential_entropy">https://en.wikipedia.org/wiki/Differential_entropy</a>).
-However, differential entropy presents some issues too, such as that it can be negative even for simple distributions (such as the uniform distribution).</p>
+attempt by Shannon to extend Shannon entropy (<a class="reference external" href="https://en.wikipedia.org/wiki/">https://en.wikipedia.org/wiki/</a>
+Differential_entropy). However, differential entropy presents some issues too, such as that it
+can be negative even for simple distributions (such as the uniform distribution).</p>
 <p>This function can be called either via <code class="docutils literal notranslate"><span class="pre">entropy_differential()</span></code> or <code class="docutils literal notranslate"><span class="pre">complexity_diffen()</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1824,7 +1838,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.37132240741966704</span>
+<span class="gh">Out[4]: </span><span class="go">0.37072114846425797</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1876,7 +1890,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.8595486460433476</span>
+<span class="gh">Out[4]: </span><span class="go">0.8648669586554008</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2020,7 +2034,9 @@ Clinical Neurophysiology, 29, 306-310. <a class="reference external" href="http:
 <dd><p><strong>Relative Roughness (RR)</strong></p>
 <p>Relative Roughness is a ratio of local variance (autocovariance at lag-1) to global variance
 (autocovariance at lag-0) that can be used to classify different ‘noises’
-(see <a class="reference external" href="https://complexity-methods.github.io/book/relative-roughness.html">Hasselman, 2019</a>). It can also be used as an index to test for the applicability of fractal analysis (see <a class="reference external" href="https://doi.org/10.3389/fphys.2012.00208">Marmelat et al., 2012</a>).</p>
+(see <a class="reference external" href="https://complexity-methods.github.io/book/relative-roughness.html">Hasselman, 2019</a>).
+It can also be used as an index to test for the applicability of fractal analysis (see
+<a class="reference external" href="https://doi.org/10.3389/fphys.2012.00208">Marmelat et al., 2012</a>).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
