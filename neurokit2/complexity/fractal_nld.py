@@ -10,11 +10,12 @@ from ..stats import standardize
 def fractal_nld(signal, window=30):
     """**Fractal dimension of signal epochs via Normalized Length Density (NLD).**
 
-    This method was developed for measuring signal complexity on very short epochs durations (< 30 samples), for when continuous signal FD changes (or 'running' FD) are of interest.
+    This method was developed for measuring signal complexity on very short epochs durations (< 30
+    samples), for when continuous signal FD changes (or 'running' FD) are of interest.
 
-    For methods such as Higuchi's FD, the standard deviation of the window FD increases sharply when the epoch becomes shorter.
-    This NLD method results in lower standard deviation especially for shorter epochs,
-    though at the expense of lower accuracy in average window FD.
+    For methods such as Higuchi's FD, the standard deviation of the window FD increases sharply
+    when the epoch becomes shorter. This NLD method results in lower standard deviation especially
+    for shorter epochs, though at the expense of lower accuracy in average window FD.
 
     See Also
     --------

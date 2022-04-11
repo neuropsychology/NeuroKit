@@ -11,11 +11,17 @@ def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
     Fractal exponent can be computed from Power Spectral Density slope (PSDslope) analysis in
     signals characterized by a frequency power-law dependence.
 
-    It first transforms the time series into the frequency domain, and breaks down the signal into sine and cosine waves of a particular amplitude that together "add-up" to represent the original signal.
-    If there is a systematic relationship between the frequencies in the signal and the power of those frequencies, this will reveal itself in log-log coordinates as a linear relationship. The slope of the best fitting line is taken as an estimate of the fractal scaling exponent and can be converted to an estimate of the fractal dimension.
+    It first transforms the time series into the frequency domain, and breaks down the signal into
+    sine and cosine waves of a particular amplitude that together "add-up" to represent the
+    original signal.
+    If there is a systematic relationship between the frequencies in the signal and the power of
+    those frequencies, this will reveal itself in log-log coordinates as a linear relationship. The
+    slope of the best fitting line is taken as an estimate of the fractal scaling exponent and can
+    be converted to an estimate of the fractal dimension.
 
-    A slope of 0 is consistent with white noise, and a slope of less than 0 but greater than –1,
-    is consistent with pink noise i.e., 1/f noise. Spectral slopes as steep as −2 indicate fractional Brownian motion, the epitome of random walk processes.
+    A slope of 0 is consistent with white noise, and a slope of less than 0 but greater than -1,
+    is consistent with pink noise i.e., 1/f noise. Spectral slopes as steep as -2 indicate
+    fractional Brownian motion, the epitome of random walk processes.
 
     Parameters
     ----------

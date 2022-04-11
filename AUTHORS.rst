@@ -52,7 +52,7 @@ Thanks also to `Gansheng Tan <https://github.com/GanshengT>`_, `Chuan-Peng Hu <h
 
 
 
-.. hint::
+.. seealso::
 
    Information about **how to cite** the software in publications can be found `here <https://neuropsychology.github.io/NeuroKit/cite_us.html>`_.
 
