@@ -500,6 +500,23 @@ title="Print to PDF"
    </li>
   </ul>
  </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   Understanding NeuroKit
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#readthedocs">
+     1. readthedocs
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-code-on-github">
+     1. The code on Github
+    </a>
+   </li>
+  </ul>
+ </li>
 </ul>
 
     </nav>
@@ -643,6 +660,23 @@ title="Print to PDF"
    </li>
   </ul>
  </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#id4">
+   Understanding NeuroKit
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#readthedocs">
+     1. readthedocs
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-code-on-github">
+     1. The code on Github
+    </a>
+   </li>
+  </ul>
+ </li>
 </ul>
 
                         </nav>
@@ -660,8 +694,7 @@ title="Print to PDF"
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>Contributions come in many forms, not necessarily code. It can be answering to issues to help
-others, creating content (youtube videos, tweets, tiktoks…), tipping in [a bit of money]
-(<a class="reference external" href="https://github.com/sponsors/DominiqueMakowski">https://github.com/sponsors/DominiqueMakowski</a>), or even just sharing ideas about the
+others, creating content (youtube videos, tweets, tiktoks…), tipping in <a class="reference external" href="https://github.com/sponsors/DominiqueMakowski">a bit of money</a>, or even just sharing ideas about the
 development of the package.</p>
 </div>
 <div class="section" id="why-contribute-to-neurokit">
@@ -858,7 +891,7 @@ much easier.</p>
 <h2>Adding examples and tutorials<a class="headerlink" href="#adding-examples-and-tutorials" title="Permalink to this headline">#</a></h2>
 <div class="section" id="how-to-write">
 <h3>How to write<a class="headerlink" href="#how-to-write" title="Permalink to this headline">#</a></h3>
-<p>The documentation that is on the <a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/">website</a> is automatically built by the hosting website, readthedocs, from <a class="reference external" href="https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html">reStructured Text (RST) files</a> (a syntax similar to markdown) or from <a class="reference external" href="https://jupyter.org/">jupyter notebooks (.ipynb)</a> Notebooks are preferred if your example contains code and images.</p>
+<p>The documentation that is on the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/">website</a> is automatically built by a <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/.github/workflows/docs-build.yml">GitHub action</a>, from <a class="reference external" href="https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html">reStructured Text (RST) files</a> (a syntax similar to markdown) or from <a class="reference external" href="https://jupyter.org/">jupyter notebooks (.ipynb)</a> Notebooks are preferred if your example contains code and images.</p>
 </div>
 <div class="section" id="where-to-add-the-files">
 <h3>Where to add the files<a class="headerlink" href="#where-to-add-the-files" title="Permalink to this headline">#</a></h3>
@@ -867,6 +900,34 @@ much easier.</p>
 <p>However, in order for this file to be easily <strong>accessible from the website</strong>, you also need to add it to the <strong>table of content</strong> located in the <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/docs/examples/index.rst">index</a> file (just add the name of the file without the extension).</p>
 <p>Do not hesitate to ask for more info by creating an <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/issues">issue</a>!</p>
 </div>
+</div>
+</div>
+<div class="section" id="id4">
+<h1>Understanding NeuroKit<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h1>
+<p><strong>Let’s start by reviewing some basic coding principles that might help you get familiar with NeuroKit</strong></p>
+<p>If you are reading this, it could be because you don’t feel comfortable enough with Python and NeuroKit <em>(yet)</em>, and you impatiently want to get to know it in order to start looking at your data.</p>
+<p><strong>“Tous les chemins mènent à Rome”</strong> <em>(all roads lead to Rome)</em></p>
+<p>Let me start by saying that there are multiple ways you’ll be able to access the documentation in order to get to know different functions, follow examples and other tutorials. So keep in mind that you will eventually find your own workflow, and that these tricks are shared simply to help you get to know your options.</p>
+<div class="section" id="readthedocs">
+<h2>1. readthedocs<a class="headerlink" href="#readthedocs" title="Permalink to this headline">#</a></h2>
+<p>You probably already saw the <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/README.rst">README</a> file that shows up on NeuroKit’s Github home page (right after the list of directories). It contains a brief overview of the project, some examples and figures. <em>But, most importantly, there are the links that will take you to the Documentation</em>.</p>
+<p>The documentation contains a description of the API (or Application Program Interface), like <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/index.html">here</a>. All the info you will see on the webpages is rendered directly from the code, meaning that the website reads the code and generates a HTML page from it. <strong>That’s why it’s important to structure your code in a standard manner</strong>.</p>
+<p>The API is organized by types of signals. You’ll find that each function has a <strong>description</strong>, and that most of them refer to peer-reviewed papers or other GitHub repositories. Also, for each function, <strong>parameters</strong> are described in order. Some of them will take many different <strong>options</strong> and all of them should be described as well.</p>
+<p><strong>If the options are not explained, they should be</strong>. It’s not your fault you don’t understand. That’s why we need you to contribute.</p>
+<p>In the <strong>ECG section</strong>, the <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-peaks">ecg_peaks function</a> takes <strong>4 parameters</strong>. One of them is <strong>method</strong>: each method refers to a peer-reviewed paper that published a peak detection algorithm. You can also see what the function <strong>returns</strong> and what <strong>type of data</strong> has been returned (integers and floating point numbers, strings, etc).  Additionally, you can find <strong>related functions</strong> in the <strong>See also</strong> part.  An small <strong>example</strong> of the function should also be found. You can copy paste it in your Python kernel, or in a Jupyter Notebook, to see what it does.</p>
+</div>
+<div class="section" id="the-code-on-github">
+<h2>1. The code on Github<a class="headerlink" href="#the-code-on-github" title="Permalink to this headline">#</a></h2>
+<p>Now that you’re familiar with <em>readthedocs</em> website, let’s go back to the <a class="reference external" href="https://github.com/neuropsychology/NeuroKit">repo</a>. What you have to keep in mind is that <em>everything you saw in the previous section is</em> <strong>in the Github repository</strong>. The website pages, the lines that you are currently reading, are stored in the repository, which is then automatically uploaded to the website. Everything is cross-referenced, everything relates to the core which can be found in the repo. If you got here, you probably already know that a repository is like a <em>tree containing different branches</em> or directories that eventually lead you to a <strong>script</strong>, in which you can find a <strong>function</strong>.</p>
+<p>Ready for inception ? let’s find the location of the file you’re currently reading. Go under <code class="docutils literal notranslate"><span class="pre">docs</span></code> and find it by yourself… it should be straight-forward.</p>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>As you can see, there are several sections (see the Table of Content on the left), and we
+are in the <strong>resources</strong> section. So you might want to look into the <strong>resources</strong> subfolder…
+However, a suprise waits for you. The <code class="docutils literal notranslate"><span class="pre">contributing.rst</span></code> file actually imports (<code class="docutils literal notranslate"><span class="pre">includes</span></code>)
+<a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst">another file</a> located upstream.</p>
+</div>
+<p>See! It’s super handy because you can visit the scripts without downloading it. Github also renders Jupyter Notebook quite well, so you can not only see the script, but also figures and markdown sections where the coder discusses results.</p>
 </div>
 </div>
 
