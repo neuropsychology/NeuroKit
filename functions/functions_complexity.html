@@ -785,7 +785,7 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="gp">In [4]: </span><span class="n">df</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">       ApEn      CREn    DiffEn  ...     ShanEn      SpEn     WPEn</span>
-<span class="go">0  0.162527 -0.009219  0.303891  ...  11.271005  0.094806  0.98896</span>
+<span class="go">0  0.162527 -0.020361  0.303891  ...  11.289246  0.094806  0.98896</span>
 
 <span class="go">[1 rows x 23 columns]</span>
 </pre></div>
@@ -799,7 +799,7 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="gp">In [6]: </span><span class="n">df</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">         CD       DFA   FuzzyEn  ...  MFDFA_ExpRange     RCMSE   RangeEn</span>
-<span class="go">0  0.830716  1.389359  0.128788  ...        0.348173  0.318944  0.188515</span>
+<span class="go">0  0.830716  1.389359  0.128788  ...        0.348173  0.318944  0.188523</span>
 
 <span class="go">[1 rows x 13 columns]</span>
 </pre></div>
@@ -1333,17 +1333,17 @@ to compute Katz’s fractal dimension.</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.9215518809060723</span>
+<span class="gh">Out[12]: </span><span class="go">2.0843208982150867</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">KFD</span>
-<span class="gh">Out[14]: </span><span class="go">2.041857476392026</span>
+<span class="gh">Out[14]: </span><span class="go">2.0418574763920256</span>
 
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.511786882130831</span>
+<span class="gh">Out[16]: </span><span class="go">3.7702596230725147</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1489,12 +1489,14 @@ Conference on Computational Intelligence in Medicine and Healthcare (CIMED2005).
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.complexity.fractal_nld">
 <span class="sig-name descname"><span class="pre">fractal_nld</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">30</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.fractal_nld" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Fractal dimension of signal epochs via Normalized Length Density (NLD).</strong></p>
+<dd><p><strong>Fractal dimension via Normalized Length Density (NLD)</strong></p>
 <p>This method was developed for measuring signal complexity on very short epochs durations (&lt; 30
-samples), for when continuous signal FD changes (or ‘running’ FD) are of interest.</p>
+samples), and can be used for instance when continuous signal FD changes (or ‘running’ FD) are
+of interest.</p>
 <p>For methods such as Higuchi’s FD, the standard deviation of the window FD increases sharply
-when the epoch becomes shorter. This NLD method results in lower standard deviation especially
+when the epoch becomes shorter. The NLD method results in lower standard deviation especially
 for shorter epochs, though at the expense of lower accuracy in average window FD.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">window</span></code> is set to <code class="docutils literal notranslate"><span class="pre">None</span></code>, the method will be applied to the entire signal.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_higuchi</span></code></p>
@@ -1525,7 +1527,7 @@ fractal dimension, and the mean and standard deviation of the fractal dimensions
 <span class="gp">In [3]: </span><span class="n">fd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">fd</span>
-<span class="gh">Out[4]: </span><span class="go">0.403522224037007</span>
+<span class="gh">Out[4]: </span><span class="go">0.4035222240370072</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1542,7 +1544,7 @@ one-dimensional signals. Nonlinear biomedical physics, 3(1), 1-11.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="neurokit2.complexity.fractal_psdslope">
 <span class="sig-name descname"><span class="pre">fractal_psdslope</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'voss1988'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.fractal_psdslope" title="Permalink to this definition">#</a></dt>
-<dd><p>** Fractal dimension via Power Spectral Density (PSD) slope**</p>
+<dd><p><strong>Fractal dimension via Power Spectral Density (PSD) slope</strong></p>
 <p>Fractal exponent can be computed from Power Spectral Density slope (PSDslope) analysis in
 signals characterized by a frequency power-law dependence.</p>
 <p>It first transforms the time series into the frequency domain, and breaks down the signal into
@@ -1584,7 +1586,7 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.5142031409489243</span>
+<span class="gh">Out[4]: </span><span class="go">2.731664028705565</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1648,7 +1650,7 @@ to compute SVD.</p></li>
 <span class="gp">In [3]: </span><span class="n">svden</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">svden</span>
-<span class="gh">Out[4]: </span><span class="go">0.5091667337544502</span>
+<span class="gh">Out[4]: </span><span class="go">0.5091667337544503</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -1711,19 +1713,19 @@ factors, or <code class="docutils literal notranslate"><span class="pre">&quot;d
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.578927069353513</span>
+<span class="gh">Out[4]: </span><span class="go">2.5711208219342985</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8726247937023458</span>
+<span class="gh">Out[6]: </span><span class="go">0.8685188680644463</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9959567204001805</span>
+<span class="gh">Out[8]: </span><span class="go">0.9991990106347157</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1839,7 +1841,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.3672856992692353</span>
+<span class="gh">Out[4]: </span><span class="go">0.38460102650905786</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1891,7 +1893,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.8677781551722376</span>
+<span class="gh">Out[4]: </span><span class="go">0.8221804092850458</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1954,7 +1956,7 @@ to compute fisher information.</p></li>
 <span class="gp">In [3]: </span><span class="n">fi</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fisher_information</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">fi</span>
-<span class="gh">Out[4]: </span><span class="go">0.6424727558784686</span>
+<span class="gh">Out[4]: </span><span class="go">0.6424727558784687</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2121,7 +2123,7 @@ output according to the expected value for the individual (R/S) values.</p></li>
 <span class="gp">In [3]: </span><span class="n">h</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_hurst</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">h</span>
-<span class="gh">Out[4]: </span><span class="go">0.9653747932291419</span>
+<span class="gh">Out[4]: </span><span class="go">0.9653747932291417</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
