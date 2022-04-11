@@ -45,6 +45,7 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_psdslope
 
+
 Entropy
 ^^^^^^^^^^^^^^^^^
 *entropy_svd()*
@@ -66,6 +67,7 @@ Entropy
 *entropy_spectral()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_spectral
+
 
 Other
 ^^^^^^^^^^^^^^^^^
