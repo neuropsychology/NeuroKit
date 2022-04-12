@@ -68,7 +68,7 @@ def hrv_frequency(
     order_criteria : str
         The criteria to automatically select order in parametric PSD (only used for autoregressive
         (AR) methods such as 'burg'). Defaults to None.
-    **kwargs 
+    **kwargs
         Additional other arguments.
 
     Returns
@@ -108,7 +108,7 @@ def hrv_frequency(
       # Find peaks
       peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
 
-      # Compute HRV indices
+      # Compute HRV indices using `method='welch'`
       @savefig p_hrv_freq1.png scale=100%
       hrv_welch = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
       @suppress
@@ -116,6 +116,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
+      # Using `method ='burg'`
       @savefig p_hrv_freq2.png scale=100%
       hrv_burg = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="burg")
       @suppress
@@ -123,6 +124,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
+      # Using `method = 'lomb'` (requires installation of astropy)
       @savefig p_hrv_freq3.png scale=100%
       hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="lomb")
       @suppress
@@ -130,6 +132,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
+    * Using `method='multitapers'`
       @savefig p_hrv_freq4.png scale=100%
       hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True,psd_method="multitapers")
       @suppress

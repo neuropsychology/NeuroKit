@@ -25,6 +25,7 @@ jobs:
           pip install matplotlib
           pip install mne
           pip install PyWavelets
+          pip install astropy
         build-command: "sphinx-build -b html . _build"
     # - name: Build and Commit
     #   uses: sphinx-notes/pages@v2
