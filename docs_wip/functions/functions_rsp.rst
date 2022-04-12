@@ -23,3 +23,7 @@ Main
 *rsp_findpeaks()*
 """""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_findpeaks
+
+*rsp_fixpeaks()*
+""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_fixpeaks
