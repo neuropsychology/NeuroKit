@@ -32,7 +32,7 @@ def hrv_frequency(
     indices to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the
     recommended minima for HF, LF and LF/HF, respectively.
 
-     .. tip::
+    .. tip::
         We strongly recommend checking our open-access paper `Pham et al. (2021)
         <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
 
@@ -108,7 +108,7 @@ def hrv_frequency(
       # Find peaks
       peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
 
-      # Compute HRV indices using `method='welch'`
+      # Compute HRV indices using method='welch'
       @savefig p_hrv_freq1.png scale=100%
       hrv_welch = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
       @suppress
@@ -116,7 +116,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
-      # Using `method ='burg'`
+      # Using method ='burg'
       @savefig p_hrv_freq2.png scale=100%
       hrv_burg = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="burg")
       @suppress
@@ -124,7 +124,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
-      # Using `method = 'lomb'` (requires installation of astropy)
+      # Using method = 'lomb' (requires installation of astropy)
       @savefig p_hrv_freq3.png scale=100%
       hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="lomb")
       @suppress
@@ -132,7 +132,7 @@ def hrv_frequency(
 
     .. ipython:: python
 
-    * Using `method='multitapers'`
+      # Using method='multitapers'
       @savefig p_hrv_freq4.png scale=100%
       hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True,psd_method="multitapers")
       @suppress
