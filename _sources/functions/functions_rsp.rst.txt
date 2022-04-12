@@ -27,3 +27,7 @@ Main
 *rsp_fixpeaks()*
 """"""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_fixpeaks
+
+*rsp_intervalrelated()*
+""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_intervalrelated
