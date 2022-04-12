@@ -16,7 +16,8 @@ def rsp_eventrelated(epochs, silent=False):
     Parameters
     ----------
     epochs : Union[dict, pd.DataFrame]
-        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`, or a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
+        A dict containing one DataFrame per event/trial, usually obtained via `epochs_create()`, or
+        a DataFrame containing all epochs, usually obtained via `epochs_to_df()`.
     silent : bool
         If True, silence possible warnings.
 
@@ -34,12 +35,18 @@ def rsp_eventrelated(epochs, silent=False):
         * ``"RSP_Rate_Max_Time"``: the time at which maximum respiratory rate occurs.
         * ``"RSP_Rate_Min_Time"``: the time at which minimum respiratory rate occurs.
         * ``"RSP_Amplitude_Baseline"``: the respiratory amplitude at stimulus onset.
-        * ``"RSP_Amplitude_Max"``: the change in maximum respiratory amplitude from before stimulus onset.
-        * ``"RSP_Amplitude_Min"``: the change in minimum respiratory amplitude from before stimulus onset.
-        * ``"RSP_Amplitude_Mean"``: the change in mean respiratory amplitude from before stimulus onset.
-        * ``"RSP_Amplitude_SD"``: the standard deviation of the respiratory amplitude after stimulus onset.
-        * ``"RSP_Phase"``: indication of whether the onset of the event concurs with respiratory inspiration (1) or expiration (0).
-        * ``"RSP_PhaseCompletion"``: indication of the stage of the current respiration phase (0 to 1) at the onset of the event.
+        * ``"RSP_Amplitude_Max"``: the change in maximum respiratory amplitude from before stimulus
+          onset.
+        * ``"RSP_Amplitude_Min"``: the change in minimum respiratory amplitude from before stimulus
+          onset.
+        * ``"RSP_Amplitude_Mean"``: the change in mean respiratory amplitude from before stimulus
+          onset.
+        * ``"RSP_Amplitude_SD"``: the standard deviation of the respiratory amplitude after
+          stimulus onset.
+        * ``"RSP_Phase"``: indication of whether the onset of the event concurs with respiratory
+          inspiration (1) or expiration (0).
+        * ``"RSP_PhaseCompletion"``: indication of the stage of the current respiration phase (0 to
+          1) at the onset of the event.
 
     See Also
     --------
