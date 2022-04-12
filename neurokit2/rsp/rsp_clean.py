@@ -5,17 +5,14 @@ import numpy as np
 import pandas as pd
 import scipy.signal
 
-from ..misc import as_vector, NeuroKitWarning
+from ..misc import NeuroKitWarning, as_vector
 from ..signal import signal_detrend, signal_filter
 
 
 def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
-    """Preprocess a respiration (RSP) signal.
+    """**Preprocess a respiration (RSP) signal**
 
-    Clean a respiration signal using different sets of parameters, such as 'khodadad2018'
-    (linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter) or
-    `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_
-    (second order0.1 - 0.35 Hz bandpass Butterworth filter followed by a constant detrending).
+    Clean a respiration signal using different sets of parameters, such as 'khodadad2018' (linear detrending followed by a fifth order 2Hz low-pass IIR Butterworth filter) or `BioSPPy <https://github.com/PIA-Group/BioSPPy/blob/master/biosppy/signals/resp.py>`_(second order0.1 - 0.35 Hz bandpass Butterworth filter followed by a constant detrending).
 
     Parameters
     ----------
@@ -37,15 +34,19 @@ def rsp_clean(rsp_signal, sampling_rate=1000, method="khodadad2018"):
 
     Examples
     --------
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.01)
-    >>> signals = pd.DataFrame({ "RSP_Raw": rsp,
-    ...                         "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
-    ...                         "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
-    >>> fig = signals.plot()
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import pandas as pd
+      import neurokit2 as nk
+
+      rsp = nk.rsp_simulate(duration=30, sampling_rate=50, noise=0.01)
+      signals = pd.DataFrame({ "RSP_Raw": rsp,
+                             "RSP_Khodadad2018": nk.rsp_clean(rsp, sampling_rate=50, method="khodadad2018"),
+                             "RSP_BioSPPy": nk.rsp_clean(rsp, sampling_rate=50, method="biosppy")})
+      @savefig p_rsp_clean1.png scale=100%
+      fig = signals.plot()
+      @suppress
+      plt.close()
 
     References
     ----------

@@ -4,10 +4,10 @@ import pandas as pd
 
 
 def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
-    """Extract extrema in a respiration (RSP) signal.
+    """**Extract extrema in a respiration (RSP) signal**
 
-    Low-level function used by `rsp_peaks()` to identify inhalation and exhalation onsets (troughs and peaks
-    respectively) in a preprocessed respiration signal using different sets of parameters.
+    Low-level function used by `rsp_peaks()` to identify inhalation and exhalation onsets (troughs
+    and peaks respectively) in a preprocessed respiration signal using different sets of parameters.
     See `rsp_peaks()` for details.
 
     Parameters
@@ -19,11 +19,10 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
     method : str
         The processing pipeline to apply. Can be one of "khodadad2018" (default) or "biosppy".
     amplitude_min : float
-        Only applies if method is "khodadad2018". Extrema that have a vertical distance smaller than
-        (outlier_threshold * average vertical distance) to any direct neighbour are removed as false
-        positive outliers. I.e., outlier_threshold should be a float with positive sign (the default is
-        0.3). Larger values of outlier_threshold correspond to more conservative thresholds (i.e.,
-        more extrema removed as outliers).
+        Only applies if method is "khodadad2018". Extrema that have a vertical distance smaller
+        than(outlier_threshold * average vertical distance) to any direct neighbour are removed as
+        false positive outliers. I.e., outlier_threshold should be a float with positive sign (the
+        default is 0.3). Larger values of outlier_threshold correspond to more conservative thresholds (i.e., more extrema removed as outliers).
 
     Returns
     -------
@@ -38,13 +37,17 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
-    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> info = nk.rsp_findpeaks(cleaned)
-    >>> fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
+      cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+      info = nk.rsp_findpeaks(cleaned)
+      @savefig p_rsp_findpeaks1.png scale=100%
+      fig = nk.events_plot([info["RSP_Peaks"], info["RSP_Troughs"]], cleaned)
+      @suppress
+      plt.close()
 
     """
     # Try retrieving correct column

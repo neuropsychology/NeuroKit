@@ -73,5 +73,3 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
     )
 
     return amplitude
-
-
