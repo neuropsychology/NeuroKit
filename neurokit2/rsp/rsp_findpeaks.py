@@ -22,7 +22,8 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
         Only applies if method is "khodadad2018". Extrema that have a vertical distance smaller
         than(outlier_threshold * average vertical distance) to any direct neighbour are removed as
         false positive outliers. I.e., outlier_threshold should be a float with positive sign (the
-        default is 0.3). Larger values of outlier_threshold correspond to more conservative thresholds (i.e., more extrema removed as outliers).
+        default is 0.3). Larger values of outlier_threshold correspond to more conservative
+        thresholds (i.e., more extrema removed as outliers).
 
     Returns
     -------
@@ -69,7 +70,9 @@ def rsp_findpeaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplit
     elif method == "biosppy":
         info = _rsp_findpeaks_biosppy(cleaned, sampling_rate=sampling_rate)
     else:
-        raise ValueError("NeuroKit error: rsp_findpeaks(): 'method' should be one of 'khodadad2018' or 'biosppy'.")
+        raise ValueError(
+            "NeuroKit error: rsp_findpeaks(): 'method' should be one of 'khodadad2018' or 'biosppy'."
+        )
 
     return info
 
