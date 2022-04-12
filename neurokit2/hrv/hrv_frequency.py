@@ -56,19 +56,19 @@ def hrv_frequency(
     vhf : tuple, optional
         Upper and lower limit of the very-high frequency band. By default (0.4, 0.5).
     psd_method : str
-        Method used for spectral density estimation. For details see signal.signal_power. By default "welch".
+        Method used for spectral density estimation. For details see :func:`.signal.signal_power`. By default "welch".
     silent : bool
         If False, warnings will be printed. Default to True.
     show : bool
-        If True, will plot the power in the different frequency bands.
+        If ``True``, will plot the power in the different frequency bands.
     normalize : bool
-        Normalization of power by maximum PSD value. Default to True.
+        Normalization of power by maximum PSD value. Default to ``True``.
         Normalization allows comparison between different PSD methods.
     order_criteria : str
         The criteria to automatically select order in parametric PSD (only used for autoregressive
         (AR) methods such as 'burg'). Defaults to None.
-    **kwargs : optional
-        Other arguments.
+    **kwargs :
+        Additional other arguments.
 
     Returns
     ------*
@@ -108,14 +108,32 @@ def hrv_frequency(
       peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
 
       # Compute HRV indices
-      hrv_welch = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
-      hrv_burg = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="burg")
-      hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="lomb")
       @savefig p_hrv_freq1.png scale=100%
-      hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True,
-      psd_method="multitapers")
+      hrv_welch = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="welch")
       @suppress
       plt.close()
+
+    .. ipython:: python
+
+      @savefig p_hrv_freq2.png scale=100%
+      hrv_burg = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="burg")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_hrv_freq3.png scale=100%
+      hrv_lomb = nk.hrv_frequency(peaks, sampling_rate=100, show=True, psd_method="lomb")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+    
+      @savefig p_hrv_freq4.png scale=100%
+      hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True,psd_method="multitapers")
+      @suppress
+      plt.close()
+
 
     References
     ----------
