@@ -26,7 +26,7 @@ def hrv_frequency(
     order_criteria=None,
     **kwargs
 ):
-    """**Computes frequency-domain indices of Heart Rate Variability (HRV).**
+    """**Computes frequency-domain indices of Heart Rate Variability (HRV)**
 
     Note that a minimum duration of the signal containing the peaks is recommended for some HRV
     indices to be meaningful. For instance, 1, 2 and 5 minutes of high quality signal are the
@@ -56,7 +56,8 @@ def hrv_frequency(
     vhf : tuple, optional
         Upper and lower limit of the very-high frequency band. By default (0.4, 0.5).
     psd_method : str
-        Method used for spectral density estimation. For details see :func:`.signal.signal_power`. By default "welch".
+        Method used for spectral density estimation. For details see :func:`.signal.signal_power`.
+        By default "welch".
     silent : bool
         If False, warnings will be printed. Default to True.
     show : bool
@@ -67,7 +68,7 @@ def hrv_frequency(
     order_criteria : str
         The criteria to automatically select order in parametric PSD (only used for autoregressive
         (AR) methods such as 'burg'). Defaults to None.
-    **kwargs :
+    **kwargs 
         Additional other arguments.
 
     Returns
@@ -128,12 +129,11 @@ def hrv_frequency(
       plt.close()
 
     .. ipython:: python
-    
+
       @savefig p_hrv_freq4.png scale=100%
       hrv_multitapers = nk.hrv_frequency(peaks, sampling_rate=100, show=True,psd_method="multitapers")
       @suppress
       plt.close()
-
 
     References
     ----------
