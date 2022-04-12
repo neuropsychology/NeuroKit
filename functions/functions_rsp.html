@@ -421,6 +421,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rsp-fixpeaks">
+     <em>
+      rsp_fixpeaks()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
 </ul>
@@ -479,6 +486,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#rsp-findpeaks">
      <em>
       rsp_findpeaks()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rsp-fixpeaks">
+     <em>
+      rsp_fixpeaks()
      </em>
     </a>
    </li>
@@ -730,9 +744,9 @@ inspiration (1) or expiration (0).</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">rsp_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  RSP_Phase  RSP_Phase_Completion</span>
-<span class="go">1     1         5000  ...        1.0              0.930772</span>
-<span class="go">2     2        10000  ...        0.0              0.374598</span>
-<span class="go">3     3        15000  ...        0.0              0.718147</span>
+<span class="go">1     1         5000  ...        0.0              0.162742</span>
+<span class="go">2     2        10000  ...        0.0              0.502953</span>
+<span class="go">3     3        15000  ...        1.0              0.452922</span>
 
 <span class="go">[3 rows x 19 columns]</span>
 
@@ -792,7 +806,7 @@ onsets and exhalation onsets occur, accessible with the keys “RSP_Troughs” a
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_fixpeaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_amplitude" title="neurokit2.rsp.rsp_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_amplitude</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></p>
+<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_fixpeaks" title="neurokit2.rsp.rsp_fixpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_fixpeaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">signal_rate</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_amplitude" title="neurokit2.rsp.rsp_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_amplitude</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -807,6 +821,53 @@ onsets and exhalation onsets occur, accessible with the keys “RSP_Troughs” a
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_rsp_findpeaks1.png"><img alt="../_images/p_rsp_findpeaks1.png" src="../_images/p_rsp_findpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</div>
+<div class="section" id="rsp-fixpeaks">
+<h3><em>rsp_fixpeaks()</em><a class="headerlink" href="#rsp-fixpeaks" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.rsp.rsp_fixpeaks">
+<span class="sig-name descname"><span class="pre">rsp_fixpeaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">troughs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.rsp.rsp_fixpeaks" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Correct RSP peaks</strong></p>
+<p>Low-level function used by <cite>rsp_peaks()</cite> to correct the peaks found by <cite>rsp_findpeaks()</cite>.
+Doesn’t do anything for now for RSP. See <cite>rsp_peaks()</cite> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>peaks</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which respiration peaks (exhalation onsets) occur. If a dict or a DataFrame
+is passed, it is assumed that these containers were obtained with <cite>rsp_findpeaks()</cite>.</p></li>
+<li><p><strong>troughs</strong> (<em>list or array or DataFrame or Series or dict</em>) – The samples at which respiration troughs (inhalation onsets) occur. If a dict or a
+DataFrame is passed, it is assumed that these containers were obtained with
+<cite>rsp_findpeak()</cite>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information, in this case the samples at which
+inhalation onsets
+and exhalation onsets occur, accessible with the keys “RSP_Troughs” and “RSP_Peaks”,
+respectively.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.rsp.rsp_clean" title="neurokit2.rsp.rsp_clean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_clean</span></code></a>, <a class="reference internal" href="#neurokit2.rsp.rsp_findpeaks" title="neurokit2.rsp.rsp_findpeaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_findpeaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_peaks</span></code>, <a class="reference internal" href="#neurokit2.rsp.rsp_amplitude" title="neurokit2.rsp.rsp_amplitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_amplitude</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_process</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">rsp_plot</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">rsp</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">respiratory_rate</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">cleaned</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_clean</span><span class="p">(</span><span class="n">rsp</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_findpeaks</span><span class="p">(</span><span class="n">cleaned</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">rsp_fixpeaks</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">events_plot</span><span class="p">([</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Peaks&quot;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;RSP_Troughs&quot;</span><span class="p">]],</span> <span class="n">cleaned</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_rsp_fixpeaks1.png"><img alt="../_images/p_rsp_fixpeaks1.png" src="../_images/p_rsp_fixpeaks1.png" style="width: 640.0px; height: 480.0px;" /></a>
 </dd></dl>
 
 </div>
