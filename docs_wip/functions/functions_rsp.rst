@@ -35,3 +35,7 @@ Main
 *rsp_peaks()*
 """""""""""""
 .. autofunction:: neurokit2.rsp.rsp_peaks
+
+*rsp_phase()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_phase
