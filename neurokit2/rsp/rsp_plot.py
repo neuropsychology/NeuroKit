@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def rsp_plot(rsp_signals, sampling_rate=None):
-    """Visualize respiration (RSP) data.
+    """**Visualize respiration (RSP) data**
 
     Parameters
     ----------
@@ -16,12 +16,17 @@ def rsp_plot(rsp_signals, sampling_rate=None):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-    >>> rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
-    >>> fig = nk.rsp_plot(rsp_signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+      rsp_signals, info = nk.rsp_process(rsp, sampling_rate=1000)
+      @savefig p_rsp_plot_1.png scale=100%
+      fig = nk.rsp_plot(rsp_signals)
+      fig
+      @suppress
+      plt.show()
 
     Returns
     -------
@@ -106,7 +111,7 @@ def rsp_plot(rsp_signals, sampling_rate=None):
         ax2.axhline(y=amplitude_mean, label="Mean", linestyle="--", color="#009688")
         ax2.legend(loc="upper right")
 
-    plt.show()
+    # plt.show()
     return fig
 
 
