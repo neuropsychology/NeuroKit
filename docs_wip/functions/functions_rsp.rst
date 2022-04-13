@@ -31,3 +31,7 @@ Main
 *rsp_intervalrelated()*
 """"""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_intervalrelated
+
+*rsp_peaks()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_peaks

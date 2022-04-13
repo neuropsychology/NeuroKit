@@ -6,7 +6,7 @@ from .rsp_fixpeaks import rsp_fixpeaks
 
 
 def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_min=0.3):
-    """Identify extrema in a respiration (RSP) signal.
+    """**Identify extrema in a respiration (RSP) signal**
 
     This function `rsp_findpeaks()` and `rsp_fixpeaks` to identify and process peaks (exhalation onsets)
     and troughs (inhalation onsets) in a preprocessed respiration signal using
@@ -51,16 +51,20 @@ def rsp_peaks(rsp_cleaned, sampling_rate=1000, method="khodadad2018", amplitude_
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
-    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> peak_signal, info = nk.rsp_peaks(cleaned, sampling_rate=1000)
-    >>>
-    >>> data = pd.concat([pd.DataFrame({"RSP": rsp}), peak_signal], axis=1)
-    >>> fig = nk.signal_plot(data)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import pandas as pd
+
+      rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)
+      cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+      peak_signal, info = nk.rsp_peaks(cleaned, sampling_rate=1000)
+
+      data = pd.concat([pd.DataFrame({"RSP": rsp}), peak_signal], axis=1)
+      @savefig p_rsp_peaks1.png scale=100%
+      fig = nk.signal_plot(data)
+      @suppress
+      plt.close()
 
     """
     info = rsp_findpeaks(rsp_cleaned, sampling_rate=sampling_rate, method=method, amplitude_min=amplitude_min)
