@@ -29,5 +29,33 @@ Main
 .. autofunction:: neurokit2.rsp.rsp_fixpeaks
 
 *rsp_intervalrelated()*
-""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_intervalrelated
+
+*rsp_peaks()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_peaks
+
+*rsp_phase()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_phase
+
+*rsp_plot()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_plot
+
+*rsp_process()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_process
+
+*rsp_rate()*
+""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_rate
+
+*rsp_rrv()*
+"""""""""""
+.. autofunction:: neurokit2.rsp.rsp_rrv
+
+*rsp_simulate()*
+""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_simulate
