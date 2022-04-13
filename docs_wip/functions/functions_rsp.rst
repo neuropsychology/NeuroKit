@@ -29,7 +29,7 @@ Main
 .. autofunction:: neurokit2.rsp.rsp_fixpeaks
 
 *rsp_intervalrelated()*
-""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_intervalrelated
 
 *rsp_peaks()*
@@ -39,3 +39,12 @@ Main
 *rsp_phase()*
 """""""""""""
 .. autofunction:: neurokit2.rsp.rsp_phase
+
+*rsp_rate()*
+""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_rate
+
+*rsp_rrv()*
+"""""""""""
+.. autofunction:: neurokit2.rsp.rsp_rrv
+

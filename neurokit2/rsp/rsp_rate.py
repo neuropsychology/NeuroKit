@@ -16,7 +16,7 @@ def rsp_rate(
     interpolation_method="monotone_cubic",
 ):
 
-    """Find respiration rate.
+    """**Find respiration rate**
 
     Parameters
     ----------
@@ -54,12 +54,14 @@ def rsp_rate(
 
     Example
     -------
-    >>> import neurokit2 as nk
-    >>> rsp_signal = nk.data("rsp_1000hz")
-    >>>
-    >>> rsp_cleaned = nk.rsp_clean(rsp_signal, sampling_rate=1000)
-    >>> rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method="trough")
-    >>> rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method="xcorr")
+    .. ipython:: python
+    
+      import neurokit2 as nk
+      rsp_signal = nk.data("rsp_1000hz")
+
+      rsp_cleaned = nk.rsp_clean(rsp_signal, sampling_rate=1000)
+      rsp_rate_onsets = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method="trough")
+      rsp_rate_xcorr = nk.rsp_rate(rsp_cleaned, sampling_rate=1000, method="xcorr")
     """
 
     if method.lower() in ["period", "peak", "peaks", "trough", "troughs", "signal_rate"]:
