@@ -40,6 +40,14 @@ Main
 """""""""""""
 .. autofunction:: neurokit2.rsp.rsp_phase
 
+*rsp_plot()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_plot
+
+*rsp_process()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_process
+
 *rsp_rate()*
 """"""""""""
 .. autofunction:: neurokit2.rsp.rsp_rate
@@ -48,3 +56,6 @@ Main
 """""""""""
 .. autofunction:: neurokit2.rsp.rsp_rrv
 
+*rsp_simulate()*
+""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_simulate

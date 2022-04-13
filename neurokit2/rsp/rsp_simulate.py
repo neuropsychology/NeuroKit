@@ -13,7 +13,7 @@ def rsp_simulate(
     method="breathmetrics",
     random_state=None,
 ):
-    """Simulate a respiratory signal.
+    """**Simulate a respiratory signal**
 
     Generate an artificial (synthetic) respiratory signal of a given duration
     and rate.
@@ -45,14 +45,18 @@ def rsp_simulate(
 
     Examples
     --------
-    >>> import pandas as pd
-    >>> import numpy as np
-    >>> import neurokit2 as nk
-    >>>
-    >>> rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
-    >>> rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
-    >>> fig = pd.DataFrame({"RSP_Simple": rsp1, "RSP_Complex": rsp2}).plot(subplots=True)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import pandas as pd
+      import numpy as np
+      import neurokit2 as nk
+
+      rsp1 = nk.rsp_simulate(duration=30, method="sinusoidal")
+      rsp2 = nk.rsp_simulate(duration=30, method="breathmetrics")
+      @savefig p_rsp_simulate1.png scale=100%
+      fig = pd.DataFrame({"RSP_Simple": rsp1, "RSP_Complex": rsp2}).plot(subplots=True)
+      @suppress
+      plt.close()
 
     References
     ----------
