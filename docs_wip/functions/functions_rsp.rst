@@ -4,21 +4,32 @@ RSP
 Main
 ^^^^^^^^^^^^^^^^
 
-*rsp_amplitude()*
-"""""""""""""""""
-.. autofunction:: neurokit2.rsp.rsp_amplitude
+*rsp_process()*
+"""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_process
 
 *rsp_analyze()*
 """""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_analyze
 
+*rsp_simulate()*
+""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_simulate
+
+*rsp_plot()*
+"""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_plot
+
+
+Preprocessing
+^^^^^^^^^^^^^^^^
 *rsp_clean()*
 """""""""""""
 .. autofunction:: neurokit2.rsp.rsp_clean
 
-*rsp_eventrelated()*
-""""""""""""""""""""
-.. autofunction:: neurokit2.rsp.rsp_eventrelated
+*rsp_amplitude()*
+"""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_amplitude
 
 *rsp_findpeaks()*
 """""""""""""""""
@@ -28,10 +39,6 @@ Main
 """"""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_fixpeaks
 
-*rsp_intervalrelated()*
-""""""""""""""""""""""""
-.. autofunction:: neurokit2.rsp.rsp_intervalrelated
-
 *rsp_peaks()*
 """""""""""""
 .. autofunction:: neurokit2.rsp.rsp_peaks
@@ -39,14 +46,6 @@ Main
 *rsp_phase()*
 """""""""""""
 .. autofunction:: neurokit2.rsp.rsp_phase
-
-*rsp_plot()*
-"""""""""""""
-.. autofunction:: neurokit2.rsp.rsp_plot
-
-*rsp_process()*
-"""""""""""""""
-.. autofunction:: neurokit2.rsp.rsp_process
 
 *rsp_rate()*
 """"""""""""
@@ -56,6 +55,13 @@ Main
 """""""""""
 .. autofunction:: neurokit2.rsp.rsp_rrv
 
-*rsp_simulate()*
-""""""""""""""""
-.. autofunction:: neurokit2.rsp.rsp_simulate
+
+Analysis
+^^^^^^^^^
+*rsp_eventrelated()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_eventrelated
+
+*rsp_intervalrelated()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.rsp.rsp_intervalrelated
