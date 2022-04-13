@@ -31,16 +31,16 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
     signals : DataFrame
         A DataFrame of same length as `rsp_signal` containing the following columns:
 
-        * **"RSP_Raw"**: the raw signal.
-        * **"RSP_Clean"**: the cleaned signal.
-        * **"RSP_Peaks"**: the respiratory peaks (exhalation onsets) marked as "1" in a list of
+        * ``"RSP_Raw"``: the raw signal.
+        * ``"RSP_Clean"``: the cleaned signal.
+        * ``"RSP_Peaks"``: the respiratory peaks (exhalation onsets) marked as "1" in a list of
           zeros.
-        * **"RSP_Troughs"**: the respiratory troughs (inhalation onsets) marked as "1" in a list of
+        * ``"RSP_Troughs"``: the respiratory troughs (inhalation onsets) marked as "1" in a list of
           zeros.
-        * **"RSP_Rate"**: breathing rate interpolated between inhalation peaks.
-        * **"RSP_Amplitude"**: breathing amplitude interpolated between inhalation peaks.
-        * **"RSP_Phase"**: breathing phase, marked by "1" for inspiration and "0" for expiration.
-        * **"RSP_PhaseCompletion"**: breathing phase completion, expressed in percentage (from 0 to
+        * ``"RSP_Rate"``: breathing rate interpolated between inhalation peaks.
+        * ``"RSP_Amplitude"``: breathing amplitude interpolated between inhalation peaks.
+        * ``"RSP_Phase"``: breathing phase, marked by "1" for inspiration and "0" for expiration.
+        * ``"RSP_PhaseCompletion"``: breathing phase completion, expressed in percentage (from 0 to
           1), representing the stage of the current respiratory phase.
     info : dict
         A dictionary containing the samples at which inhalation peaks and exhalation troughs occur,
@@ -61,7 +61,6 @@ def rsp_process(rsp_signal, sampling_rate=1000, method="khodadad2018"):
       signals, info = nk.rsp_process(rsp, sampling_rate=1000)
       @savefig p_rsp_process_1.png scale=100%
       fig = nk.rsp_plot(signals)
-      fig
       @suppress
       plt.close()
 
