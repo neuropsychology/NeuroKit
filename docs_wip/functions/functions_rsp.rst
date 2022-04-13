@@ -45,7 +45,7 @@ Main
 .. autofunction:: neurokit2.rsp.rsp_plot
 
 *rsp_process()*
-"""""""""""""
+"""""""""""""""
 .. autofunction:: neurokit2.rsp.rsp_process
 
 *rsp_rate()*
