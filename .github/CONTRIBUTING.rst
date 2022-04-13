@@ -112,6 +112,49 @@ This is a summary of the typical workflow for contributing using GitHub (a detai
     * `Why and How to Contribute <https://github.com/jonschlinkert/idiomatic-contributing/>`_
 
 
+
+
+
+Understanding NeuroKit
+---------------------
+
+**Let's start by reviewing some basic coding principles that might help you get familiar with NeuroKit**
+
+If you are reading this, it could be because you don't feel comfortable enough with Python and NeuroKit *(yet)*, and you impatiently want to get to know it in order to start looking at your data.
+
+**"Tous les chemins mènent à Rome"** *(all roads lead to Rome)*
+
+Let me start by saying that there are multiple ways you'll be able to access the documentation in order to get to know different functions, follow examples and other tutorials. So keep in mind that you will eventually find your own workflow, and that these tricks are shared simply to help you get to know your options.
+
+1. Documentation website
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You probably already saw the `README <https://github.com/neuropsychology/NeuroKit/blob/master/README.rst>`_ file that shows up on NeuroKit's Github home page (right after the list of directories). It contains a brief overview of the project, some examples and figures. *But, most importantly, there are the links that will take you to the Documentation*.
+
+The documentation contains a description of the API (or Application Program Interface), like `here <https://neuropsychology.github.io/NeuroKit/functions/index.html>`_. All the info you will see on the webpages is rendered directly from the code, meaning that the website reads the code and generates a HTML page from it. **That's why it's important to structure your code in a standard manner**.
+
+The API is organized by types of signals. You'll find that each function has a **description**, and that most of them refer to peer-reviewed papers or other GitHub repositories. Also, for each function, **parameters** are described in order. Some of them will take many different **options** and all of them should be described as well.
+
+**If the options are not explained, they should be**. It's not your fault you don't understand. That's why we need you to contribute.
+
+
+For instance, in the **ECG section**, the `ecg_peaks function <https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-peaks>`_ takes **4 parameters**. One of them is **method**: each method refers to a peer-reviewed paper that published a peak detection algorithm. You can also see what the function **returns** and what **type of data** has been returned (integers and floating point numbers, strings, etc).  Additionally, you can find **related functions** in the **See also** part.  An small **example** of the function should also be found. You can copy paste it in your Python kernel, or in a Jupyter Notebook, to see what it does.
+
+
+2. The source on Github
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Now that you're familiar with the documentation website, let's go back to the `repo <https://github.com/neuropsychology/NeuroKit>`_. What you have to keep in mind is that *everything you saw in the previous section is* **in the Github repository**. The website pages, the lines that you are currently reading, are stored in the repository, which is then automatically uploaded to the website.
+
+Ready for inception? let's try to find the location of the file you're currently reading. Go under `docs folder <https://github.com/neuropsychology/NeuroKit/tree/master/docs>`_, where the documentation source lives.
+
+As you can see, there are several sections on the website (see the Table of Content on the left, and we are in the **resources** section. So you might want to look into the **resources** subfolder... However, a surprise waits for you. The ``contributing.rst`` file that should contain the page that is on the website is actually almost empty! Well not really, because it imports (``includes``) `another file <https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst>`_ located upstream.
+
+
+
+
+
+
 How to use GitHub to contribute
 ----------------------------------
 
@@ -123,8 +166,8 @@ How to use GitHub to contribute
     much easier.
 
 
-Step 1: Fork it
-^^^^^^^^^^^^^^^^
+Step 1: Fork the repo
+^^^^^^^^^^^^^^^^^^^^^
 
 A *fork* is a copy of a repository. Working with the fork allows you to freely experiment with changes without affecting the original project.
 
@@ -149,7 +192,7 @@ Go to **File** menu, click **Clone Repository** and since you have forked Neurok
 Choose the local path of where you want to save your *local* copy and as simple as that, you have a working repository in your computer.
 
 
-Step 3: Find it and fix it
+Step 3: Improve it
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 And here is where the fun begins. You can start contributing by fixing a bug (or even a typo in the code) that has been annoying you. Or you can go to the `issue section <https://github.com/neuropsychology/NeuroKit/issues/>`_ to hunt for issues that you can address.
@@ -190,11 +233,11 @@ And now, all that is left is for the maintainers of the package to review your w
 Step 5: Let's do it
 ^^^^^^^^^^^^^^^^^^^^^^
 
-Let's do it for real! If you have a particular feature in mind that you would want to add, we would recommend first opening an `issue <https://github.com/neuropsychology/NeuroKit/issues>`_ to let us know, so we can eventually guide you and give you some advice. And if you don't know where to start or what to do, then read our `ideas for first contributions <https://neurokit2.readthedocs.io/en/latest/contributing/first_contribution.html>`_. Good luck 💪
+Let's do it for real! If you have a particular feature in mind that you would want to add, we would recommend first opening an `issue <https://github.com/neuropsychology/NeuroKit/issues>`_ to let us know, so we can eventually guide you and give you some advice. And if you don't know where to start or what to do, read on. Good luck 💪
 
 
-Ideas for first contributions
-================================
+Ideas for contributions
+------------------------------
 
 
 Now that you're familiar with how to use GitHub, time to get your hands dirty and contribute to open-science. Not sure **where to start or what to do**?
@@ -205,24 +248,24 @@ In this guide, we will discuss the two best types of contributions for beginners
 
 
 Talk about it
-------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 Contributing to the development of a package also means helping to popularize it, so that more people hear about it and use it. So do not hesitate to **talk about it on social media** (twitter, reddit, research gate, ...) and present it to your students or colleagues. Also, do not hesitate to write blogposts about it (or even make some videos if you're a YouTube influencer 😎). And let us know if you do that, we'll try to boost your outreach by retweeting, sharing and spreading it.
 
 
 Look for *"good first contribution"* issues
--------------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If you know how to code a bit, you can check out the issues that have been flagged as `good for first contribution <https://github.com/neuropsychology/NeuroKit/labels/good%20first%20contribution%20%3Asun_with_face%3A>`_. This means that they are issue or features ideas that we believe are accessible to beginners. If you're interested, do not hesitate to comment on these issues to know more, have more info or ask for guidance! We'll be really happy to help in any way we can ☺️.
 
 
 
 Improving documentation
--------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-One of the easiest thing is to improve, complete or fix the documentation for functions. For instance the `ecg_simulate() <https://neurokit2.readthedocs.io/en/latest/functions.html#neurokit2.ecg_simulate>`_ function has a documentation with a general description, a description of the arguments, some example etc. As you've surely noticed, sometimes more details would be needed, some typos are present, or some references could be added.
+One of the easiest thing is to improve, complete or fix the documentation for functions. For instance the `ecg_simulate() <https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-simulate>`_ function has a documentation with a general description, a description of the arguments, some example etc. As you've surely noticed, sometimes more details would be needed, some typos are present, or some references could be added.
 
-The documentation for functions is located alongside the function *definition* (the code of the function). If you've read `understanding NeuroKit <https://neurokit2.readthedocs.io/en/latest/contributing/understanding.html>`_, you know that the code of the `ecg_simulate()` function is `here <https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_simulate.py>`_. And as you can see, just below the function name, there is a big *string* (starting and ending with `"""`) containing the documentation.
+The documentation for functions is located alongside the function *definition* (the code of the function). The code of the `ecg_simulate()` function is `here <https://github.com/neuropsychology/NeuroKit/blob/master/neurokit2/ecg/ecg_simulate.py>`_. And as you can see, just below the function name, there is a big *string* (starting and ending with `"""`) containing the documentation.
 
 This thing is called the *docstring*.
 
@@ -230,7 +273,7 @@ If you modify it here, then it will be updated automatically on the website!
 
 
 Adding tests
-----------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 Tests are super important for programmers to make sure that the changes that we make at one location don't create unexpected changes at another place.
 
@@ -287,17 +330,10 @@ And if you want to deepen your understanding of the topic, check-out this very a
 
 
 Adding examples and tutorials
-----------------------------------
-
-How to write
-^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The documentation that is on the `website <https://neuropsychology.github.io/NeuroKit/>`_ is automatically built by a `GitHub action <https://github.com/neuropsychology/NeuroKit/blob/master/.github/workflows/docs-build.yml>`_, from `reStructured Text (RST) files <https://thomas-cokelaer.info/tutorials/sphinx/rest_syntax.html>`_ (a syntax similar to markdown) or from `jupyter notebooks (.ipynb) <https://jupyter.org/>`_ Notebooks are preferred if your example contains code and images.
 
-
-
-Where to add the files
-^^^^^^^^^^^^^^^^^^^^^^^^
 
 These documentation files that we need to write are located in the `/docs/ <https://github.com/neuropsychology/NeuroKit/tree/master/docs>`_ folder. For instance, if you want to add an example, you need to create a new file, for instance `myexample.rst`, in the `docs/examples/` folder.
 
@@ -307,51 +343,4 @@ However, in order for this file to be easily **accessible from the website**, yo
 
 Do not hesitate to ask for more info by creating an `issue <https://github.com/neuropsychology/NeuroKit/issues>`_!
 
-
-
-Understanding NeuroKit
-======================
-
-**Let's start by reviewing some basic coding principles that might help you get familiar with NeuroKit**
-
-If you are reading this, it could be because you don't feel comfortable enough with Python and NeuroKit *(yet)*, and you impatiently want to get to know it in order to start looking at your data.
-
-**"Tous les chemins mènent à Rome"** *(all roads lead to Rome)*
-
-Let me start by saying that there are multiple ways you'll be able to access the documentation in order to get to know different functions, follow examples and other tutorials. So keep in mind that you will eventually find your own workflow, and that these tricks are shared simply to help you get to know your options.
-
-1. readthedocs
--------------------
-
-You probably already saw the `README <https://github.com/neuropsychology/NeuroKit/blob/master/README.rst>`_ file that shows up on NeuroKit's Github home page (right after the list of directories). It contains a brief overview of the project, some examples and figures. *But, most importantly, there are the links that will take you to the Documentation*.
-
-The documentation contains a description of the API (or Application Program Interface), like `here <https://neuropsychology.github.io/NeuroKit/functions/index.html>`_. All the info you will see on the webpages is rendered directly from the code, meaning that the website reads the code and generates a HTML page from it. **That's why it's important to structure your code in a standard manner**.
-
-The API is organized by types of signals. You'll find that each function has a **description**, and that most of them refer to peer-reviewed papers or other GitHub repositories. Also, for each function, **parameters** are described in order. Some of them will take many different **options** and all of them should be described as well.
-
-**If the options are not explained, they should be**. It's not your fault you don't understand. That's why we need you to contribute.
-
-Example
-"""""""
-
-In the **ECG section**, the `ecg_peaks function <https://neuropsychology.github.io/NeuroKit/functions/functions_ecg.html#ecg-peaks>`_ takes **4 parameters**. One of them is **method**: each method refers to a peer-reviewed paper that published a peak detection algorithm. You can also see what the function **returns** and what **type of data** has been returned (integers and floating point numbers, strings, etc).  Additionally, you can find **related functions** in the **See also** part.  An small **example** of the function should also be found. You can copy paste it in your Python kernel, or in a Jupyter Notebook, to see what it does.
-
-
-1. The code on Github
----------------------------
-
-Now that you're familiar with *readthedocs* website, let's go back to the `repo <https://github.com/neuropsychology/NeuroKit>`_. What you have to keep in mind is that *everything you saw in the previous section is* **in the Github repository**. The website pages, the lines that you are currently reading, are stored in the repository, which is then automatically uploaded to the website. Everything is cross-referenced, everything relates to the core which can be found in the repo. If you got here, you probably already know that a repository is like a *tree containing different branches* or directories that eventually lead you to a **script**, in which you can find a **function**.
-
-Example
-""""""""
-
-Ready for inception ? let's find the location of the file you're currently reading. Go under ``docs`` and find it by yourself... it should be straight-forward.
-
-.. Hint:: As you can see, there are several sections (see the Table of Content on the left), and we
-    are in the **resources** section. So you might want to look into the **resources** subfolder...
-    However, a suprise waits for you. The ``contributing.rst`` file actually imports (``includes``)
-    `another file <https://github.com/neuropsychology/NeuroKit/blob/master/.github/CONTRIBUTING.rst>`_ located upstream.
-
-
-See! It's super handy because you can visit the scripts without downloading it. Github also renders Jupyter Notebook quite well, so you can not only see the script, but also figures and markdown sections where the coder discusses results.
 
