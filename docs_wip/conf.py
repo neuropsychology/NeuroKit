@@ -65,7 +65,7 @@ extensions = [
     "sphinxemoji.sphinxemoji",
     "sphinx.ext.autosectionlabel",
     "sphinx_copybutton",
-    # "myst_nb",
+    "myst_nb",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
