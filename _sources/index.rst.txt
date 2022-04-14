@@ -34,6 +34,7 @@ You can navigate to the different sections using the left panel. We recommend ch
    authors
    installation
    resources/index
+   examples/index
    functions/index
    cite_us
    Changelog <https://github.com/neuropsychology/NeuroKit/releases>
