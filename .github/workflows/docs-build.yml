@@ -18,6 +18,7 @@ jobs:
           pip install sphinxemoji
           pip install sphinx-copybutton
           pip install ipython
+          pip install myst-nb
           pip install numpy
           pip install pandas
           pip install scipy
