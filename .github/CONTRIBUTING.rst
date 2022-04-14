@@ -116,7 +116,7 @@ This is a summary of the typical workflow for contributing using GitHub (a detai
 
 
 Understanding NeuroKit
----------------------
+-----------------------
 
 **Let's start by reviewing some basic coding principles that might help you get familiar with NeuroKit**
 
@@ -131,7 +131,7 @@ Let me start by saying that there are multiple ways you'll be able to access the
 
 You probably already saw the `README <https://github.com/neuropsychology/NeuroKit/blob/master/README.rst>`_ file that shows up on NeuroKit's Github home page (right after the list of directories). It contains a brief overview of the project, some examples and figures. *But, most importantly, there are the links that will take you to the Documentation*.
 
-The documentation contains a description of the API (or Application Program Interface), like `here <https://neuropsychology.github.io/NeuroKit/functions/index.html>`_. All the info you will see on the webpages is rendered directly from the code, meaning that the website reads the code and generates a HTML page from it. **That's why it's important to structure your code in a standard manner**.
+The documentation contains a description of the API (or Application Program Interface), which you can access from `this page <https://neuropsychology.github.io/NeuroKit/functions/index.html>`_. All the info you will see on the webpages is rendered directly from the code, meaning that the website reads the code and generates a HTML page from it. **That's why it's important to structure your code in a standard manner**.
 
 The API is organized by types of signals. You'll find that each function has a **description**, and that most of them refer to peer-reviewed papers or other GitHub repositories. Also, for each function, **parameters** are described in order. Some of them will take many different **options** and all of them should be described as well.
 

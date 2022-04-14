@@ -23,7 +23,7 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
     data : DataFrame
         The DataFrame containing all the processed signals, typically
         produced by `bio_process()`, `ecg_process()`, `rsp_process()`,
-        `eda_process()`, `emg_process()` or `eog_process()`.
+        `eda_process()`, `emg_process()` or `eog_process()`. Can also be an epochs object.
     sampling_rate : int
         The sampling frequency of the signals (in Hz, i.e., samples/second).
         Defaults to 1000.

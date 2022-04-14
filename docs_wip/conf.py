@@ -65,6 +65,7 @@ extensions = [
     "sphinxemoji.sphinxemoji",
     "sphinx.ext.autosectionlabel",
     "sphinx_copybutton",
+    "myst_nb",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -86,6 +87,10 @@ napoleon_use_param = False
 napoleon_use_ivar = False
 napoleon_use_rtype = False
 add_module_names = False  # If true, the current module name will be prepended to all description
+
+
+# -- Options for myst_nb -------------------------------------------------
+jupyter_execute_notebooks = "force"
 
 # NumPyDoc configuration -----------------------------------------------------
 
