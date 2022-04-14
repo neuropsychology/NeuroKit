@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Resources &#8212; NeuroKit2 0.1.8 documentation</title>
+    <title>PPG &#8212; NeuroKit2 0.1.8 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -36,8 +36,8 @@
     <link rel="shortcut icon" href="../_static/icon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Learn Python in 10 minutes" href="learn_python.html" />
-    <link rel="prev" title="Installation" href="../installation.html" />
+    <link rel="next" title="Complexity" href="functions_complexity.html" />
+    <link rel="prev" title="HRV" href="functions_hrv.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -108,75 +108,75 @@
    Installation
   </a>
  </li>
- <li class="toctree-l1 current active has-children">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
    Resources
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="learn_python.html">
+    <a class="reference internal" href="../resources/learn_python.html">
      Learn Python in 10 minutes
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="contributing.html">
+    <a class="reference internal" href="../resources/contributing.html">
      Contributing guide
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="recording.html">
+    <a class="reference internal" href="../resources/recording.html">
      Recording good quality signals
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="resources.html">
+    <a class="reference internal" href="../resources/resources.html">
      Additional Resources
     </a>
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="../functions/index.html">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
    Functions
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
   <label for="toctree-checkbox-2">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_data.html">
+    <a class="reference internal" href="functions_data.html">
      Data
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_ecg.html">
+    <a class="reference internal" href="functions_ecg.html">
      ECG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_rsp.html">
+    <a class="reference internal" href="functions_rsp.html">
      RSP
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_hrv.html">
+    <a class="reference internal" href="functions_hrv.html">
      HRV
     </a>
    </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_ppg.html">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
      PPG
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../functions/functions_complexity.html">
+    <a class="reference internal" href="functions_complexity.html">
      Complexity
     </a>
    </li>
@@ -282,7 +282,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fresources/index.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Ffunctions/functions_ppg.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -299,7 +299,7 @@ title="Open an issue"
       </li>
       
       <li>
-        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/resources/index.rst"
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/functions/functions_ppg.rst"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -327,7 +327,7 @@ title="Edit this page"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="../_sources/resources/index.rst.txt"
+        <a href="../_sources/functions/functions_ppg.rst.txt"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -364,23 +364,78 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main">
+   Main
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ppg-process">
+     <em>
+      ppg_process()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Resources</h1>
+                <h1>PPG</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#main">
+   Main
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#ppg-process">
+     <em>
+      ppg_process()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -388,16 +443,57 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="section" id="resources">
-<h1>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">#</a></h1>
-<p>Contents:</p>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="learn_python.html">Learn Python in 10 minutes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing guide</a></li>
-<li class="toctree-l1"><a class="reference internal" href="recording.html">Recording good quality signals</a></li>
-<li class="toctree-l1"><a class="reference internal" href="resources.html">Additional Resources</a></li>
+  <div class="section" id="ppg">
+<h1>PPG<a class="headerlink" href="#ppg" title="Permalink to this headline">#</a></h1>
+<div class="section" id="main">
+<h2>Main<a class="headerlink" href="#main" title="Permalink to this headline">#</a></h2>
+<div class="section" id="ppg-process">
+<h3><em>ppg_process()</em><a class="headerlink" href="#ppg-process" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.ppg.ppg_process">
+<span class="sig-name descname"><span class="pre">ppg_process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ppg_signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.ppg.ppg_process" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Process a photoplethysmogram (PPG)  signal</strong></p>
+<p>Convenience function that automatically processes a photoplethysmogram signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ppg_signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The raw PPG channel.</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The sampling frequency of <cite>emg_signal</cite> (in Hz, i.e., samples/second).</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>signals</strong> (<em>DataFrame</em>) – A DataFrame of same length as <cite>emg_signal</cite> containing the following columns:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;PPG_Raw&quot;</span></code>: the raw signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;PPG_Clean&quot;</span></code>: the cleaned signal.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;PPG_Rate&quot;</span></code>: the heart rate as measured based on PPG peaks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;PPG_Peaks&quot;</span></code>: the PPG peaks marked as “1” in a list of zeros.</p></li>
+</ul>
+</li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing the information of peaks and the signals’ sampling rate.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_clean</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_findpeaks</span></code></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">ppg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">heart_rate</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">signals</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_process</span><span class="p">(</span><span class="n">ppg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">fig</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ppg_plot</span><span class="p">(</span><span class="n">signals</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_ppg_process1.png"><img alt="../_images/p_ppg_process1.png" src="../_images/p_ppg_process1.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</div>
 </div>
 </div>
 
@@ -409,17 +505,17 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../installation.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="functions_hrv.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Installation</p>
+            <p class="prev-next-title">HRV</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="learn_python.html" title="next page">
+    <a class='right-next' id="next-link" href="functions_complexity.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Learn Python in 10 minutes</p>
+        <p class="prev-next-title">Complexity</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
