@@ -32,7 +32,17 @@ You can cite the **main publication** for *NeuroKit2* as follows:
 Cite Documentation
 -------------------
 
+.. note::
+
+   We are interested in finding a way of crediting all the major contributors in a satisfactory manner. If you have some idea on that front, please let us know.
+
+
 If you want to additionally **reference the manual** (to refer to the content of this documentation), you can add the following reference:
 
 
 - Makowski, D. (2021). *Neurophysiological Data Analysis with NeuroKit2*. NeuroKit. https://neuropsychology.github.io/NeuroKit/
+
+Other related papers
+---------------------
+
+- Heart Rate Variability in Psychology: A Review of HRV Indices and an Analysis Tutorial `(Pham et al., 2021) <https://doi.org/10.3390/s21123998>`_
