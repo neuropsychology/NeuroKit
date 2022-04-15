@@ -33,10 +33,11 @@ You can navigate to the different sections using the left panel. We recommend ch
    introduction
    authors
    installation
+   cite_us
    resources/index
    examples/index
    functions/index
-   cite_us
+   studies/index
    Changelog <https://github.com/neuropsychology/NeuroKit/releases>
 
 
