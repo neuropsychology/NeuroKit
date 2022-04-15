@@ -30,10 +30,6 @@ jobs:
           pip install astropy
           pip install https://github.com/neuropsychology/neurokit/zipball/dev
         build-command: "sphinx-build -b html . _build"
-    # - name: Build and Commit
-    #   uses: sphinx-notes/pages@v2
-    #   with:
-    #     documentation_path: ./docs_wip/
     - name: Deploy 🚀
       uses: peaceiris/actions-gh-pages@v3
       with:
