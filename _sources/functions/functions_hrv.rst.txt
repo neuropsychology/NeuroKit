@@ -10,3 +10,7 @@ Main
 *hrv_frequency()*
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_frequency
+
+*hrv_nonlinear()*
+""""""""""""""""""
+.. autofunction:: neurokit2.hrv.hrv_nonlinear

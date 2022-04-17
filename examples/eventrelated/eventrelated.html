@@ -232,7 +232,12 @@
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul class="simple">
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../studies/erp_gam.html">
+     Title
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
@@ -548,19 +553,6 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="nn">Input In [1],</span> in <span class="ni">&lt;cell line: 5&gt;</span><span class="nt">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="ne">----&gt; </span><span class="mi">5</span> <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;seaborn&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -611,7 +603,7 @@ title="Print to PDF"
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;onset&#39;: array([ 1024,  4957,  9224, 12984]),
  &#39;duration&#39;: array([300, 300, 300, 300]),
- &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;], dtype=&#39;&lt;U11&#39;),
+ &#39;label&#39;: array([&#39;1&#39;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;], dtype=&#39;&lt;U21&#39;),
  &#39;condition&#39;: [&#39;Negative&#39;, &#39;Neutral&#39;, &#39;Neutral&#39;, &#39;Negative&#39;]}
 </pre></div>
 </div>
@@ -756,8 +748,8 @@ title="Print to PDF"
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>ECG_Rate</th>
-      <th>RSP_Rate</th>
+      <th>ECG_Rate_Mean</th>
+      <th>RSP_Rate_Mean</th>
       <th>SCR_Magnitude</th>
       <th>Condition</th>
     </tr>
@@ -808,24 +800,148 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;Label&#39;, &#39;Condition&#39;, &#39;Event_Onset&#39;, &#39;ECG_Rate_Baseline&#39;,
-       &#39;ECG_Rate_Max&#39;, &#39;ECG_Rate_Min&#39;, &#39;ECG_Rate_Mean&#39;, &#39;ECG_Rate_SD&#39;,
-       &#39;ECG_Rate_Max_Time&#39;, &#39;ECG_Rate_Min_Time&#39;, &#39;ECG_Rate_Trend_Linear&#39;,
-       &#39;ECG_Rate_Trend_Quadratic&#39;, &#39;ECG_Rate_Trend_R2&#39;, &#39;ECG_Phase_Atrial&#39;,
-       &#39;ECG_Phase_Completion_Atrial&#39;, &#39;ECG_Phase_Ventricular&#39;,
-       &#39;ECG_Phase_Completion_Ventricular&#39;, &#39;ECG_Quality_Mean&#39;,
-       &#39;RSP_Rate_Baseline&#39;, &#39;RSP_Rate_Max&#39;, &#39;RSP_Rate_Min&#39;, &#39;RSP_Rate_Mean&#39;,
-       &#39;RSP_Rate_SD&#39;, &#39;RSP_Rate_Max_Time&#39;, &#39;RSP_Rate_Min_Time&#39;,
-       &#39;RSP_Rate_Trend_Linear&#39;, &#39;RSP_Rate_Trend_Quadratic&#39;,
-       &#39;RSP_Rate_Trend_R2&#39;, &#39;RSP_Amplitude_Baseline&#39;, &#39;RSP_Amplitude_Max&#39;,
-       &#39;RSP_Amplitude_Min&#39;, &#39;RSP_Amplitude_Mean&#39;, &#39;RSP_Amplitude_SD&#39;,
-       &#39;RSP_Phase&#39;, &#39;RSP_Phase_Completion&#39;, &#39;EDA_Peak_Amplitude&#39;, &#39;EDA_SCR&#39;,
-       &#39;SCR_Peak_Amplitude&#39;, &#39;SCR_Peak_Amplitude_Time&#39;, &#39;SCR_RiseTime&#39;,
-       &#39;SCR_RecoveryTime&#39;, &#39;RSA_P2T&#39;, &#39;RSA_Gates&#39;],
-      dtype=&#39;object&#39;)
-</pre></div>
-</div>
-</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Label</th>
+      <th>Condition</th>
+      <th>Event_Onset</th>
+      <th>ECG_Rate_Baseline</th>
+      <th>ECG_Rate_Max</th>
+      <th>ECG_Rate_Min</th>
+      <th>ECG_Rate_Mean</th>
+      <th>ECG_Rate_SD</th>
+      <th>ECG_Rate_Max_Time</th>
+      <th>ECG_Rate_Min_Time</th>
+      <th>...</th>
+      <th>RSP_Phase</th>
+      <th>RSP_Phase_Completion</th>
+      <th>EDA_Peak_Amplitude</th>
+      <th>EDA_SCR</th>
+      <th>SCR_Peak_Amplitude</th>
+      <th>SCR_Peak_Amplitude_Time</th>
+      <th>SCR_RiseTime</th>
+      <th>SCR_RecoveryTime</th>
+      <th>RSA_P2T</th>
+      <th>RSA_Gates</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>Negative</td>
+      <td>1024</td>
+      <td>58.962843</td>
+      <td>1.037157</td>
+      <td>-7.238706</td>
+      <td>-3.416404</td>
+      <td>2.462046</td>
+      <td>3.035765</td>
+      <td>5.329041</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.641256</td>
+      <td>1.995617</td>
+      <td>1</td>
+      <td>3.114808</td>
+      <td>4.718169</td>
+      <td>1.74</td>
+      <td>NaN</td>
+      <td>-0.031061</td>
+      <td>1.008946e-07</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>Neutral</td>
+      <td>4957</td>
+      <td>64.000846</td>
+      <td>-0.056683</td>
+      <td>-5.177317</td>
+      <td>-3.209327</td>
+      <td>1.661333</td>
+      <td>0.011445</td>
+      <td>1.323319</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.462312</td>
+      <td>0.868942</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-0.030944</td>
+      <td>6.840513e-02</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>Neutral</td>
+      <td>9224</td>
+      <td>55.976284</td>
+      <td>5.248206</td>
+      <td>-1.922230</td>
+      <td>1.891089</td>
+      <td>2.279224</td>
+      <td>2.054363</td>
+      <td>1.072961</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.752747</td>
+      <td>0.026651</td>
+      <td>0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-0.024188</td>
+      <td>1.652256e-01</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>Negative</td>
+      <td>12984</td>
+      <td>57.505912</td>
+      <td>0.186396</td>
+      <td>-5.781774</td>
+      <td>-2.941543</td>
+      <td>2.142268</td>
+      <td>4.768240</td>
+      <td>2.565093</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>0.746667</td>
+      <td>1.056855</td>
+      <td>1</td>
+      <td>1.675922</td>
+      <td>2.845494</td>
+      <td>1.73</td>
+      <td>477.0</td>
+      <td>-0.020054</td>
+      <td>1.084281e-01</td>
+    </tr>
+  </tbody>
+</table>
+<p>4 rows × 43 columns</p>
+</div></div></div>
 </div>
 </div>
 <div class="section" id="plot-event-related-features">
@@ -838,10 +954,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Condition&#39;, ylabel=&#39;ECG_Rate_Mean&#39;&gt;
-</pre></div>
-</div>
-<img alt="../../_images/eventrelated_31_1.png" src="../../_images/eventrelated_31_1.png" />
+<img alt="../../_images/eventrelated_31_0.png" src="../../_images/eventrelated_31_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -851,10 +964,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Condition&#39;, ylabel=&#39;RSP_Rate_Mean&#39;&gt;
-</pre></div>
-</div>
-<img alt="../../_images/eventrelated_32_1.png" src="../../_images/eventrelated_32_1.png" />
+<img alt="../../_images/eventrelated_32_0.png" src="../../_images/eventrelated_32_0.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -864,10 +974,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Condition&#39;, ylabel=&#39;EDA_Peak_Amplitude&#39;&gt;
-</pre></div>
-</div>
-<img alt="../../_images/eventrelated_33_1.png" src="../../_images/eventrelated_33_1.png" />
+<img alt="../../_images/eventrelated_33_0.png" src="../../_images/eventrelated_33_0.png" />
 </div>
 </div>
 <p><strong>Interpretation</strong>: As we can see, there seems to be a difference between the negative and the neutral pictures. Negative stimuli, as compared to neutral stimuli, were related to a stronger cardiac deceleration (i.e., higher heart rate variability), an accelerated breathing rate, and higher SCR magnitude.</p>
