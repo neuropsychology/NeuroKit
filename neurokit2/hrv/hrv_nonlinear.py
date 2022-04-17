@@ -25,10 +25,10 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 
 
 def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
-    """Computes nonlinear indices of Heart Rate Variability (HRV).
+    """**Computes nonlinear indices of Heart Rate Variability (HRV)**
 
     Non-linear indices include features derived from the *Poincaré plot*, as well as other
-    :func:`complexity <complexity>` indices.
+    :func:`.complexity <complexity>` indices.
 
     The **Poincaré plot** is a graphical representation of each NN interval plotted against its
     preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
@@ -99,7 +99,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **LZC**: See `fractal_lempelziv()`.
     * **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal, corresponding
       to short-term correlations. See `fractal_dfa()`.
-    ** **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal,
+    * **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal,
       corresponding to long-term correlations. See `fractal_dfa()`.
     * **DFA_alpha1_ExpRange**: The multifractal detrended fluctuation analysis of the HR signal,
       corresponding to short-term correlations. ExpRange is the range of singularity exponents,
@@ -152,17 +152,22 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Download data
-    >>> data = nk.data("bio_resting_5min_100hz")
-    >>>
-    >>> # Find peaks
-    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
-    >>>
-    >>> # Compute HRV indices
-    >>> hrv = nk.hrv_nonlinear(peaks, sampling_rate=100, show=True)
-    >>> hrv #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download data
+      data = nk.data("bio_resting_5min_100hz")
+
+      # Find peaks
+      peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+
+      # Compute HRV indices
+      @savefig p_hrv_nonlinear1.png scale=100%
+      hrv = nk.hrv_nonlinear(peaks, sampling_rate=100, show=True)
+      hrv
+      @suppress
+      plt.close()
 
     References
     ----------
