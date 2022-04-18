@@ -87,4 +87,7 @@ Other
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hurst
 
+*complexity_rqa()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_rqa
 
