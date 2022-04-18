@@ -6,7 +6,8 @@ from .optim_complexity_tolerance import complexity_tolerance
 def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength=2, show=False):
     """**Recurrence quantification analysis (RQA)**
 
-    A recurrence plot is based on a phase-space (time-delay embedding) representation of a signal, and is a 2D depiction of when a system revisits a state that is has been in the past.
+    A recurrence plot is based on a phase-space (time-delay embedding) representation of a signal
+    and is a 2D depiction of when a system revisits a state that is has been in the past.
 
     Recurrence quantification analysis (RQA) is a method of complexity analysis
     for the investigation of dynamical systems. It quantifies the number and duration
@@ -45,12 +46,16 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
         Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003)
+        or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
+        returns an array with two columns corresponding to the original signal and its delayed (by
+        Tau) version.
     tolerance : float
-        Tolerance (similarity threshold, often denoted as 'r'). The radius used for detecting neighbours. A rule of thumb is to set r so that the percentage of points classified as
+        Tolerance (similarity threshold, often denoted as 'r'). The radius used for detecting
+        neighbours. A rule of thumb is to set r so that the percentage of points classified as
         recurrences (``info['RecurrenceRate']``) is about 2-5%.
     linelength : int
         Minimum length of a diagonal and vertical lines. Default to 2.
@@ -163,7 +168,6 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
             ) from e
 
     return results, {"RQA": rqa, "RP": rp, "Recurrence_Matrix": rp.recurrence_matrix_reverse}
-
 
 
 # def _complexity_rqa_rr(recmat):
