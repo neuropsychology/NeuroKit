@@ -28,14 +28,17 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     """**Computes nonlinear indices of Heart Rate Variability (HRV)**
 
     Non-linear indices include features derived from the *Poincaré plot*, as well as other
-    :func:`.complexity <complexity>` indices.
+    ``.complexity`` indices.
 
     The **Poincaré plot** is a graphical representation of each NN interval plotted against its
     preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
-    between successive NN intervals. Indices derived from the Poincaré plot analysis are:
+    between successive NN intervals.
+
+    Indices derived from the Poincaré plot analysis are:
+
     * **SD1**: Standard deviation perpendicular to the line of identity. It is an index of
       short-term RR interval fluctuations, i.e., beat-to-beat variability. It is equivalent
-      (although on another scale) to RMSSD, and therefore it is redundant to report correlations
+      (although on another scale) to RMSSD, and therefore it is redundant to report correlation
       with both.
     * **SD2**: Standard deviation along the identity line. Index of long-term HRV changes.
     * **SD1/SD2**: ratio of *SD1* to *SD2*. Describes the ratio of short term to long term
@@ -43,8 +46,8 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     * **S**: Area of ellipse described by SD1 and SD2 (``pi * SD1 * SD2``). It is proportional to
       *SD1SD2*.
     * **CSI**: The Cardiac Sympathetic Index (Toichi, 1997) is a measure of cardiac sympathetic
-      function independent of vagal activity, calculated by dividing the longitudinal variability
-      of the Poincaré plot (``4*SD2``) by its transverse variability (``4*SD1``).
+      function independent of vagal activity, calculated by dividing the longitudinal variability of
+      the Poincaré plot (``4*SD2``) by its transverse variability (``4*SD1``).
     * **CVI**: The Cardiac Vagal Index (Toichi, 1997) is an index of cardiac parasympathetic
       function (vagal activity unaffected by sympathetic activity), and is equal equal to the
       logarithm of the product of longitudinal (``4*SD2``) and transverse variability (``4*SD1``).
@@ -53,59 +56,60 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
 
     Indices of **Heart Rate Asymmetry** (HRA), i.e., asymmetry of the Poincaré plot (Yan, 2017),
     include:
-    * **GI**: Guzik's Index, defined as the distance of points above line of identity (LI)
-      to LI divided by the distance of all points in Poincaré plot to LI except those that
-      are located on LI.
-    * **SI**: Slope Index, defined as the phase angle of points above LI divided by the
-      phase angle of all points in Poincaré plot except those that are located on LI.
-    * **AI**: Area Index, defined as the cumulative area of the sectors corresponding to
-      the points that are located above LI divided by the cumulative area of sectors
-      corresponding to all points in the Poincaré plot except those that are located on LI.
-    * **PI**: Porta's Index, defined as the number of points below LI divided by the total
-      number of points in Poincaré plot except those that are located on LI.
-    * **SD1d** and **SD1a**: short-term variance of contributions of decelerations
-      (prolongations of RR intervals) and accelerations (shortenings of RR intervals),
-      respectively (Piskorski,  2011).
-    * **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations
-     to short-term HRV, respectively (Piskorski,  2011).
-    * **SD2d** and **SD2a**: long-term variance of contributions of decelerations
-      (prolongations of RR intervals) and accelerations (shortenings of RR intervals),
-      respectively (Piskorski,  2011).
-    * **C2d** and **C2a**: the contributions of heart rate decelerations and accelerations
-      to long-term HRV, respectively (Piskorski,  2011).
-    * **SDNNd** and **SDNNa**: total variance of contributions of decelerations
-      (prolongations of RR intervals) and accelerations (shortenings of RR intervals),
-      respectively (Piskorski,  2011).
-    * **Cd** and **Ca**: the total contributions of heart rate decelerations and
-      accelerations to HRV.
+
+    * **GI**: Guzik's Index, defined as the distance of points above line of identity (LI) to LI
+      divided by the distance of all points in Poincaré plot to LI except those that are located on
+      LI.
+    * **SI**: Slope Index, defined as the phase angle of points above LI divided by the phase angle
+      of all points in Poincaré plot except those that are located on LI.
+    * **AI**: Area Index, defined as the cumulative area of the sectors corresponding to the points
+      that are located above LI divided by the cumulative area of sectors corresponding to all
+      points in the Poincaré plot except those that are located on LI.
+    * **PI**: Porta's Index, defined as the number of points below LI divided by the total number
+      of points in Poincaré plot except those that are located on LI.
+    * **SD1d** and **SD1a**: short-term variance of contributions of decelerations (prolongations
+      of RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski,
+      2011)
+    * **C1d** and **C1a**: the contributions of heart rate decelerations and accelerations to s
+      short-term HRV, respectively (Piskorski,  2011).
+    * **SD2d** and **SD2a**: long-term variance of contributions of decelerations (prolongations of
+      RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski, 2011).
+    * **C2d** and **C2a**: the contributions of heart rate decelerations and accelerations to
+      long-term HRV, respectively (Piskorski,  2011).
+    * **SDNNd** and **SDNNa**: total variance of contributions of decelerations (prolongations of
+      RR intervals) and accelerations (shortenings of RR intervals), respectively (Piskorski, 2011).
+    * **Cd** and **Ca**: the total contributions of heart rate decelerations and accelerations to
+      HRV.
 
     Indices of **Heart Rate Fragmentation** (Costa, 2017) include:
+
     * **PIP**: Percentage of inflection points of the RR intervals series.
     * **IALS**: Inverse of the average length of the acceleration/deceleration segments.
     * **PSS**: Percentage of short segments.
     * **PAS**: IPercentage of NN intervals in alternation segments.
 
-    Indices of **Complexity** and Fractal Physiology include:
-    * **ApEn**: See `entropy_approximate()`.
-    * **SampEn**: See `entropy_sample()`.
-    * **ShanEn**: See `entropy_shannon()`.
-    * **FuzzyEn**: See `entropy_fuzzy()`.
-    * **MSE**: See `entropy_multiscale()`.
-    * **CMSE**: See `entropy_multiscale()`.
-    * **RCMSE**: See `entropy_multiscale()`.
-    * **CD**: See `fractal_correlation()`.
-    * **HFD**: See `fractal_higuchi()` (with ``kmax`` is set to ``"default"``).
-    * **KFD**: See `fractal_katz()`.
-    * **LZC**: See `fractal_lempelziv()`.
-    * **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal, corresponding
-      to short-term correlations. See `fractal_dfa()`.
+    Indices of **Complexity** and **Fractal Physiology** include:
+
+    * **ApEn**: See :func:`.entropy_approximate()`.
+    * **SampEn**: See :func:`.entropy_sample()`.
+    * **ShanEn**: See :func:`.entropy_shannon()`.
+    * **FuzzyEn**: See :func:`.entropy_fuzzy()`.
+    * **MSE**: See :func:`.entropy_multiscale()`.
+    * **CMSE**: See :func:`.entropy_multiscale()`.
+    * **RCMSE**: See :func:`.entropy_multiscale()`.
+    * **CD**: See :func:`.fractal_correlation()`.
+    * **HFD**: See :func:`.fractal_higuchi()` (with ``kmax`` set to ``"default"``).
+    * **KFD**: See :func:`.fractal_katz()`.
+    * **LZC**: See :func:`.fractal_lempelziv()`.
+    * **DFA_alpha1**: The monofractal detrended fluctuation analysis of the HR signal,
+      corresponding to short-term correlations. See :func:`.fractal_dfa()`.
     * **DFA_alpha2**: The monofractal detrended fluctuation analysis of the HR signal,
-      corresponding to long-term correlations. See `fractal_dfa()`.
-    * **DFA_alpha1_ExpRange**: The multifractal detrended fluctuation analysis of the HR signal,
+      corresponding to long-term correlations. See :func:`.fractal_dfa()`.
+    * **DFA_alpha1_ExpRange**: The multifractal detrended fluctuation analysis of the HR signal
       corresponding to short-term correlations. ExpRange is the range of singularity exponents,
-      corresponding to the width of the singularity spectrum. See `fractal_dfa()`.
+      corresponding to the width of the singularity spectrum. See :func:`.fractal_dfa()`.
     * **DFA_alpha2_ExpRange**: The multifractal detrended fluctuation analysis of the HR signal,
-      corresponding to long-term correlations. See `fractal_dfa()`.
+      corresponding to long-term correlations. See :func:`.fractal_dfa()`.
     * **DFA_alpha1_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
     * **DFA_alpha2_ExpMean**: Multifractal DFA. ExpMean is the mean of singularity exponents.
     * **DFA_alpha1_DimRange**: Multifractal DFA (short-term correlations). DimRange is the range of
@@ -173,19 +177,19 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     ----------
     * Pham, T., Lau, Z. J., Chen, S. H., & Makowski, D. (2021). Heart Rate Variability in
       Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
-      https:// doi.org/10.3390/s21123998
+      https://doi.org/10.3390/s21123998
     * Yan, C., Li, P., Ji, L., Yao, L., Karmakar, C., & Liu, C. (2017). Area asymmetry of heart
       rate variability signal. Biomedical engineering online, 16(1), 112.
-    * Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
+    * Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.\
       (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
-      56(4), 674-678.
+      56 (4), 674-678.
     * Shaffer, F., & Ginsberg, J. P. (2017). An overview of heart rate variability metrics and
       norms. Frontiers in public health, 5, 258.
     * Costa, M. D., Davis, R. B., & Goldberger, A. L. (2017). Heart rate fragmentation: a new
       approach to the analysis of cardiac interbeat interval dynamics. Front. Physiol. 8, 255.
     * Jeppesen, J., Beniczky, S., Johansen, P., Sidenius, P., & Fuglsang-Frederiksen, A. (2014).
       Using Lorenz plot and Cardiac Sympathetic Index of heart rate variability for detecting
-      seizures for patients with epilepsy. In 2014 36th Annual International Conference of the IEEE
+      seizures for patients with epilepsy. In 2014 36th Annual International Conference of the IEE
       Engineering in Medicine and Biology Society (pp. 4563-4566). IEEE.
     * Piskorski, J., & Guzik, P. (2011). Asymmetric properties of long-term and total heart rate
       variability. Medical & biological engineering & computing, 49(11), 1289-1297.

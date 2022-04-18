@@ -14,3 +14,7 @@ Main
 *hrv_nonlinear()*
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_nonlinear
+
+*hrv_rqa()*
+""""""""""""""""""
+.. autofunction:: neurokit2.hrv.hrv_rqa
