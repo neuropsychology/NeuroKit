@@ -84,9 +84,12 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
       @suppress
       plt.close()
 
+    .. ipython:: python
+    
       # Larger radius
       @savefig p_complexity_rqa2.png scale=100%
       results, info = nk.complexity_rqa(signal, tolerance=1, show=True)
+      results
       @suppress
       plt.close()
 
