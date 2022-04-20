@@ -7,11 +7,16 @@ from .complexity_attractor import _attractor_lorenz
 def complexity_simulate(
     duration=10, sampling_rate=1000, method="ornstein", hurst_exponent=0.5, **kwargs
 ):
-    """Simulate chaotic time series.
+    """**Simulate chaotic time series**
 
-    Generates time series using the discrete approximation of the
+    This function generates a chaotic signal using different algorithms and complex systems.
+
+    * **Mackey-Glass:** Generates time series using the discrete approximation of the
     Mackey-Glass delay differential equation described by Grassberger &
     Procaccia (1983).
+    * **Ornstein-Uhlenbeck**
+    * **Lorenz**
+    * **Random walk**
 
     Parameters
     ----------
@@ -22,8 +27,9 @@ def complexity_simulate(
     duration : int
         The desired length in samples.
     method : str
-        The method. can be 'hurst' for a (fractional) Ornstein-Uhlenbeck process, 'lorenz' for the
-        first dimension of a Lorenz system or 'mackeyglass' to use the Mackey-Glass equation.
+        The method. can be ``"hurst"`` for a (fractional) Ornstein-Uhlenbeck process, ``"lorenz"``
+        for the first dimension of a Lorenz system, ``"mackeyglass"`` to use the Mackey-Glass
+        equation, or ``random`` to generate a random-walk.
     hurst_exponent : float
         Defaults to 0.5.
     **kwargs
@@ -125,7 +131,7 @@ def complexity_simulate(
             duration=duration, sampling_rate=sampling_rate, **kwargs
         )
     else:
-        signal = _complexity_simulate_randomwalk(duration * sampling_rate)
+        signal = _complexity_simulate_randomwalk(int(duration * sampling_rate))
     return signal
 
 
@@ -299,5 +305,5 @@ def _complexity_simulate_fractionalnoise(size=1000, hurst_exponent=0.5):
 
 def _complexity_simulate_randomwalk(size=1000):
     """Random walk."""
-    steps = np.random.choice(a=[-1, 0, 1], size=size)
+    steps = np.random.choice(a=[-1, 0, 1], size=size - 1)
     return np.concatenate([np.zeros(1), steps]).cumsum(0)
