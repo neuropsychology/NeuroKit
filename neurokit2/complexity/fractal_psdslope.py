@@ -59,15 +59,13 @@ def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
     References
     ----------
     * https://complexity-methods.github.io/book/power-spectral-density-psd-slope.html
-
     * Hasselman, F. (2013). When the blind curve is finite: dimension estimation and model
       inference based on empirical waveforms. Frontiers in Physiology, 4, 75. https://doi.org/10.3389/fphys.2013.00075
-
     * Voss, R. F. (1988). Fractals in nature: From characterization to simulation. The Science of
-      Fractal Images, 21–70.
-
+      Fractal Images, 21-70.
     * Eke, A., Hermán, P., Kocsis, L., and Kozak, L. R. (2002). Fractal characterization of
-      complexity in temporal physiological signals. Physiol. Meas. 23, 1–38.
+      complexity in temporal physiological signals. Physiol. Meas. 23, 1-38.
+
     """
 
     # Sanity checks
