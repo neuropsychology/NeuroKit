@@ -30,7 +30,6 @@ jobs:
           pip install astropy
           pip install seaborn
           pip install https://github.com/neuropsychology/neurokit/zipball/dev
-          pip install PyRQA
         build-command: "sphinx-build -b html . _build"
     - name: Deploy 🚀
       uses: peaceiris/actions-gh-pages@v3

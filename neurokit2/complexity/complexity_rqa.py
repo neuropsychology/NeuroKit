@@ -71,6 +71,7 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
 
     Examples
     ----------
+    *Note:* The following examples are commented out as they require ``PyRQA`` to be installed.
     .. ipython:: python
 
       import neurokit2 as nk
@@ -78,20 +79,13 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
       signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
 
       # Default r
-      results, info = nk.complexity_rqa(signal, show=True)
-      @savefig p_complexity_rqa1.png scale=100%
-      results
-      @suppress
-      plt.close()
+      # results, info = nk.complexity_rqa(signal, show=True)
 
     .. ipython:: python
-    
+
       # Larger radius
-      @savefig p_complexity_rqa2.png scale=100%
-      results, info = nk.complexity_rqa(signal, tolerance=1, show=True)
-      results
-      @suppress
-      plt.close()
+      # results, info = nk.complexity_rqa(signal, tolerance=1, show=True)
+
 
     References
     ----------
