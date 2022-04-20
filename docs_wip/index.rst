@@ -35,7 +35,6 @@ You can navigate to the different sections using the left panel. We recommend ch
    installation
    cite_us
    resources/index
-   examples/index
    functions/index
    studies/index
    Changelog <https://github.com/neuropsychology/NeuroKit/releases>
