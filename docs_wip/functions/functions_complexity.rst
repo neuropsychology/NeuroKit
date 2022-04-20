@@ -23,6 +23,13 @@ Parameters Choice
 .. autofunction:: neurokit2.complexity.complexity_tolerance
 
 
+Simulation and Visualization
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*complexity_simulate()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_simulate
+
+
 Fractal Dimension
 ^^^^^^^^^^^^^^^^^
 *fractal_katz()*

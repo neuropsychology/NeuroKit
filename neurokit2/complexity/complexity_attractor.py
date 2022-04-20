@@ -35,7 +35,7 @@ def complexity_attractor(
     >>> import neurokit2 as nk
     >>>
     >>> # Lorenz attractors
-    >>> nk.complexity_attractor(color = "last_dim", alpha="time", sampling_rate=500) # doctest: +ELLIPSIS
+    >>> nk.complexity_attractor(color = "last_dim", alpha="time", duration=2) # doctest: +ELLIPSIS
     <Figure ...
     >>>
     >>> # Fast result (fixed alpha and color)
@@ -241,7 +241,7 @@ def _attractor_lorenz(duration=1, sampling_rate=1000, sigma=10.0, beta=8.0 / 3, 
         ]
 
     x0 = [1, 1, 1]  # starting vector
-    t = np.linspace(0, duration * 100, int(duration * sampling_rate))
+    t = np.linspace(0, duration * 20, int(duration * sampling_rate))
     return scipy.integrate.odeint(lorenz_equation, x0, t, args=(sigma, beta, rho))
 
 

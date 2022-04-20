@@ -22,7 +22,7 @@ def complexity_simulate(
     duration : int
         The desired length in samples.
     method : str
-        The method. can be 'hurst' for a (fractional) Ornstein–Uhlenbeck process, 'lorenz' for the
+        The method. can be 'hurst' for a (fractional) Ornstein-Uhlenbeck process, 'lorenz' for the
         first dimension of a Lorenz system or 'mackeyglass' to use the Mackey-Glass equation.
     hurst_exponent : float
         Defaults to 0.5.
@@ -36,23 +36,75 @@ def complexity_simulate(
 
     Examples
     ------------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.complexity_simulate(duration=10, sampling_rate=100, method="lorenz")
-    >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="blue") #doctest: +ELLIPSIS
-    <Figure ...>
-    >>>
-    >>> signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="ornstein")
-    >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="red") #doctest: +ELLIPSIS
-    <Figure ...>
-    >>>
-    >>> signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="mackeyglass")
-    >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="green") #doctest: +ELLIPSIS
-    <Figure ...>
-    >>>
-    >>> signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="randomwalk")
-    >>> nk.complexity_attractor(nk.complexity_embedding(signal, delay = 10), alpha=1, color="green") #doctest: +ELLIPSIS
-    <Figure ...>
+
+    **Lorenz System**
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.complexity_simulate(duration=5, sampling_rate=1000, method="lorenz")
+      @savefig p_complexity_simulate1.png scale=100%
+      nk.signal_plot(signal)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity2.png scale=100%
+      nk.complexity_attractor(nk.complexity_embedding(signal, delay = 5), alpha=1, color="blue") @suppress
+      plt.close()
+
+    **Ornstein System**
+
+    .. ipython:: python
+
+      signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="ornstein")
+      @savefig p_complexity_simulate2.png scale=100%
+      nk.signal_plot(signal, color = "red")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity3.png scale=100%
+      nk.complexity_attractor(nk.complexity_embedding(signal, delay = 100), alpha=1, color="red")
+      @suppress
+      plt.close()
+
+    **Mackey-Glass System**
+
+    .. ipython:: python
+
+      signal = nk.complexity_simulate(duration=1, sampling_rate=1000, method="mackeyglass")
+      @savefig p_complexity_simulate4.png scale=100%
+      nk.signal_plot(signal, color = "green")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity5.png scale=100%
+      nk.complexity_attractor(nk.complexity_embedding(signal, delay = 25), alpha=1, color="green")
+      @suppress
+      plt.close()
+
+    **Random walk**
+
+    .. ipython:: python
+
+      signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="randomwalk")
+      @savefig p_complexity_simulate6.png scale=100%
+      nk.signal_plot(signal, color = "orange")
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity7.png scale=100%
+      nk.complexity_attractor(nk.complexity_embedding(signal, delay = 100), alpha=1, color="orange")
+      @suppress
+      plt.close()
 
     Returns
     -------
@@ -81,7 +133,7 @@ def complexity_simulate(
 # Methods
 # =============================================================================
 def _complexity_simulate_mackeyglass(
-    duration=10, sampling_rate=1000, x0=None, a=0.2, b=0.1, c=10.0, n=1000, discard=250
+    duration=10, sampling_rate=1000, x0="fixed", a=0.2, b=0.1, c=10.0, n=1000, discard=250
 ):
     """Generate time series using the Mackey-Glass equation. Generates time series using the discrete approximation of
     the Mackey-Glass delay differential equation described by Grassberger & Procaccia (1983).
@@ -97,7 +149,8 @@ def _complexity_simulate_mackeyglass(
         with tau/sampling_rate being a factor of n.  This will make sure that there are only whole
         number indices. Defaults to 1000.
     x0 : array
-        Initial condition for the discrete map. Should be of length n. Defaults to None.
+        Initial condition for the discrete map. Should be of length n. Can be "fixed", "random", or
+        a vector of size n.
     a : float
         Constant a in the Mackey-Glass equation. Defaults to 0.2.
     b : float
@@ -120,11 +173,14 @@ def _complexity_simulate_mackeyglass(
     length = duration * sampling_rate
     tau = sampling_rate / 2 * 100
     sampling_rate = int(n * sampling_rate / tau)
-    grids = n * discard + sampling_rate * length
+    grids = int(n * discard + sampling_rate * length)
     x = np.empty(grids)
 
-    if not x0:
-        x[:n] = 0.5 + 0.05 * (-1 + 2 * np.random.random(n))
+    if isinstance(x0, str):
+        if x0 == "random":
+            x[:n] = 0.5 + 0.05 * (-1 + 2 * np.random.random(n))
+        else:
+            x[:n] = np.ones(n)
     else:
         x[:n] = x0
 
