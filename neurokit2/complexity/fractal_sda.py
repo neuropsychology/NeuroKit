@@ -10,11 +10,11 @@ from ..signal import signal_detrend
 
 
 def fractal_sda(signal, scales=None, show=False):
-    """Standardised Dispersion Analysis (SDA)
+    """**Standardised Dispersion Analysis (SDA)**
 
     SDA is part of a family of dispersion techniques used to compute fractal dimension.
-    The standardised time series is divided in bins of different sizes and their standard deviation (SD)
-    is calculated. The relationship between the SD and the bin size can be an indication
+    The standardized time series is divided in bins of different sizes and their standard deviation
+    (SD) is calculated. The relationship between the SD and the bin size can be an indication
     of the presence of power-laws. For instance, if the SD systematically increases or
     decreases with larger bin sizes, this means the fluctuations depend on the size of the bins.
     The dispersion measurements are in units of the standard error of the mean. An FD of 1.5
@@ -42,21 +42,30 @@ def fractal_sda(signal, scales=None, show=False):
 
     References
     ----------
-    - https://complexity-methods.github.io/book/standardised-dispersion-analysis-sda.html
-
-    - Hasselman, F. (2013). When the blind curve is finite: dimension estimation and model inference based
+    * https://complexity-methods.github.io/book/standardised-dispersion-analysis-sda.html
+    * Hasselman, F. (2013). When the blind curve is finite: dimension estimation and model
+      inference based
     on empirical waveforms. Frontiers in Physiology, 4, 75. https://doi.org/10.3389/fphys.2013.00075
-
-    - Holden, J. G. (2005). Gauging the fractal dimension of response times from cognitive tasks.
-    Contemporary nonlinear methods for behavioral scientists: A webbook tutorial, 267-318.
+    * Holden, J. G. (2005). Gauging the fractal dimension of response times from cognitive tasks.
+      Contemporary nonlinear methods for behavioral scientists: A webbook tutorial, 267-318.
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=6, sampling_rate=200, frequency=[5, 6], noise=0.5)
-    >>> sda, _ = nk.fractal_sda(signal, show=False)
-    >>> sda  #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=6, sampling_rate=200, frequency=[5, 6], noise=0.5)
+
+      @savefig p_fractal_sda.png scale=100%
+      sda, _ = nk.fractal_sda(signal, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      sda
+
 
     """
     # Sanity checks
@@ -72,13 +81,6 @@ def fractal_sda(signal, scales=None, show=False):
     signal = (signal - np.nanmean(signal)) / np.nanstd(signal)
 
     n = len(signal)
-    # Must be at least 2 bins of size 512
-    if n < 1024:
-        warn(
-            "At least 1024 data points of signal are required for SDA. Returning NaN.",
-            category=NeuroKitWarning,
-        )
-        return np.nan, {}
 
     # Set scales to be an integer power of 2
     if scales is None:
