@@ -7,3 +7,6 @@ Some of the work-in-progress studies.
    :maxdepth: 1
 
    erp_gam
+   ecg_benchmark
+   eog_blinktemplate
+   complexity_benchmark

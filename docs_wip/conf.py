@@ -80,6 +80,10 @@ exclude_patterns = ["_build", "examples"]
 suppress_warnings = ["epub.duplicated_toc_entry"]
 nitpicky = False  # Set to True to get all warnings about crosslinks
 
+# Prefix document path to section labels, to use:
+# `path/to/file:heading` instead of just `heading`
+autosectionlabel_prefix_document = True
+
 # -- Options for autodoc -------------------------------------------------
 napoleon_google_docstring = False
 napoleon_numpy_docstring = True
