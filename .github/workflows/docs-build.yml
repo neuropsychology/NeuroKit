@@ -16,7 +16,7 @@ jobs:
       uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs_wip/"
-        # repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
         pre-build-command: |
           pip install sphinx-book-theme
           pip install sphinxemoji
@@ -34,6 +34,8 @@ jobs:
           pip install astropy
           pip install seaborn
           pip install https://github.com/neuropsychology/neurokit/zipball/dev
+        build-command:
+          make html
 
     - name: Deploy 🚀
       uses: peaceiris/actions-gh-pages@v3
