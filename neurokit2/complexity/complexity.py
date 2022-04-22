@@ -55,9 +55,10 @@ def complexity(
         or ``"slow"``.
     delay : int
         Time delay (often denoted 'Tau' :math:`\\tau`, sometimes referred to as 'lag') in samples.
-        See :func:`complexity_delay` to choose the optimal value for this parameter.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        See for example :func:`entropy_sample`.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     tolerance : float
         See for example :func:`entropy_sample`.
 
