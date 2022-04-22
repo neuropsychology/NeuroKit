@@ -170,7 +170,7 @@ def _complexity_lempelziv(
         # Permutation for each scaled series
         lzc = np.zeros(len(scale_factors))
         for i, tau in enumerate(scale_factors):
-            y = _get_coarsegrained(signal, scale=tau, force=False)
+            y = complexity_coarsegraining(signal, scale=tau, force=False)
             sequence = _complexity_lempelziv_permutation(y, delay=1, dimension=dimension)
             lzc[i] = _complexity_lempelziv_count(
                 sequence, normalize=normalize, permutation=True, dimension=dimension
