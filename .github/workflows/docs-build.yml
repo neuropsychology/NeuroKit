@@ -34,8 +34,6 @@ jobs:
           pip install astropy
           pip install seaborn
           pip install https://github.com/neuropsychology/neurokit/zipball/dev
-        build-command:
-          make html
 
     - name: Deploy 🚀
       uses: peaceiris/actions-gh-pages@v3
