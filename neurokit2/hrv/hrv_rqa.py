@@ -14,7 +14,7 @@ def hrv_rqa(
     delay=1,
     tolerance="zimatore2021",
     linelength=4,
-    show=False
+    show=False,
 ):
     """**Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV)**
 
@@ -67,11 +67,9 @@ def hrv_rqa(
       # Find peaks
       peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
 
-      # Compute HRV indices
-      @savefig p_hrv_rqa1.png scale=100%
-      hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
-      @suppress
-      plt.close()
+      # Compute HRV indices  (don't run the example as it requires PyRQA)
+      # hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
+
 
     References
     ----------
