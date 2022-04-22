@@ -41,7 +41,6 @@ def complexity_simulate(
 
     Examples
     ------------
-
     **Lorenz System**
 
     .. ipython:: python
@@ -111,11 +110,6 @@ def complexity_simulate(
       nk.complexity_attractor(nk.complexity_embedding(signal, delay = 100), alpha=1, color="orange")
       @suppress
       plt.close()
-
-    Returns
-    -------
-    array
-        Array containing the time series.
 
     """
     method = method.lower()
