@@ -31,7 +31,7 @@ jobs:
           pip install seaborn
           pip install https://github.com/neuropsychology/neurokit/zipball/dev
         build-command:
-          ./docs_wip/make html
+          ./make html
     - name: Deploy 🚀
       uses: peaceiris/actions-gh-pages@v3
       with:

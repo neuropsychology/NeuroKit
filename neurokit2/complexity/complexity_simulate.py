@@ -12,8 +12,7 @@ def complexity_simulate(
     This function generates a chaotic signal using different algorithms and complex systems.
 
     * **Mackey-Glass:** Generates time series using the discrete approximation of the
-    Mackey-Glass delay differential equation described by Grassberger &
-    Procaccia (1983).
+      Mackey-Glass delay differential equation described by Grassberger & Procaccia (1983).
     * **Ornstein-Uhlenbeck**
     * **Lorenz**
     * **Random walk**
@@ -58,7 +57,8 @@ def complexity_simulate(
     .. ipython:: python
 
       @savefig p_complexity2.png scale=100%
-      nk.complexity_attractor(nk.complexity_embedding(signal, delay = 5), alpha=1, color="blue") @suppress
+      nk.complexity_attractor(nk.complexity_embedding(signal, delay = 5), alpha=1, color="blue")
+      @suppress
       plt.close()
 
     **Ornstein System**
