@@ -157,7 +157,7 @@ def hrv_rsa(
     if isinstance(rpeaks, tuple):  # Detect actual sampling rate
         rpeaks, sampling_rate = rpeaks[0], rpeaks[1]
 
-    signals, ecg_period, rpeaks, __ = _hrv_rsa_formatinput(
+    signals, ecg_period, rpeaks, _ = _hrv_rsa_formatinput(
         ecg_signals, rsp_signals, rpeaks, sampling_rate
     )
 
@@ -530,15 +530,15 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
         rpeaks = None
 
     if isinstance(ecg_signals, pd.DataFrame):
-        ecg_cols = [col for col in ecg_signals.columns if "ECG_Rate" in col]
-        if ecg_cols:
-            ecg_period = ecg_signals[ecg_cols[0]].values
+        if "ECG_Rate" in ecg_signals.columns:
+            ecg_period = ecg_signals["ECG_Rate"].values
 
         else:
-            ecg_cols = [col for col in ecg_signals.columns if "ECG_R_Peaks" in col]
-            if ecg_cols:
+            if "ECG_R_Peaks" in ecg_signals.columns:
                 ecg_period = signal_rate(
-                    rpeaks, sampling_rate=sampling_rate, desired_length=len(ecg_signals)
+                    np.where(ecg_signals["ECG_R_Peaks"].values == 1)[0],
+                    sampling_rate=sampling_rate,
+                    desired_length=len(ecg_signals),
                 )
             else:
                 raise ValueError(
@@ -547,16 +547,8 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
                     "heart rate signal."
                 )
     if rsp_signals is None:
-        rsp_cols = [col for col in ecg_signals.columns if "RSP_Phase" in col]
-        if len(rsp_cols) != 2:
-            edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
-            rsp_signals, _ = rsp_process(edr, sampling_rate)
-            warn(
-                "RSP signal not found. For this time, we will derive RSP"
-                " signal from ECG using ecg_rsp(). But the results are"
-                " definitely not reliable, so please provide a real RSP signal.",
-                category=NeuroKitWarning,
-            )
+        rsp_signals = ecg_signals.copy()
+
     elif isinstance(rsp_signals, tuple):
         rsp_signals = rsp_signals[0]
 
@@ -566,8 +558,9 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
             edr = ecg_rsp(ecg_period, sampling_rate=sampling_rate)
             rsp_signals, _ = rsp_process(edr, sampling_rate)
             warn(
-                "RSP signal not found. RSP signal is derived from ECG using ecg_rsp()."
-                " Please provide RSP signal.",
+                "RSP signal not found. For this time, we will derive RSP"
+                " signal from ECG using ecg_rsp(). But the results are"
+                " definitely not reliable, so please provide a real RSP signal.",
                 category=NeuroKitWarning,
             )
 
@@ -582,7 +575,8 @@ def _hrv_rsa_formatinput(ecg_signals, rsp_signals, rpeaks=None, sampling_rate=10
     else:
         rpeaks = _signal_formatpeaks_sanitize(rpeaks)
 
-    signals = pd.concat([ecg_signals, rsp_signals], axis=1)
+    nonduplicates = ecg_signals.columns[[i not in rsp_signals.columns for i in ecg_signals.columns]]
+    signals = pd.concat([ecg_signals[nonduplicates], rsp_signals], axis=1)
 
     # RSP signal
     if "RSP_Clean" in signals.columns:

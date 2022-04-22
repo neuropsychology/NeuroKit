@@ -5,7 +5,7 @@ from ..signal.signal_psd import signal_psd
 
 
 def entropy_spectral(signal, normalize=True, **kwargs):
-    """Spectral Entropy (SpEn)
+    """**Spectral Entropy (SpEn)**
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the
     frequency domain as a probability distribution, and calculates the Shannon entropy of it.
@@ -37,21 +37,22 @@ def entropy_spectral(signal, normalize=True, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
-    >>>
-    >>> # Spectral Entropy
-    >>> SpEn, info = nk.entropy_spectral(signal)
-    >>> SpEn #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a Signal with Laplace Noise
+      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
+
+      # Compute Spectral Entropy
+      SpEn, info = nk.entropy_spectral(signal)
+      SpEn
 
     References
     ----------
-    - Crepeau, J. C., & Isaacson, L. K. (1991). Spectral Entropy Measurements of Coherent
-    Structures in an
-    Evolving Shear Layer. Journal of Non-Equilibrium Thermodynamics, 16(2). doi:10.1515/jnet.1991.
-    16.2.137
-
+    * Crepeau, J. C., & Isaacson, L. K. (1991). Spectral Entropy Measurements of Coherent
+      Structures in an Evolving Shear Layer. Journal of Non-Equilibrium Thermodynamics, 16(2).
+      doi:10.1515/jnet.1991.16.2.137
 
     """
     # Sanity checks

@@ -67,7 +67,7 @@ def signal_noise(duration=10, sampling_rate=1000, beta=1):
     """
 
     # The number of samples in the time series
-    n = duration * sampling_rate
+    n = int(duration * sampling_rate)
 
     # Calculate Frequencies (we asume a sample rate of one)
     # Use fft functions for real output (-> hermitian spectrum)

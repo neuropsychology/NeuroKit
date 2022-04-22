@@ -32,29 +32,35 @@ from .information_fisher import fisher_information
 def complexity(
     signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="default", **kwargs
 ):
-    """Comprehensive Complexity Analysis
+    """**Automated Complexity and Chaos Analysis**
 
-    This convenience function can be used to run a large number of complexity metrics. For more
-    control, please run each function separately.
-
-    Note that it does not include Recurrence Quantification Analysis (RQA, ``nk.complexity_rqa()``)
-    which currently requires an additional dependency.
+    This function can be used to compute a large number of complexity metrics and features. For more
+    control, you can run each function separately. Note that it does not include Recurrence
+    Quantification Analysis (RQA, ``nk.complexity_rqa()``) which currently requires an additional
+    dependency.
 
     The categorization by "computation time" is based on our preliminary `benchmarking study
-    <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_.
+    <https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html>`_ results:
+
+    .. figure:: ../../studies/complexity_benchmark/figures/unnamed-chunk-3-1.png
+       :alt: Complexity Benchmark (Makowski).
+       :target: https://neurokit2.readthedocs.io/en/latest/studies/complexity_benchmark.html
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     which : list
-        What metrics to compute, based on their computation time. Currently, only 'fast' is supported.
+        What metrics to compute, based on their computation time. Can be ``"fast"``, ``"medium"``,
+        or ``"slow"``.
     delay : int
-        See for example :func:`entropy_permutation`.
+        Time delay (often denoted 'Tau' :math:`\\tau`, sometimes referred to as 'lag') in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        See for example :func:`entropy_permutation`.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     tolerance : float
-        See for example :func:`entropy_permutation`.
+        See for example :func:`entropy_sample`.
 
     Returns
     --------
@@ -70,18 +76,82 @@ def complexity(
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=[5, 10])
-    >>>
-    >>> # Fast metrics
-    >>> df, info = nk.complexity(signal, which = ["fast", "medium"])
-    >>> df #doctest: +SKIP
-    >>>
-    >>> # Slow
-    >>> # With specific parameters for Higuchi and MFDFA
-    >>> df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 2))
-    >>> df #doctest: +SKIP
+    * **Example 1**: Compute fast and medium-fast complexity metrics
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a signal of 3 seconds
+      signal = nk.signal_simulate(duration=3, frequency=[5, 10])
+
+      # Fast metrics
+      df, info = nk.complexity(signal, which = ["fast", "medium"])
+      df
+
+    * **Example 2**: Compute slow complexity metrics
+
+    .. ipython:: python
+
+      # Slow, with specific parameters for Higuchi and MFDFA
+      df, info = nk.complexity(signal, which = "slow", k_max=6, q=range(-2, 2))
+      df
+
+    * **Example 3**: Compute complexity over time
+
+    .. ipython:: python
+
+      import numpy as np
+      import pandas as pd
+      import neurokit2 as nk
+
+      # Create dynamically varying noise
+      amount_noise = nk.signal_simulate(duration=2, frequency=0.9)
+      amount_noise = nk.rescale(amount_noise, [0, 0.5])
+      noise = np.random.uniform(0, 2, len(amount_noise)) * amount_noise
+
+      # Add to simple signal
+      signal = noise + nk.signal_simulate(duration=2, frequency=5)
+
+      @savefig p_complexity1.png scale=100%
+      nk.signal_plot(signal, sampling_rate = 1000)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Create function-wrappers that only return the index value
+      pfd = lambda x: nk.fractal_petrosian(x)[0]
+      kfd = lambda x: nk.fractal_katz(x)[0]
+      sfd = lambda x: nk.fractal_sevcik(x)[0]
+      svden = lambda x: nk.entropy_svd(x)[0]
+      fisher = lambda x: -1 * nk.fisher_information(x)[0]  # FI is anticorrelated with complexity
+
+
+      # Use them in a rolling window
+      rolling_kfd = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(kfd)
+      rolling_pfd = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(pfd)
+      rolling_sfd = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(sfd)
+      rolling_svden = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(svden)
+      rolling_fisher = pd.Series(signal).rolling(500, min_periods = 300, center=True).apply(fisher)
+
+      @savefig p_complexity2.png scale=100%
+      nk.signal_plot([signal,
+                      rolling_kfd.values,
+                      rolling_pfd.values,
+                      rolling_sfd.values,
+                      rolling_svden.values,
+                      rolling_fisher],
+                      labels = ["Signal",
+                               "Petrosian Fractal Dimension",
+                               "Katz Fractal Dimension",
+                               "Sevcik Fractal Dimension",
+                               "SVD Entropy",
+                               "Fisher Information"],
+                     sampling_rate = 1000,
+                     standardize = True)
+      @suppress
+      plt.close()
 
     """
     # Sanity checks
@@ -121,9 +191,8 @@ def complexity(
     if "medium" in which:
 
         # Fractal Dimension
-        df["NLD"], info["NLD"] = fractal_nld(signal)
-        if len(signal) >= 1024:
-            df["SDA"], info["SDA"] = fractal_sda(signal)
+        df["NLD"], info["NLD"] = fractal_nld(signal, corrected=False)
+        df["SDA"], info["SDA"] = fractal_sda(signal)
         df["PSDslope"], info["PSDslope"] = fractal_psdslope(signal)
 
         # Entropy

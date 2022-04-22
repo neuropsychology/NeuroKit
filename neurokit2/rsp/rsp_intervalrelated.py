@@ -6,7 +6,7 @@ from .rsp_rrv import rsp_rrv
 
 
 def rsp_intervalrelated(data, sampling_rate=1000):
-    """Performs RSP analysis on longer periods of data (typically > 10 seconds), such as resting-state data.
+    """**Performs RSP analysis on longer periods of data (typically > 10 seconds), such as resting-state data**
 
     Parameters
     ----------
@@ -22,13 +22,14 @@ def rsp_intervalrelated(data, sampling_rate=1000):
     DataFrame
         A dataframe containing the analyzed RSP features. The analyzed
         features consist of the following:
-        - *"RSP_Rate_Mean"*: the mean respiratory rate.
-        - *"RSP_Amplitude_Mean"*: the mean respiratory amplitude.
-        - *"RSP_RRV"*: the different respiratory rate variability metrices. See `rsp_rrv()`
-        docstrings for details.
-        - *"RSP_Phase_Duration_Inspiration"*: the average inspiratory duration.
-        - *"RSP_Phase_Duration_Expiration"*: the average expiratory duration.
-        - *"RSP_Phase_Duration_Ratio "*: the inspiratory-to-expiratory time ratio (I/E).
+
+        * ``"RSP_Rate_Mean"``: the mean respiratory rate.
+        * ``"RSP_Amplitude_Mean"``: the mean respiratory amplitude.
+        * ``"RSP_RRV"``: the different respiratory rate variability metrices. See `rsp_rrv()`
+          docstrings for details.
+        * ``"RSP_Phase_Duration_Inspiration"``: the average inspiratory duration.
+        * ``"RSP_Phase_Duration_Expiration"``: the average expiratory duration.
+        * ``"RSP_Phase_Duration_Ratio "``: the inspiratory-to-expiratory time ratio (I/E).
 
     See Also
     --------
@@ -36,19 +37,21 @@ def rsp_intervalrelated(data, sampling_rate=1000):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Download data
-    >>> data = nk.data("bio_resting_5min_100hz")
-    >>>
-    >>> # Process the data
-    >>> df, info = nk.rsp_process(data["RSP"], sampling_rate=100)
+    .. ipython:: python
 
-    >>> # Single dataframe is passed
-    >>> nk.rsp_intervalrelated(df, sampling_rate=100) #doctest: +SKIP
-    >>>
-    >>> epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
-    >>> nk.rsp_intervalrelated(epochs) #doctest: +SKIP
+      import neurokit2 as nk
+
+      # Download data
+      data = nk.data("bio_resting_5min_100hz")
+
+      # Process the data
+      df, info = nk.rsp_process(data["RSP"], sampling_rate=100)
+
+      # Single dataframe is passed
+      nk.rsp_intervalrelated(df, sampling_rate=100)
+
+      epochs = nk.epochs_create(df, events=[0, 15000], sampling_rate=100, epochs_end=150)
+      nk.rsp_intervalrelated(epochs)
 
     """
     intervals = {}

@@ -7,7 +7,7 @@ from .rsp_fixpeaks import _rsp_fixpeaks_retrieve
 
 
 def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monotone_cubic"):
-    """Compute respiratory amplitude.
+    """**Compute respiratory amplitude**
 
     Compute respiratory amplitude given the raw respiration signal and its extrema.
 
@@ -16,19 +16,17 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
     rsp_cleaned : Union[list, np.array, pd.Series]
         The cleaned respiration channel as returned by `rsp_clean()`.
     peaks : list or array or DataFrame or Series or dict
-        The samples at which the respiration peaks (exhalation onsets) occur.
-        If a dict or a DataFrame is passed, it is
-        assumed that these containers were obtained with `rsp_findpeaks()`.
+        The samples at which the respiration peaks (exhalation onsets) occur. If a dict or a
+        DataFrame is passed, it is assumed that these containers were obtained with `rsp_findpeaks()`.
     troughs : list or array or DataFrame or Series or dict
-        The samples at which the respiration troughs (inhalation onsets) occur.
-        If a dict or a DataFrame is passed, it is
-        assumed that these containers were obtained with `rsp_findpeaks()`.
+        The samples at which the respiration troughs (inhalation onsets) occur. If a dict or a
+        is passed, it is assumed that these containers were obtained with `rsp_findpeaks()`.
     interpolation_method : str
-        Method used to interpolate the amplitude between peaks. See `signal_interpolate()`. 'monotone_cubic' is chosen
-        as the default interpolation method since it ensures monotone interpolation between data points
-        (i.e., it prevents physiologically implausible "overshoots" or "undershoots" in the y-direction).
-        In contrast, the widely used cubic spline interpolation does not ensure monotonicity.
-
+        Method used to interpolate the amplitude between peaks. See `signal_interpolate()`.
+        'monotone_cubic' is chosen as the default interpolation method since it ensures monotone
+        interpolation between data point (i.e., it prevents physiologically implausible "overshoots"
+        or "undershoots" in the y-direction). In contrast, the widely used cubic spline
+        'interpolation does not ensure monotonicity.
 
     Returns
     -------
@@ -41,16 +39,20 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
-    >>>
-    >>> rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
-    >>> cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
-    >>> peak_signals, info = nk.rsp_peaks(cleaned)
-    >>>
-    >>> amplitude = nk.rsp_amplitude(cleaned, peak_signals)
-    >>> fig = nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import pandas as pd
+
+      rsp = nk.rsp_simulate(duration=90, respiratory_rate=15)
+      cleaned = nk.rsp_clean(rsp, sampling_rate=1000)
+      peak_signals, info = nk.rsp_peaks(cleaned)
+
+      amplitude = nk.rsp_amplitude(cleaned, peak_signals)
+      @savefig p_rsp_amp1.png scale=100%
+      fig = nk.signal_plot(pd.DataFrame({"RSP": rsp, "Amplitude": amplitude}), subplots=True)
+      @suppress
+      plt.close()
 
     """
     # Format input.
@@ -70,6 +72,8 @@ def rsp_amplitude(rsp_cleaned, peaks, troughs=None, interpolation_method="monoto
     amplitude = rsp_cleaned[peaks] - rsp_cleaned[troughs]
 
     # Interpolate amplitude to length of rsp_cleaned.
-    amplitude = signal_interpolate(peaks, amplitude, x_new=np.arange(len(rsp_cleaned)), method=interpolation_method)
+    amplitude = signal_interpolate(
+        peaks, amplitude, x_new=np.arange(len(rsp_cleaned)), method=interpolation_method
+    )
 
     return amplitude

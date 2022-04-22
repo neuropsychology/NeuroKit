@@ -11,7 +11,21 @@ from .hrv_utils import _hrv_get_rri, _hrv_sanitize_input
 def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
     """Computes time-domain indices of Heart Rate Variability (HRV).
 
-     See references for details.
+    Time-domain measures reflect the total variability of HR and are relatively indiscriminate when
+    it comes to precisely quantifying the respective contributions of different underlying
+    regulatory mechanisms. However, this "general" sensitivity can be seen as a positive feature
+    (e.g., in exploratory studies or when specific underlying neurophysiological mechanisms are not
+    the focus). Moreover, as they are easy to compute and interpret, time-domain measures are still
+    among the most commonly reported HRV indices.
+
+    The time-domain indices can be categorized into deviation-based and difference-based indices
+    where the formal are calculated directly from the normal beat-to-beat intervals (normal RR
+    intervals or NN intervals), and the later are derived from the difference between successive NN
+    intervals.
+
+    .. tip::
+        We strongly recommend checking our open-access paper `Pham et al. (2021)
+        <https://doi.org/10.3390/s21123998>`_ on HRV indices for more information.
 
     Parameters
     ----------
@@ -81,6 +95,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     References
     ----------
+    * Pham, T., Lau, Z. J., Chen, S. H. A., & Makowski, D. (2021). Heart Rate Variability in
+      Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
+      https://doi.org/10.3390/s21123998
     - Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., & Weir, J. P.
     (2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle & nerve,
     56(4), 674-678.

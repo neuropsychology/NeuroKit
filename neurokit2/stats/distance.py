@@ -28,7 +28,8 @@ def distance(X=None, method="mahalanobis"):
     ---------
     >>> import neurokit2 as nk
     >>>
-    >>> X = nk.data("iris")
+    >>> # Load the iris dataset (without the "Species" column)
+    >>> X = nk.data("iris").drop("Species", axis=1)
     >>> vector = nk.distance(X)
     >>> vector #doctest: +SKIP
 

@@ -5,29 +5,31 @@ from .complexity_embedding import complexity_embedding
 
 
 def entropy_svd(signal, delay=1, dimension=2):
-    """Singular Value Decomposition (SVD) Entropy
+    """**Singular Value Decomposition (SVD) Entropy**
 
     SVD entropy (SVDEn) can be intuitively seen as an indicator of how many eigenvectors are needed
     for an adequate explanation of the dataset. In other words, it measures feature-richness: the
     higher the SVD entropy, the more orthogonal vectors are required to adequately explain the
-    dataset.
+    space-state. Similarly to Fisher Information (FI), it is based on the Singular Value
+    Decomposition of the time-delay embedded signal.
 
     See Also
     --------
-    information_fisher
+    information_fisher, complexity_delay, complexity_dimension
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003), or
-        to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted 'Tau' :math:`\\tau`, sometimes referred to as 'lag') in samples.
+        See :func:`complexity_delay()` to choose the optimal value for this parameter.
     dimension : int
         Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding returns
-        an array with two columns corresponding to the original signal and its delayed (by Tau) version.
+        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
+        returns an array with two columns corresponding to the original signal and its delayed (by
+        Tau) version. See ``complexity_dimension()`` to estimate the optimal value for this
+        parameter.
 
     Returns
     ----------
@@ -39,11 +41,14 @@ def entropy_svd(signal, delay=1, dimension=2):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> svden, info = nk.entropy_svd(signal, delay=10, dimension=3)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=1, frequency=5)
+
+      svden, info = nk.entropy_svd(signal, delay=5, dimension=3)
+      svden
 
     """
     # Sanity checks

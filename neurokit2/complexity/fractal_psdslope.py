@@ -6,19 +6,22 @@ from ..signal import signal_detrend, signal_psd
 
 
 def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
-    """Fractal dimension via Power Spectral Density (PSD) slope
+    """**Fractal dimension via Power Spectral Density (PSD) slope**
 
     Fractal exponent can be computed from Power Spectral Density slope (PSDslope) analysis in
     signals characterized by a frequency power-law dependence.
 
-    It first transforms the time series into the frequency domain, and breaks down the signal into sine
-    and cosine waves of a particular amplitude that together "add-up" to represent the original signal.
-    If there is a systematic relationship between the frequencies in the signal and the power of those frequencies,
-    this will reveal itself in log-log coordinates as a linear relationship. The slope of the best fitting line
-    is taken as an estimate of the fractal scaling exponent and can be converted to an estimate of the fractal dimension.
-    A slope of 0 is consistent with white noise, and a slope of less than 0 but greater than –1,
-    is consistent with pink noise i.e., 1/f noise. Spectral slopes as steep as −2 indicate fractional Brownian motion,
-    the epitome of random walk processes.
+    It first transforms the time series into the frequency domain, and breaks down the signal into
+    sine and cosine waves of a particular amplitude that together "add-up" to represent the
+    original signal.
+    If there is a systematic relationship between the frequencies in the signal and the power of
+    those frequencies, this will reveal itself in log-log coordinates as a linear relationship. The
+    slope of the best fitting line is taken as an estimate of the fractal scaling exponent and can
+    be converted to an estimate of the fractal dimension.
+
+    A slope of 0 is consistent with white noise, and a slope of less than 0 but greater than -1,
+    is consistent with pink noise i.e., 1/f noise. Spectral slopes as steep as -2 indicate
+    fractional Brownian motion, the epitome of random walk processes.
 
     Parameters
     ----------
@@ -42,25 +45,27 @@ def fractal_psdslope(signal, method="voss1988", show=False, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
-    >>>
-    >>> psdslope, info = nk.fractal_psdslope(signal, show=False)
-    >>> psdslope #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a Signal with Laplace Noise
+      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
+
+      # Compute the Fractal Dimension from PSD slope
+      psdslope, info = nk.fractal_psdslope(signal, show=False)
+      psdslope
 
     References
     ----------
-    - https://complexity-methods.github.io/book/power-spectral-density-psd-slope.html
+    * https://complexity-methods.github.io/book/power-spectral-density-psd-slope.html
+    * Hasselman, F. (2013). When the blind curve is finite: dimension estimation and model
+      inference based on empirical waveforms. Frontiers in Physiology, 4, 75. https://doi.org/10.3389/fphys.2013.00075
+    * Voss, R. F. (1988). Fractals in nature: From characterization to simulation. The Science of
+      Fractal Images, 21-70.
+    * Eke, A., Hermán, P., Kocsis, L., and Kozak, L. R. (2002). Fractal characterization of
+      complexity in temporal physiological signals. Physiol. Meas. 23, 1-38.
 
-    - Hasselman, F. (2013). When the blind curve is finite: dimension estimation and model inference
-    based on empirical waveforms. Frontiers in Physiology, 4, 75. https://doi.org/10.3389/fphys.2013.00075
-
-    - Voss, R. F. (1988). Fractals in nature: From characterization to simulation.
-    The Science of Fractal Images, 21–70.
-
-    - Eke, A., Hermán, P., Kocsis, L., and Kozak, L. R. (2002). Fractal characterization of complexity in
-    temporal physiological signals. Physiol. Meas. 23, 1–38.
     """
 
     # Sanity checks

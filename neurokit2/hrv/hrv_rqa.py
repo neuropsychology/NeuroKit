@@ -14,12 +14,12 @@ def hrv_rqa(
     delay=1,
     tolerance="zimatore2021",
     linelength=4,
-    show=False
+    show=False,
 ):
-    """Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV).
+    """**Recurrence quantification analysis (RQA) of Heart Rate Variability (HRV)**
 
     RQA is a type of complexity analysis for non-linear systems (related to entropy and fractal dimensions).
-    See the ``complexity_rqa()`` function for more information.
+    See :func:`.complexity_rqa()` for more information.
 
     This function is not run routinely as part of ``hrv_nonlinear()`` or ``hrv()`` because its
     main function, ``complexity_rqa()``, relies on the ``PyRQA`` package, which is not trivial to install.
@@ -39,7 +39,7 @@ def hrv_rqa(
     dimension : int
         See ``complexity_rqa()`` for more information.
     tolerance : float
-        See ``complexity_rqa()`` for more information. If 'zimatore2021', will be set to half of the
+        See ``complexity_rqa()`` for more information. If "zimatore2021", will be set to half of the
         mean pairwise distance between points.
     linelength : int
         See ``complexity_rqa()`` for more information.
@@ -57,25 +57,28 @@ def hrv_rqa(
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Download data
-    >>> data = nk.data("bio_resting_5min_100hz")
-    >>>
-    >>> # Find peaks
-    >>> peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
-    >>>
-    >>> # Compute HRV indices
-    >>> # hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Download data
+      data = nk.data("bio_resting_5min_100hz")
+
+      # Find peaks
+      peaks, info = nk.ecg_peaks(data["ECG"], sampling_rate=100)
+
+      # Compute HRV indices  (don't run the example as it requires PyRQA)
+      # hrv_rqa = nk.hrv_rqa(peaks, sampling_rate=100, show=True)
+
 
     References
     ----------
-    - Zimatore, G., Falcioni, L., Gallotta, M. C., Bonavolontà, V., Campanella, M.,
-    De Spirito, M., ... & Baldari, C. (2021). Recurrence quantification analysis of heart rate variability
-    to detect both ventilatory thresholds. PloS one, 16(10), e0249504.
-    - Ding, H., Crozier, S., & Wilson, S. (2008). Optimization of Euclidean distance threshold in the
-    application of recurrence quantification analysis to heart rate variability studies. Chaos,
-    Solitons & Fractals, 38(5), 1457-1467.
+    * Zimatore, G., Falcioni, L., Gallotta, M. C., Bonavolontà, V., Campanella, M., De Spirito, M.,
+      ... & Baldari, C. (2021). Recurrence quantification analysis of heart rate variability to
+      detect both ventilatory thresholds. PloS one, 16(10), e0249504.
+    * Ding, H., Crozier, S., & Wilson, S. (2008). Optimization of Euclidean distance threshold in
+      the application of recurrence quantification analysis to heart rate variability studies.
+      Chaos, Solitons & Fractals, 38(5), 1457-1467.
 
     """
     # Sanitize input

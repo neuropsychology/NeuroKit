@@ -1,4 +1,3 @@
-
 # An GAM-based Approach to EEG/ERP Analysis using Python and R
 
 *This study can be referenced by* [citing the
@@ -45,7 +44,7 @@ event_id = {'audio/left': 1, 'audio/right': 2,
             'visual/left': 3, 'visual/right': 4}
 
 # Create epochs (100 ms baseline + 500 ms)
-epochs = mne.Epochs(raw, 
+epochs = mne.Epochs(raw,
                     events,
                     event_id,
                     tmin=-0.1,
@@ -69,7 +68,7 @@ picks = ["EEG 001", "EEG 002", "EEG 003",
          "EEG 005", "EEG 006",
          "EEG 010", "EEG 011", "EEG 012", "EEG 013", "EEG 014"]
 epochs = epochs.pick_channels(picks)
-                    
+
 # Downsample
 epochs = epochs.resample(sfreq=150)
 
@@ -158,7 +157,7 @@ library(tidyverse)
 library(easystats)
 library(patchwork)
 
-data <- read.csv("data.csv", stringsAsFactors = FALSE) %>% 
+data <- read.csv("data.csv", stringsAsFactors = FALSE) %>%
   mutate(Condition = str_remove(Condition, "/right"),
          Condition = str_remove(Condition, "/left"),
          Condition = as.factor(Condition),
@@ -211,16 +210,16 @@ model <- lm(EEG ~ Condition * splines::bs(Time, df=0.05 * 600), data=data)
 
 ``` r
 plot_model <- function(model, data){
-  
+
   raw_data <- data %>%
     group_by(Time, Condition) %>%
     mutate(Average = mean(EEG)) %>%
-    ungroup() 
-  
+    ungroup()
+
   p1 <- model %>%
     modelbased::estimate_link(target=c("Condition", "Time"), length=200) %>%
     ggplot(aes(x=Time, y=Predicted)) +
-    geom_line(data=raw_data, aes(y=Average, color=Condition), size=0.50, linetype="dotted") + 
+    geom_line(data=raw_data, aes(y=Average, color=Condition), size=0.50, linetype="dotted") +
     geom_ribbon(aes(ymin=CI_low, ymax=CI_high, fill=Condition), alpha=0.2) +
     geom_line(aes(color=Condition)) +
     scale_color_manual(values=c("audio"="#FF5722", "visual"="#2196F3")) +
@@ -229,23 +228,23 @@ plot_model <- function(model, data){
     theme_eeg()
 
   data_diff <- model %>%
-    modelbased::estimate_contrasts(level="Condition", modulate="Time", length=300) %>% 
+    modelbased::estimate_contrasts(level="Condition", modulate="Time", length=300) %>%
     mutate(
-      Limit = pmin(abs(CI_low), abs(CI_high)), 
-      Positive = as.numeric(ifelse(CI_low  > 0,  Limit, NA)), 
+      Limit = pmin(abs(CI_low), abs(CI_high)),
+      Positive = as.numeric(ifelse(CI_low  > 0,  Limit, NA)),
       Negative = as.numeric(ifelse(CI_high < 0, -Limit, NA)))
 
   p2 <- data_diff %>%
     ggplot(aes(x=Time, y=Difference)) +
-    geom_ribbon(aes(ymin = 0, ymax = Positive, fill = "Audio > Visual"), alpha=0.4) +  
+    geom_ribbon(aes(ymin = 0, ymax = Positive, fill = "Audio > Visual"), alpha=0.4) +
     geom_ribbon(aes(ymin = Negative, ymax = 0, fill = "Audio < Visual"), alpha=0.4) +
-    geom_ribbon(aes(ymin=CI_low, ymax=CI_high), alpha=0.2) + 
+    geom_ribbon(aes(ymin=CI_low, ymax=CI_high), alpha=0.2) +
     geom_line() +
     geom_hline(yintercept=0) +
     theme_eeg() +
     theme(axis.line.x = element_blank()) +
-    scale_fill_manual("Significant difference (p < .05)", 
-                      values=c("Audio > Visual"="#00C853", 
+    scale_fill_manual("Significant difference (p < .05)",
+                      values=c("Audio > Visual"="#00C853",
                                "Audio < Visual"="#f44336"))
   p1 / p2
 }
@@ -289,17 +288,17 @@ the epochs, which in our case corresponds to `0.05 * 600 ms`.
 
 ``` r
 gam.check(model)
-## 
+##
 ## Method: fREML   Optimizer: perf newton
 ## full convergence after 8 iterations.
 ## Gradient range [-2.92e-07,2.28e-07]
 ## (score 36800 & scale 0.967).
 ## Hessian positive definite, eigenvalue range [3.3,13102].
-## Model rank =  20 / 20 
-## 
+## Model rank =  20 / 20
+##
 ## Basis dimension (k) checking results. Low p-value (k-index<1) may
 ## indicate that k is too low, especially if edf is close to k'.
-## 
+##
 ##                           k'  edf k-index p-value
 ## s(Time):Conditionaudio  9.00 8.68    1.02    0.92
 ## s(Time):Conditionvisual 9.00 8.83    1.02    0.89
@@ -322,12 +321,12 @@ data could reinforce our model.
 ``` r
 # Reshape the data in a long format
 data_long <- data %>%
-  pivot_longer(starts_with("EEG."), names_to="Channel", values_to="Signal") %>% 
+  pivot_longer(starts_with("EEG."), names_to="Channel", values_to="Signal") %>%
   mutate(Channel = as.factor(Channel))
 
-data_long %>% 
-  group_by(Condition, Channel, Time) %>% 
-  summarise_all(mean) %>% 
+data_long %>%
+  group_by(Condition, Channel, Time) %>%
+  summarise_all(mean) %>%
   ggplot(aes(x=Time, y=Signal)) +
   geom_line(aes(color=Condition, group=interaction(Condition, Channel))) +
   scale_color_manual(values=c("audio"="#FF5722", "visual"="#2196F3")) +
@@ -354,10 +353,10 @@ plot_model(model_full, data)
 ``` r
 performance::compare_performance(model, model_full)
 ## # Comparison of Model Performance Indices
-## 
+##
 ## Model      | Type |      AIC |      BIC |   R2 | RMSE | BF
 ## ----------------------------------------------------------
-## model      |  bam | 73490.40 | 73777.79 | 0.04 | 0.98 |   
+## model      |  bam | 73490.40 | 73777.79 | 0.04 | 0.98 |
 ## model_full |  bam | 7.35e+05 | 7.36e+05 | 0.03 | 0.98 |  0
 ```
 

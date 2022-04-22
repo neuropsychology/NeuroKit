@@ -19,7 +19,7 @@ def ecg_simulate(
     random_state=None,
     **kwargs,
 ):
-    """Simulate an ECG/EKG signal.
+    """**Simulate an ECG/EKG signal.**
 
     Generate an artificial (synthetic) ECG signal of a given duration and sampling rate using either
     the ECGSYN dynamical model (McSharry et al., 2003) or a simpler model based on Daubechies
@@ -60,23 +60,31 @@ def ecg_simulate(
 
     Examples
     ----------
-    >>> import pandas as pd
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Simulate single lead ECG
-    >>> ecg1 = nk.ecg_simulate(duration=10, method="simple")
-    >>> ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")
-    >>> pd.DataFrame({"ECG_Simple": ecg1,
-    ...               "ECG_Complex": ecg2}).plot(subplots=True) #doctest: +ELLIPSIS
-    array([<AxesSubplot:>, <AxesSubplot:>], dtype=object)
-    >>>
-    >>> # Simulate 12-leads ECG
-    >>> ecg12 = nk.ecg_simulate(duration=10, method="multileads")
-    >>> ecg12[0:10000].plot(subplots=True)
-    array([<AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>,
-           <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>,
-           <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>, <AxesSubplot:>],
-          dtype=object)
+    * **Example 1:** Simulate single lead ECG
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ecg1 = nk.ecg_simulate(duration=10, method="simple")
+      ecg2 = nk.ecg_simulate(duration=10, method="ecgsyn")
+
+      # Visualize result
+      @savefig p_ecg_simulate1.png scale=100%
+      nk.signal_plot([ecg1, ecg2], labels=["simple", "ecgsyn"], subplots=True)
+      @suppress
+      plt.close()
+
+    * **Example 2:** Simulate 12-leads ECG
+
+    .. ipython:: python
+
+      ecg12 = nk.ecg_simulate(duration=10, method="multileads")
+      # Visualize result
+      @savefig p_ecg_simulate2.png scale=100%
+      nk.signal_plot(ecg12, subplots=True)
+      @suppress
+      plt.close()
 
     See Also
     --------
@@ -86,9 +94,8 @@ def ecg_simulate(
     References
     -----------
     - McSharry, P. E., Clifford, G. D., Tarassenko, L., & Smith, L. A. (2003). A dynamical model for
-    generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering, 50
-    (3), 289-294.
-    - https://github.com/diarmaidocualain/ecg_simulation
+      generating synthetic electrocardiogram signals. IEEE transactions on biomedical engineering,
+      50 (3), 289-294.
 
     """
     # Seed the random generator for reproducible results

@@ -9,7 +9,7 @@ from .ppg_findpeaks import ppg_findpeaks
 
 
 def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
-    """Process a photoplethysmogram (PPG)  signal.
+    """**Process a photoplethysmogram (PPG)  signal**
 
     Convenience function that automatically processes a photoplethysmogram signal.
 
@@ -24,10 +24,11 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
     -------
     signals : DataFrame
         A DataFrame of same length as `emg_signal` containing the following columns:
-        - *"PPG_Raw"*: the raw signal.
-        - *"PPG_Clean"*: the cleaned signal.
-        - *"PPG_Rate"*: the heart rate as measured based on PPG peaks.
-        - *"PPG_Peaks"*: the PPG peaks marked as "1" in a list of zeros.
+
+        * ``"PPG_Raw"``: the raw signal.
+        * ``"PPG_Clean"``: the cleaned signal.
+        * ``"PPG_Rate"``: the heart rate as measured based on PPG peaks.
+        * ``"PPG_Peaks"``: the PPG peaks marked as "1" in a list of zeros.
 
     info : dict
         A dictionary containing the information of peaks and the signals' sampling rate.
@@ -38,12 +39,16 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
-    >>> signals, info = nk.ppg_process(ppg, sampling_rate=1000)
-    >>> fig = nk.ppg_plot(signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+    
+      import neurokit2 as nk
+
+      ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
+      signals, info = nk.ppg_process(ppg, sampling_rate=1000)
+      @savefig p_ppg_process1.png scale=100%
+      fig = nk.ppg_plot(signals)
+      @suppress
+      plt.close()
 
     """
     # Sanitize input

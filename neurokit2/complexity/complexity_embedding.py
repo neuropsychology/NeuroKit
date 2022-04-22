@@ -56,7 +56,7 @@ def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
 
     See Also
     ------------
-    embedding_delay, embedding_dimension
+    complexity_delay, complexity_dimension
 
     Examples
     ---------

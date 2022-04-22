@@ -3,21 +3,30 @@ import pandas as pd
 
 
 def complexity_hjorth(signal):
-    """Hjorth's Complexity and Parameters
+    """**Hjorth's Complexity and Parameters**
 
-    Hjorth Parameters are indicators of statistical properties used in signal processing in the
-    time domain introduced by Hjorth (1970). The parameters are activity, mobility, and complexity.
+    Hjorth Parameters are indicators of statistical properties initially introduced by Hjorth
+    (1970) to describe the general characteristics of an EEG trace in a few quantitative terms, but
+    which can applied to any time series. The parameters are activity, mobility, and complexity.
     NeuroKit returns complexity directly in the output tuple, but the other parameters can be found
     in the dictionary.
 
-    - The **complexity** parameter gives an estimate of the bandwidth of the signal, which
-    indicates the similarity of the shape of the signal to a pure sine wave (where the value
-    converges to 1). Complexity is define as the ratio of the mobility of the first derivative of
-    the signal to the mobility of the signal.
-    - The **mobility** parameter represents the mean frequency or the proportion of standard
-    deviation of the power spectrum. This is defined as the square root of variance of the first
-    derivative of the signal divided by the variance of the signal.
-    - The **activity** parameter is simply the variance of the signal.
+    * The **complexity** parameter gives an estimate of the bandwidth of the signal, which
+      indicates the similarity of the shape of the signal to a pure sine wave (for which the
+      value converges to 1). In other words, it is a measure of the "excessive details" with
+      reference to the "softest" possible curve shape. The Complexity parameter is defined as the
+      ratio of the mobility of the first derivative of the signal to the mobility of the signal.
+    * The **mobility** parameter represents the mean frequency or the proportion of standard
+      deviation of the power spectrum. This is defined as the square root of variance of the
+      first derivative of the signal divided by the variance of the signal.
+    * The **activity** parameter is simply the variance of the signal.
+
+    Hjorth (1970) illustrated the parameters as follows:
+
+    .. figure:: ../img/hjorth1970.png
+       :alt: Figure from Hjorth (1970).
+       :target: http://dx.doi.org/10.1016/0013-4694(70)90143-4
+
 
     See Also
     --------
@@ -28,26 +37,33 @@ def complexity_hjorth(signal):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
 
+
     Returns
     -------
     hjorth : float
          Hjorth's Complexity.
     info : dict
-        A dictionary containing additional information regarding the parameters used
-        to compute Hjorth's Complexity.
+        A dictionary containing the additional Hjorth parameters, such as ``'Mobility'`` and
+        ``'Activity'``.
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> complexity, info = nk.complexity_hjorth(signal)
-    >>> complexity #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Simulate a signal with duration os 2s
+      signal = nk.signal_simulate(duration=2, frequency=5)
+
+      # Compute Hjorth's Complexity
+      complexity, info = nk.complexity_hjorth(signal)
+      complexity
+      info
 
     References
     ----------
-    - https://github.com/raphaelvallat/antropy/blob/master/antropy
+    * Hjorth, B (1970) EEG Analysis Based on Time Domain Properties. Electroencephalography and
+      Clinical Neurophysiology, 29, 306-310. http://dx.doi.org/10.1016/0013-4694(70)90143-4
 
     """
     # Sanity checks

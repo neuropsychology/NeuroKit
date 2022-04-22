@@ -2,7 +2,7 @@
 #  - conda-forge
 dependencies:
   - python>=3.5
-  #- sphinx>=1.4  # Get WIP version of sphinx with MD stuff
+  - sphinx
   - pip
   - pandoc
   - nbconvert
@@ -11,7 +11,6 @@ dependencies:
     - sphinx
     - nbsphinx
     #- sphinx-nbexamples
-    - git+https://github.com/Chilipp/sphinx-nbexamples.git@master # Use app.add_css_file for sphinx >= 3.0, change when https://github.com/Chilipp/sphinx-nbexamples is released
     - sphinx-gallery
     - sphinx-copybutton
     - recommonmark
