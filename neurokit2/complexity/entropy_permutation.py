@@ -42,8 +42,9 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
     weighted : bool
         If True, compute the weighted permutation entropy (WPE).
     scale : Union[list, str, list]
-        If not ``None``, compute multiscale permutation entropy (MSPE). Can be a list of scale
-        factors, or ``"default"`` or ``"max"``. See ``entropy_multiscale()`` for details.
+        Can be set to something other than ``None`` to compute multiscale permutation entropy
+        (MSPE), such as a list of scale factors, or ``"default"`` or ``"max"``. See
+        :func:`.entropy_multiscale` for details.
 
     Returns
     -------

@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-from warnings import warn
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..misc import NeuroKitWarning
 from ..signal import signal_detrend
 
 

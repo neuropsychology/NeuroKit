@@ -7,7 +7,9 @@ from .optim_complexity_k import _complexity_k_slope, complexity_k
 
 
 def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
-    """Computes Higuchi's Fractal Dimension (HFD) by reconstructing k-max number of new
+    """**Higuchi's Fractal Dimension (HFD)**
+
+    Computes Higuchi's Fractal Dimension (HFD) by reconstructing k-max number of new
     data sets. For each reconstructed data set, curve length is computed and plotted
     against its corresponding k value on a log-log scale. HFD equates to the slope obtained
     from fitting a least-squares method.
@@ -62,7 +64,7 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
 
     # Get k_max
     if isinstance(k_max, (str, list, np.ndarray, pd.Series)):
-        # optimizing needed
+        # Optimizing needed
         k_max, info = complexity_k(signal, k_max=k_max, show=False)
         idx = np.where(info["Values"] == k_max)[0][0]
         slope = info["Scores"][idx]
@@ -70,7 +72,7 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
         average_values = info["Average_Values"][idx]
         k_values = np.arange(1, k_max + 1)
     else:
-        # Compute higushi
+        # Compute Higuchi
         slope, intercept, info = _complexity_k_slope(k_max, signal)
         k_values = info["k_values"]
         average_values = info["average_values"]
