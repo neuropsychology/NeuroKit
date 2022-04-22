@@ -163,7 +163,7 @@ def data(dataset="bio_eventrelated_100hz"):
     dataset = dataset.lower()
 
     # TODO: change this path back to "master"
-    path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/website-overhaul/data/"
+    path = "https://raw.githubusercontent.com/neuropsychology/NeuroKit/dev/data/"
 
     # Signals as vectors =======================
     if dataset in ["eeg", "eeg_150hz", "eeg.txt"]:

@@ -8,10 +8,10 @@ from ..signal.signal_binarize import _signal_binarize_threshold
 def fractal_petrosian(signal, method="C", show=False):
     """**Petrosian fractal dimension (PFD)**
 
-    Petrosian proposed a fast method to estimate the fractal dimension of a finite sequence, which
-    converts the data to binary sequence before estimating the fractal dimension from time series.
-    Several variations of the algorithm exist (e.g., 'A', 'B', 'C' or 'D'), primarily differing in
-    the way the binary sequence is created.
+    Petrosian (1995) proposed a fast method to estimate the fractal dimension by converting the
+    signal into a binary sequence from which the fractal dimension is estimated. Several variations
+    of the algorithm exist (e.g., 'A', 'B', 'C' or 'D'), primarily differing in the way the binary
+    sequence is created.
 
     * **Method 'A'** binarizes the signal by higher vs. lower values as compated to the signal's
       mean.
@@ -22,8 +22,8 @@ def fractal_petrosian(signal, method="C", show=False):
     * **Method 'D'** forms separates consecutive samples that exceed 1 signal's SD from the others
       smaller changes.
 
-    The algorithm assumes the signal is periodic (without a linear trend). Linear detrending might
-    be useful to eliminate linear trends (see :func:`.signal_detrend`).
+    The algorithm assumes that the signal is periodic (without a linear trend). Linear detrending
+    might be useful to eliminate linear trends (see :func:`.signal_detrend`).
 
     See Also
     --------
@@ -101,6 +101,9 @@ def fractal_petrosian(signal, method="C", show=False):
 
     References
     ----------
+    * Petrosian, A. (1995, June). Kolmogorov complexity of finite sequences and recognition of
+      different preictal EEG patterns. In Proceedings eighth IEEE symposium on computer-based
+      medical systems (pp. 212-217). IEEE.
     * Kumar, D. K., Arjunan, S. P., & Aliahmad, B. (2017). Fractals: applications in biological
       Signalling and image processing. CRC Press.
     * Goh, C., Hamadicharef, B., Henderson, G., & Ifeachor, E. (2005, June). Comparison of fractal
