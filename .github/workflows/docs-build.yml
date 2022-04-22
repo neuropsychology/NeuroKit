@@ -33,6 +33,7 @@ jobs:
     #     pip install https://github.com/neuropsychology/neurokit/zipball/dev
 
     - name: Build documentation
+      run: |
         ls
         cd docs_wip
 
