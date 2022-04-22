@@ -2,8 +2,8 @@
 import numpy as np
 import pandas as pd
 
-from .complexity_tolerance import complexity_tolerance
-from .utils import _get_tolerance, _phi, _phi_divide
+from .optim_complexity_tolerance import complexity_tolerance
+from .utils import _phi, _phi_divide
 
 
 def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
