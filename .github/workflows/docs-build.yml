@@ -9,7 +9,12 @@ jobs:
     - uses: actions/checkout@master
       with:
         fetch-depth: 0 # To be able to push refs to destination repo
+    - name: Prepare Python 🐍
     - uses: actions/setup-python@v3
+    - run:
+        pip install sphinx-book-theme
+
+    - name: sphinx-action
     - uses: ammaraskar/sphinx-action@master
       with:
         docs-folder: "docs_wip/"
@@ -31,7 +36,7 @@ jobs:
           pip install seaborn
           pip install https://github.com/neuropsychology/neurokit/zipball/dev
         build-command:
-          ./make html
+          sphinx-build -b html . _build
     - name: Deploy 🚀
       uses: peaceiris/actions-gh-pages@v3
       with:
