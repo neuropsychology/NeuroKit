@@ -29,10 +29,10 @@ def complexity_tolerance(
 
     Different methods have been described to estimate the most appropriate tolerance value:
 
-    * ``'maxApEn'``: Different values of tolerance will be tested and the one where the approximate
-      entropy (ApEn) is maximized will be selected and returned.
     * ``'sd'`` (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be
       returned.
+    * ``'maxApEn'``: Different values of tolerance will be tested and the one where the approximate
+      entropy (ApEn) is maximized will be selected and returned.
     * ``'recurrence'``, the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will
       be returned.
 
@@ -129,9 +129,12 @@ def complexity_tolerance(
       the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering,
       55(8), 1966-1972.
     """
+    if not isinstance(method, str):
+        return method, {"Method": "None"}
+
     # Method
     method = method.lower()
-    if method in ["traditional", "sd", "std"]:
+    if method in ["traditional", "sd", "std", "default"]:
         r = 0.2 * np.std(signal, ddof=1)
         info = {"Method": "20% SD"}
     elif method in ["maxapen", "optimize"]:
@@ -212,7 +215,7 @@ def _optimize_tolerance_plot(r, info, ax=None, method="maxApEn", signal=None):
     else:
         fig = None
 
-    if method in ["traditional", "sd", "std"]:
+    if method in ["traditional", "sd", "std", "default", "none"]:
         fig, ax = plt.subplots()
         x, y = density(signal)
         arrow_y = np.mean([np.max(y), np.min(y)])

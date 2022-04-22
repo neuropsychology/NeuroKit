@@ -60,7 +60,9 @@ def complexity(
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     tolerance : float
-        See for example :func:`entropy_sample`.
+        Tolerance (often denoted as 'r'), distance to consider two data points as similar. If
+        ``"default"``, will be set to :math:`0.2 * SD_{signal}`. See
+        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
 
     Returns
     --------

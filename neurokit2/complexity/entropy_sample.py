@@ -2,6 +2,7 @@
 import numpy as np
 import pandas as pd
 
+from .complexity_tolerance import complexity_tolerance
 from .utils import _get_tolerance, _phi, _phi_divide
 
 
@@ -64,28 +65,26 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # Prepare parameters
-    info = {"Dimension": dimension, "Delay": delay}
+    # Store parameters
+    info = {
+        "Dimension": dimension,
+        "Delay": delay,
+        "Tolerance": complexity_tolerance(
+            signal,
+            method=tolerance,
+            dimension=dimension,
+            show=False,
+        ),
+    }
 
-    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
-    out = _entropy_sample(
-        signal, tolerance=info["Tolerance"], delay=delay, dimension=dimension, **kwargs
-    )
-
-    return out, info
-
-
-def _entropy_sample(signal, tolerance, delay=1, dimension=2, fuzzy=False, distance="chebyshev"):
-
+    # Compute phi
     phi = _phi(
         signal,
         delay=delay,
         dimension=dimension,
-        tolerance=tolerance,
+        tolerance=info["Tolerance"],
         approximate=False,
-        distance=distance,
-        fuzzy=fuzzy,
+        **kwargs
     )
-    sampen = _phi_divide(phi)
 
-    return sampen
+    return _phi_divide(phi), info
