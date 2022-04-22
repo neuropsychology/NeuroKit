@@ -32,29 +32,33 @@ jobs:
         pip install seaborn
         pip install https://github.com/neuropsychology/neurokit/zipball/dev
 
-    - name: sphinx-action
-      uses: ammaraskar/sphinx-action@master
-      with:
-        docs-folder: "docs_wip/"
-        pre-build-command: |
-          pip install sphinx-book-theme
-          pip install sphinxemoji
-          pip install sphinx-copybutton
-          pip install ipython
-          pip install myst-parser
-          pip install myst-nb
-          pip install numpy
-          pip install pandas
-          pip install scipy
-          pip install scikit-learn
-          pip install matplotlib
-          pip install mne
-          pip install PyWavelets
-          pip install astropy
-          pip install seaborn
-          pip install https://github.com/neuropsychology/neurokit/zipball/dev
-        build-command:
-          make html
+    - name: Build documentation
+        ls
+        cd docs_wip
+
+    # - name: sphinx-action
+    #   uses: ammaraskar/sphinx-action@master
+    #   with:
+    #     docs-folder: "docs_wip/"
+    #     pre-build-command: |
+    #       pip install sphinx-book-theme
+    #       pip install sphinxemoji
+    #       pip install sphinx-copybutton
+    #       pip install ipython
+    #       pip install myst-parser
+    #       pip install myst-nb
+    #       pip install numpy
+    #       pip install pandas
+    #       pip install scipy
+    #       pip install scikit-learn
+    #       pip install matplotlib
+    #       pip install mne
+    #       pip install PyWavelets
+    #       pip install astropy
+    #       pip install seaborn
+    #       pip install https://github.com/neuropsychology/neurokit/zipball/dev
+    #     build-command:
+    #       make html
 
     - name: Deploy 🚀
       uses: peaceiris/actions-gh-pages@v3
