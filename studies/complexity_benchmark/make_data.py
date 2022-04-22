@@ -75,7 +75,7 @@ def run_benchmark(noise_intensity=0.01):
     data_complexity = []
 
     print("Noise intensity: {}".format(noise_intensity))
-    for duration in [0.5, 1, 2, 4, 8, 16, 32, 64]:
+    for duration in [0.5, 1, 2, 4]:
         for method in ["Random-Walk", "lorenz_10_2.5_28", "lorenz_20_2_30"]:
             if method == "Random-Walk":
                 delay = 1
@@ -252,6 +252,17 @@ def run_benchmark(noise_intensity=0.01):
                     ),
                 ]
             )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.fractal_higuchi,
+                        index="HFD",
+                        name="nk_fractal_higuchi",
+                    ),
+                ]
+            )
 
             # Entropy
             # ----------
@@ -340,6 +351,73 @@ def run_benchmark(noise_intensity=0.01):
                     ),
                 ]
             )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_permutation,
+                        index="MSPEn",
+                        name="nk_entropy_permutation",
+                        delay=delay,
+                        dimension=3,
+                        scale="default",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_permutation,
+                        index="WPEn",
+                        name="nk_entropy_permutation",
+                        delay=delay,
+                        dimension=3,
+                        weighted=True,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_sample,
+                        index="SampEn",
+                        name="nk_entropy_sample",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_fuzzy,
+                        index="FuzzyEn",
+                        name="nk_entropy_fuzzy",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_multiscale,
+                        index="MSEn",
+                        name="nk_entropy_multiscale",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
             # Other
             # ----------
             rez = pd.concat(
@@ -372,6 +450,70 @@ def run_benchmark(noise_intensity=0.01):
                         nk.fisher_information,
                         index="FI",
                         name="nk_fisher_information",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_hurst,
+                        index="H (corrected)",
+                        name="nk_complexity_hurst",
+                        corrected=True,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_hurst,
+                        index="H (uncorrected)",
+                        name="nk_complexity_hurst",
+                        corrected=False,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_lempelziv,
+                        index="LZC",
+                        name="nk_complexity_lempelziv",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_lempelziv,
+                        index="PLZC",
+                        name="nk_complexity_lempelziv",
+                        delay=delay,
+                        dimension=3,
+                        permutation=True,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.fractal_correlation,
+                        index="CD",
+                        name="nk_fractal_correlation",
                         delay=delay,
                         dimension=3,
                     ),

@@ -89,7 +89,11 @@ p1 / p2 / p3 + patchwork::plot_annotation(title = "Examples of Simulated Signals
 
 ```{r message=FALSE, warning=FALSE}
 df <- read.csv("data_Complexity.csv") |> 
-  mutate(Method = as.factor(Method))
+  mutate(Method = as.factor(Method)) 
+
+# Show and filter out NaNs
+df[is.na(df$Result), "Index"]
+df <- filter(df, !is.na(Result))
 
 
 colors = c("PFD (A)" = "#2196F3", 
@@ -102,12 +106,18 @@ colors = c("PFD (A)" = "#2196F3",
            "NLDFD" = "#2196F3",
            "PSDFD (Voss1998)" = "#2196F3",
            "PSDFD (Hasselman2013)" = "#2196F3",
+           "HFD" = "#2196F3",
            
            "SVDEn" = "#E91E63",
            "DiffEn" = "#E91E63",
            "ApEn" = "#E91E63",
            "PEn" = "#E91E63",
            "SPEn" = "#E91E63",
+           "MSPEn" = "#E91E63",
+           "WPEn" = "#E91E63",
+           "SampEn" = "#E91E63",
+           "MSEn" = "#E91E63",
+           "FuzzyEn" = "#E91E63",
            "ShanEn3" = "#E91E63",
            "ShanEn10" = "#E91E63",
            "ShanEn100" = "#E91E63",
@@ -117,8 +127,13 @@ colors = c("PFD (A)" = "#2196F3",
            "CREn100" = "#E91E63",
            "CREn1000" = "#E91E63",
            
+           "H (corrected)" = "#2196F3",
+           "H (uncorrected)" = "#2196F3",
+           "LZC" = "#2196F3",
+           "PLZC" = "#2196F3",
            "RR" = "#2196F3",
            "FI" = "#FF5722",
+           "CD" = "#FF5722",
            "Hjorth" = "#FF5722")
 
 # unique(df$Index)[!unique(df$Index) %in% names(colors)]
@@ -152,6 +167,7 @@ df |>
 
 ```{r time1, message=FALSE, warning=FALSE}
 dfsummary <- df |>
+  mutate(Duration = Duration * 10000) |> 
   group_by(Index, Length) |>
   summarize(CI_low = median(Duration) - sd(Duration),
             CI_high = median(Duration) + sd(Duration),
@@ -159,12 +175,13 @@ dfsummary <- df |>
 dfsummary$CI_low[dfsummary$CI_low < 0] <- 0
 
 
-ggplot(dfsummary, aes(x = Index, y = Duration)) + 
+dfsummary |>
+  ggplot(aes(x = Index, y = Duration)) + 
   # geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = "dotted") +
   geom_line(aes(alpha = Length, group = Length)) +
   geom_point(aes(color = Length)) + 
   theme_modern() +
-  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1)) +
+  scale_y_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
   guides(alpha = "none") +
   labs(y = "Time to compute", x = NULL, color = "Signal length")
@@ -173,12 +190,13 @@ ggplot(dfsummary, aes(x = Index, y = Duration)) +
 
 ```{r time2, message=FALSE, warning=FALSE}
 df |> 
+  mutate(Duration = Duration * 10000) |> 
   ggplot(aes(x = as.factor(Length), y = Duration)) +
   # geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = "dotted") +
   geom_line(data=dfsummary, aes(group = 1)) +
   geom_violin(aes(fill = Length)) +
   facet_wrap(~Index) +
-  scale_y_log10(breaks = c(0.001, 0.01, 0.1, 1)) +
+  scale_y_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x)) +
   scale_fill_viridis_c(guide = "none") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
@@ -188,7 +206,7 @@ df |>
 #### Results
 
 ```{r message=FALSE, warning=FALSE}
-model <- lm(Result ~ Index / poly(Length, 2), data = df)
+model <- lm(Result ~ Index / poly(Length, 3), data = df)
 
 parameters::parameters(model, keep = "poly") |> 
   arrange(desc(abs(Coefficient))) |> 
@@ -215,14 +233,34 @@ data <- df |>
   mutate(i = paste(Signal, Length, Noise, Noise_Intensity, sep = "__")) |> 
   select(i, Index, Result) |> 
   pivot_wider(names_from = "Index", values_from = "Result") |> 
-  # mutate(FI = -1 * FI) |> 
   select(-i) 
 
 cor <- correlation::correlation(data, method = "spearman", redundant = TRUE) |> 
   cor_sort(hclust_method = "ward.D2")
 
+cor_lower <- function(cor) {
+  m <- as.matrix(cor)
+  
+  tri <- upper.tri(m, diag = FALSE)
+  rownames(tri) <- rownames(m)
+  colnames(tri) <- colnames(m)
+  
+  toremove <- c()
+  
+  for(param1 in rownames(m)) {
+    for(param2 in colnames(m)) {
+      if(tri[param1, param2] == FALSE) {
+        toremove <- c(toremove, which(cor$Parameter1 == param1 & cor$Parameter2 == param2))
+      }
+    } 
+  }
+
+  cor[-toremove, ]
+}
+
 cor |> 
-  mutate(Text = insight::format_value(rho, zap_small=TRUE, digits = 3),
+  cor_lower() |> 
+  mutate(Text = str_remove(insight::format_value(rho, zap_small=TRUE, digits = 3), "^0+"),
          Parameter2 = fct_rev(Parameter2)) |> 
   ggplot(aes(x = Parameter2, y=Parameter1)) +
   geom_tile(aes(fill = rho)) +
@@ -240,8 +278,22 @@ cor |>
 
 ```{r message=FALSE, warning=FALSE}
 cor |> 
+  arrange(desc(rho)) |> 
   filter(Parameter1 != Parameter2) |> 
   filter(abs(rho) > .95)
+
+# Duplicates 
+# ===========
+# NLFD | RR
+# - Drop RR because it's slower
+# H (uncorrected) | H (corrected)
+# - ??
+# SVDEn | FuzzyEn
+# - Drop FuzzyEn because it's slower
+
+
+
+
 
 data <- data |> 
   select(
