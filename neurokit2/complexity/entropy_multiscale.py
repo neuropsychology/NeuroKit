@@ -5,7 +5,7 @@ import pandas as pd
 
 from .complexity_coarsegraining import _get_scale, complexity_coarsegraining
 from .entropy_sample import entropy_sample
-from .utils import _get_coarsegrained_rolling, _get_scale, _get_tolerance, _phi, _phi_divide
+from .utils import _get_coarsegrained_rolling, _get_tolerance, _phi, _phi_divide
 
 
 def entropy_multiscale(
