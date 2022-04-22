@@ -34,7 +34,7 @@ def rsp_fixpeaks(peaks, troughs=None):
     Examples
     --------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       rsp = nk.rsp_simulate(duration=30, respiratory_rate=15)

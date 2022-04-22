@@ -55,7 +55,7 @@ def rsp_rate(
     Example
     -------
     .. ipython:: python
-    
+
       import neurokit2 as nk
       rsp_signal = nk.data("rsp_1000hz")
 

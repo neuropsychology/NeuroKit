@@ -61,7 +61,7 @@ def rsp_analyze(data, sampling_rate=1000, method="auto"):
       df, info = nk.rsp_process(data["RSP"], sampling_rate=100)
 
       # Analyze
-      nk.rsp_analyze(df, sampling_rate=100) 
+      nk.rsp_analyze(df, sampling_rate=100)
 
     """
     method = method.lower()

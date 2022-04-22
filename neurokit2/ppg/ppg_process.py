@@ -40,7 +40,7 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
     Examples
     --------
     .. ipython:: python
-    
+
       import neurokit2 as nk
 
       ppg = nk.ppg_simulate(duration=10, sampling_rate=1000, heart_rate=70)
@@ -59,17 +59,24 @@ def ppg_process(ppg_signal, sampling_rate=1000, **kwargs):
 
     # Find peaks
     info = ppg_findpeaks(ppg_cleaned, sampling_rate=sampling_rate, **kwargs)
-    info['sampling_rate'] = sampling_rate  # Add sampling rate in dict info
+    info["sampling_rate"] = sampling_rate  # Add sampling rate in dict info
 
     # Mark peaks
     peaks_signal = _signal_from_indices(info["PPG_Peaks"], desired_length=len(ppg_cleaned))
 
     # Rate computation
-    rate = signal_rate(info["PPG_Peaks"], sampling_rate=sampling_rate, desired_length=len(ppg_cleaned))
+    rate = signal_rate(
+        info["PPG_Peaks"], sampling_rate=sampling_rate, desired_length=len(ppg_cleaned)
+    )
 
     # Prepare output
     signals = pd.DataFrame(
-        {"PPG_Raw": ppg_signal, "PPG_Clean": ppg_cleaned, "PPG_Rate": rate, "PPG_Peaks": peaks_signal}
+        {
+            "PPG_Raw": ppg_signal,
+            "PPG_Clean": ppg_cleaned,
+            "PPG_Rate": rate,
+            "PPG_Peaks": peaks_signal,
+        }
     )
 
     return signals, info
