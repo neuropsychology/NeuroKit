@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from .complexity_coarsegraining import _get_scale, complexity_coarsegraining
 from .entropy_sample import entropy_sample
-from .utils import (_get_coarsegrained, _get_coarsegrained_rolling, _get_scale,
-                    _get_tolerance, _phi, _phi_divide)
+from .utils import _get_coarsegrained_rolling, _get_scale, _get_tolerance, _phi, _phi_divide
 
 
 def entropy_multiscale(
@@ -19,10 +19,10 @@ def entropy_multiscale(
     show=False,
     **kwargs
 ):
-    """Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy version.
+    """**Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy versions**
 
-    Python implementations of the multiscale entropy (MSE), the composite multiscale entropy (CMSE),
-    the refined composite multiscale entropy (RCMSE) or their fuzzy version (FuzzyMSE, FuzzyCMSE or
+    Compute the multiscale entropy (MSE), the composite multiscale entropy (CMSE),
+    the refined composite multiscale entropy (RCMSE), or their fuzzy version (FuzzyMSE, FuzzyCMSE or
     FuzzyRCMSE).
 
     This function can be called either via ``entropy_multiscale()`` or ``complexity_mse()``.
@@ -79,15 +79,18 @@ def entropy_multiscale(
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy1, info = nk.entropy_multiscale(signal, show=True)
-    >>> entropy1 #doctest: +SKIP
-    >>> entropy2, info = nk.entropy_multiscale(signal, show=True, composite=True)
-    >>> entropy2 #doctest: +SKIP
-    >>> entropy3, info = nk.entropy_multiscale(signal, show=True, refined=True)
-    >>> entropy3 #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, frequency=5)
+
+      entropy1, info = nk.entropy_multiscale(signal, show=True)
+      entropy1
+      entropy2, info = nk.entropy_multiscale(signal, show=True, composite=True)
+      entropy2
+      entropy3, info = nk.entropy_multiscale(signal, show=True, refined=True)
+      entropy3
 
 
     References
@@ -223,7 +226,7 @@ def _entropy_multiscale_plot(scale_factors, mse_values):
 # Methods
 # =============================================================================
 def _entropy_multiscale_mse(signal, tau, dimension, tolerance, fuzzy, **kwargs):
-    y = _get_coarsegrained(signal, tau)
+    y = complexity_coarsegraining(signal, scale=tau)
     if len(y) < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
         return np.nan
 

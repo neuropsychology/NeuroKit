@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_binarize import _signal_binarize_threshold
+from .complexity_coarsegraining import _get_scale, complexity_coarsegraining
 from .complexity_embedding import complexity_embedding
-from .utils import _get_coarsegrained, _get_scale
 
 
 def complexity_lempelziv(

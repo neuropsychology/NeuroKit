@@ -26,7 +26,8 @@ def complexity_coarsegraining(
     decreases the entropy rate artificially (Nikulin, 2004). One of the core issue is that the
     length of coarse-grained signals becomes smaller as the scale increases.
 
-    To address this issue of length, several methods have been proposed, such as **moving average** (Wu et al. 2013), or **adaptive resampling** (Liu et al. 2012).
+    To address this issue of length, several methods have been proposed, such as **moving average**
+    (Wu et al. 2013), or **adaptive resampling** (Liu et al. 2012).
 
     Parameters
     ----------
@@ -181,3 +182,19 @@ def _complexity_show(signal, coarse, method="nonoverlapping"):
     else:
         plt.plot(np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=1)
     plt.title(f'Coarse-graining using method "{method}"')
+
+
+# =============================================================================
+# Get Scale Factor
+# =============================================================================
+def _get_scale(signal, scale="default", dimension=2):
+    """Select scale factors"""
+    if scale is None or scale == "max":
+        scale = np.arange(1, len(signal) // 2)  # Set to max
+    elif scale == "default":
+        # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
+        scale = np.arange(1, int(len(signal) / (dimension + 10)))
+    elif isinstance(scale, int):
+        scale = np.arange(1, scale)
+
+    return scale

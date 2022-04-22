@@ -149,10 +149,10 @@ def _get_count_fuzzy(embedded, tolerance, distance="chebyshev", n=1):
 # Get R
 # =============================================================================
 def _get_tolerance(signal, tolerance="default", dimension=2, show=False):
-    """Sanitize the tolerance r For the default value, following the suggestion by Christopher Schölzel (nolds), we make
-    it take into account the number of dimensions. Additionally, a constant is introduced.
-
-    so that for dimension=2, tolerance = 0.2 * np.std(signal, ddof=1), which is the traditional default value.
+    """Sanitize the tolerance r For the default value, following the suggestion by Christopher
+    Schölzel (nolds), we make it to take into account the number of dimensions. Additionally, a
+    constant is introduced, so that for dimension=2, tolerance = 0.2 * np.std(signal, ddof=1),
+    which is the traditional default value.
 
     See nolds for more info:
     https://github.com/CSchoel/nolds/blob/d8fb46c611a8d44bdcf21b6c83bc7e64238051a4/nolds/measures.py#L752
@@ -203,23 +203,6 @@ def _get_tolerance(signal, tolerance="default", dimension=2, show=False):
         optimal_r = tolerance
 
     return optimal_r
-
-
-# =============================================================================
-# Get Scale Factor
-# =============================================================================
-def _get_scale(signal, scale="default", dimension=2):
-    # Select scale
-    if scale is None or scale == "max":
-        scale = np.arange(1, len(signal) // 2)  # Set to max
-    elif scale == "default":
-        scale = np.arange(
-            1, int(len(signal) / (dimension + 10))
-        )  # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
-    elif isinstance(scale, int):
-        scale = np.arange(1, scale)
-
-    return scale
 
 
 # =============================================================================
