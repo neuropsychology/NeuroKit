@@ -8,6 +8,7 @@ dependencies:
   - nbconvert
   - ipykernel
   - pip:
+    - jupyter
     - sphinx
     - nbsphinx
     #- sphinx-nbexamples

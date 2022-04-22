@@ -3,6 +3,7 @@ import functools
 
 from .complexity import complexity
 from .complexity_attractor import complexity_attractor
+from .complexity_coarsegraining import complexity_coarsegraining
 from .complexity_embedding import complexity_embedding
 from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
@@ -82,6 +83,7 @@ __all__ = [
     "complexity",
     "complexity_attractor",
     "complexity_embedding",
+    "complexity_coarsegraining",
     "complexity_recurrence",
     "complexity_delay",
     "complexity_dimension",
