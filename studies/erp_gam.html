@@ -1,0 +1,991 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>An GAM-based Approach to EEG/ERP Analysis using Python and R &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Benchmarking of ECG Preprocessing Methods" href="ecg_benchmark.html" />
+    <link rel="prev" title="Studies" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Studies
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     An GAM-based Approach to EEG/ERP Analysis using Python and R
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ecg_benchmark.html">
+     Benchmarking of ECG Preprocessing Methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eog_blinktemplate.html">
+     Blink Template Estimation for Electrooculography (EOG)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="complexity_benchmark.html">
+     Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/releases">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fstudies/erp_gam.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/studies/erp_gam.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/studies/erp_gam.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#procedure">
+   Procedure
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data">
+     Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#erp-analysis-using-mne-python">
+     ERP analysis using MNE-Python
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#results">
+   Results
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#utility-functions">
+     Utility Functions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualize-average">
+     Visualize Average
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spline-regression">
+     Spline Regression
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#general-additive-model-gam">
+     General Additive Model (GAM)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-data-from-all-the-channels">
+     Using data from all the channels
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>An GAM-based Approach to EEG/ERP Analysis using Python and R</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#procedure">
+   Procedure
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data">
+     Data
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#erp-analysis-using-mne-python">
+     ERP analysis using MNE-Python
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#results">
+   Results
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#utility-functions">
+     Utility Functions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualize-average">
+     Visualize Average
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#spline-regression">
+     Spline Regression
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#general-additive-model-gam">
+     General Additive Model (GAM)
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#using-data-from-all-the-channels">
+     Using data from all the channels
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="an-gam-based-approach-to-eeg-erp-analysis-using-python-and-r">
+<h1>An GAM-based Approach to EEG/ERP Analysis using Python and R<a class="headerlink" href="#an-gam-based-approach-to-eeg-erp-analysis-using-python-and-r" title="Permalink to this headline">#</a></h1>
+<p><em>This study can be referenced by</em> <a class="reference external" href="https://github.com/neuropsychology/NeuroKit#citation">citing the
+package</a>.</p>
+<p><strong>We’d like to publish this study, but unfortunately we currently don’t
+have the time. If you want to help to make it happen, please contact
+us!</strong></p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<p>The aim of this study is to explore the feasibility of analyzing
+event-related potentials (ERP) under a regression framework, through the
+usage of non-linear links (using splines, and General Additive Models -
+GAMs). Combined with the usage of mixed models, theoretical benefits
+include the incorporation of more information (such as data at the
+single-trial, - and even single-channel - level), as well as the
+computation of marginal means and contrasts, allowing for a flexible and
+powerful way of analysing differences between conditions.</p>
+</section>
+<section id="procedure">
+<h2>Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline">#</a></h2>
+<p>We will start by running a “traditional” ERP analysis for a single
+subject using the MNE Python package (Gramfort et al., 2013, 2014) to
+obtain “gold standard” baseline patterns of results. Then, we will first
+attempt to model the evoked potentials using a simple linear model with
+splines, before applying GAMs.</p>
+<section id="data">
+<h3>Data<a class="headerlink" href="#data" title="Permalink to this headline">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">mne</span>
+
+<span class="c1"># Download example dataset</span>
+<span class="n">raw</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_raw_fif</span><span class="p">(</span><span class="n">mne</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">data_path</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/MEG/sample/sample_audvis_filt-0-40_raw.fif&#39;</span><span class="p">)</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">read_events</span><span class="p">(</span><span class="n">mne</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">sample</span><span class="o">.</span><span class="n">data_path</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;/MEG/sample/sample_audvis_filt-0-40_raw-eve.fif&#39;</span><span class="p">)</span>
+
+<span class="c1"># Create epochs including different events</span>
+<span class="n">event_id</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;audio/left&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;audio/right&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s1">&#39;visual/left&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;visual/right&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">}</span>
+
+<span class="c1"># Create epochs (100 ms baseline + 500 ms)</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">Epochs</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span>
+                    <span class="n">events</span><span class="p">,</span>
+                    <span class="n">event_id</span><span class="p">,</span>
+                    <span class="n">tmin</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">,</span>
+                    <span class="n">tmax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                    <span class="n">picks</span><span class="o">=</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span>
+                    <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">detrend</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                    <span class="n">baseline</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+<span class="c1"># Generate list of evoked objects from conditions names</span>
+<span class="n">evoked</span> <span class="o">=</span> <span class="p">[</span><span class="n">epochs</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">average</span><span class="p">()</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;audio&#39;</span><span class="p">,</span> <span class="s1">&#39;visual&#39;</span><span class="p">)]</span>
+
+<span class="c1"># Plot topo</span>
+<span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">plot_compare_evokeds</span><span class="p">(</span><span class="n">evoked</span><span class="p">,</span> <span class="n">picks</span><span class="o">=</span><span class="s1">&#39;eeg&#39;</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="s1">&#39;topo&#39;</span><span class="p">)</span>
+<span class="c1">## [&lt;Figure size 1800x1400 with 60 Axes&gt;]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;figures/fig1.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+
+<span class="c1"># Select subset of frontal electrodes</span>
+<span class="n">picks</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;EEG 001&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 002&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 003&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;EEG 005&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 006&quot;</span><span class="p">,</span>
+         <span class="s2">&quot;EEG 010&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 011&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 012&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 013&quot;</span><span class="p">,</span> <span class="s2">&quot;EEG 014&quot;</span><span class="p">]</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">pick_channels</span><span class="p">(</span><span class="n">picks</span><span class="p">)</span>
+
+<span class="c1"># Downsample</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">sfreq</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+
+<span class="c1"># Convert to data frame and save</span>
+<span class="n">nk</span><span class="o">.</span><span class="n">mne_to_df</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="fig1" src="../_images/fig11.png" /></p>
+</section>
+<section id="erp-analysis-using-mne-python">
+<h3>ERP analysis using MNE-Python<a class="headerlink" href="#erp-analysis-using-mne-python" title="Permalink to this headline">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Transform each condition to array</span>
+<span class="n">condition1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">epochs</span><span class="p">[</span><span class="s2">&quot;audio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">condition2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">epochs</span><span class="p">[</span><span class="s2">&quot;visual&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_data</span><span class="p">(),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Permutation test to find significant cluster of differences</span>
+<span class="n">t_vals</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">p_vals</span><span class="p">,</span> <span class="n">h0</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">permutation_cluster_test</span><span class="p">([</span><span class="n">condition1</span><span class="p">,</span> <span class="n">condition2</span><span class="p">],</span> <span class="n">out_type</span><span class="o">=</span><span class="s1">&#39;mask&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">111</span><span class="p">)</span>
+
+<span class="c1"># Visualize</span>
+<span class="c1">## &lt;string&gt;:1: RuntimeWarning: Ignoring argument &quot;tail&quot;, performing 1-tailed F-test</span>
+<span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax0</span><span class="p">,</span> <span class="n">ax1</span><span class="p">,</span> <span class="n">ax2</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">times</span> <span class="o">=</span> <span class="n">epochs</span><span class="o">.</span><span class="n">times</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="c1">## &lt;matplotlib.lines.Line2D object at 0x00000000BFAE7640&gt;</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">condition1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Audio&quot;</span><span class="p">)</span>
+<span class="c1">## [&lt;matplotlib.lines.Line2D object at 0x00000000BFAF3D30&gt;]</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">condition2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Visual&quot;</span><span class="p">)</span>
+<span class="c1">## [&lt;matplotlib.lines.Line2D object at 0x00000000BFAF3F40&gt;]</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+<span class="c1">## &lt;matplotlib.legend.Legend object at 0x00000000BFAF3EE0&gt;</span>
+<span class="n">ax0</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;uV&quot;</span><span class="p">)</span>
+
+<span class="c1"># Difference</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">condition1</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">condition2</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+<span class="c1">## [&lt;matplotlib.lines.Line2D object at 0x00000000BFB07B20&gt;]</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="c1">## &lt;matplotlib.lines.Line2D object at 0x00000000BFB07CD0&gt;</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Difference&quot;</span><span class="p">)</span>
+
+<span class="c1"># T-values</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
+<span class="n">h</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">clusters</span><span class="p">):</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">p_vals</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.05</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">start</span><span class="p">],</span>
+                        <span class="n">times</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">,</span>
+                        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">start</span><span class="p">],</span>
+                    <span class="n">times</span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">),</span>
+                    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="c1">## &lt;matplotlib.patches.Polygon object at 0x00000000BFB16550&gt;</span>
+<span class="c1">## &lt;matplotlib.patches.Polygon object at 0x00000000BFB16BE0&gt;</span>
+<span class="n">hf</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">t_vals</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">h</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">((</span><span class="n">h</span><span class="p">,</span> <span class="p">),</span> <span class="p">(</span><span class="s1">&#39;cluster p-value &lt; 0.05&#39;</span><span class="p">,</span> <span class="p">))</span>
+<span class="c1">## &lt;matplotlib.legend.Legend object at 0x00000000BFB16D00&gt;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;time (ms)&quot;</span><span class="p">)</span>
+<span class="c1">## Text(0.5, 0, &#39;time (ms)&#39;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;t-values&quot;</span><span class="p">)</span>
+<span class="c1">## Text(0, 0.5, &#39;t-values&#39;)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;figures/fig2.png&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">clf</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="fig2" src="../_images/fig21.png" /></p>
+<p>As we can see in the figure, the auditive condition led to a
+significantly different negative deflection around 100 ms (referred to
+as the <a class="reference external" href="https://en.wikipedia.org/wiki/N100">N100</a>, while the visual
+condition is related to a positive, <em>yet not significant</em>, deflection
+around 180 ms (the <a class="reference external" href="https://en.wikipedia.org/wiki/P200">P200</a>), and
+later a significant negative deflection. Let’s see if we can reproduce
+this pattern of results under a regression framework.</p>
+</section>
+</section>
+<section id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">easystats</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">patchwork</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data.csv&quot;</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Condition</span> <span class="o">=</span> <span class="nf">str_remove</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="s">&quot;/right&quot;</span><span class="p">),</span>
+         <span class="n">Condition</span> <span class="o">=</span> <span class="nf">str_remove</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="s">&quot;/left&quot;</span><span class="p">),</span>
+         <span class="n">Condition</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Condition</span><span class="p">),</span>
+         <span class="n">EEG</span> <span class="o">=</span> <span class="nf">rowMeans</span><span class="p">(</span><span class="nf">across</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&quot;EEG&quot;</span><span class="p">))))</span>
+<span class="n">data</span><span class="p">[</span><span class="n">stringr</span><span class="o">::</span><span class="nf">str_detect</span><span class="p">(</span><span class="nf">colnames</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s">&quot;EEG&quot;</span><span class="p">)]</span> <span class="o">&lt;-</span> <span class="nf">standardize</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">stringr</span><span class="o">::</span><span class="nf">str_detect</span><span class="p">(</span><span class="nf">colnames</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s">&quot;EEG&quot;</span><span class="p">)])</span>
+</pre></div>
+</div>
+<section id="utility-functions">
+<h3>Utility Functions<a class="headerlink" href="#utility-functions" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">theme_eeg</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(){</span>
+  <span class="nf">list</span><span class="p">(</span>
+    <span class="n">see</span><span class="o">::</span><span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">theme</span><span class="p">(</span><span class="n">axis.line.y</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">()),</span>
+    <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dashed&quot;</span><span class="p">)</span>
+  <span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="visualize-average">
+<h3>Visualize Average<a class="headerlink" href="#visualize-average" title="Permalink to this headline">#</a></h3>
+<p>We will start by visualizing the “simple” grand average of all epochs as
+thick lines, as well as all epochs as thin lines. This will serve us as
+a baseline to check if our regression approach is on track.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">Condition</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Average</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">EEG</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  <span class="nf">ungroup</span><span class="p">()</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Time</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">EEG</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Condition</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">Label</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.05</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">Average</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1.5</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;audio&quot;</span><span class="o">=</span><span class="s">&quot;#FF5722&quot;</span><span class="p">,</span> <span class="s">&quot;visual&quot;</span><span class="o">=</span><span class="s">&quot;#2196F3&quot;</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">coord_cartesian</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">theme_eeg</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-8-1.png" /><!-- --></p>
+</section>
+<section id="spline-regression">
+<h3>Spline Regression<a class="headerlink" href="#spline-regression" title="Permalink to this headline">#</a></h3>
+<p>We sill start by running a spline regression and specifying the degrees
+of freedom as a function of the epoch length. As our epoch is 600 ms
+(including the baseline), we will select a fraction (5%) of that.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lm</span><span class="p">(</span><span class="n">EEG</span> <span class="o">~</span> <span class="n">Condition</span> <span class="o">*</span> <span class="n">splines</span><span class="o">::</span><span class="nf">bs</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">df</span><span class="o">=</span><span class="m">0.05</span> <span class="o">*</span> <span class="m">600</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">plot_model</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">){</span>
+
+  <span class="n">raw_data</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">%&gt;%</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">Condition</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">Average</span> <span class="o">=</span> <span class="nf">mean</span><span class="p">(</span><span class="n">EEG</span><span class="p">))</span> <span class="o">%&gt;%</span>
+    <span class="nf">ungroup</span><span class="p">()</span>
+
+  <span class="n">p1</span> <span class="o">&lt;-</span> <span class="n">model</span> <span class="o">%&gt;%</span>
+    <span class="n">modelbased</span><span class="o">::</span><span class="nf">estimate_link</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Condition&quot;</span><span class="p">,</span> <span class="s">&quot;Time&quot;</span><span class="p">),</span> <span class="n">length</span><span class="o">=</span><span class="m">200</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Time</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Predicted</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">raw_data</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">Average</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Condition</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">0.50</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dotted&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_ribbon</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="n">CI_low</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">CI_high</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">Condition</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.2</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">Condition</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;audio&quot;</span><span class="o">=</span><span class="s">&quot;#FF5722&quot;</span><span class="p">,</span> <span class="s">&quot;visual&quot;</span><span class="o">=</span><span class="s">&quot;#2196F3&quot;</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;audio&quot;</span><span class="o">=</span><span class="s">&quot;#FF5722&quot;</span><span class="p">,</span> <span class="s">&quot;visual&quot;</span><span class="o">=</span><span class="s">&quot;#2196F3&quot;</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;EEG&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">theme_eeg</span><span class="p">()</span>
+
+  <span class="n">data_diff</span> <span class="o">&lt;-</span> <span class="n">model</span> <span class="o">%&gt;%</span>
+    <span class="n">modelbased</span><span class="o">::</span><span class="nf">estimate_contrasts</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s">&quot;Condition&quot;</span><span class="p">,</span> <span class="n">modulate</span><span class="o">=</span><span class="s">&quot;Time&quot;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="m">300</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">mutate</span><span class="p">(</span>
+      <span class="n">Limit</span> <span class="o">=</span> <span class="nf">pmin</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">CI_low</span><span class="p">),</span> <span class="nf">abs</span><span class="p">(</span><span class="n">CI_high</span><span class="p">)),</span>
+      <span class="n">Positive</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="nf">ifelse</span><span class="p">(</span><span class="n">CI_low</span>  <span class="o">&gt;</span> <span class="m">0</span><span class="p">,</span>  <span class="n">Limit</span><span class="p">,</span> <span class="kc">NA</span><span class="p">)),</span>
+      <span class="n">Negative</span> <span class="o">=</span> <span class="nf">as.numeric</span><span class="p">(</span><span class="nf">ifelse</span><span class="p">(</span><span class="n">CI_high</span> <span class="o">&lt;</span> <span class="m">0</span><span class="p">,</span> <span class="o">-</span><span class="n">Limit</span><span class="p">,</span> <span class="kc">NA</span><span class="p">)))</span>
+
+  <span class="n">p2</span> <span class="o">&lt;-</span> <span class="n">data_diff</span> <span class="o">%&gt;%</span>
+    <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Time</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Difference</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">geom_ribbon</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">Positive</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="s">&quot;Audio &gt; Visual&quot;</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.4</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_ribbon</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span> <span class="o">=</span> <span class="n">Negative</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="s">&quot;Audio &lt; Visual&quot;</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.4</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_ribbon</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="n">CI_low</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">CI_high</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.2</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_line</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="o">=</span><span class="m">0</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">theme_eeg</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">theme</span><span class="p">(</span><span class="n">axis.line.x</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">())</span> <span class="o">+</span>
+    <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="s">&quot;Significant difference (p &lt; .05)&quot;</span><span class="p">,</span>
+                      <span class="n">values</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;Audio &gt; Visual&quot;</span><span class="o">=</span><span class="s">&quot;#00C853&quot;</span><span class="p">,</span>
+                               <span class="s">&quot;Audio &lt; Visual&quot;</span><span class="o">=</span><span class="s">&quot;#f44336&quot;</span><span class="p">))</span>
+  <span class="n">p1</span> <span class="o">/</span> <span class="n">p2</span>
+<span class="p">}</span>
+<span class="nf">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-10-1.png" /><!-- --></p>
+<p>This plot shows the original raw averages (dotted lines), the predicted
+values by the model and their confidence interval (CI), as well as the
+difference between the two conditions (estimated as marginal contrasts).</p>
+</section>
+<section id="general-additive-model-gam">
+<h3>General Additive Model (GAM)<a class="headerlink" href="#general-additive-model-gam" title="Permalink to this headline">#</a></h3>
+<p>General Additive Model (GAM)</p>
+<p>Fit a GAM with cubic splines using the <code class="docutils literal notranslate"><span class="pre">bam()</span></code> function that is
+optimized for very large datasets.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">mgcv</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">&lt;-</span> <span class="n">mgcv</span><span class="o">::</span><span class="nf">bam</span><span class="p">(</span><span class="n">EEG</span> <span class="o">~</span> <span class="n">Condition</span> <span class="o">+</span> <span class="nf">s</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s">&quot;cr&quot;</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-12-1.png" /><!-- --></p>
+<p>As we can see, though it gives decent results, it seems like the default
+smoothing is a bit too strong. This is an issue as our process of
+interest (event-related potentials) are known to be of very high
+frequency with sharp changes.</p>
+<p>Fortunately, it is possible to decrease the smoothness by increasing the
+number of degrees of freedom of the smooth term. Similarly to the spline
+regression above, we will set the dimension <em>k</em> to 5% to the length of
+the epochs, which in our case corresponds to <code class="docutils literal notranslate"><span class="pre">0.05</span> <span class="pre">*</span> <span class="pre">600</span> <span class="pre">ms</span></code>.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">gam.check</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="c1">##</span>
+<span class="c1">## Method: fREML   Optimizer: perf newton</span>
+<span class="c1">## full convergence after 8 iterations.</span>
+<span class="c1">## Gradient range [-2.92e-07,2.28e-07]</span>
+<span class="c1">## (score 36800 &amp; scale 0.967).</span>
+<span class="c1">## Hessian positive definite, eigenvalue range [3.3,13102].</span>
+<span class="c1">## Model rank =  20 / 20</span>
+<span class="c1">##</span>
+<span class="c1">## Basis dimension (k) checking results. Low p-value (k-index&lt;1) may</span>
+<span class="c1">## indicate that k is too low, especially if edf is close to k&#39;.</span>
+<span class="c1">##</span>
+<span class="c1">##                           k&#39;  edf k-index p-value</span>
+<span class="c1">## s(Time):Conditionaudio  9.00 8.68    1.02    0.92</span>
+<span class="c1">## s(Time):Conditionvisual 9.00 8.83    1.02    0.89</span>
+
+<span class="n">model</span> <span class="o">&lt;-</span> <span class="n">mgcv</span><span class="o">::</span><span class="nf">bam</span><span class="p">(</span><span class="n">EEG</span> <span class="o">~</span> <span class="n">Condition</span> <span class="o">+</span> <span class="nf">s</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="m">0.05</span> <span class="o">*</span> <span class="m">600</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s">&quot;cr&quot;</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-14-1.png" /><!-- --></p>
+</section>
+<section id="using-data-from-all-the-channels">
+<h3>Using data from all the channels<a class="headerlink" href="#using-data-from-all-the-channels" title="Permalink to this headline">#</a></h3>
+<p>It is important to note that all the channels contribute in the same way
+to these differences, and taking into account the variability of this
+data could reinforce our model.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reshape the data in a long format</span>
+<span class="n">data_long</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">pivot_longer</span><span class="p">(</span><span class="nf">starts_with</span><span class="p">(</span><span class="s">&quot;EEG.&quot;</span><span class="p">),</span> <span class="n">names_to</span><span class="o">=</span><span class="s">&quot;Channel&quot;</span><span class="p">,</span> <span class="n">values_to</span><span class="o">=</span><span class="s">&quot;Signal&quot;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Channel</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Channel</span><span class="p">))</span>
+
+<span class="n">data_long</span> <span class="o">%&gt;%</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Channel</span><span class="p">,</span> <span class="n">Time</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarise_all</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Time</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Signal</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">Condition</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="nf">interaction</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Channel</span><span class="p">)))</span> <span class="o">+</span>
+  <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;audio&quot;</span><span class="o">=</span><span class="s">&quot;#FF5722&quot;</span><span class="p">,</span> <span class="s">&quot;visual&quot;</span><span class="o">=</span><span class="s">&quot;#2196F3&quot;</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="s">&quot;audio&quot;</span><span class="o">=</span><span class="s">&quot;#FF5722&quot;</span><span class="p">,</span> <span class="s">&quot;visual&quot;</span><span class="o">=</span><span class="s">&quot;#2196F3&quot;</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;EEG&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_eeg</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">ggtitle</span><span class="p">(</span><span class="s">&quot;Average effet of each channel&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-15-1.png" /><!-- --></p>
+<p>We will add use the data from all the channels of the cluster by adding
+them as a random factor in the model (random slopes are added for the
+condition factor).</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model_full</span> <span class="o">&lt;-</span> <span class="n">mgcv</span><span class="o">::</span><span class="nf">bam</span><span class="p">(</span><span class="n">Signal</span> <span class="o">~</span> <span class="n">Condition</span> <span class="o">+</span> <span class="nf">s</span><span class="p">(</span><span class="n">Time</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">Condition</span><span class="p">,</span> <span class="n">k</span> <span class="o">=</span> <span class="m">0.05</span> <span class="o">*</span> <span class="m">600</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s">&quot;cr&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="nf">s</span><span class="p">(</span><span class="n">Condition</span><span class="p">,</span> <span class="n">Channel</span><span class="p">,</span> <span class="n">bs</span><span class="o">=</span><span class="s">&#39;re&#39;</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">data_long</span><span class="p">)</span>
+
+<span class="nf">plot_model</span><span class="p">(</span><span class="n">model_full</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-16-1.png" /><!-- --></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">performance</span><span class="o">::</span><span class="nf">compare_performance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model_full</span><span class="p">)</span>
+<span class="c1">## # Comparison of Model Performance Indices</span>
+<span class="c1">##</span>
+<span class="c1">## Model      | Type |      AIC |      BIC |   R2 | RMSE | BF</span>
+<span class="c1">## ----------------------------------------------------------</span>
+<span class="c1">## model      |  bam | 73490.40 | 73777.79 | 0.04 | 0.98 |</span>
+<span class="c1">## model_full |  bam | 7.35e+05 | 7.36e+05 | 0.03 | 0.98 |  0</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<p>GAMs offer a flexible and powerful way to model ERPs. Moreover, these
+models can be extended to include more covariates, hopefully increasing
+the signal to noise ratio.</p>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<div id="refs" class="references">
+<div id="ref-gramfort2013meg">
+<p>Gramfort, A., Luessi, M., Larson, E., Engemann, D. A., Strohmeier, D.,
+Brodbeck, C., … others. (2013). MEG and eeg data analysis with
+mne-python. <em>Frontiers in Neuroscience</em>, <em>7</em>, 267.</p>
+</div>
+<div id="ref-gramfort2014mne">
+<p>Gramfort, A., Luessi, M., Larson, E., Engemann, D. A., Strohmeier, D.,
+Brodbeck, C., … Hämäläinen, M. S. (2014). MNE software for processing
+meg and eeg data. <em>Neuroimage</em>, <em>86</em>, 446–460.</p>
+</div>
+</div></section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Studies</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="ecg_benchmark.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Benchmarking of ECG Preprocessing Methods</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

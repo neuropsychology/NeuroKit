@@ -1,0 +1,1057 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Learn Python in 10 minutes &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Contributing guide" href="contributing.html" />
+    <link rel="prev" title="Resources" href="index.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Resources
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../studies/index.html">
+   Studies
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/erp_gam.html">
+     An GAM-based Approach to EEG/ERP Analysis using Python and R
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/ecg_benchmark.html">
+     Benchmarking of ECG Preprocessing Methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/eog_blinktemplate.html">
+     Blink Template Estimation for Electrooculography (EOG)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../studies/complexity_benchmark.html">
+     Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/releases">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fresources/learn_python.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/resources/learn_python.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/resources/learn_python.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup">
+   Setup
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#variables">
+   Variables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#variables-and-data-types">
+   Variables and data types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lists-and-dictionaries">
+   Lists and dictionaries
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#basic-indexing">
+   Basic indexing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#indexing-starts-from-0">
+   Indexing starts from 0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#control-flow-if-and-else">
+   Control flow (if and else)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#for-loops">
+   For loops
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#functions">
+   Functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#packages">
+   Packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lists-vs-vectors-arrays">
+   Lists
+   <em>
+    vs.
+   </em>
+   vectors (arrays)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conditional-indexing">
+   Conditional indexing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dataframes">
+   Dataframes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reading-data">
+   Reading data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#next-steps">
+   Next steps
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Learn Python in 10 minutes</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#setup">
+   Setup
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#variables">
+   Variables
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#variables-and-data-types">
+   Variables and data types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lists-and-dictionaries">
+   Lists and dictionaries
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#basic-indexing">
+   Basic indexing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#indexing-starts-from-0">
+   Indexing starts from 0
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#control-flow-if-and-else">
+   Control flow (if and else)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#for-loops">
+   For loops
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#functions">
+   Functions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#packages">
+   Packages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#lists-vs-vectors-arrays">
+   Lists
+   <em>
+    vs.
+   </em>
+   vectors (arrays)
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conditional-indexing">
+   Conditional indexing
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dataframes">
+   Dataframes
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reading-data">
+   Reading data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#next-steps">
+   Next steps
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section id="learn-python-in-10-minutes">
+<h1>Learn Python in 10 minutes<a class="headerlink" href="#learn-python-in-10-minutes" title="Permalink to this headline">#</a></h1>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>Spotted a typo? Would like to add something or make a correction? Join us by contributing (<a class="reference external" href="https://neurokit2.readthedocs.io/en/latest/contributing/index.html">see these guides</a>).</p>
+</div>
+<p>You have no experience in computer science? You are afraid of code? You feel betrayed because you didn’t expect to do programming in psychology studies? <strong>Relax!</strong> We got you covered.</p>
+<p>This tutorial will provide you with all you need to know to dive into the wonderful world of scientific programming. The goal here is not become a programmer, or a software designer, but rather to be able to use the power of programming to get <strong>scientific results</strong>.</p>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">#</a></h2>
+<p>The first thing you will need is to <strong>install Python</strong> on your computer (see <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/installation.html">here</a>). In fact, this includes <strong>two things</strong>, installing Python (the <em>language</em>), and an <em>environment</em> to be able to use it. For this tutorial, we will assume you have something that looks like <a class="reference external" href="https://www.spyder-ide.org/">Spyder</a> (called an IDE). But you can use <a class="reference external" href="https://jupyter.org/">jupyter notebooks</a>, <a class="reference external" href="https://code.visualstudio.com/">VS Code</a> or <a class="reference external" href="https://www.guru99.com/python-ide-code-editor.html">anything else</a>, it doesn’t really matter.</p>
+<p>There is one important concept to understand here: the difference between the <strong>CONSOLE</strong> and the <strong>EDITOR</strong>. The editor is like a <em>cooking table</em> where you prepare your ingredients to make a dish, whereas the console is like the <em>oven</em>, you only open it to put the dish in it and get the result.</p>
+<p>The process of writing code usually happens in the editor, which is basically a text editor (such as notepad), except that it automatically highlights the code (making it easy to see functions, numbers, etc.). Importantly, you can directly <em>execute</em> a line of code (which is equivalent to copy it and paste it the <em>console</em>).</p>
+<p>For instance, try writing <code class="docutils literal notranslate"><span class="pre">1+1</span></code> somewhere in the file in the editor pane. Now if select the piece of code you just wrote, and press <code class="docutils literal notranslate"><span class="pre">F9</span></code> (or <code class="docutils literal notranslate"><span class="pre">CTRL</span> <span class="pre">+</span> <span class="pre">ENTER</span></code>, or <code class="docutils literal notranslate"><span class="pre">SHIFT</span> <span class="pre">+</span> <span class="pre">ENTER</span></code> in VS Code), it will <strong>execute it</strong> (on Spyder, but the shortcut for running a line might be different in other IDEs).</p>
+<img alt="https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_1.jpg" src="https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_1.jpg" />
+<p>As a result, you should see in the console the order that you gave and, below, its <strong>output</strong> (which is: <code class="docutils literal notranslate"><span class="pre">2</span></code>).</p>
+<p>Now that the distinction between where we write the code and where the output appears is clear, take some time to explore the settings and turn the editor background to <strong>DARK</strong>. <em>Why?</em> Because it’s more comfortable for the eyes, but most importantly, because it’s cool 😎</p>
+<img alt="https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_2.png" src="https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_2.png" />
+<p><strong>Congrats, you’ve become a programmer</strong>, a wizard of the modern times.</p>
+<p>You can now save the file (<code class="docutils literal notranslate"><span class="pre">CTRL</span> <span class="pre">+</span> <span class="pre">S</span></code>), which will be saved with a <code class="docutils literal notranslate"><span class="pre">.py</span></code> extension (i.e., a Python script). Try closing everything and reopening this file with the editor.</p>
+</section>
+<section id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">#</a></h2>
+<p>The most important concept of programming is <strong>variables</strong>, which is a fancy name for something that you already know. Do you remember, from your mathematics classes, the famous <em>x</em>, this placeholder for any value? Well, <em>x</em> was a variable, i.e., the name referring to some other thing.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Despite to what I just said, a variable in programming is not equivalent to a variable in statistics, in which it refers to some specific data (for instance, <em>age</em> is a variable and contains multiple observations). In programming, a variable is simply the name that we give to some entity, that could be anything.</p>
+</div>
+<p>We can <em>assign</em> a value to a <em>variable</em> using the <code class="docutils literal notranslate"><span class="pre">=</span></code> sign, for instance:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="gp">In [2]: </span><span class="n">y</span> <span class="o">=</span> <span class="mi">3</span>
+</pre></div>
+</div>
+<p>Once we execute these two lines, Python will know that <code class="docutils literal notranslate"><span class="pre">x</span></code> refers to <code class="docutils literal notranslate"><span class="pre">2</span></code>, and <code class="docutils literal notranslate"><span class="pre">y</span></code> to <code class="docutils literal notranslate"><span class="pre">3</span></code>. We can now write:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [3]: </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">)</span>
+<span class="go">5</span>
+</pre></div>
+</div>
+<p>Which will print in the console the correct result.</p>
+<img alt="https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_3.png" src="https://raw.github.com/neuropsychology/Neurokit/master/docs/img/learnpython/learnpython_3.png" />
+<p>We can also store the output in a third variable:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="gp">In [5]: </span><span class="n">y</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="gp">In [6]: </span><span class="n">anothervariable</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+
+<span class="gp">In [7]: </span><span class="nb">print</span><span class="p">(</span><span class="n">anothervariable</span><span class="p">)</span>
+<span class="go">6</span>
+</pre></div>
+</div>
+</section>
+<section id="variables-and-data-types">
+<h2>Variables and data types<a class="headerlink" href="#variables-and-data-types" title="Permalink to this headline">#</a></h2>
+<p>The next important thing to have in mind is that variables have <strong>types</strong>. Basic types include <strong>integers</strong> (numbers without decimals), <strong>floats</strong> (numbers with decimals), <strong>strings</strong> (character text) and <strong>booleans</strong> (<code class="docutils literal notranslate"><span class="pre">True</span></code> and <code class="docutils literal notranslate"><span class="pre">False</span></code>). Depending on their type, the variables will not behave in the same way. For example, try:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">3</span>
+
+<span class="gp">In [9]: </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;1&quot;</span> <span class="o">+</span> <span class="s2">&quot;2&quot;</span><span class="p">)</span>
+<span class="go">12</span>
+</pre></div>
+</div>
+<p>What happened here? Well, quotations (<code class="docutils literal notranslate"><span class="pre">&quot;I</span> <span class="pre">am</span> <span class="pre">quoted&quot;</span></code>) are used to represent <strong>strings</strong> (i.e., text). So in the second line, the numbers that we added were not numbers, but text. And when you add strings together in Python, it <em>concatenates</em> them.</p>
+<p>One can change the type of a variable with the following:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="nb">int</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># transform the input to an integer</span>
+<span class="gh">Out[10]: </span><span class="go">1</span>
+
+<span class="gp">In [11]: </span><span class="nb">float</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># transform the input to a float (decimal)</span>
+<span class="gh">Out[11]: </span><span class="go">1.0</span>
+
+<span class="gp">In [12]: </span><span class="nb">str</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># transform the input into text</span>
+<span class="gh">Out[12]: </span><span class="go">&#39;1&#39;</span>
+</pre></div>
+</div>
+<p>Also, here I used the hashtag symbol to <strong>make comments</strong>, i.e., writing stuff that won’t be executed by Python. This is super useful to annotate each line of your code to remember what you do - and why you do it.</p>
+<p>Types are often the source of many errors as they usually are <strong>incompatible</strong> between them. For instance, you cannot add a <em>number</em> (<code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code>) with a <em>character string</em>. For instance, try running <code class="docutils literal notranslate"><span class="pre">3</span> <span class="pre">+</span> <span class="pre">&quot;a&quot;</span></code>, it will throw a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="mi">3</span> <span class="o">+</span> <span class="s2">&quot;a&quot;</span>
+<span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [13],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="mi">3</span> <span class="o">+</span> <span class="s2">&quot;a&quot;</span>
+
+<span class="ne">TypeError</span>: unsupported operand type(s) for +: &#39;int&#39; and &#39;str&#39;
+</pre></div>
+</div>
+<p>You can see that the message of this error is not as obscure as it seems. In fact, getting used to having and understanding error and warning messages is an central part of the programming experience!</p>
+</section>
+<section id="lists-and-dictionaries">
+<h2>Lists and dictionaries<a class="headerlink" href="#lists-and-dictionaries" title="Permalink to this headline">#</a></h2>
+<p>Two other important types are <strong>lists</strong> and <strong>dictionaries</strong>. You can think of them as <strong>containers</strong>, as they contain multiple variables. The main difference between them is that in a <strong>list</strong>, you access the individual elements that it contains <strong>by its order</strong> (for instance, <em>“give me the third one”</em>), whereas in a <strong>dictionary</strong>, you access an element by its name (also known as <strong>key</strong>), for example <em>“give me the element named A”</em>.</p>
+<p>A list is created using square brackets, and a dictionary using curly brackets. Importantly, in a dictionary, you must specify a name to each element. Here’s what it looks like:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">mylist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="gp">In [15]: </span><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Keep in mind that there are more types of containers, such as <em>arrays</em> and <em>dataframes</em>, that we will talk about later.</p>
+</section>
+<section id="basic-indexing">
+<h2>Basic indexing<a class="headerlink" href="#basic-indexing" title="Permalink to this headline">#</a></h2>
+<p>There’s no point in storing elements in containers if we cannot access them later on. As mentioned earlier, we can access elements from a <strong>dictionary</strong> by its key within square brackets (note that here the square brackets don’t mean <em>list</em>, just mean <em>within the previous container</em>).</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
+
+<span class="gp">In [17]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">mydict</span><span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">]</span>
+
+<span class="gp">In [18]: </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+<p><strong>Exercice time!</strong> If you have followed this tutorial so far, you should be able to guess what the following code will output:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [19]: </span><span class="n">mydict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;1&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">}</span>
+
+<span class="gp">In [20]: </span><span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [21]: </span><span class="n">y</span> <span class="o">=</span> <span class="n">mydict</span><span class="p">[</span><span class="n">x</span><span class="p">]</span>
+
+<span class="gp">In [22]: </span><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+<span class="go">42</span>
+</pre></div>
+</div>
+<p><strong>Answer</strong>: If you guessed <strong>42</strong>, you’re right, congrats! If you guessed <strong>7</strong>, you have likely confused the <strong>variable</strong> named <code class="docutils literal notranslate"><span class="pre">x</span></code> (which represents 1+1 converted to a character), with the character <code class="docutils literal notranslate"><span class="pre">&quot;x&quot;</span></code>. And if you guessed <strong>0</strong>… what is wrong with you?</p>
+</section>
+<section id="indexing-starts-from-0">
+<h2>Indexing starts from 0<a class="headerlink" href="#indexing-starts-from-0" title="Permalink to this headline">#</a></h2>
+<p>As mentioned earlier, one can access elements from a list by its <strong>order</strong>. However, <strong>and there is very important to remember</strong> (the source of many beginner errors), in Python, <strong>the order starts from 0</strong>. That means that the <strong>first element is the 0th</strong>.</p>
+<p>So if we want the 2nd element of the list, we have to ask for the 1th:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [23]: </span><span class="n">mylist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="gp">In [24]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">mylist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="gp">In [25]: </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">2</span>
+</pre></div>
+</div>
+</section>
+<section id="control-flow-if-and-else">
+<h2>Control flow (if and else)<a class="headerlink" href="#control-flow-if-and-else" title="Permalink to this headline">#</a></h2>
+<p>One important notion in programming is control flow. You want the code to do something different depending on a condition. For instance, if <code class="docutils literal notranslate"><span class="pre">x</span></code> is lower than 3, print “lower than 3”. In Python, this is done as follows:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="gp">In [27]: </span><span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">   ....: </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;lower than 3&quot;</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+<span class="go">lower than 3</span>
+</pre></div>
+</div>
+<p>One very important thing to notice is that the <strong>if statement</strong> corresponds to a “chunk” of code, as signified by the colon <code class="docutils literal notranslate"><span class="pre">:</span></code>. The chunk is usually written below, and has to be <strong>indented</strong> (you can indent a line or a chunk of code by pressing the <code class="docutils literal notranslate"><span class="pre">TAB</span></code> key).</p>
+<p><em>What is indentation?</em></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">this</span>
+<span class="go">    is</span>
+<span class="go">        indentation</span>
+</pre></div>
+</div>
+<p>This indentation must be consistent: usually one level of indentation corresponds to 4 spaces. Make sure you respect that throughout your script, as this is very important in Python. If you break the rule, it will throw an <strong>error</strong>. Try running the following:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [28]: </span><span class="k">if</span> <span class="mi">2</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">   ....: </span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;lower than 3&quot;</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+<span class="go">lower than 3</span>
+</pre></div>
+</div>
+<p>Finally, <strong>if</strong> statements can be followed by <strong>else</strong> statements, which takes care of what happens if the condition is not fulfilled:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [29]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="gp">In [30]: </span><span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+<span class="gp">   ....: </span>     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;lower&quot;</span><span class="p">)</span>
+<span class="gp">   ....: </span><span class="k">else</span><span class="p">:</span>
+<span class="gp">   ....: </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;higher&quot;</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+<span class="go">higher</span>
+</pre></div>
+</div>
+<p>Again, note the <strong>indentation</strong> and how the <strong>else</strong> statement creates a new indented chunk.</p>
+</section>
+<section id="for-loops">
+<h2>For loops<a class="headerlink" href="#for-loops" title="Permalink to this headline">#</a></h2>
+<p>One of the most used concept is <strong>loops</strong>, and in particular <strong>for loops</strong>. Loops are chunks of code that will be run several times, until a condition is complete.</p>
+<p>The <strong>for loops</strong> create a <em>variable</em> that will successively take all the values of a list (or other <strong>iterable</strong> types). Let’s look at the code below:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [31]: </span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]:</span>
+<span class="gp">   ....: </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;var = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
+<span class="gp">   ....: </span>
+<span class="go">var = 1</span>
+<span class="go">var = 2</span>
+<span class="go">var = 3</span>
+</pre></div>
+</div>
+<p>Here, the <strong>for loop</strong> creates a variable (that we named <cite>var</cite>), that will successively take all the values of the provided list.</p>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">#</a></h2>
+<p>Now that you know what a <strong>variable</strong> is, as well as the purpose of little things like <strong>if</strong>, <strong>else</strong>, <strong>for</strong>, etc., the last most common thing that you will find in code are <strong>function</strong> calls. In fact, we have already used some of them! Indeed, things like <code class="docutils literal notranslate"><span class="pre">print()</span></code>, <code class="docutils literal notranslate"><span class="pre">str()</span></code> and <code class="docutils literal notranslate"><span class="pre">int()</span></code> were functions. And in fact, you’ve probably encountered them in secondary school mathematics! Remember <em>f(x)</em>?</p>
+<p>One important thing about functions is that <em>most of the time</em> (not always though), it takes something <strong>in</strong>, and returns something <strong>out</strong>. It’s like a <strong>factory</strong>, you give it some raw material and it outputs some transformed stuff.</p>
+<p>For instance, let’s say we want to transform a variable containing an <code class="docutils literal notranslate"><span class="pre">integer</span></code> into a character <code class="docutils literal notranslate"><span class="pre">string</span></code>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [32]: </span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="gp">In [33]: </span><span class="n">x</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="gp">In [34]: </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>As we can see, our <code class="docutils literal notranslate"><span class="pre">str()</span></code> function takes <code class="docutils literal notranslate"><span class="pre">x</span></code> as an input, and outputs the transformed version, that we can collect using the equal sign <code class="docutils literal notranslate"><span class="pre">=</span></code> and store in the <code class="docutils literal notranslate"><span class="pre">x</span></code> variable to <strong>replace</strong> its content.</p>
+<p>Another useful function is <code class="docutils literal notranslate"><span class="pre">range()</span></code>, that creates a sequence of integers, and is often used in combination with <strong>for</strong> loops. Remember our previous loop:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [35]: </span><span class="n">mylist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="gp">In [36]: </span><span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">mylist</span><span class="p">:</span>
+<span class="gp">   ....: </span>    <span class="nb">print</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+<span class="gp">   ....: </span>
+<span class="go">1</span>
+<span class="go">2</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>We can re-write it using the <code class="docutils literal notranslate"><span class="pre">range()</span></code> function, to create a sequence of <strong>length 3</strong> (which will be from <code class="docutils literal notranslate"><span class="pre">0</span></code> to <code class="docutils literal notranslate"><span class="pre">2</span></code>; remember that Python indexing starts from 0!), and extracting and printing all of the elements in the list:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [37]: </span><span class="n">mylist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="gp">In [38]: </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+<span class="gp">   ....: </span>    <span class="nb">print</span><span class="p">(</span><span class="n">mylist</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="gp">   ....: </span>
+<span class="go">1</span>
+<span class="go">2</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+<p>You might say that this loop is a bit more complicated than the first version, it’s true. But that’s the beauty of programming, all things can be done in a near-infinite amount of ways, allowing for your creativity to be expressed.</p>
+<p><strong>Exercice time!</strong> Can you try making a loop so that we add <code class="docutils literal notranslate"><span class="pre">1</span></code> to each element of the list?</p>
+<p><strong>Answer</strong>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [39]: </span><span class="n">mylist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="gp">In [40]: </span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+<span class="gp">   ....: </span>    <span class="n">mylist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mylist</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="gp">   ....: </span>
+
+<span class="gp">In [41]: </span><span class="nb">print</span><span class="p">(</span><span class="n">mylist</span><span class="p">)</span>
+<span class="go">[2, 3, 4]</span>
+</pre></div>
+</div>
+<p>If you understand what happened here, in this combination of lists, functions, loops and indexing, great! You are ready to move on.</p>
+</section>
+<section id="packages">
+<h2>Packages<a class="headerlink" href="#packages" title="Permalink to this headline">#</a></h2>
+<p>Interestingly, Python alone does not include a lot of functions. <strong>And that’s also its strength</strong>, because it allows to easily use functions developped by other people, that are stored in <strong>packages</strong> (or <em>modules</em>). A package is a collection of functions that can be downloaded and used in your code.</p>
+<p>One of the most popular package is <strong>numpy</strong> (for <em>NUM*rical *PY*thon), including a lot of functions for maths and scientific programming. It is likely that this package is already **installed*</em> on your Python distribution. However, installing a package doesn’t mean you can use it. In order to use a package, you have to <strong>import it</strong> (<em>load it</em>) in your script, before using it. This usually happens at the top of a Python file, like this:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="kn">import</span> <span class="nn">numpy</span>
+</pre></div>
+</div>
+<p>Once you have imported it (you have to run that line), you can use its functions. For instance, let’s use the function to compute <strong>square roots</strong> included in this package:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [43]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="gp">In [44]: </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
+<p>You will notice that we have to first <strong>write the package name</strong>, and then a <strong>dot</strong>, and then the <code class="docutils literal notranslate"><span class="pre">sqrt()</span></code> function. Why is it like that? Imagine you load two packages, both having a function named <code class="docutils literal notranslate"><span class="pre">sqrt()</span></code>. How would the program know which one to use? Here, it knows that it has to look for the <code class="docutils literal notranslate"><span class="pre">sqrt()</span></code> function in the <code class="docutils literal notranslate"><span class="pre">numpy</span></code> package.</p>
+<p>You might think, <em>it’s annoying to write the name of the package everytime</em>, especially if the package name is long. And this is why we sometimes use <em>aliases</em>. For instance, <em>numpy</em> is often loaded under the shortcut <strong>np</strong>, which makes it shorter to use:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [45]: </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="gp">In [46]: </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+
+<span class="gp">In [47]: </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">3.0</span>
+</pre></div>
+</div>
+</section>
+<section id="lists-vs-vectors-arrays">
+<h2>Lists <em>vs.</em> vectors (arrays)<a class="headerlink" href="#lists-vs-vectors-arrays" title="Permalink to this headline">#</a></h2>
+<p>Packages can also add new <strong>types</strong>. One important type available through <strong>numpy</strong> is <strong>arrays</strong>.</p>
+<p>In short, an array is a container, similar to a <strong>list</strong>. However, it can only contain one type of things inside (for instance, only <em>floats</em>, only <em>strings</em>, etc.) and can be multidimensional (imagine a 3D cube made of little cubes containing a value). If an array is one-dimensional (like a list, i.e., a sequence of elements), we can call it a <strong>vector</strong>.</p>
+<p>A list can be converted to a vector using the <code class="docutils literal notranslate"><span class="pre">array()</span></code> function from the <strong>numpy</strong> package:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [48]: </span><span class="n">mylist</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="gp">In [49]: </span><span class="n">myvector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mylist</span><span class="p">)</span>
+
+<span class="gp">In [50]: </span><span class="nb">print</span><span class="p">(</span><span class="n">myvector</span><span class="p">)</span>
+<span class="go">[1 2 3]</span>
+</pre></div>
+</div>
+<p>In signal processing, vectors are often used instead of lists to store the signal values, because they are more efficient and allow to do some cool stuff with it. For instance, remember our exercice above? In which we had to add <code class="docutils literal notranslate"><span class="pre">1</span></code> to each element of the list? Well using vectors, you can do this directly like this:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [51]: </span><span class="n">myvector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span>
+
+<span class="gp">In [52]: </span><span class="n">myvector</span> <span class="o">=</span> <span class="n">myvector</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="gp">In [53]: </span><span class="nb">print</span><span class="p">(</span><span class="n">myvector</span><span class="p">)</span>
+<span class="go">[2 3 4]</span>
+</pre></div>
+</div>
+<p>Indeed, vectors allow for <em>vectorized</em> operations, which means that any operation is propagated on each element of the vector. And that’s very useful for signal processing :)</p>
+</section>
+<section id="conditional-indexing">
+<h2>Conditional indexing<a class="headerlink" href="#conditional-indexing" title="Permalink to this headline">#</a></h2>
+<p>Arrays can also be transformed in arrays of <strong>booleans</strong> (<code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code>) using a condition, for instance:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [54]: </span><span class="n">myvector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="gp">In [55]: </span><span class="n">vector_of_bools</span> <span class="o">=</span> <span class="n">myvector</span> <span class="o">&lt;=</span> <span class="mi">2</span>  <span class="c1"># &lt;= means inferior OR equal</span>
+
+<span class="gp">In [56]: </span><span class="nb">print</span><span class="p">(</span><span class="n">vector_of_bools</span><span class="p">)</span>
+<span class="go">[ True  True False  True  True]</span>
+</pre></div>
+</div>
+<p>This returns a vector of the same length but filled with <code class="docutils literal notranslate"><span class="pre">True</span></code> (if the condition is respected) or <code class="docutils literal notranslate"><span class="pre">False</span></code> otherwise. And this new vector can be used as a <strong>mask</strong> to index and subset the original vector. For instance, we can select all the elements of the array that fulfills this condition:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [57]: </span><span class="n">myvector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="gp">In [58]: </span><span class="n">mask</span> <span class="o">=</span> <span class="n">myvector</span> <span class="o">&lt;=</span> <span class="mi">2</span>
+
+<span class="gp">In [59]: </span><span class="n">subset</span> <span class="o">=</span> <span class="n">myvector</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+
+<span class="gp">In [60]: </span><span class="nb">print</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span>
+<span class="go">[1 2 2 1]</span>
+</pre></div>
+</div>
+<p>Additionally, we can also modify a subset of values on the fly:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [61]: </span><span class="n">myvector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="gp">In [62]: </span><span class="n">myvector</span><span class="p">[</span><span class="n">myvector</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">6</span>
+
+<span class="gp">In [63]: </span><span class="nb">print</span><span class="p">(</span><span class="n">myvector</span><span class="p">)</span>
+<span class="go">[6 6 3 6 6]</span>
+</pre></div>
+</div>
+<p>Here we assigned a new value <code class="docutils literal notranslate"><span class="pre">6</span></code> to all elements of the vector that respected the condition (were inferior or equal to 2).</p>
+</section>
+<section id="dataframes">
+<h2>Dataframes<a class="headerlink" href="#dataframes" title="Permalink to this headline">#</a></h2>
+<p>If you’ve followed everything until now, congrats! You’re almost there. The last important type that we are going to see is <strong>dataframes</strong>. A dataframe is essentially a table with rows and columns. Often, the rows represent different <strong>observations</strong> and the columns different <strong>variables</strong>.</p>
+<p>Dataframes are available in Python through the <strong>pandas</strong> package, another very used package, usually imported under the shortcut <code class="docutils literal notranslate"><span class="pre">pd</span></code>. A dataframe can be constructed from a <em>dictionary</em>: the <strong>key</strong> will become the <strong>variable name</strong>, and the list or vector associated will become the <strong>variable values</strong>.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [64]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="go"># Create variables</span>
+<span class="gp">In [65]: </span><span class="n">var1</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+<span class="gp">In [66]: </span><span class="n">var2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+
+<span class="go"># Put them in a dict</span>
+<span class="gp">In [67]: </span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;Variable1&quot;</span><span class="p">:</span> <span class="n">var1</span><span class="p">,</span> <span class="s2">&quot;Variable2&quot;</span><span class="p">:</span> <span class="n">var2</span><span class="p">}</span>
+
+<span class="go"># Convert this dict to a dataframe</span>
+<span class="gp">In [68]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="gp">In [69]: </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">   Variable1  Variable2</span>
+<span class="go">0          1          5</span>
+<span class="go">1          2          6</span>
+<span class="go">2          3          7</span>
+</pre></div>
+</div>
+<p>This creates a dataframe with 3 rows (the observations) and 2 columns (the variables). One can access the variables by their name:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [70]: </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Variable1&quot;</span><span class="p">])</span>
+<span class="go">0    1</span>
+<span class="go">1    2</span>
+<span class="go">2    3</span>
+<span class="go">Name: Variable1, dtype: int64</span>
+</pre></div>
+</div>
+<p>Note that Python cares about the <strong>case</strong>: <code class="docutils literal notranslate"><span class="pre">tHiS</span></code> is not equivalent to <code class="docutils literal notranslate"><span class="pre">ThIs`.</span> <span class="pre">And</span> <span class="pre">``pd.DataFrame</span></code> has to be written with the <em>D</em> and <em>F</em> in capital letters. This is another common source of beginner errors, so make sure you put capital letters at the right place.</p>
+</section>
+<section id="reading-data">
+<h2>Reading data<a class="headerlink" href="#reading-data" title="Permalink to this headline">#</a></h2>
+<p>Now that you know how to create a dataframe in Python, note that you also use <strong>pandas</strong> to read data from a file (<em>.csv</em>, <em>excel</em>, etc.) by its <em>path</em>:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [71]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [72]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s2">&quot;C:/Users/Dumbledore/Desktop/myfile.xlsx&quot;</span><span class="p">)</span>  <span class="c1"># this is an example</span>
+
+<span class="gp">In [73]: </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Additionally, this can also read data directly from the internet! Try running the following:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [74]: </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="gp">In [75]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;https://raw.githubusercontent.com/neuropsychology/NeuroKit/master/data/bio_eventrelated_100hz.csv&quot;</span><span class="p">)</span>
+
+<span class="gp">In [76]: </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">            ECG        EDA  Photosensor       RSP</span>
+<span class="go">0     -0.015869  13.196868          5.0  0.778931</span>
+<span class="go">1     -0.011703  13.197173          5.0  0.777588</span>
+<span class="go">2     -0.009766  13.197020          5.0  0.777435</span>
+<span class="go">3     -0.013321  13.197631          5.0  0.777557</span>
+<span class="go">4     -0.009583  13.196715          5.0  0.775299</span>
+<span class="go">...         ...        ...          ...       ...</span>
+<span class="go">14995 -0.007675  14.873656          5.0  1.351868</span>
+<span class="go">14996 -0.005203  14.873961          5.0  1.356689</span>
+<span class="go">14997 -0.004272  14.874266          5.0  1.361938</span>
+<span class="go">14998 -0.000458  14.875335          5.0  1.366821</span>
+<span class="go">14999  0.000244  14.874114          5.0  1.372040</span>
+
+<span class="go">[15000 rows x 4 columns]</span>
+</pre></div>
+</div>
+</section>
+<section id="next-steps">
+<h2>Next steps<a class="headerlink" href="#next-steps" title="Permalink to this headline">#</a></h2>
+<p>Now that you know the basis, and that you can distinguish between the different elements of Python code (functions calls, variables, etc.), we recommend that you dive in and try to follow our other examples and tutorials, that will show you some usages of Python to get something out of it.</p>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Resources</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="contributing.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Contributing guide</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

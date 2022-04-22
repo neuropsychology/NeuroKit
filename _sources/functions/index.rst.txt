@@ -1,0 +1,17 @@
+Functions
+==========
+
+You can find here the API documentation of NeuroKit, with a description of all the functions and examples on how to use them.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Modules
+   :titlesonly:
+
+   functions_data
+   functions_ecg
+   functions_rsp
+   functions_hrv
+   functions_ppg
+   functions_complexity
+

@@ -1,0 +1,1459 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Benchmarking of ECG Preprocessing Methods &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Blink Template Estimation for Electrooculography (EOG)" href="eog_blinktemplate.html" />
+    <link rel="prev" title="An GAM-based Approach to EEG/ERP Analysis using Python and R" href="erp_gam.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Studies
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="erp_gam.html">
+     An GAM-based Approach to EEG/ERP Analysis using Python and R
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Benchmarking of ECG Preprocessing Methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eog_blinktemplate.html">
+     Blink Template Estimation for Electrooculography (EOG)
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="complexity_benchmark.html">
+     Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/releases">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fstudies/ecg_benchmark.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/studies/ecg_benchmark.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/studies/ecg_benchmark.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#databases">
+   Databases
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#glasgow-university-database">
+     Glasgow University Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mit-bih-arrhythmia-database">
+     MIT-BIH Arrhythmia Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mit-bih-normal-sinus-rhythm-database">
+     MIT-BIH Normal Sinus Rhythm Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lobachevsky-university-electrocardiography-database">
+     Lobachevsky University Electrocardiography Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fantasia-database">
+     Fantasia Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#concanate-them-together">
+     Concanate them together
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#study-1-comparing-different-r-peaks-detection-algorithms">
+   Study 1: Comparing Different R-Peaks Detection Algorithms
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#procedure">
+     Procedure
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#setup-functions">
+       Setup Functions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#run-the-benchmarking">
+       Run the Benchmarking
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#results">
+     Results
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#errors-and-bugs">
+       Errors and bugs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#computation-time">
+       Computation Time
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#descriptive-statistics">
+         Descriptive Statistics
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#statistical-modelling">
+         Statistical Modelling
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#accuracy">
+       Accuracy
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id1">
+         Descriptive Statistics
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id2">
+         Statistical Modelling
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#conclusion">
+     Conclusion
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#study-2-normalization">
+   Study 2: Normalization
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     Procedure
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id4">
+       Setup Functions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id5">
+       Run the Benchmarking
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     Results
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id7">
+       Accuracy
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id8">
+         Descriptive Statistics
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id9">
+         Statistical Modelling
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     Conclusion
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#study-3-low-frequency-trends-removal">
+   Study 3: Low Frequency Trends Removal
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id11">
+     Procedure
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id12">
+       Setup Functions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id13">
+       Run the Benchmarking
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Benchmarking of ECG Preprocessing Methods</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#databases">
+   Databases
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#glasgow-university-database">
+     Glasgow University Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mit-bih-arrhythmia-database">
+     MIT-BIH Arrhythmia Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#mit-bih-normal-sinus-rhythm-database">
+     MIT-BIH Normal Sinus Rhythm Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lobachevsky-university-electrocardiography-database">
+     Lobachevsky University Electrocardiography Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fantasia-database">
+     Fantasia Database
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#concanate-them-together">
+     Concanate them together
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#study-1-comparing-different-r-peaks-detection-algorithms">
+   Study 1: Comparing Different R-Peaks Detection Algorithms
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#procedure">
+     Procedure
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#setup-functions">
+       Setup Functions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#run-the-benchmarking">
+       Run the Benchmarking
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#results">
+     Results
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#errors-and-bugs">
+       Errors and bugs
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#computation-time">
+       Computation Time
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#descriptive-statistics">
+         Descriptive Statistics
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#statistical-modelling">
+         Statistical Modelling
+        </a>
+       </li>
+      </ul>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#accuracy">
+       Accuracy
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id1">
+         Descriptive Statistics
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id2">
+         Statistical Modelling
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#conclusion">
+     Conclusion
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#study-2-normalization">
+   Study 2: Normalization
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id3">
+     Procedure
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id4">
+       Setup Functions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id5">
+       Run the Benchmarking
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id6">
+     Results
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id7">
+       Accuracy
+      </a>
+      <ul class="nav section-nav flex-column">
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id8">
+         Descriptive Statistics
+        </a>
+       </li>
+       <li class="toc-h5 nav-item toc-entry">
+        <a class="reference internal nav-link" href="#id9">
+         Statistical Modelling
+        </a>
+       </li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id10">
+     Conclusion
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#study-3-low-frequency-trends-removal">
+   Study 3: Low Frequency Trends Removal
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#id11">
+     Procedure
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id12">
+       Setup Functions
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#id13">
+       Run the Benchmarking
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="benchmarking-of-ecg-preprocessing-methods">
+<h1>Benchmarking of ECG Preprocessing Methods<a class="headerlink" href="#benchmarking-of-ecg-preprocessing-methods" title="Permalink to this headline">#</a></h1>
+<p><em>This study can be referenced by</em> <a class="reference external" href="https://github.com/neuropsychology/NeuroKit#citation"><em>citing the
+package</em></a>.</p>
+<p><strong>We’d like to publish this study, but unfortunately we currently don’t
+have the time. If you want to help to make it happen, please contact
+us!</strong></p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<p>This work is a replication and extension of the work by Porr &amp; Howell
+(2019), that compared the performance of different popular R-peak
+detectors.</p>
+</section>
+<section id="databases">
+<h2>Databases<a class="headerlink" href="#databases" title="Permalink to this headline">#</a></h2>
+<section id="glasgow-university-database">
+<h3>Glasgow University Database<a class="headerlink" href="#glasgow-university-database" title="Permalink to this headline">#</a></h3>
+<p>The GUDB Database (Howell &amp; Porr, 2018) contains ECGs from 25 subjects.
+Each subject was recorded performing 5 different tasks for two minutes
+(sitting, doing a maths test on a tablet, walking on a treadmill,
+running on a treadmill, using a hand bike). The sampling rate is 250Hz
+for all the conditions.</p>
+<p>The script to download and format the database using the
+<a class="reference external" href="https://github.com/berndporr/ECG-GUDB"><strong>ECG-GUDB</strong></a> Python package by
+Bernd Porr can be found
+<a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/dev/data/gudb/download_gudb.py"><strong>here</strong></a>.</p>
+</section>
+<section id="mit-bih-arrhythmia-database">
+<h3>MIT-BIH Arrhythmia Database<a class="headerlink" href="#mit-bih-arrhythmia-database" title="Permalink to this headline">#</a></h3>
+<p>The MIT-BIH Arrhythmia Database (MIT-Arrhythmia; Moody &amp; Mark, 2001)
+contains 48 excerpts of 30-min of two-channel ambulatory ECG recordings
+sampled at 360Hz and 25 additional recordings from the same participants
+including common but clinically significant arrhythmias (denoted as the
+<code class="docutils literal notranslate"><span class="pre">MIT-Arrhythmia-x</span></code> database).</p>
+<p>The script to download and format the database using the can be found
+<a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_arrhythmia/download_mit_arrhythmia.py"><strong>here</strong></a>.</p>
+<!-- ### MIT-BIH Noise Stress Test Database -->
+<!-- The MIT-BIH Noise Stress Test Database [MIT-NST; @moody1984bih] features two 30-minute recordings distorted by adding different types and levels of synthesized noise typical of electrode motion artefacts. -->
+</section>
+<section id="mit-bih-normal-sinus-rhythm-database">
+<h3>MIT-BIH Normal Sinus Rhythm Database<a class="headerlink" href="#mit-bih-normal-sinus-rhythm-database" title="Permalink to this headline">#</a></h3>
+<p>This database includes 18 clean long-term ECG recordings of subjects.
+Due to memory limits, we only kept the second hour of recording of each
+participant.</p>
+<p>The script to download and format the database using the can be found
+<a class="reference external" href="https://github.com/neuropsychology/NeuroKit/blob/dev/data/mit_normal/download_mit_normal.py"><strong>here</strong></a>.</p>
+</section>
+<section id="lobachevsky-university-electrocardiography-database">
+<h3>Lobachevsky University Electrocardiography Database<a class="headerlink" href="#lobachevsky-university-electrocardiography-database" title="Permalink to this headline">#</a></h3>
+<p>The Lobachevsky University Electrocardiography Database (LUDB;
+Kalyakulina et al., 2018) consists of 200 10-second 12-lead ECG signal
+records representing different morphologies of the ECG signal. The ECGs
+were collected from healthy volunteers and patients, which had various
+cardiovascular diseases. The boundaries of P, T waves and QRS complexes
+were manually annotated by cardiologists for all 200 records.</p>
+</section>
+<section id="fantasia-database">
+<h3>Fantasia Database<a class="headerlink" href="#fantasia-database" title="Permalink to this headline">#</a></h3>
+<p>The Fantasia database (Iyengar, Peng, Morin, Goldberger, &amp; Lipsitz,
+1996) consists of twenty young and twenty elderly healthy subjects. All
+subjects remained in a resting state in sinus rhythm while watching the
+movie Fantasia (Disney, 1940) to help maintain wakefulness. The
+continuous ECG signals were digitized at 250 Hz. Each heartbeat was
+annotated using an automated arrhythmia detection algorithm, and each
+beat annotation was verified by visual inspection.</p>
+</section>
+<section id="concanate-them-together">
+<h3>Concanate them together<a class="headerlink" href="#concanate-them-together" title="Permalink to this headline">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Load ECGs</span>
+<span class="n">ecgs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;../../data/gudb/ECGs.csv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;../../data/mit_arrhythmia/ECGs.csv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;../../data/mit_normal/ECGs.csv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;../../data/ludb/ECGs.csv&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;../../data/fantasia/ECGs.csv&quot;</span><span class="p">]</span>
+
+<span class="c1"># Load True R-peaks location</span>
+<span class="n">rpeaks</span> <span class="o">=</span> <span class="p">[</span><span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/gudb/Rpeaks.csv&quot;</span><span class="p">),</span>
+          <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/mit_arrhythmia/Rpeaks.csv&quot;</span><span class="p">),</span>
+          <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/mit_normal/Rpeaks.csv&quot;</span><span class="p">),</span>
+          <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/ludb/Rpeaks.csv&quot;</span><span class="p">),</span>
+          <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;../../data/fantasia/Rpeaks.csv&quot;</span><span class="p">)]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="study-1-comparing-different-r-peaks-detection-algorithms">
+<h2>Study 1: Comparing Different R-Peaks Detection Algorithms<a class="headerlink" href="#study-1-comparing-different-r-peaks-detection-algorithms" title="Permalink to this headline">#</a></h2>
+<section id="procedure">
+<h3>Procedure<a class="headerlink" href="#procedure" title="Permalink to this headline">#</a></h3>
+<section id="setup-functions">
+<h4>Setup Functions<a class="headerlink" href="#setup-functions" title="Permalink to this headline">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="k">def</span> <span class="nf">neurokit</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">pantompkins1985</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pantompkins1985&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">hamilton2002</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;hamilton2002&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">martinez2003</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;martinez2003&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">christov2004</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;christov2004&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">gamboa2008</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;gamboa2008&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">elgendi2010</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;elgendi2010&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">engzeemod2012</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;engzeemod2012&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">kalidas2017</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kalidas2017&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">rodrigues2020</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rodrigues2020&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="run-the-benchmarking">
+<h4>Run the Benchmarking<a class="headerlink" href="#run-the-benchmarking" title="Permalink to this headline">#</a></h4>
+<p><em>Note: This takes a long time (several hours).</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="n">neurokit</span><span class="p">,</span> <span class="n">pantompkins1985</span><span class="p">,</span> <span class="n">hamilton2002</span><span class="p">,</span> <span class="n">martinez2003</span><span class="p">,</span> <span class="n">christov2004</span><span class="p">,</span>
+               <span class="n">gamboa2008</span><span class="p">,</span> <span class="n">elgendi2010</span><span class="p">,</span> <span class="n">engzeemod2012</span><span class="p">,</span> <span class="n">kalidas2017</span><span class="p">,</span> <span class="n">rodrigues2020</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)):</span>
+        <span class="n">data_ecg</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ecgs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">benchmark_ecg_preprocessing</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">data_ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data_detectors.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="results">
+<h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">easystats</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">lme4</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_detectors.csv&quot;</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Method</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Method</span><span class="p">,</span> <span class="s">&quot;neurokit&quot;</span><span class="p">,</span> <span class="s">&quot;pantompkins1985&quot;</span><span class="p">,</span> <span class="s">&quot;hamilton2002&quot;</span><span class="p">,</span> <span class="s">&quot;martinez2003&quot;</span><span class="p">,</span> <span class="s">&quot;christov2004&quot;</span><span class="p">,</span> <span class="s">&quot;gamboa2008&quot;</span><span class="p">,</span> <span class="s">&quot;elgendi2010&quot;</span><span class="p">,</span> <span class="s">&quot;engzeemod2012&quot;</span><span class="p">,</span> <span class="s">&quot;kalidas2017&quot;</span><span class="p">,</span> <span class="s">&quot;rodrigues2020&quot;</span><span class="p">))</span>
+
+<span class="n">colors</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;neurokit&quot;</span><span class="o">=</span><span class="s">&quot;#E91E63&quot;</span><span class="p">,</span> <span class="s">&quot;pantompkins1985&quot;</span><span class="o">=</span><span class="s">&quot;#f44336&quot;</span><span class="p">,</span> <span class="s">&quot;hamilton2002&quot;</span><span class="o">=</span><span class="s">&quot;#FF5722&quot;</span><span class="p">,</span> <span class="s">&quot;martinez2003&quot;</span><span class="o">=</span><span class="s">&quot;#FF9800&quot;</span><span class="p">,</span> <span class="s">&quot;christov2004&quot;</span><span class="o">=</span><span class="s">&quot;#FFC107&quot;</span><span class="p">,</span> <span class="s">&quot;gamboa2008&quot;</span><span class="o">=</span><span class="s">&quot;#4CAF50&quot;</span><span class="p">,</span> <span class="s">&quot;elgendi2010&quot;</span><span class="o">=</span><span class="s">&quot;#009688&quot;</span><span class="p">,</span> <span class="s">&quot;engzeemod2012&quot;</span><span class="o">=</span><span class="s">&quot;#2196F3&quot;</span><span class="p">,</span> <span class="s">&quot;kalidas2017&quot;</span><span class="o">=</span><span class="s">&quot;#3F51B5&quot;</span><span class="p">,</span> <span class="s">&quot;rodrigues2020&quot;</span><span class="o">=</span><span class="s">&quot;#9C27B0&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="errors-and-bugs">
+<h4>Errors and bugs<a class="headerlink" href="#errors-and-bugs" title="Permalink to this headline">#</a></h4>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Error</span> <span class="o">=</span> <span class="nf">case_when</span><span class="p">(</span>
+    <span class="n">Error</span> <span class="o">==</span> <span class="s">&quot;index -1 is out of bounds for axis 0 with size 0&quot;</span> <span class="o">~</span> <span class="s">&quot;index -1 out of bounds&quot;</span><span class="p">,</span>
+    <span class="n">Error</span> <span class="o">==</span> <span class="s">&quot;index 0 is out of bounds for axis 0 with size 0&quot;</span> <span class="o">~</span> <span class="s">&quot;index 0 out of bounds&quot;</span><span class="p">,</span>
+    <span class="kc">TRUE</span> <span class="o">~</span> <span class="n">Error</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">Database</span><span class="p">,</span> <span class="n">Method</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">n</span><span class="p">())</span> <span class="o">%&gt;%</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">Database</span><span class="p">,</span> <span class="n">Method</span><span class="p">,</span> <span class="n">Error</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">summarise</span><span class="p">(</span><span class="n">Percentage</span> <span class="o">=</span> <span class="nf">n</span><span class="p">()</span> <span class="o">/</span> <span class="nf">unique</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  <span class="nf">ungroup</span><span class="p">()</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Error</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Error</span><span class="p">,</span> <span class="s">&quot;None&quot;</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Error</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Percentage</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">Method</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">geom_bar</span><span class="p">(</span><span class="n">stat</span><span class="o">=</span><span class="s">&quot;identity&quot;</span><span class="p">,</span> <span class="n">position</span> <span class="o">=</span> <span class="nf">position_dodge2</span><span class="p">(</span><span class="n">preserve</span> <span class="o">=</span> <span class="s">&quot;single&quot;</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Database</span><span class="p">,</span> <span class="n">nrow</span><span class="o">=</span><span class="m">5</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">size</span> <span class="o">=</span> <span class="m">7</span><span class="p">,</span> <span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../studies/ecg_preprocessing/figures/unnamed-chunk-6-1.png" /><!-- --></p>
+<p><strong>Conclusion:</strong> It seems that <code class="docutils literal notranslate"><span class="pre">gamboa2008</span></code> and <code class="docutils literal notranslate"><span class="pre">martinez2003</span></code> are
+particularly prone to errors, especially in the case of a noisy ECG
+signal. Aside from that, the other algorithms are quite resistant and
+bug-free.</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">Error</span> <span class="o">==</span> <span class="s">&quot;None&quot;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">Score</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="computation-time">
+<h4>Computation Time<a class="headerlink" href="#computation-time" title="Permalink to this headline">#</a></h4>
+<section id="descriptive-statistics">
+<h5>Descriptive Statistics<a class="headerlink" href="#descriptive-statistics" title="Permalink to this headline">#</a></h5>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="c1"># Normalize duration</span>
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="p">(</span><span class="n">Duration</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">Recording_Length</span> <span class="o">*</span> <span class="n">Sampling_Rate</span><span class="p">))</span>
+
+<span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Method</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Duration</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="n">Method</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">geom_jitter2</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">Method</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">Database</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="nf">position_jitterdodge</span><span class="p">())</span> <span class="o">+</span>
+    <span class="nf">geom_boxplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="n">Database</span><span class="p">),</span> <span class="n">outlier.alpha</span> <span class="o">=</span> <span class="m">0</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dotted&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_alpha_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">1</span><span class="p">,</span> <span class="n">length.out</span><span class="o">=</span><span class="m">8</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_y_sqrt</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Duration (seconds per data sample)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../studies/ecg_preprocessing/figures/unnamed-chunk-8-1.png" /><!-- --></p>
+<!-- ```{r, warning=FALSE, message=FALSE} -->
+<!-- # Interaction time and recording length -->
+<!-- data %>%  -->
+<!--   ggplot(aes(x=Recording_Length, y=Duration, color=Method)) + -->
+<!--     geom_jitter(aes(shape=Database), size=3, alpha=0.7) + -->
+<!--     geom_smooth(method="lm", se = FALSE) + -->
+<!--     theme_modern() + -->
+<!--     theme(axis.text.x = element_text(angle = 45, hjust = 1)) + -->
+<!--     scale_color_manual(values=colors) + -->
+<!--     scale_fill_manual(values=colors) + -->
+<!--     scale_y_sqrt() -->
+<!-- ``` -->
+</section>
+<section id="statistical-modelling">
+<h5>Statistical Modelling<a class="headerlink" href="#statistical-modelling" title="Permalink to this headline">#</a></h5>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lmer</span><span class="p">(</span><span class="n">Duration</span> <span class="o">~</span> <span class="n">Method</span> <span class="o">+</span> <span class="p">(</span><span class="m">1</span><span class="o">|</span><span class="n">Database</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="m">1</span><span class="o">|</span><span class="n">Participant</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">means</span> <span class="o">&lt;-</span> <span class="n">modelbased</span><span class="o">::</span><span class="nf">estimate_means</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="nf">arrange</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="n">Mean</span><span class="p">)</span>
+<span class="c1">## Method          |     Mean |       SE |       95% CI</span>
+<span class="c1">## ----------------------------------------------------</span>
+<span class="c1">## gamboa2008      | 2.90e-05 | 1.18e-05 | [0.00, 0.00]</span>
+<span class="c1">## neurokit        | 3.25e-05 | 1.17e-05 | [0.00, 0.00]</span>
+<span class="c1">## martinez2003    | 6.59e-05 | 1.18e-05 | [0.00, 0.00]</span>
+<span class="c1">## kalidas2017     | 7.80e-05 | 1.17e-05 | [0.00, 0.00]</span>
+<span class="c1">## rodrigues2020   | 1.29e-04 | 1.17e-05 | [0.00, 0.00]</span>
+<span class="c1">## hamilton2002    | 1.68e-04 | 1.17e-05 | [0.00, 0.00]</span>
+<span class="c1">## engzeemod2012   | 5.10e-04 | 1.18e-05 | [0.00, 0.00]</span>
+<span class="c1">## pantompkins1985 | 5.64e-04 | 1.17e-05 | [0.00, 0.00]</span>
+<span class="c1">## elgendi2010     | 9.80e-04 | 1.18e-05 | [0.00, 0.00]</span>
+<span class="c1">## christov2004    |     0.00 | 1.17e-05 | [0.00, 0.00]</span>
+
+<span class="n">means</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Method</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Mean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Method</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="m">1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_pointrange</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="n">CI_low</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">CI_high</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dotted&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Duration (seconds per data sample)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../studies/ecg_preprocessing/figures/unnamed-chunk-9-1.png" /><!-- --></p>
+<p><strong>Conclusion:</strong> It seems that <code class="docutils literal notranslate"><span class="pre">gamboa2008</span></code> and <code class="docutils literal notranslate"><span class="pre">neurokit</span></code> are the
+fastest methods, followed by <code class="docutils literal notranslate"><span class="pre">martinez2003</span></code>, <code class="docutils literal notranslate"><span class="pre">kalidas2017</span></code>,
+<code class="docutils literal notranslate"><span class="pre">rodrigues2020</span></code> and <code class="docutils literal notranslate"><span class="pre">hamilton2002</span></code>. The other methods are then
+substantially slower.</p>
+</section>
+</section>
+<section id="accuracy">
+<h4>Accuracy<a class="headerlink" href="#accuracy" title="Permalink to this headline">#</a></h4>
+<p><strong>Note:</strong> The accuracy is computed as the absolute distance from the
+original “true” R-peaks location. As such, the closest to zero, the
+better the accuracy.</p>
+<section id="id1">
+<h5>Descriptive Statistics<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h5>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Outlier</span> <span class="o">=</span> <span class="n">performance</span><span class="o">::</span><span class="nf">check_outliers</span><span class="p">(</span><span class="n">Score</span><span class="p">,</span> <span class="n">threshold</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">zscore</span> <span class="o">=</span> <span class="n">stats</span><span class="o">::</span><span class="nf">qnorm</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="m">1</span> <span class="o">-</span> <span class="m">0.000001</span><span class="p">))))</span> <span class="o">%&gt;%</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Outlier</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Database</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Score</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">geom_boxplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="n">Method</span><span class="p">),</span> <span class="n">outlier.alpha</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_jitter2</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">Method</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">Method</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="nf">position_jitterdodge</span><span class="p">())</span> <span class="o">+</span>
+    <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dotted&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_y_sqrt</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Amount of Error&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../studies/ecg_preprocessing/figures/unnamed-chunk-10-1.png" /><!-- --></p>
+</section>
+<section id="id2">
+<h5>Statistical Modelling<a class="headerlink" href="#id2" title="Permalink to this headline">#</a></h5>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lmer</span><span class="p">(</span><span class="n">Score</span> <span class="o">~</span> <span class="n">Method</span> <span class="o">+</span> <span class="p">(</span><span class="m">1</span><span class="o">|</span><span class="n">Database</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="m">1</span><span class="o">|</span><span class="n">Participant</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">means</span> <span class="o">&lt;-</span> <span class="n">modelbased</span><span class="o">::</span><span class="nf">estimate_means</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+
+<span class="nf">arrange</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="nf">abs</span><span class="p">(</span><span class="n">Mean</span><span class="p">))</span>
+<span class="c1">## Method          | Mean |   SE |       95% CI</span>
+<span class="c1">## --------------------------------------------</span>
+<span class="c1">## neurokit        | 0.01 | 0.00 | [0.00, 0.02]</span>
+<span class="c1">## kalidas2017     | 0.02 | 0.00 | [0.01, 0.03]</span>
+<span class="c1">## martinez2003    | 0.02 | 0.01 | [0.01, 0.03]</span>
+<span class="c1">## christov2004    | 0.05 | 0.01 | [0.04, 0.06]</span>
+<span class="c1">## engzeemod2012   | 0.05 | 0.01 | [0.04, 0.06]</span>
+<span class="c1">## pantompkins1985 | 0.07 | 0.01 | [0.06, 0.08]</span>
+<span class="c1">## rodrigues2020   | 0.07 | 0.01 | [0.06, 0.08]</span>
+<span class="c1">## hamilton2002    | 0.08 | 0.01 | [0.07, 0.09]</span>
+<span class="c1">## elgendi2010     | 0.09 | 0.01 | [0.08, 0.10]</span>
+<span class="c1">## gamboa2008      | 0.22 | 0.01 | [0.20, 0.24]</span>
+
+<span class="n">means</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Method</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Mean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Method</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="m">1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_pointrange</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="n">CI_low</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">CI_high</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dotted&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Amount of Error&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../studies/ecg_preprocessing/figures/unnamed-chunk-11-1.png" /><!-- --></p>
+<p><strong>Conclusion:</strong> It seems that <code class="docutils literal notranslate"><span class="pre">neurokit</span></code>, <code class="docutils literal notranslate"><span class="pre">kalidas2017</span></code> and
+<code class="docutils literal notranslate"><span class="pre">martinez2003</span></code> the most accurate algorithms to detect R-peaks. This
+pattern of results differs a bit from Porr &amp; Howell (2019) that outlines
+<code class="docutils literal notranslate"><span class="pre">engzeemod2012</span></code>, <code class="docutils literal notranslate"><span class="pre">elgendi2010</span></code>, <code class="docutils literal notranslate"><span class="pre">kalidas2017</span></code> as the most accurate and
+<code class="docutils literal notranslate"><span class="pre">christov2004</span></code>, <code class="docutils literal notranslate"><span class="pre">hamilton2002</span></code> and <code class="docutils literal notranslate"><span class="pre">pantompkins1985</span></code> as the worse.
+Discrepancies could be due to the differences in data and analysis, as
+here we used more databases and modelled them by respecting their
+hierarchical structure using mixed models.</p>
+</section>
+</section>
+</section>
+<section id="conclusion">
+<h3>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h3>
+<p>Based on the accuracy / execution time criterion, it seems like
+<code class="docutils literal notranslate"><span class="pre">neurokit</span></code> is the best R-peak detection method, followed by
+<code class="docutils literal notranslate"><span class="pre">kalidas2017</span></code>.</p>
+</section>
+</section>
+<section id="study-2-normalization">
+<h2>Study 2: Normalization<a class="headerlink" href="#study-2-normalization" title="Permalink to this headline">#</a></h2>
+<section id="id3">
+<h3>Procedure<a class="headerlink" href="#id3" title="Permalink to this headline">#</a></h3>
+<section id="id4">
+<h4>Setup Functions<a class="headerlink" href="#id4" title="Permalink to this headline">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="k">def</span> <span class="nf">none</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">mean_detrend</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">standardize</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="id5">
+<h4>Run the Benchmarking<a class="headerlink" href="#id5" title="Permalink to this headline">#</a></h4>
+<p><em>Note: This takes a long time (several hours).</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="n">none</span><span class="p">,</span> <span class="n">mean_detrend</span><span class="p">,</span> <span class="n">standardize</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rpeaks</span><span class="p">)):</span>
+        <span class="n">data_ecg</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">ecgs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">benchmark_ecg_preprocessing</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">data_ecg</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data_normalization.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id6">
+<h3>Results<a class="headerlink" href="#id6" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">easystats</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">lme4</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_normalization.csv&quot;</span><span class="p">,</span> <span class="n">stringsAsFactors</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Database</span> <span class="o">=</span> <span class="nf">ifelse</span><span class="p">(</span><span class="nf">str_detect</span><span class="p">(</span><span class="n">Database</span><span class="p">,</span> <span class="s">&quot;GUDB&quot;</span><span class="p">),</span> <span class="nf">paste0</span><span class="p">(</span><span class="nf">str_replace</span><span class="p">(</span><span class="n">Database</span><span class="p">,</span> <span class="s">&quot;GUDB_&quot;</span><span class="p">,</span> <span class="s">&quot;GUDB (&quot;</span><span class="p">),</span> <span class="s">&quot;)&quot;</span><span class="p">),</span> <span class="n">Database</span><span class="p">),</span>
+         <span class="n">Method</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Method</span><span class="p">,</span> <span class="s">&quot;none&quot;</span><span class="p">,</span> <span class="s">&quot;mean_removal&quot;</span><span class="p">,</span> <span class="s">&quot;standardization&quot;</span><span class="p">),</span>
+         <span class="n">Participant</span> <span class="o">=</span> <span class="nf">paste0</span><span class="p">(</span><span class="n">Database</span><span class="p">,</span> <span class="n">Participant</span><span class="p">))</span> <span class="o">%&gt;%</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Error</span> <span class="o">==</span> <span class="s">&quot;None&quot;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">Score</span><span class="p">))</span>
+
+<span class="n">colors</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;none&quot;</span><span class="o">=</span><span class="s">&quot;#607D8B&quot;</span><span class="p">,</span> <span class="s">&quot;mean_removal&quot;</span><span class="o">=</span><span class="s">&quot;#673AB7&quot;</span><span class="p">,</span> <span class="s">&quot;standardization&quot;</span><span class="o">=</span><span class="s">&quot;#00BCD4&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="id7">
+<h4>Accuracy<a class="headerlink" href="#id7" title="Permalink to this headline">#</a></h4>
+<section id="id8">
+<h5>Descriptive Statistics<a class="headerlink" href="#id8" title="Permalink to this headline">#</a></h5>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Outlier</span> <span class="o">=</span> <span class="n">performance</span><span class="o">::</span><span class="nf">check_outliers</span><span class="p">(</span><span class="n">Score</span><span class="p">,</span> <span class="n">threshold</span> <span class="o">=</span> <span class="nf">list</span><span class="p">(</span><span class="n">zscore</span> <span class="o">=</span> <span class="n">stats</span><span class="o">::</span><span class="nf">qnorm</span><span class="p">(</span><span class="n">p</span> <span class="o">=</span> <span class="m">1</span> <span class="o">-</span> <span class="m">0.000001</span><span class="p">))))</span> <span class="o">%&gt;%</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Outlier</span> <span class="o">==</span> <span class="m">0</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Database</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Score</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">geom_boxplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="n">Method</span><span class="p">),</span> <span class="n">outlier.alpha</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">geom_jitter2</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">Method</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">Method</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">3</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="m">0.2</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="nf">position_jitterdodge</span><span class="p">())</span> <span class="o">+</span>
+    <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="o">=</span><span class="m">0</span><span class="p">,</span> <span class="n">linetype</span><span class="o">=</span><span class="s">&quot;dotted&quot;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_y_sqrt</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Amount of Error&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../studies/ecg_preprocessing/figures/unnamed-chunk-15-1.png" /><!-- --></p>
+</section>
+<section id="id9">
+<h5>Statistical Modelling<a class="headerlink" href="#id9" title="Permalink to this headline">#</a></h5>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lmer</span><span class="p">(</span><span class="n">Score</span> <span class="o">~</span> <span class="n">Method</span> <span class="o">+</span> <span class="p">(</span><span class="m">1</span><span class="o">|</span><span class="n">Database</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="m">1</span><span class="o">|</span><span class="n">Participant</span><span class="p">),</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">modelbased</span><span class="o">::</span><span class="nf">estimate_contrasts</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="c1">## Level1       |          Level2 | Difference |       SE |        95% CI |     t |     df |     p | Difference (std.)</span>
+<span class="c1">## -------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1">## mean_removal | standardization |  -1.01e-07 | 1.29e-07 | [ 0.00, 0.00] | -0.78 | 553.00 | 0.872 |         -2.08e-05</span>
+<span class="c1">## none         |    mean_removal |  -8.72e-08 | 1.29e-07 | [ 0.00, 0.00] | -0.68 | 553.00 | 0.872 |         -1.81e-05</span>
+<span class="c1">## none         | standardization |  -1.88e-07 | 1.28e-07 | [ 0.00, 0.00] | -1.47 | 553.00 | 0.429 |         -3.89e-05</span>
+
+<span class="n">means</span> <span class="o">&lt;-</span> <span class="n">modelbased</span><span class="o">::</span><span class="nf">estimate_means</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="nf">arrange</span><span class="p">(</span><span class="n">means</span><span class="p">,</span> <span class="nf">abs</span><span class="p">(</span><span class="n">Mean</span><span class="p">))</span>
+<span class="c1">## Method          | Mean |       SE |       95% CI</span>
+<span class="c1">## ------------------------------------------------</span>
+<span class="c1">## none            | 0.01 | 5.13e-04 | [0.00, 0.01]</span>
+<span class="c1">## mean_removal    | 0.01 | 5.13e-04 | [0.00, 0.01]</span>
+<span class="c1">## standardization | 0.01 | 5.13e-04 | [0.00, 0.01]</span>
+
+<span class="n">means</span> <span class="o">%&gt;%</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">Method</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Mean</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">Method</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">group</span><span class="o">=</span><span class="m">1</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_pointrange</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span><span class="o">=</span><span class="n">CI_low</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="n">CI_high</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="m">1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">ylab</span><span class="p">(</span><span class="s">&quot;Amount of Error&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../studies/ecg_preprocessing/figures/unnamed-chunk-16-1.png" /><!-- --></p>
+</section>
+</section>
+</section>
+<section id="id10">
+<h3>Conclusion<a class="headerlink" href="#id10" title="Permalink to this headline">#</a></h3>
+<p>No significant benefits added by normalization for the <code class="docutils literal notranslate"><span class="pre">neurokit</span></code>
+method.</p>
+</section>
+</section>
+<section id="study-3-low-frequency-trends-removal">
+<h2>Study 3: Low Frequency Trends Removal<a class="headerlink" href="#study-3-low-frequency-trends-removal" title="Permalink to this headline">#</a></h2>
+<section id="id11">
+<h3>Procedure<a class="headerlink" href="#id11" title="Permalink to this headline">#</a></h3>
+<section id="id12">
+<h4>Setup Functions<a class="headerlink" href="#id12" title="Permalink to this headline">#</a></h4>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="k">def</span> <span class="nf">none</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="c1"># Detrending-based</span>
+<span class="k">def</span> <span class="nf">polylength</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecg</span><span class="p">)</span> <span class="o">/</span> <span class="n">sampling_rate</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;polynomial&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">tarvainen</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;tarvainen2002&quot;</span><span class="p">)</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">locreg</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_detrend</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span>
+                            <span class="n">method</span><span class="o">=</span><span class="s2">&quot;locreg&quot;</span><span class="p">,</span>
+                            <span class="n">window</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">sampling_rate</span><span class="p">,</span>
+                            <span class="n">stepsize</span><span class="o">=</span><span class="mf">0.02</span><span class="o">*</span><span class="n">sampling_rate</span><span class="p">)</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">rollingz</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="p">):</span>
+    <span class="n">ecg</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">standardize</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">sampling_rate</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">signal</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">ecg</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="n">sampling_rate</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;neurokit&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;ECG_R_Peaks&quot;</span><span class="p">]</span>
+
+<span class="c1"># Filtering-based</span>
+</pre></div>
+</div>
+</section>
+<section id="id13">
+<h4>Run the Benchmarking<a class="headerlink" href="#id13" title="Permalink to this headline">#</a></h4>
+<p><em>Note: This takes a very long time (several hours).</em></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="n">none</span><span class="p">,</span> <span class="n">polylength</span><span class="p">,</span> <span class="n">tarvainen</span><span class="p">,</span> <span class="n">locreg</span><span class="p">,</span> <span class="n">rollingz</span><span class="p">]:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">benchmark_ecg_preprocessing</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">ecgs</span><span class="p">,</span> <span class="n">rpeaks</span><span class="p">)</span>
+    <span class="n">result</span><span class="p">[</span><span class="s2">&quot;Method&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span><span class="o">.</span><span class="vm">__name__</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">results</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data_lowfreq.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+<div id="refs" class="references">
+<div id="ref-howell2018high">
+<p>Howell, L., &amp; Porr, B. (2018). <em>High precision ecg database with
+annotated r peaks, recorded and filmed under realistic conditions</em>.</p>
+</div>
+<div id="ref-iyengar1996age">
+<p>Iyengar, N., Peng, C., Morin, R., Goldberger, A. L., &amp; Lipsitz, L. A.
+(1996). Age-related alterations in the fractal scaling of cardiac
+interbeat interval dynamics. <em>American Journal of Physiology-Regulatory,
+Integrative and Comparative Physiology</em>, <em>271</em>(4), R1078–R1084.</p>
+</div>
+<div id="ref-kalyakulina2018lu">
+<p>Kalyakulina, A. I., Yusipov, I. I., Moskalenko, V. A., Nikolskiy, A. V.,
+Kozlov, A. A., Kosonogov, K. A., … Ivanchenko, M. V. (2018). LU
+electrocardiography database: A new open-access validation tool for
+delineation algorithms. <em>arXiv Preprint arXiv:1809.03393</em>.</p>
+</div>
+<div id="ref-moody2001impact">
+<p>Moody, G. B., &amp; Mark, R. G. (2001). The impact of the mit-bih arrhythmia
+database. <em>IEEE Engineering in Medicine and Biology Magazine</em>, <em>20</em>(3),
+45–50.</p>
+</div>
+<div id="ref-porr2019r">
+<p>Porr, B., &amp; Howell, L. (2019). R-peak detector stress test with a new
+noisy ecg database reveals significant performance differences amongst
+popular detectors. <em>bioRxiv</em>, 722397.</p>
+</div>
+</div></section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="erp_gam.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">An GAM-based Approach to EEG/ERP Analysis using Python and R</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="eog_blinktemplate.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Blink Template Estimation for Electrooculography (EOG)</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

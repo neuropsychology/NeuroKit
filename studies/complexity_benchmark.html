@@ -1,0 +1,837 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 &#8212; NeuroKit2 0.1.8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <link rel="shortcut icon" href="../_static/icon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Blink Template Estimation for Electrooculography (EOG)" href="eog_blinktemplate.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/neurokit.png" class="logo" alt="logo">
+      
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Menu
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction.html">
+   Overview
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../authors.html">
+   Authors
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../cite_us.html">
+   Cite us
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../resources/index.html">
+   Resources
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/learn_python.html">
+     Learn Python in 10 minutes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/contributing.html">
+     Contributing guide
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/recording.html">
+     Recording good quality signals
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../resources/resources.html">
+     Additional Resources
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../functions/index.html">
+   Functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_data.html">
+     Data
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_ecg.html">
+     ECG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_rsp.html">
+     RSP
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_hrv.html">
+     HRV
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_ppg.html">
+     PPG
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../functions/functions_complexity.html">
+     Complexity
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Studies
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="erp_gam.html">
+     An GAM-based Approach to EEG/ERP Analysis using Python and R
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ecg_benchmark.html">
+     Benchmarking of ECG Preprocessing Methods
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="eog_blinktemplate.html">
+     Blink Template Estimation for Electrooculography (EOG)
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference external" href="https://github.com/neuropsychology/NeuroKit/releases">
+   Changelog
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/issues/new?title=Issue%20on%20page%20%2Fstudies/complexity_benchmark.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/neuropsychology/NeuroKit/edit/website-overhaul/docs_wip/studies/complexity_benchmark.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/studies/complexity_benchmark.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#methods">
+   Methods
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-generation">
+     Data Generation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#results">
+   Results
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#average-computation-time">
+     Average Computation Time
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sensitivity-to-signal-length">
+     Sensitivity to Signal Length
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#visualization">
+       Visualization
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#average">
+       Average
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#model-based">
+       Model-based
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#correlation">
+     Correlation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hierarchical-clustering">
+     Hierarchical CLustering
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#introduction">
+   Introduction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#methods">
+   Methods
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-generation">
+     Data Generation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#results">
+   Results
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#average-computation-time">
+     Average Computation Time
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sensitivity-to-signal-length">
+     Sensitivity to Signal Length
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#visualization">
+       Visualization
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#average">
+       Average
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#model-based">
+       Model-based
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#correlation">
+     Correlation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#hierarchical-clustering">
+     Hierarchical CLustering
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#references">
+   References
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <!-- # Benchmarking and Analysis of Complexity Measures -->
+<section class="tex2jax_ignore mathjax_ignore" id="measuring-chaos-complexity-and-fractal-physiology-using-neurokit2">
+<h1>Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2<a class="headerlink" href="#measuring-chaos-complexity-and-fractal-physiology-using-neurokit2" title="Permalink to this headline">#</a></h1>
+<p><em>This study can be referenced by</em> <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html"><em>citing the package and the
+documentation</em></a>.</p>
+<p><strong>We’d like to improve this study, but unfortunately we currently don’t
+have the time. If you want to help to make it happen, please contact
+us!</strong></p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<p>The goal for NeuroKit is to provide the most comprehensive, accurate and
+fastest base Python implementations of complexity indices (fractal
+dimension, entropy, etc.).</p>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">#</a></h2>
+<section id="data-generation">
+<h3>Data Generation<a class="headerlink" href="#data-generation" title="Permalink to this headline">#</a></h3>
+<p>The script to generate the data can be found at …</p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">easystats</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">patchwork</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_Signals.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Method</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Method</span><span class="p">),</span>
+         <span class="n">Noise</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Noise</span><span class="p">),</span>
+         <span class="n">Intensity</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">insight</span><span class="o">::</span><span class="nf">format_value</span><span class="p">(</span><span class="n">Noise_Intensity</span><span class="p">)))</span>
+
+<span class="n">df</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Intensity</span> <span class="o">%in%</span> <span class="nf">levels</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Intensity</span><span class="p">)[</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="p">,</span> <span class="nf">round</span><span class="p">(</span><span class="nf">length</span><span class="p">(</span><span class="nf">levels</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Intensity</span><span class="p">))</span> <span class="o">/</span> <span class="m">2</span><span class="p">),</span> <span class="nf">length</span><span class="p">(</span><span class="nf">levels</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Intensity</span><span class="p">)))])</span>
+
+<span class="n">p1</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Method</span> <span class="o">==</span> <span class="s">&quot;Random-Walk&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Duration</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">facet_grid</span><span class="p">(</span><span class="n">Intensity</span> <span class="o">~</span> <span class="n">Noise</span><span class="p">,</span> <span class="n">labeller</span> <span class="o">=</span> <span class="n">label_both</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Random-Walk&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">))</span>
+
+<span class="n">p2</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Method</span> <span class="o">==</span> <span class="s">&quot;lorenz_10_2.5_28&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Duration</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="s">&quot;blue&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">facet_grid</span><span class="p">(</span><span class="n">Intensity</span> <span class="o">~</span> <span class="n">Noise</span><span class="p">,</span> <span class="n">labeller</span> <span class="o">=</span> <span class="n">label_both</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Lorenz (sigma=10, beta=2.5, rho=28)&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">))</span>
+
+<span class="n">p1</span> <span class="o">/</span> <span class="n">p2</span> <span class="o">+</span> <span class="n">patchwork</span><span class="o">::</span><span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Examples of Simulated Signals&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)))</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-2-1.png" /><!-- --></p>
+</section>
+</section>
+<section id="results">
+<h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
+<section id="average-computation-time">
+<h3>Average Computation Time<a class="headerlink" href="#average-computation-time" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_Complexity.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Method</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Method</span><span class="p">))</span>
+
+<span class="n">colors</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;PFD (A)&quot;</span> <span class="o">=</span> <span class="s">&quot;#2196F3&quot;</span><span class="p">,</span>
+           <span class="s">&quot;PFD (B)&quot;</span> <span class="o">=</span> <span class="s">&quot;#2196F3&quot;</span><span class="p">,</span>
+           <span class="s">&quot;PFD (C)&quot;</span> <span class="o">=</span> <span class="s">&quot;#2196F3&quot;</span><span class="p">,</span>
+           <span class="s">&quot;PFD (D)&quot;</span> <span class="o">=</span> <span class="s">&quot;#2196F3&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">order</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">Index</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="nf">median</span><span class="p">(</span><span class="n">Duration</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">arrange</span><span class="p">(</span><span class="n">Duration</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Index</span> <span class="o">=</span> <span class="nf">factor</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="n">levels</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span>
+
+<span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">mutate</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">Index</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="nf">as.character</span><span class="p">(</span><span class="n">order</span><span class="o">$</span><span class="n">Index</span><span class="p">)))</span>
+
+<span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Index</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Duration</span><span class="p">))</span> <span class="o">+</span>
+  <span class="c1"># geom_violin(aes(fill = Index)) +</span>
+  <span class="n">ggdist</span><span class="o">::</span><span class="nf">stat_slab</span><span class="p">(</span><span class="n">side</span> <span class="o">=</span> <span class="s">&quot;bottom&quot;</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Index</span><span class="p">),</span> <span class="n">adjust</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span> <span class="o">+</span>
+  <span class="n">ggdist</span><span class="o">::</span><span class="nf">stat_dotsinterval</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Index</span><span class="p">,</span> <span class="n">slab_size</span> <span class="o">=</span> <span class="kc">NA</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">scale_y_log10</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="n">colors</span><span class="p">,</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">vjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">&quot;Computation Time&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-4-1.png" /><!-- --></p>
+</section>
+<section id="sensitivity-to-signal-length">
+<h3>Sensitivity to Signal Length<a class="headerlink" href="#sensitivity-to-signal-length" title="Permalink to this headline">#</a></h3>
+<section id="visualization">
+<h4>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">#</a></h4>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dfsummary</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="n">Length</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">summarize</span><span class="p">(</span><span class="n">CI_low</span> <span class="o">=</span> <span class="nf">median</span><span class="p">(</span><span class="n">Duration</span><span class="p">)</span> <span class="o">-</span> <span class="nf">sd</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span>
+            <span class="n">CI_high</span> <span class="o">=</span> <span class="nf">median</span><span class="p">(</span><span class="n">Duration</span><span class="p">)</span> <span class="o">+</span> <span class="nf">sd</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span>
+            <span class="n">Duration</span> <span class="o">=</span> <span class="nf">median</span><span class="p">(</span><span class="n">Duration</span><span class="p">))</span>
+<span class="n">dfsummary</span><span class="o">$</span><span class="n">CI_low</span><span class="p">[</span><span class="n">dfsummary</span><span class="o">$</span><span class="n">CI_low</span> <span class="o">&lt;</span> <span class="m">0</span><span class="p">]</span> <span class="o">&lt;-</span> <span class="m">0</span>
+
+
+<span class="nf">ggplot</span><span class="p">(</span><span class="n">dfsummary</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Index</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Duration</span><span class="p">))</span> <span class="o">+</span>
+  <span class="c1"># geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = &quot;dotted&quot;) +</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="n">Length</span><span class="p">,</span> <span class="n">group</span> <span class="o">=</span> <span class="n">Length</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_point</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">Length</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">scale_y_log10</span><span class="p">(</span><span class="n">breaks</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0.001</span><span class="p">,</span> <span class="m">0.01</span><span class="p">,</span> <span class="m">0.1</span><span class="p">,</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">vjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">guides</span><span class="p">(</span><span class="n">alpha</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="s">&quot;Time to compute&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;Signal length&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/time1-1.png" /><!-- --></p>
+</section>
+<section id="average">
+<h4>Average<a class="headerlink" href="#average" title="Permalink to this headline">#</a></h4>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Length</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Duration</span><span class="p">))</span> <span class="o">+</span>
+  <span class="c1"># geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = &quot;dotted&quot;) +</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">dfsummary</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">group</span> <span class="o">=</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_violin</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Length</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Index</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_y_log10</span><span class="p">(</span><span class="n">breaks</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0.001</span><span class="p">,</span> <span class="m">0.01</span><span class="p">,</span> <span class="m">0.1</span><span class="p">,</span> <span class="m">1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_fill_viridis_c</span><span class="p">(</span><span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">vjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="m">1</span><span class="p">))</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/time2-1.png" /><!-- --></p>
+</section>
+<section id="model-based">
+<h4>Model-based<a class="headerlink" href="#model-based" title="Permalink to this headline">#</a></h4>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lm</span><span class="p">(</span><span class="n">Result</span> <span class="o">~</span> <span class="n">Index</span> <span class="o">/</span> <span class="nf">poly</span><span class="p">(</span><span class="n">Length</span><span class="p">,</span> <span class="m">2</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">)</span>
+
+<span class="n">parameters</span><span class="o">::</span><span class="nf">parameters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">keep</span> <span class="o">=</span> <span class="s">&quot;poly&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">arrange</span><span class="p">(</span><span class="nf">desc</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">Coefficient</span><span class="p">)))</span>
+<span class="c1">## Parameter                          | Coefficient |       SE |         95% CI | t(468) |      p</span>
+<span class="c1">## ----------------------------------------------------------------------------------------------</span>
+<span class="c1">## Index [PFD (A)] * poly(Length, 2)1 |       -0.06 | 3.66e-03 | [-0.07, -0.06] | -17.40 | &lt; .001</span>
+<span class="c1">## Index [PFD (B)] * poly(Length, 2)1 |       -0.04 | 3.66e-03 | [-0.05, -0.04] | -11.84 | &lt; .001</span>
+<span class="c1">## Index [PFD (A)] * poly(Length, 2)2 |        0.03 | 3.66e-03 | [ 0.03,  0.04] |   8.85 | &lt; .001</span>
+<span class="c1">## Index [PFD (B)] * poly(Length, 2)2 |        0.02 | 3.66e-03 | [ 0.02,  0.03] |   6.09 | &lt; .001</span>
+<span class="c1">## Index [PFD (C)] * poly(Length, 2)1 |       -0.01 | 3.66e-03 | [-0.02,  0.00] |  -3.22 | 0.001</span>
+<span class="c1">## Index [PFD (C)] * poly(Length, 2)2 |    8.30e-03 | 3.66e-03 | [ 0.00,  0.02] |   2.27 | 0.024</span>
+<span class="c1">## Index [PFD (D)] * poly(Length, 2)2 |    6.73e-05 | 3.66e-03 | [-0.01,  0.01] |   0.02 | 0.985</span>
+<span class="c1">## Index [PFD (D)] * poly(Length, 2)1 |   -6.18e-05 | 3.66e-03 | [-0.01,  0.01] |  -0.02 | 0.987</span>
+
+<span class="nf">estimate_relation</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Length</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Predicted</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_ribbon</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span> <span class="o">=</span> <span class="n">CI_low</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">CI_high</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="n">Index</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_point</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">Result</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Index</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-5-1.png" /><!-- --></p>
+</section>
+</section>
+<section id="correlation">
+<h3>Correlation<a class="headerlink" href="#correlation" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="nf">paste</span><span class="p">(</span><span class="n">Signal</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">Noise</span><span class="p">,</span> <span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&quot;__&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Index</span><span class="p">,</span> <span class="n">Result</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">names_from</span> <span class="o">=</span> <span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="n">values_from</span> <span class="o">=</span> <span class="s">&quot;Result&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>
+
+<span class="n">cor</span> <span class="o">&lt;-</span> <span class="n">correlation</span><span class="o">::</span><span class="nf">correlation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;spearman&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">cor_sort</span><span class="p">()</span>
+
+<span class="n">cor</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Text</span> <span class="o">=</span> <span class="n">insight</span><span class="o">::</span><span class="nf">format_value</span><span class="p">(</span><span class="n">rho</span><span class="p">),</span>
+         <span class="n">Parameter2</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="n">Parameter2</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Parameter2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Parameter1</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_tile</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">rho</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_text</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">label</span> <span class="o">=</span> <span class="n">Text</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_fill_gradient2</span><span class="p">(</span><span class="n">low</span> <span class="o">=</span> <span class="s">&#39;#2196F3&#39;</span><span class="p">,</span> <span class="n">mid</span> <span class="o">=</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="s">&#39;#F44336&#39;</span><span class="p">,</span> <span class="n">midpoint</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> <span class="n">space</span> <span class="o">=</span> <span class="s">&#39;Lab&#39;</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Correlation&#39;</span><span class="p">,</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&#39;legend&#39;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_x_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_y_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Correlation Matrix of Complexity Indices&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">),</span>
+        <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+        <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+        <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">())</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-6-1.png" /><!-- --></p>
+</section>
+<section id="hierarchical-clustering">
+<h3>Hierarchical CLustering<a class="headerlink" href="#hierarchical-clustering" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">cluster_analysis</span><span class="p">(</span><span class="nf">as.data.frame</span><span class="p">(</span><span class="nf">t</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span> <span class="n">n</span><span class="o">=</span><span class="m">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s">&quot;hclust&quot;</span><span class="p">,</span> <span class="n">hclust_method</span><span class="o">=</span><span class="s">&quot;ward.D2&quot;</span><span class="p">)</span>
+<span class="c1"># plot(rez)</span>
+
+<span class="nf">attributes</span><span class="p">(</span><span class="n">rez</span><span class="p">)</span><span class="o">$</span><span class="n">model</span> <span class="o">|&gt;</span>
+  <span class="nf">plot</span><span class="p">(</span><span class="n">hang</span> <span class="o">=</span> <span class="m">-1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-7-1.png" /><!-- --></p>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h2>
+</section>
+</section>
+
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="eog_blinktemplate.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Blink Template Estimation for Electrooculography (EOG)</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> and the <a href="https://github.com/neuropsychology/NeuroKit/blob/master/AUTHORS.rst">Team</a><br/>
+  
+      &copy; Copyright 2020–2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
