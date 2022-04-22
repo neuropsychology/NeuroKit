@@ -471,20 +471,6 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#simulation-and-visualization">
-   Simulation and Visualization
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#complexity-simulate">
-     <em>
-      complexity_simulate()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fractal-dimension">
    Fractal Dimension
   </a>
@@ -605,6 +591,27 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#complexity-rqa">
      <em>
       complexity_rqa()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#utilities">
+   Utilities
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-simulate">
+     <em>
+      complexity_simulate()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-coarsegraining">
+     <em>
+      complexity_coarsegraining()
      </em>
     </a>
    </li>
@@ -672,20 +679,6 @@ title="Print to PDF"
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#simulation-and-visualization">
-   Simulation and Visualization
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#complexity-simulate">
-     <em>
-      complexity_simulate()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fractal-dimension">
    Fractal Dimension
   </a>
@@ -806,6 +799,27 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#complexity-rqa">
      <em>
       complexity_rqa()
+     </em>
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#utilities">
+   Utilities
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-simulate">
+     <em>
+      complexity_simulate()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-coarsegraining">
+     <em>
+      complexity_coarsegraining()
      </em>
     </a>
    </li>
@@ -1361,99 +1375,6 @@ the threshold value r for approximate entropy. IEEE Transactions on Biomedical E
 
 </section>
 </section>
-<section id="simulation-and-visualization">
-<h2>Simulation and Visualization<a class="headerlink" href="#simulation-and-visualization" title="Permalink to this headline">#</a></h2>
-<section id="complexity-simulate">
-<h3><em>complexity_simulate()</em><a class="headerlink" href="#complexity-simulate" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.complexity.complexity_simulate">
-<span class="sig-name descname"><span class="pre">complexity_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ornstein'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hurst_exponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_simulate" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Simulate chaotic time series</strong></p>
-<p>This function generates a chaotic signal using different algorithms and complex systems.</p>
-<ul class="simple">
-<li><p><strong>Mackey-Glass:</strong> Generates time series using the discrete approximation of the
-Mackey-Glass delay differential equation described by Grassberger &amp; Procaccia (1983).</p></li>
-<li><p><strong>Ornstein-Uhlenbeck</strong></p></li>
-<li><p><strong>Lorenz</strong></p></li>
-<li><p><strong>Random walk</strong></p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>duration</strong> (<em>int</em>) – Desired length of duration (s).</p></li>
-<li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
-<li><p><strong>duration</strong> (<em>int</em>) – The desired length in samples.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – The method. can be <code class="docutils literal notranslate"><span class="pre">&quot;hurst&quot;</span></code> for a (fractional) Ornstein-Uhlenbeck process, <code class="docutils literal notranslate"><span class="pre">&quot;lorenz&quot;</span></code>
-for the first dimension of a Lorenz system, <code class="docutils literal notranslate"><span class="pre">&quot;mackeyglass&quot;</span></code> to use the Mackey-Glass
-equation, or <code class="docutils literal notranslate"><span class="pre">random</span></code> to generate a random-walk.</p></li>
-<li><p><strong>hurst_exponent</strong> (<em>float</em>) – Defaults to 0.5.</p></li>
-<li><p><strong>**kwargs</strong> – Other arguments.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>array</em> – Simulated complexity time series.</p>
-</dd>
-</dl>
-<p class="rubric">Examples</p>
-<p><strong>Lorenz System</strong></p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;lorenz&quot;</span><span class="p">)</span>
-
-<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate1.png"><img alt="../_images/p_complexity_simulate1.png" src="../_images/p_complexity_simulate1.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">5</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
-<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_complexity2.png"><img alt="../_images/p_complexity2.png" src="../_images/p_complexity2.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p><strong>Ornstein System</strong></p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ornstein&quot;</span><span class="p">)</span>
-
-<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate2.png"><img alt="../_images/p_complexity_simulate2.png" src="../_images/p_complexity_simulate2.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
-<span class="gh">Out[7]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_complexity3.png"><img alt="../_images/p_complexity3.png" src="../_images/p_complexity3.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p><strong>Mackey-Glass System</strong></p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mackeyglass&quot;</span><span class="p">)</span>
-
-<span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate4.png"><img alt="../_images/p_complexity_simulate4.png" src="../_images/p_complexity_simulate4.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">25</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
-<span class="gh">Out[10]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_complexity5.png"><img alt="../_images/p_complexity5.png" src="../_images/p_complexity5.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p><strong>Random walk</strong></p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;randomwalk&quot;</span><span class="p">)</span>
-
-<span class="gp">In [12]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;orange&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_complexity_simulate6.png"><img alt="../_images/p_complexity_simulate6.png" src="../_images/p_complexity_simulate6.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">)</span>
-<span class="gh">Out[13]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_complexity7.png"><img alt="../_images/p_complexity7.png" src="../_images/p_complexity7.png" style="width: 640.0px; height: 480.0px;" /></a>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><em>array</em> – Array containing the time series.</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-</section>
 <section id="fractal-dimension">
 <h2>Fractal Dimension<a class="headerlink" href="#fractal-dimension" title="Permalink to this headline">#</a></h2>
 <section id="fractal-katz">
@@ -1521,7 +1442,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.9058256617669054</span>
+<span class="gh">Out[12]: </span><span class="go">1.691020029643482</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1531,7 +1452,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.4707691737677493</span>
+<span class="gh">Out[16]: </span><span class="go">3.799191282108057</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1624,7 +1545,7 @@ to compute PFD.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian4.png"><img alt="../_images/p_fractal_petrosian4.png" src="../_images/p_fractal_petrosian4.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">pfd</span>
-<span class="gh">Out[12]: </span><span class="go">1.0035432295734423</span>
+<span class="gh">Out[12]: </span><span class="go">1.003775259856696</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1762,7 +1683,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [9]: </span><span class="n">nld</span> <span class="o">=</span> <span class="p">[</span><span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">]</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nld</span><span class="p">)</span>  <span class="c1"># Get average</span>
-<span class="gh">Out[10]: </span><span class="go">0.5915567514079852</span>
+<span class="gh">Out[10]: </span><span class="go">0.5959178570963267</span>
 </pre></div>
 </div>
 <p><strong>Example 3</strong>: Calculate FD-NLD on sliding windows</p>
@@ -1838,7 +1759,7 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.2590385344277033</span>
+<span class="gh">Out[4]: </span><span class="go">2.5150012093404204</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1966,19 +1887,19 @@ return the permutation entropy in bit.</p></li>
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.57794728161362</span>
+<span class="gh">Out[4]: </span><span class="go">2.4931595625748963</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8620168915492608</span>
+<span class="gh">Out[6]: </span><span class="go">0.902959210057185</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9904413706889181</span>
+<span class="gh">Out[8]: </span><span class="go">0.9474948857379375</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2094,7 +2015,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.37192445689539794</span>
+<span class="gh">Out[4]: </span><span class="go">0.360524295307049</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2146,7 +2067,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.8648485031336626</span>
+<span class="gh">Out[4]: </span><span class="go">0.8666072240166796</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2470,6 +2391,201 @@ recurrences (<code class="docutils literal notranslate"><span class="pre">info['
 <ul class="simple">
 <li><p>Rawald, T., Sips, M., Marwan, N., &amp; Dransch, D. (2014). Fast computation of recurrences in
 long time series. In Translational Recurrences (pp. 17-29). Springer, Cham.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+</section>
+<section id="utilities">
+<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">#</a></h2>
+<section id="complexity-simulate">
+<h3><em>complexity_simulate()</em><a class="headerlink" href="#complexity-simulate" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.complexity_simulate">
+<span class="sig-name descname"><span class="pre">complexity_simulate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ornstein'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hurst_exponent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_simulate" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Simulate chaotic time series</strong></p>
+<p>This function generates a chaotic signal using different algorithms and complex systems.</p>
+<ul class="simple">
+<li><p><strong>Mackey-Glass:</strong> Generates time series using the discrete approximation of the
+Mackey-Glass delay differential equation described by Grassberger &amp; Procaccia (1983).</p></li>
+<li><p><strong>Ornstein-Uhlenbeck</strong></p></li>
+<li><p><strong>Lorenz</strong></p></li>
+<li><p><strong>Random walk</strong></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>duration</strong> (<em>int</em>) – Desired length of duration (s).</p></li>
+<li><p><strong>sampling_rate</strong> (<em>int</em>) – The desired sampling rate (in Hz, i.e., samples/second).</p></li>
+<li><p><strong>duration</strong> (<em>int</em>) – The desired length in samples.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – The method. can be <code class="docutils literal notranslate"><span class="pre">&quot;hurst&quot;</span></code> for a (fractional) Ornstein-Uhlenbeck process, <code class="docutils literal notranslate"><span class="pre">&quot;lorenz&quot;</span></code>
+for the first dimension of a Lorenz system, <code class="docutils literal notranslate"><span class="pre">&quot;mackeyglass&quot;</span></code> to use the Mackey-Glass
+equation, or <code class="docutils literal notranslate"><span class="pre">random</span></code> to generate a random-walk.</p></li>
+<li><p><strong>hurst_exponent</strong> (<em>float</em>) – Defaults to 0.5.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – Simulated complexity time series.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p><strong>Lorenz System</strong></p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;lorenz&quot;</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_simulate1.png"><img alt="../_images/p_complexity_simulate1.png" src="../_images/p_complexity_simulate1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">5</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+<span class="gh">Out[4]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity2.png"><img alt="../_images/p_complexity2.png" src="../_images/p_complexity2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p><strong>Ornstein System</strong></p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;ornstein&quot;</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_simulate2.png"><img alt="../_images/p_complexity_simulate2.png" src="../_images/p_complexity_simulate2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+<span class="gh">Out[7]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity3.png"><img alt="../_images/p_complexity3.png" src="../_images/p_complexity3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p><strong>Mackey-Glass System</strong></p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;mackeyglass&quot;</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;green&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_simulate4.png"><img alt="../_images/p_complexity_simulate4.png" src="../_images/p_complexity_simulate4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">25</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">)</span>
+<span class="gh">Out[10]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity5.png"><img alt="../_images/p_complexity5.png" src="../_images/p_complexity5.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p><strong>Random walk</strong></p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;randomwalk&quot;</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">nk</span><span class="o">.</span><span class="n">signal_plot</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s2">&quot;orange&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_simulate6.png"><img alt="../_images/p_complexity_simulate6.png" src="../_images/p_complexity_simulate6.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_attractor</span><span class="p">(</span><span class="n">nk</span><span class="o">.</span><span class="n">complexity_embedding</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span> <span class="o">=</span> <span class="mi">100</span><span class="p">),</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;orange&quot;</span><span class="p">)</span>
+<span class="gh">Out[13]: </span><span class="go">&lt;Figure size 640x480 with 1 Axes&gt;</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity7.png"><img alt="../_images/p_complexity7.png" src="../_images/p_complexity7.png" style="width: 640.0px; height: 480.0px;" /></a>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><em>array</em> – Array containing the time series.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="complexity-coarsegraining">
+<h3><em>complexity_coarsegraining()</em><a class="headerlink" href="#complexity-coarsegraining" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.complexity_coarsegraining">
+<span class="sig-name descname"><span class="pre">complexity_coarsegraining</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nonoverlapping'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_coarsegraining" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Coarse-graining of a signal</strong></p>
+<p>The goal of coarse-graining is to represent the signal at a different “scale”. The
+coarse-grained time series for a scale factor Tau (<span class="math notranslate nohighlight">\(\tau\)</span>) are obtained by averaging
+non-overlapping windows of size Tau. In most of the complexity metrics, multiple coarse-grained
+segments are constructed for a given signal, to represent the signal at different scales (hence
+the “multiscale” adjective).</p>
+<p>This coarse-graining procedure is similar to moving averaging and the decimation of the original
+time series. The length of each coarse-grained time series is N/Tau. For scale = 1, the
+coarse-grained time series is simply the original time series itself.</p>
+<p>The coarse graining procedure (used for instance in MSE) is considered a shortcoming that
+decreases the entropy rate artificially (Nikulin, 2004). One of the core issue is that the
+length of coarse-grained signals becomes smaller as the scale increases.</p>
+<p>To address this issue of length, several methods have been proposed, such as <strong>moving average</strong> (Wu et al. 2013), or <strong>adaptive resampling</strong> (Liu et al. 2012).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>scale</strong> (<em>int</em>) – Also regerred to as Tau <span class="math notranslate nohighlight">\(\tau\)</span>, it represents the scale factor.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;nonoverlapping&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;rolling&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;resampling&quot;</span></code>.</p></li>
+<li><p><strong>force</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will include all the samples (even if the last segment is too short).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the coarse-grained signal.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments (not used currently).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – The coarse-grained signal.</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_delay</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_dimension</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<p><strong>Simple examples</strong>
+.. ipython:: python</p>
+<blockquote>
+<div><p>signal = [0, 2, 4, 6, 8, 10]
+nk.complexity_coarsegraining(signal, scale=2)</p>
+<p>signal = [0, 1, 2, 0, 1]
+nk.complexity_coarsegraining(signal, scale=3)
+# Forcing uses all the samples even if the last segment is too short
+nk.complexity_coarsegraining(signal, scale=3, force=True)</p>
+<p>nk.complexity_coarsegraining(signal=range(10), method=”resampling”)
+nk.complexity_coarsegraining(signal=range(10), method=”rolling”)</p>
+</div></blockquote>
+<p><strong>Simulated signal</strong>
+.. ipython:: python</p>
+<blockquote>
+<div><p>signal = nk.signal_simulate(duration=2, frequency=[5, 20])</p>
+<p>&#64;savefig p_complexity_coarsegraining1.png scale=100%
+coarsegrained = nk.complexity_coarsegraining(signal, scale=40, show=True)
+&#64;suppress
+plt.close()</p>
+</div></blockquote>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">coarsegrained</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;resampling&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_coarsegraining2.png"><img alt="../_images/p_complexity_coarsegraining2.png" src="../_images/p_complexity_coarsegraining2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [2]: </span><span class="n">coarsegrained</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rolling&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_coarsegraining3.png"><img alt="../_images/p_complexity_coarsegraining3.png" src="../_images/p_complexity_coarsegraining3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p><strong>Benchmarking</strong>
+.. ipython:: python</p>
+<blockquote>
+<div><p>signal = nk.signal_simulate(duration=10, frequency=5)
+scale = 2
+x_pd = pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]
+x_nk = nk.complexity_coarsegraining(signal, scale=scale)
+np.allclose(x_pd - x_nk, 0)</p>
+<p>%timeit x_pd = pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]
+%timeit x_nk = nk.complexity_coarsegraining(signal, scale=scale)</p>
+<p>signal = nk.signal_simulate(duration=30, frequency=5)
+scale = 3</p>
+<p>x_pd = pd.Series(signal).rolling(window=scale).mean().values[scale-1::]
+x_nk = nk.complexity_coarsegraining(signal, scale=scale, rolling=True)
+np.allclose(x_pd - x_nk[1:-1], 0)</p>
+<p>%timeit pd.Series(signal).rolling(window=scale).mean().values[scale-1::]
+%timeit nk.complexity_coarsegraining(signal, scale=scale, rolling=True)</p>
+</div></blockquote>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Su, C., Liang, Z., Li, X., Li, D., Li, Y., &amp; Ursino, M. (2016). A comparison of multiscale
+permutation entropy measures in on-line depth of anesthesia monitoring. PLoS One, 11(10),
+e0164104.</p></li>
+<li><p>Nikulin, V. V., &amp; Brismar, T. (2004). Comment on “Multiscale entropy analysis of complex
+physiologic time series”” Physical review letters, 92(8), 089803.</p></li>
+<li><p>Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., &amp; Shieh, J. S. (2012).
+Adaptive computation of multiscale entropy and its application in EEG signals for monitoring
+depth of anesthesia during surgery. Entropy, 14(6), 978-992.</p></li>
+<li><p>Wu, S. D., Wu, C. W., Lee, K. Y., &amp; Lin, S. G. (2013). Modified multiscale entropy for
+short-term time series analysis. Physica A: Statistical Mechanics and its Applications, 392
+(23), 5865-5873.</p></li>
 </ul>
 </dd></dl>
 

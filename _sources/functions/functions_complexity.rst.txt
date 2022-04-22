@@ -23,12 +23,6 @@ Parameters Choice
 .. autofunction:: neurokit2.complexity.complexity_tolerance
 
 
-Simulation and Visualization
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-*complexity_simulate()*
-""""""""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.complexity_simulate
-
 
 Fractal Dimension
 ^^^^^^^^^^^^^^^^^
@@ -98,3 +92,13 @@ Other
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_rqa
 
+
+Utilities
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+*complexity_simulate()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_simulate
+
+*complexity_coarsegraining()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_coarsegraining
