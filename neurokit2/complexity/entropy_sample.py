@@ -52,11 +52,13 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>> entropy, parameters = nk.entropy_sample(signal)
-    >>> entropy #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, frequency=5)
+      sampen, parameters = nk.entropy_sample(signal)
+      sampen
 
     """
     # Sanity checks
@@ -74,7 +76,7 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
             method=tolerance,
             dimension=dimension,
             show=False,
-        ),
+        )[0],
     }
 
     # Compute phi
