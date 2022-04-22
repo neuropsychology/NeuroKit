@@ -12,25 +12,25 @@ jobs:
     - name: Set up Python 🐍
       uses: actions/setup-python@v3
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install sphinx-book-theme
-        pip install sphinxemoji
-        pip install sphinx-copybutton
-        pip install ipython
-        pip install myst-parser
-        pip install myst-nb
-        pip install numpy
-        pip install pandas
-        pip install scipy
-        pip install scikit-learn
-        pip install matplotlib
-        pip install mne
-        pip install PyWavelets
-        pip install astropy
-        pip install seaborn
-        pip install https://github.com/neuropsychology/neurokit/zipball/dev
+    # - name: Install dependencies
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     pip install sphinx-book-theme
+    #     pip install sphinxemoji
+    #     pip install sphinx-copybutton
+    #     pip install ipython
+    #     pip install myst-parser
+    #     pip install myst-nb
+    #     pip install numpy
+    #     pip install pandas
+    #     pip install scipy
+    #     pip install scikit-learn
+    #     pip install matplotlib
+    #     pip install mne
+    #     pip install PyWavelets
+    #     pip install astropy
+    #     pip install seaborn
+    #     pip install https://github.com/neuropsychology/neurokit/zipball/dev
 
     - name: Build documentation
         ls
