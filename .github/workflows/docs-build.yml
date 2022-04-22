@@ -37,7 +37,8 @@ jobs:
     - name: Build documentation 📜
       run: |
         cd docs_wip
-        ./make html
+        ls
+        make html
 
     # - name: sphinx-action
     #   uses: ammaraskar/sphinx-action@master
