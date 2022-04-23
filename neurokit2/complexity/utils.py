@@ -20,11 +20,7 @@ def _phi(
     approximate=True,
     fuzzy=False,
 ):
-    """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`.
-
-    Adapted from `EntroPy <https://github.com/raphaelvallat/entropy>`_, check it out!
-
-    """
+    """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`."""
     # Initialize phi
     phi = np.zeros(2)
 

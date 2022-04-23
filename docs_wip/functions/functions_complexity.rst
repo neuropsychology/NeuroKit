@@ -72,6 +72,10 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_sample
 
+*entropy_fuzzy()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_fuzzy
+
 *entropy_approximate()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_approximate

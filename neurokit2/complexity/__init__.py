@@ -55,6 +55,7 @@ complexity_capen = functools.partial(entropy_approximate, corrected=True)
 
 complexity_sampen = entropy_sample
 complexity_fuzzyen = entropy_fuzzy
+complexity_fuzzyapen = functools.partial(entropy_fuzzy, approximate=True)
 
 complexity_mse = entropy_multiscale
 complexity_fuzzymse = functools.partial(entropy_multiscale, fuzzy=True)
@@ -129,6 +130,7 @@ __all__ = [
     "entropy_spectral",
     "entropy_svd",
     "entropy_fuzzy",
+    "complexity_fuzzyapen",
     "entropy_multiscale",
     "entropy_wiener",
     "entropy_permutation",
