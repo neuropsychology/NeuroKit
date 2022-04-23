@@ -49,6 +49,10 @@ Fractal Dimension
 
 Entropy
 ^^^^^^^^^^^^^^^^^
+*entropy_shannon()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_shannon
+
 *entropy_svd()*
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_svd
@@ -56,10 +60,6 @@ Entropy
 *entropy_permutation()*
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_permutation
-
-*entropy_shannon()*
-"""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_shannon
 
 *entropy_differential()*
 """"""""""""""""""""""""

@@ -25,8 +25,8 @@ def fractal_katz(signal):
     kfd : float
         Katz's fractal dimension of the single time series.
     info : dict
-        A dictionary containing additional information (currently, but returned nonetheless for
-        consistency with other functions).
+        A dictionary containing additional information (currently empty, but returned nonetheless
+        for consistency with other functions).
 
     Examples
     ----------
