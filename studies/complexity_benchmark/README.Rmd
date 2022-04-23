@@ -94,12 +94,21 @@ df <- read.csv("data_Complexity.csv") |>
 # Show and filter out NaNs
 df[is.na(df$Result), "Index"]
 df <- filter(df, !is.na(Result))
+```
 
-
-colors = c("PFD (A)" = "#2196F3", 
+```{r message=FALSE, warning=FALSE, include=FALSE}
+colors = c("SD" = "red", 
+           "Diff" = "red", 
+           
+           "PFD (A)" = "#2196F3", 
            "PFD (B)" = "#2196F3", 
            "PFD (C)" = "#2196F3", 
            "PFD (D)" = "#2196F3",
+           "PFD (r)" = "#2196F3",
+           "PFD (3)" = "#2196F3",
+           "PFD (10)" = "#2196F3",
+           "PFD (100)" = "#2196F3",
+           "PFD (1000)" = "#2196F3",
            "KFD" = "#2196F3",
            "SFD" = "#2196F3",
            "SDAFD" = "#2196F3",
@@ -111,6 +120,7 @@ colors = c("PFD (A)" = "#2196F3",
            "SVDEn" = "#E91E63",
            "DiffEn" = "#E91E63",
            "ApEn" = "#E91E63",
+           "cApEn" = "#E91E63",
            "PEn" = "#E91E63",
            "SPEn" = "#E91E63",
            "MSPEn" = "#E91E63",
@@ -118,14 +128,26 @@ colors = c("PFD (A)" = "#2196F3",
            "SampEn" = "#E91E63",
            "MSEn" = "#E91E63",
            "FuzzyEn" = "#E91E63",
-           "ShanEn3" = "#E91E63",
-           "ShanEn10" = "#E91E63",
-           "ShanEn100" = "#E91E63",
-           "ShanEn1000" = "#E91E63",
-           "CREn3" = "#E91E63",
-           "CREn10" = "#E91E63",
-           "CREn100" = "#E91E63",
-           "CREn1000" = "#E91E63",
+           "FuzzyApEn" = "#E91E63",
+           "FuzzycApEn" = "#E91E63",
+           "ShanEn (A)" = "#E91E63",
+           "ShanEn (B)" = "#E91E63",
+           "ShanEn (C)" = "#E91E63",
+           "ShanEn (D)" = "#E91E63",
+           "ShanEn (r)" = "#E91E63",
+           "ShanEn (3)" = "#E91E63",
+           "ShanEn (10)" = "#E91E63",
+           "ShanEn (100)" = "#E91E63",
+           "ShanEn (1000)" = "#E91E63",
+           "CREn (A)" = "#E91E63",
+           "CREn (B)" = "#E91E63",
+           "CREn (C)" = "#E91E63",
+           "CREn (D)" = "#E91E63",
+           "CREn (r)" = "#E91E63",
+           "CREn (3)" = "#E91E63",
+           "CREn (10)" = "#E91E63",
+           "CREn (100)" = "#E91E63",
+           "CREn (1000)" = "#E91E63",
            
            "H (corrected)" = "#2196F3",
            "H (uncorrected)" = "#2196F3",
@@ -150,6 +172,7 @@ order <- df |>
 df <- mutate(df, Index = fct_relevel(Index, as.character(order$Index)))
 
 df |> 
+  filter(!Index %in% c("Diff", "SD")) |> 
   ggplot(aes(x = Index, y = Duration)) +
   # geom_violin(aes(fill = Index)) +
   ggdist::stat_slab(side = "bottom", aes(fill = Index), adjust = 3) +
@@ -167,6 +190,7 @@ df |>
 
 ```{r time1, message=FALSE, warning=FALSE}
 dfsummary <- df |>
+  filter(!Index %in% c("Diff", "SD")) |> 
   mutate(Duration = Duration * 10000) |> 
   group_by(Index, Length) |>
   summarize(CI_low = median(Duration) - sd(Duration),
@@ -190,6 +214,7 @@ dfsummary |>
 
 ```{r time2, message=FALSE, warning=FALSE}
 df |> 
+  filter(!Index %in% c("Diff", "SD")) |> 
   mutate(Duration = Duration * 10000) |> 
   ggplot(aes(x = as.factor(Length), y = Duration)) +
   # geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = "dotted") +
@@ -206,7 +231,7 @@ df |>
 #### Results
 
 ```{r message=FALSE, warning=FALSE}
-model <- lm(Result ~ Index / poly(Length, 3), data = df)
+model <- lm(Result ~ Index / poly(Length, 2), data = df)
 
 parameters::parameters(model, keep = "poly") |> 
   arrange(desc(abs(Coefficient))) |> 
@@ -260,11 +285,12 @@ cor_lower <- function(cor) {
 
 cor |> 
   cor_lower() |> 
-  mutate(Text = str_remove(insight::format_value(rho, zap_small=TRUE, digits = 3), "^0+"),
+  mutate(Text = insight::format_value(rho, zap_small=TRUE, digits = 3),
+         Text = str_replace(str_remove(Text, "^0+"), "^-0+", "-"),
          Parameter2 = fct_rev(Parameter2)) |> 
   ggplot(aes(x = Parameter2, y=Parameter1)) +
   geom_tile(aes(fill = rho)) +
-  geom_text(aes(label = Text), size = 3) +
+  geom_text(aes(label = Text), size = 2) +
   scale_fill_gradient2(low = '#2196F3', mid = 'white', high = '#F44336', midpoint = 0, limit = c(-1, 1), space = 'Lab', name = 'Correlation', guide = 'legend') +
   scale_x_discrete(expand = c(0, 0)) +
   scale_y_discrete(expand = c(0, 0)) +
@@ -276,14 +302,38 @@ cor |>
         panel.grid.minor = element_blank()) 
 ```
 
+### Duplicates 
+
+- **CREn (D)**, **PFD (D)** and **ShanEn (D)**
+  - keep **PFD (D)** because it's faster.
+- **CREn (B)**, and **ShanEn (B)**
+  - keep **ShanEn (B)**  because it's faster.
+- **CREn (r)**, **PFD (r)** and **ShanEn (r)**
+  - keep **PFD (r)** because it's faster.
+- **SVDEn**, and **FI**
+  - keep **SVDEn**  because it's positively correlated with the rest.
+
+
 ```{r message=FALSE, warning=FALSE}
+
+
 cor |> 
-  arrange(desc(rho)) |> 
+  cor_lower() |> 
+  arrange(desc(abs(rho))) |> 
   filter(Parameter1 != Parameter2) |> 
   filter(abs(rho) > .95)
 
+
 # Duplicates 
 # ===========
+averagetime <- arrange(summarize(group_by(df, Index), Duration = mean(Duration)), Duration)
+
+filter(averagetime, Index %in% c("CREn (D)", "PFD (D)", "ShanEn (D)"))
+filter(averagetime, Index %in% c("ShanEn (B)", "CREn (B)"))
+filter(averagetime, Index %in% c("ShanEn (r)", "PFD (r)", "CREn (r)"))
+filter(averagetime, Index %in% c("SVDEn", "FI"))
+
+# NLFD | RR
 # NLFD | RR
 # - Drop RR because it's slower
 # H (uncorrected) | H (corrected)
@@ -291,16 +341,21 @@ cor |>
 # SVDEn | FuzzyEn
 # - Drop FuzzyEn because it's slower
 
-
+# Hasselman positively correlated with most of the others
+# - RR: much slower
 
 
 
 data <- data |> 
   select(
-    -`PSDFD (Voss1998)`,  # Hasselman positively correlated with most of the others
-    -FI)  # FI is negatively correlated with the rest
-# - RR: much slower
+    -`CREn (D)`, -`ShanEn (D)`,
+    - `ShanEn (B)`,
+    - `CREn (r)`, -`ShanEn (r)`,
+    -FI
+    # -`PSDFD (Voss1998)`  
+  )
 ```
+
 
 ### Hierarchical CLustering
 

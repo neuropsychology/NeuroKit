@@ -9,9 +9,13 @@ from .entropy_sample import entropy_sample
 def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=False, **kwargs):
     """**Fuzzy Entropy (FuzzyEn)**
 
-    Computes the fuzzy entropy (FuzzyEn) of a signal.
+    Fuzzy entropy (FuzzyEn) of a signal stems from the combination between information theory and
+    fuzzy set theory (Zadeh, 1965). A fuzzy set is a set containing elements with varying degrees of
+    membership.
 
-    This function can be called either via ``entropy_fuzzy()`` or ``complexity_fuzzyen()``, or ``complexity_fuzzyapen()`` for its approximate version.
+    This function can be called either via ``entropy_fuzzy()`` or ``complexity_fuzzyen()``, or
+    ``complexity_fuzzyapen()`` for its approximate version. Note that the fuzzy corrected
+    approximate entropy (cApEn) can also be computed via setting ``corrected=True`` (see examples).
 
     Parameters
     ----------
@@ -57,6 +61,16 @@ def entropy_fuzzy(signal, delay=1, dimension=2, tolerance="sd", approximate=Fals
 
       fuzzyapen, parameters = nk.entropy_fuzzy(signal, approximate=True)
       fuzzyapen
+
+      fuzzycapen, parameters = nk.entropy_fuzzy(signal, approximate=True, corrected=True)
+      fuzzycapen
+
+    References
+    ----------
+    * Ishikawa, A., & Mieno, H. (1979). The fuzzy entropy concept and its application. Fuzzy Sets
+      and systems, 2(2), 113-123.
+    * Zadeh, L. A. (1996). Fuzzy sets. In Fuzzy sets, fuzzy logic, and fuzzy systems: selected
+      papers by Lotfi A Zadeh (pp. 394-432).
 
     """
     if approximate is False:

@@ -20,12 +20,6 @@ def complexity_rr(signal, **kwargs):
     **kwargs : optional
         Other arguments to be passed to ``nk.signal_autocor()``.
 
-    References
-    ----------
-    * Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness:
-      an index for testing the suitability of the monofractal model.
-      Frontiers in Physiology, 3, 208.
-
     Returns
     --------
     rr : float
@@ -43,6 +37,16 @@ def complexity_rr(signal, **kwargs):
       signal = [1, 2, 3, 4, 5]
       rr, _ = nk.complexity_rr(signal)
       rr
+
+      # Change autocorrelation method
+      rr, _ = nk.complexity_rr(signal, method="cor")
+      rr
+
+    References
+    ----------
+    * Marmelat, V., Torre, K., & Delignieres, D. (2012). Relative roughness:
+      an index for testing the suitability of the monofractal model.
+      Frontiers in Physiology, 3, 208.
 
     """
     # Sanity checks
