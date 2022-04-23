@@ -37,6 +37,7 @@ test_requirements = requirements + [
     "mne[data]",
     "pyentrp",
     "antropy",
+    "EntropyHub",
     "nolds",
     "biosppy==0.6.1",
     "cvxopt",

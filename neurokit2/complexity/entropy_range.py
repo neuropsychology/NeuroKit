@@ -1,9 +1,5 @@
-import numpy as np
-import pandas as pd
-
 from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
-from .utils import _get_tolerance, _phi, _phi_divide
 
 
 def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate=False, **kwargs):

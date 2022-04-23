@@ -14,6 +14,7 @@ from .complexity_rqa import complexity_rqa
 from .complexity_rr import complexity_rr
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
+from .entropy_attention import entropy_attention
 from .entropy_coalition import entropy_coalition
 from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
@@ -52,6 +53,8 @@ complexity_cren = entropy_cumulative_residual
 
 complexity_apen = entropy_approximate
 complexity_capen = functools.partial(entropy_approximate, corrected=True)
+
+complexity_atten = entropy_attention
 
 complexity_sampen = entropy_sample
 complexity_fuzzyen = entropy_fuzzy
@@ -103,6 +106,7 @@ __all__ = [
     "complexity_plot",
     "complexity_se",
     "complexity_apen",
+    "complexity_atten",
     "complexity_capen",
     "complexity_cren",
     "complexity_diffen",
@@ -122,6 +126,7 @@ __all__ = [
     "complexity_rr",
     "complexity_rqa",
     "entropy_shannon",
+    "entropy_attention",
     "entropy_differential",
     "entropy_cumulative_residual",
     "entropy_approximate",
