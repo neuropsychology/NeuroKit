@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_binarize import _signal_binarize_threshold
-from .complexity_coarsegraining import _get_scale, complexity_coarsegraining
+from .complexity_coarsegraining import _get_scales, complexity_coarsegraining
 from .complexity_embedding import complexity_embedding
 
 
@@ -166,7 +166,7 @@ def _complexity_lempelziv(
     if multiscale:
         # MPLZC
         # apply coarsegraining procedure
-        scale_factors = _get_scale(signal, scale="default", dimension=dimension)
+        scale_factors = _get_scales(signal, scale="default", dimension=dimension)
         # Permutation for each scaled series
         lzc = np.zeros(len(scale_factors))
         for i, tau in enumerate(scale_factors):

@@ -7,9 +7,9 @@ def entropy_differential(signal, **kwargs):
     """**Differential entropy (DiffEn)**
 
     Differential entropy (DiffEn; also referred to as continuous entropy) started as a (failed)
-    attempt by Shannon to extend Shannon entropy (https://en.wikipedia.org/wiki/
-    Differential_entropy). However, differential entropy presents some issues too, such as that it
-    can be negative even for simple distributions (such as the uniform distribution).
+    attempt by Shannon to extend Shannon entropy. However, differential entropy presents some
+    issues too, such as that it can be negative even for simple distributions (such as the uniform
+    distribution).
 
     This function can be called either via ``entropy_differential()`` or ``complexity_diffen()``.
 
@@ -50,6 +50,7 @@ def entropy_differential(signal, **kwargs):
     -----------
     * `scipy.stats.differential_entropy()
       <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.differential_entropy.html>`_
+    * https://en.wikipedia.org/wiki/Differential_entropy
 
     """
     # Sanity checks

@@ -1,7 +1,4 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-import pandas as pd
-
 from .entropy_approximate import entropy_approximate
 from .entropy_sample import entropy_sample
 

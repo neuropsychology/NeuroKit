@@ -66,13 +66,17 @@ def _get_embedded(
     fuzzy=False,
 ):
     """Examples
-    ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, frequency=5)
-    >>>
-    >>> embbeded, count = _get_embedded(signal, delay=8, tolerance=0.2 * np.std(signal, ddof=1), dimension=2,
-    ...                                 distance='chebyshev', approximate=False)
+    -----------
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import sklearn
+      complexity_embedding = nk.complexity_embedding
+
+      signal = nk.signal_simulate(duration=2, frequency=5)
+
+      embeded, count = _get_embedded(signal, delay=8, dimension=2, tolerance=0.07,
+                                      distance='chebyshev', approximate=False)
     """
     # Sanity checks
     if distance not in sklearn.neighbors.KDTree.valid_metrics + ["range"]:
@@ -102,19 +106,32 @@ def _get_embedded(
 # Get Count
 # =============================================================================
 def _get_count(embedded, tolerance, distance="chebyshev"):
+    """Examples
+    -----------
+    .. ipython:: python
+
+      import neurokit2 as nk
+      signal = nk.signal_simulate(duration=1, frequency=[5, 6])
+      embedded = nk.complexity_embedding(signal, delay=8, dimension=3)
+      tolerance = 0.07
+      distance = "range"
+      x = embedded
+      y = embedded[0]
+
+    """
 
     if distance == "range":
         # internal function for distrange
         def distrange(x, y):
             numerator = np.max(np.abs(x - y), axis=1) - np.min(np.abs(x - y), axis=1)
             denominator = np.max(np.abs(x - y), axis=1) + np.min(np.abs(x - y), axis=1)
-            # so we don't have to do np.seterr(divide='ignore')
-            valid_indices = np.where(denominator != 0)
-            return np.divide(numerator[valid_indices], denominator[denominator != 0])
+            valid = np.where(denominator != 0)  # To prevent division by 0
+            return np.divide(numerator[valid], denominator[valid])
 
-        count = np.zeros(len(embedded))
-        for i in range(len(embedded)):
-            count[i] = np.sum(distrange(embedded, embedded[i]) < tolerance)
+        # Count for each row
+        count = np.array(
+            [np.sum(distrange(embedded, embedded[i]) < tolerance) for i in range(len(embedded))]
+        )
 
     else:  # chebyshev and other sklearn methods
         # Perhaps scipy.spatial.KDTree would be faster? Especially since its query() method
@@ -126,11 +143,8 @@ def _get_count(embedded, tolerance, distance="chebyshev"):
 
 
 def _get_count_fuzzy(embedded, tolerance, distance="chebyshev", n=1):
-    # TODO: remove this compatibility patch once sklearn > 1.2 is out
-    if sklearn.__version__ < "1.0":
-        dist = sklearn.neighbors.DistanceMetric.get_metric(distance)
-    else:
-        dist = sklearn.metrics.DistanceMetric.get_metric(distance)
+    # TODO: it would be good to implement 'distrange' here to have fuzzy RangeEn
+    dist = sklearn.metrics.DistanceMetric.get_metric(distance)
     dist = dist.pairwise(embedded)
 
     if n > 1:

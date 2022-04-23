@@ -3,8 +3,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from .complexity_coarsegraining import _get_scale, complexity_coarsegraining
+from .complexity_coarsegraining import _get_scales, complexity_coarsegraining
 from .entropy_sample import entropy_sample
+from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _get_coarsegrained_rolling, _get_tolerance, _phi, _phi_divide
 
 
@@ -12,7 +13,7 @@ def entropy_multiscale(
     signal,
     scale="default",
     dimension=2,
-    tolerance="default",
+    tolerance="sd",
     composite=False,
     refined=False,
     fuzzy=False,
@@ -95,26 +96,20 @@ def entropy_multiscale(
 
     References
     -----------
-    - `pyEntropy` <https://github.com/nikdon/pyEntropy>`_
-
-    - Richman, J. S., & Moorman, J. R. (2000). Physiological time-series analysis using approximate
+    * Richman, J. S., & Moorman, J. R. (2000). Physiological time-series analysis using approximate
       entropy and sample entropy. American Journal of Physiology-Heart and Circulatory Physiology,
       278(6), H2039-H2049.
-
-    - Costa, M., Goldberger, A. L., & Peng, C. K. (2005). Multiscale entropy analysis of biological
+    * Costa, M., Goldberger, A. L., & Peng, C. K. (2005). Multiscale entropy analysis of biological
       signals. Physical review E, 71(2), 021906.
-
-    - Gow, B. J., Peng, C. K., Wayne, P. M., & Ahn, A. C. (2015). Multiscale entropy analysis of
+    * Gow, B. J., Peng, C. K., Wayne, P. M., & Ahn, A. C. (2015). Multiscale entropy analysis of
       center-of-pressure dynamics in human postural control: methodological considerations. Entropy,
       17(12), 7926-7947.
-
-    - Norris, P. R., Anderson, S. M., Jenkins, J. M., Williams, A. E., & Morris Jr, J. A. (2008).
-      Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma patients.
-      Shock, 30(1), 17-22.
-
-    - Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012). Adaptive
-      computation of multiscale entropy and its application in EEG signals for monitoring depth of
-      anesthesia during surgery. Entropy, 14(6), 978-992.
+    * Norris, P. R., Anderson, S. M., Jenkins, J. M., Williams, A. E., & Morris Jr, J. A. (2008).
+      Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma
+      patients. Shock, 30(1), 17-22.
+    * Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., & Shieh, J. S. (2012).
+      Adaptive computation of multiscale entropy and its application in EEG signals for monitoring
+      depth of anesthesia during surgery. Entropy, 14(6), 978-992.
 
     """
     # Sanity checks
@@ -126,7 +121,7 @@ def entropy_multiscale(
     if "delay" in kwargs.keys():
         kwargs.pop("delay")
 
-    # Prepare parameters
+    # Which index to compute
     if refined:
         key = "RCMSE"
     elif composite:
@@ -137,13 +132,24 @@ def entropy_multiscale(
     if fuzzy:
         key = "Fuzzy" + key
 
+    # Store parameters
     info = {
         "Dimension": dimension,
         "Type": key,
-        "Scale": _get_scale(signal, scale=scale, dimension=dimension),
+        "Scale": _get_scales(signal, scale=scale, dimension=dimension),
+        "Tolerance": complexity_tolerance(
+            signal,
+            method=tolerance,
+            dimension=dimension,
+            show=False,
+        )[0],
     }
 
-    info["Tolerance"] = _get_tolerance(signal, tolerance=tolerance, dimension=dimension)
+    # Initalize mse vector
+    # vals = np.full(len(info["Scale"]), np.nan)
+    # for i, scale in enumerate(scale_factors):
+    #     y = complexity_coarsegraining(signal, scale=tau)
+
     out, info["Values"] = _entropy_multiscale(
         signal,
         tolerance=info["Tolerance"],

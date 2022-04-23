@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .complexity_coarsegraining import _get_scale, complexity_coarsegraining
+from .complexity_coarsegraining import _get_scales, complexity_coarsegraining
 from .complexity_embedding import complexity_embedding
 
 
@@ -98,7 +98,7 @@ def entropy_permutation(signal, dimension=3, delay=1, corrected=True, weighted=F
 
     # Multiscale
     if scale is not None:
-        info["Scale"] = _get_scale(signal, scale=scale, dimension=dimension)
+        info["Scale"] = _get_scales(signal, scale=scale, dimension=dimension)
         info["Values"] = np.full(len(info["Scale"]), np.nan)
         for i, tau in enumerate(info["Scale"]):
             y = complexity_coarsegraining(signal, scale=tau)

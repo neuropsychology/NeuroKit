@@ -187,7 +187,7 @@ def _complexity_show(signal, coarse, method="nonoverlapping"):
 # =============================================================================
 # Get Scale Factor
 # =============================================================================
-def _get_scale(signal, scale="default", dimension=2):
+def _get_scales(signal, scale="default", dimension=2):
     """Select scale factors"""
     if scale is None or scale == "max":
         scale = np.arange(1, len(signal) // 2)  # Set to max
