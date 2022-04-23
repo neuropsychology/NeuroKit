@@ -468,6 +468,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-k">
+     <em>
+      complexity_k()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -507,6 +514,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#fractal-psdslope">
      <em>
       fractal_psdslope()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-higuchi">
+     <em>
+      fractal_higuchi()
      </em>
     </a>
    </li>
@@ -697,6 +711,13 @@ title="Print to PDF"
      </em>
     </a>
    </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-k">
+     <em>
+      complexity_k()
+     </em>
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -736,6 +757,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#fractal-psdslope">
      <em>
       fractal_psdslope()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fractal-higuchi">
+     <em>
+      fractal_higuchi()
      </em>
     </a>
    </li>
@@ -1363,12 +1391,13 @@ chosen <code class="docutils literal notranslate"><span class="pre">r</span></co
 
 <span class="go"># Fast method (based on the standard deviation)</span>
 <span class="gp">In [3]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;sd&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="gp">In [4]: </span><span class="n">r</span>
-<span class="gh">Out[4]: </span><span class="go">0.07072836242007384</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_tolerance1.png"><img alt="../_images/p_complexity_tolerance1.png" src="../_images/p_complexity_tolerance1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">r</span>
+<span class="gh">Out[4]: </span><span class="go">0.07072836242007384</span>
+</pre></div>
+</div>
 <ul class="simple">
 <li><p><strong>Example 2</strong>: The method based on the recurrence rate will display the rates according to
 different values of tolerance. The horizontal line indicates 5%.</p></li>
@@ -1376,12 +1405,13 @@ different values of tolerance. The horizontal line indicates 5%.</p></li>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                  <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;recurrence&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-
-<span class="gp">In [6]: </span><span class="n">r</span>
-<span class="gh">Out[6]: </span><span class="go">0.1259621536795725</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_tolerance2.png"><img alt="../_images/p_complexity_tolerance2.png" src="../_images/p_complexity_tolerance2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">r</span>
+<span class="gh">Out[6]: </span><span class="go">0.1259621536795725</span>
+</pre></div>
+</div>
 <ul class="simple">
 <li><p><strong>Example 3</strong>: The default method selects the tolerance at which <em>ApEn</em> is maximized.</p></li>
 </ul>
@@ -1389,12 +1419,13 @@ different values of tolerance. The horizontal line indicates 5%.</p></li>
 <span class="gp">In [7]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                  <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;maxApEn&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-
-<span class="gp">In [8]: </span><span class="n">r</span>
-<span class="gh">Out[8]: </span><span class="go">0.014145672484014769</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_tolerance3.png"><img alt="../_images/p_complexity_tolerance3.png" src="../_images/p_complexity_tolerance3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">r</span>
+<span class="gh">Out[8]: </span><span class="go">0.014145672484014769</span>
+</pre></div>
+</div>
 <ul class="simple">
 <li><p><strong>Example 4</strong>: The tolerance values that are tested can be modified to get a more precise
 estimate.</p></li>
@@ -1403,17 +1434,71 @@ estimate.</p></li>
 <span class="gp">In [9]: </span><span class="n">r</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_tolerance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s1">&#39;maxApEn&#39;</span><span class="p">,</span>
 <span class="gp">   ...: </span>                                  <span class="n">r_range</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.002</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">30</span><span class="p">),</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="gp">   ...: </span>
-
-<span class="gp">In [10]: </span><span class="n">r</span>
-<span class="gh">Out[10]: </span><span class="go">0.6624137931034483</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_tolerance4.png"><img alt="../_images/p_complexity_tolerance4.png" src="../_images/p_complexity_tolerance4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">r</span>
+<span class="gh">Out[10]: </span><span class="go">0.6624137931034483</span>
+</pre></div>
+</div>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Lu, S., Chen, X., Kanters, J. K., Solomon, I. C., &amp; Chon, K. H. (2008). Automatic selection of
 the threshold value r for approximate entropy. IEEE Transactions on Biomedical Engineering,
 55(8), 1966-1972.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="complexity-k">
+<h3><em>complexity_k()</em><a class="headerlink" href="#complexity-k" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.complexity_k">
+<span class="sig-name descname"><span class="pre">complexity_k</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'max'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_k" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Automated selection of k_max parameter for Higuchi Fractal Dimension (HFD)</strong></p>
+<p>The optimal <em>k-max</em> is computed based on the point at which HFD values plateau for a range of
+kmax values (see Vega, 2015).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>k_max</strong> (<em>Union[int, str, list], optional</em>) – Maximum number of interval times (should be greater than or equal to 3) to be tested. If ‘max’,
+it selects the maximum possible value corresponding to half the length of the signal.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Visualise the slope of the curve for the selected kmax value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>) – The optimal kmax of the time series.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
+to compute optimal kmax.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.fractal_higuchi" title="neurokit2.complexity.fractal_higuchi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_higuchi</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">k_max</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_k</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">k_max</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_k1.png"><img alt="../_images/p_complexity_k1.png" src="../_images/p_complexity_k1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">k_max</span>
+<span class="gh">Out[4]: </span><span class="go">40</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
+Physica D: Nonlinear Phenomena, 31(2), 277-283.</p></li>
+<li><p>Vega, C. F., &amp; Noel, J. (2015, June). Parameters analyzed of Higuchi’s fractal dimension for
+EEG brain signals. In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE. <a class="reference external" href="https://">https://</a>
+ieeexplore.ieee.org/document/7168285</p></li>
 </ul>
 </dd></dl>
 
@@ -1486,7 +1571,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">2.03889076590927</span>
+<span class="gh">Out[12]: </span><span class="go">2.1263989368993665</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1496,7 +1581,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.7725272960111487</span>
+<span class="gh">Out[16]: </span><span class="go">3.6194238570302084</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1598,7 +1683,7 @@ to compute PFD.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian4.png"><img alt="../_images/p_fractal_petrosian4.png" src="../_images/p_fractal_petrosian4.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">pfd</span>
-<span class="gh">Out[12]: </span><span class="go">1.0032850669314466</span>
+<span class="gh">Out[12]: </span><span class="go">1.003181698082214</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1606,7 +1691,7 @@ to compute PFD.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian5.png"><img alt="../_images/p_fractal_petrosian5.png" src="../_images/p_fractal_petrosian5.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">pfd</span>
-<span class="gh">Out[14]: </span><span class="go">1.0319803025822096</span>
+<span class="gh">Out[14]: </span><span class="go">1.0309813338890566</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1614,7 +1699,7 @@ to compute PFD.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian6.png"><img alt="../_images/p_fractal_petrosian6.png" src="../_images/p_fractal_petrosian6.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">pfd</span>
-<span class="gh">Out[16]: </span><span class="go">1.0279980115009162</span>
+<span class="gh">Out[16]: </span><span class="go">1.0283819448256826</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1703,7 +1788,7 @@ when the epoch becomes shorter. The NLD method results in lower standard deviati
 for shorter epochs, though at the expense of lower accuracy in average window FD.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_higuchi</span></code></p>
+<p><a class="reference internal" href="#neurokit2.complexity.fractal_higuchi" title="neurokit2.complexity.fractal_higuchi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_higuchi</span></code></a></p>
 </div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1754,7 +1839,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [9]: </span><span class="n">nld</span> <span class="o">=</span> <span class="p">[</span><span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">]</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nld</span><span class="p">)</span>  <span class="c1"># Get average</span>
-<span class="gh">Out[10]: </span><span class="go">0.5811766593651008</span>
+<span class="gh">Out[10]: </span><span class="go">0.6034239875796686</span>
 </pre></div>
 </div>
 <p><strong>Example 3</strong>: Calculate FD-NLD on sliding windows</p>
@@ -1830,7 +1915,7 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.417078412494355</span>
+<span class="gh">Out[4]: </span><span class="go">2.657974385789936</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1842,6 +1927,64 @@ inference based on empirical waveforms. Frontiers in Physiology, 4, 75. <a class
 Fractal Images, 21-70.</p></li>
 <li><p>Eke, A., Hermán, P., Kocsis, L., and Kozak, L. R. (2002). Fractal characterization of
 complexity in temporal physiological signals. Physiol. Meas. 23, 1-38.</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="fractal-higuchi">
+<h3><em>fractal_higuchi()</em><a class="headerlink" href="#fractal-higuchi" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.fractal_higuchi">
+<span class="sig-name descname"><span class="pre">fractal_higuchi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.fractal_higuchi" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Higuchi’s Fractal Dimension (HFD)</strong></p>
+<p>Computes Higuchi’s Fractal Dimension (HFD) by reconstructing k-max number of new
+data sets. For each reconstructed data set, curve length is computed and plotted
+against its corresponding k value on a log-log scale. HFD equates to the slope obtained
+from fitting a least-squares method.</p>
+<p>Values should fall between 1 and 2. For more information about k parameter selection, see
+the <code class="docutils literal notranslate"><span class="pre">complexity_k()</span></code> optimization function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>k_max</strong> (<em>str or int</em>) – Maximum number of interval times (should be greater than or equal to 2).
+If “default”, then the optimal kmax is computed based on the point at which HFD values plateau
+for a range of kmax values (see <code class="docutils literal notranslate"><span class="pre">complexity_k()</span></code> optimization function).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Visualise the slope of the curve for the selected k_max value.</p></li>
+<li><p><strong>**kwargs</strong> (<em>optional</em>) – Currently not used.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>slope</strong> (<em>float</em>) – Higuchi’s fractal dimension of the single time series.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
+to compute Higuchi’s fractal dimension.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">)</span>
+
+<span class="gp">In [3]: </span><span class="n">k_max</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span>  <span class="n">nk</span><span class="o">.</span><span class="n">complexity_k</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">k_max</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">hfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_higuchi</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">k_max</span><span class="o">=</span><span class="n">k_max</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_fractal_higuchi1.png"><img alt="../_images/p_fractal_higuchi1.png" src="../_images/p_fractal_higuchi1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_fractal_higuchi2.png"><img alt="../_images/p_fractal_higuchi2.png" src="../_images/p_fractal_higuchi2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hfd</span>
+<span class="gh">Out[5]: </span><span class="go">1.9216828840461984</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
+Physica D: Nonlinear Phenomena, 31(2), 277-283.</p></li>
+<li><p>Vega, C. F., &amp; Noel, J. (2015, June). Parameters analyzed of Higuchi’s fractal dimension for
+EEG brain signals. In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE.
+<a class="reference external" href="https://ieeexplore.ieee.org/document/7168285">https://ieeexplore.ieee.org/document/7168285</a></p></li>
 </ul>
 </dd></dl>
 
@@ -1906,7 +2049,7 @@ to compute Shannon entropy.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_shannon1.png"><img alt="../_images/p_entropy_shannon1.png" src="../_images/p_entropy_shannon1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">shanen</span>
-<span class="gh">Out[4]: </span><span class="go">1.5588764985440613</span>
+<span class="gh">Out[4]: </span><span class="go">1.5508251211553992</span>
 </pre></div>
 </div>
 <p>Compare with <code class="docutils literal notranslate"><span class="pre">scipy</span></code> (using the same base).</p>
@@ -1916,12 +2059,12 @@ to compute Shannon entropy.</p></li>
 <span class="gp">In [6]: </span><span class="n">binned</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binned</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="gh">Out[7]: </span><span class="go">1.0805308498069757</span>
+<span class="gh">Out[7]: </span><span class="go">1.0749500602704005</span>
 
 <span class="gp">In [8]: </span><span class="n">shanen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_shannon</span><span class="p">(</span><span class="n">binned</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">shanen</span>
-<span class="gh">Out[9]: </span><span class="go">1.0805308498069757</span>
+<span class="gh">Out[9]: </span><span class="go">1.0749500602704005</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2214,19 +2357,19 @@ return the permutation entropy in bit.</p></li>
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.568148497233045</span>
+<span class="gh">Out[4]: </span><span class="go">2.5829868232307263</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8760567842319382</span>
+<span class="gh">Out[6]: </span><span class="go">0.8435714201127692</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9797964890951414</span>
+<span class="gh">Out[8]: </span><span class="go">0.9942098686181287</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2283,7 +2426,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.38930654726852765</span>
+<span class="gh">Out[4]: </span><span class="go">0.37931589065463206</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2335,7 +2478,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.8568722637490772</span>
+<span class="gh">Out[4]: </span><span class="go">0.8696799986837234</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
