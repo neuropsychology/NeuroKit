@@ -94,6 +94,15 @@ def complexity_coarsegraining(
       @suppress
       plt.close()
 
+    .. ipython:: python
+
+      signal = nk.signal_simulate(duration=0.5, frequency=[5, 20])
+
+      @savefig p_complexity_coarsegraining4.png scale=100%
+      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, method="timeshift", show=True)
+      @suppress
+      plt.close()
+
     **Benchmarking**
     .. ipython:: python
 
@@ -143,14 +152,8 @@ def complexity_coarsegraining(
         # pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]
 
         # Get max j
-        j = len(signal) / scale
-        if force is True:
-            j = int(np.ceil(j))  # Upper rounding
-            # Extend signal by NaNs so that it matches the theoretical length
-            signal = np.concatenate([signal, np.repeat(np.nan, (j * scale) - len(signal))])
-        else:
-            j = int(j)  # Truncate
-        # Return the coarse-grained time series
+        j = n // scale
+        # Coarse-grain
         coarse = np.nanmean(np.reshape(signal[0 : j * scale], (j, scale)), axis=1)
 
         if method == "resampling":
@@ -163,8 +166,15 @@ def complexity_coarsegraining(
         # Relying on scipy is a fast alternative to:
         # pd.Series(signal).rolling(window=scale).mean().values[scale-1::]
         # https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
+        coarse = scipy.ndimage.filters.uniform_filter1d(signal, size=scale, mode="nearest")[
+            scale - 1 : :
+        ]
 
-        coarse = scipy.ndimage.filters.uniform_filter1d(signal, size=scale, mode="nearest")
+    elif method == "timeshift":
+        coarse = np.transpose(np.reshape(signal[: scale * (n // scale)], (n // scale, scale)))
+
+    else:
+        raise ValueError("Unknown `method`: {}".format(method))
 
     if show is True:
         _complexity_show(signal[0:n], coarse, method=method)
@@ -179,6 +189,14 @@ def _complexity_show(signal, coarse, method="nonoverlapping"):
     if method == "nonoverlapping":
         plt.plot(np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=0.75)
         plt.scatter(np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=0.5)
+    elif method == "timeshift":
+        for i in range(len(coarse)):
+            plt.plot(
+                np.arange(i, len(signal) - len(coarse) + i + 1, len(coarse)),
+                coarse[i],
+                color="red",
+                linewidth=0.75,
+            )
     else:
         plt.plot(np.linspace(0, len(signal), len(coarse)), coarse, color="red", linewidth=1)
     plt.title(f'Coarse-graining using method "{method}"')
