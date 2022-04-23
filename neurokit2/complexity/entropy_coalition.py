@@ -8,7 +8,9 @@ from .entropy_shannon import entropy_shannon
 
 
 def entropy_coalition(signal, method="amplitude"):
-    """Amplitude Coalition Entropy (ACE) reflects the entropy over time of the constitution of the set
+    """**Amplitude Coalition Entropy (ACE) and Synchrony Coalition Entropy (SCE)**
+
+    Amplitude Coalition Entropy (ACE) reflects the entropy over time of the constitution of the set
     of most active channels (Shanahan, 2010), and is similar to Lempel-Ziv complexity, in the sense
     that it quantifies variability in space and time of the activity. ACE is normalized by dividing
     the raw by the value obtained for the same binary input but randomly shuffled. The
@@ -26,7 +28,7 @@ def entropy_coalition(signal, method="amplitude"):
     signal : DataFrame
         The DataFrame containing all the respective signals (n_samples x n_channels).
     method : str
-        Method for computing the coalition entropy.
+        Can be ``"amplitude"`` for ACE or ``"synchrony"`` for SCE.
 
     Returns
     ----------
@@ -38,27 +40,29 @@ def entropy_coalition(signal, method="amplitude"):
 
     References
     ----------
-    - Shanahan, M. (2010). Metastable chimera states in community-structured oscillator networks.
-    Chaos: An Interdisciplinary Journal of Nonlinear Science, 20(1), 013108.
-    - Schartner, M., Seth, A., Noirhomme, Q., Boly, M., Bruno, M. A., Laureys, S., &
-    Barrett, A. (2015). Complexity of multi-dimensional spontaneous EEG decreases
-    during propofol induced general anaesthesia. PloS one, 10(8), e0133532.
+    * Shanahan, M. (2010). Metastable chimera states in community-structured oscillator networks.
+      Chaos: An Interdisciplinary Journal of Nonlinear Science, 20(1), 013108.
+    * Schartner, M., Seth, A., Noirhomme, Q., Boly, M., Bruno, M. A., Laureys, S., &
+      Barrett, A. (2015). Complexity of multi-dimensional spontaneous EEG decreases
+      during propofol induced general anaesthesia. PloS one, 10(8), e0133532.
 
     Examples
-    --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Get data
-    >>> raw = nk.mne_data("raw")
-    >>> signal = nk.mne_to_df(raw)[["EEG 001", "EEG 002", "EEG 003"]]
-    >>>
-    >>> # ACE
-    >>> ace, info = nk.entropy_coalition(signal, method="amplitude")
-    >>> ace #doctest: +SKIP
-    >>>
-    >>> # SCE
-    >>> sce, info = nk.entropy_coalition(signal, method="synchrony")
-    >>> sce #doctest: +SKIP
+    ----------
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Get data
+      raw = nk.mne_data("raw")
+      signal = nk.mne_to_df(raw)[["EEG 001", "EEG 002", "EEG 003"]]
+
+      # ACE
+      ace, info = nk.entropy_coalition(signal, method="amplitude")
+      ace
+
+      # SCE
+      sce, info = nk.entropy_coalition(signal, method="synchrony")
+      sce
     """
     # Sanity checks
     if isinstance(signal, pd.DataFrame):

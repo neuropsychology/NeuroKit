@@ -8,8 +8,10 @@ from ..stats import standardize
 
 
 def fractal_nld(signal, corrected=False):
-    """**Fractal dimension via Normalized Length Density (NLD)**
+    """**Fractal dimension via Normalized Length Density (NLDFD)**
 
+    NLDFD is a very basic index corresponding to the average of the absolute consecutive
+    differences of the (standardized) signal (``np.mean(np.abs(np.diff(std_signal)))``).
     This method was developed for measuring signal complexity of very short durations (< 30
     samples), and can be used for instance when continuous signal FD changes (or "running" FD) are
     of interest (by computing it on sliding windows, see example).
@@ -113,8 +115,8 @@ def fractal_nld(signal, corrected=False):
     # Amplitude normalization
     signal = standardize(signal)
 
-    # calculate normalized length density
-    nld = np.sum(np.abs(np.diff(signal))) / len(signal)
+    # Calculate normalized length density
+    nld = np.nanmean(np.abs(np.diff(signal)))
 
     if corrected:
         # Power model optimal parameters based on analysis of EEG signals (from Kalauzi et al. 2009)

@@ -7,9 +7,9 @@ def fractal_katz(signal):
 
     """**Katz's Fractal Dimension (KFD)**
 
-    Computes Katz's Fractal Dimension (KFD), based on euclidean distances between
-    successive points in the signal which are summed and averaged,
-    and the maximum distance between the starting and any other point in the sample.
+    Computes Katz's Fractal Dimension (KFD). The euclidean distances between successive points in
+    the signal are summed and averaged, and the maximum distance between the starting point and any
+    other point in the sample.
 
     Here, fractal dimensions range from 1.0 for straight lines, through
     approximately 1.15 for random-walk waveforms, to approaching 1.5 for the most
@@ -70,7 +70,7 @@ def fractal_katz(signal):
 
     References
     ----------
-    - Katz, M. J. (1988). Fractals and the analysis of waveforms.
+    * Katz, M. J. (1988). Fractals and the analysis of waveforms.
       Computers in Biology and Medicine, 18(3), 145-156. doi:10.1016/0010-4825(88)90041-8.
 
     """
@@ -87,14 +87,6 @@ def fractal_katz(signal):
     # Drop missing values
     signal = signal[~np.isnan(signal)]
 
-    # if one signal time series
-    out = _fractal_katz(signal)
-
-    return out, {}
-
-
-def _fractal_katz(signal):
-
     # Define total length of curve
     dists = np.abs(np.diff(signal))
     length = np.sum(dists)
@@ -107,4 +99,4 @@ def _fractal_katz(signal):
 
     kfd = np.log10(length / a) / (np.log10(d / a))
 
-    return kfd
+    return kfd, {}

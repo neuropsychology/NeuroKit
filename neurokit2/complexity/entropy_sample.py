@@ -6,7 +6,7 @@ from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _phi, _phi_divide
 
 
-def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
+def entropy_sample(signal, delay=1, dimension=2, tolerance="sd", **kwargs):
     """**Sample Entropy (SampEn)**
 
     Compute the sample entropy (SampEn) of a signal. SampEn is a modification
@@ -29,7 +29,7 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
         :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
-        ``"default"``, will be set to :math:`0.2 * SD_{signal}`. See
+        ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
         :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
     **kwargs : optional
         Other arguments.

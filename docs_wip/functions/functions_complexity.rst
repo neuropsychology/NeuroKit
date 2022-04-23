@@ -53,9 +53,21 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_shannon
 
+*entropy_cumulative_residual()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_cumulative_residual
+
 *entropy_svd()*
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_svd
+
+*entropy_sample()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_sample
+
+*entropy_approximate()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_approximate
 
 *entropy_permutation()*
 """""""""""""""""""""""
@@ -69,9 +81,7 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_spectral
 
-*entropy_sample()*
-""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_sample
+
 
 
 Other

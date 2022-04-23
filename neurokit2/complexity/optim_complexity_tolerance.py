@@ -6,7 +6,7 @@ import scipy.spatial
 
 from ..stats import density
 from .complexity_embedding import complexity_embedding
-from .entropy_approximate import entropy_approximate
+from .utils import _phi
 
 
 def complexity_tolerance(
@@ -81,7 +81,7 @@ def complexity_tolerance(
 
       # Fast method (based on the standard deviation)
       @savefig p_complexity_tolerance1.png scale=100%
-      r, info = nk.complexity_tolerance(signal, method = 'SD', show=True)
+      r, info = nk.complexity_tolerance(signal, method = "sd", show=True)
       r
       @suppress
       plt.close()
@@ -158,6 +158,8 @@ def complexity_tolerance(
 # =============================================================================
 # Internals
 # =============================================================================
+
+
 def _optimize_tolerance_recurrence(signal, r_range=None, delay=None, dimension=None):
 
     # Optimize missing parameters
@@ -196,13 +198,23 @@ def _optimize_tolerance_maxapen(signal, r_range=None, delay=None, dimension=None
     if isinstance(r_range, int):
         r_range = np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)
 
-    ApEn = np.zeros_like(r_range)
-    for i, r in enumerate(r_range):
-        ApEn[i], _ = entropy_approximate(
-            signal, delay=delay, dimension=dimension, tolerance=r_range[i]
-        )
+    apens = [_entropy_apen(signal, delay=delay, dimension=dimension, tolerance=r) for r in r_range]
 
-    return r_range[np.argmax(ApEn)], {"Values": r_range, "Scores": ApEn}
+    return r_range[np.argmax(apens)], {"Values": r_range, "Scores": np.array(apens)}
+
+
+def _entropy_apen(signal, delay, dimension, tolerance, **kwargs):
+
+    phi = _phi(
+        signal,
+        delay=delay,
+        dimension=dimension,
+        tolerance=tolerance,
+        approximate=True,
+        **kwargs,
+    )
+
+    return np.abs(np.subtract(phi[0], phi[1]))
 
 
 # =============================================================================

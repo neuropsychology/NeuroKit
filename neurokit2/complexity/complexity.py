@@ -29,9 +29,7 @@ from .fractal_sevcik import fractal_sevcik
 from .information_fisher import fisher_information
 
 
-def complexity(
-    signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="default", **kwargs
-):
+def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance="sd", **kwargs):
     """**Automated Complexity and Chaos Analysis**
 
     This function can be used to compute a large number of complexity metrics and features. For more
@@ -61,7 +59,7 @@ def complexity(
         :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
-        ``"default"``, will be set to :math:`0.2 * SD_{signal}`. See
+        ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
         :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
 
     Returns
