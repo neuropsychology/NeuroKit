@@ -8,9 +8,10 @@ from ..misc import NeuroKitWarning, find_plateau
 
 
 def complexity_k(signal, k_max="max", show=False):
-    """Automated selection of the optimal k_max parameter for Higuchi Fractal Dimension (HFD).
+    """**Automated selection of k_max parameter for Higuchi Fractal Dimension (HFD)**
 
-    The optimal kmax is computed based on the point at which HFD values plateau for a range of kmax values (see Vega, 2015).
+    The optimal *k-max* is computed based on the point at which HFD values plateau for a range of
+    kmax values (see Vega, 2015).
 
     Parameters
     ----------
@@ -36,19 +37,28 @@ def complexity_k(signal, k_max="max", show=False):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
-    >>> k_max, info = nk.complexity_k(signal, k_max='default', show=True)
-    >>> k_max #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.5)
+
+      @savefig p_complexity_k1.png scale=100%
+      k_max, info = nk.complexity_k(signal, k_max='default', show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      k_max
 
     Reference
     ----------
-    - Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
-    Physica D: Nonlinear Phenomena, 31(2), 277-283.
-
-    - Vega, C. F., & Noel, J. (2015, June). Parameters analyzed of Higuchi's fractal dimension for EEG brain signals.
-    In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE. https://ieeexplore.ieee.org/document/7168285
+    * Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
+      Physica D: Nonlinear Phenomena, 31(2), 277-283.
+    * Vega, C. F., & Noel, J. (2015, June). Parameters analyzed of Higuchi's fractal dimension for
+      EEG brain signals. In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE. https://
+      ieeexplore.ieee.org/document/7168285
     """
     # Get the range of k-max values to be tested
     # ------------------------------------------

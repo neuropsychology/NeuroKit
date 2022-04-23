@@ -40,20 +40,33 @@ def fractal_higuchi(signal, k_max="default", show=False, **kwargs):
 
     Examples
     ----------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
-    >>>
-    >>> hfd, info = nk.fractal_higuchi(signal, k_max='default', show=True)
-    >>> hfd #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.signal_simulate(duration=1, sampling_rate=100, frequency=[3, 6], noise = 0.2)
+
+      @savefig p_fractal_higuchi1.png scale=100%
+      k_max, info =  nk.complexity_k(signal, k_max='default', show=True)
+      @suppress
+      plt.close()
+
+      @savefig p_fractal_higuchi2.png scale=100%
+      hfd, info = nk.fractal_higuchi(signal, k_max=k_max, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      hfd
 
     Reference
     ----------
-    - Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
-    Physica D: Nonlinear Phenomena, 31(2), 277-283.
-
-    - Vega, C. F., & Noel, J. (2015, June). Parameters analyzed of Higuchi's fractal dimension for EEG brain signals.
-    In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE. https://ieeexplore.ieee.org/document/7168285
+    * Higuchi, T. (1988). Approach to an irregular time series on the basis of the fractal theory.
+      Physica D: Nonlinear Phenomena, 31(2), 277-283.
+    * Vega, C. F., & Noel, J. (2015, June). Parameters analyzed of Higuchi's fractal dimension for
+      EEG brain signals. In 2015 Signal Processing Symposium (SPSympo) (pp. 1-5). IEEE.
+      https://ieeexplore.ieee.org/document/7168285
     """
 
     # Sanity checks

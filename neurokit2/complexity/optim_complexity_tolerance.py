@@ -82,9 +82,12 @@ def complexity_tolerance(
       # Fast method (based on the standard deviation)
       @savefig p_complexity_tolerance1.png scale=100%
       r, info = nk.complexity_tolerance(signal, method = "sd", show=True)
-      r
       @suppress
       plt.close()
+
+    .. ipython:: python
+
+      r
 
     * **Example 2**: The method based on the recurrence rate will display the rates according to
       different values of tolerance. The horizontal line indicates 5%.
@@ -94,9 +97,12 @@ def complexity_tolerance(
       @savefig p_complexity_tolerance2.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=1, dimension=10,
                                         method = 'recurrence', show=True)
-      r
       @suppress
       plt.close()
+
+    .. ipython:: python
+
+      r
 
     * **Example 3**: The default method selects the tolerance at which *ApEn* is maximized.
 
@@ -106,9 +112,12 @@ def complexity_tolerance(
       @savefig p_complexity_tolerance3.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6,
                                         method = 'maxApEn', show=True)
-      r
       @suppress
       plt.close()
+
+    .. ipython:: python
+
+      r
 
     * **Example 4**: The tolerance values that are tested can be modified to get a more precise
       estimate.
@@ -119,9 +128,12 @@ def complexity_tolerance(
       @savefig p_complexity_tolerance4.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn',
                                         r_range=np.linspace(0.002, 0.8, 30), show=True)
-      r
       @suppress
       plt.close()
+
+    .. ipython:: python
+
+      r
 
     References
     -----------

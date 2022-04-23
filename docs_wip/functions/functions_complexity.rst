@@ -22,6 +22,10 @@ Parameters Choice
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_tolerance
 
+*complexity_k()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_k
+
 
 
 Fractal Dimension
@@ -46,6 +50,9 @@ Fractal Dimension
 """"""""""""""""""""""
 .. autofunction:: neurokit2.complexity.fractal_psdslope
 
+*fractal_higuchi()*
+""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.fractal_higuchi
 
 Entropy
 ^^^^^^^^^^^^^^^^^
