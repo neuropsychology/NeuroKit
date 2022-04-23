@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_binarize import _signal_binarize_threshold
+from .optim_complexity_tolerance import complexity_tolerance
 
 
 def fractal_petrosian(signal, method="C", show=False):
@@ -22,6 +23,9 @@ def fractal_petrosian(signal, method="C", show=False):
       their sign.
     * **Method 'D'** forms separates consecutive samples that exceed 1 signal's SD from the others
       smaller changes.
+    * **Method 'r'** is based on the concept of :func:`*tolerance* <complexity_tolerance>`, and
+      will separate consecutive samples that exceed a given tolerance threshold, by default
+      :math:`0.2 * SD`. See :func:`complexity_tolerance` for more details.
     * **Binning**: If an integer *n* is passed, will bin the signal into *n* equal-width bins.
 
     Most of these methods assume that the signal is periodic (without a linear trend). Linear
@@ -36,9 +40,9 @@ def fractal_petrosian(signal, method="C", show=False):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str or int
-        Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, an ``int``
-        indicating the number of bins, or ``None`` to skip the process (for instance, in cases when
-        the binarization has already been done before).
+        Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
+        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
+        cases when the binarization has already been done before).
     show : bool
         If ``True``, will show the discrete the signal.
 
@@ -106,6 +110,17 @@ def fractal_petrosian(signal, method="C", show=False):
     .. ipython:: python
 
       @savefig p_fractal_petrosian5.png scale=100%
+      pfd, info = nk.fractal_petrosian(signal, method = "r", show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      pfd
+
+    .. ipython:: python
+
+      @savefig p_fractal_petrosian6.png scale=100%
       pfd, info = nk.fractal_petrosian(signal, method = 6, show=True)
       @suppress
       plt.close()
@@ -113,6 +128,8 @@ def fractal_petrosian(signal, method="C", show=False):
     .. ipython:: python
 
       pfd
+
+
 
     References
     ----------
@@ -153,6 +170,7 @@ def _complexity_binarize(signal, method="A", show=False):
             df = df.pivot_table(index="Index", columns="Bin", values="Signal")
             for i in df.columns:
                 plt.plot(df[i])
+
     elif isinstance(method, int):
         binned = pd.cut(signal, bins=method, labels=False)
         n_inversions = np.isclose(np.diff(binned), 0).sum()
@@ -162,6 +180,7 @@ def _complexity_binarize(signal, method="A", show=False):
             for i in df.columns:
                 plt.plot(df[i])
             plt.title(f"Method: Binning (bins={method})")
+
     elif method == "A":
         binned = _signal_binarize_threshold(signal, threshold="mean")
         n_inversions = binned.sum()
@@ -172,6 +191,7 @@ def _complexity_binarize(signal, method="A", show=False):
             df.plot()
             plt.axhline(y=np.nanmean(signal), color="r", linestyle="dotted")
             plt.title("Method A")
+
     elif method == "B":
         m = np.nanmean(signal)
         sd = np.nanstd(signal, ddof=1)
@@ -185,6 +205,7 @@ def _complexity_binarize(signal, method="A", show=False):
             plt.axhline(y=m - sd, color="r", linestyle="dotted")
             plt.axhline(y=m + sd, color="r", linestyle="dotted")
             plt.title("Method B")
+
     elif method == "C":
         binned = np.diff(np.signbit(np.diff(signal)))
         n_inversions = binned.sum()
@@ -199,10 +220,20 @@ def _complexity_binarize(signal, method="A", show=False):
         binned = np.abs(np.diff(signal)) > np.nanstd(signal, ddof=1)
         n_inversions = binned.sum()
         if show is True:
-            where = np.where(np.abs(np.diff(signal)) > np.nanstd(signal, ddof=1))[0]
+            where = np.where(binned)[0]
             plt.plot(signal, zorder=1)
             plt.scatter(where, signal[where], color="orange", label="Inversion", zorder=2)
             plt.title("Method D")
+
+    elif method == "r":
+        binned = np.abs(np.diff(signal)) > complexity_tolerance(signal, method="sd")[0]
+        n_inversions = binned.sum()
+        if show is True:
+            where = np.where(binned)[0]
+            plt.plot(signal, zorder=1)
+            plt.scatter(where, signal[where], color="orange", label="Inversion", zorder=2)
+            plt.title("Method based on tolerance r")
+
     else:
         raise ValueError(
             "`method` must be one of 'A', 'B', 'C' or 'D', or an integer. See the documentation for"

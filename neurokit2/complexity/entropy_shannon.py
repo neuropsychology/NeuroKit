@@ -10,7 +10,8 @@ def entropy_shannon(signal, base=2, method=None, show=False):
 
     Compute Shannon entropy (SE). Entropy is a measure of unpredictability of the
     state, or equivalently, of its average information content. Shannon entropy (SE) is one of the
-    first and most basic measure of entropy and a foundational concept of information theory, introduced by Shannon (1948) to quantify the amount of information in a variable.
+    first and most basic measure of entropy and a foundational concept of information theory,
+    introduced by Shannon (1948) to quantify the amount of information in a variable.
 
     Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy
     (see ``entropy_differential()``).
@@ -19,7 +20,8 @@ def entropy_shannon(signal, base=2, method=None, show=False):
     "B", "A"]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
     the signal into a number of bins using for instance ``pd.cut(signal, bins=100, labels=False)``.
     This can be done automatically using the ``method`` argument, which is the same as in
-    :func:`fractal_petrosian`. This means that methods A, B, C, and D are also available.
+    :func:`fractal_petrosian`. This means that methods *A*, *B*, *C*, *D*, and *r* are also
+    available.
 
     This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 
@@ -31,9 +33,10 @@ def entropy_shannon(signal, base=2, method=None, show=False):
         The logarithmic base to use, defaults to ``2``. Note that ``scipy.stats.entropy()``
         uses ``np.e`` as default (the natural logarithm).
     method : str or int
-        Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, an ``int``
-        indicating the number of bins, or ``None`` to skip the process (for instance, in cases when
-        the binarization has already been done before). See :func:`fractal_petrosian` for details.
+        Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
+        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
+        cases when the binarization has already been done before). See :func:`fractal_petrosian`
+        for details.
     show : bool
         If ``True``, will show the discrete the signal.
 
@@ -101,6 +104,7 @@ def entropy_shannon(signal, base=2, method=None, show=False):
     if not isinstance(signal, np.ndarray):
         signal = np.array(signal)
 
+    # Make discrete
     if np.isscalar(signal) is False:
         signal, _ = _complexity_binarize(signal, method=method, show=show)
 
