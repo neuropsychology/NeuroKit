@@ -60,6 +60,10 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_shannon
 
+*entropy_differential()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_differential
+
 *entropy_cumulative_residual()*
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_cumulative_residual
@@ -68,29 +72,30 @@ Entropy
 """""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_svd
 
+*entropy_spectral()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_spectral
+
 *entropy_sample()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_sample
-
-*entropy_fuzzy()*
-""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_fuzzy
 
 *entropy_approximate()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_approximate
 
+*entropy_range()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_range
+
+*entropy_fuzzy()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_fuzzy
+
 *entropy_permutation()*
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_permutation
 
-*entropy_differential()*
-""""""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_differential
-
-*entropy_spectral()*
-""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_spectral
 
 
 
