@@ -11,28 +11,26 @@ def fisher_information(signal, delay=1, dimension=2):
     accuracy" in statistical estimation theory. It is central to many statistical fields far beyond
     that of complexity theory. It measures the amount of information that an observable random
     variable carries about an unknown parameter. In complexity analysis, the amount of information
-    that a system carries "about itself" is measured. It is based on the Singular Value
-    Decomposition (SVD) of the time-delay embedded signal. The value of FI is usually
-    anti-correalted with other measures of complexity (the more information a system withholds
-    about itself, and the more predictable and thus, less complex it is).
+    that a system carries "about itself" is measured. Similarly to :func:`SVDEn <entropy_svd>`, it
+    is based on the Singular Value Decomposition (SVD) of the :func:`time-delay embedded <complexity_embedding>`
+    signal. The value of FI is usually anti-correlated with other measures of complexity (the more
+    information a system withholds about itself, and the more predictable and thus, less complex it
+    is).
 
     See Also
     --------
-    entropy_svd, mutual_information, complexity_delay, complexity_dimension
+    entropy_svd, mutual_information, complexity_embedding, complexity_delay, complexity_dimension
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau' :math:`\\tau`, sometimes referred to as 'lag') in samples.
-        See :func:`complexity_delay()` to choose the optimal value for this parameter.
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
-        returns an array with two columns corresponding to the original signal and its delayed (by
-        Tau) version. See ``complexity_dimension()`` to estimate the optimal value for this
-        parameter.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
 
     Returns
     -------

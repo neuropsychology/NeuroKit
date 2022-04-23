@@ -22,14 +22,15 @@ def entropy_sample(signal, delay=1, dimension=2, tolerance="default", **kwargs):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau' :math:`\\tau`, sometimes referred to as 'lag') in samples.
-        See :func:`complexity_delay` to choose the optimal value for this parameter.
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     tolerance : float
-        Tolerance (often denoted as 'r', i.e., filtering level - max absolute difference between segments).
-        If 'default', will be set to 0.2 times the standard deviation of the signal (for dimension = 2).
+        Tolerance (often denoted as *r*), distance to consider two data points as similar. If
+        ``"default"``, will be set to :math:`0.2 * SD_{signal}`. See
+        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
     **kwargs : optional
         Other arguments.
 

@@ -55,7 +55,7 @@ def complexity_simulate(
 
     .. ipython:: python
 
-      @savefig p_complexity2.png scale=100%
+      @savefig p_complexity_simulate2.png scale=100%
       nk.complexity_attractor(nk.complexity_embedding(signal, delay = 5), alpha=1, color="blue")
       @suppress
       plt.close()
@@ -65,14 +65,14 @@ def complexity_simulate(
     .. ipython:: python
 
       signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="ornstein")
-      @savefig p_complexity_simulate2.png scale=100%
+      @savefig p_complexity_simulate3.png scale=100%
       nk.signal_plot(signal, color = "red")
       @suppress
       plt.close()
 
     .. ipython:: python
 
-      @savefig p_complexity3.png scale=100%
+      @savefig p_complexity_simulate4.png scale=100%
       nk.complexity_attractor(nk.complexity_embedding(signal, delay = 100), alpha=1, color="red")
       @suppress
       plt.close()
@@ -82,14 +82,14 @@ def complexity_simulate(
     .. ipython:: python
 
       signal = nk.complexity_simulate(duration=1, sampling_rate=1000, method="mackeyglass")
-      @savefig p_complexity_simulate4.png scale=100%
+      @savefig p_complexity_simulate5.png scale=100%
       nk.signal_plot(signal, color = "green")
       @suppress
       plt.close()
 
     .. ipython:: python
 
-      @savefig p_complexity5.png scale=100%
+      @savefig p_complexity_simulate6.png scale=100%
       nk.complexity_attractor(nk.complexity_embedding(signal, delay = 25), alpha=1, color="green")
       @suppress
       plt.close()
@@ -99,14 +99,14 @@ def complexity_simulate(
     .. ipython:: python
 
       signal = nk.complexity_simulate(duration=30, sampling_rate=100, method="randomwalk")
-      @savefig p_complexity_simulate6.png scale=100%
+      @savefig p_complexity_simulate7.png scale=100%
       nk.signal_plot(signal, color = "orange")
       @suppress
       plt.close()
 
     .. ipython:: python
 
-      @savefig p_complexity7.png scale=100%
+      @savefig p_complexity_simulate8.png scale=100%
       nk.complexity_attractor(nk.complexity_embedding(signal, delay = 100), alpha=1, color="orange")
       @suppress
       plt.close()

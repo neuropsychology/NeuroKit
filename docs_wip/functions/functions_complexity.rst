@@ -69,6 +69,10 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_spectral
 
+*entropy_sample()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_sample
+
 
 Other
 ^^^^^^^^^^^^^^^^^

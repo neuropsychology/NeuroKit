@@ -37,7 +37,7 @@ def fractal_katz(signal):
       import neurokit2 as nk
       import numpy as np
 
-      # Simulate straightline
+      # Simulate straight line
       straight = np.linspace(-1, 1, 2000)
 
       # Simulate random
@@ -47,7 +47,7 @@ def fractal_katz(signal):
       # Simulate simple
       simple = nk.signal_simulate(duration=2, frequency=[5, 10])
 
-      # Simulate simple
+      # Simulate complex
       complex = nk.signal_simulate(duration=2,
                                    frequency=[1, 3, 6, 12],
                                    noise = 0.1)

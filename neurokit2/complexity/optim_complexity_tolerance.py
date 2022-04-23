@@ -41,12 +41,12 @@ def complexity_tolerance(
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str
-        Can be 'maxApEn' (default), 'sd', or 'recurrence'.
+        Can be ``"maxApEn"`` (default), ``"sd"`` (or ``"default"``), or ``"recurrence"``.
     r_range : Union[list, int]
         The range of tolerance values (or the number of values) to test. Only used if ``method`` is
-        ``'maxApEn'`` or ``'recurrence'``. If ``None`` (default), the default range will be used;
-        ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)`` for ``'maxApEn'``, and ``np.
-        linspace(0, np.max(d), 30 + 1)[1:]`` for ``'recurrence'``. You can set a lower number for
+        ``"maxApEn"`` or ``"recurrence"``. If ``None`` (default), the default range will be used;
+        ``np.linspace(0.02, 0.8, r_range) * np.std(signal, ddof=1)`` for ``"maxApEn"``, and ``np.
+        linspace(0, np.max(d), 30 + 1)[1:]`` for ``"recurrence"``. You can set a lower number for
         faster results.
     delay : int
         Only used if ``method='maxApEn'``. See ``entropy_approximate()``.
