@@ -1458,7 +1458,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.8611802284229513</span>
+<span class="gh">Out[12]: </span><span class="go">2.0335962512861094</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1468,7 +1468,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.8319787106076446</span>
+<span class="gh">Out[16]: </span><span class="go">3.7385746568855436</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1501,6 +1501,9 @@ this band.</p></li>
 their sign.</p></li>
 <li><p><strong>Method ‘D’</strong> forms separates consecutive samples that exceed 1 signal’s SD from the others
 smaller changes.</p></li>
+<li><p><strong>Method ‘r’</strong> is based on the concept of <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-func docutils literal notranslate"><span class="pre">*tolerance*</span></code></a>, and
+will separate consecutive samples that exceed a given tolerance threshold, by default
+<span class="math notranslate nohighlight">\(0.2 * SD\)</span>. See <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_tolerance()</span></code></a> for more details.</p></li>
 <li><p><strong>Binning</strong>: If an integer <em>n</em> is passed, will bin the signal into <em>n</em> equal-width bins.</p></li>
 </ul>
 <p>Most of these methods assume that the signal is periodic (without a linear trend). Linear
@@ -1513,9 +1516,9 @@ detrending might be useful to eliminate linear trends (see <code class="xref py 
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
-<li><p><strong>method</strong> (<em>str or int</em>) – Method of discretization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, an <code class="docutils literal notranslate"><span class="pre">int</span></code>
-indicating the number of bins, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to skip the process (for instance, in cases when
-the binarization has already been done before).</p></li>
+<li><p><strong>method</strong> (<em>str or int</em>) – Method of discretization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
+<code class="docutils literal notranslate"><span class="pre">int</span></code> indicating the number of bins, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to skip the process (for instance, in
+cases when the binarization has already been done before).</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the discrete the signal.</p></li>
 </ul>
 </dd>
@@ -1567,15 +1570,23 @@ to compute PFD.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian4.png"><img alt="../_images/p_fractal_petrosian4.png" src="../_images/p_fractal_petrosian4.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">pfd</span>
-<span class="gh">Out[12]: </span><span class="go">1.0037494934713858</span>
+<span class="gh">Out[12]: </span><span class="go">1.0031041324463295</span>
 </pre></div>
 </div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian5.png"><img alt="../_images/p_fractal_petrosian5.png" src="../_images/p_fractal_petrosian5.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">pfd</span>
-<span class="gh">Out[14]: </span><span class="go">1.0300218805228696</span>
+<span class="gh">Out[14]: </span><span class="go">1.0314703675838237</span>
+</pre></div>
+</div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_fractal_petrosian6.png"><img alt="../_images/p_fractal_petrosian6.png" src="../_images/p_fractal_petrosian6.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">pfd</span>
+<span class="gh">Out[16]: </span><span class="go">1.0273412756900366</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1713,7 +1724,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [9]: </span><span class="n">nld</span> <span class="o">=</span> <span class="p">[</span><span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">]</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nld</span><span class="p">)</span>  <span class="c1"># Get average</span>
-<span class="gh">Out[10]: </span><span class="go">0.5651966248340411</span>
+<span class="gh">Out[10]: </span><span class="go">0.5892426292858512</span>
 </pre></div>
 </div>
 <p><strong>Example 3</strong>: Calculate FD-NLD on sliding windows</p>
@@ -1789,7 +1800,7 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.7554318910509057</span>
+<span class="gh">Out[4]: </span><span class="go">2.569748631851824</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1816,14 +1827,16 @@ complexity in temporal physiological signals. Physiol. Meas. 23, 1-38.</p></li>
 <dd><p><strong>Shannon entropy (SE or ShanEn)</strong></p>
 <p>Compute Shannon entropy (SE). Entropy is a measure of unpredictability of the
 state, or equivalently, of its average information content. Shannon entropy (SE) is one of the
-first and most basic measure of entropy and a foundational concept of information theory, introduced by Shannon (1948) to quantify the amount of information in a variable.</p>
+first and most basic measure of entropy and a foundational concept of information theory,
+introduced by Shannon (1948) to quantify the amount of information in a variable.</p>
 <p>Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy
 (see <code class="docutils literal notranslate"><span class="pre">entropy_differential()</span></code>).</p>
 <p>Because Shannon entropy was meant for symbolic sequences (discrete events such as [“A”, “B”,
 “B”, “A”]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
 the signal into a number of bins using for instance <code class="docutils literal notranslate"><span class="pre">pd.cut(signal,</span> <span class="pre">bins=100,</span> <span class="pre">labels=False)</span></code>.
 This can be done automatically using the <code class="docutils literal notranslate"><span class="pre">method</span></code> argument, which is the same as in
-<a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a>. This means that methods A, B, C, and D are also available.</p>
+<a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a>. This means that methods <em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, and <em>r</em> are also
+available.</p>
 <p>This function can be called either via <code class="docutils literal notranslate"><span class="pre">entropy_shannon()</span></code> or <code class="docutils literal notranslate"><span class="pre">complexity_se()</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1831,9 +1844,10 @@ This can be done automatically using the <code class="docutils literal notransla
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
 <li><p><strong>base</strong> (<em>float</em>) – The logarithmic base to use, defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">scipy.stats.entropy()</span></code>
 uses <code class="docutils literal notranslate"><span class="pre">np.e</span></code> as default (the natural logarithm).</p></li>
-<li><p><strong>method</strong> (<em>str or int</em>) – Method of discretization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, an <code class="docutils literal notranslate"><span class="pre">int</span></code>
-indicating the number of bins, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to skip the process (for instance, in cases when
-the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a> for details.</p></li>
+<li><p><strong>method</strong> (<em>str or int</em>) – Method of discretization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
+<code class="docutils literal notranslate"><span class="pre">int</span></code> indicating the number of bins, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to skip the process (for instance, in
+cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a>
+for details.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the discrete the signal.</p></li>
 </ul>
 </dd>
@@ -1862,7 +1876,7 @@ to compute Shannon entropy.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_shannon1.png"><img alt="../_images/p_entropy_shannon1.png" src="../_images/p_entropy_shannon1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">shanen</span>
-<span class="gh">Out[4]: </span><span class="go">1.555280117032032</span>
+<span class="gh">Out[4]: </span><span class="go">1.5509155276929905</span>
 </pre></div>
 </div>
 <p>Compare with <code class="docutils literal notranslate"><span class="pre">scipy</span></code> (using the same base).</p>
@@ -1872,12 +1886,12 @@ to compute Shannon entropy.</p></li>
 <span class="gp">In [6]: </span><span class="n">binned</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binned</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="gh">Out[7]: </span><span class="go">1.0780380281016948</span>
+<span class="gh">Out[7]: </span><span class="go">1.075012725307036</span>
 
 <span class="gp">In [8]: </span><span class="n">shanen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_shannon</span><span class="p">(</span><span class="n">binned</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">shanen</span>
-<span class="gh">Out[9]: </span><span class="go">1.0780380281016948</span>
+<span class="gh">Out[9]: </span><span class="go">1.075012725307036</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1994,19 +2008,19 @@ return the permutation entropy in bit.</p></li>
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.5761369334659707</span>
+<span class="gh">Out[4]: </span><span class="go">2.581546836889315</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8874661404837921</span>
+<span class="gh">Out[6]: </span><span class="go">0.8809903230276509</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.998158220212819</span>
+<span class="gh">Out[8]: </span><span class="go">0.9918120667481956</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2063,7 +2077,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.3797039202788337</span>
+<span class="gh">Out[4]: </span><span class="go">0.3433855065817541</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2115,7 +2129,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.8582469904296726</span>
+<span class="gh">Out[4]: </span><span class="go">0.8207994205615935</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
