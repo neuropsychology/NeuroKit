@@ -14,7 +14,7 @@ def entropy_tsallis(signal, q=1, method=None, show=False, freq=None):
 
     .. math::
 
-    TSEn = \\frac{1}{q - 1} \\left( 1 - \\sum_{x \\in \\mathcal{X}} p(x)^q \\right)
+      TSEn = \\frac{1}{q - 1} \\left( 1 - \\sum_{x \\in \\mathcal{X}} p(x)^q \\right)
 
 
     Parameters
@@ -41,7 +41,7 @@ def entropy_tsallis(signal, q=1, method=None, show=False, freq=None):
 
     See Also
     --------
-    entropy_shannon, fractal_petrosian
+    entropy_shannon, fractal_petrosian, entropy_renyi
 
     Examples
     ----------

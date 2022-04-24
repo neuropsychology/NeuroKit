@@ -10,15 +10,15 @@ def entropy_renyi(signal, alpha=1, method=None, show=False, freq=None):
     the collision entropy and the min-entropy.
 
     - :math:`\\alpha = 0`: the Rényi entropy becomes what is known as the **Hartley entropy**.
-    - :math:`\\alpha = 1`: the Rényi entropy becomes the :func:`**Shannon entropy** <entropy_shannon>`.
+    - :math:`\\alpha = 1`: the Rényi entropy becomes the **:func:`Shannon entropy <entropy_shannon>`**.
     - :math:`\\alpha = 2`: the Rényi entropy becomes the collision entropy, which corresponds to
       the surprisal of "rolling doubles".
 
     It is mathematically defined as:
 
-     .. math::
+    .. math::
 
-    REn = \\frac{1}{1-\\alpha} \\log_2 \\left( \\sum_{x \\in \\mathcal{X}} p(x)^\\alpha \\right)
+      REn = \\frac{1}{1-\\alpha} \\log_2 \\left( \\sum_{x \\in \\mathcal{X}} p(x)^\\alpha \\right)
 
     Parameters
     ----------
@@ -44,7 +44,7 @@ def entropy_renyi(signal, alpha=1, method=None, show=False, freq=None):
 
     See Also
     --------
-    entropy_shannon, fractal_petrosian
+    entropy_shannon, fractal_petrosian, entropy_tsallis
 
     Examples
     ----------

@@ -54,7 +54,7 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None):
 
     See Also
     --------
-    entropy_differential, entropy_cumulative_residual, entropy_tsallis
+    entropy_differential, entropy_cumulative_residual, entropy_tsallis, entropy_renyi
 
     Examples
     ----------
