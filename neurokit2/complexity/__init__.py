@@ -60,16 +60,17 @@ complexity_sampen = entropy_sample
 complexity_fuzzyen = entropy_fuzzy
 complexity_fuzzyapen = functools.partial(entropy_fuzzy, approximate=True)
 
-complexity_mse = entropy_multiscale
-complexity_cmse = functools.partial(entropy_multiscale, method="CMSE")
-complexity_rcmse = functools.partial(entropy_multiscale, method="RCMSE")
-complexity_fuzzymse = functools.partial(entropy_multiscale, fuzzy=True)
-complexity_fuzzycmse = functools.partial(entropy_multiscale, method="CMSE", fuzzy=True)
-complexity_fuzzyrcmse = functools.partial(entropy_multiscale, method="RCMSE", fuzzy=True)
-
 complexity_pe = entropy_permutation
 complexity_wpe = functools.partial(entropy_permutation, weighted=True)
-complexity_mspe = functools.partial(entropy_permutation, scale="default")
+
+complexity_mse = entropy_multiscale
+complexity_mspe = functools.partial(entropy_multiscale, scale="MSPEn")
+complexity_cmse = functools.partial(entropy_multiscale, method="CMSEn")
+complexity_rcmse = functools.partial(entropy_multiscale, method="RCMSEn")
+complexity_fuzzymse = functools.partial(entropy_multiscale, fuzzy=True)
+complexity_fuzzycmse = functools.partial(entropy_multiscale, method="CMSEn", fuzzy=True)
+complexity_fuzzyrcmse = functools.partial(entropy_multiscale, method="RCMSEn", fuzzy=True)
+
 
 complexity_dfa = fractal_dfa
 fractal_mfdfa = functools.partial(fractal_dfa, multifractal=True)

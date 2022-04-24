@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
+import functools
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
 from .complexity_coarsegraining import _get_scales, complexity_coarsegraining
 from .entropy_approximate import entropy_approximate
+from .entropy_permutation import entropy_permutation
 from .entropy_sample import entropy_sample
 from .optim_complexity_tolerance import complexity_tolerance
-from .utils import _get_coarsegrained_rolling, _phi, _phi_divide
+from .utils import _phi, _phi_divide
 
 
 def entropy_multiscale(
@@ -75,7 +78,9 @@ def entropy_multiscale(
         :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
     method : str
         What version of multiscale entropy to compute. Can be one of ``"MSEn"``, ``"CMSEn"``,
-        ``"RCMSEn"``, ``"MMSEn"``, or ``"IMSEn"``.
+        ``"RCMSEn"``, ``"MMSEn"``, ``"IMSEn"``, ``"MSApEn"``, ``"MSPEn"``, ``"CMSPEn"``,
+        ``"MMSPEn"``, ``"IMSPEn"``, ``"MSWPEn"``, ``"CMSWPEn"``, ``"MMSWPEn"``, ``"IMSWPEn"``
+        (case sensitive).
     show : bool
         Show the entropy values for each scale factor.
     **kwargs
@@ -95,11 +100,11 @@ def entropy_multiscale(
 
     See Also
     --------
-    entropy_shannon, entropy_approximate, entropy_sample, entropy_fuzzy, entropy_permutation
+    complexity_coarsegraining, entropy_sample, entropy_fuzzy, entropy_permutation
 
     Examples
     ----------
-    * **MSE** (basic coarse-graining)
+    * **MSEn** (basic coarse-graining)
     .. ipython:: python
 
       import neurokit2 as nk
@@ -111,7 +116,7 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **CMSE** (time-shifted coarse-graining)
+    * **CMSEn** (time-shifted coarse-graining)
     .. ipython:: python
 
       @savefig p_entropy_multiscale2.png scale=100%
@@ -119,7 +124,7 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **RCMSE** (refined composite MSE)
+    * **RCMSEn** (refined composite MSEn)
     .. ipython:: python
 
       @savefig p_entropy_multiscale3.png scale=100%
@@ -127,7 +132,7 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **MMSE** (rolling-window coarse-graining)
+    * **MMSEn** (rolling-window coarse-graining)
     .. ipython:: python
 
       @savefig p_entropy_multiscale4.png scale=100%
@@ -135,7 +140,7 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **IMSE** (interpolated coarse-graining)
+    * **IMSEn** (interpolated coarse-graining)
     .. ipython:: python
 
       @savefig p_entropy_multiscale5.png scale=100%
@@ -151,22 +156,43 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **FuzzyMSEn**
+    * **MSPEn** (based on PEn), **CMSPEn**, **MMSPEn** and **IMSPEn**
     .. ipython:: python
 
       @savefig p_entropy_multiscale7.png scale=100%
+      mspen, info = nk.entropy_multiscale(signal, method="MSPEn", show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      cmspen, info = nk.entropy_multiscale(signal, method="CMSPEn")
+      cmspen
+      mmspen, info = nk.entropy_multiscale(signal, method="MMSPEn")
+      mmspen
+      imspen, info = nk.entropy_multiscale(signal, method="IMSPEn")
+      imspen
+
+    * **MSWPEn** (based on WPEn), **CMSWPEn**, **MMSWPEn** and **IMSWPEn**
+    .. ipython:: python
+
+      mswpen, info = nk.entropy_multiscale(signal, method="MSWPEn")
+      cmswpen, info = nk.entropy_multiscale(signal, method="CMSWPEn")
+      mmswpen, info = nk.entropy_multiscale(signal, method="MMSWPEn")
+      imswpen, info = nk.entropy_multiscale(signal, method="IMSWPEn")
+
+    * **FuzzyMSEn**, **FuzzyCMSEn** and **FuzzyRCMSEn**
+    .. ipython:: python
+
+      @savefig p_entropy_multiscale8.png scale=100%
       fuzzymsen, info = nk.entropy_multiscale(signal, method="MSEn", fuzzy=True, show=True)
       @suppress
       plt.close()
 
-    * **FuzzyCMSEn**
     .. ipython:: python
 
       fuzzycmsen, info = nk.entropy_multiscale(signal, method="CMSEn", fuzzy=True)
       fuzzycmsen
-
-    * **FuzzyRCMSEn**
-    .. ipython:: python
 
       fuzzyrcmsen, info = nk.entropy_multiscale(signal, method="RCMSEn", fuzzy=True)
       fuzzycmsen
@@ -207,25 +233,41 @@ def entropy_multiscale(
     # Parameters selection
     algorithm = entropy_sample
     refined = False
-    if method in ["MSE", "MSEn"]:
+    if method in ["MSEn", "MSApEn", "MSPEn", "MSWPEn"]:
         coarsegraining = "nonoverlapping"
-    elif method in ["MSApEn"]:
-        coarsegraining = "nonoverlapping"
-        algorithm = entropy_approximate
-    elif method in ["MMSE", "MMSEn"]:
+        if method in ["MSApEn"]:
+            algorithm = entropy_approximate
+        if method in ["MSPEn"]:
+            algorithm = entropy_permutation
+        if method in ["MSWPEn"]:
+            algorithm = functools.partial(entropy_permutation, weighted=True)
+    elif method in ["MMSEn", "MMSPEn", "MMSWPEn"]:
         coarsegraining = "rolling"
-    elif method in ["IMSE", "IMSEn"]:
+        if method in ["MMSPEn"]:
+            algorithm = entropy_permutation
+        if method in ["MMSWPEn"]:
+            algorithm = functools.partial(entropy_permutation, weighted=True)
+    elif method in ["IMSEn", "IMSPEn", "IMSWPEn"]:
         coarsegraining = "interpolate"
-    elif method in ["CMSE", "CMSEn"]:
+        if method in ["IMSPEn"]:
+            algorithm = entropy_permutation
+        if method in ["IMSWPEn"]:
+            algorithm = functools.partial(entropy_permutation, weighted=True)
+    elif method in ["CMSEn", "RCMSEn", "CMSPEn", "CMSWPEn"]:
         coarsegraining = "timeshift"
-    elif method in ["RCMSE", "RCMSEn"]:
-        coarsegraining = "timeshift"
-        refined = True
+        if method in ["CMSPEn"]:
+            algorithm = entropy_permutation
+        if method in ["CMSWPEn"]:
+            algorithm = functools.partial(entropy_permutation, weighted=True)
+        if method in ["RCMSEn"]:
+            refined = True
     else:
         raise ValueError(
             "Method '{method}' is not supported. Please use "
-            "'MSEn', 'CMSEn', 'RCMSEn', 'MMSEn', 'MSApEn'"
-            " or 'IMSEn'."
+            "'MSEn', 'CMSEn', 'RCMSEn', 'MMSEn', 'IMSPEn',"
+            "'MSPEn', 'CMSPEn', 'MMSPEn', 'IMSPEn',"
+            "'MSWPEn', 'CMSWPEn', 'MMSWPEn', 'IMSWPEn',"
+            " or 'MSApEn' (case sensitive)."
         )
 
     # Store parameters
