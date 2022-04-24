@@ -567,6 +567,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entropy-attention">
+     <em>
+      entropy_attention()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#entropy-sample">
      <em>
       entropy_sample()
@@ -591,6 +598,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#entropy-fuzzy">
      <em>
       entropy_fuzzy()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entropy-multiscale">
+     <em>
+      entropy_multiscale()
      </em>
     </a>
    </li>
@@ -824,6 +838,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entropy-attention">
+     <em>
+      entropy_attention()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#entropy-sample">
      <em>
       entropy_sample()
@@ -848,6 +869,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#entropy-fuzzy">
      <em>
       entropy_fuzzy()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#entropy-multiscale">
+     <em>
+      entropy_multiscale()
      </em>
     </a>
    </li>
@@ -993,7 +1021,7 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="gp">In [4]: </span><span class="n">df</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">       ApEn      CREn    DiffEn  ...     ShanEn      SpEn     WPEn</span>
-<span class="go">0  0.162527 -0.020361  0.303891  ...  11.289246  0.094806  0.98896</span>
+<span class="go">0  0.162527 -0.009219  0.303891  ...  11.271005  0.094806  0.98896</span>
 
 <span class="go">[1 rows x 23 columns]</span>
 </pre></div>
@@ -1006,8 +1034,8 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 
 <span class="gp">In [6]: </span><span class="n">df</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
-<span class="go">         CD       DFA   FuzzyEn  ...  MFDFA_ExpRange     RCMSE   RangeEn</span>
-<span class="go">0  0.830716  1.389359  0.128788  ...        0.348173  0.318944  0.188523</span>
+<span class="go">         CD       DFA   FuzzyEn  ...  MFDFA_ExpRange    RCMSE   RangeEn</span>
+<span class="go">0  0.830716  1.389359  0.128788  ...        0.348173  0.29487  0.188515</span>
 
 <span class="go">[1 rows x 13 columns]</span>
 </pre></div>
@@ -1518,7 +1546,7 @@ to compute optimal kmax.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_k1.png"><img alt="../_images/p_complexity_k1.png" src="../_images/p_complexity_k1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">k_max</span>
-<span class="gh">Out[4]: </span><span class="go">20</span>
+<span class="gh">Out[4]: </span><span class="go">19</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -1599,17 +1627,17 @@ for consistency with other functions).</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.7011086666342232</span>
+<span class="gh">Out[12]: </span><span class="go">1.4900393099912677</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">KFD</span>
-<span class="gh">Out[14]: </span><span class="go">2.0418574763920256</span>
+<span class="gh">Out[14]: </span><span class="go">2.041857476392026</span>
 
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.8331253495636743</span>
+<span class="gh">Out[16]: </span><span class="go">3.6654410266765463</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1711,7 +1739,7 @@ to compute PFD.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian4.png"><img alt="../_images/p_fractal_petrosian4.png" src="../_images/p_fractal_petrosian4.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">pfd</span>
-<span class="gh">Out[12]: </span><span class="go">1.003465819653409</span>
+<span class="gh">Out[12]: </span><span class="go">1.0032333899308943</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1719,7 +1747,7 @@ to compute PFD.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian5.png"><img alt="../_images/p_fractal_petrosian5.png" src="../_images/p_fractal_petrosian5.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">pfd</span>
-<span class="gh">Out[14]: </span><span class="go">1.0319803025822096</span>
+<span class="gh">Out[14]: </span><span class="go">1.0299323843135606</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1727,7 +1755,7 @@ to compute PFD.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian6.png"><img alt="../_images/p_fractal_petrosian6.png" src="../_images/p_fractal_petrosian6.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">pfd</span>
-<span class="gh">Out[16]: </span><span class="go">1.0277038927123532</span>
+<span class="gh">Out[16]: </span><span class="go">1.0309145508449216</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1848,7 +1876,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [3]: </span><span class="n">fd</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">fd</span>
-<span class="gh">Out[4]: </span><span class="go">0.023124767861850155</span>
+<span class="gh">Out[4]: </span><span class="go">0.023124767861850158</span>
 </pre></div>
 </div>
 <p><strong>Example 2</strong>: Compute FD-NLD on non-overlapping windows</p>
@@ -1867,7 +1895,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [9]: </span><span class="n">nld</span> <span class="o">=</span> <span class="p">[</span><span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">]</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nld</span><span class="p">)</span>  <span class="c1"># Get average</span>
-<span class="gh">Out[10]: </span><span class="go">0.5991899409591024</span>
+<span class="gh">Out[10]: </span><span class="go">0.5973616300362228</span>
 </pre></div>
 </div>
 <p><strong>Example 3</strong>: Calculate FD-NLD on sliding windows</p>
@@ -1943,7 +1971,7 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.819128521934133</span>
+<span class="gh">Out[4]: </span><span class="go">2.7007331297892443</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2004,7 +2032,7 @@ to compute Higuchi’s fractal dimension.</p></li>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi1.png"><img alt="../_images/p_fractal_higuchi1.png" src="../_images/p_fractal_higuchi1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi2.png"><img alt="../_images/p_fractal_higuchi2.png" src="../_images/p_fractal_higuchi2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hfd</span>
-<span class="gh">Out[5]: </span><span class="go">1.979814643946789</span>
+<span class="gh">Out[5]: </span><span class="go">1.9604711042046592</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -2077,7 +2105,7 @@ to compute Shannon entropy.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_shannon1.png"><img alt="../_images/p_entropy_shannon1.png" src="../_images/p_entropy_shannon1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">shanen</span>
-<span class="gh">Out[4]: </span><span class="go">1.5512621633709531</span>
+<span class="gh">Out[4]: </span><span class="go">1.5472555812830762</span>
 </pre></div>
 </div>
 <p>Compare with <code class="docutils literal notranslate"><span class="pre">scipy</span></code> (using the same base).</p>
@@ -2087,12 +2115,12 @@ to compute Shannon entropy.</p></li>
 <span class="gp">In [6]: </span><span class="n">binned</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binned</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="gh">Out[7]: </span><span class="go">1.0752529948498974</span>
+<span class="gh">Out[7]: </span><span class="go">1.0724758437720034</span>
 
 <span class="gp">In [8]: </span><span class="n">shanen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_shannon</span><span class="p">(</span><span class="n">binned</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">shanen</span>
-<span class="gh">Out[9]: </span><span class="go">1.0752529948498974</span>
+<span class="gh">Out[9]: </span><span class="go">1.0724758437720034</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2144,7 +2172,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.3425362166946044</span>
+<span class="gh">Out[4]: </span><span class="go">0.35353520805240296</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2243,7 +2271,7 @@ to compute SVDEn.</p></li>
 <span class="gp">In [3]: </span><span class="n">svden</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_svd</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">svden</span>
-<span class="gh">Out[4]: </span><span class="go">0.5091667337544503</span>
+<span class="gh">Out[4]: </span><span class="go">0.5091667337544502</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2291,7 +2319,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.8277562747461952</span>
+<span class="gh">Out[4]: </span><span class="go">0.8863977136848117</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2299,6 +2327,58 @@ noise) produces the greatest entropy.</p>
 <li><p>Crepeau, J. C., &amp; Isaacson, L. K. (1991). Spectral Entropy Measurements of Coherent
 Structures in an Evolving Shear Layer. Journal of Non-Equilibrium Thermodynamics, 16(2).
 doi:10.1515/jnet.1991.16.2.137</p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="entropy-attention">
+<h3><em>entropy_attention()</em><a class="headerlink" href="#entropy-attention" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.entropy_attention">
+<span class="sig-name descname"><span class="pre">entropy_attention</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.entropy_attention" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Attention Entropy (AttEn)</strong></p>
+<p>Yang et al. (2020) propose a conceptually new approach called <strong>Attention Entropy (AttEn)</strong>,
+which pays attention only to the key observations. Instead of counting the frequency of all
+observations, it analyzes the frequency distribution of the intervals between the key
+observations in a time-series. The advantages of the attention entropy are that it does not
+need any parameter to tune, is robust to the time-series length, and requires only linear time
+to compute.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>atten</strong> (<em>float</em>) – The attention entropy of the signal.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing values of sub-entropies that are averaged to give the general
+AttEn, such as <code class="docutils literal notranslate"><span class="pre">MaxMax</span></code> (entropy of local-maxima intervals), <code class="docutils literal notranslate"><span class="pre">MinMin</span></code> (entropy of
+local-minima intervals), <code class="docutils literal notranslate"><span class="pre">MaxMin</span></code> (entropy of intervals between local maxima and
+subsequent minima), and <code class="docutils literal notranslate"><span class="pre">MinMax</span></code> (entropy of intervals between local minima and
+subsequent maxima ).</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_cumulative_residual" title="neurokit2.complexity.entropy_cumulative_residual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulative_residual</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+
+<span class="go"># Compute Differential Entropy</span>
+<span class="gp">In [3]: </span><span class="n">atten</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_attention</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">atten</span>
+<span class="gh">Out[4]: </span><span class="go">1.1274554690751466</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Yang, J., Choudhary, G. I., Rahardja, S., &amp; Franti, P. (2020). Classification of interbeat
+interval time-series using attention entropy. IEEE Transactions on Affective Computing.</p></li>
 </ul>
 </dd></dl>
 
@@ -2494,19 +2574,19 @@ levels might help avoid this.</p></li>
 <span class="gp">In [3]: </span><span class="n">RangeEnB</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_range</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">approximate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">RangeEnB</span>
-<span class="gh">Out[4]: </span><span class="go">1.0882982278736182</span>
+<span class="gh">Out[4]: </span><span class="go">1.0889078910536056</span>
 
 <span class="go"># Range Entropy A (mApEn)</span>
 <span class="gp">In [5]: </span><span class="n">RangeEnA</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_range</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">approximate</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">RangeEnA</span>
-<span class="gh">Out[6]: </span><span class="go">1.0749312293123292</span>
+<span class="gh">Out[6]: </span><span class="go">1.0760194384012471</span>
 
 <span class="go"># Range Entropy A (corrected)</span>
 <span class="gp">In [7]: </span><span class="n">RangeEnAc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_range</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">approximate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">RangeEnAc</span>
-<span class="gh">Out[8]: </span><span class="go">1.1153142451616476</span>
+<span class="gh">Out[8]: </span><span class="go">1.1164135584249424</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2579,6 +2659,160 @@ papers by Lotfi A Zadeh (pp. 394-432).</p></li>
 </dd></dl>
 
 </section>
+<section id="entropy-multiscale">
+<h3><em>entropy_multiscale()</em><a class="headerlink" href="#entropy-multiscale" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.entropy_multiscale">
+<span class="sig-name descname"><span class="pre">entropy_multiscale</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'default'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sd'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">approximate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">composite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refined</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fuzzy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.entropy_multiscale" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy versions</strong></p>
+<p>Compute the multiscale entropy (MSE), the composite multiscale entropy (CMSE),
+the refined composite multiscale entropy (RCMSE), or their fuzzy version (FuzzyMSE, FuzzyCMSE or
+FuzzyRCMSE).</p>
+<p>One of the limitation of <a class="reference internal" href="#neurokit2.complexity.entropy_sample" title="neurokit2.complexity.entropy_sample"><code class="xref py py-func docutils literal notranslate"><span class="pre">SampEn</span></code></a> is that it characterizes
+complexity strictly on the time scale defined by the sampling procedure (via the <code class="docutils literal notranslate"><span class="pre">delay</span></code>
+argument). To address this, Costa et al. (2002) proposed the multiscale entropy (MSE),
+which compute sample entropies at multiple scales.</p>
+<p>The conventional MSE algorithm consists of two steps:
+1. A <a class="reference internal" href="#neurokit2.complexity.complexity_coarsegraining" title="neurokit2.complexity.complexity_coarsegraining"><code class="xref py py-func docutils literal notranslate"><span class="pre">coarse-graining</span></code></a> procedure is used to represent the</p>
+<blockquote>
+<div><p>signal at different time scales.</p>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li><p>SampEn is used to quantify the regularity of a coarse-grained time series at each time scale
+factor.</p></li>
+</ol>
+<p>However, in the traditional coarse-graining procedure, the larger the scale factor is, the
+shorter the coarse-grained time series is. As such, the variance of the entropy of the
+coarse-grained series estimated by SampEn increases as the time scale factor increases, making
+it problematic for shorter signals.</p>
+<ul class="simple">
+<li><p><strong>CMSE</strong>: In order to reduce the variance of estimated entropy values at large scales, Wu et
+al. (2013) introduced the <strong>composite multiscale entropy (CMSE)</strong> algorithm, which computes
+multiple coarse-grained series for each scale factor (via the <strong>time-shift</strong> method for
+<a class="reference internal" href="#neurokit2.complexity.complexity_coarsegraining" title="neurokit2.complexity.complexity_coarsegraining"><code class="xref py py-func docutils literal notranslate"><span class="pre">coarse-graining</span></code></a>).</p></li>
+<li><p><strong>MMSE</strong>: Wu et al. (2013) also introduced the <strong>modified multiscale entropy (MMSE)</strong>
+algorithm, which is based on rolling-average <a class="reference internal" href="#neurokit2.complexity.complexity_coarsegraining" title="neurokit2.complexity.complexity_coarsegraining"><code class="xref py py-func docutils literal notranslate"><span class="pre">coarse-graining</span></code></a>.</p></li>
+<li><p><strong>IMSE</strong>: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
+coarse-grained series. We implement a generalization of this via interpolation that can be
+referred to as <strong>interpolated multiscale entropy (IMSE)</strong>.</p></li>
+</ul>
+<p>This function can be called either via <code class="docutils literal notranslate"><span class="pre">entropy_multiscale()</span></code> or <code class="docutils literal notranslate"><span class="pre">complexity_mse()</span></code>.
+Moreover, variants can be directly accessed via <code class="docutils literal notranslate"><span class="pre">complexity_cmse()</span></code>, <cite>complexity_rcmse()`</cite>,
+<code class="docutils literal notranslate"><span class="pre">complexity_fuzzymse()</span></code>, <code class="docutils literal notranslate"><span class="pre">complexity_fuzzycmse()</span></code> and <code class="docutils literal notranslate"><span class="pre">complexity_fuzzyrcmse()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.
+or dataframe.</p></li>
+<li><p><strong>scale</strong> (<em>str or int or list</em>) – A list of scale factors used for coarse graining the time series. If ‘default’, will use
+<code class="docutils literal notranslate"><span class="pre">range(len(signal)</span> <span class="pre">/</span> <span class="pre">(dimension</span> <span class="pre">+</span> <span class="pre">10))</span></code> (see discussion
+<a class="reference external" href="https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426">here</a>).
+If ‘max’, will use all scales until half the length of the signal. If an integer, will
+create a range until the specified int.</p></li>
+<li><p><strong>dimension</strong> (<em>int</em>) – Embedding dimension (often denoted ‘m’ or ‘d’, sometimes referred to as ‘order’). Typically
+2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
+returns an array with two columns corresponding to the original signal and its delayed (by
+Tau) version.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – Tolerance (often denoted as ‘r’, i.e., filtering level - max absolute difference between
+segments). If ‘default’, will be set to 0.2 times the standard deviation of the signal (for
+dimension = 2).</p></li>
+<li><p><strong>composite</strong> (<em>bool</em>) – Returns the composite multiscale entropy (CMSE), more accurate than MSE.</p></li>
+<li><p><strong>refined</strong> (<em>bool</em>) – Returns the ‘refined’ composite MSE (RCMSE; Wu, 2014)</p></li>
+<li><p><strong>fuzzy</strong> (<em>bool</em>) – Returns the fuzzy (composite) multiscale entropy (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Show the entropy values for each scale factor.</p></li>
+<li><p><strong>**kwargs</strong> – Optional arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>mse</strong> (<em>float</em>) – The point-estimate of multiscale entropy (MSE) of the single time series corresponding to the
+area under the MSE values curve, which is essentially the sum of sample entropy values over
+the range of scale factors.
+series.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
+to compute multiscale entropy. The entropy values corresponding to each <code class="docutils literal notranslate"><span class="pre">&quot;Scale&quot;</span></code>
+factor are stored under the <code class="docutils literal notranslate"><span class="pre">&quot;Value&quot;</span></code> key.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_approximate" title="neurokit2.complexity.entropy_approximate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_approximate</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_sample" title="neurokit2.complexity.entropy_sample"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_sample</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_fuzzy" title="neurokit2.complexity.entropy_fuzzy"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_fuzzy</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_permutation" title="neurokit2.complexity.entropy_permutation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_permutation</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<ul class="simple">
+<li><p><strong>MSE</strong> (basic coarse-graining)</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">40</span><span class="p">])</span>
+
+<span class="gp">In [3]: </span><span class="n">mse</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_entropy_multiscale1.png"><img alt="../_images/p_entropy_multiscale1.png" src="../_images/p_entropy_multiscale1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">mse</span>
+<span class="gh">Out[4]: </span><span class="go">0.7691884213426652</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>CMSE</strong> (time-shifted coarse-graining)</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">cmse</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;timeshift&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_entropy_multiscale2.png"><img alt="../_images/p_entropy_multiscale2.png" src="../_images/p_entropy_multiscale2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">cmse</span>
+<span class="gh">Out[6]: </span><span class="go">1.1703156028370234</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>MMSE</strong> (rolling-window coarse-graining)</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">mmse</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;rolling&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_entropy_multiscale3.png"><img alt="../_images/p_entropy_multiscale3.png" src="../_images/p_entropy_multiscale3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">mmse</span>
+<span class="gh">Out[8]: </span><span class="go">0.10414134922074746</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><strong>IMSE</strong> (interpolated coarse-graining)</p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">imse</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;interpolate&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_entropy_multiscale3.png"><img alt="../_images/p_entropy_multiscale3.png" src="../_images/p_entropy_multiscale3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">imse</span>
+<span class="gh">Out[10]: </span><span class="go">0.07241390044490217</span>
+</pre></div>
+</div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Richman, J. S., &amp; Moorman, J. R. (2000). Physiological time-series analysis using approximate
+entropy and sample entropy. American Journal of Physiology-Heart and Circulatory Physiology,
+278(6), H2039-H2049.</p></li>
+<li><p>Costa, M., Goldberger, A. L., &amp; Peng, C. K. (2002). Multiscale entropy analysis of complex
+physiologic time series. Physical review letters, 89(6), 068102.</p></li>
+<li><p>Costa, M., Goldberger, A. L., &amp; Peng, C. K. (2005). Multiscale entropy analysis of biological
+signals. Physical review E, 71(2), 021906.</p></li>
+<li><p>Wu, S. D., Wu, C. W., Lin, S. G., Wang, C. C., &amp; Lee, K. Y. (2013). Time series analysis
+using composite multiscale entropy. Entropy, 15(3), 1069-1084.</p></li>
+<li><p>Gow, B. J., Peng, C. K., Wayne, P. M., &amp; Ahn, A. C. (2015). Multiscale entropy analysis of
+center-of-pressure dynamics in human postural control: methodological considerations. Entropy,
+17(12), 7926-7947.</p></li>
+<li><p>Norris, P. R., Anderson, S. M., Jenkins, J. M., Williams, A. E., &amp; Morris Jr, J. A. (2008).
+Heart rate multiscale entropy at three hours predicts hospital mortality in 3,154 trauma
+patients. Shock, 30(1), 17-22.</p></li>
+<li><p>Liu, Q., Wei, Q., Fan, S. Z., Lu, C. W., Lin, T. Y., Abbod, M. F., &amp; Shieh, J. S. (2012).
+Adaptive computation of multiscale entropy and its application in EEG signals for monitoring
+depth of anesthesia during surgery. Entropy, 14(6), 978-992.</p></li>
+</ul>
+</dd></dl>
+
+</section>
 <section id="entropy-permutation">
 <h3><em>entropy_permutation()</em><a class="headerlink" href="#entropy-permutation" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -2613,7 +2847,7 @@ return the permutation entropy in bit.</p></li>
 <li><p><strong>weighted</strong> (<em>bool</em>) – If True, compute the weighted permutation entropy (WPE).</p></li>
 <li><p><strong>scale</strong> (<em>Union[list, str, list]</em>) – Can be set to something other than <code class="docutils literal notranslate"><span class="pre">None</span></code> to compute multiscale permutation entropy
 (MSPE), such as a list of scale factors, or <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;max&quot;</span></code>. See
-<code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_multiscale()</span></code> for details.</p></li>
+<a class="reference internal" href="#neurokit2.complexity.entropy_multiscale" title="neurokit2.complexity.entropy_multiscale"><code class="xref py py-func docutils literal notranslate"><span class="pre">entropy_multiscale()</span></code></a> for details.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2626,7 +2860,7 @@ return the permutation entropy in bit.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_multiscale</span></code></p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_multiscale" title="neurokit2.complexity.entropy_multiscale"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_multiscale</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -2637,19 +2871,19 @@ return the permutation entropy in bit.</p></li>
 <span class="gp">In [3]: </span><span class="n">pe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">pe</span>
-<span class="gh">Out[4]: </span><span class="go">2.5731094968596264</span>
+<span class="gh">Out[4]: </span><span class="go">2.561108513999954</span>
 
 <span class="go"># Multiscale Permutation Entropy</span>
 <span class="gp">In [5]: </span><span class="n">mspe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scale</span> <span class="o">=</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">mspe</span>
-<span class="gh">Out[6]: </span><span class="go">0.8900496455363734</span>
+<span class="gh">Out[6]: </span><span class="go">0.8686097169407038</span>
 
 <span class="go"># Weighted Permutation Entropy</span>
 <span class="gp">In [7]: </span><span class="n">wpe</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [8]: </span><span class="n">wpe</span>
-<span class="gh">Out[8]: </span><span class="go">0.9891216921183142</span>
+<span class="gh">Out[8]: </span><span class="go">0.9833142581117965</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2714,7 +2948,7 @@ to compute fisher information.</p></li>
 <span class="gp">In [3]: </span><span class="n">fi</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fisher_information</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">fi</span>
-<span class="gh">Out[4]: </span><span class="go">0.6424727558784687</span>
+<span class="gh">Out[4]: </span><span class="go">0.6424727558784686</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -2885,7 +3119,7 @@ output according to the expected value for the individual (R/S) values.</p></li>
 <span class="gp">In [3]: </span><span class="n">h</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_hurst</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">h</span>
-<span class="gh">Out[4]: </span><span class="go">0.9653747932291417</span>
+<span class="gh">Out[4]: </span><span class="go">0.9653747932291419</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3082,20 +3316,38 @@ coarse-grained time series for a scale factor Tau (<span class="math notranslate
 non-overlapping windows of size Tau. In most of the complexity metrics, multiple coarse-grained
 segments are constructed for a given signal, to represent the signal at different scales (hence
 the “multiscale” adjective).</p>
+<figure class="align-default">
+<a class="reference external image-reference" href="https://doi.org/10.1016/j.physleta.2014.03.034"><img alt="Figure from Wu et al. (2013)." src="../_images/wu2013a.png" /></a>
+</figure>
 <p>This coarse-graining procedure is similar to moving averaging and the decimation of the original
 time series. The length of each coarse-grained time series is N/Tau. For scale = 1, the
 coarse-grained time series is simply the original time series itself.</p>
 <p>The coarse graining procedure (used for instance in MSE) is considered a shortcoming that
 decreases the entropy rate artificially (Nikulin, 2004). One of the core issue is that the
 length of coarse-grained signals becomes smaller as the scale increases.</p>
-<p>To address this issue of length, several methods have been proposed, such as <strong>moving average</strong>
-(Wu et al. 2013), or <strong>adaptive resampling</strong> (Liu et al. 2012).</p>
+<p>To address this issue of length, several methods have been proposed, such as <strong>adaptive
+resampling</strong> (Liu et al. 2012), <strong>moving average</strong> (Wu et al. 2013), or <strong>timeshift</strong>
+(Wu et al. 2013).</p>
+<ul class="simple">
+<li><p><strong>Non-overlapping</strong> (default): The coarse-grained time series are constructed by averaging
+non-overlapping windows of given size.</p></li>
+<li><p><strong>Interpolate</strong>: Interpolates (i.e., resamples) the coarse-grained time series to match the
+original signal length (currently using a monotonic cubic method, but let us know if you have
+any opinion on that).</p></li>
+<li><p><strong>Moving average</strong>: The coarse-grained time series via a moving average.</p></li>
+<li><p><strong>Time-shift</strong>: For each scale, a <em>k</em> number of coarse-grained vectors are constructed (see
+<strong>Figure</strong> below). Somewhat similar to moving-average, with the difference that the time lag
+creates new vectors.</p></li>
+</ul>
+<figure class="align-default">
+<a class="reference external image-reference" href="https://doi.org/10.1016/j.physleta.2014.03.034"><img alt="Figure from Wu et al. (2013)." src="../_images/wu2013b.png" /></a>
+</figure>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
 <li><p><strong>scale</strong> (<em>int</em>) – Also regerred to as Tau <span class="math notranslate nohighlight">\(\tau\)</span>, it represents the scale factor.</p></li>
-<li><p><strong>method</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;nonoverlapping&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;rolling&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">&quot;resampling&quot;</span></code>.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – Can be <code class="docutils literal notranslate"><span class="pre">&quot;nonoverlapping&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;rolling&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;interpolate&quot;</span></code>, or <code class="docutils literal notranslate"><span class="pre">timeshift</span></code>.</p></li>
 <li><p><strong>force</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will include all the samples (even if the last segment is too short).</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the coarse-grained signal.</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments (not used currently).</p></li>
@@ -3119,7 +3371,7 @@ nk.complexity_coarsegraining(signal, scale=2)</p>
 nk.complexity_coarsegraining(signal, scale=3)
 # Forcing uses all the samples even if the last segment is too short
 nk.complexity_coarsegraining(signal, scale=3, force=True)</p>
-<p>nk.complexity_coarsegraining(signal=range(10), method=”resampling”)
+<p>nk.complexity_coarsegraining(signal=range(10), method=”interpolate”)
 nk.complexity_coarsegraining(signal=range(10), method=”rolling”)</p>
 </div></blockquote>
 <p><strong>Simulated signal</strong>
@@ -3131,7 +3383,7 @@ coarsegrained = nk.complexity_coarsegraining(signal, scale=40, show=True)
 &#64;suppress
 plt.close()</p>
 </div></blockquote>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">coarsegrained</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;resampling&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="n">coarsegrained</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_coarsegraining</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;interpolate&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_complexity_coarsegraining2.png"><img alt="../_images/p_complexity_coarsegraining2.png" src="../_images/p_complexity_coarsegraining2.png" style="width: 640.0px; height: 480.0px;" /></a>
@@ -3176,6 +3428,8 @@ depth of anesthesia during surgery. Entropy, 14(6), 978-992.</p></li>
 <li><p>Wu, S. D., Wu, C. W., Lee, K. Y., &amp; Lin, S. G. (2013). Modified multiscale entropy for
 short-term time series analysis. Physica A: Statistical Mechanics and its Applications, 392
 (23), 5865-5873.</p></li>
+<li><p>Wu, S. D., Wu, C. W., Lin, S. G., Wang, C. C., &amp; Lee, K. Y. (2013). Time series analysis
+using composite multiscale entropy. Entropy, 15(3), 1069-1084.</p></li>
 </ul>
 </dd></dl>
 
