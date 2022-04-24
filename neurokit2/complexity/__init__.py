@@ -23,6 +23,7 @@ from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
 from .entropy_range import entropy_range
+from .entropy_renyi import entropy_renyi
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
 from .entropy_spectral import entropy_spectral
@@ -131,6 +132,7 @@ __all__ = [
     "complexity_rqa",
     "entropy_shannon",
     "entropy_tsallis",
+    "entropy_renyi",
     "entropy_attention",
     "entropy_differential",
     "entropy_cumulative_residual",

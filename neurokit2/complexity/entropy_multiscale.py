@@ -120,7 +120,7 @@ def entropy_multiscale(
     .. ipython:: python
 
       @savefig p_entropy_multiscale2.png scale=100%
-      cmsen, info = nk.entropy_multiscale(signal, method="CMSE", show=True)
+      cmsen, info = nk.entropy_multiscale(signal, method="CMSEn", show=True)
       @suppress
       plt.close()
 
@@ -128,7 +128,7 @@ def entropy_multiscale(
     .. ipython:: python
 
       @savefig p_entropy_multiscale3.png scale=100%
-      rcmsen, info = nk.entropy_multiscale(signal, method="RCMSE", show=True)
+      rcmsen, info = nk.entropy_multiscale(signal, method="RCMSEn", show=True)
       @suppress
       plt.close()
 
@@ -136,7 +136,7 @@ def entropy_multiscale(
     .. ipython:: python
 
       @savefig p_entropy_multiscale4.png scale=100%
-      mmsen, info = nk.entropy_multiscale(signal, method="MMSE", show=True)
+      mmsen, info = nk.entropy_multiscale(signal, method="MMSEn", show=True)
       @suppress
       plt.close()
 
@@ -144,7 +144,7 @@ def entropy_multiscale(
     .. ipython:: python
 
       @savefig p_entropy_multiscale5.png scale=100%
-      imsen, info = nk.entropy_multiscale(signal, method="IMSE", show=True)
+      imsen, info = nk.entropy_multiscale(signal, method="IMSEn", show=True)
       @suppress
       plt.close()
 

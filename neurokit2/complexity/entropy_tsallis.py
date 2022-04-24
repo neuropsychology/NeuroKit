@@ -6,10 +6,16 @@ from .entropy_shannon import _entropy_freq
 def entropy_tsallis(signal, q=1, method=None, show=False, freq=None):
     """**Tsallis entropy (TSEn)**
 
-    Tsallis Entropy is an extension of :func:`Shannon entropy <entropy_shannon>`, and is similarly
-    computed from a vector of probabilities of different states. Because it works on discrete
-    inputs (e.g., [A, B, B, A, B]), it requires to transform the continuous signal into a discrete
-    one.
+    Tsallis Entropy is an extension of :func:`Shannon entropy <entropy_shannon>` to the case where
+    entropy is nonextensive. It is similarly computed from a vector of probabilities of different
+    states. Because it works on discrete inputs (e.g., [A, B, B, A, B]), it requires to transform
+    the continuous signal into a discrete one.
+
+
+    .. math::
+
+    TSEn = \frac{1}{q - 1} \left( 1 - \sum_{x \in \mathcal{X}} p(x)^q \right)
+
 
     Parameters
     ----------
@@ -44,11 +50,10 @@ def entropy_tsallis(signal, q=1, method=None, show=False, freq=None):
       import neurokit2 as nk
 
       signal = [1, 3, 3, 2, 6, 6, 6, 1, 0]
-      freq = np.unique(signal, return_counts=True)[1]
       tsen, _ = nk.entropy_tsallis(signal, q=1)
       tsen
 
-      shanen, _ = nk.entropy_shannon(signal)
+      shanen, _ = nk.entropy_shannon(signal, base=np.e)
       shanen
 
 
