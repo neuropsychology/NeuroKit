@@ -18,7 +18,7 @@ def entropy_renyi(signal, alpha=1, method=None, show=False, freq=None):
 
      .. math::
 
-    REn = \\frac{1}{1-\\alpha} \\log_2 \\left( \\sum_{x in \\mathcal{X}} p(x)^\\alpha \\right)
+    REn = \\frac{1}{1-\\alpha} \\log_2 \\left( \\sum_{x \\in \\mathcal{X}} p(x)^\\alpha \\right)
 
     Parameters
     ----------
