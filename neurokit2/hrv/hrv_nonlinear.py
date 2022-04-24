@@ -233,15 +233,9 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out["SampEn"] = entropy_sample(rri, delay=1, dimension=2, tolerance=tolerance)[0]
     out["ShanEn"] = entropy_shannon(rri)[0]
     out["FuzzyEn"] = entropy_fuzzy(rri, delay=1, dimension=2, tolerance=tolerance)[0]
-    out["MSE"] = entropy_multiscale(
-        rri, dimension=2, tolerance=tolerance, composite=False, refined=False
-    )[0]
-    out["CMSE"] = entropy_multiscale(
-        rri, dimension=2, tolerance=tolerance, composite=True, refined=False
-    )[0]
-    out["RCMSE"] = entropy_multiscale(
-        rri, dimension=2, tolerance=tolerance, composite=True, refined=True
-    )[0]
+    out["MSEn"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="MSEn")[0]
+    out["CMSEn"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="CMSEn")[0]
+    out["RCMSEn"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="RCMSEn")[0]
 
     out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)[0]
     out["HFD"] = fractal_higuchi(rri, **kwargs)[0]

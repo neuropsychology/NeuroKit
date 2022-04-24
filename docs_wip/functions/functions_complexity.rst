@@ -92,6 +92,10 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_permutation
 
+*entropy_bubble()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_bubble
+
 *entropy_range()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_range
@@ -144,3 +148,7 @@ Utilities
 *complexity_coarsegraining()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_coarsegraining
+
+*complexity_ordinalpatterns*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_ordinalpatterns

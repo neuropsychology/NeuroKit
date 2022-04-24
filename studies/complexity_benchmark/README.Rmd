@@ -106,7 +106,8 @@ df <- df |>
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 colors = c("SD" = "red", 
-           "Diff" = "red", 
+           "Noise" = "red", 
+           "Length" = "red", 
            
            "PFD (A)" = "#2196F3", 
            "PFD (B)" = "#2196F3", 
@@ -132,17 +133,27 @@ colors = c("SD" = "red",
            "cApEn" = "#E91E63",
            "PEn" = "#E91E63",
            "SPEn" = "#E91E63",
-           "MSPEn" = "#E91E63",
            "WPEn" = "#E91E63",
            "SampEn" = "#E91E63",
            "FuzzyEn" = "#E91E63",
            "FuzzyApEn" = "#E91E63",
            "FuzzycApEn" = "#E91E63",
+           
            "MSEn" = "#E91E63",
            "CMSEn" = "#E91E63",
            "RCMSEn" = "#E91E63",
            "MMSEn" = "#E91E63",
            "IMSEn" = "#E91E63",
+           "MSApEn" = "#E91E63",
+           "MSPEn" = "#E91E63",
+           "CMSPEn" = "#E91E63",
+           "MMSPEn" = "#E91E63",
+           "IMSPEn" = "#E91E63",
+           "MSWPEn" = "#E91E63",
+           "CMSWPEn" = "#E91E63",
+           "MMSWPEn" = "#E91E63",
+           "IMSWPEn" = "#E91E63",
+           
            "ShanEn (A)" = "#E91E63",
            "ShanEn (B)" = "#E91E63",
            "ShanEn (C)" = "#E91E63",
@@ -192,7 +203,7 @@ order <- df |>
 df <- mutate(df, Index = fct_relevel(Index, as.character(order$Index)))
 
 df |> 
-  filter(!Index %in% c("Diff", "SD")) |> 
+  filter(!Index %in% c("SD", "Length", "Noise")) |> 
   mutate(Duration = Duration * 10000) |> 
   ggplot(aes(x = Index, y = Duration)) +
   # geom_violin(aes(fill = Index)) +
@@ -300,37 +311,16 @@ estimate_relation(model) |>
 
 ```{r message=FALSE, warning=FALSE}
 data <- df |> 
-  mutate(i = paste(Signal, Length, Noise, Noise_Intensity, sep = "__")) |> 
+  mutate(i = paste(Signal, Length, Noise_Type, Noise_Intensity, sep = "__")) |> 
   select(i, Index, Result) |> 
   pivot_wider(names_from = "Index", values_from = "Result") |> 
   select(-i) 
 
 
-cor_lower <- function(cor) {
-  m <- as.matrix(cor)
-  
-  tri <- upper.tri(m, diag = FALSE)
-  rownames(tri) <- rownames(m)
-  colnames(tri) <- colnames(m)
-  
-  toremove <- c()
-  
-  for(param1 in rownames(m)) {
-    for(param2 in colnames(m)) {
-      if(tri[param1, param2] == FALSE) {
-        toremove <- c(toremove, which(cor$Parameter1 == param1 & cor$Parameter2 == param2))
-      }
-    } 
-  }
-
-  cor[-toremove, ]
-}
-
-
 
 get_cor <- function(data) {
   cor <- correlation::correlation(data, method = "spearman", redundant = TRUE) |> 
-    cor_sort(hclust_method = "ward.D2")
+    correlation::cor_sort(hclust_method = "ward.D2")
   p <- cor |> 
     cor_lower() |> 
     mutate(Text = insight::format_value(rho, zap_small=TRUE, digits = 3),
@@ -370,11 +360,18 @@ cor <- get_cor(data)
   - Remove **RangeEn (A)**, **RangeEn (Ac)**  because they yield undefined entropies.
 - **SVDEn**, and **FI**
   - Remove **FI**  because it's negatively correlated with the rest.
+- **MMSEn**, and **IMSEn**
+  - Remove **MMSEn**  because it's slower.
+- **H (corrected)**, and **H (uncorrected)**
+  - Remove **H (corrected)**  because it's slower.
+- **FuzzyEn**, and **FuzzyApEn**
+  - Remove **FuzzyApEn**  because it's slower.
 
 
 ```{r message=FALSE, warning=FALSE}
 cor |> 
   cor_lower() |> 
+  filter(Parameter1 %in% names(data), Parameter2 %in% names(data)) |> 
   arrange(desc(abs(rho)), Parameter1) |> 
   filter(Parameter1 != Parameter2) |> 
   filter(abs(rho) > .98)
@@ -389,6 +386,10 @@ filter(averagetime, Index %in% c("ShanEn (B)", "CREn (B)"))
 filter(averagetime, Index %in% c("ShanEn (r)", "PFD (r)", "CREn (r)"))
 filter(averagetime, Index %in% c("SVDEn", "FI"))
 filter(averagetime, Index %in% c("PSDFD (Hasselman2013)", "PSDFD (Voss1998)"))
+filter(averagetime, Index %in% c("MMSEn", "IMSEn"))
+filter(averagetime, Index %in% c("H (corrected)", "H (uncorrected)"))
+filter(averagetime, Index %in% c("FuzzyEn", "FuzzyApEn"))
+
 
 # NLFD | RR
 # NLFD | RR
@@ -411,6 +412,9 @@ data <- data |>
     -`PSDFD (Voss1998)`,
     -`RangeEn (A)`, -`RangeEn (Ac)`,
     -FI,
+    -MMSEn,
+    - `H (corrected)`,
+    - FuzzyApEn
   )
 
 cor <- get_cor(data)
@@ -443,7 +447,42 @@ plot(parameters::n_factors(data))
 rez <- parameters::factor_analysis(data, cor = as.matrix(cor), n = 4, rotation = "varimax", sort = TRUE)
 rez
 
-plot(rez)
+# plot(rez)
+closest <- attributes(rez)$closest_component
+see::material_colors()
+
+loadings <- attributes(rez)$loadings_long |> 
+  mutate(Loading = abs(Loading),
+         Component = fct_rev(Component),
+         Variable = fct_rev(fct_relevel(Variable, rez$Variable))) 
+
+loadings |> 
+  # filter(Variable == "CD") |> 
+  ggplot(aes(x = Variable, y = Loading)) +
+  geom_bar(aes(fill=Component), stat = "identity") +
+  geom_vline(xintercept = c("SD", "Length", "Noise"), color = "red") +
+  scale_y_continuous(expand = c(0, 0)) +
+  scale_fill_material_d("rainbow") +
+  coord_flip()+
+  theme_minimal() +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(axis.text.y = element_text(
+    color = rev(rev(see::palette_material("rainbow")(max(closest)))[closest]),
+    face = ifelse(rez$Variable %in% c("SD", "Length", "Noise"), "italic", "plain")
+),
+        plot.title = element_text(hjust = 0.5),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank()) 
+
+# order |> 
+#   mutate(Duration = Duration * 10000) |> 
+#   filter(Index %in% loadings$Variable) |> 
+#   mutate(Index = fct_relevel(Index, levels(loadings$Variable))) |> 
+#   ggplot(aes(x = Duration, y = Index)) +
+#   geom_bar(stat = "identity") +
+#   scale_x_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x)) +
+#   scale_fill_manual(values = colors, guide = "none") +
+#   labs(x = NULL, y = "Computation Time")
 ```
 
 

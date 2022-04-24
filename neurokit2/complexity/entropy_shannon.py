@@ -5,7 +5,7 @@ import scipy.stats
 from .fractal_petrosian import _complexity_binarize
 
 
-def entropy_shannon(signal, base=2, method=None, show=False):
+def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None):
     """**Shannon entropy (SE or ShanEn)**
 
     Compute Shannon entropy (SE). Entropy is a measure of unpredictability of the
@@ -39,6 +39,10 @@ def entropy_shannon(signal, base=2, method=None, show=False):
         for details.
     show : bool
         If ``True``, will show the discrete the signal.
+    freq : np.array
+        Instead of a signal, a vector of probabilities can be provided (used for instance in
+        :func:`entropy_permutation`).
+
 
     Returns
     --------
@@ -50,13 +54,19 @@ def entropy_shannon(signal, base=2, method=None, show=False):
 
     See Also
     --------
-    entropy_differential, entropy_cumulative_residual
+    entropy_differential, entropy_cumulative_residual, entropy_tsallis
 
     Examples
     ----------
     .. ipython:: python
 
       import neurokit2 as nk
+
+      signal = [1, 1, 5, 5, 2, 8, 1]
+      _, freq = np.unique(signal, return_counts=True)
+      nk.entropy_shannon(freq=freq)
+
+    .. ipython:: python
 
       # Simulate a Signal with Laplace Noise
       signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
@@ -90,6 +100,16 @@ def entropy_shannon(signal, base=2, method=None, show=False):
       journal, 27(3), 379-423.
 
     """
+    if freq is None:
+        freq = _entropy_freq(signal, method=method, show=show)
+
+    return scipy.stats.entropy(freq, base=base), {"Method": method, "Base": base}
+
+
+# =============================================================================
+# Compute frequencies (common to Shannon and Tsallis)
+# =============================================================================
+def _entropy_freq(signal, method=None, show=False):
     # Sanity checks
     if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
         raise ValueError(
@@ -108,6 +128,4 @@ def entropy_shannon(signal, base=2, method=None, show=False):
     if np.isscalar(signal) is False:
         signal, _ = _complexity_binarize(signal, method=method, show=show)
 
-    shanen = scipy.stats.entropy(pd.Series(signal).value_counts(), base=base)
-
-    return shanen, {"Base": base, "Method": method}
+    return np.unique(signal, return_counts=True)[1]

@@ -9,6 +9,7 @@ from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
+from .complexity_ordinalpatterns import complexity_ordinalpatterns
 from .complexity_recurrence import complexity_recurrence
 from .complexity_rqa import complexity_rqa
 from .complexity_rr import complexity_rr
@@ -26,6 +27,7 @@ from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
+from .entropy_tsallis import entropy_tsallis
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
 from .fractal_higuchi import fractal_higuchi
@@ -89,6 +91,7 @@ __all__ = [
     "complexity_attractor",
     "complexity_embedding",
     "complexity_coarsegraining",
+    "complexity_ordinalpatterns",
     "complexity_recurrence",
     "complexity_delay",
     "complexity_dimension",
@@ -127,6 +130,7 @@ __all__ = [
     "complexity_rr",
     "complexity_rqa",
     "entropy_shannon",
+    "entropy_tsallis",
     "entropy_attention",
     "entropy_differential",
     "entropy_cumulative_residual",
