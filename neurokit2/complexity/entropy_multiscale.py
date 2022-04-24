@@ -299,8 +299,8 @@ def _entropy_multiscale_plot(mse, info):
 # =============================================================================
 # Methods
 # =============================================================================
-# Define function that works both on 1D and 2D coarse-grained (for composite)
 def _entropy_multiscale(coarse, algorithm, dimension, tolerance, refined=False, **kwargs):
+    """Wrapper function that works both on 1D and 2D coarse-grained (for composite)"""
     # For 1D coarse-graining
     if coarse.ndim == 1:
         return algorithm(
@@ -345,8 +345,8 @@ def _entropy_multiscale(coarse, algorithm, dimension, tolerance, refined=False, 
             return _phi_divide([_validmean(phis[:, 0]), _validmean(phis[:, 1])])
 
 
-# Mean that is robust to NaN,
 def _validmean(x):
+    """Mean that is robust to NaN and Inf"""
     x = np.array(x)[np.isfinite(x)]
     if len(x) == 0:
         return np.nan

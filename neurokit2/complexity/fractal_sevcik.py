@@ -5,7 +5,7 @@ from ..stats import rescale
 
 
 def fractal_sevcik(signal):
-    """**Sevcik fractal dimension (SFD)**
+    """**Sevcik Fractal Dimension (SFD)**
 
     The SFD algorithm was proposed to calculate the fractal dimension of waveforms by Sevcik
     (1998). This method can be used to quickly measure the complexity and randomness of a signal.

@@ -80,13 +80,17 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_attention
 
+*entropy_approximate()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_approximate
+
 *entropy_sample()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_sample
 
-*entropy_approximate()*
+*entropy_permutation()*
 """"""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_approximate
+.. autofunction:: neurokit2.complexity.entropy_permutation
 
 *entropy_range()*
 """"""""""""""""""""

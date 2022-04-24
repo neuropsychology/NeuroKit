@@ -196,21 +196,21 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         df["PSDslope"], info["PSDslope"] = fractal_psdslope(signal)
 
         # Entropy
+        df["CREn"], info["CREn"] = entropy_cumulative_residual(signal)
         df["ApEn"], info["ApEn"] = entropy_approximate(
             signal, delay=delay, dimension=dimension, tolerance=tolerance
         )
-        df["CREn"], info["CREn"] = entropy_cumulative_residual(signal)
+        df["SampEn"], info["SampEn"] = entropy_sample(
+            signal, dimension=dimension, delay=delay, tolerance=tolerance
+        )
+        df["MSEn"], info["MSEn"] = entropy_multiscale(
+            signal, dimension=dimension, tolerance=tolerance, method="MSEn"
+        )
         df["MSPEn"], info["MSPEn"] = entropy_permutation(
             signal, dimension=dimension, delay=delay, scale="default"
         )
         df["WPEn"], info["WPEn"] = entropy_permutation(
             signal, dimension=dimension, delay=delay, weighted=True
-        )
-        df["SampEn"], info["SampEn"] = entropy_sample(
-            signal, dimension=dimension, delay=delay, tolerance=tolerance
-        )
-        df["MSE"], info["MSE"] = entropy_multiscale(
-            signal, dimension=dimension, tolerance=tolerance
         )
 
         # Other
@@ -227,21 +227,21 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         df["HFD"], info["HFD"] = fractal_higuchi(signal, **kwargs)
 
         # Entropy
-        df["FuzzyEn"], info["FuzzyEn"] = entropy_fuzzy(
-            signal, dimension=dimension, delay=delay, tolerance=tolerance
-        )
-        df["FuzzyMSE"], info["FuzzyMSE"] = entropy_multiscale(
-            signal, dimension=dimension, tolerance=tolerance, fuzzy=True
-        )
-        df["FuzzyRCMSE"], info["FuzzyRCMSE"] = entropy_multiscale(
-            signal, dimension=dimension, tolerance=tolerance, refined=True, fuzzy=True
-        )
-        df["RCMSE"], info["RCMSE"] = entropy_multiscale(
-            signal, dimension=dimension, tolerance=tolerance, refined=True
-        )
-        df["RangeEn"], info["RangeEn"] = entropy_range(
-            signal, dimension=dimension, delay=delay, tolerance=tolerance
-        )
+        # df["FuzzyEn"], info["FuzzyEn"] = entropy_fuzzy(
+        #     signal, dimension=dimension, delay=delay, tolerance=tolerance
+        # )
+        # df["FuzzyMSE"], info["FuzzyMSE"] = entropy_multiscale(
+        #     signal, dimension=dimension, tolerance=tolerance, fuzzy=True
+        # )
+        # df["FuzzyRCMSE"], info["FuzzyRCMSE"] = entropy_multiscale(
+        #     signal, dimension=dimension, tolerance=tolerance, refined=True, fuzzy=True
+        # )
+        # df["RCMSE"], info["RCMSE"] = entropy_multiscale(
+        #     signal, dimension=dimension, tolerance=tolerance, refined=True
+        # )
+        # df["RangeEn"], info["RangeEn"] = entropy_range(
+        #     signal, dimension=dimension, delay=delay, tolerance=tolerance
+        # )
 
         # Other
         df["DFA"], info["DFA"] = fractal_dfa(signal)
