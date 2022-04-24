@@ -19,6 +19,7 @@ def _phi(
     distance="chebyshev",
     approximate=True,
     fuzzy=False,
+    **kwargs,
 ):
     """Common internal for `entropy_approximate`, `entropy_sample` and `entropy_range`."""
     # Initialize phi

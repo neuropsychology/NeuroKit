@@ -17,6 +17,9 @@ def complexity_coarsegraining(
     segments are constructed for a given signal, to represent the signal at different scales (hence
     the "multiscale" adjective).
 
+    .. figure:: ../img/wu2013a.png
+       :alt: Figure from Wu et al. (2013).
+       :target: https://doi.org/10.1016/j.physleta.2014.03.034
 
     This coarse-graining procedure is similar to moving averaging and the decimation of the original
     time series. The length of each coarse-grained time series is N/Tau. For scale = 1, the
@@ -26,8 +29,23 @@ def complexity_coarsegraining(
     decreases the entropy rate artificially (Nikulin, 2004). One of the core issue is that the
     length of coarse-grained signals becomes smaller as the scale increases.
 
-    To address this issue of length, several methods have been proposed, such as **moving average**
-    (Wu et al. 2013), or **adaptive resampling** (Liu et al. 2012).
+    To address this issue of length, several methods have been proposed, such as **adaptive
+    resampling** (Liu et al. 2012), **moving average** (Wu et al. 2013), or **timeshift**
+    (Wu et al. 2013).
+
+    - **Non-overlapping** (default): The coarse-grained time series are constructed by averaging
+      non-overlapping windows of given size.
+    - **Interpolate**: Interpolates (i.e., resamples) the coarse-grained time series to match the
+      original signal length (currently using a monotonic cubic method, but let us know if you have
+      any opinion on that).
+    - **Moving average**: The coarse-grained time series via a moving average.
+    - **Time-shift**: For each scale, a *k* number of coarse-grained vectors are constructed (see
+      **Figure** below). Somewhat similar to moving-average, with the difference that the time lag
+      creates new vectors.
+
+    .. figure:: ../img/wu2013b.png
+       :alt: Figure from Wu et al. (2013).
+       :target: https://doi.org/10.1016/j.physleta.2014.03.034
 
     Parameters
     ----------
@@ -36,7 +54,7 @@ def complexity_coarsegraining(
     scale : int
         Also regerred to as Tau :math:`\\tau`, it represents the scale factor.
     method : str
-        Can be ``"nonoverlapping"``, ``"rolling"``, or ``"resampling"``.
+        Can be ``"nonoverlapping"``, ``"rolling"``, ``"interpolate"``, or ``timeshift``.
     force : bool
         If ``True``, will include all the samples (even if the last segment is too short).
     show : bool
@@ -67,7 +85,7 @@ def complexity_coarsegraining(
       # Forcing uses all the samples even if the last segment is too short
       nk.complexity_coarsegraining(signal, scale=3, force=True)
 
-      nk.complexity_coarsegraining(signal=range(10), method="resampling")
+      nk.complexity_coarsegraining(signal=range(10), method="interpolate")
       nk.complexity_coarsegraining(signal=range(10), method="rolling")
 
     **Simulated signal**
@@ -83,7 +101,7 @@ def complexity_coarsegraining(
     .. ipython:: python
 
       @savefig p_complexity_coarsegraining2.png scale=100%
-      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, method="resampling", show=True)
+      coarsegrained = nk.complexity_coarsegraining(signal, scale=40, method="interpolate", show=True)
       @suppress
       plt.close()
 
@@ -138,6 +156,8 @@ def complexity_coarsegraining(
     * Wu, S. D., Wu, C. W., Lee, K. Y., & Lin, S. G. (2013). Modified multiscale entropy for
       short-term time series analysis. Physica A: Statistical Mechanics and its Applications, 392
       (23), 5865-5873.
+    * Wu, S. D., Wu, C. W., Lin, S. G., Wang, C. C., & Lee, K. Y. (2013). Time series analysis
+      using composite multiscale entropy. Entropy, 15(3), 1069-1084.
 
     """
     # Sanity checks
@@ -147,7 +167,7 @@ def complexity_coarsegraining(
     if scale > n:
         return np.array([])
 
-    if method in ["nonoverlapping", "resampling"]:
+    if method in ["nonoverlapping", "resampling", "interpolate"]:
         # The following is a fast alternative to:
         # pd.Series(signal).rolling(window=scale).mean().values[scale-1::scale]
 
@@ -156,7 +176,7 @@ def complexity_coarsegraining(
         # Coarse-grain
         coarse = np.nanmean(np.reshape(signal[0 : j * scale], (j, scale)), axis=1)
 
-        if method == "resampling":
+        if method in ["resampling", "interpolate"]:
             x_values = (np.arange(len(coarse)) * scale + scale / 2).astype(int)
             coarse = signal_interpolate(
                 x_values, coarse, x_new=np.arange(n), method="monotone_cubic"

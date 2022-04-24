@@ -96,6 +96,10 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_fuzzy
 
+*entropy_multiscale()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_multiscale
+
 *entropy_permutation()*
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_permutation
