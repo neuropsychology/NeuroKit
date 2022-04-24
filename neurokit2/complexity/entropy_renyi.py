@@ -3,11 +3,11 @@ import numpy as np
 from .entropy_shannon import _entropy_freq
 
 
-def entropy_renyi(signal, alpha=1, method=None, show=False, freq=None):
-    """**Rényi entropy (REn)**
+def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None):
+    """**Rényi entropy (REn or H)**
 
-    In information theory, the Rényi entropy generalizes the Hartley entropy, the Shannon entropy,
-    the collision entropy and the min-entropy.
+    In information theory, the Rényi entropy *H* generalizes the Hartley entropy, the Shannon
+    entropy, the collision entropy and the min-entropy.
 
     - :math:`\\alpha = 0`: the Rényi entropy becomes what is known as the **Hartley entropy**.
     - :math:`\\alpha = 1`: the Rényi entropy becomes the **:func:`Shannon entropy <entropy_shannon>`**.

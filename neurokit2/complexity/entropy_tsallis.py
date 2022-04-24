@@ -3,7 +3,7 @@ import numpy as np
 from .entropy_shannon import _entropy_freq
 
 
-def entropy_tsallis(signal, q=1, method=None, show=False, freq=None):
+def entropy_tsallis(signal=None, q=1, method=None, show=False, freq=None):
     """**Tsallis entropy (TSEn)**
 
     Tsallis Entropy is an extension of :func:`Shannon entropy <entropy_shannon>` to the case where

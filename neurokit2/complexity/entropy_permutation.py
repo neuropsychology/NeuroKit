@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 from .complexity_ordinalpatterns import complexity_ordinalpatterns
+from .entropy_shannon import entropy_shannon
 
 
 def entropy_permutation(
@@ -29,7 +30,7 @@ def entropy_permutation(
     The **Conditional Entropy (CPEn)** was originally defined by Bandt & Pompe as *Sorting
     Entropy*, but recently gained in popularity as conditional through the work of Unakafov et al.
     (2014). It describes the average diversity of the ordinal patterns succeeding a given ordinal
-    pattern.
+    pattern (dimension+1 vs. dimension).
 
     This function can be called either via ``entropy_permutation()`` or ``complexity_pe()``.
     Moreover, variants can be directly accessed via ``complexity_wpe()`` and ``complexity_mspe()``.
@@ -50,7 +51,8 @@ def entropy_permutation(
     weighted : bool
         If True, compute the weighted permutation entropy (WPE).
     **kwargs
-        Optional arguments (currently not used).
+        Optional arguments, such as a function to compute Entropy (:func:`nk.entropy_shannon`
+        (default), :func:`nk.entropy_tsallis` or :func:`nk.entropy_reyni`).
 
     Returns
     -------
@@ -85,6 +87,13 @@ def entropy_permutation(
       cwpen, info = nk.entropy_permutation(signal, weighted=True, conditional=True)
       cwpen
 
+      # Conditional Renyi Permutation Entropy (CPEn)
+      cpen, info = nk.entropy_permutation(signal,
+                                          conditional=True,
+                                          algorithm=nk.entropy_renyi,
+                                          alpha=2)
+      cpen
+
     References
     ----------
     * Fadlallah, B., Chen, B., Keil, A., & Principe, J. (2013). Weighted-permutation entropy: A
@@ -104,8 +113,51 @@ def entropy_permutation(
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    info = {"Corrected": corrected, "Weighted": weighted}
+    info = {"Corrected": corrected, "Weighted": weighted, "Dimension": dimension, "Delay": delay}
 
+    pen = _entropy_permutation(
+        signal,
+        dimension=dimension,
+        delay=delay,
+        corrected=corrected,
+        weighted=weighted,
+        **kwargs,
+    )
+
+    if conditional is True:
+        # Compute PEn at m+1
+        pen_m1 = _entropy_permutation(
+            signal,
+            dimension=dimension + 1,
+            delay=delay,
+            corrected=corrected,
+            weighted=weighted,
+            **kwargs,
+        )
+        # Get difference
+        pen = pen_m1 - pen
+
+        if corrected:
+            pen = pen / np.log2(np.math.factorial(dimension + 1))
+    else:
+        if corrected:
+            pen = pen / np.log2(np.math.factorial(dimension))
+
+    return pen, info
+
+
+# =============================================================================
+# Permutation Entropy
+# =============================================================================
+def _entropy_permutation(
+    signal,
+    dimension=3,
+    delay=1,
+    corrected=True,
+    weighted=False,
+    algorithm=entropy_shannon,
+    **kwargs
+):
     patterns, freq, info = complexity_ordinalpatterns(signal, dimension=dimension, delay=delay)
 
     # Weighted permutation entropy ----------------------------------------------
@@ -122,16 +174,7 @@ def entropy_permutation(
         # Normalize
         freq = freq / info["Weights"].sum()
 
-    # Compute Shannon entropy ------------------------------------------------
-    pe = -np.multiply(freq, np.log2(freq))
+    # Compute entropy algorithm ------------------------------------------------
+    pe, _ = algorithm(freq=freq, **kwargs)
 
-    # Apply correction
-    if corrected:
-        pe = pe / np.log2(np.math.factorial(dimension))
-
-    if conditional is True:
-        pe = np.mean(np.diff(pe))
-    else:
-        pe = pe.sum()
-
-    return pe, info
+    return pe
