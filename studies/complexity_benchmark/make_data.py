@@ -16,8 +16,6 @@ def time_function(
 ):
     t0 = timer()
     rez, _ = fun(x, **kwargs)
-    if isinstance(rez, dict):
-        rez = rez["RecurrenceRate"]
     return pd.DataFrame(
         {
             "Duration": [timer() - t0],
@@ -494,6 +492,22 @@ def run_benchmark(noise_intensity=0.01):
                         dimension=3,
                         weighted=True,
                         conditional=True,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_permutation,
+                        index="CRPEn",
+                        name="nk_entropy_permutation",
+                        delay=delay,
+                        dimension=3,
+                        conditional=True,
+                        algorithm=nk.entropy_renyi,
+                        alpha=2,
                     ),
                 ]
             )

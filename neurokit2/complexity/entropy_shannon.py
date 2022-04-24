@@ -5,7 +5,7 @@ import scipy.stats
 from .fractal_petrosian import _complexity_binarize
 
 
-def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None):
+def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **kwargs):
     """**Shannon entropy (SE or ShanEn)**
 
     Compute Shannon entropy (SE). Entropy is a measure of unpredictability of the
@@ -42,6 +42,8 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None):
     freq : np.array
         Instead of a signal, a vector of probabilities can be provided (used for instance in
         :func:`entropy_permutation`).
+    **kwargs
+        Optional arguments. Not used for now.
 
 
     Returns

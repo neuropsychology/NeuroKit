@@ -29,7 +29,8 @@ knitr::opts_chunk$set(
 
 
 <!-- # Benchmarking and Analysis of Complexity Measures -->
-# Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2
+<!-- # Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 -->
+# Measuring Chaos: Empirical Relationship between Complexity Indices
 
 *This study can be referenced by* [*citing the package and the documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
 
@@ -37,6 +38,11 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
+There has been a large and accelerating increase in the number of complexity indices in the past few decades. They are usually mathematically well-defined and theoretically promising. However, few empirical data exist to understand their differences and similarities.
+
+ In this study, we will compute a vast amount of complexity indices on various types of signals, with varying degrees of noise. We will then empirically compare the various metrics and their relationship.
+ 
+ 
 The goal for NeuroKit is to provide the most comprehensive, accurate and fastest base Python implementations of complexity indices (fractal dimension, entropy, etc.).
 
 ## Methods
@@ -153,6 +159,9 @@ colors = c("SD" = "red",
            "CMSWPEn" = "#E91E63",
            "MMSWPEn" = "#E91E63",
            "IMSWPEn" = "#E91E63",
+           "CPEn" = "#E91E63",
+           "CWPEn" = "#E91E63",
+           "CRPEn" = "#E91E63",
            
            "ShanEn (A)" = "#E91E63",
            "ShanEn (B)" = "#E91E63",
@@ -222,7 +231,7 @@ df |>
 
 ```{r time1, message=FALSE, warning=FALSE}
 dfsummary <- df |>
-  filter(!Index %in% c("Diff", "SD")) |> 
+  filter(!Index %in% c("SD", "Length", "Noise")) |> 
   mutate(Duration = Duration * 10000) |> 
   group_by(Index, Length) |>
   summarize(CI_low = median(Duration) - sd(Duration),
@@ -444,19 +453,18 @@ attributes(rez)$model |>
 
 ```{r message=FALSE, warning=FALSE}
 plot(parameters::n_factors(data))
-rez <- parameters::factor_analysis(data, cor = as.matrix(cor), n = 4, rotation = "varimax", sort = TRUE)
+rez <- parameters::factor_analysis(data, cor = as.matrix(cor), n = 8, rotation = "varimax", sort = TRUE)
 rez
 
-# plot(rez)
-closest <- attributes(rez)$closest_component
-see::material_colors()
+closest <- colnames(select(rez, starts_with("MR")))[apply(select(rez, starts_with("MR")), 1, \(x) which.max(abs(x)))]
 
 loadings <- attributes(rez)$loadings_long |> 
   mutate(Loading = abs(Loading),
          Component = fct_rev(Component),
          Variable = fct_rev(fct_relevel(Variable, rez$Variable))) 
 
-loadings |> 
+
+p1 <- loadings |> 
   # filter(Variable == "CD") |> 
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill=Component), stat = "identity") +
@@ -466,23 +474,35 @@ loadings |>
   coord_flip()+
   theme_minimal() +
   guides(fill = guide_legend(reverse = TRUE)) +
+  labs(x = NULL) +
   theme(axis.text.y = element_text(
-    color = rev(rev(see::palette_material("rainbow")(max(closest)))[closest]),
-    face = ifelse(rez$Variable %in% c("SD", "Length", "Noise"), "italic", "plain")
-),
+    color = rev(see::palette_material("rainbow")(length(unique(closest))))[rev(as.factor(closest))],
+    face = rev(ifelse(rez$Variable %in% c("SD", "Length", "Noise"), "italic", "plain")),
+    hjust=0.5),
+    axis.text.x = element_blank(),
+    plot.title = element_text(hjust = 0.5),
+    panel.grid.major = element_blank(), 
+    panel.grid.minor = element_blank()) 
+
+p2 <- order |>
+  mutate(Duration = 1 + Duration * 10000) |>
+  filter(Index %in% loadings$Variable) |>
+  mutate(Index = fct_relevel(Index, levels(loadings$Variable))) |>
+  ggplot(aes(x = log10(Duration), y = Index)) +
+  geom_bar(aes(fill = log10(Duration)), stat = "identity") +
+  scale_x_reverse(expand=c(0, 0)) +
+  # scale_x_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x), expand=c(0, 0)) +
+  scale_y_discrete(position="right") +
+  scale_fill_viridis_c(guide="none") +
+  labs(x = "Computation Time", y = NULL) +
+  theme_minimal() +
+  theme(axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
         plot.title = element_text(hjust = 0.5),
         panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank()) 
+        panel.grid.minor = element_blank())
 
-# order |> 
-#   mutate(Duration = Duration * 10000) |> 
-#   filter(Index %in% loadings$Variable) |> 
-#   mutate(Index = fct_relevel(Index, levels(loadings$Variable))) |> 
-#   ggplot(aes(x = Duration, y = Index)) +
-#   geom_bar(stat = "identity") +
-#   scale_x_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x)) +
-#   scale_fill_manual(values = colors, guide = "none") +
-#   labs(x = NULL, y = "Computation Time")
+(p2 | p1) + patchwork::plot_annotation(title = "Computation Time and Factor Loading", theme = theme(plot.title = element_text(hjust = 0.5, face = "bold")))
 ```
 
 

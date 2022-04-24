@@ -3,7 +3,7 @@ import numpy as np
 from .entropy_shannon import _entropy_freq
 
 
-def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None):
+def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kwargs):
     """**Rényi entropy (REn or H)**
 
     In information theory, the Rényi entropy *H* generalizes the Hartley entropy, the Shannon
@@ -33,6 +33,8 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None):
         for details.
     show : bool
         If ``True``, will show the discrete the signal.
+    **kwargs
+        Optional arguments. Not used for now.
 
     Returns
     --------
