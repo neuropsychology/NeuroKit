@@ -16,6 +16,7 @@ from .complexity_rr import complexity_rr
 from .complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
 from .entropy_attention import entropy_attention
+from .entropy_bubble import entropy_bubble
 from .entropy_coalition import entropy_coalition
 from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
@@ -137,6 +138,7 @@ __all__ = [
     "entropy_differential",
     "entropy_cumulative_residual",
     "entropy_approximate",
+    "entropy_bubble",
     "entropy_coalition",
     "entropy_sample",
     "entropy_spectral",

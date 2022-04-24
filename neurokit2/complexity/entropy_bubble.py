@@ -1,9 +1,14 @@
 # -*- coding: utf-8 -*-
+from mailbox import _singlefileMailbox
+
 import numpy as np
 import pandas as pd
 
+from .entropy_permutation import _entropy_permutation
+from .entropy_renyi import entropy_renyi
 
-def entropy_bubble(signal, **kwargs):
+
+def entropy_bubble(signal, dimension=3, delay=1, alpha=2, **kwargs):
     """**Bubble Entropy (BubblEn)**
 
     Introduced by Manis et al. (2017) with the goal of being independent of parameters such as
@@ -25,22 +30,19 @@ def entropy_bubble(signal, **kwargs):
         Tolerance (often denoted as *r*), distance to consider two data points as similar. If
         ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
         :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
+    alpha : float
+        The *alpha* :math:`\\alpha` parameter (default to 1) for :func:`Rényi entropy <entropy_renyi>`).
     **kwargs : optional
         Other arguments.
 
     See Also
     --------
-    entropy_shannon, entropy_approximate, entropy_fuzzy
+    complexity_ordinalpatterns, entropy_permutation, entropy_renyi
 
     Returns
     ----------
-    sampen : float
-        The sample entropy of the single time series.
-        If undefined conditional probabilities are detected (logarithm
-        of sum of conditional probabilities is ``ln(0)``), ``np.inf`` will
-        be returned, meaning it fails to retrieve 'accurate' regularity information.
-        This tends to happen for short data segments, increasing tolerance
-        levels might help avoid this.
+    BubbEn : float
+        The Bubble Entropy.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute sample entropy.
@@ -52,8 +54,9 @@ def entropy_bubble(signal, **kwargs):
       import neurokit2 as nk
 
       signal = nk.signal_simulate(duration=2, frequency=5)
-      sampen, parameters = nk.entropy_sample(signal)
-      sampen
+
+      BubbEn, info = nk.entropy_bubble(signal)
+      BubbEn
 
     References
     ----------
@@ -67,4 +70,20 @@ def entropy_bubble(signal, **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    return np.nan, np.nan
+    info = {"Dimension": dimension, "Delay": delay}
+
+    H = [
+        _entropy_permutation(
+            signal,
+            dimension=d,
+            delay=delay,
+            algorithm=entropy_renyi,
+            sorting="bubblesort",
+            **kwargs,
+        )
+        for d in [dimension, dimension + 1]
+    ]
+
+    BubbEn = np.diff(H) / np.log((dimension + 1) / (dimension - 1))
+
+    return BubbEn[0], info

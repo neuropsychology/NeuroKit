@@ -516,6 +516,19 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
+                        nk.entropy_bubble,
+                        index="BubbEn",
+                        name="nk_entropy_bubble",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
                         nk.entropy_multiscale,
                         index="MSEn",
                         name="nk_entropy_multiscale",

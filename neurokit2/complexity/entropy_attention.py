@@ -1,3 +1,5 @@
+from re import I
+
 import numpy as np
 import pandas as pd
 
@@ -40,7 +42,7 @@ def entropy_attention(signal):
 
       signal = nk.signal_simulate(duration=2, frequency=5, noise=0.1)
 
-      # Compute Differential Entropy
+      # Compute Attention Entropy
       atten, info = nk.entropy_attention(signal)
       atten
 
@@ -59,9 +61,6 @@ def entropy_attention(signal):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    signal = np.squeeze(signal)
-    N = signal.shape[0]
-
     Xmax = _find_keypatterns(signal)
     Xmin = _find_keypatterns(-signal)
     Txx = np.diff(Xmax)
@@ -78,7 +77,7 @@ def entropy_attention(signal):
         Txn = Temp[1::2]
         Tnx = Temp[::2]
 
-    Edges = np.arange(-0.5, N + 1)
+    Edges = np.arange(-0.5, len(signal) + 1)
     Pnx, _ = np.histogram(Tnx, Edges)
     Pnn, _ = np.histogram(Tnn, Edges)
     Pxx, _ = np.histogram(Txx, Edges)
@@ -103,20 +102,19 @@ def entropy_attention(signal):
     }
 
 
-def _find_keypatterns(X):
-    Nx = len(X)
-    Indx = np.zeros(Nx)
-    for n in range(1, Nx - 1):
-        if X[n - 1] < X[n] > X[n + 1]:
-            Indx[n] = n
+def _find_keypatterns(signal):
+    n = len(signal)
+    vals = np.zeros(n)
+    for i in range(1, n - 1):
+        if signal[i - 1] < signal[i] > signal[i + 1]:
+            vals[i] = i
 
-        elif X[n - 1] < X[n] == X[n + 1]:
+        elif signal[i - 1] < signal[i] == signal[i + 1]:
             k = 1
-            while (n + k) < Nx - 1 and X[n] == X[n + k]:
+            while (i + k) < n - 1 and signal[i] == signal[i + k]:
                 k += 1
 
-            if X[n] > X[n + k]:
-                Indx[n] = n + ((k - 1) // 2)
+            if signal[i] > signal[i + k]:
+                vals[i] = i + ((k - 1) // 2)
 
-    Indx = Indx[Indx != 0]
-    return Indx
+    return vals[vals != 0]

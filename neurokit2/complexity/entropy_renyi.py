@@ -25,7 +25,7 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kw
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     alpha : float
-        Rényi's *alpha* parameter (default to 1).
+        The *alpha* :math:`\\alpha` parameter (default to 1) for Rényi entropy.
     method : str or int
         Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
         ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in

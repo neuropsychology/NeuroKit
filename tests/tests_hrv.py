@@ -55,7 +55,7 @@ def test_hrv():
 
     ecg_hrv = nk.hrv(peaks, sampling_rate=1000)
 
-    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.01)
+    assert np.isclose(ecg_hrv["HRV_RMSSD"].values[0], 3.526, atol=0.1)
 
 
 def test_hrv_rsa():

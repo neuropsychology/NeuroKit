@@ -454,6 +454,7 @@ attributes(rez)$model |>
 ```{r message=FALSE, warning=FALSE}
 plot(parameters::n_factors(data))
 rez <- parameters::factor_analysis(data, cor = as.matrix(cor), n = 8, rotation = "varimax", sort = TRUE)
+# rez <- parameters::principal_components(data, n = 8, sort = TRUE)
 rez
 
 closest <- colnames(select(rez, starts_with("MR")))[apply(select(rez, starts_with("MR")), 1, \(x) which.max(abs(x)))]

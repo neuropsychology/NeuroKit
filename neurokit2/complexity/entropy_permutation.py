@@ -87,12 +87,12 @@ def entropy_permutation(
       cwpen, info = nk.entropy_permutation(signal, weighted=True, conditional=True)
       cwpen
 
-      # Conditional Renyi Permutation Entropy (CPEn)
-      cpen, info = nk.entropy_permutation(signal,
-                                          conditional=True,
-                                          algorithm=nk.entropy_renyi,
-                                          alpha=2)
-      cpen
+      # Conditional Renyi Permutation Entropy (CRPEn)
+      crpen, info = nk.entropy_permutation(signal,
+                                           conditional=True,
+                                           algorithm=nk.entropy_renyi,
+                                           alpha=2)
+      crpen
 
     References
     ----------
@@ -156,9 +156,15 @@ def _entropy_permutation(
     corrected=True,
     weighted=False,
     algorithm=entropy_shannon,
+    sorting="quicksort",
     **kwargs
 ):
-    patterns, freq, info = complexity_ordinalpatterns(signal, dimension=dimension, delay=delay)
+    patterns, freq, info = complexity_ordinalpatterns(
+        signal,
+        dimension=dimension,
+        delay=delay,
+        algorithm=sorting,
+    )
 
     # Weighted permutation entropy ----------------------------------------------
     if weighted is True:
