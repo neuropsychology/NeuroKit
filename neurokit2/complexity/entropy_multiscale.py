@@ -15,25 +15,18 @@ def entropy_multiscale(
     scale="default",
     dimension=2,
     tolerance="sd",
-    approximate=False,
-    composite=False,
-    refined=False,
-    fuzzy=False,
+    method="MSEn",
     show=False,
-    **kwargs
+    **kwargs,
 ):
-    """**Multiscale entropy (MSE) and its Composite (CMSE), Refined (RCMSE) or fuzzy versions**
-
-    Compute the multiscale entropy (MSE), the composite multiscale entropy (CMSE),
-    the refined composite multiscale entropy (RCMSE), or their fuzzy version (FuzzyMSE, FuzzyCMSE or
-    FuzzyRCMSE).
+    """**Multiscale entropy (MSEn) and its Composite (CMSEn), Refined (RCMSEn) or fuzzy versions**
 
     One of the limitation of :func:`SampEn <entropy_sample>` is that it characterizes
     complexity strictly on the time scale defined by the sampling procedure (via the ``delay``
-    argument). To address this, Costa et al. (2002) proposed the multiscale entropy (MSE),
+    argument). To address this, Costa et al. (2002) proposed the multiscale entropy (MSEn),
     which compute sample entropies at multiple scales.
 
-    The conventional MSE algorithm consists of two steps:
+    The conventional MSEn algorithm consists of two steps:
     1. A :func:`coarse-graining <complexity_coarsegraining>` procedure is used to represent the
        signal at different time scales.
     2. SampEn is used to quantify the regularity of a coarse-grained time series at each time scale
@@ -44,15 +37,19 @@ def entropy_multiscale(
     coarse-grained series estimated by SampEn increases as the time scale factor increases, making
     it problematic for shorter signals.
 
-    - **CMSE**: In order to reduce the variance of estimated entropy values at large scales, Wu et
-      al. (2013) introduced the **composite multiscale entropy (CMSE)** algorithm, which computes
+    - **CMSEn**: In order to reduce the variance of estimated entropy values at large scales, Wu et
+      al. (2013) introduced the **Composite Multiscale Entropy** algorithm, which computes
       multiple coarse-grained series for each scale factor (via the **time-shift** method for
       :func:`coarse-graining <complexity_coarsegraining>`).
-    - **MMSE**: Wu et al. (2013) also introduced the **modified multiscale entropy (MMSE)**
+    - **RCMSEn**: Wu et al. (2014) further **Refined** their CMSEn by averaging not the entropy
+      values of each subcoarsed vector, but its components at a lower level.
+    - **MMSEn**: Wu et al. (2013) also introduced the **Modified Multiscale Entropy**
       algorithm, which is based on rolling-average :func:`coarse-graining <complexity_coarsegraining>`.
-    - **IMSE**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
+    - **IMSEn**: Liu et al. (2012) introduced an adaptive-resampling procedure to resample the
       coarse-grained series. We implement a generalization of this via interpolation that can be
-      referred to as **interpolated multiscale entropy (IMSE)**.
+      referred to as **Interpolated Multiscale Entropy**.
+
+    Their :func:`**Fuzzy** <entropy_sample>` version can be obtained by setting ``fuzzy=True``.
 
     This function can be called either via ``entropy_multiscale()`` or ``complexity_mse()``.
     Moreover, variants can be directly accessed via ``complexity_cmse()``, `complexity_rcmse()``,
@@ -70,20 +67,15 @@ def entropy_multiscale(
         If 'max', will use all scales until half the length of the signal. If an integer, will
         create a range until the specified int.
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
-        returns an array with two columns corresponding to the original signal and its delayed (by
-        Tau) version.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     tolerance : float
-        Tolerance (often denoted as 'r', i.e., filtering level - max absolute difference between
-        segments). If 'default', will be set to 0.2 times the standard deviation of the signal (for
-        dimension = 2).
-    composite : bool
-        Returns the composite multiscale entropy (CMSE), more accurate than MSE.
-    refined : bool
-        Returns the 'refined' composite MSE (RCMSE; Wu, 2014)
-    fuzzy : bool
-        Returns the fuzzy (composite) multiscale entropy (FuzzyMSE, FuzzyCMSE or FuzzyRCMSE).
+        Tolerance (often denoted as *r*), distance to consider two data points as similar. If
+        ``"sd"`` (default), will be set to :math:`0.2 * SD_{signal}`. See
+        :func:`complexity_tolerance()` to estimate the optimal value for this parameter.
+    method : str
+        What version of multiscale entropy to compute. Can be one of ``"MSEn"``, ``"CMSEn"``,
+        ``"RCMSEn"``, ``"MMSEn"``, or ``"IMSEn"``.
     show : bool
         Show the entropy values for each scale factor.
     **kwargs
@@ -92,12 +84,11 @@ def entropy_multiscale(
 
     Returns
     ----------
-    mse : float
-        The point-estimate of multiscale entropy (MSE) of the single time series corresponding to the
-        area under the MSE values curve, which is essentially the sum of sample entropy values over
-        the range of scale factors.
-        series.
-    info : dict
+    float
+        The point-estimate of multiscale entropy (MSEn) of the single time series corresponding to
+        the area under the MSEn values curve, which is essentially the sum of sample entropy values
+        over the range of scale factors.
+    dict
         A dictionary containing additional information regarding the parameters used
         to compute multiscale entropy. The entropy values corresponding to each ``"Scale"``
         factor are stored under the ``"Value"`` key.
@@ -116,61 +107,83 @@ def entropy_multiscale(
       signal = nk.signal_simulate(duration=2, frequency=[5, 12, 40])
 
       @savefig p_entropy_multiscale1.png scale=100%
-      mse, info = nk.entropy_multiscale(signal, show=True)
+      msen, info = nk.entropy_multiscale(signal, show=True)
       @suppress
       plt.close()
-
-    .. ipython:: python
-
-      mse
 
     * **CMSE** (time-shifted coarse-graining)
     .. ipython:: python
 
       @savefig p_entropy_multiscale2.png scale=100%
-      cmse, info = nk.entropy_multiscale(signal, method="timeshift", show=True)
+      cmsen, info = nk.entropy_multiscale(signal, method="CMSE", show=True)
       @suppress
       plt.close()
 
+    * **RCMSE** (refined composite MSE)
     .. ipython:: python
 
-      cmse
+      @savefig p_entropy_multiscale3.png scale=100%
+      rcmsen, info = nk.entropy_multiscale(signal, method="RCMSE", show=True)
+      @suppress
+      plt.close()
 
     * **MMSE** (rolling-window coarse-graining)
     .. ipython:: python
 
-      @savefig p_entropy_multiscale3.png scale=100%
-      mmse, info = nk.entropy_multiscale(signal, method="rolling", show=True)
+      @savefig p_entropy_multiscale4.png scale=100%
+      mmsen, info = nk.entropy_multiscale(signal, method="MMSE", show=True)
       @suppress
       plt.close()
-
-    .. ipython:: python
-
-      mmse
 
     * **IMSE** (interpolated coarse-graining)
     .. ipython:: python
 
-      @savefig p_entropy_multiscale3.png scale=100%
-      imse, info = nk.entropy_multiscale(signal, method="interpolate", show=True)
+      @savefig p_entropy_multiscale5.png scale=100%
+      imsen, info = nk.entropy_multiscale(signal, method="IMSE", show=True)
       @suppress
       plt.close()
 
+    * **MSApEn** (based on ApEn instead of SampEn)
     .. ipython:: python
 
-      imse
+      @savefig p_entropy_multiscale6.png scale=100%
+      msapen, info = nk.entropy_multiscale(signal, method="MSApEn", show=True)
+      @suppress
+      plt.close()
+
+    * **FuzzyMSEn**
+    .. ipython:: python
+
+      @savefig p_entropy_multiscale7.png scale=100%
+      fuzzymsen, info = nk.entropy_multiscale(signal, method="MSEn", fuzzy=True, show=True)
+      @suppress
+      plt.close()
+
+    * **FuzzyCMSEn**
+    .. ipython:: python
+
+      fuzzycmsen, info = nk.entropy_multiscale(signal, method="CMSEn", fuzzy=True)
+      fuzzycmsen
+
+    * **FuzzyRCMSEn**
+    .. ipython:: python
+
+      fuzzyrcmsen, info = nk.entropy_multiscale(signal, method="RCMSEn", fuzzy=True)
+      fuzzycmsen
 
     References
     -----------
-    * Richman, J. S., & Moorman, J. R. (2000). Physiological time-series analysis using approximate
-      entropy and sample entropy. American Journal of Physiology-Heart and Circulatory Physiology,
-      278(6), H2039-H2049.
     * Costa, M., Goldberger, A. L., & Peng, C. K. (2002). Multiscale entropy analysis of complex
       physiologic time series. Physical review letters, 89(6), 068102.
     * Costa, M., Goldberger, A. L., & Peng, C. K. (2005). Multiscale entropy analysis of biological
       signals. Physical review E, 71(2), 021906.
+    * Wu, S. D., Wu, C. W., Lee, K. Y., & Lin, S. G. (2013). Modified multiscale entropy for
+      short-term time series analysis. Physica A: Statistical Mechanics and its Applications, 392
+      (23), 5865-5873.
     * Wu, S. D., Wu, C. W., Lin, S. G., Wang, C. C., & Lee, K. Y. (2013). Time series analysis
       using composite multiscale entropy. Entropy, 15(3), 1069-1084.
+    * Wu, S. D., Wu, C. W., Lin, S. G., Lee, K. Y., & Peng, C. K. (2014). Analysis of complex time
+      series using refined composite multiscale entropy. Physics Letters A, 378(20), 1369-1374.
     * Gow, B. J., Peng, C. K., Wayne, P. M., & Ahn, A. C. (2015). Multiscale entropy analysis of
       center-of-pressure dynamics in human postural control: methodological considerations. Entropy,
       17(12), 7926-7947.
@@ -191,8 +204,34 @@ def entropy_multiscale(
     if "delay" in kwargs.keys():
         kwargs.pop("delay")
 
+    # Parameters selection
+    algorithm = entropy_sample
+    refined = False
+    if method in ["MSE", "MSEn"]:
+        coarsegraining = "nonoverlapping"
+    elif method in ["MSApEn"]:
+        coarsegraining = "nonoverlapping"
+        algorithm = entropy_approximate
+    elif method in ["MMSE", "MMSEn"]:
+        coarsegraining = "rolling"
+    elif method in ["IMSE", "IMSEn"]:
+        coarsegraining = "interpolate"
+    elif method in ["CMSE", "CMSEn"]:
+        coarsegraining = "timeshift"
+    elif method in ["RCMSE", "RCMSEn"]:
+        coarsegraining = "timeshift"
+        refined = True
+    else:
+        raise ValueError(
+            "Method '{method}' is not supported. Please use "
+            "'MSEn', 'CMSEn', 'RCMSEn', 'MMSEn', 'MSApEn'"
+            " or 'IMSEn'."
+        )
+
     # Store parameters
     info = {
+        "Method": method,
+        "Coarsegraining": coarsegraining,
         "Dimension": dimension,
         "Scale": _get_scales(signal, scale=scale, dimension=dimension),
         "Tolerance": complexity_tolerance(
@@ -203,60 +242,21 @@ def entropy_multiscale(
         )[0],
     }
 
-    # Select function
-    if approximate is False:
-        algorithm = entropy_sample
-    else:
-        algorithm = entropy_approximate
-
-    # Mean that is robust to NaN,
-    def _validmean(x):
-        x = np.array(x)[np.isfinite(x)]
-        if len(x) == 0:
-            return np.nan
-        else:
-            return np.mean(x)
-
-    # Define function that works both on 1D and 2D coarse-grained (for composite)
-    def _run_algo(coarse, algorithm, dimension, tolerance, **kwargs):
-        # For 1D coarse-graining
-        if coarse.ndim == 1:
-            return algorithm(
-                coarse,
-                delay=1,
-                dimension=dimension,
-                tolerance=tolerance,
-                **kwargs,
-            )[0]
-
-        # For composite time-shifted coarse-graining
-        else:
-            return _validmean(
-                [
-                    algorithm(
-                        coarse[i],
-                        delay=1,
-                        dimension=dimension,
-                        tolerance=tolerance,
-                        **kwargs,
-                    )[0]
-                    for i in range(len(coarse))
-                ]
-            )
-
     # Compute entropy for each coarsegrained segment
     info["Value"] = np.array(
         [
-            _run_algo(
+            _entropy_multiscale(
                 coarse=complexity_coarsegraining(
                     signal,
                     scale=scale,
+                    method=coarsegraining,
                     show=False,
                     **kwargs,
                 ),
                 algorithm=algorithm,
                 dimension=dimension,
                 tolerance=info["Tolerance"],
+                refined=refined,
                 **kwargs,
             )
             for scale in info["Scale"]
@@ -272,7 +272,7 @@ def entropy_multiscale(
 
     # Plot overlay
     if show is True:
-        _entropy_multiscale_plot(info)
+        _entropy_multiscale_plot(mse, info)
 
     return mse, info
 
@@ -280,59 +280,11 @@ def entropy_multiscale(
 # =============================================================================
 # Internal
 # =============================================================================
-def _entropy_multiscale(
-    signal,
-    tolerance,
-    scale_factors,
-    dimension=2,
-    composite=False,
-    fuzzy=False,
-    refined=False,
-    show=False,
-    **kwargs
-):
-
-    # Initalize mse vector
-    mse_vals = np.full(len(scale_factors), np.nan)
-    for i, tau in enumerate(scale_factors):
-
-        # Regular MSE
-        if refined is False and composite is False:
-            mse_vals[i] = _entropy_multiscale_mse(
-                signal, tau, dimension, tolerance, fuzzy, **kwargs
-            )
-
-        # Composite MSE
-        elif refined is False and composite is True:
-            mse_vals[i] = _entropy_multiscale_cmse(
-                signal, tau, dimension, tolerance, fuzzy, **kwargs
-            )
-
-        # Refined Composite MSE
-        else:
-            mse_vals[i] = _entropy_multiscale_rcmse(
-                signal, tau, dimension, tolerance, fuzzy, **kwargs
-            )
-
-    # Remove inf, nan and 0
-    mse = mse_vals.copy()[~np.isnan(mse_vals)]
-    mse = mse[(mse != np.inf) & (mse != -np.inf)]
-
-    # The MSE index is quantified as the area under the curve (AUC),
-    # which is like the sum normalized by the number of values. It's similar to the mean.
-    mse = np.trapz(mse) / len(mse)
-
-    # Plot overlay
-    if show is True:
-        _entropy_multiscale_plot(scale_factors, mse_vals)
-
-    return mse, mse_vals
-
-
-def _entropy_multiscale_plot(info):
+def _entropy_multiscale_plot(mse, info):
 
     fig = plt.figure(constrained_layout=False)
     fig.suptitle("Entropy values across scale factors")
+    plt.title(f"(Total {info['Method']} = {np.round(mse, 3)})")
     plt.ylabel("Entropy values")
     plt.xlabel("Scale")
     plt.plot(
@@ -347,54 +299,56 @@ def _entropy_multiscale_plot(info):
 # =============================================================================
 # Methods
 # =============================================================================
-def _entropy_multiscale_mse(signal, tau, dimension, tolerance, fuzzy, **kwargs):
-    y = complexity_coarsegraining(signal, scale=tau)
-    if len(y) < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
-        return np.nan
-
-    return entropy_sample(
-        y, delay=1, dimension=dimension, tolerance=tolerance, fuzzy=fuzzy, **kwargs
-    )[0]
-
-
-def _entropy_multiscale_cmse(signal, tau, dimension, tolerance, fuzzy, **kwargs):
-    y = _get_coarsegrained_rolling(signal, tau)
-    if y.size < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
-        return np.nan
-
-    mse_y = np.full(len(y), np.nan)
-    for i in np.arange(len(y)):
-        mse_y[i] = entropy_sample(
-            y[i, :], delay=1, dimension=dimension, tolerance=tolerance, fuzzy=fuzzy, **kwargs
-        )[0]
-
-    if len(np.where((mse_y == np.inf) | (mse_y == -np.inf) | (mse_y == np.nan))[0]) == len(mse_y):
-        # return nan if all are infinity/nan values
-        return np.nan
-    else:
-        # Remove inf, nan and 0
-        mse_y = mse_y[(mse_y != np.inf) & (mse_y != -np.inf) & ~np.isnan(mse_y)]
-
-        return np.mean(mse_y)
-
-
-def _entropy_multiscale_rcmse(signal, tau, dimension, tolerance, fuzzy, **kwargs):
-    y = _get_coarsegrained_rolling(signal, tau)
-    if y.size < 10 ** dimension:  # Compute only if enough values (Liu et al., 2012)
-        return np.nan
-
-    # Get phi for all kth coarse-grained time series
-    phi_ = np.full([len(y), 2], np.nan)
-    for i in np.arange(len(y)):
-        phi_[i] = _phi(
-            y[i, :],
+# Define function that works both on 1D and 2D coarse-grained (for composite)
+def _entropy_multiscale(coarse, algorithm, dimension, tolerance, refined=False, **kwargs):
+    # For 1D coarse-graining
+    if coarse.ndim == 1:
+        return algorithm(
+            coarse,
             delay=1,
             dimension=dimension,
             tolerance=tolerance,
-            fuzzy=fuzzy,
-            approximate=False,
             **kwargs,
-        )
+        )[0]
 
-    # Average all phi of the same dimension, then divide, then log
-    return _phi_divide([np.mean(phi_[:, 0]), np.mean(phi_[:, 1])])
+    # 2D coarse-graining (time-shifted, used in composite)
+    else:
+        # CMSE
+        if refined is False:
+            return _validmean(
+                [
+                    algorithm(
+                        coarse[i],
+                        delay=1,
+                        dimension=dimension,
+                        tolerance=tolerance,
+                        **kwargs,
+                    )[0]
+                    for i in range(len(coarse))
+                ]
+            )
+        # RCMSE
+        else:
+            phis = np.array(
+                [
+                    _phi(
+                        coarse[i],
+                        delay=1,
+                        dimension=dimension,
+                        tolerance=tolerance,
+                        approximate=False,
+                    )
+                    for i in range(len(coarse))
+                ]
+            )
+            # Average all phi of the same dimension, then divide, then log
+            return _phi_divide([_validmean(phis[:, 0]), _validmean(phis[:, 1])])
+
+
+# Mean that is robust to NaN,
+def _validmean(x):
+    x = np.array(x)[np.isfinite(x)]
+    if len(x) == 0:
+        return np.nan
+    else:
+        return np.mean(x)

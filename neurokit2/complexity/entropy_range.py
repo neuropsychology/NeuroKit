@@ -3,22 +3,25 @@ from .entropy_sample import entropy_sample
 
 
 def entropy_range(signal, dimension=3, delay=1, tolerance="default", approximate=False, **kwargs):
-    """**Range Entropy (RangeEn) A and B**
+    """**Range Entropy (RangeEn)**
 
     Introduced by `Omidvarnia et al. (2018) <https://www.mdpi.com/1099-4300/20/12/962/htm>`_,
-    RangeEn refers to a modified form of ApEn (or SampEn).
+    RangeEn refers to a modified form of SampEn (or ApEn).
 
     Both ApEn and SampEn compute the logarithmic likelihood that runs of patterns that are close
     remain close on the next incremental comparisons, of which this closeness is estimated by the
     Chebyshev distance. Range Entropy uses instead a normalized "range distance", resulting in
     modified forms of ApEn and SampEn, **RangeEn (A)** (*mApEn*) and **RangeEn (B)** (*mSampEn*).
 
+    However, the RangeEn (A), based on ApEn, often yields undefined entropies (i.e., *NaN* or
+    *Inf*). As such, using RangeEn (B) is recommended instead.
+
     RangeEn is described as more robust to nonstationary signal changes, and has a more linear
     relationship with the Hurst exponent (compared to ApEn and SampEn), and has no need for signal
     amplitude correction.
 
     Note that the :func:`corrected <entropy_approximate>` version of ApEn (cApEn) can be computed
-    by setting ``approximate=True``.
+    by setting ``corrected=True``.
 
 
 
