@@ -2,9 +2,6 @@
 import numpy as np
 import pandas as pd
 
-from .optim_complexity_tolerance import complexity_tolerance
-from .utils import _phi, _phi_divide
-
 
 def entropy_bubble(signal, **kwargs):
     """**Bubble Entropy (BubblEn)**

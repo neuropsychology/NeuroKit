@@ -1,6 +1,4 @@
 import numpy as np
-import pandas as pd
-import scipy.stats
 
 from .entropy_shannon import _entropy_freq
 
@@ -29,8 +27,8 @@ def entropy_tsallis(signal, q=1, method=None, show=False, freq=None):
 
     Returns
     --------
-    shanen : float
-        The Shannon entropy of the signal.
+    tsen : float
+        The Tsallis entropy of the signal.
     info : dict
         A dictionary containing additional information regarding the parameters used
         to compute Shannon entropy.

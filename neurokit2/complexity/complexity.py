@@ -227,21 +227,21 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         df["HFD"], info["HFD"] = fractal_higuchi(signal, **kwargs)
 
         # Entropy
-        # df["FuzzyEn"], info["FuzzyEn"] = entropy_fuzzy(
-        #     signal, dimension=dimension, delay=delay, tolerance=tolerance
-        # )
-        # df["FuzzyMSE"], info["FuzzyMSE"] = entropy_multiscale(
-        #     signal, dimension=dimension, tolerance=tolerance, fuzzy=True
-        # )
-        # df["FuzzyRCMSE"], info["FuzzyRCMSE"] = entropy_multiscale(
-        #     signal, dimension=dimension, tolerance=tolerance, refined=True, fuzzy=True
-        # )
-        # df["RCMSE"], info["RCMSE"] = entropy_multiscale(
-        #     signal, dimension=dimension, tolerance=tolerance, refined=True
-        # )
-        # df["RangeEn"], info["RangeEn"] = entropy_range(
-        #     signal, dimension=dimension, delay=delay, tolerance=tolerance
-        # )
+        df["FuzzyEn"], info["FuzzyEn"] = entropy_fuzzy(
+            signal, dimension=dimension, delay=delay, tolerance=tolerance
+        )
+        df["RCMSEn"], info["RCMSEn"] = entropy_multiscale(
+            signal, dimension=dimension, tolerance=tolerance, method="RCMSEn"
+        )
+        df["FuzzyMSEn"], info["FuzzyMSEn"] = entropy_multiscale(
+            signal, dimension=dimension, tolerance=tolerance, fuzzy=True
+        )
+        df["FuzzyRCMSEn"], info["FuzzyRCMSEn"] = entropy_multiscale(
+            signal, dimension=dimension, tolerance=tolerance, method="RCMSEn", fuzzy=True
+        )
+        df["RangeEn"], info["RangeEn"] = entropy_range(
+            signal, dimension=dimension, delay=delay, tolerance=tolerance
+        )
 
         # Other
         df["DFA"], info["DFA"] = fractal_dfa(signal)

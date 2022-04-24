@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 
-from .complexity_coarsegraining import _get_scales, complexity_coarsegraining
 from .complexity_embedding import complexity_embedding
 
 
@@ -9,7 +8,8 @@ def complexity_ordinalpatterns(signal, dimension=3, delay=1, **kwargs):
     """**Find Ordinal Patterns for Permutation Procedures**
 
     The seminal work by Bandt and Pompe (2002) introduced a symbolization approach to obtain a
-    sequence of ordinal patterns (permutations) from continuous data. It is used in :func:`permutation entropy <entropy_permutation>` and its different variants.
+    sequence of ordinal patterns (permutations) from continuous data. It is used in
+    :func:`permutation entropy <entropy_permutation>` and its different variants.
 
     Parameters
     ----------
