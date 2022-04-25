@@ -6,7 +6,7 @@ from .entropy_shannon import entropy_shannon
 
 
 def entropy_permutation(
-    signal, dimension=3, delay=1, corrected=True, weighted=False, conditional=False, **kwargs
+    signal, delay=1, dimension=3, corrected=True, weighted=False, conditional=False, **kwargs
 ):
     """**Permutation Entropy (PEn), its Weighted (WPEn) and Conditional (CPEn) forms**
 

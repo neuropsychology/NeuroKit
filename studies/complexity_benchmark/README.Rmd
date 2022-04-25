@@ -163,6 +163,10 @@ colors = c("SD" = "red",
            "CWPEn" = "#E91E63",
            "CRPEn" = "#E91E63",
            
+           "BubbEn" = "#E91E63",
+           "CoSiEn" = "#E91E63",
+           "MSCoSiEn" = "#E91E63",
+           
            "ShanEn (A)" = "#E91E63",
            "ShanEn (B)" = "#E91E63",
            "ShanEn (C)" = "#E91E63",
@@ -216,11 +220,12 @@ df |>
   mutate(Duration = Duration * 10000) |> 
   ggplot(aes(x = Index, y = Duration)) +
   # geom_violin(aes(fill = Index)) +
-  geom_hline(yintercept = rep(10, 5)**seq(0, 4), linetype = "dotted") +
+  geom_hline(yintercept = 10**seq(0, 5, by=2), linetype = "dotted") +
+  geom_hline(yintercept = 10**seq(1, 5, by=2), linetype = "plain") +
   ggdist::stat_slab(side = "bottom", aes(fill = Index), adjust = 3) +
   ggdist::stat_dotsinterval(aes(fill = Index, slab_size = NA)) +
   theme_modern() +
-  scale_y_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x)) +
+  scale_y_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x)) +
   scale_fill_manual(values = colors, guide = "none") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
   labs(x = NULL, y = "Computation Time")
@@ -246,7 +251,7 @@ dfsummary |>
   geom_line(aes(alpha = Length, group = Length)) +
   geom_point(aes(color = Length)) + 
   theme_modern() +
-  scale_y_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x)) +
+  scale_y_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
   guides(alpha = "none") +
   labs(y = "Time to compute", x = NULL, color = "Signal length")
@@ -262,7 +267,7 @@ df |>
   geom_line(data=dfsummary, aes(group = 1)) +
   geom_violin(aes(fill = Length)) +
   facet_wrap(~Index) +
-  scale_y_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x)) +
+  scale_y_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x)) +
   scale_fill_viridis_c(guide = "none") +
   theme_modern() +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
@@ -492,7 +497,7 @@ p2 <- order |>
   ggplot(aes(x = log10(Duration), y = Index)) +
   geom_bar(aes(fill = log10(Duration)), stat = "identity") +
   scale_x_reverse(expand=c(0, 0)) +
-  # scale_x_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf("%g", x), expand=c(0, 0)) +
+  # scale_x_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x), expand=c(0, 0)) +
   scale_y_discrete(position="right") +
   scale_fill_viridis_c(guide="none") +
   labs(x = "Computation Time", y = NULL) +

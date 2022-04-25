@@ -529,6 +529,33 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
+                        nk.entropy_cosinesimilarity,
+                        index="CoSiEn",
+                        name="nk_entropy_cosinesimilarity",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_multiscale,
+                        index="MSCoSiEn",
+                        name="nk_entropy_multiscale",
+                        delay=delay,
+                        dimension=3,
+                        method="MSCoSiEn",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
                         nk.entropy_multiscale,
                         index="MSEn",
                         name="nk_entropy_multiscale",

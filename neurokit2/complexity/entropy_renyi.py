@@ -41,8 +41,7 @@ def entropy_renyi(signal=None, alpha=1, method=None, show=False, freq=None, **kw
     ren : float
         The Tsallis entropy of the signal.
     info : dict
-        A dictionary containing additional information regarding the parameters used
-        to compute Shannon entropy.
+        A dictionary containing additional information regarding the parameters used.
 
     See Also
     --------

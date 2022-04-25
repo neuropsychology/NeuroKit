@@ -38,8 +38,7 @@ def entropy_tsallis(signal=None, q=1, method=None, show=False, freq=None, **kwar
     tsen : float
         The Tsallis entropy of the signal.
     info : dict
-        A dictionary containing additional information regarding the parameters used
-        to compute Shannon entropy.
+        A dictionary containing additional information regarding the parameters used.
 
     See Also
     --------

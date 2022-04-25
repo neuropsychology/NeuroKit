@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from mailbox import _singlefileMailbox
-
 import numpy as np
 import pandas as pd
 

@@ -18,6 +18,7 @@ from .entropy_approximate import entropy_approximate
 from .entropy_attention import entropy_attention
 from .entropy_bubble import entropy_bubble
 from .entropy_coalition import entropy_coalition
+from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
@@ -149,6 +150,7 @@ __all__ = [
     "entropy_wiener",
     "entropy_permutation",
     "entropy_range",
+    "entropy_cosinesimilarity",
     "fisher_information",
     "fractal_dfa",
     "fractal_correlation",

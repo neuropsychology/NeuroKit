@@ -7,6 +7,7 @@ import pandas as pd
 
 from .complexity_coarsegraining import _get_scales, complexity_coarsegraining
 from .entropy_approximate import entropy_approximate
+from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_permutation import entropy_permutation
 from .entropy_sample import entropy_sample
 from .optim_complexity_tolerance import complexity_tolerance
@@ -261,6 +262,9 @@ def entropy_multiscale(
             algorithm = functools.partial(entropy_permutation, weighted=True)
         if method in ["RCMSEn"]:
             refined = True
+    elif method in ["MSCoSiEn"]:
+        coarsegraining = "nonoverlapping"
+        algorithm = entropy_cosinesimilarity
     else:
         raise ValueError(
             "Method '{method}' is not supported. Please use "
