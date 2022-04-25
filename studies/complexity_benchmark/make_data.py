@@ -335,6 +335,17 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
+                        nk.entropy_distribution,
+                        index="DistrEn",
+                        name="nk_entropy_distribution",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
                         nk.entropy_spectral,
                         index="SPEn",
                         name="entropy_spectral",

@@ -21,6 +21,7 @@ from .entropy_coalition import entropy_coalition
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
+from .entropy_distribution import entropy_distribution
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
@@ -137,6 +138,7 @@ __all__ = [
     "entropy_renyi",
     "entropy_attention",
     "entropy_differential",
+    "entropy_distribution",
     "entropy_cumulative_residual",
     "entropy_approximate",
     "entropy_bubble",
