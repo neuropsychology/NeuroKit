@@ -280,7 +280,19 @@ def run_benchmark(noise_intensity=0.01):
                     ),
                 ]
             )
-
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_kolmogorov,
+                        index="K2En",
+                        name="nk_entropy_kolmogorov",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
             rez = pd.concat(
                 [
                     rez,

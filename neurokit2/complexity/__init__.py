@@ -23,6 +23,7 @@ from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
 from .entropy_distribution import entropy_distribution
 from .entropy_fuzzy import entropy_fuzzy
+from .entropy_kolmogorov import entropy_kolmogorov
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
 from .entropy_range import entropy_range
@@ -136,6 +137,7 @@ __all__ = [
     "entropy_shannon",
     "entropy_tsallis",
     "entropy_renyi",
+    "entropy_kolmogorov",
     "entropy_attention",
     "entropy_differential",
     "entropy_distribution",
