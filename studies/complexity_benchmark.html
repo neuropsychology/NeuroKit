@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 &#8212; NeuroKit2 0.1.8 documentation</title>
+    <title>Measuring Chaos: Empirical Relationship between Complexity Indices &#8212; NeuroKit2 0.1.8 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -221,7 +221,7 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2
+     Measuring Chaos: Empirical Relationship between Complexity Indices
     </a>
    </li>
   </ul>
@@ -448,26 +448,19 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#average-computation-time">
-     Average Computation Time
+    <a class="reference internal nav-link" href="#computation-time">
+     Computation Time
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#sensitivity-to-signal-length">
      Sensitivity to Signal Length
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#computation-time">
-       Computation Time
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id1">
-       Results
-      </a>
-     </li>
-    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sensitivity-to-noise">
+     Sensitivity to Noise
+    </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#correlation">
@@ -505,7 +498,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2</h1>
+                <h1>Measuring Chaos: Empirical Relationship between Complexity Indices</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -538,26 +531,19 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#average-computation-time">
-     Average Computation Time
+    <a class="reference internal nav-link" href="#computation-time">
+     Computation Time
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#sensitivity-to-signal-length">
      Sensitivity to Signal Length
     </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#computation-time">
-       Computation Time
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#id1">
-       Results
-      </a>
-     </li>
-    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#sensitivity-to-noise">
+     Sensitivity to Noise
+    </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#correlation">
@@ -597,8 +583,9 @@ title="Print to PDF"
               <div>
                 
   <!-- # Benchmarking and Analysis of Complexity Measures -->
-<section class="tex2jax_ignore mathjax_ignore" id="measuring-chaos-complexity-and-fractal-physiology-using-neurokit2">
-<h1>Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2<a class="headerlink" href="#measuring-chaos-complexity-and-fractal-physiology-using-neurokit2" title="Permalink to this headline">#</a></h1>
+<!-- # Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 -->
+<section class="tex2jax_ignore mathjax_ignore" id="measuring-chaos-empirical-relationship-between-complexity-indices">
+<h1>Measuring Chaos: Empirical Relationship between Complexity Indices<a class="headerlink" href="#measuring-chaos-empirical-relationship-between-complexity-indices" title="Permalink to this headline">#</a></h1>
 <p><em>This study can be referenced by</em> <a class="reference external" href="https://neuropsychology.github.io/NeuroKit/cite_us.html"><em>citing the package and the
 documentation</em></a>.</p>
 <p><strong>We’d like to improve this study, but unfortunately we currently don’t
@@ -606,6 +593,13 @@ have the time. If you want to help to make it happen, please contact
 us!</strong></p>
 <section id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
+<p>There has been a large and accelerating increase in the number of
+complexity indices in the past few decades. They are usually
+mathematically well-defined and theoretically promising. However, few
+empirical data exist to understand their differences and similarities.</p>
+<p>In this study, we will compute a vast amount of complexity indices on
+various types of signals, with varying degrees of noise. We will then
+empirically compare the various metrics and their relationship.</p>
 <p>The goal for NeuroKit is to provide the most comprehensive, accurate and
 fastest base Python implementations of complexity indices (fractal
 dimension, entropy, etc.).</p>
@@ -647,8 +641,9 @@ noise.</p>
 <span class="n">p1</span> <span class="o">&lt;-</span> <span class="nf">make_plot</span><span class="p">(</span><span class="n">method</span> <span class="o">=</span> <span class="s">&quot;Random-Walk&quot;</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Random-Walk&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">)</span>
 <span class="n">p2</span> <span class="o">&lt;-</span> <span class="nf">make_plot</span><span class="p">(</span><span class="n">method</span> <span class="o">=</span> <span class="s">&quot;lorenz_10_2.5_28&quot;</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Lorenz (sigma=10, beta=2.5, rho=28)&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;blue&quot;</span><span class="p">)</span>
 <span class="n">p3</span> <span class="o">&lt;-</span> <span class="nf">make_plot</span><span class="p">(</span><span class="n">method</span> <span class="o">=</span> <span class="s">&quot;lorenz_20_2_30&quot;</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Lorenz (sigma=20, beta=2, rho=30)&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;green&quot;</span><span class="p">)</span>
+<span class="n">p4</span> <span class="o">&lt;-</span> <span class="nf">make_plot</span><span class="p">(</span><span class="n">method</span> <span class="o">=</span> <span class="s">&quot;oscillatory&quot;</span><span class="p">,</span> <span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Oscillatory&quot;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;orange&quot;</span><span class="p">)</span>
 
-<span class="n">p1</span> <span class="o">/</span> <span class="n">p2</span> <span class="o">/</span> <span class="n">p3</span> <span class="o">+</span> <span class="n">patchwork</span><span class="o">::</span><span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Examples of Simulated Signals&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)))</span>
+<span class="n">p1</span> <span class="o">/</span> <span class="n">p2</span> <span class="o">/</span> <span class="n">p3</span> <span class="o">/</span> <span class="n">p4</span> <span class="o">+</span> <span class="n">patchwork</span><span class="o">::</span><span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Examples of Simulated Signals&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">)))</span>
 </pre></div>
 </div>
 <p><img alt="" src="../_images/unnamed-chunk-2-1.png" /><!-- --></p>
@@ -656,17 +651,64 @@ noise.</p>
 </section>
 <section id="results">
 <h2>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h2>
-<section id="average-computation-time">
-<h3>Average Computation Time<a class="headerlink" href="#average-computation-time" title="Permalink to this headline">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">read.csv</span><span class="p">(</span><span class="s">&quot;data_Complexity.csv&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">mutate</span><span class="p">(</span><span class="n">Method</span> <span class="o">=</span> <span class="nf">as.factor</span><span class="p">(</span><span class="n">Method</span><span class="p">))</span>
 
 <span class="c1"># Show and filter out NaNs</span>
 <span class="n">df</span><span class="p">[</span><span class="nf">is.na</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Result</span><span class="p">),</span> <span class="s">&quot;Index&quot;</span><span class="p">]</span>
-<span class="c1">## character(0)</span>
+<span class="c1">##  [1] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [6] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [11] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">## [16] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [21] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">## [26] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [31] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
 <span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">!</span><span class="nf">is.na</span><span class="p">(</span><span class="n">Result</span><span class="p">))</span>
+
+<span class="n">df</span><span class="p">[</span><span class="nf">is.infinite</span><span class="p">(</span><span class="n">df</span><span class="o">$</span><span class="n">Result</span><span class="p">),</span> <span class="s">&quot;Index&quot;</span><span class="p">]</span>
+<span class="c1">##   [1] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##   [6] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [11] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [16] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [21] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [26] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [31] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [36] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [41] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [46] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [51] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [56] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [61] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [66] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [71] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [76] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [81] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [86] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">##  [91] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">##  [96] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [101] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">## [106] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [111] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">## [116] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [121] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">## [126] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [131] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">## [136] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [141] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">## [146] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [151] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;</span>
+<span class="c1">## [156] &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="c1">## [161] &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot; &quot;RangeEn (A)&quot;  &quot;RangeEn (Ac)&quot;</span>
+<span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="o">!</span><span class="nf">is.infinite</span><span class="p">(</span><span class="n">Result</span><span class="p">))</span>
+
+<span class="n">df</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">group_by</span><span class="p">(</span><span class="n">Index</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">standardize</span><span class="p">(</span><span class="n">select</span><span class="o">=</span><span class="s">&quot;Result&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">ungroup</span><span class="p">()</span>
 </pre></div>
 </div>
+<section id="computation-time">
+<h3>Computation Time<a class="headerlink" href="#computation-time" title="Permalink to this headline">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">order</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
   <span class="nf">group_by</span><span class="p">(</span><span class="n">Index</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">summarize</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="nf">median</span><span class="p">(</span><span class="n">Duration</span><span class="p">))</span> <span class="o">|&gt;</span>
@@ -676,26 +718,23 @@ noise.</p>
 <span class="n">df</span> <span class="o">&lt;-</span> <span class="nf">mutate</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">Index</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="nf">as.character</span><span class="p">(</span><span class="n">order</span><span class="o">$</span><span class="n">Index</span><span class="p">)))</span>
 
 <span class="n">df</span> <span class="o">|&gt;</span>
-  <span class="nf">filter</span><span class="p">(</span><span class="o">!</span><span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Diff&quot;</span><span class="p">,</span> <span class="s">&quot;SD&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="o">!</span><span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="n">Duration</span> <span class="o">*</span> <span class="m">10000</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Index</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Duration</span><span class="p">))</span> <span class="o">+</span>
   <span class="c1"># geom_violin(aes(fill = Index)) +</span>
+  <span class="nf">geom_hline</span><span class="p">(</span><span class="n">yintercept</span> <span class="o">=</span> <span class="nf">rep</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span><span class="o">**</span><span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">linetype</span> <span class="o">=</span> <span class="s">&quot;dotted&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="n">ggdist</span><span class="o">::</span><span class="nf">stat_slab</span><span class="p">(</span><span class="n">side</span> <span class="o">=</span> <span class="s">&quot;bottom&quot;</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Index</span><span class="p">),</span> <span class="n">adjust</span> <span class="o">=</span> <span class="m">3</span><span class="p">)</span> <span class="o">+</span>
   <span class="n">ggdist</span><span class="o">::</span><span class="nf">stat_dotsinterval</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">Index</span><span class="p">,</span> <span class="n">slab_size</span> <span class="o">=</span> <span class="kc">NA</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">theme_modern</span><span class="p">()</span> <span class="o">+</span>
-  <span class="nf">scale_y_log10</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">scale_y_log10</span><span class="p">(</span><span class="n">breaks</span> <span class="o">=</span> <span class="nf">rep</span><span class="p">(</span><span class="m">10</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span><span class="o">**</span><span class="nf">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">4</span><span class="p">),</span> <span class="n">labels</span> <span class="o">=</span> <span class="nf">function</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">sprintf</span><span class="p">(</span><span class="s">&quot;%g&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="n">colors</span><span class="p">,</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span> <span class="o">=</span> <span class="m">45</span><span class="p">,</span> <span class="n">vjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">,</span> <span class="n">hjust</span><span class="o">=</span><span class="m">1</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="s">&quot;Computation Time&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><img alt="" src="../_images/unnamed-chunk-5-1.png" /><!-- --></p>
-</section>
-<section id="sensitivity-to-signal-length">
-<h3>Sensitivity to Signal Length<a class="headerlink" href="#sensitivity-to-signal-length" title="Permalink to this headline">#</a></h3>
-<section id="computation-time">
-<h4>Computation Time<a class="headerlink" href="#computation-time" title="Permalink to this headline">#</a></h4>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">dfsummary</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
-  <span class="nf">filter</span><span class="p">(</span><span class="o">!</span><span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;Diff&quot;</span><span class="p">,</span> <span class="s">&quot;SD&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="o">!</span><span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
   <span class="nf">mutate</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="n">Duration</span> <span class="o">*</span> <span class="m">10000</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">group_by</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="n">Length</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">summarize</span><span class="p">(</span><span class="n">CI_low</span> <span class="o">=</span> <span class="nf">median</span><span class="p">(</span><span class="n">Duration</span><span class="p">)</span> <span class="o">-</span> <span class="nf">sd</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span>
@@ -733,147 +772,288 @@ noise.</p>
 </div>
 <p><img alt="" src="../_images/time2-1.png" /><!-- --></p>
 </section>
-<section id="id1">
-<h4>Results<a class="headerlink" href="#id1" title="Permalink to this headline">#</a></h4>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lm</span><span class="p">(</span><span class="n">Result</span> <span class="o">~</span> <span class="n">Index</span> <span class="o">/</span> <span class="nf">poly</span><span class="p">(</span><span class="n">Length</span><span class="p">,</span> <span class="m">2</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">)</span>
+<section id="sensitivity-to-signal-length">
+<h3>Sensitivity to Signal Length<a class="headerlink" href="#sensitivity-to-signal-length" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lm</span><span class="p">(</span><span class="n">Result</span> <span class="o">~</span> <span class="n">Index</span> <span class="o">/</span> <span class="nf">poly</span><span class="p">(</span><span class="n">Length</span><span class="p">,</span> <span class="m">2</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="nf">filter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">Index</span> <span class="o">!=</span> <span class="s">&quot;SD&quot;</span><span class="p">))</span>
 
-<span class="n">parameters</span><span class="o">::</span><span class="nf">parameters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">keep</span> <span class="o">=</span> <span class="s">&quot;poly&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+<span class="n">parameters</span><span class="o">::</span><span class="nf">parameters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">keep</span> <span class="o">=</span> <span class="s">&quot;poly.*1&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">arrange</span><span class="p">(</span><span class="nf">desc</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">Coefficient</span><span class="p">)))</span> <span class="o">|&gt;</span>
   <span class="nf">filter</span><span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="n">.</span><span class="m">05</span><span class="p">)</span>
-<span class="c1">## Parameter                              | Coefficient |    SE |           95% CI | t(9450) |      p</span>
-<span class="c1">## --------------------------------------------------------------------------------------------------</span>
-<span class="c1">## Index [CREn (1000)] * poly(Length, 2)1 |      428.75 | 54.77 | [321.39, 536.11] |    7.83 | &lt; .001</span>
-<span class="c1">## Index [CREn (1000)] * poly(Length, 2)2 |      264.37 | 54.77 | [157.01, 371.73] |    4.83 | &lt; .001</span>
-<span class="c1">## Index [Hjorth] * poly(Length, 2)1      |      216.00 | 54.77 | [108.64, 323.36] |    3.94 | &lt; .001</span>
+<span class="c1">## Parameter                                        | Coefficient |   SE |            95% CI | t(13790) |      p</span>
+<span class="c1">## -------------------------------------------------------------------------------------------------------------</span>
+<span class="c1">## Index [Length] * poly(Length, 2)1                |      118.16 | 7.92 | [ 102.64, 133.68] |    14.93 | &lt; .001</span>
+<span class="c1">## Index [PFD (3)] * poly(Length, 2)1               |     -110.16 | 7.92 | [-125.67, -94.64] |   -13.91 | &lt; .001</span>
+<span class="c1">## Index [IMSPEn] * poly(Length, 2)1                |     -107.97 | 7.92 | [-123.49, -92.45] |   -13.64 | &lt; .001</span>
+<span class="c1">## Index [IMSEn] * poly(Length, 2)1                 |      -93.81 | 7.92 | [-109.33, -78.30] |   -11.85 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (1000)] * poly(Length, 2)1         |       90.94 | 7.92 | [  75.42, 106.46] |    11.49 | &lt; .001</span>
+<span class="c1">## Index [MMSEn] * poly(Length, 2)1                 |      -90.09 | 7.92 | [-105.61, -74.58] |   -11.38 | &lt; .001</span>
+<span class="c1">## Index [ApEn] * poly(Length, 2)1                  |       86.34 | 7.92 | [  70.83, 101.86] |    10.91 | &lt; .001</span>
+<span class="c1">## Index [MMSPEn] * poly(Length, 2)1                |      -85.91 | 7.92 | [-101.43, -70.40] |   -10.85 | &lt; .001</span>
+<span class="c1">## Index [PFD (A)] * poly(Length, 2)1               |      -83.30 | 7.92 | [ -98.82, -67.78] |   -10.52 | &lt; .001</span>
+<span class="c1">## Index [PFD (r)] * poly(Length, 2)1               |      -58.67 | 7.92 | [ -74.19, -43.16] |    -7.41 | &lt; .001</span>
+<span class="c1">## Index [SFD] * poly(Length, 2)1                   |       57.37 | 7.92 | [  41.85,  72.89] |     7.25 | &lt; .001</span>
+<span class="c1">## Index [CMSPEn] * poly(Length, 2)1                |       56.50 | 7.92 | [  40.98,  72.02] |     7.14 | &lt; .001</span>
+<span class="c1">## Index [RCMSEn] * poly(Length, 2)1                |       55.12 | 7.92 | [  39.60,  70.64] |     6.96 | &lt; .001</span>
+<span class="c1">## Index [PFD (10)] * poly(Length, 2)1              |      -54.19 | 7.92 | [ -69.71, -38.67] |    -6.84 | &lt; .001</span>
+<span class="c1">## Index [PFD (B)] * poly(Length, 2)1               |      -53.27 | 7.92 | [ -68.79, -37.75] |    -6.73 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (r)] * poly(Length, 2)1            |      -50.12 | 7.92 | [ -65.64, -34.60] |    -6.33 | &lt; .001</span>
+<span class="c1">## Index [RR] * poly(Length, 2)1                    |      -49.71 | 7.92 | [ -65.23, -34.19] |    -6.28 | &lt; .001</span>
+<span class="c1">## Index [NLDFD] * poly(Length, 2)1                 |      -49.09 | 7.92 | [ -64.61, -33.57] |    -6.20 | &lt; .001</span>
+<span class="c1">## Index [PFD (C)] * poly(Length, 2)1               |      -44.68 | 7.92 | [ -60.20, -29.16] |    -5.64 | &lt; .001</span>
+<span class="c1">## Index [MSApEn] * poly(Length, 2)1                |       43.89 | 7.92 | [  28.37,  59.41] |     5.54 | &lt; .001</span>
+<span class="c1">## Index [CREn (r)] * poly(Length, 2)1              |      -42.90 | 7.92 | [ -58.41, -27.38] |    -5.42 | &lt; .001</span>
+<span class="c1">## Index [cApEn] * poly(Length, 2)1                 |      -42.09 | 7.92 | [ -57.61, -26.57] |    -5.32 | &lt; .001</span>
+<span class="c1">## Index [RangeEn (B)] * poly(Length, 2)1           |      -39.84 | 7.92 | [ -55.36, -24.32] |    -5.03 | &lt; .001</span>
+<span class="c1">## Index [CMSWPEn] * poly(Length, 2)1               |       39.68 | 7.92 | [  24.17,  55.20] |     5.01 | &lt; .001</span>
+<span class="c1">## Index [AttEn] * poly(Length, 2)1                 |       39.31 | 7.92 | [  23.80,  54.83] |     4.97 | &lt; .001</span>
+<span class="c1">## Index [MMSWPEn] * poly(Length, 2)1               |      -36.77 | 7.92 | [ -52.29, -21.25] |    -4.64 | &lt; .001</span>
+<span class="c1">## Index [PFD (100)] * poly(Length, 2)1             |       36.61 | 7.92 | [  21.09,  52.13] |     4.62 | &lt; .001</span>
+<span class="c1">## Index [KFD] * poly(Length, 2)1                   |       36.50 | 7.92 | [  20.98,  52.01] |     4.61 | &lt; .001</span>
+<span class="c1">## Index [FuzzycApEn] * poly(Length, 2)1            |      -35.44 | 7.92 | [ -50.96, -19.92] |    -4.48 | &lt; .001</span>
+<span class="c1">## Index [SVDEn] * poly(Length, 2)1                 |      -34.75 | 7.92 | [ -50.27, -19.23] |    -4.39 | &lt; .001</span>
+<span class="c1">## Index [FI] * poly(Length, 2)1                    |       34.38 | 7.92 | [  18.86,  49.90] |     4.34 | &lt; .001</span>
+<span class="c1">## Index [IMSWPEn] * poly(Length, 2)1               |      -34.01 | 7.92 | [ -49.53, -18.49] |    -4.30 | &lt; .001</span>
+<span class="c1">## Index [Hjorth] * poly(Length, 2)1                |       28.92 | 7.92 | [  13.40,  44.43] |     3.65 | &lt; .001</span>
+<span class="c1">## Index [FuzzyEn] * poly(Length, 2)1               |      -27.31 | 7.92 | [ -42.83, -11.79] |    -3.45 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (100)] * poly(Length, 2)1          |       25.72 | 7.92 | [  10.20,  41.23] |     3.25 | 0.001</span>
+<span class="c1">## Index [PSDFD (Voss1998)] * poly(Length, 2)1      |      -25.50 | 7.92 | [ -41.02,  -9.98] |    -3.22 | 0.001</span>
+<span class="c1">## Index [FuzzyApEn] * poly(Length, 2)1             |      -25.47 | 7.92 | [ -40.98,  -9.95] |    -3.22 | 0.001</span>
+<span class="c1">## Index [PSDFD (Hasselman2013)] * poly(Length, 2)1 |       24.05 | 7.92 | [   8.53,  39.57] |     3.04 | 0.002</span>
+<span class="c1">## Index [ShanEn (B)] * poly(Length, 2)1            |       23.58 | 7.92 | [   8.06,  39.10] |     2.98 | 0.003</span>
+<span class="c1">## Index [ShanEn (C)] * poly(Length, 2)1            |      -22.83 | 7.92 | [ -38.35,  -7.31] |    -2.88 | 0.004</span>
+<span class="c1">## Index [CREn (B)] * poly(Length, 2)1              |       22.27 | 7.92 | [   6.75,  37.78] |     2.81 | 0.005</span>
+<span class="c1">## Index [PFD (D)] * poly(Length, 2)1               |      -21.18 | 7.92 | [ -36.70,  -5.67] |    -2.68 | 0.007</span>
+<span class="c1">## Index [MSEn] * poly(Length, 2)1                  |       20.81 | 7.92 | [   5.29,  36.33] |     2.63 | 0.009</span>
+<span class="c1">## Index [CREn (1000)] * poly(Length, 2)1           |       20.30 | 7.92 | [   4.78,  35.81] |     2.56 | 0.010</span>
+<span class="c1">## Index [MSPEn] * poly(Length, 2)1                 |       20.19 | 7.92 | [   4.67,  35.70] |     2.55 | 0.011</span>
+<span class="c1">## Index [CREn (D)] * poly(Length, 2)1              |      -19.58 | 7.92 | [ -35.09,  -4.06] |    -2.47 | 0.013</span>
+<span class="c1">## Index [ShanEn (D)] * poly(Length, 2)1            |      -18.90 | 7.92 | [ -34.42,  -3.38] |    -2.39 | 0.017</span>
+<span class="c1">## Index [SPEn] * poly(Length, 2)1                  |      -18.85 | 7.92 | [ -34.37,  -3.33] |    -2.38 | 0.017</span>
+<span class="c1">## Index [DiffEn] * poly(Length, 2)1                |       18.26 | 7.92 | [   2.74,  33.77] |     2.31 | 0.021</span>
+<span class="c1">## Index [SDAFD] * poly(Length, 2)1                 |       17.87 | 7.92 | [   2.35,  33.39] |     2.26 | 0.024</span>
+<span class="c1">## Index [CREn (10)] * poly(Length, 2)1             |       16.03 | 7.92 | [   0.51,  31.55] |     2.02 | 0.043</span>
+<span class="c1">## Index [CREn (100)] * poly(Length, 2)1            |       15.64 | 7.92 | [   0.12,  31.16] |     1.98 | 0.048</span>
 
 <span class="nf">estimate_relation</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Length</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Predicted</span><span class="p">))</span> <span class="o">+</span>
   <span class="nf">geom_ribbon</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span> <span class="o">=</span> <span class="n">CI_low</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">CI_high</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="n">Index</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.1</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
-  <span class="nf">geom_point</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="n">df</span><span class="p">,</span> <span class="nf">aes</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">Result</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_point2</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="nf">filter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">Index</span> <span class="o">!=</span> <span class="s">&quot;SD&quot;</span><span class="p">),</span>
+              <span class="nf">aes</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">Result</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Index</span><span class="p">),</span>
+              <span class="n">alpha</span><span class="o">=</span><span class="m">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
   <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Index</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><img alt="" src="../_images/unnamed-chunk-6-1.png" /><!-- --></p>
 </section>
-</section>
-<section id="correlation">
-<h3>Correlation<a class="headerlink" href="#correlation" title="Permalink to this headline">#</a></h3>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
-  <span class="nf">mutate</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="nf">paste</span><span class="p">(</span><span class="n">Signal</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">Noise</span><span class="p">,</span> <span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&quot;__&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
-  <span class="nf">select</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Index</span><span class="p">,</span> <span class="n">Result</span><span class="p">)</span> <span class="o">|&gt;</span>
-  <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">names_from</span> <span class="o">=</span> <span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="n">values_from</span> <span class="o">=</span> <span class="s">&quot;Result&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
-  <span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>
+<section id="sensitivity-to-noise">
+<h3>Sensitivity to Noise<a class="headerlink" href="#sensitivity-to-noise" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">&lt;-</span> <span class="nf">lm</span><span class="p">(</span><span class="n">Result</span> <span class="o">~</span> <span class="n">Index</span> <span class="o">/</span> <span class="nf">poly</span><span class="p">(</span><span class="n">Noise_Intensity</span><span class="p">,</span> <span class="m">2</span><span class="p">),</span> <span class="n">data</span> <span class="o">=</span> <span class="nf">filter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">Index</span> <span class="o">!=</span> <span class="s">&quot;SD&quot;</span><span class="p">))</span>
 
-<span class="n">cor</span> <span class="o">&lt;-</span> <span class="n">correlation</span><span class="o">::</span><span class="nf">correlation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;spearman&quot;</span><span class="p">,</span> <span class="n">redundant</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">|&gt;</span>
-  <span class="nf">cor_sort</span><span class="p">(</span><span class="n">hclust_method</span> <span class="o">=</span> <span class="s">&quot;ward.D2&quot;</span><span class="p">)</span>
+<span class="n">parameters</span><span class="o">::</span><span class="nf">parameters</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">keep</span> <span class="o">=</span> <span class="s">&quot;poly.*1&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">arrange</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">p</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="n">.</span><span class="m">05</span><span class="p">)</span>
+<span class="c1">## Parameter                                                 | Coefficient |    SE |           95% CI | t(13790) |      p</span>
+<span class="c1">## ----------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1">## Index [Noise] * poly(Noise Intensity, 2)1                 |      118.00 |  8.10 | [102.13, 133.88] |    14.57 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (C)] * poly(Noise Intensity, 2)1            |       70.57 |  8.10 | [ 54.69,  86.44] |     8.71 | &lt; .001</span>
+<span class="c1">## Index [CREn (C)] * poly(Noise Intensity, 2)1              |       58.64 |  8.10 | [ 42.77,  74.52] |     7.24 | &lt; .001</span>
+<span class="c1">## Index [RR] * poly(Noise Intensity, 2)1                    |      -55.90 |  8.10 | [-71.77, -40.02] |    -6.90 | &lt; .001</span>
+<span class="c1">## Index [KFD] * poly(Noise Intensity, 2)1                   |      -54.31 |  8.10 | [-70.18, -38.43] |    -6.71 | &lt; .001</span>
+<span class="c1">## Index [H (uncorrected)] * poly(Noise Intensity, 2)1       |       53.08 |  8.10 | [ 37.20,  68.95] |     6.55 | &lt; .001</span>
+<span class="c1">## Index [H (corrected)] * poly(Noise Intensity, 2)1         |       52.69 |  8.10 | [ 36.82,  68.57] |     6.51 | &lt; .001</span>
+<span class="c1">## Index [NLDFD] * poly(Noise Intensity, 2)1                 |      -51.95 |  8.10 | [-67.83, -36.08] |    -6.42 | &lt; .001</span>
+<span class="c1">## Index [PFD (C)] * poly(Noise Intensity, 2)1               |       50.81 |  8.10 | [ 34.94,  66.69] |     6.27 | &lt; .001</span>
+<span class="c1">## Index [HFD] * poly(Noise Intensity, 2)1                   |      -48.87 |  8.10 | [-64.74, -32.99] |    -6.03 | &lt; .001</span>
+<span class="c1">## Index [PFD (r)] * poly(Noise Intensity, 2)1               |      -48.69 |  8.10 | [-64.57, -32.82] |    -6.01 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (100)] * poly(Noise Intensity, 2)1          |       46.59 |  8.10 | [ 30.72,  62.47] |     5.75 | &lt; .001</span>
+<span class="c1">## Index [FI] * poly(Noise Intensity, 2)1                    |       45.84 |  8.10 | [ 29.96,  61.71] |     5.66 | &lt; .001</span>
+<span class="c1">## Index [RangeEn (B)] * poly(Noise Intensity, 2)1           |      -45.67 |  8.10 | [-61.54, -29.80] |    -5.64 | &lt; .001</span>
+<span class="c1">## Index [SFD] * poly(Noise Intensity, 2)1                   |      -43.67 |  8.10 | [-59.55, -27.80] |    -5.39 | &lt; .001</span>
+<span class="c1">## Index [PFD (10)] * poly(Noise Intensity, 2)1              |       43.39 |  8.10 | [ 27.52,  59.27] |     5.36 | &lt; .001</span>
+<span class="c1">## Index [FuzzycApEn] * poly(Noise Intensity, 2)1            |      -42.33 |  8.10 | [-58.21, -26.46] |    -5.23 | &lt; .001</span>
+<span class="c1">## Index [CREn (r)] * poly(Noise Intensity, 2)1              |      -42.25 |  8.10 | [-58.13, -26.38] |    -5.22 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (D)] * poly(Noise Intensity, 2)1            |      -41.89 |  8.10 | [-57.76, -26.01] |    -5.17 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (r)] * poly(Noise Intensity, 2)1            |      -41.24 |  8.10 | [-57.12, -25.37] |    -5.09 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (3)] * poly(Noise Intensity, 2)1            |       41.22 |  8.10 | [ 25.34,  57.09] |     5.09 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (10)] * poly(Noise Intensity, 2)1           |       40.81 |  8.10 | [ 24.94,  56.69] |     5.04 | &lt; .001</span>
+<span class="c1">## Index [CREn (D)] * poly(Noise Intensity, 2)1              |      -40.40 |  8.10 | [-56.27, -24.52] |    -4.99 | &lt; .001</span>
+<span class="c1">## Index [MSWPEn] * poly(Noise Intensity, 2)1                |      -39.29 |  8.10 | [-55.17, -23.42] |    -4.85 | &lt; .001</span>
+<span class="c1">## Index [SVDEn] * poly(Noise Intensity, 2)1                 |      -39.22 |  8.10 | [-55.10, -23.35] |    -4.84 | &lt; .001</span>
+<span class="c1">## Index [PFD (D)] * poly(Noise Intensity, 2)1               |      -39.19 |  8.10 | [-55.07, -23.32] |    -4.84 | &lt; .001</span>
+<span class="c1">## Index [CMSEn] * poly(Noise Intensity, 2)1                 |       38.09 |  8.10 | [ 22.22,  53.97] |     4.70 | &lt; .001</span>
+<span class="c1">## Index [cApEn] * poly(Noise Intensity, 2)1                 |      -37.77 |  8.10 | [-53.65, -21.90] |    -4.66 | &lt; .001</span>
+<span class="c1">## Index [FuzzyApEn] * poly(Noise Intensity, 2)1             |      -35.92 |  8.10 | [-51.80, -20.05] |    -4.44 | &lt; .001</span>
+<span class="c1">## Index [FuzzyEn] * poly(Noise Intensity, 2)1               |      -35.32 |  8.10 | [-51.19, -19.44] |    -4.36 | &lt; .001</span>
+<span class="c1">## Index [SDAFD] * poly(Noise Intensity, 2)1                 |       32.60 |  8.10 | [ 16.73,  48.48] |     4.03 | &lt; .001</span>
+<span class="c1">## Index [Hjorth] * poly(Noise Intensity, 2)1                |       31.74 |  8.10 | [ 15.87,  47.62] |     3.92 | &lt; .001</span>
+<span class="c1">## Index [MMSWPEn] * poly(Noise Intensity, 2)1               |       31.14 |  8.10 | [ 15.27,  47.02] |     3.85 | &lt; .001</span>
+<span class="c1">## Index [ShanEn (B)] * poly(Noise Intensity, 2)1            |       29.88 |  8.10 | [ 14.01,  45.76] |     3.69 | &lt; .001</span>
+<span class="c1">## Index [IMSWPEn] * poly(Noise Intensity, 2)1               |       28.71 |  8.10 | [ 12.83,  44.58] |     3.54 | &lt; .001</span>
+<span class="c1">## Index [MSEn] * poly(Noise Intensity, 2)1                  |       28.43 |  8.10 | [ 12.55,  44.30] |     3.51 | &lt; .001</span>
+<span class="c1">## Index [CREn (B)] * poly(Noise Intensity, 2)1              |       27.87 |  8.10 | [ 12.00,  43.74] |     3.44 | &lt; .001</span>
+<span class="c1">## Index [AttEn] * poly(Noise Intensity, 2)1                 |      -26.75 |  8.10 | [-42.63, -10.88] |    -3.30 | &lt; .001</span>
+<span class="c1">## Index [MSPEn] * poly(Noise Intensity, 2)1                 |      -26.53 |  8.10 | [-42.41, -10.66] |    -3.28 | 0.001</span>
+<span class="c1">## Index [ShanEn (1000)] * poly(Noise Intensity, 2)1         |       24.78 |  8.10 | [  8.91,  40.66] |     3.06 | 0.002</span>
+<span class="c1">## Index [PFD (B)] * poly(Noise Intensity, 2)1               |       24.30 |  8.10 | [  8.42,  40.17] |     3.00 | 0.003</span>
+<span class="c1">## Index [CPEn] * poly(Noise Intensity, 2)1                  |       23.70 |  8.10 | [  7.83,  39.58] |     2.93 | 0.003</span>
+<span class="c1">## Index [PFD (1000)] * poly(Noise Intensity, 2)1            |      -21.99 |  8.10 | [-37.86,  -6.11] |    -2.71 | 0.007</span>
+<span class="c1">## Index [ApEn] * poly(Noise Intensity, 2)1                  |       21.86 |  8.10 | [  5.99,  37.74] |     2.70 | 0.007</span>
+<span class="c1">## Index [PSDFD (Hasselman2013)] * poly(Noise Intensity, 2)1 |      -20.19 |  8.10 | [-36.06,  -4.31] |    -2.49 | 0.013</span>
+<span class="c1">## Index [CD] * poly(Noise Intensity, 2)1                    |      -18.36 |  8.10 | [-34.24,  -2.49] |    -2.27 | 0.023</span>
+<span class="c1">## Index [RangeEn (Ac)] * poly(Noise Intensity, 2)1          |      -27.30 | 12.76 | [-52.31,  -2.28] |    -2.14 | 0.032</span>
+<span class="c1">## Index [RangeEn (A)] * poly(Noise Intensity, 2)1           |      -27.03 | 12.76 | [-52.04,  -2.01] |    -2.12 | 0.034</span>
 
-<span class="n">cor_lower</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">cor</span><span class="p">)</span> <span class="p">{</span>
-  <span class="n">m</span> <span class="o">&lt;-</span> <span class="nf">as.matrix</span><span class="p">(</span><span class="n">cor</span><span class="p">)</span>
-
-  <span class="n">tri</span> <span class="o">&lt;-</span> <span class="nf">upper.tri</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">diag</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">)</span>
-  <span class="nf">rownames</span><span class="p">(</span><span class="n">tri</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">rownames</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-  <span class="nf">colnames</span><span class="p">(</span><span class="n">tri</span><span class="p">)</span> <span class="o">&lt;-</span> <span class="nf">colnames</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
-
-  <span class="n">toremove</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">()</span>
-
-  <span class="nf">for</span><span class="p">(</span><span class="n">param1</span> <span class="n">in</span> <span class="nf">rownames</span><span class="p">(</span><span class="n">m</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nf">for</span><span class="p">(</span><span class="n">param2</span> <span class="n">in</span> <span class="nf">colnames</span><span class="p">(</span><span class="n">m</span><span class="p">))</span> <span class="p">{</span>
-      <span class="nf">if</span><span class="p">(</span><span class="n">tri</span><span class="p">[</span><span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">]</span> <span class="o">==</span> <span class="kc">FALSE</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">toremove</span> <span class="o">&lt;-</span> <span class="nf">c</span><span class="p">(</span><span class="n">toremove</span><span class="p">,</span> <span class="nf">which</span><span class="p">(</span><span class="n">cor</span><span class="o">$</span><span class="n">Parameter1</span> <span class="o">==</span> <span class="n">param1</span> <span class="o">&amp;</span> <span class="n">cor</span><span class="o">$</span><span class="n">Parameter2</span> <span class="o">==</span> <span class="n">param2</span><span class="p">))</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-
-  <span class="n">cor</span><span class="p">[</span><span class="o">-</span><span class="n">toremove</span><span class="p">,</span> <span class="p">]</span>
-<span class="p">}</span>
-
-<span class="n">cor</span> <span class="o">|&gt;</span>
-  <span class="nf">cor_lower</span><span class="p">()</span> <span class="o">|&gt;</span>
-  <span class="nf">mutate</span><span class="p">(</span><span class="n">Text</span> <span class="o">=</span> <span class="n">insight</span><span class="o">::</span><span class="nf">format_value</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">zap_small</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">digits</span> <span class="o">=</span> <span class="m">3</span><span class="p">),</span>
-         <span class="n">Text</span> <span class="o">=</span> <span class="nf">str_replace</span><span class="p">(</span><span class="nf">str_remove</span><span class="p">(</span><span class="n">Text</span><span class="p">,</span> <span class="s">&quot;^0+&quot;</span><span class="p">),</span> <span class="s">&quot;^-0+&quot;</span><span class="p">,</span> <span class="s">&quot;-&quot;</span><span class="p">),</span>
-         <span class="n">Parameter2</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="n">Parameter2</span><span class="p">))</span> <span class="o">|&gt;</span>
-  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Parameter2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Parameter1</span><span class="p">))</span> <span class="o">+</span>
-  <span class="nf">geom_tile</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">rho</span><span class="p">))</span> <span class="o">+</span>
-  <span class="nf">geom_text</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">label</span> <span class="o">=</span> <span class="n">Text</span><span class="p">),</span> <span class="n">size</span> <span class="o">=</span> <span class="m">2</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">scale_fill_gradient2</span><span class="p">(</span><span class="n">low</span> <span class="o">=</span> <span class="s">&#39;#2196F3&#39;</span><span class="p">,</span> <span class="n">mid</span> <span class="o">=</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="s">&#39;#F44336&#39;</span><span class="p">,</span> <span class="n">midpoint</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> <span class="n">space</span> <span class="o">=</span> <span class="s">&#39;Lab&#39;</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Correlation&#39;</span><span class="p">,</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&#39;legend&#39;</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">scale_x_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
-  <span class="nf">scale_y_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
-  <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Correlation Matrix of Complexity Indices&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
-  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
-  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">),</span>
-        <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
-        <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
-        <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">())</span>
+<span class="nf">estimate_relation</span><span class="p">(</span><span class="n">model</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Predicted</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_ribbon</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">ymin</span> <span class="o">=</span> <span class="n">CI_low</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">CI_high</span><span class="p">,</span> <span class="n">fill</span> <span class="o">=</span> <span class="n">Index</span><span class="p">),</span> <span class="n">alpha</span> <span class="o">=</span> <span class="m">0.1</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_line</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">color</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_point2</span><span class="p">(</span><span class="n">data</span> <span class="o">=</span> <span class="nf">filter</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">Index</span> <span class="o">!=</span> <span class="s">&quot;SD&quot;</span><span class="p">),</span>
+              <span class="nf">aes</span><span class="p">(</span><span class="n">y</span> <span class="o">=</span> <span class="n">Result</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">Index</span><span class="p">),</span>
+              <span class="n">alpha</span><span class="o">=</span><span class="m">0.1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="m">2</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_fill_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_color_manual</span><span class="p">(</span><span class="n">values</span> <span class="o">=</span> <span class="n">colors</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">legend.position</span> <span class="o">=</span> <span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">facet_wrap</span><span class="p">(</span><span class="o">~</span><span class="n">Index</span><span class="p">,</span> <span class="n">scales</span> <span class="o">=</span> <span class="s">&quot;free_y&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><img alt="" src="../_images/unnamed-chunk-7-1.png" /><!-- --></p>
 </section>
+<section id="correlation">
+<h3>Correlation<a class="headerlink" href="#correlation" title="Permalink to this headline">#</a></h3>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">&lt;-</span> <span class="n">df</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="nf">paste</span><span class="p">(</span><span class="n">Signal</span><span class="p">,</span> <span class="n">Length</span><span class="p">,</span> <span class="n">Noise_Type</span><span class="p">,</span> <span class="n">Noise_Intensity</span><span class="p">,</span> <span class="n">sep</span> <span class="o">=</span> <span class="s">&quot;__&quot;</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">Index</span><span class="p">,</span> <span class="n">Result</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">pivot_wider</span><span class="p">(</span><span class="n">names_from</span> <span class="o">=</span> <span class="s">&quot;Index&quot;</span><span class="p">,</span> <span class="n">values_from</span> <span class="o">=</span> <span class="s">&quot;Result&quot;</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="n">i</span><span class="p">)</span>
+
+
+
+<span class="n">get_cor</span> <span class="o">&lt;-</span> <span class="nf">function</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">cor</span> <span class="o">&lt;-</span> <span class="n">correlation</span><span class="o">::</span><span class="nf">correlation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;spearman&quot;</span><span class="p">,</span> <span class="n">redundant</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span> <span class="o">|&gt;</span>
+    <span class="n">correlation</span><span class="o">::</span><span class="nf">cor_sort</span><span class="p">(</span><span class="n">hclust_method</span> <span class="o">=</span> <span class="s">&quot;ward.D2&quot;</span><span class="p">)</span>
+  <span class="n">p</span> <span class="o">&lt;-</span> <span class="n">cor</span> <span class="o">|&gt;</span>
+    <span class="nf">cor_lower</span><span class="p">()</span> <span class="o">|&gt;</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">Text</span> <span class="o">=</span> <span class="n">insight</span><span class="o">::</span><span class="nf">format_value</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">zap_small</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">,</span> <span class="n">digits</span> <span class="o">=</span> <span class="m">3</span><span class="p">),</span>
+           <span class="n">Text</span> <span class="o">=</span> <span class="nf">str_replace</span><span class="p">(</span><span class="nf">str_remove</span><span class="p">(</span><span class="n">Text</span><span class="p">,</span> <span class="s">&quot;^0+&quot;</span><span class="p">),</span> <span class="s">&quot;^-0+&quot;</span><span class="p">,</span> <span class="s">&quot;-&quot;</span><span class="p">),</span>
+           <span class="n">Parameter2</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="n">Parameter2</span><span class="p">))</span> <span class="o">|&gt;</span>
+    <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Parameter2</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">Parameter1</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">geom_tile</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="n">rho</span><span class="p">))</span> <span class="o">+</span>
+    <span class="c1"># geom_text(aes(label = Text), size = 2) +</span>
+    <span class="nf">scale_fill_gradient2</span><span class="p">(</span><span class="n">low</span> <span class="o">=</span> <span class="s">&#39;#2196F3&#39;</span><span class="p">,</span> <span class="n">mid</span> <span class="o">=</span> <span class="s">&#39;white&#39;</span><span class="p">,</span> <span class="n">high</span> <span class="o">=</span> <span class="s">&#39;#F44336&#39;</span><span class="p">,</span> <span class="n">midpoint</span> <span class="o">=</span> <span class="m">0</span><span class="p">,</span> <span class="n">limit</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">-1</span><span class="p">,</span> <span class="m">1</span><span class="p">),</span> <span class="n">space</span> <span class="o">=</span> <span class="s">&#39;Lab&#39;</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;Correlation&#39;</span><span class="p">,</span> <span class="n">guide</span> <span class="o">=</span> <span class="s">&#39;legend&#39;</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">scale_x_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">scale_y_discrete</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+    <span class="nf">labs</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Correlation Matrix of Complexity Indices&quot;</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+    <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+    <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="m">45</span><span class="p">,</span> <span class="n">hjust</span> <span class="o">=</span> <span class="m">1</span><span class="p">),</span>
+          <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+          <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+          <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">())</span>
+  <span class="nf">plot</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+  <span class="n">cor</span>
+<span class="p">}</span>
+
+
+<span class="n">cor</span> <span class="o">&lt;-</span> <span class="nf">get_cor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><img alt="" src="../_images/unnamed-chunk-8-1.png" /><!-- --></p>
+</section>
 <section id="duplicates">
 <h3>Duplicates<a class="headerlink" href="#duplicates" title="Permalink to this headline">#</a></h3>
 <ul class="simple">
-<li><p><strong>CREn (D)</strong>, <strong>PFD (D)</strong> and <strong>ShanEn (D)</strong></p>
-<ul>
-<li><p>keep <strong>PFD (D)</strong> because it’s faster.</p></li>
-</ul>
-</li>
 <li><p><strong>CREn (B)</strong>, and <strong>ShanEn (B)</strong></p>
 <ul>
-<li><p>keep <strong>ShanEn (B)</strong> because it’s faster.</p></li>
+<li><p>Remove <em>CREn (B)</em> because it’s slower.</p></li>
+</ul>
+</li>
+<li><p><strong>CREn (D)</strong>, <strong>PFD (D)</strong> and <strong>ShanEn (D)</strong></p>
+<ul>
+<li><p>Remove <em>CREn (D)</em> and <em>ShanEn (D)</em> because it’s slower.</p></li>
 </ul>
 </li>
 <li><p><strong>CREn (r)</strong>, <strong>PFD (r)</strong> and <strong>ShanEn (r)</strong></p>
 <ul>
-<li><p>keep <strong>PFD (r)</strong> because it’s faster.</p></li>
+<li><p>Remove <em>CREn (r)</em> and <em>ShanEn (r)</em> because it’s slower.</p></li>
+</ul>
+</li>
+<li><p><strong>PSDFD (Hasselman2013)</strong> and <strong>PSDFD (Voss1998)</strong></p>
+<ul>
+<li><p>Remove <strong>PSDFD (Voss1998)</strong> because it’s positively correlated
+with the rest.</p></li>
+</ul>
+</li>
+<li><p><strong>RangeEn (A)</strong>, <strong>RangeEn (Ac)</strong> and <strong>RangeEn (B)</strong></p>
+<ul>
+<li><p>Remove <strong>RangeEn (A)</strong>, <strong>RangeEn (Ac)</strong> because they yield
+undefined entropies.</p></li>
 </ul>
 </li>
 <li><p><strong>SVDEn</strong>, and <strong>FI</strong></p>
 <ul>
-<li><p>keep <strong>SVDEn</strong> because it’s positively correlated with the rest.</p></li>
+<li><p>Remove <strong>FI</strong> because it’s negatively correlated with the rest.</p></li>
+</ul>
+</li>
+<li><p><strong>MMSEn</strong>, and <strong>IMSEn</strong></p>
+<ul>
+<li><p>Remove <strong>MMSEn</strong> because it’s slower.</p></li>
+</ul>
+</li>
+<li><p><strong>H (corrected)</strong>, and <strong>H (uncorrected)</strong></p>
+<ul>
+<li><p>Remove <strong>H (corrected)</strong> because it’s slower.</p></li>
+</ul>
+</li>
+<li><p><strong>FuzzyEn</strong>, and <strong>FuzzyApEn</strong></p>
+<ul>
+<li><p>Remove <strong>FuzzyApEn</strong> because it’s slower.</p></li>
 </ul>
 </li>
 </ul>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">cor</span> <span class="o">|&gt;</span>
   <span class="nf">cor_lower</span><span class="p">()</span> <span class="o">|&gt;</span>
-  <span class="nf">arrange</span><span class="p">(</span><span class="nf">desc</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">rho</span><span class="p">)))</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Parameter1</span> <span class="o">%in%</span> <span class="nf">names</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">Parameter2</span> <span class="o">%in%</span> <span class="nf">names</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">|&gt;</span>
+  <span class="nf">arrange</span><span class="p">(</span><span class="nf">desc</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">rho</span><span class="p">)),</span> <span class="n">Parameter1</span><span class="p">)</span> <span class="o">|&gt;</span>
   <span class="nf">filter</span><span class="p">(</span><span class="n">Parameter1</span> <span class="o">!=</span> <span class="n">Parameter2</span><span class="p">)</span> <span class="o">|&gt;</span>
-  <span class="nf">filter</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">.</span><span class="m">95</span><span class="p">)</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">rho</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">.</span><span class="m">98</span><span class="p">)</span>
 <span class="c1">## # Correlation Matrix (spearman-method)</span>
 <span class="c1">##</span>
 <span class="c1">## Parameter1            |       Parameter2 |   rho |         95% CI |        S |         p</span>
 <span class="c1">## ----------------------------------------------------------------------------------------</span>
+<span class="c1">## CREn (D)              |          PFD (D) |  1.00 | [ 1.00,  1.00] |     0.00 | &lt; .001***</span>
+<span class="c1">## CREn (D)              |       ShanEn (D) |  1.00 | [ 1.00,  1.00] |     0.00 | &lt; .001***</span>
+<span class="c1">## PFD (D)               |       ShanEn (D) |  1.00 | [ 1.00,  1.00] |     0.00 | &lt; .001***</span>
 <span class="c1">## PSDFD (Hasselman2013) | PSDFD (Voss1998) | -1.00 | [-1.00, -1.00] | 2.36e+06 | &lt; .001***</span>
 <span class="c1">## ShanEn (B)            |         CREn (B) |  1.00 | [ 1.00,  1.00] |     0.00 | &lt; .001***</span>
-<span class="c1">## CREn (D)              |          PFD (D) |  1.00 | [ 1.00,  1.00] | 2.62e-10 | &lt; .001***</span>
-<span class="c1">## CREn (D)              |       ShanEn (D) |  1.00 | [ 1.00,  1.00] | 2.62e-10 | &lt; .001***</span>
-<span class="c1">## PFD (D)               |       ShanEn (D) |  1.00 | [ 1.00,  1.00] | 2.62e-10 | &lt; .001***</span>
+<span class="c1">## RangeEn (A)           |     RangeEn (Ac) |  1.00 | [ 1.00,  1.00] |    62.00 | &lt; .001***</span>
 <span class="c1">## SVDEn                 |               FI | -1.00 | [-1.00, -1.00] | 2.36e+06 | &lt; .001***</span>
-<span class="c1">## FuzzyEn               |        FuzzyApEn |  0.99 | [ 0.99,  0.99] |  8172.00 | &lt; .001***</span>
-<span class="c1">## FuzzycApEn            |               FI | -0.99 | [-0.99, -0.99] | 2.35e+06 | &lt; .001***</span>
-<span class="c1">## NLDFD                 |               RR |  0.99 | [ 0.99,  0.99] | 11532.00 | &lt; .001***</span>
-<span class="c1">## PFD (r)               |       ShanEn (r) |  0.99 | [ 0.99,  0.99] | 12160.37 | &lt; .001***</span>
-<span class="c1">## SVDEn                 |       FuzzycApEn |  0.99 | [ 0.99,  0.99] | 12602.00 | &lt; .001***</span>
-<span class="c1">## NLDFD                 |       ShanEn (r) |  0.99 | [ 0.98,  0.99] | 15180.13 | &lt; .001***</span>
-<span class="c1">## H (corrected)         |  H (uncorrected) |  0.98 | [ 0.98,  0.99] | 18408.00 | &lt; .001***</span>
-<span class="c1">## NLDFD                 |          PFD (r) |  0.98 | [ 0.98,  0.99] | 19995.77 | &lt; .001***</span>
-<span class="c1">## FuzzyApEn             |       FuzzycApEn |  0.98 | [ 0.97,  0.99] | 22418.00 | &lt; .001***</span>
-<span class="c1">## FuzzyApEn             |            SVDEn |  0.98 | [ 0.97,  0.98] | 29488.00 | &lt; .001***</span>
-<span class="c1">## FuzzyApEn             |               FI | -0.97 | [-0.98, -0.97] | 2.33e+06 | &lt; .001***</span>
-<span class="c1">## RR                    |       ShanEn (r) |  0.97 | [ 0.97,  0.98] | 30486.70 | &lt; .001***</span>
-<span class="c1">## RR                    |          PFD (r) |  0.97 | [ 0.96,  0.98] | 31279.30 | &lt; .001***</span>
-<span class="c1">## CREn (r)              |       ShanEn (r) |  0.97 | [ 0.96,  0.98] | 31910.21 | &lt; .001***</span>
-<span class="c1">## FuzzyEn               |       FuzzycApEn |  0.97 | [ 0.96,  0.98] | 39170.00 | &lt; .001***</span>
-<span class="c1">## CREn (r)              |          PFD (r) |  0.96 | [ 0.95,  0.97] | 48561.36 | &lt; .001***</span>
-<span class="c1">## FuzzyEn               |            SVDEn |  0.96 | [ 0.94,  0.97] | 48900.00 | &lt; .001***</span>
-<span class="c1">## SFD                   |         PFD (10) | -0.96 | [-0.97, -0.94] | 2.31e+06 | &lt; .001***</span>
-<span class="c1">## CREn (r)              |            NLDFD |  0.96 | [ 0.94,  0.97] | 51683.72 | &lt; .001***</span>
-<span class="c1">## FuzzyEn               |               FI | -0.96 | [-0.97, -0.94] | 2.31e+06 | &lt; .001***</span>
-<span class="c1">## CREn (100)            |      CREn (1000) |  0.95 | [ 0.94,  0.96] | 55968.00 | &lt; .001***</span>
+<span class="c1">## RangeEn (B)           |      RangeEn (A) |  0.99 | [ 0.99,  1.00] |   766.00 | &lt; .001***</span>
+<span class="c1">## RangeEn (B)           |     RangeEn (Ac) |  0.99 | [ 0.99,  1.00] |   768.00 | &lt; .001***</span>
+<span class="c1">## RangeEn (A)           |       FuzzycApEn |  0.99 | [ 0.99,  1.00] |   906.00 | &lt; .001***</span>
+<span class="c1">## RangeEn (Ac)          |       FuzzycApEn |  0.99 | [ 0.99,  1.00] |   934.00 | &lt; .001***</span>
+<span class="c1">## FuzzyApEn             |      RangeEn (A) |  0.99 | [ 0.99,  1.00] |   974.00 | &lt; .001***</span>
+<span class="c1">## NLDFD                 |       ShanEn (r) |  0.99 | [ 0.99,  0.99] |  8532.37 | &lt; .001***</span>
+<span class="c1">## FuzzyApEn             |     RangeEn (Ac) |  0.99 | [ 0.99,  0.99] |  1058.00 | &lt; .001***</span>
+<span class="c1">## RangeEn (A)           |               FI | -0.99 | [-0.99, -0.99] | 2.76e+05 | &lt; .001***</span>
+<span class="c1">## MMSEn                 |            IMSEn |  0.99 | [ 0.99,  0.99] |  9496.00 | &lt; .001***</span>
+<span class="c1">## RangeEn (Ac)          |               FI | -0.99 | [-0.99, -0.99] | 2.76e+05 | &lt; .001***</span>
+<span class="c1">## FuzzyEn               |      RangeEn (A) |  0.99 | [ 0.98,  0.99] |  1378.00 | &lt; .001***</span>
+<span class="c1">## RangeEn (A)           |            SVDEn |  0.99 | [ 0.98,  0.99] |  1380.00 | &lt; .001***</span>
+<span class="c1">## FuzzyEn               |     RangeEn (Ac) |  0.99 | [ 0.98,  0.99] |  1446.00 | &lt; .001***</span>
+<span class="c1">## RangeEn (Ac)          |            SVDEn |  0.99 | [ 0.98,  0.99] |  1524.00 | &lt; .001***</span>
+<span class="c1">## H (corrected)         |  H (uncorrected) |  0.99 | [ 0.98,  0.99] | 13684.00 | &lt; .001***</span>
+<span class="c1">## PFD (r)               |       ShanEn (r) |  0.99 | [ 0.98,  0.99] | 14487.28 | &lt; .001***</span>
+<span class="c1">## FuzzyEn               |        FuzzyApEn |  0.99 | [ 0.98,  0.99] | 15918.00 | &lt; .001***</span>
+<span class="c1">## PFD (r)               |            NLDFD |  0.98 | [ 0.98,  0.99] | 18560.82 | &lt; .001***</span>
+<span class="c1">## SVDEn                 |       FuzzycApEn |  0.98 | [ 0.98,  0.99] | 18684.00 | &lt; .001***</span>
+<span class="c1">## FuzzycApEn            |               FI | -0.98 | [-0.99, -0.98] | 2.34e+06 | &lt; .001***</span>
+<span class="c1">## CREn (r)              |       ShanEn (r) |  0.98 | [ 0.98,  0.99] | 21171.87 | &lt; .001***</span>
 <span class="c1">##</span>
 <span class="c1">## p-value adjustment method: Holm (1979)</span>
-<span class="c1">## Observations: 192</span>
+<span class="c1">## Observations: 94-192</span>
 
 
 <span class="c1"># Duplicates</span>
@@ -884,28 +1064,53 @@ noise.</p>
 <span class="c1">## # A tibble: 3 x 2</span>
 <span class="c1">##   Index      Duration</span>
 <span class="c1">##   &lt;fct&gt;         &lt;dbl&gt;</span>
-<span class="c1">## 1 PFD (D)    0.000161</span>
-<span class="c1">## 2 ShanEn (D) 0.000515</span>
-<span class="c1">## 3 CREn (D)   0.000569</span>
+<span class="c1">## 1 PFD (D)    0.000134</span>
+<span class="c1">## 2 ShanEn (D) 0.000200</span>
+<span class="c1">## 3 CREn (D)   0.000539</span>
 <span class="nf">filter</span><span class="p">(</span><span class="n">averagetime</span><span class="p">,</span> <span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;ShanEn (B)&quot;</span><span class="p">,</span> <span class="s">&quot;CREn (B)&quot;</span><span class="p">))</span>
 <span class="c1">## # A tibble: 2 x 2</span>
 <span class="c1">##   Index      Duration</span>
 <span class="c1">##   &lt;fct&gt;         &lt;dbl&gt;</span>
-<span class="c1">## 1 ShanEn (B) 0.000577</span>
-<span class="c1">## 2 CREn (B)   0.000634</span>
+<span class="c1">## 1 ShanEn (B) 0.000232</span>
+<span class="c1">## 2 CREn (B)   0.000586</span>
 <span class="nf">filter</span><span class="p">(</span><span class="n">averagetime</span><span class="p">,</span> <span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;ShanEn (r)&quot;</span><span class="p">,</span> <span class="s">&quot;PFD (r)&quot;</span><span class="p">,</span> <span class="s">&quot;CREn (r)&quot;</span><span class="p">))</span>
 <span class="c1">## # A tibble: 3 x 2</span>
-<span class="c1">##   Index      Duration</span>
-<span class="c1">##   &lt;fct&gt;         &lt;dbl&gt;</span>
-<span class="c1">## 1 PFD (r)    0.000103</span>
-<span class="c1">## 2 ShanEn (r) 0.000458</span>
-<span class="c1">## 3 CREn (r)   0.000529</span>
+<span class="c1">##   Index       Duration</span>
+<span class="c1">##   &lt;fct&gt;          &lt;dbl&gt;</span>
+<span class="c1">## 1 PFD (r)    0.0000884</span>
+<span class="c1">## 2 ShanEn (r) 0.000149</span>
+<span class="c1">## 3 CREn (r)   0.000479</span>
 <span class="nf">filter</span><span class="p">(</span><span class="n">averagetime</span><span class="p">,</span> <span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SVDEn&quot;</span><span class="p">,</span> <span class="s">&quot;FI&quot;</span><span class="p">))</span>
 <span class="c1">## # A tibble: 2 x 2</span>
 <span class="c1">##   Index Duration</span>
 <span class="c1">##   &lt;fct&gt;    &lt;dbl&gt;</span>
-<span class="c1">## 1 SVDEn 0.000129</span>
-<span class="c1">## 2 FI    0.000205</span>
+<span class="c1">## 1 SVDEn 0.000107</span>
+<span class="c1">## 2 FI    0.000108</span>
+<span class="nf">filter</span><span class="p">(</span><span class="n">averagetime</span><span class="p">,</span> <span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;PSDFD (Hasselman2013)&quot;</span><span class="p">,</span> <span class="s">&quot;PSDFD (Voss1998)&quot;</span><span class="p">))</span>
+<span class="c1">## # A tibble: 2 x 2</span>
+<span class="c1">##   Index                 Duration</span>
+<span class="c1">##   &lt;fct&gt;                    &lt;dbl&gt;</span>
+<span class="c1">## 1 PSDFD (Hasselman2013)  0.00261</span>
+<span class="c1">## 2 PSDFD (Voss1998)       0.00280</span>
+<span class="nf">filter</span><span class="p">(</span><span class="n">averagetime</span><span class="p">,</span> <span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;MMSEn&quot;</span><span class="p">,</span> <span class="s">&quot;IMSEn&quot;</span><span class="p">))</span>
+<span class="c1">## # A tibble: 2 x 2</span>
+<span class="c1">##   Index Duration</span>
+<span class="c1">##   &lt;fct&gt;    &lt;dbl&gt;</span>
+<span class="c1">## 1 IMSEn    0.930</span>
+<span class="c1">## 2 MMSEn    1.03</span>
+<span class="nf">filter</span><span class="p">(</span><span class="n">averagetime</span><span class="p">,</span> <span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;H (corrected)&quot;</span><span class="p">,</span> <span class="s">&quot;H (uncorrected)&quot;</span><span class="p">))</span>
+<span class="c1">## # A tibble: 2 x 2</span>
+<span class="c1">##   Index           Duration</span>
+<span class="c1">##   &lt;fct&gt;              &lt;dbl&gt;</span>
+<span class="c1">## 1 H (uncorrected)  0.00697</span>
+<span class="c1">## 2 H (corrected)    0.00864</span>
+<span class="nf">filter</span><span class="p">(</span><span class="n">averagetime</span><span class="p">,</span> <span class="n">Index</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;FuzzyEn&quot;</span><span class="p">,</span> <span class="s">&quot;FuzzyApEn&quot;</span><span class="p">))</span>
+<span class="c1">## # A tibble: 2 x 2</span>
+<span class="c1">##   Index     Duration</span>
+<span class="c1">##   &lt;fct&gt;        &lt;dbl&gt;</span>
+<span class="c1">## 1 FuzzyEn     0.0716</span>
+<span class="c1">## 2 FuzzyApEn   0.0724</span>
+
 
 <span class="c1"># NLFD | RR</span>
 <span class="c1"># NLFD | RR</span>
@@ -922,14 +1127,21 @@ noise.</p>
 
 <span class="n">data</span> <span class="o">&lt;-</span> <span class="n">data</span> <span class="o">|&gt;</span>
   <span class="nf">select</span><span class="p">(</span>
+    <span class="o">-</span> <span class="n">`CREn (B)`</span><span class="p">,</span>
     <span class="o">-</span><span class="n">`CREn (D)`</span><span class="p">,</span> <span class="o">-</span><span class="n">`ShanEn (D)`</span><span class="p">,</span>
-    <span class="o">-</span> <span class="n">`ShanEn (B)`</span><span class="p">,</span>
     <span class="o">-</span> <span class="n">`CREn (r)`</span><span class="p">,</span> <span class="o">-</span><span class="n">`ShanEn (r)`</span><span class="p">,</span>
-    <span class="o">-</span><span class="n">FI</span>
-    <span class="c1"># -`PSDFD (Voss1998)`</span>
+    <span class="o">-</span><span class="n">`PSDFD (Voss1998)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">`RangeEn (A)`</span><span class="p">,</span> <span class="o">-</span><span class="n">`RangeEn (Ac)`</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">FI</span><span class="p">,</span>
+    <span class="o">-</span><span class="n">MMSEn</span><span class="p">,</span>
+    <span class="o">-</span> <span class="n">`H (corrected)`</span><span class="p">,</span>
+    <span class="o">-</span> <span class="n">FuzzyApEn</span>
   <span class="p">)</span>
+
+<span class="n">cor</span> <span class="o">&lt;-</span> <span class="nf">get_cor</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
+<p><img alt="" src="../_images/unnamed-chunk-9-1.png" /><!-- --></p>
 </section>
 <section id="hierarchical-clustering">
 <h3>Hierarchical CLustering<a class="headerlink" href="#hierarchical-clustering" title="Permalink to this headline">#</a></h3>
@@ -937,10 +1149,10 @@ noise.</p>
 <span class="nf">plot</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-9-1.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-10-1.png" /><!-- --></p>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">cluster_analysis</span><span class="p">(</span><span class="nf">as.data.frame</span><span class="p">(</span><span class="nf">t</span><span class="p">(</span><span class="n">data</span><span class="p">)),</span>
                                     <span class="n">standardize</span> <span class="o">=</span> <span class="kc">FALSE</span><span class="p">,</span>
-                                    <span class="n">n</span><span class="o">=</span><span class="m">7</span><span class="p">,</span>
+                                    <span class="n">n</span><span class="o">=</span><span class="m">4</span><span class="p">,</span>
                                     <span class="n">method</span><span class="o">=</span><span class="s">&quot;hclust&quot;</span><span class="p">,</span>
                                     <span class="n">hclust_method</span><span class="o">=</span><span class="s">&quot;ward.D2&quot;</span><span class="p">)</span>
 <span class="c1"># plot(rez)</span>
@@ -949,68 +1161,136 @@ noise.</p>
   <span class="nf">plot</span><span class="p">(</span><span class="n">hang</span> <span class="o">=</span> <span class="m">-1</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-9-2.png" /><!-- --></p>
+<p><img alt="" src="../_images/unnamed-chunk-10-2.png" /><!-- --></p>
 </section>
 <section id="factor-analysis">
 <h3>Factor Analysis<a class="headerlink" href="#factor-analysis" title="Permalink to this headline">#</a></h3>
 <div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="nf">plot</span><span class="p">(</span><span class="n">parameters</span><span class="o">::</span><span class="nf">n_factors</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
 </pre></div>
 </div>
-<p><img alt="" src="../_images/unnamed-chunk-10-1.png" /><!-- --></p>
-<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">factor_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="nf">cor</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s">&quot;spearman&quot;</span><span class="p">),</span> <span class="n">n</span> <span class="o">=</span> <span class="m">6</span><span class="p">,</span> <span class="n">rotation</span> <span class="o">=</span> <span class="s">&quot;varimax&quot;</span><span class="p">,</span> <span class="n">sort</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
+<p><img alt="" src="../_images/unnamed-chunk-11-1.png" /><!-- --></p>
+<div class="highlight-r notranslate"><div class="highlight"><pre><span></span><span class="n">rez</span> <span class="o">&lt;-</span> <span class="n">parameters</span><span class="o">::</span><span class="nf">factor_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">cor</span> <span class="o">=</span> <span class="nf">as.matrix</span><span class="p">(</span><span class="n">cor</span><span class="p">),</span> <span class="n">n</span> <span class="o">=</span> <span class="m">8</span><span class="p">,</span> <span class="n">rotation</span> <span class="o">=</span> <span class="s">&quot;varimax&quot;</span><span class="p">,</span> <span class="n">sort</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">)</span>
 <span class="n">rez</span>
 <span class="c1">## # Rotated loadings from Factor Analysis (varimax-rotation)</span>
 <span class="c1">##</span>
-<span class="c1">## Variable              |  MR1  |  MR5  |  MR2  |    MR4    |    MR3    |    MR6    | Complexity | Uniqueness</span>
-<span class="c1">## -----------------------------------------------------------------------------------------------------------</span>
-<span class="c1">## CD                    | 0.88  | 0.34  | -0.12 |   -0.08   |   -0.09   |   0.14    |    1.43    |    0.07</span>
-<span class="c1">## FuzzyEn               | 0.85  | 0.36  | 0.06  |   -0.20   |   -0.07   |   0.21    |    1.63    |    0.05</span>
-<span class="c1">## FuzzyApEn             | 0.83  | 0.38  | 0.06  |   -0.23   |   -0.05   |   0.24    |    1.79    |    0.04</span>
-<span class="c1">## SampEn                | 0.83  | 0.14  | -0.23 |   -0.30   |   -0.14   |   0.02    |    1.57    |    0.14</span>
-<span class="c1">## cApEn                 | 0.79  | 0.27  | 0.18  |   -0.30   |   -0.05   |   0.20    |    1.83    |    0.14</span>
-<span class="c1">## FuzzycApEn            | 0.78  | 0.42  | 0.15  |   -0.29   |   -0.03   |   0.25    |    2.21    |    0.05</span>
-<span class="c1">## SVDEn                 | 0.75  | 0.50  | 0.11  |   -0.28   |   -0.02   |   0.22    |    2.34    |    0.04</span>
-<span class="c1">## PFD (r)               | 0.68  | 0.42  | 0.25  |   -0.27   |   -0.02   |   0.41    |    3.15    |    0.05</span>
-<span class="c1">## NLDFD                 | 0.68  | 0.45  | 0.21  |   -0.30   | -8.40e-03 |   0.40    |    3.14    |    0.04</span>
-<span class="c1">## RR                    | 0.66  | 0.46  | 0.26  |   -0.33   |   -0.01   |   0.36    |    3.37    |    0.05</span>
-<span class="c1">## DiffEn                | 0.65  | 0.05  | -0.46 |   -0.15   |   -0.01   |   0.15    |    2.08    |    0.31</span>
-<span class="c1">## ShanEn (A)            | 0.48  | 0.16  | -0.16 |   0.07    |   -0.08   | -1.31e-03 |    1.59    |    0.71</span>
-<span class="c1">## H (uncorrected)       | -0.30 | -0.87 | 0.12  |   0.23    |   -0.10   |   -0.08   |    1.47    |    0.08</span>
-<span class="c1">## H (corrected)         | -0.35 | -0.86 | -0.02 |   0.22    |   -0.08   |   -0.12   |    1.53    |    0.07</span>
-<span class="c1">## ShanEn (C)            | -0.20 | -0.83 | 0.31  |   0.18    |   -0.12   |   -0.15   |    1.65    |    0.10</span>
-<span class="c1">## SPEn                  | 0.39  | 0.79  | -0.12 |   -0.08   |   0.02    |   0.11    |    1.58    |    0.20</span>
-<span class="c1">## PFD (C)               | -0.07 | -0.79 | 0.52  |   0.16    |   -0.14   |   -0.02   |    1.94    |    0.06</span>
-<span class="c1">## HFD                   | 0.40  | 0.78  | -0.09 |   -0.25   |   0.04    |   0.03    |    1.76    |    0.15</span>
-<span class="c1">## Hjorth                | -0.50 | -0.74 | 0.04  |   0.28    |   -0.07   |   -0.31   |    2.53    |    0.02</span>
-<span class="c1">## CREn (C)              | -0.11 | -0.72 | 0.22  |   0.17    |   -0.05   |   -0.09   |    1.41    |    0.38</span>
-<span class="c1">## PSDFD (Hasselman2013) | 0.54  | 0.62  | -0.33 |   0.02    |   -0.04   |   -0.24   |    2.86    |    0.15</span>
-<span class="c1">## PSDFD (Voss1998)      | -0.54 | -0.62 | 0.33  |   -0.02   |   0.04    |   0.24    |    2.86    |    0.15</span>
-<span class="c1">## PFD (D)               | 0.22  | 0.52  | 0.12  |   -0.39   |   -0.02   |   -0.10   |    2.48    |    0.51</span>
-<span class="c1">## PFD (3)               | 0.06  | -0.14 | 0.95  | -5.62e-03 |   -0.03   |   0.16    |    1.11    |    0.05</span>
-<span class="c1">## SD                    | -0.20 | 0.02  | -0.90 |   0.02    |   0.03    |   -0.27   |    1.28    |    0.07</span>
-<span class="c1">## ShanEn (1000)         | -0.31 | -0.05 | -0.82 |   0.33    | 4.38e-03  |   -0.10   |    1.66    |    0.11</span>
-<span class="c1">## PFD (10)              | -0.35 | -0.38 | 0.75  | 9.72e-03  |   -0.01   |   -0.13   |    2.03    |    0.15</span>
-<span class="c1">## SFD                   | 0.43  | 0.39  | -0.74 |   -0.03   |   0.03    |   0.20    |    2.39    |    0.06</span>
-<span class="c1">## ApEn                  | 0.23  | 0.11  | -0.72 |   -0.12   |   -0.05   |   -0.08   |    1.34    |    0.39</span>
-<span class="c1">## PFD (A)               | 0.22  | -0.10 | 0.67  |   0.07    |   -0.55   |   0.16    |    2.39    |    0.16</span>
-<span class="c1">## KFD                   | 0.45  | 0.48  | -0.52 |   -0.13   |   0.04    |   0.29    |    3.74    |    0.19</span>
-<span class="c1">## CREn (B)              | -0.10 | -0.19 | -0.08 |   0.86    |   0.07    |   -0.10   |    1.18    |    0.19</span>
-<span class="c1">## ShanEn (3)            | -0.42 | -0.25 | 0.11  |   0.80    |   -0.03   |   -0.04   |    1.80    |    0.10</span>
-<span class="c1">## ShanEn (10)           | -0.35 | -0.34 | 0.12  |   0.79    |   -0.01   |   0.02    |    1.85    |    0.12</span>
-<span class="c1">## ShanEn (100)          | -0.36 | -0.26 | -0.17 |   0.75    |   -0.02   |   0.10    |    1.89    |    0.20</span>
-<span class="c1">## PFD (B)               | 0.15  | -0.19 | 0.58  |   0.73    | 6.28e-03  |   0.05    |    2.18    |    0.08</span>
-<span class="c1">## CREn (100)            | -0.08 | 0.09  | -0.02 |   0.03    |   0.99    |   0.06    |    1.04    |  4.11e-03</span>
-<span class="c1">## CREn (10)             | -0.06 | 0.07  | -0.03 |   0.01    |   0.94    |   0.08    |    1.04    |    0.10</span>
-<span class="c1">## CREn (1000)           | -0.10 | 0.13  | -0.07 | 1.84e-03  |   0.94    |   0.05    |    1.08    |    0.09</span>
-<span class="c1">## CREn (A)              | 0.10  | 0.05  | -0.05 |   -0.12   |   0.43    |   -0.11   |    1.49    |    0.77</span>
-<span class="c1">## CREn (3)              | -0.08 | -0.07 | 0.05  |   0.11    |   0.31    |   0.05    |    1.66    |    0.88</span>
-<span class="c1">## PFD (100)             | -0.50 | -0.10 | -0.11 |   -0.08   |   -0.03   |   -0.79   |    1.80    |    0.10</span>
-<span class="c1">## PFD (1000)            | -0.38 | -0.11 | -0.14 |   -0.08   |   -0.11   |   -0.69   |    1.81    |    0.33</span>
-<span class="c1">## SDAFD                 | -0.27 | -0.31 | -0.17 |   0.17    |   0.06    |   -0.33   |    4.13    |    0.66</span>
+<span class="c1">## Variable              |   MR1    |    MR2    |   MR7    |    MR5    |  MR8  |    MR4    |    MR3    |   MR6    | Complexity | Uniqueness</span>
+<span class="c1">## ----------------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="c1">## NLDFD                 |   0.82   |   -0.38   |   0.16   |   0.32    | -0.11 |   -0.05   |   -0.01   |   0.13   |    1.97    |    0.01</span>
+<span class="c1">## PFD (r)               |   0.79   |   -0.47   |   0.15   |   0.29    | -0.07 |   -0.06   |   0.02    |   0.09   |    2.11    |    0.03</span>
+<span class="c1">## MSWPEn                |   0.79   |   0.19    |   0.16   |   0.20    | -0.30 |   -0.06   |   0.14    |   0.15   |    1.86    |    0.14</span>
+<span class="c1">## PFD (10)              |  -0.77   |   -0.50   |  -0.17   |   0.02    | 0.15  | -4.60e-03 |   -0.03   |  -0.08   |    1.96    |    0.10</span>
+<span class="c1">## SFD                   |   0.76   |   0.55    |   0.14   | -7.60e-03 | -0.18 | 9.20e-03  |   0.11    |   0.13   |    2.17    |    0.04</span>
+<span class="c1">## KFD                   |   0.76   |   0.33    |   0.09   |   0.14    | -0.29 |   0.04    |   0.03    |   0.13   |    1.91    |    0.19</span>
+<span class="c1">## RR                    |   0.75   |   -0.44   |   0.13   |   0.35    | -0.10 |   -0.02   |   -0.05   |   0.17   |    2.39    |    0.05</span>
+<span class="c1">## FuzzyEn               |   0.75   |   -0.18   |   0.50   |   0.25    | -0.12 |   -0.07   |   0.10    |   0.06   |    2.30    |    0.06</span>
+<span class="c1">## FuzzycApEn            |   0.74   |   -0.27   |   0.42   |   0.35    | -0.17 | -8.40e-03 |   0.06    |   0.06   |    2.60    |    0.05</span>
+<span class="c1">## SVDEn                 |   0.74   |   -0.24   |   0.44   |   0.32    | -0.27 |   0.01    |   0.02    |   0.05   |    2.69    |    0.03</span>
+<span class="c1">## Hjorth                |  -0.73   |   0.13    |  -0.15   |   -0.32   | 0.54  |   -0.08   | 1.84e-03  |  -0.08   |    2.51    |    0.02</span>
+<span class="c1">## PFD (100)             |  -0.71   |   0.33    |  -0.07   |   0.17    | 0.03  |   0.13    |   -0.27   |   0.23   |    2.26    |    0.21</span>
+<span class="c1">## RangeEn (B)           |   0.70   |   -0.33   |   0.38   |   0.36    | -0.20 | 1.38e-03  |   0.02    |   0.07   |    2.86    |    0.08</span>
+<span class="c1">## cApEn                 |   0.69   |   -0.35   |   0.31   |   0.31    | -0.10 |   -0.04   |   0.25    |   0.14   |    2.95    |    0.12</span>
+<span class="c1">## CD                    |   0.66   |   0.02    |   0.59   |   0.14    | -0.12 |   0.01    |   0.31    |   0.07   |    2.63    |    0.08</span>
+<span class="c1">## MSPEn                 |   0.60   |   0.30    |   0.14   |   0.13    | -0.17 |   -0.12   |   0.18    |   0.15   |    2.43    |    0.41</span>
+<span class="c1">## CMSWPEn               |   0.58   |   0.52    |   0.19   |   0.11    | -0.22 | -6.04e-03 |   0.34    |   0.28   |    3.84    |    0.10</span>
+<span class="c1">## SampEn                |   0.57   |   0.16    |   0.44   |   0.35    | 0.09  |   -0.06   |   0.32    |   0.25   |    4.07    |    0.15</span>
+<span class="c1">## MSApEn                |  -0.49   |   0.38    |  -0.12   |   -0.03   | 0.09  |   0.01    |   -0.46   |   0.12   |    3.24    |    0.36</span>
+<span class="c1">## Noise                 |  -0.44   | 3.12e-03  |   0.08   |   -0.20   | 0.33  |   -0.05   |   0.43    |   0.06   |    3.44    |    0.46</span>
+<span class="c1">## ShanEn (A)            |   0.44   |   0.09    |   0.15   |   0.02    | -0.07 | 6.30e-03  |   0.15    |  -0.08   |    1.75    |    0.75</span>
+<span class="c1">## PFD (1000)            |  -0.43   |   0.36    |  -0.03   |   0.08    | 0.10  |   0.07    |   -0.33   |   0.16   |    3.45    |    0.52</span>
+<span class="c1">## SDAFD                 |  -0.40   |   0.13    |   0.06   |   -0.19   | 0.14  | 7.96e-03  |   0.18    |  -0.02   |    2.49    |    0.73</span>
+<span class="c1">## Length                |  -0.08   |   0.98    |   0.04   |   -0.02   | -0.10 |   0.09    | 8.73e-03  |  -0.02   |    1.05    |  9.83e-03</span>
+<span class="c1">## PFD (3)               |  -0.20   |   -0.95   |  -0.09   |   0.02    | 0.13  |   -0.06   |   -0.03   |  -0.01   |    1.16    |    0.03</span>
+<span class="c1">## SD                    |  -0.02   |   0.94    |   0.07   |   -0.02   | -0.07 |   0.06    |   0.01    |  -0.02   |    1.03    |    0.10</span>
+<span class="c1">## IMSPEn                |   0.28   |   -0.90   |   0.09   |   0.04    | 0.02  |   -0.09   |   0.07    |   0.05   |    1.25    |    0.08</span>
+<span class="c1">## ShanEn (1000)         |  -0.12   |   0.88    |  -0.01   |   -0.32   | -0.05 |   0.09    |   0.08    |  -0.06   |    1.36    |    0.09</span>
+<span class="c1">## ApEn                  |  -0.03   |   0.81    |   0.02   |   0.08    | 0.04  |   -0.06   |   0.31    |   0.24   |    1.53    |    0.18</span>
+<span class="c1">## IMSEn                 |   0.49   |   -0.80   |   0.09   |   0.14    | 0.03  |   -0.12   |   0.16    |   0.06   |    1.93    |    0.04</span>
+<span class="c1">## MMSPEn                |   0.10   |   -0.75   |   0.03   |   -0.06   | 0.25  |   -0.08   |   0.10    |  -0.05   |    1.35    |    0.34</span>
+<span class="c1">## PFD (A)               |   0.06   |   -0.70   | 3.30e-03 |   -0.10   | 0.15  |   -0.61   |   0.02    |   0.02   |    2.14    |    0.11</span>
+<span class="c1">## CMSPEn                |   0.41   |   0.68    |   0.13   |   0.05    | -0.10 |   -0.03   |   0.37    |   0.19   |    2.63    |    0.16</span>
+<span class="c1">## IMSWPEn               | 4.52e-04 |   -0.35   |   0.10   |   0.15    | 0.22  |   -0.08   |   0.18    |   0.17   |    3.73    |    0.73</span>
+<span class="c1">## CREn (3)              | 7.09e-03 |   -0.21   |  -0.14   | -8.87e-03 | -0.08 |   0.15    |   -0.04   |  -0.15   |    4.12    |    0.88</span>
+<span class="c1">## CPEn                  |   0.17   |   0.07    |   0.93   |   0.05    | -0.06 | 7.33e-04  |   0.19    |  -0.14   |    1.23    |    0.04</span>
+<span class="c1">## PEn                   |   0.26   | -3.19e-03 |   0.91   |   0.12    | -0.08 |   0.02    |   0.02    |  -0.05   |    1.23    |    0.07</span>
+<span class="c1">## WPEn                  |   0.26   |   0.02    |   0.89   |   0.15    | -0.05 | 6.13e-03  | -1.25e-03 |   0.21   |    1.36    |    0.07</span>
+<span class="c1">## CRPEn                 |   0.22   |   0.03    |   0.89   |   0.06    | -0.15 |   -0.02   |   0.24    |  -0.12   |    1.39    |    0.06</span>
+<span class="c1">## CWPEn                 |   0.24   |   0.06    |   0.88   |   0.05    | -0.16 |   -0.02   |   0.24    |  -0.11   |    1.43    |    0.06</span>
+<span class="c1">## ShanEn (3)            |  -0.35   |   0.02    |  -0.13   |   -0.84   | 0.20  |   -0.02   |   -0.14   |  -0.06   |    1.60    |    0.09</span>
+<span class="c1">## ShanEn (10)           |  -0.27   |   -0.02   |  -0.12   |   -0.84   | 0.27  |   -0.05   |   -0.10   |  -0.18   |    1.62    |    0.10</span>
+<span class="c1">## ShanEn (B)            |  -0.25   |   0.11    |  -0.10   |   -0.81   | 0.08  |   0.07    | -6.88e-03 |   0.01   |    1.30    |    0.25</span>
+<span class="c1">## ShanEn (100)          |  -0.22   |   0.23    |  -0.10   |   -0.80   | 0.16  | -5.04e-03 |   0.04    |  -0.16   |    1.56    |    0.19</span>
+<span class="c1">## PFD (B)               |  -0.11   |   -0.52   |  -0.07   |   -0.70   | 0.16  | -8.51e-03 |   -0.03   | 7.36e-03 |    2.06    |    0.19</span>
+<span class="c1">## ShanEn (C)            |  -0.43   |   -0.14   |  -0.14   |   -0.23   | 0.82  |   -0.11   |   -0.02   |  -0.04   |    1.90    |    0.04</span>
+<span class="c1">## PFD (C)               |  -0.37   |   -0.34   |  -0.14   |   -0.22   | 0.79  |   -0.13   |   0.01    |  -0.02   |    2.16    |    0.03</span>
+<span class="c1">## H (uncorrected)       |  -0.41   | -9.29e-03 |  -0.23   |   -0.27   | 0.76  |   -0.13   |   0.03    |  -0.20   |    2.32    |    0.08</span>
+<span class="c1">## AttEn                 |   0.31   |   0.29    |   0.18   |   0.17    | -0.69 |   0.10    |   0.22    |   0.24   |    2.77    |    0.17</span>
+<span class="c1">## CREn (C)              |  -0.39   |   -0.11   |  -0.15   |   -0.12   | 0.68  |   -0.12   |   0.12    |  -0.03   |    2.04    |    0.31</span>
+<span class="c1">## HFD                   |   0.41   |   0.02    |   0.17   |   0.23    | -0.63 |   0.15    |   -0.06   |   0.42   |    3.28    |    0.16</span>
+<span class="c1">## MMSWPEn               |   0.09   |   -0.18   |   0.06   |   -0.03   | 0.62  |   -0.13   |   0.14    |   0.30   |    1.99    |    0.45</span>
+<span class="c1">## CREn (100)            |  -0.06   |   0.07    |  -0.05   |   -0.06   | -0.10 |   0.96    |   -0.10   | 9.35e-03 |    1.08    |    0.04</span>
+<span class="c1">## CREn (10)             |  -0.02   |   0.06    |  -0.03   | -8.44e-03 | -0.12 |   0.93    |   -0.03   |   0.02   |    1.05    |    0.12</span>
+<span class="c1">## CREn (1000)           |  -0.08   |   0.15    |  -0.06   |   -0.02   | -0.07 |   0.89    |   -0.09   |   0.01   |    1.12    |    0.16</span>
+<span class="c1">## CREn (A)              | 9.59e-03 |   0.03    |   0.09   |   0.04    | -0.07 |   0.42    |   0.13    |   0.11   |    1.55    |    0.78</span>
+<span class="c1">## MSEn                  |   0.29   |   0.21    |   0.33   |   0.10    | 0.02  |   -0.01   |   0.65    |  -0.04   |    2.26    |    0.32</span>
+<span class="c1">## RCMSEn                |   0.30   |   0.55    |   0.23   |   0.12    | -0.09 |   -0.01   |   0.62    |  -0.12   |    3.01    |    0.13</span>
+<span class="c1">## CMSEn                 |   0.08   |   -0.13   |   0.21   | 2.08e-03  | 0.23  | 3.67e-03  |   0.59    |  -0.03   |    1.75    |    0.53</span>
+<span class="c1">## DiffEn                |   0.46   |   0.24    |   0.28   |   0.21    | -0.17 | 2.14e-03  |   0.57    |  -0.08   |    3.47    |    0.24</span>
+<span class="c1">## SPEn                  |   0.11   |   -0.12   |  -0.20   |   0.09    | -0.14 |   0.10    |   -0.04   |   0.87   |    1.29    |    0.15</span>
+<span class="c1">## PSDFD (Hasselman2013) |   0.10   |   0.21    |  -0.05   |   0.12    | 0.02  |   0.08    |   -0.06   |   0.80   |    1.25    |    0.29</span>
+<span class="c1">## PFD (D)               |   0.22   |   -0.08   |   0.12   |   0.40    | -0.20 |   0.08    |   -0.33   |   0.44   |    4.26    |    0.42</span>
 <span class="c1">##</span>
-<span class="c1">## The 6 latent factors (varimax rotation) accounted for 80.97% of the total variance of the original data (MR1 = 22.42%, MR5 = 19.84%, MR2 = 14.70%, MR4 = 10.30%, MR3 = 7.85%, MR6 = 5.85%).</span>
+<span class="c1">## The 8 latent factors (varimax rotation) accounted for 79.42% of the total variance of the original data (MR1 = 20.44%, MR2 = 17.32%, MR7 = 10.20%, MR5 = 8.27%, MR8 = 8.20%, MR4 = 5.40%, MR3 = 5.28%, MR6 = 4.31%).</span>
+
+<span class="n">closest</span> <span class="o">&lt;-</span> <span class="nf">colnames</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="s">&quot;MR&quot;</span><span class="p">)))[</span><span class="nf">apply</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">rez</span><span class="p">,</span> <span class="nf">starts_with</span><span class="p">(</span><span class="s">&quot;MR&quot;</span><span class="p">)),</span> <span class="m">1</span><span class="p">,</span> \<span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="nf">which.max</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)))]</span>
+
+<span class="n">loadings</span> <span class="o">&lt;-</span> <span class="nf">attributes</span><span class="p">(</span><span class="n">rez</span><span class="p">)</span><span class="o">$</span><span class="n">loadings_long</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Loading</span> <span class="o">=</span> <span class="nf">abs</span><span class="p">(</span><span class="n">Loading</span><span class="p">),</span>
+         <span class="n">Component</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="n">Component</span><span class="p">),</span>
+         <span class="n">Variable</span> <span class="o">=</span> <span class="nf">fct_rev</span><span class="p">(</span><span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Variable</span><span class="p">,</span> <span class="n">rez</span><span class="o">$</span><span class="n">Variable</span><span class="p">)))</span>
+
+
+<span class="n">p1</span> <span class="o">&lt;-</span> <span class="n">loadings</span> <span class="o">|&gt;</span>
+  <span class="c1"># filter(Variable == &quot;CD&quot;) |&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">Variable</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Loading</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span><span class="o">=</span><span class="n">Component</span><span class="p">),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">geom_vline</span><span class="p">(</span><span class="n">xintercept</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s">&quot;red&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span> <span class="o">=</span> <span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">scale_fill_material_d</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">coord_flip</span><span class="p">()</span><span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">guides</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="nf">guide_legend</span><span class="p">(</span><span class="n">reverse</span> <span class="o">=</span> <span class="kc">TRUE</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.y</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="nf">rev</span><span class="p">(</span><span class="n">see</span><span class="o">::</span><span class="nf">palette_material</span><span class="p">(</span><span class="s">&quot;rainbow&quot;</span><span class="p">)(</span><span class="nf">length</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">closest</span><span class="p">))))[</span><span class="nf">rev</span><span class="p">(</span><span class="nf">as.factor</span><span class="p">(</span><span class="n">closest</span><span class="p">))],</span>
+    <span class="n">face</span> <span class="o">=</span> <span class="nf">rev</span><span class="p">(</span><span class="nf">ifelse</span><span class="p">(</span><span class="n">rez</span><span class="o">$</span><span class="n">Variable</span> <span class="o">%in%</span> <span class="nf">c</span><span class="p">(</span><span class="s">&quot;SD&quot;</span><span class="p">,</span> <span class="s">&quot;Length&quot;</span><span class="p">,</span> <span class="s">&quot;Noise&quot;</span><span class="p">),</span> <span class="s">&quot;italic&quot;</span><span class="p">,</span> <span class="s">&quot;plain&quot;</span><span class="p">)),</span>
+    <span class="n">hjust</span><span class="o">=</span><span class="m">0.5</span><span class="p">),</span>
+    <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+    <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+    <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">())</span>
+
+<span class="n">p2</span> <span class="o">&lt;-</span> <span class="n">order</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Duration</span> <span class="o">=</span> <span class="m">1</span> <span class="o">+</span> <span class="n">Duration</span> <span class="o">*</span> <span class="m">10000</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">filter</span><span class="p">(</span><span class="n">Index</span> <span class="o">%in%</span> <span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)</span> <span class="o">|&gt;</span>
+  <span class="nf">mutate</span><span class="p">(</span><span class="n">Index</span> <span class="o">=</span> <span class="nf">fct_relevel</span><span class="p">(</span><span class="n">Index</span><span class="p">,</span> <span class="nf">levels</span><span class="p">(</span><span class="n">loadings</span><span class="o">$</span><span class="n">Variable</span><span class="p">)))</span> <span class="o">|&gt;</span>
+  <span class="nf">ggplot</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="nf">log10</span><span class="p">(</span><span class="n">Duration</span><span class="p">),</span> <span class="n">y</span> <span class="o">=</span> <span class="n">Index</span><span class="p">))</span> <span class="o">+</span>
+  <span class="nf">geom_bar</span><span class="p">(</span><span class="nf">aes</span><span class="p">(</span><span class="n">fill</span> <span class="o">=</span> <span class="nf">log10</span><span class="p">(</span><span class="n">Duration</span><span class="p">)),</span> <span class="n">stat</span> <span class="o">=</span> <span class="s">&quot;identity&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_x_reverse</span><span class="p">(</span><span class="n">expand</span><span class="o">=</span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span> <span class="m">0</span><span class="p">))</span> <span class="o">+</span>
+  <span class="c1"># scale_x_log10(breaks = rep(10, 5)**seq(0, 4), labels = function(x) sprintf(&quot;%g&quot;, x), expand=c(0, 0)) +</span>
+  <span class="nf">scale_y_discrete</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="s">&quot;right&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">scale_fill_viridis_c</span><span class="p">(</span><span class="n">guide</span><span class="o">=</span><span class="s">&quot;none&quot;</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">labs</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="s">&quot;Computation Time&quot;</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="kc">NULL</span><span class="p">)</span> <span class="o">+</span>
+  <span class="nf">theme_minimal</span><span class="p">()</span> <span class="o">+</span>
+  <span class="nf">theme</span><span class="p">(</span><span class="n">axis.text.y</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+        <span class="n">axis.text.x</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+        <span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">),</span>
+        <span class="n">panel.grid.major</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">(),</span>
+        <span class="n">panel.grid.minor</span> <span class="o">=</span> <span class="nf">element_blank</span><span class="p">())</span>
+
+<span class="p">(</span><span class="n">p2</span> <span class="o">|</span> <span class="n">p1</span><span class="p">)</span> <span class="o">+</span> <span class="n">patchwork</span><span class="o">::</span><span class="nf">plot_annotation</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s">&quot;Computation Time and Factor Loading&quot;</span><span class="p">,</span> <span class="n">theme</span> <span class="o">=</span> <span class="nf">theme</span><span class="p">(</span><span class="n">plot.title</span> <span class="o">=</span> <span class="nf">element_text</span><span class="p">(</span><span class="n">hjust</span> <span class="o">=</span> <span class="m">0.5</span><span class="p">,</span> <span class="n">face</span> <span class="o">=</span> <span class="s">&quot;bold&quot;</span><span class="p">)))</span>
 </pre></div>
 </div>
+<p><img alt="" src="../_images/unnamed-chunk-11-2.png" /><!-- --></p>
 </section>
 </section>
 <section id="references">
