@@ -31,6 +31,12 @@ def complexity_tolerance(
 
     * ``'sd'`` (as in Standard Deviation): r = 0.2 * standard deviation of the signal will be
       returned.
+    * ``'adjusted_sd'``: Adjusted value based on the SD and the dimension. The rationale is that
+      the chebyshev distance (used in various metrics) rises logarithmically with increasing
+      dimension. ``0.5627 * np.log(dimension) + 1.3334`` is the logarithmic trend line for the
+      chebyshev distance of vectors sampled from a univariate normal distribution. A constant of
+      ``0.1164`` is used so that ``tolerance = 0.2 * SDs`` for ``dimension = 2`` (originally in
+      https://github.com/CSchoel/nolds).
     * ``'maxApEn'``: Different values of tolerance will be tested and the one where the approximate
       entropy (ApEn) is maximized will be selected and returned.
     * ``'recurrence'``, the tolerance that yields a recurrence rate (see ``RQA``) close to 5% will
@@ -89,12 +95,26 @@ def complexity_tolerance(
 
       r
 
+    The dimension can be taken into account:
+    .. ipython:: python
+
+      # Adjusted SD
+      @savefig p_complexity_tolerance2.png scale=100%
+      r, info = nk.complexity_tolerance(signal, method = "adjusted_sd", dimension=3, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      r
+
+
     * **Example 2**: The method based on the recurrence rate will display the rates according to
       different values of tolerance. The horizontal line indicates 5%.
 
     .. ipython:: python
 
-      @savefig p_complexity_tolerance2.png scale=100%
+      @savefig p_complexity_tolerance3.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=1, dimension=10,
                                         method = 'recurrence', show=True)
       @suppress
@@ -109,7 +129,7 @@ def complexity_tolerance(
     .. ipython:: python
 
       # Slow method
-      @savefig p_complexity_tolerance3.png scale=100%
+      @savefig p_complexity_tolerance4.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6,
                                         method = 'maxApEn', show=True)
       @suppress
@@ -125,7 +145,7 @@ def complexity_tolerance(
     .. ipython:: python
 
       # Narrower range
-      @savefig p_complexity_tolerance4.png scale=100%
+      @savefig p_complexity_tolerance5.png scale=100%
       r, info = nk.complexity_tolerance(signal, delay=8, dimension=6, method = 'maxApEn',
                                         r_range=np.linspace(0.002, 0.8, 30), show=True)
       @suppress
@@ -149,6 +169,11 @@ def complexity_tolerance(
     if method in ["traditional", "sd", "std", "default"]:
         r = 0.2 * np.std(signal, ddof=1)
         info = {"Method": "20% SD"}
+    elif method in ["adjusted_sd"] and isinstance(dimension, int):
+        if dimension is None:
+            raise ValueError("'dimension' cannot be empty for the 'adjusted_sd' method.")
+        r = 0.11604738531196232 * np.std(signal, ddof=1) * (0.5627 * np.log(dimension) + 1.3334)
+        info = {"Method": "Adjusted 20% SD"}
     elif method in ["maxapen", "optimize"]:
         r, info = _optimize_tolerance_maxapen(
             signal, r_range=r_range, delay=delay, dimension=dimension
@@ -239,8 +264,7 @@ def _optimize_tolerance_plot(r, info, ax=None, method="maxApEn", signal=None):
     else:
         fig = None
 
-    if method in ["traditional", "sd", "std", "default", "none"]:
-        fig, ax = plt.subplots()
+    if method in ["traditional", "sd", "std", "default", "none", "adjusted_sd"]:
         x, y = density(signal)
         arrow_y = np.mean([np.max(y), np.min(y)])
         x_range = np.max(x) - np.min(x)
