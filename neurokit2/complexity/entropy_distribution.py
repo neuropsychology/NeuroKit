@@ -1,10 +1,9 @@
 import numpy as np
 import pandas as pd
+import scipy.stats
 
-from ..stats import rescale
 from .complexity_embedding import complexity_embedding
 from .entropy_shannon import entropy_shannon
-from .optim_complexity_tolerance import complexity_tolerance
 
 
 def entropy_distribution(signal=None, delay=1, dimension=3, bins="Sturges", base=2):
@@ -97,7 +96,7 @@ def entropy_distribution(signal=None, delay=1, dimension=3, bins="Sturges", base
             n_bins = np.ceil(np.sqrt(n_d))
         elif bins == "doanes":
             sigma = np.sqrt(6 * (n_d - 2) / ((n_d + 1) * (n_d + 3)))
-            n_bins = np.ceil(1 + np.log2(n_d) + np.log2(1 + abs(skew(d) / sigma)))
+            n_bins = np.ceil(1 + np.log2(n_d) + np.log2(1 + abs(scipy.stats.skew(d) / sigma)))
         else:
             raise Exception("Please enter a valid binning method")
     else:

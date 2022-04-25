@@ -386,6 +386,8 @@ cor <- get_cor(data)
   - Remove **FuzzycApEn**  because it's slower.
 - **CPEn**, and **CRPEn**
   - Remove **CPEn**  to keep the Renyi entropy.
+- **NLDFD**, and **RR**
+  - Remove **RR**  because it's slower.
 
 
 ```{r message=FALSE, warning=FALSE}
@@ -394,7 +396,7 @@ cor |>
   filter(Parameter1 %in% names(data), Parameter2 %in% names(data)) |> 
   arrange(desc(abs(rho)), Parameter1) |> 
   filter(Parameter1 != Parameter2) |> 
-  filter(abs(rho) > .98)
+  filter(abs(rho) > .96)
 
 
 # Duplicates 
@@ -411,6 +413,7 @@ filter(averagetime, Index %in% c("H (corrected)", "H (uncorrected)"))
 filter(averagetime, Index %in% c("FuzzyEn", "FuzzyApEn"))
 filter(averagetime, Index %in% c("SVDEn", "FuzzycApEn"))
 filter(averagetime, Index %in% c("CPEn", "CRPEn"))
+filter(averagetime, Index %in% c("NLDFD", "RR"))
 
 
 # NLFD | RR
@@ -439,6 +442,7 @@ data <- data |>
     - FuzzyApEn,
     - FuzzycApEn,
     - CPEn
+    - RR
   )
 
 cor <- get_cor(data)
