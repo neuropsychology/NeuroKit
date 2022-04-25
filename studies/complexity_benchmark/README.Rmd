@@ -460,11 +460,11 @@ cor <- get_cor(data)
 r <- correlation::cor_smooth(as.matrix(cor))
 
 plot(parameters::n_factors(data, cor=r))
-rez <- parameters::factor_analysis(data, cor = r, n = 11, rotation = "varimax", sort = TRUE)
+rez <- parameters::factor_analysis(data, cor = r, n = 10, rotation = "varimax", sort = TRUE)
 # rez <- parameters::principal_components(data, n = 5, sort = TRUE)
 rez
 
-closest <- colnames(select(rez, starts_with("PC")))[apply(select(rez, starts_with("PC")), 1, \(x) which.max(abs(x)))]
+closest <- colnames(select(rez, starts_with("MR")))[apply(select(rez, starts_with("MR")), 1, \(x) which.max(abs(x)))]
 
 loadings <- attributes(rez)$loadings_long |> 
   mutate(Loading = abs(Loading),

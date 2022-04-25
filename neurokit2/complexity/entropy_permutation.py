@@ -88,12 +88,7 @@ def entropy_permutation(
       cwpen
 
       # Conditional Renyi Permutation Entropy (CRPEn)
-      crpen, info = nk.entropy_permutation(
-          signal,
-          conditional=True,
-          algorithm=nk.entropy_renyi,
-          alpha=2
-          )
+      crpen, info = nk.entropy_permutation(signal, conditional=True, algorithm=nk.entropy_renyi, alpha=2)
       crpen
 
     References
