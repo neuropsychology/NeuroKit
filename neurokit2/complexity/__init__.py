@@ -26,6 +26,7 @@ from .entropy_fuzzy import entropy_fuzzy
 from .entropy_kolmogorov import entropy_kolmogorov
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
+from .entropy_phase import entropy_phase
 from .entropy_range import entropy_range
 from .entropy_renyi import entropy_renyi
 from .entropy_sample import entropy_sample
@@ -146,6 +147,7 @@ __all__ = [
     "entropy_bubble",
     "entropy_coalition",
     "entropy_sample",
+    "entropy_phase",
     "entropy_spectral",
     "entropy_svd",
     "entropy_fuzzy",

@@ -84,6 +84,10 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_spectral
 
+*entropy_phase()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_phase
+
 *entropy_attention()*
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_attention

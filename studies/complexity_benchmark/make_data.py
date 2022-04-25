@@ -358,6 +358,18 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
+                        nk.nk_entropy_phase,
+                        index="PhasEn",
+                        name="nk_entropy_phase",
+                        delay=delay,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
                         nk.entropy_spectral,
                         index="SPEn",
                         name="entropy_spectral",

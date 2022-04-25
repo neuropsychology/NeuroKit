@@ -13,8 +13,12 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
     first and most basic measure of entropy and a foundational concept of information theory,
     introduced by Shannon (1948) to quantify the amount of information in a variable.
 
+    .. math::
+
+      ShanEn = -\\sum_{x \in \\mathcal{X}} p(x) \\log_2 p(x)
+
     Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy
-    (see ``entropy_differential()``).
+    (see :func`entropy_differential`).
 
     Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B",
     "B", "A"]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
@@ -62,44 +66,44 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
     ----------
     .. ipython:: python
 
-      import neurokit2 as nk
+    import neurokit2 as nk
 
-      signal = [1, 1, 5, 5, 2, 8, 1]
-      _, freq = np.unique(signal, return_counts=True)
-      nk.entropy_shannon(freq=freq)
-
-    .. ipython:: python
-
-      # Simulate a Signal with Laplace Noise
-      signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
-
-      # Compute Shannon's Entropy
-      @savefig p_entropy_shannon1.png scale=100%
-      shanen, info = nk.entropy_shannon(signal, method=3, show=True)
-      @suppress
-      plt.close()
+    signal = [1, 1, 5, 5, 2, 8, 1]
+    _, freq = np.unique(signal, return_counts=True)
+    nk.entropy_shannon(freq=freq)
 
     .. ipython:: python
 
-      shanen
+    # Simulate a Signal with Laplace Noise
+    signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
+
+    # Compute Shannon's Entropy
+    @savefig p_entropy_shannon1.png scale=100%
+    shanen, info = nk.entropy_shannon(signal, method=3, show=True)
+    @suppress
+    plt.close()
+
+    .. ipython:: python
+
+    shanen
 
     Compare with ``scipy`` (using the same base).
 
     .. ipython:: python
 
-      import scipy.stats
+    import scipy.stats
 
-      # Make the binning ourselves
-      binned = pd.cut(signal, bins=3, labels=False)
+    # Make the binning ourselves
+    binned = pd.cut(signal, bins=3, labels=False)
 
-      scipy.stats.entropy(pd.Series(binned).value_counts())
-      shanen, info = nk.entropy_shannon(binned, base=np.e)
-      shanen
+    scipy.stats.entropy(pd.Series(binned).value_counts())
+    shanen, info = nk.entropy_shannon(binned, base=np.e)
+    shanen
 
     References
     -----------
     * Shannon, C. E. (1948). A mathematical theory of communication. The Bell system technical
-      journal, 27(3), 379-423.
+    journal, 27(3), 379-423.
 
     """
     if freq is None:

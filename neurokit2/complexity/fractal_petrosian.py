@@ -15,6 +15,7 @@ def fractal_petrosian(signal, method="C", show=False):
     sequence is created.
 
     **How to transform a continuous signal into a discrete one?**
+
     * **Method 'A'** binarizes the signal by higher vs. lower values as compated to the signal's
       mean.
     * **Method 'B'** uses values that are within the mean +/- 1 SD band vs. values that are outside

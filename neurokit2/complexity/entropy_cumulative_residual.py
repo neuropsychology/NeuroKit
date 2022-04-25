@@ -12,11 +12,16 @@ def entropy_cumulative_residual(signal, method=None, show=False):
     The cumulative residual entropy is an alternative to the Shannon
     differential entropy with several advantageous properties, such as non-negativity.
 
+    .. math::
+
+      CREn = -\\int_{0}^{\\infty} p(|X| > x) \\log_{2} p(|X| > x) dx
+
     Similarly to :func:`Shannon entropy <entropy_shannon>` and :func:`Petrosian fractal dimension
     <fractal_petrosian>`, different methods to transform continuous signals into discrete ones are
     available. See :func:`fractal_petrosian` for details.
 
     This function can be called either via ``entropy_cumulative_residual()`` or ``complexity_cren()``.
+
 
     Parameters
     ----------
