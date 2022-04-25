@@ -220,12 +220,12 @@ df |>
   mutate(Duration = Duration * 10000) |> 
   ggplot(aes(x = Index, y = Duration)) +
   # geom_violin(aes(fill = Index)) +
-  geom_hline(yintercept = 10**seq(0, 5, by=2), linetype = "dotted") +
-  geom_hline(yintercept = 10**seq(1, 5, by=2), linetype = "plain") +
+  geom_hline(yintercept = 10**seq(0, 5, by=2), linetype = "dotted", color="#9E9E9E") +
+  geom_hline(yintercept = 10**seq(1, 5, by=2), color="#9E9E9E") +
   ggdist::stat_slab(side = "bottom", aes(fill = Index), adjust = 3) +
   ggdist::stat_dotsinterval(aes(fill = Index, slab_size = NA)) +
   theme_modern() +
-  scale_y_log10(breaks = 10**seq(0, 4), labels = function(x) sprintf("%g", x)) +
+  scale_y_log10(breaks = 10**seq(0, 5), labels = function(x) sprintf("%g", x)) +
   scale_fill_manual(values = colors, guide = "none") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
   labs(x = NULL, y = "Computation Time")
@@ -435,41 +435,44 @@ cor <- get_cor(data)
 ```
 
 
-### Hierarchical CLustering
+<!-- ### Hierarchical CLustering -->
 
 
-```{r message=FALSE, warning=FALSE}
-n <- parameters::n_clusters(as.data.frame(t(data)), standardize = FALSE)
-plot(n)
+<!-- ```{r message=FALSE, warning=FALSE} -->
+<!-- n <- parameters::n_clusters(as.data.frame(t(data)), standardize = FALSE) -->
+<!-- plot(n) -->
 
-rez <- parameters::cluster_analysis(as.data.frame(t(data)), 
-                                    standardize = FALSE, 
-                                    n=4, 
-                                    method="hclust", 
-                                    hclust_method="ward.D2")
-# plot(rez)
+<!-- rez <- parameters::cluster_analysis(as.data.frame(t(data)),  -->
+<!--                                     standardize = FALSE,  -->
+<!--                                     n=4,  -->
+<!--                                     method="hclust",  -->
+<!--                                     hclust_method="ward.D2") -->
+<!-- # plot(rez) -->
 
-attributes(rez)$model |> 
-  plot(hang = -1)
-```
+<!-- attributes(rez)$model |>  -->
+<!--   plot(hang = -1) -->
+<!-- ``` -->
 
 ### Factor Analysis
 
 
 ```{r message=FALSE, warning=FALSE}
-plot(parameters::n_factors(data))
-rez <- parameters::factor_analysis(data, cor = as.matrix(cor), n = 8, rotation = "varimax", sort = TRUE)
-# rez <- parameters::principal_components(data, n = 8, sort = TRUE)
+r <- correlation::cor_smooth(as.matrix(cor))
+
+plot(parameters::n_factors(data, cor=r))
+rez <- parameters::factor_analysis(data, cor = r, n = 11, rotation = "varimax", sort = TRUE)
+# rez <- parameters::principal_components(data, n = 5, sort = TRUE)
 rez
 
-closest <- colnames(select(rez, starts_with("MR")))[apply(select(rez, starts_with("MR")), 1, \(x) which.max(abs(x)))]
+closest <- colnames(select(rez, starts_with("PC")))[apply(select(rez, starts_with("PC")), 1, \(x) which.max(abs(x)))]
 
 loadings <- attributes(rez)$loadings_long |> 
   mutate(Loading = abs(Loading),
-         Component = fct_rev(Component),
+         Component = fct_relevel(Component, rev(names(select(rez, starts_with("PC"))))),
          Variable = fct_rev(fct_relevel(Variable, rez$Variable))) 
 
-
+colors <- setNames(see::palette_material("rainbow")(length(levels(loadings$Component))), levels(loadings$Component))
+  
 p1 <- loadings |> 
   # filter(Variable == "CD") |> 
   ggplot(aes(x = Variable, y = Loading)) +
@@ -482,7 +485,7 @@ p1 <- loadings |>
   guides(fill = guide_legend(reverse = TRUE)) +
   labs(x = NULL) +
   theme(axis.text.y = element_text(
-    color = rev(see::palette_material("rainbow")(length(unique(closest))))[rev(as.factor(closest))],
+    color = rev(colors[closest]),
     face = rev(ifelse(rez$Variable %in% c("SD", "Length", "Noise"), "italic", "plain")),
     hjust=0.5),
     axis.text.x = element_blank(),

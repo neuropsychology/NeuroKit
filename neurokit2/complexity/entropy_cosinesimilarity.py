@@ -9,7 +9,9 @@ from .optim_complexity_tolerance import complexity_tolerance
 def entropy_cosinesimilarity(signal=None, delay=1, dimension=3, tolerance="sd"):
     """**Cosine Similarity Entropy (CoSiEn) and its multiscale variant (MSCoSiEn)**
 
-    Cosine Similarity Entropy (CoSiEn) is based on fundamental modifications of the SampEn and the MSEn approaches, which makes the CoSiEn amplitude-independent and robust to spikes and short length of data segments, two key problems with the standard SampEn.
+    Cosine Similarity Entropy (CoSiEn) is based on fundamental modifications of the SampEn and the
+    MSEn approaches, which makes the CoSiEn amplitude-independent and robust to spikes and short
+    length of data segments, two key problems with the standard SampEn.
 
     Parameters
     ----------
