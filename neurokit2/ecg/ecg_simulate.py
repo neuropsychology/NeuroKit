@@ -60,6 +60,7 @@ def ecg_simulate(
 
     Examples
     ----------
+    
     * **Example 1:** Simulate single lead ECG
 
     .. ipython:: python
