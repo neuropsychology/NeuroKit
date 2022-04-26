@@ -100,6 +100,10 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_increment
 
+*entropy_slope()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_slope
+
 *entropy_ofentropy()*
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_ofentropy

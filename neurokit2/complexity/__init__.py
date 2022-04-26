@@ -34,6 +34,7 @@ from .entropy_range import entropy_range
 from .entropy_renyi import entropy_renyi
 from .entropy_sample import entropy_sample
 from .entropy_shannon import entropy_shannon
+from .entropy_slope import entropy_slope
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
 from .entropy_tsallis import entropy_tsallis
@@ -144,6 +145,7 @@ __all__ = [
     "entropy_kolmogorov",
     "entropy_attention",
     "entropy_ofentropy",
+    "entropy_slope",
     "entropy_increment",
     "entropy_differential",
     "entropy_distribution",

@@ -11,6 +11,7 @@ from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_increment import entropy_increment
 from .entropy_permutation import entropy_permutation
 from .entropy_sample import entropy_sample
+from .entropy_slope import entropy_slope
 from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _phi, _phi_divide
 
@@ -269,12 +270,16 @@ def entropy_multiscale(
     elif method in ["MSIncrEn"]:
         coarsegraining = "nonoverlapping"
         algorithm = entropy_increment
+    elif method in ["MSSlopEn"]:
+        coarsegraining = "nonoverlapping"
+        algorithm = entropy_slope
     else:
         raise ValueError(
             "Method '{method}' is not supported. Please use "
             "'MSEn', 'CMSEn', 'RCMSEn', 'MMSEn', 'IMSPEn',"
             "'MSPEn', 'CMSPEn', 'MMSPEn', 'IMSPEn',"
             "'MSWPEn', 'CMSWPEn', 'MMSWPEn', 'IMSWPEn',"
+            "'MSCoSiEn', 'MSIncrEn', 'MSSlopEn',"
             " or 'MSApEn' (case sensitive)."
         )
 
