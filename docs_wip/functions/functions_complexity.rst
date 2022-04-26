@@ -104,6 +104,10 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_slope
 
+*entropy_symbolicdynamic()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_symbolicdynamic
+
 *entropy_ofentropy()*
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_ofentropy

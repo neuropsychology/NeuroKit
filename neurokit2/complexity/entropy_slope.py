@@ -34,7 +34,7 @@ def entropy_slope(signal, dimension=3, thresholds=[0.1, 45], **kwargs):
     Returns
     -------
     slopen : float
-        SlopEn Entropy of the signal.
+        Slope Entropy of the signal.
     info : dict
         A dictionary containing additional information regarding the parameters used.
 

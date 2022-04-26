@@ -37,6 +37,7 @@ from .entropy_shannon import entropy_shannon
 from .entropy_slope import entropy_slope
 from .entropy_spectral import entropy_spectral
 from .entropy_svd import entropy_svd
+from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .entropy_tsallis import entropy_tsallis
 from .fractal_correlation import fractal_correlation
 from .fractal_dfa import fractal_dfa
@@ -149,6 +150,7 @@ __all__ = [
     "entropy_increment",
     "entropy_differential",
     "entropy_distribution",
+    "entropy_symbolicdynamic",
     "entropy_cumulative_residual",
     "entropy_approximate",
     "entropy_bubble",

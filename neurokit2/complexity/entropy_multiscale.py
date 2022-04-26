@@ -12,6 +12,7 @@ from .entropy_increment import entropy_increment
 from .entropy_permutation import entropy_permutation
 from .entropy_sample import entropy_sample
 from .entropy_slope import entropy_slope
+from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _phi, _phi_divide
 
@@ -236,8 +237,8 @@ def entropy_multiscale(
     # Parameters selection
     algorithm = entropy_sample
     refined = False
+    coarsegraining = "nonoverlapping"
     if method in ["MSEn", "MSApEn", "MSPEn", "MSWPEn"]:
-        coarsegraining = "nonoverlapping"
         if method in ["MSApEn"]:
             algorithm = entropy_approximate
         if method in ["MSPEn"]:
@@ -265,21 +266,22 @@ def entropy_multiscale(
         if method in ["RCMSEn"]:
             refined = True
     elif method in ["MSCoSiEn"]:
-        coarsegraining = "nonoverlapping"
         algorithm = entropy_cosinesimilarity
     elif method in ["MSIncrEn"]:
-        coarsegraining = "nonoverlapping"
         algorithm = entropy_increment
     elif method in ["MSSlopEn"]:
-        coarsegraining = "nonoverlapping"
         algorithm = entropy_slope
+    elif method in ["MSSyDyEn", "MMSyDyEn"]:
+        algorithm = entropy_symbolicdynamic
+        if method in ["MMSyDyEn"]:
+            coarsegraining = "rolling"
     else:
         raise ValueError(
             "Method '{method}' is not supported. Please use "
             "'MSEn', 'CMSEn', 'RCMSEn', 'MMSEn', 'IMSPEn',"
             "'MSPEn', 'CMSPEn', 'MMSPEn', 'IMSPEn',"
             "'MSWPEn', 'CMSWPEn', 'MMSWPEn', 'IMSWPEn',"
-            "'MSCoSiEn', 'MSIncrEn', 'MSSlopEn',"
+            "'MSCoSiEn', 'MSIncrEn', 'MSSlopEn', 'MSSyDyEn'"
             " or 'MSApEn' (case sensitive)."
         )
 
