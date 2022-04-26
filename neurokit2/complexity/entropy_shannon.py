@@ -66,39 +66,39 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
     ----------
     .. ipython:: python
 
-    import neurokit2 as nk
+      import neurokit2 as nk
 
-    signal = [1, 1, 5, 5, 2, 8, 1]
-    _, freq = np.unique(signal, return_counts=True)
-    nk.entropy_shannon(freq=freq)
-
-    .. ipython:: python
-
-    # Simulate a Signal with Laplace Noise
-    signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
-
-    # Compute Shannon's Entropy
-    @savefig p_entropy_shannon1.png scale=100%
-    shanen, info = nk.entropy_shannon(signal, method=3, show=True)
-    @suppress
-    plt.close()
+      signal = [1, 1, 5, 5, 2, 8, 1]
+      _, freq = np.unique(signal, return_counts=True)
+      nk.entropy_shannon(freq=freq)
 
     .. ipython:: python
 
-    shanen
+      # Simulate a Signal with Laplace Noise
+      signal = nk.signal_simulate(duration=2, frequency=5, noise=0.01)
+
+      # Compute Shannon's Entropy
+      @savefig p_entropy_shannon1.png scale=100%
+      shanen, info = nk.entropy_shannon(signal, method=3, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      shanen
 
     Compare with ``scipy`` (using the same base).
 
     .. ipython:: python
 
-    import scipy.stats
+      import scipy.stats
 
-    # Make the binning ourselves
-    binned = pd.cut(signal, bins=3, labels=False)
+      # Make the binning ourselves
+      binned = pd.cut(signal, bins=3, labels=False)
 
-    scipy.stats.entropy(pd.Series(binned).value_counts())
-    shanen, info = nk.entropy_shannon(binned, base=np.e)
-    shanen
+      scipy.stats.entropy(pd.Series(binned).value_counts())
+      shanen, info = nk.entropy_shannon(binned, base=np.e)
+      shanen
 
     References
     -----------

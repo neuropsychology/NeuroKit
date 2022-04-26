@@ -134,10 +134,15 @@ def run_benchmark(noise_intensity=0.01):
 
             rez = pd.DataFrame(
                 {
-                    "Duration": [np.nan, np.nan, np.nan],
-                    "Result": [np.nanstd(signal_), noise_intensity, len(signal_)],
-                    "Index": ["SD", "Noise", "Length"],
-                    "Method": ["np.nanstd", "noise", "len"],
+                    "Duration": [np.nan, np.nan, np.nan, np.nan],
+                    "Result": [
+                        np.nanstd(signal_),
+                        noise_intensity,
+                        len(signal_),
+                        np.random.uniform(),
+                    ],
+                    "Index": ["SD", "Noise", "Length", "Random"],
+                    "Method": ["np.std", "noise", "len", "random"],
                 }
             )
 

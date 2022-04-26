@@ -88,6 +88,10 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_phase
 
+*entropy_grid()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_grid
+
 *entropy_attention()*
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_attention
