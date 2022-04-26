@@ -108,6 +108,10 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_symbolicdynamic
 
+*entropy_dispersion()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_dispersion
+
 *entropy_ofentropy()*
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_ofentropy

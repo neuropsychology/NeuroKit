@@ -63,7 +63,13 @@ def run_benchmark(noise_intensity=0.01):
 
     print("Noise intensity: {}".format(noise_intensity))
     for duration in [0.5, 1, 2]:
-        for method in ["Random-Walk", "lorenz_10_2.5_28", "lorenz_20_2_30", "oscillatory"]:
+        for method in [
+            "Random-Walk",
+            "lorenz_10_2.5_28",
+            "lorenz_20_2_30",
+            "oscillatory",
+            "fractal",
+        ]:
             if method == "Random-Walk":
                 delay = 10
                 k = 30
@@ -102,6 +108,14 @@ def run_benchmark(noise_intensity=0.01):
                     duration=duration,
                     sampling_rate=1000,
                     frequency=[5, 11, 18, 24, 42, 60, 63],
+                )
+            elif method == "fractal":
+                delay = 10
+                k = 30
+                signal = nk.signal_simulate(
+                    duration=duration,
+                    sampling_rate=1000,
+                    frequency=[4, 8, 16, 32, 64, 128],
                 )
 
             # Standardize
@@ -445,6 +459,95 @@ def run_benchmark(noise_intensity=0.01):
                         name="nk_entropy_multiscale",
                         dimension=3,
                         method="MSIncrEn",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_slope,
+                        index="SlopEn",
+                        name="nk_entropy_slope",
+                        dimension=3,
+                        thresholds=[0.1, 45],
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_multiscale,
+                        index="MSSlopEn",
+                        name="nk_entropy_multiscale",
+                        dimension=3,
+                        method="MSSlopEn",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_symbolicdynamic,
+                        index="SyDyEn",
+                        name="nk_entropy_symbolicdynamic",
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_multiscale,
+                        index="MSSyDyEn",
+                        name="nk_entropy_multiscale",
+                        dimension=3,
+                        method="MSSyDyEn",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_multiscale,
+                        index="MMSyDyEn",
+                        name="nk_entropy_multiscale",
+                        dimension=3,
+                        method="MMSyDyEn",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_dispersion,
+                        index="DispEn",
+                        name="nk_entropy_dispersion",
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_dispersion,
+                        index="DispEn (fluctuation)",
+                        name="nk_entropy_dispersion",
+                        dimension=3,
+                        fluctuation=True,
                     ),
                 ]
             )

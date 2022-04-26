@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
@@ -86,7 +85,8 @@ def entropy_slope(signal, dimension=3, thresholds=[0.1, 45], **kwargs):
     else:
         delay = 1
 
-    # each subsequence of length m drawn from x, can be transformed into another subsequence of length m−1 with the differences of each pair of consecutive samples
+    # each subsequence of length m drawn from x, can be transformed into another subsequence of
+    # length m-1 with the differences of each pair of consecutive samples
     Tx = np.degrees(np.arctan(signal[delay:] - signal[:-delay]))
     N = len(Tx)
 

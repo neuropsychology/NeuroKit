@@ -30,7 +30,7 @@ knitr::opts_chunk$set(
 
 <!-- # Benchmarking and Analysis of Complexity Measures -->
 <!-- # Measuring Chaos: Complexity and Fractal Physiology using NeuroKit2 -->
-# Measuring Chaos: Empirical Relationship between Complexity Indices
+# Measuring Chaos with NeuroKit2, and an Empirical Relationship between Complexity Indices
 
 *This study can be referenced by* [*citing the package and the documentation*](https://neuropsychology.github.io/NeuroKit/cite_us.html).
 
@@ -38,12 +38,15 @@ knitr::opts_chunk$set(
 
 ## Introduction
 
-There has been a large and accelerating increase in the number of complexity indices in the past few decades. They are usually mathematically well-defined and theoretically promising. However, few empirical data exist to understand their differences and similarities.
+Complexity is an umbrella term for concepts derived from information theory, chaos theory, and fractal mathematics, used to quantify the unpredictability and randomness of a signal. Using these tools to characterize signals has shown promising results in physiology in the assessment and diagnostic of the health and state of living systems (a subfield referred to as "fractal physiology").
 
- In this study, we will compute a vast amount of complexity indices on various types of signals, with varying degrees of noise. We will then empirically compare the various metrics and their relationship.
+There has been a large and accelerating increase in the number of complexity indices in the past few decades. They are usually mathematically well-defined and theoretically promising. However, few empirical data exist to understand their differences and similarities. One of the contributing factor is the lack of free, open-source, and easy to use software for computing various complexity indices. Indeed, most of them are described mathematically in journal articles, and reusable code is seldom made available.
+
+The goal for NeuroKit is to provide the most comprehensive, accurate and fast pure Python implementations of complexity indices (fractal dimension, entropy, etc.).
+
+In this study, we will compute a vast amount of complexity indices on various types of signals, with varying degrees of noise. We will then empirically compare the various metrics and their relationship.
  
- 
-The goal for NeuroKit is to provide the most comprehensive, accurate and fastest base Python implementations of complexity indices (fractal dimension, entropy, etc.).
+
 
 ## Methods
 
@@ -174,6 +177,15 @@ colors <- c(
   "BubbEn" = "#E91E63",
   "CoSiEn" = "#E91E63",
   "MSCoSiEn" = "#E91E63",
+  "IncrEn" = "#E91E63",
+  "MSIncrEn" = "#E91E63",
+  "SlopEn" = "#E91E63",
+  "MSSlopEn" = "#E91E63",
+  "SyDyEn" = "#E91E63",
+  "MSSyDyEn" = "#E91E63",
+  "MMSyDyEn" = "#E91E63",
+  "DispEn" = "#E91E63",
+  "DispEn (fluctuation)" = "#E91E63",
   "ShanEn (A)" = "#E91E63",
   "ShanEn (B)" = "#E91E63",
   "ShanEn (C)" = "#E91E63",
@@ -192,6 +204,9 @@ colors <- c(
   "CREn (10)" = "#E91E63",
   "CREn (100)" = "#E91E63",
   "CREn (1000)" = "#E91E63",
+  "EnofEn (3)" = "#E91E63",
+  "EnofEn (5)" = "#E91E63",
+  "EnofEn (9)" = "#E91E63",
   "RangeEn (A)" = "#E91E63",
   "RangeEn (Ac)" = "#E91E63",
   "RangeEn (B)" = "#E91E63",
@@ -223,7 +238,7 @@ order <- df |>
 df <- mutate(df, Index = fct_relevel(Index, as.character(order$Index)))
 
 df |>
-  filter(!Index %in% c("SD", "Length", "Noise")) |>
+  filter(!Index %in% c("SD", "Length", "Noise", "Random")) |>
   mutate(Duration = Duration * 10000) |>
   ggplot(aes(x = Index, y = Duration)) +
   # geom_violin(aes(fill = Index)) +
@@ -243,7 +258,7 @@ df |>
 
 ```{r time1, message=FALSE, warning=FALSE}
 dfsummary <- df |>
-  filter(!Index %in% c("SD", "Length", "Noise")) |>
+  filter(!Index %in% c("SD", "Length", "Noise", "Random")) |>
   mutate(Duration = Duration * 10000) |>
   group_by(Index, Length) |>
   summarize(
@@ -269,7 +284,7 @@ dfsummary |>
 
 ```{r time2, message=FALSE, warning=FALSE}
 df |>
-  filter(!Index %in% c("Diff", "SD")) |>
+  filter(!Index %in% c("SD", "Length", "Noise", "Random")) |>
   mutate(Duration = Duration * 10000) |>
   ggplot(aes(x = as.factor(Length), y = Duration)) +
   # geom_hline(yintercept = c(0.001, 0.01, 0.1, 1), linetype = "dotted") +
@@ -288,7 +303,7 @@ df |>
 
 
 ```{r message=FALSE, warning=FALSE}
-model <- lm(Result ~ Index / poly(Length, 2), data = filter(df, Index != "SD"))
+model <- lm(Result ~ Index / poly(Length, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random"))
 
 parameters::parameters(model, keep = "poly.*1") |>
   arrange(desc(abs(Coefficient))) |>
@@ -312,7 +327,7 @@ estimate_relation(model) |>
 ### Sensitivity to Noise
 
 ```{r message=FALSE, warning=FALSE}
-model <- lm(Result ~ Index / poly(Noise_Intensity, 2), data = filter(df, Index != "SD"))
+model <- lm(Result ~ Index / poly(Noise_Intensity, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random"))
 
 parameters::parameters(model, keep = "poly.*1") |>
   arrange(abs(p)) |>
@@ -411,7 +426,8 @@ cor |>
   filter(Parameter1 %in% names(data), Parameter2 %in% names(data)) |>
   arrange(desc(abs(rho)), Parameter1) |>
   filter(Parameter1 != Parameter2) |>
-  filter(abs(rho) > .95)
+  filter(abs(rho) > .97) |> 
+  select(Parameter1, Parameter2, rho)
 
 
 # Duplicates
@@ -421,6 +437,7 @@ averagetime <- arrange(summarize(group_by(df, Index), Duration = mean(Duration))
 filter(averagetime, Index %in% c("CREn (D)", "PFD (D)", "ShanEn (D)"))
 filter(averagetime, Index %in% c("ShanEn (B)", "CREn (B)"))
 filter(averagetime, Index %in% c("ShanEn (r)", "PFD (r)", "CREn (r)"))
+filter(averagetime, Index %in% c("ShanEn (C)", "PFD (C)", "CREn (C)"))
 filter(averagetime, Index %in% c("SVDEn", "FI"))
 filter(averagetime, Index %in% c("PSDFD (Hasselman2013)", "PSDFD (Voss1998)"))
 filter(averagetime, Index %in% c("MMSEn", "IMSEn"))
@@ -449,6 +466,7 @@ data <- data |>
     -`CREn (B)`,
     -`CREn (D)`, -`ShanEn (D)`,
     -`CREn (r)`, -`ShanEn (r)`,
+    # -`CREn (C)`, -`ShanEn (C)`,
     -`PSDFD (Voss1998)`,
     -`RangeEn (A)`, -`RangeEn (Ac)`,
     -FI,
@@ -489,10 +507,10 @@ cor <- get_cor(data)
 r <- correlation::cor_smooth(as.matrix(cor))
 
 plot(parameters::n_factors(data, cor = r))
-psych::fa(r, nfactors=10, n.obs=nrow(data))
-rez <- parameters::factor_analysis(data, cor = r, n = 10, rotation = "varimax", sort = TRUE, fm="wls")
+
+rez <- parameters::factor_analysis(data, cor = r, n = 11, rotation = "varimax", sort = TRUE, fm="wls")
 # rez <- parameters::principal_components(data, n = 5, sort = TRUE)
-rez
+# rez
 
 col <- gsub('[[:digit:]]+', '', names(rez)[2]) 
 closest <- colnames(select(rez, starts_with(col)))[apply(select(rez, starts_with(col)), 1, \(x) which.max(abs(x)))]
@@ -510,7 +528,7 @@ p1 <- loadings |>
   # filter(Variable == "CD") |>
   ggplot(aes(x = Variable, y = Loading)) +
   geom_bar(aes(fill = Component), stat = "identity") +
-  geom_vline(xintercept = c("SD", "Length", "Noise"), color = "red") +
+  geom_vline(xintercept = c("SD", "Length", "Noise", "Random"), color = "red") +
   scale_y_continuous(expand = c(0, 0)) +
   scale_fill_material_d("rainbow") +
   coord_flip() +
@@ -520,7 +538,7 @@ p1 <- loadings |>
   theme(
     axis.text.y = element_text(
       color = rev(colors[closest]),
-      face = rev(ifelse(rez$Variable %in% c("SD", "Length", "Noise"), "italic", "plain")),
+      face = rev(ifelse(rez$Variable %in% c("SD", "Length", "Noise", "Random"), "italic", "plain")),
       hjust = 0.5
     ),
     axis.text.x = element_blank(),

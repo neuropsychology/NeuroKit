@@ -25,7 +25,7 @@ def entropy_phase(signal, delay=1, n=4, show=False, **kwargs):
         Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
         See :func:`complexity_delay` to estimate the optimal value for this parameter.
     n : int
-        The number of sections that the SODP is divided into, often denoted *k*). It is a coarse
+        The number of sections that the SODP is divided into, often denoted *k*. It is a coarse
         graining parameter that defines how fine the grid is. It is recommended to use even-numbered
         (preferably multiples of 4) partitions for sake of symmetry.
     show : bool
