@@ -9,7 +9,7 @@ from ..signal import signal_filter
 
 
 def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi"):
-    """Clean a photoplethysmogram (PPG) signal.
+    """**Clean a photoplethysmogram (PPG) signal**
 
     Prepare a raw PPG signal for systolic peak detection.
 
@@ -36,21 +36,24 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>> import pandas as pd
-    >>> import matplotlib.pyplot as plt
-    >>>
-    >>> # Simulate and clean signal
-    >>> ppg = nk.ppg_simulate(heart_rate=75, duration=30)
-    >>> ppg_elgendi = nk.ppg_clean(ppg, method='elgendi')
-    >>> ppg_nabian = nk.ppg_clean(ppg, method='nabian2018', heart_rate=75)
-    >>>
-    >>> # Plot and compare methods
-    >>> signals = pd.DataFrame({"PPG_Raw" : ppg,
-    ...                         "PPG_Elgendi" : ppg_elgendi,
-    ...                         "PPG_Nabian" : ppg_nabian})
-    >>> signals.plot() #doctest: +ELLIPSIS
-     <AxesSubplot:>
+    .. ipython:: python
+
+      import neurokit2 as nk
+      import pandas as pd
+      import matplotlib.pyplot as plt
+
+      # Simulate and clean signal
+      ppg = nk.ppg_simulate(heart_rate=75, duration=30)
+      ppg_elgendi = nk.ppg_clean(ppg, method='elgendi')
+      ppg_nabian = nk.ppg_clean(ppg, method='nabian2018', heart_rate=75)
+
+      # Plot and compare methods
+      signals = pd.DataFrame({"PPG_Raw" : ppg,
+                              "PPG_Elgendi" : ppg_elgendi,
+                              "PPG_Nabian" : ppg_nabian})
+      @savefig p_ppg_clean1.png scale=100%
+      signals.plot()
+      plt.close()
 
     References
     ----------
