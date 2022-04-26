@@ -59,11 +59,11 @@ release = version
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.doctest",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.autosectionlabel",
     "IPython.sphinxext.ipython_console_highlighting",
     "IPython.sphinxext.ipython_directive",
-    "sphinx.ext.napoleon",
     "sphinxemoji.sphinxemoji",
-    "sphinx.ext.autosectionlabel",
     "sphinx_copybutton",
     "myst_nb",
 ]
@@ -93,8 +93,11 @@ napoleon_use_rtype = False
 add_module_names = False  # If true, the current module name will be prepended to all description
 
 
-# -- Options for myst_nb -------------------------------------------------
+# -- Options for myst_nb ---------------------------------------------------
 jupyter_execute_notebooks = "force"
+
+# googleanalytics_id = "G-DVXSEGN5M9"
+
 
 # NumPyDoc configuration -----------------------------------------------------
 
@@ -111,7 +114,7 @@ html_theme = "sphinx_book_theme"
 # https://sphinx-book-theme.readthedocs.io/en/latest/customize/index.html
 html_theme_options = {
     "repository_url": "https://github.com/neuropsychology/NeuroKit",
-    "repository_branch": "website-overhaul",  # TODO: remove this before merging
+    "repository_branch": "dev",  # TODO: remove this before merging
     "use_repository_button": True,
     "use_issues_button": True,
     "path_to_docs": "docs_wip/",

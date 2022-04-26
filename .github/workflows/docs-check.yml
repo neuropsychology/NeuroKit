@@ -1,13 +1,6 @@
-name: "📜 Documentation builder"
-
+name: "📜 Documentation check"
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - dev
-
+- pull_request
 
 jobs:
   docs:
@@ -45,9 +38,3 @@ jobs:
       run: |
         cd docs_wip
         sphinx-build -b html . _build
-
-    - name: Deploy 🚀
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./docs_wip/_build
