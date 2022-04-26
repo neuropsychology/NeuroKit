@@ -438,13 +438,6 @@ title="Print to PDF"
      </em>
     </a>
    </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#analyses">
-   Analyses
-  </a>
-  <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#hrv-frequency">
      <em>
@@ -463,27 +456,6 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#hrv-rqa">
      <em>
       hrv_rqa()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#hrv-time">
-     <em>
-      hrv_time()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#utilities">
-   Utilities
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#hrv-utils">
-     <em>
-      hrv_utils()
      </em>
     </a>
    </li>
@@ -520,13 +492,6 @@ title="Print to PDF"
      </em>
     </a>
    </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#analyses">
-   Analyses
-  </a>
-  <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#hrv-frequency">
      <em>
@@ -545,27 +510,6 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#hrv-rqa">
      <em>
       hrv_rqa()
-     </em>
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#hrv-time">
-     <em>
-      hrv_time()
-     </em>
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#utilities">
-   Utilities
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#hrv-utils">
-     <em>
-      hrv_utils()
      </em>
     </a>
    </li>
@@ -592,7 +536,7 @@ title="Print to PDF"
 <span class="sig-name descname"><span class="pre">hrv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Heart Rate Variability (HRV)</strong></p>
 <p>This function computes all HRV indices available in NeuroKit. It is essentially a convenience
-function that aggregates results from the <a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-func docutils literal notranslate"><span class="pre">time</span> <span class="pre">domain</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-func docutils literal notranslate"><span class="pre">frequency</span>
+function that aggregates results from the <code class="xref py py-func docutils literal notranslate"><span class="pre">time</span> <span class="pre">domain</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-func docutils literal notranslate"><span class="pre">frequency</span>
 <span class="pre">domain</span></code></a>, and <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-func docutils literal notranslate"><span class="pre">non-linear</span> <span class="pre">domain</span></code></a>.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -616,7 +560,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_rsa</span></code>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_rsa</span></code>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <p><strong>Example 1</strong>: Only using a list of R-peaks locations</p>
@@ -672,9 +616,6 @@ norms. Frontiers in public health, 5, 258.</p></li>
 </dd></dl>
 
 </section>
-</section>
-<section id="analyses">
-<h2>Analyses<a class="headerlink" href="#analyses" title="Permalink to this headline">#</a></h2>
 <section id="hrv-frequency">
 <h3><em>hrv_frequency()</em><a class="headerlink" href="#hrv-frequency" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -736,7 +677,7 @@ the total power.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_summary</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code></a></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_summary</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -791,7 +732,7 @@ Rate Variability. Simul. Notes Eur., 27(4), 183-190.</p></li>
 <span class="sig-name descname"><span class="pre">hrv_nonlinear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv_nonlinear" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Computes nonlinear indices of Heart Rate Variability (HRV)</strong></p>
 <p>Non-linear indices include features derived from the <em>Poincaré plot</em>, as well as other
-<a class="reference internal" href="functions_complexity.html#neurokit2.complexity.complexity" title="neurokit2.complexity.complexity"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity()</span></code></a> indices.</p>
+:func:<code class="docutils literal notranslate"><span class="pre">.complexity</span></code> indices.</p>
 <p>The <strong>Poincaré plot</strong> is a graphical representation of each NN interval plotted against its
 preceding NN interval. The ellipse that emerges is a visual quantification of the correlation
 between successive NN intervals.</p>
@@ -906,7 +847,7 @@ the next successive one. The ellipse centers around the average RR interval. By 
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <a class="reference internal" href="#neurokit2.hrv.hrv_time" title="neurokit2.hrv.hrv_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_summary</span></code></p>
+<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_time</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_summary</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -1022,140 +963,6 @@ the application of recurrence quantification analysis to heart rate variability 
 Chaos, Solitons &amp; Fractals, 38(5), 1457-1467.</p></li>
 </ul>
 </dd></dl>
-
-</section>
-<section id="hrv-time">
-<h3><em>hrv_time()</em><a class="headerlink" href="#hrv-time" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.hrv.hrv_time">
-<span class="sig-name descname"><span class="pre">hrv_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">peaks</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sampling_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv_time" title="Permalink to this definition">#</a></dt>
-<dd><p><strong>Computes time-domain indices of Heart Rate Variability (HRV)</strong></p>
-<p>Time-domain measures reflect the total variability of HR and are relatively indiscriminate when
-it comes to precisely quantifying the respective contributions of different underlying
-regulatory mechanisms. However, this “general” sensitivity can be seen as a positive feature
-(e.g., in exploratory studies or when specific underlying neurophysiological mechanisms are not
-the focus). Moreover, as they are easy to compute and interpret, time-domain measures are still
-among the most commonly reported HRV indices.</p>
-<p>The time-domain indices can be categorized into deviation-based and difference-based indices
-where the formal are calculated directly from the normal beat-to-beat intervals (normal RR
-intervals or NN intervals), and the later are derived from the difference between successive NN
-intervals.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>We strongly recommend checking our open-access paper <a class="reference external" href="https://doi.org/10.3390/s21123998">Pham et al. (2021)</a> on HRV indices for more information.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>peaks</strong> (<em>dict</em>) – Samples at which cardiac extrema (i.e., R-peaks, systolic peaks) occur.
-Can be a list of indices or the output(s) of other functions such as <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_peaks" title="neurokit2.ecg.ecg_peaks"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_peaks()</span></code></a>,
-<code class="xref py py-func docutils literal notranslate"><span class="pre">ppg_peaks()</span></code>, <a class="reference internal" href="functions_ecg.html#neurokit2.ecg.ecg_process" title="neurokit2.ecg.ecg_process"><code class="xref py py-func docutils literal notranslate"><span class="pre">ecg_process()</span></code></a> or <code class="xref py py-func docutils literal notranslate"><span class="pre">bio_process()</span></code></p></li>
-<li><p><strong>sampling_rate</strong> (<em>int, optional</em>) – Sampling rate (Hz) of the continuous cardiac signal in which the peaks occur. Should be at
-least twice as high as the highest frequency in vhf. By default 1000.</p></li>
-<li><p><strong>show</strong> (<em>bool</em>) – If True, will plot the distribution of R-R intervals.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><p><em>DataFrame</em> – Contains time domain HRV metrics:</p>
-<ul class="simple">
-<li><p><strong>MeanNN</strong>: The mean of the RR intervals.</p></li>
-<li><p><strong>SDNN</strong>: The standard deviation of the RR intervals.</p></li>
-<li><p><strong>SDANN1</strong>, <strong>SDANN2</strong>, <strong>SDANN5</strong>: The standard deviation of average RR intervals
-extracted from n-minute segments of time series data (1, 2 and 5 by default). Note that
-these indices require a minimal duration of signal to be computed (3, 6 and 15 minutes
-respectively) and will be silently skipped if the data provided is too short.</p></li>
-<li><p><strong>SDNNI1</strong>, <strong>SDNNI2</strong>, <strong>SDNNI5</strong>: The mean of the standard deviations of RR intervals
-extracted from n-minute segments of time series data (1, 2 and 5 by default). Note that
-these indices require a minimal duration of signal to be computed (3, 6 and 15 minutes
-respectively) and will be silently skipped if the data provided is too short.</p></li>
-<li><p><strong>RMSSD</strong>: The square root of the mean of the sum of successive differences between
-adjacent RR intervals. It is equivalent (although on another scale) to SD1, and
-therefore it is redundant to report correlations with both (Ciccone, 2017).</p></li>
-<li><p><strong>SDSD</strong>: The standard deviation of the successive differences between RR intervals.</p></li>
-<li><p><strong>CVNN</strong>: The standard deviation of the RR intervals (<strong>SDNN</strong>) divided by the mean of
-the RR intervals (<strong>MeanNN</strong>).</p></li>
-<li><p><strong>CVSD</strong>: The root mean square of the sum of successive differences (<strong>RMSSD</strong>) divided by
-the mean of the RR intervals (<strong>MeanNN</strong>).</p></li>
-<li><p><strong>MedianNN</strong>: The median of the absolute values of the successive differences between RR
-intervals.</p></li>
-<li><p><strong>MadNN</strong>: The median absolute deviation of the RR intervals.</p></li>
-<li><p><strong>HCVNN</strong>: The median absolute deviation of the RR intervals (<strong>MadNN</strong>) divided by the
-median of the absolute differences of their successive differences (<strong>MedianNN</strong>).</p></li>
-<li><p><strong>IQRNN</strong>: The interquartile range (<strong>IQR</strong>) of the RR intervals.</p></li>
-<li><p><strong>Prc20NN</strong>: The 20th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).</p></li>
-<li><p><strong>Prc80NN</strong>: The 80th percentile of the RR intervals (Han, 2017; Hovsepian, 2015).</p></li>
-<li><p><strong>pNN50</strong>: The proportion of RR intervals greater than 50ms, out of the total number of
-RR intervals.</p></li>
-<li><p><strong>pNN20</strong>: The proportion of RR intervals greater than 20ms, out of the total number of
-RR intervals.</p></li>
-<li><p><strong>MinNN</strong>: The minimum of the RR intervals (Parent, 2019; Subramaniam, 2022).</p></li>
-<li><p><strong>MaxNN</strong>: The maximum of the RR intervals (Parent, 2019; Subramaniam, 2022).</p></li>
-<li><p><strong>TINN</strong>: A geometrical parameter of the HRV, or more specifically, the baseline width of
-the RR intervals distribution obtained by triangular interpolation, where the error of
-least squares determines the triangle. It is an approximation of the RR interval
-distribution.</p></li>
-<li><p><strong>HTI</strong>: The HRV triangular index, measuring the total number of RR intervals divided by
-the height of the RR intervals histogram.</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p><code class="xref py py-obj docutils literal notranslate"><span class="pre">ecg_peaks</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">ppg_peaks</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_frequency" title="neurokit2.hrv.hrv_frequency"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_frequency</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_summary</span></code>, <a class="reference internal" href="#neurokit2.hrv.hrv_nonlinear" title="neurokit2.hrv.hrv_nonlinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hrv_nonlinear</span></code></a></p>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
-
-<span class="go"># Download data</span>
-<span class="gp">In [2]: </span><span class="n">data</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">data</span><span class="p">(</span><span class="s2">&quot;bio_resting_5min_100hz&quot;</span><span class="p">)</span>
-
-<span class="go"># Find peaks</span>
-<span class="gp">In [3]: </span><span class="n">peaks</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">ecg_peaks</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;ECG&quot;</span><span class="p">],</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-
-<span class="go"># Compute HRV indices</span>
-<span class="gp">In [4]: </span><span class="n">hrv</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_time</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_hrv_time.png"><img alt="../_images/p_hrv_time.png" src="../_images/p_hrv_time.png" style="width: 640.0px; height: 480.0px;" /></a>
-<p class="rubric">References</p>
-<ul class="simple">
-<li><p>Pham, T., Lau, Z. J., Chen, S. H. A., &amp; Makowski, D. (2021). Heart Rate Variability in
-Psychology: A Review of HRV Indices and an Analysis Tutorial. Sensors, 21(12), 3998.
-<a class="reference external" href="https://doi.org/10.3390/s21123998">https://doi.org/10.3390/s21123998</a></p></li>
-<li><p>Ciccone, A. B., Siedlik, J. A., Wecht, J. M., Deckert, J. A., Nguyen, N. D., &amp; Weir, J. P.
-(2017). Reminder: RMSSD and SD1 are identical heart rate variability metrics. Muscle &amp; nerve,
-56(4), 674-678.</p></li>
-<li><p>Han, L., Zhang, Q., Chen, X., Zhan, Q., Yang, T., &amp; Zhao, Z. (2017). Detecting work-related
-stress with a wearable device. Computers in Industry, 90, 42-49.</p></li>
-<li><p>Hovsepian, K., Al’Absi, M., Ertin, E., Kamarck, T., Nakajima, M., &amp; Kumar, S. (2015). cStress:
-towards a gold standard for continuous stress assessment in the mobile environment. In
-Proceedings of the 2015 ACM international joint conference on pervasive and ubiquitous
-computing (pp. 493-504).</p></li>
-<li><p>Parent, M., Tiwari, A., Albuquerque, I., Gagnon, J. F., Lafond, D., Tremblay, S., &amp; Falk, T.
-H. (2019). A multimodal approach to improve the robustness of physiological stress prediction
-during physical activity. In 2019 IEEE International Conference on Systems, Man and
-Cybernetics (SMC) (pp. 4131-4136). IEEE.</p></li>
-<li><p>Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
-electrophysiology review, 6(3), 239-244.</p></li>
-<li><p>Shaffer, F., &amp; Ginsberg, J. P. (2017). An overview of heart rate variability metrics and
-norms. Frontiers in public health, 5, 258.</p></li>
-<li><p>Subramaniam, S. D., &amp; Dass, B. (2022). An Efficient Convolutional Neural Network for Acute
-Pain Recognition Using HRV Features. In Proceedings of the International e-Conference on
-Intelligent Systems and Signal Processing (pp. 119-132). Springer, Singapore.</p></li>
-</ul>
-</dd></dl>
-
-</section>
-</section>
-<section id="utilities">
-<h2>Utilities<a class="headerlink" href="#utilities" title="Permalink to this headline">#</a></h2>
-<section id="hrv-utils">
-<h3><em>hrv_utils()</em><a class="headerlink" href="#hrv-utils" title="Permalink to this headline">#</a></h3>
-<dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.hrv.hrv_utils">
-<span class="sig-name descname"><span class="pre">hrv_utils</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.hrv.hrv_utils" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
 
 </section>
 </section>
