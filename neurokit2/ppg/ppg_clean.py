@@ -51,15 +51,14 @@ def ppg_clean(ppg_signal, sampling_rate=1000, heart_rate=None, method="elgendi")
       signals = pd.DataFrame({"PPG_Raw" : ppg,
                               "PPG_Elgendi" : ppg_elgendi,
                               "PPG_Nabian" : ppg_nabian})
-      @savefig p_ppg_clean1.png scale=100%
       signals.plot()
-      plt.close()
+
 
     References
     ----------
-    - Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S. (2018).
-    An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological Data. IEEE Journal of
-    Translational Engineering in Health and Medicine, 6, 1-11. doi:10.1109/jtehm.2018.2878000
+    * Nabian, M., Yin, Y., Wormwood, J., Quigley, K. S., Barrett, L. F., &amp; Ostadabbas, S.
+      (2018). An Open-Source Feature Extraction Tool for the Analysis of Peripheral Physiological
+      Data. IEEE Journal of Translational Engineering in Health and Medicine, 6, 1-11. doi:10.1109/jtehm.2018.2878000
 
     """
     ppg_signal = as_vector(ppg_signal)
