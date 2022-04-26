@@ -18,3 +18,11 @@ Main
 *hrv_rqa()*
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_rqa
+
+*hrv_time()*
+""""""""""""""""""
+.. autofunction:: neurokit2.hrv.hrv_time
+
+*hrv_utils()*
+""""""""""""""""""
+.. autofunction:: neurokit2.hrv.hrv_utils
