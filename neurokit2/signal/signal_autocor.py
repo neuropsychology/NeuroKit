@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 
 
 def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
-    """Autocorrelation (ACF)
+    """**Autocorrelation (ACF)**
 
     Compute the autocorrelation of a signal.
 
@@ -13,33 +13,46 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
     signal : Union[list, np.array, pd.Series]
         Vector of values.
     lag : int
-        Time lag. If specified, one value of autocorrelation between signal with its lag self will be returned.
+        Time lag. If specified, one value of autocorrelation between signal with its lag self will
+        be returned.
     demean : bool
         If True, the mean of the signal will be subtracted from the signal before ACF computation.
     method : str
-        Can be 'correlation' (using ``np.correlate``) or 'fft' (using FFT, default).
+        Can be 'correlation' (using :func:`.np.correlate`) or 'fft' (Fast Fourier Transform;
+        default).
     show : bool
         If True, plot the autocorrelation at all values of lag.
 
     Returns
     -------
     r : float
-        The cross-correlation of the signal with itself at different time lags. Minimum time lag is 0,
-        maximum time lag is the length of the signal. Or a correlation value at a specific lag if lag
-        is not None.
+        The cross-correlation of the signal with itself at different time lags. Minimum time lag is
+        0, maximum time lag is the length of the signal. Or a correlation value at a specific lag
+        if lag is not None.
     info : dict
         A dictionary containing additional information, such as the confidence interval.
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = [1, 2, 3, 4, 5]
-    >>> r, info = nk.signal_autocor(signal, show=True, method='correlate')
-    >>> r #doctest: +SKIP
-    >>>
-    >>> signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
-    >>> r, info = nk.signal_autocor(signal, lag=2, method='fft', show=True)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      # Example 1: Using 'Correlation' Method
+      signal = [1, 2, 3, 4, 5]
+      @savefig p_signal_autocor.png scale=100%
+      r, info = nk.signal_autocor(signal, show=True, method='correlate')
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Example 2: Using 'FFT' Method
+      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
+      @savefig p_signal_autocor2.png scale=100%
+      r, info = nk.signal_autocor(signal, lag=2, method='fft', show=True)
+      @suppress
+      plt.close()
 
     """
     n = len(signal)
@@ -77,7 +90,7 @@ def signal_autocor(signal, lag=None, demean=True, method="fft", show=False):
         plt.ylabel("Autocorrelation r")
         plt.xlabel("Lag")
         plt.ylim(-1, 1)
-        plt.show()
+        # plt.show()
 
     if lag is not None:
         if lag > n:
