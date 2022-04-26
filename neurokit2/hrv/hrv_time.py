@@ -77,7 +77,9 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         * **MinNN**: The minimum of the RR intervals (Parent, 2019; Subramaniam, 2022).
         * **MaxNN**: The maximum of the RR intervals (Parent, 2019; Subramaniam, 2022).
         * **TINN**: A geometrical parameter of the HRV, or more specifically, the baseline width of
-          the RR intervals distribution obtained by triangular interpolation, where the error of least squares determines the triangle. It is an approximation of the RR interval distribution.
+          the RR intervals distribution obtained by triangular interpolation, where the error of
+          least squares determines the triangle. It is an approximation of the RR interval
+          distribution.
         * **HTI**: The HRV triangular index, measuring the total number of RR intervals divided by
           the height of the RR intervals histogram.
 
@@ -123,7 +125,8 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
 
     * Parent, M., Tiwari, A., Albuquerque, I., Gagnon, J. F., Lafond, D., Tremblay, S., & Falk, T.
       H. (2019). A multimodal approach to improve the robustness of physiological stress prediction
-      during physical activity. In 2019 IEEE International Conference on Systems, Man and Cybernetics (SMC) (pp. 4131-4136). IEEE.
+      during physical activity. In 2019 IEEE International Conference on Systems, Man and
+      Cybernetics (SMC) (pp. 4131-4136). IEEE.
 
     * Stein, P. K. (2002). Assessing heart rate variability from real-world Holter reports. Cardiac
       electrophysiology review, 6(3), 239-244.
@@ -155,7 +158,7 @@ def hrv_time(peaks, sampling_rate=1000, show=False, **kwargs):
         out["SDNNI" + str(i)] = _sdnni(rri, window=i)
 
     # Difference-based
-    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri ** 2))
+    out["RMSSD"] = np.sqrt(np.nanmean(diff_rri**2))
     out["SDSD"] = np.nanstd(diff_rri, ddof=1)
 
     # Normalized
@@ -245,7 +248,7 @@ def _sdnni(rri, window=1):
 
 def _hrv_TINN(rri, bar_x, bar_y, binsize):
     # set pre-defined conditions
-    min_error = 2 ** 14
+    min_error = 2**14
     X = bar_x[np.argmax(bar_y)]  # bin where Y is max
     Y = np.max(bar_y)  # max value of Y
     idx_where = np.where(bar_x - np.min(rri) > 0)[0]

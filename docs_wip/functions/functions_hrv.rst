@@ -7,6 +7,9 @@ Main
 """""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv
 
+
+Analyses
+^^^^^^^^^^^^^^^^^^
 *hrv_frequency()*
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_frequency
@@ -23,6 +26,9 @@ Main
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_time
 
+
+Utilities
+^^^^^^^^^^^^^^^^^^
 *hrv_utils()*
 """"""""""""""""""
 .. autofunction:: neurokit2.hrv.hrv_utils
