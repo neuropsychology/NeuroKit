@@ -358,10 +358,50 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
-                        nk.nk_entropy_phase,
-                        index="PhasEn",
+                        nk.entropy_phase,
+                        index="PhasEn (4)",
                         name="nk_entropy_phase",
                         delay=delay,
+                        n=4,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_phase,
+                        index="PhasEn (8)",
+                        name="nk_entropy_phase",
+                        delay=delay,
+                        n=8,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_grid,
+                        index="GridEn (3)",
+                        name="nk_entropy_grid",
+                        delay=delay,
+                        n=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_grid,
+                        index="GridEn (10)",
+                        name="nk_entropy_grid",
+                        delay=delay,
+                        n=10,
                     ),
                 ]
             )

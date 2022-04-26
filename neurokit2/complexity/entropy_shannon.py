@@ -15,7 +15,7 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
 
     .. math::
 
-      ShanEn = -\\sum_{x \in \\mathcal{X}} p(x) \\log_2 p(x)
+      ShanEn = -\\sum_{x \\in \\mathcal{X}} p(x) \\log_2 p(x)
 
     Shannon attempted to extend Shannon entropy in what has become known as Differential Entropy
     (see :func`entropy_differential`).

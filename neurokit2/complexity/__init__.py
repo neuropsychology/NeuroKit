@@ -23,6 +23,7 @@ from .entropy_cumulative_residual import entropy_cumulative_residual
 from .entropy_differential import entropy_differential
 from .entropy_distribution import entropy_distribution
 from .entropy_fuzzy import entropy_fuzzy
+from .entropy_grid import entropy_grid
 from .entropy_kolmogorov import entropy_kolmogorov
 from .entropy_multiscale import entropy_multiscale
 from .entropy_permutation import entropy_permutation
@@ -148,6 +149,7 @@ __all__ = [
     "entropy_coalition",
     "entropy_sample",
     "entropy_phase",
+    "entropy_grid",
     "entropy_spectral",
     "entropy_svd",
     "entropy_fuzzy",
