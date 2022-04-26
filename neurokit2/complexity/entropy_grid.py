@@ -37,7 +37,7 @@ def entropy_grid(signal, delay=1, n=3, show=False, **kwargs):
     Returns
     -------
     griden : float
-        Phase Entropy
+        Grid Entropy of the signal.
     info : dict
         A dictionary containing additional information regarding the parameters used.
 

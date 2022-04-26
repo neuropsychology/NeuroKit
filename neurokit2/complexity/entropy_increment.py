@@ -110,7 +110,7 @@ def entropy_increment(signal, dimension=2, q=4, **kwargs):
 
     # Get probabilities of occurence
     freq = np.unique(words, axis=0)
-    freq = [np.sum(np.any(words - freq[k, :], axis=1) == False) for k in range(len(freq))]
+    freq = [np.sum(~np.any(words - freq[k, :], axis=1)) for k in range(len(freq))]
     freq = np.array(freq) / np.sum(freq)
 
     # Compute entropy
