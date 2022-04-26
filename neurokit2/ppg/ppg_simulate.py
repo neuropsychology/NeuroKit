@@ -21,7 +21,7 @@ def ppg_simulate(
     random_state=None,
     show=False,
 ):
-    """Simulate a photoplethysmogram (PPG) signal.
+    """**Simulate a photoplethysmogram (PPG) signal**
 
     Phenomenological approximation of PPG. The PPG wave is described with four landmarks: wave onset,
     location of the systolic peak, location of the dicrotic notch and location of the diastolic peaks.
@@ -76,9 +76,11 @@ def ppg_simulate(
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> ppg = nk.ppg_simulate(duration=40, sampling_rate=500, heart_rate=75, random_state=42)
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      ppg = nk.ppg_simulate(duration=40, sampling_rate=500, heart_rate=75, random_state=42)
 
     """
     np.random.seed(random_state)
