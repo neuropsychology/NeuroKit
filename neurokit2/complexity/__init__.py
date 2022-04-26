@@ -24,6 +24,7 @@ from .entropy_differential import entropy_differential
 from .entropy_distribution import entropy_distribution
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_grid import entropy_grid
+from .entropy_increment import entropy_increment
 from .entropy_kolmogorov import entropy_kolmogorov
 from .entropy_multiscale import entropy_multiscale
 from .entropy_ofentropy import entropy_ofentropy
@@ -143,6 +144,7 @@ __all__ = [
     "entropy_kolmogorov",
     "entropy_attention",
     "entropy_ofentropy",
+    "entropy_increment",
     "entropy_differential",
     "entropy_distribution",
     "entropy_cumulative_residual",

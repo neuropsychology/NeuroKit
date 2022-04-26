@@ -271,7 +271,20 @@ def run_benchmark(noise_intensity=0.01):
                         ),
                     ]
                 )
-
+            for bins in [3, 5, 9]:
+                rez = pd.concat(
+                    [
+                        rez,
+                        time_function(
+                            signal_,
+                            nk.entropy_ofentropy,
+                            index=f"EnofEn ({bins})",
+                            name="nk_entropy_ofentropy",
+                            scale=10,
+                            bins=bins,
+                        ),
+                    ]
+                )
             rez = pd.concat(
                 [
                     rez,
@@ -407,6 +420,31 @@ def run_benchmark(noise_intensity=0.01):
                         name="nk_entropy_grid",
                         delay=delay,
                         n=10,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_increment,
+                        index="IncrEn",
+                        name="nk_entropy_increment",
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.entropy_multiscale,
+                        index="MSIncrEn",
+                        name="nk_entropy_multiscale",
+                        dimension=3,
+                        method="MSIncrEn",
                     ),
                 ]
             )
