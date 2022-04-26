@@ -8,7 +8,7 @@ Documentation
 
 Welcome to **NeuroKit**'s documentation. Here you can find information and learn about Python, NeuroKit, Physiological Signals and more.
 
-You can navigate to the different sections using the left panel. We would recommend checking out the **guides** and **examples**, where you can find tutorials and hands-on walkthroughs.
+You can navigate to the different sections using the left panel. We would recommend checking out the **guides** and **examples**, where you can find walkthroughs and hands-on tutorials.
 
 .. toctree::
    :maxdepth: 2
