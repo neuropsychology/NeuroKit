@@ -52,7 +52,9 @@ def complexity_coarsegraining(
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     scale : int
-        Also regerred to as Tau :math:`\\tau`, it represents the scale factor.
+        The size of the windows that the signal is divided into. Also referred to as Tau
+        :math:`\\tau`, it represents the scale factor and corresponds to
+        the amount of coarsegraining.
     method : str
         Can be ``"nonoverlapping"``, ``"rolling"``, ``"interpolate"``, or ``timeshift``.
     force : bool

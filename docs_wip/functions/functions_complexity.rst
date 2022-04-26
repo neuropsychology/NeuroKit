@@ -96,6 +96,10 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_attention
 
+*entropy_ofentropy()*
+"""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_ofentropy
+
 *entropy_approximate()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_approximate

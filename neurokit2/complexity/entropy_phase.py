@@ -65,7 +65,7 @@ def entropy_phase(signal, delay=1, n=4, show=False, **kwargs):
       phasen
 
       @savefig p_entropy_phase2.png scale=100%
-      phasen, info = nk.entropy_phase(signal, n=9, show=True)
+      phasen, info = nk.entropy_phase(signal, n=8, show=True)
       @suppress
       plt.close()
 
@@ -113,9 +113,9 @@ def entropy_phase(signal, delay=1, n=4, show=False, **kwargs):
 
     if show is True:
         Tx = np.zeros((n, len(theta)))
-        for n in range(n):
-            Temp = np.logical_and((theta > angles[n]), (theta < angles[n + 1]))
-            Tx[n, Temp] = 1
+        for k in range(n):
+            Temp = np.logical_and((theta > angles[k]), (theta < angles[k + 1]))
+            Tx[k, Temp] = 1
 
         limx = np.ceil(np.max(np.abs([y, x])))
         Tx = Tx.astype(bool)
@@ -124,8 +124,8 @@ def entropy_phase(signal, delay=1, n=4, show=False, **kwargs):
         colors = plt.get_cmap("jet")(np.linspace(0, 1, n))
 
         plt.figure()
-        for n in range(n):
-            plt.plot(x[Tx[n, :]], y[Tx[n, :]], ".", color=tuple(colors[n, :]))
+        for k in range(n):
+            plt.plot(x[Tx[k, :]], y[Tx[k, :]], ".", color=tuple(colors[k, :]))
             plt.plot(
                 np.vstack((np.zeros(n + 1), Xs)), np.vstack((np.zeros(n + 1), Ys)), color="red"
             )

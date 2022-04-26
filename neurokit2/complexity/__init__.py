@@ -26,6 +26,7 @@ from .entropy_fuzzy import entropy_fuzzy
 from .entropy_grid import entropy_grid
 from .entropy_kolmogorov import entropy_kolmogorov
 from .entropy_multiscale import entropy_multiscale
+from .entropy_ofentropy import entropy_ofentropy
 from .entropy_permutation import entropy_permutation
 from .entropy_phase import entropy_phase
 from .entropy_range import entropy_range
@@ -141,6 +142,7 @@ __all__ = [
     "entropy_renyi",
     "entropy_kolmogorov",
     "entropy_attention",
+    "entropy_ofentropy",
     "entropy_differential",
     "entropy_distribution",
     "entropy_cumulative_residual",
