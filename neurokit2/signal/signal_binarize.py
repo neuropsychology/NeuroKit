@@ -31,11 +31,11 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
 
     Examples
     --------
-    ..ipython:: python
+    .. ipython:: python
 
+      import neurokit2 as nk
       import numpy as np
       import pandas as pd
-      import neurokit2 as nk
 
       signal = np.cos(np.linspace(start=0, stop=20, num=1000))
       binary = nk.signal_binarize(signal)
@@ -43,7 +43,6 @@ def signal_binarize(signal, method="threshold", threshold="auto"):
       fig = pd.DataFrame({"Raw": signal, "Binary": binary}).plot()
       @suppress
       plt.close()
-
 
     """
 

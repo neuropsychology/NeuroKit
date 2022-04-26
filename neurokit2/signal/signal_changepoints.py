@@ -5,7 +5,7 @@ from ..misc import as_vector
 
 
 def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
-    """Change Point Detection.
+    """**Change Point Detection**
 
     Only the PELT method is implemented for now.
 
@@ -16,7 +16,7 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
     change : str
         Can be one of "meanvar" (default), "mean" or "var".
     penalty : float
-        The algorithm penalty. Default to ``np.log(len(signal))``.
+        The algorithm penalty. Defaults to ``np.log(len(signal))``.
     show : bool
         Defaults to False.
 
@@ -29,16 +29,21 @@ def signal_changepoints(signal, change="meanvar", penalty=None, show=False):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> signal = nk.emg_simulate(burst_number=3)
-    >>> fig = nk.signal_changepoints(signal, change="var", show=True)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      signal = nk.emg_simulate(burst_number=3)
+      @savefig p_signal_changepoints1.png scale=100%
+      fig = nk.signal_changepoints(signal, change="var", show=True)
+      @suppress
+      plt.close()
+
 
     References
     ----------
-    - Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a linear
-    computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
+    * Killick, R., Fearnhead, P., & Eckley, I. A. (2012). Optimal detection of changepoints with a
+      linear computational cost. Journal of the American Statistical Association, 107(500), 1590-1598.
 
     """
     signal = as_vector(signal)

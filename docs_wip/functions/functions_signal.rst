@@ -11,5 +11,9 @@ Main
 """""""""""""""""""
 .. autofunction:: neurokit2.signal_binarize
 
+*signal_changepoints()*
+""""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_changepoints
+
 
 
