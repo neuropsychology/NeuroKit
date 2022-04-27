@@ -9,6 +9,7 @@ Maintainers
 
 * `Dominique Makowski <https://github.com/DominiqueMakowski>`_ *(Nanyang Technological University, Singapore)*
 * `An Shu Te <https://github.com/anshu-97>`_ *(Nanyang Technological University, Singapore)*
+* `Max Ngoi Zi Liang <https://github.com/Max-ZiLiang>`_ *(Nanyang Technological University, Singapore)*
 
 
 Core contributors

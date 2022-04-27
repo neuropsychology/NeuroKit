@@ -32,6 +32,7 @@ jobs:
         pip install PyWavelets
         pip install astropy
         pip install seaborn
+        pip install EMD-signal
         pip install https://github.com/neuropsychology/neurokit/zipball/dev
 
     - name: Build documentation 📜

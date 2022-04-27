@@ -37,6 +37,7 @@ jobs:
         pip install matplotlib
         pip install mne
         pip install PyWavelets
+        pip install EMD-signal
         pip install astropy
         pip install seaborn
         pip install https://github.com/neuropsychology/neurokit/zipball/dev
