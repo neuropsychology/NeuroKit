@@ -10,7 +10,8 @@ from .complexity_attractor import _attractor_equation, complexity_attractor
 def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):
     """**Time-delay Embedding of a Signal**
 
-    Time-delay embedding is one of the key concept of complexity science. It is based on the idea that a dynamical system can be described by a vector of numbers, called its *'state'*, that
+    Time-delay embedding is one of the key concept of complexity science. It is based on the idea
+    that a dynamical system can be described by a vector of numbers, called its *'state'*, that
     aims to provide a complete description of the system at some point in time. The set of all
     possible states is called the *'state space'*.
 

@@ -19,7 +19,7 @@ def complexity_lempelziv(
     normalize=True,
     show=False,
 ):
-    """Lempel-Ziv Complexity (LZC, PLZC and MPLZC)
+    """**Lempel-Ziv Complexity (LZC, PLZC and MPLZC)**
 
     Computes Lempel-Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
     symbolic sequences for new patterns, increasing the complexity count every time a new sequence
@@ -28,13 +28,13 @@ def complexity_lempelziv(
     complexity measure, LZC was originally proposed to reflect randomness (Lempel and Ziv, 1976).
 
     Permutation Lempel-Ziv Complexity (PLZC) combines permutation and LZC.
-    A finite sequence of symbols is first generated (numbers of types of symbols = `dimension!`)
-    and LZC is computed over the symbol series.
+    A finite sequence of symbols is first generated (numbers of types of symbols =
+    :math:`dimension!`) and LZC is computed over the symbol series.
 
-    Multiscale Permutation Lempel-Ziv Complexity (MPLZC) combines permutation LZC and multiscale approach.
-    It first performs a coarse-graining procedure to the original time series by constructing the coarse-grained
-    time series in non-overlapping windows of increasing length (scale) where the number of data points are
-    averaged. PLZC is then computed for each scaled series.
+    Multiscale Permutation Lempel-Ziv Complexity (MPLZC) combines permutation LZC and multiscale
+    approach. It first performs a coarse-graining procedure to the original time series by
+    constructing the coarse-grained time series in non-overlapping windows of increasing length
+    (scale) where the number of data points are averaged. PLZC is then computed for each scaled series.
 
     Parameters
     ----------

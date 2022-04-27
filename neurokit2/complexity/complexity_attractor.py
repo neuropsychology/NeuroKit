@@ -58,6 +58,7 @@ def complexity_attractor(
       plt.close()
 
     **Rössler attractors**
+
     .. ipython:: python
 
       @savefig p_complexity_attractor3.png scale=100%
@@ -66,6 +67,7 @@ def complexity_attractor(
       plt.close()
 
     **2D Attractors using a signal**
+
     .. ipython:: python
 
       # Simulate Signal
@@ -82,8 +84,6 @@ def complexity_attractor(
 
     .. ipython:: python
 
-      embedded = nk.complexity_embedding(signal, delay = 3, dimension = 2)
-
       # Slow
       @savefig p_complexity_attractor5.png scale=100%
       nk.complexity_attractor(embedded, color = "last_dim", alpha = "time")
@@ -91,6 +91,7 @@ def complexity_attractor(
       plt.close()
 
     **3D Attractors using a signal**
+
     .. ipython:: python
 
       # 3D Attractor
@@ -111,6 +112,7 @@ def complexity_attractor(
       plt.close()
 
     **Animated Rotation**
+
     .. ipython:: python
 
       import matplotlib.animation as animation

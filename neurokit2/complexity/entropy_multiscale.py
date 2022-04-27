@@ -37,8 +37,8 @@ def entropy_multiscale(
 
     1. A :func:`coarse-graining <complexity_coarsegraining>` procedure is used to represent the
        signal at different time scales.
-    2. SampEn is used to quantify the regularity of a coarse-grained time series at each time scale
-       factor.
+    2. :func:`Sample entropy <entropy_sample>` (or other function) is used to quantify the
+      regularity of a coarse-grained time series at each time scale factor.
 
     However, in the traditional coarse-graining procedure, the larger the scale factor is, the
     shorter the coarse-grained time series is. As such, the variance of the entropy of the
@@ -57,7 +57,7 @@ def entropy_multiscale(
       coarse-grained series. We implement a generalization of this via interpolation that can be
       referred to as **Interpolated Multiscale Entropy**.
 
-    Their :func:`**Fuzzy** <entropy_sample>` version can be obtained by setting ``fuzzy=True``.
+    Their :func:`Fuzzy <entropy_fuzzy>` version can be obtained by setting ``fuzzy=True``.
 
     This function can be called either via ``entropy_multiscale()`` or ``complexity_mse()``.
     Moreover, variants can be directly accessed via ``complexity_cmse()``, `complexity_rcmse()``,
@@ -109,7 +109,8 @@ def entropy_multiscale(
 
     Examples
     ----------
-    * **MSEn** (basic coarse-graining)
+    **MSEn** (basic coarse-graining)
+
     .. ipython:: python
 
       import neurokit2 as nk
@@ -121,7 +122,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **CMSEn** (time-shifted coarse-graining)
+    **CMSEn** (time-shifted coarse-graining)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale2.png scale=100%
@@ -129,7 +131,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **RCMSEn** (refined composite MSEn)
+    **RCMSEn** (refined composite MSEn)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale3.png scale=100%
@@ -137,7 +140,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **MMSEn** (rolling-window coarse-graining)
+    **MMSEn** (rolling-window coarse-graining)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale4.png scale=100%
@@ -145,7 +149,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **IMSEn** (interpolated coarse-graining)
+    **IMSEn** (interpolated coarse-graining)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale5.png scale=100%
@@ -153,7 +158,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **MSApEn** (based on ApEn instead of SampEn)
+    **MSApEn** (based on ApEn instead of SampEn)
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale6.png scale=100%
@@ -161,7 +167,8 @@ def entropy_multiscale(
       @suppress
       plt.close()
 
-    * **MSPEn** (based on PEn), **CMSPEn**, **MMSPEn** and **IMSPEn**
+    **MSPEn** (based on PEn), **CMSPEn**, **MMSPEn** and **IMSPEn**
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale7.png scale=100%
@@ -178,7 +185,8 @@ def entropy_multiscale(
       imspen, info = nk.entropy_multiscale(signal, method="IMSPEn")
       imspen
 
-    * **MSWPEn** (based on WPEn), **CMSWPEn**, **MMSWPEn** and **IMSWPEn**
+    **MSWPEn** (based on WPEn), **CMSWPEn**, **MMSWPEn** and **IMSWPEn**
+
     .. ipython:: python
 
       mswpen, info = nk.entropy_multiscale(signal, method="MSWPEn")
@@ -186,7 +194,8 @@ def entropy_multiscale(
       mmswpen, info = nk.entropy_multiscale(signal, method="MMSWPEn")
       imswpen, info = nk.entropy_multiscale(signal, method="IMSWPEn")
 
-    * **FuzzyMSEn**, **FuzzyCMSEn** and **FuzzyRCMSEn**
+    **FuzzyMSEn**, **FuzzyCMSEn** and **FuzzyRCMSEn**
+
     .. ipython:: python
 
       @savefig p_entropy_multiscale8.png scale=100%
