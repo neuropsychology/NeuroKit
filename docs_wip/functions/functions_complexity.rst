@@ -144,12 +144,9 @@ Entropy
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_multiscale
 
-*entropy_permutation()*
-"""""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_permutation
-
-
-
+*entropy_hierarchical()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.entropy_hierarchical
 
 
 Other

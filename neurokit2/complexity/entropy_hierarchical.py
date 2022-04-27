@@ -1,23 +1,28 @@
+import matplotlib.cm
+import matplotlib.gridspec
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from .complexity_embedding import complexity_embedding
+from .entropy_sample import entropy_sample
 
 
-def entropy_hierarchical(signal, dimension=3, n=3, method="MEP", **kwargs):
+def entropy_hierarchical(signal, scale=3, show=False, **kwargs):
     """**Hierarchical Entropy (HEn)**
 
-    The hierarchical entropy (HEn) analysis proposed in this paper takes into consideration the entropy of the higher frequency components of a time series.
+    Hierarchical Entropy (HEn) can be viewed as a generalization of the multiscale
+    decomposition used in :func:`multiscale entropy <entropy_multiscale>`, and the Haar wavelet
+    decomposition since it generate subtrees of the hierarchical tree. It preserves the strength of
+    the multiscale decomposition with additional components of higher frequency in different
+    scales. The hierarchical decomposition, unlike the wavelet decomposition, contains redundant
+    components, which makes it sensitive to the dynamical richness of the time series.
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    dimension : int
-        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
-        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
-    n : int
-        Number of symbols.
+    scale : int
+        The number of scale factors.
     method : str
         Method for symbolic sequence partitioning. Can be one of ``"MEP"`` (default),
         ``"linear"``, ``"uniform"``, ``"kmeans"``.
@@ -42,28 +47,13 @@ def entropy_hierarchical(signal, dimension=3, n=3, method="MEP", **kwargs):
       import neurokit2 as nk
 
       # Simulate a Signal
-      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
+      signal = nk.signal_simulate(duration=20, sampling_rate=200, frequency=[5, 6], noise=0.5)
 
-      # Compute Symbolic Dynamic Entropy
-      sydyen, info = nk.entropy_symbolicdynamic(signal, n=3, method="MEP")
-      sydyen
-
-      sydyen, info = nk.entropy_symbolicdynamic(signal, n=3, method="kmeans")
-      sydyen
-
-      # Compute Multiscale Symbolic Dynamic Entropy (MSSyDyEn)
-      @savefig p_entropy_symbolicdynamic1.png scale=100%
-      mssydyen, info = nk.entropy_multiscale(signal, method="MSSyDyEn", show=True)
+      # Compute Hierarchical Entropy (HEn)
+      @savefig p_entropy_hierarchical1.png scale=100%
+      hen, info = nk.entropy_hierarchical(signal, scale=5, show=True)
       @suppress
       plt.close()
-
-      # Compute Modified Multiscale Symbolic Dynamic Entropy (MMSyDyEn)
-      @savefig p_entropy_symbolicdynamic2.png scale=100%
-      mmsydyen, info = nk.entropy_multiscale(signal, method="MMSyDyEn", show=True)
-      @suppress
-      plt.close()
-
-      MMSDE
 
     References
     ----------
@@ -77,60 +67,107 @@ def entropy_hierarchical(signal, dimension=3, n=3, method="MEP", **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # TODO: help us.
-    return None, {}
+    # Store parameters
+    info = {}
 
-    # # Store parameters
-    # info = {"Dimension": dimension}
+    # TODO: Simplify this code, make it clearer and step by step, following the paper more closely
 
-    # # We could technically expose the Delay, but the paper is about consecutive differences so...
-    # if "delay" in kwargs.keys():
-    #     delay = kwargs["delay"]
-    #     kwargs.pop("delay")
-    # else:
-    #     delay = 1
+    Q, N = _hierarchical_decomposition(signal, scale=scale)
 
-    # method = "SD"
+    HEns = np.zeros(len(Q))
+    for T in range(len(Q)):
+        Temp = Q[T, : int(N / (2 ** (int(np.log2(T + 1)))))]
+        HEns[T], _ = entropy_sample(Temp, delay=1)
 
-    # method = method.lower()
-    # if method == "sd":
-    #     Rnew = lambda x: np.std(x)
-    # elif method == "var":
-    #     Rnew = lambda x: np.var(x)
-    # elif method == "mean":
-    #     Rnew = lambda x: np.mean(abs(x - np.mean(x)))
-    # elif method == "median":
-    #     Rnew = lambda x: np.median(abs(x - np.median(x)))
+    Sn = np.zeros(scale)
+    for t in range(scale):
+        vals = HEns[(2 ** t) - 1 : (2 ** (t + 1)) - 1]
+        Sn[t] = np.mean(vals[np.isfinite(vals)])
 
-    # signal = np.array([0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1, 2, 4, 5, 6, 7, 9, 12])
-    # XX, N = Hierarchy(signal, sx=2)
-    # XX.shape
-    # return sydyen, info
+    # The HEn index is quantified as the area under the curve (AUC),
+    # which is like the sum normalized by the number of values. It's similar to the mean.
+    hen = np.trapz(Sn[np.isfinite(Sn)]) / len(Sn[np.isfinite(Sn)])
+
+    if show is True:
+
+        # Color normalization values by extending beyond the range of the mean values
+        colormin = np.min(Sn) - np.ptp(Sn) * 0.1
+        colormax = np.max(Sn) + np.ptp(Sn) * 0.1
+
+        plt.figure()
+        G = matplotlib.gridspec.GridSpec(10, 1)
+        ax1 = plt.subplot(G[:2, :])
+        ax1.plot(np.arange(1, scale + 1), Sn, color="black", zorder=0)
+        ax1.scatter(
+            np.arange(1, scale + 1),
+            Sn,
+            c=Sn,
+            zorder=1,
+            # Color map and color normalization values
+            cmap="spring",
+            vmin=colormin,
+            vmax=colormax,
+        )
+        ax1.set_xticks(np.arange(1, scale + 1))
+        ax1.set_xlabel("Scale Factor")
+        ax1.set_ylabel("Entropy")
+        ax1.set_title("Hierarchical Entropy")
+
+        N = 2 ** (scale - 1)
+        x = np.zeros(2 * N - 1, dtype=int)
+        x[0] = N
+        y = -1 * (scale - np.log2(np.arange(1, 2 * N)) // 1) + scale + 1
+        for k in range(1, 2 * N):
+            Q = int(np.log2(k) // 1)
+            P = int((k) // 2) - 1
+            if k > 1:
+                if k % 2:
+                    x[k - 1] = x[P] + N / (2 ** Q)
+                else:
+                    x[k - 1] = x[P] - N / (2 ** Q)
+
+        Edges = np.vstack((np.repeat(np.arange(1, N), 2), np.arange(2, 2 * N))).transpose() - 1
+        labx = ["".join(k) for k in np.round(HEns, 3).astype(str)]
+        ax2 = plt.subplot(G[3:, :])
+        for k in range(len(x) - 1):
+            ax2.plot(x[Edges[k, :]], y[Edges[k, :]], color="black", zorder=0)
+            ax2.annotate(labx[k], (x[k], y[k]), fontsize=8)
+        ax2.scatter(
+            x,
+            y,
+            c=HEns,
+            zorder=1,
+            # Color map and color normalization values
+            cmap="spring",
+            vmin=colormin,
+            vmax=colormax,
+        )
+        ax2.annotate(labx[-1], (x[-1], y[-1]), fontsize=8)
+        ax2.invert_yaxis()
+        ax2.set_ylabel("Scale Factor")
+        plt.show()
+
+    # return MSx, Sn, CI
+    return hen, info
 
 
-# def Hierarchy(signal, sx):
-#     N = int(2 ** np.floor(np.log2(len(signal))))
-#     if np.log2(len(signal)) % 1 != 0:
-#         print(
-#             "Only first %d samples were used in hierarchical decomposition. \
-#             \nThe last %d samples of the data sequence were ignored."
-#             % (N, len(signal) - N)
-#         )
-#     if N / (2 ** (sx - 1)) < 8:
-#         raise Exception(
-#             "Data length (%d) is too short to estimate entropy at the lowest"
-#             " subtree. Consider reducing the number of scales." % N
-#         )
+def _hierarchical_decomposition(signal, scale=3):
+    N = int(2 ** np.floor(np.log2(len(signal))))
+    if N / (2 ** (scale - 1)) < 8:
+        raise Exception(
+            "Signal length is too short to estimate entropy at the lowest"
+            " subtree. Consider reducing the value of scale."
+        )
 
-#     U = np.zeros(((2 ** sx) - 1, N))
-#     U[0, :] = signal[:N]
-#     p = 1
-#     for k in range(sx - 1):
-#         for n in range(2 ** k):
-#             Temp = U[(2 ** k) + n - 1, :]
-#             # U[p,1:N//2]  = (Temp[:-2:2] + Temp[1:-1:2])/2
-#             # U[p+1,1:N//2]= (Temp[:-2:2] - Temp[1:-1:2])/2
-#             U[p, : N // 2] = (Temp[::2] + Temp[1::2]) / 2
-#             U[p + 1, : N // 2] = (Temp[::2] - Temp[1::2]) / 2
-#             p += 2
-#     return U, N
+    Q = np.zeros(((2 ** scale) - 1, N))
+    Q[0, :] = signal[:N]
+    p = 1
+    for k in range(scale - 1):
+        for n in range(2 ** k):
+            Temp = Q[(2 ** k) + n - 1, :]
+            # 1. We define an averaging operator Q0. It is the the low frequency component.
+            Q[p, : N // 2] = (Temp[::2] + Temp[1::2]) / 2
+            # 2. We define a difference frequency component. It is the the high frequency component.
+            Q[p + 1, : N // 2] = (Temp[::2] - Temp[1::2]) / 2
+            p += 2
+    return Q, N

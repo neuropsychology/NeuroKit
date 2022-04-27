@@ -188,9 +188,8 @@ def complexity_coarsegraining(
         # Relying on scipy is a fast alternative to:
         # pd.Series(signal).rolling(window=scale).mean().values[scale-1::]
         # https://stackoverflow.com/questions/13728392/moving-average-or-running-mean
-        coarse = scipy.ndimage.filters.uniform_filter1d(signal, size=scale, mode="nearest")[
-            scale - 1 : :
-        ]
+        coarse = scipy.ndimage.filters.uniform_filter1d(signal, size=scale, mode="nearest")
+        coarse = coarse[scale - 1 : :]
 
     elif method == "timeshift":
         coarse = np.transpose(np.reshape(signal[: scale * (n // scale)], (n // scale, scale)))

@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 
-from .complexity_embedding import complexity_embedding
 from .entropy_shannon import entropy_shannon
 from .entropy_symbolicdynamic import _complexity_symbolization
 

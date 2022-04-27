@@ -25,6 +25,7 @@ from .entropy_dispersion import entropy_dispersion
 from .entropy_distribution import entropy_distribution
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_grid import entropy_grid
+from .entropy_hierarchical import entropy_hierarchical
 from .entropy_increment import entropy_increment
 from .entropy_kolmogorov import entropy_kolmogorov
 from .entropy_multiscale import entropy_multiscale
@@ -165,6 +166,7 @@ __all__ = [
     "entropy_fuzzy",
     "complexity_fuzzyapen",
     "entropy_multiscale",
+    "entropy_hierarchical",
     "entropy_wiener",
     "entropy_permutation",
     "entropy_range",
