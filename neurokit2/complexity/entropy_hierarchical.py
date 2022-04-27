@@ -5,9 +5,12 @@ import numpy as np
 import pandas as pd
 
 from .entropy_sample import entropy_sample
+from .optim_complexity_tolerance import complexity_tolerance
 
 
-def entropy_hierarchical(signal, scale=3, show=False, **kwargs):
+def entropy_hierarchical(
+    signal, scale="default", dimension=2, tolerance="sd", show=False, **kwargs
+):
     """**Hierarchical Entropy (HEn)**
 
     Hierarchical Entropy (HEn) can be viewed as a generalization of the multiscale
@@ -22,7 +25,11 @@ def entropy_hierarchical(signal, scale=3, show=False, **kwargs):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     scale : int
-        The number of scale factors.
+        The maximum scale factor. Can only be a number of "default". Though it behaves a bit
+        differently here, see :func:`complexity_multiscale` for details.
+    dimension : int
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     method : str
         Method for symbolic sequence partitioning. Can be one of ``"MEP"`` (default),
         ``"linear"``, ``"uniform"``, ``"kmeans"``.
@@ -47,11 +54,11 @@ def entropy_hierarchical(signal, scale=3, show=False, **kwargs):
       import neurokit2 as nk
 
       # Simulate a Signal
-      signal = nk.signal_simulate(duration=20, sampling_rate=200, frequency=[5, 6], noise=0.5)
+      signal = nk.signal_simulate(duration=5, frequency=[97, 98, 100], noise=0.05)
 
       # Compute Hierarchical Entropy (HEn)
       @savefig p_entropy_hierarchical1.png scale=100%
-      hen, info = nk.entropy_hierarchical(signal, scale=5, show=True)
+      hen, info = nk.entropy_hierarchical(signal, show=True, scale=5, dimension=3)
       @suppress
       plt.close()
 
@@ -59,6 +66,9 @@ def entropy_hierarchical(signal, scale=3, show=False, **kwargs):
     ----------
     * Jiang, Y., Peng, C. K., & Xu, Y. (2011). Hierarchical entropy analysis for biological
       signals. Journal of Computational and Applied Mathematics, 236(5), 728-742.
+    * Li, W., Shen, X., & Li, Y. (2019). A comparative study of multiscale sample entropy and
+      hierarchical entropy and its application in feature extraction for ship-radiated noise.
+      Entropy, 21(8), 793.
 
     """
     # Sanity checks
@@ -67,8 +77,25 @@ def entropy_hierarchical(signal, scale=3, show=False, **kwargs):
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
+    # Get max scale
+    if isinstance(scale, str):
+        N = int(2 ** np.floor(np.log2(len(signal))))
+        # Max scale where N / (2 ** (scale - 1)) < 8
+        scale = 1
+        while N / (2 ** (scale - 1)) > 8 and scale < len(signal) / 2:
+            scale += 1
+
     # Store parameters
-    info = {}
+    info = {
+        "Scale": np.arange(1, scale + 1),
+        "Dimension": dimension,
+        "Tolerance": complexity_tolerance(
+            signal,
+            method=tolerance,
+            dimension=dimension,
+            show=False,
+        )[0],
+    }
 
     # TODO: Simplify this code, make it clearer and step by step, following the paper more closely
 
@@ -77,7 +104,8 @@ def entropy_hierarchical(signal, scale=3, show=False, **kwargs):
     HEns = np.zeros(len(Q))
     for T in range(len(Q)):
         Temp = Q[T, : int(N / (2 ** (int(np.log2(T + 1)))))]
-        HEns[T], _ = entropy_sample(Temp, delay=1)
+        # This could be exposed to have different type of entropy estimators
+        HEns[T], _ = entropy_sample(Temp, delay=1, dimension=dimension, tolerance=info["Tolerance"])
 
     Sn = np.zeros(scale)
     for t in range(scale):

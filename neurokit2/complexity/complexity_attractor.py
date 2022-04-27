@@ -6,8 +6,9 @@ import scipy
 def complexity_attractor(
     embedded="lorenz", alpha="time", color="last_dim", shadows=True, linewidth=1, **kwargs
 ):
-    """Attractor graph
+    """**Attractor Graph**
 
+    Create an attractor graph from an :func:`embedded <complexity_embedding>` time series.
 
     Parameters
     ----------
@@ -32,55 +33,89 @@ def complexity_attractor(
 
     Examples
     ---------
-    >>> import neurokit2 as nk
-    >>>
-    >>> # Lorenz attractors
-    >>> nk.complexity_attractor(color = "last_dim", alpha="time", duration=2) # doctest: +ELLIPSIS
-    <Figure ...
-    >>>
-    >>> # Fast result (fixed alpha and color)
-    >>> nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2) # doctest: +ELLIPSIS
-    <Figure ...
-    >>>
-    >>> # Rössler attractors
-    >>> nk.complexity_attractor("rossler", color = "blue", alpha=1, sampling_rate=5000) # doctest: +ELLIPSIS
-    <Figure ...
-    >>>
-    >>> # Simulate Signal
-    >>> signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency = [0.1, 5, 7, 10])
-    >>>
-    >>> # 2D Attractor
-    >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 2)
-    >>>
-    >>> # Fast (fixed alpha and color)
-    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1) # doctest: +ELLIPSIS
-    <Figure ...
-    >>>
-    >>> # Slow
-    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time") # doctest: +ELLIPSIS
-    <Figure ...
-    >>>
-    >>> # 3D Attractor
-    >>> embedded = nk.complexity_embedding(signal, delay = 3, dimension = 3)
-    >>>
-    >>> # Fast (fixed alpha and color)
-    >>> nk.complexity_attractor(embedded, color = "red", alpha = 1) # doctest: +ELLIPSIS
-    <Figure ...
-    >>>
-    >>> # Slow
-    >>> nk.complexity_attractor(embedded, color = "last_dim", alpha = "time") # doctest: +ELLIPSIS
-    <Figure ...
-    >>>
-    >>> # Animated rotation
-    >>> import matplotlib.animation as animation
-    >>> fig = nk.complexity_attractor(embedded, color = "black", alpha = 0.5, shadows=False)
-    >>>
-    >>> # ax = fig.get_axes()[0]
-    >>> # def rotate(angle):
-    >>> #     ax.view_init(azim=angle)
-    >>> # anim = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 361, 10), interval=10)
-    >>> # import IPython
-    >>> # IPython.display.HTML(anim.to_jshtml())
+    **Lorenz attractors**
+
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      @savefig p_complexity_attractor1.png scale=100%
+      fig = nk.complexity_attractor(color = "last_dim", alpha="time", duration=1)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Fast result (fixed alpha and color)
+      @savefig p_complexity_attractor2.png scale=100%
+      fig = nk.complexity_attractor(color = "red", alpha=1, sampling_rate=5000, linewidth=0.2)
+      @suppress
+      plt.close()
+
+    **Rössler attractors**
+    .. ipython:: python
+
+      @savefig p_complexity_attractor3.png scale=100%
+      nk.complexity_attractor("rossler", color = "blue", alpha=1, sampling_rate=5000)
+      @suppress
+      plt.close()
+
+    **2D Attractors using a signal**
+    .. ipython:: python
+
+      # Simulate Signal
+      signal = nk.signal_simulate(duration=10, sampling_rate=100, frequency = [0.1, 5, 7, 10])
+
+      # 2D Attractor
+      embedded = nk.complexity_embedding(signal, delay = 3, dimension = 2)
+
+      # Fast (fixed alpha and color)
+      @savefig p_complexity_attractor4.png scale=100%
+      nk.complexity_attractor(embedded, color = "red", alpha = 1)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Slow
+      @savefig p_complexity_attractor5.png scale=100%
+      nk.complexity_attractor(embedded, color = "last_dim", alpha = "time")
+      @suppress
+      plt.close()
+
+    **3D Attractors using a signal**
+    .. ipython:: python
+
+      # 3D Attractor
+      embedded = nk.complexity_embedding(signal, delay = 3, dimension = 3)
+
+      # Fast (fixed alpha and color)
+      @savefig p_complexity_attractor6.png scale=100%
+      nk.complexity_attractor(embedded, color = "red", alpha = 1)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # Slow
+      @savefig p_complexity_attractor7.png scale=100%
+      nk.complexity_attractor(embedded, color = "last_dim", alpha = "time")
+      @suppress
+      plt.close()
+
+    **Animated Rotation**
+    .. ipython:: python
+
+      import matplotlib.animation as animation
+      import IPython
+
+      fig = nk.complexity_attractor(embedded, color = "black", alpha = 0.5, shadows=False)
+
+      ax = fig.get_axes()[0]
+      def rotate(angle):
+          ax.view_init(azim=angle)
+      anim = animation.FuncAnimation(fig, rotate, frames=np.arange(0, 361, 10), interval=10)
+      IPython.display.HTML(anim.to_jshtml())
 
 
     """

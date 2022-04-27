@@ -72,7 +72,7 @@ def entropy_multiscale(
         ``range(len(signal) / (dimension + 10))`` (see discussion
         `here <https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426>`_).
         If 'max', will use all scales until half the length of the signal. If an integer, will
-        create a range until the specified int.
+        create a range until the specified int. See :func:`complexity_coarsegraining` for details.
     dimension : int
         Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
         :func:`complexity_dimension()` to estimate the optimal value for this parameter.

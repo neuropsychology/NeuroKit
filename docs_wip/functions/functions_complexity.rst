@@ -178,6 +178,10 @@ Utilities
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_simulate
 
+*complexity_attractor()*
+""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_attractor
+
 *complexity_coarsegraining()*
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_coarsegraining
