@@ -31,6 +31,11 @@ def complexity_attractor(
         to the Lorenz system simulator, such as ``duration`` (default = 100), ``sampling_rate``
         (default = 10), ``sigma`` (default = 10), ``beta`` (default = 8/3), ``rho`` (default = 28).
 
+    See Also
+    ------------
+    complexity_embeddding
+
+
     Examples
     ---------
     **Lorenz attractors**
@@ -76,6 +81,8 @@ def complexity_attractor(
       plt.close()
 
     .. ipython:: python
+
+      embedded = nk.complexity_embedding(signal, delay = 3, dimension = 2)
 
       # Slow
       @savefig p_complexity_attractor5.png scale=100%
