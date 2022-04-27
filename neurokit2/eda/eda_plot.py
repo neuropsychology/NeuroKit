@@ -8,7 +8,7 @@ from ..misc import find_closest
 
 
 def eda_plot(eda_signals, sampling_rate=None):
-    """Visualize electrodermal activity (EDA) data.
+    """**Visualize electrodermal activity (EDA) data**
 
     Parameters
     ----------
@@ -24,12 +24,16 @@ def eda_plot(eda_signals, sampling_rate=None):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)
-    >>> eda_signals, info = nk.eda_process(eda_signal, sampling_rate=250)
-    >>> fig = nk.eda_plot(eda_signals)
-    >>> fig #doctest: +SKIP
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      eda_signal = nk.eda_simulate(duration=30, scr_number=5, drift=0.1, noise=0, sampling_rate=250)
+      eda_signals, info = nk.eda_process(eda_signal, sampling_rate=250)
+      @savefig p_eda_plot1.png scale=100%
+      fig = nk.eda_plot(eda_signals)
+      @suppress
+      plt.close()
 
     See Also
     --------
@@ -89,7 +93,7 @@ def eda_plot(eda_signals, sampling_rate=None):
     ax2.set_title("Skin Conductance Level (SCL)")
     ax2.plot(x_axis, eda_signals["EDA_Tonic"], color="#673AB7", label="Tonic Component", linewidth=1.5)
     ax2.legend(loc="upper right")
-    plt.show()
+    # plt.show()
     return fig
 
 
