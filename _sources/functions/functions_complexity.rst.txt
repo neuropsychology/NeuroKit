@@ -65,7 +65,7 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_differential
 
 *entropy_tsallis()*
-"""""""""""""""""""
+"""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_tsallis
 
 *entropy_renyi()*
@@ -73,7 +73,7 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_renyi
 
 *entropy_cumulative_residual()*
-"""""""""""""""""""
+"""""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_cumulative_residual
 
 *entropy_svd()*
@@ -93,11 +93,11 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_grid
 
 *entropy_attention()*
-"""""""""""""""""""
+"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_attention
 
 *entropy_increment()*
-"""""""""""""""""""
+"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_increment
 
 *entropy_slope()*
@@ -105,19 +105,19 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_slope
 
 *entropy_symbolicdynamic()*
-"""""""""""""""""""
+"""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_symbolicdynamic
 
 *entropy_dispersion()*
-"""""""""""""""""""
+"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_dispersion
 
 *entropy_ofentropy()*
-"""""""""""""""""""
+"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_ofentropy
 
 *entropy_approximate()*
-""""""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_approximate
 
 *entropy_sample()*
@@ -141,11 +141,11 @@ Entropy
 .. autofunction:: neurokit2.complexity.entropy_fuzzy
 
 *entropy_multiscale()*
-""""""""""""""""""""
+""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_multiscale
 
 *entropy_hierarchical()*
-""""""""""""""""""""
+""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_hierarchical
 
 
@@ -156,7 +156,7 @@ Other
 .. autofunction:: neurokit2.complexity.fisher_information
 
 *complexity_hjorth()*
-"""""""""""""""""""""
+"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth
 
 *complexity_rr()*
@@ -178,10 +178,14 @@ Utilities
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_simulate
 
-*complexity_coarsegraining()*
+*complexity_attractor()*
 """"""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_attractor
+
+*complexity_coarsegraining()*
+""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_coarsegraining
 
 *complexity_ordinalpatterns*
-""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_ordinalpatterns
