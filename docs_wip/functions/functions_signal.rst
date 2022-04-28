@@ -33,5 +33,23 @@ Main
 
 *signal_findpeaks()*
 """""""""""""""""""""
-.. autofunction:: neurokit2.signal_findpeaks"
+.. autofunction:: neurokit2.signal_findpeaks
+
+*signal_fixpeaks()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_fixpeaks
+
+*signal_flatline()*
+""""""""""""""""""""
+.. autofunction:: neurokit2.signal_flatline
+
+*signal_formatpeaks()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_formatpeaks
+
+*signal_interpolate()*
+"""""""""""""""""""""""
+.. autofunction:: neurokit2.signal_interpolate
+
+
 
