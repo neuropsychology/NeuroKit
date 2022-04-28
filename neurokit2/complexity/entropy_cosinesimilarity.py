@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 
 from ..stats import rescale
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 from .optim_complexity_tolerance import complexity_tolerance
 
 

@@ -5,7 +5,7 @@ import pandas as pd
 import sklearn.metrics.pairwise
 
 from ..misc import expspace
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 
 
 def fractal_correlation(signal, delay=1, dimension=2, radius=64, show=False, **kwargs):

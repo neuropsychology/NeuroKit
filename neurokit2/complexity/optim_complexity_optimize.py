@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import scipy.spatial
 
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 from .entropy_approximate import entropy_approximate
 from .optim_complexity_delay import (
     _embedding_delay_metric,

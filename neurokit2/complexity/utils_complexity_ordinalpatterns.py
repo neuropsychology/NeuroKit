@@ -1,6 +1,6 @@
 import numpy as np
 
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 
 
 def complexity_ordinalpatterns(signal, delay=1, dimension=3, algorithm="quicksort", **kwargs):

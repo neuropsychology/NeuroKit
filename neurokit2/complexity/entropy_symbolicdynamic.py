@@ -4,7 +4,7 @@ import scipy.cluster.vq
 import scipy.special
 
 from ..stats import standardize
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 
 
 def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):

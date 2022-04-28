@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial
 
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 from .optim_complexity_tolerance import complexity_tolerance
 
 

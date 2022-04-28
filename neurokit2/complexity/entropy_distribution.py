@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 from .entropy_shannon import entropy_shannon
 
 

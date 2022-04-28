@@ -4,7 +4,7 @@ from warnings import warn
 import numpy as np
 
 from ..misc import NeuroKitWarning
-from .complexity_attractor import _attractor_equation, complexity_attractor
+from .utils_complexity_attractor import _attractor_equation, complexity_attractor
 
 
 def complexity_embedding(signal, delay=1, dimension=3, show=False, **kwargs):

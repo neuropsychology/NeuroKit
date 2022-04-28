@@ -3,7 +3,7 @@ import numpy as np
 import sklearn.metrics
 import sklearn.neighbors
 
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 
 # =============================================================================
 # Phi

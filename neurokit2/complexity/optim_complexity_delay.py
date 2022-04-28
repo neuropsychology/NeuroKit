@@ -12,7 +12,7 @@ import scipy.stats
 
 from ..misc import NeuroKitWarning, find_closest
 from ..signal import signal_autocor, signal_findpeaks, signal_psd, signal_zerocrossings
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 from .information_mutual import mutual_information
 
 

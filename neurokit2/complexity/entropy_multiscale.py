@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from .complexity_coarsegraining import _get_scales, complexity_coarsegraining
 from .entropy_approximate import entropy_approximate
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_increment import entropy_increment
@@ -15,6 +14,8 @@ from .entropy_slope import entropy_slope
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _phi, _phi_divide
+from .utils_complexity_coarsegraining import (_get_scales,
+                                              complexity_coarsegraining)
 
 
 def entropy_multiscale(

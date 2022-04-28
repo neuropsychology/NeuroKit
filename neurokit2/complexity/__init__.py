@@ -2,18 +2,17 @@
 import functools
 
 from .complexity import complexity
-from .complexity_attractor import complexity_attractor
-from .complexity_coarsegraining import complexity_coarsegraining
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_coarsegraining import complexity_coarsegraining
+from .utils_complexity_embedding import complexity_embedding
 from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
-from .complexity_ordinalpatterns import complexity_ordinalpatterns
+from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
 from .complexity_recurrence import complexity_recurrence
 from .complexity_rqa import complexity_rqa
 from .complexity_rr import complexity_rr
-from .complexity_simulate import complexity_simulate
+from .utils_complexity_simulate import complexity_simulate
 from .entropy_approximate import entropy_approximate
 from .entropy_attention import entropy_attention
 from .entropy_bubble import entropy_bubble
@@ -59,7 +58,8 @@ from .optim_complexity_k import complexity_k
 from .optim_complexity_optimize import complexity_optimize
 from .optim_complexity_tolerance import complexity_tolerance
 from .TODO_entropy_wiener import entropy_wiener
-from .transition_matrix import transition_matrix, transition_matrix_simulate
+from .utils_transition_matrix import transition_matrix, transition_matrix_simulate
+from .utils_complexity_attractor import complexity_attractor
 
 # Aliases
 complexity_se = entropy_shannon

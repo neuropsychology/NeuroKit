@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 
-from .complexity_attractor import _attractor_lorenz
+from .utils_complexity_attractor import _attractor_lorenz
 
 
 def complexity_simulate(

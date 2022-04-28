@@ -5,7 +5,7 @@ import numpy as np
 import scipy.spatial
 
 from ..stats import density
-from .complexity_embedding import complexity_embedding
+from .utils_complexity_embedding import complexity_embedding
 from .utils import _phi
 
 

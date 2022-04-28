@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from .complexity_ordinalpatterns import complexity_ordinalpatterns
+from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
 from .entropy_shannon import entropy_shannon
 
 
