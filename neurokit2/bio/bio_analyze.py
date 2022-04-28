@@ -22,8 +22,8 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
     ----------
     data : DataFrame
         The DataFrame containing all the processed signals, typically
-        produced by :func:`.bio_process()`, :func:`ecg_process()`, :func:`rsp_process()`,
-        :func:`eda_process()`, :func:`emg_process()` or :func:`eog_process()`. Can also be an
+        produced by :func:`.bio_process`, :func:`.ecg_process`, :func:`.rsp_process`,
+        :func:`.eda_process`, :func:`.emg_process` or :func:`.eog_process`. Can also be an
         epochs object.
     sampling_rate : int
         The sampling frequency of the signals (in Hz, i.e., samples/second).
@@ -41,10 +41,10 @@ def bio_analyze(data, sampling_rate=1000, method="auto", window_lengths="constan
     Returns
     ----------
     DataFrame
-        DataFrame of the analyzed bio features. See docstrings of :func:`ecg_analyze()`,
-        :func:`rsp_analyze()`, :func:`eda_analyze()`, :func:`emg_analyze()` and
-        :func:`eog_analyze()` for more details. Also returns Respiratory Sinus Arrhythmia features
-        produced by :func:`hrv_rsa()` if interval-related analysis is carried out.
+        DataFrame of the analyzed bio features. See docstrings of :func:`.ecg_analyze()`,
+        :func:`.rsp_analyze()`, :func:`.eda_analyze()`, :func:`.emg_analyze()` and
+        :func:`.eog_analyze()` for more details. Also returns Respiratory Sinus Arrhythmia features
+        produced by :func:`.hrv_rsa()` if interval-related analysis is carried out.
 
     See Also
     ----------
