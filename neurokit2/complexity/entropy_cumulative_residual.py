@@ -3,7 +3,7 @@ import itertools
 import numpy as np
 import pandas as pd
 
-from .fractal_petrosian import _complexity_binarize
+from .utils_complexity_symbolize import complexity_symbolize
 
 
 def entropy_cumulative_residual(signal, method=None, show=False):
@@ -18,7 +18,7 @@ def entropy_cumulative_residual(signal, method=None, show=False):
 
     Similarly to :func:`Shannon entropy <entropy_shannon>` and :func:`Petrosian fractal dimension
     <fractal_petrosian>`, different methods to transform continuous signals into discrete ones are
-    available. See :func:`fractal_petrosian` for details.
+    available. See :func:`complexity_symbolize` for details.
 
     This function can be called either via ``entropy_cumulative_residual()`` or ``complexity_cren()``.
 
@@ -28,9 +28,9 @@ def entropy_cumulative_residual(signal, method=None, show=False):
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str or int
-        Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
+        Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
         ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
-        cases when the binarization has already been done before). See :func:`fractal_petrosian`
+        cases when the binarization has already been done before). See :func:`complexity_symbolize`
         for details.
     show : bool
         If ``True``, will show the discrete the signal.
@@ -75,7 +75,7 @@ def entropy_cumulative_residual(signal, method=None, show=False):
 
     # Make discrete
     if np.isscalar(signal) is False:
-        signal, _ = _complexity_binarize(signal, method=method, show=show)
+        signal = complexity_symbolize(signal, method=method, show=show)
 
     # Get probability of each event
     valscount = pd.Series(signal).value_counts(sort=True)

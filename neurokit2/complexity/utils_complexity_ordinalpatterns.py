@@ -43,16 +43,16 @@ def complexity_ordinalpatterns(signal, delay=1, dimension=3, algorithm="quicksor
 
       signal = [4, 7, 9, 10, 6, 11, 3]
 
-      patterns, freqs, info = nk.complexity_ordinalpatterns(signal, delay=1, dimension=3)
+      patterns, info = nk.complexity_ordinalpatterns(signal, delay=1, dimension=3)
       patterns
-      freqs
+      info["Frequencies"]
 
     .. ipython:: python
 
       signal = [4, 7, 9, 10, 6, 5, 3, 6, 8, 9, 5, 1, 0]
 
-      patterns, freqs, info = nk.complexity_ordinalpatterns(signal, algorithm="bubblesort")
-      freqs
+      patterns, info = nk.complexity_ordinalpatterns(signal, algorithm="bubblesort")
+      info["Frequencies"]
 
 
     References
@@ -73,13 +73,16 @@ def complexity_ordinalpatterns(signal, delay=1, dimension=3, algorithm="quicksor
         info["Permutations"] = info["Embedded"].argsort(kind="quicksort")
 
     # Count and get unique patterns
-    patterns, freq = np.unique(info["Permutations"], axis=0, return_counts=True)
+    patterns, info["Uniques"], info["Frequencies"] = np.unique(info["Permutations"],
+                                                axis=0,
+                                                return_inverse=True,
+                                                return_counts=True,)
 
     # Relative Frequency
-    freq = freq / freq.sum()
+    info["Frequencies"] = info["Frequencies"] / info["Frequencies"].sum()
 
     # all_symbols = np.array(list(map(np.array, list(itertools.permutations(np.arange(delay * dimension))))))
-    return patterns, freq, info
+    return patterns, info
 
 
 def _bubblesort(embedded):

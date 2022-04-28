@@ -11,15 +11,35 @@ def complexity_hjorth(signal):
     NeuroKit returns complexity directly in the output tuple, but the other parameters can be found
     in the dictionary.
 
+
+    * The **activity** parameter is simply the variance of the signal.
+
+      .. math::
+
+        Activity = \\sigma_{signal}^2
+
+      :math:`\sigma_{x}^2` is the mean power of a signal :math:`x`. That is, its variance, if its
+      mean is zero.
+
     * The **complexity** parameter gives an estimate of the bandwidth of the signal, which
       indicates the similarity of the shape of the signal to a pure sine wave (for which the
       value converges to 1). In other words, it is a measure of the "excessive details" with
       reference to the "softest" possible curve shape. The Complexity parameter is defined as the
       ratio of the mobility of the first derivative of the signal to the mobility of the signal.
+
+      .. math::
+
+        Complexity = \\sigma_{d}/ \\sigma_{signal}
+
     * The **mobility** parameter represents the mean frequency or the proportion of standard
       deviation of the power spectrum. This is defined as the square root of variance of the
       first derivative of the signal divided by the variance of the signal.
-    * The **activity** parameter is simply the variance of the signal.
+
+      .. math::
+
+        Mobility = \\frac{\sigma_{dd}/ \\sigma_{d}}{Complexity}
+
+    :math:`d` and :math:`dd` represent the first and second derivatives of the signal, respectively.
 
     Hjorth (1970) illustrated the parameters as follows:
 

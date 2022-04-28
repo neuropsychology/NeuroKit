@@ -182,6 +182,10 @@ Utilities
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_attractor
 
+*complexity_symbolize*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_symbolize
+
 *complexity_coarsegraining()*
 """"""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_coarsegraining
@@ -189,3 +193,4 @@ Utilities
 *complexity_ordinalpatterns*
 """"""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_ordinalpatterns
+

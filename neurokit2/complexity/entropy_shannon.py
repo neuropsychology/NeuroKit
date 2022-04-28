@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import scipy.stats
 
-from .fractal_petrosian import _complexity_binarize
+from .utils_complexity_symbolize import complexity_symbolize
 
 
 def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **kwargs):
@@ -23,9 +23,8 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
     Because Shannon entropy was meant for symbolic sequences (discrete events such as ["A", "B",
     "B", "A"]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
     the signal into a number of bins using for instance ``pd.cut(signal, bins=100, labels=False)``.
-    This can be done automatically using the ``method`` argument, which is the same as in
-    :func:`fractal_petrosian`. This means that methods *A*, *B*, *C*, *D*, and *r* are also
-    available.
+    This can be done automatically using the ``method`` argument, which will be transferred to :
+    func:`complexity_symbolize`.
 
     This function can be called either via ``entropy_shannon()`` or ``complexity_se()``.
 
@@ -37,9 +36,9 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
         The logarithmic base to use, defaults to ``2``. Note that ``scipy.stats.entropy()``
         uses ``np.e`` as default (the natural logarithm).
     method : str or int
-        Method of discretization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
+        Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
         ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
-        cases when the binarization has already been done before). See :func:`fractal_petrosian`
+        cases when the binarization has already been done before). See :func:`complexity_symbolize`
         for details.
     show : bool
         If ``True``, will show the discrete the signal.
@@ -132,6 +131,6 @@ def _entropy_freq(signal, method=None, show=False):
 
     # Make discrete
     if np.isscalar(signal) is False:
-        signal, _ = _complexity_binarize(signal, method=method, show=show)
+        signal = complexity_symbolize(signal, method=method, show=show)
 
     return np.unique(signal, return_counts=True)[1]
