@@ -1,4 +1,4 @@
- # - * - coding: utf-8 - * -
+# - * - coding: utf-8 - * -
 import matplotlib.patches
 import matplotlib.pyplot as plt
 import numpy as np
@@ -24,7 +24,8 @@ def signal_fixpeaks(
 ):
     """**Correct Erroneous Peak Placements**
 
-    Identify and correct erroneous peak placements based on outliers in peak-to-peak differences (period).
+    Identify and correct erroneous peak placements based on outliers in peak-to-peak differences
+    (period).
 
     Parameters
     ----------
@@ -65,7 +66,8 @@ def signal_fixpeaks(
     peaks_clean : array
         The corrected peak locations.
     artifacts : dict
-        Only if method="Kubios". A dictionary containing the indices of artifacts, accessible with the keys "ectopic", "missed", "extra", and "longshort".
+        Only if method="Kubios". A dictionary containing the indices of artifacts, accessible with
+        the keys "ectopic", "missed", "extra", and "longshort".
 
     See Also
     --------
