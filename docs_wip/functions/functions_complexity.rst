@@ -159,6 +159,10 @@ Other
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth
 
+*complexity_lempelziv()*
+""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_lempelziv
+
 *complexity_rr()*
 """"""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_rr

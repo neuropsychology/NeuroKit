@@ -15,8 +15,7 @@ from .entropy_slope import entropy_slope
 from .entropy_symbolicdynamic import entropy_symbolicdynamic
 from .optim_complexity_tolerance import complexity_tolerance
 from .utils import _phi, _phi_divide
-from .utils_complexity_coarsegraining import (_get_scales,
-                                              complexity_coarsegraining)
+from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegraining
 
 
 def entropy_multiscale(
@@ -250,12 +249,14 @@ def entropy_multiscale(
     algorithm = entropy_sample
     refined = False
     coarsegraining = "nonoverlapping"
-    if method in ["MSEn", "SampEn", "MSApEn", "ApEn", "MSPEn", "PEn", "MSWPEn"]:
+    if method in ["MSEn", "SampEn"]:
+        pass  # The default arguments are good
+    elif method in ["MSApEn", "ApEn", "MSPEn", "PEn", "MSWPEn", "WPEn"]:
         if method in ["MSApEn", "ApEn"]:
             algorithm = entropy_approximate
         if method in ["MSPEn", "PEn"]:
             algorithm = entropy_permutation
-        if method in ["MSWPEn"]:
+        if method in ["MSWPEn", "WPEn"]:
             algorithm = functools.partial(entropy_permutation, weighted=True)
     elif method in ["MMSEn", "MMSPEn", "MMSWPEn"]:
         coarsegraining = "rolling"
@@ -285,6 +286,8 @@ def entropy_multiscale(
         algorithm = entropy_slope
     elif method in ["MSLZC", "LZC"]:
         algorithm = complexity_lempelziv
+    elif method in ["MSPLZC", "PLZC"]:
+        algorithm = functools.partial(complexity_lempelziv, permutation=True)
     elif method in ["MSSyDyEn", "SyDyEn", "MMSyDyEn"]:
         algorithm = entropy_symbolicdynamic
         if method in ["MMSyDyEn"]:
@@ -296,6 +299,7 @@ def entropy_multiscale(
             "'MSPEn', 'CMSPEn', 'MMSPEn', 'IMSPEn',"
             "'MSWPEn', 'CMSWPEn', 'MMSWPEn', 'IMSWPEn',"
             "'MSCoSiEn', 'MSIncrEn', 'MSSlopEn', 'MSSyDyEn'"
+            "'MSLZC', 'MSPLZC'"
             " or 'MSApEn' (case sensitive)."
         )
 

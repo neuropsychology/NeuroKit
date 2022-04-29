@@ -1118,33 +1118,59 @@ def run_benchmark(noise_intensity=0.01):
                     ),
                 ]
             )
-            # rez = pd.concat(
-            #     [
-            #         rez,
-            #         time_function(
-            #             signal_,
-            #             nk.complexity_lempelziv,
-            #             index="LZC",
-            #             name="nk_complexity_lempelziv",
-            #             delay=delay,
-            #             dimension=3,
-            #         ),
-            #     ]
-            # )
-            # rez = pd.concat(
-            #     [
-            #         rez,
-            #         time_function(
-            #             signal_,
-            #             nk.complexity_lempelziv,
-            #             index="PLZC",
-            #             name="nk_complexity_lempelziv",
-            #             delay=delay,
-            #             dimension=3,
-            #             permutation=True,
-            #         ),
-            #     ]
-            # )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_lempelziv,
+                        index="LZC",
+                        name="nk_complexity_lempelziv",
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_lempelziv,
+                        index="PLZC",
+                        name="nk_complexity_lempelziv",
+                        delay=delay,
+                        dimension=3,
+                        permutation=True,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_lempelziv,
+                        index="MSLZC",
+                        name="nk_entropy_permutation",
+                        method="LZC",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_lempelziv,
+                        index="MSPLZC",
+                        name="nk_entropy_permutation",
+                        method="PLZC",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
 
             # Add info
             rez["Length"] = len(signal_)
