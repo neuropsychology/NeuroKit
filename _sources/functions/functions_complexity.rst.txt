@@ -72,9 +72,9 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_renyi
 
-*entropy_cumulative_residual()*
+*entropy_cumulativeresidual()*
 """""""""""""""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_cumulative_residual
+.. autofunction:: neurokit2.complexity.entropy_cumulativeresidual
 
 *entropy_svd()*
 """""""""""""""""
@@ -159,6 +159,10 @@ Other
 """""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hjorth
 
+*complexity_lempelziv()*
+""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_lempelziv
+
 *complexity_rr()*
 """"""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_rr
@@ -182,6 +186,10 @@ Utilities
 """"""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_attractor
 
+*complexity_symbolize*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_symbolize
+
 *complexity_coarsegraining()*
 """"""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_coarsegraining
@@ -189,3 +197,4 @@ Utilities
 *complexity_ordinalpatterns*
 """"""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_ordinalpatterns
+

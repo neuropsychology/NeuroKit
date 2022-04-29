@@ -560,9 +560,9 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#entropy-cumulative-residual">
+    <a class="reference internal nav-link" href="#entropy-cumulativeresidual">
      <em>
-      entropy_cumulative_residual()
+      entropy_cumulativeresidual()
      </em>
     </a>
    </li>
@@ -714,6 +714,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-lempelziv">
+     <em>
+      complexity_lempelziv()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#complexity-rr">
      <em>
       complexity_rr()
@@ -752,6 +759,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#complexity-attractor">
      <em>
       complexity_attractor()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-symbolize">
+     <em>
+      complexity_symbolize
      </em>
     </a>
    </li>
@@ -922,9 +936,9 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#entropy-cumulative-residual">
+    <a class="reference internal nav-link" href="#entropy-cumulativeresidual">
      <em>
-      entropy_cumulative_residual()
+      entropy_cumulativeresidual()
      </em>
     </a>
    </li>
@@ -1076,6 +1090,13 @@ title="Print to PDF"
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-lempelziv">
+     <em>
+      complexity_lempelziv()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#complexity-rr">
      <em>
       complexity_rr()
@@ -1114,6 +1135,13 @@ title="Print to PDF"
     <a class="reference internal nav-link" href="#complexity-attractor">
      <em>
       complexity_attractor()
+     </em>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#complexity-symbolize">
+     <em>
+      complexity_symbolize
      </em>
     </a>
    </li>
@@ -1203,7 +1231,7 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="gp">In [4]: </span><span class="n">df</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">       ApEn      CREn    DiffEn  ...     ShanEn      SpEn     WPEn</span>
-<span class="go">0  0.162527 -0.009219  0.303891  ...  11.271005  0.094806  0.98896</span>
+<span class="go">0  0.162527  0.628836  0.303891  ...  11.271005  0.094806  0.98896</span>
 
 <span class="go">[1 rows x 23 columns]</span>
 </pre></div>
@@ -1829,7 +1857,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [11]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">random</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">KFD</span>
-<span class="gh">Out[12]: </span><span class="go">1.8799573656894768</span>
+<span class="gh">Out[12]: </span><span class="go">2.1633040973868036</span>
 
 <span class="gp">In [13]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="n">simple</span><span class="p">)</span>
 
@@ -1839,7 +1867,7 @@ for consistency with other functions).</p></li>
 <span class="gp">In [15]: </span><span class="n">KFD</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_katz</span><span class="p">(</span><span class="nb">complex</span><span class="p">)</span>
 
 <span class="gp">In [16]: </span><span class="n">KFD</span>
-<span class="gh">Out[16]: </span><span class="go">3.9630022109366823</span>
+<span class="gh">Out[16]: </span><span class="go">3.928694736136611</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -1859,22 +1887,10 @@ Computers in Biology and Medicine, 18(3), 145-156. doi:10.1016/0010-4825(88)9004
 <p>Petrosian (1995) proposed a fast method to estimate the fractal dimension by converting the
 signal into a binary sequence from which the fractal dimension is estimated. Several variations
 of the algorithm exist (e.g., ‘A’, ‘B’, ‘C’ or ‘D’), primarily differing in the way the discrete
-sequence is created.</p>
-<p><strong>How to transform a continuous signal into a discrete one?</strong></p>
-<ul class="simple">
-<li><p><strong>Method ‘A’</strong> binarizes the signal by higher vs. lower values as compated to the signal’s
-mean.</p></li>
-<li><p><strong>Method ‘B’</strong> uses values that are within the mean +/- 1 SD band vs. values that are outside
-this band.</p></li>
-<li><p><strong>Method ‘C’</strong> computes the difference between consecutive samples and binarizes depending on
-their sign.</p></li>
-<li><p><strong>Method ‘D’</strong> forms separates consecutive samples that exceed 1 signal’s SD from the others
-smaller changes.</p></li>
-<li><p><strong>Method ‘r’</strong> is based on the concept of <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-func docutils literal notranslate"><span class="pre">*tolerance*</span></code></a>, and
-will separate consecutive samples that exceed a given tolerance threshold, by default
-<span class="math notranslate nohighlight">\(0.2 * SD\)</span>. See <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_tolerance()</span></code></a> for more details.</p></li>
-<li><p><strong>Binning</strong>: If an integer <em>n</em> is passed, will bin the signal into <em>n</em> equal-width bins.</p></li>
-</ul>
+(symbolic) sequence is created (see func:<cite>complexity_symbolize</cite> for details). The most common
+method (‘C’, by default) binarizes the signal by the sign of consecutive differences.</p>
+<div class="math notranslate nohighlight">
+\[\frac{log(N)}{log(N) + log(\frac{N}{N+0.4N_{\delta}})}\]</div>
 <p>Most of these methods assume that the signal is periodic (without a linear trend). Linear
 detrending might be useful to eliminate linear trends (see <code class="xref py py-func docutils literal notranslate"><span class="pre">signal_detrend()</span></code>).</p>
 <div class="admonition seealso">
@@ -1885,9 +1901,10 @@ detrending might be useful to eliminate linear trends (see <code class="xref py 
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
-<li><p><strong>method</strong> (<em>str or int</em>) – Method of discretization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
+<li><p><strong>method</strong> (<em>str or int</em>) – Method of symbolization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
 <code class="docutils literal notranslate"><span class="pre">int</span></code> indicating the number of bins, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to skip the process (for instance, in
-cases when the binarization has already been done before).</p></li>
+cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.complexity_symbolize" title="neurokit2.complexity.complexity_symbolize"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_symbolize()</span></code></a>
+for details.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the discrete the signal.</p></li>
 </ul>
 </dd>
@@ -1905,57 +1922,15 @@ to compute PFD.</p></li>
 
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">])</span>
 
-<span class="gp">In [3]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_fractal_petrosian1.png"><img alt="../_images/p_fractal_petrosian1.png" src="../_images/p_fractal_petrosian1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">pfd</span>
-<span class="gh">Out[4]: </span><span class="go">1.02455331903282</span>
+<span class="gh">Out[4]: </span><span class="go">1.0012592763505226</span>
 
 <span class="gp">In [5]: </span><span class="n">info</span>
-<span class="gh">Out[5]: </span><span class="go">{&#39;Method&#39;: &#39;A&#39;}</span>
-</pre></div>
-</div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_fractal_petrosian2.png"><img alt="../_images/p_fractal_petrosian2.png" src="../_images/p_fractal_petrosian2.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">pfd</span>
-<span class="gh">Out[7]: </span><span class="go">1.0183040659345393</span>
-</pre></div>
-</div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_fractal_petrosian3.png"><img alt="../_images/p_fractal_petrosian3.png" src="../_images/p_fractal_petrosian3.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">pfd</span>
-<span class="gh">Out[9]: </span><span class="go">1.0012585660009627</span>
-</pre></div>
-</div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
-
-<span class="gp">In [11]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_fractal_petrosian4.png"><img alt="../_images/p_fractal_petrosian4.png" src="../_images/p_fractal_petrosian4.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [12]: </span><span class="n">pfd</span>
-<span class="gh">Out[12]: </span><span class="go">1.003465819653409</span>
-</pre></div>
-</div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [13]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_fractal_petrosian5.png"><img alt="../_images/p_fractal_petrosian5.png" src="../_images/p_fractal_petrosian5.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [14]: </span><span class="n">pfd</span>
-<span class="gh">Out[14]: </span><span class="go">1.0304017735337727</span>
-</pre></div>
-</div>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">pfd</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_petrosian</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="mi">6</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/p_fractal_petrosian6.png"><img alt="../_images/p_fractal_petrosian6.png" src="../_images/p_fractal_petrosian6.png" style="width: 640.0px; height: 480.0px;" /></a>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">pfd</span>
-<span class="gh">Out[16]: </span><span class="go">1.028990137717698</span>
+<span class="gh">Out[5]: </span><span class="go">{&#39;Method&#39;: &#39;C&#39;}</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2095,7 +2070,7 @@ consistency with other functions).</p></li>
 <span class="gp">In [9]: </span><span class="n">nld</span> <span class="o">=</span> <span class="p">[</span><span class="n">nk</span><span class="o">.</span><span class="n">fractal_nld</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">windows</span><span class="p">]</span>
 
 <span class="gp">In [10]: </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">nld</span><span class="p">)</span>  <span class="c1"># Get average</span>
-<span class="gh">Out[10]: </span><span class="go">0.5912541614846617</span>
+<span class="gh">Out[10]: </span><span class="go">0.5919182285869364</span>
 </pre></div>
 </div>
 <p><strong>Example 3</strong>: Calculate FD-NLD on sliding windows</p>
@@ -2171,7 +2146,7 @@ to perform PSD slope analysis.</p></li>
 <span class="gp">In [3]: </span><span class="n">psdslope</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">fractal_psdslope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">psdslope</span>
-<span class="gh">Out[4]: </span><span class="go">2.659133329182822</span>
+<span class="gh">Out[4]: </span><span class="go">2.6586959814132385</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2235,7 +2210,7 @@ to compute Higuchi’s fractal dimension.</p></li>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi1.png"><img alt="../_images/p_fractal_higuchi1.png" src="../_images/p_fractal_higuchi1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <a class="reference internal image-reference" href="../_images/p_fractal_higuchi2.png"><img alt="../_images/p_fractal_higuchi2.png" src="../_images/p_fractal_higuchi2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hfd</span>
-<span class="gh">Out[5]: </span><span class="go">1.935824136936682</span>
+<span class="gh">Out[5]: </span><span class="go">1.8919224286057372</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2269,9 +2244,8 @@ introduced by Shannon (1948) to quantify the amount of information in a variable
 <p>Because Shannon entropy was meant for symbolic sequences (discrete events such as [“A”, “B”,
 “B”, “A”]), it does not do well with continuous signals. One option is to binarize (i.e., cut)
 the signal into a number of bins using for instance <code class="docutils literal notranslate"><span class="pre">pd.cut(signal,</span> <span class="pre">bins=100,</span> <span class="pre">labels=False)</span></code>.
-This can be done automatically using the <code class="docutils literal notranslate"><span class="pre">method</span></code> argument, which is the same as in
-<a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a>. This means that methods <em>A</em>, <em>B</em>, <em>C</em>, <em>D</em>, and <em>r</em> are also
-available.</p>
+This can be done automatically using the <code class="docutils literal notranslate"><span class="pre">method</span></code> argument, which will be transferred to :
+func:<cite>complexity_symbolize</cite>.</p>
 <p>This function can be called either via <code class="docutils literal notranslate"><span class="pre">entropy_shannon()</span></code> or <code class="docutils literal notranslate"><span class="pre">complexity_se()</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -2279,9 +2253,9 @@ available.</p>
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
 <li><p><strong>base</strong> (<em>float</em>) – The logarithmic base to use, defaults to <code class="docutils literal notranslate"><span class="pre">2</span></code>. Note that <code class="docutils literal notranslate"><span class="pre">scipy.stats.entropy()</span></code>
 uses <code class="docutils literal notranslate"><span class="pre">np.e</span></code> as default (the natural logarithm).</p></li>
-<li><p><strong>method</strong> (<em>str or int</em>) – Method of discretization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
+<li><p><strong>method</strong> (<em>str or int</em>) – Method of symbolization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
 <code class="docutils literal notranslate"><span class="pre">int</span></code> indicating the number of bins, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to skip the process (for instance, in
-cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a>
+cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.complexity_symbolize" title="neurokit2.complexity.complexity_symbolize"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_symbolize()</span></code></a>
 for details.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the discrete the signal.</p></li>
 <li><p><strong>freq</strong> (<em>np.array</em>) – Instead of a signal, a vector of probabilities can be provided (used for instance in
@@ -2300,7 +2274,7 @@ to compute Shannon entropy.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.complexity.entropy_differential" title="neurokit2.complexity.entropy_differential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_differential</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_cumulative_residual" title="neurokit2.complexity.entropy_cumulative_residual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulative_residual</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_tsallis" title="neurokit2.complexity.entropy_tsallis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_tsallis</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_renyi" title="neurokit2.complexity.entropy_renyi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_renyi</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_differential" title="neurokit2.complexity.entropy_differential"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_differential</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulative_residual</span></code>, <a class="reference internal" href="#neurokit2.complexity.entropy_tsallis" title="neurokit2.complexity.entropy_tsallis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_tsallis</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_renyi" title="neurokit2.complexity.entropy_renyi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_renyi</span></code></a></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -2322,7 +2296,7 @@ to compute Shannon entropy.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_shannon1.png"><img alt="../_images/p_entropy_shannon1.png" src="../_images/p_entropy_shannon1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [7]: </span><span class="n">shanen</span>
-<span class="gh">Out[7]: </span><span class="go">1.5529391093854341</span>
+<span class="gh">Out[7]: </span><span class="go">1.5514903213389357</span>
 </pre></div>
 </div>
 <p>Compare with <code class="docutils literal notranslate"><span class="pre">scipy</span></code> (using the same base).</p>
@@ -2332,12 +2306,12 @@ to compute Shannon entropy.</p></li>
 <span class="gp">In [9]: </span><span class="n">binned</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">cut</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [10]: </span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">entropy</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">binned</span><span class="p">)</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
-<span class="gh">Out[10]: </span><span class="go">1.076415365251786</span>
+<span class="gh">Out[10]: </span><span class="go">1.0754111419021268</span>
 
 <span class="gp">In [11]: </span><span class="n">shanen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_shannon</span><span class="p">(</span><span class="n">binned</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">e</span><span class="p">)</span>
 
 <span class="gp">In [12]: </span><span class="n">shanen</span>
-<span class="gh">Out[12]: </span><span class="go">1.076415365251786</span>
+<span class="gh">Out[12]: </span><span class="go">1.0754111419021268</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2354,7 +2328,7 @@ to compute Shannon entropy.</p></li>
 <dt class="sig sig-object py" id="neurokit2.complexity.entropy_differential">
 <span class="sig-name descname"><span class="pre">entropy_differential</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.entropy_differential" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Differential entropy (DiffEn)</strong></p>
-<p>Differential entropy (DiffEn; also referred to as continuous entropy) started as a (failed)
+<p>Differential entropy (DiffEn; also referred to as continuous entropy) started as an
 attempt by Shannon to extend Shannon entropy. However, differential entropy presents some
 issues too, such as that it can be negative even for simple distributions (such as the uniform
 distribution).</p>
@@ -2377,7 +2351,7 @@ to compute Differential entropy.</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_cumulative_residual" title="neurokit2.complexity.entropy_cumulative_residual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulative_residual</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulative_residual</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -2389,7 +2363,7 @@ to compute Differential entropy.</p></li>
 <span class="gp">In [3]: </span><span class="n">diffen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_differential</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">diffen</span>
-<span class="gh">Out[4]: </span><span class="go">0.34533806634377734</span>
+<span class="gh">Out[4]: </span><span class="go">0.3840483881023114</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2422,6 +2396,7 @@ the continuous signal into a discrete one.</p>
 cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a>
 for details.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the discrete the signal.</p></li>
+<li><p><strong>freq</strong> (<em>np.array</em>) – Instead of a signal, a vector of probabilities can be provided.</p></li>
 <li><p><strong>**kwargs</strong> – Optional arguments. Not used for now.</p></li>
 </ul>
 </dd>
@@ -2488,6 +2463,7 @@ the surprisal of “rolling doubles”.</p></li>
 cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a>
 for details.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the discrete the signal.</p></li>
+<li><p><strong>freq</strong> (<em>np.array</em>) – Instead of a signal, a vector of probabilities can be provided.</p></li>
 <li><p><strong>**kwargs</strong> – Optional arguments. Not used for now.</p></li>
 </ul>
 </dd>
@@ -2537,28 +2513,31 @@ Press.</p></li>
 </dd></dl>
 
 </section>
-<section id="entropy-cumulative-residual">
-<h3><em>entropy_cumulative_residual()</em><a class="headerlink" href="#entropy-cumulative-residual" title="Permalink to this headline">#</a></h3>
+<section id="entropy-cumulativeresidual">
+<h3><em>entropy_cumulativeresidual()</em><a class="headerlink" href="#entropy-cumulativeresidual" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
-<dt class="sig sig-object py" id="neurokit2.complexity.entropy_cumulative_residual">
-<span class="sig-name descname"><span class="pre">entropy_cumulative_residual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.entropy_cumulative_residual" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="neurokit2.complexity.entropy_cumulativeresidual">
+<span class="sig-name descname"><span class="pre">entropy_cumulativeresidual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.entropy_cumulativeresidual" title="Permalink to this definition">#</a></dt>
 <dd><p><strong>Cumulative residual entropy (CREn)</strong></p>
 <p>The cumulative residual entropy is an alternative to the Shannon
-differential entropy with several advantageous properties, such as non-negativity.</p>
+differential entropy with several advantageous properties, such as non-negativity. The key idea
+is to use the cumulative distribution (CDF) instead of the density function in Shannon’s
+entropy.</p>
 <div class="math notranslate nohighlight">
 \[CREn = -\int_{0}^{\infty} p(|X| &gt; x) \log_{2} p(|X| &gt; x) dx\]</div>
 <p>Similarly to <a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-func docutils literal notranslate"><span class="pre">Shannon</span> <span class="pre">entropy</span></code></a> and <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">Petrosian</span> <span class="pre">fractal</span> <span class="pre">dimension</span></code></a>, different methods to transform continuous signals into discrete ones are
-available. See <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a> for details.</p>
-<p>This function can be called either via <code class="docutils literal notranslate"><span class="pre">entropy_cumulative_residual()</span></code> or <code class="docutils literal notranslate"><span class="pre">complexity_cren()</span></code>.</p>
+available. See <a class="reference internal" href="#neurokit2.complexity.complexity_symbolize" title="neurokit2.complexity.complexity_symbolize"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_symbolize()</span></code></a> for details.</p>
+<p>This function can be called either via <code class="docutils literal notranslate"><span class="pre">entropy_cumulativeresidual()</span></code> or <code class="docutils literal notranslate"><span class="pre">complexity_cren()</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
-<li><p><strong>method</strong> (<em>str or int</em>) – Method of discretization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
+<li><p><strong>method</strong> (<em>str or int</em>) – Method of symbolization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
 <code class="docutils literal notranslate"><span class="pre">int</span></code> indicating the number of bins, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to skip the process (for instance, in
-cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-func docutils literal notranslate"><span class="pre">fractal_petrosian()</span></code></a>
+cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.complexity_symbolize" title="neurokit2.complexity.complexity_symbolize"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_symbolize()</span></code></a>
 for details.</p></li>
 <li><p><strong>show</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, will show the discrete the signal.</p></li>
+<li><p><strong>freq</strong> (<em>np.array</em>) – Instead of a signal, a vector of probabilities can be provided.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -2574,14 +2553,19 @@ for details.</p></li>
 
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
 
-<span class="gp">In [3]: </span><span class="n">cren</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_cumulative_residual</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">cren</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_cumulativeresidual</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_entropy_cumulative1.png"><img alt="../_images/p_entropy_cumulative1.png" src="../_images/p_entropy_cumulative1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<a class="reference internal image-reference" href="../_images/p_entropy_cumulativeresidual1.png"><img alt="../_images/p_entropy_cumulativeresidual1.png" src="../_images/p_entropy_cumulativeresidual1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">cren</span>
-<span class="gh">Out[4]: </span><span class="go">0.7010314845953541</span>
+<span class="gh">Out[4]: </span><span class="go">0.8706159142657933</span>
 </pre></div>
 </div>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Rao, M., Chen, Y., Vemuri, B. C., &amp; Wang, F. (2004). Cumulative residual entropy: a new
+measure of information. IEEE transactions on Information Theory, 50(6), 1220-1228.</p></li>
+</ul>
 </dd></dl>
 
 </section>
@@ -2675,7 +2659,7 @@ noise) produces the greatest entropy.</p>
 <span class="gp">In [3]: </span><span class="n">SpEn</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_spectral</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">SpEn</span>
-<span class="gh">Out[4]: </span><span class="go">0.8450830262593828</span>
+<span class="gh">Out[4]: </span><span class="go">0.8818788437580583</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2738,7 +2722,7 @@ graining parameter that defines how fine the grid is. It is recommended to use e
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_phase1.png"><img alt="../_images/p_entropy_phase1.png" src="../_images/p_entropy_phase1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">phasen</span>
-<span class="gh">Out[4]: </span><span class="go">1.1613076403646374</span>
+<span class="gh">Out[4]: </span><span class="go">1.162891274404753</span>
 
 <span class="gp">In [5]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_phase</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
@@ -2802,14 +2786,14 @@ graining parameter that defines how fine the grid is.</p></li>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_grid1.png"><img alt="../_images/p_entropy_grid1.png" src="../_images/p_entropy_grid1.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">phasen</span>
-<span class="gh">Out[4]: </span><span class="go">1.7094190996259986</span>
+<span class="gh">Out[4]: </span><span class="go">2.126950633384087</span>
 
 <span class="gp">In [5]: </span><span class="n">phasen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_grid</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <a class="reference internal image-reference" href="../_images/p_entropy_grid2.png"><img alt="../_images/p_entropy_grid2.png" src="../_images/p_entropy_grid2.png" style="width: 640.0px; height: 480.0px;" /></a>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;GDR&quot;</span><span class="p">]</span>
-<span class="gh">Out[6]: </span><span class="go">0.5</span>
+<span class="gh">Out[6]: </span><span class="go">0.59</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2851,7 +2835,7 @@ subsequent maxima ).</p></li>
 </dl>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_cumulative_residual" title="neurokit2.complexity.entropy_cumulative_residual"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulative_residual</span></code></a></p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulative_residual</span></code></p>
 </div>
 <p class="rubric">Examples</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
@@ -2862,7 +2846,7 @@ subsequent maxima ).</p></li>
 <span class="gp">In [3]: </span><span class="n">atten</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_attention</span><span class="p">(</span><span class="n">signal</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">atten</span>
-<span class="gh">Out[4]: </span><span class="go">1.1376806659057814</span>
+<span class="gh">Out[4]: </span><span class="go">1.1448985322653884</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -2930,7 +2914,7 @@ average entropy <code class="docutils literal notranslate"><span class="pre">AvE
 <span class="gp">In [3]: </span><span class="n">incren</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_increment</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">incren</span>
-<span class="gh">Out[4]: </span><span class="go">2.813085344404704</span>
+<span class="gh">Out[4]: </span><span class="go">2.8021298183938903</span>
 
 <span class="go"># Multiscale IncrEn (MSIncrEn)</span>
 <span class="gp">In [5]: </span><span class="n">msincren</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSIncrEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2997,12 +2981,12 @@ range [0, 90] degrees.</p></li>
 <span class="gp">In [3]: </span><span class="n">slopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_slope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">45</span><span class="p">])</span>
 
 <span class="gp">In [4]: </span><span class="n">slopen</span>
-<span class="gh">Out[4]: </span><span class="go">3.805042892555151</span>
+<span class="gh">Out[4]: </span><span class="go">3.8480630990066973</span>
 
 <span class="gp">In [5]: </span><span class="n">slopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_slope</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">45</span><span class="p">,</span> <span class="mi">60</span><span class="p">])</span>
 
 <span class="gp">In [6]: </span><span class="n">slopen</span>
-<span class="gh">Out[6]: </span><span class="go">4.978963616957565</span>
+<span class="gh">Out[6]: </span><span class="go">5.144857094058976</span>
 
 <span class="go"># Compute Multiscale Slope Entropy (MSSlopEn)</span>
 <span class="gp">In [7]: </span><span class="n">msslopen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSSlopEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3060,12 +3044,12 @@ theory.</p>
 <span class="gp">In [3]: </span><span class="n">sydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MEP&quot;</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">sydyen</span>
-<span class="gh">Out[4]: </span><span class="go">3.7164476747644826</span>
+<span class="gh">Out[4]: </span><span class="go">3.7657413430825812</span>
 
 <span class="gp">In [5]: </span><span class="n">sydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_symbolicdynamic</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;kmeans&quot;</span><span class="p">)</span>
 
 <span class="gp">In [6]: </span><span class="n">sydyen</span>
-<span class="gh">Out[6]: </span><span class="go">3.5032064769945315</span>
+<span class="gh">Out[6]: </span><span class="go">3.38481640428402</span>
 
 <span class="go"># Compute Multiscale Symbolic Dynamic Entropy (MSSyDyEn)</span>
 <span class="gp">In [7]: </span><span class="n">mssydyen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MSSyDyEn&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -3131,17 +3115,17 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="gp">In [3]: </span><span class="n">dispen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_dispersion</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">dispen</span>
-<span class="gh">Out[4]: </span><span class="go">1.4043176561695003</span>
+<span class="gh">Out[4]: </span><span class="go">1.401201014017172</span>
 
 <span class="go"># Get Reverse Dispersion Entropy (RDEn)</span>
 <span class="gp">In [5]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;RDEn&quot;</span><span class="p">]</span>
-<span class="gh">Out[5]: </span><span class="go">0.006432432747424791</span>
+<span class="gh">Out[5]: </span><span class="go">0.007796034676669003</span>
 
 <span class="go"># Fluctuation-based with another symbolization algorithm</span>
 <span class="gp">In [6]: </span><span class="n">dispen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_dispersion</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;finesort&quot;</span><span class="p">,</span> <span class="n">fluctuation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">dispen</span>
-<span class="gh">Out[7]: </span><span class="go">1.4423256776390145</span>
+<span class="gh">Out[7]: </span><span class="go">1.428486398919147</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3195,7 +3179,7 @@ average entropy <code class="docutils literal notranslate"><span class="pre">AvE
 <span class="gp">In [3]: </span><span class="n">enofen</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_ofentropy</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">enofen</span>
-<span class="gh">Out[4]: </span><span class="go">3.7561983328100954</span>
+<span class="gh">Out[4]: </span><span class="go">3.877567157116929</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3395,31 +3379,31 @@ return the permutation entropy in bit.</p></li>
 <span class="gp">In [2]: </span><span class="n">pen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">corrected</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 <span class="gp">In [3]: </span><span class="n">pen</span>
-<span class="gh">Out[3]: </span><span class="go">2.5807270962474704</span>
+<span class="gh">Out[3]: </span><span class="go">2.5423944721194043</span>
 
 <span class="go"># Weighted Permutation Entropy (WPEn)</span>
 <span class="gp">In [4]: </span><span class="n">wpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [5]: </span><span class="n">wpen</span>
-<span class="gh">Out[5]: </span><span class="go">0.9961668637136919</span>
+<span class="gh">Out[5]: </span><span class="go">0.9829806697339724</span>
 
 <span class="go"># Conditional Permutation Entropy (CPEn)</span>
 <span class="gp">In [6]: </span><span class="n">cpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [7]: </span><span class="n">cpen</span>
-<span class="gh">Out[7]: </span><span class="go">0.41331442152043996</span>
+<span class="gh">Out[7]: </span><span class="go">0.40480496177608566</span>
 
 <span class="go"># Conditional Weighted Permutation Entropy (CWPEn)</span>
 <span class="gp">In [8]: </span><span class="n">cwpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">weighted</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="gp">In [9]: </span><span class="n">cwpen</span>
-<span class="gh">Out[9]: </span><span class="go">0.4006920623785874</span>
+<span class="gh">Out[9]: </span><span class="go">0.3956812530693177</span>
 
 <span class="go"># Conditional Renyi Permutation Entropy (CRPEn)</span>
 <span class="gp">In [10]: </span><span class="n">crpen</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_permutation</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">conditional</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="n">nk</span><span class="o">.</span><span class="n">entropy_renyi</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
 
 <span class="gp">In [11]: </span><span class="n">crpen</span>
-<span class="gh">Out[11]: </span><span class="go">0.27414958409645956</span>
+<span class="gh">Out[11]: </span><span class="go">0.2709457481716397</span>
 </pre></div>
 </div>
 <p class="rubric">References</p>
@@ -3956,17 +3940,28 @@ to compute fisher information.</p></li>
 which can applied to any time series. The parameters are activity, mobility, and complexity.
 NeuroKit returns complexity directly in the output tuple, but the other parameters can be found
 in the dictionary.</p>
-<ul class="simple">
+<ul>
+<li><p>The <strong>activity</strong> parameter is simply the variance of the signal, which corresponds to the
+mean power of a signal (if its mean is 0).</p>
+<div class="math notranslate nohighlight">
+\[Activity = \sigma_{signal}^2\]</div>
+</li>
 <li><p>The <strong>complexity</strong> parameter gives an estimate of the bandwidth of the signal, which
 indicates the similarity of the shape of the signal to a pure sine wave (for which the
 value converges to 1). In other words, it is a measure of the “excessive details” with
 reference to the “softest” possible curve shape. The Complexity parameter is defined as the
-ratio of the mobility of the first derivative of the signal to the mobility of the signal.</p></li>
+ratio of the mobility of the first derivative of the signal to the mobility of the signal.</p>
+<div class="math notranslate nohighlight">
+\[Complexity = \sigma_{d}/ \sigma_{signal}\]</div>
+</li>
 <li><p>The <strong>mobility</strong> parameter represents the mean frequency or the proportion of standard
 deviation of the power spectrum. This is defined as the square root of variance of the
-first derivative of the signal divided by the variance of the signal.</p></li>
-<li><p>The <strong>activity</strong> parameter is simply the variance of the signal.</p></li>
+first derivative of the signal divided by the variance of the signal.</p>
+<div class="math notranslate nohighlight">
+\[Mobility = \frac{\sigma_{dd}/ \sigma_{d}}{Complexity}\]</div>
+</li>
 </ul>
+<p><span class="math notranslate nohighlight">\(d\)</span> and <span class="math notranslate nohighlight">\(dd\)</span> represent the first and second derivatives of the signal, respectively.</p>
 <p>Hjorth (1970) illustrated the parameters as follows:</p>
 <figure class="align-default">
 <a class="reference external image-reference" href="http://dx.doi.org/10.1016/0013-4694(70)90143-4"><img alt="Figure from Hjorth (1970)." src="../_images/hjorth1970.png" /></a>
@@ -4008,6 +4003,94 @@ first derivative of the signal divided by the variance of the signal.</p></li>
 <ul class="simple">
 <li><p>Hjorth, B (1970) EEG Analysis Based on Time Domain Properties. Electroencephalography and
 Clinical Neurophysiology, 29, 306-310. <a class="reference external" href="http://dx.doi.org/10.1016/0013-4694(70)90143-4">http://dx.doi.org/10.1016/0013-4694(70)90143-4</a></p></li>
+</ul>
+</dd></dl>
+
+</section>
+<section id="complexity-lempelziv">
+<h3><em>complexity_lempelziv()</em><a class="headerlink" href="#complexity-lempelziv" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.complexity_lempelziv">
+<span class="sig-name descname"><span class="pre">complexity_lempelziv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimension</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">permutation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_lempelziv" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Lempel-Ziv Complexity (LZC, PLZC and MSLZC)</strong></p>
+<p>Computes Lempel-Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
+symbolic sequences for new patterns, increasing the complexity count every time a new sequence
+is detected. Regular signals have a lower number of distinct patterns and thus have low LZC
+whereas irregular signals are characterized by a high LZC. While often being interpreted as a
+complexity measure, LZC was originally proposed to reflect randomness (Lempel and Ziv, 1976).</p>
+<p>Permutation Lempel-Ziv Complexity (<strong>PLZC</strong>) combines LZC with <a class="reference internal" href="#neurokit2.complexity.entropy_permutation" title="neurokit2.complexity.entropy_permutation"><code class="xref py py-func docutils literal notranslate"><span class="pre">permutation</span></code></a>. A sequence of symbols is generated from the permutations observed in the <code class="xref py py-func docutils literal notranslate"><span class="pre">tine-delay</span> <span class="pre">embedding</span></code>, and LZC is computed over it.</p>
+<p>Multiscale (Permutation) Lempel-Ziv Complexity (<strong>MSLZC</strong> or <strong>MSPLZC</strong>) combines permutation
+LZC with the <a class="reference internal" href="#neurokit2.complexity.entropy_multiscale" title="neurokit2.complexity.entropy_multiscale"><code class="xref py py-func docutils literal notranslate"><span class="pre">multiscale</span> <span class="pre">approach</span></code></a>. It first performs a
+<a class="reference internal" href="#neurokit2.complexity.complexity_coarsegraining" title="neurokit2.complexity.complexity_coarsegraining"><code class="xref py py-func docutils literal notranslate"><span class="pre">coarse-graining</span></code></a> procedure to the original time series.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>delay</strong> (<em>int</em>) – Time delay (often denoted <em>Tau</em> <span class="math notranslate nohighlight">\(\tau\)</span>, sometimes referred to as <em>lag</em>) in samples.
+See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" title="neurokit2.complexity.complexity_delay"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_delay()</span></code></a> to estimate the optimal value for this parameter. Only used
+when <code class="docutils literal notranslate"><span class="pre">permutation=True</span></code>.</p></li>
+<li><p><strong>dimension</strong> (<em>int</em>) – Embedding Dimension (<em>m</em>, sometimes referred to as <em>d</em> or <em>order</em>). See
+<a class="reference internal" href="#neurokit2.complexity.complexity_dimension" title="neurokit2.complexity.complexity_dimension"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_dimension()</span></code></a> to estimate the optimal value for this parameter. Only used
+when <code class="docutils literal notranslate"><span class="pre">permutation=True</span></code>.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <a class="reference internal" href="#neurokit2.complexity.complexity_ordinalpatterns" title="neurokit2.complexity.complexity_ordinalpatterns"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_ordinalpatterns()</span></code></a> (if
+<code class="docutils literal notranslate"><span class="pre">permutation=True</span></code>) or <a class="reference internal" href="#neurokit2.complexity.complexity_symbolize" title="neurokit2.complexity.complexity_symbolize"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_symbolize()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>lzc</strong> (<em>float</em>) – Lempel Ziv Complexity (LZC) of the signal.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – A dictionary containing additional information regarding the parameters used
+to compute LZC.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.complexity_symbolize" title="neurokit2.complexity.complexity_symbolize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_symbolize</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.complexity_ordinalpatterns" title="neurokit2.complexity.complexity_ordinalpatterns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">complexity_ordinalpatterns</span></code></a>, <a class="reference internal" href="#neurokit2.complexity.entropy_permutation" title="neurokit2.complexity.entropy_permutation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_permutation</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="n">noise</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="go"># LZC</span>
+<span class="gp">In [3]: </span><span class="n">lzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;median&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">lzc</span>
+<span class="gh">Out[4]: </span><span class="go">1.0588723832474038</span>
+
+<span class="go"># PLZC</span>
+<span class="gp">In [5]: </span><span class="n">plzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_lempelziv</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">plzc</span>
+<span class="gh">Out[6]: </span><span class="go">0.6967625773807192</span>
+</pre></div>
+</div>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># MSLZC</span>
+<span class="gp">In [7]: </span><span class="n">mslzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;LZC&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_lempelziv1.png"><img alt="../_images/p_complexity_lempelziv1.png" src="../_images/p_complexity_lempelziv1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># MSPLZC</span>
+<span class="gp">In [8]: </span><span class="n">msplzc</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">entropy_multiscale</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;LZC&quot;</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_lempelziv2.png"><img alt="../_images/p_complexity_lempelziv2.png" src="../_images/p_complexity_lempelziv2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p>Lempel, A., &amp; Ziv, J. (1976). On the complexity of finite sequences. IEEE Transactions on
+information theory, 22(1), 75-81.</p></li>
+<li><p>Nagarajan, R. (2002). Quantifying physiological data with Lempel-Ziv complexity-certain
+issues. IEEE Transactions on Biomedical Engineering, 49(11), 1371-1373.</p></li>
+<li><p>Kaspar, F., &amp; Schuster, H. G. (1987). Easily calculable measure for the complexity of
+spatiotemporal patterns. Physical Review A, 36(2), 842.</p></li>
+<li><p>Zhang, Y., Hao, J., Zhou, C., &amp; Chang, K. (2009). Normalized Lempel-Ziv complexity and
+its application in bio-sequence analysis. Journal of mathematical chemistry, 46(4), 1203-1212.</p></li>
+<li><p>Bai, Y., Liang, Z., &amp; Li, X. (2015). A permutation Lempel-Ziv complexity measure for EEG
+analysis. Biomedical Signal Processing and Control, 19, 102-114.</p></li>
+<li><p>Borowska, M. (2021). Multiscale Permutation Lempel-Ziv Complexity Measure for Biomedical
+Signal Analysis: Interpretation and Application to Focal EEG Signals. Entropy, 23(7), 832.</p></li>
 </ul>
 </dd></dl>
 
@@ -4399,6 +4482,86 @@ to the Lorenz system simulator, such as <code class="docutils literal notranslat
 </dd></dl>
 
 </section>
+<section id="complexity-symbolize">
+<h3><em>complexity_symbolize</em><a class="headerlink" href="#complexity-symbolize" title="Permalink to this headline">#</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="neurokit2.complexity.complexity_symbolize">
+<span class="sig-name descname"><span class="pre">complexity_symbolize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mean'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#neurokit2.complexity.complexity_symbolize" title="Permalink to this definition">#</a></dt>
+<dd><p><strong>Signal Symbolization and Discretization</strong></p>
+<p>Many complexity indices are made to assess the recurrence and predictability of discrete -
+symbolic - states. As such, continuous signals must be transformed into such discrete sequence.</p>
+<p>For instance, one of the easiest way is to split the signal values into two categories, above
+and below the mean, resulting in a sequence of <em>A</em> and <em>B</em>. More complex methods have been
+developped to that end.</p>
+<ul class="simple">
+<li><p><strong>Method ‘A’</strong> binarizes the signal by higher vs. lower values as compated to the signal’s
+mean.</p></li>
+<li><p><strong>Method ‘B’</strong> uses values that are within the mean +/- 1 SD band vs. values that are outside
+this band.</p></li>
+<li><p><strong>Method ‘C’</strong> computes the difference between consecutive samples and binarizes depending on
+their sign.</p></li>
+<li><p><strong>Method ‘D’</strong> forms separates consecutive samples that exceed 1 signal’s SD from the others
+smaller changes.</p></li>
+<li><p><strong>Method ‘r’</strong> is based on the concept of <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-func docutils literal notranslate"><span class="pre">*tolerance*</span></code></a>, and
+will separate consecutive samples that exceed a given tolerance threshold, by default
+<span class="math notranslate nohighlight">\(0.2 * SD\)</span>. See <a class="reference internal" href="#neurokit2.complexity.complexity_tolerance" title="neurokit2.complexity.complexity_tolerance"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_tolerance()</span></code></a> for more details.</p></li>
+<li><p><strong>Binning</strong>: If an integer <em>n</em> is passed, will bin the signal into <em>n</em> equal-width bins.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signal</strong> (<em>Union[list, np.array, pd.Series]</em>) – The signal (i.e., a time series) in the form of a vector of values.</p></li>
+<li><p><strong>method</strong> (<em>str or int</em>) – Method of symbolization. Can be one of <code class="docutils literal notranslate"><span class="pre">&quot;A&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;B&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;C&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;D&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;r&quot;</span></code>, an
+<code class="docutils literal notranslate"><span class="pre">int</span></code> indicating the number of bins, or <code class="docutils literal notranslate"><span class="pre">None</span></code> to skip the process (for instance, in
+cases when the binarization has already been done before). See <a class="reference internal" href="#neurokit2.complexity.complexity_symbolize" title="neurokit2.complexity.complexity_symbolize"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_symbolize()</span></code></a>
+for details.</p></li>
+<li><p><strong>show</strong> (<em>bool</em>) – Plot the reconstructed attractor. See <a class="reference internal" href="#neurokit2.complexity.complexity_attractor" title="neurokit2.complexity.complexity_attractor"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_attractor()</span></code></a> for details.</p></li>
+<li><p><strong>**kwargs</strong> – Other arguments to be passed to <a class="reference internal" href="#neurokit2.complexity.complexity_attractor" title="neurokit2.complexity.complexity_attractor"><code class="xref py py-func docutils literal notranslate"><span class="pre">complexity_attractor()</span></code></a>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>array</em> – A symbolic sequence made of discrete states (e.g., 0 and 1).</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#neurokit2.complexity.entropy_shannon" title="neurokit2.complexity.entropy_shannon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_shannon</span></code></a>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">entropy_cumulative_residual</span></code>, <a class="reference internal" href="#neurokit2.complexity.fractal_petrosian" title="neurokit2.complexity.fractal_petrosian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fractal_petrosian</span></code></a></p>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">neurokit2</span> <span class="k">as</span> <span class="nn">nk</span>
+
+<span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">12</span><span class="p">])</span>
+
+<span class="go"># Method &quot;A&quot; is equivalent to &quot;mean&quot;</span>
+<span class="gp">In [3]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_symbolize1.png"><img alt="../_images/p_complexity_symbolize1.png" src="../_images/p_complexity_symbolize1.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [4]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_symbolize2.png"><img alt="../_images/p_complexity_symbolize2.png" src="../_images/p_complexity_symbolize2.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_symbolize3.png"><img alt="../_images/p_complexity_symbolize3.png" src="../_images/p_complexity_symbolize3.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">signal</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">signal_simulate</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">noise</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+
+<span class="gp">In [7]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_symbolize4.png"><img alt="../_images/p_complexity_symbolize4.png" src="../_images/p_complexity_symbolize4.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [8]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_symbolize5.png"><img alt="../_images/p_complexity_symbolize5.png" src="../_images/p_complexity_symbolize5.png" style="width: 640.0px; height: 480.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [9]: </span><span class="n">symbolic</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_symbolize</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">method</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_complexity_symbolize6.png"><img alt="../_images/p_complexity_symbolize6.png" src="../_images/p_complexity_symbolize6.png" style="width: 640.0px; height: 480.0px;" /></a>
+</dd></dl>
+
+</section>
 <section id="complexity-coarsegraining">
 <h3><em>complexity_coarsegraining()</em><a class="headerlink" href="#complexity-coarsegraining" title="Permalink to this headline">#</a></h3>
 <dl class="py function">
@@ -4461,7 +4624,8 @@ the amount of coarsegraining.</p></li>
 <p><strong>Simple examples</strong>
 .. ipython:: python</p>
 <blockquote>
-<div><p>signal = [0, 2, 4, 6, 8, 10]
+<div><p>import neurokit2 as nk</p>
+<p>signal = [0, 2, 4, 6, 8, 10]
 nk.complexity_coarsegraining(signal, scale=2)</p>
 <p>signal = [0, 1, 2, 0, 1]
 nk.complexity_coarsegraining(signal, scale=3)
@@ -4565,7 +4729,7 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 
 <span class="gp">In [2]: </span><span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
 
-<span class="gp">In [3]: </span><span class="n">patterns</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_ordinalpatterns</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">In [3]: </span><span class="n">patterns</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_ordinalpatterns</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [4]: </span><span class="n">patterns</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
@@ -4573,15 +4737,15 @@ See <a class="reference internal" href="#neurokit2.complexity.complexity_delay" 
 <span class="go">       [1, 0, 2],</span>
 <span class="go">       [2, 0, 1]])</span>
 
-<span class="gp">In [5]: </span><span class="n">freqs</span>
+<span class="gp">In [5]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Frequencies&quot;</span><span class="p">]</span>
 <span class="gh">Out[5]: </span><span class="go">array([0.4, 0.2, 0.4])</span>
 </pre></div>
 </div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">signal</span> <span class="o">=</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
 
-<span class="gp">In [7]: </span><span class="n">patterns</span><span class="p">,</span> <span class="n">freqs</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_ordinalpatterns</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;bubblesort&quot;</span><span class="p">)</span>
+<span class="gp">In [7]: </span><span class="n">patterns</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">complexity_ordinalpatterns</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;bubblesort&quot;</span><span class="p">)</span>
 
-<span class="gp">In [8]: </span><span class="n">freqs</span>
+<span class="gp">In [8]: </span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;Frequencies&quot;</span><span class="p">]</span>
 <span class="gh">Out[8]: </span><span class="go">array([0.36363636, 0.09090909, 0.18181818, 0.36363636])</span>
 </pre></div>
 </div>
