@@ -36,17 +36,6 @@ div.cell_input > div, div.cell_output div.output > div.highlight {
   margin-top: 1em;
 }
 
-/* Outputs from jupyter_sphinx overrides to remove extra CSS */
-div.section div.jupyter_container {
-  padding: .4em;
-  margin: 0 0 .4em 0;
-  background-color: none;
-  border: none;
-  -moz-box-shadow: none;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-
 /* Text outputs from cells */
 .cell_output .output.text_plain,
 .cell_output .output.traceback,
@@ -112,6 +101,10 @@ div.cell_output table {
     background: rgba(66, 165, 245, 0.2);
   }
 
+/** source code line numbers **/
+span.linenos {
+  opacity: 0.5;
+}
 
 /* Inline text from `paste` operation */
 
@@ -128,7 +121,10 @@ tbody span.pasted-inline img {
 }
 
 /* Font colors for translated ANSI escape sequences
-Color values are adapted from share/jupyter/nbconvert/templates/classic/static/style.css
+Color values are copied from Jupyter Notebook
+https://github.com/jupyter/notebook/blob/52581f8eda9b319eb0390ac77fe5903c38f81e3e/notebook/static/notebook/less/ansicolors.less#L14-L21
+Background colors from
+https://nbsphinx.readthedocs.io/en/latest/code-cells.html#ANSI-Colors
 */
 div.highlight .-Color-Bold {
   font-weight: bold;
@@ -143,7 +139,7 @@ div.highlight .-Color[class*=-Green] {
   color: #00A250
 }
 div.highlight .-Color[class*=-Yellow] {
-  color: yellow
+  color: #DDB62B
 }
 div.highlight .-Color[class*=-Blue] {
   color: #208FFB
@@ -167,7 +163,7 @@ div.highlight .-Color[class*=-BGGreen] {
   background-color: #00A250
 }
 div.highlight .-Color[class*=-BGYellow] {
-  background-color: yellow
+  background-color: #DDB62B
 }
 div.highlight .-Color[class*=-BGBlue] {
   background-color: #208FFB

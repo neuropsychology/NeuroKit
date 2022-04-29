@@ -23,8 +23,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -888,7 +888,7 @@ by the <code class="docutils literal notranslate"><span class="pre">Label</span>
 <span class="gp">In [12]: </span><span class="n">analyze_df</span>
 <span class="gh">Out[12]: </span><span class="go"></span>
 <span class="go">   ECG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0      86.392105  694.756381  49.036043  ...  1.917341  2.722348  0.873124</span>
+<span class="go">0      86.392105  694.756381  49.036043  ...  1.846507  2.722348  0.873124</span>
 
 <span class="go">[1 rows x 82 columns]</span>
 </pre></div>
@@ -1815,9 +1815,9 @@ might not be reliable or meaningful.</p></li>
 <span class="gp">In [5]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_eventrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">  Label  Event_Onset  ...  ECG_Phase_Completion_Ventricular  ECG_Quality_Mean</span>
-<span class="go">1     1         5000  ...                          0.691358          0.985061</span>
-<span class="go">2     2        10000  ...                          0.424490          0.935204</span>
-<span class="go">3     3        15000  ...                          0.075665          0.921981</span>
+<span class="go">1     1         5000  ...                          0.653846          0.941555</span>
+<span class="go">2     2        10000  ...                          0.368313          0.962438</span>
+<span class="go">3     3        15000  ...                          0.100823          0.968928</span>
 
 <span class="go">[3 rows x 17 columns]</span>
 </pre></div>
@@ -1899,7 +1899,7 @@ separately processed DataFrames.</p></li>
 <span class="gp">In [4]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_intervalrelated</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
 <span class="gh">Out[4]: </span><span class="go"></span>
 <span class="go">   ECG_Rate_Mean  HRV_MeanNN   HRV_SDNN  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0      86.392105  694.756381  49.036043  ...  1.917341  2.722348  0.873124</span>
+<span class="go">0      86.392105  694.756381  49.036043  ...  1.846507  2.722348  0.873124</span>
 
 <span class="go">[1 rows x 82 columns]</span>
 
@@ -1908,8 +1908,8 @@ separately processed DataFrames.</p></li>
 <span class="gp">In [6]: </span><span class="n">nk</span><span class="o">.</span><span class="n">ecg_intervalrelated</span><span class="p">(</span><span class="n">epochs</span><span class="p">)</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">  Label  ECG_Rate_Mean  HRV_MeanNN  ...   HRV_HFD  HRV_KFD   HRV_LZC</span>
-<span class="go">1     1      86.389814   69.497674  ...  1.908272  2.33683  0.828876</span>
-<span class="go">2     2      86.394396   69.460465  ...  1.933065  3.09411  0.973029</span>
+<span class="go">1     1      86.389814   69.497674  ...  1.803504  2.33683  0.828876</span>
+<span class="go">2     2      86.394396   69.460465  ...  1.895279  3.09411  0.973029</span>
 
 <span class="go">[2 rows x 83 columns]</span>
 </pre></div>

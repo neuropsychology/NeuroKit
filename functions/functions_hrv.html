@@ -23,8 +23,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
   <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
@@ -582,7 +582,7 @@ least twice as high as the highest frequency in vhf. By default 1000.</p></li>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [6]: </span><span class="n">hrv_indices</span>
 <span class="gh">Out[6]: </span><span class="go"></span>
 <span class="go">   HRV_MeanNN   HRV_SDNN  HRV_SDANN1  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0  694.756381  49.036043    7.277185  ...  1.917341  2.722348  0.873124</span>
+<span class="go">0  694.756381  49.036043    7.277185  ...  1.846507  2.722348  0.873124</span>
 
 <span class="go">[1 rows x 81 columns]</span>
 </pre></div>
@@ -860,16 +860,17 @@ the next successive one. The ellipse centers around the average RR interval. By 
 
 <span class="go"># Compute HRV indices</span>
 <span class="gp">In [4]: </span><span class="n">hrv</span> <span class="o">=</span> <span class="n">nk</span><span class="o">.</span><span class="n">hrv_nonlinear</span><span class="p">(</span><span class="n">peaks</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="gp">In [5]: </span><span class="n">hrv</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../_images/p_hrv_nonlinear1.png"><img alt="../_images/p_hrv_nonlinear1.png" src="../_images/p_hrv_nonlinear1.png" style="width: 800.0px; height: 800.0px;" /></a>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [5]: </span><span class="n">hrv</span>
 <span class="gh">Out[5]: </span><span class="go"></span>
 <span class="go">     HRV_SD1    HRV_SD2  HRV_SD1SD2  ...   HRV_HFD   HRV_KFD   HRV_LZC</span>
-<span class="go">0  49.341281  72.597435    0.679656  ...  1.921677  1.913071  0.854475</span>
+<span class="go">0  49.341281  72.597435    0.679656  ...  1.856372  1.913071  0.854475</span>
 
 <span class="go">[1 rows x 48 columns]</span>
 </pre></div>
 </div>
-<a class="reference internal image-reference" href="../_images/p_hrv_nonlinear1.png"><img alt="../_images/p_hrv_nonlinear1.png" src="../_images/p_hrv_nonlinear1.png" style="width: 800.0px; height: 800.0px;" /></a>
 <p class="rubric">References</p>
 <ul class="simple">
 <li><p>Pham, T., Lau, Z. J., Chen, S. H., &amp; Makowski, D. (2021). Heart Rate Variability in
