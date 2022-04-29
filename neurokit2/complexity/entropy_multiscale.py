@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from .complexity_lempelziv import complexity_lempelziv
 from .entropy_approximate import entropy_approximate
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
 from .entropy_increment import entropy_increment
@@ -249,10 +250,10 @@ def entropy_multiscale(
     algorithm = entropy_sample
     refined = False
     coarsegraining = "nonoverlapping"
-    if method in ["MSEn", "MSApEn", "MSPEn", "MSWPEn"]:
-        if method in ["MSApEn"]:
+    if method in ["MSEn", "SampEn", "MSApEn", "ApEn", "MSPEn", "PEn", "MSWPEn"]:
+        if method in ["MSApEn", "ApEn"]:
             algorithm = entropy_approximate
-        if method in ["MSPEn"]:
+        if method in ["MSPEn", "PEn"]:
             algorithm = entropy_permutation
         if method in ["MSWPEn"]:
             algorithm = functools.partial(entropy_permutation, weighted=True)
@@ -276,13 +277,15 @@ def entropy_multiscale(
             algorithm = functools.partial(entropy_permutation, weighted=True)
         if method in ["RCMSEn"]:
             refined = True
-    elif method in ["MSCoSiEn"]:
+    elif method in ["MSCoSiEn", "CoSiEn"]:
         algorithm = entropy_cosinesimilarity
-    elif method in ["MSIncrEn"]:
+    elif method in ["MSIncrEn", "IncrEn"]:
         algorithm = entropy_increment
-    elif method in ["MSSlopEn"]:
+    elif method in ["MSSlopEn", "SlopEn"]:
         algorithm = entropy_slope
-    elif method in ["MSSyDyEn", "MMSyDyEn"]:
+    elif method in ["MSLZC", "LZC"]:
+        algorithm = complexity_lempelziv
+    elif method in ["MSSyDyEn", "SyDyEn", "MMSyDyEn"]:
         algorithm = entropy_symbolicdynamic
         if method in ["MMSyDyEn"]:
             coarsegraining = "rolling"
@@ -299,6 +302,7 @@ def entropy_multiscale(
     # Store parameters
     info = {
         "Method": method,
+        "Algorithm": algorithm.__name__,
         "Coarsegraining": coarsegraining,
         "Dimension": dimension,
         "Scale": _get_scales(signal, scale=scale, dimension=dimension),

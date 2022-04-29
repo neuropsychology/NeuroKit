@@ -79,6 +79,8 @@ def complexity_coarsegraining(
     **Simple examples**
     .. ipython:: python
 
+      import neurokit2 as nk
+
       signal = [0, 2, 4, 6, 8, 10]
       nk.complexity_coarsegraining(signal, scale=2)
 
@@ -234,6 +236,6 @@ def _get_scales(signal, scale="default", dimension=2):
         # See https://github.com/neuropsychology/NeuroKit/issues/75#issuecomment-583884426
         scale = np.arange(1, int(len(signal) / (dimension + 10)))
     elif isinstance(scale, int):
-        scale = np.arange(1, scale)
+        scale = np.arange(1, scale + 1)
 
     return scale

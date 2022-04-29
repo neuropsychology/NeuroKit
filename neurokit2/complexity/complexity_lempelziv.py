@@ -4,8 +4,7 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_binarize import _signal_binarize_threshold
-from .utils_complexity_coarsegraining import (_get_scales,
-                                              complexity_coarsegraining)
+from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegraining
 from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
 from .utils_complexity_symbolize import complexity_symbolize
@@ -19,7 +18,7 @@ def complexity_lempelziv(
     scale=False,
     **kwargs,
 ):
-    """**Lempel-Ziv Complexity (LZC, PLZC and MPLZC)**
+    """**Lempel-Ziv Complexity (LZC, PLZC and MSLZC)**
 
     Computes Lempel-Ziv Complexity (LZC) to quantify the regularity of the signal, by scanning
     symbolic sequences for new patterns, increasing the complexity count every time a new sequence
@@ -27,14 +26,11 @@ def complexity_lempelziv(
     whereas irregular signals are characterized by a high LZC. While often being interpreted as a
     complexity measure, LZC was originally proposed to reflect randomness (Lempel and Ziv, 1976).
 
-    Permutation Lempel-Ziv Complexity (PLZC) combines permutation and LZC.
-    A finite sequence of symbols is first generated (numbers of types of symbols =
-    :math:`dimension!`) and LZC is computed over the symbol series.
+    Permutation Lempel-Ziv Complexity (**PLZC**) combines LZC with :func:`permutation <entropy_permutation>`. A sequence of symbols is generated from the permutations observed in the :func:`tine-delay embedding <complexity_embedding>`, and LZC is computed over it.
 
-    Multiscale Permutation Lempel-Ziv Complexity (MPLZC) combines permutation LZC and multiscale
-    approach. It first performs a coarse-graining procedure to the original time series by
-    constructing the coarse-grained time series in non-overlapping windows of increasing length
-    (scale) where the number of data points are averaged. PLZC is then computed for each scaled series.
+    Multiscale (Permutation) Lempel-Ziv Complexity (**MSLZC** or **MSPLZC**) combines permutation
+    LZC with the :func:`multiscale approach <entropy_multiscale>`. It first performs a
+    :func:`coarse-graining <complexity_coarsegraining>` procedure to the original time series.
 
     Parameters
     ----------
@@ -80,9 +76,21 @@ def complexity_lempelziv(
       plzc, info = nk.complexity_lempelziv(signal, delay=1, dimension=3, permutation=True)
       plzc
 
-      # MPLZC
-      mplzc, info = nk.complexity_lempelziv(signal)
-      mplzc
+    .. ipython:: python
+
+      # MSLZC
+      @savefig p_complexity_lempelziv1.png scale=100%
+      mslzc, info = nk.entropy_multiscale(signal, method="LZC", show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      # MSPLZC
+      @savefig p_complexity_lempelziv2.png scale=100%
+      msplzc, info = nk.entropy_multiscale(signal, method="LZC", permutation=True, show=True)
+      @suppress
+      plt.close()
 
     References
     ----------
@@ -107,16 +115,13 @@ def complexity_lempelziv(
             "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
         )
 
-    # Multiscale
-    if scale is not False:
-        delay = 1,
-        scale = 1
-
     # Store parameters
-    info = {"Dimension": dimension, "Delay": delay, "Permutation": permutation, "Scales": _get_scales(signal, scale=scale, dimension=dimension),}
+    info = {"Permutation": permutation}
 
-    # Permtuation or not
+    # Permutation or not
     if permutation:
+        info["Dimension"] = dimension
+        info["Delay"] = delay
         # Permutation on the signal (i.e., converting to ordinal pattern).
         _, info = complexity_ordinalpatterns(signal, delay=delay, dimension=dimension, **kwargs)
         symbolic = info["Uniques"]
@@ -131,7 +136,9 @@ def complexity_lempelziv(
     if permutation is False:
         lzc = (info["Complexity_Kolmogorov"] * np.log2(n)) / n
     else:
-        lzc = (info["Complexity_Kolmogorov"] * np.log2(n) / np.log2(np.math.factorial(dimension))) / n
+        lzc = (
+            info["Complexity_Kolmogorov"] * np.log2(n) / np.log2(np.math.factorial(dimension))
+        ) / n
 
     return lzc, info
 

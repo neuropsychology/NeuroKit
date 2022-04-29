@@ -12,14 +12,12 @@ def complexity_hjorth(signal):
     in the dictionary.
 
 
-    * The **activity** parameter is simply the variance of the signal.
+    * The **activity** parameter is simply the variance of the signal, which corresponds to the
+      mean power of a signal (if its mean is 0).
 
       .. math::
 
         Activity = \\sigma_{signal}^2
-
-      :math:`\sigma_{x}^2` is the mean power of a signal :math:`x`. That is, its variance, if its
-      mean is zero.
 
     * The **complexity** parameter gives an estimate of the bandwidth of the signal, which
       indicates the similarity of the shape of the signal to a pure sine wave (for which the
@@ -37,7 +35,7 @@ def complexity_hjorth(signal):
 
       .. math::
 
-        Mobility = \\frac{\sigma_{dd}/ \\sigma_{d}}{Complexity}
+        Mobility = \\frac{\\sigma_{dd}/ \\sigma_{d}}{Complexity}
 
     :math:`d` and :math:`dd` represent the first and second derivatives of the signal, respectively.
 
