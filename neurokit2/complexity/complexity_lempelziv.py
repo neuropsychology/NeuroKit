@@ -232,7 +232,7 @@ def _complexity_lempelziv_count(symbolic):
 
     s = "0" + string
     c = 1
-    l = 1
+    j = 1
     i = 0
     k = 1
     k_max = 1
@@ -240,7 +240,7 @@ def _complexity_lempelziv_count(symbolic):
 
     # Start counting
     while stop is False:
-        if s[i + k] != s[l + k]:
+        if s[i + k] != s[j + k]:
             if k > k_max:
                 # k_max stores the length of the longest pattern in the LA that has been matched
                 # somewhere in the SB
@@ -250,14 +250,14 @@ def _complexity_lempelziv_count(symbolic):
             # pattern. s[i+k] is scanning the "search buffer" (SB)
             i = i + 1
             # we stop looking when i catches up with the first bit of the "look-ahead" (LA) part.
-            if i == l:
+            if i == j:
                 # If we were actually compressing, we would add the new token here. here we just
                 # count reconstruction STEPs
                 c = c + 1
                 # we move the beginning of the LA to the end of the newly matched pattern.
-                l = l + k_max
+                j = j + k_max
                 # if the LA surpasses length of string, then we stop.
-                if l + 1 > n:
+                if j + 1 > n:
                     stop = True
                 # after STEP,
                 else:
@@ -267,21 +267,21 @@ def _complexity_lempelziv_count(symbolic):
                     # the first bit of the string, because we added an extra 0 above, so i+k is the
                     # first bit of the string.
                     k = 1
-                    # and we reset max lenght of matched pattern to k.
+                    # and we reset max length of matched pattern to k.
                     k_max = 1
             else:
                 # we've finished matching a pattern in the SB, and we reset the matched pattern
                 # length counter.
                 k = 1
-        # I increase k as long as the pattern matches, i.e. as long as s[l+k] bit string can be
-        # reconstructed by s[i+k] bit string. Note that the matched pattern can "run over" l
+        # I increase k as long as the pattern matches, i.e. as long as s[j+k] bit string can be
+        # reconstructed by s[i+k] bit string. Note that the matched pattern can "run over" j
         # because the pattern starts copying itself (see LZ 76 paper). This is just what happens
         # when you apply the cloning tool on photoshop to a region where you've already cloned...
         else:
             k = k + 1
             # if we reach the end of the string while matching, we need to add that to the tokens,
             # and stop.
-            if l + k > n:
+            if j + k > n:
                 c = c + 1
                 stop = True
 

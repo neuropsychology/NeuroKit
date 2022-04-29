@@ -73,15 +73,19 @@ def complexity_ordinalpatterns(signal, delay=1, dimension=3, algorithm="quicksor
         info["Permutations"] = info["Embedded"].argsort(kind="quicksort")
 
     # Count and get unique patterns
-    patterns, info["Uniques"], info["Frequencies"] = np.unique(info["Permutations"],
-                                                axis=0,
-                                                return_inverse=True,
-                                                return_counts=True,)
+    patterns, info["Uniques"], info["Frequencies"] = np.unique(
+        info["Permutations"],
+        axis=0,
+        return_inverse=True,
+        return_counts=True,
+    )
+
+    # Find all possible patterns (not needed for now)
+    # all_symbols = np.array(list(map(np.array, list(itertools.permutations(np.arange(delay * dimension))))))
 
     # Relative Frequency
     info["Frequencies"] = info["Frequencies"] / info["Frequencies"].sum()
 
-    # all_symbols = np.array(list(map(np.array, list(itertools.permutations(np.arange(delay * dimension))))))
     return patterns, info
 
 

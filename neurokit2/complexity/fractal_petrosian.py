@@ -1,4 +1,3 @@
-
 import numpy as np
 import pandas as pd
 
@@ -89,10 +88,9 @@ def fractal_petrosian(signal, method="C", show=False):
         # These methods are already based on the consecutive differences
         n_inversions = symbolic.sum()
     else:
-         # Note: np.diff(symbolic).sum() is not recommended in case there's a seq like [0, -1, 1]
+        # Note: np.diff(symbolic).sum() wouldn't work in case there's a seq like [0, -1, 1]
         n_inversions = (symbolic[1:] != symbolic[:-1]).sum()
 
     n = len(symbolic)
     pfd = np.log10(n) / (np.log10(n) + np.log10(n / (n + 0.4 * n_inversions)))
     return pfd, {"Method": method}
-
