@@ -168,9 +168,13 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
       # Compute HRV indices
       @savefig p_hrv_nonlinear1.png scale=100%
       hrv = nk.hrv_nonlinear(peaks, sampling_rate=100, show=True)
-      hrv
       @suppress
       plt.close()
+
+    .. ipython:: python
+
+      hrv
+
 
     References
     ----------
@@ -238,7 +242,7 @@ def hrv_nonlinear(peaks, sampling_rate=1000, show=False, **kwargs):
     out["RCMSEn"] = entropy_multiscale(rri, dimension=2, tolerance=tolerance, method="RCMSEn")[0]
 
     out["CD"] = fractal_correlation(rri, delay=1, dimension=2, **kwargs)[0]
-    out["HFD"] = fractal_higuchi(rri, **kwargs)[0]
+    out["HFD"] = fractal_higuchi(rri, k_max=10, **kwargs)[0]
     out["KFD"] = fractal_katz(rri)[0]
     out["LZC"] = complexity_lempelziv(rri, **kwargs)[0]
 

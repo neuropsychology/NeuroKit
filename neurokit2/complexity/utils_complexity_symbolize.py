@@ -3,11 +3,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import scipy.cluster.vq
+import scipy.special
 
+from ..stats import standardize
 from .optim_complexity_tolerance import complexity_tolerance
 
 
-def complexity_symbolize(signal, method="mean", show=False, **kwargs):
+def complexity_symbolize(signal, method="mean", c=3, show=False, **kwargs):
     """**Signal Symbolization and Discretization**
 
     Many complexity indices are made to assess the recurrence and predictability of discrete -
@@ -29,16 +32,28 @@ def complexity_symbolize(signal, method="mean", show=False, **kwargs):
       will separate consecutive samples that exceed a given tolerance threshold, by default
       :math:`0.2 * SD`. See :func:`complexity_tolerance` for more details.
     * **Binning**: If an integer *n* is passed, will bin the signal into *n* equal-width bins.
+      Requires to specify *c*.
+    * **MEP**: Maximum Entropy Partitioning. Requires to specify *c*.
+    * **NCDF**: Please help us to improve the documentation here. Requires to specify *c*.
+    * **Linear**: Please help us to improve the documentation here. Requires to specify *c*.
+    * **Uniform**: Please help us to improve the documentation here. Requires to specify *c*.
+    * **kmeans**: k-means clustering. Requires to specify *c*.
+
+
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     method : str or int
-        Method of symbolization. Can be one of ``"A"``, ``"B"``, ``"C"``, ``"D"``, ``"r"``, an
-        ``int`` indicating the number of bins, or ``None`` to skip the process (for instance, in
-        cases when the binarization has already been done before). See :func:`complexity_symbolize`
-        for details.
+        Method of symbolization. Can be one of ``"A"`` (default), ``"B"``, ``"C"``, ``"D"``,
+        ``"r"``, ``"Binning"``, ``"MEP"``, ``"NCDF"``, ``"linear"``, ``"uniform"``, ``"kmeans"``,
+        ``"equal"``, or ``None`` to skip the process (for instance, in cases when the binarization
+        has already been done before).
+
+        See :func:`complexity_symbolize` for details.
+    c : int
+        Number of symbols *c*, used in some algorithms.
     show : bool
         Plot the reconstructed attractor. See :func:`complexity_attractor` for details.
     **kwargs
@@ -100,7 +115,44 @@ def complexity_symbolize(signal, method="mean", show=False, **kwargs):
     .. ipython:: python
 
       @savefig p_complexity_symbolize6.png scale=100%
-      symbolic = nk.complexity_symbolize(signal, method = 10, show=True)
+      symbolic = nk.complexity_symbolize(signal, method = "binning", c=3, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_symbolize7.png scale=100%
+      symbolic = nk.complexity_symbolize(signal, method = "MEP", c=3, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_symbolize8.png scale=100%
+      symbolic = nk.complexity_symbolize(signal, method = "NCDF", c=3, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      @savefig p_complexity_symbolize9.png scale=100%
+      symbolic = nk.complexity_symbolize(signal, method = "linear", c=5, show=True)
+      @suppress
+      plt.close()
+
+
+    .. ipython:: python
+
+      @savefig p_complexity_symbolize10.png scale=100%
+      symbolic = nk.complexity_symbolize(signal, method = "equal", c=5, show=True)
+      @suppress
+      plt.close()
+
+
+    .. ipython:: python
+
+      @savefig p_complexity_symbolize11.png scale=100%
+      symbolic = nk.complexity_symbolize(signal, method = "kmeans", c=5, show=True)
       @suppress
       plt.close()
 
@@ -116,14 +168,10 @@ def complexity_symbolize(signal, method="mean", show=False, **kwargs):
 
     # Binnning
     elif isinstance(method, int):
-        symbolic = pd.cut(signal, bins=method, labels=False)
-        if show is True:
-            df = pd.DataFrame({"Signal": signal, "Bin": symbolic, "Index": np.arange(len(signal))})
-            df = df.pivot_table(index="Index", columns="Bin", values="Signal")
-            for i in df.columns:
-                plt.plot(df[i])
-            plt.title(f"Method: Binning (bins={method})")
-    else:
+        c = method
+        method = "binning"
+
+    if isinstance(method, str):
         method = method.lower()
 
         if method in ["a", "mean"]:
@@ -185,10 +233,52 @@ def complexity_symbolize(signal, method="mean", show=False, **kwargs):
                 plt.scatter(where, signal[where], color="orange", label="Inversion", zorder=2)
                 plt.title("Method based on tolerance r")
 
+        elif method in ["binning", "mep", "ncdf", "linear", "uniform", "kmeans", "equal"]:
+            n = len(signal)
+            if method == "binning":
+                symbolic = pd.cut(signal, bins=c, labels=False)
+
+            elif method == "mep":
+                Temp = np.hstack((0, np.ceil(np.arange(1, c) * len(signal) / c) - 1)).astype(int)
+                symbolic = np.digitize(signal, np.sort(signal)[Temp])
+            elif method == "ncdf":
+                symbolic = np.digitize(
+                    scipy.special.ndtr(standardize(signal)), np.arange(0, 1, 1 / c)
+                )
+            elif method == "linear":
+                symbolic = np.digitize(
+                    signal, np.arange(np.min(signal), np.max(signal), np.ptp(signal) / c)
+                )
+            elif method == "uniform":
+                symbolic = np.zeros(len(signal))
+                symbolic[np.argsort(signal)] = np.digitize(np.arange(n), np.arange(0, 2 * n, n / c))
+            elif method == "kmeans":
+                centroids, labels = scipy.cluster.vq.kmeans2(signal, c)
+                labels += 1
+                xx = np.argsort(centroids) + 1
+                symbolic = np.zeros(n)
+                for k in range(1, c + 1):
+                    symbolic[labels == xx[k - 1]] = k
+            elif method == "equal":
+                ix = np.argsort(signal)
+                xx = np.round(np.arange(0, 2 * n, n / c)).astype(int)
+                symbolic = np.zeros(n)
+                for k in range(c):
+                    symbolic[ix[xx[k] : xx[k + 1]]] = k + 1
+
+            if show is True:
+                df = pd.DataFrame(
+                    {"Signal": signal, "Bin": symbolic, "Index": np.arange(len(signal))}
+                )
+                df = df.pivot_table(index="Index", columns="Bin", values="Signal")
+                for i in df.columns:
+                    plt.plot(df[i])
+                plt.title(f"Method: {method} (c={c})")
+
         else:
             raise ValueError(
-                "`method` must be one of 'A', 'B', 'C' or 'D', or an integer. See the documentation for"
-                " more information."
+                "`method` must be one of 'A', 'B', 'C' or 'D', 'Binning', 'MEP', 'NCDF', 'linear',"
+                " 'uniform', 'kmeans'. See the documentation for more information."
             )
 
     return symbolic

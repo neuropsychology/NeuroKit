@@ -5,6 +5,7 @@ import scipy.special
 
 from ..stats import standardize
 from .utils_complexity_embedding import complexity_embedding
+from .utils_complexity_symbolize import complexity_symbolize
 
 
 def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
@@ -23,9 +24,9 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
     c : int
         Number of symbols *c*.
     method : str
-        Method for transforming the signal into a symbolic sequence. Can be one of ``"MEP"``
-        (default), ``"NCDF"``, ``"linear"``, ``"uniform"``, ``"kmeans"``, ``"equal"`` or
-        ``"finesort"``.
+        Method of symbolization. Can be one of ``"MEP"`` (default), ``"NCDF"``, ``"linear"``,
+        ``"uniform"``, ``"kmeans"``, ``"equal"``, or others. See :func:`complexity_symbolize` for
+        details.
     **kwargs : optional
         Other keyword arguments (currently not used).
 
@@ -97,16 +98,11 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
 
     # There are four main steps of SDE algorithm
     # 1. Convert the time series into the symbol time series (called symbolization).
+    symbolic = complexity_symbolize(signal, method=method, c=c)
+
     # 2. Construct the embedding vectors based on the symbol time series and compute the potential
     # state patterns probability
-    embedded = _complexity_symbolization(
-        signal,
-        dimension=dimension,
-        delay=delay,
-        c=c,
-        method=method,
-        **kwargs,
-    )
+    embedded = complexity_embedding(symbolic, dimension=dimension, delay=delay)
 
     # 3. Construct the state transitions and compute the probability of state transitions.
     unique = np.unique(embedded, axis=0)
@@ -137,53 +133,3 @@ def entropy_symbolicdynamic(signal, dimension=3, c=6, method="MEP", **kwargs):
     sydyen = sydyen / np.log(c ** (dimension + 1))
 
     return sydyen, info
-
-
-def _complexity_symbolization(signal, delay=1, dimension=3, c=3, method="MEP", rho=1, **kwargs):
-    """Transform signal into symbolic sequence"""
-    n = len(signal)
-    method = method.lower()
-    if method == "mep":
-        # Maximum Entropy Partitioning (MEP)
-        Temp = np.hstack((0, np.ceil(np.arange(1, c) * len(signal) / c) - 1)).astype(int)
-        symbols = np.digitize(signal, np.sort(signal)[Temp])
-    elif method == "ncdf":
-        symbols = np.digitize(scipy.special.ndtr(standardize(signal)), np.arange(0, 1, 1 / c))
-    elif method == "linear":
-        symbols = np.digitize(signal, np.arange(np.min(signal), np.max(signal), np.ptp(signal) / c))
-    elif method == "uniform":
-        symbols = np.zeros(len(signal))
-        symbols[np.argsort(signal)] = np.digitize(np.arange(n), np.arange(0, 2 * n, n / c))
-    elif method == "kmeans":
-        centroids, labels = scipy.cluster.vq.kmeans2(signal, c)
-        labels += 1
-        xx = np.argsort(centroids) + 1
-        symbols = np.zeros(n)
-        for k in range(1, c + 1):
-            symbols[labels == xx[k - 1]] = k
-    elif method == "equal":
-        ix = np.argsort(signal)
-        xx = np.round(np.arange(0, 2 * n, n / c)).astype(int)
-        symbols = np.zeros(n)
-        for k in range(c):
-            symbols[ix[xx[k] : xx[k + 1]]] = k + 1
-    elif method == "finesort":
-        Zx = scipy.special.ndtr((signal - np.mean(signal)) / np.std(signal))
-        symbols = np.digitize(Zx, np.arange(0, 1, 1 / c))
-        Ym = np.zeros((n - (dimension - 1) * delay, dimension))
-        for k in range(dimension):
-            Ym[:, k] = Zx[k * delay : n - ((dimension - k - 1) * delay)]
-        Yi = np.floor(np.max(abs(np.diff(Ym)), axis=1) / (rho * np.std(abs(np.diff(signal)))))
-    else:
-        raise ValueError(
-            'Method must be one of "MEP", "NCDF", "linear", "uniform", "kmeans",'
-            '"equal" or "finesort".'
-        )
-
-    embedded = complexity_embedding(symbols, dimension=dimension, delay=delay)
-
-    if method == "finesort":
-        Yi = np.expand_dims(Yi, axis=1)
-        embedded = np.hstack((embedded, Yi))
-
-    return embedded

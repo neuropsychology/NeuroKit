@@ -2,11 +2,12 @@ import numpy as np
 import pandas as pd
 
 from .entropy_shannon import entropy_shannon
-from .entropy_symbolicdynamic import _complexity_symbolization
+from .utils_complexity_embedding import complexity_embedding
+from .utils_complexity_symbolize import complexity_symbolize
 
 
 def entropy_dispersion(
-    signal, delay=1, dimension=3, c=6, method="NCDF", fluctuation=False, **kwargs
+    signal, delay=1, dimension=3, c=6, method="NCDF", fluctuation=False, rho=1, **kwargs
 ):
     """**Dispersion Entropy (DispEn)**
 
@@ -25,9 +26,12 @@ def entropy_dispersion(
     c : int
         Number of symbols *c*. Rostaghi (2016) recommend in practice a *c* between 4 and 8.
     method : str
-        Method for transforming the signal into a symbolic sequence. Can be one of ``"NCDF"``
-        (default), ``"MEP"``, ``"linear"``, ``"uniform"``, ``"kmeans"``, ``"equal"`` or
-        ``"finesort"``.
+        Method of symbolization. Can be one of ``"NCDF"`` (default), ``"finesort"``, or others. See
+        :func:`complexity_symbolize` for details.
+    fluctuation : bool
+        Fluctuation-based Dispersion entropy.
+    rho : float
+        Tuning parameter of "finesort". Only when ``method="finesort"``.
     **kwargs : optional
         Other keyword arguments (currently not used).
 
@@ -58,7 +62,7 @@ def entropy_dispersion(
       # Get Reverse Dispersion Entropy (RDEn)
       info["RDEn"]
 
-      # Fluctuation-based with another symbolization algorithm
+      # Fluctuation-based DispEn with "finesort"
       dispen, info = nk.entropy_dispersion(signal, c=3, method="finesort", fluctuation=True)
       dispen
 
@@ -78,15 +82,20 @@ def entropy_dispersion(
     info = {"Dimension": dimension, "Delay": delay, "c": c, "Method": method}
 
     # Symbolization and embedding
-    embedded = _complexity_symbolization(
-        signal,
-        dimension=dimension,
-        delay=delay,
-        c=c,
-        method=method,
-        **kwargs,
-    )
+    if method == "finesort":
+        symbolic = complexity_symbolize(signal, method="NCDF", c=c)
+        Ym = np.zeros((len(signal) - (dimension - 1) * delay, dimension))
+        for k in range(dimension):
+            Ym[:, k] = symbolic[k * delay : len(signal) - ((dimension - k - 1) * delay)]
+        Yi = np.floor(np.max(abs(np.diff(Ym)), axis=1) / (rho * np.std(abs(np.diff(signal)))))
+        embedded = complexity_embedding(symbolic, dimension=dimension, delay=delay)
+        Yi = np.expand_dims(Yi, axis=1)
+        embedded = np.hstack((embedded, Yi))
+    else:
+        symbolic = complexity_symbolize(signal, method=method, c=c)
+        embedded = complexity_embedding(symbolic, dimension=dimension, delay=delay)
 
+    # Fluctuation
     if fluctuation is True:
         embedded = np.diff(embedded, axis=1)
 
