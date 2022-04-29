@@ -146,84 +146,11 @@ def complexity_lempelziv(
 # =============================================================================
 # Utilities
 # =============================================================================
-
-
-def _complexity_lempelziv(
-    signal,
-    delay=1,
-    dimension=2,
-    method="median",
-    normalize=True,
-    permutation=False,
-    multiscale=False,
-    scale_factors="default",
-    show=False,
-):
-
-    if multiscale:
-        # MPLZC
-        # apply coarsegraining procedure
-        scale_factors = _get_scales(signal, scale="default", dimension=dimension)
-        # Permutation for each scaled series
-        lzc = np.zeros(len(scale_factors))
-        for i, tau in enumerate(scale_factors):
-            y = complexity_coarsegraining(signal, scale=tau, force=False)
-            sequence = _complexity_lempelziv_permutation(y, delay=1, dimension=dimension)
-            lzc[i] = _complexity_lempelziv_count(
-                sequence, normalize=normalize, permutation=True, dimension=dimension
-            )
-        info = {
-            "Dimension": dimension,
-            "Delay": delay,
-            "Scale": scale_factors,
-            "Values": lzc,
-            "SD": np.std(lzc),
-        }
-        complexity = np.mean(lzc)
-        if show:
-            _complexity_lempelziv_multiscale_plot(scale_factors, lzc)
-
-    elif permutation:
-        # PLZC
-        sequence = _complexity_lempelziv_permutation(signal, delay=delay, dimension=dimension)
-        complexity = _complexity_lempelziv_count(
-            sequence, normalize=normalize, permutation=True, dimension=dimension
-        )
-        info = {"Dimension": dimension, "Delay": delay}
-
-    else:
-        # for normal LZC
-        sequence = _signal_binarize_threshold(np.asarray(signal), threshold=method).astype(int)
-        complexity = _complexity_lempelziv_count(sequence, normalize=normalize, permutation=False)
-        info = {"Method": method}
-
-    return complexity, info
-
-
-def _complexity_lempelziv_multiscale_plot(scale_factors, lzc_values):
-
-    fig = plt.figure(constrained_layout=False)
-    fig.suptitle("Permutation LZC (PLZC) values across scale factors")
-    plt.ylabel("PLZC values")
-    plt.xlabel("Scale")
-    plt.plot(scale_factors, lzc_values, color="#FF9800")
-
-    return fig
-
-
-def _complexity_lempelziv_permutation(signal, delay=1, dimension=2):
-    """Permutation on the signal (i.e., converting to ordinal pattern)."""
-    # Time-delay embedding
-    embedded = complexity_embedding(signal, delay=delay, dimension=dimension)
-    # Sort the order of permutations
-    embedded = embedded.argsort(kind="quicksort")
-    sequence = np.unique(embedded, return_inverse=True, axis=0)[1]
-
-    return sequence
-
-
 def _complexity_lempelziv_count(symbolic):
     """Computes LZC counts from symbolic sequences"""
+
+    # TODO: I really can't imagine that there is no faster way of doing that that with a while loop
+
     # Convert to string (faster)
     string = "".join(list(symbolic.astype(int).astype(str)))
 
@@ -246,7 +173,7 @@ def _complexity_lempelziv_count(symbolic):
                 # somewhere in the SB
                 k_max = k
 
-            # we increase i while the bit doesn't match, looking for a previous occurence of a
+            # we increase i while the bit doesn't match, looking for a previous occurrence of a
             # pattern. s[i+k] is scanning the "search buffer" (SB)
             i = i + 1
             # we stop looking when i catches up with the first bit of the "look-ahead" (LA) part.

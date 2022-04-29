@@ -92,8 +92,9 @@ p1 <- make_plot(method = "Random-Walk", title = "Random-Walk", color = "red")
 p2 <- make_plot(method = "lorenz_10_2.5_28", title = "Lorenz (sigma=10, beta=2.5, rho=28)", color = "blue")
 p3 <- make_plot(method = "lorenz_20_2_30", title = "Lorenz (sigma=20, beta=2, rho=30)", color = "green")
 p4 <- make_plot(method = "oscillatory", title = "Oscillatory", color = "orange")
+p5 <- make_plot(method = "fractal", title = "Fractal", color = "purple")
 
-p1 / p2 / p3 / p4 + patchwork::plot_annotation(title = "Examples of Simulated Signals", theme = theme(plot.title = element_text(face = "bold", hjust = 0.5)))
+p1 / p2 / p3 / p4 / p5 + patchwork::plot_annotation(title = "Examples of Simulated Signals", theme = theme(plot.title = element_text(face = "bold", hjust = 0.5)))
 ```
 
 
@@ -210,10 +211,13 @@ colors <- c(
   "RangeEn (A)" = "#E91E63",
   "RangeEn (Ac)" = "#E91E63",
   "RangeEn (B)" = "#E91E63",
+  "HEn" = "#E91E63",
   "H (corrected)" = "#2196F3",
   "H (uncorrected)" = "#2196F3",
   "LZC" = "#2196F3",
   "PLZC" = "#2196F3",
+  "MSLZC" = "#2196F3",
+  "MSPLZC" = "#2196F3",
   "RR" = "#2196F3",
   "FI" = "#FF5722",
   "CD" = "#FF5722",
@@ -303,7 +307,7 @@ df |>
 
 
 ```{r message=FALSE, warning=FALSE}
-model <- lm(Result ~ Index / poly(Length, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random"))
+model <- lm(Result ~ Index / poly(Length, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random")))
 
 parameters::parameters(model, keep = "poly.*1") |>
   arrange(desc(abs(Coefficient))) |>
@@ -327,7 +331,7 @@ estimate_relation(model) |>
 ### Sensitivity to Noise
 
 ```{r message=FALSE, warning=FALSE}
-model <- lm(Result ~ Index / poly(Noise_Intensity, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random"))
+model <- lm(Result ~ Index / poly(Noise_Intensity, 2), data = filter(df, !Index %in% c("SD", "Length", "Noise", "Random")))
 
 parameters::parameters(model, keep = "poly.*1") |>
   arrange(abs(p)) |>

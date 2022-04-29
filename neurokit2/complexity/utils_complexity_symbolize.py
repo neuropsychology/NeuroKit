@@ -115,7 +115,7 @@ def complexity_symbolize(signal, method="mean", show=False, **kwargs):
                 plt.plot(df[i])
 
     # Binnning
-    if isinstance(method, int):
+    elif isinstance(method, int):
         symbolic = pd.cut(signal, bins=method, labels=False)
         if show is True:
             df = pd.DataFrame({"Signal": signal, "Bin": symbolic, "Index": np.arange(len(signal))})
@@ -125,7 +125,6 @@ def complexity_symbolize(signal, method="mean", show=False, **kwargs):
             plt.title(f"Method: Binning (bins={method})")
     else:
         method = method.lower()
-
 
         if method in ["a", "mean"]:
             symbolic = (signal > np.nanmean(signal)).astype(int)
@@ -161,7 +160,7 @@ def complexity_symbolize(signal, method="mean", show=False, **kwargs):
                 plt.title("Method B")
 
         elif method == "c":
-            symbolic = np.signbit(np.diff(signal))
+            symbolic = np.signbit(np.diff(signal)).astype(int)
             if show is True:
                 df = pd.DataFrame({"A": signal, "B": signal})
                 df["A"][np.insert(symbolic, 0, False)] = np.nan
@@ -170,17 +169,18 @@ def complexity_symbolize(signal, method="mean", show=False, **kwargs):
                 plt.title("Method C")
 
         elif method == "d":
-            symbolic = np.abs(np.diff(signal)) > np.nanstd(signal, ddof=1)
+            symbolic = (np.abs(np.diff(signal)) > np.nanstd(signal, ddof=1)).astype(int)
             if show is True:
                 where = np.where(symbolic)[0]
-                plt.plot(signal, zorder=1)
+                plt.plot(signal, zorder=1 == 1)
                 plt.scatter(where, signal[where], color="orange", label="Inversion", zorder=2)
                 plt.title("Method D")
 
         elif method == "r":
             symbolic = np.abs(np.diff(signal)) > complexity_tolerance(signal, method="sd")[0]
+            symbolic = symbolic.astype(int)
             if show is True:
-                where = np.where(symbolic)[0]
+                where = np.where(symbolic == 1)[0]
                 plt.plot(signal, zorder=1)
                 plt.scatter(where, signal[where], color="orange", label="Inversion", zorder=2)
                 plt.title("Method based on tolerance r")

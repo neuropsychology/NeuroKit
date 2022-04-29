@@ -14,7 +14,7 @@ from .entropy_attention import entropy_attention
 from .entropy_bubble import entropy_bubble
 from .entropy_coalition import entropy_coalition
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
-from .entropy_cumulative_residual import entropy_cumulative_residual
+from .entropy_cumulativeresidual import entropy_cumulativeresidual
 from .entropy_differential import entropy_differential
 from .entropy_dispersion import entropy_dispersion
 from .entropy_distribution import entropy_distribution
@@ -60,13 +60,12 @@ from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
 from .utils_complexity_simulate import complexity_simulate
 from .utils_complexity_symbolize import complexity_symbolize
-from .utils_transition_matrix import (transition_matrix,
-                                      transition_matrix_simulate)
+from .utils_transition_matrix import transition_matrix, transition_matrix_simulate
 
 # Aliases
 complexity_se = entropy_shannon
 complexity_diffen = entropy_differential
-complexity_cren = entropy_cumulative_residual
+complexity_cren = entropy_cumulativeresidual
 
 complexity_apen = entropy_approximate
 complexity_capen = functools.partial(entropy_approximate, corrected=True)
@@ -156,7 +155,7 @@ __all__ = [
     "entropy_differential",
     "entropy_distribution",
     "entropy_symbolicdynamic",
-    "entropy_cumulative_residual",
+    "entropy_cumulativeresidual",
     "entropy_approximate",
     "entropy_bubble",
     "entropy_coalition",

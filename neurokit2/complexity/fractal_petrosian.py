@@ -84,12 +84,13 @@ def fractal_petrosian(signal, method="C", show=False):
     # Binarize the sequence
     symbolic = complexity_symbolize(signal, method=method, show=show)
 
-    if isinstance(method, str) and method.lower() in ["d", "r"]:
-        # These methods are already based on the consecutive differences
-        n_inversions = symbolic.sum()
-    else:
-        # Note: np.diff(symbolic).sum() wouldn't work in case there's a seq like [0, -1, 1]
-        n_inversions = (symbolic[1:] != symbolic[:-1]).sum()
+    # if isinstance(method, str) and method.lower() in ["d", "r"]:
+    #     # These methods are already based on the consecutive differences
+    #     n_inversions = symbolic.sum()
+    # else:
+    #     # Note: np.diff(symbolic).sum() wouldn't work in case there's a seq like [0, -1, 1]
+    #     n_inversions = (symbolic[1:] != symbolic[:-1]).sum()
+    n_inversions = (symbolic[1:] != symbolic[:-1]).sum()
 
     n = len(symbolic)
     pfd = np.log10(n) / (np.log10(n) + np.log10(n / (n + 0.4 * n_inversions)))

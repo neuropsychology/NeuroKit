@@ -72,9 +72,9 @@ Entropy
 """""""""""""""""""
 .. autofunction:: neurokit2.complexity.entropy_renyi
 
-*entropy_cumulative_residual()*
+*entropy_cumulativeresidual()*
 """""""""""""""""""""""""""""""""
-.. autofunction:: neurokit2.complexity.entropy_cumulative_residual
+.. autofunction:: neurokit2.complexity.entropy_cumulativeresidual
 
 *entropy_svd()*
 """""""""""""""""

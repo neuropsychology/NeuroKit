@@ -115,7 +115,7 @@ def run_benchmark(noise_intensity=0.01):
                 signal = nk.signal_simulate(
                     duration=duration,
                     sampling_rate=1000,
-                    frequency=[4, 8, 16, 32, 64, 128],
+                    frequency=[4, 8, 16, 32, 64],
                 )
 
             # Standardize
@@ -278,10 +278,10 @@ def run_benchmark(noise_intensity=0.01):
                         rez,
                         time_function(
                             signal_,
-                            nk.entropy_cumulative_residual,
+                            nk.entropy_cumulativeresidual,
                             method=x,
                             index=f"CREn ({x})",
-                            name="nk_entropy_cumulative_residual",
+                            name="entropy_cumulativeresidual",
                         ),
                     ]
                 )
@@ -1148,9 +1148,9 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
-                        nk.complexity_lempelziv,
+                        nk.entropy_multiscale,
                         index="MSLZC",
-                        name="nk_entropy_permutation",
+                        name="nk_entropy_multiscale",
                         method="LZC",
                         delay=delay,
                         dimension=3,
@@ -1162,9 +1162,9 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
-                        nk.complexity_lempelziv,
+                        nk.entropy_multiscale,
                         index="MSPLZC",
-                        name="nk_entropy_permutation",
+                        name="nk_entropy_multiscale",
                         method="PLZC",
                         delay=delay,
                         dimension=3,
@@ -1182,6 +1182,7 @@ def run_benchmark(noise_intensity=0.01):
     return pd.concat(data_signal), pd.concat(data_complexity)
 
 
+# run_benchmark(noise_intensity=0.01)
 out = nk.parallel_run(
     run_benchmark,
     [{"noise_intensity": i} for i in np.linspace(0.01, 3, 16)],

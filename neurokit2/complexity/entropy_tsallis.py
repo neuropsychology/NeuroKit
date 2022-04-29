@@ -30,6 +30,8 @@ def entropy_tsallis(signal=None, q=1, method=None, show=False, freq=None, **kwar
         for details.
     show : bool
         If ``True``, will show the discrete the signal.
+    freq : np.array
+        Instead of a signal, a vector of probabilities can be provided.
     **kwargs
         Optional arguments. Not used for now.
 
@@ -65,9 +67,9 @@ def entropy_tsallis(signal=None, q=1, method=None, show=False, freq=None, **kwar
 
     """
     if freq is None:
-        freq = _entropy_freq(signal, method=method, show=show)
-
+        _, freq = _entropy_freq(signal, method=method, show=show)
     freq = freq / np.sum(freq)
+
     if np.isclose(q, 1):
         lnq_1_over_p = np.log(1 / freq)
     else:

@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-import functools
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ..misc import copyfunction
 from .complexity_lempelziv import complexity_lempelziv
 from .entropy_approximate import entropy_approximate
 from .entropy_cosinesimilarity import entropy_cosinesimilarity
@@ -257,25 +256,25 @@ def entropy_multiscale(
         if method in ["MSPEn", "PEn"]:
             algorithm = entropy_permutation
         if method in ["MSWPEn", "WPEn"]:
-            algorithm = functools.partial(entropy_permutation, weighted=True)
+            algorithm = copyfunction(entropy_permutation, weighted=True)
     elif method in ["MMSEn", "MMSPEn", "MMSWPEn"]:
         coarsegraining = "rolling"
         if method in ["MMSPEn"]:
             algorithm = entropy_permutation
         if method in ["MMSWPEn"]:
-            algorithm = functools.partial(entropy_permutation, weighted=True)
+            algorithm = copyfunction(entropy_permutation, weighted=True)
     elif method in ["IMSEn", "IMSPEn", "IMSWPEn"]:
         coarsegraining = "interpolate"
         if method in ["IMSPEn"]:
             algorithm = entropy_permutation
         if method in ["IMSWPEn"]:
-            algorithm = functools.partial(entropy_permutation, weighted=True)
+            algorithm = copyfunction(entropy_permutation, weighted=True)
     elif method in ["CMSEn", "RCMSEn", "CMSPEn", "CMSWPEn"]:
         coarsegraining = "timeshift"
         if method in ["CMSPEn"]:
             algorithm = entropy_permutation
         if method in ["CMSWPEn"]:
-            algorithm = functools.partial(entropy_permutation, weighted=True)
+            algorithm = copyfunction(entropy_permutation, weighted=True)
         if method in ["RCMSEn"]:
             refined = True
     elif method in ["MSCoSiEn", "CoSiEn"]:
@@ -287,7 +286,7 @@ def entropy_multiscale(
     elif method in ["MSLZC", "LZC"]:
         algorithm = complexity_lempelziv
     elif method in ["MSPLZC", "PLZC"]:
-        algorithm = functools.partial(complexity_lempelziv, permutation=True)
+        algorithm = copyfunction(complexity_lempelziv, permutation=True)
     elif method in ["MSSyDyEn", "SyDyEn", "MMSyDyEn"]:
         algorithm = entropy_symbolicdynamic
         if method in ["MMSyDyEn"]:

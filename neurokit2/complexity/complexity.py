@@ -7,7 +7,7 @@ from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
 from .complexity_rr import complexity_rr
 from .entropy_approximate import entropy_approximate
-from .entropy_cumulative_residual import entropy_cumulative_residual
+from .entropy_cumulativeresidual import entropy_cumulativeresidual
 from .entropy_differential import entropy_differential
 from .entropy_fuzzy import entropy_fuzzy
 from .entropy_multiscale import entropy_multiscale
@@ -196,7 +196,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         df["PSDslope"], info["PSDslope"] = fractal_psdslope(signal)
 
         # Entropy
-        df["CREn"], info["CREn"] = entropy_cumulative_residual(signal)
+        df["CREn"], info["CREn"] = entropy_cumulativeresidual(signal)
         df["ApEn"], info["ApEn"] = entropy_approximate(
             signal, delay=delay, dimension=dimension, tolerance=tolerance
         )

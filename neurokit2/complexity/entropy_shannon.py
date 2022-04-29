@@ -106,7 +106,7 @@ def entropy_shannon(signal=None, base=2, method=None, show=False, freq=None, **k
 
     """
     if freq is None:
-        freq = _entropy_freq(signal, method=method, show=show)
+        _, freq = _entropy_freq(signal, method=method, show=show)
 
     return scipy.stats.entropy(freq, base=base), {"Method": method, "Base": base}
 
@@ -133,4 +133,4 @@ def _entropy_freq(signal, method=None, show=False):
     if np.isscalar(signal) is False:
         signal = complexity_symbolize(signal, method=method, show=show)
 
-    return np.unique(signal, return_counts=True)[1]
+    return np.unique(signal, return_counts=True)
