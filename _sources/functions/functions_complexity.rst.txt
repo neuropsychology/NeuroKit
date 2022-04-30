@@ -163,9 +163,9 @@ Other
 """"""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_lempelziv
 
-*complexity_rr()*
+*complexity_relativeroughness()*
 """"""""""""""""""
-.. autofunction:: neurokit2.complexity.complexity_rr
+.. autofunction:: neurokit2.complexity.complexity_relativeroughness
 
 *complexity_hurst()*
 """""""""""""""""""""
@@ -198,7 +198,10 @@ Utilities
 """"""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_coarsegraining
 
-*complexity_ordinalpatterns*
+*complexity_ordinalpatterns()*
 """"""""""""""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_ordinalpatterns
 
+*recurrence_matrix()*
+""""""""""""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.recurrence_matrix
