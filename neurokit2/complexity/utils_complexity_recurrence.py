@@ -2,12 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy.spatial
 
-from .utils_complexity_embedding import complexity_embedding
 from .optim_complexity_tolerance import complexity_tolerance
+from .utils_complexity_embedding import complexity_embedding
 
 
-def complexity_recurrence(signal, delay=1, dimension=3, tolerance="default", show=False):
-    """Recurrence matrix (Python implementation)
+def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=False):
+    """**Recurrence Matrix**
 
     Fast Python implementation of recurrence matrix (tested against pyRQA). Returns a tuple
     with the recurrence matrix (made of 0s and 1s) and the distance matrix (the non-binarized

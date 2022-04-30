@@ -5,7 +5,7 @@ from .complexity_hjorth import complexity_hjorth
 from .complexity_hurst import complexity_hurst
 from .complexity_lempelziv import complexity_lempelziv
 from .complexity_lyapunov import complexity_lyapunov
-from .complexity_rr import complexity_rr
+from .complexity_relativeroughness import complexity_relativeroughness
 from .entropy_approximate import entropy_approximate
 from .entropy_cumulativeresidual import entropy_cumulativeresidual
 from .entropy_differential import entropy_differential
@@ -186,7 +186,7 @@ def complexity(signal, which=["fast", "medium"], delay=1, dimension=2, tolerance
         # Other
         df["FI"], info["FI"] = fisher_information(signal, delay=delay, dimension=dimension)
         df["Hjorth"], info["Hjorth"] = complexity_hjorth(signal)
-        df["RR"], info["RR"] = complexity_rr(signal)
+        df["RR"], info["RR"] = complexity_relativeroughness(signal)
 
     if "medium" in which:
 

@@ -1074,9 +1074,9 @@ def run_benchmark(noise_intensity=0.01):
                     rez,
                     time_function(
                         signal_,
-                        nk.complexity_rr,
+                        nk.complexity_relativeroughness,
                         index="RR",
-                        name="nk_complexity_rr",
+                        name="nk_complexity_relativeroughness",
                     ),
                 ]
             )

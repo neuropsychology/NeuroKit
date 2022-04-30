@@ -4,7 +4,7 @@ import pandas as pd
 from ..signal import signal_autocor
 
 
-def complexity_rr(signal, **kwargs):
+def complexity_relativeroughness(signal, **kwargs):
     """**Relative Roughness (RR)**
 
     Relative Roughness is a ratio of local variance (autocovariance at lag-1) to global variance

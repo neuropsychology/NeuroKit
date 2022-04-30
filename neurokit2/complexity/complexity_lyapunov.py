@@ -8,7 +8,6 @@ import sklearn.metrics.pairwise
 
 from ..misc import NeuroKitWarning
 from ..signal.signal_psd import signal_psd
-from .optim_complexity_delay import complexity_delay
 from .utils_complexity_embedding import complexity_embedding
 
 
