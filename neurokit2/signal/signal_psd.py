@@ -114,7 +114,7 @@ def signal_psd(
 
     # FFT (Numpy)
     elif method in ["fft"]:
-        frequency, power = _signal_psd_fft(signal, sampling_rate=sampling_rate)
+        frequency, power = _signal_psd_fft(signal, sampling_rate=sampling_rate, **kwargs)
 
     # Lombscargle (AtroPy)
     elif method.lower() in ["lombscargle", "lomb"]:
@@ -197,9 +197,9 @@ def signal_psd(
 # =============================================================================
 
 
-def _signal_psd_fft(signal, sampling_rate=1000):
+def _signal_psd_fft(signal, sampling_rate=1000, n=None):
     # Power-spectrum density (PSD)
-    power = np.abs(np.fft.rfft(signal)) ** 2
+    power = np.abs(np.fft.rfft(signal, n=n)) ** 2
     frequency = np.linspace(0, sampling_rate / 2, len(power))
     return frequency, power
 

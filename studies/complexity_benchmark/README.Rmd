@@ -54,7 +54,7 @@ In this study, we will compute a vast amount of complexity indices on various ty
 
 The script to generate the data can be found at ...
 
-Generated 3 types of signals, to which we added different types of noise.
+Generated 5 types of signals, to which we added different types of noise.
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -221,7 +221,24 @@ colors <- c(
   "RR" = "#2196F3",
   "FI" = "#FF5722",
   "CD" = "#FF5722",
-  "Hjorth" = "#FF5722"
+  "Hjorth" = "#FF5722",
+  "LLE" = "#2196F3",
+  "RQA_RecurrenceRate" = "#4CAF50",
+  "RQA_Determinism" = "#4CAF50",
+  "RQA_Laminarity" = "#4CAF50",
+  "RQA_TrappingTime" = "#4CAF50",
+  "RQA_Determinism_RecurrenceRate" = "#4CAF50",
+  "RQA_Divergence" = "#4CAF50",
+  "RQA_Laminarity_Determinism" = "#4CAF50",
+  "RQA_RecurrenceRate" = "#4CAF50",
+  "RQA_L" = "#4CAF50",
+  "RQA_LMax" = "#4CAF50",
+  "RQA_LEn" = "#4CAF50",
+  "RQA_VMax" = "#4CAF50",
+  "RQA_VEn" = "#4CAF50",
+  "RQA_W" = "#4CAF50",
+  "RQA_WMax" = "#4CAF50",
+  "RQA_WEn" = "#4CAF50"
 )
 
 # unique(df$Index)[!unique(df$Index) %in% names(colors)]
@@ -479,7 +496,7 @@ data <- data |>
     -FuzzyApEn,
     -FuzzycApEn,
     -CPEn,
-    -RR
+    -RR,
   )
 
 cor <- get_cor(data)

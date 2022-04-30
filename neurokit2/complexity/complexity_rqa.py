@@ -27,41 +27,43 @@ def complexity_rqa(
       the radius *r*.
     * **Determinism (DET)**: Proportion of recurrence points which form diagonal lines. Indicates
       autocorrelation.
-    * **Divergence (DIV)**: The inverse of the longest diagonal line length (*L_max*).
+    * **Divergence (DIV)**: The inverse of the longest diagonal line length (*LMax*).
     * **Laminarity (LAM)**: Proportion of recurrence points which form vertical lines. Indicates the
       amount of laminar phases (intermittency).
     * **Trapping Time (TT)**: Average length of vertical black lines.
-    * Ratio determinism / recurrence rate (DET_RR)
-    * Ratio laminarity / determinism (LAM_DET)
-    * Average diagonal line length (**L**): Average length of diagonal black lines. Average
-      duration that a system is staying in the same state.
-    * Longest diagonal line length (**L_max**)
-    * Entropy diagonal lines (**L_entr**)
-    * Longest vertical line length (**V_max**)
-    * Entropy vertical lines (**V_entr**)
-    * Average white vertical line length (**W**)
-    * Longest white vertical line length (**W_max**)
-    * Entropy white vertical lines (**W_entr**)
+    * **L**: Average length of diagonal black lines. Average duration that a system is staying in
+      the same state.
+    * **LEn**: Entropy diagonal lines.
+    * **VMax**: Longest vertical line length.
+    * **VEn**: Entropy vertical lines.
+    * **W**: Average white vertical line length.
+    * **WMax**: Longest white vertical line length.
+    * **WEn**: Entropy white vertical lines.
+    * Ratio determinism / recurrence rate
+    * Ratio laminarity / determinism
+
+    .. note::
+
+      More feature exist for RQA, such as the `trend <https://juliadynamics.github.io/DynamicalSystems.jl/dev/rqa/quantification/#RecurrenceAnalysis.trend>`_
 
     Parameters
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
     delay : int
-        Time delay (often denoted 'Tau', sometimes referred to as 'lag'). In practice, it is common
-        to have a fixed time lag (corresponding for instance to the sampling rate; Gautama, 2003)
-        or to find a suitable value using some algorithmic heuristics (see ``delay_optimal()``).
+        Time delay (often denoted *Tau* :math:`\\tau`, sometimes referred to as *lag*) in samples.
+        See :func:`complexity_delay` to estimate the optimal value for this parameter.
     dimension : int
-        Embedding dimension (often denoted 'm' or 'd', sometimes referred to as 'order'). Typically
-        2 or 3. It corresponds to the number of compared runs of lagged data. If 2, the embedding
-        returns an array with two columns corresponding to the original signal and its delayed (by
-        Tau) version.
+        Embedding Dimension (*m*, sometimes referred to as *d* or *order*). See
+        :func:`complexity_dimension()` to estimate the optimal value for this parameter.
     tolerance : float
         Tolerance (similarity threshold, often denoted as 'r'). The radius used for detecting
         neighbours. A rule of thumb is to set r so that the percentage of points classified as
         recurrences (``info['RecurrenceRate']``) is about 2-5%.
     min_linelength : int
         Minimum length of diagonal and vertical lines. Default to 2.
+    method : str
+        Can be ``"pyrqa"`` to use the *PyRQA* package (requires to install it first).
     show : bool
         Visualise recurrence matrix.
 
@@ -74,7 +76,6 @@ def complexity_rqa(
 
     Examples
     ----------
-    *Note:* The following examples are commented out as they require ``PyRQA`` to be installed.
     .. ipython:: python
 
       import neurokit2 as nk
@@ -82,7 +83,14 @@ def complexity_rqa(
       signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
 
       # RQA
-      results, info = nk.complexity_rqa(signal, tolerance=1, show=True, method = "nk")
+      @savefig p_complexity_rqa1.png scale=100%
+      results, info = nk.complexity_rqa(signal, tolerance=1, show=True)
+      @suppress
+      plt.close()
+
+    .. ipython:: python
+
+      results
 
       # Compare to PyRQA
       # results1, info = nk.complexity_rqa(signal, tolerance=1, show=True, method = "pyrqa")
@@ -169,9 +177,8 @@ def _complexity_rqa_features(rc, min_linelength=2):
     data["Determinism"] = diag_lengths.sum() / rc[idx].sum()
     data["Determinism_RecurrenceRate"] = data["Determinism"] / data["RecurrenceRate"]
     data["L"] = 0 if len(diag_lengths) == 0 else np.mean(diag_lengths)
-    data["L_max"] = 0 if len(diag_lengths) == 0 else np.max(diag_lengths)
-    data["Divergence"] = np.nan if data["L_max"] == 0 else 1 / data["L_max"]
-    data["L_entr"] = entropy_shannon(
+    data["Divergence"] = np.nan if len(diag_lengths) == 0 else 1 / np.max(diag_lengths)
+    data["LEn"] = entropy_shannon(
         freq=np.unique(diag_lengths, return_counts=True)[1],
         base=np.e,
     )[0]
@@ -197,15 +204,15 @@ def _complexity_rqa_features(rc, min_linelength=2):
     data["Laminarity"] = black_lengths.sum() / rc[idx].sum()
     data["Laminarity_Determinism"] = data["Laminarity"] / data["Determinism"]
     data["TrappingTime"] = 0 if len(black_lengths) == 0 else np.mean(black_lengths)
-    data["V_max"] = 0 if len(black_lengths) == 0 else np.max(black_lengths)
-    data["V_entr"] = entropy_shannon(
+    data["VMax"] = 0 if len(black_lengths) == 0 else np.max(black_lengths)
+    data["VEn"] = entropy_shannon(
         freq=np.unique(black_lengths, return_counts=True)[1],
         base=np.e,
     )[0]
 
     data["W"] = 0 if len(white_lengths) == 0 else np.mean(white_lengths)
-    data["W_max"] = 0 if len(white_lengths) == 0 else np.max(white_lengths)
-    data["W_entr"] = entropy_shannon(
+    data["WMax"] = 0 if len(white_lengths) == 0 else np.max(white_lengths)
+    data["WEn"] = entropy_shannon(
         freq=np.unique(white_lengths, return_counts=True)[1],
         base=np.e,
     )[0]
@@ -266,13 +273,12 @@ def _complexity_rqa_pyrqa(signal, dimension=3, delay=1, tolerance=0.1, linelengt
         "Determinism_RecurrenceRate": rqa.determinism / rqa.recurrence_rate,
         "Laminarity_Determinism": rqa.laminarity / rqa.determinism,
         "L": rqa.average_diagonal_line,
-        "L_max": rqa.longest_diagonal_line,
-        "L_entr": rqa.entropy_diagonal_lines,
-        "V_max": rqa.longest_vertical_line,
-        "V_entr": rqa.entropy_vertical_lines,
+        "LEn": rqa.entropy_diagonal_lines,
+        "VMax": rqa.longest_vertical_line,
+        "VEn": rqa.entropy_vertical_lines,
         "W": rqa.average_white_vertical_line,
-        "W_max": rqa.longest_white_vertical_line,
+        "WMax": rqa.longest_white_vertical_line,
         "W_div": rqa.longest_white_vertical_line_inverse,
-        "W_entr": rqa.entropy_white_vertical_lines,
+        "WEn": rqa.entropy_white_vertical_lines,
         "Recurrence_Matrix": rp.recurrence_matrix_reverse,  # recurrence_matrix_reverse_normalized
     }

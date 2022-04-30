@@ -16,14 +16,23 @@ def time_function(
 ):
     t0 = timer()
     rez, _ = fun(x, **kwargs)
-    return pd.DataFrame(
+    t1 = timer() - t0
+
+    pd.DataFrame(
         {
-            "Duration": [timer() - t0],
-            "Result": [rez],
-            "Index": [index],
+            "Duration": [t1],
             "Method": [name],
         }
     )
+    if name == "nk_complexity_rqa":
+        rez = rez.add_prefix("RQA_")
+        out = pd.DataFrame({"Result": rez.iloc[0].to_numpy(), "Index": rez.columns})
+
+    else:
+        out = pd.DataFrame({"Result": [rez], "Index": [index]})
+    out["Duration"] = t1
+    out["Method"] = name
+    return out
 
 
 # Parameters
@@ -299,6 +308,19 @@ def run_benchmark(noise_intensity=0.01):
                         ),
                     ]
                 )
+            for bins in [10, 50, 100]:
+                rez = pd.concat(
+                    [
+                        rez,
+                        time_function(
+                            signal_,
+                            nk.entropy_spectral,
+                            index=f"SPEn {bins}",
+                            name="entropy_spectral",
+                            c=bins,
+                        ),
+                    ]
+                )
             rez = pd.concat(
                 [
                     rez,
@@ -548,17 +570,6 @@ def run_benchmark(noise_intensity=0.01):
                         name="nk_entropy_dispersion",
                         dimension=3,
                         fluctuation=True,
-                    ),
-                ]
-            )
-            rez = pd.concat(
-                [
-                    rez,
-                    time_function(
-                        signal_,
-                        nk.entropy_spectral,
-                        index="SPEn",
-                        name="entropy_spectral",
                     ),
                 ]
             )
@@ -1179,6 +1190,19 @@ def run_benchmark(noise_intensity=0.01):
                         nk.complexity_lyapunov,
                         index="LLE",
                         name="nk_complexity_lyapunov",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_rqa,
+                        index="RQA",
+                        name="nk_complexity_rqa",
                         delay=delay,
                         dimension=3,
                     ),

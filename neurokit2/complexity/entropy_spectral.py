@@ -2,9 +2,10 @@ import numpy as np
 import pandas as pd
 
 from ..signal.signal_psd import signal_psd
+from .entropy_shannon import entropy_shannon
 
 
-def entropy_spectral(signal, normalize=True, **kwargs):
+def entropy_spectral(signal, c=None, **kwargs):
     """**Spectral Entropy (SpEn)**
 
     Spectral entropy (SE or SpEn) treats the signal's normalized power distribution in the
@@ -18,9 +19,8 @@ def entropy_spectral(signal, normalize=True, **kwargs):
     ----------
     signal : Union[list, np.array, pd.Series]
         The signal (i.e., a time series) in the form of a vector of values.
-    normalize : bool
-        If True, divide by ``log2(len(signal)/2)`` to normalize the spectral entropy between 0 and
-        1.
+    c : int
+        Number of bins of frequency.
     **kwargs : optional
         Keyword arguments to be passed to `signal_psd()`.
 
@@ -42,10 +42,10 @@ def entropy_spectral(signal, normalize=True, **kwargs):
       import neurokit2 as nk
 
       # Simulate a Signal with Laplace Noise
-      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6], noise=0.5)
+      signal = nk.signal_simulate(duration=2, sampling_rate=200, frequency=[5, 6, 10], noise=0.1)
 
       # Compute Spectral Entropy
-      SpEn, info = nk.entropy_spectral(signal)
+      SpEn, info = nk.entropy_spectral(signal, c=20)
       SpEn
 
     References
@@ -62,14 +62,13 @@ def entropy_spectral(signal, normalize=True, **kwargs):
         )
 
     # Power-spectrum density (PSD) (actual sampling rate does not matter)
-    psd = signal_psd(signal, sampling_rate=1000, method="fft", **kwargs)["Power"]
+    psd = signal_psd(signal, sampling_rate=1000, method="fft", n=c, **kwargs)["Power"]
     psd /= np.sum(psd)  # area under normalized spectrum should sum to 1 (np.sum(psd["Power"]))
-    psd = psd[psd > 0]
 
     # Compute Shannon entropy
-    se = -np.sum(psd * np.log2(psd))
+    se, _ = entropy_shannon(freq=psd)
 
-    if normalize:
-        se /= np.log2(len(psd))  # between 0 and 1
+    # Normalize
+    se /= np.log2(len(psd))  # between 0 and 1
 
-    return se, {"PSD": psd, "Normalize": normalize}
+    return se, {"PSD": psd}

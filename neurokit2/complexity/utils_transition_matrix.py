@@ -72,9 +72,9 @@ def transition_matrix_simulate(matrix, n=10):
     >>> import numpy as np
     >>>
     >>> sequence = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
-    >>> matrix = nk.transition_matrix(sequence)["Observed"]
+    >>> tm, _ = nk.transition_matrix(sequence)
     >>>
-    >>> x = nk.transition_matrix_simulate(matrix, n=10)
+    >>> x = nk.transition_matrix_simulate(tm, n=10)
     >>> x #doctest: +SKIP
     """
     states = matrix.columns.values
