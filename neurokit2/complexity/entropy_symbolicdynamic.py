@@ -1,9 +1,6 @@
 import numpy as np
 import pandas as pd
-import scipy.cluster.vq
-import scipy.special
 
-from ..stats import standardize
 from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_symbolize import complexity_symbolize
 

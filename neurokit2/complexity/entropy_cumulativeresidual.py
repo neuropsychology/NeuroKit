@@ -69,6 +69,12 @@ def entropy_cumulativeresidual(signal, method=None, show=False, freq=None):
       measure of information. IEEE transactions on Information Theory, 50(6), 1220-1228.
 
     """
+    # Sanity checks
+    if isinstance(signal, (np.ndarray, pd.DataFrame)) and signal.ndim > 1:
+        raise ValueError(
+            "Multidimensional inputs (e.g., matrices or multichannel data) are not supported yet."
+        )
+
     if freq is None:
         events, freq = _entropy_freq(signal, method=method, show=show)
     freq = freq / np.sum(freq)

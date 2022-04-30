@@ -171,6 +171,10 @@ Other
 """""""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_hurst
 
+*complexity_lyapunov()*
+"""""""""""""""""""""
+.. autofunction:: neurokit2.complexity.complexity_lyapunov
+
 *complexity_rqa()*
 """"""""""""""""""""
 .. autofunction:: neurokit2.complexity.complexity_rqa

@@ -1171,6 +1171,19 @@ def run_benchmark(noise_intensity=0.01):
                     ),
                 ]
             )
+            rez = pd.concat(
+                [
+                    rez,
+                    time_function(
+                        signal_,
+                        nk.complexity_lyapunov,
+                        index="LLE",
+                        name="nk_complexity_lyapunov",
+                        delay=delay,
+                        dimension=3,
+                    ),
+                ]
+            )
 
             # Add info
             rez["Length"] = len(signal_)

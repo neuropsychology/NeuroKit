@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ..signal.signal_binarize import _signal_binarize_threshold
-from .utils_complexity_coarsegraining import _get_scales, complexity_coarsegraining
-from .utils_complexity_embedding import complexity_embedding
 from .utils_complexity_ordinalpatterns import complexity_ordinalpatterns
 from .utils_complexity_symbolize import complexity_symbolize
 
@@ -26,7 +22,9 @@ def complexity_lempelziv(
     whereas irregular signals are characterized by a high LZC. While often being interpreted as a
     complexity measure, LZC was originally proposed to reflect randomness (Lempel and Ziv, 1976).
 
-    Permutation Lempel-Ziv Complexity (**PLZC**) combines LZC with :func:`permutation <entropy_permutation>`. A sequence of symbols is generated from the permutations observed in the :func:`tine-delay embedding <complexity_embedding>`, and LZC is computed over it.
+    Permutation Lempel-Ziv Complexity (**PLZC**) combines LZC with :func:`permutation <entropy_permutation>`.
+    A sequence of symbols is generated from the permutations observed in the :func:`tine-delay
+    embedding <complexity_embedding>`, and LZC is computed over it.
 
     Multiscale (Permutation) Lempel-Ziv Complexity (**MSLZC** or **MSPLZC**) combines permutation
     LZC with the :func:`multiscale approach <entropy_multiscale>`. It first performs a
