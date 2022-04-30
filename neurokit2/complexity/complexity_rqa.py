@@ -1,44 +1,47 @@
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
+from ..misc import find_groups
+from .entropy_shannon import entropy_shannon
 from .optim_complexity_tolerance import complexity_tolerance
+from .utils_recurrence_matrix import recurrence_matrix
 
 
-def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength=2, show=False):
-    """**Recurrence quantification analysis (RQA)**
+def complexity_rqa(
+    signal, dimension=3, delay=1, tolerance="sd", min_linelength=2, method="python", show=False
+):
+    """**Recurrence Quantification Analysis (RQA)**
 
-    A recurrence plot is based on a phase-space (time-delay embedding) representation of a signal
-    and is a 2D depiction of when a system revisits a state that is has been in the past.
+    A :func:`recurrence plot <recurrence_matrix>` is based on a time-delay embedding representation
+    of a signal and is a 2D depiction of when a system revisits a state that is has been in the
+    past.
 
     Recurrence quantification analysis (RQA) is a method of complexity analysis
     for the investigation of dynamical systems. It quantifies the number and duration
     of recurrences of a dynamical system presented by its phase space trajectory.
 
-    This implementation currently relies on the ``PyRQA``, which itself relies on the ``pyopencl``.
-    The latter can be a bit of a hassle to install (you might need, as a first step, to download the
-    pre-compiled `wheels <https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyopencl>`_ of the package
-    and pip install it directly before pip-installing PyRQA).
-
     Features include:
 
-    * Recurrence rate (RR): Proportion of points that are labelled as recurrences. Depends on the
-      radius r.
-    * Determinism (DET): Proportion of recurrence points which form diagonal lines. Indicates
+    * **Recurrence rate (RR)**: Proportion of points that are labelled as recurrences. Depends on
+      the radius *r*.
+    * **Determinism (DET)**: Proportion of recurrence points which form diagonal lines. Indicates
       autocorrelation.
-    * Divergence (DIV)
-    * Laminarity (LAM): Proportion of recurrence points which form vertical lines. Indicates the
+    * **Divergence (DIV)**: The inverse of the longest diagonal line length (*L_max*).
+    * **Laminarity (LAM)**: Proportion of recurrence points which form vertical lines. Indicates the
       amount of laminar phases (intermittency).
-    * Trapping Time (TT)
+    * **Trapping Time (TT)**: Average length of vertical black lines.
     * Ratio determinism / recurrence rate (DET_RR)
     * Ratio laminarity / determinism (LAM_DET)
-    * Average diagonal line length (L): Average duration that a system is staying in the same state.
-    * Longest diagonal line length (L_max)
-    * Entropy diagonal lines (L_entr)
-    * Longest vertical line length (V_max)
-    * Entropy vertical lines (V_entr)
-    * Average white vertical line length (W)
-    * Longest white vertical line length (W_max)
-    * Longest white vertical line length divergence (W_div)
-    * Entropy white vertical lines (W_entr)
+    * Average diagonal line length (**L**): Average length of diagonal black lines. Average
+      duration that a system is staying in the same state.
+    * Longest diagonal line length (**L_max**)
+    * Entropy diagonal lines (**L_entr**)
+    * Longest vertical line length (**V_max**)
+    * Entropy vertical lines (**V_entr**)
+    * Average white vertical line length (**W**)
+    * Longest white vertical line length (**W_max**)
+    * Entropy white vertical lines (**W_entr**)
 
     Parameters
     ----------
@@ -57,8 +60,8 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
         Tolerance (similarity threshold, often denoted as 'r'). The radius used for detecting
         neighbours. A rule of thumb is to set r so that the percentage of points classified as
         recurrences (``info['RecurrenceRate']``) is about 2-5%.
-    linelength : int
-        Minimum length of a diagonal and vertical lines. Default to 2.
+    min_linelength : int
+        Minimum length of diagonal and vertical lines. Default to 2.
     show : bool
         Visualise recurrence matrix.
 
@@ -78,14 +81,11 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
 
       signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.5)
 
-      # Default r
-      # results, info = nk.complexity_rqa(signal, show=True)
+      # RQA
+      results, info = nk.complexity_rqa(signal, tolerance=1, show=True, method = "nk")
 
-    .. ipython:: python
-
-      # Larger radius
-      # results, info = nk.complexity_rqa(signal, tolerance=1, show=True)
-
+      # Compare to PyRQA
+      # results1, info = nk.complexity_rqa(signal, tolerance=1, show=True, method = "pyrqa")
 
     References
     ----------
@@ -93,7 +93,132 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
       long time series. In Translational Recurrences (pp. 17-29). Springer, Cham.
 
     """
-    # Try loading mne
+    info = {
+        "Tolerance": complexity_tolerance(
+            signal, method=tolerance, delay=delay, dimension=dimension
+        )[0]
+    }
+
+    if method == "pyrqa":
+        data = _complexity_rqa_pyrqa(
+            signal,
+            delay=delay,
+            dimension=dimension,
+            tolerance=info["Tolerance"],
+            linelength=min_linelength,
+        )
+        rc = np.flip(data.pop("Recurrence_Matrix"), axis=0)
+        info["Recurrence_Matrix"] = rc
+
+    else:
+        # Get recurrence matrix (rm)
+        rc, dm = recurrence_matrix(
+            signal,
+            delay=delay,
+            dimension=dimension,
+            tolerance=info["Tolerance"],
+        )
+        info["Recurrence_Matrix"] = rc
+        info["Distance_Matrix"] = dm
+
+        # Compute features
+        data = _complexity_rqa_features(rc, min_linelength=min_linelength)
+
+    data = pd.DataFrame(data, index=[0])
+
+    if show is True:
+        try:
+            plt.imshow(rc, cmap="Greys")
+            # Flip the matrix to match traditional RQA representation
+            plt.gca().invert_yaxis()
+        except MemoryError as e:
+            raise MemoryError(
+                "NeuroKit error: complexity_rqa(): the recurrence plot is too large to display. ",
+                "You can recover the matrix from the parameters and try to display parts of it.",
+            ) from e
+
+    return data, info
+
+
+def _complexity_rqa_features(rc, min_linelength=2):
+    """Compute recurrence rate from a recurrence matrix (rc)."""
+    width = len(rc)
+    # Recurrence Rate (RR)
+    # --------------------------------------------------
+    # Indices of the lower triangular (without the diagonal)
+    idx = np.tril_indices(width, k=-1)
+    # Compute percentage
+    data = {"RecurrenceRate": (rc[idx].sum()) / len(rc[idx])}
+
+    # Find diagonale lines
+    # --------------------------------------------------
+    diag_lines = []
+    # All diagonals except the main one (0)
+    for i in range(1, width):
+        diag = np.diagonal(rc, offset=i)  # Get diagonal
+        diag = find_groups(diag)  # Split into consecutives
+        diag_lines.extend([diag[i] for i in range(len(diag)) if diag[i][0] == 1])  # Store 1s
+
+    # Get lengths
+    diag_lengths = np.array([len(i) for i in diag_lines])
+
+    # Exclude small diagonals (> 1)
+    diag_lengths = diag_lengths[np.where(diag_lengths >= min_linelength)[0]]
+
+    # Compute features
+    data["Determinism"] = diag_lengths.sum() / rc[idx].sum()
+    data["Determinism_RecurrenceRate"] = data["Determinism"] / data["RecurrenceRate"]
+    data["L"] = 0 if len(diag_lengths) == 0 else np.mean(diag_lengths)
+    data["L_max"] = 0 if len(diag_lengths) == 0 else np.max(diag_lengths)
+    data["Divergence"] = np.nan if data["L_max"] == 0 else 1 / data["L_max"]
+    data["L_entr"] = entropy_shannon(
+        freq=np.unique(diag_lengths, return_counts=True)[1],
+        base=np.e,
+    )[0]
+
+    # Find vertical lines
+    # --------------------------------------------------
+    black_lines = []
+    white_lines = []
+    for i in range(width - 1):
+        verti = rc[i, i + 1 :]
+        verti = find_groups(verti)
+        black_lines.extend([verti[i] for i in range(len(verti)) if verti[i][0] == 1])
+        white_lines.extend([verti[i] for i in range(len(verti)) if verti[i][0] == 0])
+    # Get lengths
+    black_lengths = np.array([len(i) for i in black_lines])
+    white_lengths = np.array([len(i) for i in white_lines])
+
+    # Exclude small lines (> 1)
+    black_lengths = black_lengths[np.where(black_lengths >= min_linelength)[0]]
+    white_lengths = white_lengths[np.where(white_lengths >= min_linelength)[0]]
+
+    # Compute features
+    data["Laminarity"] = black_lengths.sum() / rc[idx].sum()
+    data["Laminarity_Determinism"] = data["Laminarity"] / data["Determinism"]
+    data["TrappingTime"] = 0 if len(black_lengths) == 0 else np.mean(black_lengths)
+    data["V_max"] = 0 if len(black_lengths) == 0 else np.max(black_lengths)
+    data["V_entr"] = entropy_shannon(
+        freq=np.unique(black_lengths, return_counts=True)[1],
+        base=np.e,
+    )[0]
+
+    data["W"] = 0 if len(white_lengths) == 0 else np.mean(white_lengths)
+    data["W_max"] = 0 if len(white_lengths) == 0 else np.max(white_lengths)
+    data["W_entr"] = entropy_shannon(
+        freq=np.unique(white_lengths, return_counts=True)[1],
+        base=np.e,
+    )[0]
+
+    return data
+
+
+# =============================================================================
+# PyRQA
+# =============================================================================
+def _complexity_rqa_pyrqa(signal, dimension=3, delay=1, tolerance=0.1, linelength=2):
+    """Compute recurrence rate (imported in complexity_rqa)"""
+    # Try loading pyrqa
     try:
         import pyrqa.analysis_type
         import pyrqa.computation
@@ -109,10 +234,6 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
         ) from e
 
     # Get neighbourhood
-    if tolerance == "default":
-        tolerance, _ = complexity_tolerance(
-            signal, method="sd", delay=None, dimension=None, show=False
-        )
     r = pyrqa.neighbourhood.FixedRadius(tolerance)
 
     # Convert signal to time series
@@ -134,7 +255,9 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
     rqa.min_vertical_line_length = linelength
     rqa.min_white_vertical_line_length = linelength
 
-    results = {
+    rp = pyrqa.computation.RPComputation.create(settings, verbose=False).run()
+
+    return {
         "RecurrenceRate": rqa.recurrence_rate,
         "Determinism": rqa.determinism,
         "Divergence": rqa.divergence,
@@ -151,25 +274,5 @@ def complexity_rqa(signal, dimension=3, delay=1, tolerance="default", linelength
         "W_max": rqa.longest_white_vertical_line,
         "W_div": rqa.longest_white_vertical_line_inverse,
         "W_entr": rqa.entropy_white_vertical_lines,
+        "Recurrence_Matrix": rp.recurrence_matrix_reverse,  # recurrence_matrix_reverse_normalized
     }
-
-    # Reccurence Plot
-    rp = pyrqa.computation.RPComputation.create(settings, verbose=False).run()
-    if show is True:
-        try:
-            plt.imshow(rp.recurrence_matrix_reverse_normalized, cmap="Greys")
-        except MemoryError as e:
-            raise MemoryError(
-                "NeuroKit error: complexity_rqa(): the recurrence plot is too large to display. ",
-                "You can recover the matrix from the parameters and try to display parts of it.",
-            ) from e
-
-    return results, {"RQA": rqa, "RP": rp, "Recurrence_Matrix": rp.recurrence_matrix_reverse}
-
-
-# def _complexity_rqa_rr(recmat):
-#     """Compute recurrence rate (imported in complexity_rqa)"""
-#     # Indices of the lower triangular (without the diagonal)
-#     idx = np.tril_indices(len(recmat), k=-1)
-#     # Compute percentage
-#     return recmat[idx].sum() / len(recmat[idx])

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
+
 from ..complexity import transition_matrix
-from ..misc import as_vector
 
 
 def microstates_dynamic(microstates):
@@ -30,29 +30,25 @@ def microstates_dynamic(microstates):
     Examples
     --------
     >>> import neurokit2 as nk
-    >>> import numpy as np
     >>>
-    >>> microstates = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
+    >>> microstates = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
     >>> nk.microstates_dynamic(microstates)  #doctest: +ELLIPSIS
            Microstate_0_to_0  ...  Microstate_Symmetry_p
     0                    ...  ...                    ...
 
     [1 rows x 15 columns]
     """
-    microstates = as_vector(microstates)
     out = {}
 
     # Transition matrix
-    results = transition_matrix(microstates)
-    T = results["Observed"]
+    T, results = transition_matrix(microstates)
 
     for row in T.index:
         for col in T.columns:
             out[str(T.loc[row].name) + "_to_" + str(T[col].name)] = T[col][row]
 
-    for _, rez in enumerate(results):
-        if rez not in ["Observed", "Expected"]:
-            out[rez] = results[rez]
+    out.update(results)
+    out.pop("Expected")
 
     df = pd.DataFrame.from_dict(out, orient="index").T.add_prefix("Microstate_")
 

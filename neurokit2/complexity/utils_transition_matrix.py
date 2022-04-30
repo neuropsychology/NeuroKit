@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 import itertools
+
 import numpy as np
 import pandas as pd
 import scipy.stats
 
+from ..misc import as_vector
+
 
 def transition_matrix(sequence):
-    """Empirical transition matrix
+    """**Empirical Transition Matrix*
 
     Also known as discrete Markov chains. Computes the observed transition matrix and performs a
     Chi-square test against the expected transition matrix.
@@ -25,35 +28,35 @@ def transition_matrix(sequence):
 
     Examples
     --------
-    >>> import neurokit2 as nk
-    >>>
-    >>> sequence = np.array([0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0])
-    >>> out = nk.transition_matrix(sequence)
-    >>> out["Observed"] #doctest: +ELLIPSIS
-              0         1         2
-    0  0.750000  0.250000  0.000000
-    1  0.333333  0.333333  0.333333
-    2  0.000000  0.250000  0.750000
+    .. ipython:: python
+
+      import neurokit2 as nk
+
+      sequence = [0, 0, 0, 1, 1, 2, 2, 2, 2, 1, 0, 0]
+      tm, _ = nk.transition_matrix(sequence)
+      tm
 
     """
     out = {}
 
-    # Observed transtion matrix
-    out["Observed"] = _transition_matrix_observed(sequence)
+    sequence = as_vector(sequence)
 
-    # Expect transition matrix (theorethical)
-    out["Expected"] = _transition_matrix_expected(out["Observed"])
+    # Observed transition matrix
+    tm = _transition_matrix_observed(sequence)
 
-    # Test against theorethical transitions
-    results = scipy.stats.chisquare(f_obs=out["Observed"], f_exp=out["Expected"], axis=None)
+    # Expect transition matrix (theoretical)
+    out["Expected"] = _transition_matrix_expected(tm)
+
+    # Test against theoretical transitions
+    results = scipy.stats.chisquare(f_obs=tm, f_exp=out["Expected"], axis=None)
     out["Transition_Chisq"] = results[0]
-    out["Transition_df"] = len(out["Observed"])*(len(out["Observed"])-1)/2
+    out["Transition_df"] = len(tm) * (len(tm) - 1) / 2
     out["Transition_p"] = results[1]
 
     # Symmetry test
     out.update(_transition_matrix_symmetry(sequence))
 
-    return out
+    return tm, out
 
 
 def transition_matrix_simulate(matrix, n=10):
@@ -88,7 +91,7 @@ def transition_matrix_simulate(matrix, n=10):
 
     # simulation procedure
     for i in range(1, n):
-        _ps = matrix.values[seq[i-1]]
+        _ps = matrix.values[seq[i - 1]]
         _sample = np.argmax(scipy.stats.multinomial.rvs(1, _ps, 1, random_state=random_states[i]))
         seq[i] = _sample
 
@@ -179,7 +182,9 @@ def _transition_matrix_observed(sequence):
 def _transition_matrix_expected(observed_matrix):
 
     expected_matrix = scipy.stats.contingency.expected_freq(observed_matrix.values)
-    expected_matrix = pd.DataFrame(expected_matrix, index=observed_matrix.index, columns=observed_matrix.columns)
+    expected_matrix = pd.DataFrame(
+        expected_matrix, index=observed_matrix.index, columns=observed_matrix.columns
+    )
     return expected_matrix
 
 
@@ -195,24 +200,23 @@ def _transition_matrix_symmetry(sequence):
     n = len(sequence)
     f_ij = np.zeros((n_states, n_states))
 
-    for t in range(n-1):
+    for t in range(n - 1):
         i = sequence[t]
-        j = sequence[t+1]
+        j = sequence[t + 1]
         f_ij[states == i, states == j] += 1.0
 
     T = 0.0
     for i, j in np.ndindex(f_ij.shape):
-        if (i != j):
+        if i != j:
             f = f_ij[i, j] * f_ij[j, i]
-            if (f > 0):
-                T += (f_ij[i, j] * np.log((2. * f_ij[i, j]) / (f_ij[i, j] + f_ij[j, i])))
+            if f > 0:
+                T += f_ij[i, j] * np.log((2.0 * f_ij[i, j]) / (f_ij[i, j] + f_ij[j, i]))
 
     out = {}
     out["Symmetry_t"] = T * 2.0
-    out["Symmetry_df"] = n_states*(n_states-1)/2
+    out["Symmetry_df"] = n_states * (n_states - 1) / 2
     out["Symmetry_p"] = scipy.stats.chi2.sf(out["Symmetry_t"], out["Symmetry_df"], loc=0, scale=1)
     return out
-
 
 
 def _transition_matrix_stationarity(sequence, size=100):
@@ -229,9 +233,10 @@ def _transition_matrix_stationarity(sequence, size=100):
     if r < 5:
         raise ValueError(
             "NeuroKit error: _transition_matrix_stationarity(): the size of the blocks is too high.",
-            " Decrease the 'size' argument.")
+            " Decrease the 'size' argument.",
+        )
 
-#    nl =  r* size
+    #    nl =  r* size
 
     f_ijk = np.zeros((r, n_states, n_states))
     f_ij = np.zeros((r, n_states))
@@ -241,9 +246,9 @@ def _transition_matrix_stationarity(sequence, size=100):
 
     # calculate f_ijk (time / block dep. transition matrix)
     for i in range(r):  # block index
-        for ii in range(size-1):  # pos. inside the current block
-            j = sequence[i*size + ii]
-            k = sequence[i*size + ii + 1]
+        for ii in range(size - 1):  # pos. inside the current block
+            j = sequence[i * size + ii]
+            k = sequence[i * size + ii + 1]
             f_ijk[i, j, k] += 1.0
             f_ij[i, j] += 1.0
             f_jk[j, k] += 1.0
@@ -255,11 +260,13 @@ def _transition_matrix_stationarity(sequence, size=100):
     for i, j, k in np.ndindex(f_ijk.shape):
         # conditional homogeneity
         f = f_ijk[i, j, k] * f_j[j] * f_ij[i, j] * f_jk[j, k]
-        if (f > 0):
-            T += (f_ijk[i, j, k] * np.log((f_ijk[i, j, k] * f_j[j]) / (f_ij[i, j] * f_jk[j, k])))
+        if f > 0:
+            T += f_ijk[i, j, k] * np.log((f_ijk[i, j, k] * f_j[j]) / (f_ij[i, j] * f_jk[j, k]))
 
     out = {}
     out["Stationarity_t"] = T * 2.0
-    out["Stationarity_df"] = (r-1)*(n_states-1)*n_states
-    out["Stationarity_p"] = scipy.stats.chi2.sf(out["Stationarity_t"], out["Stationarity_df"], loc=0, scale=1)
+    out["Stationarity_df"] = (r - 1) * (n_states - 1) * n_states
+    out["Stationarity_p"] = scipy.stats.chi2.sf(
+        out["Stationarity_t"], out["Stationarity_df"], loc=0, scale=1
+    )
     return out

@@ -35,11 +35,11 @@ def complexity_relativeroughness(signal, **kwargs):
       import neurokit2 as nk
 
       signal = [1, 2, 3, 4, 5]
-      rr, _ = nk.complexity_rr(signal)
+      rr, _ = nk.complexity_relativeroughness(signal)
       rr
 
       # Change autocorrelation method
-      rr, _ = nk.complexity_rr(signal, method="cor")
+      rr, _ = nk.complexity_relativeroughness(signal, method="cor")
       rr
 
     References

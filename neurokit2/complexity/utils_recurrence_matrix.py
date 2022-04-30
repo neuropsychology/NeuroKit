@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.ticker
 import numpy as np
 import scipy.spatial
 
@@ -12,6 +13,8 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
     Fast Python implementation of recurrence matrix (tested against pyRQA). Returns a tuple
     with the recurrence matrix (made of 0s and 1s) and the distance matrix (the non-binarized
     version of the former).
+
+    It is used in :func:`Recurrence Quantification Analysis (RQA) <complexity_rqa>`.
 
     Parameters
     ----------
@@ -34,7 +37,8 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
 
     See Also
     --------
-    complexity_embedding, complexity_delay, complexity_dimension, complexity_tolerance
+    complexity_embedding, complexity_delay, complexity_dimension, complexity_tolerance,
+    complexity_rqa
 
     Returns
     -------
@@ -49,7 +53,7 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
 
       import neurokit2 as nk
 
-      signal = nk.signal_simulate(duration=5, sampling_rate=100, frequency=[5, 6], noise=0.01)
+      signal = nk.signal_simulate(duration=2, sampling_rate=100, frequency=[5, 6], noise=0.01)
 
       # Default r
       @savefig p_recurrence_matrix1.png scale=100%
@@ -99,9 +103,6 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
     # Compute distance matrix
     d = scipy.spatial.distance.cdist(emb, emb, metric="euclidean")
 
-    # Flip the matrix to match traditional RQA representation
-    d = np.flip(d, axis=0)
-
     # Initialize the recurrence matrix filled with 0s
     recmat = np.zeros((len(d), len(d)))
     # If lower than tolerance, then 1
@@ -117,6 +118,11 @@ def recurrence_matrix(signal, delay=1, dimension=3, tolerance="default", show=Fa
             axes[1].set_title("Distance")
             cbar = fig.colorbar(im, ax=axes[1], fraction=0.046, pad=0.04)
             cbar.ax.plot([0, 1], [tolerance] * 2, color="r")
+            # Flip the matrix to match traditional RQA representation
+            axes[0].invert_yaxis()
+            axes[1].invert_yaxis()
+            axes[0].xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
+            axes[1].xaxis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
         except MemoryError as e:
             raise MemoryError(
                 "NeuroKit error: complexity_rqa(): the recurrence plot is too large to display. ",
